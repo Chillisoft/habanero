@@ -47,10 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BOEditorPanelWin.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="BusinessObjectControlWin.cs">
+    <Compile Include="BOEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="CollapsiblePanelGroupControlWin.cs">

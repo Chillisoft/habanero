@@ -1439,7 +1439,7 @@ namespace Habanero.Test.UI.Base
 
         protected override Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper() { return new Sample.SampleUserInterfaceMapperVWG(); }
 
-        [Test, Ignore("Gizmox does not support changing the TextAlign Property (Default value iss Left) ")]
+        [Test, Ignore("Gizmox does not support changing the TextAlign Property (Default value is Left) ")]
         public void Test_BuildPanelForTab_Parameter_SetAlignment_NumericUpDown()
         {
             //---------------Set up test pack-------------------

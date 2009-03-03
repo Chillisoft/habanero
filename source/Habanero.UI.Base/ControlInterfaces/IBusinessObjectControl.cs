@@ -24,9 +24,13 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a control that represents a single business object.
     /// The primary purpose of this interface is to ensure that a master
-    /// control can access the current business object held in a sub-control
+    /// control can access (get and set) the current business object held in a sub-control
     /// that inherits from this interface.  See IBOColTabControl for an
     /// example usage.
+    /// This is the interface that is used for viewing the current state
+    /// of a business object.
+    /// There are various interfaces and controls that inherit from this control
+    /// which are used for editing a Business Object.
     /// </summary>
     public interface IBusinessObjectControl : IControlHabanero
     {

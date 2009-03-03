@@ -21,12 +21,11 @@ using System.Collections;
 
 namespace Habanero.UI.Base
 {
-    //TODO: Port
-    ///// <summary>
-    ///// Represents the collection of items in a ListView control or assigned to a ListViewGroup
-    ///// </summary>
-    //public interface IListViewItemCollection
-    //{
+    /// <summary>
+    /// Represents the collection of items in a ListView control or assigned to a ListViewGroup
+    /// </summary>
+    public interface IListViewItemCollection
+    {
     //    ///// <summary>
     //    ///// Adds the specified STR text.
     //    ///// </summary>
@@ -150,5 +149,5 @@ namespace Habanero.UI.Base
     //    /// Gets or sets the item at the specified index within the collection
     //    /// </summary>
     //    IListViewItem this[int index] { get; }
-    //}
+    }
 }

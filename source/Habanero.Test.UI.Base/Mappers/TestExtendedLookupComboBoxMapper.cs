@@ -236,7 +236,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(1, form.Controls.Count);
             Assert.AreEqual(DockStyle.Fill, form.Controls[0].Dock);
 
-            Assert.IsInstanceOfType(typeof(IGridAndBOEditorControl), form.Controls[0]);
+            Assert.IsInstanceOfType(typeof(IBOSelectorAndEditor), form.Controls[0]);
             Assert.IsInstanceOfType(typeof(GridAndBOEditorControlWin), form.Controls[0]);
             GridAndBOEditorControlWin gridAndBOEditorControlWin = (GridAndBOEditorControlWin)form.Controls[0];
             //Assert.AreSame(mapper.BusinessObject, GridAndBOEditorControlWin.BusinessObjectControlWin.BusinessObject);
@@ -277,7 +277,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(1, form.Controls.Count);
             Assert.AreEqual(DockStyle.Fill, form.Controls[0].Dock);
 
-            Assert.IsInstanceOfType(typeof(IGridAndBOEditorControl), form.Controls[0]);
+            Assert.IsInstanceOfType(typeof(IBOSelectorAndEditor), form.Controls[0]);
             Assert.IsInstanceOfType(typeof(GridAndBOEditorControlWin), form.Controls[0]);
             GridAndBOEditorControlWin gridAndBOEditorControlWin = (GridAndBOEditorControlWin)form.Controls[0];
             //Assert.AreSame(mapper.BusinessObject, GridAndBOEditorControlWin.BusinessObjectControlWin.BusinessObject);

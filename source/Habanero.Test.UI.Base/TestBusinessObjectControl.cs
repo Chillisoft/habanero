@@ -104,7 +104,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControlWin(GetControlFactory(), def, null);
+                new BOEditorControl(GetControlFactory(), def, null);
 
                 Assert.Fail("Null uiDefName should be prevented");
             }
@@ -123,7 +123,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControlWin(null, def, CUSTOM_UIDEF_NAME);
+                new BOEditorControl(null, def, CUSTOM_UIDEF_NAME);
 
                 Assert.Fail("Null controlFactory should be prevented");
             }
@@ -142,7 +142,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControlWin(GetControlFactory(), null, CUSTOM_UIDEF_NAME);
+                new BOEditorControl(GetControlFactory(), null, CUSTOM_UIDEF_NAME);
 
                 Assert.Fail("Null controlFactory should be prevented");
             }
@@ -162,7 +162,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControlWin(GetControlFactory(), def, CUSTOM_UIDEF_NAME);
+                new BOEditorControl(GetControlFactory(), def, CUSTOM_UIDEF_NAME);
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
@@ -185,7 +185,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsNotNull(GlobalUIRegistry.ControlFactory);
             //---------------Execute Test ----------------------
-            BusinessObjectControlWin control = new BusinessObjectControlWin(def);
+            BOEditorControl control = new BOEditorControl(def);
             //---------------Test Result -----------------------
             Assert.IsNotNull(control);
 
@@ -197,7 +197,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectControlWin control = new BusinessObjectControlWin(GetCustomClassDef());
+            BOEditorControl control = new BOEditorControl(GetCustomClassDef());
             OrganisationTestBO businessObject = OrganisationTestBO.CreateSavedOrganisation();
             //---------------Assert Precondition----------------
             Assert.IsNull(control.BusinessObject);
@@ -212,7 +212,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectControlWin control = new BusinessObjectControlWin(GetCustomClassDef());
+            BOEditorControl control = new BOEditorControl(GetCustomClassDef());
             OrganisationTestBO businessObject = OrganisationTestBO.CreateSavedOrganisation();
             control.BusinessObject = businessObject;
             //---------------Assert Precondition----------------
@@ -229,7 +229,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectControlWin control = new BusinessObjectControlWin(GetCustomClassDef());
+            BOEditorControl control = new BOEditorControl(GetCustomClassDef());
             control.BusinessObject = null;
             //---------------Assert Precondition----------------
             Assert.IsNull(control.BusinessObject);
@@ -244,7 +244,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectControlWin control = new BusinessObjectControlWin(GetCustomClassDef());
+            BOEditorControl control = new BOEditorControl(GetCustomClassDef());
             control.BusinessObject = null;
             //---------------Assert Precondition----------------
             Assert.IsNull(control.BusinessObject);

@@ -60,9 +60,9 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the GridSelector class.
     /// </summary>
     [TestFixture]
-    public class TestReadOnlyGridControlSelectorWin : TestBOSelectorWin
+    public class TestReadOnlyGridControlSelectorWin : TestBOSelector
     {
-        private const string _gridIdColumnName = "HABANERO_OBJECTID";
+//        private const string _gridIdColumnName = "HABANERO_OBJECTID";
 
         //[TestFixtureSetUp]
         //private void TestFixtureSetUp()
@@ -86,6 +86,7 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGrid readOnlyGrid = ((IReadOnlyGridControl)selector).Grid;
             foreach (IDataGridViewRow row in readOnlyGrid.Rows)
             {
+                if (row == null) continue;//This is done to stop the Pragma warning.
                 if (count == index)
                 {
                     IBusinessObject businessObjectAtRow = readOnlyGrid.GetBusinessObjectAtRow(count);
@@ -103,7 +104,7 @@ namespace Habanero.Test.UI.Base
             {
                 currentRow = gridSelector.SelectedRows[0];
             }
-            
+           
             if (currentRow == null) return -1;
 
             return gridSelector.Rows.IndexOf(currentRow);

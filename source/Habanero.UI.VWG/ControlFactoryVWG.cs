@@ -202,21 +202,22 @@ namespace Habanero.UI.VWG
             return new ReadOnlyGridControlVWG(this);
         }
 
+        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, "default");
         }
-
+        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, uiDefName);
         }
-
+        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, businessObjectControl, "default");
         }
-
+        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, businessObjectControl, uiDefName);
@@ -562,22 +563,17 @@ namespace Habanero.UI.VWG
             return new DateTimePickerMapperStrategyVWG();
         }
 
-        public IBusinessObjectControlWithErrorDisplay CreateBOEditorForm(ClassDef lookupTypeClassDef, string uiDefName, IControlFactory controlFactory)
-        {
-            return null;
-        }
-
-        public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
+        public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
         {
             throw new System.NotImplementedException();
         }
 
-        public IGridAndBOEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
+        public IBOSelectorAndEditor CreateGridAndBOEditorControl(ClassDef classDef)
         {
             throw new NotImplementedException();
         }
 
-        public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBusinessObjectControlWithErrorDisplay editorPanel) where TBusinessObject : class, IBusinessObject
+        public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
         {
             throw new NotImplementedException();
         }
@@ -596,7 +592,7 @@ namespace Habanero.UI.VWG
         }
 
 //
-//        public IGridAndBOEditorControl CreateGridAndBOEditorControl(IBusinessObjectControlWithErrorDisplay boEditorPanel)
+//        public IBOSelectorAndEditor CreateGridAndBOEditorControl(IBOEditorControl boEditorPanel)
 //        {
 //            throw new NotImplementedException();
 //        }

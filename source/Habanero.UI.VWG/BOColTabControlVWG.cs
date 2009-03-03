@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.UI.Base;
 
@@ -42,13 +43,21 @@ namespace Habanero.UI.VWG
         /// </summary>
         public BOColTabControlVWG(IControlFactory controlFactory)
         {
+            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             _controlFactory = controlFactory;
             BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(this);
             _tabControl = _controlFactory.CreateTabControl();
             manager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
             _boColTabControlManager = new BOColTabControlManager(_tabControl, _controlFactory);
+            _boColTabControlManager.BusinessObjectSelected += delegate { FireBusinessObjectSelected(); };
         }
-
+        private void FireBusinessObjectSelected()
+        {
+            if (this.BusinessObjectSelected != null)
+            {
+                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
+            }
+        }
         /// <summary>
         /// Sets the boControl that will be displayed on each tab page.  This must be called
         /// before the BoTabColControl can be used.
@@ -72,6 +81,7 @@ namespace Habanero.UI.VWG
             get { return BOColTabControlManager.BusinessObjectCollection; }
             set { BOColTabControlManager.BusinessObjectCollection = value; }
         }
+
 
         /// <summary>
         /// Returns the TabControl object
@@ -121,6 +131,50 @@ namespace Habanero.UI.VWG
         {
             get { return _boColTabControlManager; }
         }
+
+        #region IBOSelector
+
+        /// <summary>
+        /// Gets and sets the currently selected business object in the grid
+        /// </summary>
+        public IBusinessObject SelectedBusinessObject
+        {
+            get { return CurrentBusinessObject; }
+            set { CurrentBusinessObject = value; }
+        }
+
+        /// <summary>
+        /// Event Occurs when a business object is selected
+        /// </summary>
+        public event EventHandler<BOEventArgs> BusinessObjectSelected;
+
+        /// <summary>
+        /// Clears the business object collection and the rows in the data table
+        /// </summary>
+        public void Clear()
+        {
+            BOColTabControlManager.Clear();
+        }
+
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelector"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelector"></see>.</returns>
+        public int NoOfItems
+        {
+            get { return this.BOColTabControlManager.NoOfItems; }
+        }
+
+        /// <summary>
+        /// Returns the business object at the specified row number
+        /// </summary>
+        /// <param name="row">The row number in question</param>
+        /// <returns>Returns the busines object at that row, or null
+        /// if none is found</returns>
+        public IBusinessObject GetBusinessObjectAtRow(int row)
+        {
+            return this.BOColTabControlManager.GetBusinessObjectAtRow(row);
+        }
+
+        #endregion
 
     }
 }

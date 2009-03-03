@@ -895,7 +895,7 @@ namespace Habanero.Test.UI.Base
         {
             //This cannot be enforced since it is the grids underlying behaviour
         }
-
+#pragma warning disable 618,612
         [Test]
         public void TestSetCollection_IncorrectClassDef()
         {
@@ -908,7 +908,9 @@ namespace Habanero.Test.UI.Base
             readOnlyGridControl.Initialise(Sample.CreateClassDefVWG());
             try
             {
+
                 readOnlyGridControl.SetBusinessObjectCollection(col);
+
                 Assert.Fail
                     ("You cannot call set collection for a collection that has a different class def than is initialised");
                 ////---------------Test Result -----------------------
@@ -2151,7 +2153,7 @@ namespace Habanero.Test.UI.Base
         {
             gridBase.Columns.Add("TestProp", "TestProp");
         }
-
+#pragma warning restore 618,612
         #endregion //Utility Methods
     }
 

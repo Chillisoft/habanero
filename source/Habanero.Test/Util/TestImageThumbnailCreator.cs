@@ -11,7 +11,7 @@
 //     The Habanero framework is distributed in the hope that it will be useful,
 //     but WITHOUT ANY WARRANTY; without even the implied warranty of
 //     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
+//     GNU Lesser General Public License for more detailsest.
 // 
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
@@ -39,6 +39,7 @@ namespace Habanero.Test.Util
         public void TestThumbnailCreation()
         {
             Image oldImage = (Image)_resourceManager.GetObject("TestPhoto");
+            Assert.IsNotNull(oldImage);
             Assert.AreEqual(100, oldImage.Height);
             Assert.AreEqual(100, oldImage.Width);
 
@@ -57,6 +58,7 @@ namespace Habanero.Test.Util
         public void TestForHeightLargerThanWidth()
         {
             Image oldImage = (Image)_resourceManager.GetObject("TestJpeg2");
+            Assert.IsNotNull(oldImage);
             Assert.AreEqual(10, oldImage.Height);
             Assert.AreEqual(5, oldImage.Width);
 
@@ -75,6 +77,7 @@ namespace Habanero.Test.Util
         public void TestForWidthLargerThanHeight()
         {
             Image oldImage = (Image)_resourceManager.GetObject("TestJpeg3");
+            Assert.IsNotNull(oldImage);
             Assert.AreEqual(5, oldImage.Height);
             Assert.AreEqual(10, oldImage.Width);
 

@@ -24,12 +24,12 @@ using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
-//    /// <summary>
-//    /// Represents a list view control, which displays a collection of
-//    /// items that can be displayed using one of four different views
-//    /// </summary>
-//    public interface IListView : IControlHabanero
-//    {
+    /// <summary>
+    /// Represents a list view control, which displays a collection of
+    /// items that can be displayed using one of four different views
+    /// </summary>
+        public interface IListView : IListControl
+    {
 //        /// <summary>
 //        /// Occurs when the SelectedIndex property has changed.
 //        /// </summary>
@@ -131,5 +131,5 @@ namespace Habanero.UI.Base
 //        void SetCollection(IBusinessObjectCollection collection);
 
 //        IListViewItem CreateListViewItem(string displayName);
-//    }
+    }
 }

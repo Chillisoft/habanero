@@ -71,29 +71,29 @@ namespace Habanero.UI.VWG
         /// </summary>
         public ITabPage SelectedTab
         {
-            get { return TabPages[base.SelectedIndex]; }
-            set { base.SelectedIndex = TabPages.IndexOf(value); }
+            get
+            {
+                if ((this.SelectedIndex >= TabPages.Count) || (this.SelectedIndex == -1))
+                {
+                    return null;
+                }
+                return TabPages[this.SelectedIndex];
+            }
+            set { this.SelectedIndex = TabPages.IndexOf(value); }
         }
 
-//        /// <summary>
-//        /// Gets the collection of tab pages in this tab control
-//        /// </summary>
-//        IControlCollection IGroupControl.ChildControls
-//        {
-//            get
-//            {
-//                return new ControlCollectionVWG(this.Controls);
-//            }
-//        }
-
-//        /// <summary>
-//        /// Gets or sets the currently selected tab page
-//        /// </summary>
-//        IControlHabanero IGroupControl.SelectedChildControl
-//        {
-//            get { return TabPages[base.SelectedIndex]; }
-//            set { base.SelectedIndex = TabPages.IndexOf((ITabPage) value); }
-//        }
+        public new int SelectedIndex
+        {
+            get
+            {
+                if (this.TabPages.Count == 0)
+                {
+                    return -1;
+                }
+                return base.SelectedIndex;
+            }
+            set { base.SelectedIndex = value; }
+        }
 
         /// <summary>
         /// Adds an <see cref="IControlHabanero"/> to this control. The <paramref name="contentControl"/> is
@@ -149,9 +149,9 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Indicates the tab page at the specified indexed location in the collection
         /// </summary>
-        public ITabPage this[int i]
+        public ITabPage this[int index]
         {
-            get { return (ITabPage)_tabPages[i]; }
+            get { return (ITabPage)_tabPages[index]; }
         }
 
         /// <summary>

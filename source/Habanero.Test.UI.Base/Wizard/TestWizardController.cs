@@ -65,6 +65,21 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.AreSame(this._step1, _wizardController.GetNextStep());
         }
 
+        [Test]
+        public void Test_ToEliminateCompilerWarningsFromStepStub()
+        {
+            //---------------Set up test pack-------------------
+            WizardStepStub stepStub = new WizardStepStub();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            stepStub.Click += delegate {  };
+            stepStub.DoubleClick += delegate {  };
+            stepStub.Resize += delegate { };
+            stepStub.VisibleChanged += delegate { };
+            //---------------Test Result -----------------------
+        }
+
         [Test, ExpectedException(typeof (WizardStepException), ExpectedMessage = "Invalid Wizard Step: 1")]
         public void TestGetNextStepError()
         {

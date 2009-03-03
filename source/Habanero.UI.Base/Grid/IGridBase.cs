@@ -52,7 +52,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="col">The collection of business objects to display.  This
         /// collection must be pre-loaded.</param>
-        [Obsolete("Should be replaced with 'BusinessObjectCollection' property")]
+        [Obsolete("Should be replaced with 'BusinessObjectCollection' property")] //01 Mar 2009
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         void SetBusinessObjectCollection(IBusinessObjectCollection col);
 

@@ -153,7 +153,7 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the ListBoxSelector class.
     /// </summary>
     [TestFixture]
-    public class TestListBoxSelectorWin : TestBOSelectorWin
+    public class TestListBoxSelectorWin : TestBOSelector
     {
         protected override IControlFactory GetControlFactory()
         {
@@ -161,7 +161,6 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-
 
         protected override void SetSelectedIndex(IBOSelector selector, int index)
         {

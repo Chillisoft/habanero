@@ -30,7 +30,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-
+    [Obsolete("This has been replaced by IBOEditorControl : Brett 03 Mar 2009")]
     public abstract class TestGridWithPanelControl 
     {
         private const string CUSTOM_UIDEF_NAME = "custom1";
@@ -1367,7 +1367,6 @@ namespace Habanero.Test.UI.Base
             return myBos;
         }
     }
-
     internal class BusinessObjectControlStubWin : UserControlWin, IBusinessObjectControl
     {
         //private bool _displayErrorsCalled;
@@ -1395,7 +1394,6 @@ namespace Habanero.Test.UI.Base
         //    _clearErrorsCalled = true;
         //}
     }
-
     internal class BusinessObjectControlStubVWG : UserControlVWG, IBusinessObjectControl
     {
         //private bool _displayErrorsCalled;
@@ -1423,7 +1421,7 @@ namespace Habanero.Test.UI.Base
         //    _clearErrorsCalled = true;
         //}
     }
-
+        [Obsolete("This has been replaced by IBOEditorControl : Brett 03 Mar 2009")]
     internal class GridWithPanelStrategyVWGStub<TBusinessObject> : IGridWithPanelControlStrategy<TBusinessObject>
     {
         public void UpdateControlEnabledState(TBusinessObject lastSelectedBusinessObject)

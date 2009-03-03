@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -40,8 +41,8 @@ namespace Habanero.UI.VWG
     /// Some customisation is provided through the GridWithPanelControlStrategy,
     /// including how controls should be enabled for the appropriate environment.
     /// </summary>
-    /// TODO: This uses ReadOnlyGridControl due to some flaw in ReadOnlyGrid. Look at switching back
     /// to the grid in the future.  What happens when you double-click?
+    [Obsolete("This has been replaced by IBOSelectorAndEditor : Brett 03 Mar 2009")]
     public class GridWithPanelControlVWG<TBusinessObject> : UserControlVWG, IGridWithPanelControl<TBusinessObject>
         where TBusinessObject : class, IBusinessObject, new()
     {
@@ -158,6 +159,7 @@ namespace Habanero.UI.VWG
     /// <summary>
     /// Represents a panel containing a PanelInfo used to edit a single business object.
     /// </summary>
+    [Obsolete("This has been replaced by IBOEditorControl : Brett 03 Mar 2009")]
     public class BusinessObjectPanelVWG<T> : UserControlVWG, IBusinessObjectPanel where T : class, IBusinessObject
     {
         private IPanelInfo _panelInfo;
@@ -197,6 +199,7 @@ namespace Habanero.UI.VWG
     /// <summary>
     /// Provides a strategy to add custom behaviour to a GridWithPanelControl
     /// </summary>
+    [Obsolete("This has been replaced by IBOEditorControl : Brett 03 Mar 2009")]
     public class GridWithPanelControlStrategyVWG<TBusinessObject> : IGridWithPanelControlStrategy<TBusinessObject>
     {
         private readonly IGridWithPanelControl<TBusinessObject> _gridWithPanelControl;

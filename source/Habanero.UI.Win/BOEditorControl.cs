@@ -9,19 +9,19 @@ namespace Habanero.UI.Win
     ///<summary>
     /// A Control for Editing/Viewing an <see cref="IBusinessObject"/>.
     ///</summary>
-    public class BusinessObjectControlWin : UserControlWin, IBusinessObjectControlWithErrorDisplay
+    public class BOEditorControl : UserControlWin, IBOEditorControl
     {
         private readonly IPanelInfo _panelInfo;
 
         ///<summary>
-        /// The Constructor for the <see cref="BusinessObjectControlWin"/> which passes in the
+        /// The Constructor for the <see cref="BOEditorControl"/> which passes in the
         /// <paramref name="classDef"/> for the <see cref="IBusinessObject"/> and the <see cref="uiDefName"/> that 
         ///  is used to defined the User Interface for the <see cref="IBusinessObject"/>      
         ///</summary>
         ///<param name="controlFactory">The control factory which is used to create the Controls on this form.</param>
         ///<param name="classDef">The <see cref="IClassDef"/> for the  <see cref="IBusinessObject"/> that will be edited by this control</param>
         ///<param name="uiDefName">The user interface defined in the <see cref="IClassDef"/> that will be used to Build this control</param>
-        public BusinessObjectControlWin(IControlFactory controlFactory,IClassDef classDef, string uiDefName)
+        public BOEditorControl(IControlFactory controlFactory,IClassDef classDef, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (classDef == null) throw new ArgumentNullException("classDef");
@@ -31,14 +31,14 @@ namespace Habanero.UI.Win
         }
 
         ///<summary>
-        /// The Constructor for the <see cref="BusinessObjectControlWin"/> which passes in the
+        /// The Constructor for the <see cref="BOEditorControl"/> which passes in the
         /// <paramref name="classDef"/> for the <see cref="IBusinessObject"/> and
         ///  this control will be built using the default <see cref="UIDef"/> and the <see cref="IControlFactory"/> 
         ///  from the <see cref="GlobalUIRegistry.ControlFactory"/>
         ///  is used to defined the User Interface for the <see cref="IBusinessObject"/>      
         ///</summary>
         ///<param name="classDef">The <see cref="IClassDef"/> for the  <see cref="IBusinessObject"/> that will be edited by this control</param>
-        public BusinessObjectControlWin(IClassDef classDef): this(GlobalUIRegistry.ControlFactory,classDef, "default")
+        public BOEditorControl(IClassDef classDef): this(GlobalUIRegistry.ControlFactory,classDef, "default")
         {
         }
 
@@ -65,7 +65,7 @@ namespace Habanero.UI.Win
     ///<summary>
     /// A Control for Editing/Viewing an <see cref="IBusinessObject"/> of type <typeparam name="T"/>.
     ///</summary>
-    public class BusinessObjectControlWin<T> : UserControlWin, IBusinessObjectControlWithErrorDisplay
+    public class BusinessObjectControlWin<T> : UserControlWin, IBOEditorControl
         where T : class, IBusinessObject
     {
         private readonly IPanelInfo _panelInfo;
@@ -101,7 +101,7 @@ namespace Habanero.UI.Win
         }
     }
     /// <summary>
-    /// A Utility Class used by <see cref="BusinessObjectControlWin"/> and <see cref="BusinessObjectControlWin{T}"/> providing common functionality.
+    /// A Utility Class used by <see cref="BOEditorControl"/> and <see cref="BusinessObjectControlWin{T}"/> providing common functionality.
     /// </summary>
     internal static class BusinessObjectControlUtils
     {
@@ -126,12 +126,12 @@ namespace Habanero.UI.Win
             }
             return uiForm;
         }
-        internal static IPanelInfo CreatePanelInfo(IControlFactory controlFactory, IClassDef classDef, string uiDefName, IBusinessObjectControlWithErrorDisplay businessObjectControl)
+        internal static IPanelInfo CreatePanelInfo(IControlFactory controlFactory, IClassDef classDef, string uiDefName, IBOEditorControl iboEditorControl)
         {
             UIForm uiForm = GetUiForm(classDef, uiDefName);
             PanelBuilder panelBuilder = new PanelBuilder(controlFactory);
             IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(uiForm);
-            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(businessObjectControl);
+            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(iboEditorControl);
             layoutManager.AddControl(panelInfo.Panel, BorderLayoutManager.Position.Centre);
             return panelInfo;
         }

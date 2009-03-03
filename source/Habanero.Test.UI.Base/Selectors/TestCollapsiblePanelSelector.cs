@@ -55,7 +55,7 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the CollapsiblePanelSelector class.
     /// </summary>
     [TestFixture]
-    public class TestCollapsiblePanelSelectorWin : TestBOSelectorWin
+    public class TestCollapsiblePanelSelectorWin : TestBOSelector
     {
         protected override IControlFactory GetControlFactory()
         {

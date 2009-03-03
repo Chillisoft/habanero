@@ -541,25 +541,20 @@ namespace Habanero.UI.Base
         IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy();
 
         ///<summary>
-        /// Creates a <see cref="IBusinessObjectControlWithErrorDisplay"/>
+        /// Creates a <see cref="IBOSelectorAndEditor"/>
         ///</summary>
-        IBusinessObjectControlWithErrorDisplay CreateBOEditorForm(ClassDef lookupTypeClassDef, string uiDefName, IControlFactory controlFactory);
-
-        ///<summary>
-        /// Creates a <see cref="IGridAndBOEditorControl"/>
-        ///</summary>
-        IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>() 
+        IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>() 
             where TBusinessObject:class, IBusinessObject;
 
         ///<summary>
-        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        /// Creates a <see cref="IBOSelectorAndEditor"/>
         ///</summary>
-        IGridAndBOEditorControl CreateGridAndBOEditorControl(ClassDef classDef);
+        IBOSelectorAndEditor CreateGridAndBOEditorControl(ClassDef classDef);
 
         ///<summary>
-        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        /// Creates a <see cref="IBOSelectorAndEditor"/>
         ///</summary>
-        IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBusinessObjectControlWithErrorDisplay editorPanel)
+        IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel)
             where TBusinessObject : class, IBusinessObject;
 
         ///<summary>

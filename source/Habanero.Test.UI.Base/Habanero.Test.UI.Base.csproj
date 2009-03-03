@@ -83,8 +83,10 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
-    <Compile Include="Controllers\TestListBoxCollectionController.cs" />
+    <Compile Include="Controllers\TestBOColTabControlManager.cs" />
+    <Compile Include="Controllers\TestListBoxCollectionManager.cs" />
     <Compile Include="Selectors\TestBOSelector.cs" />
+    <Compile Include="Selectors\TestBOTabControlSelector.cs" />
     <Compile Include="Selectors\TestCollapsiblePanelSelector.cs">
     </Compile>
     <Compile Include="Selectors\TestComboBoxSelector.cs" />
@@ -137,7 +139,7 @@
     <Compile Include="TestOKCancelDialog.cs" />
     <Compile Include="TestPanel.cs" />
     <Compile Include="TestTextBox.cs" />
-    <Compile Include="Controllers\TestComboBoxCollectionController.cs" />
+    <Compile Include="Controllers\TestComboBoxCollectionManagerWin.cs" />
     <Compile Include="FilterController\TestCompositeFilterClause.cs" />
     <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
     <Compile Include="FilterController\TestFilterControlDate.cs" />
@@ -161,7 +163,7 @@
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
     <Compile Include="Mappers\TestControlMapper.cs">
     </Compile>
-    <Compile Include="Controllers\TestListViewCollectionController.cs" />
+    <Compile Include="Controllers\TestListViewCollectionManager.cs" />
     <Compile Include="Mappers\TestLookupComboBoxMapper.cs" />
     <Compile Include="Mappers\TestMapperBase.cs" />
     <Compile Include="Mappers\TestNumericUpDownCurrencyMapper.cs" />

@@ -158,11 +158,11 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Indicates the tab page at the specified indexed location in the collection
         /// </summary>
-        public ITabPage this[int i]
+        public ITabPage this[int index]
         {
             get
             {
-                if(i>-1) return (ITabPage)_tabPages[i];
+                if(index>-1) return (ITabPage)_tabPages[index];
                 return null;
             }
         }

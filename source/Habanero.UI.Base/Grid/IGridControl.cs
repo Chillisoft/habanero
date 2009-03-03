@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using System.ComponentModel;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -26,7 +28,7 @@ namespace Habanero.UI.Base
     /// Provides a combination of grid, filter and buttons used to edit a
     /// collection of business objects
     /// </summary>
-    public interface IGridControl : IBOSelector //IControlHabanero
+    public interface IGridControl : IBOSelector 
     {
         /// <summary>
         /// Initiliases the grid structure using the default UI class definition (implicitly named "default")
@@ -95,10 +97,6 @@ namespace Habanero.UI.Base
         ///</summary>
         bool IsInitialised { get; }
 
-        ///<summary>
-        /// The Business Object currently Selected in the Grid.
-        ///</summary>
-        IBusinessObject SelectedBusinessObject { get; set; }
 
         /// <summary>
         /// Sets the business object collection to display.  Loading of
@@ -108,6 +106,16 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="boCollection">The new business object collection
         /// to be shown in the grid</param>
+        [Obsolete("Should be replaced with 'BusinessObjectCollection' property")] //01 Mar 2009
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
+
+
+        /// <summary>
+        /// Gets and sets the currently selected business object in the grid
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        new IBusinessObject SelectedBusinessObject { get; set; }
+
     }
 }

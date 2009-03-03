@@ -51,7 +51,7 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the GridSelector class.
     /// </summary>
     [TestFixture]
-    public class TestGridSelectorWin : TestBOSelectorWin
+    public class TestGridSelectorWin : TestBOSelector
     {
         private const string _gridIdColumnName = "HABANERO_OBJECTID";
         protected override IControlFactory GetControlFactory()

@@ -36,7 +36,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Indicates the tab page at the specified indexed location in the collection
         /// </summary>
-        ITabPage this[int i] { get; }
+        ITabPage this[int index] { get; }
 
         /// <summary>
         /// Indicates the number of tab pages in the collection

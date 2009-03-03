@@ -24,6 +24,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
+#pragma warning disable 618,612
     public abstract class TestReadOnlyGridButtonControl //: TestUsingDatabase
     {
 
@@ -237,6 +238,7 @@ namespace Habanero.Test.UI.Base
             MyBO bo = new MyBO();
             myBOS.Add(bo);
             myBOS.Add(new MyBO());
+
             readOnlyGridControl.SetBusinessObjectCollection(myBOS);
             bool gridItemSelected = false;
             readOnlyGridControl.Grid.SelectedBusinessObject = null;
@@ -248,7 +250,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(gridItemSelected);
         }
-
+#pragma warning restore 618,612
     }
 
 }

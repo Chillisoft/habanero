@@ -49,7 +49,7 @@ namespace Habanero.UI.Base
     /// parent form is closed and take appropriate save action using SaveChanges(), or use an
     /// <see cref="IEditableGridControl"/> , which provides Save and Cancel buttons. 
     /// </summary>
-    public interface IEditableGrid : IGridBase
+    public interface IEditableGrid : IReadOnlyGrid
     {
         //IDataGridViewColumnCollection Columns { get; }
 

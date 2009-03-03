@@ -21,12 +21,11 @@ using System.ComponentModel;
 
 namespace Habanero.UI.Base
 {
-    //TODO: Port
-    ///// <summary>
-    ///// Represents an item in a ListView control
-    ///// </summary>
-    //public interface IListViewItem
-    //{
+    /// <summary>
+    /// Represents an item in a ListView control
+    /// </summary>
+    public interface IListViewItem
+    {
     //    /// <summary>
     //    /// Removes the item from its associated ListView control.
     //    /// </summary>
@@ -75,5 +74,5 @@ namespace Habanero.UI.Base
     //    /// Gets or sets an object that contains data to associate with the item
     //    /// </summary>
     //    object Tag { get; set; }
-    //}
+    }
 }

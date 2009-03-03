@@ -25,7 +25,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public abstract class TestListViewCollectionController : TestUsingDatabase
+    public abstract class TestListViewCollectionManager : TestUsingDatabase
     {
         //TODO: Port
     }
@@ -36,7 +36,7 @@ namespace Habanero.Test.UI.Base
 //        protected abstract IControlFactory GetControlFactory();
 //
 //        //[TestFixture]
-//        //public class TestListViewCollectionMapperWin : TestListViewCollectionController
+//        //public class TestListViewCollectionMapperWin : TestListViewCollectionManager
 //        //{
 //        //    protected override IControlFactory GetControlFactory()
 //        //    {
@@ -47,7 +47,7 @@ namespace Habanero.Test.UI.Base
 //        //}
 //
 //        [TestFixture]
-    //        public class TestListViewCollectionMapperVWG : TestListViewCollectionController
+    //        public class TestListViewCollectionMapperVWG : TestListViewCollectionManager
 //        {
 //            protected override IControlFactory GetControlFactory()
 //            {

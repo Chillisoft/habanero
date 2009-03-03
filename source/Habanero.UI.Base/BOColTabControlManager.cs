@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -56,12 +57,15 @@ namespace Habanero.UI.Base
         ///<param name="controlFactory"></param>
         public BOColTabControlManager(ITabControl tabControl, IControlFactory controlFactory)
         {
+            if (tabControl == null) throw new ArgumentNullException("tabControl");
+            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             //BorderLayoutManager manager = new BorderLayoutManager(this);
             _tabControl = tabControl;
             _controlFactory = controlFactory;
             //manager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
             _pageBoTable = new Dictionary<ITabPage, IBusinessObject>();
             _boPageTable = new Dictionary<IBusinessObject, ITabPage>();
+            TabControl.SelectedIndexChanged += delegate { FireBusinessObjectSelected(); };
         }
 
         /// <summary>
@@ -73,21 +77,17 @@ namespace Habanero.UI.Base
             set
             {
                 _boControl = value;
-                if (_boControl != null)
-                {
-                    BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(TabControl);
-                    ITabPage tabPage = _controlFactory.CreateTabPage(_boControl.Text);
-                    _boControl.Dock = DockStyle.Fill;
-                    tabPage.Controls.Add(_boControl);
-                    //_pageBoTable.Add(tabPage,_boControl.BusinessObject);
-                    //_boPageTable.Add(_boControl.BusinessObject,tabPage);
-                    manager.AddControl(tabPage, BorderLayoutManager.Position.Centre);
-                    
-                }
-                else
+                if (_boControl == null)
                 {
                     throw new ArgumentException("boControl must be of type IControlHabanero or one of its subtypes.");
                 }
+                BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(TabControl);
+                ITabPage tabPage = _controlFactory.CreateTabPage(BusinessObjectControl.Text);
+                BusinessObjectControl.Dock = DockStyle.Fill;
+                tabPage.Controls.Add(BusinessObjectControl);
+                //_pageBoTable.Add(tabPage,_boControl.BusinessObject);
+                //_boPageTable.Add(_boControl.BusinessObject,tabPage);
+                layoutManager.AddControl(tabPage, BorderLayoutManager.Position.Centre);
             }
             get { return _boControl; }
         }
@@ -100,6 +100,12 @@ namespace Habanero.UI.Base
         {
             set
             {
+                CheckBusinessObjectControlSet("BusinessObjectCollection");
+                if (_businessObjectCollection != null)
+                {
+                    _businessObjectCollection.BusinessObjectAdded -= BusinessObjectAddedHandler;
+                    _businessObjectCollection.BusinessObjectRemoved -= BusinessObjectRemovedHandler;
+                }
                 _businessObjectCollection = value;
                 ReloadCurrentCollection();
             }
@@ -108,26 +114,37 @@ namespace Habanero.UI.Base
 
         private void ReloadCurrentCollection()
         {
-            _tabControl.SelectedIndexChanged -= TabChangedHandler;
+            TabControl.SelectedIndexChanged -= TabChangedHandler;
             ClearTabPages();
 
             if (_businessObjectCollection == null)
             {
-                _tabControl.SelectedIndexChanged += TabChangedHandler;
+                TabControl.SelectedIndexChanged += TabChangedHandler;
                 return;
             }
             foreach (BusinessObject bo in _businessObjectCollection)
             {
-                ITabPage page = _controlFactory.CreateTabPage(bo.ToString());
-                //page.Text =  ;
-                AddTabPage(page, bo);
+                AddTabPage(bo);
             }
             if (_businessObjectCollection.Count > 0)
             {
-                _tabControl.SelectedIndex = 0;
+                TabControl.SelectedIndex = 0;
             }
-            _tabControl.SelectedIndexChanged += TabChangedHandler;
+            else
+            {
+                TabControl.SelectedIndex = -1;
+            }
+            TabControl.SelectedIndexChanged += TabChangedHandler;
+
+            _businessObjectCollection.BusinessObjectAdded += BusinessObjectAddedHandler;
+            _businessObjectCollection.BusinessObjectRemoved += BusinessObjectRemovedHandler;
             TabChanged();
+        }
+
+        private void AddTabPage(IBusinessObject bo)
+        {
+            ITabPage page = _controlFactory.CreateTabPage(bo.ToString());
+            AddTabPage(page, bo);
         }
 
         /// <summary>
@@ -146,29 +163,19 @@ namespace Habanero.UI.Base
         /// </summary>
         public virtual void TabChanged()
         {
-            if (_tabControl.SelectedTab != null)
-            {
-                _tabControl.SelectedTab.Controls.Clear();
-                _tabControl.SelectedTab.Controls.Add(_boControl);
-                if (_boControl != null)
-                {
-                    _boControl.BusinessObject = GetBo(_tabControl.SelectedTab);
-                   // _boControl.Dock = DockStyle.Fill;
-                    _tabControl.SelectedTab.Controls.Add(_boControl);
-                    
-                }
-            }
+            if (TabControl.SelectedTab == null) return;
+            TabControl.SelectedTab.Controls.Clear();
+            TabControl.SelectedTab.Controls.Add(BusinessObjectControl);
+            if (BusinessObjectControl == null) return;
+            BusinessObjectControl.BusinessObject = GetBo(TabControl.SelectedTab);
+            // _boControl.Dock = DockStyle.Fill;
+            //TabControl.SelectedTab.Controls.Add(BusinessObjectControl);
         }
-
-//        protected virtual Dictionary<string, object> GetBusinessObjectDisplayValueDictionary()
-//        {
-//            return BusinessObjectLookupList.CreateDisplayValueDictionary(_businessObjectCollection, false);
-//        }
 
         /// <summary>
         /// Returns the TabControl object
         /// </summary>
-        public ITabControl TabControl
+        internal ITabControl TabControl
         {
             get { return _tabControl; }
         }
@@ -194,6 +201,7 @@ namespace Habanero.UI.Base
         {
             get
             {
+                CheckBusinessObjectControlSet("CurrentBusinessObject");
                 if (_businessObjectCollection == null)
                 {
                     return null;
@@ -203,10 +211,41 @@ namespace Habanero.UI.Base
             }
             set
             {
-                if (value == null) return;
+                if (value == null) return; //The control is being swapped out 
+                    // onto each tab i.e. all the tabs use the Same BusinessObjectControl
+                    // setting the selected Bo to null is therefore not a particularly 
+                    // sensible action on a BOTabControl.
+
+
+//                if (value == null)
+//                {
+//                    BusinessObjectControl.BusinessObject = null;
+//                    TabControl.SelectedIndex = -1;
+//                    TabControl.SelectedTab = null;
+//                    return;
+//                }
+                CheckBusinessObjectColNotNull();
                 TabControl.SelectedIndex = _businessObjectCollection.IndexOf(value);
-                _boControl.BusinessObject = value;
+                BusinessObjectControl.BusinessObject = value;
             }
+        }
+
+        private void CheckBusinessObjectColNotNull()
+        {
+            if (_businessObjectCollection != null) return;
+
+            const string expectedMessage =
+                "You cannot set the 'CurrentBusinessObject' for BOColTabControlManager since the BusinessObjectCollection has not been set";
+            throw new HabaneroDeveloperException(expectedMessage, expectedMessage);
+        }
+
+        private void CheckBusinessObjectControlSet(string methodName)
+        {
+            if (this.BusinessObjectControl != null) return;
+
+            string errMessage =
+                "You cannot set the '" + methodName + "' for BOColTabControlManager since the BusinessObjectControl has not been set";
+            throw new HabaneroDeveloperException(errMessage, errMessage);
         }
 
         ///<summary>
@@ -225,6 +264,13 @@ namespace Habanero.UI.Base
             get { return _boPageTable; }
         }
 
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelector"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelector"></see>.</returns>
+        public int NoOfItems
+        {
+            get { return TabControl.TabPages.Count; }
+        }
+
         /// <summary>
         /// Adds a tab page to represent the given business object
         /// </summary>
@@ -232,10 +278,10 @@ namespace Habanero.UI.Base
         /// <param name="bo">The business ojbect to represent</param>
         protected virtual void AddTabPage(ITabPage page, IBusinessObject bo)
         {
-            if (_boControl != null)
+            if (BusinessObjectControl != null)
             {
-                _boControl.BusinessObject = bo;
-                page.Controls.Add(_boControl);
+                BusinessObjectControl.BusinessObject = bo;
+                page.Controls.Add(BusinessObjectControl);
             }
             AddTabPageToEnd(page);
             AddBoPageIndexing(bo, page);
@@ -258,7 +304,7 @@ namespace Habanero.UI.Base
         /// <param name="page">The Tab Page to be added to the Tab Control</param>
         protected virtual void AddTabPageToEnd(ITabPage page)
         {
-            _tabControl.TabPages.Add(page);
+            TabControl.TabPages.Add(page);
         }
 
         /// <summary>
@@ -271,16 +317,83 @@ namespace Habanero.UI.Base
         {
             return _boPageTable.ContainsKey(bo) ? _boPageTable[bo] : null;
         }
+        /// <summary>
+        /// Clears the Business Object collection and removes all tab pages.
+        /// </summary>
+        public virtual void Clear()
+        {
+            ClearTabPages();
+            _businessObjectCollection = null;
+        }
 
         /// <summary>
         /// Clears the tab pages
         /// </summary>
         protected virtual void ClearTabPages()
         {
-            _tabControl.Controls.Clear();
-            //_tabControl.TabPages.Clear();
+            TabControl.Controls.Clear();
             _pageBoTable.Clear();
             _boPageTable.Clear();
         }
+
+        /// <summary>
+        /// Returns the business object at the specified row number
+        /// </summary>
+        /// <param name="row">The row number in question</param>
+        /// <returns>Returns the busines object at that row, or null
+        /// if none is found</returns>
+        public IBusinessObject GetBusinessObjectAtRow(int row)
+        {
+            if (IndexOutOfRange(row)) return null;
+            ITabPage page = TabControl.TabPages[row];
+            return GetBo(page);
+        }
+
+        private bool IndexOutOfRange(int row)
+        {
+            return row < 0 || row >= NoOfItems;
+        }
+
+        #region For IBOSelector
+
+        /// <summary>
+        /// Event Occurs when a business object is selected
+        /// </summary>
+        public event EventHandler<BOEventArgs> BusinessObjectSelected;
+
+        private void FireBusinessObjectSelected()
+        {
+            if (this.BusinessObjectSelected != null)
+            {
+                this.BusinessObjectSelected(this, new BOEventArgs(this.CurrentBusinessObject));
+            }
+        }
+
+        /// <summary>
+        /// This handler is called when a business object has been removed from
+        /// the collection - it subsequently removes the item from the ListBox
+        /// list as well.
+        /// </summary>
+        /// <param name="sender">The object that notified of the change</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private void BusinessObjectRemovedHandler(object sender, BOEventArgs e)
+        {
+            ITabPage page = GetTabPage(e.BusinessObject);
+            TabControl.Controls.Remove(page);
+        }
+
+        /// <summary>
+        /// This handler is called when a business object has been added to
+        /// the collection - it subsequently adds the item to the ListBox
+        /// list as well.
+        /// </summary>
+        /// <param name="sender">The object that notified of the change</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private void BusinessObjectAddedHandler(object sender, BOEventArgs e)
+        {
+            AddTabPage(e.BusinessObject);
+        }
+
+        #endregion
     }
 }

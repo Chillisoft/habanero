@@ -955,41 +955,34 @@ namespace Habanero.UI.Win
             return new DateTimePickerMapperStrategyWin();
         }
 #pragma warning disable 618,612//Maintained for backward compatibility
-        ///<summary>
-        /// Creates a <see cref="IBusinessObjectControlWithErrorDisplay"/>
-        ///</summary>
-        public IBusinessObjectControlWithErrorDisplay CreateBOEditorForm(ClassDef lookupTypeClassDef, string uiDefName, IControlFactory controlFactory)
-        {
-            return new BOEditorPanelWin(lookupTypeClassDef, uiDefName, controlFactory);
-        }
 #pragma warning restore 618,612
         ///<summary>
-        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        /// Creates a <see cref="IBOSelectorAndEditor"/>
         ///</summary>
-        public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
+        public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
         {
             return new GridAndBOEditorControlWin<TBusinessObject>(this, "default");
 
         }
 
         ///<summary>
-        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        /// Creates a <see cref="IBOSelectorAndEditor"/>
         ///</summary>
-        public IGridAndBOEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
+        public IBOSelectorAndEditor CreateGridAndBOEditorControl(ClassDef classDef)
         {
             return new GridAndBOEditorControlWin(this, classDef, "default");
         }
 
         ///<summary>
-        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        /// Creates a <see cref="IBOSelectorAndEditor"/>
         ///</summary>
-        public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBusinessObjectControlWithErrorDisplay editorPanel) where TBusinessObject : class, IBusinessObject
+        public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
         {
 
-            return new GridAndBOEditorControlWin<TBusinessObject>(this, editorPanel);
+            return new GridAndBOEditorControlWin<TBusinessObject>(this, editorControlPanel);
         }
 
-//        public IGridAndBOEditorControl CreateGridAndBOEditorControl(IBusinessObjectControlWithErrorDisplay boEditorPanel,IBusinessObject businessObject)
+//        public IBOSelectorAndEditor CreateGridAndBOEditorControl(IBOEditorControl boEditorPanel,IBusinessObject businessObject)
 //        {
 //            return new GridAndBOEditorControlWin<IBusinessObject>(this, boEditorPanel,businessObject);
 //        }

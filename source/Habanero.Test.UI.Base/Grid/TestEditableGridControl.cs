@@ -36,6 +36,7 @@ using Form=Gizmox.WebGUI.Forms.Form;
 
 namespace Habanero.Test.UI.Base
 {
+#pragma warning disable 618,612
     /// <summary>
     /// TODO:
     /// - check editable grid in actual win and giz applications (check all extra EditableGrid behaviour also,
@@ -370,7 +371,9 @@ namespace Habanero.Test.UI.Base
             IEditableGridControl editableGridControl = CreateEditableGridControl();
             AddControlToForm(editableGridControl);
             editableGridControl.Grid.Columns.Add("TestProp", "TestProp");
+
             editableGridControl.SetBusinessObjectCollection(col);
+
             //----------------Assert Preconditions --------------
 
             Assert.IsTrue(editableGridControl.Grid.Rows.Count > 0, "There should be items in teh grid b4 clearing");
@@ -1099,4 +1102,5 @@ namespace Habanero.Test.UI.Base
 
         #endregion
     }
+#pragma warning restore 618,612
 }

@@ -41,6 +41,10 @@ namespace Habanero.UI.Base
     /// </summary>
     public class WizardStepNotInitialised : WizardStepException
     {
+        ///<summary>
+        /// Constructor for <see cref="WizardStepNotInitialised"/>
+        ///</summary>
+        ///<param name="message"></param>
         public WizardStepNotInitialised(string message) : base(message)
         {
         }

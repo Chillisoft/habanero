@@ -20,7 +20,7 @@ namespace Habanero.Test.UI.Base
     /// override the <see cref="GetControlFactory"/> to return a VWG control Factory.
     /// </summary>
     [TestFixture]
-    public class TestBOSelectorWin
+    public class TestBOSelector
     {
         protected virtual IControlFactory GetControlFactory()
         {
@@ -415,7 +415,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(ActualIndex(0), SelectedIndex(selector));
         }
         [Test]
-        public void Test_AutoSelectsFirstItem_NoItems()
+        public virtual void Test_AutoSelectsFirstItem_NoItems()
         {
             //---------------Set up test pack-------------------
             IBOSelector selector = CreateSelector();

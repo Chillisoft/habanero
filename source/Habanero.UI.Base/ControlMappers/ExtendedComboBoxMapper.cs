@@ -49,9 +49,9 @@ namespace Habanero.UI.Base
                     ShowPopupForm();
                     PopupForm.Closed += delegate
                         {
-                            IGridAndBOEditorControl gridAndBOEditorControl =
-                                (IGridAndBOEditorControl) PopupForm.Controls[0];
-                            IBusinessObject currentBusinessObject = gridAndBOEditorControl.CurrentBusinessObject;
+                            IBOSelectorAndEditor iboSelectorAndEditor =
+                                (IBOSelectorAndEditor) PopupForm.Controls[0];
+                            IBusinessObject currentBusinessObject = iboSelectorAndEditor.CurrentBusinessObject;
                             if ((currentBusinessObject != null) && currentBusinessObject.IsValid())
                             {
                                 currentBusinessObject.Save();
@@ -97,12 +97,12 @@ namespace Habanero.UI.Base
             PopupForm.Height = 600;
             PopupForm.Width = 800;
 
-            IGridAndBOEditorControl gridAndBOEditorControl = ControlFactory.CreateGridAndBOEditorControl
+            IBOSelectorAndEditor iboSelectorAndEditor = ControlFactory.CreateGridAndBOEditorControl
                 (lookupTypeClassDef);
-            gridAndBOEditorControl.Dock = DockStyle.Fill;
-            PopupForm.Controls.Add(gridAndBOEditorControl);
+            iboSelectorAndEditor.Dock = DockStyle.Fill;
+            PopupForm.Controls.Add(iboSelectorAndEditor);
             IBusinessObjectCollection col = GetCollection(classType);
-            gridAndBOEditorControl.SetBusinessObjectCollection(col);
+            iboSelectorAndEditor.BusinessObjectCollection = col;
         }
 
         private ClassDef GetLookupTypeClassDef(out Type classType)

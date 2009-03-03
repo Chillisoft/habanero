@@ -175,7 +175,7 @@ namespace Habanero.Test.UI.Base
 //            //---------------Set up test pack-------------------
 //            IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
 //            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-//            boColTabControl.BusinessObjectControl = busControl;
+//            boColTabControl.IBOEditor = busControl;
 //            BusinessObjectCollection<MyBO> myBOS = new BusinessObjectCollection<MyBO>();
 //
 //            //---------------Execute Test ----------------------
@@ -220,6 +220,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Execute Test ----------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
+            boColTabControl.BusinessObjectControl = GetBusinessObjectControlStub();
             //---------------Test Result -----------------------
             Assert.IsNull(boColTabControl.CurrentBusinessObject);
         }
@@ -410,7 +411,7 @@ namespace Habanero.Test.UI.Base
             return myBoCol;
         }
 
-        private class BusinessObjectControlVWGStub : ControlVWG, IBusinessObjectControl
+        public class BusinessObjectControlVWGStub : ControlVWG, IBusinessObjectControl
         {
             private IBusinessObject _bo;
 
@@ -425,7 +426,7 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        private class BusinessObjectControlWinStub : ControlWin, IBusinessObjectControl
+        public class BusinessObjectControlWinStub : ControlWin, IBusinessObjectControl
         {
             private IBusinessObject _bo;
 

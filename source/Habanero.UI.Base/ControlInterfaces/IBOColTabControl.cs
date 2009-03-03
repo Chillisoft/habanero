@@ -30,23 +30,23 @@ namespace Habanero.UI.Base
     /// This control is suitable for a business object collection with a limited
     /// number of objects.
     /// </summary>
-    public interface IBOColTabControl: IControlHabanero
+    public interface IBOColTabControl: IBOSelector
     {
         /// <summary>
         /// Sets the boControl that will be displayed on each tab page.  This must be called
-        /// before the BoTabColControl can be used.
+        /// before the BoTabColControl can be used.<vbr/>
+        /// The business object control that is
+        /// displaying the business object information in the tab page
         /// </summary>
-        /// <param name="value">The business object control that is
-        /// displaying the business object information in the tab page</param>
         IBusinessObjectControl BusinessObjectControl { set; get;}
 
-        /// <summary>
-        /// Sets the collection of tab pages for the collection of business
-        /// objects provided
-        /// </summary>
-        /// <param name="value">The business object collection to create tab pages
-        /// for</param>
-        IBusinessObjectCollection BusinessObjectCollection { set; get; }
+//        /// <summary>
+//        /// Sets the collection of tab pages for the collection of business
+//        /// objects provided
+//        /// </summary>
+//        /// <param name="value">The business object collection to create tab pages
+//        /// for</param>
+//        IBusinessObjectCollection BusinessObjectCollection { set; get; }
 
         /// <summary>
         /// Returns the TabControl object

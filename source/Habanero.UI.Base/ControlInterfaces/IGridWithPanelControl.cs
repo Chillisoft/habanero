@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 
 namespace Habanero.UI.Base
@@ -43,6 +44,7 @@ namespace Habanero.UI.Base
     /// Some customisation is provided through the GridWithPanelControlStrategy,
     /// including how controls should be enabled for the appropriate environment.
     /// </summary>
+    [Obsolete("This has been replaced by IBOSelectorAndEditor : Brett 03 Mar 2009")]
     public interface IGridWithPanelControl<TBusinessObject> : IControlHabanero
     {
         /// <summary>
@@ -89,6 +91,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Provides a strategy to add custom behaviour to a GridWithPanelControl
     /// </summary>
+    [Obsolete("This has been replaced by IBOEditorControl : Brett 03 Mar 2009")]
     public interface IGridWithPanelControlStrategy<TBusinessObject>
     {
         /// <summary>

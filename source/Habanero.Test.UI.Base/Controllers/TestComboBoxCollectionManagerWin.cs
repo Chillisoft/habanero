@@ -27,7 +27,7 @@ namespace Habanero.Test.UI.Base.Controllers
 {
 
     [TestFixture]
-    public class TestComboBoxCollectionControllerVWG : TestComboBoxCollectionControllerWin
+    public class TestComboBoxCollectionControllerVWG : TestComboBoxCollectionManagerWin
     {
         protected override IControlFactory GetControlFactory()
         {
@@ -35,7 +35,7 @@ namespace Habanero.Test.UI.Base.Controllers
         }
     }
     [TestFixture]
-    public class TestComboBoxCollectionControllerWin
+    public class TestComboBoxCollectionManagerWin
     {
         protected virtual IControlFactory GetControlFactory()
         {

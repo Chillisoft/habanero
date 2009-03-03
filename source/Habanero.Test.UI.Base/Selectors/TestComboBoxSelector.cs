@@ -72,7 +72,7 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the ComboBoxSelector class.
     /// </summary>
     [TestFixture]
-    public class TestComboBoxSelectorWin : TestBOSelectorWin
+    public class TestComboBoxSelectorWin : TestBOSelector
     {
         protected override IControlFactory GetControlFactory()
         {
@@ -96,6 +96,8 @@ namespace Habanero.Test.UI.Base
         {
             return GetControlFactory().CreateComboBoxSelector();
         }
+
+
 
         [Test]
         public void Test_Constructor_ComboBoxSet()

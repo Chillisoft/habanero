@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Base.Controllers
 {
     [TestFixture]
-    public class TestListBoxCollectionControllerVWG : TestListBoxCollectionController
+        public class TestListBoxCollectionManagerVWG : TestListBoxCollectionManager
     {
         protected override IControlFactory GetControlFactory()
         {
@@ -16,7 +16,7 @@ namespace Habanero.Test.UI.Base.Controllers
     }
 
     [TestFixture]
-    public class TestListBoxCollectionController
+    public class TestListBoxCollectionManager
     {
         protected virtual IControlFactory GetControlFactory()
         {
