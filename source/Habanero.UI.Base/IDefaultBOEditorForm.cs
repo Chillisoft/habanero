@@ -39,12 +39,6 @@ namespace Habanero.UI.Base
         new bool ShowDialog();
 
         /// <summary>
-        /// Gets or sets the dialog result that indicates what action was
-        /// taken to close the form
-        /// </summary>
-        DialogResult DialogResult { get; set;}
-
-        /// <summary>
         /// Gets the object containing all information related to the form, including
         /// its controls, mappers and business object
         /// </summary>

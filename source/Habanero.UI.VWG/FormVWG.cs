@@ -119,5 +119,15 @@ namespace Habanero.UI.VWG
             get { return (Base.FormStartPosition)base.StartPosition; }
             set { base.StartPosition = (Gizmox.WebGUI.Forms.FormStartPosition)value; }
         }
+
+        /// <summary>
+        /// Gets or sets the dialog result that indicates what action was
+        /// taken to close the form
+        /// </summary>
+        public Base.DialogResult DialogResult
+        {
+            get { return (Base.DialogResult)base.DialogResult; }
+            set { base.DialogResult = (Gizmox.WebGUI.Forms.DialogResult)value; }
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace Habanero.Test.UI.Base
             FormVWG formVWG = new FormVWG();
 
             //---------------Execute Test ----------------------
-            formVWG.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) Habanero.UI.Base.DialogResult.Abort;
+            formVWG.DialogResult = Habanero.UI.Base.DialogResult.Abort;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) Gizmox.WebGUI.Forms.DialogResult.Abort, (int) formVWG.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Abort.ToString(), formVWG.DialogResult.ToString());
@@ -48,7 +48,7 @@ namespace Habanero.Test.UI.Base
             FormVWG formVWG = new FormVWG();
 
             //---------------Execute Test ----------------------
-            formVWG.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) Habanero.UI.Base.DialogResult.Cancel;
+            formVWG.DialogResult = Habanero.UI.Base.DialogResult.Cancel;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) Gizmox.WebGUI.Forms.DialogResult.Cancel, (int) formVWG.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Cancel.ToString(), formVWG.DialogResult.ToString());
@@ -63,7 +63,7 @@ namespace Habanero.Test.UI.Base
             FormVWG formVWG = new FormVWG();
 
             //---------------Execute Test ----------------------
-            formVWG.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) Habanero.UI.Base.DialogResult.Ignore;
+            formVWG.DialogResult = Habanero.UI.Base.DialogResult.Ignore;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) Gizmox.WebGUI.Forms.DialogResult.Ignore, (int) formVWG.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Ignore.ToString(), formVWG.DialogResult.ToString());
@@ -78,7 +78,7 @@ namespace Habanero.Test.UI.Base
             FormVWG formVWG = new FormVWG();
 
             //---------------Execute Test ----------------------
-            formVWG.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) Habanero.UI.Base.DialogResult.No;
+            formVWG.DialogResult = Habanero.UI.Base.DialogResult.No;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) Gizmox.WebGUI.Forms.DialogResult.No, (int) formVWG.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.No.ToString(), formVWG.DialogResult.ToString());
@@ -93,7 +93,7 @@ namespace Habanero.Test.UI.Base
             FormVWG formVWG = new FormVWG();
 
             //---------------Execute Test ----------------------
-            formVWG.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) Habanero.UI.Base.DialogResult.None;
+            formVWG.DialogResult = Habanero.UI.Base.DialogResult.None;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) Gizmox.WebGUI.Forms.DialogResult.None, (int) formVWG.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.None.ToString(), formVWG.DialogResult.ToString());
@@ -108,7 +108,7 @@ namespace Habanero.Test.UI.Base
             FormVWG formVWG = new FormVWG();
 
             //---------------Execute Test ----------------------
-            formVWG.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) Habanero.UI.Base.DialogResult.OK;
+            formVWG.DialogResult = Habanero.UI.Base.DialogResult.OK;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) Gizmox.WebGUI.Forms.DialogResult.OK, (int) formVWG.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.OK.ToString(), formVWG.DialogResult.ToString());
@@ -123,7 +123,7 @@ namespace Habanero.Test.UI.Base
             FormVWG formVWG = new FormVWG();
 
             //---------------Execute Test ----------------------
-            formVWG.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) Habanero.UI.Base.DialogResult.Retry;
+            formVWG.DialogResult = Habanero.UI.Base.DialogResult.Retry;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) Gizmox.WebGUI.Forms.DialogResult.Retry, (int) formVWG.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Retry.ToString(), formVWG.DialogResult.ToString());
@@ -138,7 +138,7 @@ namespace Habanero.Test.UI.Base
             FormVWG formVWG = new FormVWG();
 
             //---------------Execute Test ----------------------
-            formVWG.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) Habanero.UI.Base.DialogResult.Yes;
+            formVWG.DialogResult = Habanero.UI.Base.DialogResult.Yes;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) Gizmox.WebGUI.Forms.DialogResult.Yes, (int) formVWG.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Yes.ToString(), formVWG.DialogResult.ToString());
@@ -152,7 +152,7 @@ namespace Habanero.Test.UI.Base
             FormWin formWin = new FormWin();
 
             //---------------Execute Test ----------------------
-            formWin.DialogResult = (DialogResult) Habanero.UI.Base.DialogResult.Abort;
+            formWin.DialogResult = Habanero.UI.Base.DialogResult.Abort;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) DialogResult.Abort, (int) formWin.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Abort.ToString(), formWin.DialogResult.ToString());
@@ -166,7 +166,7 @@ namespace Habanero.Test.UI.Base
             FormWin formWin = new FormWin();
 
             //---------------Execute Test ----------------------
-            formWin.DialogResult = (DialogResult) Habanero.UI.Base.DialogResult.Cancel;
+            formWin.DialogResult = Habanero.UI.Base.DialogResult.Cancel;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) DialogResult.Cancel, (int) formWin.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Cancel.ToString(), formWin.DialogResult.ToString());
@@ -181,7 +181,7 @@ namespace Habanero.Test.UI.Base
             FormWin formWin = new FormWin();
 
             //---------------Execute Test ----------------------
-            formWin.DialogResult = (DialogResult) Habanero.UI.Base.DialogResult.Ignore;
+            formWin.DialogResult = Habanero.UI.Base.DialogResult.Ignore;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) DialogResult.Ignore, (int) formWin.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Ignore.ToString(), formWin.DialogResult.ToString());
@@ -196,7 +196,7 @@ namespace Habanero.Test.UI.Base
             FormWin formWin = new FormWin();
 
             //---------------Execute Test ----------------------
-            formWin.DialogResult = (DialogResult) Habanero.UI.Base.DialogResult.No;
+            formWin.DialogResult = Habanero.UI.Base.DialogResult.No;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) DialogResult.No, (int) formWin.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.No.ToString(), formWin.DialogResult.ToString());
@@ -211,7 +211,7 @@ namespace Habanero.Test.UI.Base
             FormWin formWin = new FormWin();
 
             //---------------Execute Test ----------------------
-            formWin.DialogResult = (DialogResult) Habanero.UI.Base.DialogResult.None;
+            formWin.DialogResult = Habanero.UI.Base.DialogResult.None;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) DialogResult.None, (int) formWin.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.None.ToString(), formWin.DialogResult.ToString());
@@ -226,7 +226,7 @@ namespace Habanero.Test.UI.Base
             FormWin formWin = new FormWin();
 
             //---------------Execute Test ----------------------
-            formWin.DialogResult = (DialogResult) Habanero.UI.Base.DialogResult.OK;
+            formWin.DialogResult = Habanero.UI.Base.DialogResult.OK;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) DialogResult.OK, (int) formWin.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.OK.ToString(), formWin.DialogResult.ToString());
@@ -241,7 +241,7 @@ namespace Habanero.Test.UI.Base
             FormWin formWin = new FormWin();
 
             //---------------Execute Test ----------------------
-            formWin.DialogResult = (DialogResult) Habanero.UI.Base.DialogResult.Retry;
+            formWin.DialogResult = Habanero.UI.Base.DialogResult.Retry;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) DialogResult.Retry, (int) formWin.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Retry.ToString(), formWin.DialogResult.ToString());
@@ -256,7 +256,7 @@ namespace Habanero.Test.UI.Base
             FormWin formWin = new FormWin();
 
             //---------------Execute Test ----------------------
-            formWin.DialogResult = (DialogResult) Habanero.UI.Base.DialogResult.Yes;
+            formWin.DialogResult = Habanero.UI.Base.DialogResult.Yes;
             //---------------Test Result -----------------------
             Assert.AreEqual((int) DialogResult.Yes, (int) formWin.DialogResult);
             Assert.AreEqual(Habanero.UI.Base.DialogResult.Yes.ToString(), formWin.DialogResult.ToString());

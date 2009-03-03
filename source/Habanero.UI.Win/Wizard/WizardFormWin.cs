@@ -63,7 +63,7 @@ namespace Habanero.UI.Win
             this._uxWizardControl.CancelButton.Click += CancelButton_OnClick;
             InitializeComponent();
             WizardControl.WizardController = _wizardController;
-            DialogResult = DialogResult.Cancel;
+            DialogResult = Base.DialogResult.Cancel;
             this.Closing += WizardFormWin_Closing;
         }
 
@@ -132,7 +132,7 @@ namespace Habanero.UI.Win
 
         private void _uxWizardControl_Finished(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
+            DialogResult = Base.DialogResult.OK;
             Close();
         }
 

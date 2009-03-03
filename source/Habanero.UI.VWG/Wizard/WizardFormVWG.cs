@@ -62,7 +62,7 @@ namespace Habanero.UI.VWG
             this._uxWizardControl.CancelButton.Click += CancelButton_OnClick;
             InitializeComponent();
             WizardControl.WizardController = _wizardController;
-            DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
+            ((Form)this).DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
             this.Closing += WizardFormGiz_Closing;
         }
 
@@ -131,7 +131,7 @@ namespace Habanero.UI.VWG
 
         private void _uxWizardControl_Finished(object sender, EventArgs e)
         {
-            DialogResult = Gizmox.WebGUI.Forms.DialogResult.OK;
+            ((Form)this).DialogResult = Gizmox.WebGUI.Forms.DialogResult.OK;
             Close();
         }
 

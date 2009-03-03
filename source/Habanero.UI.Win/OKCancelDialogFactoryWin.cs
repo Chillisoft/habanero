@@ -69,13 +69,13 @@ namespace Habanero.UI.Win
 
         public void CancelButton_ClickHandler(FormWin form)
         {
-            form.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            ((Form)form).DialogResult = System.Windows.Forms.DialogResult.Cancel;
             form.Close();
         }
 
         public void OkButton_ClickHandler(FormWin form)
         {
-            form.DialogResult = System.Windows.Forms.DialogResult.OK;
+            ((Form)form).DialogResult = System.Windows.Forms.DialogResult.OK;
             form.Close();
         }
 
