@@ -56,6 +56,7 @@ namespace Habanero.UI.Base
             _gridBase.AutoGenerateColumns = false;
             _gridLoader = DefaultGridLoader;
             _gridBase.AllowUserToAddRows = false;
+           
         }
 
         ///<summary>
@@ -372,6 +373,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public void RefreshGrid()
         {
+            _gridBase.CancelEdit();
             IBusinessObjectCollection col = this._gridBase.BusinessObjectCollection;
             IBusinessObject bo = this._gridBase.SelectedBusinessObject;
             SetBusinessObjectCollection(null);

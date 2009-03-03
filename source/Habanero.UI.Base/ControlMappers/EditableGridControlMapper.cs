@@ -35,7 +35,7 @@ namespace Habanero.UI.Base
         protected override void InternalUpdateControlValueFromBo()
         {
             _editableGrid.Initialise(_businessObject.Relationships[_propertyName].RelatedObjectClassDef);
-            _editableGrid.SetBusinessObjectCollection(_businessObject.Relationships.GetRelatedCollection(_propertyName));
+            _editableGrid.BusinessObjectCollection =_businessObject.Relationships.GetRelatedCollection(_propertyName);
 
         }
     }

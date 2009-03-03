@@ -245,8 +245,6 @@ namespace Habanero.UI.Win
             }
             UpdateControlEnabledState();
 
-            //Note: Removing the event prevents the flicker event that happens while a grid is being refreshed
-            //  - perhaps the SelectionChanged event should be temporarily removed inside the RefreshGrid method itself?
             RefreshGrid();
         }
 
@@ -255,6 +253,8 @@ namespace Habanero.UI.Win
         ///</summary>
         public void RefreshGrid()
         {
+            //Note_: Removing the event prevents the flicker event that happens while a grid is being refreshed
+            //  - perhaps the SelectionChanged event should be temporarily removed inside the RefreshGrid method itself?
             RemoveGridSelectionChangedEvent();
             _readOnlyGridControl.Grid.RefreshGrid();
             AddGridSelectionChangedEvent();
@@ -358,7 +358,7 @@ namespace Habanero.UI.Win
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
-                _readOnlyGridControl.SetBusinessObjectCollection(value);
+                _readOnlyGridControl.BusinessObjectCollection =value;
                 _newButton.Enabled = true;
             }
         }
@@ -596,18 +596,18 @@ namespace Habanero.UI.Win
             IBusinessObject currentBO = CurrentBusinessObject;
             if (currentBO.Status.IsNew)
             {
+//                _readOnlyGridControl.BusinessObjectCollection.RestoreAll();
                 _lastSelectedBusinessObject = null;
-                _readOnlyGridControl.Grid.BusinessObjectCollection.Remove(currentBO);
+                _readOnlyGridControl.BusinessObjectCollection.Remove(currentBO);
                 SelectLastRowInGrid();
             }
             else
             {
+//                _readOnlyGridControl.BusinessObjectCollection.RestoreAll();
                 currentBO.CancelEdits();
             }
             UpdateControlEnabledState();
 
-            //Note: Removing the event prevents the flicker event that happens while a grid is being refreshed
-            //  - perhaps the SelectionChanged event should be temporarily removed inside the RefreshGrid method itself?
             RefreshGrid();
         }
 
@@ -716,7 +716,7 @@ namespace Habanero.UI.Win
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
-                _readOnlyGridControl.SetBusinessObjectCollection(value);
+                _readOnlyGridControl.BusinessObjectCollection = value;
                 _newButton.Enabled = true;
             }
         }

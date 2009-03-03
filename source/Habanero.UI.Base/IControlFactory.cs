@@ -147,23 +147,27 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
+        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
+        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new();
 
  
         /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
+        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new();
 
 
-                /// <summary>
+        /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
+        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new();
 
         /// <summary>
@@ -695,7 +699,7 @@ namespace Habanero.UI.Base
         /// Adds value changed event handlers.
         /// </summary>
         /// <param name="mapper">The DateTime mapper</param>
-       void AddUpdateBoPropOnValueChangedHandler(DateTimePickerMapper mapper);
+        void AddUpdateBoPropOnValueChangedHandler(DateTimePickerMapper mapper);
     }
 
     /// <summary>

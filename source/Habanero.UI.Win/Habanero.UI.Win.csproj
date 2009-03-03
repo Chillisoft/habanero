@@ -127,7 +127,7 @@
     <Compile Include="FormWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GridAndBOEditorControlWin.cs">
+    <Compile Include="BOSelectorAndBOEditorControlWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GridBaseWin.cs">

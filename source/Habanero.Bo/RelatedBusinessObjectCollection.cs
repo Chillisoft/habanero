@@ -78,7 +78,7 @@ namespace Habanero.BO
         public override bool Remove(TBusinessObject bo)
         {
             MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
-            if (def != null && !Loading && (def.RelationshipType == RelationshipType.Composition))
+            if (!bo.Status.IsNew && def != null && !Loading && (def.RelationshipType == RelationshipType.Composition))
             {
                 string message = "The " + def.RelatedObjectClassName +
                                  " could not be removed since the " + def.RelationshipName +
@@ -102,7 +102,7 @@ namespace Habanero.BO
             if (this.Loading) return true;
             DereferenceBO(bo);
             MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
-            if (!(def != null && !Loading && (def.RelationshipType == RelationshipType.Composition)))
+            if (!(!bo.Status.IsNew && def != null && !Loading && (def.RelationshipType == RelationshipType.Composition)))
             {
                 RemoveRelatedObject(bo);
             }

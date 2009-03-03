@@ -450,7 +450,7 @@ namespace Habanero.BO
 
         internal override void CancelEdits()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)

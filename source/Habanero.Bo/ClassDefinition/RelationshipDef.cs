@@ -296,7 +296,7 @@ namespace Habanero.BO.ClassDefinition
         ///<exception cref="HabaneroDeveloperException"></exception>
         public void CheckCanRemoveChild(IBusinessObject bo)
         {
-            if (this.RelationshipType != RelationshipType.Composition) return;
+            if (bo.Status.IsNew || this.RelationshipType != RelationshipType.Composition) return;
 
             string message = "The " + this.RelatedObjectClassName + " could not be removed since the "
                              + this.RelationshipName

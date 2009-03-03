@@ -117,7 +117,7 @@
     <Compile Include="TestGridWithPanelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TestGridAndBOEditorControl.cs" />
+    <Compile Include="TestBOSelectorAndBOEditorContro.cs" />
     <Compile Include="TestGroupBox.cs" />
     <Compile Include="TestMessageBoxConfirmer.cs" />
     <Compile Include="TestNumericUpDown.cs" />

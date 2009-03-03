@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -32,32 +33,6 @@ namespace Habanero.Test.UI.Base
     public class TestBOSelectorAndBOEditorControlWin
     {
         private const string CUSTOM_UIDEF_NAME = "custom1";
-
-        //        [SetUp]
-        //        public void SetupTest()
-        //        {
-        //            //Runs every time that any testmethod is executed
-        //            base.SetupTest();
-        //        }
-
-        //        [TestFixtureSetUp]
-        //        public void TestFixtureSetup()
-        //        {
-        //            //Code that is executed before any test is run in this class. If multiple tests
-        //            // are executed then it will still only be called once.
-        //        }
-
-        //        [TearDown]
-        //        public void TearDownTest()
-        //        {
-        //            //runs every time any testmethod is complete
-        //            base.TearDownTest();
-        //        }
-
-        //         Creates a new UI def by cloning an existing one and adding a cloned column
-        //           (easier than creating a whole new BO for this test)
-
-
         private static ClassDef GetCustomClassDef()
         {
             ClassDef.ClassDefs.Clear();
@@ -77,6 +52,11 @@ namespace Habanero.Test.UI.Base
             return classDef;
         }
 
+        private static BOSelectorAndBOEditorControlWin<TBusinessObject> CreateGridAndBOEditorControlWinCP<TBusinessObject>() where TBusinessObject : class, IBusinessObject
+        {
+            IBOEditorControl iboEditorControl = new TestComboBox.BusinessObjectControlStub();
+            return new BOSelectorAndBOEditorControlWin<TBusinessObject>(GetControlFactory(), iboEditorControl);
+        }
         private static BOSelectorAndBOEditorControlWin<OrganisationTestBO> CreateGridAndBOEditorControlWin()
         {
             IBOEditorControl iboEditorControl = new TestComboBox.BusinessObjectControlStub();
@@ -771,6 +751,7 @@ namespace Habanero.Test.UI.Base
 #pragma warning restore 168
             //---------------Assert Precondition----------------
             Assert.AreEqual(4, boSelectorAndBOEditorControlWin.GridControl.Grid.Rows.Count);
+            organisationTestBOS.SaveAll();
             //---------------Execute Test ----------------------
             newButton.PerformClick();
             newButton.PerformClick();
@@ -851,7 +832,8 @@ namespace Habanero.Test.UI.Base
             GetCustomClassDef();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BOSelectorAndBOEditorControlWin<OrganisationTestBO> boSelectorAndBOEditorControlWin = CreateGridAndBOEditorControlWin();
-            boSelectorAndBOEditorControlWin.BusinessObjectCollection = new BusinessObjectCollection<OrganisationTestBO>();
+            BusinessObjectCollection<OrganisationTestBO> collection = new BusinessObjectCollection<OrganisationTestBO>();
+            boSelectorAndBOEditorControlWin.BusinessObjectCollection = collection;
             IButton cancelButton = boSelectorAndBOEditorControlWin.ButtonGroupControl["Cancel"];
             IButton newButton = boSelectorAndBOEditorControlWin.ButtonGroupControl["New"];
 
@@ -863,6 +845,37 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             cancelButton.PerformClick();
             //---------------Test Result -----------------------
+            Assert.AreEqual(0, collection.Count, "The new item should be removed from the collection");
+            Assert.AreEqual(0, boSelectorAndBOEditorControlWin.GridControl.Grid.Rows.Count);
+            Assert.IsFalse(boSelectorAndBOEditorControlWin.IBOEditorControl.Enabled);
+        } 
+        
+        [Test]
+        public void TestCancelButton_ClickRemovesNewObject_OnlyItemInGrid_CompositionRelationship()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            IRelationshipDef cpRelationship = organisationClassDef.RelationshipDefCol["ContactPeople"];
+            cpRelationship.RelationshipType = RelationshipType.Composition;
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BOSelectorAndBOEditorControlWin<ContactPersonTestBO> boSelectorAndBOEditorControlWin = CreateGridAndBOEditorControlWinCP<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> people = new OrganisationTestBO().ContactPeople;
+            boSelectorAndBOEditorControlWin.BusinessObjectCollection = people;
+            IButton cancelButton = boSelectorAndBOEditorControlWin.ButtonGroupControl["Cancel"];
+            IButton newButton = boSelectorAndBOEditorControlWin.ButtonGroupControl["New"];
+
+            newButton.PerformClick();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(cancelButton.Enabled);
+            Assert.AreEqual(1, boSelectorAndBOEditorControlWin.GridControl.Grid.Rows.Count);
+            Assert.IsTrue(boSelectorAndBOEditorControlWin.IBOEditorControl.Enabled);
+            //---------------Execute Test ----------------------
+            cancelButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, people.Count, "The cancelled item should be removed from the collection");
             Assert.AreEqual(0, boSelectorAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.IsFalse(boSelectorAndBOEditorControlWin.IBOEditorControl.Enabled);
         }

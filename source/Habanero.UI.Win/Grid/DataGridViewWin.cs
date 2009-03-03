@@ -40,6 +40,10 @@ namespace Habanero.UI.Win
         public DataGridViewWin()
         {
             _manager = new DataGridViewManager(this);
+            this.DataError +=delegate
+                             {
+                                 //do nothing  
+                             };
         }
 
         /// <summary>

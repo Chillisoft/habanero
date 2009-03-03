@@ -90,7 +90,7 @@ namespace Habanero.BO
 
         #region Serialisation of BusinessObject
 
-        // TODO - Mark 03 Feb 2009 : The only detail that is recorded off of a BOProp is the current value. Is this correct?
+        // TODO_ - Mark 03 Feb 2009 : The only detail that is recorded off of a BOProp is the current value. Is this correct?
         //      I noticed that the prop values that have come out of a seriaizable context are all going to be the persisted values as well.
 
         protected BusinessObject(SerializationInfo info, StreamingContext context)
@@ -970,7 +970,7 @@ namespace Habanero.BO
             _boStatus.IsEditing = false;
         }
 
-        private void SetStateAsPermanentlyDeleted()
+        internal void SetStateAsPermanentlyDeleted()
         {
             _boStatus.IsNew = true;
             _boStatus.IsDeleted = true;

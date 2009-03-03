@@ -1782,6 +1782,10 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public void MarkForDelete(TBusinessObject businessObject)
         {
+            if (businessObject.Status.IsNew)
+            {
+                //Remove object from collection and created col and set state as permanently deleted
+            }
             businessObject.MarkForDelete();
         }
 

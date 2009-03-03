@@ -648,7 +648,7 @@ namespace Habanero.UI.Win
             return (Base.DialogResult)MessageBox.Show(message, title, 
                 (System.Windows.Forms.MessageBoxButtons)buttons, (System.Windows.Forms.MessageBoxIcon)icon);
         }
-
+        
         ///<summary>
         /// Displays a message box with specified text.
         ///</summary>

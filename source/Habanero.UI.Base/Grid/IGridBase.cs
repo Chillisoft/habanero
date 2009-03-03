@@ -109,14 +109,14 @@ namespace Habanero.UI.Base
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         IBusinessObjectCollection GetBusinessObjectCollection();
 
-        /// <summary>
-        /// Returns the business object at the specified row number
-        /// </summary>
-        /// <param name="row">The row number in question</param>
-        /// <returns>Returns the busines object at that row, or null
-        /// if none is found</returns>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        IBusinessObject GetBusinessObjectAtRow(int row);
+        ///// <summary>
+        ///// Returns the business object at the specified row number
+        ///// </summary>
+        ///// <param name="row">The row number in question</param>
+        ///// <returns>Returns the busines object at that row, or null
+        ///// if none is found</returns>
+        //[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        //IBusinessObject GetBusinessObjectAtRow(int row);
 
         ///<summary>
         /// Returns the row for the specified <see cref="IBusinessObject"/>.

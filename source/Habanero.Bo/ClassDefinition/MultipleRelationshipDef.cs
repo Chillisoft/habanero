@@ -49,7 +49,7 @@ namespace Habanero.BO.ClassDefinition
         /// enumeration for more detail.</param>
         public MultipleRelationshipDef(string relationshipName,
                                        Type relatedObjectClassType,
-                                       RelKeyDef relKeyDef,
+                                       IRelKeyDef relKeyDef,
                                        bool keepReferenceToRelatedObject,
             //				IExpression searchCriteria, 
                                        string orderBy,
@@ -78,7 +78,7 @@ namespace Habanero.BO.ClassDefinition
     	/// with regards to deleting a parent object.  See the DeleteParentAction 
     	/// enumeration for more detail.</param>
     	public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName,
-    	                               string relatedObjectClassName, RelKeyDef relKeyDef,
+    	                               string relatedObjectClassName, IRelKeyDef relKeyDef,
     	                               bool keepReferenceToRelatedObject, string orderBy,
     	                               DeleteParentAction deleteParentAction)
     		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RelationshipType.Association)
@@ -106,7 +106,7 @@ namespace Habanero.BO.ClassDefinition
         /// enumeration for more detail.</param>
         /// <param name="relationshipType">Provides specific instructions for adding/removing a child object.</param>
         public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName,
-                                       string relatedObjectClassName, RelKeyDef relKeyDef,
+                                       string relatedObjectClassName, IRelKeyDef relKeyDef,
                                        bool keepReferenceToRelatedObject, string orderBy,
                                       DeleteParentAction deleteParentAction, RelationshipType relationshipType)
             : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, relationshipType)
