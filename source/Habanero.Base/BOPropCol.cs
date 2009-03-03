@@ -48,17 +48,18 @@ namespace Habanero.Base
         /// <summary>
         /// Adds a property to the collection
         /// </summary>
-        /// <param name="prop">The property to add</param>
-        public void Add(IBOProp prop)
+        /// <param name="boProp">The property to add</param>
+        public void Add(IBOProp boProp)
         {
-            if (Contains(prop.PropertyName.ToUpper()))
+            if (boProp == null) throw new ArgumentNullException("boProp");
+            if (Contains(boProp.PropertyName.ToUpper()))
             {
                 throw new InvalidPropertyException(String.Format(
                     "The BOProp with the name '{0}' is being added to the " +
                     "prop collection, but already exists in the collection.",
-                    prop.PropertyName));
+                    boProp.PropertyName));
             }
-            _boProps.Add(prop.PropertyName.ToUpper(), prop);
+            _boProps.Add(boProp.PropertyName.ToUpper(), boProp);
         }
 
 

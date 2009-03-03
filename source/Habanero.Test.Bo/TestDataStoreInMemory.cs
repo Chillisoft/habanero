@@ -155,7 +155,95 @@ namespace Habanero.Test.BO
             Assert.AreSame(cp.ID, loadedCP.ID);
             //---------------Tear Down -------------------------      
         }
+        [Test]
+        public void TestFind_UsingGuidCriteria_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = Guid.NewGuid().ToString("N")};
+            cp.OrganisationID = OrganisationTestBO.CreateSavedOrganisation().OrganisationID;
+            cp.Save();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(cp);
+            Criteria criteria = new Criteria("OrganisationID", Criteria.ComparisonOp.Equals, cp.OrganisationID);
 
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCP = (ContactPersonTestBO) dataStore.Find(typeof(ContactPersonTestBO), criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(cp.ID, loadedCP.ID);
+        }
+
+        [Test]
+        public void TestFind_UsingGuidCriteria_Typed()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = Guid.NewGuid().ToString("N")};
+            cp.OrganisationID = OrganisationTestBO.CreateSavedOrganisation().OrganisationID;
+            cp.Save();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(cp);
+            Criteria criteria = new Criteria("OrganisationID", Criteria.ComparisonOp.Equals, cp.OrganisationID);
+            //---------------Assert Precondtions---------------
+            Assert.IsNotNull(cp.OrganisationID);
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCP = dataStore.Find<ContactPersonTestBO>(criteria);
+            //---------------Test Result -----------------------
+            Assert.AreSame(cp.ID, loadedCP.ID);
+        }
+
+        [Test]
+        public void TestFind_UsingGuidCriteriaString_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO { Surname = Guid.NewGuid().ToString("N") };
+            cp.OrganisationID = OrganisationTestBO.CreateSavedOrganisation().OrganisationID;
+            cp.Save();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(cp);
+            Criteria criteria = CriteriaParser.CreateCriteria("OrganisationID = " + cp.OrganisationID);
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCP = (ContactPersonTestBO)dataStore.Find(typeof(ContactPersonTestBO), criteria);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(loadedCP);
+            Assert.AreSame(cp.ID, loadedCP.ID);
+        }
+
+        [Test]
+        public void TestFind_UsingGuidCriteriaString_Typed()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO { Surname = Guid.NewGuid().ToString("N") };
+            cp.OrganisationID = OrganisationTestBO.CreateSavedOrganisation().OrganisationID;
+            cp.Save();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(cp);
+            Criteria criteria = CriteriaParser.CreateCriteria("OrganisationID = " + cp.OrganisationID);
+            //---------------Assert Precondtions---------------
+            Assert.IsNotNull(cp.OrganisationID);
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCP = dataStore.Find<ContactPersonTestBO>(criteria);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(loadedCP);
+            Assert.AreSame(cp.ID, loadedCP.ID);
+        }
 
         [Test]
         public void TestFind_PrimaryKey()

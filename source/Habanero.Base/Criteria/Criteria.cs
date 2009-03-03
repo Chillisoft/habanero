@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
@@ -289,7 +290,19 @@ namespace Habanero.Base
             }
             IComparable compareToValue = _fieldValue as IComparable;
             compareToValue = ConvertDateTimeStringToValue(compareToValue);
+            compareToValue = ConvertGuidStringToValue(boPropertyValue, compareToValue);
             return IsNonNullMatch(boPropertyValue, compareToValue);
+        }
+
+        private static IComparable ConvertGuidStringToValue(IComparable propertyValue, IComparable compareToValue)
+        {
+            if (propertyValue is Guid )
+            {
+                Guid guidCompareToValue;
+                bool parsedOK = GuidTryParse(compareToValue.ToString(), out guidCompareToValue);
+                return parsedOK ? guidCompareToValue : compareToValue;
+            }
+            return compareToValue;
         }
 
         /// <summary>
@@ -607,6 +620,45 @@ namespace Habanero.Base
             if (criteria1 == null) return criteria2;
             return new Criteria(criteria1, LogicalOp.And, criteria2);
         }
+        static readonly Regex _guidFormat = new Regex(
+            "^[A-Fa-f0-9]{32}$|" +
+            "^({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?$|" +
+            "^({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})$");
+        /// <summary>
+        /// Converts the string representation of a Guid to its Guid
+        /// equivalent. A return value indicates whether the operation
+        /// succeeded.
+        /// </summary>
+        /// <param name="s">A string containing a Guid to convert.</param>
+        /// <param name="result">
+        /// When this method returns, contains the Guid value equivalent to
+        /// the Guid contained in <paramref name="s"/>, if the conversion
+        /// succeeded, or <see cref="Guid.Empty"/> if the conversion failed.
+        /// The conversion fails if the <paramref name="s"/> parameter is a
+        /// <see langword="null" /> reference (<see langword="Nothing" /> in
+        /// Visual Basic), or is not of the correct format.
+        /// </param>
+        /// <value>
+        /// <see langword="true" /> if <paramref name="s"/> was converted
+        /// successfully; otherwise, <see langword="false" />.
+        /// </value>
+        /// <exception cref="ArgumentNullException">
+        ///        Thrown if <pararef name="s"/> is <see langword="null"/>.
+        /// </exception>
+        public static bool GuidTryParse(string s, out Guid result)
+        {
+            if (s == null)
+                throw new ArgumentNullException("s");
 
+            Match match = _guidFormat.Match(s);
+
+            if (match.Success)
+            {
+                result = new Guid(s);
+                return true;
+            }
+            result = Guid.Empty;
+            return false;
+        }
     }
 }

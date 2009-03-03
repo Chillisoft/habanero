@@ -392,6 +392,87 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestSetPropertyValueFieldDoesNotExist()
+        {           
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID();
+
+            TestAutoInc bo = new TestAutoInc();
+            //---------------Execute Test ----------------------
+
+            const string nonexistentPropName = "nonExistent";
+            try
+            {
+                bo.SetPropertyValue(nonexistentPropName, "testing 123");
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                string errMessage = String.Format
+                    ("The given property name '{0}' does not exist in the "
+                     + "collection of properties for the class '{1}'.", nonexistentPropName, "TestAutoInc");
+                StringAssert.Contains(errMessage, ex.Message);
+            }
+            
+        }
+        [Test]
+        public void Test_GetProperty_FieldDoesNotExist()
+        {           
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID();
+
+            TestAutoInc bo = new TestAutoInc();
+            //---------------Execute Test ----------------------
+
+            const string nonexistentPropName = "nonExistent";
+            try
+            {
+                bo.GetProperty(nonexistentPropName);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                string errMessage = String.Format
+                    ("The given property name '{0}' does not exist in the "
+                     + "collection of properties for the class '{1}'.", nonexistentPropName, "TestAutoInc");
+                StringAssert.Contains(errMessage, ex.Message);
+            }
+            
+        }
+
+        [Test]
+        public void Test_AddNullBOProp()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID();
+
+            TestAutoInc bo = new TestAutoInc();
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                bo.Props.Add((IBOProp)null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("boProp", ex.ParamName);
+            }
+
+        }
+
+        [Test]
         public void TestSaveWithBeforeSaveImplemented()
         {
             ClassDef.ClassDefs.Clear();

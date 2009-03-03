@@ -19,7 +19,6 @@
 
 using System;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -137,7 +136,6 @@ namespace Habanero.Test.BO
         public void TestEquals_Leaf_FieldValueIsNull_True()
         {
             //---------------Set up test pack-------------------
-            DateTime dateTimeValue = DateTime.Now;
             const string datetimePropName = "DateTime";
             Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.Equals, null);
             Criteria criteria2 = new Criteria(datetimePropName, Criteria.ComparisonOp.Equals, null);
@@ -152,7 +150,6 @@ namespace Habanero.Test.BO
         public void TestEquals_Leaf_FieldValueIsNull_False()
         {
             //---------------Set up test pack-------------------
-            DateTime dateTimeValue = DateTime.Now;
             const string datetimePropName = "DateTime";
             Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.Equals, null);
             Criteria criteria2 = new Criteria(datetimePropName, Criteria.ComparisonOp.Equals, DateTime.Now);
@@ -224,7 +221,7 @@ namespace Habanero.Test.BO
         public void TestQueryField_FromString()
         {
             //---------------Set up test pack-------------------
-            string propertyName = "PropName";
+            const string propertyName = "PropName";
 
             //---------------Execute Test ----------------------
 
@@ -239,7 +236,7 @@ namespace Habanero.Test.BO
         public void TestQueryField_FromString_WithSource()
         {
             //---------------Set up test pack-------------------
-            string propertyName = "SourceName.PropName";
+            const string propertyName = "SourceName.PropName";
 
             //---------------Execute Test ----------------------
 
@@ -255,7 +252,7 @@ namespace Habanero.Test.BO
         public void TestQueryField_FromString_WithSource_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            string propertyName = "BaseSource.ChildSource.PropName";
+            const string propertyName = "BaseSource.ChildSource.PropName";
 
             //---------------Execute Test ----------------------
 
@@ -518,6 +515,47 @@ namespace Habanero.Test.BO
             Assert.IsTrue(isMatch, "The object should be a match since its current values match the criteria given.");
         }
 
+        [Test]
+        public void Test_IsMatch_GuidCriteriaAsString_UserPersistedValueFalse()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO { Surname = Guid.NewGuid().ToString("N") };
+            cp.OrganisationID = OrganisationTestBO.CreateSavedOrganisation().OrganisationID;
+//            cp.Save();
+            Criteria criteria = CriteriaParser.CreateCriteria("OrganisationID = " + cp.OrganisationID);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            bool isMatch = criteria.IsMatch(cp, false);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch);
+
+        }
+
+        [Test]
+        public void Test_IsMatch_GuidCriteriaAsString_UserPersistedValueTrue()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO { Surname = Guid.NewGuid().ToString("N") };
+            cp.OrganisationID = OrganisationTestBO.CreateSavedOrganisation().OrganisationID;
+            cp.Save();
+            Criteria criteria = CriteriaParser.CreateCriteria("OrganisationID = " + cp.OrganisationID);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch);
+
+        }
         [Test]
         public void TestToString_Guid()
         {
@@ -788,7 +826,6 @@ namespace Habanero.Test.BO
         public void TestToString_LeafCriteria_String_Equals_Null()
         {
             //---------------Set up test pack-------------------
-            string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
             Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, null);
 
@@ -803,7 +840,6 @@ namespace Habanero.Test.BO
         public void TestToString_LeafCriteria_String_Is_Null()
         {
             //---------------Set up test pack-------------------
-            string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
             Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Is, null);
 

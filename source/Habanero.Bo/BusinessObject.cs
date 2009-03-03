@@ -111,12 +111,13 @@ namespace Habanero.BO
                     throw;
                 }
             }
-            _boStatus = (BOStatus)info.GetValue("Status", typeof(BOStatus));
+            _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
             _boStatus.BusinessObject = this;
             AddToObjectManager();
         }
+
         [SecurityPermissionAttribute(SecurityAction.Demand,
-        SerializationFormatter = true)]
+            SerializationFormatter = true)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             foreach (IBOProp prop in _boPropCol)
@@ -157,7 +158,7 @@ namespace Habanero.BO
 
         public override string ToString()
         {
-            return this.ID.GetAsValue() == null? base.ToString(): this.ID.GetAsValue().ToString();
+            return this.ID.GetAsValue() == null ? base.ToString() : this.ID.GetAsValue().ToString();
         }
 
         /// <summary>
@@ -579,10 +580,7 @@ namespace Habanero.BO
             string message;
             if (!this.IsReadable(out message)) throw new BusObjReadException(message);
 
-            if (Props.Contains(propName))
-                return Props[propName].Value;
-            throw new InvalidPropertyNameException
-                ("Property '" + propName + "' does not exist on a business object of type '" + GetType().Name + "'");
+            return GetProperty(propName).Value;
         }
 
         /// <summary>
@@ -615,7 +613,7 @@ namespace Habanero.BO
             IBOProp prop;
             if (source == null || String.IsNullOrEmpty(source.Name))
             {
-                prop = Props[propName];
+                prop = GetProperty(propName);
                 return prop.PersistedPropertyValue;
             }
 
@@ -628,6 +626,16 @@ namespace Habanero.BO
             return businessObject.GetPersistedPropertyValue(null, propName);
         }
 
+        internal IBOProp GetProperty(string propName)
+        {
+            if (Props.Contains(propName))
+                return Props[propName];
+            string errMessage = String.Format
+                ("The given property name '{0}' does not exist in the "
+                 + "collection of properties for the class '{1}'.", propName, GetType().Name);
+            throw new InvalidPropertyNameException (errMessage);
+        }
+
         /// <summary>
         /// Sets a property value to a new value
         /// </summary>
@@ -635,14 +643,14 @@ namespace Habanero.BO
         /// <param name="newPropValue">The new value to set to</param>
         public void SetPropertyValue(string propName, object newPropValue)
         {
-            IBOProp prop = Props[propName];
-            if (prop == null)
-            {
-                throw new InvalidPropertyNameException
-                    (String.Format
-                         ("The given property name '{0}' does not exist in the "
-                          + "collection of properties for the class '{1}'.", propName, ClassName));
-            }
+            IBOProp prop = GetProperty(propName);
+//            if (prop == null)
+//            {
+//                throw new InvalidPropertyNameException
+//                    (String.Format
+//                         ("The given property name '{0}' does not exist in the "
+//                          + "collection of properties for the class '{1}'.", propName, ClassName));
+//            }
             object propValue = prop.Value;
             object newPropValue1;
             ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
@@ -758,7 +766,7 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         public string GetPropertyValueString(string propName)
         {
-            return Props[propName].PropertyValueString;
+            return GetProperty(propName).PropertyValueString;
         }
 
         /// <summary>
@@ -772,7 +780,7 @@ namespace Habanero.BO
         /// <returns>Returns the property value</returns>
         internal object GetPropertyValueToDisplay(string propName)
         {
-            IBOProp prop = Props[propName];
+            IBOProp prop = GetProperty(propName);
             return prop.PropertyValueToDisplay;
         }
 
@@ -802,7 +810,7 @@ namespace Habanero.BO
         /// <param name="propValue">The value to initialise to</param>
         private void InitialisePropertyValue(string propName, object propValue)
         {
-            IBOProp prop = Props[propName];
+            IBOProp prop = GetProperty(propName);
             prop.Value = propValue;
         }
 
@@ -938,7 +946,7 @@ namespace Habanero.BO
                 IList createdBos = multipleRelationship.CurrentBusinessObjectCollection.CreatedBusinessObjects;
                 while (createdBos.Count > 0)
                 {
-                    IBusinessObject businessObject = (IBusinessObject) createdBos[createdBos.Count-1];
+                    IBusinessObject businessObject = (IBusinessObject) createdBos[createdBos.Count - 1];
                     createdBos.Remove(businessObject);
                     if (relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated) continue;
                     ((BOStatus) businessObject.Status).IsDeleted = true;
@@ -1216,6 +1224,4 @@ namespace Habanero.BO
             return false;
         }
     }
-
-
 }

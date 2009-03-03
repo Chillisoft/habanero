@@ -61,7 +61,7 @@ namespace Habanero.Test.BO
             //---------------Clean Up --------------------------
             //Create an entry in the number generator table for entry type to seed.
             BOSequenceNumber.LoadNumberGenClassDef();
-            string numberType = "tmp";
+            const string numberType = "tmp";
             SetNumberGeneratorSeedZero(numberType);
             //---------------Set up test pack-------------------
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
@@ -82,7 +82,7 @@ namespace Habanero.Test.BO
         {
             //---------------Clean Up --------------------------
             //Create an entry in the number generator table for entry type to seed.
-            string numberType = "tmp";
+            const string numberType = "tmp";
             SetNumberGeneratorSeedZero(numberType);
             //---------------Set up test pack-------------------
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
@@ -122,7 +122,7 @@ namespace Habanero.Test.BO
             //Create an entry in the number generator table for entry type to seed with seed = 100.
             BOSequenceNumber.LoadNumberGenClassDef();
             INumberGenerator numGen = new NumberGenerator("tmp");
-            int seedNumber = 100;
+            const int seedNumber = 100;
             numGen.SetSequenceNumber(seedNumber);
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
             numGen = new NumberGenerator("tmp");
@@ -140,7 +140,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             //Create an entry in the number generator table for entry type to seed with seed = 0.
-            string numberType = "tmp";
+            const string numberType = "tmp";
             BOSequenceNumber.LoadNumberGenClassDef();
             SetNumberGeneratorSeedZero(numberType);
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
@@ -228,7 +228,9 @@ namespace Habanero.Test.BO
         public void TestAcceptance_NumberGeneratorCreatedInBeforeUpdateForAnObject()
         {
             //---------------Clean Up --------------------------
-            CleanUpContactPersonNumberGenerator();
+//            CleanUpContactPersonNumberGenerator();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            CleanUpContactPersonNumberGenerator_ForInMemory();
             //---------------Set up test pack-------------------
             //Create an object that sets the number generator for it.
             //Edit the object.
@@ -247,7 +249,8 @@ namespace Habanero.Test.BO
         public void TestAcceptance_NumberGeneratorCreatedInBeforeUpdateForAnObject_2ObjectsSavedOneAfterTheOther()
         {
             //---------------Clean Up --------------------------
-            CleanUpContactPersonNumberGenerator();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            CleanUpContactPersonNumberGenerator_ForInMemory();
             //---------------Set up test pack-------------------
             //Create an object that sets the number generator for it.
             //Edit the object.
@@ -265,11 +268,18 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------        
         }
 
-        private static void CleanUpContactPersonNumberGenerator()
+//        private static void CleanUpContactPersonNumberGenerator()
+//        {
+//            ContactPersonNumberGenerator.LoadDefaultClassDef();
+//            BOSequenceNumber.LoadNumberGenClassDef();
+//            ContactPersonNumberGenerator.DeleteAllContactPeople();
+//            INumberGenerator numGen = new NumberGenerator("GeneratedNumber");
+//            numGen.SetSequenceNumber(0);
+//        }
+        private static void CleanUpContactPersonNumberGenerator_ForInMemory()
         {
             ContactPersonNumberGenerator.LoadDefaultClassDef();
             BOSequenceNumber.LoadNumberGenClassDef();
-            ContactPersonNumberGenerator.DeleteAllContactPeople();
             INumberGenerator numGen = new NumberGenerator("GeneratedNumber");
             numGen.SetSequenceNumber(0);
         }
@@ -280,7 +290,9 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             //Create an object that sets the number generator for it.
-            CleanUpContactPersonNumberGenerator();
+//            CleanUpContactPersonNumberGenerator();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            CleanUpContactPersonNumberGenerator_ForInMemory();
             //---------------Set up test pack-------------------
             //Create an objects that sets the number generator for it.
             //Edit the objects.

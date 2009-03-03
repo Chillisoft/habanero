@@ -27,11 +27,13 @@ using Habanero.Util;
 
 namespace Habanero.BO
 {
+
     ///<summary>
     /// This is an in memory datastore this is designed to be used primarily for testing.
     ///</summary>
     public class DataStoreInMemory
     {
+
         private Dictionary<Guid, IBusinessObject> _objects =
             new Dictionary<Guid, IBusinessObject>();
 
@@ -216,5 +218,7 @@ namespace Habanero.BO
                 this._objects = (Dictionary<Guid, IBusinessObject>) formatter.Deserialize(stream);
             }
         }
+
+
     }
 }
