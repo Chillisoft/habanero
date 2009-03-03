@@ -42,7 +42,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Provides an Interface that is used by the Grid's in Habanero this extends the <see cref="IDataGridView"/> so that it is adapted to show business objects
     /// </summary>
-    public interface IGridBase : IDataGridView, IBOSelector
+    public interface IGridBase : IDataGridView, IBOSelectorControl
     {
         /// <summary>
         /// Sets the business object collection displayed in the grid.  This

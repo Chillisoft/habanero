@@ -279,9 +279,9 @@ namespace Habanero.UI.VWG
                 this.BusinessObjectEdited(this, new BOEventArgs(bo));
             }
         }
-        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelector"></see>.</summary>
-        /// <returns>The number of rows in the <see cref="IBOSelector"></see>.</returns>
-        int IBOSelector.NoOfItems
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelectorControl"></see>.</returns>
+        int IBOSelectorControl.NoOfItems
         {
             get { return this.Rows.Count; }
         }

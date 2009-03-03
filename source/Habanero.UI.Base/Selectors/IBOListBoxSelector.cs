@@ -4,7 +4,7 @@ namespace Habanero.UI.Base
     /// Provides an interface that is specialised for showing a collection of 
     /// Business Objects in a <see cref="IListBox"/> and allowing the user to select one.
     /// </summary>
-    public interface IBOListBoxSelector : IBOSelector, IListBox
+    public interface IBOListBoxSelector : IBOSelectorControl, IListBox
     {
         ///<summary>
         /// Returns the Underlying <see cref="IListBox"/> that is used by this selector

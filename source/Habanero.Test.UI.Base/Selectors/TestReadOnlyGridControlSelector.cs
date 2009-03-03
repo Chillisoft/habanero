@@ -19,14 +19,14 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-        protected override IBOSelector CreateSelector()
+        protected override IBOSelectorControl CreateSelector()
         {
             IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
             Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
             frm.Controls.Add((Gizmox.WebGUI.Forms.Control)readOnlyGridControl);
             return readOnlyGridControl;
         }
-        //protected override IBOSelector CreateSelector()
+        //protected override IBOSelectorControl CreateSelector()
         //{
         //    TestGridBase.GridBaseVWGStub gridBase = new TestGridBase.GridBaseVWGStub();
         //    Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
@@ -79,7 +79,7 @@ namespace Habanero.Test.UI.Base
             return factory;
         }
 
-        protected override void SetSelectedIndex(IBOSelector selector, int index)
+        protected override void SetSelectedIndex(IBOSelectorControl selector, int index)
         {
             int count = 0;
 
@@ -96,7 +96,7 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        protected override int SelectedIndex(IBOSelector selector)
+        protected override int SelectedIndex(IBOSelectorControl selector)
         {
             IReadOnlyGrid gridSelector = ((IReadOnlyGridControl)selector).Grid;
             IDataGridViewRow currentRow = null;
@@ -110,7 +110,7 @@ namespace Habanero.Test.UI.Base
             return gridSelector.Rows.IndexOf(currentRow);
         }
 
-        protected override IBOSelector CreateSelector()
+        protected override IBOSelectorControl CreateSelector()
         {
             IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
             System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
@@ -131,7 +131,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(IReadOnlyGridControl), selector);
         }
@@ -141,7 +141,7 @@ namespace Habanero.Test.UI.Base
         public override void Test_Set_SelectedBusinessObject_ItemNotInList_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
@@ -164,7 +164,7 @@ namespace Habanero.Test.UI.Base
         public override void Test_AutoSelectsFirstItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };

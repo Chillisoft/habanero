@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOColTabControlManager.cs" />
+    <Compile Include="BOSelectorAndBOEditorManager.cs" />
     <Compile Include="CollapsiblePanelGroupManager.cs" />
     <Compile Include="CollapsiblePanelManager.cs" />
     <Compile Include="CollapsiblePanelResource.Designer.cs">
@@ -87,7 +88,7 @@
     <Compile Include="ControlMappers\EditableGridControlMapper.cs" />
     <Compile Include="ControlMappers\ExtendedComboBoxMapper.cs" />
     <Compile Include="ControlMappers\ListComboBoxMapper.cs" />
-    <Compile Include="Selectors\IBOSelector.cs" />
+    <Compile Include="Selectors\IBOSelectorControl.cs" />
     <Compile Include="GroupBoxGroupControlManager.cs" />
     <Compile Include="IBOEditorControl.cs" />
     <Compile Include="IBOSelectorAndEditor.cs" />

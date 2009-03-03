@@ -30,7 +30,7 @@ namespace Habanero.UI.Win
     /// The collection of business objects can be shown using any selector control e.g. an <see cref="IEditableGridControl"/>,
     ///   <see cref="IGridControl"/> etc.
     ///</summary>
-    public class GridAndBOEditorControlWin : UserControlWin, IBOSelectorAndEditor
+    public class BOSelectorAndBOEditorControlWin : UserControlWin, IBOSelectorAndEditor
     {
         private readonly ClassDef _classDef;
         private IControlFactory _controlFactory;
@@ -46,13 +46,13 @@ namespace Habanero.UI.Win
         public event EventHandler<BOEventArgs<IBusinessObject>> BusinessObjectSelected;
 
         ///<summary>
-        /// Constructor for the <see cref="GridAndBOEditorControlWin"/>
+        /// Constructor for the <see cref="BOSelectorAndBOEditorControlWin"/>
         ///</summary>
         ///<param name="controlFactory"></param>
         ///<param name="classDef"></param>
         ///<param name="uiDefName"></param>
         ///<exception cref="ArgumentNullException"></exception>
-        public GridAndBOEditorControlWin(IControlFactory controlFactory, ClassDef classDef, string uiDefName)
+        public BOSelectorAndBOEditorControlWin(IControlFactory controlFactory, ClassDef classDef, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (classDef == null) throw new ArgumentNullException("classDef");
@@ -62,22 +62,22 @@ namespace Habanero.UI.Win
         }
 
         ///<summary>
-        /// Constructor for the <see cref="GridAndBOEditorControlWin"/>
+        /// Constructor for the <see cref="BOSelectorAndBOEditorControlWin"/>
         ///</summary>
         ///<param name="controlFactory"></param>
         ///<param name="iboEditorControl"></param>
-        public GridAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl iboEditorControl)
+        public BOSelectorAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl iboEditorControl)
             : this(controlFactory, iboEditorControl, "default")
         {
         }
 
         ///<summary>
-        /// Constructor for the <see cref="GridAndBOEditorControlWin"/>
+        /// Constructor for the <see cref="BOSelectorAndBOEditorControlWin"/>
         ///</summary>
         ///<param name="controlFactory"></param>
         ///<param name="iboEditorControl"></param>
         ///<param name="gridUiDefName"></param>
-        public GridAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl iboEditorControl, string gridUiDefName)
+        public BOSelectorAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl iboEditorControl, string gridUiDefName)
         {
             SetupGridAndBOEditorControlWin(controlFactory, iboEditorControl, gridUiDefName);
         }
@@ -99,8 +99,10 @@ namespace Habanero.UI.Win
             layoutManager.AddControl(_iboEditorControl, BorderLayoutManager.Position.Centre);
             layoutManager.AddControl(_buttonGroupControl, BorderLayoutManager.Position.South);
 
-            _readOnlyGridControl.Grid.BusinessObjectSelected +=
+            _readOnlyGridControl.BusinessObjectSelected +=
                 ((sender, e) => FireBusinessObjectSelected(e.BusinessObject));
+
+            _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
         }
 
 
@@ -152,7 +154,6 @@ namespace Habanero.UI.Win
                     _readOnlyGridControl.Width = width;
                 }
             }
-            _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
             _readOnlyGridControl.DoubleClickEditsBusinessObject = false;
         }
 
@@ -402,7 +403,7 @@ namespace Habanero.UI.Win
     /// TODO:
     /// - grid caret moves all over, even though selected row is correct
     /// </summary>
-    public class GridAndBOEditorControlWin<TBusinessObject> : UserControlWin, IBOSelectorAndEditor
+    public class BOSelectorAndBOEditorControlWin<TBusinessObject> : UserControlWin, IBOSelectorAndEditor
         where TBusinessObject : class, IBusinessObject
     {
         private IControlFactory _controlFactory;
@@ -416,45 +417,45 @@ namespace Habanero.UI.Win
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectSelected;
 
         ///<summary>
-        /// Constructor for <see cref="GridAndBOEditorControlWin"/>
+        /// Constructor for <see cref="BOSelectorAndBOEditorControlWin"/>
         ///</summary>
         ///<param name="controlFactory"></param>
         ///<param name="uiDefName"></param>
-        public GridAndBOEditorControlWin(IControlFactory controlFactory, string uiDefName)
+        public BOSelectorAndBOEditorControlWin(IControlFactory controlFactory, string uiDefName)
         {
             BusinessObjectControlWin<TBusinessObject> businessObjectControl = new BusinessObjectControlWin<TBusinessObject>(controlFactory, uiDefName);
             SetupGridAndBOEditorControlWin(controlFactory, businessObjectControl, uiDefName);
         }
 
         ///<summary>
-        ///  Constructor for <see cref="GridAndBOEditorControlWin"/>
+        ///  Constructor for <see cref="BOSelectorAndBOEditorControlWin"/>
         ///</summary>
         ///<param name="controlFactory"></param>
         ///<param name="iboEditorControl"></param>
-        public GridAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl iboEditorControl)
+        public BOSelectorAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl iboEditorControl)
             : this(controlFactory, iboEditorControl, "default")
         {
         }
 
 //        ///<summary>
-//        ///  Constructor for <see cref="GridAndBOEditorControlWin"/>
+//        ///  Constructor for <see cref="BOSelectorAndBOEditorControlWin"/>
 //        ///</summary>
 //        ///<param name="controlFactory"></param>
 //        ///<param name="businessObjectControl"></param>
 //        ///<param name="businessObject"></param>
-//        public GridAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl businessObjectControl, IBusinessObject businessObject)
+//        public BOSelectorAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl businessObjectControl, IBusinessObject businessObject)
 //            :this(controlFactory,businessObjectControl,"default")
 //        {
 //            
 //        }
 
         ///<summary>
-        ///  Constructor for <see cref="GridAndBOEditorControlWin"/>
+        ///  Constructor for <see cref="BOSelectorAndBOEditorControlWin"/>
         ///</summary>
         ///<param name="controlFactory"></param>
         ///<param name="iboEditorControl"></param>
         ///<param name="gridUiDefName"></param>
-        public GridAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl iboEditorControl, string gridUiDefName)
+        public BOSelectorAndBOEditorControlWin(IControlFactory controlFactory, IBOEditorControl iboEditorControl, string gridUiDefName)
         {
             SetupGridAndBOEditorControlWin(controlFactory, iboEditorControl, gridUiDefName);
         }

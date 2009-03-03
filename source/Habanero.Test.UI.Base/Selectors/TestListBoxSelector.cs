@@ -42,7 +42,7 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-        protected override IBOSelector CreateSelector()
+        protected override IBOSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateListBoxSelector();
         }
@@ -72,7 +72,7 @@ namespace Habanero.Test.UI.Base
         public override void Test_SelectedBusinessObject_ReturnsNullIfNoItemSelected()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
             selector.BusinessObjectCollection = collection;
@@ -90,7 +90,7 @@ namespace Habanero.Test.UI.Base
         public override void Test_Set_SelectedBusinessObject_Null_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
@@ -112,7 +112,7 @@ namespace Habanero.Test.UI.Base
         public override void Test_Set_SelectedBusinessObject_ItemNotInList_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
@@ -137,7 +137,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IBOSelector boSelector = GetSelectorWith_4_Rows(out col);
+            IBOSelectorControl boSelector = GetSelectorWith_4_Rows(out col);
             bool itemSelected = false;
             boSelector.SelectedBusinessObject = null;
             boSelector.BusinessObjectSelected += (delegate { itemSelected = true; });
@@ -162,17 +162,17 @@ namespace Habanero.Test.UI.Base
             return factory;
         }
 
-        protected override void SetSelectedIndex(IBOSelector selector, int index)
+        protected override void SetSelectedIndex(IBOSelectorControl selector, int index)
         {
             ((IBOListBoxSelector)selector).ListBox.SelectedIndex = index;
         }
 
-        protected override int SelectedIndex(IBOSelector selector)
+        protected override int SelectedIndex(IBOSelectorControl selector)
         {
             return ((IBOListBoxSelector)selector).ListBox.SelectedIndex;
         }
 
-        protected override IBOSelector CreateSelector()
+        protected override IBOSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateListBoxSelector();
         }

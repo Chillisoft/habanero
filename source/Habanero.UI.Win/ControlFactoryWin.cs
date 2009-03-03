@@ -665,7 +665,7 @@ namespace Habanero.UI.Win
         public IComboBox CreateComboBox()
         {
             ComboBoxWin comboBoxWin = new ComboBoxWin();
-            //Note: This is a workaround in windows to avoid this default from breaking all the tests because if the Thread's ApartmentState is not STA then setting the AutoCompleteSource default gives an error
+            //Note_: This is a workaround in windows to avoid this default from breaking all the tests because if the Thread's ApartmentState is not STA then setting the AutoCompleteSource default gives an error
             if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
             {
                 comboBoxWin.AutoCompleteSource =  AutoCompleteSource.ListItems;
@@ -847,21 +847,25 @@ namespace Habanero.UI.Win
             return new ReadOnlyGridButtonsControlWin(this);
         }
 
+        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, "default");
         }
 
+        [Obsolete("Replaced by IBOSelectorAndEditor:: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, uiDefName);
         }
 
+        [Obsolete("Replaced by IBOSelectorAndEditor:: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, businessObjectControl);
         }
 
+        [Obsolete("Replaced by IBOSelectorAndEditor:: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, businessObjectControl, uiDefName);
@@ -961,7 +965,7 @@ namespace Habanero.UI.Win
         ///</summary>
         public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
         {
-            return new GridAndBOEditorControlWin<TBusinessObject>(this, "default");
+            return new BOSelectorAndBOEditorControlWin<TBusinessObject>(this, "default");
 
         }
 
@@ -970,7 +974,7 @@ namespace Habanero.UI.Win
         ///</summary>
         public IBOSelectorAndEditor CreateGridAndBOEditorControl(ClassDef classDef)
         {
-            return new GridAndBOEditorControlWin(this, classDef, "default");
+            return new BOSelectorAndBOEditorControlWin(this, classDef, "default");
         }
 
         ///<summary>
@@ -979,12 +983,12 @@ namespace Habanero.UI.Win
         public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
         {
 
-            return new GridAndBOEditorControlWin<TBusinessObject>(this, editorControlPanel);
+            return new BOSelectorAndBOEditorControlWin<TBusinessObject>(this, editorControlPanel);
         }
 
 //        public IBOSelectorAndEditor CreateGridAndBOEditorControl(IBOEditorControl boEditorPanel,IBusinessObject businessObject)
 //        {
-//            return new GridAndBOEditorControlWin<IBusinessObject>(this, boEditorPanel,businessObject);
+//            return new BOSelectorAndBOEditorControlWin<IBusinessObject>(this, boEditorPanel,businessObject);
 //        }
 
         ///<summary>

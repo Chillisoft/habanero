@@ -9,7 +9,7 @@ namespace Habanero.Test.UI.Base
 {
     /// <summary>
     /// This test class tests the ComboBoxSelector class but can be overridden to 
-    /// test any class that implements the IBOSelector Interface.
+    /// test any class that implements the IBOSelectorControl Interface.
     /// The methods to override are <see cref="GetControlFactory"/><br/> 
     /// <see cref="SetSelectedIndex"/> <br/>
     /// <see cref="SelectedIndex"/><br/>
@@ -29,17 +29,17 @@ namespace Habanero.Test.UI.Base
             return factory;
         }
 
-        protected virtual void SetSelectedIndex(IBOSelector selector, int index)
+        protected virtual void SetSelectedIndex(IBOSelectorControl selector, int index)
         {
             ((IBOComboBoxSelector)selector).ComboBox.SelectedIndex = index;
         }
 
-        protected virtual int SelectedIndex(IBOSelector selector)
+        protected virtual int SelectedIndex(IBOSelectorControl selector)
         {
             return ((IBOComboBoxSelector)selector).ComboBox.SelectedIndex;
         }
 
-        protected virtual IBOSelector CreateSelector()
+        protected virtual IBOSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateComboBoxSelector();
         }
@@ -53,10 +53,10 @@ namespace Habanero.Test.UI.Base
         {
             return 1;
         }
-        protected IBOSelector GetSelectorWith_4_Rows(out BusinessObjectCollection<MyBO> col)
+        protected IBOSelectorControl GetSelectorWith_4_Rows(out BusinessObjectCollection<MyBO> col)
         {
             col = CreateCollectionWith_4_Objects();
-            IBOSelector boSelector = CreateSelector();
+            IBOSelectorControl boSelector = CreateSelector();
             boSelector.BusinessObjectCollection = col;
             return boSelector;
         }
@@ -89,7 +89,7 @@ namespace Habanero.Test.UI.Base
         public void Test_SetBOCol()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             new MyBO(); //So that class defs are loaded
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>();
             //---------------Assert Precondition----------------
@@ -106,7 +106,7 @@ namespace Habanero.Test.UI.Base
         public void Test_SetBOCol_SetsItemsInSelector()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
             //---------------Assert Precondition----------------
@@ -122,7 +122,7 @@ namespace Habanero.Test.UI.Base
         public void Test_GetBusinessObjectAtRow_ReturnsTheCorrectBO()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
             selector.BusinessObjectCollection = collection;
@@ -140,7 +140,7 @@ namespace Habanero.Test.UI.Base
         public void Test_GetBusinessObjectAtRow_0_ReturnsNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
             selector.BusinessObjectCollection = collection;
@@ -156,7 +156,7 @@ namespace Habanero.Test.UI.Base
         public void Test_GetBusinessObjectAtRow_Neg1_ReturnsNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
             selector.BusinessObjectCollection = collection;
@@ -172,7 +172,7 @@ namespace Habanero.Test.UI.Base
         public void Test_GetBusinessObjectAtRow_GTNoRows_ReturnsNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
             selector.BusinessObjectCollection = collection;
@@ -189,7 +189,7 @@ namespace Habanero.Test.UI.Base
         public void Test_AddBOToCol_UpdatesItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
             selector.BusinessObjectCollection = collection;
@@ -208,7 +208,7 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_RemoveBOToCol_UpdatesItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO newMyBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, newMyBO };
@@ -229,7 +229,7 @@ namespace Habanero.Test.UI.Base
         public void Test_ResetBOCol_ResetsItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO newMyBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, newMyBO };
@@ -248,7 +248,7 @@ namespace Habanero.Test.UI.Base
         public void Test_ResetBOCol_DeregistersForBOChangedEvents()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO newMyBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, newMyBO };
@@ -265,7 +265,7 @@ namespace Habanero.Test.UI.Base
         public void Test_ResetBOCol_ToNullClearsItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
 
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
@@ -284,7 +284,7 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_SelectedBusinessObject_ReturnsNullIfNoItemSelected()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
             selector.BusinessObjectCollection = collection;
@@ -301,7 +301,7 @@ namespace Habanero.Test.UI.Base
         public void Test_SelectedBusinessObject_FirstItemSelected_ReturnsItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
             selector.BusinessObjectCollection = collection;
@@ -318,7 +318,7 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_SelectedBusinessObject_SecondItemSelected_ReturnsItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
@@ -336,7 +336,7 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_Set_SelectedBusinessObject_SetsItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
@@ -357,7 +357,7 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_Set_SelectedBusinessObject_Null_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
@@ -378,7 +378,7 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_Set_SelectedBusinessObject_ItemNotInList_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
@@ -399,7 +399,7 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_AutoSelectsFirstItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
@@ -418,7 +418,7 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_AutoSelectsFirstItem_NoItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             new MyBO();//Purely to load the ClassDefs.
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>();
             //---------------Assert Precondition----------------
@@ -438,7 +438,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IBOSelector boSelector = GetSelectorWith_4_Rows(out col);
+            IBOSelectorControl boSelector = GetSelectorWith_4_Rows(out col);
             bool itemSelected = false;
             boSelector.SelectedBusinessObject = null;
             boSelector.BusinessObjectSelected += (delegate { itemSelected = true; });
@@ -453,7 +453,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IBOSelector boSelector = GetSelectorWith_4_Rows(out col);
+            IBOSelectorControl boSelector = GetSelectorWith_4_Rows(out col);
             //---------------Assert Preconditions --------------
             Assert.IsNotNull(boSelector.SelectedBusinessObject);
             Assert.IsNotNull(boSelector.BusinessObjectCollection);

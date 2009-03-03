@@ -17,7 +17,7 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-        protected override IBOSelector CreateSelector()
+        protected override IBOSelectorControl CreateSelector()
         {
             TestGridBase.GridBaseVWGStub gridBase = new TestGridBase.GridBaseVWGStub();
             Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
@@ -61,7 +61,7 @@ namespace Habanero.Test.UI.Base
             return factory;
         }
 
-        protected override void SetSelectedIndex(IBOSelector selector, int index)
+        protected override void SetSelectedIndex(IBOSelectorControl selector, int index)
         {
             int count = 0;
             foreach (IDataGridViewRow row in ((IGridBase) selector).Rows)
@@ -75,7 +75,7 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        protected override int SelectedIndex(IBOSelector selector)
+        protected override int SelectedIndex(IBOSelectorControl selector)
         {
             IGridBase gridSelector = (IGridBase) selector;
             IDataGridViewRow currentRow = null;
@@ -88,7 +88,7 @@ namespace Habanero.Test.UI.Base
             return gridSelector.Rows.IndexOf(currentRow);
         }
 
-        protected override IBOSelector CreateSelector()
+        protected override IBOSelectorControl CreateSelector()
         {
             TestGridBase.GridBaseWinStub gridBase = new TestGridBase.GridBaseWinStub();
             System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
@@ -114,7 +114,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(IGridBase), selector);
         }
@@ -124,7 +124,7 @@ namespace Habanero.Test.UI.Base
         public override void Test_Set_SelectedBusinessObject_ItemNotInList_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
@@ -147,7 +147,7 @@ namespace Habanero.Test.UI.Base
         public override void Test_AutoSelectsFirstItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelector selector = CreateSelector();
+            IBOSelectorControl selector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };

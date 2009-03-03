@@ -4,7 +4,7 @@ namespace Habanero.UI.Base
     /// Provides an interface that is specialised for showing a collection of 
     /// Business Objects in a <see cref="IComboBox"/> and allowing the user to select one.
     /// </summary>
-    public interface IBOComboBoxSelector : IBOSelector, IComboBox
+    public interface IBOComboBoxSelector : IBOSelectorControl, IComboBox
     {
 //        ///<summary>
 //        /// Returns the control factory used by this selector

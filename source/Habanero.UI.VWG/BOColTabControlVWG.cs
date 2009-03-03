@@ -132,7 +132,7 @@ namespace Habanero.UI.VWG
             get { return _boColTabControlManager; }
         }
 
-        #region IBOSelector
+        #region IBOSelectorControl
 
         /// <summary>
         /// Gets and sets the currently selected business object in the grid
@@ -156,8 +156,8 @@ namespace Habanero.UI.VWG
             BOColTabControlManager.Clear();
         }
 
-        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelector"></see>.</summary>
-        /// <returns>The number of rows in the <see cref="IBOSelector"></see>.</returns>
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelectorControl"></see>.</returns>
         public int NoOfItems
         {
             get { return this.BOColTabControlManager.NoOfItems; }

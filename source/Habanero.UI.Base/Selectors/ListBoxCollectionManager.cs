@@ -204,8 +204,8 @@ namespace Habanero.UI.Base
         {
             SetCollection (null, false);
         }
-        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelector"></see>.</summary>
-        /// <returns>The number of rows in the <see cref="IBOSelector"></see>.</returns>
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelectorControl"></see>.</returns>
         public int NoOfItems
         {
             get { return Control.Items.Count; }

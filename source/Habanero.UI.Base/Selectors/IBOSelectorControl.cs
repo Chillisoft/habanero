@@ -13,7 +13,7 @@ namespace Habanero.UI.Base
 //    public delegate void SelectorLoaderDelegate(IGridBase grid, IBusinessObjectCollection col);
 //
     /// <summary>
-    /// Handles the event of a user double-clicking on a row in the <see cref="IBOSelector"/>
+    /// Handles the event of a user double-clicking on a row in the <see cref="IBOSelectorControl"/>
     /// </summary>
     /// <param name="sender">The object that notified of the event</param>
     /// <param name="e">Attached arguments regarding the event</param>
@@ -25,7 +25,7 @@ namespace Habanero.UI.Base
     ///  <see cref="ICollapsiblePanelGroupControl"/>, <see cref="IBOColTabControl"/>, a <see cref="IMultiSelector{T}"/>
     ///  or an <see cref="ITreeView"/>
     /// </summary>
-    public interface IBOSelector:IControlHabanero
+    public interface IBOSelectorControl:IControlHabanero
     {
         /// <summary>
         /// Gets and Sets the business object collection displayed in the grid.  This
@@ -73,8 +73,8 @@ namespace Habanero.UI.Base
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         void Clear();
 
-        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelector"></see>.</summary>
-        /// <returns>The number of rows in the <see cref="IBOSelector"></see>.</returns>
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelectorControl"></see>.</returns>
         [DefaultValue(0), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
          EditorBrowsable(EditorBrowsableState.Advanced), Browsable(false)]
         int NoOfItems { get; }

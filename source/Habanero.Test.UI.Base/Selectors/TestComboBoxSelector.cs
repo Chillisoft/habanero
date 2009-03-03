@@ -43,7 +43,7 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-        protected override IBOSelector CreateSelector()
+        protected override IBOSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateComboBoxSelector();
         }
@@ -82,17 +82,17 @@ namespace Habanero.Test.UI.Base
         }
 
 
-        protected override void SetSelectedIndex(IBOSelector selector, int index)
+        protected override void SetSelectedIndex(IBOSelectorControl selector, int index)
         {
             ((IBOComboBoxSelector)selector).ComboBox.SelectedIndex = index;
         }
 
-        protected override int SelectedIndex(IBOSelector selector)
+        protected override int SelectedIndex(IBOSelectorControl selector)
         {
             return ((IBOComboBoxSelector)selector).ComboBox.SelectedIndex;
         }
 
-        protected override IBOSelector CreateSelector()
+        protected override IBOSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateComboBoxSelector();
         }
@@ -138,7 +138,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BusinessObjectCollection<MyBO> col;
-            IBOSelector boSelector = GetSelectorWith_4_Rows(out col);
+            IBOSelectorControl boSelector = GetSelectorWith_4_Rows(out col);
             const string propName = "TestProp";
             const int rowIndex = 1;
             MyBO bo = col[rowIndex];
