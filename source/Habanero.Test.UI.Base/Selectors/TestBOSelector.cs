@@ -430,7 +430,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item");
             Assert.AreSame(null, selector.SelectedBusinessObject);
-            Assert.AreEqual(0, SelectedIndex(selector));
+            Assert.AreEqual(-1, SelectedIndex(selector));
         }
 
         [Test]

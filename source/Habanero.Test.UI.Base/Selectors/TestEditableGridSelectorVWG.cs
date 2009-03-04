@@ -201,7 +201,26 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(myBO, selector.SelectedBusinessObject);
             Assert.AreEqual(ActualIndex(0), SelectedIndex(selector));
         }
-        [Ignore(" Not Yet implemented")] //TODO  01 Mar 2009:
+
+          public override void Test_AutoSelectsFirstItem_NoItems()
+        {
+            //---------------Set up test pack-------------------
+            IBOSelectorControl selector = CreateSelector();
+            new MyBO();//Purely to load the ClassDefs.
+            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, selector.NoOfItems);
+            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.AreEqual(null, selector.SelectedBusinessObject);
+            //---------------Execute Test ----------------------
+            selector.BusinessObjectCollection = collection;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item");
+            Assert.AreSame(null, selector.SelectedBusinessObject);
+            Assert.AreEqual(0, SelectedIndex(selector));
+        }
+
+          [Ignore(" Not Yet implemented")] //TODO  01 Mar 2009:
         [Test]
         public void TestEditItemFromCollectionUpdatesItemInSelector()
         {

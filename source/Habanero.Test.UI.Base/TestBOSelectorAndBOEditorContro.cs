@@ -378,10 +378,11 @@ namespace Habanero.Test.UI.Base
             //  ---------------Test Result -----------------------
             IButtonGroupControl buttonGroupControl = boSelectorAndBOEditorControlWin.ButtonGroupControl;
             Assert.IsNotNull(buttonGroupControl);
-            Assert.AreEqual(3, buttonGroupControl.Controls.Count);
+            Assert.AreEqual(4, buttonGroupControl.Controls.Count);
             Assert.AreEqual("Cancel", buttonGroupControl.Controls[0].Text);
-            Assert.AreEqual("Delete", buttonGroupControl.Controls[1].Text);
-            Assert.AreEqual("New", buttonGroupControl.Controls[2].Text);
+            Assert.AreEqual("Save", buttonGroupControl.Controls[1].Text);
+            Assert.AreEqual("Delete", buttonGroupControl.Controls[2].Text);
+            Assert.AreEqual("New", buttonGroupControl.Controls[3].Text);
         }
 
         [Test]
