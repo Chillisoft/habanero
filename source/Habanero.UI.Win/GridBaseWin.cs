@@ -62,6 +62,9 @@ namespace Habanero.UI.Win
             _manager.CollectionChanged += delegate { FireCollectionChanged(); };
 
             DoubleClick += DoubleClickHandler;
+//            this.BusinessObjectEdited
+//                this.CellValueChanged
+//                    this.;
         }
 
         /// <summary>

@@ -49,6 +49,7 @@ namespace Habanero.Test.UI.Base.Mappers
             {
                 return new ControlFactoryVWG();
             }
+#pragma warning disable 168
             [TestFixtureSetUp]
             public void TestFixtureSetup()
             {
@@ -56,6 +57,8 @@ namespace Habanero.Test.UI.Base.Mappers
                 BORegistry.DataAccessor = new DataAccessorInMemory(_store);
                 Dictionary<string, string> collection = Sample.BOLookupCollection;
             }
+#pragma warning restore 168
+
             [Test]
             public void TestChangeComboBoxDoesntUpdateBusinessObject()
             {
@@ -86,7 +89,8 @@ namespace Habanero.Test.UI.Base.Mappers
                 return new ControlFactoryWin();
             }
 
-            
+
+#pragma warning disable 168
 
             [TestFixtureSetUp]
             public void TestFixtureSetup()
@@ -95,6 +99,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 BORegistry.DataAccessor = new DataAccessorInMemory(_store);
                 Dictionary<string, string> collection = Sample.BOLookupCollection;
             }
+#pragma warning restore 168
             [Test]
             public void TestChangePropValueUpdatesBusObj()
             {
@@ -312,6 +317,42 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsNotNull(cmbox.SelectedItem);
             Assert.AreEqual(LOOKUP_ITEM_1, cmbox.SelectedItem, "Item is not set.");
             Assert.AreEqual(s.SampleLookupID.ToString(), cmbox.SelectedValue, "Value is not set");
+        }
+
+        [Test]
+        public void TestSetBusinessObject_Null_DoesNotRaiseError_BUGFIX()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string propName = "SampleLookupID";
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            Sample s = new Sample();
+            mapper.LookupList = Sample.LookupCollection;
+            s.SampleLookupID = (Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_1);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, Sample.LookupCollection.Count);
+            Assert.IsNull(cmbox.SelectedItem);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = null; 
+            //---------------Test Result -----------------------
+            Assert.IsTrue(string.IsNullOrEmpty(Convert.ToString(cmbox.SelectedItem)));
+        }
+        [Test]
+        public void TestSetBusinessObject_Null_NullLookupListSet_DoesNotRaiseError_BUGFIX()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string propName = "SampleLookupID";
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsNull(mapper.LookupList);
+            Assert.AreEqual(0, cmbox.Items.Count);
+            Assert.IsNull(cmbox.SelectedItem);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(cmbox.SelectedItem);
+            Assert.AreEqual(1, cmbox.Items.Count, "Should have only the null item in it.");
         }
 //        protected static string GuidToUpper(Guid guid)
 //        {

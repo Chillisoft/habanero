@@ -35,7 +35,7 @@ namespace Habanero.BO
         protected DataTable _table;
         protected IBusinessObjectInitialiser _objectInitialiser;
         private const string _idColumnName = "HABANERO_OBJECTID";
-
+        protected EventHandler<BOEventArgs> _boAddedHandler;
         ///<summary>
         /// Gets and sets whether the property update handler shold be set or not.
         /// This is used to 
@@ -57,6 +57,7 @@ namespace Habanero.BO
             if (collection == null) throw new ArgumentNullException("collection");
             this._collection = collection;
             RegisterForBusinessObjectPropertyUpdatedEvents = true;
+            _boAddedHandler = BOAddedHandler;
         }
 
         /// <summary>
@@ -161,7 +162,7 @@ namespace Habanero.BO
                 _collection.BusinessObjectUpdated += UpdatedHandler;
             }
             _collection.BusinessObjectIDUpdated += IDUpdatedHandler;
-            _collection.BusinessObjectAdded += AddedHandler;
+            _collection.BusinessObjectAdded += _boAddedHandler;
             _collection.BusinessObjectRemoved += RemovedHandler;
         }
         private void PropertyUpdatedHandler(object sender, BOPropUpdatedEventArgs propEventArgs)
@@ -209,7 +210,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        protected virtual void AddedHandler(object sender, BOEventArgs e)
+        protected virtual void BOAddedHandler(object sender, BOEventArgs e)
         {
             BusinessObject businessObject = (BusinessObject)e.BusinessObject;
             object[] values = GetValues(businessObject);

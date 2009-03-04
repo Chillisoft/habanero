@@ -55,7 +55,8 @@ namespace Habanero.UI.Win
             _confirmDeletion = false;
             AllowUserToAddRows = true;
             _deleteKeyBehaviour = DeleteKeyBehaviours.DeleteRow;
-            SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+//            SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            this.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             _comboBoxClickOnce = true;
 
             UserDeletingRow += ConfirmRowDeletion;
@@ -90,7 +91,10 @@ namespace Habanero.UI.Win
         /// </summary>
         public void SaveChanges()
         {
-            if (this.DataSource is DataView)
+            if (this.BusinessObjectCollection != null)
+            {
+                this.BusinessObjectCollection.SaveAll();
+            }else if (this.DataSource is DataView)
             {
                 ((DataView)this.DataSource).Table.AcceptChanges();
             }
@@ -243,7 +247,7 @@ namespace Habanero.UI.Win
             if (setToEditMode)
             {
                 DataGridViewColumn dataGridViewColumn = ((DataGridViewColumnWin) Columns[e.ColumnIndex]).DataGridViewColumn;
-                ControlsHelper.SafeGui(this, delegate { BeginEdit(true); });
+                ControlsHelper.SafeGui(this, () => BeginEdit(true));
                 if (EditingControl is DataGridViewComboBoxEditingControl)
                 {
                     ((DataGridViewComboBoxEditingControl)EditingControl).DroppedDown = true;

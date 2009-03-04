@@ -517,6 +517,112 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_AutoSelectsFirstItem()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            AddControlToForm(editableGridControl);
+            SetupGridColumnsForMyBo(editableGridControl.Grid);
+
+            //-----------------Assert Preconditions-----------------------
+            Assert.AreEqual(1, editableGridControl.Grid.Rows.Count, "The number of items in the grid plus the null item");
+            //---------------Execute Test ----------------------
+            editableGridControl.BusinessObjectCollection = col;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(col.Count + 1, editableGridControl.Grid.Rows.Count, "should be 4 item 1 adding item");
+            Assert.IsNotNull(editableGridControl.SelectedBusinessObject);
+            Assert.AreSame(col[0], editableGridControl.SelectedBusinessObject);
+
+        }
+
+        [Test]
+        public void Test_SelectItem_SetsSelectedBO()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            AddControlToForm(editableGridControl);
+            SetupGridColumnsForMyBo(editableGridControl.Grid);
+            editableGridControl.BusinessObjectCollection = col;
+            MyBO myBO = col[2];
+            //---------------Execute Test ----------------------
+            editableGridControl.SelectedBusinessObject = myBO;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(col.Count + 1, editableGridControl.Grid.Rows.Count, "should be 4 item 1 adding item");
+            Assert.AreSame(myBO, editableGridControl.SelectedBusinessObject);
+
+        }
+
+        [Test]
+        public void Test_SelectIndex_SetsSelectedBO()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            AddControlToForm(editableGridControl);
+            SetupGridColumnsForMyBo(editableGridControl.Grid);
+            editableGridControl.BusinessObjectCollection = col;
+            MyBO myBO = col[2];
+            //---------------Execute Test ----------------------
+            editableGridControl.Grid.Rows[2].Selected = true;
+            //---------------Test Result -----------------------
+           Assert.AreEqual(col.Count + 1, editableGridControl.Grid.Rows.Count, "should be 4 item 1 adding item");
+            Assert.AreSame(myBO, editableGridControl.SelectedBusinessObject);
+        }
+        
+        [Test]
+        public void Test_BusinessObjectSelectEvent()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            AddControlToForm(editableGridControl);
+            SetupGridColumnsForMyBo(editableGridControl.Grid);
+            editableGridControl.BusinessObjectCollection = col;
+            IBusinessObject boFromEvent = null;
+            editableGridControl.BusinessObjectSelected += delegate(object sender, BOEventArgs e) 
+                {
+                    boFromEvent = e.BusinessObject; 
+                };
+            MyBO myBO = col[2];
+            //---------------Execute Test ----------------------
+            editableGridControl.Grid.Rows[2].Selected = true;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(col.Count + 1, editableGridControl.Grid.Rows.Count, "should be 4 item 1 adding item");
+            Assert.AreSame(myBO, editableGridControl.SelectedBusinessObject);
+            Assert.AreEqual(myBO, boFromEvent);
+        }      
+        [Test]
+        public void Test_SetBusinessObject_BusinessObjectSelectEvent_FiresAndReturnsAValidBO()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            AddControlToForm(editableGridControl);
+            SetupGridColumnsForMyBo(editableGridControl.Grid);
+            editableGridControl.BusinessObjectCollection = col;
+            IBusinessObject boFromEvent = null;
+            editableGridControl.BusinessObjectSelected += delegate(object sender, BOEventArgs e) 
+                {
+                    boFromEvent = e.BusinessObject; 
+                };
+            MyBO myBO = col[2];
+            //---------------Execute Test ----------------------
+            editableGridControl.SelectedBusinessObject = myBO;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(col.Count + 1, editableGridControl.Grid.Rows.Count, "should be 4 item 1 adding item");
+            Assert.AreSame(myBO, editableGridControl.SelectedBusinessObject);
+            Assert.AreEqual(myBO, boFromEvent);
+        }
+
+
+        [Test]
         public void Test_GetBusinessObjectCollection()
         {
             //---------------Set up test pack-------------------

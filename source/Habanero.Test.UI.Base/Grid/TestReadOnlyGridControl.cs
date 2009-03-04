@@ -581,8 +581,8 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        //TODO Brett : Jan 2009
-        [Test, Ignore("TODO: fix this")]
+//        //TODO Brett : Jan 2009
+//        [Test, Ignore("TODO: fix this")]
 //        [Test]
         public void TestAcceptance_SearchGridSearchesTheGrid()
         {
@@ -1187,7 +1187,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void _____TestSetBusinessObjectFiresBusinessObjectSelected2()
+        public void TestSetBusinessObjectFiresBusinessObjectSelected2()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;

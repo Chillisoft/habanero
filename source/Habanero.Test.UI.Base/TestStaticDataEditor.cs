@@ -393,7 +393,7 @@ namespace Habanero.Test.UI.Base
             TearDownForm(frm);
         }
 
-
+        [Ignore("Changing how this works 04 March 2009 bbb")] 
         [Test]
         public virtual void TestSaveChanges()
         {

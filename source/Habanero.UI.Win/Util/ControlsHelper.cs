@@ -23,13 +23,15 @@ namespace Habanero.UI.Win
 {
     ///<summary>
     /// Provides useful utilities for windows controls.
+    /// E.g. 
+    /// <li> <see cref="SafeGui"/></li>
     ///</summary>
     public static class ControlsHelper
     {
 
         ///<summary>
         /// Executes the provided delegate in the specified control's thread.
-        /// Use this method to avoid problems with corss thread calls.
+        /// Use this method to avoid problems with cross thread calls.
         ///</summary>
         ///<param name="control">The control running on the thread to be used.</param>
         ///<param name="invoker">The delegate to execute on the control's thread.</param>

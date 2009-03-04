@@ -259,6 +259,7 @@ namespace Habanero.UI.Base
             {
                 Dictionary<string, string> emptyList = new Dictionary<string, string>();
                 LookupList = emptyList;
+                return;
             }
             BOMapper mapper = new BOMapper(_businessObject);
             Dictionary<string, string> col = mapper.GetLookupList(_propertyName);

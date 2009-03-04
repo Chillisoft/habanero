@@ -58,7 +58,9 @@ namespace Habanero.BO
             _rowChangedHandler = RowChangedHandler;
             _rowDeletedHandler = RowDeletedHandler;
             _newRowHandler = NewRowHandler;
+            _boAddedHandler = BOAddedHandler;
         }
+
 
         /// <summary>
         /// Adds handlers to be called when updates occur
@@ -71,22 +73,23 @@ namespace Habanero.BO
             _table.RowChanged += _rowChangedHandler;
             _table.RowDeleting += _rowDeletedHandler;
         }
-
         /// <summary>
         /// Handles the event of a business object being added. Adds a new
         /// data row containing the object.
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        protected override void AddedHandler(object sender, BOEventArgs e)
+        protected override void BOAddedHandler(object sender, BOEventArgs e)
         {
             BusinessObject businessObject = (BusinessObject) e.BusinessObject;
             int rowNum = this.FindRow(e.BusinessObject);
             if (rowNum >= 0) return; //If row already exists in the datatable then do not add it.
             object[] values = GetValues(businessObject);
             _table.RowChanged -= _rowChangedHandler;
+            _table.TableNewRow -= _newRowHandler;
             _table.LoadDataRow(values, true);
             _table.RowChanged += _rowChangedHandler;
+            _table.TableNewRow += _newRowHandler;
         }
 
         /// <summary>
@@ -298,9 +301,9 @@ namespace Habanero.BO
             try
             {
                 _isBeingAdded = true;
-               _collection.BusinessObjectAdded -= AddedHandler;
-                BusinessObject newBo = (BusinessObject) _collection.CreateBusinessObject();
-               _collection.BusinessObjectAdded += AddedHandler;
+                _collection.BusinessObjectAdded -= _boAddedHandler;
+                BusinessObject newBo = (BusinessObject)_collection.CreateBusinessObject();
+                _collection.BusinessObjectAdded += _boAddedHandler;
 
                 //log.Debug("Initialising obj");
                 if (this._objectInitialiser != null)
@@ -313,7 +316,7 @@ namespace Habanero.BO
                 row[IDColumnName] = newBo.ID.ObjectID;
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
-                    //If not a related Property then Update //TODO Brett 17 Feb 2009: Why?
+                    //If not a related Property then Update //TODO Brett 17 Feb 2009: Why using . 
                     if (uiProperty.PropertyName.IndexOf(".") == -1)
                     {
                         //If no value was typed into the grid then use the default value for the property if one exists.
@@ -349,5 +352,40 @@ namespace Habanero.BO
                 throw;
             }
         }
+//        /// <summary>
+//        /// Handles the event of a row being added
+//        /// </summary>
+//        /// <param name="e">Attached arguments regarding the event</param>
+//        private void NewRowSaved(DataRowChangeEventArgs e)
+//        {
+//            try
+//            {
+//                _isBeingAdded = true;
+//                DataRow row = e.Row;
+//                IBusinessObject newBo = _addedRows[row];
+//                foreach (UIGridColumn uiProperty in _uiGridProperties)
+//                {
+//                    //If not a related Property then Update //TODO Brett 17 Feb 2009: Why using . 
+//                    if (uiProperty.PropertyName.IndexOf(".") == -1)
+//                    {
+//                        //If no value was typed into the grid then use the default value for the property if one exists.
+//                        if (!DBNull.Value.Equals(row[uiProperty.PropertyName]))
+//                        {
+//                            newBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
+//                        }
+//                    }
+//                }
+//                _isBeingAdded = false;
+//            }
+//            catch (Exception ex)
+//            {
+//                _isBeingAdded = false;
+//                if (e.Row != null)
+//                {
+//                    e.Row.RowError = ex.Message;
+//                }
+//                throw;
+//            }
+//        }
     }
 }

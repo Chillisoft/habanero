@@ -25,6 +25,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.UI.Base
 {
@@ -55,8 +56,7 @@ namespace Habanero.UI.Base
             UiDefName = uiDefName;
             _gridBase.AutoGenerateColumns = false;
             _gridLoader = DefaultGridLoader;
-            _gridBase.AllowUserToAddRows = false;
-           
+            _gridBase.AllowUserToAddRows = false; 
         }
 
         ///<summary>
@@ -304,7 +304,8 @@ namespace Habanero.UI.Base
                 {
                     if (i++ == rowIndex)
                     {
-                        return this._dataSetProvider.Find( new Guid(dataRowView.Row[_dataSetProvider.IDColumnName].ToString()));
+                        Guid result = GetRowObjectIDValue(dataRowView);
+                        return this._dataSetProvider.Find(result);
                     }
                 }
             }else
@@ -332,9 +333,20 @@ namespace Habanero.UI.Base
             return null;
         }
 
+        private Guid GetRowObjectIDValue(DataRowView dataRowView)
+        {
+            object idValue = dataRowView.Row[_dataSetProvider.IDColumnName];
+            Guid result;
+            StringUtilities.GuidTryParse(idValue.ToString(), out result);
+            return result;
+        }
+
         private Guid GetRowObjectIDValue(IDataGridViewRow row)
         {
-            return new  Guid(row.Cells[IDColumnName].Value.ToString()); 
+            object idValue = row.Cells[IDColumnName].Value;
+            Guid result;
+            StringUtilities.GuidTryParse(idValue.ToString(), out result);
+            return result;
         }
 
         ///<summary>

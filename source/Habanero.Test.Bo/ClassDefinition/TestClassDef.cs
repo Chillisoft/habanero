@@ -594,14 +594,17 @@ namespace Habanero.Test.BO.ClassDefinition
 
             Assert.IsNull(classDef.PropDefcol);
             classDef.SetPropDefCol(new PropDefCol());
+            Assert.IsNotNull(classDef.PropDefcol);
             Assert.AreEqual(0, classDef.PropDefcol.Count);
 
             Assert.IsNull(classDef.KeysCol);
             classDef.SetKeyCol(new KeyDefCol());
+            Assert.IsNotNull(classDef.KeysCol);
             Assert.AreEqual(0, classDef.KeysCol.Count);
 
             Assert.IsNull(classDef.PrimaryKeyDef);
             classDef.SetPrimaryKeyDef(new PrimaryKeyDef());
+            Assert.IsNotNull(classDef.PrimaryKeyDef);
             Assert.AreEqual(0, classDef.PrimaryKeyDef.Count);
 
             Assert.AreEqual(0, classDef.UIDefCol.Count);
@@ -905,7 +908,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             try
             {
-                ClassDef gotClassDef = ClassDef.Get<ContactPerson>();
+                ClassDef.Get<ContactPerson>();
                 Assert.Fail("Get<ContactPerson> should have thrown an error as there is no ClassDef for ContactPerson");
             }
             catch (HabaneroDeveloperException ex)

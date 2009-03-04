@@ -52,7 +52,7 @@ namespace Habanero.BO
 ////                _collection.BusinessObjectUpdated += UpdatedHandler;
 //            }
 ////            _collection.BusinessObjectIDUpdated += IDUpdatedHandler;
-//            _collection.BusinessObjectAdded += AddedHandler;
+//            _collection.BusinessObjectAdded += BOAddedHandler;
 //            _collection.BusinessObjectRemoved += RemovedHandler;
 //        }
 

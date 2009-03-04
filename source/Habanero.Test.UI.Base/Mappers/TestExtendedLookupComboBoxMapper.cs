@@ -155,7 +155,19 @@ namespace Habanero.Test.UI.Base.Mappers
             mapper.BusinessObject = businessObjectInfo;
             //--------------- Test Result -----------------------
             Assert.AreSame(businessObjectInfo, mapper.BusinessObject);
-            Assert.AreSame(businessObjectInfo, mapper.BusinessObject);
+        }
+        [Test]
+        public void Test_SetBusinessObject_ToNull_OnInternalLookupComboBoxMapper()
+        {
+            //--------------- Set up test pack ------------------
+            ExtendedComboBoxMapper mapper = CreateExtendedLookupComboBoxMapper("Surname");
+            //--------------- Test Preconditions ----------------
+            Assert.IsNull(mapper.BusinessObject);
+            Assert.IsNull(mapper.BusinessObject);
+            //--------------- Execute Test ----------------------
+            mapper.BusinessObject = null;
+            //--------------- Test Result -----------------------
+            Assert.AreSame(null, mapper.BusinessObject);
         }
 
         private static ExtendedComboBoxMapper CreateExtendedLookupComboBoxMapper(string propertyName)

@@ -62,6 +62,7 @@ namespace Habanero.UI.Win
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             manager.AddControl(_buttons, BorderLayoutManager.Position.South);
             this.Grid.BusinessObjectSelected += Grid_OnBusinessObjectSelected;
+
             //TODO copy rest from readonly version
         }
 
