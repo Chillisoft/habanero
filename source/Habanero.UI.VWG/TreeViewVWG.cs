@@ -17,8 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using TreeViewAction=Habanero.UI.Base.TreeViewAction;
@@ -34,7 +32,6 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class TreeViewVWG : TreeView, ITreeView
     {
-        private ITreeNode _topNode;
         private event TreeViewEventHandler _afterSelect;
         private event TreeViewCancelEventHandler _beforeSelect;
 
@@ -42,20 +39,13 @@ namespace Habanero.UI.VWG
 
         private static ITreeNode GetITreeNode(TreeNode treeNode)
         {
-            if (treeNode == null) return null;
-            return new TreeNodeVWG(treeNode);
-            //ITreeNode treeNodeValue = treeNode as ITreeNode;
-            //if (treeNodeValue == null)
-            //{
-            //    treeNodeValue = new TreeNodeVWG(treeNode);
-            //}
-            //return treeNodeValue;
+            return treeNode == null ? null : new TreeNodeVWG(treeNode);
         }
 
         private static TreeNode GetTreeNode(ITreeNode treeNode)
         {
             if (treeNode == null) return null;
-            return (TreeNode)treeNode.OriginalNode;
+            return (TreeNode)treeNode. OriginalNode;
         }
 
         #endregion // Utility Methods
@@ -132,68 +122,107 @@ namespace Habanero.UI.VWG
             get { return new TreeNodeCollectionVWG(base.Nodes); }
         }
 
-        public ITreeNode TopNode
-        {
-            get { return _topNode;}
-            set { _topNode = value; }
-        }
+        /// <summary>
+        /// The top <see cref="ITreeNode"/> or first node shown in the <see cref="ITreeView"/>.
+        /// <remarks>
+        /// This is custom implemented for Visual Web Guid since it was not implemeted by them.</remarks>
+        /// </summary>
+        public ITreeNode TopNode { get; set; }
 
         public new ITreeNode SelectedNode
         {
             get { return GetITreeNode(base.SelectedNode); }
             set { base.SelectedNode = GetTreeNode(value); }
         }
-
+        /// <summary>
+        /// An Implementation of <see cref="ITreeNode"/> for Visual Web Gui.
+        /// </summary>
         public class TreeNodeVWG : TreeNode, ITreeNode
         {
             private readonly TreeNode _originalNode;
 
+            ///<summary>
+            /// A constructor for <see cref="TreeNodeVWG"/> that takes the underlying Visual Web Gui Node as its 
+            /// arguement. I.e. This control acts as a wrapper to the Visual Web Gui TreeNode Control.
+            ///</summary>
+            ///<param name="node"></param>
             public TreeNodeVWG(TreeNode node)
             {
                 _originalNode = node;
             }
 
+            ///<summary>
+            /// The text shown in the <see cref="ITreeNode"/>
+            ///</summary>
             string ITreeNode.Text
             {
                 get { return _originalNode.Text; }
                 set { _originalNode.Text = value; }
             }
 
+            /// <summary>
+            /// The parent <see cref="ITreeNode"/> if one exists null if this is the Root Node.
+            /// </summary>
             public new ITreeNode Parent
             {
                 get { return GetITreeNode(_originalNode.Parent); }
             }
 
+            ///<summary>
+            /// The <see cref="ITreeNodeCollection"/> of <see cref="ITreeNode"/>'s that are children of this <see cref="ITreeNode"/>.
+            ///</summary>
             public new ITreeNodeCollection Nodes
             {
                 get { return new TreeNodeCollectionVWG(_originalNode.Nodes); }
             }
 
+            /// <summary>
+            /// The underlying Node i.e. If you are wrapping a Windows TreeView then this method will return the Windows Node.
+            /// If you are wrapping a VWG Node then this method will return the underlying VWG Node.
+            /// </summary>
             public object OriginalNode
             {
                 get { return _originalNode; }
             }
         }
-
+        /// <summary>
+        /// An implementation of the <see cref="ITreeNodeCollection"/> for Visual Web Gui.
+        /// </summary>
         public class TreeNodeCollectionVWG : ITreeNodeCollection
         {
             private readonly TreeNodeCollection _nodes;
 
+            ///<summary>
+            /// Constructs a <see cref="TreeNodeCollectionVWG"/>
+            ///</summary>
+            ///<param name="nodes"></param>
             public TreeNodeCollectionVWG(TreeNodeCollection nodes)
             {
                 _nodes = nodes;
             }
 
+            ///<summary>
+            /// The number of items in this collection
+            ///</summary>
             public int Count
             {
                 get { return _nodes.Count; }
             }
 
+            /// <summary>
+            /// Returns the item identified by index.
+            /// </summary>
+            /// <param name="index"></param>
+            /// <returns></returns>
             public ITreeNode this[int index]
             {
                 get { return GetITreeNode(_nodes[index]); }
             }
 
+            /// <summary>
+            /// Adds a new <paramref name="treeNode"/> to the collection of <see cref="ITreeNode"/>s
+            /// </summary>
+            /// <param name="treeNode">the <see cref="ITreeNode"/> that is being added to the collection</param>
             public void Add(ITreeNode treeNode)
             {
                 _nodes.Add(GetTreeNode(treeNode));

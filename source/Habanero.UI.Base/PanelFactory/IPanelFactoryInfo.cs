@@ -105,6 +105,11 @@ namespace Habanero.UI.Base
         /// </summary>
         IDictionary<string, IEditableGridControl> FormGrids { get; set; }
 
+        ///<summary>
+        /// Constructs and returns an <see cref="IEditableGridControl"/> for a specified relationship.
+        ///</summary>
+        ///<param name="relationShipName"></param>
+        ///<returns></returns>
         IEditableGridControl GetFormGrid(string relationShipName);
     }
 }

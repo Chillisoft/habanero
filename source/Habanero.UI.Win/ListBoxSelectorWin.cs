@@ -73,6 +73,9 @@ namespace Habanero.UI.Win
             _manager.Clear();
         }
 
+        ///<summary>
+        /// Returns the Underlying <see cref="IListBox"/> that is used by this selector
+        ///</summary>
         public IListBox ListBox
         {
             get { return this; }

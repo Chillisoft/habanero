@@ -22,11 +22,21 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    ///<summary>
+    /// A form that allows the user to capture additional information about what happened when the error occured and to
+    ///  send this to the relevant person.
+    ///</summary>
     public class ErrorDescriptionForm : FormWin
     {
         private readonly ITextBox _errorDescriptionTextBox;
+        /// <summary>
+        /// Event raised when this form is due to close.
+        /// </summary>
         public event EventHandler ErrorDescriptionFormClosing;
  
+        ///<summary>
+        /// A constructor for the <see cref="ErrorDescriptionForm"/>
+        ///</summary>
         public ErrorDescriptionForm()
         {
 
@@ -45,6 +55,9 @@ namespace Habanero.UI.Win
             this.Height = 400;
         }
 
+        ///<summary>
+        /// Returns the text box that contains the error description.
+        ///</summary>
         public ITextBox ErrorDescriptionTextBox
         {
             get { return _errorDescriptionTextBox; }

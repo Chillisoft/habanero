@@ -28,6 +28,10 @@ namespace Habanero.UI.Base
     ///</summary>
     public class DefaultBODeletor : IBusinessObjectDeletor
     {
+        ///<summary>
+        /// Deletes the given business object
+        ///</summary>
+        ///<param name="businessObject">The business object to delete</param>
         public virtual void DeleteBusinessObject(IBusinessObject businessObject)
         {
             businessObject.MarkForDelete();

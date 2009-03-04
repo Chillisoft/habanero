@@ -143,11 +143,24 @@ namespace Habanero.UI.Base
             _lookupComboBoxMapper.UpdateControlValueFromBusinessObject();
         }
 
+        /// <summary>
+        /// Updates the value on the control from the corresponding property
+        /// on the represented <see cref="IControlMapper.BusinessObject"/>
+        /// </summary>
         protected override void InternalUpdateControlValueFromBo()
         {
             _lookupComboBoxMapper.DoUpdateControlValueFromBO();
         }
 
+        /// <summary>
+        /// Gets and sets the business object that has a property
+        /// being mapped by this mapper.  In other words, this property
+        /// does not return the exact business object being shown in the
+        /// control, but rather the business object shown in the
+        /// form.  Where the business object has been amended or
+        /// altered, the <see cref="ControlMapper.UpdateControlValueFromBusinessObject"/> method is automatically called here to 
+        /// implement the changes in the control itself.
+        /// </summary>
         public override IBusinessObject BusinessObject
         {
             get { return base.BusinessObject; }

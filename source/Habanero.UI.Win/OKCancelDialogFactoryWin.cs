@@ -31,11 +31,20 @@ namespace Habanero.UI.Win
     {
         private readonly IControlFactory _controlFactory;
 
+        ///<summary>
+        /// Constructor for <see cref="OKCancelDialogFactoryWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public OKCancelDialogFactoryWin(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
         }
 
+        /// <summary>
+        /// Creates a panel containing OK and Cancel buttons
+        /// </summary>
+        /// <param name="nestedControl">The control to place above the buttons</param>
+        /// <returns>Returns the created panel</returns>
         public IOKCancelPanel CreateOKCancelPanel(IControlHabanero nestedControl)
         {
             OKCancelPanelWin mainPanel = new OKCancelPanelWin(_controlFactory);
@@ -46,6 +55,12 @@ namespace Habanero.UI.Win
             return mainPanel;
         }
 
+        /// <summary>
+        /// Creates a form containing OK and Cancel buttons
+        /// </summary>
+        /// <param name="nestedControl">The control to place above the buttons</param>
+        /// <param name="formTitle">The title shown on the form</param>
+        /// <returns>Returns the created form</returns>
         public IFormHabanero CreateOKCancelForm(IControlHabanero nestedControl, string formTitle)
         {
             FormWin form = (FormWin) _controlFactory.CreateForm();
@@ -67,12 +82,20 @@ namespace Habanero.UI.Win
             return form;
         }
 
+        ///<summary>
+        /// Handles the event of the Cancel Button being clicked.
+        ///</summary>
+        ///<param name="form"></param>
         public void CancelButton_ClickHandler(FormWin form)
         {
             ((Form)form).DialogResult = System.Windows.Forms.DialogResult.Cancel;
             form.Close();
         }
 
+        ///<summary>
+        /// Handles the event of the OKButton Being Clicked.
+        ///</summary>
+        ///<param name="form"></param>
         public void OkButton_ClickHandler(FormWin form)
         {
             ((Form)form).DialogResult = System.Windows.Forms.DialogResult.OK;

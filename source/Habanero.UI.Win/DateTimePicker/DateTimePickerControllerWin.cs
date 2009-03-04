@@ -69,7 +69,9 @@ namespace Habanero.UI.Win
 			Value = null;
 			UpdateFocusState();
 		}
-
+        /// <summary>
+        /// Cleans up all events etc on the DateTimePicker.
+        /// </summary>
         ~DateTimePickerControllerWin()
         {
             _dateTimePicker.KeyDown -= DateTimePicker_KeyDown;

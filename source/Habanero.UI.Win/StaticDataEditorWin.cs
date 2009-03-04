@@ -41,6 +41,10 @@ namespace Habanero.UI.Win
     {
         private readonly StaticDataEditorManager _staticDataEditorManager;
 
+        ///<summary>
+        /// Constructor for <see cref="StaticDataEditorWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public StaticDataEditorWin(IControlFactory controlFactory)
         {
             _staticDataEditorManager = new StaticDataEditorManager(this, controlFactory);

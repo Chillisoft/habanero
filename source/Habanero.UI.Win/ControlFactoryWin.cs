@@ -350,10 +350,9 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Returns a BOEditor form. This is a form that the business object can be edited in.
+        /// Returns a BOEditor form. This is a form that the business object can be edited in  a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid
         /// </summary>
-        /// <param name="bo"></param>
-        ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
+        /// <param name="bo"> </param>
         /// <returns></returns>
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo)
         {
@@ -846,25 +845,41 @@ namespace Habanero.UI.Win
         {
             return new ReadOnlyGridButtonsControlWin(this);
         }
-
+        /// <summary>
+        /// Obsolete
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, "default");
         }
-
+        /// <summary>
+        /// Obsolete
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         [Obsolete("Replaced by IBOSelectorAndEditor:: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, uiDefName);
         }
-
+        /// <summary>
+        /// Obsolete
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         [Obsolete("Replaced by IBOSelectorAndEditor:: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, businessObjectControl);
         }
-
+        /// <summary>
+        /// Obsolete
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         [Obsolete("Replaced by IBOSelectorAndEditor:: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
         {
@@ -920,11 +935,17 @@ namespace Habanero.UI.Win
             return new ControlWin();
         }
 
+        /// <summary>
+        /// Creates a user control
+        /// </summary>
         public IUserControlHabanero CreateUserControl()
         {
             return new UserControlWin();
         }
 
+        /// <summary>
+        /// Creates a user control with the specified name.
+        /// </summary>
         public IUserControlHabanero CreateUserControl(string name)
         {
             IUserControlHabanero userControlHabanero = CreateUserControl();
@@ -1028,7 +1049,7 @@ namespace Habanero.UI.Win
             return button;
         }
 
-        private void ConfigureCollapsibleStyleButton(IButton button)
+        private static void ConfigureCollapsibleStyleButton(IButton button)
         {
             ButtonWin buttonWin = ((ButtonWin)button);
             buttonWin.BackgroundImage = CollapsiblePanelResource.headergradient;

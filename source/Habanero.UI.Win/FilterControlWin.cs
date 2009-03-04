@@ -45,6 +45,10 @@ namespace Habanero.UI.Win
         /// </summary>
         public event EventHandler Filter;
 
+        ///<summary>
+        /// Constructor for <see cref="FilterControlWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public FilterControlWin(IControlFactory controlFactory)
         {
             Height = 50;

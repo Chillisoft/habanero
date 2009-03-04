@@ -422,7 +422,7 @@ namespace Habanero.UI.Base
         IDataGridViewColumn SortedColumn { get; }
 
         ///// <summary>Gets a value indicating whether the items in the <see cref="IDataGridView"></see> 
-        /// control are sorted in ascending or descending order, or are not sorted.</summary>
+        ///// control are sorted in ascending or descending order, or are not sorted.</summary>
         ///// <returns>One of the <see cref="T:Gizmox.WebGUI.Forms.SortOrder"></see> values.</returns>
         ///// <filterpriority>1</filterpriority>
         //[Browsable(false)]

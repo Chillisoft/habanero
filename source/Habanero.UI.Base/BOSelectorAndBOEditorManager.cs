@@ -36,7 +36,7 @@ namespace Habanero.UI.Base
         
 
         ///<summary>
-        ///// Constructor for the <see cref="BOSelectorAndEditorManager{TBusinessObject}"/>
+        /// Constructor for the <see cref="BOSelectorAndEditorManager"/>
         ///</summary>
         ///<param name="boSelector"></param>
         ///<param name="boEditor"></param>

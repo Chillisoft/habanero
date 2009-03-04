@@ -47,6 +47,9 @@ namespace Habanero.UI.Win
         private DeleteKeyBehaviours _deleteKeyBehaviour;
         private bool _comboBoxClickOnce;
 
+        ///<summary>
+        /// Constructs the <see cref="EditableGridWin"/>
+        ///</summary>
         public EditableGridWin()
         {
             _confirmDeletion = false;

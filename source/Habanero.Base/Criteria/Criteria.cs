@@ -599,7 +599,7 @@ namespace Habanero.Base
             return true;
         }
         /// <summary>
-        /// Returns the string comparison Operator for the enumerated <see cref="ComparisonOp" value (e.g. ComparisonOp.Equals will be converted to '='/>
+        /// Returns the string comparison Operator for the enumerated <see cref="ComparisonOp"/> value (e.g. ComparisonOp.Equals will be converted to '='/>
         /// </summary>
         /// <returns></returns>
         protected string ComparisonOperatorString()

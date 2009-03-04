@@ -36,7 +36,6 @@ namespace Habanero.UI.Base
         private readonly IPanel _panel;
         private readonly IControlMapperCollection _mappers;
         private readonly IControlHabanero _firstControlToFocus;
-        private int _preferredHeight;
         private int _preferredWidth;
         private IDictionary<string, IEditableGridControl> _formGrids;
         private IToolTip _toolTip;
@@ -105,6 +104,11 @@ namespace Habanero.UI.Base
             }
         }
 
+        ///<summary>
+        /// Constructs and returns an <see cref="IEditableGridControl"/> for a specified relationship.
+        ///</summary>
+        ///<param name="relationShipName"></param>
+        ///<returns></returns>
         public IEditableGridControl GetFormGrid(string relationShipName)
         {
             return _formGrids[relationShipName];
@@ -113,11 +117,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets and sets the preferred height setting
         /// </summary>
-        public int PreferredHeight
-        {
-            get { return _preferredHeight; }
-            set { _preferredHeight = value; }
-        }
+        public int PreferredHeight { get; set; }
 
         /// <summary>
         /// Gets and sets the preferred width setting

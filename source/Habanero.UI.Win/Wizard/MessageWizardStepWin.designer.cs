@@ -73,7 +73,9 @@ namespace Habanero.UI.Win
         }
 
         #endregion
-
+        /// <summary>
+        /// The label for the message.
+        /// </summary>
         protected Label _uxMessageLabel;
     }
 }

@@ -64,6 +64,10 @@ namespace Habanero.UI.Base
 		private readonly ValidationRule	_DefaultValidationRule	= new ValidationRule();
 	    private readonly IErrorProvider _ErrorProvider;
 
+	    ///<summary>
+	    /// Constructor for <see cref="ValidationProvider"/>
+	    ///</summary>
+	    ///<param name="errorProvider"></param>
 	    public ValidationProvider(IErrorProvider errorProvider)
 	    {
 	        _ErrorProvider = errorProvider;
@@ -443,9 +447,9 @@ namespace Habanero.UI.Base
 		#endregion
 
 		#region "ErrorProvider properties delegation"
-		/// <summary>
-		/// Icon display when validation failed.
-		/// </summary>
+		///// <summary>
+		///// Icon display when validation failed.
+		///// </summary>
         //[Category("Appearance"), Description("Icon display when validation failed."), Localizable(true)]
         //public Icon Icon
         //{

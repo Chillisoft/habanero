@@ -30,11 +30,26 @@ namespace Habanero.UI.Win
     /// </summary>
     public class ReadOnlyGridButtonsControlWin : ButtonGroupControlWin, IReadOnlyGridButtonsControl
     {
+        /// <summary>
+        /// Fires when the Delete button is clicked
+        /// </summary>
         public event EventHandler DeleteClicked;
+
+        /// <summary>
+        /// Fires when the Add button is clicked
+        /// </summary>
         public event EventHandler AddClicked;
+
+        /// <summary>
+        /// Fires when the Edit button is clicked
+        /// </summary>
         public event EventHandler EditClicked;
         private readonly ReadOnlyGridButtonsControlManager _manager;
 
+        ///<summary>
+        /// Constructs the <see cref="ReadOnlyGridButtonsControlWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public ReadOnlyGridButtonsControlWin(IControlFactory controlFactory)
             : base(controlFactory)
         {

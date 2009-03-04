@@ -31,6 +31,11 @@ namespace Habanero.UI.Base
         private readonly IEditableGridControl _gridControl;
         private readonly IGridInitialiser _gridInitialiser;
 
+        ///<summary>
+        /// Constructor for <see cref="EditableGridControlManager"/>
+        ///</summary>
+        ///<param name="gridControl"></param>
+        ///<param name="controlFactory"></param>
         public EditableGridControlManager(IEditableGridControl gridControl, IControlFactory controlFactory)
         {
             _gridControl = gridControl;

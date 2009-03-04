@@ -32,12 +32,29 @@ namespace Habanero.UI.Base
     {
         private List<T> _allOptions;
         private List<T> _selectedOptions;
-
+        /// <summary>
+        /// Event raised when the available options have been changed
+        /// </summary>
         public event EventHandler OptionsChanged;
+        /// <summary>
+        /// Event raised when the current selection has been changed.
+        /// </summary>
         public event EventHandler SelectionsChanged;
+        /// <summary>
+        /// Event raised when a new option has been added
+        /// </summary>
         public event EventHandler<ModelEventArgs<T>> OptionAdded;
+        /// <summary>
+        /// An event raised when an option has been removed
+        /// </summary>
         public event EventHandler<ModelEventArgs<T>> OptionRemoved;
+        /// <summary>
+        /// An event raised when an option has been selected
+        /// </summary>
         public event EventHandler<ModelEventArgs<T>> Selected;
+        /// <summary>
+        /// An event raised when an option has been deselected.
+        /// </summary>
         public event EventHandler<ModelEventArgs<T>> Deselected;
 
 #pragma warning disable 693

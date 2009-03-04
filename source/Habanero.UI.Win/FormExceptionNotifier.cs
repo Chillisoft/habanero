@@ -19,8 +19,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
@@ -28,7 +26,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
 using Habanero.Util;
-using DialogResult=System.Windows.Forms.DialogResult;
 using FormStartPosition=System.Windows.Forms.FormStartPosition;
 using MessageBoxButtons=System.Windows.Forms.MessageBoxButtons;
 using MessageBoxIcon=System.Windows.Forms.MessageBoxIcon;
@@ -249,7 +246,7 @@ namespace Habanero.UI.Win
 //                _errorDetails.ScrollBars = ScrollBars.Both;
                 _showStackTrace = _controlFactory.CreateCheckBox();
                 _showStackTrace.Text = "&Show stack trace";
-                _showStackTrace.CheckedChanged += new EventHandler(ShowStackTraceClicked);//TODO: Fix
+                _showStackTrace.CheckedChanged += ShowStackTraceClicked;
                 BorderLayoutManager detailsManager = _controlFactory.CreateBorderLayoutManager(_fullDetail);
                 detailsManager.AddControl(_errorDetails, BorderLayoutManager.Position.Centre);
                 detailsManager.AddControl(_showStackTrace, BorderLayoutManager.Position.South);
@@ -304,17 +301,10 @@ namespace Habanero.UI.Win
                 }
                 _summary.Height = sdHeight;
                 int heightRemaining = Height - BUTTONS_HEIGHT - sdHeight - 16;
-                if (heightRemaining > 0)
-                {
-                    _fullDetail.Height = heightRemaining;
-                }
-                else
-                {
-                    _fullDetail.Height = 0;
-                }
+                _fullDetail.Height = heightRemaining > 0 ? heightRemaining : 0;
             }
 
-            private  IDictionary GetEmailErrorSettings()
+            private static IDictionary GetEmailErrorSettings()
             {
                 IDictionary dictionary = ((IDictionary)ConfigurationSettings.GetConfig("EmailErrorConfig"));
                 return dictionary;

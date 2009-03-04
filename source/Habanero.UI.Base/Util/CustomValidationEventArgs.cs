@@ -60,9 +60,14 @@ namespace Habanero.UI.Base
 	/// </summary>
 	public class CustomValidationEventArgs : EventArgs
 	{
-		private object _value = null;
-		private ValidationRule _validationRule = null;
+		private readonly object _value;
+		private readonly ValidationRule _validationRule;
 
+		///<summary>
+		/// Constructs the <see cref="CustomValidationEventArgs"/>
+		///</summary>
+		///<param name="Value"></param>
+		///<param name="vr"></param>
 		public CustomValidationEventArgs(object Value, ValidationRule vr)
 		{
 			this._value = Value;

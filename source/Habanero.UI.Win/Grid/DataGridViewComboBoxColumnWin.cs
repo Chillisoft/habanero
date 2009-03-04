@@ -29,6 +29,10 @@ namespace Habanero.UI.Win
     {
         private readonly DataGridViewComboBoxColumn _dataGridViewComboBoxColumn;
 
+        ///<summary>
+        /// Constructor for <see cref="DataGridViewComboBoxCell"/>
+        ///</summary>
+        ///<param name="dataGridViewComboBoxColumn"></param>
         public DataGridViewComboBoxColumnWin(DataGridViewComboBoxColumn dataGridViewComboBoxColumn)
             : base(dataGridViewComboBoxColumn)
         {

@@ -41,6 +41,9 @@ namespace Habanero.UI.Win
         }
 
 
+        /// <summary>
+        /// Initialises the step. Run when the step is reached.
+        /// </summary>
         public void InitialiseStep() { }
 
         /// <summary>

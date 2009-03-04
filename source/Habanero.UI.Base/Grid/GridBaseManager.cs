@@ -68,7 +68,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IGridBase.BusinessObjectCollection"/>
+        /// See <see cref="IGridBase"/>.<see cref="IBusinessObjectCollection"/>
         /// </summary>
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {

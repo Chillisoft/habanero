@@ -18,14 +18,25 @@ namespace Habanero.UI.Win
     {
         private readonly CollapsiblePanelGroupManager _collapsiblePanelGroupManager;
 
+        /// <summary>
+        /// Event handler for the Uncollapsed Event on any of the Collapsible Panels.
+        /// </summary>
         public event EventHandler ItemSelected;
 
+        /// <summary>
+        /// A List of all <see cref="ICollapsiblePanel"/>s that are being managed and displayed by this Control.
+        /// This must be treated as a ReadOnly List i.e. Never use PanelList.Add or PanelList.Remove.
+        /// Since this will cause the Panel List to be out of sync with the ControlsCollection.
+        /// </summary>
         public List<ICollapsiblePanel> PanelsList
         {
             get { return _collapsiblePanelGroupManager.PanelsList; }
-            //            set { _collapsiblePanelGroupManager.PanelsList = value; }
         }
 
+        /// <summary>
+        /// Returns the <see cref="ICollapsiblePanelGroupControl.ColumnLayoutManager"/> that is used for Laying out the <see cref="ICollapsiblePanel"/>s
+        ///   on this control.
+        /// </summary>
         public ColumnLayoutManager ColumnLayoutManager
         {
             get { return _collapsiblePanelGroupManager.ColumnLayoutManager; }
@@ -39,16 +50,35 @@ namespace Habanero.UI.Win
             _collapsiblePanelGroupManager = new CollapsiblePanelGroupManager(this, GlobalUIRegistry.ControlFactory);
         }
 
+        /// <summary>
+        /// The <see cref="IControlFactory"/> being used to create the <see cref="ICollapsiblePanel"/>s
+        /// </summary>
         public IControlFactory ControlFactory
         {
             get { return _collapsiblePanelGroupManager.ControlFactory; }
         }
 
+
+        /// <summary>
+        /// Returns the Total Expanded Height of this Control. I.e. the total height of this control required
+        /// if all the <see cref="ICollapsiblePanel"/> controls are fully expanded.
+        /// </summary>
         public int TotalExpandedHeight
         {
             get { return _collapsiblePanelGroupManager.TotalExpandedHeight; }
         }
 
+        /// <summary>
+        /// Adds an <see cref="IControlHabanero"/> to this control. The <paramref name="contentControl"/> is
+        ///    wrapped in an <see cref="ICollapsiblePanel"/> control.
+        /// </summary>
+        /// <param name="contentControl"></param>
+        /// <param name="headingText"></param>
+        /// <param name="minimumControlHeight">The minimum height that the <paramref name="contentControl"/> can be.
+        ///   This height along with the <see cref="ICollapsiblePanel.CollapseButton"/>.Height are give the 
+        ///   <see cref="ICollapsiblePanel.ExpandedHeight"/> that the <see cref="ICollapsiblePanel"/> will be when it is 
+        ///   expanded </param>
+        /// <returns></returns>
         public ICollapsiblePanel AddControl
             (IControlHabanero contentControl, string headingText, int minimumControlHeight)
         {
@@ -67,6 +97,10 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Sets whether all the <see cref="ICollapsiblePanel"/> controls are collapsed or expanded AllCollapsed = true will 
+        ///   <see cref="ICollapsiblePanel.Collapsed"/> = true for all the <see cref="ICollapsiblePanel"/>s.
+        /// </summary>
         public bool AllCollapsed
         {
             set { _collapsiblePanelGroupManager.AllCollapsed = value; }
@@ -114,8 +148,8 @@ namespace Habanero.UI.Win
         /// <param name="headingText">The heading text that will be shown as the Header for this Group e.g. For a <see cref="ITabControl"/>
         ///   this will be the Text shown in the Tab for a <see cref="ICollapsiblePanelGroupControl"/> this will be the text shown
         ///   on the Collapse Panel and for an <see cref="IGroupBox"/> this will be the title of the Group Box.</param>
-        /// <param name="minimumControlHeight">The minimum height that the <paramref name="contentControl"/> can be.
-        ///   This height along with any other spacing required will be used as the minimum height for the ChildControlCreated</param>
+        /// <param name="minimumControlHeight">The minimum height that the <paramref name="contentControl"/> can be. This height along with any other spacing required will be used as the minimum height for the ChildControlCreated</param>
+        /// <param name="minimumControlWidth">The minimum width that the control can be.</param>
         /// <returns></returns>
         IControlHabanero IGroupControl.AddControl
             (IControlHabanero contentControl, string headingText, int minimumControlHeight, int minimumControlWidth)

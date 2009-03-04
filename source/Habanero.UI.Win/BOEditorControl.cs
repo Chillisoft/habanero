@@ -15,7 +15,7 @@ namespace Habanero.UI.Win
 
         ///<summary>
         /// The Constructor for the <see cref="BOEditorControl"/> which passes in the
-        /// <paramref name="classDef"/> for the <see cref="IBusinessObject"/> and the <see cref="uiDefName"/> that 
+        /// <paramref name="classDef"/> for the <see cref="IBusinessObject"/> and the <paramref name="uiDefName"/> that 
         ///  is used to defined the User Interface for the <see cref="IBusinessObject"/>      
         ///</summary>
         ///<param name="controlFactory">The control factory which is used to create the Controls on this form.</param>
@@ -51,11 +51,20 @@ namespace Habanero.UI.Win
             set { _panelInfo.BusinessObject = value; }
         }
 
+        /// <summary>
+        /// Displays any errors or invalid fields associated with the BusinessObjectInfo
+        /// being edited.  A typical use would involve activating the ErrorProviders
+        /// on a BO panel.
+        /// </summary>
         public void DisplayErrors()
         {
             _panelInfo.ApplyChangesToBusinessObject();
         }
 
+        /// <summary>
+        /// Hides all the error providers.  Typically used where a new object has just
+        /// been added and the interface is being cleaned up.
+        /// </summary>
         public void ClearErrors()
         {
             _panelInfo.ClearErrorProviders();
@@ -63,7 +72,7 @@ namespace Habanero.UI.Win
     }
 
     ///<summary>
-    /// A Control for Editing/Viewing an <see cref="IBusinessObject"/> of type <typeparam name="T"/>.
+    /// A Control for Editing/Viewing an <see cref="IBusinessObject"/> of type T.
     ///</summary>
     public class BusinessObjectControlWin<T> : UserControlWin, IBOEditorControl
         where T : class, IBusinessObject
@@ -84,17 +93,29 @@ namespace Habanero.UI.Win
             _panelInfo = BusinessObjectControlUtils.CreatePanelInfo(controlFactory, classDef, uiDefName, this);
         }
 
+        /// <summary>
+        /// Gets or sets the business object being represented
+        /// </summary>
         public IBusinessObject BusinessObject
         {
             get { return _panelInfo.BusinessObject; }
             set { _panelInfo.BusinessObject = value; }
         }
 
+        /// <summary>
+        /// Displays any errors or invalid fields associated with the BusinessObjectInfo
+        /// being edited.  A typical use would involve activating the ErrorProviders
+        /// on a BO panel.
+        /// </summary>
         public void DisplayErrors()
         {
             _panelInfo.ApplyChangesToBusinessObject();
         }
 
+        /// <summary>
+        /// Hides all the error providers.  Typically used where a new object has just
+        /// been added and the interface is being cleaned up.
+        /// </summary>
         public void ClearErrors()
         {
             _panelInfo.ClearErrorProviders();

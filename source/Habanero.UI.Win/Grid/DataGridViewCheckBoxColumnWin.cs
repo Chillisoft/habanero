@@ -19,7 +19,6 @@
 
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
 
 namespace Habanero.UI.Win
 {
@@ -30,6 +29,10 @@ namespace Habanero.UI.Win
     {
         private readonly DataGridViewCheckBoxColumn _dataGridViewCheckBoxColumn;
 
+        ///<summary>
+        /// Constructor for <see cref="DataGridViewCheckBoxColumnWin"/>
+        ///</summary>
+        ///<param name="dataGridViewColumn"></param>
         public DataGridViewCheckBoxColumnWin(DataGridViewCheckBoxColumn dataGridViewColumn)
             : base(dataGridViewColumn)
         {

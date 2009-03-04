@@ -60,18 +60,29 @@ namespace Habanero.UI.Win
 
         #region Event Handling
 
+        /// <summary>
+        /// An event that is fired after the <see cref="ITreeNode"/>  is selected.
+        /// </summary>
         event TreeViewEventHandler ITreeView.AfterSelect
         {
             add { _afterSelect += value; }
             remove { _afterSelect -= value; }
         }
 
+        /// <summary>
+        /// An event that is fired just before the <see cref="ITreeNode"/> is selected.
+        /// </summary>
         event TreeViewCancelEventHandler ITreeView.BeforeSelect
         {
             add { _beforeSelect += value; }
             remove { _beforeSelect -= value; }
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.TreeView.AfterSelect" /> event.
+        ///</summary>
+        ///
+        ///<param name="e">A <see cref="T:System.Windows.Forms.TreeViewEventArgs" /> that contains the event data. </param>
         protected override void OnAfterSelect(TreeViewEventArgs e)
         {
             base.OnAfterSelect(e);
@@ -83,6 +94,11 @@ namespace Habanero.UI.Win
             }
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.TreeView.BeforeSelect" /> event.
+        ///</summary>
+        ///
+        ///<param name="e">A <see cref="T:System.Windows.Forms.TreeViewCancelEventArgs" /> that contains the event data. </param>
         protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
         {
             base.OnBeforeSelect(e);
@@ -125,73 +141,127 @@ namespace Habanero.UI.Win
             set { base.Dock = (System.Windows.Forms.DockStyle)Enum.Parse(typeof(System.Windows.Forms.DockStyle), value.ToString()); }
         }
 
+        /// <summary>
+        /// The collection (<see cref="ITreeNodeCollection"/>) of <see cref="ITreeNode"/>s in this <see cref="ITreeView"/>.
+        /// This collection only returns the <see cref="ITreeNode"/>s that are directly assigned to the <see cref="ITreeView"/>.
+        /// i.e. all the nodes shown in this collection are Root Nodes.
+        /// </summary>
         public new ITreeNodeCollection Nodes
         {
             get { return new TreeNodeCollectionWin(base.Nodes); }
+            set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// The top <see cref="ITreeNode"/> or first node shown in the <see cref="ITreeView"/>.
+        /// </summary>
         public new ITreeNode TopNode
         {
             get { return GetITreeNode(base.TopNode); }
             set { base.TopNode = GetTreeNode(value); }
         }
 
+        /// <summary>
+        /// The currently selected <see cref="ITreeNode"/> in the <see cref="ITreeView"/>.
+        /// </summary>
         public new ITreeNode SelectedNode
         {
             get { return GetITreeNode(base.SelectedNode); }
             set { base.SelectedNode = GetTreeNode(value); }
         }
 
+        ///<summary>
+        /// An implementation of <see cref="ITreeView"/> for Windows Forms.
+        ///</summary>
         public class TreeNodeWin : TreeNode, ITreeNode
         {
             private readonly TreeNode _originalNode;
 
+            ///<summary>
+            /// A constructor for <see cref="TreeNodeWin"/>
+            ///</summary>
+            ///<param name="node"></param>
             public TreeNodeWin(TreeNode node)
             {
                 _originalNode = node;
             }
 
+            ///<summary>
+            /// The t   ext shown in the <see cref="ITreeNode"/>
+            ///</summary>
             string ITreeNode.Text
             {
                 get { return _originalNode.Text; }
                 set { _originalNode.Text = value; }
             }
 
+            /// <summary>
+            /// The parent <see cref="ITreeNode"/> if one exists null if this is the Root Node.
+            /// </summary>
             public new ITreeNode Parent
             {
                 get { return GetITreeNode(_originalNode.Parent); }
             }
 
+            ///<summary>
+            /// The <see cref="ITreeNodeCollection"/> of <see cref="ITreeNode"/>'s that are children of this <see cref="ITreeNode"/>.
+            ///</summary>
             public new ITreeNodeCollection Nodes
             {
                 get { return new TreeNodeCollectionWin(_originalNode.Nodes); }
             }
 
+            /// <summary>
+            /// The underlying Node i.e. If you are wrapping a Windows TreeView then this method will return the Windows Node.
+            /// If you are wrapping a VWG Node then this method will return the underlying VWG Node.
+            /// </summary>
             public object OriginalNode
             {
                 get { return _originalNode; }
             }
         }
 
+        ///<summary>
+        /// An implementation of <see cref="ITreeNodeCollection"/> for windows.
+        /// This implements the wrapper pattern where the underlying windows TreeView control
+        ///  is merely wrapped by this control.
+        /// this control
+        ///</summary>
         public class TreeNodeCollectionWin :  ITreeNodeCollection
         {
             private readonly TreeNodeCollection _nodes;
 
+            ///<summary>
+            /// constructs a <see cref="TreeNodeCollectionWin"/>
+            ///</summary>
+            ///<param name="nodes"></param>
             public TreeNodeCollectionWin(TreeNodeCollection nodes) 
             {
                 _nodes = nodes;
             }
 
+            ///<summary>
+            /// The number of items in this collection
+            ///</summary>
             public int Count
             {
                 get { return _nodes.Count; }
             }
 
+            /// <summary>
+            /// Returns the item identified by index.
+            /// </summary>
+            /// <param name="index"></param>
+            /// <returns></returns>
             public ITreeNode this[int index]
             {
                 get { return GetITreeNode(_nodes[index]); }
             }
 
+            /// <summary>
+            /// Adds a new <paramref name="treeNode"/> to the collection of <see cref="ITreeNode"/>s
+            /// </summary>
+            /// <param name="treeNode">the <see cref="ITreeNode"/> that is being added to the collection</param>
             public void Add(ITreeNode treeNode)
             {
                 _nodes.Add(GetTreeNode(treeNode));

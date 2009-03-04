@@ -47,10 +47,10 @@ namespace Habanero.UI.Base
         /// by default to <see cref="BusinessObjectLookupList"/> or a custom <see cref="ILookupList"/> defined by the user.
         /// </summary>
         protected bool _rightClickEnabled;
-        /// <summary>
-        /// In the case of a <see cref="BusinessObjectLookupList"/> this will be the class def of the <see cref="IBusinessObject"/>s shown
-        /// in the list.
-        /// </summary>
+//        / <summary>
+//        / In the case of a <see cref="BusinessObjectLookupList"/> this will be the class def of the <see cref="IBusinessObject"/>s shown
+//        / in the list.
+//        / </summary>
 //        protected ClassDef _lookupTypeClassDef;
         //protected ComboBoxRightClickController _comboBoxRightClickController;
 

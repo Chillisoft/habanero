@@ -62,10 +62,9 @@ namespace Habanero.UI.Win
 
         /// <summary>
         /// Sets the boControl that will be displayed on each tab page.  This must be called
-        /// before the BoTabColControl can be used.
+        /// before the BoTabColControl can be used. The business object control that is
+        /// displaying the business object information in the tab page
         /// </summary>
-        /// <param name="value">The business object control that is
-        /// displaying the business object information in the tab page</param>
         public IBusinessObjectControl BusinessObjectControl
         {
             get { return _boColTabControlManager.BusinessObjectControl; }

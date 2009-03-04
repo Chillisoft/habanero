@@ -17,13 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -32,14 +25,16 @@ namespace Habanero.UI.Win
     /// Provides a means to choose a file and makes the selected
     /// path available to a control that needs it
     /// </summary>
-    public partial class FileChooserWin : UserControlWin, IFileChooser
+    public class FileChooserWin : UserControlWin, IFileChooser
     {
-        private readonly IControlFactory _controlFactory;
         private readonly FileChooserManager _fileChooserManager;
 
+        ///<summary>
+        /// Constructor for <see cref="FileChooserWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public FileChooserWin(IControlFactory controlFactory)
         {
-            _controlFactory = controlFactory;
             _fileChooserManager = new FileChooserManager(controlFactory, this);
         }
 

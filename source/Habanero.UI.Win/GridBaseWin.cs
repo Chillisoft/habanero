@@ -31,6 +31,8 @@ namespace Habanero.UI.Win
     /// </summary>
     public abstract class GridBaseWin : DataGridViewWin, IGridBase
     {
+        private readonly GridBaseManager _manager;
+
         /// <summary>
         /// Occurs when a business object is selected
         /// </summary>
@@ -40,13 +42,27 @@ namespace Habanero.UI.Win
         /// Occurs when the collection in the grid is changed
         /// </summary>
         public event EventHandler CollectionChanged;
-
+        /// <summary>
+        /// Event raised when the filter has been updated.
+        /// </summary>
         public event EventHandler FilterUpdated;
 
         /// <summary>
         /// Occurs when a row is double-clicked by the user
         /// </summary>
         public event RowDoubleClickedHandler RowDoubleClicked;
+
+        /// <summary>
+        /// Constructor for <see cref="GridBaseWin"/>
+        /// </summary>
+        protected GridBaseWin()
+        {
+            _manager = new GridBaseManager(this);
+            this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
+            _manager.CollectionChanged += delegate { FireCollectionChanged(); };
+
+            DoubleClick += DoubleClickHandler;
+        }
 
         /// <summary>
         /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
@@ -75,17 +91,6 @@ namespace Habanero.UI.Win
         {
             if (DataSetProvider == null) return;
             DataSetProvider.UpdateBusinessObjectRowValues(businessObject);
-        }
-
-        private readonly GridBaseManager _manager;
-
-        protected GridBaseWin()
-        {
-            _manager = new GridBaseManager(this);
-            this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
-            _manager.CollectionChanged += delegate { FireCollectionChanged(); };
-
-            DoubleClick += DoubleClickHandler;
         }
 
         /// <summary>
@@ -154,6 +159,13 @@ namespace Habanero.UI.Win
             BusinessObjectCollection = col;
         }
 
+        /// <summary>
+        /// Gets and Sets the business object collection displayed in the grid.  This
+        /// collection must be pre-loaded using the collection's Load() command or from the
+        /// <see cref="IBusinessObjectLoader"/>.
+        /// The default UI definition will be used, that is a 'ui' element 
+        /// without a 'name' attribute.
+        /// </summary>
         public IBusinessObjectCollection BusinessObjectCollection
         {
             get { return _manager.GetBusinessObjectCollection(); }
@@ -291,7 +303,10 @@ namespace Habanero.UI.Win
                 this.BusinessObjectEdited(this, new BOEventArgs(bo));
             }
         }
-
+        /// <summary>
+        /// Fires the Selected Business Object Edited Event for <paramref name="bo"/>
+        /// </summary>
+        /// <param name="bo">The Business object the event is being fired for</param>
         public void FireBusinessObjectEditedEvent(BusinessObject bo)
         {
             FireSelectedBusinessObjectEdited(bo);

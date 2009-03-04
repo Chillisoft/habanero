@@ -79,7 +79,8 @@ namespace Habanero.UI.Win
             borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
             borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
             FilterMode = FilterModes.Filter;
-            _grid.Name = "GridControl";
+            const string gridName = "GridControl";
+            _grid.Name = gridName;
 
             _doubleClickEditsBusinessObject = false;
             DoubleClickEditsBusinessObject = true;
@@ -389,7 +390,7 @@ namespace Habanero.UI.Win
         ///<returns>Returns the <see cref="IBusinessObjectCollection"/> that has been set for this <see cref="IGridControl"/>.</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            return Grid.GetBusinessObjectCollection();
+            return Grid.BusinessObjectCollection;
         }
 
         #endregion

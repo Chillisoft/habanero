@@ -143,12 +143,17 @@ namespace Habanero.UI.Win
             : this(bo, uiDefName, controlFactory, controlFactory.CreateTabControl)
         {
         }
-
+        /// <summary>
+        /// Returns the BOPanel being used to edit the form.
+        /// </summary>
         protected IPanel BoPanel
         {
             get { return _boPanel; }
         }
-
+        /// <summary>
+        /// Sets all the controls up in a layout manager. By default uses the border layout manager
+        /// with the editor control centre and the buttons south.
+        /// </summary>
         protected void CreateLayout()
         {
             BorderLayoutManager borderLayoutManager = new BorderLayoutManagerWin(this, _controlFactory);

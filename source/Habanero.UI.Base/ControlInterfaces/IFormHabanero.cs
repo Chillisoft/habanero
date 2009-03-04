@@ -60,6 +60,9 @@ namespace Habanero.UI.Base
         No = 7
     }
 
+    ///<summary>
+    /// An enumeration for deteriming how the Form will be positioned in the window.
+    ///</summary>
     public enum FormStartPosition
     {
         /// <summary>
@@ -163,6 +166,9 @@ namespace Habanero.UI.Base
         /// <value></value>
         FormStartPosition StartPosition { get; set; }
 
+        ///<summary>
+        /// Indicator of whether this form is an mdiChild or not.
+        ///</summary>
         bool IsMdiContainer { get; set; }
 
         /// <summary>

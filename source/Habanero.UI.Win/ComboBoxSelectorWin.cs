@@ -73,6 +73,9 @@ namespace Habanero.UI.Win
             _manager.Clear();
         }
 
+        ///<summary>
+        /// Returns the Underlying ComboBoxControl that is used by this selector
+        ///</summary>
         public IComboBox ComboBox
         {
             get { return this; }

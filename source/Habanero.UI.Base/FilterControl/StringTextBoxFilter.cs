@@ -30,8 +30,14 @@ namespace Habanero.UI.Base
         private readonly IControlFactory _controlFactory;
         private readonly string _propertyName;
         private readonly FilterClauseOperator _filterClauseOperator;
-        private ITextBox _textBox;
+        private readonly ITextBox _textBox;
 
+        ///<summary>
+        /// Constructor for <see cref="StringTextBoxFilter"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="propertyName"></param>
+        ///<param name="filterClauseOperator"></param>
         public StringTextBoxFilter(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
         {
             _controlFactory = controlFactory;
@@ -49,15 +55,40 @@ namespace Habanero.UI.Base
             }
         }
 
+        ///<summary>
+        /// The control that has been constructed by this Control Manager.
+        ///</summary>
         public IControlHabanero Control { get { return _textBox; } }
+
+        ///<summary>
+        /// Returns the filter clause for this control
+        ///</summary>
+        ///<param name="filterClauseFactory"></param>
+        ///<returns></returns>
         public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) {
             return _textBox.Text.Length > 0
                        ? filterClauseFactory.CreateStringFilterClause(_propertyName, _filterClauseOperator, _textBox.Text)
                        : filterClauseFactory.CreateNullFilterClause();
         }
+
+        ///<summary>
+        /// Clears the <see cref="IDateRangeComboBox"/> of its value
+        ///</summary>
         public void Clear() { _textBox.Text = ""; }
+
+        /// <summary>
+        /// Event handler that fires when the value in the Filter control changes
+        /// </summary>
         public event EventHandler ValueChanged;
+
+        ///<summary>
+        /// The name of the property being filtered by.
+        ///</summary>
         public string PropertyName { get { return _propertyName; } }
+
+        ///<summary>
+        /// Returns the operator <see cref="ICustomFilter.FilterClauseOperator"/> e.g.OpEquals to be used by for creating the Filter Clause.
+        ///</summary>
         public FilterClauseOperator FilterClauseOperator { get { return _filterClauseOperator; } }
     }
 }

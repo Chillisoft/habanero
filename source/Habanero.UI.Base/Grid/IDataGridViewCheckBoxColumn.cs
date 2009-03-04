@@ -36,7 +36,7 @@ namespace Habanero.UI.Base
 
         ///// <summary>Gets or sets the flat style appearance of the check box cells.</summary>
         ///// <returns>A <see cref="T:Gizmox.WebGUI.Forms.FlatStyle"></see> value indicating the appearance 
-        /// of cells in the column. The default is FlatStyle.Standard.</returns>
+        ///// of cells in the column. The default is FlatStyle.Standard.</returns>
         ///// <exception cref="T:System.InvalidOperationException">The value of the <see cref="IDataGridViewCheckBoxColumn.CellTemplate"></see> property is null. </exception>
         ///// <filterpriority>1</filterpriority>
         //[DefaultValue(2)]

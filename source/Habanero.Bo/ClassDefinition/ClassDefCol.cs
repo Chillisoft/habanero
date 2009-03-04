@@ -61,8 +61,6 @@ namespace Habanero.BO.ClassDefinition
                 
                 ThrowClassDefNotFoundForTypeException(key);
                 
-                //TODO error: When converted to use generic collection then 
-                
                 return null;
             }
         }
@@ -107,8 +105,6 @@ namespace Habanero.BO.ClassDefinition
                     return _classDefs[typeId];
 
                 ThrowClassDefNotFoundForTypeException(assemblyName, className, typeId);
-                //TODO error: When converted to use generic collection then 
-
                 return null;
             }
         }
@@ -211,8 +207,6 @@ namespace Habanero.BO.ClassDefinition
             bool found;
             string typeId = GetTypeIdForItem(key, out found);
             if (found) _classDefs.Remove(typeId);
-            //TODO error: When converted to use generic collection then 
-            // an the value of found should be returned (method type should be bool).
         }
 
         /// <summary>
@@ -224,8 +218,6 @@ namespace Habanero.BO.ClassDefinition
             bool found;
             string typeId = GetTypeIdForItem(classDef.AssemblyName, classDef.ClassName, out found);
             if (found) _classDefs.Remove(typeId);
-            //TODO error: When converted to use generic collection then 
-            // an the value of found should be returned (method type should be bool).
         }
 
         /// <summary>
@@ -233,7 +225,7 @@ namespace Habanero.BO.ClassDefinition
         /// this flag is removed, calling LoadColClassDef will result in a
         /// new empty collection replacing the existing one.
         /// </summary>
-        protected void Finalize()
+        protected static void FinalizeInstanceFlag()
         {
             _instanceFlag = false;
         }

@@ -28,10 +28,15 @@ namespace Habanero.UI.Base
     /// </summary>
     public class ButtonGroupControlManager
     {
-        private IControlFactory _controlFactory;
-        private FlowLayoutManager _layoutManager;
-        private IButtonGroupControl _buttonGroupControl;
+        private readonly IControlFactory _controlFactory;
+        private readonly FlowLayoutManager _layoutManager;
+        private readonly IButtonGroupControl _buttonGroupControl;
         
+        ///<summary>
+        /// Constructor for the <see cref="ButtonGroupControlManager"/>
+        ///</summary>
+        ///<param name="buttonGroupControl"></param>
+        ///<param name="controlFactory"></param>
         public ButtonGroupControlManager(IButtonGroupControl buttonGroupControl, IControlFactory controlFactory)
         {
             _buttonGroupControl = buttonGroupControl;
@@ -42,11 +47,19 @@ namespace Habanero.UI.Base
             _buttonGroupControl.Height = sampleBtn.Height + 10;
         }
         
+        ///<summary>
+        /// Returns the Layout manager being used by this control.
+        ///</summary>
         public FlowLayoutManager LayoutManager
         {
             get { return _layoutManager; }
         }
 
+        ///<summary>
+        /// Adds a button with te button name and text equal to buttonName.
+        ///</summary>
+        ///<param name="buttonName"></param>
+        ///<returns></returns>
         public IButton AddButton(string buttonName)
         {
             IButton button = _controlFactory.CreateButton();

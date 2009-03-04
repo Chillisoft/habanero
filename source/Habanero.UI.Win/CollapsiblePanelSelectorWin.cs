@@ -187,6 +187,9 @@ namespace Habanero.UI.Win
             return null;
         }
 
+        /// <summary>
+        /// Event Occurs when a business object is selected
+        /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
 
         /// <summary>

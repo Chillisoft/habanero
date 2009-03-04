@@ -30,7 +30,11 @@ namespace Habanero.UI.Win
     ///</summary>
     public class MenuBuilderWin : IMenuBuilder
     {
-
+        ///<summary>
+        /// Builds the Main Menu based on a <paramref name="habaneroMenu"/>
+        ///</summary>
+        ///<param name="habaneroMenu"></param>
+        ///<returns></returns>
         public IMainMenuHabanero BuildMainMenu(HabaneroMenu habaneroMenu)
         {
             MainMenuWin mainMenu = new MainMenuWin();
@@ -42,7 +46,7 @@ namespace Habanero.UI.Win
             return mainMenu;
         }
 
-        private IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
+        private static IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
         {
             MenuItemWin menuItem = new MenuItemWin(habaneroMenu.Name);
             foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
@@ -132,7 +136,7 @@ namespace Habanero.UI.Win
 
     internal class MenuItemWin : MenuItem, IMenuItem
     {
-        private HabaneroMenu.Item _habaneroMenuItem;
+        private readonly HabaneroMenu.Item _habaneroMenuItem;
         private IFormHabanero _createdForm;
         private IFormControl _formControl;
         private IControlManager _controlManager;

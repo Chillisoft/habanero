@@ -33,6 +33,9 @@ namespace Habanero.UI.Win
     /// </summary>
     public class ReadOnlyGridWin : GridBaseWin, IReadOnlyGrid
     {
+        ///<summary>
+        /// Constructor for <see cref="ReadOnlyGridWin"/>
+        ///</summary>
         public ReadOnlyGridWin()
         {
             this.ReadOnly = true;

@@ -38,6 +38,11 @@ namespace Habanero.UI.Win
         private readonly IControlHabanero[] _controls;
         private readonly bool[] _splitters;
         private Control _ctl;
+        ///<summary>
+        /// Constructor for <see cref="BorderLayoutManagerWin"/>
+        ///</summary>
+        ///<param name="managedControl"></param>
+        ///<param name="controlFactory"></param>
         public BorderLayoutManagerWin(IControlHabanero managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {

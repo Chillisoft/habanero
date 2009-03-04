@@ -118,6 +118,11 @@ namespace Habanero.UI.Win
             _manager.OnResize(eventargs);
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.Control.Click" /> event.
+        ///</summary>
+        ///
+        ///<param name="eventargs">An <see cref="T:System.EventArgs" /> that contains the event data. </param>
         protected override void OnClick(EventArgs eventargs)
         {
             base.OnClick(eventargs);

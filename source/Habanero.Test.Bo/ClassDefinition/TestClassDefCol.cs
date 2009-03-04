@@ -110,7 +110,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             public void CallFinalize()
             {
-                Finalize();
+                FinalizeInstanceFlag();
             }
         }
 

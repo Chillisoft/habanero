@@ -323,7 +323,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             initialiser.InitialiseGrid(classDef);
-            grid.SetBusinessObjectCollection(col);
+            grid.BusinessObjectCollection = col;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
