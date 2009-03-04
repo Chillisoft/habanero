@@ -963,6 +963,35 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(boControl.DisplayErrorsCalled);
         }
 
+        [Test]
+        public void Test_ObjectSavesWhenSaveButtonClicked()
+        {
+            //---------------Set up test pack-------------------
+            GetCustomClassDef();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BOSelectorAndBOEditorControlWin<OrganisationTestBO> boSelectorAndBOEditorControlWin = CreateGridAndBOEditorControlWin();
+            TestComboBox.BusinessObjectControlStub boControl =
+                (TestComboBox.BusinessObjectControlStub)boSelectorAndBOEditorControlWin.IBOEditorControl;
+            boSelectorAndBOEditorControlWin.BusinessObjectCollection = new BusinessObjectCollection<OrganisationTestBO>();
+            IButton saveButton = boSelectorAndBOEditorControlWin.ButtonGroupControl["Save"];
+            boSelectorAndBOEditorControlWin.ButtonGroupControl["New"].PerformClick();
+            OrganisationTestBO currentBO =
+                (OrganisationTestBO)boSelectorAndBOEditorControlWin.IBOEditorControl.BusinessObject;
+
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(currentBO);
+            Assert.IsTrue(currentBO.Status.IsNew);
+            Assert.IsTrue(currentBO.IsValid());
+            //  ---------------Execute Test ----------------------
+            saveButton.PerformClick();
+            // ---------------Test Result -----------------------
+            Assert.AreSame(currentBO, boSelectorAndBOEditorControlWin.IBOEditorControl.BusinessObject);
+            Assert.IsFalse(currentBO.Status.IsDirty);
+            Assert.IsFalse(currentBO.Status.IsNew);
+            Assert.IsFalse(currentBO.Status.IsDeleted);
+            Assert.IsFalse(boControl.DisplayErrorsCalled);
+        }
+
         //        [Test]
         //        public void Test_CannotChangeGridRowIfCurrentObjectInvalid()
         //        {

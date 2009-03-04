@@ -61,6 +61,7 @@ namespace Habanero.UI.Win
             manager.AddControl(_filterControl, BorderLayoutManager.Position.North);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             manager.AddControl(_buttons, BorderLayoutManager.Position.South);
+            this.Grid.BusinessObjectSelected += Grid_OnBusinessObjectSelected;
             //TODO copy rest from readonly version
         }
 
@@ -139,32 +140,66 @@ namespace Habanero.UI.Win
             get { return true; }
         }
 
+        /// <summary>
+        /// Gets and Sets the business object collection displayed in the grid.  This
+        /// collection must be pre-loaded using the collection's Load() command or from the
+        /// <see cref="IBusinessObjectLoader"/>.
+        /// The default UI definition will be used, that is a 'ui' element 
+        /// without a 'name' attribute.
+        /// </summary>
         public IBusinessObjectCollection BusinessObjectCollection
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return this.Grid.BusinessObjectCollection; }
+            set { SetBusinessObjectCollection(value); }
         }
 
+        /// <summary>
+        /// Gets and sets the currently selected business object in the grid
+        /// </summary>
         public IBusinessObject SelectedBusinessObject
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return this.Grid.SelectedBusinessObject; }
+            set { this.Grid.SelectedBusinessObject = value; }
         }
 
+        /// <summary>
+        /// Event Occurs when a business object is selected
+        /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
+
+        private void Grid_OnBusinessObjectSelected(object sender, BOEventArgs e)
+        {
+            if (this.BusinessObjectSelected != null)
+            {
+                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
+            }
+        }
+
+        /// <summary>
+        /// Clears the business object collection and the rows in the data table
+        /// </summary>
         public void Clear()
         {
-            throw new System.NotImplementedException();
+            SetBusinessObjectCollection(null);
         }
 
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelectorControl"></see>.</returns>
         public int NoOfItems
         {
-            get { throw new System.NotImplementedException(); }
+            get { return this.Grid.Rows.Count; }
         }
 
+
+        /// <summary>
+        /// Returns the business object at the specified row number
+        /// </summary>
+        /// <param name="row">The row number in question</param>
+        /// <returns>Returns the busines object at that row, or null
+        /// if none is found</returns>
         public IBusinessObject GetBusinessObjectAtRow(int row)
         {
-            throw new System.NotImplementedException();
+            return this.Grid.GetBusinessObjectAtRow(row);
         }
 
         /// <summary>
@@ -219,7 +254,7 @@ namespace Habanero.UI.Win
         ///<returns>Returns the <see cref="IBusinessObjectCollection"/> that has been set for this <see cref="IGridControl"/>.</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            return Grid.GetBusinessObjectCollection();
+            return Grid.BusinessObjectCollection;
         }
 
         /// <summary>

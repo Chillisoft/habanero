@@ -177,20 +177,22 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsNotNull(contactPerson.Organisation);
 
             //---------------Execute Test ----------------------
-            try
-            {
+            //try
+            //{
                 contactPerson.Organisation = null;
-                Assert.Fail("expected Err");
-            }
+            //    Assert.Fail("expected Err");
+            //}
             //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
-            {
-                StringAssert.Contains
-                    ("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
-                StringAssert.Contains
-                    ("could not be removed since the " + compositionRelationship.RelationshipName
-                     + " relationship is set up as ", ex.Message);
-            }
+            //catch (HabaneroDeveloperException ex)
+            //{
+            //    StringAssert.Contains
+            //        ("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
+            //    StringAssert.Contains
+            //        ("could not be removed since the " + compositionRelationship.RelationshipName
+            //         + " relationship is set up as ", ex.Message);
+            //}
+                Assert.IsNull(contactPerson.Organisation);
+
         }
         [Test]
         public void Test_SetParentNull()
@@ -229,17 +231,18 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(RelationshipType.Composition, compositionRelationship.RelationshipDef.RelationshipType);
 
             //---------------Execute Test ----------------------
-            try
-            {
+            //try
+            //{
                 compositionRelationship.SetRelatedObject(null);
-                Assert.Fail("expected Err");
-            }
-            //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
-            {
-                StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
-                StringAssert.Contains("could not be removed since the " + compositionRelationship.RelationshipName + " relationship is set up as ", ex.Message);
-            }
+            //    Assert.Fail("expected Err");
+            //}
+            ////---------------Test Result -----------------------
+            //catch (HabaneroDeveloperException ex)
+            //{
+            //    StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
+            //    StringAssert.Contains("could not be removed since the " + compositionRelationship.RelationshipName + " relationship is set up as ", ex.Message);
+            //}
+                Assert.IsNull(compositionRelationship.GetRelatedObject());
         }
 
         [Test]

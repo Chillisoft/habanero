@@ -1055,6 +1055,7 @@ namespace Habanero.UI.Win
             LabelWin labelWin = (LabelWin)CreateLabel();
             labelWin.BackgroundImage = CollapsiblePanelResource.pinoff_withcolour;
             labelWin.FlatStyle = FlatStyle.Flat;
+            //labelWin.ForeColor = Color.White;
             labelWin.BackgroundImageLayout = ImageLayout.Center;
             labelWin.Width = 24;
         }
@@ -1067,6 +1068,7 @@ namespace Habanero.UI.Win
             LabelWin labelWin = (LabelWin)CreateLabel();
             labelWin.BackgroundImage = CollapsiblePanelResource.pinon_withcolour;
             labelWin.FlatStyle = FlatStyle.Flat;
+            //labelWin.ForeColor = Color.White;
             labelWin.BackgroundImageLayout = ImageLayout.Center;
             labelWin.Width = 24;
         }

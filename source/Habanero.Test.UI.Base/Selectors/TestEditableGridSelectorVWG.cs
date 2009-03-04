@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public class TestReadOnlyGridControlSelectorVWG : TestReadOnlyGridControlSelectorWin
+    public class TestEditableGridSelectorVWG : TestEditableGridSelectorWin
     {
         //        private const string _gridIdColumnName = "HABANERO_OBJECTID";
         protected override IControlFactory GetControlFactory()
@@ -18,10 +18,10 @@ namespace Habanero.Test.UI.Base
         }
         protected override IBOSelectorControl CreateSelector()
         {
-            IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
+            IEditableGridControl editableGridControl = GetControlFactory().CreateEditableGridControl();
             Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-            frm.Controls.Add((Gizmox.WebGUI.Forms.Control)readOnlyGridControl);
-            return readOnlyGridControl;
+            frm.Controls.Add((Gizmox.WebGUI.Forms.Control)editableGridControl);
+            return editableGridControl;
         }
         //protected override IBOSelectorControl CreateSelector()
         //{
@@ -53,13 +53,13 @@ namespace Habanero.Test.UI.Base
         //        }
     }
 
-    /// <summary>
+      /// <summary>
     /// This test class tests the GridSelector class.
     /// </summary>
     [TestFixture]
-    public class TestReadOnlyGridControlSelectorWin : TestBOSelector
+    public class TestEditableGridSelectorWin : TestBOSelector
     {
-//        private const string _gridIdColumnName = "HABANERO_OBJECTID";
+        //        private const string _gridIdColumnName = "HABANERO_OBJECTID";
 
         //[TestFixtureSetUp]
         //private void TestFixtureSetUp()
@@ -80,7 +80,7 @@ namespace Habanero.Test.UI.Base
         {
             int count = 0;
 
-            IReadOnlyGrid readOnlyGrid = ((IReadOnlyGridControl)selector).Grid;
+            IEditableGrid readOnlyGrid = ((IEditableGridControl)selector).Grid;
             foreach (IDataGridViewRow row in readOnlyGrid.Rows)
             {
                 if (row == null) continue;//This is done to stop the Pragma warning.
@@ -95,13 +95,13 @@ namespace Habanero.Test.UI.Base
 
         protected override int SelectedIndex(IBOSelectorControl selector)
         {
-            IReadOnlyGrid gridSelector = ((IReadOnlyGridControl)selector).Grid;
+            IEditableGrid gridSelector = ((IEditableGridControl)selector).Grid;
             IDataGridViewRow currentRow = null;
             if (gridSelector.SelectedRows.Count > 0)
             {
                 currentRow = gridSelector.SelectedRows[0];
             }
-           
+
             if (currentRow == null) return -1;
 
             return gridSelector.Rows.IndexOf(currentRow);
@@ -109,18 +109,23 @@ namespace Habanero.Test.UI.Base
 
         protected override IBOSelectorControl CreateSelector()
         {
-            IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
+            IEditableGridControl editableGridControl = GetControlFactory().CreateEditableGridControl();
             System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-            frm.Controls.Add((System.Windows.Forms.Control)readOnlyGridControl);
-            return readOnlyGridControl;
+            frm.Controls.Add((System.Windows.Forms.Control)editableGridControl);
+            return editableGridControl;
         }
 
         protected override int NumberOfLeadingBlankRows()
         {
-            return 0;
+            return 1;
         }
 
-        [Test]
+          protected override int ActualIndex(int index)
+          {
+              return index;
+          }
+
+          [Test]
         public void Test_Constructor_ReadOnlyGridControlSet()
         {
             //---------------Set up test pack-------------------
@@ -130,8 +135,28 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IBOSelectorControl selector = CreateSelector();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IReadOnlyGridControl), selector);
+            Assert.IsInstanceOfType(typeof(IEditableGridControl), selector);
         }
+
+          [Test]
+          public override void Test_ResetBOCol_ToNullClearsItems()
+          {
+              //---------------Set up test pack-------------------
+              IBOSelectorControl selector = CreateSelector();
+              MyBO myBO = new MyBO();
+
+              BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
+              selector.BusinessObjectCollection = collection;
+              //---------------Assert Precondition----------------
+              Assert.AreEqual(ActualNumberOfRows(collection.Count), selector.NoOfItems, "The blank item and one other");
+              Assert.AreSame(myBO, selector.SelectedBusinessObject);
+              //---------------Execute Test ----------------------
+              selector.BusinessObjectCollection = null;
+              //---------------Test Result -----------------------
+              Assert.IsNull(selector.SelectedBusinessObject);
+              Assert.IsNull(selector.BusinessObjectCollection);
+              Assert.AreEqual(0, selector.NoOfItems, "The blank item");
+          }
 
         [Ignore(" Not sure how to implement this in grids.")] //TODO  01 Mar 2009:
         [Test]
@@ -181,6 +206,5 @@ namespace Habanero.Test.UI.Base
         public void TestEditItemFromCollectionUpdatesItemInSelector()
         {
         }
-
     }
 }

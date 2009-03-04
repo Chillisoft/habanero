@@ -69,7 +69,7 @@ namespace Habanero.Test.UI.Base
             return new BusinessObjectCollection<MyBO> { cp, cp2, cp3, cp4 };
         }
 
-        protected int ActualIndex(int index)
+        protected virtual int ActualIndex(int index)
         {
             return index + NumberOfLeadingBlankRows();
         }
@@ -262,7 +262,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1 + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
         }
         [Test]
-        public void Test_ResetBOCol_ToNullClearsItems()
+        public virtual void Test_ResetBOCol_ToNullClearsItems()
         {
             //---------------Set up test pack-------------------
             IBOSelectorControl selector = CreateSelector();
@@ -430,7 +430,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item");
             Assert.AreSame(null, selector.SelectedBusinessObject);
-            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.AreEqual(0, SelectedIndex(selector));
         }
 
         [Test]

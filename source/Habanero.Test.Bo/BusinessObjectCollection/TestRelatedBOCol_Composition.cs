@@ -307,22 +307,24 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             util.AssertRemovedEventNotFired();
 
             //---------------Execute Test ----------------------
-            try
-            {
+            //try
+            //{
                 contactPerson.Organisation = null;
-                Assert.Fail("expected Err");
-            }
-                //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
-            {
-                StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
-                StringAssert.Contains("could not be removed since the " + compositionRelationship.RelationshipName + " relationship is set up as ", ex.Message);
-                StringAssert.Contains("RemoveChildAction.Prevent", ex.Message);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("HabaneroDeveloperException not thrown. Exception Thrown was : " + ex.Message);
-            }
+            //    Assert.Fail("expected Err");
+            //}
+            //    //---------------Test Result -----------------------
+            //catch (HabaneroDeveloperException ex)
+            //{
+            //    StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
+            //    StringAssert.Contains("could not be removed since the " + compositionRelationship.RelationshipName + " relationship is set up as ", ex.Message);
+            //    StringAssert.Contains("RemoveChildAction.Prevent", ex.Message);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Assert.Fail("HabaneroDeveloperException not thrown. Exception Thrown was : " + ex.Message);
+            //}
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
         }
 
         #region Utils

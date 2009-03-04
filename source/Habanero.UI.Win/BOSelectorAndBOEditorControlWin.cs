@@ -40,6 +40,7 @@ namespace Habanero.UI.Win
         private IButton _newButton;
         private IButton _deleteButton;
         private IButton _cancelButton;
+        private IButton _saveButton;
         private IBusinessObject _lastSelectedBusinessObject;
         private IBusinessObject _newBO;
 
@@ -110,11 +111,18 @@ namespace Habanero.UI.Win
         {
             _buttonGroupControl = _controlFactory.CreateButtonGroupControl();
             _cancelButton = _buttonGroupControl.AddButton("Cancel", CancelButtonClicked);
+            _saveButton = _buttonGroupControl.AddButton("Save", SaveClickHandler);
             _deleteButton = _buttonGroupControl.AddButton("Delete", DeleteButtonClicked);
             _newButton = _buttonGroupControl.AddButton("New", NewButtonClicked);
             _cancelButton.Enabled = false;
             _deleteButton.Enabled = false;
             _newButton.Enabled = false;
+        }
+
+        private void SaveClickHandler(object sender, EventArgs e)
+        {
+            IBusinessObject currentBO = CurrentBusinessObject;
+            currentBO.Save();
         }
 
         ///<summary>
@@ -412,6 +420,7 @@ namespace Habanero.UI.Win
         private IButton _newButton;
         private IButton _deleteButton;
         private IButton _cancelButton;
+        private IButton _saveButton;
         private TBusinessObject _lastSelectedBusinessObject;
 
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectSelected;
@@ -486,11 +495,18 @@ namespace Habanero.UI.Win
         {
             _buttonGroupControl = _controlFactory.CreateButtonGroupControl();
             _cancelButton = _buttonGroupControl.AddButton("Cancel", CancelButtonClicked);
+            _saveButton = _buttonGroupControl.AddButton("Save", SaveClickHandler);
             _deleteButton = _buttonGroupControl.AddButton("Delete", DeleteButtonClicked);
             _newButton = _buttonGroupControl.AddButton("New", NewButtonClicked);
             _cancelButton.Enabled = false;
             _deleteButton.Enabled = false;
             _newButton.Enabled = false;
+        }
+
+        private void SaveClickHandler(object sender, EventArgs e)
+        {
+            IBusinessObject currentBO = CurrentBusinessObject;
+            if (currentBO != null) currentBO.Save();
         }
 
         ///<summary>
