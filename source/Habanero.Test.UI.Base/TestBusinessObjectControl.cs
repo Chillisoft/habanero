@@ -205,7 +205,9 @@ namespace Habanero.Test.UI.Base
             control.BusinessObject = businessObject;
             //  ---------------Test Result -----------------------
             Assert.AreEqual(businessObject, control.BusinessObject);
+            Assert.AreSame(businessObject, control.PanelInfo.BusinessObject);
         }
+
         [Test]
         public void Test_SetBusinessObject_Null()
         {

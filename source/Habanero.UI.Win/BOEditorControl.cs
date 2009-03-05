@@ -51,6 +51,14 @@ namespace Habanero.UI.Win
             set { _panelInfo.BusinessObject = value; }
         }
 
+        ///<summary>
+        /// The PanelInfo for the <see cref="BOEditorControl"/>.
+        ///</summary>
+        public IPanelInfo PanelInfo
+        {
+            get { return _panelInfo; }
+        }
+
         /// <summary>
         /// Displays any errors or invalid fields associated with the BusinessObjectInfo
         /// being edited.  A typical use would involve activating the ErrorProviders
@@ -100,6 +108,14 @@ namespace Habanero.UI.Win
         {
             get { return _panelInfo.BusinessObject; }
             set { _panelInfo.BusinessObject = value; }
+        }
+
+        ///<summary>
+        /// The PanelInfo for the <see cref="BOEditorControl"/>.
+        ///</summary>
+        public IPanelInfo PanelInfo
+        {
+            get { return _panelInfo; }
         }
 
         /// <summary>
