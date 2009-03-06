@@ -264,8 +264,8 @@ namespace Habanero.UI.Base
             get { return _boPageTable; }
         }
 
-        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelectorControl"></see>.</summary>
-        /// <returns>The number of rows in the <see cref="IBOSelectorControl"></see>.</returns>
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOColSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOColSelectorControl"></see>.</returns>
         public int NoOfItems
         {
             get { return TabControl.TabPages.Count; }
@@ -354,7 +354,7 @@ namespace Habanero.UI.Base
             return row < 0 || row >= NoOfItems;
         }
 
-        #region For IBOSelectorControl
+        #region For IBOColSelectorControl
 
         /// <summary>
         /// Event Occurs when a business object is selected

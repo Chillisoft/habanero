@@ -41,7 +41,7 @@ namespace Habanero.BO
 //        /// <summary>
 //        /// Adds handlers to be called when business object updates occur
 //        /// </summary>
-//        public override void AddHandlersForUpdates()
+//        public override void AddHandlersForDataTableUpdates()
 //        {
 //            if (base.RegisterForBusinessObjectPropertyUpdatedEvents)
 //            {

@@ -26,7 +26,7 @@ namespace Habanero.Test.Base
     [TestFixture]
     public class TestDateTimeNow
     {
-        [Test, Ignore("This test fails intermittently due to the mutability of the DateTimeNow value.")]
+        [Test, Ignore("This test fails intermittently due to the mutability of the DateTimeNow value. June 2008")]
         public void TestComparable_Equals()
         {
             //-------------Setup Test Pack ------------------
@@ -72,7 +72,7 @@ namespace Habanero.Test.Base
             Assert.AreEqual(-1, i);
         }
 
-        [Test, Ignore("This test fails intermittently due to the mutability of the DateTimeNow value.")]
+        [Test, Ignore("This test fails intermittently due to the mutability of the DateTimeNow value. June 2008")]
         public void TestComparable_OfDateTime_Equals()
         {
             //-------------Setup Test Pack ------------------

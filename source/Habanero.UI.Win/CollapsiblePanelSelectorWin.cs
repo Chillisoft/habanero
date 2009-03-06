@@ -29,6 +29,7 @@ namespace Habanero.UI.Win
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             this.ItemSelected += delegate { FireBusinessObjectSelected(); };
         }
+
         private void FireBusinessObjectSelected()
         {
             if (this.BusinessObjectSelected != null)
@@ -36,6 +37,7 @@ namespace Habanero.UI.Win
                 this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
             }
         }
+
         private IBusinessObjectCollection _businessObjectCollection;
 
         /// <summary>
@@ -159,14 +161,16 @@ namespace Habanero.UI.Win
             set
             {
                 ICollapsiblePanel panel = FindCollapsiblePanel(value);
-                if (panel != null)
+                if (panel == null)
                 {
-                    panel.Collapsed = false;
+                    _selectedBusinessObject = null;
+                    return;
                 }
+                panel.Collapsed = false;
                 _selectedBusinessObject = value;
             }
         }
-                
+
 //        private void FireBusinessObjectSelected()
 //        {
 //            if (this.BusinessObjectSelected != null)
@@ -200,8 +204,8 @@ namespace Habanero.UI.Win
             BusinessObjectCollection = null;
         }
 
-        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelectorControl"></see>.</summary>
-        /// <returns>The number of rows in the <see cref="IBOSelectorControl"></see>.</returns>
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOColSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOColSelectorControl"></see>.</returns>
         public int NoOfItems
         {
             get { return this.PanelsList.Count; }

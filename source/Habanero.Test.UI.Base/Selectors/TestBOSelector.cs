@@ -20,7 +20,7 @@ namespace Habanero.Test.UI.Base
     /// override the <see cref="GetControlFactory"/> to return a VWG control Factory.
     /// </summary>
     [TestFixture]
-    public class TestBOSelector
+    public class TestBOColSelector
     {
         protected virtual IControlFactory GetControlFactory()
         {
@@ -29,17 +29,17 @@ namespace Habanero.Test.UI.Base
             return factory;
         }
 
-        protected virtual void SetSelectedIndex(IBOSelectorControl selector, int index)
+        protected virtual void SetSelectedIndex(IBOColSelectorControl colSelector, int index)
         {
-            ((IBOComboBoxSelector)selector).ComboBox.SelectedIndex = index;
+            ((IBOComboBoxSelector)colSelector).ComboBox.SelectedIndex = index;
         }
 
-        protected virtual int SelectedIndex(IBOSelectorControl selector)
+        protected virtual int SelectedIndex(IBOColSelectorControl colSelector)
         {
-            return ((IBOComboBoxSelector)selector).ComboBox.SelectedIndex;
+            return ((IBOComboBoxSelector)colSelector).ComboBox.SelectedIndex;
         }
 
-        protected virtual IBOSelectorControl CreateSelector()
+        protected virtual IBOColSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateComboBoxSelector();
         }
@@ -53,20 +53,43 @@ namespace Habanero.Test.UI.Base
         {
             return 1;
         }
-        protected IBOSelectorControl GetSelectorWith_4_Rows(out BusinessObjectCollection<MyBO> col)
+        protected IBOColSelectorControl GetSelectorWith_4_Rows(out IBusinessObjectCollection col)
         {
-            col = CreateCollectionWith_4_Objects();
-            IBOSelectorControl boSelector = CreateSelector();
-            boSelector.BusinessObjectCollection = col;
-            return boSelector;
+            col = GetCollectionWith_4_Objects();
+            IBOColSelectorControl boColSelector = CreateSelector();
+            boColSelector.BusinessObjectCollection = col;
+            return boColSelector;
         }
-        protected static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
+        protected virtual IBusinessObjectCollection GetCollectionWith_4_Objects()
         {
             MyBO cp = new MyBO { TestProp = "b" };
             MyBO cp2 = new MyBO { TestProp = "d" };
             MyBO cp3 = new MyBO { TestProp = "c" };
             MyBO cp4 = new MyBO { TestProp = "a" };
             return new BusinessObjectCollection<MyBO> { cp, cp2, cp3, cp4 };
+        }
+        protected virtual IBusinessObjectCollection GetCollectionWithNoItems()
+        {
+            new MyBO();//Purely to load the ClassDefs.
+            return new BusinessObjectCollection<MyBO>();
+        }
+
+        protected virtual IBusinessObject CreateNewBO()
+        {
+            return new MyBO();
+        }
+
+        protected virtual IBusinessObjectCollection GetCollectionWithOneBO(out IBusinessObject bo)
+        {
+            bo = new MyBO();
+            return new BusinessObjectCollection<MyBO> { (MyBO)bo };
+        }
+
+        protected virtual IBusinessObjectCollection GetCollectionWithTowBOs(out IBusinessObject myBO)
+        {
+            myBO = new MyBO();
+            MyBO myBO2 = new MyBO();
+            return new BusinessObjectCollection<MyBO> { (MyBO)myBO, myBO2 };
         }
 
         protected virtual int ActualIndex(int index)
@@ -86,249 +109,250 @@ namespace Habanero.Test.UI.Base
             BORegistry.DataAccessor = new DataAccessorInMemory();
         }
         [Test]
-        public void Test_SetBOCol()
+        public virtual void Test_SetBOCol()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            new MyBO(); //So that class defs are loaded
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>();
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObjectCollection collection = GetCollectionWithNoItems();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            selector.BusinessObjectCollection = collection;
+            colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
-            Assert.AreSame(collection, selector.BusinessObjectCollection);
-            Assert.AreEqual(NumberOfLeadingBlankRows(), selector.NoOfItems, "By default should always put 1 item in blank");
+            Assert.AreSame(collection, colSelector.BusinessObjectCollection);
+            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "By default should always put 1 item in blank");
         }
 
 
         [Test]
-        public void Test_SetBOCol_SetsItemsInSelector()
+        public virtual void Test_SetBOCol_SetsItemsInSelector()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithOneBO(out bo);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, collection.Count);
             //---------------Execute Test ----------------------
-            selector.BusinessObjectCollection = collection;
+            colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
-            Assert.AreSame(collection, selector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(collection, colSelector.BusinessObjectCollection);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
         }
 
         [Test]
-        public void Test_GetBusinessObjectAtRow_ReturnsTheCorrectBO()
+        public virtual void Test_GetBusinessObjectAtRow_ReturnsTheCorrectBO()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-            selector.BusinessObjectCollection = collection;
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithOneBO(out bo);
+            colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
-            Assert.AreSame(collection, selector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(collection, colSelector.BusinessObjectCollection);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
-            IBusinessObject businessObjectAtRow = selector.GetBusinessObjectAtRow(ActualIndex(0));
+            IBusinessObject businessObjectAtRow = colSelector.GetBusinessObjectAtRow(ActualIndex(0));
             //---------------Test Result -----------------------
-            Assert.AreSame(myBO, businessObjectAtRow);
+            Assert.AreSame(bo, businessObjectAtRow, "The Business Object at the first row Row should be");
         }
 
 
         [Test]
-        public void Test_GetBusinessObjectAtRow_0_ReturnsNull()
+        public virtual void Test_GetBusinessObjectAtRow_0_ReturnsNotNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-            selector.BusinessObjectCollection = collection;
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithOneBO(out bo);
+            colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
-            Assert.AreSame(collection, selector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(collection, colSelector.BusinessObjectCollection);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
-            IBusinessObject businessObjectAtRow = selector.GetBusinessObjectAtRow(ActualIndex(0));
+            IBusinessObject businessObjectAtRow = colSelector.GetBusinessObjectAtRow(ActualIndex(0));
             //---------------Test Result -----------------------
-            Assert.AreSame(myBO, businessObjectAtRow);
+            Assert.AreSame(bo, businessObjectAtRow, "The business object at the first row selected" );
         }
         [Test]
-        public void Test_GetBusinessObjectAtRow_Neg1_ReturnsNull()
+        public virtual void Test_GetBusinessObjectAtRow_Neg1_ReturnsNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-            selector.BusinessObjectCollection = collection;
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithOneBO(out bo);
+            colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
-            Assert.AreSame(collection, selector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(collection, colSelector.BusinessObjectCollection);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
-            IBusinessObject businessObjectAtRow = selector.GetBusinessObjectAtRow(-1);
-            //---------------Test Result -----------------------
-            Assert.IsNull(businessObjectAtRow);
-        }
-        [Test]
-        public void Test_GetBusinessObjectAtRow_GTNoRows_ReturnsNull()
-        {
-            //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-            selector.BusinessObjectCollection = collection;
-            //---------------Assert Precondition----------------
-            Assert.AreSame(collection, selector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
-            //---------------Execute Test ----------------------
-            IBusinessObject businessObjectAtRow = selector.GetBusinessObjectAtRow(ActualIndex(1));
+            IBusinessObject businessObjectAtRow = colSelector.GetBusinessObjectAtRow(-1);
             //---------------Test Result -----------------------
             Assert.IsNull(businessObjectAtRow);
         }
 
         [Test]
-        public void Test_AddBOToCol_UpdatesItems()
+        public virtual void Test_GetBusinessObjectAtRow_GTNoRows_ReturnsNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-            selector.BusinessObjectCollection = collection;
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithOneBO(out bo);
+            colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
-            Assert.AreSame(collection, selector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(collection, colSelector.BusinessObjectCollection);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
-            MyBO newMyBO = new MyBO();
-            collection.Add(newMyBO);
+            IBusinessObject businessObjectAtRow = colSelector.GetBusinessObjectAtRow(ActualIndex(1));
             //---------------Test Result -----------------------
-            Assert.AreEqual(ActualNumberOfRows(2), selector.NoOfItems, "The blank item and one other");
-            Assert.AreSame(myBO, selector.GetBusinessObjectAtRow(ActualIndex(0)));
-            Assert.AreSame(newMyBO, selector.GetBusinessObjectAtRow(ActualIndex(1)));
+            Assert.IsNull(businessObjectAtRow);
+        }
+
+        [Test]
+        public virtual void Test_AddBOToCol_UpdatesItems()
+        {
+            //---------------Set up test pack-------------------
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithOneBO(out bo);
+
+            colSelector.BusinessObjectCollection = collection;
+            //---------------Assert Precondition----------------
+            Assert.AreSame(collection, colSelector.BusinessObjectCollection);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            //---------------Execute Test ----------------------
+            IBusinessObject newBO = CreateNewBO();
+            collection.Add(newBO);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(ActualNumberOfRows(2), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(bo, colSelector.GetBusinessObjectAtRow(ActualIndex(0)));
+            Assert.AreSame(newBO, colSelector.GetBusinessObjectAtRow(ActualIndex(1)));
         }
         [Test]
         public virtual void Test_RemoveBOToCol_UpdatesItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO newMyBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, newMyBO };
-            selector.BusinessObjectCollection = collection;
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out bo);
+            IBusinessObject newMyBO = collection[1];
+            colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
-            Assert.AreSame(myBO, selector.GetBusinessObjectAtRow(ActualIndex(0)));
-            Assert.AreSame(newMyBO, selector.GetBusinessObjectAtRow(ActualIndex(1)));
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(bo, colSelector.GetBusinessObjectAtRow(ActualIndex(0)));
+            Assert.AreSame(newMyBO, colSelector.GetBusinessObjectAtRow(ActualIndex(1)));
             //---------------Execute Test ----------------------
-            collection.Remove(myBO);
+            collection.Remove(bo);
             //---------------Test Result -----------------------
-            Assert.AreEqual(ActualNumberOfRows(1), selector.NoOfItems, "The blank item and one other");
-            Assert.AreSame(newMyBO, selector.GetBusinessObjectAtRow(ActualIndex(0)));
+            Assert.AreEqual(ActualNumberOfRows(1), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(newMyBO, colSelector.GetBusinessObjectAtRow(ActualIndex(0)));
         }
 
 
         [Test]
-        public void Test_ResetBOCol_ResetsItems()
+        public virtual void Test_ResetBOCol_ResetsItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO newMyBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, newMyBO };
-            selector.BusinessObjectCollection = collection;
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out bo);
+            IBusinessObject newMyBO = collection[1];
+            colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
-            Assert.AreSame(myBO, selector.GetBusinessObjectAtRow(ActualIndex(0)));
-            Assert.AreSame(newMyBO, selector.GetBusinessObjectAtRow(ActualIndex(1)));
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(bo, colSelector.GetBusinessObjectAtRow(ActualIndex(0)));
+            Assert.AreSame(newMyBO, colSelector.GetBusinessObjectAtRow(ActualIndex(1)));
             //---------------Execute Test ----------------------
-            selector.BusinessObjectCollection = new BusinessObjectCollection<MyBO>();
+            colSelector.BusinessObjectCollection = GetCollectionWithNoItems();
             //---------------Test Result -----------------------
-            Assert.AreEqual(ActualNumberOfRows(0), selector.NoOfItems, "The blank item ");
-            Assert.IsNull(selector.SelectedBusinessObject);
+            Assert.AreEqual(ActualNumberOfRows(0), colSelector.NoOfItems, "The blank item ");
+            Assert.IsNull(colSelector.SelectedBusinessObject);
         }
         [Test]
-        public void Test_ResetBOCol_DeregistersForBOChangedEvents()
+        public virtual void Test_ResetBOCol_DeregistersForBOChangedEvents()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO newMyBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, newMyBO };
-            selector.BusinessObjectCollection = collection;
-            selector.BusinessObjectCollection = new BusinessObjectCollection<MyBO> { new MyBO() };
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out bo);
+
+            colSelector.BusinessObjectCollection = collection;
+            colSelector.BusinessObjectCollection = GetCollectionWithNoItems();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(selector.BusinessObjectCollection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
-            collection.Add(new MyBO());
+            collection.Add(CreateNewBO());
             //---------------Test Result -----------------------
-            Assert.AreEqual(1 + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
         }
+
         [Test]
         public virtual void Test_ResetBOCol_ToNullClearsItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-            selector.BusinessObjectCollection = collection;
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithOneBO(out bo);
+            colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(ActualNumberOfRows(collection.Count), selector.NoOfItems, "The blank item and one other");
-            Assert.AreSame(myBO, selector.SelectedBusinessObject);
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(bo, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.BusinessObjectCollection = null;
+            colSelector.BusinessObjectCollection = null;
             //---------------Test Result -----------------------
-            Assert.IsNull(selector.SelectedBusinessObject);
-            Assert.IsNull(selector.BusinessObjectCollection);
-            Assert.AreEqual(NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item");
+            Assert.IsNull(colSelector.SelectedBusinessObject);
+            Assert.IsNull(colSelector.BusinessObjectCollection);
+            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item");
         }
         [Test]
         public virtual void Test_SelectedBusinessObject_ReturnsNullIfNoItemSelected()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-            selector.BusinessObjectCollection = collection;
-            selector.SelectedBusinessObject = null;
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithOneBO(out bo);
+            colSelector.BusinessObjectCollection = collection;
+            colSelector.SelectedBusinessObject = null;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
-            IBusinessObject selectedBusinessObject = selector.SelectedBusinessObject;
+            IBusinessObject selectedBusinessObject = colSelector.SelectedBusinessObject;
             //---------------Test Result -----------------------
             Assert.IsNull(selectedBusinessObject);
         }
 
         [Test]
-        public void Test_SelectedBusinessObject_FirstItemSelected_ReturnsItem()
+        public virtual void Test_SelectedBusinessObject_FirstItemSelected_ReturnsItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(0));
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject bo;
+            IBusinessObjectCollection collection = GetCollectionWithOneBO(out bo);
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(0));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
-            Assert.AreEqual(ActualIndex(0), SelectedIndex(selector));
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualIndex(0), SelectedIndex(colSelector));
             //---------------Execute Test ----------------------
-            IBusinessObject selectedBusinessObject = selector.SelectedBusinessObject;
+            IBusinessObject selectedBusinessObject = colSelector.SelectedBusinessObject;
             //---------------Test Result -----------------------
-            Assert.AreSame(myBO, selectedBusinessObject);
+            Assert.AreSame(bo, selectedBusinessObject);
         }
         [Test]
         public virtual void Test_SelectedBusinessObject_SecondItemSelected_ReturnsItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO myBO2 = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);
+            IBusinessObject myBO2 = collection[1];
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
-            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
             //---------------Execute Test ----------------------
-            IBusinessObject selectedBusinessObject = selector.SelectedBusinessObject;
+            IBusinessObject selectedBusinessObject = colSelector.SelectedBusinessObject;
             //---------------Test Result -----------------------
             Assert.AreSame(myBO2, selectedBusinessObject);
         }
@@ -336,133 +360,132 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_Set_SelectedBusinessObject_SetsItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO myBO2 = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);
+            IBusinessObject myBO2 = collection[1];
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
 //            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
-            Assert.AreSame(myBO2, selector.SelectedBusinessObject);
+            Assert.AreSame(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.SelectedBusinessObject = myBO;
+            colSelector.SelectedBusinessObject = myBO;
             //---------------Test Result -----------------------
-            Assert.AreSame(myBO, selector.SelectedBusinessObject);
-            Assert.AreEqual(ActualIndex(0), SelectedIndex(selector));
+            Assert.AreSame(myBO, colSelector.SelectedBusinessObject);
+            Assert.AreEqual(ActualIndex(0), SelectedIndex(colSelector));
         }
 
         [Test]
         public virtual void Test_Set_SelectedBusinessObject_Null_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO myBO2 = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);
+            IBusinessObject myBO2 = collection[1];
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
-            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
-            Assert.AreEqual(myBO2, selector.SelectedBusinessObject);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
+            Assert.AreEqual(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.SelectedBusinessObject = null;
+            colSelector.SelectedBusinessObject = null;
             //---------------Test Result -----------------------
-            Assert.IsNull(selector.SelectedBusinessObject);
-            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.IsNull(colSelector.SelectedBusinessObject);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
         }
 
         [Test]
         public virtual void Test_Set_SelectedBusinessObject_ItemNotInList_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO myBO2 = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);
+            IBusinessObject myBO2 = collection[1];
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
-            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
-            Assert.AreEqual(myBO2, selector.SelectedBusinessObject);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
+            Assert.AreEqual(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.SelectedBusinessObject = new MyBO();
+            colSelector.SelectedBusinessObject = CreateNewBO();
             //---------------Test Result -----------------------
-            Assert.AreEqual(ActualIndex(2), selector.NoOfItems, "The blank item");
-            Assert.IsNull(selector.SelectedBusinessObject);
-            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.AreEqual(ActualIndex(2), colSelector.NoOfItems, "The blank item");
+            Assert.IsNull(colSelector.SelectedBusinessObject);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
         }
         [Test]
         public virtual void Test_AutoSelectsFirstItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO myBO2 = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, selector.NoOfItems);
-            Assert.AreEqual(-1, SelectedIndex(selector));
-            Assert.AreEqual(null, selector.SelectedBusinessObject);
+            Assert.AreEqual(0, colSelector.NoOfItems);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
+            Assert.AreEqual(null, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.BusinessObjectCollection = collection;
+            colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item");
-            Assert.AreSame(myBO, selector.SelectedBusinessObject);
-            Assert.AreEqual(ActualIndex(0), SelectedIndex(selector));
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item");
+            Assert.AreSame(myBO, colSelector.SelectedBusinessObject);
+            Assert.AreEqual(ActualIndex(0), SelectedIndex(colSelector));
         }
+
         [Test]
         public virtual void Test_AutoSelectsFirstItem_NoItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            new MyBO();//Purely to load the ClassDefs.
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>();
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObjectCollection collection = GetCollectionWithNoItems();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, selector.NoOfItems);
-            Assert.AreEqual(-1, SelectedIndex(selector));
-            Assert.AreEqual(null, selector.SelectedBusinessObject);
+            Assert.AreEqual(0, colSelector.NoOfItems);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
+            Assert.AreEqual(null, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.BusinessObjectCollection = collection;
+            colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
-            Assert.AreEqual(NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item");
-            Assert.AreSame(null, selector.SelectedBusinessObject);
-            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item");
+            Assert.AreSame(null, colSelector.SelectedBusinessObject);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
         }
 
         [Test]
         public virtual void Test_SelectorFiringItemSelected()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<MyBO> col;
-            IBOSelectorControl boSelector = GetSelectorWith_4_Rows(out col);
+            IBusinessObjectCollection col;
+            IBOColSelectorControl boColSelector = GetSelectorWith_4_Rows(out col);
             bool itemSelected = false;
-            boSelector.SelectedBusinessObject = null;
-            boSelector.BusinessObjectSelected += (delegate { itemSelected = true; });
+            boColSelector.SelectedBusinessObject = null;
+            boColSelector.BusinessObjectSelected += (delegate { itemSelected = true; });
             //---------------Execute Test ----------------------
-            boSelector.SelectedBusinessObject = col[1];
+            boColSelector.SelectedBusinessObject = col[1];
             //---------------Test Result -----------------------
             Assert.IsTrue(itemSelected);
         }
 
         [Test]
-        public void Test_Selector_Clear_ClearsItems()
+        public virtual void Test_Selector_Clear_ClearsItems()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<MyBO> col;
-            IBOSelectorControl boSelector = GetSelectorWith_4_Rows(out col);
+            IBusinessObjectCollection col;
+            IBOColSelectorControl boColSelector = GetSelectorWith_4_Rows(out col);
             //---------------Assert Preconditions --------------
-            Assert.IsNotNull(boSelector.SelectedBusinessObject);
-            Assert.IsNotNull(boSelector.BusinessObjectCollection);
+            Assert.IsNotNull(boColSelector.SelectedBusinessObject);
+            Assert.IsNotNull(boColSelector.BusinessObjectCollection);
             //---------------Execute Test ----------------------
-            boSelector.Clear();
+            boColSelector.Clear();
             //---------------Test Result -----------------------
-            Assert.IsNull(boSelector.BusinessObjectCollection);
-            Assert.IsNull(boSelector.SelectedBusinessObject);
-            Assert.AreEqual(0, boSelector.NoOfItems);
+            Assert.IsNull(boColSelector.BusinessObjectCollection);
+            Assert.IsNull(boColSelector.SelectedBusinessObject);
+            Assert.AreEqual(0, boColSelector.NoOfItems);
         }
     }
 }

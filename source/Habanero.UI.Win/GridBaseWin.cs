@@ -353,9 +353,9 @@ namespace Habanero.UI.Win
                 this.FilterUpdated(this, new EventArgs());
             }
         }
-        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelectorControl"></see>.</summary>
-        /// <returns>The number of rows in the <see cref="IBOSelectorControl"></see>.</returns>
-        int IBOSelectorControl.NoOfItems
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOColSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOColSelectorControl"></see>.</returns>
+        int IBOColSelectorControl.NoOfItems
         {
             get { return this.Rows.Count; }
         }

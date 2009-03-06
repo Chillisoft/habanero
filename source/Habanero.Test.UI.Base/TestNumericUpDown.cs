@@ -99,28 +99,23 @@ namespace Habanero.Test.UI.Base
 
         
 
-        [Test , Ignore("VWG does not support setting the TextAlign Property. Default value is Left")]
+        [Test ]
         public void Test_setTextAlignment_Center()
         {
-            //---------------Set up test pack-------------------
-            INumericUpDown numericUpDown = GetControlFactory().CreateNumericUpDown();
-            //---------------Execute Test ----------------------
-            numericUpDown.TextAlign = HorizontalAlignment.Center;
-            //---------------Test Result -----------------------
-            Assert.AreEqual(HorizontalAlignment.Center, numericUpDown.TextAlign);
-            //---------------Tear Down -------------------------
+            //, Ignore("VWG does not support setting the TextAlign Property. Default value is Left")
         }
 
-        [Test , Ignore("VWG does not support setting the TextAlign Property. Default value is Left")]
+        [Test]
         public void Test_setTextAlignment_Right()
         {
-            //---------------Set up test pack-------------------
-            INumericUpDown numericUpDown = GetControlFactory().CreateNumericUpDown();
-            //---------------Execute Test ----------------------
-            numericUpDown.TextAlign = HorizontalAlignment.Right;
-            //---------------Test Result -----------------------
-            Assert.AreEqual(HorizontalAlignment.Right, numericUpDown.TextAlign);
-            //---------------Tear Down -------------------------
+             //Ignore("VWG does not support setting the TextAlign Property. Default value is Left")
+//            //---------------Set up test pack-------------------
+//            INumericUpDown numericUpDown = GetControlFactory().CreateNumericUpDown();
+//            //---------------Execute Test ----------------------
+//            numericUpDown.TextAlign = HorizontalAlignment.Right;
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual(HorizontalAlignment.Right, numericUpDown.TextAlign);
+//            //---------------Tear Down -------------------------
         }
     }
 

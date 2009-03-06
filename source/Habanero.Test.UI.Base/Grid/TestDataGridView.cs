@@ -101,8 +101,8 @@ namespace Habanero.Test.UI.Base.Grid
             Assert.IsNotNull(dataGridView);
             //---------------Tear Down -------------------------   
         }
-
-        [Test, Ignore("Can't seem to get the precondition passing")]//TODO - Mark 02 Feb 2009 : Get this working
+        //[Ignore("Can't seem to get the precondition passing  TODO - Mark 02 Feb 2009 ")]
+        [Test]//TODO - Mark 02 Feb 2009 : Get this working
         public void Test_Rows_Remove()
         {
             //---------------Set up test pack-------------------
@@ -113,6 +113,7 @@ namespace Habanero.Test.UI.Base.Grid
             dataTable.AcceptChanges();
             dataGridView.DataSource = dataTable;
             //-------------Assert Preconditions -------------
+            Assert.AreEqual(1, dataTable.Rows.Count);
             Assert.AreEqual(2, dataGridView.Rows.Count);
             //---------------Execute Test ----------------------
             dataGridView.Rows.Remove(dataGridView.Rows[1]);

@@ -9,7 +9,7 @@ namespace Habanero.UI.Base
     /// This is a very powerfull control for easily adding or viewing a fiew items E.g. for 
     /// a list of addresses for a person.
     ///</summary>
-    public interface IBOCollapsiblePanelSelector : IBOSelectorControl
+    public interface IBOCollapsiblePanelSelector : IBOColSelectorControl
     {
     }
 }

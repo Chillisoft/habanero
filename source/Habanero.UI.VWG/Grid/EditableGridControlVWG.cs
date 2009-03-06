@@ -222,8 +222,8 @@ namespace Habanero.UI.VWG
             SetBusinessObjectCollection(null);
         }
 
-        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelectorControl"></see>.</summary>
-        /// <returns>The number of rows in the <see cref="IBOSelectorControl"></see>.</returns>
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOColSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOColSelectorControl"></see>.</returns>
         public int NoOfItems
         {
             get { return this.Grid.Rows.Count; }

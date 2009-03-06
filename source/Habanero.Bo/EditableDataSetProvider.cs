@@ -24,6 +24,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
+
 //using log4net;
 
 namespace Habanero.BO
@@ -61,18 +62,29 @@ namespace Habanero.BO
             _boAddedHandler = BOAddedHandler;
         }
 
-
-        /// <summary>
-        /// Adds handlers to be called when updates occur
-        /// </summary>
-        public override void AddHandlersForUpdates()
+        protected override void DeregisterForTableEvents()
         {
-            base.AddHandlersForUpdates();
+            try
+            {
+                _table.TableNewRow -= _newRowHandler;
+                _table.RowChanged -= _rowChangedHandler;
+                _table.RowDeleting -= _rowDeletedHandler;
+            }
+            catch (KeyNotFoundException ex)
+            {
+                Console.WriteLine(ex);
+                //Hide exception that cannot remove event handler
+            }
+        }
 
+        protected override void RegisterForTableEvents()
+        {
+            this.DeregisterForTableEvents();
             _table.TableNewRow += _newRowHandler;
             _table.RowChanged += _rowChangedHandler;
             _table.RowDeleting += _rowDeletedHandler;
         }
+
         /// <summary>
         /// Handles the event of a business object being added. Adds a new
         /// data row containing the object.
@@ -85,11 +97,15 @@ namespace Habanero.BO
             int rowNum = this.FindRow(e.BusinessObject);
             if (rowNum >= 0) return; //If row already exists in the datatable then do not add it.
             object[] values = GetValues(businessObject);
-            _table.RowChanged -= _rowChangedHandler;
-            _table.TableNewRow -= _newRowHandler;
-            _table.LoadDataRow(values, true);
-            _table.RowChanged += _rowChangedHandler;
-            _table.TableNewRow += _newRowHandler;
+            try
+            {
+                DeregisterForTableEvents();
+                _table.LoadDataRow(values, true);
+            }
+            finally
+            {
+                RegisterForTableEvents();
+            }
         }
 
         /// <summary>
@@ -105,14 +121,14 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// Removes the handlers that are called in the event of updates
-        /// </summary>
-        public void RemoveHandlersForUpdates()
-        {
-            _table.RowChanged -= _rowChangedHandler;
-            _table.RowDeleted -= _rowDeletedHandler;
-        }
+//        /// <summary>
+//        /// Removes the handlers that are called in the event of updates
+//        /// </summary>
+//        public override void DeregisterForEvents()
+//        {
+//            base.DeregisterForEvents();
+//            DeregisterForTableEvents();
+//        }
 
         /// <summary>
         /// Initialises the local data
@@ -130,57 +146,57 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected void RowDeletedHandler(object sender, DataRowChangeEventArgs e)
         {
+            DataRow row = e.Row;
             try
             {
-                DataRow row = e.Row;
                 IBusinessObject changedBo = GetBusinessObjectForRow(row);
                 if (changedBo == null) return;
                 if (changedBo.Status.IsNew)
                 {
-                    _collection.BusinessObjectRemoved -= RemovedHandler;
-                    _collection.Remove(changedBo);
-                    _collection.BusinessObjectRemoved += RemovedHandler;
+                    try
+                    {
+                        DeregisterForBOEvents();
+                        _collection.Remove(changedBo);
+                    }
+                    finally
+                    {
+                        RegisterForBOEvents();
+                    }
                     return;
                 }
-                _collection.BusinessObjectRemoved -= RemovedHandler;
-                changedBo.MarkForDelete();
-                _deletedRows.Add(row, changedBo);
-                _collection.BusinessObjectRemoved += RemovedHandler;
+                try
+                {
+                    DeregisterForBOEvents();
+                    changedBo.MarkForDelete();
+                    _deletedRows.Add(row, changedBo);
+                }
+                finally
+                {
+                    RegisterForBOEvents();
+                }
             }
             catch (Exception ex)
             {
+                string message = "There was a problem saving. : " + ex.Message;
+                row.RowError = message;
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
             finally
             {
-                _collection.BusinessObjectRemoved += RemovedHandler;
+                _collection.BusinessObjectRemoved += _removedHandler;
             }
         }
 
         private IBusinessObject GetBusinessObjectForRow(DataRow row)
         {
-            IBusinessObject changedBo = null;
             if (row.RowState == DataRowState.Detached)
             {
                 return null;
             }
-            if (row.HasVersion(DataRowVersion.Original))
+            IBusinessObject changedBo = _collection.Find(GetRowID(row));
+            if (changedBo == null && _deletedRows.ContainsKey(row))
             {
-                string originalRowID = row[IDColumnName, DataRowVersion.Original].ToString();
-                changedBo = _collection.Find(new Guid(originalRowID));
-                if (changedBo == null && _deletedRows.ContainsKey(row))
-                {
-                    changedBo = _deletedRows[row];
-                }
-            }
-            if (changedBo == null)
-            {
-                string currencyRowID = row[IDColumnName].ToString();
-                changedBo = _collection.Find(new Guid(currencyRowID));
-                if (changedBo == null && _deletedRows.ContainsKey(row))
-                {
-                    changedBo = _deletedRows[row];
-                }
+                changedBo = _deletedRows[row];
             }
             return changedBo;
         }
@@ -194,22 +210,38 @@ namespace Habanero.BO
         {
             if (_isBeingAdded) return;
 
-            switch (e.Action)
+            DataRow row = e.Row;
+            try
             {
-                case DataRowAction.Add:
-                    RowAdded(e);
-                    break;
-                case DataRowAction.Change:
-                    RowChanged(e);
-                    break;
-                case DataRowAction.Commit:
-                    RowCommitted(e);
-                    break;
-                case DataRowAction.Rollback:
-                    RowRollback(e);
-                    break;
+                DeregisterForBOEvents();
+                switch (e.Action)
+                {
+                    case DataRowAction.Add:
+                        RowAdded(e);
+                        break;
+                    case DataRowAction.Change:
+                        RowChanged(e);
+                        break;
+                    case DataRowAction.Commit:
+                        RowCommitted(e);
+                        break;
+                    case DataRowAction.Rollback:
+                        RowRollback(e);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = "There was a problem saving. : " + ex.Message;
+                row.RowError = message;
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
+            finally
+            {
+                RegisterForBOEvents();
             }
         }
+
 
         /// <summary>
         /// Restores a row to its previous state before changes were made
@@ -218,15 +250,31 @@ namespace Habanero.BO
         private void RowRollback(DataRowChangeEventArgs e)
         {
             DataRow row = e.Row;
-            IBusinessObject changedBo;
-            if (row.RowState == DataRowState.Detached)
+            try
             {
-                changedBo = _addedRows[row];
-                _collection.Remove(changedBo);
-                return;
+                IBusinessObject changedBo;
+                DeregisterForBOEvents();
+                if (row.RowState == DataRowState.Detached)
+                {
+                    changedBo = _addedRows[row];
+                    _collection.Remove(changedBo);
+                }
+                else
+                {
+                    changedBo = GetBusinessObjectForRow(row);
+                    if (changedBo != null) changedBo.CancelEdits();
+                }
             }
-            changedBo = GetBusinessObjectForRow(row);
-            if (changedBo != null) changedBo.CancelEdits();
+            catch (Exception ex)
+            {
+                string message = "There was a problem saving. : " + ex.Message;
+                row.RowError = message;
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
+            finally
+            {
+                RegisterForBOEvents();
+            }
         }
 
         /// <summary>
@@ -256,23 +304,10 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void RowChanged(DataRowChangeEventArgs e)
         {
-            object objectID = e.Row[IDColumnName];
-            Guid guidObjectID;
-            if (objectID == null)
+            DataRow row = e.Row;
+            try
             {
-                const string message =
-                    "The Editable Dataset provider is not set up correctly since the Row ID is null for a row.";
-                throw new HabaneroDeveloperException(message, message);
-            }
-
-            if (StringUtilities.GuidTryParse(objectID.ToString(), out guidObjectID))
-            {
-                if (guidObjectID == Guid.Empty)
-                {
-                    const string message =
-                        "The Editable Dataset provider is not set up correctly since the Row ID is Empty for a row.";
-                    throw new HabaneroDeveloperException(message, message);
-                }
+                Guid guidObjectID = GetRowID(row);
                 IBusinessObject changedBo = _collection.Find(guidObjectID);
                 if (changedBo == null || _isBeingAdded) return;
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
@@ -280,16 +315,50 @@ namespace Habanero.BO
                     //If not a related property and not a reflective property then update the property //TODO Brett 17 Feb 2009: Why?
                     if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
                     {
-                        changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
+                        changedBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
                     }
                 }
             }
-            else
+            catch (Exception ex)
+            {
+                string message = "There was a problem saving. : " + ex.Message;
+                row.RowError = message;
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
+        }
+
+        private Guid GetRowID(DataRow row)
+        {
+            object objectID = row[IDColumnName];
+            CheckRowIDNotNull(objectID);
+            return GetGuidID(objectID);
+        }
+
+        private static Guid GetGuidID(object objectID)
+        {
+            Guid guidObjectID;
+            if (!StringUtilities.GuidTryParse(objectID.ToString(), out guidObjectID))
             {
                 const string message =
                     "The Editable Dataset provider is not set up correctly since the Row ID is not set as a guid for a row.";
                 throw new HabaneroDeveloperException(message, message);
             }
+            if (guidObjectID == Guid.Empty)
+            {
+                const string message =
+                    "The Editable Dataset provider is not set up correctly since the Row ID is Empty for a row.";
+                throw new HabaneroDeveloperException(message, message);
+            }
+            return guidObjectID;
+        }
+
+        private static void CheckRowIDNotNull(object objectID)
+        {
+            if (objectID != null) return;
+
+            const string message =
+                "The Editable Dataset provider is not set up correctly since the Row ID is null for a row.";
+            throw new HabaneroDeveloperException(message, message);
         }
 
         /// <summary>
@@ -301,9 +370,16 @@ namespace Habanero.BO
             try
             {
                 _isBeingAdded = true;
-                _collection.BusinessObjectAdded -= _boAddedHandler;
-                BusinessObject newBo = (BusinessObject)_collection.CreateBusinessObject();
-                _collection.BusinessObjectAdded += _boAddedHandler;
+                BusinessObject newBo;
+                try
+                {
+                    DeregisterForBOEvents();
+                    newBo = (BusinessObject) _collection.CreateBusinessObject();
+                }
+                finally
+                {
+                    RegisterForBOEvents();
+                }
 
                 //log.Debug("Initialising obj");
                 if (this._objectInitialiser != null)
@@ -330,7 +406,15 @@ namespace Habanero.BO
                         }
                         else
                         {
-                            newBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
+                            try
+                            {
+                                DeregisterForBOEvents();
+                                newBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
+                            }
+                            finally
+                            {
+                                RegisterForBOEvents();
+                            }
                         }
                     }
                 }
@@ -352,40 +436,5 @@ namespace Habanero.BO
                 throw;
             }
         }
-//        /// <summary>
-//        /// Handles the event of a row being added
-//        /// </summary>
-//        /// <param name="e">Attached arguments regarding the event</param>
-//        private void NewRowSaved(DataRowChangeEventArgs e)
-//        {
-//            try
-//            {
-//                _isBeingAdded = true;
-//                DataRow row = e.Row;
-//                IBusinessObject newBo = _addedRows[row];
-//                foreach (UIGridColumn uiProperty in _uiGridProperties)
-//                {
-//                    //If not a related Property then Update //TODO Brett 17 Feb 2009: Why using . 
-//                    if (uiProperty.PropertyName.IndexOf(".") == -1)
-//                    {
-//                        //If no value was typed into the grid then use the default value for the property if one exists.
-//                        if (!DBNull.Value.Equals(row[uiProperty.PropertyName]))
-//                        {
-//                            newBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
-//                        }
-//                    }
-//                }
-//                _isBeingAdded = false;
-//            }
-//            catch (Exception ex)
-//            {
-//                _isBeingAdded = false;
-//                if (e.Row != null)
-//                {
-//                    e.Row.RowError = ex.Message;
-//                }
-//                throw;
-//            }
-//        }
     }
 }

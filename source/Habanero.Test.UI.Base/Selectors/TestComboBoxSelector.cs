@@ -43,7 +43,7 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-        protected override IBOSelectorControl CreateSelector()
+        protected override IBOColSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateComboBoxSelector();
         }
@@ -72,7 +72,7 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the ComboBoxSelector class.
     /// </summary>
     [TestFixture]
-    public class TestComboBoxSelectorWin : TestBOSelector
+    public class TestComboBoxSelectorWin : TestBOColSelector
     {
         protected override IControlFactory GetControlFactory()
         {
@@ -82,17 +82,17 @@ namespace Habanero.Test.UI.Base
         }
 
 
-        protected override void SetSelectedIndex(IBOSelectorControl selector, int index)
+        protected override void SetSelectedIndex(IBOColSelectorControl colSelector, int index)
         {
-            ((IBOComboBoxSelector)selector).ComboBox.SelectedIndex = index;
+            ((IBOComboBoxSelector)colSelector).ComboBox.SelectedIndex = index;
         }
 
-        protected override int SelectedIndex(IBOSelectorControl selector)
+        protected override int SelectedIndex(IBOColSelectorControl colSelector)
         {
-            return ((IBOComboBoxSelector)selector).ComboBox.SelectedIndex;
+            return ((IBOComboBoxSelector)colSelector).ComboBox.SelectedIndex;
         }
 
-        protected override IBOSelectorControl CreateSelector()
+        protected override IBOColSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateComboBoxSelector();
         }
@@ -137,13 +137,13 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectCollection<MyBO> col;
-            IBOSelectorControl boSelector = GetSelectorWith_4_Rows(out col);
+            IBusinessObjectCollection col;
+            IBOColSelectorControl boColSelector = GetSelectorWith_4_Rows(out col);
             const string propName = "TestProp";
             const int rowIndex = 1;
-            MyBO bo = col[rowIndex];
-            boSelector.BusinessObjectCollection = col;
-            string origStringValue = ((IBOComboBoxSelector)boSelector).GetItemText(bo);
+            MyBO bo = (MyBO) col[rowIndex];
+            boColSelector.BusinessObjectCollection = col;
+            string origStringValue = ((IBOComboBoxSelector)boColSelector).GetItemText(bo);
             //---------------Verify precondition----------------
             Assert.AreEqual(bo.ToString(), origStringValue);
             //---------------Execute Test ----------------------
@@ -151,7 +151,7 @@ namespace Habanero.Test.UI.Base
             bo.SetPropertyValue(propName, newPropValue);
             bo.Save();
             //---------------Test Result -----------------------
-            string newStringValue = ((IBOComboBoxSelector)boSelector).GetItemText(bo);
+            string newStringValue = ((IBOComboBoxSelector)boColSelector).GetItemText(bo);
             Assert.AreNotEqual(origStringValue, newStringValue);
             Assert.AreEqual(newPropValue + " - " + bo.MyBoID, newStringValue);
         }

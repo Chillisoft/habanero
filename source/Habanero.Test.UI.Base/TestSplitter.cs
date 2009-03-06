@@ -33,16 +33,16 @@ namespace Habanero.Test.UI.Base
             return GetControlFactory().CreateSplitter();
         }
 
-        [Test, Ignore("The Splitter Control does not support this docking setting by design.")]
+        [Test]
         public override void TestConversion_DockStyle_None()
         {
-            base.TestConversion_DockStyle_None();
+            //Splitter does not support setting dock styles at design time.
         }
 
-        [Test, Ignore("The Splitter Control does not support this docking setting by design.")]
+        [Test]
         public override void TestConversion_DockStyle_Fill()
         {
-            base.TestConversion_DockStyle_Fill();
+            //Splitter does not support setting dock styles at design time.
         }
     }
 
@@ -57,16 +57,16 @@ namespace Habanero.Test.UI.Base
             return GetControlFactory().CreateSplitter();
         }
 
-        [Test, Ignore("The Splitter Control does not support this docking setting by design.")]
+        [Test]
         public override void TestConversion_DockStyle_None()
         {
-            base.TestConversion_DockStyle_None();
+            //Splitter does not support setting dock styles at design time.
         }
 
-        [Test, Ignore("The Splitter Control does not support this docking setting by design.")]
+        [Test]
         public override void TestConversion_DockStyle_Fill()
         {
-            base.TestConversion_DockStyle_Fill();
+            //Splitter does not support setting dock styles at design time.
         }
     }
 

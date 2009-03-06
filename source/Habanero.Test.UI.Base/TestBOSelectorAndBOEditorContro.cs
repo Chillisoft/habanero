@@ -131,7 +131,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        [Ignore("Brett is working on this")] //TODO Brett 03 Mar 2009: Brett is working on this
+        [Ignore("Brett is working on this : Brett 03 Mar 2009:")] //TODO Brett 03 Mar 2009: Brett is working on this
         public void TestConstructor_NonGeneric()
         {
             //---------------Set up test pack-------------------
@@ -196,7 +196,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        [Ignore("Brett is working on this")] //TODO Brett 03 Mar 2009: Brett is working on this
+        [Ignore("Brett is working on this : Brett 03 Mar 2009:")] //TODO Brett 03 Mar 2009: Brett is working on this
         public void TestConstructor_NonGeneric_NoFormDefDefinedForUIDef_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
@@ -783,7 +783,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(cancelButton.Enabled);
         }
 
-        [Ignore(" This is currently not doing anything - what should it be doing ")] //Brett  27 Feb 2009:
+        [Ignore(" This is currently not doing anything - what should it be doing: Brett 03 Mar 2009:")] //Brett  27 Feb 2009:
         [Test]
         public void TestCancelButton_EnabledWhenObjectEdited()
         {

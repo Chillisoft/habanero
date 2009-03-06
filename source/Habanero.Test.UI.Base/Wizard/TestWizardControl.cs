@@ -817,7 +817,7 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.AreEqual(wizardControl.Width - WizardControl.PADDING * 2, wizardController.ControlForStep2.Width);
         }
 
-        [Test, Ignore("The test is visually working but the tests are not picking up a change in width")]
+        [Test, Ignore("The test is visually working but the tests are not picking up a change in width : June 2008")]
         public void TestNextPreviousIn_theCorrectOrder()
         {
             //---------------Set up test pack-------------------

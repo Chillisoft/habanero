@@ -70,7 +70,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //return null;
             }
 
-            [Test, Ignore("ShowUpDown property does not exist for VWG")]
+            [Test, Ignore("ShowUpDown property does not exist for VWG : June 2008")]
             public override void TestAttribute_ShowUpDown()
             {
                 base.TestAttribute_ShowUpDown();

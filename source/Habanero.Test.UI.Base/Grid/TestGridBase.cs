@@ -385,7 +385,7 @@ namespace Habanero.Test.UI.Base
             //{
             //    //---------------Set up test pack-------------------
             //    MyBO.LoadDefaultClassDef();
-            //    BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            //    BusinessObjectCollection<MyBO> col = GetCollectionWith_4_Objects();
             //    IGridBase gridBase = CreateGridBaseStub();
             //    SetupGridColumnsForMyBo(gridBase);
             //    gridBase.BusinessObjectCollection  = col;
@@ -395,7 +395,7 @@ namespace Habanero.Test.UI.Base
             //    gridBase.SelectedBusinessObject = bo;
             //    col.Remove(bo);
             //    gridBase.Sort(propName,true);
-            //    col = CreateCollectionWith_4_Objects();
+            //    col = GetCollectionWith_4_Objects();
             //    gridBase.SetBusinessObjectCollection(col);
             //    //---------------Test Result -----------------------
             //}

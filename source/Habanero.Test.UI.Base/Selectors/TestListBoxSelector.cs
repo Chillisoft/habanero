@@ -42,7 +42,7 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-        protected override IBOSelectorControl CreateSelector()
+        protected override IBOColSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateListBoxSelector();
         }
@@ -72,15 +72,15 @@ namespace Habanero.Test.UI.Base
         public override void Test_SelectedBusinessObject_ReturnsNullIfNoItemSelected()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             MyBO myBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-            selector.BusinessObjectCollection = collection;
-            selector.SelectedBusinessObject = null;
+            colSelector.BusinessObjectCollection = collection;
+            colSelector.SelectedBusinessObject = null;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
-            IBusinessObject selectedBusinessObject = selector.SelectedBusinessObject;
+            IBusinessObject selectedBusinessObject = colSelector.SelectedBusinessObject;
             //---------------Test Result -----------------------
             Assert.IsNull(selectedBusinessObject);
         }
@@ -90,21 +90,21 @@ namespace Habanero.Test.UI.Base
         public override void Test_Set_SelectedBusinessObject_Null_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
-            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
-            Assert.AreEqual(myBO2, selector.SelectedBusinessObject);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
+            Assert.AreEqual(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.SelectedBusinessObject = null;
+            colSelector.SelectedBusinessObject = null;
             //---------------Test Result -----------------------
-            Assert.IsNull(selector.SelectedBusinessObject);
-            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.IsNull(colSelector.SelectedBusinessObject);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
         }
 
         [Ignore(" Not working in VWG")] 
@@ -112,22 +112,22 @@ namespace Habanero.Test.UI.Base
         public override void Test_Set_SelectedBusinessObject_ItemNotInList_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
-            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
-            Assert.AreEqual(myBO2, selector.SelectedBusinessObject);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
+            Assert.AreEqual(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.SelectedBusinessObject = new MyBO();
+            colSelector.SelectedBusinessObject = new MyBO();
             //---------------Test Result -----------------------
-            Assert.AreEqual(ActualIndex(2), selector.NoOfItems, "The blank item");
-            Assert.IsNull(selector.SelectedBusinessObject);
-            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.AreEqual(ActualIndex(2), colSelector.NoOfItems, "The blank item");
+            Assert.IsNull(colSelector.SelectedBusinessObject);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
         }
 
 
@@ -136,13 +136,13 @@ namespace Habanero.Test.UI.Base
         public override void Test_SelectorFiringItemSelected()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<MyBO> col;
-            IBOSelectorControl boSelector = GetSelectorWith_4_Rows(out col);
+            IBusinessObjectCollection col;
+            IBOColSelectorControl boColSelector = GetSelectorWith_4_Rows(out col);
             bool itemSelected = false;
-            boSelector.SelectedBusinessObject = null;
-            boSelector.BusinessObjectSelected += (delegate { itemSelected = true; });
+            boColSelector.SelectedBusinessObject = null;
+            boColSelector.BusinessObjectSelected += (delegate { itemSelected = true; });
             //---------------Execute Test ----------------------
-            boSelector.SelectedBusinessObject = col[1];
+            boColSelector.SelectedBusinessObject = col[1];
             //---------------Test Result -----------------------
             Assert.IsTrue(itemSelected);
         }
@@ -153,7 +153,7 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the ListBoxSelector class.
     /// </summary>
     [TestFixture]
-    public class TestListBoxSelectorWin : TestBOSelector
+    public class TestListBoxSelectorWin : TestBOColSelector
     {
         protected override IControlFactory GetControlFactory()
         {
@@ -162,17 +162,17 @@ namespace Habanero.Test.UI.Base
             return factory;
         }
 
-        protected override void SetSelectedIndex(IBOSelectorControl selector, int index)
+        protected override void SetSelectedIndex(IBOColSelectorControl colSelector, int index)
         {
-            ((IBOListBoxSelector)selector).ListBox.SelectedIndex = index;
+            ((IBOListBoxSelector)colSelector).ListBox.SelectedIndex = index;
         }
 
-        protected override int SelectedIndex(IBOSelectorControl selector)
+        protected override int SelectedIndex(IBOColSelectorControl colSelector)
         {
-            return ((IBOListBoxSelector)selector).ListBox.SelectedIndex;
+            return ((IBOListBoxSelector)colSelector).ListBox.SelectedIndex;
         }
 
-        protected override IBOSelectorControl CreateSelector()
+        protected override IBOColSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateListBoxSelector();
         }

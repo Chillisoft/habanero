@@ -221,10 +221,10 @@ namespace Habanero.BO
 
             List<T> loadedBos = _dataStore.FindAllInternal<T>(criteria);
             loadedBos.Sort(orderCriteria.Compare);
-
             collection.TotalCountAvailableForPaging = loadedBos.Count;
             ApplyLimitsToList(selectQuery, loadedBos);
             LoadBOCollection(collection, loadedBos);
+            collection.Sort(orderCriteria.Compare);
         }
 
         private static void ApplyLimitsToList<T>(ISelectQuery selectQuery, IList<T> loadedBos)
@@ -306,7 +306,7 @@ namespace Habanero.BO
         /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
         public IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship)
         {
-            IRelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
+            IRelationshipDef relationshipDef = relationship.RelationshipDef;
             if (relationshipDef.RelatedObjectClassDef != null)
                 return GetBusinessObject(relationshipDef.RelatedObjectClassDef,
                                          Criteria.FromRelationship(relationship));

@@ -20,12 +20,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.Util;
 
 namespace Habanero.Test
 {
@@ -238,18 +236,19 @@ namespace Habanero.Test
                     Sample sample1 = new Sample();
                     sample1.Save();
                     Sample sample2 = new Sample();
-                    sample1.Save();
+                    sample2.Save();
                     Sample sample3 = new Sample();
-                    sample1.Save();
+                    sample3.Save();
                     itsBOLookupCollection = new Dictionary<string, string>
                                 {
-                                    {"Test3", sample3.ID.GetAsGuid().ToString()},
-                                    {"Test2", sample2.ID.GetAsGuid().ToString()},
-                                    {"Test1", sample1.ID.GetAsGuid().ToString()}
+                                    {"Test3", sample3.ID.GetAsValue().ToString()},
+                                    {"Test2", sample2.ID.GetAsValue().ToString()},
+                                    {"Test1", sample1.ID.GetAsValue().ToString()}
                                 };
                 }
                 return itsBOLookupCollection;
             }
+            set { itsBOLookupCollection = value; }
         }
 
         public DateTime SampleDate
@@ -372,7 +371,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private UIForm GetSimpleUIFormDefWithReadWriteRuleValueReadOnly()
+            private static UIForm GetSimpleUIFormDefWithReadWriteRuleValueReadOnly()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -533,7 +532,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private UIForm GetSimpleUIFormDef1Row3Columns()
+            private static UIForm GetSimpleUIFormDef1Row3Columns()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -553,7 +552,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private UIForm GetSimpleUIFormDefTwoRowsOneHasCompulsoryProp()
+            private static UIForm GetSimpleUIFormDefTwoRowsOneHasCompulsoryProp()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -568,7 +567,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private UIForm GetSimpleUIFormOneFieldHasToolTip()
+            private static UIForm GetSimpleUIFormOneFieldHasToolTip()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -583,7 +582,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private UIForm GetSimpleUIFormDef_3Columns_1Column_2RowSpan()
+            private static UIForm GetSimpleUIFormDef_3Columns_1Column_2RowSpan()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -607,7 +606,7 @@ namespace Habanero.Test
                             </form>");
             }
 
-            private UIForm GetSimpleUIFormDef_2Columns_2_1_ColSpan()
+            private static UIForm GetSimpleUIFormDef_2Columns_2_1_ColSpan()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -945,7 +944,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_NoAlignment()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_NoAlignment()
+            private static UIForm GetSimpleUIFormDef_NoAlignment()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -965,7 +964,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_RightAlignment()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_RightAlignment()
+            private static UIForm GetSimpleUIFormDef_RightAlignment()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -986,7 +985,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_CenterAlignment()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_CenterAlignment()
+            private static UIForm GetSimpleUIFormDef_CenterAlignment()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1007,7 +1006,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_InvalidAlignment()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_InvalidAlignment()
+            private static UIForm GetSimpleUIFormDef_InvalidAlignment()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1028,7 +1027,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()
+            private static UIForm GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1058,7 +1057,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_WithNumericUpDown()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_WithNumericUpDown()
+            private static UIForm GetSimpleUIFormDef_WithNumericUpDown()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1080,7 +1079,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_WithMultiLineParameter()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_WithMultiLineParameter()
+            private static UIForm GetSimpleUIFormDef_WithMultiLineParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1101,7 +1100,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_WithInvalidMultiLineParameter()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_WithInvalidMultiLineParameter()
+            private static UIForm GetSimpleUIFormDef_WithInvalidMultiLineParameter()
             {
                
                    XmlUIFormLoader loader = new XmlUIFormLoader();
@@ -1123,7 +1122,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_WithDecimalPlacesParameter()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_WithDecimalPlacesParameter()
+            private static UIForm GetSimpleUIFormDef_WithDecimalPlacesParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1144,7 +1143,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_WithOptionsParameter()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_WithOptionsParameter()
+            private static UIForm GetSimpleUIFormDef_WithOptionsParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1165,7 +1164,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_WithIsEmailParameter()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_WithIsEmailParameter()
+            private static UIForm GetSimpleUIFormDef_WithIsEmailParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1189,7 +1188,7 @@ namespace Habanero.Test
                 return GetSimpleUIFormDef_WithDateFormatParameter()[0];
             }
 
-            private UIForm GetSimpleUIFormDef_WithDateFormatParameter()
+            private static UIForm GetSimpleUIFormDef_WithDateFormatParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return

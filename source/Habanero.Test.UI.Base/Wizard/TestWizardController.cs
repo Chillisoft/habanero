@@ -77,6 +77,7 @@ namespace Habanero.Test.UI.Base.Wizard
             stepStub.DoubleClick += delegate {  };
             stepStub.Resize += delegate { };
             stepStub.VisibleChanged += delegate { };
+            stepStub.TextChanged += delegate { };
             //---------------Test Result -----------------------
         }
 
@@ -212,6 +213,24 @@ namespace Habanero.Test.UI.Base.Wizard
 
         }
         //WizardController catches WizardControl Cancelevent
+        [Test]
+        public void Test_PurelyToHookIntoEventsAnsStopWarnings()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+
+WizardStepStub wizardStepStub = new WizardStepStub();
+            wizardStepStub.Click += delegate {  };
+            wizardStepStub.DoubleClick += delegate { };
+            wizardStepStub.Resize += delegate {  };
+            wizardStepStub.VisibleChanged += delegate { };
+            wizardStepStub.Click += delegate {  };
+            //---------------Test Result -----------------------
+
+        }
     }
 
     internal class WizardStepStub : IWizardStep

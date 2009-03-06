@@ -20,6 +20,7 @@
 using Habanero.Base;
 using Habanero.Console;
 using Habanero.UI.Base;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -322,7 +323,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear down -------------------------
         }
 
-        [Test, Ignore("The Pin Button has been Change to a Label and the performClick cannnot be tested.")]
+        [Test, Ignore("The Pin Button has been Change to a Label and the performClick cannnot be tested. Use NUnitForms : Aug 2008")]
         public void TestClickPinButtonPins()
         {
             //---------------Set up test pack-------------------
@@ -336,7 +337,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear down -------------------------
         }
 
-        [Test, Ignore("The Pin Button has been Change to a Label and the performClick cannnot be tested.")]
+        [Test, Ignore("The Pin Button has been Change to a Label and the performClick cannnot be tested. Use NUnitForms : Aug 2008")]
         public void TestClickPinButtonUnpins()
         {
             //---------------Set up test pack-------------------

@@ -50,7 +50,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using Habanero.UI.Base;
 
 
 namespace Habanero.UI.Base
@@ -105,11 +104,10 @@ namespace Habanero.UI.Base
         public bool ValidateControl(IControlHabanero ctrl)
         {
             bool bIsValid = true;
-            List<ValidationRule> vr;
-            
-                this.Validate(ctrl);
 
-                vr = this.GetValidationRules(ctrl);
+            this.Validate(ctrl);
+
+                List<ValidationRule> vr = this.GetValidationRules(ctrl);
                 vr.ForEach(delegate(ValidationRule obj)
                 {
                     if (obj != null && obj.IsValid == false) bIsValid = false;
@@ -158,9 +156,8 @@ namespace Habanero.UI.Base
         public string ValidationMessagesControl(IControlHabanero ctrl, bool showErrorIcon)
         {
             StringBuilder sb = new StringBuilder();
-            List<ValidationRule> vr;
-            
-                vr = this.GetValidationRules(ctrl);
+
+            List<ValidationRule> vr = this.GetValidationRules(ctrl);
                 if (vr != null)
                 {
                     vr.ForEach(delegate(ValidationRule obj)

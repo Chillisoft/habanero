@@ -142,7 +142,6 @@ namespace Habanero.Test.UI.Base
             //TODO: Should we test selection mode
             //---------------Tear Down -------------------------
         }
-        [Ignore("Changing how this works 04 March 2009 Brett")] 
         [Test]
         public void TestRejectChanges()
         {
@@ -158,7 +157,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(5,editableGrid.Rows.Count);
             Assert.AreEqual("b", editableGrid.Rows[0].Cells[1].Value);
             //---------------Execute Test ----------------------
-            editableGrid.Rows[0].Cells[0].Value = "test";
+            editableGrid.Rows[0].Cells[1].Value = "test";
             //---------------Assert Precondition----------------
             Assert.AreEqual("test", editableGrid.Rows[0].Cells[1].Value);
             //---------------Execute Test ----------------------
@@ -166,7 +165,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual("b", editableGrid.Rows[0].Cells[1].Value);
         }
-        [Ignore("Changing how this works 04 March 2009 Brett")] 
         [Test]
         public void TestSaveChanges()
         {
@@ -175,27 +173,11 @@ namespace Habanero.Test.UI.Base
             //---------------Clean from previous tests----------
             const string originalText = "testsavechanges";
             const string newText = "testsavechanges_edited";
-            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, originalText);
-            MyBO oldBO1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
-            if (oldBO1 != null)
-            {
-                oldBO1.MarkForDelete();
-                oldBO1.Save();
-            }
-            criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
-            MyBO oldBO2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
-            if (oldBO2 != null)
-            {
-                oldBO2.MarkForDelete();
-                oldBO2.Save();
-            }
-            
-            MyBO bo = new MyBO();
-            bo.TestProp = originalText;
+
+            MyBO bo = new MyBO {TestProp = originalText};
             bo.Save();
 
-            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
-            col.Add(bo);
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO> {bo};
 
             IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
             AddControlToForm(editableGrid);
@@ -204,11 +186,11 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, editableGrid.Rows.Count);
             Assert.AreEqual(originalText, editableGrid.Rows[0].Cells[1].Value);
-            criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
+            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
             MyBO nullBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             Assert.IsNull(nullBO);
             //---------------Execute Test ----------------------
-            editableGrid.Rows[0].Cells[0].Value = newText;
+            editableGrid.Rows[0].Cells[1].Value = newText;
             //---------------Assert Precondition----------------
             Assert.AreEqual(newText, editableGrid.Rows[0].Cells[1].Value);
             //---------------Execute Test ----------------------
@@ -284,7 +266,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, uiGridDef.Count);
 
             //---------------Execute Test ----------------------
-#pragma warning disable 618,612
+#pragma warning disable 618,612// maintained test for backward compatibility testing
             grid.SetBusinessObjectCollection(colBOs);
 #pragma warning restore 618,612
             //---------------Test Result -----------------------
@@ -339,7 +321,7 @@ namespace Habanero.Test.UI.Base
             IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
             AssertIsComboBoxColumnType(dataGridViewColumn);    
         }
-        [Ignore("Changing how this works 04 March 2009 bbb")] 
+//        [Ignore("Changing how this works 04 March 2009 bbb")] 
         [Test]
         public void TestBasicSettings()
         {
@@ -444,8 +426,10 @@ namespace Habanero.Test.UI.Base
             SetupGridColumnsForMyBo(editableGrid);
             editableGrid.BusinessObjectCollection = col;
             IBusinessObject boFromEvent = null;
+            bool eventFired = false;
             editableGrid.BusinessObjectSelected += delegate(object sender, BOEventArgs e)
             {
+                eventFired = true;
                 boFromEvent = e.BusinessObject;
             };
             MyBO myBO = col[2];
@@ -454,10 +438,44 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(col.Count + 1, editableGrid.Rows.Count, "should be 4 item 1 adding item");
             Assert.AreSame(myBO, editableGrid.SelectedBusinessObject);
+            Assert.IsTrue(eventFired);
             Assert.AreEqual(myBO, boFromEvent);
         }
 
 
+        [Test]
+        public void Test_GetBusinessObjectAtRow()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+            AddControlToForm(editableGrid);
+            SetupGridColumnsForMyBo(editableGrid);
+            editableGrid.BusinessObjectCollection = col;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IBusinessObject bo = editableGrid.GetBusinessObjectAtRow(0);
+            //---------------Test Result -----------------------
+            Assert.AreSame(col[0], bo);
+        }
+
+        [Test]
+        public void Test_GetBusinessObjectAtRow_NewRow()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+            AddControlToForm(editableGrid);
+            SetupGridColumnsForMyBo(editableGrid);
+            editableGrid.BusinessObjectCollection = col;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IBusinessObject bo = editableGrid.GetBusinessObjectAtRow(4);
+            //---------------Test Result -----------------------
+            Assert.IsNull(bo);
+        }
 
         private void LoadMyBoDefaultClassDef()
         {
@@ -557,7 +575,7 @@ namespace Habanero.Test.UI.Base
             editableGrid.Columns.Add(dataGridViewColumn);
         }
 
-        protected void SetupGridColumnsForMyBo(IDataGridView editableGrid)
+        protected static void SetupGridColumnsForMyBo(IDataGridView editableGrid)
         {
             editableGrid.Columns.Add(_HABANERO_OBJECTID, _HABANERO_OBJECTID);
             editableGrid.Columns.Add("TestProp","TestProp");
@@ -604,7 +622,7 @@ namespace Habanero.Test.UI.Base
         {
             // These four lines are the preferable approach (create an actual Delete key press)
             //   using Nunit's testing framework (see TestControlMapperStrategyWin for a working example)
-            //   but there is some deep lying bug in Nunit (and there is no GridTester or equivalent)
+            //   but there is some deep lying bug_ in Nunit (and there is no GridTester or equivalent)
 
             //formWin.Show();
             //FormTester box = new FormTester();
@@ -891,8 +909,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, editableGrid.Rows.Count);
         }
 
-
-
         [Test]
         public void TestDeleteKeyBehaviours_DeletesNoCells_WhenNoneSelected_WhenUserConfirmsDeletion()
         {
@@ -1070,6 +1086,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(editableGrid.ComboBoxClickOnce);
             //---------------Tear Down -------------------------
         }
+
         [Ignore("Changing how this works 04 March 2009 bbb")] 
         [Test]
         public void TestComboBoxClick_SetsCellInEditModeOnOneClick()
@@ -1170,59 +1187,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(setToEditMode);
         }
 
-//        [Test]
-//        public void Test_SelectIndex_SetsSelectedBO()
-//        {
-//            //---------------Set up test pack-------------------
-//            MyBO.LoadDefaultClassDef();
-//            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-//            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
-//            AddControlToForm(editableGrid);
-//            SetupGridColumnsForMyBo(editableGrid);
-//            editableGrid.BusinessObjectCollection = col;
-//            MyBO myBO = col[2];
-//            //---------------Execute Test ----------------------
-//            editableGrid.Rows[2].Selected = true;
-//            //---------------Test Result -----------------------
-//            Assert.AreEqual(col.Count + 1, editableGrid.Rows.Count, "should be 4 item 1 adding item");
-//            Assert.AreSame(myBO, editableGrid.SelectedBusinessObject);
-//
-//        }
-
-        [Test]
-        public void Test_GetBusinessObjectAtRow()
-        {
-            //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
-            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
-            AddControlToForm(editableGrid);
-            SetupGridColumnsForMyBo(editableGrid);
-            editableGrid.BusinessObjectCollection = col;
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            IBusinessObject bo = editableGrid.GetBusinessObjectAtRow(0);
-            //---------------Test Result -----------------------
-            Assert.AreSame(col[0], bo);
-        }
-
-        [Test]
-        public void Test_GetBusinessObjectAtRow_NewRow()
-        {
-            //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
-            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
-            AddControlToForm(editableGrid);
-            SetupGridColumnsForMyBo(editableGrid);
-            editableGrid.BusinessObjectCollection = col;
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            IBusinessObject bo = editableGrid.GetBusinessObjectAtRow(4);
-            //---------------Test Result -----------------------
-            Assert.IsNull(bo);
-//            Assert.AreSame(col[4], bo);
-        }
 
         //protected override IGridBase CreateGridBaseStub()
         //{

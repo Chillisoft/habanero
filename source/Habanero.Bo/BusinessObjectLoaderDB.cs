@@ -333,6 +333,10 @@ namespace Habanero.BO
             //   that returns another type of object that has these methods to eliminate all these 
             //   public accessors
             RestoreEditedLists(collection);
+            if (collection.Count > totalNoOfRecords && selectQuery.OrderCriteria != null)
+            {
+                collection.Sort(selectQuery.OrderCriteria.Compare);
+            }
         }
 
         /// <summary>

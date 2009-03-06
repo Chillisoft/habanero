@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -45,8 +46,14 @@ namespace Habanero.UI.Win
 
         private void SelectIndexChangedHandler(object sender, EventArgs e)
         {
-            _mapper.ApplyChangesToBusinessObject();
-           // _mapper.UpdateControlValueFromBusinessObject();
+            try
+            {
+                _mapper.ApplyChangesToBusinessObject();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error");
+            }
         }
 
         /// <summary>

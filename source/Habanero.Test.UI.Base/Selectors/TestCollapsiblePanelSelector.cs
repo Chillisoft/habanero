@@ -55,7 +55,7 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the CollapsiblePanelSelector class.
     /// </summary>
     [TestFixture]
-    public class TestCollapsiblePanelSelectorWin : TestBOSelector
+    public class TestCollapsiblePanelSelectorWin : TestBOColSelector
     {
         protected override IControlFactory GetControlFactory()
         {
@@ -65,16 +65,16 @@ namespace Habanero.Test.UI.Base
         }
 
 
-        protected override void SetSelectedIndex(IBOSelectorControl selector, int index)
+        protected override void SetSelectedIndex(IBOColSelectorControl colSelector, int index)
         {
-            ICollapsiblePanelGroupControl groupControl = ((ICollapsiblePanelGroupControl) selector);
+            ICollapsiblePanelGroupControl groupControl = ((ICollapsiblePanelGroupControl) colSelector);
             groupControl.AllCollapsed = true;
-            ((ICollapsiblePanelGroupControl) selector).PanelsList[index].Collapsed = false;
+            ((ICollapsiblePanelGroupControl) colSelector).PanelsList[index].Collapsed = false;
         }
 
-        protected override int SelectedIndex(IBOSelectorControl selector)
+        protected override int SelectedIndex(IBOColSelectorControl colSelector)
         {
-            ICollapsiblePanelGroupControl groupControl = ((ICollapsiblePanelGroupControl) selector);
+            ICollapsiblePanelGroupControl groupControl = ((ICollapsiblePanelGroupControl) colSelector);
             int count = 0;
             foreach (ICollapsiblePanel panel in groupControl.PanelsList)
             {
@@ -89,7 +89,7 @@ namespace Habanero.Test.UI.Base
 ////            return 0;
         }
 
-        protected override IBOSelectorControl CreateSelector()
+        protected override IBOColSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateCollapsiblePanelSelector();
         }
@@ -107,11 +107,11 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             //---------------Test Result -----------------------
-            Assert.IsNotNull(selector);
-            Assert.IsInstanceOfType(typeof (IBOCollapsiblePanelSelector), selector);
-            Assert.IsInstanceOfType(typeof (ICollapsiblePanelGroupControl), selector);
+            Assert.IsNotNull(colSelector);
+            Assert.IsInstanceOfType(typeof (IBOCollapsiblePanelSelector), colSelector);
+            Assert.IsInstanceOfType(typeof (ICollapsiblePanelGroupControl), colSelector);
         }
 
         [Test]
@@ -135,123 +135,126 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        [Ignore(" Not Yet implemented")] //TODO  01 Mar 2009:
+        [Ignore(" Not Yet implemented : Brett  01 Mar 2009:")]
         [Test]
         public void TestEditItemFromCollectionUpdatesItemInSelector()
         {
+            Assert.Fail("Not hyet implemented");
         }
 
-        [Ignore(" Not Implemented yet")] //TODO  02 Mar 2009:
         [Test]
         public override void Test_RemoveBOToCol_UpdatesItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO newMyBO = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> {myBO, newMyBO};
-            selector.BusinessObjectCollection = collection;
+            colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
             Assert.AreEqual
-                (collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and one other");
-            Assert.AreSame(myBO, selector.GetBusinessObjectAtRow(ActualIndex(0)));
-            Assert.AreSame(newMyBO, selector.GetBusinessObjectAtRow(ActualIndex(1)));
+                (collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(myBO, colSelector.GetBusinessObjectAtRow(ActualIndex(0)));
+            Assert.AreSame(newMyBO, colSelector.GetBusinessObjectAtRow(ActualIndex(1)));
             //---------------Execute Test ----------------------
             collection.Remove(myBO);
             //---------------Test Result -----------------------
-            Assert.AreEqual(ActualNumberOfRows(1), selector.NoOfItems, "The blank item and one other");
-            Assert.AreSame(newMyBO, selector.GetBusinessObjectAtRow(ActualIndex(0)));
+            Assert.AreEqual(ActualNumberOfRows(1), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreSame(newMyBO, colSelector.GetBusinessObjectAtRow(ActualIndex(0)));
         }
 
-        [Ignore(" Not Implemented")]
+        [Ignore(" Not Implemented : Brett 02 Mar 2009")]
         [Test]
         public override void Test_SelectedBusinessObject_SecondItemSelected_ReturnsItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> {myBO, myBO2};
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
             Assert.AreEqual
-                (collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
-            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
+                (collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
             //---------------Execute Test ----------------------
-            IBusinessObject selectedBusinessObject = selector.SelectedBusinessObject;
+            IBusinessObject selectedBusinessObject = colSelector.SelectedBusinessObject;
             //---------------Test Result -----------------------
             Assert.AreSame(myBO2, selectedBusinessObject);
         }
 
-        [Ignore(" Not Implemented")] 
         [Test]
         public override void Test_Set_SelectedBusinessObject_SetsItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> {myBO, myBO2};
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(0));
             //---------------Assert Precondition----------------
             Assert.AreEqual
-                (collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
+                (collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
 //            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
-            Assert.AreSame(myBO2, selector.SelectedBusinessObject);
+            Assert.AreSame(myBO, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.SelectedBusinessObject = myBO;
+            colSelector.SelectedBusinessObject = myBO2;
             //---------------Test Result -----------------------
-            Assert.AreSame(myBO, selector.SelectedBusinessObject);
-            Assert.AreEqual(ActualIndex(0), SelectedIndex(selector));
+            Assert.AreSame(myBO2, colSelector.SelectedBusinessObject);
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
         }
 
-        [Ignore(" Not Implemented")] 
+//        [Ignore(" Not Implemented : Brett 02 Mar 2009")] 
         [Test]
         public override void Test_Set_SelectedBusinessObject_Null_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> {myBO, myBO2};
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            colSelector.BusinessObjectCollection = collection;
+//            SetSelectedIndex(selector, ActualIndex(1));
+            colSelector.SelectedBusinessObject = myBO2;
             //---------------Assert Precondition----------------
             Assert.AreEqual
-                (collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
-            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
-            Assert.AreEqual(myBO2, selector.SelectedBusinessObject);
+                (collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
+            Assert.AreEqual(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.SelectedBusinessObject = null;
+            colSelector.SelectedBusinessObject = null;
             //---------------Test Result -----------------------
-            Assert.IsNull(selector.SelectedBusinessObject);
-            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.IsNull(colSelector.SelectedBusinessObject);
+            Assert.AreEqual(1, SelectedIndex(colSelector), "This does not make sense with a collapsible panel similar to a boTabcontrol");
         }
 
-        [Ignore(" Not Implemented")]
+//        [Ignore(" Not Implemented : Brett 02 Mar 2009")]
         [Test]
         public override void Test_Set_SelectedBusinessObject_ItemNotInList_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             MyBO myBO = new MyBO();
             MyBO myBO2 = new MyBO();
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> {myBO, myBO2};
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            colSelector.BusinessObjectCollection = collection;
+//            SetSelectedIndex(selector, ActualIndex(1));
+            colSelector.SelectedBusinessObject = myBO2;
             //---------------Assert Precondition----------------
             Assert.AreEqual
-                (collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
-            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
-            Assert.AreEqual(myBO2, selector.SelectedBusinessObject);
+                (collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
+            Assert.AreEqual(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.SelectedBusinessObject = new MyBO();
+            colSelector.SelectedBusinessObject = new MyBO();
             //---------------Test Result -----------------------
-            Assert.AreEqual(ActualIndex(2), selector.NoOfItems, "The blank item");
-            Assert.IsNull(selector.SelectedBusinessObject);
-            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.AreEqual(ActualIndex(2), colSelector.NoOfItems, "The blank item");
+            Assert.IsNull(colSelector.SelectedBusinessObject);
+            Assert.AreEqual
+                (1, SelectedIndex(colSelector),
+                 "This does not make sense with a collapsible panel similar to a boTabcontrol");
         }
     }
 }

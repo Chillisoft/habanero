@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
@@ -36,11 +37,15 @@ namespace Habanero.BO
         protected IBusinessObjectInitialiser _objectInitialiser;
         private const string _idColumnName = "HABANERO_OBJECTID";
         protected EventHandler<BOEventArgs> _boAddedHandler;
+        protected readonly EventHandler<BOPropUpdatedEventArgs> _propUpdatedEventHandler;
+        protected readonly EventHandler<BOEventArgs> _updatedHandler;
+        protected readonly EventHandler<BOEventArgs> _removedHandler;
+
         ///<summary>
         /// Gets and sets whether the property update handler shold be set or not.
         /// This is used to 
         ///    change behaviour typically to differentiate behaviour
-        ///    between windows and web.
+        ///    between windows and web.<br/>
         ///Typically in windows every time a business object property is changed
         ///   the grid is updated with Web the grid is updated only when the object
         ///    is persisted.
@@ -58,6 +63,9 @@ namespace Habanero.BO
             this._collection = collection;
             RegisterForBusinessObjectPropertyUpdatedEvents = true;
             _boAddedHandler = BOAddedHandler;
+            _propUpdatedEventHandler = PropertyUpdatedHandler;
+            _updatedHandler = UpdatedHandler;
+            _removedHandler = RemovedHandler;
         }
 
         /// <summary>
@@ -71,7 +79,7 @@ namespace Habanero.BO
             _table = new DataTable();
             this.InitialiseLocalData();
 
-            _uiGridProperties = uiGrid; 
+            _uiGridProperties = uiGrid;
             DataColumn column = _table.Columns.Add();
             column.Caption = _idColumnName;
             column.ColumnName = _idColumnName;
@@ -79,14 +87,15 @@ namespace Habanero.BO
             IClassDef classDef = _collection.ClassDef;
             foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
-                AddColumn(uiProperty, (ClassDef)classDef);
+                AddColumn(uiProperty, (ClassDef) classDef);
             }
+//            this.DeregisterForEvents();
             foreach (BusinessObject businessObjectBase in _collection)
             {
                 object[] values = GetValues(businessObjectBase);
                 _table.LoadDataRow(values, true);
             }
-            this.AddHandlersForUpdates();
+            this.RegisterForEvents();
             return _table;
         }
 
@@ -95,10 +104,11 @@ namespace Habanero.BO
             DataColumn column = _table.Columns.Add();
             if (_table.Columns.Contains(uiProperty.PropertyName))
             {
-                throw new DuplicateNameException(String.Format(
-                                                     "In a grid definition, a duplicate column with " +
-                                                     "the name '{0}' has been detected. Only one column " +
-                                                     "per property can be specified.", uiProperty.PropertyName));
+                throw new DuplicateNameException
+                    (String.Format
+                         ("In a grid definition, a duplicate column with "
+                          + "the name '{0}' has been detected. Only one column " + "per property can be specified.",
+                          uiProperty.PropertyName));
             }
             Type columnPropertyType = classDef.GetPropertyType(uiProperty.PropertyName);
             column.DataType = columnPropertyType;
@@ -122,8 +132,24 @@ namespace Habanero.BO
             {
                 return;
             }
-            object[] values = GetValues(businessObject);
-            _table.Rows[rowNum].ItemArray = values;
+            try
+            {
+                DeregisterForTableEvents();
+                object[] values = GetValues(businessObject);
+                _table.Rows[rowNum].ItemArray = values;
+            }
+            finally
+            {
+                RegisterForTableEvents();
+            }
+        }
+
+        protected virtual void DeregisterForTableEvents()
+        {
+        }
+
+        protected virtual void RegisterForTableEvents()
+        {
         }
 
         /// <summary>
@@ -151,25 +177,64 @@ namespace Habanero.BO
         /// <summary>
         /// Adds handlers to be called when updates occur
         /// </summary>
-        public virtual void AddHandlersForUpdates()
+        public virtual void DeregisterForEvents()
         {
+            DeregisterForBOEvents();
+        }
+
+        protected virtual void DeregisterForBOEvents()
+        {
+            try
+            {
+                if (RegisterForBusinessObjectPropertyUpdatedEvents)
+                {
+                    _collection.BusinessObjectPropertyUpdated -= _propUpdatedEventHandler;
+                }
+                else
+                {
+                    _collection.BusinessObjectUpdated -= _updatedHandler;
+                }
+                _collection.BusinessObjectIDUpdated -= IDUpdatedHandler;
+                _collection.BusinessObjectAdded -= _boAddedHandler;
+                _collection.BusinessObjectRemoved -= _removedHandler;
+            }
+            catch (KeyNotFoundException)
+            {
+                //Hide the exception that the event was not registerd for in the first place
+            }
+        }
+
+        /// <summary>
+        /// Adds handlers to be called when updates occur
+        /// </summary>
+        public virtual void RegisterForEvents()
+        {
+            RegisterForBOEvents();
+            RegisterForTableEvents();
+        }
+
+        protected virtual void RegisterForBOEvents()
+        {
+            this.DeregisterForBOEvents();
             if (RegisterForBusinessObjectPropertyUpdatedEvents)
             {
-                _collection.BusinessObjectPropertyUpdated += PropertyUpdatedHandler;
+                _collection.BusinessObjectPropertyUpdated += _propUpdatedEventHandler;
             }
             else
             {
-                _collection.BusinessObjectUpdated += UpdatedHandler;
+                _collection.BusinessObjectUpdated += _updatedHandler;
             }
             _collection.BusinessObjectIDUpdated += IDUpdatedHandler;
             _collection.BusinessObjectAdded += _boAddedHandler;
-            _collection.BusinessObjectRemoved += RemovedHandler;
+            _collection.BusinessObjectRemoved += _removedHandler;
         }
+
         private void PropertyUpdatedHandler(object sender, BOPropUpdatedEventArgs propEventArgs)
         {
-            BusinessObject businessObject = (BusinessObject)propEventArgs.BusinessObject;
+            BusinessObject businessObject = (BusinessObject) propEventArgs.BusinessObject;
             UpdateBusinessObjectRowValues(businessObject);
         }
+
         /// <summary>
         /// Handles the event of a <see cref="IBusinessObject"/> being updated
         /// </summary>
@@ -177,9 +242,10 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void UpdatedHandler(object sender, BOEventArgs e)
         {
-            BusinessObject businessObject = (BusinessObject)e.BusinessObject;
+            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
             UpdateBusinessObjectRowValues(businessObject);
         }
+
         /// <summary>
         /// Handles the event of a business object being removed. Removes the
         /// data row that contains the object.
@@ -191,19 +257,20 @@ namespace Habanero.BO
             lock (_table.Rows)
             {
                 int rowNum = this.FindRow(e.BusinessObject);
-                if (rowNum != -1)
+                if (rowNum == -1) return;
+
+                try
                 {
-                    try
-                    {
-                        this._table.Rows.RemoveAt(rowNum);
-                    }catch(Exception)
-                    {
-                        //IF you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error
-                        Console.Write("There was an error");
-                    }
+                    this._table.Rows.RemoveAt(rowNum);
+                }
+                catch (Exception)
+                {
+                    //IF you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error
+                    Console.Write("There was an error");
                 }
             }
         }
+
         /// <summary>
         /// Handles the event of a business object being added. Adds a new
         /// data row containing the object.
@@ -212,10 +279,11 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected virtual void BOAddedHandler(object sender, BOEventArgs e)
         {
-            BusinessObject businessObject = (BusinessObject)e.BusinessObject;
+            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
             object[] values = GetValues(businessObject);
             _table.LoadDataRow(values, true);
         }
+
         /// <summary>
         /// Updates the grid ID column when the Business's ID is changed.
         /// </summary>
@@ -223,9 +291,10 @@ namespace Habanero.BO
         /// <param name="e"></param>
         private void IDUpdatedHandler(object sender, BOEventArgs e)
         {
-            BusinessObject businessObject = (BusinessObject)e.BusinessObject;
+            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
             UpdateBusinessObjectRowValues(businessObject);
         }
+
         /// <summary>
         /// Initialises the local data
         /// </summary>

@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public class TestEditableGridSelectorVWG : TestEditableGridSelectorWin
+    public class TestEditableGridSelectorVWG : TestBOSelectorEditableGridWin
     {
         //        private const string _gridIdColumnName = "HABANERO_OBJECTID";
         protected override IControlFactory GetControlFactory()
@@ -16,7 +16,7 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-        protected override IBOSelectorControl CreateSelector()
+        protected override IBOColSelectorControl CreateSelector()
         {
             IEditableGridControl editableGridControl = GetControlFactory().CreateEditableGridControl();
             Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
@@ -57,7 +57,7 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the GridSelector class.
     /// </summary>
     [TestFixture]
-    public class TestEditableGridSelectorWin : TestBOSelector
+    public class TestBOSelectorEditableGridWin : TestBOColSelector
     {
         //        private const string _gridIdColumnName = "HABANERO_OBJECTID";
 
@@ -76,26 +76,26 @@ namespace Habanero.Test.UI.Base
             return factory;
         }
 
-        protected override void SetSelectedIndex(IBOSelectorControl selector, int index)
+        protected override void SetSelectedIndex(IBOColSelectorControl colSelector, int index)
         {
             int count = 0;
 
-            IEditableGrid readOnlyGrid = ((IEditableGridControl)selector).Grid;
+            IEditableGrid readOnlyGrid = ((IEditableGridControl)colSelector).Grid;
             foreach (IDataGridViewRow row in readOnlyGrid.Rows)
             {
                 if (row == null) continue;//This is done to stop the Pragma warning.
                 if (count == index)
                 {
                     IBusinessObject businessObjectAtRow = readOnlyGrid.GetBusinessObjectAtRow(count);
-                    selector.SelectedBusinessObject = businessObjectAtRow;
+                    colSelector.SelectedBusinessObject = businessObjectAtRow;
                 }
                 count++;
             }
         }
 
-        protected override int SelectedIndex(IBOSelectorControl selector)
+        protected override int SelectedIndex(IBOColSelectorControl colSelector)
         {
-            IEditableGrid gridSelector = ((IEditableGridControl)selector).Grid;
+            IEditableGrid gridSelector = ((IEditableGridControl)colSelector).Grid;
             IDataGridViewRow currentRow = null;
             if (gridSelector.SelectedRows.Count > 0)
             {
@@ -107,7 +107,7 @@ namespace Habanero.Test.UI.Base
             return gridSelector.Rows.IndexOf(currentRow);
         }
 
-        protected override IBOSelectorControl CreateSelector()
+        protected override IBOColSelectorControl CreateSelector()
         {
             IEditableGridControl editableGridControl = GetControlFactory().CreateEditableGridControl();
             System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
@@ -126,36 +126,35 @@ namespace Habanero.Test.UI.Base
           }
 
           [Test]
-        public void Test_Constructor_ReadOnlyGridControlSet()
+        public virtual void Test_Constructor_ReadOnlyGridControlSet()
         {
             //---------------Set up test pack-------------------
 
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IBOSelectorControl selector = CreateSelector();
+            IBOColSelectorControl colSelector = CreateSelector();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IEditableGridControl), selector);
+            Assert.IsInstanceOfType(typeof(IEditableGridControl), colSelector);
         }
 
           [Test]
           public override void Test_ResetBOCol_ToNullClearsItems()
           {
               //---------------Set up test pack-------------------
-              IBOSelectorControl selector = CreateSelector();
-              MyBO myBO = new MyBO();
-
-              BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO };
-              selector.BusinessObjectCollection = collection;
+              IBOColSelectorControl colSelector = CreateSelector();
+              IBusinessObject myBO;
+              IBusinessObjectCollection collection = GetCollectionWithOneBO(out myBO); 
+              colSelector.BusinessObjectCollection = collection;
               //---------------Assert Precondition----------------
-              Assert.AreEqual(ActualNumberOfRows(collection.Count), selector.NoOfItems, "The blank item and one other");
-              Assert.AreSame(myBO, selector.SelectedBusinessObject);
+              Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
+              Assert.AreSame(myBO, colSelector.SelectedBusinessObject);
               //---------------Execute Test ----------------------
-              selector.BusinessObjectCollection = null;
+              colSelector.BusinessObjectCollection = null;
               //---------------Test Result -----------------------
-              Assert.IsNull(selector.SelectedBusinessObject);
-              Assert.IsNull(selector.BusinessObjectCollection);
-              Assert.AreEqual(0, selector.NoOfItems, "The blank item");
+              Assert.IsNull(colSelector.SelectedBusinessObject);
+              Assert.IsNull(colSelector.BusinessObjectCollection);
+              Assert.AreEqual(0, colSelector.NoOfItems, "The blank item");
           }
 
         [Ignore(" Not sure how to implement this in grids.")] //TODO  01 Mar 2009:
@@ -163,22 +162,21 @@ namespace Habanero.Test.UI.Base
         public override void Test_Set_SelectedBusinessObject_ItemNotInList_SetsItemNull()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO myBO2 = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
-            selector.BusinessObjectCollection = collection;
-            SetSelectedIndex(selector, ActualIndex(1));
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO); 
+            colSelector.BusinessObjectCollection = collection;
+            SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item and others");
-            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
-            Assert.AreEqual(myBO2, selector.SelectedBusinessObject);
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
+            Assert.AreEqual(collection[1], colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.SelectedBusinessObject = new MyBO();
+            colSelector.SelectedBusinessObject = new MyBO();
             //---------------Test Result -----------------------
-            Assert.AreEqual(ActualIndex(2), selector.NoOfItems, "The blank item");
-            Assert.IsNull(selector.SelectedBusinessObject);
-            Assert.AreEqual(-1, SelectedIndex(selector));
+            Assert.AreEqual(ActualIndex(2), colSelector.NoOfItems, "The blank item");
+            Assert.IsNull(colSelector.SelectedBusinessObject);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
         }
 
         [Ignore(" Not sure how to implement this in grids")] //TODO  01 Mar 2009:
@@ -186,38 +184,36 @@ namespace Habanero.Test.UI.Base
         public override void Test_AutoSelectsFirstItem()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            MyBO myBO = new MyBO();
-            MyBO myBO2 = new MyBO();
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO> { myBO, myBO2 };
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, selector.NoOfItems);
-            Assert.AreEqual(-1, SelectedIndex(selector));
-            Assert.AreEqual(null, selector.SelectedBusinessObject);
+            Assert.AreEqual(0, colSelector.NoOfItems);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
+            Assert.AreEqual(null, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.BusinessObjectCollection = collection;
+            colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item");
-            Assert.AreSame(myBO, selector.SelectedBusinessObject);
-            Assert.AreEqual(ActualIndex(0), SelectedIndex(selector));
+            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item");
+            Assert.AreSame(myBO, colSelector.SelectedBusinessObject);
+            Assert.AreEqual(ActualIndex(0), SelectedIndex(colSelector));
         }
 
           public override void Test_AutoSelectsFirstItem_NoItems()
         {
             //---------------Set up test pack-------------------
-            IBOSelectorControl selector = CreateSelector();
-            new MyBO();//Purely to load the ClassDefs.
-            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>();
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObjectCollection collection = GetCollectionWithNoItems();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, selector.NoOfItems);
-            Assert.AreEqual(-1, SelectedIndex(selector));
-            Assert.AreEqual(null, selector.SelectedBusinessObject);
+            Assert.AreEqual(0, colSelector.NoOfItems);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
+            Assert.AreEqual(null, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            selector.BusinessObjectCollection = collection;
+            colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
-            Assert.AreEqual(NumberOfLeadingBlankRows(), selector.NoOfItems, "The blank item");
-            Assert.AreSame(null, selector.SelectedBusinessObject);
-            Assert.AreEqual(0, SelectedIndex(selector));
+            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item");
+            Assert.AreSame(null, colSelector.SelectedBusinessObject);
+            Assert.AreEqual(0, SelectedIndex(colSelector));
         }
 
           [Ignore(" Not Yet implemented")] //TODO  01 Mar 2009:

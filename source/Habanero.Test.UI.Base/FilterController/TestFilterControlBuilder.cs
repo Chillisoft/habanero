@@ -40,6 +40,7 @@ namespace Habanero.Test.UI.Base.FilterController
     {
         protected virtual IControlFactory GetControlFactory() { return new ControlFactoryWin(); }
 
+
         [Test]
         public void Test_BuildFilterControl_Simple()
         {
@@ -314,7 +315,18 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.IsInstanceOfType(typeof(SimpleFilter), customFilter);
             //---------------Tear Down -------------------------          
         }
+        [Test]
+        public void Test_TestToHookIntoSimpleFilterEvents()
+        {
+            //---------------Set up test pack-------------------
 
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            SimpleFilter simpleFilter = new SimpleFilter(GetControlFactory(), "SomeName", FilterClauseOperator.OpEquals);
+            simpleFilter.ValueChanged += delegate { };
+            //---------------Test Result -----------------------
+        }
 
         private static FilterDef CreateFilterDef_1Property()
         {

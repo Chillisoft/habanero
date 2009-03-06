@@ -24,12 +24,12 @@ namespace Habanero.UI.Base
 {
 
     /// <summary>
-    /// This is a manager class that can be used to combine any <see cref="IBOSelectorControl"/>
+    /// This is a manager class that can be used to combine any <see cref="IBOColSelectorControl"/>
     ///   and <see cref="IBusinessObjectControl"/>. The selector control is essentially a control 
     ///   for selecting a Business Object a list box, combo box. The <see cref="IBusinessObjectControl"/> is a control
     ///   that is used for viewing a selected <see cref="IBusinessObject"/>.<br/>
     /// The responsibilities of this class is to link these two controls together so that if a new business object is selected
-    ///   in the <see cref="IBOSelectorControl"/> then its values are displayed in the <see cref="IBusinessObjectControl"/>.<br/>
+    ///   in the <see cref="IBOColSelectorControl"/> then its values are displayed in the <see cref="IBusinessObjectControl"/>.<br/>
     /// </summary>
     public class BOSelectorAndEditorManager
     {
@@ -38,21 +38,21 @@ namespace Habanero.UI.Base
         ///<summary>
         /// Constructor for the <see cref="BOSelectorAndEditorManager"/>
         ///</summary>
-        ///<param name="boSelector"></param>
+        ///<param name="boColSelector"></param>
         ///<param name="boEditor"></param>
-        public BOSelectorAndEditorManager(IBOSelectorControl boSelector, IBusinessObjectControl boEditor)
+        public BOSelectorAndEditorManager(IBOColSelectorControl boColSelector, IBusinessObjectControl boEditor)
         {
 
-            if (boSelector == null) throw new ArgumentNullException("boSelector");
+            if (boColSelector == null) throw new ArgumentNullException("boColSelector");
             if (boEditor == null) throw new ArgumentNullException("boEditor");
-            this.BOSelector = boSelector;
+            this.BOColSelector = boColSelector;
             this.BOEditor = boEditor;
             this.AddBoSelectedEventHandler();
         }
 
         private void AddBoSelectedEventHandler()
         {
-            BOSelector.BusinessObjectSelected += ((sender, e) => 
+            BOColSelector.BusinessObjectSelected += ((sender, e) => 
                     {
                         BOEditor.BusinessObject = e.BusinessObject;
                     });
@@ -60,9 +60,9 @@ namespace Habanero.UI.Base
 
 
         ///<summary>
-        /// Returns hte <see cref="IBOSelectorControl"/> that is being managed by this <see cref="BOSelectorAndEditorManager"/>
+        /// Returns hte <see cref="IBOColSelectorControl"/> that is being managed by this <see cref="BOSelectorAndEditorManager"/>
         ///</summary>
-        public IBOSelectorControl BOSelector { get; private set; }
+        public IBOColSelectorControl BOColSelector { get; private set; }
 
         ///<summary>
         /// Returns hte <see cref="IBusinessObjectControl"/> that is being managed by this <see cref="BOSelectorAndEditorManager"/>

@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 
@@ -353,9 +352,14 @@ namespace Habanero.UI.Base
         {
             if (_businessObject == null || _comboBox.SelectedIndex == -1) return;
             string selectedOption = (string) _comboBox.SelectedItem;
-            object newValue = !string.IsNullOrEmpty(selectedOption) 
+            object newValue = null;
+            if (LookupList.ContainsKey(selectedOption))
+            {
+
+                newValue = !string.IsNullOrEmpty(selectedOption) 
                                   ? LookupList[selectedOption] 
                                   : null;
+            }
             if (newValue != null)
             {
                 object propertyValue = GetPropertyValue();
