@@ -97,6 +97,7 @@
     <Compile Include="TestComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TestConfirmingBusinessObjectDeletor.cs" />
     <Compile Include="TestExtendedComboBox.cs" />
     <Compile Include="TestEnumerationConverter.cs" />
     <Compile Include="TestEnumerations.cs" />

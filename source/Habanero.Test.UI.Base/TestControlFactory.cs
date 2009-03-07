@@ -1134,7 +1134,9 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), dataGridViewColumn);
             Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
         }
-
+        
         //TODO: write tests for CreateGridWithPanelControl
+
+
     }
 }

@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Text;
 using Habanero.UI.Base;
@@ -59,6 +60,11 @@ namespace Habanero.Test.UI.Base.Grid
     public abstract class TestDataGridView
     {
         protected abstract IControlFactory GetControlFactory();
+        
+        private IDataGridView CreateDataGridView()
+        {
+            return GetControlFactory().CreateDataGridView();
+        }
 
         [TestFixture]
         public class TestDataGridViewWin : TestDataGridView
@@ -189,13 +195,79 @@ namespace Habanero.Test.UI.Base.Grid
         public virtual void TestConversion_DataGridViewSelectionMode_ColumnHeaderSelect()
         {
             //---------------Set up test pack-------------------
-            IDataGridView control = GetControlFactory().CreateDataGridView();
+            IDataGridView control = CreateDataGridView();
             //-------------Assert Preconditions -------------
             //---------------Execute Test ----------------------
             control.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
             //---------------Test Result -----------------------
             Assert.AreEqual(DataGridViewSelectionMode.ColumnHeaderSelect, control.SelectionMode);
             AssertDataGridViewSelectionModesSame(control);
+        }
+
+        [Test]
+        public void Test_Sort_Ascending()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridView dataGridView = CreateDataGridViewWithTestColumn();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            dataGridView.Sort(dataGridView.Columns[0], ListSortDirection.Ascending);
+            //---------------Test Result -----------------------
+            string sortColumn = ((DataView)dataGridView.DataSource).Sort;
+            Assert.AreEqual("TestColumn ASC", sortColumn);
+        }
+
+        [Test]
+        public void Test_Sort_Descending()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridView dataGridView = CreateDataGridViewWithTestColumn();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            dataGridView.Sort(dataGridView.Columns[0], ListSortDirection.Descending);
+            //---------------Test Result -----------------------
+            string sortColumn = ((DataView)dataGridView.DataSource).Sort;
+            Assert.AreEqual("TestColumn DESC", sortColumn);
+        }
+
+        [Test]
+        [Ignore("Need to investigate how to get this working")] //TODO Mark 04 Mar 2009: Ignored Test - Need to investigate how to get this working
+        public void Test_SortColumn_UnSorted()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridView dataGridView = CreateDataGridViewWithTestColumn();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataGridView.Columns.Count);
+            //---------------Execute Test ----------------------
+            IDataGridViewColumn sortedColumn = dataGridView.SortedColumn;
+            //---------------Test Result -----------------------
+            Assert.IsNull(sortedColumn);
+        }
+
+        [Test]
+        [Ignore("Need to investigate how to get this working")] //TODO Mark 04 Mar 2009: Ignored Test - Need to investigate how to get this working
+        public void Test_SortColumn_Sorted()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridView dataGridView = CreateDataGridViewWithTestColumn();
+            dataGridView.Sort(dataGridView.Columns[0], ListSortDirection.Ascending);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IDataGridViewColumn sortedColumn = dataGridView.SortedColumn;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(sortedColumn);
+            Assert.AreEqual("TestColumn", sortedColumn.Name);
+        }
+
+        private IDataGridView CreateDataGridViewWithTestColumn()
+        {
+            IDataGridView dataGridView = CreateDataGridView();
+            dataGridView.Columns.Add("TestColumn", "Test Column");
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("TestColumn");
+            dataTable.AcceptChanges();
+            dataGridView.DataSource = dataTable.DefaultView;
+            return dataGridView;
         }
     }
 }

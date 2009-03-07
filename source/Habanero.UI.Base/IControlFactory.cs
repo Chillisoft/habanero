@@ -25,6 +25,16 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+    ///<summary>
+    /// This delegate provides a signature for a method to be called when a Dialog completes.
+    /// It provides a parameter for a reference to the actal dialog that completed, and 
+    /// the <see cref="DialogResult"/> of the dialog.
+    ///</summary>
+    ///<param name="sender">A reference to the actual dialog that was completed, resulting in this delegate being called.
+    /// This may be null if the particular Dialog implementation does not allow references to the Dialog type. eg. MessageBox in windows</param>
+    ///<param name="dialogResult">The <see cref="DialogResult"/> of the dialog when it was completed.</param>
+    public delegate void DialogCompletionDelegate(object sender, DialogResult dialogResult);
+
     /// <summary>
     /// Creates controls for a specific UI environment
     /// </summary>
@@ -498,7 +508,7 @@ namespace Habanero.UI.Base
         /// Creates a static data editor
         /// </summary>
         IStaticDataEditor CreateStaticDataEditor();
-        
+
         ///<summary>
         /// Displays a message box with specified text, caption, buttons, and icon.
         ///</summary>
@@ -508,6 +518,18 @@ namespace Habanero.UI.Base
         ///<param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
         ///<returns>The message box result.</returns>
         DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon);
+
+        ///<summary>
+        /// Displays a message box with specified text, caption, buttons, and icon.
+        /// Once the user is has responded, the provided delegate is called with an indication of the <see cref="DialogResult"/>.
+        ///</summary>
+        ///<param name="message">The text to display in the message box.</param>
+        ///<param name="title">The text to display in the title bar of the message box.</param>
+        ///<param name="buttons">One of the MessageBoxButtons values that specifies which buttons to display in the message box.</param>
+        ///<param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
+        ///<param name="dialogCompletionDelegate">A delegate to be called when the MessageBox has been completed.</param>
+        ///<returns>The message box result.</returns>
+        DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon, DialogCompletionDelegate dialogCompletionDelegate);
 
         ///<summary>
         /// Displays a message box with specified text.

@@ -102,8 +102,7 @@ namespace Habanero.UI.VWG
         /// <filterpriority>1</filterpriority>
         public void Sort(IDataGridViewColumn dataGridViewColumn, ListSortDirection direction)
         {
-            //TODO
-            throw new System.NotImplementedException();
+            Sort(dataGridViewColumn.Name, direction == ListSortDirection.Ascending);
         }
 
         /// <summary>Gets the column by which the <see cref="IDataGridView"></see> contents are currently sorted.</summary>
@@ -112,7 +111,6 @@ namespace Habanero.UI.VWG
         /// <filterpriority>1</filterpriority>
         IDataGridViewColumn IDataGridView.SortedColumn
         {
-            //TODO
             get { throw new System.NotImplementedException(); }
         }
 

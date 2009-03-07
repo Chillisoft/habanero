@@ -132,6 +132,7 @@
     <Compile Include="InputFormDate.cs" />
     <Compile Include="InputFormTextBox.cs" />
     <Compile Include="IOKCancelDialogFactory.cs" />
+    <Compile Include="MessageBoxConfirmer.cs" />
     <Compile Include="PanelBuilder\IPanelInfo.cs" />
     <Compile Include="LayoutManagers\ColumnLayoutManager.cs" />
     <Compile Include="IListViewItem.cs" />

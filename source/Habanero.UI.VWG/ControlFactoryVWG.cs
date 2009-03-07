@@ -29,7 +29,10 @@ using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.Util;
 using DateTimePickerFormat=Habanero.UI.Base.DateTimePickerFormat;
+using DialogResult=Habanero.UI.Base.DialogResult;
 using HorizontalAlignment=Gizmox.WebGUI.Forms.HorizontalAlignment;
+using MessageBoxButtons=Habanero.UI.Base.MessageBoxButtons;
+using MessageBoxIcon=Habanero.UI.Base.MessageBoxIcon;
 using ScrollBars=Gizmox.WebGUI.Forms.ScrollBars;
 
 namespace Habanero.UI.VWG
@@ -540,6 +543,24 @@ namespace Habanero.UI.VWG
         {
             return (Base.DialogResult)MessageBox.Show(message, title,
                 (Gizmox.WebGUI.Forms.MessageBoxButtons)buttons, (Gizmox.WebGUI.Forms.MessageBoxIcon)icon);
+        }
+
+        ///<summary>
+        /// Displays a message box with specified text, caption, buttons, and icon.
+        /// Once the user is has responded, the provided delegate is called with an indication of the <see cref="DialogResult"/>.
+        ///</summary>
+        ///<param name="message">The text to display in the message box.</param>
+        ///<param name="title">The text to display in the title bar of the message box.</param>
+        ///<param name="buttons">One of the MessageBoxButtons values that specifies which buttons to display in the message box.</param>
+        ///<param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
+        ///<param name="dialogCompletionDelegate">A delegate to be called when the MessageBox has been completed.</param>
+        ///<returns>The message box result.</returns>
+        public DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon, DialogCompletionDelegate dialogCompletionDelegate)
+        {
+            Gizmox.WebGUI.Forms.MessageBoxButtons messageBoxButtons = (Gizmox.WebGUI.Forms.MessageBoxButtons)buttons;
+            Gizmox.WebGUI.Forms.MessageBoxIcon messageBoxIcon = (Gizmox.WebGUI.Forms.MessageBoxIcon)icon;
+            return (Base.DialogResult)MessageBox.Show(message, title, messageBoxButtons, messageBoxIcon,
+                (sender, e) => dialogCompletionDelegate(sender, (DialogResult)((Form) sender).DialogResult));
         }
 
         ///<summary>
