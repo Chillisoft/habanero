@@ -64,11 +64,11 @@ namespace Habanero.BO
             T businessObject = GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
             if (businessObject != null) return businessObject;
 
-            throw new BusObjDeleteConcurrencyControlException(
-                string.Format(
-                    "A Error has occured since the object you are trying to refresh has been deleted by another user."
-                    + " There are no records in the database for the Class: {0} identified by {1} \n", typeof (T).Name,
-                    primaryKey));
+            throw new BusObjDeleteConcurrencyControlException
+                (string.Format
+                     ("A Error has occured since the object you are trying to refresh has been deleted by another user."
+                      + " There are no records in the database for the Class: {0} identified by {1} \n", typeof (T).Name,
+                      primaryKey));
         }
 
         /// <summary>
@@ -82,11 +82,11 @@ namespace Habanero.BO
             IBusinessObject businessObject = GetBusinessObject(classDef, Criteria.FromPrimaryKey(primaryKey));
             if (businessObject != null) return businessObject;
 
-            throw new BusObjDeleteConcurrencyControlException(
-                string.Format(
-                    "A Error has occured since the object you are trying to refresh has been deleted by another user."
-                    + " There are no records in the database for the Class: {0} identified by {1} \n",
-                    classDef.ClassNameFull, primaryKey));
+            throw new BusObjDeleteConcurrencyControlException
+                (string.Format
+                     ("A Error has occured since the object you are trying to refresh has been deleted by another user."
+                      + " There are no records in the database for the Class: {0} identified by {1} \n",
+                      classDef.ClassNameFull, primaryKey));
         }
 
         /// <summary>
@@ -168,10 +168,10 @@ namespace Habanero.BO
 
         private static void ThrowRetrieveDuplicateObjectException(ISqlStatement statement, IBusinessObject loadedBo)
         {
-            throw new HabaneroDeveloperException("There was an error with loading the class '"
-                                                 + loadedBo.ClassDef.ClassNameFull + "'", "Loading a '"
-                                                                                          + loadedBo.ClassDef.ClassNameFull + "' with criteria '" + statement.Statement 
-                                                                                          + "' returned more than one record when only one was expected.");
+            throw new HabaneroDeveloperException
+                ("There was an error with loading the class '" + loadedBo.ClassDef.ClassNameFull + "'",
+                 "Loading a '" + loadedBo.ClassDef.ClassNameFull + "' with criteria '" + statement.Statement
+                 + "' returned more than one record when only one was expected.");
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Habanero.BO
                 {
                     loadedBo = LoadBOFromReader(classDef, dr, selectQueryDB);
                     correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
-                    
+
                     if (dr.Read())
                     {
                         ThrowRetrieveDuplicateObjectException(statement, loadedBo);
@@ -244,7 +244,7 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
-            Criteria criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof(T)], criteriaString);
+            Criteria criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof (T)], criteriaString);
             return GetBusinessObject<T>(criteria);
         }
 
@@ -269,8 +269,6 @@ namespace Habanero.BO
 
         #region GetBusinessObjectCollection
 
-
-
         /// <summary>
         /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
         /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
@@ -278,7 +276,7 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="collection">The collection to refresh</param> 
-        protected override void DoRefresh<T>(BusinessObjectCollection<T> collection) 
+        protected override void DoRefresh<T>(BusinessObjectCollection<T> collection)
         {
             IClassDef classDef = collection.ClassDef;
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
@@ -313,14 +311,8 @@ namespace Habanero.BO
                 ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
             }
 
-            if (totalNoOfRecords == -1)
-            {
-                collection.TotalCountAvailableForPaging = collection.Count;
-            } else
-            {
-                collection.TotalCountAvailableForPaging = totalNoOfRecords;
-            }
-            
+            collection.TotalCountAvailableForPaging = totalNoOfRecords == -1 ? collection.Count : totalNoOfRecords;
+
 
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
@@ -333,10 +325,6 @@ namespace Habanero.BO
             //   that returns another type of object that has these methods to eliminate all these 
             //   public accessors
             RestoreEditedLists(collection);
-            if (collection.Count > totalNoOfRecords && selectQuery.OrderCriteria != null)
-            {
-                collection.Sort(selectQuery.OrderCriteria.Compare);
-            }
         }
 
         /// <summary>
@@ -345,27 +333,39 @@ namespace Habanero.BO
         /// only fire for the new objects added to the collection, not for the ones that already existed).
         /// </summary>
         /// <param name="collection">The collection to refresh</param>
-        //TODO 17 Feb 2009 - Mark : NNB! This method is very different to the DoRefresh<T> method above. Check if this method is tested.
         protected override void DoRefresh(IBusinessObjectCollection collection)
         {
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
-            QueryBuilder.PrepareCriteria(collection.ClassDef, selectQuery.Criteria);
-            ISqlStatement statement = selectQuery.CreateSqlStatement();
-
-            ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
-
-            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            IClassDef classDef = collection.ClassDef;
+            QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
+            int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
+            if (IsLoadNecessary(selectQuery, totalNoOfRecords))
             {
-                while (dr.Read())
+                ISqlStatement statement = selectQuery.CreateSqlStatement();
+
+                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+
+                using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
                 {
-                    IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
-                    AddBusinessObjectToCollection(collection, loadedBo);
+                    while (dr.Read())
+                    {
+                        IBusinessObject loadedBo = LoadBOFromReader(classDef, dr, selectQuery);
+                        AddBusinessObjectToCollection(collection, loadedBo);
+                    }
                 }
             }
+            else
+            {
+                //The first record is past the end of the available records, so return an empty collection.
+                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+            }
+            int totalCountAvailableForPaging = totalNoOfRecords == -1 ? collection.Count : totalNoOfRecords;
+            collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
+
             RestoreEditedLists(collection);
         }
 
-        private int GetTotalNoOfRecordsIfNeeded(IClassDef classDef, SelectQueryDB selectQuery)
+        private int GetTotalNoOfRecordsIfNeeded(IClassDef classDef, ISelectQuery selectQuery)
         {
             int totalNoOfRecords = -1;
             if ((selectQuery.FirstRecordToLoad > 0) || (selectQuery.Limit >= 0))
@@ -375,7 +375,7 @@ namespace Habanero.BO
             return totalNoOfRecords;
         }
 
-        private static bool IsLoadNecessary(SelectQueryDB selectQuery, int totalNoOfRecords)
+        private static bool IsLoadNecessary(ISelectQuery selectQuery, int totalNoOfRecords)
         {
             if (selectQuery.FirstRecordToLoad < 0)
             {
@@ -386,8 +386,7 @@ namespace Habanero.BO
             //If the limit is set to zero, then it is pointless to do a load.
             if (selectQuery.Limit == 0) return false;
             //If the first record is beyond the end of the records then there is nothing to load.
-            if (selectQuery.FirstRecordToLoad > totalNoOfRecords) return false;
-            return true;
+            return selectQuery.FirstRecordToLoad <= totalNoOfRecords;
         }
 
         private static ISqlStatement CreateStatementAdjustedForLimits(SelectQueryDB selectQuery, int totalNoOfRecords)
@@ -398,7 +397,9 @@ namespace Habanero.BO
                 int remainingNumberOfItems = totalNoOfRecords - selectQuery.FirstRecordToLoad;
                 if (originalLimit >= 0)
                 {
-                    selectQuery.Limit = (originalLimit < remainingNumberOfItems) ? originalLimit : remainingNumberOfItems;
+                    selectQuery.Limit = (originalLimit < remainingNumberOfItems)
+                                            ? originalLimit
+                                            : remainingNumberOfItems;
                 }
                 else
                 {
@@ -419,7 +420,7 @@ namespace Habanero.BO
         {
             ISelectQuery selectQuery = QueryBuilder.CreateSelectCountQuery(classDef, criteria);
             SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
-            SqlFormatter sqlFormatter = new SqlFormatter("","","","");
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "");
             ISqlStatement statement = selectQueryDB.CreateSqlStatement(sqlFormatter);
             int totalNoOfRecords = 0;
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
@@ -446,7 +447,7 @@ namespace Habanero.BO
             {
                 BusinessObjectManager.Instance.Remove(loadedBo);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
-                loadedBo = (T)subClassBusinessObject;
+                loadedBo = (T) subClassBusinessObject;
             }
             return loadedBo;
         }
@@ -466,16 +467,16 @@ namespace Habanero.BO
             }
             if (businessObject.Status.IsEditing)
             {
-                throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
-                                                     "A Error has occured since the object being refreshed is being edited. ID :- " +
-                                                     businessObject.ID.AsString_CurrentValue() + " - Class : " + businessObject.ClassDef.ClassNameFull);
+                throw new HabaneroDeveloperException
+                    ("A Error has occured since the object being refreshed is being edited.",
+                     "A Error has occured since the object being refreshed is being edited. ID :- "
+                     + businessObject.ID.AsString_CurrentValue() + " - Class : " + businessObject.ClassDef.ClassNameFull);
             }
             businessObject = GetBusinessObject(businessObject.ClassDef, businessObject.ID);
             return businessObject;
         }
 
         #endregion
-
 
         #region GetRelatedBusinessObjectCollection
 
@@ -534,10 +535,7 @@ namespace Habanero.BO
         //    return relatedCol;
         //}
 
-
-
         #endregion
-
 
         #region GetRelatedBusinessObject
 
@@ -563,18 +561,16 @@ namespace Habanero.BO
         {
             RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
             if (relationshipDef.RelatedObjectClassDef != null)
-                return GetBusinessObject(relationshipDef.RelatedObjectClassDef,
-                                         Criteria.FromRelationship(relationship));
+                return GetBusinessObject(relationshipDef.RelatedObjectClassDef, Criteria.FromRelationship(relationship));
             return null;
         }
 
         #endregion
 
-
         protected new static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
         {
-            Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(BOType);
-            return (IBusinessObjectCollection)Activator.CreateInstance(boColType);
+            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
+            return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
         }
 
         private static T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery)
@@ -586,7 +582,8 @@ namespace Habanero.BO
             return (T) GetLoadedBusinessObject(bo, dataReader, selectQuery);
         }
 
-        private static IBusinessObject LoadBOFromReader(IClassDef classDef, IDataRecord dataReader, ISelectQuery selectQuery)
+        private static IBusinessObject LoadBOFromReader
+            (IClassDef classDef, IDataRecord dataReader, ISelectQuery selectQuery)
         {
             IBusinessObject bo = classDef.CreateNewBusinessObject();
             BusinessObjectManager.Instance.Remove(bo);
@@ -594,11 +591,12 @@ namespace Habanero.BO
             return GetLoadedBusinessObject(bo, dataReader, selectQuery);
         }
 
-        private static IBusinessObject GetLoadedBusinessObject(IBusinessObject bo, IDataRecord dataReader, ISelectQuery selectQuery)
+        private static IBusinessObject GetLoadedBusinessObject
+            (IBusinessObject bo, IDataRecord dataReader, ISelectQuery selectQuery)
         {
             PopulateBOFromReader(bo, dataReader, selectQuery);
             IPrimaryKey key = bo.ID;
-            
+
             IBusinessObject boFromObjectManager = GetObjectFromObjectManager(key, bo.ClassDef.ClassType);
 
             if (boFromObjectManager == null)
@@ -610,8 +608,8 @@ namespace Habanero.BO
             // key as the one being loaded.  We want to return the one that was loaded without putting it into the 
             // BusinessObjectManager (as that would cause an error).  This is only used to check for duplicates or in 
             // similar scenarios.
- 
-            if (boFromObjectManager.Status.IsNew) boFromObjectManager = bo; 
+
+            if (boFromObjectManager.Status.IsNew) boFromObjectManager = bo;
             if (boFromObjectManager.Status.IsEditing) return boFromObjectManager;
 
             PopulateBOFromReader(boFromObjectManager, dataReader, selectQuery);
@@ -630,7 +628,7 @@ namespace Habanero.BO
             }
             BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
             IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
-            return find.Count>0 ? find[0] : null;
+            return find.Count > 0 ? find[0] : null;
         }
 
         private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)

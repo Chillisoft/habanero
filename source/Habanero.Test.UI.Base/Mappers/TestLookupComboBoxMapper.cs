@@ -436,7 +436,7 @@ namespace Habanero.Test.UI.Base.Mappers
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(Sample.LookupCollection[LOOKUP_ITEM_1], s.SampleLookupID.ToString());
-                //---------------Tear Down -------------------------
+
             }
             [Test]
             public void TestChangeComboBoxUpdatesBusinessObject()

@@ -19,7 +19,7 @@
 
 using System;
 using System.Collections;
-using Habanero.Base;
+using System.Security.Permissions;
 
 namespace Habanero.Base
 {
@@ -91,7 +91,7 @@ namespace Habanero.Base
 
         /// <summary>
 		/// Finds a business object that has the key string specified.<br/>
-		/// Note: the format of the search term is strict, so that a Guid ID
+		/// Note_: the format of the search term is strict, so that a Guid ID
 		/// may be stored as "boIDname=########-####-####-####-############".
 		/// In the case of such Guid ID's, rather use the FindByGuid() function.
 		/// Composite primary keys may be stored otherwise, such as a
@@ -324,10 +324,35 @@ namespace Habanero.Base
         ///   BusinessObjectCollecion being a generic collection.
         IList MarkedForDeleteBusinessObjects { get; }
 
+        ///<summary>
+        /// This property is used to return the total number of records available for paging.
+        /// It is set internally by the loader when the collection is being loaded.
+        ///</summary>
+        int TotalCountAvailableForPaging { get; set; }
+
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
         /// </summary>
         void RestoreAll();
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided
+        /// and an extra criteria literal, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
+        /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
+        /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
+        void LoadWithLimit(string searchCriteria, string orderByClause, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords);
+
+        /// <summary>
+        /// Refreshes the business objects in the collection
+        /// </summary>
+        [ReflectionPermission(SecurityAction.Demand)]
+        void Refresh();
 	}
 }

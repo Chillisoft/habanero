@@ -165,6 +165,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual("b", editableGrid.Rows[0].Cells[1].Value);
         }
+
         [Test]
         public void TestSaveChanges()
         {
@@ -204,7 +205,6 @@ namespace Habanero.Test.UI.Base
             savedBO.MarkForDelete();
             savedBO.Save();
         }
-
 
         [Test]
         public void TestSetCollectionOnGrid_NoOfRows()

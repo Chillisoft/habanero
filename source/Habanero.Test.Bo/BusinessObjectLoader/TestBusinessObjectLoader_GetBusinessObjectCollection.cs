@@ -68,8 +68,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [TestFixture]
-        public class TestBusinessObjectLoader_GetBusinessObjectCollectionDB :
-            TestBusinessObjectLoader_GetBusinessObjectCollection
+        public class TestBusinessObjectLoader_GetBusinessObjectCollectionDB
+            : TestBusinessObjectLoader_GetBusinessObjectCollection
         {
             #region Setup/Teardown
 
@@ -109,11 +109,11 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 //---------------Assert Precondition----------------
 
                 //---------------Execute Test ----------------------
-                Criteria criteria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals,
-                                                 cp.ContactPersonID.ToString("B"));
+                Criteria criteria = new Criteria
+                    ("ContactPersonID", Criteria.ComparisonOp.Equals, cp.ContactPersonID.ToString("B"));
                 BusinessObjectCollection<ContactPersonTestBO> col =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(
-                        criteria);
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                        (criteria);
                 //---------------Test Result -----------------------
                 Assert.AreEqual(1, col.Count);
                 Assert.AreNotSame(cp, col[0]);
@@ -131,18 +131,18 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.IsFalse(cp.AfterLoadCalled);
 
                 //---------------Execute Test ----------------------
-                Criteria criteria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals,
-                                                 cp.ContactPersonID.ToString("B"));
+                Criteria criteria = new Criteria
+                    ("ContactPersonID", Criteria.ComparisonOp.Equals, cp.ContactPersonID.ToString("B"));
                 BusinessObjectCollection<ContactPersonTestBO> col =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(
-                        criteria);
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                        (criteria);
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(1, col.Count);
                 ContactPersonTestBO loadedBO = col[0];
                 Assert.AreSame(cp, loadedBO);
                 Assert.IsTrue(loadedBO.AfterLoadCalled);
-                    //This works because if the object is not dirty then it is refreshed from the database
+                //This works because if the object is not dirty then it is refreshed from the database
             }
 
 
@@ -157,8 +157,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 //---------------Assert Precondition----------------
 
                 //---------------Execute Test ----------------------
-                Criteria criteria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals,
-                                                 cp.ContactPersonID.ToString("B"));
+                Criteria criteria = new Criteria
+                    ("ContactPersonID", Criteria.ComparisonOp.Equals, cp.ContactPersonID.ToString("B"));
                 IBusinessObjectCollection col =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
                 //---------------Test Result -----------------------
@@ -179,8 +179,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.IsFalse(cp.AfterLoadCalled);
 
                 //---------------Execute Test ----------------------
-                Criteria criteria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals,
-                                                 cp.ContactPersonID.ToString("B"));
+                Criteria criteria = new Criteria
+                    ("ContactPersonID", Criteria.ComparisonOp.Equals, cp.ContactPersonID.ToString("B"));
                 IBusinessObjectCollection col =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
 
@@ -198,9 +198,11 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
                 Shape shape = Shape.CreateSavedShape();
                 Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
-                
+
                 //---------------Execute Test ----------------------
-                BusinessObjectCollection<CircleNoPrimaryKey> loadedCircles = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<CircleNoPrimaryKey>(criteria);
+                BusinessObjectCollection<CircleNoPrimaryKey> loadedCircles =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<CircleNoPrimaryKey>
+                        (criteria);
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(0, loadedCircles.Count);
@@ -216,12 +218,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
-                BusinessObjectCollection<CircleNoPrimaryKey> loadedCircles = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<CircleNoPrimaryKey>(criteria);
+                BusinessObjectCollection<CircleNoPrimaryKey> loadedCircles =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<CircleNoPrimaryKey>
+                        (criteria);
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(0, loadedCircles.Count);
             }
-
 
             #region Test that the load returns the correct sub type
 
@@ -235,12 +238,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
-                BusinessObjectCollection<Shape> loadedShapes = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>(criteria);
+                BusinessObjectCollection<Shape> loadedShapes =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>(criteria);
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(1, loadedShapes.Count);
                 Shape loadedShape = loadedShapes[0];
-                Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
+                Assert.IsInstanceOfType(typeof (CircleNoPrimaryKey), loadedShape);
             }
 
             [Test]
@@ -254,10 +258,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
-                Shape loadedShape =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(filledCircle.ID);
+                Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>
+                    (filledCircle.ID);
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+                Assert.IsInstanceOfType(typeof (FilledCircleNoPrimaryKey), loadedShape);
                 //---------------Tear Down -------------------------          
             }
 
@@ -272,15 +276,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
-                Shape loadedShape =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(filledCircle.ID);
+                Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>
+                    (filledCircle.ID);
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+                Assert.IsInstanceOfType(typeof (FilledCircleNoPrimaryKey), loadedShape);
                 //---------------Tear Down -------------------------          
             }
 
             #endregion //Test that the load returns the correct sub type
-
         }
 
         private static SelectQuery CreateManualSelectQueryOrderedByDateOfBirth(DateTime now, BusinessObject cp1)
@@ -366,7 +369,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
         }
-        
+
         [Test]
         public void Test_CollectionLoad_GetBusinessObjectCollection_CriteriaString()
         {
@@ -462,7 +465,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.Load("ContactPersonID = '"+person.ContactPersonID+"'", "");
+            col.Load("ContactPersonID = '" + person.ContactPersonID + "'", "");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
@@ -562,7 +565,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ClassDef changedClassDef = classDef.Clone();
             changedClassDef.TypeParameter = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(changedClassDef, "");
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (changedClassDef, "");
             //---------------Test Result -----------------------
             Assert.AreEqual(changedClassDef, col.ClassDef);
             //---------------Tear Down -------------------------
@@ -577,7 +581,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ClassDef changedClassDef = classDef.Clone();
             changedClassDef.TypeParameter = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(changedClassDef, "", "");
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (changedClassDef, "", "");
             //---------------Test Result -----------------------
             Assert.AreEqual(changedClassDef, col.ClassDef);
             //---------------Tear Down -------------------------
@@ -593,14 +598,16 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ClassDef changedClassDef = classDef.Clone();
             changedClassDef.TypeParameter = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(changedClassDef, selectQuery);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (changedClassDef, selectQuery);
             //---------------Test Result -----------------------
             Assert.AreEqual(changedClassDef, col.ClassDef);
             //---------------Tear Down -------------------------
         }
 
         [Test]
-        public void Test_CollectionLoad_LoadWithLimit_ThenRefresh_CriteriaObject_NewObjectWithinLimitAndCriteria_Included()
+        public void
+            Test_CollectionLoad_LoadWithLimit_ThenRefresh_CriteriaObject_NewObjectWithinLimitAndCriteria_Included()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -630,6 +637,79 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        public void
+            Test_GetCollection_Generic_LoadWithLimit_ThenRefresh_CriteriaObject_NewObjectWithinLimitAndCriteria_Included
+            ()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
+            ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "hhh");
+            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(-3));
+
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, now.AddHours(-1));
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            int noRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (criteria, orderCriteria, 0, 2, out noRecords);
+//            col.LoadWithLimit(criteria, "Surname", 2);
+            ContactPersonTestBO cpnew = ContactPersonTestBO.CreateSavedContactPerson(now, "bbb");
+
+            //---------------Assert Precondition ---------------
+            Assert.AreEqual(2, col.Count);
+
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp1, col[0]);
+            Assert.AreSame(cpnew, col[1]);
+            Assert.IsFalse(col.Contains(cpLast));
+            Assert.IsFalse(col.Contains(cp2));
+        }
+
+        [Test]
+        public void
+            Test_GetCollection_NonGeneric_LoadWithLimit_ThenRefresh_CriteriaObject_NewObjectWithinLimitAndCriteria_Included
+            ()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
+            ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "hhh");
+            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(-3));
+
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, now.AddHours(-1));
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            int noRecords;
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (def, criteria, orderCriteria, 0, 2, out noRecords);
+            //            col.LoadWithLimit(criteria, "Surname", 2);
+            ContactPersonTestBO cpnew = ContactPersonTestBO.CreateSavedContactPerson(now, "bbb");
+
+            //---------------Assert Precondition ---------------
+            Assert.AreEqual(2, col.Count);
+
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp1, col[0]);
+            Assert.AreSame(cpnew, col[1]);
+            Assert.IsFalse(col.Contains(cpLast));
+            Assert.IsFalse(col.Contains(cp2));
+        }
+
+        [Test]
         public void Test_CollectionLoad_LoadWithLimit_CriteriaObject_IncludesCriteriaMatchesWithinLimit()
         {
             //---------------Set up test pack-------------------
@@ -638,7 +718,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "hhh");
-            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(-3),"bbb");
+            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(-3), "bbb");
 
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, now.AddHours(-1));
@@ -657,7 +737,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_LoadWithLimit_FirstAtStart_LimitEqualsEnd()//NoRecords_StartRecords_ContainsAllRecords()
+        public void Test_CollectionLoad_LoadWithLimit_FirstAtStart_LimitEqualsEnd()
+            //NoRecords_StartRecords_ContainsAllRecords()
         {
             const int totalRecords = 3;
             const int firstRecord = 0;
@@ -671,11 +752,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
-        public void Test_CollectionLoad_LoadWithLimit_FirstAtStart_LimitBeforeEnd()//_NoRecords_StartRecords_First2Records()
+        public void Test_CollectionLoad_LoadWithLimit_FirstAtStart_LimitBeforeEnd()
+            //_NoRecords_StartRecords_First2Records()
         {
             const int totalRecords = 3;
             const int firstRecord = 0;
@@ -689,7 +772,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -707,7 +791,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -725,7 +810,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -743,11 +829,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
-        public void Test_CollectionLoad_LoadWithLimit_FirstAfterStart_LimitEqualsEnd()//NoRecords_StartRecords_ContainsAllRecords()
+        public void Test_CollectionLoad_LoadWithLimit_FirstAfterStart_LimitEqualsEnd()
+            //NoRecords_StartRecords_ContainsAllRecords()
         {
             const int totalRecords = 3;
             const int firstRecord = 1;
@@ -761,11 +849,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
-        public void Test_CollectionLoad_LoadWithLimit_FirstAfterStart_LimitBeforeEnd()//_NoRecords_StartRecords_First2Records()
+        public void Test_CollectionLoad_LoadWithLimit_FirstAfterStart_LimitBeforeEnd()
+            //_NoRecords_StartRecords_First2Records()
         {
             const int totalRecords = 6;
             const int firstRecord = 2;
@@ -779,7 +869,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -797,7 +888,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, 2, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 2, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -813,7 +905,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
-            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZZZZZZZZZZZZZ");
+            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson
+                ("ZZZZZZZZZZZZZZZZZ");
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, col.Count);
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -822,7 +915,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             col.Refresh();
             //---------------Test Result -----------------------
             totalNoOfRecords++;
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords + 1, 2 + 1, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords + 1, 2 + 1, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
         }
 
         [Test]
@@ -840,7 +934,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, 4, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 4, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -858,7 +953,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -876,7 +972,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -894,7 +991,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -910,7 +1008,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
-            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZZZZZZZZZZZZZ");
+            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson
+                ("ZZZZZZZZZZZZZZZZZ");
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, col.Count);
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -919,7 +1018,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             col.Refresh();
             //---------------Test Result -----------------------
             totalNoOfRecords++;
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords + 1, 2, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords + 1, 2, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
         }
 
         [Test]
@@ -937,7 +1037,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -955,7 +1056,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -973,7 +1075,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -991,7 +1094,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -1009,7 +1113,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             int totalNoOfRecords;
             col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
-            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
         [Test]
@@ -1028,13 +1133,1033 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             {
                 int totalNoOfRecords;
                 col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
                 Assert.Fail("IndexOutOfRangeException exception expected");
-            } catch(IndexOutOfRangeException ex)
+            }
+            catch (IndexOutOfRangeException ex)
             {
                 Assert.AreEqual("FirstRecordToLoad should not be negative.", ex.Message);
             }
         }
+
+        #region GetCollection - LoadWith Limit Generic
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_CriteriaObject_IncludesCriteriaMatchesWithinLimit()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
+            ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "hhh");
+            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(-3), "bbb");
+
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, now.AddHours(-1));
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            int totalNoOfRecords;
+            //---------------Assert Precondition ---------------
+            //---------------Execute Test ----------------------
+            //            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (criteria, orderCriteria, 0, 2, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp1, col[0]);
+            Assert.AreSame(cp2, col[1]);
+            Assert.IsFalse(col.Contains(cpLast));
+        }
+
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtStart_LimitEqualsEnd()
+            //NoRecords_StartRecords_ContainsAllRecords()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 0;
+            const int limit = totalRecords;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtStart_LimitBeforeEnd()
+            //_NoRecords_StartRecords_First2Records()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 0;
+            const int limit = 2;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtStart_LimitBeyondEnd()
+        {
+            const int totalRecords = 4;
+            const int firstRecord = 0;
+            const int limit = 6;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtStart_LimitNegative()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = 0;
+            const int limit = -1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtStart_LimitZero()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = 0;
+            const int limit = 0;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAfterStart_LimitEqualsEnd()
+            //NoRecords_StartRecords_ContainsAllRecords()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 1;
+            const int limit = 2;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAfterStart_LimitBeforeEnd()
+            //_NoRecords_StartRecords_First2Records()
+        {
+            const int totalRecords = 6;
+            const int firstRecord = 2;
+            const int limit = 2;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAfterStart_LimitBeyondEnd()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = 3;
+            const int limit = 4;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 2, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAfterStart_LimitBeyondEnd_RefreshWithAdditionalBO()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = 3;
+            const int limit = 4;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
+            contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson
+                ("ZZZZZZZZZZZZZZZZZ");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            Assert.AreEqual(totalRecords + 1, contactPersonTestBOsPlusOne.Length);
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+            //---------------Test Result -----------------------
+            totalNoOfRecords++;
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords + 1, 2 + 1, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAfterStart_LimitNegative()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = 3;
+            const int limit = -1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+//            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 4, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAfterStart_LimitZero()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = 3;
+            const int limit = 0;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+//            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtEnd_LimitEqualsEnd()
+        {
+            const int totalRecords = 4;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+//            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+//            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtEnd_LimitBeyondEnd()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 3;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+//            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+//            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtEnd_LimitBeyondEnd_RefreshWithAdditionalBO()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 3;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
+            contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson
+                ("ZZZZZZZZZZZZZZZZZ");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, col.Count);
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            Assert.AreEqual(totalRecords + 1, contactPersonTestBOsPlusOne.Length);
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+            //---------------Test Result -----------------------
+            totalNoOfRecords++;
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords + 1, 2, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtEnd_LimitNegative()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = totalRecords - 1;
+            const int limit = -1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+//            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtEnd_LimitZero()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 0;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+//            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+//            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAfterEnd_LimitBeyondEnd()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 5;
+            const int limit = 2;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAfterEnd_LimitNegative()
+        {
+            const int totalRecords = 4;
+            const int firstRecord = 4;
+            const int limit = -1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAfterEnd_LimitZero()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 4;
+            const int limit = 0;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstNegative_ThrowsError()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = -1;
+            const int limit = 0;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            try
+            {
+                int totalNoOfRecords;
+                BusinessObjectCollection<ContactPersonTestBO> col =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                        (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+                col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+                //---------------Test Result -----------------------
+                Assert.Fail("IndexOutOfRangeException exception expected");
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                Assert.AreEqual("FirstRecordToLoad should not be negative.", ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region GetCollection With Limit NonGeneric
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_CriteriaObject_IncludesCriteriaMatchesWithinLimit()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
+            ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "hhh");
+            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(-3), "bbb");
+
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, now.AddHours(-1));
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            int totalNoOfRecords;
+            //---------------Assert Precondition ---------------
+
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria, orderCriteria, 0, 2, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp1, col[0]);
+            Assert.AreSame(cp2, col[1]);
+            Assert.IsFalse(col.Contains(cpLast));
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitEqualsEnd()
+            //NoRecords_StartRecords_ContainsAllRecords()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 0;
+            const int limit = totalRecords;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def,null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitBeforeEnd()
+            //_NoRecords_StartRecords_First2Records()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 0;
+            const int limit = 2;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def,null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitBeyondEnd()
+        {
+            const int totalRecords = 4;
+            const int firstRecord = 0;
+            const int limit = 6;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+           
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def,null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitNegative()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = 0;
+            const int limit = -1;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+           
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+
+            IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def,null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, totalRecords, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitZero()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = 0;
+            const int limit = 0;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def,null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitEqualsEnd()
+            //NoRecords_StartRecords_ContainsAllRecords()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 1;
+            const int limit = 2;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+                        OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+
+           IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def,null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitBeforeEnd()
+            //_NoRecords_StartRecords_First2Records()
+        {
+            const int totalRecords = 6;
+            const int firstRecord = 2;
+            const int limit = 2;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def,null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitBeyondEnd()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = 3;
+            const int limit = 4;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 2, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitBeyondEnd_RefreshWithAdditionalBO()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = 3;
+            const int limit = 4;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
+            contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson
+                ("ZZZZZZZZZZZZZZZZZ");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            Assert.AreEqual(totalRecords + 1, contactPersonTestBOsPlusOne.Length);
+            //---------------Execute Test ----------------------
+            col.Refresh();
+            //---------------Test Result -----------------------
+            totalNoOfRecords++;
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords + 1, 2 + 1, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitNegative()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = 3;
+            const int limit = -1;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 4, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitZero()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = 3;
+            const int limit = 0;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitEqualsEnd()
+        {
+            const int totalRecords = 4;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 1;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitBeyondEnd()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 3;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitBeyondEnd_RefreshWithAdditionalBO()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 3;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
+            contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson
+                ("ZZZZZZZZZZZZZZZZZ");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, col.Count);
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            Assert.AreEqual(totalRecords + 1, contactPersonTestBOsPlusOne.Length);
+            //---------------Execute Test ----------------------
+            col.Refresh();
+            //---------------Test Result -----------------------
+            totalNoOfRecords++;
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords + 1, 2, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitNegative()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = totalRecords - 1;
+            const int limit = -1;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitZero()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 0;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterEnd_LimitBeyondEnd()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 5;
+            const int limit = 2;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterEnd_LimitNegative()
+        {
+            const int totalRecords = 4;
+            const int firstRecord = 4;
+            const int limit = -1;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterEnd_LimitZero()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 4;
+            const int limit = 0;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+            IBusinessObjectCollection col =
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstNegative_ThrowsError()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = -1;
+            const int limit = 0;
+            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            try
+            {
+                int totalNoOfRecords;
+                OrderCriteria orderCriteria = new OrderCriteria();
+                orderCriteria.Add("Surname");
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(def, null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+
+                //---------------Test Result -----------------------
+                Assert.Fail("IndexOutOfRangeException exception expected");
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                Assert.AreEqual("FirstRecordToLoad should not be negative.", ex.Message);
+            }
+        }
+
+        #endregion //GetCollection NonGeneric LoadWithLimit
 
         /// <summary>
         /// Asserts that the results for the collection are as expected
@@ -1046,11 +2171,18 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         /// <param name="orderedPeople">An ordered array that will be used to validate the items of the collection</param>
         /// <param name="actualCol">The actual Collection</param>
         /// <param name="returnedTotalNoOfRecords">The returned total Number of records to check</param>
-        private static void AssertLimitedResultsCorrect(int expectedFirstRecord, int expectedLimit, int expectedTotal, int expectedCount, ContactPersonTestBO[] orderedPeople, BusinessObjectCollection<ContactPersonTestBO> actualCol, int returnedTotalNoOfRecords)
+        private static void AssertLimitedResultsCorrect
+            (int expectedFirstRecord, int expectedLimit, int expectedTotal, int expectedCount,
+             ContactPersonTestBO[] orderedPeople, IBusinessObjectCollection actualCol,
+             int returnedTotalNoOfRecords)
         {
-            Assert.AreEqual(expectedTotal, returnedTotalNoOfRecords, "The returned total number of availabe records is incorrect");
-            Assert.AreEqual(expectedFirstRecord, actualCol.SelectQuery.FirstRecordToLoad, "Collection query FirstRecordToLoad does not match expectation.");
-            Assert.AreEqual(expectedLimit, actualCol.SelectQuery.Limit, "Collection query limit does not match expectation.");
+            Assert.AreEqual
+                (expectedTotal, returnedTotalNoOfRecords, "The returned total number of availabe records is incorrect");
+            Assert.AreEqual
+                (expectedFirstRecord, actualCol.SelectQuery.FirstRecordToLoad,
+                 "Collection query FirstRecordToLoad does not match expectation.");
+            Assert.AreEqual
+                (expectedLimit, actualCol.SelectQuery.Limit, "Collection query limit does not match expectation.");
             Assert.AreEqual(expectedCount, actualCol.Count, "Collection size does not match expectation.");
             int index = expectedFirstRecord;
             foreach (ContactPersonTestBO bo in actualCol)
@@ -1069,11 +2201,11 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         private static ContactPersonTestBO[] CreateSavedContactPeople(int noOfPeople)
         {
             List<ContactPersonTestBO> createdBos = new List<ContactPersonTestBO>(noOfPeople);
-            while(createdBos.Count < noOfPeople)
+            while (createdBos.Count < noOfPeople)
             {
                 createdBos.Add(ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString()));
             }
-            createdBos.Sort((x,y) => StringComparer.InvariantCultureIgnoreCase.Compare(x.Surname, y.Surname));
+            createdBos.Sort((x, y) => StringComparer.InvariantCultureIgnoreCase.Compare(x.Surname, y.Surname));
             return createdBos.ToArray();
         }
 
@@ -1148,8 +2280,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             selectQuery.Limit = 3;
 
             //---------------Execute Test ----------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection<ContactPersonTestBO>(selectQuery);
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (selectQuery);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, col.Count);
@@ -1175,8 +2308,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             selectQuery.Limit = 10;
 
             //---------------Execute Test ----------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection<ContactPersonTestBO>(selectQuery);
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (selectQuery);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, col.Count);
@@ -1197,7 +2331,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         //            CreateSavedContactPerson();
         //        }
 
- 
 
         private static ContactPersonTestBO CreateSavedContactPerson(string surnameValue, int integerPropertyValue)
         {
@@ -1225,8 +2358,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             selectQuery.Limit = 2;
 
             //---------------Execute Test ----------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection<ContactPersonTestBO>(selectQuery);
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (selectQuery);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -1252,8 +2386,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             selectQuery.Limit = -1;
 
             //---------------Execute Test ----------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection<ContactPersonTestBO>(selectQuery);
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (selectQuery);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, col.Count);
@@ -1279,8 +2414,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             selectQuery.Limit = 0;
 
             //---------------Execute Test ----------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection<ContactPersonTestBO>(selectQuery);
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (selectQuery);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(0, col.Count);
@@ -1298,8 +2434,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             CreateContactPersonInDB();
             CreateContactPersonInDB_With_SSSSS_InSurname();
             CreateContactPersonInDB_With_SSSSS_InSurname();
-            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection<ContactPersonTestBO>("Surname like %SSS%", "Surname");
+            IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    ("Surname like %SSS%", "Surname");
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, col.Count);
             //---------------Execute Test ----------------------
@@ -1325,8 +2462,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             CreateContactPersonInDB();
             CreateContactPersonInDB_With_SSSSS_InSurname();
             CreateContactPersonInDB_With_SSSSS_InSurname();
-            BusinessObjectCollection<ContactPersonTestBO> col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection<ContactPersonTestBO>("Surname not like %SSS%", "Surname");
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    ("Surname not like %SSS%", "Surname");
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
@@ -1352,8 +2490,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             CreateContactPersonInDB();
             CreateContactPersonInDB_With_SSSSS_InSurname();
             CreateContactPersonInDB_With_SSSSS_InSurname();
-            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection(classDef, "Surname like %SSS%", "Surname");
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (classDef, "Surname like %SSS%", "Surname");
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, col.Count);
             //---------------Execute Test ----------------------
@@ -1379,8 +2517,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             CreateContactPersonInDB();
             CreateContactPersonInDB_With_SSSSS_InSurname();
             CreateContactPersonInDB_With_SSSSS_InSurname();
-            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection(classDef, "Surname not like %SSS%", "Surname");
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (classDef, "Surname not like %SSS%", "Surname");
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
@@ -1408,8 +2546,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (classDef, criteria);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -1485,8 +2623,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, DateTime.Now);
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (classDef, criteria);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(criteria, col.SelectQuery.Criteria);
@@ -1503,8 +2641,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             string stringCriteria = "DateOfBirth = " + now;
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, stringCriteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (classDef, stringCriteria);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(criteria.FieldValue, col.SelectQuery.Criteria.FieldValue);
@@ -1520,8 +2658,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const string stringCriteria = "Surname = searchSurname";
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, stringCriteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (classDef, stringCriteria);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(criteria, col.SelectQuery.Criteria);
@@ -1536,8 +2674,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const string stringCriteria = "Surname = searchSurname";
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, stringCriteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (classDef, stringCriteria);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(col.SelectQuery.Criteria);
@@ -1602,8 +2740,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, criteria);
 
 
             //---------------Test Result -----------------------
@@ -1626,8 +2764,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria,
-                                                                                                              orderCriteria);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (criteria, orderCriteria);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -1647,9 +2785,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria,
-                                                                                         orderCriteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, criteria, orderCriteria);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -1694,7 +2831,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO.CreateSavedContactPerson(surname);
             ContactPersonTestBO.CreateSavedContactPerson();
             //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            string criteria = string.Format("Organisation.OrganisationID = '{0}'", organisation.OrganisationID.Value.ToString("B"));
+            string criteria = string.Format
+                ("Organisation.OrganisationID = '{0}'", organisation.OrganisationID.Value.ToString("B"));
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col =
@@ -1745,7 +2883,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             Assert.Contains(engine, col);
-
         }
 
 
@@ -1780,6 +2917,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
             return;
         }
+
         private static Engine CreateEngineWithCarWithContact(out string surname, out string regno, out string engineNo)
         {
             regno = TestUtil.GetRandomString();
@@ -1837,8 +2975,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const string criteria = "FirstName = " + firstName;
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, criteria);
 
 
             //---------------Test Result -----------------------
@@ -1862,9 +3000,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria,
-                                                                                         "Surname");
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, criteria, "Surname");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -1889,8 +3026,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria,
-                                                                                                              "Surname");
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (criteria, "Surname");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -1909,9 +3046,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const string criteria = "FirstName = " + firstName;
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria,
-                                                                                         "Surname");
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, criteria, "Surname");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -1928,7 +3064,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "zzzz");
             ContactPersonTestBO.CreateSavedContactPerson(now, "aaaa");
             Criteria collectionCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            Criteria singleCritieria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals, cp1.ContactPersonID);
+            Criteria singleCritieria = new Criteria
+                ("ContactPersonID", Criteria.ComparisonOp.Equals, cp1.ContactPersonID);
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
@@ -1936,8 +3073,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO loadedCp =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(singleCritieria);
             BusinessObjectCollection<ContactPersonTestBO> col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(
-                    collectionCriteria, orderCriteria);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (collectionCriteria, orderCriteria);
 
             //---------------Test Result -----------------------
             Assert.AreSame(loadedCp, col[1]);
@@ -1952,7 +3089,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "zzzz");
             ContactPersonTestBO.CreateSavedContactPerson(now, "aaaa");
             Criteria collectionCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            Criteria singleCritieria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals, cp1.ContactPersonID);
+            Criteria singleCritieria = new Criteria
+                ("ContactPersonID", Criteria.ComparisonOp.Equals, cp1.ContactPersonID);
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
@@ -1960,10 +3098,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO loadedCp =
                 (ContactPersonTestBO)
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(cp1.ClassDef, singleCritieria);
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef,
-                                                                                         collectionCriteria,
-                                                                                         orderCriteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, collectionCriteria, orderCriteria);
 
             //---------------Test Result -----------------------
             Assert.AreSame(loadedCp, col[1]);
@@ -2038,8 +3174,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             SelectQuery query = CreateManualSelectQueryOrderedByDateOfBirth(now, cp1);
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, query);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, query);
 
 
             //---------------Test Result -----------------------
@@ -2058,8 +3194,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Engine car1engine1 = Engine.CreateSavedEngine(car1, "20");
             Engine car1engine2 = Engine.CreateSavedEngine(car1, "10");
             Engine car2engine1 = Engine.CreateSavedEngine(car2, "50");
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(car1engine1.ClassDef,
-                                                                           "Car.CarRegNo, EngineNo");
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria
+                (car1engine1.ClassDef, "Car.CarRegNo, EngineNo");
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<Engine> engines =
@@ -2077,7 +3213,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
-            new Engine(); new Car();
+            new Engine();
+            new Car();
             ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("zzzz");
             ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson("aaaa");
             Car car1 = Car.CreateSavedCar("2", contactPerson1);
@@ -2087,8 +3224,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Engine car2engine1 = Engine.CreateSavedEngine(car2, "50");
 
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(car1engine1.ClassDef,
-                                                                           "Car.Owner.Surname, EngineNo");
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria
+                (car1engine1.ClassDef, "Car.Owner.Surname, EngineNo");
             BusinessObjectCollection<Engine> engines =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(null, orderCriteria);
 
@@ -2100,13 +3237,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Tear Down -------------------------     
         }
 
-        
+
         [Test]
         public void Test_GetBusinessObjectCollectionClassDef_SortOrder_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             //DeleteEnginesAndCars();
-            new Engine(); new Car();
+            new Engine();
+            new Car();
             ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("zzzz");
             Car car1 = Car.CreateSavedCar("2", contactPerson1);
             Engine.CreateSavedEngine(car1, "20");
@@ -2131,13 +3269,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Engine car1engine1 = Engine.CreateSavedEngine(car1, "20");
             Engine car1engine2 = Engine.CreateSavedEngine(car1, "10");
             Engine car2engine1 = Engine.CreateSavedEngine(car2, "50");
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(car1engine1.ClassDef,
-                                                                           "Car.CarRegNo, EngineNo");
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria
+                (car1engine1.ClassDef, "Car.CarRegNo, EngineNo");
 
             //---------------Execute Test ----------------------
             IBusinessObjectCollection engines =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(car1engine1.ClassDef, null,
-                                                                                         orderCriteria);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                    (car1engine1.ClassDef, null, orderCriteria);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, engines.Count);
@@ -2161,8 +3299,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<Engine> engines =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(null,
-                                                                                                 "Car.CarRegNo, EngineNo");
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>
+                    (null, "Car.CarRegNo, EngineNo");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, engines.Count);
@@ -2176,7 +3314,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
-            new Engine(); new Car();
+            new Engine();
+            new Car();
             ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("zzzz");
             ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson("aaaa");
             Car car1 = Car.CreateSavedCar("2", contactPerson1);
@@ -2189,8 +3328,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 //            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(car1engine1.ClassDef,
 //                                                                           "Car.Owner.Surname, EngineNo");
             BusinessObjectCollection<Engine> engines =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(null,
-                                                                                                 "Car.Owner.Surname, EngineNo");
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>
+                    (null, "Car.Owner.Surname, EngineNo");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, engines.Count);
@@ -2215,8 +3354,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Execute Test ----------------------
             IBusinessObjectCollection engines =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(car1engine1.ClassDef, null,
-                                                                                         "Car.CarRegNo, EngineNo");
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                    (car1engine1.ClassDef, null, "Car.CarRegNo, EngineNo");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, engines.Count);
@@ -2236,8 +3375,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const string criteria = "FirstName = '" + firstName + "'";
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, criteria);
             col.Sort("Surname", true, true);
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -2259,8 +3398,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             string criteria = "DateOfBirth = '" + now + "'";
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, criteria);
             col.Sort("Surname", true, true);
 
             //---------------Test Result -----------------------
@@ -2281,8 +3420,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             string criteria = "DateOfBirth = '" + now + "'";
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetBusinessObjectCollection(cp1.ClassDef, criteria, "Surname");
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (cp1.ClassDef, criteria, "Surname");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -2383,8 +3522,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Execute Test ----------------------
             OrderCriteria orderCriteria = new OrderCriteria().Add("Surname");
             BusinessObjectCollection<ContactPersonTestBO> col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(null,
-                                                                                                              orderCriteria);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria);
             //---------------Test Result -----------------------
             Assert.AreSame(cp3, col[0]);
             Assert.AreSame(cp1, col[1]);
@@ -2401,11 +3540,11 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
             OrderCriteria orderCriteria = new OrderCriteria();
             //---------------Execute Test ----------------------
-            orderCriteria.Add(new OrderCriteria.Field("Surname", "Surname_field", null,
-                                                      OrderCriteria.SortDirection.Ascending));
+            orderCriteria.Add
+                (new OrderCriteria.Field("Surname", "Surname_field", null, OrderCriteria.SortDirection.Ascending));
             BusinessObjectCollection<ContactPersonTestBO> col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(null,
-                                                                                                              orderCriteria);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria);
             //---------------Test Result -----------------------
             Assert.AreSame(cp3, col[0]);
             Assert.AreSame(cp1, col[1]);
@@ -2413,7 +3552,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
 
- 
         [Test]
         public void Test_SetColSelectQuery_null()
         {
@@ -2446,13 +3584,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
-            {
+            AssertTypedAsBusinessObjectThrowsCorrectException
+                (delegate
+                 {
 #pragma warning disable 168
-                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                     BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
 #pragma warning restore 168
-                    GetBusinessObjectCollection<BusinessObject>(criteria);
-            });
+                         GetBusinessObjectCollection<BusinessObject>(criteria);
+                 });
         }
 
         [Test]
@@ -2464,13 +3603,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
-            {
+            AssertTypedAsBusinessObjectThrowsCorrectException
+                (delegate
+                 {
 #pragma warning disable 168
-                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                     BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
 #pragma warning restore 168
-                    GetBusinessObjectCollection<BusinessObject>(criteria, null);
-            });
+                         GetBusinessObjectCollection<BusinessObject>(criteria, null);
+                 });
         }
 
         [Test]
@@ -2480,13 +3620,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO.LoadDefaultClassDef();
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
-                                                              {
+            AssertTypedAsBusinessObjectThrowsCorrectException
+                (delegate
+                 {
 #pragma warning disable 168
-                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                     BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
 #pragma warning restore 168
-                    GetBusinessObjectCollection<BusinessObject>((SelectQuery) null);
-            });
+                         GetBusinessObjectCollection<BusinessObject>((SelectQuery) null);
+                 });
         }
 
         [Test]
@@ -2496,13 +3637,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO.LoadDefaultClassDef();
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
-                                                              {
+            AssertTypedAsBusinessObjectThrowsCorrectException
+                (delegate
+                 {
 #pragma warning disable 168
-                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                     BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
 #pragma warning restore 168
-                    GetBusinessObjectCollection<BusinessObject>("");
-            });
+                         GetBusinessObjectCollection<BusinessObject>("");
+                 });
         }
 
         [Test]
@@ -2512,13 +3654,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO.LoadDefaultClassDef();
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
-                                                              {
+            AssertTypedAsBusinessObjectThrowsCorrectException
+                (delegate
+                 {
 #pragma warning disable 168
-                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                     BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
 #pragma warning restore 168
-                    GetBusinessObjectCollection<BusinessObject>("", "");
-            });
+                         GetBusinessObjectCollection<BusinessObject>("", "");
+                 });
         }
 
         private static void AssertTypedAsBusinessObjectThrowsCorrectException(MethodInvoker callToInvoke)
@@ -2536,23 +3679,24 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Exception should have been thrown");
-            Assert.IsInstanceOfType(typeof(HabaneroDeveloperException), exception, "Should be a HabaneroDeveloperException.");
-            HabaneroDeveloperException developerException = (HabaneroDeveloperException)exception;
+            Assert.IsInstanceOfType
+                (typeof (HabaneroDeveloperException), exception, "Should be a HabaneroDeveloperException.");
+            HabaneroDeveloperException developerException = (HabaneroDeveloperException) exception;
             Assert.AreEqual(developerException.Message, ExceptionHelper._habaneroDeveloperExceptionUserMessage);
-            Assert.AreEqual(developerException.DeveloperMessage, ExceptionHelper._loaderGenericTypeMethodExceptionMessage);
+            Assert.AreEqual
+                (developerException.DeveloperMessage, ExceptionHelper._loaderGenericTypeMethodExceptionMessage);
         }
 
         [Test, Ignore("No Test Implemented")]
         public void Test_LoadWithCriteria_MultipleLevels()
         {
             //---------------Set up test pack-------------------
-            
+
             //---------------Execute Test ----------------------
 
             //---------------Test Result -----------------------
 
             //---------------Tear Down -------------------------
-
         }
     }
 }

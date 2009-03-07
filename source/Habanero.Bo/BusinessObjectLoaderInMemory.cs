@@ -18,10 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -161,6 +163,8 @@ namespace Habanero.BO
             return _dataStore.Find(classDef.ClassType, criteriaObject);
         }
 
+
+
         /// <summary>
         /// Reloads a businessObject from the datasource using the id of the object.
         /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
@@ -208,11 +212,6 @@ namespace Habanero.BO
         protected override void DoRefresh<T>(BusinessObjectCollection<T> collection) 
             //where T : class, IBusinessObject, new()
         {
-//            if (typeof(T) == typeof(BusinessObject))
-//            {
-//                Refresh(collection);
-//                return;
-//            }
             ISelectQuery selectQuery = collection.SelectQuery;
             Criteria criteria = selectQuery.Criteria;
             OrderCriteria orderCriteria = selectQuery.OrderCriteria;
@@ -224,10 +223,9 @@ namespace Habanero.BO
             collection.TotalCountAvailableForPaging = loadedBos.Count;
             ApplyLimitsToList(selectQuery, loadedBos);
             LoadBOCollection(collection, loadedBos);
-            collection.Sort(orderCriteria.Compare);
         }
 
-        private static void ApplyLimitsToList<T>(ISelectQuery selectQuery, IList<T> loadedBos)
+        private static void ApplyLimitsToList(ISelectQuery selectQuery, IList loadedBos)
         {
             int firstRecordToLoad = selectQuery.FirstRecordToLoad;
             if (firstRecordToLoad < 0)
@@ -270,17 +268,38 @@ namespace Habanero.BO
 
             IBusinessObjectCollection loadedBos = _dataStore.FindAll(classDef.ClassType, criteria);
             loadedBos.Sort(orderCriteria);
-            if (selectQuery.Limit >= 0)
-            {
-                while (loadedBos.Count > selectQuery.Limit)
-                {
-                    loadedBos.RemoveAt(selectQuery.Limit);
-                }
-            }
+
+            collection.TotalCountAvailableForPaging = loadedBos.Count;
+            ApplyLimitsToList(selectQuery, loadedBos);
             LoadBOCollection(collection, loadedBos);
         }
 
 
+        private static void ApplyLimitsToList(ISelectQuery selectQuery, IBusinessObjectCollection loadedBos)
+        {
+            int firstRecordToLoad = selectQuery.FirstRecordToLoad;
+            if (firstRecordToLoad < 0)
+            {
+                throw new IndexOutOfRangeException("FirstRecordToLoad should not be negative.");
+            }
+            if (firstRecordToLoad > loadedBos.Count)
+            {
+                loadedBos.Clear();
+                return;
+            }
+            if (firstRecordToLoad > 0)
+            {
+                for (int i = 0; i < firstRecordToLoad; i++)
+                {
+                    loadedBos.RemoveAt(0);
+                }
+            }
+            if (selectQuery.Limit < 0) return;
+            while (loadedBos.Count > selectQuery.Limit)
+            {
+                loadedBos.RemoveAt(selectQuery.Limit);
+            }
+        }
 
         #endregion //GetBusinessObjectCollection Members
 

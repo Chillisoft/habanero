@@ -933,6 +933,304 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(totalNumberOfRecords, cpCol.TotalCountAvailableForPaging);
         }
 
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAfterStart_LimitBeyondEnd_RefreshWithAdditionalBO()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = 3;
+            const int limit = 4;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
+            contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson
+                ("ZZZZZZZZZZZZZZZZZ");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            Assert.AreEqual(totalRecords + 1, contactPersonTestBOsPlusOne.Length);
+            //---------------Execute Test ----------------------
+            col.Refresh();
+            //---------------Test Result -----------------------
+            totalNoOfRecords++;
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords + 1, 2 + 1, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAfterStart_LimitNegative()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = 3;
+            const int limit = -1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 4, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAfterStart_LimitZero()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = 3;
+            const int limit = 0;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAtEnd_LimitEqualsEnd()
+        {
+            const int totalRecords = 4;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAtEnd_LimitBeyondEnd()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 3;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAtEnd_LimitBeyondEnd_RefreshWithAdditionalBO()
+        {
+            const int totalRecords = 5;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 3;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
+            contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            contactPersonTestBOsPlusOne[totalRecords] = ContactPersonTestBO.CreateSavedContactPerson
+                ("ZZZZZZZZZZZZZZZZZ");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, col.Count);
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            Assert.AreEqual(totalRecords + 1, contactPersonTestBOsPlusOne.Length);
+            //---------------Execute Test ----------------------
+            col.Refresh();
+            //---------------Test Result -----------------------
+            totalNoOfRecords++;
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords + 1, 2, contactPersonTestBOsPlusOne, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAtEnd_LimitNegative()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = totalRecords - 1;
+            const int limit = -1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 1, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAtEnd_LimitZero()
+        {
+            const int totalRecords = 7;
+            const int firstRecord = totalRecords - 1;
+            const int limit = 0;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAfterEnd_LimitBeyondEnd()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 5;
+            const int limit = 2;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAfterEnd_LimitNegative()
+        {
+            const int totalRecords = 4;
+            const int firstRecord = 4;
+            const int limit = -1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstAfterEnd_LimitZero()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 4;
+            const int limit = 0;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, 0, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_LoadWithLimit_FirstNegative_ThrowsError()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = -1;
+            const int limit = 0;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            try
+            {
+                int totalNoOfRecords;
+                col.LoadWithLimit("", "Surname", firstRecord, limit, out totalNoOfRecords);
+                //---------------Test Result -----------------------
+                Assert.Fail("IndexOutOfRangeException exception expected");
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                Assert.AreEqual("FirstRecordToLoad should not be negative.", ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Asserts that the results for the collection are as expected
+        /// </summary>
+        /// <param name="expectedFirstRecord">The expected index for the first record to load.</param>
+        /// <param name="expectedLimit">The expected limit for the Collection's Query.</param>
+        /// <param name="expectedTotal">The expected total number of Bo's available</param>
+        /// <param name="expectedCount">The expected count of the returned collection</param>
+        /// <param name="orderedPeople">An ordered array that will be used to validate the items of the collection</param>
+        /// <param name="actualCol">The actual Collection</param>
+        /// <param name="returnedTotalNoOfRecords">The returned total Number of records to check</param>
+        private static void AssertLimitedResultsCorrect
+            (int expectedFirstRecord, int expectedLimit, int expectedTotal, int expectedCount,
+             ContactPersonTestBO[] orderedPeople, IBusinessObjectCollection actualCol,
+             int returnedTotalNoOfRecords)
+        {
+            Assert.AreEqual
+                (expectedTotal, returnedTotalNoOfRecords, "The returned total number of availabe records is incorrect");
+            Assert.AreEqual
+                (expectedFirstRecord, actualCol.SelectQuery.FirstRecordToLoad,
+                 "Collection query FirstRecordToLoad does not match expectation.");
+            Assert.AreEqual
+                (expectedLimit, actualCol.SelectQuery.Limit, "Collection query limit does not match expectation.");
+            Assert.AreEqual(expectedCount, actualCol.Count, "Collection size does not match expectation.");
+            int index = expectedFirstRecord;
+            foreach (ContactPersonTestBO bo in actualCol)
+            {
+                Assert.AreSame(orderedPeople[index], bo, "Item in collection does not match expected item.");
+                index++;
+            }
+        }
+
+        /// <summary>
+        /// Creates the specifed number of saved Contact People with random Surnames and reurns an array of the 
+        /// created items sorted by their surname.
+        /// </summary>
+        /// <param name="noOfPeople">The number of saved contact perople to create</param>
+        /// <returns>Returns an array of the created items sorted by their surname.</returns>
+        private static ContactPersonTestBO[] CreateSavedContactPeople(int noOfPeople)
+        {
+            List<ContactPersonTestBO> createdBos = new List<ContactPersonTestBO>(noOfPeople);
+            while (createdBos.Count < noOfPeople)
+            {
+                createdBos.Add(ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString()));
+            }
+            createdBos.Sort((x, y) => StringComparer.InvariantCultureIgnoreCase.Compare(x.Surname, y.Surname));
+            return createdBos.ToArray();
+        }
         private static BusinessObjectCollection<ContactPersonTestBO> CreateCollectionWith_OneBO()
         {
             ContactPersonTestBO.LoadDefaultClassDef();

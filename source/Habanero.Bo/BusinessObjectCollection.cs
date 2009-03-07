@@ -1677,7 +1677,7 @@ namespace Habanero.BO
         /// This property is used to return the total number of records available for paging.
         /// It is set internally by the loader when the collection is being loaded.
         ///</summary>
-        internal int TotalCountAvailableForPaging { get; set; }
+        public int TotalCountAvailableForPaging { get; set; }
         #endregion
 
         /// <summary>

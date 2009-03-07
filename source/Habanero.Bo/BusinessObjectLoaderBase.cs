@@ -238,7 +238,30 @@ namespace Habanero.BO
             totalNoOfRecords = col.TotalCountAvailableForPaging;
             return col;
         }
-
+        /// <summary>
+        /// Loads a business Object collection of the type defined by the <paramref name="classDef"/> with the appropriate 
+        /// criteria and the start no of records and max number of records. For full details 
+        /// see <see cref="GetBusinessObjectCollection{T}(string,string,int,int,out int)<>"/>
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <param name="criteria"></param>
+        /// <param name="orderCriteria"></param>
+        /// <param name="firstRecordToLoad"></param>
+        /// <param name="numberOfRecordsToLoad"></param>
+        /// <param name="totalNoOfRecords"></param>
+        /// <returns></returns>
+        public IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef, Criteria criteria, 
+                OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
+        {
+            IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            col.SelectQuery.Criteria = criteria;
+            col.SelectQuery.OrderCriteria = orderCriteria;
+            col.SelectQuery.FirstRecordToLoad = firstRecordToLoad;
+            col.SelectQuery.Limit = numberOfRecordsToLoad;
+            Refresh(col);
+            totalNoOfRecords = col.TotalCountAvailableForPaging;
+            return col;
+        }
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, and limiting the number of objects loaded. 

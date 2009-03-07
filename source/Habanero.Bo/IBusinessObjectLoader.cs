@@ -262,7 +262,19 @@ namespace Habanero.BO
                 int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
             where T : class, IBusinessObject, new();
         //TODO 17 Feb 2009 Mark: Add the GetBusinessObjectCollection with Limit eith the ClassDef parameter 
-
+        /// <summary>
+        /// Loads the Business object collection with the appropriate items.
+        /// See <see cref="GetBusinessObjectCollection{T}(Criteria,OrderCriteria,int,int,out int)<>"/> for a full explanation.
+        /// </summary>
+        /// <param name="def"></param>
+        /// <param name="criteria"></param>
+        /// <param name="orderCriteria"></param>
+        /// <param name="firstRecordToLoad"></param>
+        /// <param name="numberOfRecordsToLoad"></param>
+        /// <param name="records"></param>
+        /// <returns></returns>
+        IBusinessObjectCollection GetBusinessObjectCollection(ClassDef def, Criteria criteria, 
+                OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int records);
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 

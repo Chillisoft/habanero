@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -135,12 +136,7 @@ namespace Habanero.BO
         public BusinessObjectCollection<T> FindAll<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
-            foreach (IBusinessObject bo in _objects.Values)
-            {
-                T boAsT = bo as T;
-                if (boAsT == null) continue;
-                if (criteria == null || criteria.IsMatch(boAsT)) col.Add(boAsT);
-            }
+            col.Add(FindAllInternal<T>(criteria));
             col.SelectQuery.Criteria = criteria;
             return col;
         }
@@ -162,7 +158,6 @@ namespace Habanero.BO
             }
             return col;
         }
-
         ///<summary>
         /// find all objects of type boType that match the criteria.
         ///</summary>
