@@ -218,21 +218,34 @@ namespace Habanero.Test.UI.Base.Mappers
                 Assert.AreSame(typeof(string), cmbox.SelectedValue.GetType());
             }
 
-
+            private static Dictionary<string, string> getLookupList()
+            {
+                Sample sample1 = new Sample();
+                sample1.Save();
+                Sample sample2 = new Sample();
+                sample2.Save();
+                Sample sample3 = new Sample();
+                sample3.Save();
+                return  new Dictionary<string, string>
+                                {
+                                    {"Test3", sample3.ID.GetAsValue().ToString()},
+                                    {"Test2", sample2.ID.GetAsValue().ToString()},
+                                    {"Test1", sample1.ID.GetAsValue().ToString()}
+                                };
+            }
             [Test]
             public void TestUsingPropWithBOLookupList()
             {
                 //---------------Set up test pack-------------------
-                DataStoreInMemory store = _store;
+                DataStoreInMemory store = new DataStoreInMemory();
                 BORegistry.DataAccessor = new DataAccessorInMemory(store);
                 IComboBox cmbox = GetControlFactory().CreateComboBox();
                 const string propName = "SampleLookup2ID";
                 LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
-//                Sample.BOLookupCollection = null;
-                Dictionary<string, string> collection = Sample.BOLookupCollection;
+                Dictionary<string, string> collection = getLookupList();
                 Sample sample = new Sample();
                 sample.Save();
-                string boId = Sample.BOLookupCollection[LOOKUP_ITEM_2];
+                string boId = collection[LOOKUP_ITEM_2];
                 Assert.AreEqual(4, store.Count);
                 IBusinessObject businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue<Sample>(boId);
                 Sample sampleToSelect = (Sample)businessObject;
@@ -240,7 +253,7 @@ namespace Habanero.Test.UI.Base.Mappers
                             
                 //--------------Assert Preconditions -------------
                 Assert.AreEqual(3, collection.Count);
-                Assert.AreEqual(4, _store.Count);
+                Assert.AreEqual(4, store.Count);
                 //---------------Execute Test ----------------------
                 mapper.LookupList = collection;
                 mapper.BusinessObject = sample;
@@ -418,26 +431,44 @@ namespace Habanero.Test.UI.Base.Mappers
 
                 //---------------Tear Down -------------------------
             }
+
             [Test]
             public override void TestChangeComboBoxDoesntUpdateBusinessObject()
             {
+                //For Windows the value should be changed.
                 //---------------Set up test pack-------------------
                 IComboBox cmbox = GetControlFactory().CreateComboBox();
                 const string propName = "SampleLookupID";
                 LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
                 Sample s = new Sample();
-                mapper.LookupList = Sample.LookupCollection;
+                Dictionary<string, string> collection = mapper.LookupList = GetLookupList();
                 Guid guidResult;
-                StringUtilities.GuidTryParse(Sample.LookupCollection[LOOKUP_ITEM_1], out guidResult);
+                StringUtilities.GuidTryParse(collection[LOOKUP_ITEM_1], out guidResult);
                 s.SampleLookupID = guidResult;
                 mapper.BusinessObject = s;
                 //---------------Execute Test ----------------------
                 cmbox.SelectedItem = LOOKUP_ITEM_2;
 
                 //---------------Test Result -----------------------
-                Assert.AreEqual(Sample.LookupCollection[LOOKUP_ITEM_1], s.SampleLookupID.ToString());
-
+                Assert.AreEqual(collection[LOOKUP_ITEM_2], s.SampleLookupID.ToString(), "For Windows the value should be changed");
             }
+
+            private static Dictionary<string, string> GetLookupList()
+            {
+                Sample sample1 = new Sample();
+                sample1.Save();
+                Sample sample2 = new Sample();
+                sample2.Save();
+                Sample sample3 = new Sample();
+                sample3.Save();
+                return new Dictionary<string, string>
+                        {
+                            {"Test3", sample3.ID.GetAsValue().ToString()},
+                            {"Test2", sample2.ID.GetAsValue().ToString()},
+                            {"Test1", sample1.ID.GetAsValue().ToString()}
+                        };
+            }
+
             [Test]
             public void TestChangeComboBoxUpdatesBusinessObject()
             {
