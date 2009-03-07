@@ -26,6 +26,10 @@ namespace Habanero.Base
     /// <summary>
     /// Models a collection of business objects.  This interface has been provided to
     /// circumvent the strong typing of BusinessObjectCollection.
+    /// This interface is used when you want the full capabilities of a business object collection 
+    /// as part of your domain model or for linking to user interfaces etc.
+    /// If you simply require a list of Business Objects with limited intelligence then check out
+    /// <see cref="IBusinessObjectList"/>
     /// </summary>
 	public interface IBusinessObjectCollection : ICollection //IList<BusinessObject>
 	{

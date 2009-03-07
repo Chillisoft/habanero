@@ -72,11 +72,19 @@ namespace Habanero.UI.Base
 //        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 //        IBusinessObject SelectedBusinessObject { get; set; }
 
+//        /// <summary>
+//        /// Gets a List of currently selected business objects
+//        /// </summary>
+//        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+//        IBusinessObjectList SelectedBusinessObjects { get; }
+
+
         /// <summary>
         /// Gets a List of currently selected business objects
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         IList<BusinessObject> SelectedBusinessObjects { get; }
+
 //
 //        /// <summary>
 //        /// Occurs when a business object is selected

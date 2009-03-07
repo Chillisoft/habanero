@@ -44,7 +44,8 @@ namespace Habanero.UI.Win
         /// </summary>
         IControlCollection IControlHabanero.Controls
         {
-            get { return new ControlCollectionWin(base.Controls); }
+            get { return new ControlCollectionWin(base.Controls);  }
+
         }
         
         /// <summary>

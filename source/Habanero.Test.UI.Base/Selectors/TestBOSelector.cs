@@ -53,6 +53,11 @@ namespace Habanero.Test.UI.Base
         {
             return 1;
         }
+
+        protected virtual int NumberOFTrailingBlankRows()
+        {
+            return 0;
+        }
         protected IBOColSelectorControl GetSelectorWith_4_Rows(out IBusinessObjectCollection col)
         {
             col = GetCollectionWith_4_Objects();
@@ -97,10 +102,11 @@ namespace Habanero.Test.UI.Base
             return index + NumberOfLeadingBlankRows();
         }
 
-        protected int ActualNumberOfRows(int noOfBOs)
+        protected virtual int ActualNumberOfRows(int noOfBOs)
         {
-            return noOfBOs + NumberOfLeadingBlankRows();
+            return noOfBOs + NumberOfLeadingBlankRows() + NumberOFTrailingBlankRows();
         }
+
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
@@ -120,7 +126,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
             Assert.AreSame(collection, colSelector.BusinessObjectCollection);
-            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "By default should always put 1 item in blank");
+            Assert.AreEqual(ActualNumberOfRows(0), colSelector.NoOfItems, "By default should always put 1 item in blank");
         }
 
 
@@ -137,7 +143,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
             Assert.AreSame(collection, colSelector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
         }
 
         [Test]
@@ -150,7 +156,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
             Assert.AreSame(collection, colSelector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
             IBusinessObject businessObjectAtRow = colSelector.GetBusinessObjectAtRow(ActualIndex(0));
             //---------------Test Result -----------------------
@@ -168,7 +174,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
             Assert.AreSame(collection, colSelector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
             IBusinessObject businessObjectAtRow = colSelector.GetBusinessObjectAtRow(ActualIndex(0));
             //---------------Test Result -----------------------
@@ -184,7 +190,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
             Assert.AreSame(collection, colSelector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
             IBusinessObject businessObjectAtRow = colSelector.GetBusinessObjectAtRow(-1);
             //---------------Test Result -----------------------
@@ -201,7 +207,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
             Assert.AreSame(collection, colSelector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
             IBusinessObject businessObjectAtRow = colSelector.GetBusinessObjectAtRow(ActualIndex(1));
             //---------------Test Result -----------------------
@@ -219,7 +225,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
             Assert.AreSame(collection, colSelector.BusinessObjectCollection);
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
             IBusinessObject newBO = CreateNewBO();
             collection.Add(newBO);
@@ -238,7 +244,7 @@ namespace Habanero.Test.UI.Base
             IBusinessObject newMyBO = collection[1];
             colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
             Assert.AreSame(bo, colSelector.GetBusinessObjectAtRow(ActualIndex(0)));
             Assert.AreSame(newMyBO, colSelector.GetBusinessObjectAtRow(ActualIndex(1)));
             //---------------Execute Test ----------------------
@@ -259,7 +265,7 @@ namespace Habanero.Test.UI.Base
             IBusinessObject newMyBO = collection[1];
             colSelector.BusinessObjectCollection = collection;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
             Assert.AreSame(bo, colSelector.GetBusinessObjectAtRow(ActualIndex(0)));
             Assert.AreSame(newMyBO, colSelector.GetBusinessObjectAtRow(ActualIndex(1)));
             //---------------Execute Test ----------------------
@@ -279,11 +285,11 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             colSelector.BusinessObjectCollection = GetCollectionWithNoItems();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(0), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
             collection.Add(CreateNewBO());
             //---------------Test Result -----------------------
-            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(0), colSelector.NoOfItems, "The blank item and one other");
         }
 
         [Test]
@@ -314,7 +320,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             colSelector.SelectedBusinessObject = null;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
             //---------------Execute Test ----------------------
             IBusinessObject selectedBusinessObject = colSelector.SelectedBusinessObject;
             //---------------Test Result -----------------------
@@ -331,7 +337,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             SetSelectedIndex(colSelector, ActualIndex(0));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and one other");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and one other");
             Assert.AreEqual(ActualIndex(0), SelectedIndex(colSelector));
             //---------------Execute Test ----------------------
             IBusinessObject selectedBusinessObject = colSelector.SelectedBusinessObject;
@@ -349,7 +355,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and others");
             Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
             //---------------Execute Test ----------------------
             IBusinessObject selectedBusinessObject = colSelector.SelectedBusinessObject;
@@ -367,7 +373,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and others");
 //            Assert.AreEqual(ActualIndex(1), SelectedIndex(selector));
             Assert.AreSame(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
@@ -388,7 +394,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and others");
             Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
             Assert.AreEqual(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
@@ -409,7 +415,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             SetSelectedIndex(colSelector, ActualIndex(1));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item and others");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item and others");
             Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
             Assert.AreEqual(myBO2, colSelector.SelectedBusinessObject);
             //---------------Execute Test ----------------------
@@ -433,7 +439,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
-            Assert.AreEqual(collection.Count + NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item");
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item");
             Assert.AreSame(myBO, colSelector.SelectedBusinessObject);
             Assert.AreEqual(ActualIndex(0), SelectedIndex(colSelector));
         }
@@ -451,7 +457,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
-            Assert.AreEqual(NumberOfLeadingBlankRows(), colSelector.NoOfItems, "The blank item");
+            Assert.AreEqual(ActualNumberOfRows(0), colSelector.NoOfItems, "The blank item");
             Assert.AreSame(null, colSelector.SelectedBusinessObject);
             Assert.AreEqual(-1, SelectedIndex(colSelector));
         }

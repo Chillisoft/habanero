@@ -344,6 +344,8 @@ namespace Habanero.UI.Base
         private Guid GetRowObjectIDValue(IDataGridViewRow row)
         {
             object idValue = row.Cells[IDColumnName].Value;
+            if (idValue == null) return Guid.Empty;
+
             Guid result;
             StringUtilities.GuidTryParse(idValue.ToString(), out result);
             return result;

@@ -117,6 +117,7 @@
     <Compile Include="IBusinessObject.cs" />
     <Compile Include="IBusinessObjectCollection.cs" />
     <Compile Include="IBusinessObjectDeletor.cs" />
+    <Compile Include="IBusinessObjectList.cs" />
     <Compile Include="IClassDef.cs" />
     <Compile Include="IBusinessObjectUpdateLog.cs" />
     <Compile Include="IConcurrencyControl.cs" />

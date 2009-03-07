@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
 
@@ -50,6 +51,8 @@ namespace Habanero.UI.Win
         ///<param name="controlFactory">The <see cref="IControlFactory"/> to use to construct the control.</param>
         public EditableGridControlWin(IControlFactory controlFactory)
         {
+            if (controlFactory == null) throw new HabaneroArgumentException("controlFactory",
+                    "Cannot create an editable grid control if the control factory is null");
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this, controlFactory);
             _grid = _controlFactory.CreateEditableGrid();

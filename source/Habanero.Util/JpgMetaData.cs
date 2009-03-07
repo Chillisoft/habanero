@@ -55,18 +55,57 @@ namespace Habanero.Util
         /// </summary>
         public struct Metadata
         {
+            /// <summary>
+            /// EquipmentMake
+            /// </summary>
             public MetadataDetail EquipmentMake;
+            /// <summary>
+            /// CameraModel
+            /// </summary>
             public MetadataDetail CameraModel;
+            /// <summary>
+            /// ExposureTime
+            /// </summary>
             public MetadataDetail ExposureTime;
+            /// <summary>
+            /// Fstop
+            /// </summary>
             public MetadataDetail Fstop;
+            /// <summary>
+            /// DatePictureTaken
+            /// </summary>
             public MetadataDetail DatePictureTaken;
+            /// <summary>
+            /// ShutterSpeed
+            /// </summary>
             public MetadataDetail ShutterSpeed;
+            /// <summary>
+            /// ExposureCompensation
+            /// </summary>
             public MetadataDetail ExposureCompensation;
+            /// <summary>
+            /// MeteringMode
+            /// </summary>
             public MetadataDetail MeteringMode;
+            /// <summary>
+            /// Flash
+            /// </summary>
             public MetadataDetail Flash;
+            /// <summary>
+            /// XResolution
+            /// </summary>
             public MetadataDetail XResolution;
+            /// <summary>
+            /// YResolution
+            /// </summary>
             public MetadataDetail YResolution;
+            /// <summary>
+            /// ImageWidth
+            /// </summary>
             public MetadataDetail ImageWidth;
+            /// <summary>
+            /// ImageHeight
+            /// </summary>
             public MetadataDetail ImageHeight;
         }
 

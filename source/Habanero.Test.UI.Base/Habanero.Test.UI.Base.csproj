@@ -90,6 +90,7 @@
     <Compile Include="Selectors\TestCollapsiblePanelSelector.cs">
     </Compile>
     <Compile Include="Selectors\TestComboBoxSelector.cs" />
+    <Compile Include="Selectors\TestBOSelectorEditableGridControlWin.cs" />
     <Compile Include="Selectors\TestEditableGridSelectorVWG.cs" />
     <Compile Include="Selectors\TestGridSelector.cs" />
     <Compile Include="Selectors\TestListBoxSelector.cs" />
