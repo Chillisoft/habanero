@@ -38,7 +38,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlLookupListLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        protected XmlLookupListLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
         }
@@ -46,7 +46,7 @@ namespace Habanero.BO.Loaders
         /// <summary>
         /// Constructor to initialise a new loader
         /// </summary>
-        public XmlLookupListLoader()
+        protected XmlLookupListLoader()
         {
         }
 

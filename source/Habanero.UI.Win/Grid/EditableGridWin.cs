@@ -24,7 +24,6 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
 using DataGridViewSelectionMode=System.Windows.Forms.DataGridViewSelectionMode;
 using MessageBoxButtons=System.Windows.Forms.MessageBoxButtons;
 using MessageBoxIcon=System.Windows.Forms.MessageBoxIcon;
@@ -42,8 +41,6 @@ namespace Habanero.UI.Win
     /// </summary>
     public class EditableGridWin : GridBaseWin, IEditableGrid
     {
-        private bool _confirmDeletion;
-        private CheckUserConfirmsDeletion _checkUserConfirmsDeletionDelegate;
         private DeleteKeyBehaviours _deleteKeyBehaviour;
         private bool _comboBoxClickOnce;
 
@@ -52,7 +49,7 @@ namespace Habanero.UI.Win
         ///</summary>
         public EditableGridWin()
         {
-            _confirmDeletion = false;
+            ConfirmDeletion = false;
             AllowUserToAddRows = true;
             _deleteKeyBehaviour = DeleteKeyBehaviours.DeleteRow;
 //            SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
@@ -80,9 +77,20 @@ namespace Habanero.UI.Win
         /// </summary>
         public void RejectChanges()
         {
-            if (this.DataSource is DataView)
+            try
             {
-                ((DataView)this.DataSource).Table.RejectChanges();
+                if (this.BusinessObjectCollection != null)
+                {
+                    this.BusinessObjectCollection.RestoreAll();
+                }
+                else if (this.DataSource is DataView)
+                {
+                    ((DataView)this.DataSource).Table.RejectChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
@@ -91,34 +99,33 @@ namespace Habanero.UI.Win
         /// </summary>
         public void SaveChanges()
         {
-            if (this.BusinessObjectCollection != null)
+            try
             {
-                this.BusinessObjectCollection.SaveAll();
-            }else if (this.DataSource is DataView)
+                if (this.BusinessObjectCollection != null)
+                {
+                    this.BusinessObjectCollection.SaveAll();
+                } else            if (this.DataSource is DataView)
+                {
+                    ((DataView) this.DataSource).Table.AcceptChanges();
+                }
+            }
+            catch (Exception ex)
             {
-                ((DataView)this.DataSource).Table.AcceptChanges();
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
+        /// /// TODO: shouldn't this be moved up to GridBase?
         /// <summary>
         /// Gets or sets the boolean value that determines whether to confirm
         /// deletion with the user when they have chosen to delete a row
         /// </summary>
-        /// /// TODO: shouldn't this be moved up to GridBase?
-        public bool ConfirmDeletion
-        {
-            get { return _confirmDeletion; }
-            set { _confirmDeletion = value; }
-        }
+        public bool ConfirmDeletion { get; set; }
 
         /// <summary>
         /// Gets or sets the delegate that checks whether the user wants to delete selected rows
         /// </summary>
-        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate
-        {
-            get { return _checkUserConfirmsDeletionDelegate; }
-            set { _checkUserConfirmsDeletionDelegate = value; }
-        }
+        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate { get; set; }
 
         /// <summary>
         /// Indicates what action should be taken when a selection of
@@ -179,7 +186,6 @@ namespace Habanero.UI.Win
         /// </summary>
         public void DeleteKeyHandler()
         {
-
             if (CurrentCell != null && !CurrentCell.IsInEditMode && SelectedRows.Count == 0) //&& CurrentRow != null
             {
                 if (_deleteKeyBehaviour == DeleteKeyBehaviours.DeleteRow && AllowUserToDeleteRows)
@@ -230,11 +236,10 @@ namespace Habanero.UI.Win
         /// <returns>Returns true if the user does want to delete</returns>
         public static bool CheckUserWantsToDelete()
         {
-            return MessageBox.Show(
-                "Are you sure you want to delete the selected row(s)?",
-                "Delete?",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Exclamation) == System.Windows.Forms.DialogResult.Yes;
+            return
+                MessageBox.Show
+                    ("Are you sure you want to delete the selected row(s)?", "Delete?", MessageBoxButtons.YesNo,
+                     MessageBoxIcon.Exclamation) == System.Windows.Forms.DialogResult.Yes;
         }
 
         /// <summary>
@@ -246,11 +251,12 @@ namespace Habanero.UI.Win
             bool setToEditMode = CheckIfComboBoxShouldSetToEditMode(e.ColumnIndex, e.RowIndex);
             if (setToEditMode)
             {
-                DataGridViewColumn dataGridViewColumn = ((DataGridViewColumnWin) Columns[e.ColumnIndex]).DataGridViewColumn;
+                DataGridViewColumn dataGridViewColumn =
+                    ((DataGridViewColumnWin) Columns[e.ColumnIndex]).DataGridViewColumn;
                 ControlsHelper.SafeGui(this, () => BeginEdit(true));
                 if (EditingControl is DataGridViewComboBoxEditingControl)
                 {
-                    ((DataGridViewComboBoxEditingControl)EditingControl).DroppedDown = true;
+                    ((DataGridViewComboBoxEditingControl) EditingControl).DroppedDown = true;
                 }
             }
         }
@@ -270,7 +276,8 @@ namespace Habanero.UI.Win
         {
             if (columnIndex > -1 && rowIndex > -1 && !CurrentCell.IsInEditMode && this.ComboBoxClickOnce)
             {
-                DataGridViewColumn dataGridViewColumn = ((DataGridViewColumnWin) Columns[columnIndex]).DataGridViewColumn;
+                DataGridViewColumn dataGridViewColumn =
+                    ((DataGridViewColumnWin) Columns[columnIndex]).DataGridViewColumn;
                 if (dataGridViewColumn is DataGridViewComboBoxColumn)
                 {
                     return true;

@@ -36,10 +36,22 @@ namespace Habanero.BO.ClassDefinition
     public class KeyDef : IKeyDef
     {
         private readonly Dictionary<string, IPropDef> _propDefs;
+        /// <summary>
+        /// Ignore the Alternate Key constraint if one or more of the properties has a null value.
+        /// </summary>
         protected bool _ignoreIfNull;
+        /// <summary>
+        /// The Name of the Alternate Key.
+        /// </summary>
         protected string _keyName = "";
         protected string _keyNameBuilt = "";
+        /// <summary>
+        /// The Key Name to dispay to the user
+        /// </summary>
         protected string _keyNameForDisplay = "";
+        /// <summary>
+        /// The message to dispaly to the user in the case of a failure.
+        /// </summary>
         protected string _message;
         protected bool _buildKeyName = true; //this is a flag used to 
                 //indicate whether the the keyname should be built up 
@@ -52,8 +64,7 @@ namespace Habanero.BO.ClassDefinition
 		/// set as a concatenation of the PropDef.PropertyNames separated
 		/// by an underscore.
 		/// </summary>
-		public KeyDef()
-			: this("")
+		public KeyDef(): this("")
 		{
 		}
 

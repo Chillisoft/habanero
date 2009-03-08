@@ -170,12 +170,15 @@ namespace Habanero.BO.Loaders
         {
             def.AddPropRule( this.LoadRule(def.PropertyTypeName, propertyRuleElement));
         }
-
+  
 		protected override object Create()
 		{
 			return _propRule;
 		}
-
+        /// <summary>
+        /// Creates the Prop Rule for.
+        /// </summary>
+        /// <returns></returns>
     	protected PropRuleBase CreatePropRule() {
             if (!string.IsNullOrEmpty(_class) && !string.IsNullOrEmpty(_assembly)) 
 			{

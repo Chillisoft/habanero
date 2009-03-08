@@ -334,12 +334,18 @@ namespace Habanero.Base
         ///</summary>
         int TotalCountAvailableForPaging { get; set; }
 
+        
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
         /// </summary>
+        [Obsolete("This has been replaced with CancelEdits : 04 Mar 2009")]
         void RestoreAll();
-
+        /// <summary>
+        /// Restores all the business objects to their last persisted state, that
+        /// is their state and values at the time they were last saved to the database
+        /// </summary>
+        void CancelEdits();
         /// <summary>
         /// Loads business objects that match the search criteria provided
         /// and an extra criteria literal, 

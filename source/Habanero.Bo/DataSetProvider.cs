@@ -83,13 +83,11 @@ namespace Habanero.BO
             DataColumn column = _table.Columns.Add();
             column.Caption = _idColumnName;
             column.ColumnName = _idColumnName;
-            //_table.PrimaryKey = new DataColumn[]{column}; //TODO  07 Feb 2009: Investigate this in combination with the find code below (see todo note there)
             IClassDef classDef = _collection.ClassDef;
             foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
                 AddColumn(uiProperty, (ClassDef) classDef);
             }
-//            this.DeregisterForEvents();
             foreach (BusinessObject businessObjectBase in _collection)
             {
                 object[] values = GetValues(businessObjectBase);
@@ -114,7 +112,7 @@ namespace Habanero.BO
             column.DataType = columnPropertyType;
             column.ColumnName = uiProperty.PropertyName;
             column.Caption = uiProperty.GetHeading(classDef);
-            column.ReadOnly = !uiProperty.Editable;
+//            column.ReadOnly = !uiProperty.Editable;
             column.ExtendedProperties.Add("LookupList", classDef.GetLookupList(uiProperty.PropertyName));
             column.ExtendedProperties.Add("Width", uiProperty.Width);
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
@@ -136,6 +134,10 @@ namespace Habanero.BO
             {
                 DeregisterForTableEvents();
                 object[] values = GetValues(businessObject);
+                foreach (DataColumn column in _table.Columns)
+                {
+                    column.ReadOnly = false;
+                }
                 _table.Rows[rowNum].ItemArray = values;
             }
             finally

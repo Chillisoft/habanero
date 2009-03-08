@@ -236,7 +236,7 @@ namespace Habanero.UI.Base
                         }
 
                         comboBoxCol.DataSource = table;
-                        //Bug: This null check has been placed because of a Gizmox bug 
+                        //Bug_: This null check has been placed because of a Gizmox bug 
                         //  We posted this at: http://www.visualwebgui.com/Forums/tabid/364/forumid/29/threadid/12420/scope/posts/Default.aspx
                         //  It is causing a StackOverflowException on ValueMember because the DataSource is still null
                         if (comboBoxCol.DataSource != null)
@@ -267,6 +267,7 @@ namespace Habanero.UI.Base
                 col.Width = gridColDef.Width;
                 col.Visible = gridColDef.Width != 0;
                 col.SortMode = DataGridViewColumnSortMode.Automatic;
+                col.ReadOnly = !gridColDef.Editable;
                 //IPropDef propDef = GetPropDef(classDef, gridColDef);
                 //if (propDef != null) col.ValueType = propDef.PropertyType;
                 Type propertyType = classDef.GetPropertyType(gridColDef.PropertyName);

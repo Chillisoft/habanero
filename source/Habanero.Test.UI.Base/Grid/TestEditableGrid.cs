@@ -142,67 +142,67 @@ namespace Habanero.Test.UI.Base
             //TODO: Should we test selection mode
             //---------------Tear Down -------------------------
         }
+//        [Test]
+//        public void TestRejectChanges()
+//        {
+//            //---------------Set up test pack-------------------
+//            MyBO.LoadDefaultClassDef();
+//            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+//            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+//            AddControlToForm(editableGrid);
+//            SetupGridColumnsForMyBo(editableGrid);
+//            editableGrid.BusinessObjectCollection = col;
+//
+//            //---------------Assert Precondition----------------
+//            Assert.AreEqual(5,editableGrid.Rows.Count);
+//            Assert.AreEqual("b", editableGrid.Rows[0].Cells[1].Value);
+//            //---------------Execute Test ----------------------
+//            editableGrid.Rows[0].Cells[1].Value = "test";
+//            //---------------Assert Precondition----------------
+//            Assert.AreEqual("test", editableGrid.Rows[0].Cells[1].Value);
+//            //---------------Execute Test ----------------------
+//            editableGrid.RejectChanges();
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual("b", editableGrid.Rows[0].Cells[1].Value);
+//        }
+
+//        [Ignore("Brett 07 Mar 2009: This is no longer working since the save is now saving the underlying collection and not doing an apply edits from the grid ")] //TODO Brett 07 Mar 2009:
         [Test]
-        public void TestRejectChanges()
-        {
-            //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
-            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
-            AddControlToForm(editableGrid);
-            SetupGridColumnsForMyBo(editableGrid);
-            editableGrid.BusinessObjectCollection = col;
-
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(5,editableGrid.Rows.Count);
-            Assert.AreEqual("b", editableGrid.Rows[0].Cells[1].Value);
-            //---------------Execute Test ----------------------
-            editableGrid.Rows[0].Cells[1].Value = "test";
-            //---------------Assert Precondition----------------
-            Assert.AreEqual("test", editableGrid.Rows[0].Cells[1].Value);
-            //---------------Execute Test ----------------------
-            editableGrid.RejectChanges();
-            //---------------Test Result -----------------------
-            Assert.AreEqual("b", editableGrid.Rows[0].Cells[1].Value);
-        }
-
-        [Ignore("Brett 07 Mar 2009: This is no longer working since the save is now saving the underlying collection and not doing an apply edits from the grid ")] //TODO Brett 07 Mar 2009:
-        [Test]
-        public void TestSaveChanges()
-        {
-            //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
-            //---------------Clean from previous tests----------
-            const string originalText = "testsavechanges";
-            const string newText = "testsavechanges_edited";
-
-            MyBO bo = new MyBO {TestProp = originalText};
-            bo.Save();
-
-            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO> {bo};
-
-            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
-            AddControlToForm(editableGrid);
-            SetupGridColumnsForMyBo(editableGrid);
-            editableGrid.BusinessObjectCollection  = col;
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(2, editableGrid.Rows.Count);
-            Assert.AreEqual(originalText, editableGrid.Rows[0].Cells[1].Value);
-            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
-            MyBO nullBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
-            Assert.IsNull(nullBO);
-            //---------------Execute Test ----------------------
-            editableGrid.Rows[0].Cells[1].Value = newText;
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(newText, editableGrid.Rows[0].Cells[1].Value);
-            //---------------Execute Test ----------------------
-            editableGrid.SaveChanges();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(newText, editableGrid.Rows[0].Cells[1].Value);
-            criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
-            MyBO savedBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
-            Assert.IsNotNull(savedBO);
-        }
+//        public void TestSaveChanges()
+//        {
+//            //---------------Set up test pack-------------------
+//            MyBO.LoadDefaultClassDef();
+//            //---------------Clean from previous tests----------
+//            const string originalText = "testsavechanges";
+//            const string newText = "testsavechanges_edited";
+//
+//            MyBO bo = new MyBO {TestProp = originalText};
+//            bo.Save();
+//
+//            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO> {bo};
+//
+//            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+//            AddControlToForm(editableGrid);
+//            SetupGridColumnsForMyBo(editableGrid);
+//            editableGrid.BusinessObjectCollection  = col;
+//            //---------------Assert Precondition----------------
+//            Assert.AreEqual(2, editableGrid.Rows.Count);
+//            Assert.AreEqual(originalText, editableGrid.Rows[0].Cells[1].Value);
+//            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
+//            MyBO nullBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
+//            Assert.IsNull(nullBO);
+//            //---------------Execute Test ----------------------
+//            editableGrid.Rows[0].Cells[1].Value = newText;
+//            //---------------Assert Precondition----------------
+//            Assert.AreEqual(newText, editableGrid.Rows[0].Cells[1].Value);
+//            //---------------Execute Test ----------------------
+//            editableGrid.SaveChanges();
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual(newText, editableGrid.Rows[0].Cells[1].Value);
+//            criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
+//            MyBO savedBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
+//            Assert.IsNotNull(savedBO);
+//        }
 
         [Test]
         public void TestSetCollectionOnGrid_NoOfRows()

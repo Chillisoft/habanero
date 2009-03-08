@@ -197,28 +197,28 @@ namespace Habanero.Test.BO
             Assert.AreEqual(originalCount, _collection.Count);
         }
         [Test]
-        public void TestRejectChangesUnDoesDeletedRow()
-        {
-            //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            SetupTestData();
-            _collection.SaveAll();
-            int originalCount = _collection.Count;
-//            itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
-            DataRow row = itsTable.Rows[1];
-            row.Delete();
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
-            Assert.AreEqual(originalCount, itsTable.Rows.Count);
-            Assert.AreEqual(DataRowState.Deleted,  row.RowState);
-            Assert.AreEqual(originalCount -1, _collection.Count);
-            //---------------Execute Test ----------------------
-            itsTable.RejectChanges();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(originalCount, itsTable.Rows.Count);
-            Assert.AreEqual(0, _collection.MarkedForDeleteBusinessObjects.Count);
-            Assert.AreEqual(originalCount, _collection.Count);
-        }
+//        public void TestRejectChangesUnDoesDeletedRow()
+//        {
+//            //---------------Set up test pack-------------------
+//            BusinessObjectManager.Instance.ClearLoadedObjects();
+//            SetupTestData();
+//            _collection.SaveAll();
+//            int originalCount = _collection.Count;
+////            itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
+//            DataRow row = itsTable.Rows[1];
+//            row.Delete();
+//            //---------------Assert Precondition----------------
+//            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+//            Assert.AreEqual(originalCount, itsTable.Rows.Count);
+//            Assert.AreEqual(DataRowState.Deleted,  row.RowState);
+//            Assert.AreEqual(originalCount -1, _collection.Count);
+//            //---------------Execute Test ----------------------
+//            itsTable.RejectChanges();
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual(originalCount, itsTable.Rows.Count);
+//            Assert.AreEqual(0, _collection.MarkedForDeleteBusinessObjects.Count);
+//            Assert.AreEqual(originalCount, _collection.Count);
+//        }
 
         [Test]
         public void TestAcceptChangesSavesNewBusinessObjects()
@@ -310,24 +310,24 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, itsTable.Rows.Count);
 //            Assert.AreEqual(DataRowState.Deleted, itsTable.Rows[1].RowState);
         }
-        //TODO Brett : Jan 2009
+
 //        [Test,
 //         Ignore(
 //             "Brett - to consult with peter by fundamentally changing the way BO's respond to edits we are fundamentally altering the way these data providers work"
 //             )]
-        [Test]
-        public void TestRevertChangesRevertsBoValues()
-        {
-            SetupTestData();
-            itsTable.Rows[0]["TestProp"] = "bo1prop1updated";
-            itsTable.RejectChanges();
-            Assert.AreEqual("bo1prop1", itsBo1.GetPropertyValue("TestProp"));
-            itsTable.AcceptChanges();
-            itsTable.Rows[0].Delete();
-            Assert.IsTrue(itsBo1.Status.IsDeleted);
-            itsTable.RejectChanges();
-            Assert.IsFalse(itsBo1.Status.IsDeleted);
-        }
+//        [Test]
+//        public void TestRevertChangesRevertsBoValues()
+//        {
+//            SetupTestData();
+//            itsTable.Rows[0]["TestProp"] = "bo1prop1updated";
+//            itsTable.RejectChanges();
+//            Assert.AreEqual("bo1prop1", itsBo1.GetPropertyValue("TestProp"));
+//            itsTable.AcceptChanges();
+//            itsTable.Rows[0].Delete();
+//            Assert.IsTrue(itsBo1.Status.IsDeleted);
+//            itsTable.RejectChanges();
+//            Assert.IsFalse(itsBo1.Status.IsDeleted);
+//        }
 
         [Test]
         public void TestAddBOToCollectionAddsRow()

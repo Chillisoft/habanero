@@ -189,15 +189,18 @@ namespace Habanero.BO
 
         private IBusinessObject GetBusinessObjectForRow(DataRow row)
         {
+            IBusinessObject changedBo = null;
             if (row.RowState == DataRowState.Detached)
             {
-                return null;
-            }
-            IBusinessObject changedBo = _collection.Find(GetRowID(row));
-            if (changedBo == null && _deletedRows.ContainsKey(row))
+                if (_deletedRows.ContainsKey(row))
+                {
+                    changedBo = _deletedRows[row];
+                }
+            } else
             {
-                changedBo = _deletedRows[row];
+                changedBo = _collection.Find(GetRowID(row));
             }
+
             return changedBo;
         }
 
@@ -312,8 +315,7 @@ namespace Habanero.BO
                 if (changedBo == null || _isBeingAdded) return;
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
-                    //If not a related property and not a reflective property then update the property //TODO Brett 17 Feb 2009: Why?
-                    if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
+                    if (!IsReflectiveProperty(uiProperty))
                     {
                         changedBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
                     }
@@ -392,29 +394,28 @@ namespace Habanero.BO
                 row[IDColumnName] = newBo.ID.ObjectID;
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
-                    //If not a related Property then Update //TODO Brett 17 Feb 2009: Why using . 
-                    if (uiProperty.PropertyName.IndexOf(".") == -1)
+                    if (IsReflectiveProperty(uiProperty)) continue;
+
+                    //If no value was typed into the grid then use the default value for the property if one exists.
+                    if (DBNull.Value.Equals(row[uiProperty.PropertyName]))
                     {
-                        //If no value was typed into the grid then use the default value for the property if one exists.
-                        if (DBNull.Value.Equals(row[uiProperty.PropertyName]))
+                        object propertyValueToDisplay = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
+                        if (propertyValueToDisplay != null)
                         {
-                            object propertyValueToDisplay = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
-                            if (propertyValueToDisplay != null)
-                            {
-                                row[uiProperty.PropertyName] = propertyValueToDisplay;
-                            }
+                            _table.Columns[uiProperty.PropertyName].ReadOnly = false;
+                            row[uiProperty.PropertyName] = propertyValueToDisplay;
                         }
-                        else
+                    }
+                    else
+                    {
+                        try
                         {
-                            try
-                            {
-                                DeregisterForBOEvents();
-                                newBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
-                            }
-                            finally
-                            {
-                                RegisterForBOEvents();
-                            }
+                            DeregisterForBOEvents();
+                            newBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
+                        }
+                        finally
+                        {
+                            RegisterForBOEvents();
                         }
                     }
                 }
@@ -435,6 +436,11 @@ namespace Habanero.BO
                 }
                 throw;
             }
+        }
+
+        private static bool IsReflectiveProperty(UIGridColumn uiProperty)
+        {
+            return uiProperty.PropertyName.IndexOf(".") >= 0 || uiProperty.PropertyName.IndexOf("-") >= 0;
         }
     }
 }
