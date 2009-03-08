@@ -196,7 +196,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(originalCount -1, _collection.CreatedBusinessObjects.Count);
             Assert.AreEqual(originalCount, _collection.Count);
         }
-        [Test]
+//        [Test]
 //        public void TestRejectChangesUnDoesDeletedRow()
 //        {
 //            //---------------Set up test pack-------------------
