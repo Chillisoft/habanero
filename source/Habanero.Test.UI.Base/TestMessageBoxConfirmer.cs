@@ -123,9 +123,8 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(delegateWasCalled);
             Assert.IsFalse(confirmedParamInDelegate);
             //---------------Execute Test ----------------------
-            bool confirmResult = messageBoxConfirmer.Confirm(message, confirmationDelegate);
+            messageBoxConfirmer.Confirm(message, confirmationDelegate);
             //---------------Test Result -----------------------
-            Assert.IsTrue(confirmResult);
             Assert.IsTrue(delegateWasCalled);
             Assert.IsTrue(confirmedParamInDelegate);
             mockRepository.VerifyAll();
@@ -159,9 +158,8 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(delegateWasCalled);
             Assert.IsTrue(confirmedParamInDelegate);
             //---------------Execute Test ----------------------
-            bool confirmResult = messageBoxConfirmer.Confirm(message, confirmationDelegate);
+            messageBoxConfirmer.Confirm(message, confirmationDelegate);
             //---------------Test Result -----------------------
-            Assert.IsFalse(confirmResult);
             Assert.IsTrue(delegateWasCalled);
             Assert.IsFalse(confirmedParamInDelegate);
             mockRepository.VerifyAll();

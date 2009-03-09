@@ -56,12 +56,11 @@ namespace Habanero.UI.Base
         ///<param name="confirmationDelegate">The delegate to execute once the user has responded.</param>
         ///<returns>Returns true if the user confirms the choice and false
         /// if they decline the offer</returns>
-        public bool Confirm(string message, ConfirmationDelegate confirmationDelegate)
+        public void Confirm(string message, ConfirmationDelegate confirmationDelegate)
         {
-            DialogResult dialogResult = ControlFactory.ShowMessageBox(message, Title,
-                                                                      MessageBoxButtons.YesNo, MessageBoxIcon,
-                                                                      (sender, result) => confirmationDelegate(result == DialogResult.Yes));
-            return dialogResult == DialogResult.Yes;
+            DialogResult dialogResult = ControlFactory.ShowMessageBox(
+                message, Title, MessageBoxButtons.YesNo, MessageBoxIcon,
+                (sender, result) => confirmationDelegate(result == DialogResult.Yes));
         }
     }
 }

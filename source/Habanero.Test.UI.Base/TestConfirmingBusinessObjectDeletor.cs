@@ -1,5 +1,7 @@
 using System;
 using Habanero.Base;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
@@ -43,43 +45,179 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(confirmer, confirmingBusinessObjectDeletor.Confirmer);
         }
 
-        
+        [Test]
+        public void Test_Construct_WithCustomConfirmationMessageDelegate()
+        {
+            //---------------Set up test pack-------------------
+            MockRepository mockRepository = new MockRepository();
+            IConfirmer confirmer = mockRepository.StrictMock<IConfirmer>();
+            Function<IBusinessObject, string> customConfirmationMessageDelegate = t => "aaa";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer, customConfirmationMessageDelegate);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(IBusinessObjectDeletor), confirmingBusinessObjectDeletor);
+            Assert.AreSame(confirmer, confirmingBusinessObjectDeletor.Confirmer);
+            Assert.AreSame(customConfirmationMessageDelegate, confirmingBusinessObjectDeletor.CustomConfirmationMessageDelegate);
+        }
+
+        [Test]
+        public void Test_DeleteBusinessObject_ConfirmationMessage()
+        {
+            //---------------Set up test pack-------------------
+            MockRepository mockRepository = new MockRepository();
+            string boToString = TestUtil.GetRandomString();
+            string expectedMessage = string.Format("Are you certain you want to delete the object '{0}'", boToString);
+            IConfirmer confirmer = CreateMockConfirmerWithExpectation(mockRepository, 
+                Is.Equal(expectedMessage), false);
+            IBusinessObject boToDelete = new MockBOWithToString(boToString);
+            ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer);
+            mockRepository.ReplayAll();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            confirmingBusinessObjectDeletor.DeleteBusinessObject(boToDelete);
+            //---------------Test Result -----------------------
+            mockRepository.VerifyAll();
+        }
+
+        [Test]
+        public void Test_DeleteBusinessObject_CustomConfirmationMessage()
+        {
+            //---------------Set up test pack-------------------
+            MockRepository mockRepository = new MockRepository();
+            string expectedMessage = TestUtil.GetRandomString();
+            IConfirmer confirmer = CreateMockConfirmerWithExpectation(mockRepository, 
+                Is.Equal(expectedMessage), false);
+            IBusinessObject boToDelete = mockRepository.StrictMock<IBusinessObject>();
+            ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = 
+                new ConfirmingBusinessObjectDeletor(confirmer, t => expectedMessage);
+            mockRepository.ReplayAll();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            confirmingBusinessObjectDeletor.DeleteBusinessObject(boToDelete);
+            //---------------Test Result -----------------------
+            mockRepository.VerifyAll();
+        }
 
         [Test]
         public void Test_DeleteBusinessObject_ConfirmedIsTrue()
         {
             //---------------Set up test pack-------------------
             MockRepository mockRepository = new MockRepository();
-            IConfirmer confirmer = mockRepository.StrictMock<IConfirmer>();
-            Expect.Call(confirmer.Confirm(null, null))
-                .Constraints(Is.Anything(),Is.NotNull())
-                .Do((Delegates.Function<bool, string, ConfirmationDelegate>)delegate(string message, ConfirmationDelegate confirmationDelegate)
-                {
-                    confirmationDelegate(true);
-                    return true;
-                });
-
-            IBusinessObject boToDelete = mockRepository.StrictMock<IBusinessObject>();
-            Expect.Call(boToDelete.MarkForDelete).Repeat.Once();
-            Expect.Call(boToDelete.Save).Repeat.Once();
-
+            IConfirmer confirmer = CreateMockConfirmerWithExpectation(mockRepository, true);
+            IBusinessObject boToDelete = CreateMockBOWithDeleteExpectation(mockRepository);
             ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer);
             mockRepository.ReplayAll();
             //---------------Assert Precondition----------------
-
             //---------------Execute Test ----------------------
             confirmingBusinessObjectDeletor.DeleteBusinessObject(boToDelete);
             //---------------Test Result -----------------------
             mockRepository.VerifyAll();
         }
-        
+
+        [Test]
+        public void Test_DeleteBusinessObject_ConfirmedIsFalse()
+        {
+            //---------------Set up test pack-------------------
+            MockRepository mockRepository = new MockRepository();
+            IConfirmer confirmer = CreateMockConfirmerWithExpectation(mockRepository, false);
+            IBusinessObject boToDelete = mockRepository.StrictMock<IBusinessObject>();
+            ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer);
+            mockRepository.ReplayAll();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            confirmingBusinessObjectDeletor.DeleteBusinessObject(boToDelete);
+            //---------------Test Result -----------------------
+            mockRepository.VerifyAll();
+        }
+
+        [Test]
+        public void Test_DeleteBusinessObject_ConfirmationDelegateUsed_ConfirmedIsTrue()
+        {
+            //---------------Set up test pack-------------------
+            MockRepository mockRepository = new MockRepository();
+            IConfirmer confirmer = CreateMockConfirmerWithExpectation(mockRepository, true);
+            IBusinessObject boToDelete = CreateMockBOWithDeleteExpectation(mockRepository);
+            ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer);
+            mockRepository.ReplayAll();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            confirmingBusinessObjectDeletor.DeleteBusinessObject(boToDelete);
+            //---------------Test Result -----------------------
+            mockRepository.VerifyAll();
+        }
+
+        [Test]
+        public void Test_DeleteBusinessObject_ConfirmationDelegateUsed_ConfirmedIsFalse()
+        {
+            //---------------Set up test pack-------------------
+            MockRepository mockRepository = new MockRepository();
+            IConfirmer confirmer = CreateMockConfirmerWithExpectation(mockRepository, false);
+            IBusinessObject boToDelete = mockRepository.StrictMock<IBusinessObject>();
+            ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer);
+            mockRepository.ReplayAll();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            confirmingBusinessObjectDeletor.DeleteBusinessObject(boToDelete);
+            //---------------Test Result -----------------------
+            mockRepository.VerifyAll();
+        }
+
+        private static IBusinessObject CreateMockBOWithDeleteExpectation(MockRepository mockRepository)
+        {
+            IBusinessObject boToDelete = mockRepository.StrictMock<IBusinessObject>();
+            Expect.Call(boToDelete.MarkForDelete).Repeat.Once();
+            Expect.Call(boToDelete.Save).Repeat.Once();
+            return boToDelete;
+        }
+
+        private static IConfirmer CreateMockConfirmerWithExpectation(MockRepository mockRepository, bool confirmReturnValue)
+        {
+            return CreateMockConfirmerWithExpectation(mockRepository, Is.Anything(), confirmReturnValue);
+        }
+
+        private static IConfirmer CreateMockConfirmerWithExpectation(MockRepository mockRepository, AbstractConstraint messageConstraint, bool confirmReturnValue)
+        {
+            IConfirmer confirmer = mockRepository.StrictMock<IConfirmer>();
+            Expect.Call(()=>confirmer.Confirm(null, null))
+                .Constraints(messageConstraint,Is.NotNull())
+                .Do((Delegates.Action<string, ConfirmationDelegate>)(
+                (message, confirmationDelegate) => confirmationDelegate(confirmReturnValue)));
+            return confirmer;
+        }
+
+        public class MockBOWithToString : BusinessObject
+        {
+            private readonly string _boToString;
+
+            public MockBOWithToString(string boToString)
+                : base(Circle.CreateClassDef())
+            {
+                _boToString = boToString;
+            }
+
+            public override string ToString()
+            {
+                return _boToString;
+            }
+        }
+
         public class ConfirmingBusinessObjectDeletor : IBusinessObjectDeletor
         {
             public IConfirmer Confirmer { get; private set; }
+            public Function<IBusinessObject, string> CustomConfirmationMessageDelegate { get; set; }
 
             public ConfirmingBusinessObjectDeletor(IConfirmer confirmer)
             {
                 Confirmer = confirmer;
+            }
+
+            public ConfirmingBusinessObjectDeletor(IConfirmer confirmer, 
+                Function<IBusinessObject, string> customConfirmationMessageDelegate)
+                :this(confirmer)
+            {
+                CustomConfirmationMessageDelegate = customConfirmationMessageDelegate;
             }
 
             ///<summary>
@@ -88,9 +226,20 @@ namespace Habanero.Test.UI.Base
             ///<param name="businessObject">The business object to delete</param>
             public void DeleteBusinessObject(IBusinessObject businessObject)
             {
-                Confirmer.Confirm(null, delegate { });
-                businessObject.MarkForDelete();
-                businessObject.Save();
+                string message;
+                if (CustomConfirmationMessageDelegate != null)
+                {
+                    message = CustomConfirmationMessageDelegate(businessObject);
+                } else
+                {
+                    message = string.Format("Are you certain you want to delete the object '{0}'", businessObject);
+                }
+                Confirmer.Confirm(message, delegate(bool confirmed)
+                {
+                    if (!confirmed) return;
+                    businessObject.MarkForDelete();
+                    businessObject.Save();
+                });
             }
         }
     }
