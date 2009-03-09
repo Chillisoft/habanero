@@ -105,6 +105,23 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestSetAllowUsersToAddRowsToFalse()
+        {
+            //---------------Set up test pack-------------------
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+            IEditableGrid editableGrid = gridControl.Grid;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(editableGrid.AllowUserToAddRows);
+            Assert.IsTrue(editableGrid.AllowUserToDeleteRows);
+            //---------------Execute Test ----------------------
+            editableGrid.AllowUserToAddRows = false;
+            editableGrid.AllowUserToDeleteRows = false;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(editableGrid.AllowUserToAddRows);
+            Assert.IsFalse(editableGrid.AllowUserToDeleteRows);
+        }
+
+        [Test]
         public void Test_CreateButtonsControl()
         {
             //---------------Set up test pack-------------------

@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
@@ -84,6 +85,44 @@ namespace Habanero.Test.UI.Base
 
         }
 
+        [Test]
+        public void TestAddControl_Null_ThrowsAppropriateError()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero managedControl = GetControlFactory().CreateControl();
+            BorderLayoutManager manager = GetControlFactory().CreateBorderLayoutManager(managedControl);
+            //---------------Execute Test ----------------------
+            try
+            {
+                manager.AddControl(null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("control", ex.ParamName);
+            }
+        }
+        [Test]
+        public void TestAddControl_Null_WithPos_ThrowsAppropriateError()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero managedControl = GetControlFactory().CreateControl();
+            BorderLayoutManager manager = GetControlFactory().CreateBorderLayoutManager(managedControl);
+            //---------------Execute Test ----------------------
+            try
+            {
+                manager.AddControl(null, BorderLayoutManager.Position.Centre);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("control", ex.ParamName);
+            }
+        }
         [Test]
         public void TestAddControl()
         {

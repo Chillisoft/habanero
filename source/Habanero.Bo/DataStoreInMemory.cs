@@ -210,7 +210,15 @@ namespace Habanero.BO
             BinaryFormatter formatter = new BinaryFormatter();
             using (Stream stream = new FileStream(fullFileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                this._objects = (Dictionary<Guid, IBusinessObject>) formatter.Deserialize(stream);
+                try
+                {
+                    this._objects = (Dictionary<Guid, IBusinessObject>) formatter.Deserialize(stream);
+                }
+                catch (Exception ex)
+                {
+                    string message = "The File " + fullFileName + " could not be deserialised because of the following error";
+                    throw new Exception( message + ex.Message, ex);
+                }
             }
         }
 

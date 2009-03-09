@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -87,6 +89,7 @@ namespace Habanero.UI.Base
         /// <returns>Returns the control added</returns>
         public override IControlHabanero AddControl(IControlHabanero control)
         {
+            if (control == null) throw new ArgumentNullException("control");
             this.ManagedControl.Controls.Add(control);
             return control;
         }
@@ -99,6 +102,7 @@ namespace Habanero.UI.Base
         /// <returns>Returns the control added</returns>
         public IControlHabanero AddControl(IControlHabanero control, Position pos)
         {
+            if (control == null) throw new ArgumentNullException("control");
             AddControl(control,pos,false);
             return control;
         }

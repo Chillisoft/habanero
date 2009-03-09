@@ -110,6 +110,11 @@ namespace Habanero.BO
                     }
                     throw;
                 }
+                catch (Exception ex)
+                {
+                    string message = "The Business Object " + this.ClassName + " could not be deserialised because the property " + prop.PropertyName + " raised an exception";
+                    throw new HabaneroDeveloperException(message, message, ex);
+                }
             }
             _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
             _boStatus.BusinessObject = this;
