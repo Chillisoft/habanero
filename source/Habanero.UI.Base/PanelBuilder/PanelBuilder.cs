@@ -366,13 +366,13 @@ namespace Habanero.UI.Base
 
             AddDateTimePickerParameters(formField, inputControl);
 
-            AddMultiLintTTextbox(formField, inputControl);
+            AddMultiLineTextbox(formField, inputControl);
 
             SetToolTip(formField, inputControl);
             return inputControl;
         }
 
-        private static void AddMultiLintTTextbox(UIFormField formField, IControlHabanero inputControl)
+        private static void AddMultiLineTextbox(UIFormField formField, IControlHabanero inputControl)
         {
             if (formField.RowSpan > 1)
             {

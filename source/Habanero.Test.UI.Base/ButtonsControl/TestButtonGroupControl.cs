@@ -105,8 +105,8 @@ namespace Habanero.Test.UI.Base
                 IButton btnTest = buttonGroupControl.AddButton("A");
                 ////---------------Test Result -----------------------
 
-                Assert.AreEqual(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 16, btnTest.Width,
-                                "Button width is incorrect - when buttons are very small they should instead be 1 16th of screen width.");
+                Assert.AreEqual(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 20, btnTest.Width,
+                                "Button width is incorrect - when buttons are very small they should instead be 1 18th of screen width.");
             }
             //}
 

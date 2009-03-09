@@ -29,9 +29,13 @@ namespace Habanero.UI.VWG
     [MetadataTag("P")]
     public class ButtonGroupControlVWG : PanelVWG, IButtonGroupControl
     {
-        private ButtonGroupControlManager _buttonGroupControlManager;
-        private IControlFactory _controlFactory;
+        private readonly ButtonGroupControlManager _buttonGroupControlManager;
+        private readonly IControlFactory _controlFactory;
 
+        ///<summary>
+        /// Constructor for <see cref="ButtonGroupControlVWG"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public ButtonGroupControlVWG(IControlFactory controlFactory)
         {
             _buttonGroupControlManager = new ButtonGroupControlManager(this, controlFactory);
@@ -50,14 +54,6 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the Button object created</returns>
         public IButton AddButton(string buttonName)
         {
-            //IButton button = _controlFactory.CreateButton();
-            //button.Name = buttonName;
-            //button.Text = buttonName;
-            //_layoutManager.AddControl(button);
-            //RecalcButtonSizes();
-            //Controls.Add((Control) button);
-            //return button;
-
             IButton button = _buttonGroupControlManager.AddButton(buttonName);
             RecalcButtonSizes();
             return button;
@@ -103,10 +99,6 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the Button object created</returns>
         public IButton AddButton(string buttonName, EventHandler clickHandler)
         {
-            //IButton button = this.AddButton(buttonName);
-            ////TODO: Not supported by Gizmox button.UseMnemonic = true;
-            //button.Click += clickHandler;
-            //return button;
             return AddButton(buttonName, buttonName, clickHandler);
         }
 
@@ -121,12 +113,6 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the Button object created</returns>
         public IButton AddButton(string buttonName, string buttonText, EventHandler clickHandler)
         {
-            //IButton button = this.AddButton(buttonName);
-            //button.Name = buttonName;
-            //button.Text = buttonText;
-            //RecalcButtonSizes();
-            //button.Click += clickHandler;
-            //return button;
             IButton button = _buttonGroupControlManager.AddButton(buttonName, buttonText, clickHandler);
             RecalcButtonSizes();
             return button;
@@ -147,10 +133,6 @@ namespace Habanero.UI.VWG
                     maxButtonWidth = lbl.PreferredWidth + 10;
                 }
             }
-            //if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 16)
-            //{
-            //    maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 16;
-            //}
             foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
             {
                 btn.Width = maxButtonWidth;

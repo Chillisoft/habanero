@@ -80,7 +80,8 @@ namespace Habanero.UI.Win
         /// <param name="buttonName">The name of the button</param>
         public void SetDefaultButton(string buttonName)
         {
-            this.FindForm().AcceptButton = (Button)this[buttonName];
+            Form form = this.FindForm();
+            if (form != null) form.AcceptButton = (Button)this[buttonName];
         }
 
         /// <summary>
@@ -94,7 +95,6 @@ namespace Habanero.UI.Win
         public IButton AddButton(string buttonName, EventHandler clickHandler)
         {
              return AddButton(buttonName, buttonName, clickHandler);
-   
         }
 
         /// <summary>
@@ -108,7 +108,6 @@ namespace Habanero.UI.Win
         /// <returns>Returns the Button object created</returns>
         public IButton AddButton(string buttonName, string buttonText, EventHandler clickHandler)
         {
-
             IButton button = _buttonGroupControlManager.AddButton(buttonName, buttonText, clickHandler);
             RecalcButtonSizes();
             ((Button)button).UseMnemonic = true;
@@ -119,7 +118,7 @@ namespace Habanero.UI.Win
         /// A method called by AddButton() to recalculate the size of the
         /// button
         /// </summary>
-        public void RecalcButtonSizes()
+        protected void RecalcButtonSizes()
         {
             int maxButtonWidth = 0;
             foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
@@ -130,9 +129,9 @@ namespace Habanero.UI.Win
                     maxButtonWidth = lbl.PreferredWidth + 10;
                 }
             }
-            if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 16)
+            if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 20)
             {
-                maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 16;
+                maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 20;
             }
             foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
             {

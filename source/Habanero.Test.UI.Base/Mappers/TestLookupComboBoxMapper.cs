@@ -150,6 +150,32 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Test Result -----------------------
                 Assert.IsTrue(string.IsNullOrEmpty(Convert.ToString(cmbox.SelectedItem)));
             }
+
+            [Test]
+            public void TestSetBusinessObject_Null_SetBusinessObject_FillsList_BUGFIX()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef.ClassDefs.Clear();
+                IComboBox cmbox = GetControlFactory().CreateComboBox();
+                const string propName = "SampleLookup2ID";
+
+                Sample.CreateClassDefWin();
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                Sample sample = new Sample();
+//                mapper.LookupList = Sample.LookupCollection;
+//                sample.SampleLookupID = (Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_1);
+                mapper.BusinessObject = null;
+                //---------------Assert Precondition----------------
+                Assert.IsTrue(string.IsNullOrEmpty(Convert.ToString(cmbox.SelectedItem)));
+                Assert.AreEqual(1, cmbox.Items.Count);
+                //---------------Execute Test ----------------------
+                mapper.BusinessObject = sample;
+                //---------------Test Result -----------------------
+                Assert.AreEqual(3, Sample.LookupCollection.Count);
+                Assert.AreEqual(3 + 1, cmbox.Items.Count);
+                Assert.IsNull(cmbox.SelectedItem);
+            }
+
             [Test]
             public void TestSetBusinessObject_Null_NullLookupListSet_DoesNotRaiseError_BUGFIX()
             {
@@ -372,6 +398,9 @@ namespace Habanero.Test.UI.Base.Mappers
                 // This test changes the static class def, so force a reload
                 ClassDef.ClassDefs.Remove(typeof(Sample));
             }
+
+
+
         }
 
         [TestFixture]
@@ -530,7 +559,6 @@ namespace Habanero.Test.UI.Base.Mappers
                 Assert.IsInstanceOfType(typeof(LookupComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
             }
-
 
             [Test]
             public void Test_KeyPressStrategy_UpdatesBusinessObject_WhenEnterKeyPressed()
