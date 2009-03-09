@@ -39,7 +39,6 @@ namespace Habanero.Base
         /// if they decline the offer</returns>
         bool Confirm(string message);
 
-
         ///<summary>
         /// Gets confirmation from the user after providing them with an option
         /// and executes the provided delegate once the user has responded.

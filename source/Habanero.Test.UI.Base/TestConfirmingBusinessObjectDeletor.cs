@@ -2,6 +2,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.UI.Base;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
@@ -51,7 +52,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             MockRepository mockRepository = new MockRepository();
             IConfirmer confirmer = mockRepository.StrictMock<IConfirmer>();
-            Function<IBusinessObject, string> customConfirmationMessageDelegate = t => "aaa";
+            Habanero.UI.Base.Function<IBusinessObject, string> customConfirmationMessageDelegate = t => "aaa";
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -200,46 +201,6 @@ namespace Habanero.Test.UI.Base
             public override string ToString()
             {
                 return _boToString;
-            }
-        }
-
-        public class ConfirmingBusinessObjectDeletor : IBusinessObjectDeletor
-        {
-            public IConfirmer Confirmer { get; private set; }
-            public Function<IBusinessObject, string> CustomConfirmationMessageDelegate { get; set; }
-
-            public ConfirmingBusinessObjectDeletor(IConfirmer confirmer)
-            {
-                Confirmer = confirmer;
-            }
-
-            public ConfirmingBusinessObjectDeletor(IConfirmer confirmer, 
-                Function<IBusinessObject, string> customConfirmationMessageDelegate)
-                :this(confirmer)
-            {
-                CustomConfirmationMessageDelegate = customConfirmationMessageDelegate;
-            }
-
-            ///<summary>
-            /// Deletes the given business object
-            ///</summary>
-            ///<param name="businessObject">The business object to delete</param>
-            public void DeleteBusinessObject(IBusinessObject businessObject)
-            {
-                string message;
-                if (CustomConfirmationMessageDelegate != null)
-                {
-                    message = CustomConfirmationMessageDelegate(businessObject);
-                } else
-                {
-                    message = string.Format("Are you certain you want to delete the object '{0}'", businessObject);
-                }
-                Confirmer.Confirm(message, delegate(bool confirmed)
-                {
-                    if (!confirmed) return;
-                    businessObject.MarkForDelete();
-                    businessObject.Save();
-                });
             }
         }
     }

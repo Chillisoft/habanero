@@ -669,6 +669,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
+        [Ignore("This needs to be reviewed with the cancellation and persistance philosophy")] 
+        //TODO Mark 09 Mar 2009: Ignored Test - This needs to be reviewed with the cancellation and persistance philosophy
         public void Test_MarkForDelete_Added_RestoreBO()
         {
             //---------------Set up test pack-------------------
@@ -698,6 +700,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
+        [Ignore("This needs to be reviewed with the cancellation and persistance philosophy")] 
+        //TODO Mark 09 Mar 2009: Ignored Test - This needs to be reviewed with the cancellation and persistance philosophy
         public void Test_MarkForDelete_Added_RestoreBO_LoadWCriteria()
         {
             //---------------Set up test pack-------------------

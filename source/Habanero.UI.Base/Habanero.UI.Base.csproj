@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="ComboBoxManager.cs" />
     <Compile Include="ButtonGroupControlManager.cs" />
+    <Compile Include="ConfirmingBusinessObjectDeletor.cs" />
     <Compile Include="ControlFactoryManager.cs" />
     <Compile Include="ControlInterfaces\Events.cs" />
     <Compile Include="ControlInterfaces\IBOColTabControl.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="ControlMappers\EditableGridControlMapper.cs" />
     <Compile Include="ControlMappers\ExtendedComboBoxMapper.cs" />
+    <Compile Include="Delegates.cs" />
     <Compile Include="IBOEditorPanel.cs" />
     <Compile Include="IBusinessObjectControlWithErrorDisplay.cs" />
     <Compile Include="IGridAndBOEditorControl.cs" />
