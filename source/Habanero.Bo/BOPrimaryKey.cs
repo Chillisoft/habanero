@@ -32,6 +32,9 @@ namespace Habanero.BO
     /// </summary>
     public class BOPrimaryKey : BOKey, IPrimaryKey
     {
+        /// <summary>
+        /// The object identifier for this BOPrimaryKey
+        /// </summary>
         protected Guid _objectID = Guid.Empty;
         private string _currentValue;
         private string _previousValue;
@@ -86,11 +89,12 @@ namespace Habanero.BO
         /// <returns>Returns a hashcode integer</returns>
         public override int GetHashCode()
         {
-//            return AsString_CurrentValue().GetHashCode();
             return ObjectID.GetHashCode();
-            //if (_objectID != Guid.Empty) return NewObjectID().GetHashCode();
-            //return GetObjectId().GetHashCode();
         }
+
+        /// <summary>
+        /// Event handler for handling the event of a property belonging to this key being updated.
+        /// </summary>
         protected override void BOPropUpdated_Handler(object sender, BOPropEventArgs e)
         {
             _previousValue = _currentValue;

@@ -241,7 +241,7 @@ namespace Habanero.BO
         /// <summary>
         /// Loads a business Object collection of the type defined by the <paramref name="classDef"/> with the appropriate 
         /// criteria and the start no of records and max number of records. For full details 
-        /// see <see cref="GetBusinessObjectCollection{T}(string,string,int,int,out int)<>"/>
+        /// see <see cref="GetBusinessObjectCollection{T}(string,string,int,int,out int)"/>
         /// </summary>
         /// <param name="classDef"></param>
         /// <param name="criteria"></param>
@@ -387,10 +387,15 @@ namespace Habanero.BO
         }
 
         #endregion
-
-        protected static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
+        /// <summary>
+        /// Creates a Generic Collection of <see cref="IBusinessObjectCollection"/> of the Generic
+        /// Type determined by the <paramref name="boType"/>
+        /// </summary>
+        /// <param name="boType"></param>
+        /// <returns></returns>
+        protected static IBusinessObjectCollection CreateCollectionOfType(Type boType)
         {
-            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
+            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
             return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
         }
 
@@ -412,7 +417,11 @@ namespace Habanero.BO
 //            }
 //            collection.PersistedBOCol.Add(loadedBo);
 //        }
-
+        /// <summary>
+        /// Adds the business object <paramref name="loadedBo"/> to the collection identified by <paramref name="collection"/>
+        /// </summary>
+        /// <param name="collection">The collection to add to</param>
+        /// <param name="loadedBo">The bo to be added</param>
         protected static void AddBusinessObjectToCollection
             (IBusinessObjectCollection collection, IBusinessObject loadedBo)
         {
@@ -439,16 +448,19 @@ namespace Habanero.BO
            // ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
 
-        //The collection should show all loaded object less removed or deleted object not yet persisted
-        //     plus all created or added objects not yet persisted.
-        //Note_: This behaviour is fundamentally different than the business objects behaviour which 
-        //  throws and error if any of the items are dirty when it is being refreshed.
-        //Should a refresh be allowed on a dirty collection (what do we do with BO's
-        //I think this could be done via reflection instead of having all these public methods.
-        //   especially where done via the interface.
-        //  the other option would be for the business object collection to have another method (other than clone)
-        //   that returns another type of object that has these methods to eliminate all these 
-        //   public accessors
+        /// <summary>
+        /// The collection should show all loaded object less removed or deleted object not yet persisted
+        ///     plus all created or added objects not yet persisted.
+        ///Note_: This behaviour is fundamentally different than the business objects behaviour which 
+        ///  throws and error if any of the items are dirty when it is being refreshed.
+        ///Should a refresh be allowed on a dirty collection (what do we do with BO's
+        ///I think this could be done via reflection instead of having all these public methods.
+        ///   especially where done via the interface.
+        ///  the other option would be for the business object collection to have another method (other than clone)
+        ///   that returns another type of object that has these methods to eliminate all these 
+        ///   public accessors
+        /// </summary>
+        /// <param name="collection"></param>
         protected static void RestoreEditedLists(IBusinessObjectCollection collection)
         {
             ArrayList addedBoArray = new ArrayList();
@@ -459,6 +471,12 @@ namespace Habanero.BO
             RestoreMarkForDeleteCollection(collection);
             RestoreAddedCollection(collection, addedBoArray);
         }
+        /// <summary>
+        /// Restores the items in the <see cref="IBusinessObjectCollection.AddedBusinessObjects"/> collection
+        ///  back into the collection <paramref name="collection"/>
+        /// </summary>
+        /// <param name="collection">the collection to be added back into</param>
+        /// <param name="addedBoArray">The array of bo's to be added back</param>
         protected static void RestoreAddedCollection(IBusinessObjectCollection collection, ArrayList addedBoArray)
         {
             if (collection == null) throw new ArgumentNullException("collection");
@@ -516,7 +534,13 @@ namespace Habanero.BO
                 collection.AddWithoutEvents(businessObject);
             }
         }
-
+        /// <summary>
+        /// Restores the created collection. I.e. moves the items that are in the created collection
+        ///  back to the main collection. Remember the main collection shows all the items from the database
+        ///   plus the items added, and created less the items removed or marked for deletion.
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="createdBusinessObjects"></param>
         protected static void RestoreCreatedCollection
             (IBusinessObjectCollection collection, IList createdBusinessObjects)
         {
@@ -531,7 +555,13 @@ namespace Habanero.BO
                 collection.AddWithoutEvents(createdBO);
             }
         }
-
+        /// <summary>
+        /// Restores the removed collection. I.e. moves the items that are in the removed collection
+        ///  out of the main collection. Remember the main collection shows all the items from the database
+        ///   plus the items added, and created less the items removed or marked for deletion.
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="removedBusinessObjects"></param>
         protected static void RestoreRemovedCollection
             (IBusinessObjectCollection collection, IList removedBusinessObjects)
         {
@@ -575,14 +605,19 @@ namespace Habanero.BO
             return relatedCol;
         }
 
-
-        protected static void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBos)
+        /// <summary>
+        /// Adds all the business objects from the <paramref name="loadedBOs"/> collection to the
+        /// <see cref="IBusinessObjectCollection"/>
+        /// </summary>
+        /// <param name="collection">the collection being added to</param>
+        /// <param name="loadedBOs">the collection of loaded BOs to add</param>
+        protected static void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBOs)
         {
             ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
 
             // made internal or something and used via reflection.
             // I (Brett) am not comfortable with it being on the Interface. 
-            foreach (IBusinessObject loadedBo in loadedBos)
+            foreach (IBusinessObject loadedBo in loadedBOs)
             {
                 AddBusinessObjectToCollection(collection, loadedBo);
             }
@@ -593,7 +628,7 @@ namespace Habanero.BO
         /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
         /// fields defined in the relationship.
         /// </summary>
-        /// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</typeparam>
+        /// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</param>
         /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
         /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
         /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's

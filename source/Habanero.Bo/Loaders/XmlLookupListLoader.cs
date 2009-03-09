@@ -30,7 +30,13 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public abstract class XmlLookupListLoader : XmlLoader
     {
+        /// <summary>
+        /// The name of the rule
+        /// </summary>
         protected string _ruleName;
+        /// <summary>
+        /// whether this is compulsory or not
+        /// </summary>
         protected bool _isCompulsory;
 
         /// <summary>

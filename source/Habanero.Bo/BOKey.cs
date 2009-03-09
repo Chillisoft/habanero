@@ -145,7 +145,9 @@ namespace Habanero.BO
             _props.Add(boProp.PropertyName, boProp);
             boProp.Updated += BOPropUpdated_Handler ;
         }
-
+        /// <summary>
+        /// Event handler for handling the event of a property belonging to this key being updated.
+        /// </summary>
         protected virtual void BOPropUpdated_Handler(object sender, BOPropEventArgs e)
         {
             FireValueUpdated();

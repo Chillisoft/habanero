@@ -36,39 +36,51 @@ namespace Habanero.BO.ClassDefinition
     public class KeyDef : IKeyDef
     {
         private readonly Dictionary<string, IPropDef> _propDefs;
+
         /// <summary>
         /// Ignore the Alternate Key constraint if one or more of the properties has a null value.
         /// </summary>
         protected bool _ignoreIfNull;
+
         /// <summary>
         /// The Name of the Alternate Key.
         /// </summary>
         protected string _keyName = "";
+
+        /// <summary>
+        /// The built key name
+        /// </summary>
         protected string _keyNameBuilt = "";
+
         /// <summary>
         /// The Key Name to dispay to the user
         /// </summary>
         protected string _keyNameForDisplay = "";
+
         /// <summary>
         /// The message to dispaly to the user in the case of a failure.
         /// </summary>
         protected string _message;
-        protected bool _buildKeyName = true; //this is a flag used to 
-                //indicate whether the the keyname should be built up 
-				//from the property names or not
 
-		#region Constructors
+        /// <summary>
+        /// this is a flag used to 
+        ///indicate whether the the keyname should be built up 
+        ///from the property names or not
+        /// </summary>
+        protected bool _buildKeyName = true;
 
-		/// <summary>
-		/// A deparameterised constructor that causes the keyName to be
-		/// set as a concatenation of the PropDef.PropertyNames separated
-		/// by an underscore.
-		/// </summary>
-		public KeyDef(): this("")
-		{
-		}
+        #region Constructors
 
-		/// <summary>
+        /// <summary>
+        /// A deparameterised constructor that causes the keyName to be
+        /// set as a concatenation of the PropDef.PropertyNames separated
+        /// by an underscore.
+        /// </summary>
+        public KeyDef() : this("")
+        {
+        }
+
+        /// <summary>
         /// Constructor that initialises the object with the name
         /// of the key.
         /// </summary>
@@ -79,50 +91,47 @@ namespace Habanero.BO.ClassDefinition
         public KeyDef(string keyName)
         {
             //if (string.IsNullOrEmpty(keyName)) throw new ArgumentNullException("keyName");
-		    _propDefs = new Dictionary<string, IPropDef>();
+            _propDefs = new Dictionary<string, IPropDef>();
             KeyName = keyName;
         }
 
-		#endregion Constructors
+        #endregion Constructors
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// A method used by BOKey to determine whether to check for
-		/// duplicate keys.  If true, then the uniqueness check will be ignored
-		/// if any of the properties making up the key are null.<br/>
-		/// NNB: If the BOKey is a primary key, then this cannot be
-		/// set to true.
-		/// </summary>
-		public virtual bool IgnoreIfNull
-		{
-			get { return _ignoreIfNull; }
-			set { _ignoreIfNull = value; }
-		}
+        /// <summary>
+        /// A method used by BOKey to determine whether to check for
+        /// duplicate keys.  If true, then the uniqueness check will be ignored
+        /// if any of the properties making up the key are null.<br/>
+        /// NNB: If the BOKey is a primary key, then this cannot be
+        /// set to true.
+        /// </summary>
+        public virtual bool IgnoreIfNull
+        {
+            get { return _ignoreIfNull; }
+            set { _ignoreIfNull = value; }
+        }
 
-		/// <summary>
-		/// Returns the key name for this key definition - this key name is built
-		/// up through a combination of the key name and the property names
-		/// </summary>
-		public string KeyName
-		{
-			get
-			{
-			    return _buildKeyName ? _keyNameBuilt : _keyName;
-			}
-		    set
-			{
-				_keyName = value;
-			    KeyNameForDisplay = value;
+        /// <summary>
+        /// Returns the key name for this key definition - this key name is built
+        /// up through a combination of the key name and the property names
+        /// </summary>
+        public string KeyName
+        {
+            get { return _buildKeyName ? _keyNameBuilt : _keyName; }
+            set
+            {
+                _keyName = value;
+                KeyNameForDisplay = value;
                 if (String.IsNullOrEmpty(_keyName))
-				{
-					_keyName = "";
-				    KeyNameForDisplay = "";
-					_buildKeyName = true;
-				}
+                {
+                    _keyName = "";
+                    KeyNameForDisplay = "";
+                    _buildKeyName = true;
+                }
                 UpdateKeyNameBuildt();
-			}
-		}
+            }
+        }
 
         private void UpdateKeyNameBuildt()
         {
@@ -139,7 +148,8 @@ namespace Habanero.BO.ClassDefinition
                 }
                 string newKeyName = String.Join("_", propNames.ToArray());
                 _keyNameBuilt = newKeyName;
-            } else
+            }
+            else
             {
                 _keyNameBuilt = _keyName;
             }
@@ -164,9 +174,9 @@ namespace Habanero.BO.ClassDefinition
             set { _message = value; }
         }
 
-		#endregion Properties
+        #endregion Properties
 
-		#region Dictionary Methods
+        #region Dictionary Methods
 
         /// <summary>
         /// Provides an indexing facility for the collection of property
@@ -182,9 +192,10 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (!Contains(propName))
                 {
-                    throw new InvalidPropertyNameException(String.Format(
-                        "In a key definition, no property with the name '{0}' " +
-                        "exists in the collection of properties.",propName));
+                    throw new InvalidPropertyNameException
+                        (String.Format
+                             ("In a key definition, no property with the name '{0}' "
+                              + "exists in the collection of properties.", propName));
                 }
                 return _propDefs[propName];
             }
@@ -226,8 +237,8 @@ namespace Habanero.BO.ClassDefinition
         {
             if (propDef == null)
             {
-                throw new HabaneroArgumentException("lPropDef",
-                                                   "ClassDef-Add. You cannot add a null prop def to a classdef");
+                throw new HabaneroArgumentException
+                    ("lPropDef", "ClassDef-Add. You cannot add a null prop def to a classdef");
             }
             if (!Contains(propDef))
             {
@@ -236,29 +247,29 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-		/// <summary>
-		/// Removes a Property definition from the key
-		/// </summary>
-		/// <param name="propDef">The Property Definition to remove</param>
-		protected void Remove(PropDef propDef)
-		{
-			if (Contains(propDef))
-			{
-				_propDefs.Remove(propDef.PropertyName);
+        /// <summary>
+        /// Removes a Property definition from the key
+        /// </summary>
+        /// <param name="propDef">The Property Definition to remove</param>
+        protected void Remove(PropDef propDef)
+        {
+            if (Contains(propDef))
+            {
+                _propDefs.Remove(propDef.PropertyName);
                 UpdateKeyNameBuildt();
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Indicates if the specified property definition exists
-		/// in the key.
-		/// </summary>
-		/// <param name="propDef">The Property definition to search for</param>
-		/// <returns>Returns true if found, false if not</returns>
-		protected bool Contains(IPropDef propDef)
-		{
-			return (_propDefs.ContainsKey(propDef.PropertyName));
-		}
+        /// <summary>
+        /// Indicates if the specified property definition exists
+        /// in the key.
+        /// </summary>
+        /// <param name="propDef">The Property definition to search for</param>
+        /// <returns>Returns true if found, false if not</returns>
+        protected bool Contains(IPropDef propDef)
+        {
+            return (_propDefs.ContainsKey(propDef.PropertyName));
+        }
 
         /// <summary>
         /// Returns true if the key definition holds a property definition
@@ -269,7 +280,7 @@ namespace Habanero.BO.ClassDefinition
         internal bool Contains(string propName)
         {
             return (_propDefs.ContainsKey(propName));
-		}
+        }
 
         /// <summary>
         /// Returns a count of the number of property definitions held
@@ -286,9 +297,9 @@ namespace Habanero.BO.ClassDefinition
             UpdateKeyNameBuildt();
         }
 
-		#endregion Dictionary Methods
-		
-		/// <summary>
+        #endregion Dictionary Methods
+
+        /// <summary>
         /// Indicates whether the key definition is valid based on
         /// whether it contains one or more properties. 
         /// I.e. The key is not valid if it does not contain any properties.
@@ -300,7 +311,7 @@ namespace Habanero.BO.ClassDefinition
             return (_propDefs.Count > 0);
         }
 
-		/// <summary>
+        /// <summary>
         /// Creates a new business object key (BOKey) using this key
         /// definition and its property definitions
         /// </summary>
@@ -317,7 +328,7 @@ namespace Habanero.BO.ClassDefinition
             return lBOKey;
         }
 
-		#region IEnumerable<PropDef> Members
+        #region IEnumerable<PropDef> Members
 
         ///<summary>
         ///Returns an enumerator that iterates through the collection.
@@ -328,13 +339,13 @@ namespace Habanero.BO.ClassDefinition
         ///</returns>
         ///<filterpriority>1</filterpriority>
         IEnumerator<IPropDef> IEnumerable<IPropDef>.GetEnumerator()
-		{
-			return _propDefs.Values.GetEnumerator();
-		}
+        {
+            return _propDefs.Values.GetEnumerator();
+        }
 
-		#endregion
+        #endregion
 
-		#region IEnumerable Members
+        #region IEnumerable Members
 
         ///<summary>
         ///Returns an enumerator that iterates through a collection.
@@ -345,15 +356,10 @@ namespace Habanero.BO.ClassDefinition
         ///</returns>
         ///<filterpriority>2</filterpriority>
         IEnumerator IEnumerable.GetEnumerator()
-		{
-			return _propDefs.Values.GetEnumerator();
-		}
+        {
+            return _propDefs.Values.GetEnumerator();
+        }
 
-		#endregion
-
-        
+        #endregion
     }
-
-
-
 }

@@ -32,6 +32,9 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlRuleLoader : XmlLoader
     {
+        /// <summary>
+        /// The name of the rule
+        /// </summary>
         protected string _name;
         private string _propTypeName;
         private string _message;
@@ -60,8 +63,8 @@ namespace Habanero.BO.Loaders
         /// <summary>
         /// Loads a property rule from the given xml string
         /// </summary>
-        /// <param name="ruleXml">The xml string containing the
-        /// rule</param>
+        /// <param name="propTypeName"></param>
+        /// <param name="ruleXml">The xml string containing the rule</param>
         /// <returns>Returns the property rule object</returns>
         public PropRuleBase LoadRule(string propTypeName, string ruleXml)
         {
@@ -170,8 +173,14 @@ namespace Habanero.BO.Loaders
         {
             def.AddPropRule( this.LoadRule(def.PropertyTypeName, propertyRuleElement));
         }
-  
-		protected override object Create()
+
+        /// <summary>
+        /// Creates the object using the data that has been read in using
+        /// LoadFromReader(). This method needs to be implemented by the
+        /// sub-class.
+        /// </summary>
+        /// <returns>Returns the object created</returns>
+        protected override object Create()
 		{
 			return _propRule;
 		}

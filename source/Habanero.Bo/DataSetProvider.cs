@@ -31,14 +31,39 @@ namespace Habanero.BO
     /// </summary>
     public abstract class DataSetProvider : IDataSetProvider
     {
+        /// <summary>
+        /// The <see cref="IBusinessObjectCollection"/> of <see cref="IBusinessObject"/>s that
+        ///   are being mapped in this DataSetProvider (i.e. are being copied to the <see cref="DataTable"/>.
+        /// </summary>
         protected readonly IBusinessObjectCollection _collection;
+        /// <summary>
+        /// The collection of <see cref="UIGridColumn"/>s that are being shown in this <see cref="DataTable"/>.
+        /// </summary>
         protected ICollection _uiGridProperties;
+        /// <summary>
+        /// The <see cref="DataTable"/> that is set up to represent the items in this collection.
+        /// </summary>
         protected DataTable _table;
+        /// <summary>
+        /// The object initialiser being used to create a new object if this grid is allowed to create a new object.
+        /// </summary>
         protected IBusinessObjectInitialiser _objectInitialiser;
         private const string _idColumnName = "HABANERO_OBJECTID";
+        /// <summary>
+        /// A handler for the <see cref="IBusinessObject"/> has been added to the <see cref="_collection"/>.
+        /// </summary>
         protected EventHandler<BOEventArgs> _boAddedHandler;
+        /// <summary>
+        /// A handler for the <see cref="IBusinessObject"/> has had one of its properties updated
+        /// </summary>
         protected readonly EventHandler<BOPropUpdatedEventArgs> _propUpdatedEventHandler;
+        /// <summary>
+        /// A handler for the <see cref="IBusinessObject"/> has been persisted.
+        /// </summary>
         protected readonly EventHandler<BOEventArgs> _updatedHandler;
+        /// <summary>
+        /// A handler for the <see cref="IBusinessObject"/> has been removed from the <see cref="_collection"/>.
+        /// </summary>
         protected readonly EventHandler<BOEventArgs> _removedHandler;
 
         ///<summary>
@@ -145,11 +170,15 @@ namespace Habanero.BO
                 RegisterForTableEvents();
             }
         }
-
+        /// <summary>
+        /// Deregisters for all events to the <see cref="_table"/>
+        /// </summary>
         protected virtual void DeregisterForTableEvents()
         {
         }
-
+        /// <summary>
+        /// Registers for all events to the <see cref="_table"/>
+        /// </summary>
         protected virtual void RegisterForTableEvents()
         {
         }
@@ -214,7 +243,9 @@ namespace Habanero.BO
             RegisterForBOEvents();
             RegisterForTableEvents();
         }
-
+        /// <summary>
+        /// Registers for all events from the <see cref="_collection"/>
+        /// </summary>
         protected virtual void RegisterForBOEvents()
         {
             this.DeregisterForBOEvents();
