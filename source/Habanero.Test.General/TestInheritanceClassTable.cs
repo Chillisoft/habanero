@@ -216,9 +216,9 @@ namespace Habanero.Test.General
             Assert.AreEqual("CircleChanged", circles[0].ShapeName);
             
             // Test deleting
-            shape.Delete();
+            shape.MarkForDelete();
             shape.Save();
-            circle.Delete();
+            circle.MarkForDelete();
             circle.Save();
             shapes.LoadAll();
             Assert.AreEqual(0, shapes.Count);
@@ -237,7 +237,7 @@ namespace Habanero.Test.General
             Shape shape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(shapeCriteria);
             if (shape != null)
             {
-                shape.Delete();
+                shape.MarkForDelete();
                 shape.Save();
             }
 
@@ -248,7 +248,7 @@ namespace Habanero.Test.General
             Circle circle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(criteria);
             if (circle != null)
             {
-                circle.Delete();
+                circle.MarkForDelete();
                 circle.Save();
             }
         }

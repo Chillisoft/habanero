@@ -281,7 +281,7 @@ namespace Habanero.UI.Win
             }
             else
             {
-                currentBO.Restore();
+                currentBO.CancelEdits();
             }
             UpdateControlEnabledState();
 
@@ -369,7 +369,7 @@ namespace Habanero.UI.Win
         private void DeleteButtonClicked(object sender, EventArgs e)
         {
             IBusinessObject businessObject = CurrentBusinessObject;
-            businessObject.Delete();
+            businessObject.MarkForDelete();
             businessObject.Save();
 
             if (CurrentBusinessObject == null && _readOnlyGridControl.Grid.Rows.Count > 0)
@@ -425,8 +425,7 @@ namespace Habanero.UI.Win
     /// TODO: This uses ReadOnlyGridControl due to some flaw in ReadOnlyGrid. Look at switching back
     /// to the grid in the future.  What happens when you double-click?
     /// 
-    /// TODO:
-    /// - grid caret moves all over, even though selected row is correct
+    /// TODO: - grid caret moves all over, even though selected row is correct
     /// </summary>
     public class GridAndBOEditorControlWin<TBusinessObject> : UserControlWin, IGridAndBOEditorControl
         where TBusinessObject : class, IBusinessObject
@@ -602,7 +601,7 @@ namespace Habanero.UI.Win
             }
             else
             {
-                currentBO.Restore();
+                currentBO.CancelEdits();
             }
             UpdateControlEnabledState();
 
@@ -687,7 +686,7 @@ namespace Habanero.UI.Win
         private void DeleteButtonClicked(object sender, EventArgs e)
         {
             IBusinessObject businessObject = CurrentBusinessObject;
-            businessObject.Delete();
+            businessObject.MarkForDelete();
             businessObject.Save();
 
             if (CurrentBusinessObject == null && _readOnlyGridControl.Grid.Rows.Count > 0)

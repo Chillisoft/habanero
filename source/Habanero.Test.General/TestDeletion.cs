@@ -81,7 +81,7 @@ namespace Habanero.Test.General
         public void TestCascadeDelete()
         {
             Assert.AreEqual(2, _person.Addresses.Count);
-            _person.Delete();
+            _person.MarkForDelete();
             _person.Save();
             Assert.IsTrue(_person.Status.IsDeleted);
             Assert.AreEqual(0, _person.Addresses.Count);

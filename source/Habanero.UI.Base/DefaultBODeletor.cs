@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 
 namespace Habanero.UI.Base
@@ -30,8 +31,16 @@ namespace Habanero.UI.Base
     {
         public virtual void DeleteBusinessObject(IBusinessObject businessObject)
         {
-            businessObject.Delete();
-            businessObject.Save();
+            try
+            {
+                businessObject.MarkForDelete();
+                businessObject.Save();
+            }
+            catch (Exception)
+            {
+                businessObject.CancelEdits();
+                throw;
+            }
         }
     }
 }

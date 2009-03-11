@@ -223,7 +223,7 @@ namespace Habanero.BO
                 return;
             }
             changedBo = GetBusinessObjectForRow(row);
-            if (changedBo != null) changedBo.Restore();
+            if (changedBo != null) changedBo.CancelEdits();
         }
 
         /// <summary>

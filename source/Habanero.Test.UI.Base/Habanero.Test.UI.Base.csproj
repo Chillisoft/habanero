@@ -83,6 +83,7 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
+    <Compile Include="TestBusinessObjectDeletor.cs" />
     <Compile Include="TestCollapsiblePanel.cs" />
     <Compile Include="FilterController\TestFilterControlBuilder.cs" />
     <Compile Include="FilterController\TestFilterControlManager.cs" />

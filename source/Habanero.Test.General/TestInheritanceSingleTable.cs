@@ -72,7 +72,7 @@ namespace Habanero.Test.General
             while (shapes.Count > 0)
             {
                 Shape shape = shapes[0];
-                shape.Delete();
+                shape.MarkForDelete();
                 committer.AddBusinessObject(shape);
             }
 
@@ -85,7 +85,7 @@ namespace Habanero.Test.General
             foreach (CircleNoPrimaryKey circle in circles)
 
             {
-                circle.Delete();
+                circle.MarkForDelete();
                 committer.AddBusinessObject(circle);
             }
             committer.CommitTransaction();
@@ -227,9 +227,9 @@ namespace Habanero.Test.General
             Assert.AreEqual("CircleChanged", circles[0].ShapeName);
 
             // Test deleting
-            shape.Delete();
+            shape.MarkForDelete();
             shape.Save();
-            circle.Delete();
+            circle.MarkForDelete();
             circle.Save();
             shapes.LoadAll();
             Assert.AreEqual(0, shapes.Count);

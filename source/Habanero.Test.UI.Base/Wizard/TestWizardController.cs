@@ -36,7 +36,7 @@ namespace Habanero.Test.UI.Base.Wizard
         public void SetupTest()
         {
             _wizardController = new WizardController();
-            _step1 = _mock.CreateMock<IWizardStep>();
+            _step1 = _mock.StrictMock<IWizardStep>();
             _wizardController.AddStep(_step1);
         }
 
@@ -75,7 +75,7 @@ namespace Habanero.Test.UI.Base.Wizard
         [Test]
         public void TestGetPreviousStep()
         {
-            IWizardStep step2 = _mock.CreateMock<IWizardStep>();
+            IWizardStep step2 = _mock.StrictMock<IWizardStep>();
             _wizardController.AddStep(step2);
             _wizardController.GetNextStep();
             _wizardController.GetNextStep();
@@ -129,7 +129,7 @@ namespace Habanero.Test.UI.Base.Wizard
             WizardController wizardController = new WizardController();
             bool wizardFinishedFires = false;
             wizardController.WizardFinished += delegate { wizardFinishedFires = true; };
-            IWizardStep step1 = _mock.CreateMock<IWizardStep>();
+            IWizardStep step1 = _mock.StrictMock<IWizardStep>();
             wizardController.AddStep(step1);
 
             wizardController.GetNextStep();

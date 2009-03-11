@@ -416,7 +416,7 @@ namespace Habanero.UI.VWG
                                             {
                                                 try
                                                 {
-                                                    selectedBo.Restore();
+                                                    selectedBo.CancelEdits();
                                                     _grid.SelectedBusinessObject = selectedBo;
                                                 }
                                                 catch (Exception)

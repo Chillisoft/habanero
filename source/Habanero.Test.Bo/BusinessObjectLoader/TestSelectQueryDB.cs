@@ -658,6 +658,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
  
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
         {
+            [Obsolete("please use the SqlFormatter directly")]
             public override string GetLimitClauseForEnd(int limit)
             {
                 return "LIMIT " + limit;

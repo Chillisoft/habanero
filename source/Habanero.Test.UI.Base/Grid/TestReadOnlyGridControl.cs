@@ -1838,7 +1838,7 @@ namespace Habanero.Test.UI.Base
             readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor(
                 delegate(IBusinessObject obj, string uiDefName, PostObjectEditDelegate postEditAction)
                 {
-                    obj.Restore();
+                    obj.CancelEdits();
                     postEditAction(obj, true);
                     return false;
                 });

@@ -88,7 +88,7 @@ namespace Habanero.Test.General
             myContact.Surname = "Vincent2";
 
             myContact.Save(); //save the object to the DB
-            myContact.Delete();
+            myContact.MarkForDelete();
             myContact.Save();
 
             mContactPDeleted = myContact;
@@ -119,7 +119,7 @@ namespace Habanero.Test.General
             myContact.Surname = "My Surname";
             Assert.IsTrue(myContact.IsValid());
             Assert.AreEqual("My Surname", myContact.Surname);
-            myContact.Restore();
+            myContact.CancelEdits();
             Assert.IsFalse(myContact.IsValid());
             Assert.IsTrue(myContact.Surname.Length == 0);
         }
@@ -154,7 +154,7 @@ namespace Habanero.Test.General
             IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
             //Put a loop in to take up some time due to MSAccess 
-            myContact.Delete();
+            myContact.MarkForDelete();
             Assert.IsTrue(myContact.Status.IsDeleted);
             myContact.Save();
             Assert.IsTrue(myContact.Status.IsDeleted);

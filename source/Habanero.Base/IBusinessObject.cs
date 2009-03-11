@@ -109,6 +109,7 @@ namespace Habanero.Base
         /// Cancel all edits made to the object since it was loaded from the 
         /// database or last saved to the database
         /// </summary>
+        [Obsolete("This is replaced by CancelEdits().")]
         void Restore();
 
         /// <summary>
@@ -127,6 +128,7 @@ namespace Habanero.Base
         /// Marks the business object for deleting.  Calling Save() will
         /// then carry out the deletion from the database.
         /// </summary>
+        [Obsolete("This method has been replaced with MarkForDelete() since it is far more explicit that this does not instantly delete the business object.")]
         void Delete();
 
         /// <summary>

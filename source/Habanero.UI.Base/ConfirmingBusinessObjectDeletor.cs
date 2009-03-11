@@ -1,3 +1,4 @@
+using System;
 using Habanero.Base;
 
 namespace Habanero.UI.Base
@@ -61,8 +62,15 @@ namespace Habanero.UI.Base
             Confirmer.Confirm(message, delegate(bool confirmed)
             {
                 if (!confirmed) return;
-                businessObject.MarkForDelete();
-                businessObject.Save();
+                DefaultBODeletor defaultBODeletor = new DefaultBODeletor();
+                try
+                {
+                    defaultBODeletor.DeleteBusinessObject(businessObject);
+                }
+                catch (Exception ex)
+                {
+                    GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error Deleting");
+                }
             });
         }
     }

@@ -33,7 +33,7 @@ namespace Habanero.Test.BO
         protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
             _dataSetProvider = new ReadOnlyDataSetProvider(col);
-            ((ReadOnlyDataSetProvider)_dataSetProvider).RegisterForBusinessObjectPropertyUpdatedEvents = true;
+            _dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = true;
             return _dataSetProvider;
         }
 

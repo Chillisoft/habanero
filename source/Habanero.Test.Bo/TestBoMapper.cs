@@ -130,10 +130,10 @@ namespace Habanero.Test.BO
 			MockRepository mock = new MockRepository();
 			
 			//Mock mockDbConnection = new DynamicMock(typeof(IDatabaseConnection));
-			IDatabaseConnection connection = mock.CreateMock<IDatabaseConnection>();
+            IDatabaseConnection connection = mock.StrictMock<IDatabaseConnection>();
 			
 			//Mock relColControl = new DynamicMock(typeof(IRelationshipCol));
-			IRelationshipCol mockRelCol = mock.CreateMock<IRelationshipCol>();
+			IRelationshipCol mockRelCol = mock.StrictMock<IRelationshipCol>();
 
 			ClassDef.ClassDefs.Clear();
 			itsClassDef = MyBO.LoadClassDefWithRelationship();
@@ -203,11 +203,11 @@ namespace Habanero.Test.BO
 			MockRepository mock = new MockRepository();
 			//Mock mockDbConnection = new DynamicMock(typeof(IDatabaseConnection));
 			//IDatabaseConnection connection = (IDatabaseConnection)mockDbConnection.MockInstance;
-			IDatabaseConnection connection = mock.CreateMock<IDatabaseConnection>();
+            IDatabaseConnection connection = mock.StrictMock<IDatabaseConnection>();
 
 			//Mock relColControl = new DynamicMock(typeof(IRelationshipCol));
 			//IRelationshipCol mockRelCol = (IRelationshipCol)relColControl.MockInstance;
-			IRelationshipCol mockRelCol = mock.CreateMock<IRelationshipCol>();
+            IRelationshipCol mockRelCol = mock.StrictMock<IRelationshipCol>();
 
 			ClassDef.ClassDefs.Clear();
 			itsClassDef = MyBO.LoadClassDefWithRelationship();

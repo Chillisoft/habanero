@@ -155,7 +155,7 @@ namespace Habanero.Test.BO
             ContactPersonOptimisticLockingVersionNumberDB contactPerson2 
                 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonOptimisticLockingVersionNumberDB>(contactPersonDeleteConcurrency.ID);
             //---------Run TEST ---------------------------------
-            contactPersonDeleteConcurrency.Delete();
+            contactPersonDeleteConcurrency.MarkForDelete();
             contactPerson2.Surname = "New Surname 2";
             contactPersonDeleteConcurrency.Save();
             try
