@@ -322,11 +322,11 @@ namespace Habanero.BO
                 {
                     allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
                 }
-            }
-            if (!string.IsNullOrEmpty(allMessages))
-            {
-                throw new BusinessObjectReferentialIntegrityException(allMessages);
-            }
+                }
+                if (!string.IsNullOrEmpty(allMessages))
+                {
+                    throw new BusinessObjectReferentialIntegrityException(allMessages);
+                }
         }
 
         /// <summary>

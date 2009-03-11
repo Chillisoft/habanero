@@ -170,14 +170,15 @@ namespace Habanero.UI.Base
             
             if (!String.IsNullOrEmpty(formField.DecimalPlaces))
             {
-                if (inputControl is INumericUpDown && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
-                {
-                    int decimalPlaces = Convert.ToInt32(formField.DecimalPlaces);
-                    if (decimalPlaces>=0)
-                    {
-                        ((INumericUpDown)inputControl).DecimalPlaces = decimalPlaces;
-                    }
-                }
+                    if (formField.MapperTypeName != null)
+                            if (inputControl is INumericUpDown && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
+                            {
+                                    int decimalPlaces = Convert.ToInt32(formField.DecimalPlaces);
+                                    if (decimalPlaces>=0)
+                                    {
+                                            ((INumericUpDown)inputControl).DecimalPlaces = decimalPlaces;
+                                    }
+                            }
             }
 
             if (!String.IsNullOrEmpty(formField.Options))

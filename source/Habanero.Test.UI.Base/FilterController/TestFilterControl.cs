@@ -829,7 +829,7 @@ namespace Habanero.Test.UI.Base.FilterController
                         }
 
                         [Test]
-                        public void TestComboBoxChangedTextEventAppliesFilter()
+                        public void TestComboBoxTextChangedEventAppliesFilter()
                         {
                                 //---------------Set up test pack-------------------
                                 IControlFactory factory = GetControlFactory();
