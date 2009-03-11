@@ -638,6 +638,37 @@ namespace Habanero.Test.BO
             Assert.IsTrue(markForDeleteEventFired);
         }
 
+        [Ignore("//TODO_ Brett 11 Mar 2009: ")]
+        [Test]
+        public void Test_MarkForDelete_NewObjectDoesNotRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
+//            bo.Save();
+            bool markForDeleteEventFired = false;
+            bo.MarkedForDeletion += delegate { markForDeleteEventFired = true; };
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsDeleted);
+            Assert.IsTrue(bo.Status.IsNew);
+            Assert.IsFalse(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsEditing);
+            Assert.IsFalse(markForDeleteEventFired);
+
+            //---------------Execute Test ----------------------
+            bo.MarkForDelete();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsTrue(bo.Status.IsEditing);
+            Assert.IsTrue(markForDeleteEventFired);
+        }
+
         [Test, ExpectedException(typeof (BusObjEditableException))]
         public void TestCannotEdit_IsEditable_False()
         {

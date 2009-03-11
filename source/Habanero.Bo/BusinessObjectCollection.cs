@@ -602,7 +602,8 @@ namespace Habanero.BO
                 if (this.RemovedBusinessObjects.Remove(bo)) return;
                 if (!this.Contains(bo))
                 {
-                    if (this.SelectQuery.Criteria.IsMatch(bo))
+                    Criteria criteria = this.SelectQuery.Criteria;
+                    if ((criteria == null ) || (criteria.IsMatch(bo)))
                     {
                         addEventRequired = AddInternal(bo);
                     }

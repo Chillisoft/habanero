@@ -216,7 +216,6 @@ namespace Habanero.UI.Win
         {
             if (boCollection == null)
             {
-                //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
                 _grid.BusinessObjectCollection = null;
                 _grid.AllowUserToAddRows = false;
                 Buttons.Enabled = false;
