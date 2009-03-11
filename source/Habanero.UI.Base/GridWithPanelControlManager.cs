@@ -28,7 +28,7 @@ namespace Habanero.UI.Base
     /// TODO: does win version flash error providers?
     /// TODO: consider when to remove BusinessObjectUpdated event (it is attached and never removed)
     /// </summary>
-    [Obsolete("This has been replaced by IBOSelectorAndEditor : Brett 03 Mar 2009")]
+    [Obsolete("This has been replaced by IBOGridAndEditorControl : Brett 03 Mar 2009")]
     public class GridWithPanelControlManager<TBusinessObject> where TBusinessObject : class, IBusinessObject, new()
     {
         private readonly IGridWithPanelControl<TBusinessObject> _gridWithPanelControl;
@@ -394,12 +394,12 @@ namespace Habanero.UI.Base
         }
 
         ///<summary>
-        /// Returns the ReadOnly Grid Control that is used as the Selector control for the <see cref="IBOSelectorAndEditor"/>
+        /// Returns the ReadOnly Grid Control that is used as the Selector control for the <see cref="IBOGridAndEditorControl"/>
         ///</summary>
         public IReadOnlyGridControl  ReadOnlyGridControl { get; private set; }
 
         ///<summary>
-        /// Returns the Business Object Control that is used for editing the Business Object for the <see cref="IBOSelectorAndEditor"/>
+        /// Returns the Business Object Control that is used for editing the Business Object for the <see cref="IBOGridAndEditorControl"/>
         ///</summary>
         public IBusinessObjectControl BusinessObjectControl
         {

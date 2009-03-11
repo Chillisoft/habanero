@@ -218,6 +218,34 @@ namespace Habanero.Test.UI.Base
 //            MyBO savedBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
 //            Assert.IsNotNull(savedBO);
 //        }
+        [Test]
+        public void TestConfirmDeletion_FalseByDefault()
+        {
+            //---------------Set up test pack-------------------
+            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(editableGrid.ConfirmDeletion);
+        }
+
+        [Test]
+        public void TestConfirmDeletion_SetToTrue()
+        {
+            //---------------Set up test pack-------------------
+            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(editableGrid.ConfirmDeletion);
+            //---------------Execute Test ----------------------
+            editableGrid.ConfirmDeletion = true;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(editableGrid.ConfirmDeletion);
+        }
+
 
         [Test]
         public void TestSetCollectionOnGrid_NoOfRows()
@@ -602,33 +630,7 @@ namespace Habanero.Test.UI.Base
             return new ControlFactoryWin();
         }
 
-        [Test]
-        public void TestConfirmDeletion_FalseByDefault()
-        {
-            //---------------Set up test pack-------------------
-            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
 
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-
-            //---------------Test Result -----------------------
-            Assert.IsFalse(editableGrid.ConfirmDeletion);
-        }
-
-        [Test]
-        public void TestConfirmDeletion_SetToTrue()
-        {
-            //---------------Set up test pack-------------------
-            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
-
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(editableGrid.ConfirmDeletion);
-            //---------------Execute Test ----------------------
-            editableGrid.ConfirmDeletion = true;
-            //---------------Test Result -----------------------
-            Assert.IsTrue(editableGrid.ConfirmDeletion);
-        }
 
         private static void SimulateDeleteKeyPress(IEditableGrid editableGrid)
         {
@@ -700,7 +702,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestConfirmDeletion_NoDeletionWhenAllowUserToDeleteRowsIsFalse()
+        public  void TestConfirmDeletion_NoDeletionWhenAllowUserToDeleteRowsIsFalse()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;

@@ -55,7 +55,6 @@ namespace Habanero.UI.Win
 //            SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
             this.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             _comboBoxClickOnce = true;
-
             UserDeletingRow += ConfirmRowDeletion;
             CheckUserConfirmsDeletionDelegate += CheckUserWantsToDelete;
             CellClick += CellClickHandler;
@@ -81,7 +80,7 @@ namespace Habanero.UI.Win
             {
                 if (this.BusinessObjectCollection != null)
                 {
-                    this.BusinessObjectCollection.RestoreAll();
+                    this.BusinessObjectCollection.CancelEdits();
                 }
                 else if (this.DataSource is DataView)
                 {
@@ -115,7 +114,6 @@ namespace Habanero.UI.Win
             }
         }
 
-        /// /// TODO: shouldn't this be moved up to GridBase?
         /// <summary>
         /// Gets or sets the boolean value that determines whether to confirm
         /// deletion with the user when they have chosen to delete a row

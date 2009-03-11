@@ -248,12 +248,12 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(1, form.Controls.Count);
             Assert.AreEqual(DockStyle.Fill, form.Controls[0].Dock);
 
-            Assert.IsInstanceOfType(typeof(IBOSelectorAndEditor), form.Controls[0]);
-            Assert.IsInstanceOfType(typeof(BOSelectorAndBOEditorControlWin), form.Controls[0]);
-            BOSelectorAndBOEditorControlWin boSelectorAndBOEditorControlWin = (BOSelectorAndBOEditorControlWin)form.Controls[0];
-            //Assert.AreSame(mapper.BusinessObject, BOSelectorAndBOEditorControlWin.BusinessObjectControlWin.BusinessObject);
-            Assert.IsTrue(boSelectorAndBOEditorControlWin.GridControl.IsInitialised);
-            IBusinessObjectCollection collection = boSelectorAndBOEditorControlWin.GridControl.Grid.BusinessObjectCollection;
+            Assert.IsInstanceOfType(typeof(IBOGridAndEditorControl), form.Controls[0]);
+            Assert.IsInstanceOfType(typeof(BOGridAndEditorControlWin), form.Controls[0]);
+            BOGridAndEditorControlWin andBOGridAndEditorControlWin = (BOGridAndEditorControlWin)form.Controls[0];
+            //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BusinessObjectControlWin.BusinessObject);
+            Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);
+            IBusinessObjectCollection collection = andBOGridAndEditorControlWin.GridControl.Grid.BusinessObjectCollection;
             Assert.IsNotNull(collection);
             Assert.AreEqual(organisationTestBOS.Count, collection.Count);
             Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);
@@ -289,12 +289,12 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(1, form.Controls.Count);
             Assert.AreEqual(DockStyle.Fill, form.Controls[0].Dock);
 
-            Assert.IsInstanceOfType(typeof(IBOSelectorAndEditor), form.Controls[0]);
-            Assert.IsInstanceOfType(typeof(BOSelectorAndBOEditorControlWin), form.Controls[0]);
-            BOSelectorAndBOEditorControlWin boSelectorAndBOEditorControlWin = (BOSelectorAndBOEditorControlWin)form.Controls[0];
-            //Assert.AreSame(mapper.BusinessObject, BOSelectorAndBOEditorControlWin.BusinessObjectControlWin.BusinessObject);
-            Assert.IsTrue(boSelectorAndBOEditorControlWin.GridControl.IsInitialised);
-            IBusinessObjectCollection collection = boSelectorAndBOEditorControlWin.GridControl.Grid.BusinessObjectCollection;
+            Assert.IsInstanceOfType(typeof(IBOGridAndEditorControl), form.Controls[0]);
+            Assert.IsInstanceOfType(typeof(BOGridAndEditorControlWin), form.Controls[0]);
+            BOGridAndEditorControlWin andBOGridAndEditorControlWin = (BOGridAndEditorControlWin)form.Controls[0];
+            //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BusinessObjectControlWin.BusinessObject);
+            Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);
+            IBusinessObjectCollection collection = andBOGridAndEditorControlWin.GridControl.Grid.BusinessObjectCollection;
             Assert.IsNotNull(collection);
             Assert.AreEqual(organisationTestBOS.Count, collection.Count);
             Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);

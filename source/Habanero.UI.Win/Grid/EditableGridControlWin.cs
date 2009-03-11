@@ -51,8 +51,9 @@ namespace Habanero.UI.Win
         ///<param name="controlFactory">The <see cref="IControlFactory"/> to use to construct the control.</param>
         public EditableGridControlWin(IControlFactory controlFactory)
         {
-            if (controlFactory == null) throw new HabaneroArgumentException("controlFactory",
-                    "Cannot create an editable grid control if the control factory is null");
+            if (controlFactory == null)
+                throw new HabaneroArgumentException
+                    ("controlFactory", "Cannot create an editable grid control if the control factory is null");
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this, controlFactory);
             _grid = _controlFactory.CreateEditableGrid();
@@ -182,7 +183,7 @@ namespace Habanero.UI.Win
         /// </summary>
         public void Clear()
         {
-            SetBusinessObjectCollection(null);
+            this.BusinessObjectCollection = null;
         }
 
         /// <summary>Gets the number of rows displayed in the <see cref="IBOColSelectorControl"></see>.</summary>
@@ -230,8 +231,8 @@ namespace Habanero.UI.Win
             {
                 if (ClassDef != boCollection.ClassDef)
                 {
-                    throw new ArgumentException(
-                        "You cannot call set collection for a collection that has a different class def than is initialised");
+                    throw new ArgumentException
+                        ("You cannot call set collection for a collection that has a different class def than is initialised");
                 }
             }
             //if (this.BusinessObjectCreator is DefaultBOCreator)
@@ -321,8 +322,9 @@ namespace Habanero.UI.Win
                     }
                     searchClause += AdditionalSearchCriteria;
                 }
-                IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
-                    GetBusinessObjectCollection(ClassDef, searchClause, OrderBy);
+                IBusinessObjectCollection collection =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                        (ClassDef, searchClause, OrderBy);
                 SetBusinessObjectCollection(collection);
             }
             else
@@ -340,5 +342,57 @@ namespace Habanero.UI.Win
         {
             _grid.SaveChanges();
         }
+
+        #region Implementation of IBOSelectorAndEditor
+
+        ///<summary>
+        /// Gets and sets whether the user can add Business objects via this control
+        ///</summary>
+        public bool AllowUsersToAddBO
+        {
+            get { return this.Grid.AllowUserToAddRows; }
+            set { this.Grid.AllowUserToAddRows = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets whether the user can Delete (<see cref="IBusinessObject.MarkForDelete"/>) <see cref="IBusinessObject"/>s via this control
+        /// </summary>
+        public bool AllowUsersToDeleteBO
+        {
+            get { return this.Grid.AllowUserToDeleteRows; }
+            set { this.Grid.AllowUserToDeleteRows = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets whether the user can edit <see cref="IBusinessObject"/>s via this control
+        /// </summary>
+        public bool AllowUsersToEditBO
+        {
+            get { return !this.Grid.ReadOnly; }
+            set { this.Grid.ReadOnly = !value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a boolean value that determines whether to confirm
+        /// deletion with the user when they have chosen to delete a row
+        /// </summary>
+        public bool ConfirmDeletion
+        {
+            get { return this.Grid.ConfirmDeletion; }
+            set { this.Grid.ConfirmDeletion = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the delegate that checks whether the user wants to delete selected rows.
+        /// If <see cref="IBOSelectorAndEditor.ConfirmDeletion"/> is true and no specific <see cref="IBOSelectorAndEditor.CheckUserConfirmsDeletionDelegate"/> is set then
+        /// a default <see cref="CheckUserConfirmsDeletion"/> is used.
+        /// </summary>
+        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate
+        {
+            get { return this.Grid.CheckUserConfirmsDeletionDelegate; }
+            set { this.Grid.CheckUserConfirmsDeletionDelegate = value; }
+        }
+
+        #endregion
     }
 }

@@ -19,10 +19,13 @@
 
 using System;
 using System.Data;
+using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 using DataGridViewSelectionMode=Gizmox.WebGUI.Forms.DataGridViewSelectionMode;
+using MessageBoxButtons=Habanero.UI.Base.MessageBoxButtons;
+using MessageBoxIcon=Habanero.UI.Base.MessageBoxIcon;
 
 namespace Habanero.UI.VWG
 {
@@ -49,7 +52,7 @@ namespace Habanero.UI.VWG
         {
             this.AllowUserToAddRows = true;
             this.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-
+            CheckUserConfirmsDeletionDelegate = CheckUserWantsToDelete;
         }
 
         /// <summary>
@@ -89,21 +92,25 @@ namespace Habanero.UI.VWG
         /// Gets or sets the boolean value that determines whether to confirm
         /// deletion with the user when they have chosen to delete a row
         /// </summary>
-        public bool ConfirmDeletion
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
+        public bool ConfirmDeletion { get; set; }
 
         /// <summary>
         /// Gets or sets the delegate that checks whether the user wants to delete selected rows
         /// </summary>
-        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
+        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate { get; set; }
 
+        /// <summary>
+        /// Displays a message box to the user to check if they want to proceed with
+        /// deleting the selected rows.
+        /// </summary>
+        /// <returns>Returns true if the user does want to delete</returns>
+        public static bool CheckUserWantsToDelete()
+        {
+            return
+                MessageBox.Show
+                    ("Are you sure you want to delete the selected row(s)?", "Delete?", Gizmox.WebGUI.Forms.MessageBoxButtons.YesNo,
+                     Gizmox.WebGUI.Forms.MessageBoxIcon.Exclamation) == Gizmox.WebGUI.Forms.DialogResult.Yes;
+        }
         /// <summary>
         /// Indicates what action should be taken when a selection of
         /// cells is selected and the Delete key is pressed.
@@ -117,7 +124,8 @@ namespace Habanero.UI.VWG
         }
 
         /// <summary>
-        /// Carries out actions when the delete key on the keyboard is pressed
+        /// Carries out actions when the delete key on the keyboard is pressed.
+        /// This has been made public purely for testing purposes.
         /// </summary>
         public void DeleteKeyHandler()
         {

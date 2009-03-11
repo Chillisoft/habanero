@@ -205,22 +205,22 @@ namespace Habanero.UI.VWG
             return new ReadOnlyGridControlVWG(this);
         }
 
-        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
+        [Obsolete(" Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, "default");
         }
-        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
+        [Obsolete(" Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, uiDefName);
         }
-        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
+        [Obsolete(" Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, businessObjectControl, "default");
         }
-        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
+        [Obsolete(" Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, businessObjectControl, uiDefName);
@@ -584,17 +584,17 @@ namespace Habanero.UI.VWG
             return new DateTimePickerMapperStrategyVWG();
         }
 
-        public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
+        public IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
         {
             throw new System.NotImplementedException();
         }
 
-        public IBOSelectorAndEditor CreateGridAndBOEditorControl(ClassDef classDef)
+        public IBOGridAndEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
         {
             throw new NotImplementedException();
         }
 
-        public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
+        public IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
         {
             throw new NotImplementedException();
         }
@@ -613,7 +613,7 @@ namespace Habanero.UI.VWG
         }
 
 //
-//        public IBOSelectorAndEditor CreateGridAndBOEditorControl(IBOEditorControl boEditorPanel)
+//        public IBOGridAndEditorControl CreateGridAndBOEditorControl(IBOEditorControl boEditorPanel)
 //        {
 //            throw new NotImplementedException();
 //        }

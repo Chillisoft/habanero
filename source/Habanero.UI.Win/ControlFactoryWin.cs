@@ -872,7 +872,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
+        [Obsolete("Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, "default");
@@ -882,7 +882,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        [Obsolete("Replaced by IBOSelectorAndEditor:: Brett 03 Mar 2009")]
+        [Obsolete("Replaced by IBOGridAndEditorControl:: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, uiDefName);
@@ -892,7 +892,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        [Obsolete("Replaced by IBOSelectorAndEditor:: Brett 03 Mar 2009")]
+        [Obsolete("Replaced by IBOGridAndEditorControl:: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, businessObjectControl);
@@ -902,7 +902,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        [Obsolete("Replaced by IBOSelectorAndEditor:: Brett 03 Mar 2009")]
+        [Obsolete("Replaced by IBOGridAndEditorControl:: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, businessObjectControl, uiDefName);
@@ -1001,37 +1001,35 @@ namespace Habanero.UI.Win
         {
             return new DateTimePickerMapperStrategyWin();
         }
-#pragma warning disable 618,612//Maintained for backward compatibility
-#pragma warning restore 618,612
         ///<summary>
-        /// Creates a <see cref="IBOSelectorAndEditor"/>
+        /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
+        public IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
         {
-            return new BOSelectorAndBOEditorControlWin<TBusinessObject>(this, "default");
+            return new BOGridAndEditorControlWin<TBusinessObject>(this, "default");
 
         }
 
         ///<summary>
-        /// Creates a <see cref="IBOSelectorAndEditor"/>
+        /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        public IBOSelectorAndEditor CreateGridAndBOEditorControl(ClassDef classDef)
+        public IBOGridAndEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
         {
-            return new BOSelectorAndBOEditorControlWin(this, classDef, "default");
+            return new BOGridAndEditorControlWin(this, classDef, "default");
         }
 
         ///<summary>
-        /// Creates a <see cref="IBOSelectorAndEditor"/>
+        /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        public IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
+        public IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
         {
 
-            return new BOSelectorAndBOEditorControlWin<TBusinessObject>(this, editorControlPanel);
+            return new BOGridAndEditorControlWin<TBusinessObject>(this, editorControlPanel);
         }
 
-//        public IBOSelectorAndEditor CreateGridAndBOEditorControl(IBOEditorControl boEditorPanel,IBusinessObject businessObject)
+//        public IBOGridAndEditorControl CreateGridAndBOEditorControl(IBOEditorControl boEditorPanel,IBusinessObject businessObject)
 //        {
-//            return new BOSelectorAndBOEditorControlWin<IBusinessObject>(this, boEditorPanel,businessObject);
+//            return new BOGridAndEditorControlWin<IBusinessObject>(this, boEditorPanel,businessObject);
 //        }
 
         ///<summary>

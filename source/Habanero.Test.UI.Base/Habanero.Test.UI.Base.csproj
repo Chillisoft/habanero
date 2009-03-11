@@ -87,6 +87,7 @@
     <Compile Include="TestBusinessObjectDeletor.cs" />
     <Compile Include="Controllers\TestListBoxCollectionManager.cs" />
     <Compile Include="Selectors\TestBOSelector.cs" />
+    <Compile Include="Selectors\TestBOSelectorAndEditorWin.cs" />
     <Compile Include="Selectors\TestBOTabControlSelector.cs" />
     <Compile Include="Selectors\TestCollapsiblePanelSelector.cs">
     </Compile>
@@ -96,7 +97,7 @@
     <Compile Include="Selectors\TestGridSelector.cs" />
     <Compile Include="Selectors\TestListBoxSelector.cs" />
     <Compile Include="Selectors\TestReadOnlyGridControlSelector.cs" />
-    <Compile Include="TestBOSelectorAndBOEditorManager.cs" />
+    <Compile Include="Selectors\TestBOSelectorAndBOEditorManager.cs" />
     <Compile Include="TestGroupBoxGroupControl.cs" />
     <Compile Include="TestBusinessObjectControl.cs" />
     <Compile Include="TestCollapsiblePanel.cs" />
@@ -121,7 +122,7 @@
     <Compile Include="TestGridWithPanelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TestBOSelectorAndBOEditorContro.cs" />
+    <Compile Include="Selectors\BOGridAndEditorControl.cs" />
     <Compile Include="TestGroupBox.cs" />
     <Compile Include="TestMessageBoxConfirmer.cs" />
     <Compile Include="TestNumericUpDown.cs" />

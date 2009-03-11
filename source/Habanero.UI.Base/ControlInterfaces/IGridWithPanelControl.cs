@@ -44,7 +44,7 @@ namespace Habanero.UI.Base
     /// Some customisation is provided through the GridWithPanelControlStrategy,
     /// including how controls should be enabled for the appropriate environment.
     /// </summary>
-    [Obsolete("This has been replaced by IBOSelectorAndEditor : Brett 03 Mar 2009")]
+    [Obsolete("This has been replaced by IBOGridAndEditorControl : Brett 03 Mar 2009")]
     public interface IGridWithPanelControl<TBusinessObject> : IControlHabanero
     {
         /// <summary>

@@ -42,7 +42,7 @@ namespace Habanero.UI.VWG
     /// including how controls should be enabled for the appropriate environment.
     /// </summary>
     /// to the grid in the future.  What happens when you double-click?
-    [Obsolete("This has been replaced by IBOSelectorAndEditor : Brett 03 Mar 2009")]
+    [Obsolete("This has been replaced by IBOGridAndEditorControl : Brett 03 Mar 2009")]
     public class GridWithPanelControlVWG<TBusinessObject> : UserControlVWG, IGridWithPanelControl<TBusinessObject>
         where TBusinessObject : class, IBusinessObject, new()
     {

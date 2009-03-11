@@ -523,6 +523,56 @@ namespace Habanero.UI.Win
             }
         }
 
-        
+        #region Implementation of IBOSelectorAndEditor
+
+        ///<summary>
+        /// Gets and sets whether the user can add Business objects via this control
+        ///</summary>
+        public bool AllowUsersToAddBO
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Gets and sets whether the user can Delete (<see cref="IBusinessObject.MarkForDelete"/>) <see cref="IBusinessObject"/>s via this control
+        /// </summary>
+        public bool AllowUsersToDeleteBO
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Gets and sets whether the user can edit <see cref="IBusinessObject"/>s via this control
+        /// </summary>
+        public bool AllowUsersToEditBO
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Gets or sets a boolean value that determines whether to confirm
+        /// deletion with the user when they have chosen to delete a row
+        /// </summary>
+        public bool ConfirmDeletion
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the delegate that checks whether the user wants to delete selected rows.
+        /// If <see cref="IBOSelectorAndEditor.ConfirmDeletion"/> is true and no specific <see cref="IBOSelectorAndEditor.CheckUserConfirmsDeletionDelegate"/> is set then
+        /// a default <see cref="CheckUserConfirmsDeletion"/> is used.
+        /// </summary>
+        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        #endregion
     }
 }

@@ -102,6 +102,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DockStyleWin.cs" />
+    <Compile Include="Grid\BOGridAndEditorControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Grid\EditableGridControlWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -126,9 +129,6 @@
     <Compile Include="FormExceptionNotifier.cs" />
     <Compile Include="FormWin.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BOSelectorAndBOEditorControlWin.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GridBaseWin.cs">
       <SubType>Component</SubType>

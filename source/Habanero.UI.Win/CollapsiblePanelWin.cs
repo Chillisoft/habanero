@@ -8,6 +8,9 @@ namespace Habanero.UI.Win
     /// </summary>
     public class CollapsiblePanelWin : PanelWin, ICollapsiblePanel
     {
+        /// <summary>
+        /// Event that is raised when this panel is uncollapsed.
+        /// </summary>
         public event EventHandler Uncollapsed;
 
         private readonly CollapsiblePanelManager _collapsiblePanelManager;

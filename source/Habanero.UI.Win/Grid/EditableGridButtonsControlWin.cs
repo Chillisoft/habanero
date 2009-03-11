@@ -39,6 +39,10 @@ namespace Habanero.UI.Win
         public event EventHandler CancelClicked;
 
 
+        ///<summary>
+        /// Constructor for <see cref="EditableGridButtonsControlWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public EditableGridButtonsControlWin(IControlFactory controlFactory)
             : base(controlFactory)
         {

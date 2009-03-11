@@ -93,7 +93,7 @@
     <Compile Include="Selectors\IBOSelectorControl.cs" />
     <Compile Include="GroupBoxGroupControlManager.cs" />
     <Compile Include="IBOEditorControl.cs" />
-    <Compile Include="IBOSelectorAndEditor.cs" />
+    <Compile Include="IBOGridAndEditorControl.cs" />
     <Compile Include="ControlInterfaces\IExtendedComboBox.cs" />
     <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
     <Compile Include="FilterControl\FilterControlBuilder.cs" />

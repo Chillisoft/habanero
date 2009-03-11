@@ -157,27 +157,27 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
-        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
+        [Obsolete("Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
-        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
+        [Obsolete("Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new();
 
  
         /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
-        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
+        [Obsolete("Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new();
 
 
         /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
-        [Obsolete("Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
+        [Obsolete("Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new();
 
         /// <summary>
@@ -567,20 +567,20 @@ namespace Habanero.UI.Base
         IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy();
 
         ///<summary>
-        /// Creates a <see cref="IBOSelectorAndEditor"/>
+        /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>() 
+        IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>() 
             where TBusinessObject:class, IBusinessObject;
 
         ///<summary>
-        /// Creates a <see cref="IBOSelectorAndEditor"/>
+        /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        IBOSelectorAndEditor CreateGridAndBOEditorControl(ClassDef classDef);
+        IBOGridAndEditorControl CreateGridAndBOEditorControl(ClassDef classDef);
 
         ///<summary>
-        /// Creates a <see cref="IBOSelectorAndEditor"/>
+        /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        IBOSelectorAndEditor CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel)
+        IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel)
             where TBusinessObject : class, IBusinessObject;
 
         ///<summary>

@@ -43,7 +43,7 @@ namespace Habanero.UI.Win
     /// Some customisation is provided through the GridWithPanelControlStrategy,
     /// including how controls should be enabled for the appropriate environment.
     /// </summary>
-    [Obsolete("This has been replaced by IBOSelectorAndEditor : Brett 03 Mar 2009")]
+    [Obsolete("This has been replaced by IBOGridAndEditorControl : Brett 03 Mar 2009")]
     public class GridWithPanelControlWin<TBusinessObject> : UserControlWin, IGridWithPanelControl<TBusinessObject> 
                 where TBusinessObject : class, IBusinessObject, new()
     {
@@ -156,7 +156,7 @@ namespace Habanero.UI.Win
     /// <summary>
     /// Represents a panel containing a PanelInfo used to edit a single business object.
     /// </summary>
-    [Obsolete("This has been replaced by IBOSelectorAndEditor : Brett 03 Mar 2009")]
+    [Obsolete("This has been replaced by IBOGridAndEditorControl : Brett 03 Mar 2009")]
     public class BusinessObjectPanelWin<T> : UserControlWin, IBusinessObjectPanel where T : class, IBusinessObject
     {
         private IPanelInfo _panelInfo;

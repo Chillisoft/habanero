@@ -26,7 +26,7 @@ namespace Habanero.UI.Base
     /// The collection of business objects can be shown using any selector control e.g. an <see cref="IEditableGridControl"/>,
     ///   <see cref="IGridControl"/> etc.
     ///</summary>
-    public interface IBOSelectorAndEditor : IControlHabanero
+    public interface IBOGridAndEditorControl : IControlHabanero
     {
         /// <summary>
         /// Sets the business object collection to populate the grid.  If the grid

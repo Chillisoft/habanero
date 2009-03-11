@@ -27,6 +27,9 @@ namespace Habanero.UI.Win
     /// </summary>
     public class TabPageWin : TabPage, ITabPage
     {
+        /// <summary>
+        /// Constructor for <see cref="TabPageWin"/>
+        /// </summary>
         public TabPageWin()
         {
         }
