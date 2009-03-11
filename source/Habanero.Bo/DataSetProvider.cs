@@ -253,10 +253,7 @@ namespace Habanero.BO
             {
                 _collection.BusinessObjectPropertyUpdated += _propUpdatedEventHandler;
             }
-            else
-            {
-                _collection.BusinessObjectUpdated += _updatedHandler;
-            }
+            _collection.BusinessObjectUpdated += _updatedHandler;
             _collection.BusinessObjectIDUpdated += IDUpdatedHandler;
             _collection.BusinessObjectAdded += _boAddedHandler;
             _collection.BusinessObjectRemoved += _removedHandler;

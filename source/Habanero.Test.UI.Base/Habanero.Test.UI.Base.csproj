@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
     <Compile Include="Controllers\TestBOColTabControlManager.cs" />
+    <Compile Include="TestBusinessObjectDeletor.cs" />
     <Compile Include="Controllers\TestListBoxCollectionManager.cs" />
     <Compile Include="Selectors\TestBOSelector.cs" />
     <Compile Include="Selectors\TestBOTabControlSelector.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="TestCollapsiblePanelGroupControlWin.cs" />
     <Compile Include="TestComboBox.cs">
     </Compile>
+    <Compile Include="TestConfirmingBusinessObjectDeletor.cs" />
     <Compile Include="TestExtendedComboBox.cs" />
     <Compile Include="TestEnumerationConverter.cs" />
     <Compile Include="TestEnumerations.cs" />

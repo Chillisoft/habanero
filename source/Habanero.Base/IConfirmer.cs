@@ -39,7 +39,6 @@ namespace Habanero.Base
         /// if they decline the offer</returns>
         bool Confirm(string message);
 
-
         ///<summary>
         /// Gets confirmation from the user after providing them with an option
         /// and executes the provided delegate once the user has responded.
@@ -48,6 +47,6 @@ namespace Habanero.Base
         ///<param name="confirmationDelegate">The delegate to execute once the user has responded.</param>
         ///<returns>Returns true if the user confirms the choice and false
         /// if they decline the offer</returns>
-        bool Confirm(string message, ConfirmationDelegate confirmationDelegate);
+        void Confirm(string message, ConfirmationDelegate confirmationDelegate);
     }
 }

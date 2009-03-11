@@ -154,9 +154,38 @@ namespace Habanero.Test
             return rnd.Next();
         }
 
+        public static int GetRandomInt(int max)
+        {
+            return rnd.Next(0, max);
+        }
+
+        public static int GetRandomInt(int min, int max)
+        {
+            return rnd.Next(min, max);
+        }
+
         public static decimal GetRandomDecimal()
         {
             return (decimal) rnd.NextDouble();
+        }
+
+        public static TEnum GetRandomEnum<TEnum>()
+            where TEnum : struct
+        {
+            return GetRandomEnum<TEnum>(null);
+        }
+
+        public static TEnum GetRandomEnum<TEnum>(TEnum? excluded)
+            where TEnum : struct
+        {
+            Array values = Enum.GetValues(typeof(TEnum));
+            int randomIndex = GetRandomInt(0, values.Length);
+            TEnum value = (TEnum)values.GetValue(randomIndex);
+            if (excluded.HasValue && excluded.Value.Equals(value))
+            {
+                return GetRandomEnum(excluded);
+            }
+            return value;
         }
 
         public static DatabaseConfig GetDatabaseConfig() { 

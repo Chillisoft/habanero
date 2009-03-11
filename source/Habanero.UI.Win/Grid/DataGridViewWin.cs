@@ -166,7 +166,8 @@ namespace Habanero.UI.Win
         /// <filterpriority>1</filterpriority>
         public void Sort(IDataGridViewColumn dataGridViewColumn, ListSortDirection direction)
         {
-            base.Sort(((DataGridViewColumnWin) dataGridViewColumn).DataGridViewColumn, direction);
+            Sort(dataGridViewColumn.Name, direction == ListSortDirection.Ascending);
+            //base.Sort(((DataGridViewColumnWin) dataGridViewColumn).DataGridViewColumn,direction);
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace Habanero.UI.Win
         /// <returns>The <see cref="IDataGridViewColumn"></see> by which the <see cref="IDataGridView"></see> 
         /// contents are currently sorted.</returns>
         /// <filterpriority>1</filterpriority>
-        public new IDataGridViewColumn SortedColumn
+        IDataGridViewColumn IDataGridView.SortedColumn
         {
             get { throw new System.NotImplementedException(); }
         }
