@@ -871,15 +871,18 @@ namespace Habanero.BO
         public void MarkForDelete()
         {
             CheckIsDeletable();
-            if (Status.IsNew)
-            {
-                throw new HabaneroDeveloperException
-                    (String.Format
-                         ("This '{0}' cannot be deleted as it has never existed in the database.", ClassDef.DisplayName),
-                     String.Format
-                         ("A '{0}' cannot be deleted when its status is new and does not exist in the database.",
-                          ClassDef.ClassName));
-            }
+            //This has been removed. The new philosophy with allowing the user to create items have them show
+            // in the collection and the UI. It should be allowed that the user can (delete) the object.
+            // The transaction committer will be modified to ignore an object that is marked as deleted and new.
+//            if (Status.IsNew)
+//            {
+//                throw new HabaneroDeveloperException
+//                    (String.Format
+//                         ("This '{0}' cannot be deleted as it has never existed in the database.", ClassDef.DisplayName),
+//                     String.Format
+//                         ("A '{0}' cannot be deleted when its status is new and does not exist in the database.",
+//                          ClassDef.ClassName));
+//            }
             if (!Status.IsEditing)
             {
                 BeginEdit(true);

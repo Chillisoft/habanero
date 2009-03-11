@@ -30,12 +30,17 @@ namespace Habanero.UI.VWG
     public class DataGridViewColumnVWG : IDataGridViewColumn
     {
         private readonly DataGridViewColumn _dataGridViewColumn;
-
+        /// <summary>
+        /// Constructor for <see cref="DataGridViewColumnVWG"/> 
+        /// </summary>
+        /// <param name="dataGridViewColumn"></param>
         public DataGridViewColumnVWG(DataGridViewColumn dataGridViewColumn)
         {
             _dataGridViewColumn = dataGridViewColumn;
         }
-
+        /// <summary>
+        /// returns the Visual WebGui DataGridViewColumn that is being wrapped by this class
+        /// </summary>
         public DataGridViewColumn DataGridViewColumn
         {
             get { return _dataGridViewColumn; }

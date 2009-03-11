@@ -29,6 +29,11 @@ namespace Habanero.UI.VWG
     ///</summary>
     public class MenuBuilderVWG : IMenuBuilder
     {
+        /// <summary>
+        /// Constructor for <see cref="BuildMainMenu"/>
+        /// </summary>
+        /// <param name="habaneroMenu"></param>
+        /// <returns></returns>
         public IMainMenuHabanero BuildMainMenu(HabaneroMenu habaneroMenu)
         {
             MainMenuVWG mainMenu = new MainMenuVWG(habaneroMenu);

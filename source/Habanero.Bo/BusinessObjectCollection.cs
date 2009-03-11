@@ -535,8 +535,15 @@ namespace Habanero.BO
                 bo = e.BusinessObject as TBusinessObject;
                 if (bo == null) return;
                 if (this.MarkedForDeleteBusinessObjects.Contains(bo)) return;
-
-                this.MarkedForDeleteBusinessObjects.Add(bo);
+                if (bo.Status.IsNew)
+                {
+                    this.CreatedBusinessObjects.Remove(bo);
+                }
+                else
+                {
+                    this.MarkedForDeleteBusinessObjects.Add(bo);
+                }
+                
                 base.Remove(bo);
                 //KeyObjectHashTable.Remove(bo.ID.AsString_CurrentValue());
 				KeyObjectHashTable.Remove(bo.ID.ObjectID);

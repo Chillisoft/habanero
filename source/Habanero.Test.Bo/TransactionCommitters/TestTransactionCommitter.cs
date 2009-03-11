@@ -329,6 +329,69 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
 
         [Test]
+        public void Test_AddCreatedBO_DoesNotFailInTransactionCommitter()
+        {
+            //---------------Set up test pack-------------------
+            MockBO mockBo = new MockBO();
+            Guid mockBOProp1 = Guid.NewGuid();
+            mockBo.MockBOProp1 = mockBOProp1;
+            mockBo.MarkForDelete();
+            TransactionCommitter committerDB = new TransactionCommitterStub();
+            //---------------Assert Preconditions---------------
+            Assert.IsTrue(mockBo.Status.IsNew);
+            Assert.IsTrue(mockBo.Status.IsDeleted);
+            Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
+            //---------------Execute Test ----------------------
+            committerDB.AddBusinessObject(mockBo);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(mockBo.Status.IsNew);
+            Assert.IsTrue(mockBo.Status.IsDeleted);
+            Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
+        }
+        [Test]
+        public void TestPersistSimpleCreatedBO_DoesNotFailInTransactionCommitter()
+        {
+            //---------------Set up test pack-------------------
+            MockBO mockBo = new MockBO();
+            Guid mockBOProp1 = Guid.NewGuid();
+            mockBo.MockBOProp1 = mockBOProp1;
+            
+            TransactionCommitter committerDB = new TransactionCommitterStub();
+            committerDB.AddBusinessObject(mockBo);
+            mockBo.MarkForDelete();
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(1, committerDB.OriginalTransactions.Count);
+            Assert.IsTrue(mockBo.Status.IsNew);
+            Assert.IsTrue(mockBo.Status.IsDeleted);
+            //---------------Execute Test ----------------------
+            committerDB.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(mockBo.Status.IsNew);
+            Assert.IsTrue(mockBo.Status.IsDeleted);
+        }
+
+        [Test]
+        public void TestPersistCreated_Deleted_Invalid_BO_DoesNotFailInTransactionCommitter()
+        {
+            //---------------Set up test pack-------------------
+            MockBOWithCompulsoryField mockBo = new MockBOWithCompulsoryField();
+            mockBo.MockBOProp1 = null;
+
+            TransactionCommitter committerDB = new TransactionCommitterStub();
+            committerDB.AddBusinessObject(mockBo);
+            mockBo.MarkForDelete();
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(1, committerDB.OriginalTransactions.Count);
+            Assert.IsTrue(mockBo.Status.IsNew);
+            Assert.IsTrue(mockBo.Status.IsDeleted);
+            //---------------Execute Test ----------------------
+            committerDB.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(mockBo.Status.IsNew);
+            Assert.IsTrue(mockBo.Status.IsDeleted);
+        }
+
+        [Test]
         public void TestPersistSimpleBO_Update_NotUsingTransactionalBusinessObject()
         {
             //---------------Set up test pack-------------------
@@ -344,7 +407,6 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
         }
-
         [Test, ExpectedException(typeof (NotImplementedException))]
         public void TestRaisesException_onError()
         {
@@ -405,8 +467,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
             bool updateBeforePersistCalled = false;
             MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(
-                delegate(ITransactionCommitter committer)
-                {
+                delegate {
                     updateBeforePersistCalled = true;
                 });
             trnCommitter.AddBusinessObject(mockBo);
@@ -426,8 +487,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             bool updateBeforePersistCalled = false;
             bool updateBeforePersistCalledForInner = false;
             MockBOWithUpdateBeforePersistDelegate innerMockBo = new MockBOWithUpdateBeforePersistDelegate(
-                delegate(ITransactionCommitter committer)
-                {
+                delegate {
                     updateBeforePersistCalledForInner = true;
                 });
             MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(

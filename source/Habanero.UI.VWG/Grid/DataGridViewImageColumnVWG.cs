@@ -29,7 +29,10 @@ namespace Habanero.UI.VWG
     public class DataGridViewImageColumnVWG : DataGridViewColumnVWG, IDataGridViewImageColumn
     {
         private readonly DataGridViewImageColumn _dataGridViewColumn;
-
+        /// <summary>
+        /// Constructor for <see cref="DataGridViewImageColumnVWG"/> 
+        /// </summary>
+        /// <param name="dataGridViewColumn"></param>
         public DataGridViewImageColumnVWG(DataGridViewImageColumn dataGridViewColumn)
             : base(dataGridViewColumn)
         {

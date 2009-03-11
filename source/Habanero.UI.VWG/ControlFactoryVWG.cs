@@ -42,6 +42,9 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class ControlFactoryVWG : IControlFactory
     {
+        /// <summary>
+        /// The standard height to be used when constructing a textbox
+        /// </summary>
         public const int TEXTBOX_HEIGHT = 20;
         //I Guess that the manager was created with the idea of 
         // moving the common code in the Win and VWG control factory to a manager.
@@ -205,22 +208,37 @@ namespace Habanero.UI.VWG
             return new ReadOnlyGridControlVWG(this);
         }
 
-        [Obsolete(" Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
+        /// <summary>
+        /// Creates a GridWithPanelControl
+        /// </summary>
+        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, "default");
         }
-        [Obsolete(" Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
+
+        /// <summary>
+        /// Creates a GridWithPanelControl
+        /// </summary>
+        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, uiDefName);
         }
-        [Obsolete(" Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
+
+        /// <summary>
+        /// Creates a GridWithPanelControl
+        /// </summary>
+        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, businessObjectControl, "default");
         }
-        [Obsolete(" Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
+
+        /// <summary>
+        /// Creates a GridWithPanelControl
+        /// </summary>
+        [Obsolete(" Replaced by IBOSelectorAndEditor: Brett 03 Mar 2009")]
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlVWG<T>(this, businessObjectControl, uiDefName);
@@ -327,6 +345,9 @@ namespace Habanero.UI.VWG
             return new UserControlVWG();
         }
 
+        /// <summary>
+        /// Creates a user control with the specified name.
+        /// </summary>
         public IUserControlHabanero CreateUserControl(string name)
         {
             IUserControlHabanero userControlHabanero = CreateUserControl();
@@ -579,21 +600,33 @@ namespace Habanero.UI.VWG
             return new PictureBoxVWG();
         }
 
+        ///<summary>
+        /// Creates a <see cref="IDateTimePickerMapperStrategy"/>
+        ///</summary>
         public IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy()
         {
             return new DateTimePickerMapperStrategyVWG();
         }
 
+        ///<summary>
+        /// Creates a <see cref="IBOSelectorAndEditor"/>
+        ///</summary>
         public IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
         {
             throw new System.NotImplementedException();
         }
 
+        ///<summary>
+        /// Creates a <see cref="IBOSelectorAndEditor"/>
+        ///</summary>
         public IBOGridAndEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
         {
             throw new NotImplementedException();
         }
 
+        ///<summary>
+        /// Creates a <see cref="IBOSelectorAndEditor"/>
+        ///</summary>
         public IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
         {
             throw new NotImplementedException();
@@ -607,6 +640,9 @@ namespace Habanero.UI.VWG
             return new CollapsiblePanelVWG(this); 
         }
 
+        ///<summary>
+        /// Creates a <see cref="ICollapsiblePanel"/>
+        ///</summary>
         public ICollapsiblePanel CreateCollapsiblePanel(string name)
         {
             return new CollapsiblePanelVWG(this) {Text = name};

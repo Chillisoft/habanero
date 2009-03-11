@@ -363,8 +363,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             AssertRemovedEventFired();
         }
 
-        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
-        public void Test_CreatedBusinessObject_ColMarkForDelete()
+        [Test]
+        public void Test_CreatedBusinessObject_ColMarkForDelete_ShouldRemoveFromCurrentAndCreatedCol()
         {
             //---------------Set up test pack-------------------
             //ContactPersonTestBO.LoadDefaultClassDef();
@@ -380,24 +380,29 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.MarkForDelete(newCP);
 
             //---------------Test Result -----------------------
+            Assert.AreEqual(0, cpCol.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.IsTrue(newCP.Status.IsDeleted);
         }
 
-        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
-        public void Test_CreatedBusinessObject_MarkForDelete()
+        [Test]
+        public void Test_CreatedBusinessObject_MarkForDelete_ShouldRemoveFromCurrentAndCreatedCol()
         {
             //---------------Set up test pack-------------------
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
             newCP.Surname = TestUtil.GetRandomString();
-
             //---------------Assert Precondition----------------
             AssertOneObjectInCurrentAndCreatedCollection(cpCol);
-
             //---------------Execute Test ----------------------
             newCP.MarkForDelete();
-
             //---------------Test Result -----------------------
+            Assert.AreEqual(0, cpCol.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.IsTrue(newCP.Status.IsDeleted);
         }
 
         [Test]

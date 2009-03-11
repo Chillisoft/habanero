@@ -45,6 +45,11 @@ namespace Habanero.UI.VWG
         /// </summary>
         public event EventHandler CollectionChanged;
 
+        /// <summary>
+        /// Fires an event indicating that the selected business object
+        /// is being edited
+        /// </summary>
+        /// <param name="bo">The business object being edited</param>
         public void FireBusinessObjectEditedEvent(BusinessObject bo)
         {
             FireSelectedBusinessObjectEdited(bo);
@@ -147,6 +152,13 @@ namespace Habanero.UI.VWG
             BusinessObjectCollection = col;
         }
 
+        /// <summary>
+        /// Gets and Sets the business object collection displayed in the grid.  This
+        /// collection must be pre-loaded using the collection's Load() command or from the
+        /// <see cref="IBusinessObjectLoader"/>.
+        /// The default UI definition will be used, that is a 'ui' element 
+        /// without a 'name' attribute.
+        /// </summary>
         public IBusinessObjectCollection BusinessObjectCollection
         {
             get { return _manager.GetBusinessObjectCollection(); }

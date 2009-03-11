@@ -111,6 +111,11 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public virtual void AddBusinessObject(IBusinessObject businessObject)
         {
+            //Do not add objects that are new and deleted to the transaction committer.
+            if (businessObject.Status.IsNew && businessObject.Status.IsDeleted)
+            {
+                return;
+            }
             TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(businessObject);
             this.AddTransaction(transaction);
             bool added = _originalTransactions.Contains(transaction);
@@ -227,6 +232,10 @@ namespace Habanero.BO
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
                 TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
+                if (trnBusObj.BusinessObject.Status.IsNew && trnBusObj.BusinessObject.Status.IsDeleted)
+                {
+                    continue;
+                }
                 string errMsg;
                 if (!trnBusObj.CanBePersisted(out errMsg))
                 {

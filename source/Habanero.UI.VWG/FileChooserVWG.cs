@@ -36,7 +36,10 @@ namespace Habanero.UI.VWG
     {
         private readonly IControlFactory _controlFactory;
         private readonly FileChooserManager _fileChooserManager;
-
+        /// <summary>
+        /// Constructor for <see cref="FileChooserVWG"/>
+        /// </summary>
+        /// <param name="controlFactory"></param>
         public FileChooserVWG(IControlFactory controlFactory)
         {
             this._controlFactory = controlFactory;

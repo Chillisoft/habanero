@@ -151,19 +151,19 @@ namespace Habanero.BO
             {
                 IBusinessObject changedBo = GetBusinessObjectForRow(row);
                 if (changedBo == null) return;
-                if (changedBo.Status.IsNew)
-                {
-                    try
-                    {
-                        DeregisterForBOEvents();
-                        _collection.Remove(changedBo);
-                    }
-                    finally
-                    {
-                        RegisterForBOEvents();
-                    }
-                    return;
-                }
+//                if (changedBo.Status.IsNew)
+//                {
+//                    try
+//                    {
+//                        DeregisterForBOEvents();
+//                        _collection.Remove(changedBo);
+//                    }
+//                    finally
+//                    {
+//                        RegisterForBOEvents();
+//                    }
+//                    return;
+//                }
                 try
                 {
                     DeregisterForBOEvents();

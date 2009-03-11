@@ -35,7 +35,9 @@ namespace Habanero.UI.VWG
     public class DataGridViewVWG : DataGridView, IDataGridView
     {
         private readonly DataGridViewManager _manager;
-
+        /// <summary>
+        /// Constructor for <see cref="DataGridViewVWG"/>
+        /// </summary>
         public DataGridViewVWG()
         {
             _manager = new DataGridViewManager(this);
@@ -118,8 +120,7 @@ namespace Habanero.UI.VWG
         /// Sets the sort column and indicates whether
         /// it should be sorted in ascending or descending order
         /// </summary>
-        /// <param name="columnName">The column number to sort on</param>
-        /// object property</param>
+        /// <param name="columnName">The column number to sort on object property</param>
         /// <param name="ascending">True for ascending order, false for descending order</param>
         public void Sort(string columnName, bool ascending)
         {
@@ -341,11 +342,16 @@ namespace Habanero.UI.VWG
 
         /// <summary>
         /// Represents a collection of DataGridViewColumn objects in a DataGridView control.
+        /// This class is essentially a wrapper for the Visual Web Gui DataGridViewColumnCollection class.
+        /// This is implemented so that one generic grid can be used for both windows and Web.
         /// </summary>
         protected class DataGridViewColumnCollectionVWG : IDataGridViewColumnCollection
         {
             private readonly DataGridViewColumnCollection _columns;
-
+            /// <summary>
+            /// Constructor for <see cref="DataGridViewColumnCollectionVWG"/>
+            /// </summary>
+            /// <param name="columns"></param>
             public DataGridViewColumnCollectionVWG(DataGridViewColumnCollection columns)
             {
                 if (columns == null) throw new ArgumentNullException("columns");

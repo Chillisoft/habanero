@@ -340,5 +340,58 @@ namespace Habanero.Test.BO.ClassDefinition
         #endregion //For Testing
     }
 
+    internal class MockBOWithCompulsoryField : BusinessObject
+    {
+        public MockBOWithCompulsoryField()
+        {
+        }
+
+        public MockBOWithCompulsoryField(ClassDef def)
+            : base(def)
+        {
+        }
+
+        protected override ClassDef ConstructClassDef()
+        {
+            return GetClassDef();
+        }
+
+        protected static ClassDef GetClassDef()
+        {
+            return !ClassDef.IsDefined(typeof(MockBOWithCompulsoryField)) ? CreateClassDef() : ClassDef.ClassDefs[typeof(MockBOWithCompulsoryField)];
+        }
+
+        private static ClassDef CreateClassDef()
+        {
+            PropDefCol lPropDefCol = CreateBOPropDef();
+
+            KeyDefCol keysCol = new KeyDefCol();
+
+            PrimaryKeyDef primaryKey = new PrimaryKeyDef();
+            primaryKey.IsGuidObjectID = true;
+            primaryKey.Add(lPropDefCol["MockBOID"]);
+            ClassDef lClassDef = new ClassDef
+                (typeof(MockBOWithCompulsoryField), primaryKey, lPropDefCol, keysCol, new RelationshipDefCol());
+            ClassDef.ClassDefs.Add(lClassDef);
+            return lClassDef;
+        }
+
+        private static PropDefCol CreateBOPropDef()
+        {
+            PropDefCol lPropDefCol = new PropDefCol();
+            PropDef propDef = new PropDef
+                ("MockBOProp1", typeof (Guid), PropReadWriteRule.ReadWrite, "MockBOProp1", null, true, false);
+            lPropDefCol.Add(propDef);
+            lPropDefCol.Add("MockBOProp2", typeof (string), PropReadWriteRule.WriteOnce, "MockBOProp2", null);
+            lPropDefCol.Add("MockBOID", typeof (Guid), PropReadWriteRule.WriteOnce, "MockBOID", null);
+            return lPropDefCol;
+        }
+        public Guid? MockBOProp1
+        {
+            get { return (Guid?)this.GetPropertyValue("MockBOProp1"); }
+            set { this.SetPropertyValue("MockBOProp1", value); }
+        }
+    }
+
     #endregion
 }

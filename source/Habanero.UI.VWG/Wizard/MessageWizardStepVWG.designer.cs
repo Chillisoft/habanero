@@ -72,7 +72,9 @@ namespace Habanero.UI.VWG
         }
 
         #endregion
-
+        /// <summary>
+        /// The label that is used to show the message in the wizard step
+        /// </summary>
         protected Label _uxMessageLabel;
     }
 }

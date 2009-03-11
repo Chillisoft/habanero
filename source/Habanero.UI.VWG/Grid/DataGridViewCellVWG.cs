@@ -29,7 +29,10 @@ namespace Habanero.UI.VWG
     public class DataGridViewCellVWG : IDataGridViewCell
     {
         private readonly DataGridViewCell _dataGridViewCell;
-
+        /// <summary>
+        /// Constructor for <see cref="DataGridViewCellVWG"/> 
+        /// </summary>
+        /// <param name="cell"></param>
         public DataGridViewCellVWG(DataGridViewCell cell)
         {
             _dataGridViewCell = cell;

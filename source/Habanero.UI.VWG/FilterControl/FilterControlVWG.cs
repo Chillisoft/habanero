@@ -36,6 +36,10 @@ namespace Habanero.UI.VWG
         private readonly FilterControlManager _filterControlManager;
         private IButton _filterButton;
         private IButton _clearButton;
+
+        /// <summary>
+        /// The event that is fired with the filter is ready so that another control e.g. a grid can be filtered.
+        /// </summary>
         public event EventHandler Filter;
         private readonly IGroupBox _gbox;
         private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
@@ -289,6 +293,11 @@ namespace Habanero.UI.VWG
             get { return _filterControlManager.FilterControls; }
         }
 
+        /// <summary>
+        /// Returns the filter control for the <paramref name="propertyName"/>
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public IControlHabanero GetChildControl(string propertyName)
         {
             return this._filterControlManager.GetChildControl(propertyName);
@@ -369,6 +378,13 @@ namespace Habanero.UI.VWG
             return (IDateRangeComboBox) filter.Control;
         }
 
+        ///<summary>
+        /// Adds a custom filter which allows filtering using an ICustomFilter 
+        ///</summary>
+        ///<param name="labelText">The Label to appear before the control</param>
+        ///<param name="propertyName">The property of the Business Object to filter</param>
+        ///<param name="customFilter">The custom filter</param>
+        ///<returns>Returns the new Custom Filter Control </returns>
         [Obsolete("Please use the overload without the propertyName parameter")]
         public IControlHabanero AddCustomFilter(string labelText,string propertyName, ICustomFilter customFilter)
         {
@@ -376,26 +392,51 @@ namespace Habanero.UI.VWG
             return customFilter.Control;
         }
 
+        ///<summary>
+        /// Adds a custom filter which allows filtering using an ICustomFilter 
+        ///</summary>
+        ///<param name="labelText">The Label to appear before the control</param>
+        ///<param name="customFilter">The custom filter</param>
         public void AddCustomFilter(string labelText, ICustomFilter customFilter)
         {
              _filterControlManager.AddCustomFilter(labelText, customFilter);
         }
 
+        /// <summary>
+        /// Removes the default Click Event. 
+        /// Enables the developer to add custom functionality on the button click 
+        /// before the Clear or search happens.
+        /// </summary>
         public void RemoveDefaultClearClickEvent()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Adds the default Click Event. 
+        /// Enables the developer to add the default functionality back on the button click 
+        /// if previously removed.
+        /// </summary>
         public void AddDefaultClearClickEvent()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Removes the default Click Event. 
+        /// Enables the developer to add custom functionality on the button click 
+        /// before the filter or search happens.
+        /// </summary>
         public void RemoveDefaultFilterClickEvent()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Adds the default Click Event. 
+        /// Enables the developer to add the default functionality back on the button click 
+        /// if previously removed.
+        /// </summary>
         public void AddDefaultFilterClickEvent()
         {
             throw new NotImplementedException();

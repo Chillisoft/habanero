@@ -32,7 +32,7 @@ namespace Habanero.Test.BO
     /// Summary description for TestBusinessObject.
     /// </summary>
     [TestFixture]
-    public class  TestBusinessObject : TestUsingDatabase
+    public class TestBusinessObject : TestUsingDatabase
     {
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -76,9 +76,6 @@ namespace Habanero.Test.BO
             MyBO bo = new MyBO();
             //---------------Test Result -----------------------
             Assert.AreEqual(testPropDefault, bo.TestProp);
-
-
-
         }
 
         [Test]
@@ -163,13 +160,14 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(updatedEventFired);
         }
+
         [Test]
         public void Test_BusinessObject_WithBrokenRules_ValidUntil_PropsIsValidCalled()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             IBOProp boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
             Assert.IsTrue(boProp.IsValid);
@@ -191,7 +189,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             IBOProp boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
             Assert.IsTrue(boProp.IsValid);
@@ -201,13 +199,14 @@ namespace Habanero.Test.BO
             Assert.AreEqual("", boProp.InvalidReason);
             Assert.IsTrue(valid);
         }
+
         [Test]
         public void Test_BusinessObject_WithBrokenRules_ValidUntilIsValidCalled()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             IBOProp boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
             Assert.IsTrue(boProp.IsValid);
@@ -219,6 +218,7 @@ namespace Habanero.Test.BO
             StringAssert.Contains("Test Prop' is a compulsory field and has no value", bo.Status.IsValidMessage);
             Assert.IsFalse(bo.IsValid());
         }
+
 //        [Test]
 //        public void Test_BusinessObject_WithNoBrokenRules_Isvalid_AfterValidateCalled()
 //        {
@@ -244,7 +244,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             IBOProp boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
             Assert.IsTrue(boProp.IsValid);
@@ -254,12 +254,13 @@ namespace Habanero.Test.BO
                 bo.Save();
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (BusObjectInAnInvalidStateException ex)
             {
                 StringAssert.Contains("Test Prop' is a compulsory field and has no value", ex.Message);
             }
         }
+
         [Test]
         public void TestGetPropertyValueToDisplay()
         {
@@ -393,7 +394,7 @@ namespace Habanero.Test.BO
 
         [Test]
         public void TestSetPropertyValueFieldDoesNotExist()
-        {           
+        {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
@@ -415,11 +416,11 @@ namespace Habanero.Test.BO
                      + "collection of properties for the class '{1}'.", nonexistentPropName, "TestAutoInc");
                 StringAssert.Contains(errMessage, ex.Message);
             }
-            
         }
+
         [Test]
         public void Test_GetProperty_FieldDoesNotExist()
-        {           
+        {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
@@ -441,7 +442,6 @@ namespace Habanero.Test.BO
                      + "collection of properties for the class '{1}'.", nonexistentPropName, "TestAutoInc");
                 StringAssert.Contains(errMessage, ex.Message);
             }
-            
         }
 
         [Test]
@@ -453,14 +453,14 @@ namespace Habanero.Test.BO
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
 
             TestAutoInc bo = new TestAutoInc();
-            
+
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
 
             try
             {
-                bo.Props.Add((IBOProp)null);
+                bo.Props.Add((IBOProp) null);
                 Assert.Fail("expected ArgumentNullException");
             }
                 //---------------Test Result -----------------------
@@ -469,7 +469,6 @@ namespace Habanero.Test.BO
                 StringAssert.Contains("Value cannot be null", ex.Message);
                 StringAssert.Contains("boProp", ex.ParamName);
             }
-
         }
 
         [Test]
@@ -584,28 +583,25 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestDeleteWhenNewThrowsException()
+        public void Test_MarkForDelete_WhenNew_DoesNotThrowException()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             IBusinessObject bo = classDef.CreateNewBusinessObject();
+            bool markForDeleteEventFired = false;
+            bo.MarkedForDeletion += delegate { markForDeleteEventFired = true; };
             //---------------Assert Precondition----------------
             Assert.IsTrue(bo.Status.IsNew);
             //---------------Execute Test ----------------------
-            try
-            {
-                bo.MarkForDelete();
-                //---------------Test Result -----------------------
-                Assert.Fail("Should have thrown an exception");
-            }
-            catch (HabaneroDeveloperException ex)
-            {
-                Assert.AreEqual("This 'My B O' cannot be deleted as it has never existed in the database.", ex.Message);
-                Assert.AreEqual
-                    ("A 'MyBO' cannot be deleted when its status is new and does not exist in the database.",
-                     ex.DeveloperMessage);
-            }
+
+            bo.MarkForDelete();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+            Assert.IsTrue(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsTrue(bo.Status.IsEditing);
+            Assert.IsTrue(markForDeleteEventFired);
         }
 
         [Test]
@@ -638,7 +634,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(markForDeleteEventFired);
         }
 
-        [Ignore("//TODO_ Brett 11 Mar 2009: ")]
         [Test]
         public void Test_MarkForDelete_NewObjectDoesNotRaiseError()
         {
@@ -657,16 +652,37 @@ namespace Habanero.Test.BO
             Assert.IsFalse(bo.Status.IsDirty);
             Assert.IsFalse(bo.Status.IsEditing);
             Assert.IsFalse(markForDeleteEventFired);
-
             //---------------Execute Test ----------------------
             bo.MarkForDelete();
-
             //---------------Test Result -----------------------
             Assert.IsTrue(bo.Status.IsDeleted);
-            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsNew);
             Assert.IsTrue(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
             Assert.IsTrue(markForDeleteEventFired);
+        }
+
+        [Test]
+        public void Test_MarkForDelete_Save_NewObjectDoesNotRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
+            bo.MarkForDelete();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+            Assert.IsTrue(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsTrue(bo.Status.IsEditing);
+            //---------------Execute Test ----------------------
+            bo.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+            Assert.IsTrue(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsTrue(bo.Status.IsEditing);
         }
 
         [Test, ExpectedException(typeof (BusObjEditableException))]
@@ -767,7 +783,7 @@ namespace Habanero.Test.BO
 
             const string z = "1";
             Type type = x.GetType();
-            Assert.IsFalse(BusinessObject.PropValueHasChanged(Convert.ChangeType(x,type), Convert.ChangeType(z,type)));
+            Assert.IsFalse(BusinessObject.PropValueHasChanged(Convert.ChangeType(x, type), Convert.ChangeType(z, type)));
 
             Assert.IsFalse(BusinessObject.PropValueHasChanged(null, null));
             Assert.IsTrue(BusinessObject.PropValueHasChanged(null, x));
@@ -839,7 +855,9 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             string surname = TestUtil.GetRandomString();
-            new Engine(); new Car(); new ContactPerson();
+            new Engine();
+            new Car();
+            new ContactPerson();
             ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
             Car car = Car.CreateSavedCar("5", owner);
             Engine engine = Engine.CreateSavedEngine(car, "20");
@@ -923,7 +941,7 @@ namespace Habanero.Test.BO
             engine1.EngineNo = "20";
             //---------------Test Result -----------------------
             Assert.IsTrue(propertyEventFired);
-            Assert.AreSame(engine1,eventBusinessObject);
+            Assert.AreSame(engine1, eventBusinessObject);
             Assert.AreSame(engine1.Props["EngineNo"], eventProp);
         }
 
@@ -972,7 +990,7 @@ namespace Habanero.Test.BO
             contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime);
             //---------------Test Result -----------------------
             object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
-            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.IsInstanceOfType(typeof (DateTime), value);
             Assert.AreEqual(newDateTime, value);
         }
 
@@ -988,7 +1006,7 @@ namespace Habanero.Test.BO
             contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime.ToString());
             //---------------Test Result -----------------------
             object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
-            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.IsInstanceOfType(typeof (DateTime), value);
             Assert.AreEqual(newDateTime, value);
         }
 
@@ -1010,11 +1028,11 @@ namespace Habanero.Test.BO
                 contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime);
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
                 string message = string.Format("{0} cannot be set to {1}. It is not a type of"
-                              , "DateOfBirth", newDateTime);
+                                               , "DateOfBirth", newDateTime);
                 StringAssert.Contains(message, ex.Message);
                 StringAssert.Contains("DateTime", ex.Message);
                 object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
@@ -1035,7 +1053,7 @@ namespace Habanero.Test.BO
             contactPersonTestBO.SetPropertyValue("ContactType", "Business");
             //---------------Test Result -----------------------
             object value = contactPersonTestBO.GetPropertyValue("ContactType");
-            Assert.IsInstanceOfType(typeof(ContactPersonTestBO.ContactType), value);
+            Assert.IsInstanceOfType(typeof (ContactPersonTestBO.ContactType), value);
             Assert.AreEqual(ContactPersonTestBO.ContactType.Business, value);
         }
 
@@ -1053,13 +1071,16 @@ namespace Habanero.Test.BO
             try
             {
                 contactPersonTestBO.SetPropertyValue("ContactType", newValue);
-            } catch(InvalidPropertyValueException ex)
+            }
+            catch (InvalidPropertyValueException ex)
             {
                 exception = ex;
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Expected exception of type InvalidPropertyValueException");
-            StringAssert.Contains("An error occurred while attempting to convert the loaded property value of 'ContactType' to its specified type of 'Habanero.Test.BO.ContactPersonTestBO+ContactType'. The property value is 'InvalidOption'. See log for details", exception.Message);
+            StringAssert.Contains(
+                "An error occurred while attempting to convert the loaded property value of 'ContactType' to its specified type of 'Habanero.Test.BO.ContactPersonTestBO+ContactType'. The property value is 'InvalidOption'. See log for details",
+                exception.Message);
 
 //            object value = contactPersonTestBO.GetPropertyValue("ContactType");
 //            Assert.IsInstanceOfType(typeof (string), value);
@@ -1087,7 +1108,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(contactPerson.Status.IsDirty);
 
             //---------------Execute Test ----------------------
- 
+
             contactPerson.UpdateDirtyStatusFromProperties();
             //---------------Test Result -----------------------
 
