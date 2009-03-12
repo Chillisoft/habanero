@@ -121,7 +121,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_Constructor_ReadOnlyGridControlSet()
+        public virtual void Test_Constructor_ReadOnlyGridControlSet()
         {
             //---------------Set up test pack-------------------
 

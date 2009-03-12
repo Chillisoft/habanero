@@ -1785,7 +1785,7 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Marks the business object as MarkedForDeletion and places the 
+        /// Marks the business object as MarkedForDeletion and places the object
         ///</summary>
         ///<param name="businessObject"></param>
         public void MarkForDelete(TBusinessObject businessObject)
