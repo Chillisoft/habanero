@@ -214,7 +214,10 @@ namespace Habanero.UI.Win
                     "Saving Problem");
             }
         }
-
+        /// <summary>
+        /// Creates a transaction Committer with the Business Object added.
+        /// </summary>
+        /// <returns></returns>
         protected virtual TransactionCommitter CreateSaveTransaction()
         {
             TransactionCommitter committer = (TransactionCommitter) BORegistry.DataAccessor.CreateTransactionCommitter();

@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -144,7 +145,7 @@ namespace Habanero.UI.Base
 
             panel.Width = layoutManager.GetFixedWidthIncludingGaps();
             panel.Height = layoutManager.GetFixedHeightIncludingGaps();
-
+            panel.MinimumSize = new Size(panel.Width, panel.Height);
             panelInfo.Panel = panel;
 
             panelInfo.UIFormTab = formTab;
