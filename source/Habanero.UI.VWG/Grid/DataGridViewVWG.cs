@@ -21,11 +21,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.VWG.Grid;
-using IEnumerable=System.Collections.IEnumerable;
 
 namespace Habanero.UI.VWG
 {
@@ -35,6 +33,7 @@ namespace Habanero.UI.VWG
     public class DataGridViewVWG : DataGridView, IDataGridView
     {
         private readonly DataGridViewManager _manager;
+
         /// <summary>
         /// Constructor for <see cref="DataGridViewVWG"/>
         /// </summary>
@@ -49,8 +48,8 @@ namespace Habanero.UI.VWG
         /// <value></value>
         Base.AnchorStyles IControlHabanero.Anchor
         {
-            get { return (Base.AnchorStyles)base.Anchor; }
-            set { base.Anchor = (Gizmox.WebGUI.Forms.AnchorStyles)value; }
+            get { return (Base.AnchorStyles) base.Anchor; }
+            set { base.Anchor = (Gizmox.WebGUI.Forms.AnchorStyles) value; }
         }
 
         /// <summary>
@@ -162,7 +161,7 @@ namespace Habanero.UI.VWG
         public new IDataGridViewCell this[int columnIndex, int rowIndex]
         {
             get { return new DataGridViewCellVWG(base[columnIndex, rowIndex]); }
-            set { base[columnIndex, rowIndex] = value == null ? null : ((DataGridViewCellVWG)value).DataGridViewCell; }
+            set { base[columnIndex, rowIndex] = value == null ? null : ((DataGridViewCellVWG) value).DataGridViewCell; }
         }
 
         /// <summary>
@@ -170,10 +169,7 @@ namespace Habanero.UI.VWG
         /// </summary>
         public new IDataGridViewRow CurrentRow
         {
-            get
-            {
-                return base.CurrentRow == null ? null : new DataGridViewRowVWG(base.CurrentRow);
-            }
+            get { return base.CurrentRow == null ? null : new DataGridViewRowVWG(base.CurrentRow); }
         }
 
         /// <summary>
@@ -182,7 +178,7 @@ namespace Habanero.UI.VWG
         public new IDataGridViewCell CurrentCell
         {
             get { return base.CurrentCell == null ? null : new DataGridViewCellVWG(base.CurrentCell); }
-            set { base.CurrentCell = value == null ? null : ((DataGridViewCellVWG)value).DataGridViewCell; }
+            set { base.CurrentCell = value == null ? null : ((DataGridViewCellVWG) value).DataGridViewCell; }
         }
 
         /// <summary>
@@ -198,11 +194,6 @@ namespace Habanero.UI.VWG
                 this.CurrentPage = (rowNum / this.ItemsPerPage) + 1;
             else this.CurrentPage = 1;
         }
-
-
-
-
-
 
 
         /// <summary>
@@ -319,7 +310,7 @@ namespace Habanero.UI.VWG
             {
                 if (dataGridViewRow == null) throw new ArgumentNullException("dataGridViewRow");
 
-                DataGridViewRowVWG rowWin = (DataGridViewRowVWG)dataGridViewRow;
+                DataGridViewRowVWG rowWin = (DataGridViewRowVWG) dataGridViewRow;
                 return _rows.IndexOf(rowWin.DataGridViewRow);
             }
 
@@ -345,14 +336,15 @@ namespace Habanero.UI.VWG
         /// This class is essentially a wrapper for the Visual Web Gui DataGridViewColumnCollection class.
         /// This is implemented so that one generic grid can be used for both windows and Web.
         /// </summary>
-        protected class DataGridViewColumnCollectionVWG : IDataGridViewColumnCollection
+        protected internal class DataGridViewColumnCollectionVWG : IDataGridViewColumnCollection
         {
             private readonly DataGridViewColumnCollection _columns;
+
             /// <summary>
             /// Constructor for <see cref="DataGridViewColumnCollectionVWG"/>
             /// </summary>
             /// <param name="columns"></param>
-            public DataGridViewColumnCollectionVWG(DataGridViewColumnCollection columns)
+            internal DataGridViewColumnCollectionVWG(DataGridViewColumnCollection columns)
             {
                 if (columns == null) throw new ArgumentNullException("columns");
                 _columns = columns;
@@ -393,7 +385,7 @@ namespace Habanero.UI.VWG
             /// </summary>
             public void Add(IDataGridViewColumn dataGridViewColumn)
             {
-                DataGridViewColumnVWG col = (DataGridViewColumnVWG)dataGridViewColumn;
+                DataGridViewColumnVWG col = (DataGridViewColumnVWG) dataGridViewColumn;
                 _columns.Add(col.DataGridViewColumn);
             }
 
@@ -423,11 +415,25 @@ namespace Habanero.UI.VWG
                 }
             }
 
+            /// <summary>Determines whether the collection contains the column referred to by the given name. </summary>
+            /// <returns>true if the column is contained in the collection; otherwise, false.</returns>
+            /// <param name="columnName">The name of the column to look for.</param>
+            /// <exception cref="T:System.ArgumentNullException"><paramref name="columnName"/> is null.</exception>
+            public bool Contains(string columnName)
+            {
+                return _columns.Contains(columnName);
+            }
+
             private static IDataGridViewColumn GetAppropriateColumnType(DataGridViewColumn column)
             {
                 if (column is DataGridViewImageColumn)
                 {
-                    return new DataGridViewImageColumnVWG((DataGridViewImageColumn)column);
+                    return new DataGridViewImageColumnVWG((DataGridViewImageColumn) column);
+                }
+                //TODO Brett 13 Mar 2009: Write test for this
+                if (column is DataGridViewComboBoxColumn)
+                {
+                    return new DataGridViewComboBoxColumnVWG((DataGridViewComboBoxColumn)column);
                 }
                 return new DataGridViewColumnVWG(column);
             }
@@ -587,7 +593,7 @@ namespace Habanero.UI.VWG
             /// <filterpriority>1</filterpriority>
             public int Add(IDataGridViewCell dataGridViewCell)
             {
-                return _cells.Add((DataGridViewCell)dataGridViewCell);
+                return _cells.Add((DataGridViewCell) dataGridViewCell);
             }
 
             /// <summary>Clears all cells from the collection.</summary>
@@ -605,7 +611,7 @@ namespace Habanero.UI.VWG
             /// <filterpriority>1</filterpriority>
             public bool Contains(IDataGridViewCell dataGridViewCell)
             {
-                return _cells.Contains((DataGridViewCell)dataGridViewCell);
+                return _cells.Contains((DataGridViewCell) dataGridViewCell);
             }
 
             ///// <summary>Copies the entire collection of cells into an array at a specified location within the array.</summary>
@@ -623,7 +629,7 @@ namespace Habanero.UI.VWG
             /// <filterpriority>1</filterpriority>
             public int IndexOf(IDataGridViewCell dataGridViewCell)
             {
-                return _cells.IndexOf((DataGridViewCell)dataGridViewCell);
+                return _cells.IndexOf((DataGridViewCell) dataGridViewCell);
             }
 
             ///// <summary>Inserts a cell into the collection at the specified index. </summary>

@@ -1481,6 +1481,14 @@ namespace Habanero.Test.UI.Base
 
     internal class DataGridViewColumnStub : IDataGridViewColumn
     {
+        ///<summary>
+        /// Returns the underlying control being wrapped by this decorator.
+        ///</summary>
+        public object Control
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
         /// <summary>Gets or sets the name of the data source property or database column to which the <see cref="IDataGridViewColumn"></see> is bound.</summary>
         /// <returns>The name of the property or database column associated with the <see cref="IDataGridViewColumn"></see>.</returns>
         /// <filterpriority>1</filterpriority>

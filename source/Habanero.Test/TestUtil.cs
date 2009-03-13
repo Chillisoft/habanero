@@ -191,5 +191,10 @@ namespace Habanero.Test
         public static DatabaseConfig GetDatabaseConfig() { 
             return new DatabaseConfig("MySql", "localhost", "habanero_test_trunk", "root", "root", "3306");
         }
+
+        public static bool GetRandomBoolean()
+        {
+            return (GetRandomInt(100000) > 50000);
+        }
     }
 }

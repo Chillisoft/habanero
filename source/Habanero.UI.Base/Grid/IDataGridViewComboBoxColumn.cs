@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
+
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -42,5 +44,9 @@ namespace Habanero.UI.Base
         ///  retrieve strings for display in the combo boxes.
         /// </summary>
         string DisplayMember { get; set; }
+
+        /// <summary>Gets the collection of objects used as selections in the combo boxes.</summary>
+        /// <returns>An <see cref="IList"></see> that represents the selections in the combo boxes. </returns>
+        IList Items { get; }
     }
 }

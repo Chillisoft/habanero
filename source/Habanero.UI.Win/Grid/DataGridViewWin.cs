@@ -369,11 +369,11 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Represents a collection of DataGridViewColumn objects in a DataGridView control.
         /// </summary>
-        private class DataGridViewColumnCollectionWin : IDataGridViewColumnCollection
+        internal class DataGridViewColumnCollectionWin : IDataGridViewColumnCollection
         {
             private readonly DataGridViewColumnCollection _columns;
 
-            public DataGridViewColumnCollectionWin(DataGridViewColumnCollection columns)
+            internal DataGridViewColumnCollectionWin(DataGridViewColumnCollection columns)
             {
                 if (columns == null)
                 {
@@ -420,7 +420,6 @@ namespace Habanero.UI.Win
                 _columns[addedColumn].DataPropertyName = columnName;
                 return addedColumn;
             }
-
             /// <summary>
             /// Gets or sets the column at the given index in the collection
             /// </summary>
@@ -429,11 +428,8 @@ namespace Habanero.UI.Win
                 get
                 {
                     DataGridViewColumn column = _columns[index];
-                    if (column == null)
-                    {
-                        return null;
-                    }
-                    return new DataGridViewColumnWin(column);
+                    if (column == null) return null;
+                    return GetAppropriateColumnType(column);
                 }
             }
 
@@ -445,12 +441,32 @@ namespace Habanero.UI.Win
                 get
                 {
                     DataGridViewColumn column = _columns[name];
-                    if (column == null)
-                    {
-                        return null;
-                    }
-                    return new DataGridViewColumnWin(column);
+                    if (column == null) return null;
+                    return GetAppropriateColumnType(column);
                 }
+            }
+
+            private static IDataGridViewColumn GetAppropriateColumnType(DataGridViewColumn column)
+            {
+//                if (column is DataGridViewImageColumn)
+//                {
+//                    return new DataGridViewImageColumnWin((DataGridViewImageColumn)column);
+//                }
+                //TODO Brett 13 Mar 2009: Write test for this
+                if (column is DataGridViewComboBoxColumn)
+                {
+                    return new DataGridViewComboBoxColumnWin((DataGridViewComboBoxColumn)column);
+                }
+                return new DataGridViewColumnWin(column);
+            }
+
+            /// <summary>Determines whether the collection contains the column referred to by the given name. </summary>
+            /// <returns>true if the column is contained in the collection; otherwise, false.</returns>
+            /// <param name="columnName">The name of the column to look for.</param>
+            /// <exception cref="T:System.ArgumentNullException"><paramref name="columnName"/> is null.</exception>
+            public bool Contains(string columnName)
+            {
+                return _columns.Contains(columnName);
             }
 
             #endregion

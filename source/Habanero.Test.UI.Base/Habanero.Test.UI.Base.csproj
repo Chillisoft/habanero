@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
     <Compile Include="Controllers\TestBOColTabControlManager.cs" />
+    <Compile Include="Grid\TestDataGridViewColumnCollection.cs" />
     <Compile Include="TestBusinessObjectDeletor.cs" />
     <Compile Include="Controllers\TestListBoxCollectionManager.cs" />
     <Compile Include="Selectors\TestBOSelector.cs" />

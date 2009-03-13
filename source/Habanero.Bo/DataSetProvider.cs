@@ -31,6 +31,8 @@ namespace Habanero.BO
     /// </summary>
     public abstract class DataSetProvider : IDataSetProvider
     {
+        private const string _idColumnName = "HABANERO_OBJECTID";
+
         /// <summary>
         /// The <see cref="IBusinessObjectCollection"/> of <see cref="IBusinessObject"/>s that
         ///   are being mapped in this DataSetProvider (i.e. are being copied to the <see cref="DataTable"/>.
@@ -48,7 +50,6 @@ namespace Habanero.BO
         /// The object initialiser being used to create a new object if this grid is allowed to create a new object.
         /// </summary>
         protected IBusinessObjectInitialiser _objectInitialiser;
-        private const string _idColumnName = "HABANERO_OBJECTID";
         /// <summary>
         /// A handler for the <see cref="IBusinessObject"/> has been added to the <see cref="_collection"/>.
         /// </summary>

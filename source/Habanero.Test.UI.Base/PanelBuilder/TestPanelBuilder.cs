@@ -1166,7 +1166,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(pnl.Height, panelInfo.MinimumPanelHeight);
             Assert.AreEqual(pnl.Width, panelInfo.Panel.MinimumSize.Width);
             Assert.AreEqual(pnl.Height, panelInfo.Panel.MinimumSize.Height);
-            //---------------Tear Down -------------------------          
         }
 
         [Test]

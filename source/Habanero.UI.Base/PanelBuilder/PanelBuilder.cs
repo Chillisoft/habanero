@@ -145,7 +145,8 @@ namespace Habanero.UI.Base
 
             panel.Width = layoutManager.GetFixedWidthIncludingGaps();
             panel.Height = layoutManager.GetFixedHeightIncludingGaps();
-            panel.MinimumSize = new Size(panel.Width, panel.Height);
+            Size minSize = new Size(panel.Width, panel.Height);
+            panel.MinimumSize = minSize;
             panelInfo.Panel = panel;
 
             panelInfo.UIFormTab = formTab;

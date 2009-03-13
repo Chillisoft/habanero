@@ -46,6 +46,14 @@ namespace Habanero.UI.VWG
             get { return _dataGridViewColumn; }
         }
 
+        ///<summary>
+        /// Returns the underlying control being wrapped by this decorator.
+        ///</summary>
+        public object Control
+        {
+            get { return _dataGridViewColumn; }
+        }
+
         /// <summary>Gets or sets the name of the data source property or database column to which 
         /// the <see cref="IDataGridViewColumn"></see> is bound.</summary>
         /// <returns>The name of the property or database column associated with the <see cref="IDataGridViewColumn"></see>.</returns>

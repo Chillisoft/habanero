@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
@@ -73,6 +74,13 @@ namespace Habanero.UI.VWG
         {
             get { return _dataGridViewComboBoxColumn.DisplayMember; }
             set { _dataGridViewComboBoxColumn.DisplayMember = value; }
+        }
+
+        /// <summary>Gets the collection of objects used as selections in the combo boxes.</summary>
+        /// <returns>An <see cref="IList"></see> that represents the selections in the combo boxes. </returns>
+        public IList Items
+        {
+            get { return _dataGridViewComboBoxColumn.Items; }
         }
     }
 }

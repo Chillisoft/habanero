@@ -667,11 +667,12 @@ namespace Habanero.BO
                 }
                 _boStatus.IsDirty = true;
                 prop.Value = newPropValue1;
-                if (prop.IsValid)
-                {
+//                if (prop.IsValid)
+//                {
                     //FireUpdatedEvent();
+                    //TODO Mark 13 Mar 2009: This should rather be fired from any BOProp being updated, not from this SetPropertyValue method.
                     FirePropertyUpdatedEvent(prop);
-                }
+//                }
             }
         }
 

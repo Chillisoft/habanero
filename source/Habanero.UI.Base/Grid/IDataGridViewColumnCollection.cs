@@ -57,5 +57,11 @@ namespace Habanero.UI.Base
         /// Gets or sets the column of the given name in the collection
         /// </summary>
         IDataGridViewColumn this[string name] { get;}
+
+        /// <summary>Determines whether the collection contains the column referred to by the given name. </summary>
+        /// <returns>true if the column is contained in the collection; otherwise, false.</returns>
+        /// <param name="columnName">The name of the column to look for.</param>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="columnName"/> is null.</exception>
+        bool Contains(string columnName);
     }
 }
