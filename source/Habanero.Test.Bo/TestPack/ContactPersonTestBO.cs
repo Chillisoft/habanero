@@ -637,6 +637,18 @@ namespace Habanero.Test.BO
 						<grid>
 							<column heading=""OrganisationID"" property=""OrganisationID"" type=""DataGridViewComboBoxColumn"" />
 						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Surname"" property=""Surname"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""readWriteRule"" value=""WriteNew"" />
+                                     </field>
+									<field label=""First Name"" property=""FirstName"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""readWriteRule"" value=""WriteNotNew"" />
+                                     </field>
+								</columnLayout>
+							</tab>
+						</form>
                     </ui>
 			    </class>
 			");

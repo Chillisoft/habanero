@@ -25,12 +25,11 @@ namespace Habanero.UI.Base
     /// Represents a panel containing a PanelInfo used to edit a single business object.
     /// This inherits from the <see cref="IBusinessObjectControl"/>
     /// </summary>
-    [Obsolete("This has been replaced by IBOEditorControl : Brett 03 Mar 2009")]
     public interface IBusinessObjectPanel : IBusinessObjectControl
     {
         /// <summary>
         /// Gets and sets the PanelInfo object created by the control
         /// </summary>
-        IPanelInfo PanelInfo { get; set; }
+        IPanelInfo PanelInfo { get;  }
     }
 }

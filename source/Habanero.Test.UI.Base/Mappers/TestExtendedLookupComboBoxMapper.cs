@@ -251,7 +251,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsInstanceOfType(typeof(IBOGridAndEditorControl), form.Controls[0]);
             Assert.IsInstanceOfType(typeof(BOGridAndEditorControlWin), form.Controls[0]);
             BOGridAndEditorControlWin andBOGridAndEditorControlWin = (BOGridAndEditorControlWin)form.Controls[0];
-            //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BusinessObjectControlWin.BusinessObject);
+            //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BOEditorControlWin.BusinessObject);
             Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);
             IBusinessObjectCollection collection = andBOGridAndEditorControlWin.GridControl.Grid.BusinessObjectCollection;
             Assert.IsNotNull(collection);
@@ -292,7 +292,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsInstanceOfType(typeof(IBOGridAndEditorControl), form.Controls[0]);
             Assert.IsInstanceOfType(typeof(BOGridAndEditorControlWin), form.Controls[0]);
             BOGridAndEditorControlWin andBOGridAndEditorControlWin = (BOGridAndEditorControlWin)form.Controls[0];
-            //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BusinessObjectControlWin.BusinessObject);
+            //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BOEditorControlWin.BusinessObject);
             Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);
             IBusinessObjectCollection collection = andBOGridAndEditorControlWin.GridControl.Grid.BusinessObjectCollection;
             Assert.IsNotNull(collection);

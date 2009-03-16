@@ -17,9 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 
@@ -28,7 +25,7 @@ namespace Habanero.UI.Win
     /// <summary>
     /// Provides a user interface for indicating that a control on a form has an error associated with it
     /// </summary>
-    public class ErrorProviderWin:ErrorProvider,IErrorProvider
+    public class ErrorProviderWin : ErrorProvider, IErrorProvider
     {
         /// <summary>
         /// Returns the current error description string for the specified control.
@@ -39,7 +36,7 @@ namespace Habanero.UI.Win
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
         public string GetError(IControlHabanero objControl)
         {
-            return base.GetError((Control)objControl);
+            return base.GetError((Control) objControl);
         }
 
         /// <summary>
@@ -51,7 +48,7 @@ namespace Habanero.UI.Win
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
         public ErrorIconAlignmentHabanero GetIconAlignment(IControlHabanero objControl)
         {
-            return (ErrorIconAlignmentHabanero)base.GetIconAlignment((Control)objControl);
+            return (ErrorIconAlignmentHabanero) base.GetIconAlignment((Control) objControl);
         }
 
         /// <summary>
@@ -63,8 +60,7 @@ namespace Habanero.UI.Win
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
         public int GetIconPadding(IControlHabanero objControl)
         {
-            return base.GetIconPadding((Control)objControl);
-
+            return base.GetIconPadding((Control) objControl);
         }
 
         /// <summary>
@@ -76,7 +72,7 @@ namespace Habanero.UI.Win
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
         public void SetError(IControlHabanero objControl, string strValue)
         {
-            base.SetError((Control)objControl, strValue);
+            base.SetError((Control) objControl, strValue);
         }
 
         /// <summary>
@@ -88,8 +84,7 @@ namespace Habanero.UI.Win
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
         public void SetIconAlignment(IControlHabanero objControl, ErrorIconAlignmentHabanero enmValue)
         {
-            base.SetIconAlignment((Control)objControl, (ErrorIconAlignment)enmValue);
-
+            base.SetIconAlignment((Control) objControl, (ErrorIconAlignment) enmValue);
         }
 
         /// <summary>
@@ -101,7 +96,7 @@ namespace Habanero.UI.Win
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
         public void SetIconPadding(IControlHabanero objControl, int intPadding)
         {
-            base.SetIconPadding((Control)objControl, intPadding);
+            base.SetIconPadding((Control) objControl, intPadding);
         }
 
         /// <summary>
@@ -112,8 +107,8 @@ namespace Habanero.UI.Win
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
         public ErrorBlinkStyleHabanero BlinkStyleHabanero
         {
-            get { return (ErrorBlinkStyleHabanero)base.BlinkStyle; }
-            set { base.BlinkStyle = (ErrorBlinkStyle)value; }
+            get { return (ErrorBlinkStyleHabanero) base.BlinkStyle; }
+            set { base.BlinkStyle = (ErrorBlinkStyle) value; }
         }
     }
 }

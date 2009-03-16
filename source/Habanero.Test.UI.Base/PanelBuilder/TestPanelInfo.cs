@@ -17,26 +17,25 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
     [TestFixture]
-    public class TestPanelInfo 
+    public class TestPanelInfo
     {
-        private IControlFactory _controlFactory = new ControlFactoryVWG();
+        private readonly IControlFactory _controlFactory = new ControlFactoryVWG();
+
         [SetUp]
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            
         }
 
         [TestFixtureSetUp]
@@ -58,8 +57,19 @@ namespace Habanero.Test.UI.Base
             panelInfo.Panel = panel;
             //---------------Test Result -----------------------
             Assert.AreSame(panel, panelInfo.Panel);
-
         }
+#pragma warning disable 168
+        [Test, ExpectedException(typeof (InvalidPropertyNameException))]
+        public void TestFieldInfos_WrongPropertyNameGivesUsefulError()
+        {
+            //---------------Set up test pack-------------------
+            IPanelInfo panelInfo = new PanelInfo();
+
+            //---------------Execute Test ----------------------
+
+            PanelInfo.FieldInfo fieldInfo = panelInfo.FieldInfos["invalidPropName"];
+        }
+#pragma warning restore 168
 
         [Test]
         public void TestFieldInfos()
@@ -73,16 +83,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(panelInfo.FieldInfos);
             Assert.AreEqual(0, panelInfo.FieldInfos.Count);
-        }
-
-        [Test, ExpectedException(typeof(InvalidPropertyNameException))]
-        public void TestFieldInfos_WrongPropertyNameGivesUsefulError()
-        {
-            //---------------Set up test pack-------------------
-            IPanelInfo panelInfo = new PanelInfo();
-
-            //---------------Execute Test ----------------------
-            PanelInfo.FieldInfo fieldInfo = panelInfo.FieldInfos["invalidPropName"];
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetBusinessObjectUpdatesControlMappers()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            Sample.CreateClassDefWithTwoPropsOneInteger();
             IPanelInfo panelInfo = new PanelInfo();
             panelInfo.FieldInfos.Add(CreateFieldInfo("SampleText"));
             panelInfo.FieldInfos.Add(CreateFieldInfo("SampleInt"));
@@ -129,7 +129,7 @@ namespace Habanero.Test.UI.Base
         public void TestApplyChangesToBusinessObject()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            Sample.CreateClassDefWithTwoPropsOneInteger();
             Sample sampleBO = new Sample();
             const string startText = "startText";
             const string endText = "endText";
@@ -169,8 +169,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsFalse(panelInfo.FieldInfos[0].InputControl.Enabled);
             Assert.IsFalse(panelInfo.FieldInfos[1].InputControl.Enabled);
-
-
         }
 
         [Test]
@@ -188,23 +186,28 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
-            PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(classDef.UIDefCol["default"].UIForm[0]);
             Sample businessObject = new Sample();
-            
+
             panelInfo.BusinessObject = businessObject;
 
             //businessObject.SetPropertyValue("SampleText2", "sdlkfj");
             PanelInfo.FieldInfo fieldInfo = panelInfo.FieldInfos["SampleText2"];
             panelInfo.ApplyChangesToBusinessObject();
             IErrorProvider errorProvider = fieldInfo.ControlMapper.ErrorProvider;
-            
+
             //---------------Assert Precondition----------------
             Assert.IsTrue(errorProvider.GetError(fieldInfo.InputControl).Length > 0);
             //---------------Execute Test ----------------------
             panelInfo.ClearErrorProviders();
             //---------------Test Result -----------------------
             Assert.IsFalse(errorProvider.GetError(fieldInfo.InputControl).Length > 0);
+        }
+
+        private IControlFactory GetControlFactory()
+        {
+            return _controlFactory;
         }
 
         [Test]
@@ -228,14 +231,48 @@ namespace Habanero.Test.UI.Base
             ILabel label = _controlFactory.CreateLabel();
             ITextBox tb = _controlFactory.CreateTextBox();
             IControlMapper controlMapper = new TextBoxMapper(tb, propertyName, false, _controlFactory);
-            IErrorProvider errorProvider = _controlFactory.CreateErrorProvider();
-            return  new PanelInfo.FieldInfo(propertyName, label, controlMapper);
+            _controlFactory.CreateErrorProvider();
+            return new PanelInfo.FieldInfo(propertyName, label, controlMapper);
         }
 
-        private PanelInfo.FieldInfo CreateFieldInfo()
+        [Test]
+        public void Test_UpdateErrorProviderError_WhenBOInvalid_ShouldSetErrorMessage()
         {
-            return CreateFieldInfo(TestUtil.GetRandomString());
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(person.ClassDef.UIDefCol["default"].UIForm[0]);
+            panelInfo.BusinessObject = person;
+            IControlMapper SurnameControlMapper = panelInfo.FieldInfos["Surname"].ControlMapper;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(person.IsValid());
+            Assert.AreEqual("", SurnameControlMapper.GetErrorMessage());
+            //---------------Execute Test ----------------------
+            panelInfo.UpdateErrorProvidersErrorMessages();
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual("", SurnameControlMapper.GetErrorMessage());
         }
+
+        [Test]
+        public void Test_UpdateErrorProviderError_WhenBOValid_ShouldClearErrorMessage()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(person.ClassDef.UIDefCol["default"].UIForm[0]);
+            panelInfo.BusinessObject = person;
+            IControlMapper SurnameControlMapper = panelInfo.FieldInfos["Surname"].ControlMapper;
+            panelInfo.UpdateErrorProvidersErrorMessages();
+            //---------------Assert Precondition----------------
+            Assert.AreNotEqual("", SurnameControlMapper.GetErrorMessage());
+            //---------------Execute Test ----------------------
+            person.Surname = "SomeValue";
+            panelInfo.UpdateErrorProvidersErrorMessages();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("", SurnameControlMapper.GetErrorMessage());
+        }
+
     }
-    
 }

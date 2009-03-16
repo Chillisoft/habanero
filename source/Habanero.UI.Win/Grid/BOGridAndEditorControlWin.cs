@@ -60,8 +60,8 @@ namespace Habanero.UI.Win
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (classDef == null) throw new ArgumentNullException("classDef");
             _classDef = classDef;
-            BOEditorControl boEditorControl = new BOEditorControl(controlFactory, classDef, uiDefName);
-            SetupGridAndBOEditorControlWin(controlFactory, boEditorControl, uiDefName);
+            BOEditorControlWin boEditorControlWin = new BOEditorControlWin(controlFactory, classDef, uiDefName);
+            SetupGridAndBOEditorControlWin(controlFactory, boEditorControlWin, uiDefName);
         }
 
         ///<summary>
@@ -207,7 +207,7 @@ namespace Habanero.UI.Win
             {
                 if (!_lastSelectedBusinessObject.IsValid())
                 {
-                    _iboEditorControl.DisplayErrors();
+                    bool errors = _iboEditorControl.HasErrors;
                     _readOnlyGridControl.SelectedBusinessObject = _lastSelectedBusinessObject;
                     return false;
                 }
@@ -324,7 +324,7 @@ namespace Habanero.UI.Win
             {
                 if (!currentBO.IsValid())
                 {
-                    _iboEditorControl.DisplayErrors();
+                    bool errors = _iboEditorControl.HasErrors;
                     return;
                 }
                 currentBO.Save();
@@ -341,7 +341,7 @@ namespace Habanero.UI.Win
             _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
             GridSelectionChanged(null, null);
             _iboEditorControl.Focus();
-            _iboEditorControl.ClearErrors();
+            //_iboEditorControl.ClearErrors();
             _cancelButton.Enabled = true;
         }
 
@@ -449,8 +449,8 @@ namespace Habanero.UI.Win
         ///<param name="uiDefName"></param>
         public BOGridAndEditorControlWin(IControlFactory controlFactory, string uiDefName)
         {
-            BusinessObjectControlWin<TBusinessObject> businessObjectControl = new BusinessObjectControlWin<TBusinessObject>(controlFactory, uiDefName);
-            SetupGridAndBOEditorControlWin(controlFactory, businessObjectControl, uiDefName);
+            BOEditorControlWin<TBusinessObject> boEditorControl = new BOEditorControlWin<TBusinessObject>(controlFactory, uiDefName);
+            SetupGridAndBOEditorControlWin(controlFactory, boEditorControl, uiDefName);
         }
 
         ///<summary>
@@ -591,7 +591,7 @@ namespace Habanero.UI.Win
             {
                 if (!_lastSelectedBusinessObject.IsValid())
                 {
-                    this.IBOEditorControl.DisplayErrors();
+                    bool hasErrors = this.IBOEditorControl.HasErrors;
                     _readOnlyGridControl.SelectedBusinessObject = _lastSelectedBusinessObject;
                     return false;
                 }
@@ -707,7 +707,7 @@ namespace Habanero.UI.Win
             {
                 if (!currentBO.IsValid())
                 {
-                    this.IBOEditorControl.DisplayErrors();
+                    bool hasErrors = this.IBOEditorControl.HasErrors;
                     return;
                 }
                 currentBO.Save();
@@ -722,7 +722,7 @@ namespace Habanero.UI.Win
             _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
             GridSelectionChanged(null, null);
             this.IBOEditorControl.Focus();
-            this.IBOEditorControl.ClearErrors();
+//            this.IBOEditorControl.ClearErrors();
             _cancelButton.Enabled = true;
         }
 

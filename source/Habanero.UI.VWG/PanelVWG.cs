@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
@@ -45,6 +46,16 @@ namespace Habanero.UI.VWG
         {
             get { return new ControlCollectionVWG(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets the size that is the lower limit that
+        /// GetPreferredSize(System.Drawing.Size) can specify
+        /// </summary>
+        /// <returns>An ordered pair of type System.Drawing.Size
+        /// representing the width and height of a rectangle</returns>
+        /// <filterpriority>1</filterpriority>
+        public new Size MinimumSize { //This has been replaced since the MinimumSize in Giz does not work
+            get; set; }
 
         /// <summary>
         /// Gets or sets which control borders are docked to its parent

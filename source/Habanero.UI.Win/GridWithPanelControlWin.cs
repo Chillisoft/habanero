@@ -19,7 +19,6 @@
 
 using System;
 using Habanero.Base;
-using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -150,46 +149,6 @@ namespace Habanero.UI.Win
         {
             get { return _gridWithPanelControlManager.ConfirmSaveDelegate; }
             set { _gridWithPanelControlManager.ConfirmSaveDelegate = value; }
-        }
-    }
-    
-    /// <summary>
-    /// Represents a panel containing a PanelInfo used to edit a single business object.
-    /// </summary>
-    [Obsolete("This has been replaced by IBOGridAndEditorControl : Brett 03 Mar 2009")]
-    public class BusinessObjectPanelWin<T> : UserControlWin, IBusinessObjectPanel where T : class, IBusinessObject
-    {
-        private IPanelInfo _panelInfo;
-
-        ///<summary>
-        /// Constructor for <see cref="BusinessObjectPanelWin{T}"/>
-        ///</summary>
-        ///<param name="controlFactory"></param>
-        ///<param name="uiDefName"></param>
-        public BusinessObjectPanelWin(IControlFactory controlFactory, string uiDefName)
-        {
-            PanelBuilder panelBuilder = new PanelBuilder(controlFactory);
-            _panelInfo = panelBuilder.BuildPanelForForm(ClassDef.Get<T>().UIDefCol[uiDefName].UIForm);
-            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(this);
-            layoutManager.AddControl(_panelInfo.Panel, BorderLayoutManager.Position.Centre );
-        }
-
-        /// <summary>
-        /// Gets or sets the business object being represented
-        /// </summary>
-        public IBusinessObject BusinessObject
-        {
-            get { return _panelInfo.BusinessObject; }
-            set { _panelInfo.BusinessObject = value; }
-        }
-
-        /// <summary>
-        /// Gets and sets the PanelInfo object created by the control
-        /// </summary>
-        public IPanelInfo PanelInfo
-        {
-            get { return _panelInfo; }
-            set { _panelInfo = value; }
         }
     }
 }

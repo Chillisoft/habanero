@@ -1360,6 +1360,9 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof(IPanel), tabPage2.Controls[0]);
             IPanel tabPage2Panel = (IPanel)tabPage2.Controls[0];
             Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage2Panel.Controls.Count);
+            Assert.AreEqual(30, panelInfo.MinimumPanelHeight);
+            Assert.AreEqual(30, panelInfo.Panel.MinimumSize.Height);
+            Assert.AreEqual(200, panelInfo.Panel.MinimumSize.Width);
 
         }
 

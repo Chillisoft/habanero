@@ -59,6 +59,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="BorderLayoutManagerVWG.cs" />
+    <Compile Include="BusinessObjectPanelVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ButtonGroupControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>

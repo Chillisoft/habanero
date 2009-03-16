@@ -29,7 +29,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ClassDef classDef = ClassDef.Get<MyBO>();
             IBOColSelectorControl boColSelector = GetControlFactory().CreateReadOnlyGridControl();
-            IBusinessObjectControl boEditor = new BOEditorControl(classDef);
+            IBusinessObjectControl boEditor = new BOEditorControlWin(classDef);
 
             //---------------Assert Precondition----------------
 
@@ -45,7 +45,7 @@ namespace Habanero.Test.UI.Base
         public void Test_Constructor_BOSelectorNull_ShouldRaiseError()
         {
             ClassDef classDef = ClassDef.Get<MyBO>();
-            IBusinessObjectControl boEditor = new BOEditorControl(classDef); 
+            IBusinessObjectControl boEditor = new BOEditorControlWin(classDef); 
 
             //---------------Assert Precondition----------------
 
@@ -136,7 +136,7 @@ namespace Habanero.Test.UI.Base
         {
             ClassDef classDef = ClassDef.Get<MyBO>();
             boColSelector = GetControlFactory().CreateReadOnlyGridControl();
-            boEditor = new BOEditorControl(classDef);
+            boEditor = new BOEditorControlWin(classDef);
             new BOSelectorAndEditorManager(boColSelector, boEditor);
             FormWin form = new FormWin();
             form.Controls.Add((Control) boColSelector);

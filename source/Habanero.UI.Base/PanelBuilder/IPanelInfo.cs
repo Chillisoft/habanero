@@ -86,5 +86,11 @@ namespace Habanero.UI.Base
         /// Gets the text for the panel tab (UIFormTab.Name)
         /// </summary>
         string PanelTabText { get; }
+
+        /// <summary>
+        /// Sets the Error providers Error message with the appropriate message from the businessObject for each
+        /// Control mapped on this panel.
+        /// </summary>
+        void UpdateErrorProvidersErrorMessages();
     }
 }

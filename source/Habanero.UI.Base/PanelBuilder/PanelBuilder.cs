@@ -65,19 +65,23 @@ namespace Habanero.UI.Base
         /// The width that the error provider will Take up on the screen.
         /// </summary>
         public const int ERROR_PROVIDER_WIDTH = 20;
+
         /// <summary>
         /// The number of controls per <see cref="IClassDef"/>.<see cref="UIDef"/> defined column on the Panel Builder. (Typically the label, the Actual control (e.g. TextBox)
         ///  and the 
         /// </summary>
         public const int CONTROLS_PER_COLUMN = 3;
+
         /// <summary>
         /// The column Number that the Label Control will be placed in.
         /// </summary>
         public const int LABEL_CONTROL_COLUMN_NO = 0;
+
         /// <summary>
         /// The column Number that the Actual user control (e.g. TextBox) will be placed in.
         /// </summary>
         public const int INPUT_CONTROL_COLUMN_NO = 1;
+
         /// <summary>
         /// The column that the error provider will be placed in. 
         ///   This is the last column position within the <see cref="IClassDef"/>.<see cref="UIDef"/> defined column.
@@ -168,9 +172,9 @@ namespace Habanero.UI.Base
         ///<returns></returns>
         public IPanelInfo BuildPanelForForm(UIForm uiForm)
         {
-
             return BuildPanelForForm(uiForm, this.GroupControlCreator);
         }
+
         ///<summary>
         /// Builds a Panel for a single Tab as defined in the <see cref="UIForm"/>.
         ///   There will be one <see cref="IPanelInfo"/> for the defined uiForm.<br/>
@@ -183,7 +187,7 @@ namespace Habanero.UI.Base
         ///<param name="uiForm">The uiForm that the Panel is being built for.</param>
         ///<param name="groupControlCreator">The <see cref="GroupControlCreator"/></param>
         ///<returns></returns>
-        public IPanelInfo BuildPanelForForm(UIForm uiForm,  GroupControlCreator groupControlCreator)
+        public IPanelInfo BuildPanelForForm(UIForm uiForm, GroupControlCreator groupControlCreator)
         {
             if (uiForm == null) throw new ArgumentNullException("uiForm");
             if (groupControlCreator == null) throw new ArgumentNullException("groupControlCreator");
@@ -195,7 +199,6 @@ namespace Habanero.UI.Base
             IPanel childPanel = ControlFactory.CreatePanel();
             foreach (UIFormTab formTab in uiForm)
             {
-
                 IPanelInfo tabPagePanelInfo = BuildPanelForTab(formTab);
                 childPanel = tabPagePanelInfo.Panel;
                 groupControl.AddControl(childPanel, formTab.Name, childPanel.Height, childPanel.Width);
@@ -204,6 +207,11 @@ namespace Habanero.UI.Base
                 foreach (PanelInfo.FieldInfo fieldInfo in tabPagePanelInfo.FieldInfos)
                 {
                     panelInfo.FieldInfos.Add(fieldInfo);
+                }
+                if (panelInfo.MinimumPanelHeight < tabPagePanelInfo.MinimumPanelHeight)
+                {
+                    panelInfo.MinimumPanelHeight = tabPagePanelInfo.MinimumPanelHeight;
+                    panelInfo.Panel.MinimumSize = tabPagePanelInfo.Panel.MinimumSize;
                 }
             }
             groupControl.Dock = DockStyle.Fill;
@@ -224,7 +232,7 @@ namespace Habanero.UI.Base
         {
             GridLayoutManager layoutManager = new GridLayoutManager(panel, ControlFactory);
             int maxRowsInColumns = formTab.GetMaxRowsInColumns();
-            int colCount = formTab.Count*CONTROLS_PER_COLUMN;
+            int colCount = formTab.Count * CONTROLS_PER_COLUMN;
             layoutManager.SetGridSize(maxRowsInColumns, colCount);
             layoutManager.FixColumnBasedOnContents(0);
             for (int i = 0; i < colCount; i += CONTROLS_PER_COLUMN)
@@ -255,10 +263,10 @@ namespace Habanero.UI.Base
 
                     if (--rowSpanTrackerForColumn[currentColumnNo] > 0)
                         continue;
-                            // keep skipping this grid position until a previous row span in this column has been decremented 
+                    // keep skipping this grid position until a previous row span in this column has been decremented 
                     if (--columnSpanTrackerForRow[currentRowNo] > 0)
                         continue;
-                            // keep skipping this grid position until a previous column span in this row has been decremented
+                    // keep skipping this grid position until a previous column span in this row has been decremented
 
                     int currentFieldNoInColumn = currentFieldPositionInColumns[currentColumnNo];
                     int totalFieldsInColumn = currentFormColumn.Count;
@@ -279,7 +287,6 @@ namespace Habanero.UI.Base
                     currentFieldPositionInColumns[currentColumnNo]++;
                 }
             }
-            
         }
 
         private void AddControlsForField(UIFormField formField, IPanelInfo panelInfo)
@@ -302,11 +309,11 @@ namespace Habanero.UI.Base
             panelInfo.FieldInfos.Add(new PanelInfo.FieldInfo(formField.PropertyName, labelControl, controlMapper));
         }
 
-      
 
-        private IControlHabanero CreateAndAddGroupBox(IPanelInfo panelInfo, UIFormField formField) {
+        private IControlHabanero CreateAndAddGroupBox(IPanelInfo panelInfo, UIFormField formField)
+        {
             IControlHabanero labelControl = ControlFactory.CreateGroupBox(formField.GetLabel());
-            labelControl.Width = 0;  // don't affect the label column's fixed width
+            labelControl.Width = 0; // don't affect the label column's fixed width
             labelControl.Name = formField.PropertyName;
             SetToolTip(formField, labelControl);
             panelInfo.LayoutManager.AddControl(labelControl, formField.RowSpan, 2);
@@ -325,7 +332,8 @@ namespace Habanero.UI.Base
             panelInfo.LayoutManager.AddControl(panel, formField.RowSpan, 1);
         }
 
-        private IControlMapper CreateAndAddInputControlToContainerControl(UIFormField formField, IControlHabanero containerControl)
+        private IControlMapper CreateAndAddInputControlToContainerControl
+            (UIFormField formField, IControlHabanero containerControl)
         {
             IControlMapper controlMapper;
             IControlHabanero inputControl = ConfigureInputControl(formField, out controlMapper);
@@ -340,21 +348,21 @@ namespace Habanero.UI.Base
             IControlHabanero inputControl = ConfigureInputControl(formField, out controlMapper);
 
 
-            int numberOfGridColumnsToSpan = 1 + (CONTROLS_PER_COLUMN*(formField.ColSpan - 1));
-            GridLayoutManager.ControlInfo inputControlInfo =
-                new GridLayoutManager.ControlInfo(inputControl, numberOfGridColumnsToSpan,
-                                                  formField.RowSpan);
+            int numberOfGridColumnsToSpan = 1 + (CONTROLS_PER_COLUMN * (formField.ColSpan - 1));
+            GridLayoutManager.ControlInfo inputControlInfo = new GridLayoutManager.ControlInfo
+                (inputControl, numberOfGridColumnsToSpan, formField.RowSpan);
 
             panelInfo.LayoutManager.AddControl(inputControlInfo);
             return controlMapper;
         }
 
-        private IControlHabanero ConfigureInputControl(UIFormField formField, out IControlMapper controlMapper) {
-            IControlHabanero inputControl = ControlFactory.CreateControl(formField.ControlTypeName,
-                                                                  formField.ControlAssemblyName);
-            controlMapper = ControlMapper.Create(formField.MapperTypeName,
-                                                 formField.MapperAssembly, inputControl,
-                                                 formField.PropertyName, !formField.Editable, ControlFactory);
+        private IControlHabanero ConfigureInputControl(UIFormField formField, out IControlMapper controlMapper)
+        {
+            IControlHabanero inputControl = ControlFactory.CreateControl
+                (formField.ControlTypeName, formField.ControlAssemblyName);
+            controlMapper = ControlMapper.Create
+                (formField.MapperTypeName, formField.MapperAssembly, inputControl, formField.PropertyName,
+                 !formField.Editable, ControlFactory);
 
 
             if (!String.IsNullOrEmpty(formField.Alignment)) SetInputControlAlignment(formField, inputControl);
@@ -378,7 +386,7 @@ namespace Habanero.UI.Base
         {
             if (formField.RowSpan > 1)
             {
-                if (inputControl is ITextBox) ((ITextBox)inputControl).Multiline = true;
+                if (inputControl is ITextBox) ((ITextBox) inputControl).Multiline = true;
             }
         }
 
@@ -386,9 +394,8 @@ namespace Habanero.UI.Base
         {
             if (formField.MapperTypeName == "DateTimePickerMapper")
             {
-                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper((IDateTimePicker)inputControl,
-                                                                                     formField.PropertyName, formField.Editable,
-                                                                                     ControlFactory);
+                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper
+                    ((IDateTimePicker) inputControl, formField.PropertyName, formField.Editable, ControlFactory);
                 dateTimePickerMapper.SetPropertyAttributes(formField.Parameters);
             }
         }
@@ -397,12 +404,13 @@ namespace Habanero.UI.Base
         {
             if (!String.IsNullOrEmpty(formField.DecimalPlaces))
             {
-                if (inputControl is INumericUpDown && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
+                if (inputControl is INumericUpDown
+                    && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
                 {
                     int decimalPlaces = Convert.ToInt32(formField.DecimalPlaces);
                     if (decimalPlaces >= 0)
                     {
-                        ((INumericUpDown)inputControl).DecimalPlaces = decimalPlaces;
+                        ((INumericUpDown) inputControl).DecimalPlaces = decimalPlaces;
                     }
                 }
             }
@@ -415,7 +423,7 @@ namespace Habanero.UI.Base
                 if (inputControl is IComboBox && formField.MapperTypeName.ToLower() == "listcomboboxmapper")
                 {
                     string[] items = formField.Options.Split('|');
-                    IComboBox comboBox = ((IComboBox)inputControl);
+                    IComboBox comboBox = ((IComboBox) inputControl);
                     comboBox.Items.Add(""); // This creates the blank item for the ComboBox 
                     foreach (string item in items)
                     {
@@ -431,11 +439,12 @@ namespace Habanero.UI.Base
             {
                 if (inputControl is ITextBox && Convert.ToBoolean(formField.IsEmail))
                 {
-                    ITextBox textBox = (ITextBox)inputControl;
+                    ITextBox textBox = (ITextBox) inputControl;
                     textBox.DoubleClick += EmailTextBoxDoubleClickedHandler;
                 }
             }
         }
+
         ///<summary>
         /// A handler to deal with a double-click on an email textbox, which
         /// causes the default mail client on the user system to be opened
@@ -465,7 +474,6 @@ namespace Habanero.UI.Base
                 textBox.Multiline = true;
                 textBox.AcceptsReturn = true;
                 textBox.ScrollBars = ScrollBars.Vertical;
-
             }
         }
 
@@ -506,20 +514,21 @@ namespace Habanero.UI.Base
             foreach (UIFormColumn formColumn in formTab)
             {
                 if (formColumn.Width < 0) continue;
-                int gridCol = formColCount*CONTROLS_PER_COLUMN;
+                int gridCol = formColCount * CONTROLS_PER_COLUMN;
                 int labelColumnWidth = layoutManager.GetFixedColumnWidth(gridCol + LABEL_CONTROL_COLUMN_NO);
                 int errorProviderColumnWidth = layoutManager.GetFixedColumnWidth(gridCol + ERROR_PROVIDER_COLUMN_NO);
-                int totalGap = (CONTROLS_PER_COLUMN - 1)*layoutManager.GapSize;
+                int totalGap = (CONTROLS_PER_COLUMN - 1) * layoutManager.GapSize;
                 if (formTab.Count == 1)
-                    totalGap += 2*layoutManager.BorderSize; // add extra border for single column
+                    totalGap += 2 * layoutManager.BorderSize; // add extra border for single column
                 else if (formColCount == formTab.Count - 1)
                     totalGap += layoutManager.BorderSize + layoutManager.GapSize; // last column in multi-column
                 else if (formColCount > 0 && formTab.Count > 0)
                     totalGap += layoutManager.GapSize; //2 More gaps for internal column in multi-column
                 else if (formColCount == 0 && formTab.Count > 0) totalGap += layoutManager.BorderSize;
 
-                layoutManager.FixColumn(gridCol + INPUT_CONTROL_COLUMN_NO,
-                                        formColumn.Width - labelColumnWidth - errorProviderColumnWidth - totalGap);
+                layoutManager.FixColumn
+                    (gridCol + INPUT_CONTROL_COLUMN_NO,
+                     formColumn.Width - labelColumnWidth - errorProviderColumnWidth - totalGap);
                 formColCount++;
             }
         }
@@ -544,10 +553,11 @@ namespace Habanero.UI.Base
         {
             HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left;
             if (
-                !(alignmentValue.ToLower() == "left" || alignmentValue.ToLower() == "right" ||
-                  alignmentValue.ToLower() == "center" || alignmentValue.ToLower() == "centre"))
+                !(alignmentValue.ToLower() == "left" || alignmentValue.ToLower() == "right"
+                  || alignmentValue.ToLower() == "center" || alignmentValue.ToLower() == "centre"))
             {
-                string errMessage = "Invalid alignment property value '" + alignmentValue + "' in the class definitions.";
+                string errMessage = "Invalid alignment property value '" + alignmentValue
+                                    + "' in the class definitions.";
                 throw new HabaneroDeveloperException(errMessage, errMessage);
             }
 

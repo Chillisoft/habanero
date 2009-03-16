@@ -66,6 +66,8 @@ namespace Habanero.UI.Base
         /// </summary>
         protected string _propertyName;
 
+        private IBOProp _boProp;
+
         /// <summary>
         /// Constructor to instantiate a new instance of the class
         /// </summary>
@@ -149,6 +151,10 @@ namespace Habanero.UI.Base
             {
                 RemoveCurrentBOPropHandlers();
                 _businessObject = value;
+                if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
+                {
+                    _boProp = _businessObject.Props[_propertyName];
+                }
                 OnBusinessObjectChanged();
                 UpdateIsEditable();
                 UpdateControlValueFromBusinessObject();
@@ -209,11 +215,11 @@ namespace Habanero.UI.Base
         /// </summary>
         public IBOProp CurrentBOProp()
         {
-            if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
-            {
-                return _businessObject.Props[_propertyName];
-            }
-            return null;
+//            if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
+//            {
+//                return _businessObject.Props[_propertyName];
+//            }
+            return _boProp;
         }
 
 
@@ -232,7 +238,7 @@ namespace Habanero.UI.Base
                 virtualPropertySetExists = propertyInfo != null && propertyInfo.CanWrite;
             }
             _isEditable = !_isReadOnly && _businessObject != null
-                          && (_businessObject.Props.Contains(_propertyName) || virtualPropertySetExists);
+                          && (CurrentBOProp() != null || virtualPropertySetExists);
             //TODO: make this support single-table-inheritance.
             //if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsGuidObjectID &&
             //    _businessObject.ID.Contains(_propertyName) &&
@@ -243,10 +249,10 @@ namespace Habanero.UI.Base
             if (_isEditable && !virtualPropertySetExists)
             {
                 if (_businessObject != null)
-                    if (_businessObject.ClassDef.PropDefColIncludingInheritance.Contains(_propertyName))
+                    if (CurrentBOProp() != null)
                     {
-                        IPropDef propDef = _businessObject.ClassDef.PropDefColIncludingInheritance[_propertyName];
                         IBOProp boProp = CurrentBOProp();
+                        IPropDef propDef = boProp.PropDef;
                         switch (propDef.ReadWriteRule)
                         {
                             case PropReadWriteRule.ReadOnly:
@@ -415,16 +421,27 @@ namespace Habanero.UI.Base
                 this.ErrorProvider.SetError(_control, ex.Message);
                 return;
             }
-            if (_businessObject.Props.Contains(_propertyName))
-            {
-                IBOProp prop = _businessObject.Props[_propertyName];
-                if (prop != null)
-                {
-                    _errorProvider.SetError(_control, prop.InvalidReason);
-                }
-            }
+            UpdateErrorProviderErrorMessage();
         }
+        /// <summary>
+        /// Sets the Error Provider Error with the appropriate value for the property e.g. if it is invalid then
+        ///  sets the error provider with the invalid reason else sets the error provider with a zero length string.
+        /// </summary>
+        public virtual void UpdateErrorProviderErrorMessage()
+        {
 
+            if (CurrentBOProp() == null) return;
+
+            _errorProvider.SetError(_control, CurrentBOProp().InvalidReason);
+        }
+        /// <summary>
+        /// Returns the Error Provider's Error message.
+        /// </summary>
+        /// <returns></returns>
+        public virtual string GetErrorMessage()
+        {
+            return ErrorProvider.GetError(_control);
+        }
         /// <summary>
         /// A form field can have attributes defined in the class definition.
         /// These attributes are passed to the control mapper via a hashtable

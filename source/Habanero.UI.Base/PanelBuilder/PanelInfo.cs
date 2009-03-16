@@ -145,6 +145,18 @@ namespace Habanero.UI.Base
             get { return this.UIFormTab == null ? "" : this.UIFormTab.Name; }
         }
 
+        /// <summary>
+        /// Sets the Error providers Error message with the appropriate message from the businessObject for each
+        /// Control mapped on this panel.
+        /// </summary>
+        public void UpdateErrorProvidersErrorMessages()
+        {
+            for (int fieldInfoNum = 0; fieldInfoNum < FieldInfos.Count; fieldInfoNum++)
+            {
+                FieldInfos[fieldInfoNum].ControlMapper.UpdateErrorProviderErrorMessage();
+            }
+        }
+
         ///<summary>
         /// An enumeration of all 
         ///</summary>

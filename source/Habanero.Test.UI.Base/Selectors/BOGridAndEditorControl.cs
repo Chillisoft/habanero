@@ -225,6 +225,7 @@ namespace Habanero.Test.UI.Base
             }
         }
 
+        [Ignore(" In the process of removing this class")] //TODO  15 Mar 2009:
         [Test]
         public void TestConstructor_NonGeneric_DefinedUIDefDoesNotExistForDef_ShouldRiaseError()
         {

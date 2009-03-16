@@ -61,5 +61,17 @@ namespace Habanero.UI.Base
         /// on the represented <see cref="BusinessObject"/>
         /// </summary>
         void UpdateControlValueFromBusinessObject();
+
+        /// <summary>
+        /// Sets the Error Provider Error with the appropriate value for the property e.g. if it is invalid then
+        ///  sets the error provider with the invalid reason else sets the error provider with a zero length string.
+        /// </summary>
+        void UpdateErrorProviderErrorMessage();
+
+        /// <summary>
+        /// Returns the Error Provider's Error message.
+        /// </summary>
+        /// <returns></returns>
+        string GetErrorMessage();
     }
 }
