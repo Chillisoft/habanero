@@ -39,7 +39,8 @@ namespace Habanero.Test
         {
         }
 
-        protected internal MyBO(ClassDef def) : base(def)
+        public MyBO(ClassDef def)
+            : base(def)
         {
         }
 
@@ -74,6 +75,7 @@ namespace Habanero.Test
             {
                 return (Guid?)this.GetPropertyValue("MyBoID");
             }
+            set { this.SetPropertyValue("MyBoID", value); }
         }
 
         public BusinessObjectCollection<MyRelatedBo> MyMultipleRelationship
@@ -814,7 +816,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID""  type=""Guid""/>
+					<property  name=""MyBoID""  type=""Guid"" compulsory=""true""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
 						<simpleLookupList>

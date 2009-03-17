@@ -215,7 +215,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_IfInInvalidState_WhenSetBOToValidBo_ShouldClearErrorProviders()
+        public void Test_IfInvalidState_WhenSetBOToValidBo_ShouldClearErrorProviders()
         {
             //---------------Set up test pack-------------------
             GetCustomClassDef();
@@ -233,9 +233,28 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(controlWin.BusinessObject.IsValid());
             AssertErrorProvidersHaveBeenCleared(controlWin);
         }
+        [Test]
+        public void Test_IfInvalidState_WhenSetBOToNull_ShouldClearErrorProviders()
+        {
+            //---------------Set up test pack-------------------
+            GetCustomClassDef();
+            GlobalUIRegistry.ControlFactory = GetControlFactory();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ContactPersonTestBO boInvalid = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
+            IBOPanelEditorControl controlWin = new BOEditorControlWin(boInvalid.ClassDef);
+            controlWin.BusinessObject = boInvalid;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(boInvalid.IsValid());
+            AssertErrorProviderHasErrors(controlWin, "Surname");
+            //---------------Execute Test ----------------------
+            controlWin.BusinessObject = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(controlWin.BusinessObject);
+            AssertErrorProvidersHaveBeenCleared(controlWin);
+        }
 
         [Test]
-        public virtual void Test_IfInValidState_WhenSetControlValueToInvalidValue_ShouldUpdatesErrorProviders()
+        public virtual void Test_IfValidState_WhenSetControlValueToInvalidValue_ShouldUpdatesErrorProviders()
         {
             //---------------Set up test pack-------------------
             GetCustomClassDef();
@@ -386,6 +405,8 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsFalse(isDirty);
         }
+
+
         private static void SetSurnameTextBoxToNull(IBusinessObjectPanel controlWin)
         {
             ITextBox surnameTextBox = (ITextBox) controlWin.PanelInfo.FieldInfos["Surname"].InputControl;

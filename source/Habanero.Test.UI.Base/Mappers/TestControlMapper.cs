@@ -130,53 +130,47 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
 
-            private ITextBox GetTextBoxForShapeNameWhereShapeNameCompulsory
-                (out Shape shape, out TextBoxMapper textBoxMapper)
-            {
-                ITextBox textBox = GetControlFactory().CreateTextBox();
-                textBoxMapper = new TextBoxMapper(textBox, "ShapeName", false, GetControlFactory());
-                shape = new Shape();
-                ClassDef def = shape.ClassDef;
-                IPropDef shapeNameDef = def.PropDefcol["ShapeName"];
-                shapeNameDef.Compulsory = true;
-                return textBox;
-            }
-
+            //This test is different from VWG because an edit to the properties in Windows updates the 
+            // control and must therefore update the Error provider whereas for VWG it is done only when you
+            // specifically update the control with the BO Values.
             [Test]
-            public void Test_SetErrorProviderError_WhenBOInvalid_ShouldSetsErrorMessage()
+            public void Test_EditBusinessObjectProp_IfControlHasErrors_WhenBOValid_ShouldClearErrorMessage()
             {
                 //---------------Set up test pack-------------------
                 Shape shape;
-                TextBoxMapper textBoxMapper;
-                ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out textBoxMapper);
-                textBoxMapper.BusinessObject = shape;
+                ControlMapperStub mapperStub;
+                ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out mapperStub);
+                mapperStub.BusinessObject = shape;
                 //---------------Assert Precondition----------------
-                Assert.IsFalse(shape.IsValid());
+                Assert.IsFalse(mapperStub.BusinessObject.IsValid());
+                Assert.AreNotEqual("", mapperStub.ErrorProvider.GetError(textBox));
+                //---------------Execute Test ----------------------
+                shape.ShapeName = TestUtil.GetRandomString();
+                //---------------Test Result -----------------------
+                Assert.IsTrue(mapperStub.BusinessObject.IsValid());
+                Assert.AreEqual("", mapperStub.ErrorProvider.GetError(textBox));
+            }
+            //This test is different from VWG because an edit to the properties in Windows updates the 
+            // control and must therefore update the Error provider whereas for VWG it is done only when you
+            // specifically update the control with the BO values
+            [Test]
+            public void Test_UpdateErrorProviderError_IfControlHasNoErrors_WhenBOInvalid_ShouldSetsErrorMessage()
+            {
+                //---------------Set up test pack-------------------
+                Shape shape;
+                ControlMapperStub textBoxMapper;
+                ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out textBoxMapper);
+                shape.ShapeName = TestUtil.GetRandomString();
+                textBoxMapper.BusinessObject = shape;
+                
+                //---------------Assert Precondition----------------
+                Assert.IsTrue(shape.IsValid());
                 Assert.AreEqual("", textBoxMapper.ErrorProvider.GetError(textBox));
                 //---------------Execute Test ----------------------
-                textBoxMapper.UpdateErrorProviderErrorMessage();
+                shape.ShapeName = "";
                 //---------------Test Result -----------------------
-                Assert.AreNotEqual("", textBoxMapper.ErrorProvider.GetError(textBox));
-            }
-
-            [Test]
-            public void Test_GetErrorProviderErrorMessage_WhenInvalid_ShouldReturnErrorMessageFromErrorProvider()
-            {
-                //---------------Set up test pack-------------------
-                Shape shape;
-                TextBoxMapper textBoxMapper;
-                ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out textBoxMapper);
-                textBoxMapper.BusinessObject = shape;
-                shape.IsValid();
-                textBoxMapper.UpdateErrorProviderErrorMessage();
-                string expectedErrorProviderErroMessage = textBoxMapper.ErrorProvider.GetError(textBox);
-                //---------------Assert Precondition----------------
                 Assert.IsFalse(shape.IsValid());
-                Assert.AreNotEqual("", expectedErrorProviderErroMessage);
-                //---------------Execute Test ----------------------
-                string message = textBoxMapper.GetErrorMessage();
-                //---------------Test Result -----------------------
-                Assert.AreEqual(expectedErrorProviderErroMessage, message);
+                Assert.AreNotEqual("", textBoxMapper.ErrorProvider.GetError(textBox));
             }
 
 //            [Test]
@@ -262,7 +256,47 @@ namespace Habanero.Test.UI.Base
                 _readOnlyMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
-        }
+
+            [Test]
+            public void Test_UpdateErrorProviderError_IfControlHasErrors_WhenBOValid_ShouldClearErrorMessage()
+            {
+                //---------------Set up test pack-------------------
+                Shape shape;
+                ControlMapperStub mapperStub;
+                ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out mapperStub);
+                mapperStub.BusinessObject = shape;
+                mapperStub.UpdateErrorProviderErrorMessage();
+                shape.ShapeName = TestUtil.GetRandomString();
+                //---------------Assert Precondition----------------
+                Assert.IsTrue(mapperStub.BusinessObject.IsValid());
+                Assert.AreNotEqual("", mapperStub.ErrorProvider.GetError(textBox));
+                //---------------Execute Test ----------------------
+                mapperStub.UpdateErrorProviderErrorMessage();
+                //---------------Test Result -----------------------
+                Assert.IsTrue(mapperStub.BusinessObject.IsValid());
+                Assert.AreEqual("", mapperStub.ErrorProvider.GetError(textBox));
+            }
+
+            [Test]
+            public void Test_UpdateErrorProviderError_IfControlHasNoErrors_WhenBOInvalid_ShouldSetsErrorMessage()
+            {
+                //---------------Set up test pack-------------------
+                Shape shape;
+                ControlMapperStub textBoxMapper;
+                ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out textBoxMapper);
+                shape.ShapeName = TestUtil.GetRandomString();
+                textBoxMapper.BusinessObject = shape;
+                shape.ShapeName = "";
+                //---------------Assert Precondition----------------
+                Assert.IsFalse(shape.IsValid());
+                Assert.AreEqual("", textBoxMapper.ErrorProvider.GetError(textBox));
+                //---------------Execute Test ----------------------
+                textBoxMapper.UpdateErrorProviderErrorMessage();
+                //---------------Test Result -----------------------
+                Assert.AreNotEqual("", textBoxMapper.ErrorProvider.GetError(textBox));
+            }
+
+        }//Test ControlMapperVWG
 
         private ITextBox _txtNormal;
         private ITextBox _txtReadonly;
@@ -1129,6 +1163,78 @@ namespace Habanero.Test.UI.Base
             sh2.ShapeName = "Different2";
             _readOnlyMapper.UpdateControlValueFromBusinessObject();
             Assert.AreEqual("Different2", _txtReadonly.Text);
+        }
+
+
+        private ITextBox GetTextBoxForShapeNameWhereShapeNameCompulsory
+            (out Shape shape, out ControlMapperStub controlMapper)
+        {
+            ITextBox textBox = GetControlFactory().CreateTextBox();
+            controlMapper = new ControlMapperStub(textBox, "ShapeName", false, GetControlFactory());
+            shape = new Shape();
+            ClassDef def = shape.ClassDef;
+            IPropDef shapeNameDef = def.PropDefcol["ShapeName"];
+            shapeNameDef.Compulsory = true;
+            return textBox;
+        }
+
+        [Test]
+        public void Test_SetBusinessObject_IfControlHasErrors_WhenBONull_ShouldClearErrorMessage()
+        {
+            //---------------Set up test pack-------------------
+            Shape shape;
+            ControlMapperStub mapperStub;
+            ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out mapperStub);
+            mapperStub.BusinessObject = shape;
+            mapperStub.UpdateErrorProviderErrorMessage();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(mapperStub.BusinessObject.IsValid());
+            Assert.AreNotEqual("", mapperStub.ErrorProvider.GetError(textBox));
+            //---------------Execute Test ----------------------
+            mapperStub.BusinessObject = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(mapperStub.CurrentBOProp());
+            Assert.IsNull(mapperStub.BusinessObject);
+            Assert.AreEqual("", mapperStub.ErrorProvider.GetError(textBox));
+        }
+
+        [Test]
+        public void Test_SetBusinessObject_IfControlHasErrors_WhenBOValid_ShouldClearErrorMessage()
+        {
+            //---------------Set up test pack-------------------
+            Shape shape;
+            ControlMapperStub mapperStub;
+            ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out mapperStub);
+            mapperStub.BusinessObject = shape;
+            mapperStub.UpdateErrorProviderErrorMessage();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(mapperStub.BusinessObject.IsValid());
+            Assert.AreNotEqual("", mapperStub.ErrorProvider.GetError(textBox));
+            //---------------Execute Test ----------------------
+            mapperStub.BusinessObject = new Shape { ShapeName = "someName" };
+            //---------------Test Result -----------------------
+            Assert.IsTrue(mapperStub.BusinessObject.IsValid());
+            Assert.AreEqual("", mapperStub.ErrorProvider.GetError(textBox));
+        }
+
+        [Test]
+        public void Test_GetErrorProviderErrorMessage_WhenInvalid_ShouldReturnErrorMessageFromErrorProvider()
+        {
+            //---------------Set up test pack-------------------
+            Shape shape;
+            ControlMapperStub textBoxMapper;
+            ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out textBoxMapper);
+            textBoxMapper.BusinessObject = shape;
+            shape.IsValid();
+            textBoxMapper.UpdateErrorProviderErrorMessage();
+            string expectedErrorProviderErroMessage = textBoxMapper.ErrorProvider.GetError(textBox);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(shape.IsValid());
+            Assert.AreNotEqual("", expectedErrorProviderErroMessage);
+            //---------------Execute Test ----------------------
+            string message = textBoxMapper.GetErrorMessage();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedErrorProviderErroMessage, message);
         }
     }
 

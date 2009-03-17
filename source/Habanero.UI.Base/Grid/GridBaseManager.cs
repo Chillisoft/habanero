@@ -118,7 +118,9 @@ namespace Habanero.UI.Base
                 gridBase.DataSource = null;
                 return;
             }
-            gridBase.DataSource = GetDataTable(boCol);
+            DataView table = GetDataTable(boCol);
+            gridBase.DataSource = table;
+            
         }
         /// <summary>
         /// Returns a DataView based on the <see cref="IBusinessObjectCollection"/> defined by <paramref name="boCol"/>.

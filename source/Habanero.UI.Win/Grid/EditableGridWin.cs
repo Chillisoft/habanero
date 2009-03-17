@@ -42,7 +42,13 @@ namespace Habanero.UI.Win
     public class EditableGridWin : GridBaseWin, IEditableGrid
     {
         private DeleteKeyBehaviours _deleteKeyBehaviour;
-        private bool _comboBoxClickOnce;
+
+        /// <summary>
+        /// Gets or sets whether clicking on a ComboBox cell causes the drop-down to
+        /// appear immediately.  Set this to false if the user should click twice
+        /// (first to select, then to edit), which is the default behaviour.
+        /// </summary>
+        public bool ComboBoxClickOnce { get; set; }
 
         ///<summary>
         /// Constructs the <see cref="EditableGridWin"/>
@@ -54,7 +60,7 @@ namespace Habanero.UI.Win
             _deleteKeyBehaviour = DeleteKeyBehaviours.DeleteRow;
 //            SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
             this.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            _comboBoxClickOnce = true;
+            ComboBoxClickOnce = true;
             UserDeletingRow += ConfirmRowDeletion;
             CheckUserConfirmsDeletionDelegate += CheckUserWantsToDelete;
             CellClick += CellClickHandler;
@@ -184,47 +190,34 @@ namespace Habanero.UI.Win
         /// </summary>
         public void DeleteKeyHandler()
         {
-            if (CurrentCell != null && !CurrentCell.IsInEditMode && SelectedRows.Count == 0) //&& CurrentRow != null
+            if (CurrentCell == null || CurrentCell.IsInEditMode || SelectedRows.Count != 0) return;
+            if (_deleteKeyBehaviour == DeleteKeyBehaviours.DeleteRow && AllowUserToDeleteRows)
             {
-                if (_deleteKeyBehaviour == DeleteKeyBehaviours.DeleteRow && AllowUserToDeleteRows)
+                if (!ConfirmDeletion || (ConfirmDeletion && CheckUserConfirmsDeletionDelegate()))
                 {
-                    if (!ConfirmDeletion || (ConfirmDeletion && CheckUserConfirmsDeletionDelegate()))
-                    {
-                        ArrayList rowIndexes = new ArrayList();
-                        foreach (IDataGridViewCell cell in SelectedCells)
-                        {
-                            if (!rowIndexes.Contains(cell.RowIndex) && cell.RowIndex != NewRowIndex)
-                            {
-                                rowIndexes.Add(cell.RowIndex);
-                            }
-                        }
-                        rowIndexes.Sort();
-
-                        for (int row = rowIndexes.Count - 1; row >= 0; row--)
-                        {
-                            Rows.RemoveAt((int) rowIndexes[row]);
-                        }
-                    }
-                }
-                else if (_deleteKeyBehaviour == DeleteKeyBehaviours.ClearContents)
-                {
+                    ArrayList rowIndexes = new ArrayList();
                     foreach (IDataGridViewCell cell in SelectedCells)
                     {
-                        cell.Value = null;
+                        if (!rowIndexes.Contains(cell.RowIndex) && cell.RowIndex != NewRowIndex)
+                        {
+                            rowIndexes.Add(cell.RowIndex);
+                        }
+                    }
+                    rowIndexes.Sort();
+
+                    for (int row = rowIndexes.Count - 1; row >= 0; row--)
+                    {
+                        Rows.RemoveAt((int) rowIndexes[row]);
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets or sets whether clicking on a ComboBox cell causes the drop-down to
-        /// appear immediately.  Set this to false if the user should click twice
-        /// (first to select, then to edit), which is the default behaviour.
-        /// </summary>
-        public bool ComboBoxClickOnce
-        {
-            get { return _comboBoxClickOnce; }
-            set { _comboBoxClickOnce = value; }
+            else if (_deleteKeyBehaviour == DeleteKeyBehaviours.ClearContents)
+            {
+                foreach (IDataGridViewCell cell in SelectedCells)
+                {
+                    cell.Value = null;
+                }
+            }
         }
 
         /// <summary>

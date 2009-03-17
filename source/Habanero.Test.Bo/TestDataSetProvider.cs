@@ -515,6 +515,83 @@ namespace Habanero.Test.BO
             Assert.AreEqual(testPropValue, myBO.TestProp);
             Assert.AreEqual(testPropValue, row1["TestProp"]);
         }
+        [Test]
+        public virtual void TestAddBOToCol_WhenBOInvalid_UpdatesErrorProvider()
+        {
+            //---------------Set up test pack-------------------
+            //XmlClassLoader loader = new XmlClassLoader();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithLookup();
+            classDef.PropDefcol["TestProp"].Compulsory = true; 
+            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>(_classDef);
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(collection);
+            DataTable table = dataSetProvider.GetDataTable(classDef.GetUIDef("default").UIGrid);
+            string errMessage;
+            //-------------Assert Preconditions -------------
+            Assert.AreEqual(0, table.Rows.Count);
+            //---------------Execute Test ----------------------
+            MyBO myBO = collection.CreateBusinessObject();
+            myBO.IsValid(out errMessage);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, table.Rows.Count);
+            DataRow row1 = table.Rows[0];
+            Assert.AreEqual(null, myBO.TestProp);
+            Assert.AreEqual(DBNull.Value, row1["TestProp"]);
+            Assert.AreEqual(errMessage, row1.RowError);
+        }
+
+        [Test]
+        public virtual void TestUpdateBusinessObjectRowValues_WhenBOInvalid_UpdatesErrorProvider()
+        {
+            //---------------Set up test pack-------------------
+            //XmlClassLoader loader = new XmlClassLoader();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithLookup();
+            classDef.PropDefcol["TestProp"].Compulsory = true; 
+            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>(_classDef);
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(collection);
+            MyBO myBo = new MyBO();
+            myBo.TestProp = TestUtil.GetRandomString();
+            collection.Add(myBo);
+            BOMapper mapper = new BOMapper(myBo);
+            DataTable table = dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            DataRow row1 = table.Rows[0];
+            MyBO foundBO = (MyBO)dataSetProvider.Find(0);
+            string testPropValueOrigValue = foundBO.TestProp;
+            string errMessage;
+            
+            //-------------Assert Preconditions -------------
+            Assert.AreEqual(testPropValueOrigValue, row1["TestProp"]);
+            Assert.IsTrue(foundBO.IsValid());
+            Assert.AreEqual("", row1.RowError);
+            //---------------Execute Test ----------------------
+            myBo.TestProp = "";
+            foundBO.IsValid(out errMessage);
+            dataSetProvider.UpdateBusinessObjectRowValues(foundBO);
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(testPropValueOrigValue, foundBO.TestProp);
+            Assert.IsFalse(foundBO.IsValid());
+            Assert.AreEqual(errMessage,row1.RowError);
+        }
+        [Test]
+        public virtual void TestUpdateBusinessObjectRowValues_BOPropNull()
+        {
+            //---------------Set up test pack-------------------
+            SetupTestData();
+            DataRow row1 = itsTable.Rows[0];
+            MyBO myBO = (MyBO)_dataSetProvider.Find(0);
+            string testPropValue = myBO.TestProp;
+            _dataSetProvider.UpdateBusinessObjectRowValues(myBO);
+            //-------------Assert Preconditions -------------
+            Assert.AreEqual(testPropValue, myBO.TestProp);
+            Assert.AreEqual(testPropValue, row1["TestProp"]);
+            //---------------Execute Test ----------------------
+            myBO.TestProp = null;
+            _dataSetProvider.UpdateBusinessObjectRowValues(myBO);
+            //---------------Test Result -----------------------
+            Assert.IsNull( myBO.TestProp);
+            Assert.AreEqual(DBNull.Value, row1["TestProp"]);
+        }
 
         [Test]
         public void TestUpdateBusinessObjectRowValues_NullBo()

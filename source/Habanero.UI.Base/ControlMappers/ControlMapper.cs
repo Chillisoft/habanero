@@ -151,14 +151,21 @@ namespace Habanero.UI.Base
             {
                 RemoveCurrentBOPropHandlers();
                 _businessObject = value;
+                if (value != null) value.IsValid();//This forces the object to do validation.
+
                 if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
                 {
                     _boProp = _businessObject.Props[_propertyName];
+                }
+                if (_businessObject == null)
+                {
+                    _boProp = null;
                 }
                 OnBusinessObjectChanged();
                 UpdateIsEditable();
                 UpdateControlValueFromBusinessObject();
                 AddCurrentBOPropHandlers();
+                this.UpdateErrorProviderErrorMessage();
             }
         }
 
@@ -174,6 +181,7 @@ namespace Habanero.UI.Base
         public virtual void UpdateControlValueFromBusinessObject()
         {
             InternalUpdateControlValueFromBo();
+            this.UpdateErrorProviderErrorMessage();
         }
 
         #endregion
@@ -430,7 +438,11 @@ namespace Habanero.UI.Base
         public virtual void UpdateErrorProviderErrorMessage()
         {
 
-            if (CurrentBOProp() == null) return;
+            if (CurrentBOProp() == null)
+            {
+                _errorProvider.SetError(_control, "");
+                return;
+            }
 
             _errorProvider.SetError(_control, CurrentBOProp().InvalidReason);
         }

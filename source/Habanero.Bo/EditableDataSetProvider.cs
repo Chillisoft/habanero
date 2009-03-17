@@ -85,28 +85,28 @@ namespace Habanero.BO
             _table.RowDeleting += _rowDeletedHandler;
         }
 
-        /// <summary>
-        /// Handles the event of a business object being added. Adds a new
-        /// data row containing the object.
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        protected override void BOAddedHandler(object sender, BOEventArgs e)
-        {
-            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
-            int rowNum = this.FindRow(e.BusinessObject);
-            if (rowNum >= 0) return; //If row already exists in the datatable then do not add it.
-            object[] values = GetValues(businessObject);
-            try
-            {
-                DeregisterForTableEvents();
-                _table.LoadDataRow(values, true);
-            }
-            finally
-            {
-                RegisterForTableEvents();
-            }
-        }
+//        /// <summary>
+//        /// Handles the event of a business object being added. Adds a new
+//        /// data row containing the object.
+//        /// </summary>
+//        /// <param name="sender">The object that notified of the event</param>
+//        /// <param name="e">Attached arguments regarding the event</param>
+//        protected override void BOAddedHandler(object sender, BOEventArgs e)
+//        {
+//            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
+//            int rowNum = this.FindRow(e.BusinessObject);
+//            if (rowNum >= 0) return; //If row already exists in the datatable then do not add it.
+//            object[] values = GetValues(businessObject);
+//            try
+//            {
+//                DeregisterForTableEvents();
+//                _table.LoadDataRow(values, true);
+//            }
+//            finally
+//            {
+//                RegisterForTableEvents();
+//            }
+//        }
 
         /// <summary>
         /// Handles the event of a new row being added
@@ -151,19 +151,6 @@ namespace Habanero.BO
             {
                 IBusinessObject changedBo = GetBusinessObjectForRow(row);
                 if (changedBo == null) return;
-//                if (changedBo.Status.IsNew)
-//                {
-//                    try
-//                    {
-//                        DeregisterForBOEvents();
-//                        _collection.Remove(changedBo);
-//                    }
-//                    finally
-//                    {
-//                        RegisterForBOEvents();
-//                    }
-//                    return;
-//                }
                 try
                 {
                     DeregisterForBOEvents();
@@ -265,7 +252,15 @@ namespace Habanero.BO
                 else
                 {
                     changedBo = GetBusinessObjectForRow(row);
-                    if (changedBo != null) changedBo.CancelEdits();
+                    if (changedBo != null)
+                    {
+                        changedBo.CancelEdits();
+                        row.RowError = changedBo.Status.IsValidMessage;
+                    }
+                    else
+                    {
+                        row.RowError = "";
+                    }
                 }
             }
             catch (Exception ex)
@@ -290,8 +285,14 @@ namespace Habanero.BO
             try
             {
                 IBusinessObject changedBo = GetBusinessObjectForRow(row);
-                if (changedBo != null) changedBo.Save();
-                row.RowError = "";
+                if (changedBo != null)
+                {
+                    changedBo.Save();
+                    row.RowError = changedBo.Status.IsValidMessage;
+                }else
+                {
+                    row.RowError = "";
+                }
             }
             catch (Exception ex)
             {
@@ -320,6 +321,7 @@ namespace Habanero.BO
                         changedBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
                     }
                 }
+                row.RowError = changedBo.Status.IsValidMessage;
             }
             catch (Exception ex)
             {
@@ -419,6 +421,7 @@ namespace Habanero.BO
                         }
                     }
                 }
+                row.RowError = newBo.Status.IsValidMessage;
                 _addedRows.Add(row, newBo);
                 if (newBo.ID.ObjectID == Guid.Empty)
                 {

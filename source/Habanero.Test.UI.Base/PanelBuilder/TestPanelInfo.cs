@@ -243,8 +243,10 @@ namespace Habanero.Test.UI.Base
             ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(person.ClassDef.UIDefCol["default"].UIForm[0]);
+            person.Surname = TestUtil.GetRandomString();
             panelInfo.BusinessObject = person;
             IControlMapper SurnameControlMapper = panelInfo.FieldInfos["Surname"].ControlMapper;
+            person.Surname = "";
             //---------------Assert Precondition----------------
             Assert.IsFalse(person.IsValid());
             Assert.AreEqual("", SurnameControlMapper.GetErrorMessage());

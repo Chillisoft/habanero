@@ -52,7 +52,7 @@ namespace Habanero.UI.Win
             set
             {
                 _panelInfo.BusinessObject = value;
-                _panelInfo.UpdateErrorProvidersErrorMessages();
+                //_panelInfo.UpdateErrorProvidersErrorMessages();
                 SetEnableState();
             }
         }

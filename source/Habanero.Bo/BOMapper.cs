@@ -111,15 +111,6 @@ namespace Habanero.BO
                 {
                     string[] parts = relationshipName.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
                     List<string> relNames = new List<string>(parts);
-                    //ArrayList relNames = new ArrayList();
-                    //while (relationshipName.IndexOf("|") != -1)
-                    //{
-                    //    string relName = relationshipName.Substring(0, relationshipName.IndexOf("|"));
-                    //    relNames.Add(relName);
-                    //    //log.Debug("Relationship name found : " + relName);
-                    //    relationshipName = relationshipName.Remove(0, relationshipName.IndexOf("|") + 1);
-                    //}
-                    //relNames.Add(relationshipName);
                     IBusinessObject oldBo = relatedBo;
                     int i = 0;
                     do

@@ -494,6 +494,30 @@ namespace Habanero.Test.BO
             Assert.AreEqual(updatedvalue, table.Rows[0][columnName]);
             Assert.AreEqual(updatedvalue, bo1.GetPropertyValue(columnName));
         }
+        [Test]
+        public void Test_EditDataTable_ToDBNUll_EditsBo()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider dataSetProvider = GetDataSetProviderWithCollection(ref col);
+            BOMapper mapper = new BOMapper(col.ClassDef.CreateNewBusinessObject());
+            DataTable table = dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            MyBO bo1 = col[0];
+//            const string updatedvalue = "UpdatedValue";
+            const string columnName = "TestProp";
+            object origionalPropValue = bo1.GetPropertyValue(columnName);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+            Assert.AreEqual(4, table.Rows.Count);
+            Assert.AreEqual(bo1.ID.AsString_CurrentValue(), table.Rows[0][_dataTableIdColumnName]);
+            Assert.AreEqual(origionalPropValue, table.Rows[0][columnName]);
+            //---------------Execute Test ----------------------
+            table.Rows[0][columnName] = DBNull.Value;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(bo1.ID.AsString_CurrentValue(), table.Rows[0][_dataTableIdColumnName]);
+            Assert.AreEqual(DBNull.Value, table.Rows[0][columnName]);
+            Assert.AreEqual(null, bo1.GetPropertyValue(columnName));
+        }
 
         [Test]
         public void TestGetConnection()

@@ -38,30 +38,37 @@ namespace Habanero.BO
         ///   are being mapped in this DataSetProvider (i.e. are being copied to the <see cref="DataTable"/>.
         /// </summary>
         protected readonly IBusinessObjectCollection _collection;
+
         /// <summary>
         /// The collection of <see cref="UIGridColumn"/>s that are being shown in this <see cref="DataTable"/>.
         /// </summary>
         protected ICollection _uiGridProperties;
+
         /// <summary>
         /// The <see cref="DataTable"/> that is set up to represent the items in this collection.
         /// </summary>
         protected DataTable _table;
+
         /// <summary>
         /// The object initialiser being used to create a new object if this grid is allowed to create a new object.
         /// </summary>
         protected IBusinessObjectInitialiser _objectInitialiser;
+
         /// <summary>
         /// A handler for the <see cref="IBusinessObject"/> has been added to the <see cref="_collection"/>.
         /// </summary>
         protected EventHandler<BOEventArgs> _boAddedHandler;
+
         /// <summary>
         /// A handler for the <see cref="IBusinessObject"/> has had one of its properties updated
         /// </summary>
         protected readonly EventHandler<BOPropUpdatedEventArgs> _propUpdatedEventHandler;
+
         /// <summary>
         /// A handler for the <see cref="IBusinessObject"/> has been persisted.
         /// </summary>
         protected readonly EventHandler<BOEventArgs> _updatedHandler;
+
         /// <summary>
         /// A handler for the <see cref="IBusinessObject"/> has been removed from the <see cref="_collection"/>.
         /// </summary>
@@ -114,10 +121,9 @@ namespace Habanero.BO
             {
                 AddColumn(uiProperty, (ClassDef) classDef);
             }
-            foreach (BusinessObject businessObjectBase in _collection)
+            foreach (BusinessObject businessObject in _collection)
             {
-                object[] values = GetValues(businessObjectBase);
-                _table.LoadDataRow(values, true);
+                LoadBusinessObject(businessObject);
             }
             this.RegisterForEvents();
             return _table;
@@ -164,19 +170,23 @@ namespace Habanero.BO
                 {
                     column.ReadOnly = false;
                 }
-                _table.Rows[rowNum].ItemArray = values;
+                DataRow row = _table.Rows[rowNum];
+                row.ItemArray = values;
+                row.RowError = businessObject.Status.IsValidMessage;
             }
             finally
             {
                 RegisterForTableEvents();
             }
         }
+
         /// <summary>
         /// Deregisters for all events to the <see cref="_table"/>
         /// </summary>
         protected virtual void DeregisterForTableEvents()
         {
         }
+
         /// <summary>
         /// Registers for all events to the <see cref="_table"/>
         /// </summary>
@@ -199,9 +209,7 @@ namespace Habanero.BO
             foreach (UIGridColumn gridProperty in _uiGridProperties)
             {
                 object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
-                ////TODO: Do for derived properties may need some logic for setting val
-                /// see previous code for this method
-                values[i++] = val;
+                values[i++] = val ?? DBNull.Value;
             }
             return values;
         }
@@ -244,6 +252,7 @@ namespace Habanero.BO
             RegisterForBOEvents();
             RegisterForTableEvents();
         }
+
         /// <summary>
         /// Registers for all events from the <see cref="_collection"/>
         /// </summary>
@@ -311,8 +320,27 @@ namespace Habanero.BO
         protected virtual void BOAddedHandler(object sender, BOEventArgs e)
         {
             BusinessObject businessObject = (BusinessObject) e.BusinessObject;
+            int rowNum = this.FindRow(e.BusinessObject);
+            if (rowNum >= 0) return; //If row already exists in the datatable then do not add it.
+            LoadBusinessObject(businessObject);
+        }
+
+        /// <summary>
+        /// Adds the Business Object to the DataTable
+        /// </summary>
+        private void LoadBusinessObject(IBusinessObject businessObject)
+        {
             object[] values = GetValues(businessObject);
-            _table.LoadDataRow(values, true);
+            try
+            {
+                DeregisterForTableEvents();
+                DataRow row = _table.LoadDataRow(values, true);
+                if (businessObject != null) row.RowError = businessObject.Status.IsValidMessage;
+            }
+            finally
+            {
+                RegisterForTableEvents();
+            }
         }
 
         /// <summary>
@@ -363,21 +391,9 @@ namespace Habanero.BO
             {
                 DataRow dataRow = _table.Rows[i];
                 if (dataRow.RowState == DataRowState.Deleted) continue;
-                //string gridIDValue = dataRow[0].ToString();
-                //string valuePersisted = bo.ID.AsString_LastPersistedValue();
-                //string valueBeforeLastEdit = bo.ID.AsString_PreviousValue();
-                //string currentValue = bo.ID.AsString_CurrentValue();
-                //if (gridIDValue == valueBeforeLastEdit ||
-                //    gridIDValue == valuePersisted ||
-                //    gridIDValue == currentValue)
-                //{
-                //    return i;
-                //}
 
                 string rowID = dataRow[0].ToString();
                 Guid objectID = bo.ID.ObjectID;
-                //string valueBeforeLastEdit = bo.ID.AsString_PreviousValue();
-                //string currentValue = bo.ID.AsString_CurrentValue();
                 if (rowID == objectID.ToString())
                 {
                     return i;
