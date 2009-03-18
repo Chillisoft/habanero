@@ -3050,7 +3050,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Rhino.Mocks, Version=3.2.0.781, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_2F3B0D00D7E44A88A6E987D547CDB52C"
@@ -3374,7 +3374,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Rhino.Mocks, Version=3.2.0.781, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_4B2C806F77E5025545E7A25160CA6412"
@@ -5744,8 +5744,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Habanero v2.2.0a"
-        "ProductCode" = "8:{D07797B3-6E29-4428-A99C-CFD43DD3DAE3}"
-        "PackageCode" = "8:{2A607BCE-0457-4265-B97C-954F28676CA8}"
+        "ProductCode" = "8:{CE9E1B23-4917-4098-B958-8DDAB0B1935C}"
+        "PackageCode" = "8:{0718657A-BC63-42B1-8F36-99B48CF9E90D}"
         "UpgradeCode" = "8:{3F3CD419-5D29-4D0C-ABA0-456887C00FE9}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
