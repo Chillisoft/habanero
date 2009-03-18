@@ -120,7 +120,10 @@ namespace Habanero.UI.Base
             }
             DataView table = GetDataTable(boCol);
             gridBase.DataSource = table;
-            
+//            table.ListChanged += (sender, e) =>
+//                                 {
+//                                     gridBase.RefreshEdit();
+//                                 };
         }
         /// <summary>
         /// Returns a DataView based on the <see cref="IBusinessObjectCollection"/> defined by <paramref name="boCol"/>.

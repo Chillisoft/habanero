@@ -440,11 +440,11 @@ namespace Habanero.UI.Base
 
             if (CurrentBOProp() == null)
             {
-                _errorProvider.SetError(_control, "");
+                ErrorProvider.SetError(_control, "");
                 return;
             }
 
-            _errorProvider.SetError(_control, CurrentBOProp().InvalidReason);
+            ErrorProvider.SetError(_control, CurrentBOProp().InvalidReason);
         }
         /// <summary>
         /// Returns the Error Provider's Error message.

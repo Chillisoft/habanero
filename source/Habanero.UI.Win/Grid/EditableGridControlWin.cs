@@ -66,6 +66,7 @@ namespace Habanero.UI.Win
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             manager.AddControl(_buttons, BorderLayoutManager.Position.South);
             this.Grid.BusinessObjectSelected += Grid_OnBusinessObjectSelected;
+            //this.Grid.Rows[0].
         }
 
         /// <summary>
@@ -146,9 +147,9 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets and Sets the business object collection displayed in the grid.  This
         /// collection must be pre-loaded using the collection's Load() command or from the
-        /// <see cref="IBusinessObjectLoader"/>.
-        /// The default UI definition will be used, that is a 'ui' element 
-        /// without a 'name' attribute.
+        /// <see cref="IBusinessObjectLoader"/>.<br/>
+        /// If the grid has not been <see cref="IGridControl.Initialise(IClassDef,string)"/>d.
+        /// The default UI definition will be used for the class def defined by the business object collection.
         /// </summary>
         public IBusinessObjectCollection BusinessObjectCollection
         {
@@ -192,7 +193,6 @@ namespace Habanero.UI.Win
         {
             get { return this.Grid.Rows.Count; }
         }
-
 
         /// <summary>
         /// Returns the business object at the specified row number
@@ -310,7 +310,6 @@ namespace Habanero.UI.Win
 
         private void _filterControl_OnFilter(object sender, EventArgs e)
         {
-            //this.Grid.CurrentPage = 1;
             if (FilterMode == FilterModes.Search)
             {
                 string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");

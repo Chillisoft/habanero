@@ -364,7 +364,6 @@ namespace Habanero.UI.Base
                 (formField.MapperTypeName, formField.MapperAssembly, inputControl, formField.PropertyName,
                  !formField.Editable, ControlFactory);
 
-
             if (!String.IsNullOrEmpty(formField.Alignment)) SetInputControlAlignment(formField, inputControl);
             SetInputControlNumLines(formField, inputControl);
 
@@ -533,13 +532,13 @@ namespace Habanero.UI.Base
             }
         }
 
-        private void SetToolTip(UIFormField formField, IControlHabanero inputControl)
+        private void SetToolTip(UIFormField formField, IControlHabanero control)
         {
             string toolTipText = formField.GetToolTipText();
             IToolTip toolTip = ControlFactory.CreateToolTip();
             if (!String.IsNullOrEmpty(toolTipText))
             {
-                toolTip.SetToolTip(inputControl, toolTipText);
+                toolTip.SetToolTip(control, toolTipText);
             }
         }
 

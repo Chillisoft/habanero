@@ -85,29 +85,6 @@ namespace Habanero.BO
             _table.RowDeleting += _rowDeletedHandler;
         }
 
-//        /// <summary>
-//        /// Handles the event of a business object being added. Adds a new
-//        /// data row containing the object.
-//        /// </summary>
-//        /// <param name="sender">The object that notified of the event</param>
-//        /// <param name="e">Attached arguments regarding the event</param>
-//        protected override void BOAddedHandler(object sender, BOEventArgs e)
-//        {
-//            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
-//            int rowNum = this.FindRow(e.BusinessObject);
-//            if (rowNum >= 0) return; //If row already exists in the datatable then do not add it.
-//            object[] values = GetValues(businessObject);
-//            try
-//            {
-//                DeregisterForTableEvents();
-//                _table.LoadDataRow(values, true);
-//            }
-//            finally
-//            {
-//                RegisterForTableEvents();
-//            }
-//        }
-
         /// <summary>
         /// Handles the event of a new row being added
         /// </summary>
@@ -120,15 +97,6 @@ namespace Habanero.BO
                 _objectInitialiser.InitialiseDataRow(e.Row);
             }
         }
-
-//        /// <summary>
-//        /// Removes the handlers that are called in the event of updates
-//        /// </summary>
-//        public override void DeregisterForEvents()
-//        {
-//            base.DeregisterForEvents();
-//            DeregisterForTableEvents();
-//        }
 
         /// <summary>
         /// Initialises the local data
@@ -173,7 +141,11 @@ namespace Habanero.BO
                 _collection.BusinessObjectRemoved += _removedHandler;
             }
         }
-
+        /// <summary>
+        /// Returns the business object mapped to a particular row.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
         private IBusinessObject GetBusinessObjectForRow(DataRow row)
         {
             IBusinessObject changedBo = null;
@@ -316,10 +288,10 @@ namespace Habanero.BO
                 if (changedBo == null || _isBeingAdded) return;
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
-                    if (!IsReflectiveProperty(uiProperty))
-                    {
-                        changedBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
-                    }
+                    if (IsReflectiveProperty(uiProperty)) continue;
+                    changedBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
+                    IBOProp prop = changedBo.Props[uiProperty.PropertyName];
+                    row.SetColumnError(uiProperty.PropertyName, prop.InvalidReason);
                 }
                 row.RowError = changedBo.Status.IsValidMessage;
             }

@@ -156,27 +156,46 @@ namespace Habanero.BO
         ///<param name="businessObject">The <see cref="IBusinessObject"/> for which the row values need to updated.</param>
         public virtual void UpdateBusinessObjectRowValues(IBusinessObject businessObject)
         {
-            if (businessObject == null) return;
-            int rowNum = this.FindRow(businessObject);
-            if (rowNum == -1)
-            {
-                return;
-            }
             try
             {
-                DeregisterForTableEvents();
-                object[] values = GetValues(businessObject);
-                foreach (DataColumn column in _table.Columns)
+                if (businessObject == null) return;
+                int rowNum = this.FindRow(businessObject);
+                if (rowNum == -1)
                 {
-                    column.ReadOnly = false;
+                    return;
                 }
-                DataRow row = _table.Rows[rowNum];
-                row.ItemArray = values;
-                row.RowError = businessObject.Status.IsValidMessage;
+                try
+                {
+                    DeregisterForTableEvents();
+                    object[] values = GetValues(businessObject);
+                    DataRow row = _table.Rows[rowNum];
+                    foreach (DataColumn column in _table.Columns)
+                    {
+                        column.ReadOnly = false;
+                        string propName = column.ColumnName;
+                        if (businessObject.Props.Contains(propName))
+                        {
+                            IBOProp prop = businessObject.Props[propName];
+                            if (prop != null) row.SetColumnError(propName, prop.InvalidReason);
+                        }
+                    }
+                    row.RowError = businessObject.Status.IsValidMessage;
+                    row.ItemArray = values;
+
+//                if (string.IsNullOrEmpty(row.RowError ))
+//                {
+//                    row.ClearErrors();
+//                } 
+//                row.EndEdit();
+                }
+                finally
+                {
+                    RegisterForTableEvents();
+                }
             }
-            finally
+            catch (Exception ex)
             {
-                RegisterForTableEvents();
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
