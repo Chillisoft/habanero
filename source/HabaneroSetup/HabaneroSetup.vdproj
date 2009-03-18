@@ -1119,6 +1119,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_65405FF6CDAB44B3A3B97C735AC63B0E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_665F76ADB9344806A4E8E5F40815A335"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1282,6 +1288,12 @@
         "Entry"
         {
         "MsmKey" = "8:_7E1C4953AEF946CC98BF771FC637BBAF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7F0464AFE86E47779288B0B4345F77E8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1499,6 +1511,12 @@
         {
         "MsmKey" = "8:_AC6B99EDC554A357D53C5BF5EF9CE896"
         "OwnerKey" = "8:_0F75C69415744F2F84682B6EAB55B66E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ACB0AD3B3EA0497CB10337EFE5600D1B"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -3050,7 +3068,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Rhino.Mocks, Version=3.2.0.781, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_2F3B0D00D7E44A88A6E987D547CDB52C"
@@ -3374,7 +3392,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Rhino.Mocks, Version=3.2.0.781, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_4B2C806F77E5025545E7A25160CA6412"
@@ -3876,6 +3894,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_65405FF6CDAB44B3A3B97C735AC63B0E"
+            {
+            "SourcePath" = "8:..\\Habanero.UI.Base\\Resources\\headergradient.png"
+            "TargetName" = "8:headergradient.png"
+            "Tag" = "8:"
+            "Folder" = "8:_D92DCD3B5B4A49158893AA1245DE22CD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6700D472CA514410BBCC58AE58CDBA89"
             {
             "SourcePath" = "8:Resources\\ChmFile.ico"
@@ -4166,6 +4204,26 @@
             "TargetName" = "8:primaryKey.dtd"
             "Tag" = "8:"
             "Folder" = "8:_42572CF617994C858EF87133B8469CEA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7F0464AFE86E47779288B0B4345F77E8"
+            {
+            "SourcePath" = "8:..\\Habanero.UI.Base\\Resources\\pinon_withcolour.png"
+            "TargetName" = "8:pinon_withcolour.png"
+            "Tag" = "8:"
+            "Folder" = "8:_D92DCD3B5B4A49158893AA1245DE22CD"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4768,6 +4826,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ACB0AD3B3EA0497CB10337EFE5600D1B"
+            {
+            "SourcePath" = "8:..\\Habanero.UI.Base\\Resources\\pinoff_withcolour.png"
+            "TargetName" = "8:pinoff_withcolour.png"
+            "Tag" = "8:"
+            "Folder" = "8:_D92DCD3B5B4A49158893AA1245DE22CD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AF449668A306C2164F00C49E2C1278B1"
@@ -5612,6 +5690,17 @@
                             "Property" = "8:_8FB71FC0582549C2A13534C6F2BA54C3"
                                 "Folders"
                                 {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_D92DCD3B5B4A49158893AA1245DE22CD"
+                                    {
+                                    "Name" = "8:Resources"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_8112A3DF184B43978A2232410FB9E60E"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
                                 }
                             }
                             "{9EF0B969-E518-4E46-987F-47570745A589}:_CF9924598AD747D8AE547DA6FB993BC5"
