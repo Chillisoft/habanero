@@ -1186,15 +1186,18 @@ namespace Habanero.Test
 
             public UIFormTab GetFormTabOneFieldWithDateFormatParameter()
             {
-                return GetSimpleUIFormDef_WithDateFormatParameter()[0];
+                return GetFormTabOneFieldWithDateFormatParameter(true);
             }
 
-            private UIForm GetSimpleUIFormDef_WithDateFormatParameter()
+            public UIFormTab GetFormTabOneFieldWithDateFormatParameter(bool includeMapperType)
+            {
+                return GetSimpleUIFormDef_WithDateFormatParameter(includeMapperType)[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_WithDateFormatParameter(bool includeMapperType)
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
-                return
-                     loader.LoadUIFormDef(
-                         @"<form>
+                string defXml = @"<form>
 							<tab name=""Tab1"">
 								<columnLayout width=""150"">
 									<field label=""DateTime:"" property=""SampleDateTime"" type=""DateTimePicker"" mapperType=""DateTimePickerMapper"" >
@@ -1205,7 +1208,9 @@ namespace Habanero.Test
                                     </field>
    								</columnLayout>
 							</tab>
-						</form>");
+						</form>";
+                if (!includeMapperType) defXml = defXml.Replace(@"mapperType=""DateTimePickerMapper""", "");
+                return loader.LoadUIFormDef(defXml);
             }
             public UIFormTab GetFormTabOneFieldHasRowAndColSpan()
             {

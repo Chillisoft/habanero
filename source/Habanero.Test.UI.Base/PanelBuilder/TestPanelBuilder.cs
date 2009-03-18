@@ -803,14 +803,40 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (IDateTimePicker), panel.Controls[1]);
-            IDateTimePicker control1 = (IDateTimePicker) panel.Controls[1];
+            Assert.IsInstanceOfType(typeof(IDateTimePicker), panel.Controls[1]);
+            IDateTimePicker control1 = (IDateTimePicker)panel.Controls[1];
             Assert.AreEqual(DateTimePickerFormat.Short, control1.Format);
 
-            Assert.IsInstanceOfType(typeof (IDateTimePicker), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
-            IDateTimePicker control2 = (IDateTimePicker) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
+            Assert.IsInstanceOfType(typeof(IDateTimePicker), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
+            IDateTimePicker control2 = (IDateTimePicker)panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
             Assert.AreEqual(DateTimePickerFormat.Custom, control2.Format);
             Assert.AreEqual(singleFieldTab[0][1].DateFormat, control2.CustomFormat);
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_DateFormat_DateTimePicker_WithUnspecifiedMapper()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDateFormatParameter(false);
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            UIFormField formField1 = singleFieldTab[0][0];
+            UIFormField formField2 = singleFieldTab[0][1];
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(String.IsNullOrEmpty(formField1.DateFormat));
+            Assert.IsFalse(String.IsNullOrEmpty(formField2.DateFormat));
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(IDateTimePicker), panel.Controls[1]);
+            IDateTimePicker control1 = (IDateTimePicker)panel.Controls[1];
+            Assert.AreEqual(DateTimePickerFormat.Short, control1.Format);
+
+            Assert.IsInstanceOfType(typeof(IDateTimePicker), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
+            IDateTimePicker control2 = (IDateTimePicker)panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
+            Assert.AreEqual(DateTimePickerFormat.Custom, control2.Format);
+            Assert.AreEqual(formField2.DateFormat, control2.CustomFormat);
         }
 
         [Test]

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 using Habanero.UI.Base;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.MethodRecorders;
 
 namespace Habanero.Test.UI.Base
 {
@@ -76,8 +73,8 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Expected to throw an Exception");
             Assert.AreSame(expectedException, exception);
-            boToDelete.AssertWasCalled(o => o.Save());
             boToDelete.AssertWasCalled(o => o.MarkForDelete());
+            boToDelete.AssertWasCalled(o => o.Save());
             boToDelete.AssertWasCalled(o => o.CancelEdits());
         }
     }

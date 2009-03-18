@@ -261,7 +261,7 @@ namespace Habanero.BO
         BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteriaString,
                 int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
             where T : class, IBusinessObject, new();
-        //TODO 17 Feb 2009 Mark: Add the GetBusinessObjectCollection with Limit eith the ClassDef parameter 
+        //TODO 17 Feb 2009 Mark: Add the GetBusinessObjectCollection with Limit with the ClassDef parameter 
 
 
         /// <summary>

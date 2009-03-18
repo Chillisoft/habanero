@@ -274,18 +274,12 @@ namespace Habanero.UI.Base
                 }
             }
 
-            if (formField.MapperTypeName == "DateTimePickerMapper")
+            if (controlMapper is ControlMapper)
             {
-                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper((IDateTimePicker)inputControl,
-                                                                                     formField.PropertyName, formField.Editable,
-                                                                                     _factory);
-                dateTimePickerMapper.SetPropertyAttributes(formField.Parameters);
+                ControlMapper mapper = (ControlMapper) controlMapper;
+                mapper.SetPropertyAttributes(formField.Parameters);
             }
 
-            if (formField.RowSpan > 1)
-            {
-                if (inputControl is ITextBox) ((ITextBox)inputControl).Multiline = true;
-            }
             SetToolTip(formField, inputControl);
             return inputControl;
         }
