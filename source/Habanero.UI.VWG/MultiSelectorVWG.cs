@@ -17,14 +17,10 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-#region Using
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Habanero.UI.Base;
-
-#endregion
 
 namespace Habanero.UI.VWG
 {
