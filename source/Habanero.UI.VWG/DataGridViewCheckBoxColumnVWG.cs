@@ -29,6 +29,10 @@ namespace Habanero.UI.VWG
     {
         private readonly DataGridViewCheckBoxColumn _dataGridViewCheckBoxColumn;
 
+        ///<summary>
+        /// Constructs the <see cref="DataGridViewCheckBoxColumnVWG"/> which is a wrapper around the <see cref="DataGridViewCheckBoxColumn"/>
+        ///</summary>
+        ///<param name="dataGridViewColumn"></param>
         public DataGridViewCheckBoxColumnVWG(DataGridViewCheckBoxColumn dataGridViewColumn) : base(dataGridViewColumn)
         {
             _dataGridViewCheckBoxColumn = dataGridViewColumn;

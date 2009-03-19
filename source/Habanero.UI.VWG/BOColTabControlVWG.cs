@@ -60,10 +60,10 @@ namespace Habanero.UI.VWG
         }
         /// <summary>
         /// Sets the boControl that will be displayed on each tab page.  This must be called
-        /// before the BoTabColControl can be used.
+        /// before the BoTabColControl can be used.<br/>
+        /// The business object control that is
+        /// displaying the business object information in the tab page
         /// </summary>
-        /// <param name="value">The business object control that is
-        /// displaying the business object information in the tab page</param>
         public IBusinessObjectControl BusinessObjectControl
         {
             get { return _boColTabControlManager.BusinessObjectControl; }
@@ -72,10 +72,9 @@ namespace Habanero.UI.VWG
 
         /// <summary>
         /// Sets the collection of tab pages for the collection of business
-        /// objects provided
+        /// objects provided.<br/>
+        /// The business object collection to create tab pages for
         /// </summary>
-        /// <param name="value">The business object collection to create tab pages
-        /// for</param>
         public IBusinessObjectCollection BusinessObjectCollection
         {
             get { return BOColTabControlManager.BusinessObjectCollection; }

@@ -494,7 +494,9 @@ namespace Habanero.BO
         public BusObjectConcurrencyControlException(string message, Exception inner) : base(message, inner)
         {
         }
-
+        /// <summary>
+        /// The Business Object the concurrency control exception is for
+        /// </summary>
         protected object mobj; //TODO make this be a business object only
 
         /// <summary>
@@ -1013,6 +1015,9 @@ namespace Habanero.BO
     [Serializable]
     public class BusObjReadException : BusinessObjectException
     {
+        /// <summary>
+        /// Teh Business Object the Exception is for
+        /// </summary>
         protected object mobj;
 
         /// <summary>
@@ -1091,6 +1096,9 @@ namespace Habanero.BO
     [Serializable]
     public class EditingException : BusinessObjectException
     {
+        /// <summary>
+        /// The business object that had the editing exception.
+        /// </summary>
         protected object mobj;
 
         /// <summary>

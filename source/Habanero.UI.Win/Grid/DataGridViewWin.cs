@@ -149,6 +149,7 @@ namespace Habanero.UI.Win
             set { base[columnIndex, rowIndex] = value == null ? null : ((DataGridViewCellWin) value).DataGridViewCell; }
         }
 
+
         /// <summary>Sorts the contents of the <see cref="IDataGridView"></see> control in ascending or
         /// descending order based on the contents of the specified column.</summary>
         /// <param name="direction">One of the <see cref="T:System.ComponentModel.ListSortDirection"></see> values. </param>
@@ -448,10 +449,10 @@ namespace Habanero.UI.Win
 
             private static IDataGridViewColumn GetAppropriateColumnType(DataGridViewColumn column)
             {
-//                if (column is DataGridViewImageColumn)
-//                {
-//                    return new DataGridViewImageColumnWin((DataGridViewImageColumn)column);
-//                }
+                if (column is DataGridViewImageColumn)
+                {
+                    return new DataGridViewImageColumnWin((DataGridViewImageColumn)column);
+                }
                 //TODO Brett 13 Mar 2009: Write test for this
                 if (column is DataGridViewComboBoxColumn)
                 {

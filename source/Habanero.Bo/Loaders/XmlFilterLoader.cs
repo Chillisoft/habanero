@@ -24,13 +24,31 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders
 {
+    ///<summary>
+    /// loads the Filter Defs from the ClassDefs.xml so
+    ///</summary>
     public class XmlFilterLoader : XmlLoader
     {
-        private IList<FilterPropertyDef> _propertyDefs = new List<FilterPropertyDef>();
+        private readonly IList<FilterPropertyDef> _propertyDefs = new List<FilterPropertyDef>();
         private FilterModes _filterMode;
         private int _columns;
+        ///<summary>
+        ///</summary>
+        ///<param name="dtdLoader"></param>
+        ///<param name="defClassFactory"></param>
         public XmlFilterLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory) : base(dtdLoader, defClassFactory) { }
+        ///<summary>
+        ///</summary>
         public XmlFilterLoader() { }
+
+        /// <summary>
+        /// Creates the object using the data that has been read in using
+        /// LoadFromReader(). This method needs to be implemented by the
+        /// sub-class.
+        /// Creates the FilterDef with the propDefs, columns and filtermode.
+        /// <returns></returns>
+        /// </summary>
+        /// <returns>Returns the object created</returns>
         protected override object Create()
         {
             FilterDef filterDef = _defClassFactory.CreateFilterDef(_propertyDefs);
@@ -39,6 +57,12 @@ namespace Habanero.BO.Loaders
             return filterDef;
         }
 
+        /// <summary>
+        /// Loads all the data out of the reader, assuming the document is 
+        /// well-formed, otherwise the error must be caught and thrown.
+        /// By the end of this method the reader must be finished reading.
+        /// This method needs to be implemented by the sub-class.
+        /// </summary>
         protected override void LoadFromReader()
         {
             if (_reader.Name == "filter")
@@ -81,6 +105,11 @@ namespace Habanero.BO.Loaders
             }
             while (_reader.Name == "filter") _reader.Read();
         }
+        ///<summary>
+        /// Loads the FilterDef from an XML string.
+        ///</summary>
+        ///<param name="xml"></param>
+        ///<returns></returns>
         public FilterDef LoadFilterDef(string xml)
         {
             return (FilterDef)base.Load(this.CreateXmlElement(xml));

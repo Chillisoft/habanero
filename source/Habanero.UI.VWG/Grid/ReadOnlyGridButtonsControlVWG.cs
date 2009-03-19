@@ -30,11 +30,19 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class ReadOnlyGridButtonsControlVWG : ButtonGroupControlVWG, IReadOnlyGridButtonsControl
     {
+        /// <summary> Fires when the Delete button is clicked </summary>
         public event EventHandler DeleteClicked;
+
+        /// <summary> Fires when the Add button is clicked </summary>
         public event EventHandler AddClicked;
+
+        /// <summary> Fires when the Edit button is clicked </summary>
         public event EventHandler EditClicked;
         private readonly ReadOnlyGridButtonsControlManager _manager;
-
+        /// <summary>
+        /// Constructor for <see cref="ReadOnlyGridButtonsControlVWG"/>
+        /// </summary>
+        /// <param name="controlFactory"></param>
         public ReadOnlyGridButtonsControlVWG(IControlFactory controlFactory)
             : base(controlFactory)
         {

@@ -108,7 +108,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>the form field or null</returns>
         public UIFormField GetFormField(string propertyName)
         {
-            UIForm formProperties = this.GetUIFormProperties();
+            UIForm formProperties = this.UIForm;
 
             foreach (UIFormTab tab in formProperties)
             {

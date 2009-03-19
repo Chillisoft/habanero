@@ -39,6 +39,9 @@ namespace Habanero.BO.ClassDefinition
     ///</summary>
     public abstract class BOPropDataMapper
     {
+        /// <summary>
+        /// The standard date Time Format to use.
+        /// </summary>
         protected string _standardDateTimeFormat = "dd MMM yyyy HH:mm:ss:fff";
 
         /// <summary>

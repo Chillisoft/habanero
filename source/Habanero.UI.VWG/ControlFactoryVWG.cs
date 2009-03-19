@@ -340,6 +340,9 @@ namespace Habanero.UI.VWG
             return cntrl;
         }
 
+        /// <summary>
+        /// Creates a user control
+        /// </summary>
         public IUserControlHabanero CreateUserControl()
         {
             return new UserControlVWG();
@@ -366,6 +369,14 @@ namespace Habanero.UI.VWG
             return tv;
         }
 
+        /// <summary>
+        /// Creates a new empty TreeView
+        /// </summary>
+        public ITreeView CreateTreeView()
+        {
+            return CreateTreeView("TreeView");
+        }
+
         ///<summary>
         /// Creates a new TreeNode for a TreeView control.
         ///</summary>
@@ -373,7 +384,7 @@ namespace Habanero.UI.VWG
         ///<returns>The newly created TreeNode object.</returns>
         public ITreeNode CreateTreeNode(string nodeName)
         {
-            return new TreeViewVWG.TreeNodeVWG(new TreeNode(nodeName));
+            return new TreeViewVWG.TreeNodeVWG(nodeName);
         }
 
         /// <summary>
@@ -595,6 +606,9 @@ namespace Habanero.UI.VWG
             return (Base.DialogResult)MessageBox.Show(message);
         }
 
+        /// <summary>
+        /// Creates a TextBox that provides filtering of characters depending on the property type.
+        /// </summary>
         public IPictureBox CreatePictureBox()
         {
             return new PictureBoxVWG();
@@ -843,8 +857,7 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Returns a BOEditor form. This is a form that the business object can be edited in.
         /// </summary>
-        /// <param name="bo"></param>
-        ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
+        /// <param name="bo">   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
         /// <returns></returns>
         public virtual IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo)
         {

@@ -41,6 +41,10 @@ namespace Habanero.UI.VWG
         public event EventHandler CancelClicked;
 
 
+        ///<summary>
+        /// Creates the <see cref="EditableGridButtonsControlVWG"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public EditableGridButtonsControlVWG(IControlFactory controlFactory) : base(controlFactory)
         {
             IButton cancelButton = AddButton("Cancel", FireCancelButtonClicked);

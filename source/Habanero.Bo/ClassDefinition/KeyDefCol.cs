@@ -108,7 +108,11 @@ namespace Habanero.BO.ClassDefinition
                 return _keyDefs[keyName];
             }
         }
-
+        /// <summary>
+        /// returns the key def at the index/
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         protected internal KeyDef GetKeyDefAtIndex(int index)
         {
             int counter = 0;

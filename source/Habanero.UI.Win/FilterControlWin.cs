@@ -35,7 +35,7 @@ namespace Habanero.UI.Win
         private readonly IPanel _controlPanel;
         private readonly IPanel _filterButtonPanel;
         private readonly FilterControlManager _filterControlManager;
-        private readonly IGroupBox _gbox;
+        private readonly IControlHabanero _gbox;
         private IButton _clearButton;
         private IButton _filterButton;
         private FilterModes _filterMode;
@@ -54,9 +54,9 @@ namespace Habanero.UI.Win
             Height = 50;
             _controlFactory = controlFactory;
             _gbox = _controlFactory.CreateGroupBox();
+//            _gbox = _controlFactory.CreatePanel();
             _controlFactory.CreateBorderLayoutManager(this).AddControl(_gbox, BorderLayoutManager.Position.Centre);
             _gbox.Text = "Filter the Grid";
-
             BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(_gbox);
             layoutManager.BorderSize = 20;
             _filterButtonPanel = controlFactory.CreatePanel();
@@ -75,6 +75,8 @@ namespace Habanero.UI.Win
             Height = 50;
             _filterControlManager = new FilterControlManager(controlFactory,
                                                              new FlowLayoutManager(_controlPanel, controlFactory));
+
+
         }
 
         /// <summary>
@@ -279,11 +281,18 @@ namespace Habanero.UI.Win
             get { return _filterControlManager.FilterControls; }
         }
 
+        /// <summary>
+        /// Returns the filter control used to filter the column for the given property name
+        /// </summary>
+        /// <param name="propertyName">The property name on the business object</param>
         public IControlHabanero GetChildControl(string propertyName)
         {
             return _filterControlManager.GetChildControl(propertyName);
         }
 
+        /// <summary>
+        /// Clears all the values from the filter and calls <see cref="IFilterControl.ApplyFilter"/>
+        /// </summary>
         public void ClearFilters()
         {
             _filterControlManager.ClearFilters();

@@ -296,10 +296,10 @@ namespace Habanero.Base
 
         private static IComparable ConvertGuidStringToValue(IComparable propertyValue, IComparable compareToValue)
         {
-            if (propertyValue is Guid )
+            if (propertyValue is Guid && compareToValue != null)
             {
                 Guid guidCompareToValue;
-                bool parsedOK = GuidTryParse(compareToValue.ToString(), out guidCompareToValue);
+                bool parsedOK = GuidTryParse( compareToValue.ToString(), out guidCompareToValue);
                 return parsedOK ? guidCompareToValue : compareToValue;
             }
             return compareToValue;

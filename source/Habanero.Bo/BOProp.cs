@@ -38,18 +38,27 @@ namespace Habanero.BO
     ///</summary>
     public class BOProp : IBOProp
     {
+        /// <summary> The Logger </summary>
         protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
+        /// <summary> The current value of the BOProp </summary>
         protected object _currentValue;
+        /// <summary> Whether the prop has been edited since being created or loaded from the database </summary>
         protected bool _isDirty;
+        /// <summary> Is the boProp valid </summary>
         protected bool _isValid = true;
-
+        /// <summary> The propDef for the BOProp </summary>
         protected PropDef _propDef;
-
+        /// <summary> The reason the prop is invalid </summary>
         protected string _invalidReason = "";
+        /// <summary> The persisted value of the Property. </summary>
         protected object _persistedValue;
+        /// <summary> Whether the origional value loaded from the DB or the default value was valid. </summary>
         protected bool _origValueIsValid = true;
+        /// <summary> The reason that the origional value was not valid. </summary>
         protected string _origInvalidReason = "";
+        /// <summary> Is the business object new. </summary>
         protected bool _isObjectNew;
+        /// <summary> The value prior to the last edit. </summary>
         protected object _valueBeforeLastEdit;
         private IBOPropAuthorisation _boPropAuthorisation;
 
@@ -225,7 +234,10 @@ namespace Habanero.BO
                 _isDirty = !Equals(_persistedValue, newValue);
             }
         }
-
+        /// <summary>
+        /// Raises an Erorr if the Incorrect type of property is being set to this BOProp.
+        /// </summary>
+        /// <param name="value"></param>
         protected void RaiseIncorrectTypeException(object value)
         {
             string message = string.Format("{0} cannot be set to {1}. It is not a type of {2}" 

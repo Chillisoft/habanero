@@ -143,10 +143,10 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Creates a new <see cref="TBusinessObject"/> for this RelatedBusinessObjectCollection.
+        /// Creates a new TBusinessObject for this RelatedBusinessObjectCollection.
         /// The new BusinessObject has all of its foreign key properties set, but is not added in to the collection yet.
         /// </summary>
-        /// <returns>A new <see cref="TBusinessObject"/>.</returns>
+        /// <returns>A new TBusinessObject.</returns>
         protected override TBusinessObject CreateNewBusinessObject()
         {
             TBusinessObject newBusinessObject = base.CreateNewBusinessObject();
@@ -189,6 +189,11 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Handles the event of a Business object being restored.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected override void RestoredEventHandler(object sender, BOEventArgs e)
         {
             TBusinessObject bo = (TBusinessObject)e.BusinessObject;
@@ -199,6 +204,11 @@ namespace Habanero.BO
             if (addedListContains) DereferenceBO(bo);
         }
 
+        /// <summary>
+        /// Handles the event of the Business object becoming invalid.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected override void SavedEventHandler(object sender, BOEventArgs e)
         {
             TBusinessObject bo = (TBusinessObject)e.BusinessObject;

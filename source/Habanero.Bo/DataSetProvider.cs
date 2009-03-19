@@ -240,7 +240,9 @@ namespace Habanero.BO
         {
             DeregisterForBOEvents();
         }
-
+        /// <summary>
+        /// Derigisters the Data Set Provider from all events raised by the BO collection.
+        /// </summary>
         protected virtual void DeregisterForBOEvents()
         {
             try

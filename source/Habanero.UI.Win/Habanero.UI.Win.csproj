@@ -108,6 +108,7 @@
     <Compile Include="Grid\BOGridAndEditorControlWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Grid\DataGridViewImageColumnWin.cs" />
     <Compile Include="Grid\EditableGridControlWin.cs">
       <SubType>UserControl</SubType>
     </Compile>

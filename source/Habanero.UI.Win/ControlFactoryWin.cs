@@ -82,9 +82,17 @@ namespace Habanero.UI.Win
         /// <param name="name">The name of the TreeView</param>
         public ITreeView CreateTreeView(string name)
         {
-            ITreeView treeView = new TreeViewWin();
+            ITreeView treeView = new TreeViewWin(this);
             treeView.Name = name;
             return treeView;
+        }
+
+        /// <summary>
+        /// Creates a new empty TreeView
+        /// </summary>
+        public ITreeView CreateTreeView()
+        {
+            return CreateTreeView("TreeView");
         }
 
         ///<summary>
@@ -94,7 +102,7 @@ namespace Habanero.UI.Win
         ///<returns>The newly created TreeNode object.</returns>
         public ITreeNode CreateTreeNode(string nodeName)
         {
-            return new TreeViewWin.TreeNodeWin(new TreeNode(nodeName));
+            return new TreeViewWin.TreeNodeWin(this, nodeName);
         }
 
         /// <summary>
@@ -451,7 +459,7 @@ namespace Habanero.UI.Win
         /// </summary>
         public IDataGridViewImageColumn CreateDataGridViewImageColumn()
         {
-            throw new NotImplementedException();
+            return new DataGridViewImageColumnWin(new DataGridViewImageColumn());
         }
 
         /// <summary>

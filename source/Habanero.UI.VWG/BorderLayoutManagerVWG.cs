@@ -37,6 +37,11 @@ namespace Habanero.UI.VWG
         private readonly IControlHabanero[] _controls;
         private readonly bool[] _splitters;
 
+        ///<summary>
+        /// Constructs the <see cref="BorderLayoutManager"/>
+        ///</summary>
+        ///<param name="managedControl"></param>
+        ///<param name="controlFactory"></param>
         public BorderLayoutManagerVWG(IControlHabanero managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {

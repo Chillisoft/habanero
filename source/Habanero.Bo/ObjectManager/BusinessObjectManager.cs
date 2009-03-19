@@ -51,16 +51,21 @@ namespace Habanero.BO
     ///</summary>
     public class BusinessObjectManager
     {
+        /// <summary>
+        /// Teh Single Instance of the <see cref="BusinessObjectManager"/> used by the Singleton.
+        /// </summary>
         protected static BusinessObjectManager _businessObjectManager = new BusinessObjectManager();
 
         //protected readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
         //    new Dictionary<string, WeakReference>();
-
+        /// <summary> The Busienss Objects Loaded in memory. This is a <see cref="WeakReference"/> so that the objects can still be garbage collected. </summary>
         protected readonly Dictionary<Guid, WeakReference> _loadedBusinessObjects =
             new Dictionary<Guid, WeakReference>();
 
         private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
-
+        /// <summary>
+        /// The constructor for the Busienss Object Manager.
+        /// </summary>
         protected internal BusinessObjectManager()
         {
             _updateIDEventHandler = ObjectID_Updated_Handler;
@@ -339,7 +344,10 @@ namespace Habanero.BO
                 }
             }
         }
-
+        /// <summary>
+        /// Dereigisters for the IDValueUpdatedEvent.
+        /// </summary>
+        /// <param name="businessObject"></param>
         protected void DeregisterForIDUpdatedEvent(IBusinessObject businessObject)
         {
             businessObject.IDUpdated -= _updateIDEventHandler;

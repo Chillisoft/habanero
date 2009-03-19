@@ -287,6 +287,14 @@ namespace Habanero.BO.ClassDefinition
             return true;
         }
 
+        ///<summary>
+        ///Serves as a hash function for a particular type. 
+        ///</summary>
+        ///
+        ///<returns>
+        ///A hash code for the current <see cref="T:System.Object" />.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
             return (_propDefs != null ? _propDefs.GetHashCode() : 0);

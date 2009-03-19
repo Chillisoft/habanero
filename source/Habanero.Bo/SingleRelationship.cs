@@ -56,6 +56,13 @@ namespace Habanero.BO
     ///</summary>
     public abstract class SingleRelationshipBase : Relationship
     {
+        /// <summary>
+        /// Constructs a Single Relationship with the Owning BO, the RelationshipDe and the Props that from the
+        /// Owning BO.
+        /// </summary>
+        /// <param name="owningBo">The Business object that owns this relationship.</param>
+        /// <param name="lRelDef">The <see cref="IRelationshipDef"/> that this relationship is for </param>
+        /// <param name="lBOPropCol">The Collection of business objects properties (<see cref="BOPropCol"/> that is used to create the relKey</param>
         protected SingleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
@@ -417,22 +424,34 @@ namespace Habanero.BO
                     || this.RelationshipDef.RelationshipType == RelationshipType.Composition);
         }
 
+        /// <summary>
+        /// Do the initialisation of this relationship.
+        /// </summary>
         protected override void DoInitialisation()
         {
             // do nothing
         }
-
+        /// <summary>
+        /// UpdateRelationshipAsPersisted
+        /// </summary>
         internal override void UpdateRelationshipAsPersisted()
         {
             IsRemoved = false;
             RemovedBO = null;
         }
 
+        /// <summary>
+        /// DereferenceChildren
+        /// </summary>
+        /// <param name="committer"></param>
         internal override void DereferenceChildren(TransactionCommitter committer)
         {
             DereferenceChild(committer, GetRelatedObject());
         }
-
+        /// <summary>
+        /// Delete Children
+        /// </summary>
+        /// <param name="committer"></param>
         internal override void DeleteChildren(TransactionCommitter committer)
         {
             DeleteChild(committer, GetRelatedObject());

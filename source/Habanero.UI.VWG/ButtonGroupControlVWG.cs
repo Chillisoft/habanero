@@ -86,7 +86,7 @@ namespace Habanero.UI.VWG
         /// <param name="buttonName">The name of the button</param>
         public void SetDefaultButton(string buttonName)
         {
-            ///not implemented in GIz
+            //not implemented in VWG
         }
 
         /// <summary>

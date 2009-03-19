@@ -374,7 +374,7 @@ namespace Habanero.UI.VWG
         ///<returns>Returns the <see cref="IBusinessObjectCollection"/> that has been set for this <see cref="IGridControl"/>.</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            return Grid.GetBusinessObjectCollection();
+            return Grid.BusinessObjectCollection;
         }
 
         #endregion

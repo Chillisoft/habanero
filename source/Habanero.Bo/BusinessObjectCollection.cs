@@ -84,6 +84,7 @@ namespace Habanero.BO
         private IClassDef _boClassDef;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _persistedObjectsCollection = new List<TBusinessObject>();
+        /// <summary> Collection of Business Objects Removed From this collection </summary>
         protected readonly List<TBusinessObject> _removedBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _addedBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _markedForDeleteBusinessObjects = new List<TBusinessObject>();
@@ -423,7 +424,12 @@ namespace Habanero.BO
             }
             if (addSuccessful) this.FireBusinessObjectAdded(bo);
         }
-
+        /// <summary>
+        /// Adds a business object to the collection of business objects without raising any events.
+        /// But still verifies the object does not exist in Created, removed etc collections
+        /// </summary>
+        /// <param name="bo"></param>
+        /// <returns></returns>
         protected virtual bool AddInternal(TBusinessObject bo) {
             if (this.Contains(bo)) return false;
             if (bo.Status.IsNew && !this.CreatedBusinessObjects.Contains(bo))
@@ -574,7 +580,11 @@ namespace Habanero.BO
             }
             if (fireEvent) FireBusinessObjectRemoved(bo);
         }
-
+        /// <summary>
+        /// Handles the event of a Business object being restored.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void RestoredEventHandler(object sender, BOEventArgs e)
         {
             bool addEventRequired = false;
@@ -596,7 +606,11 @@ namespace Habanero.BO
             }
             if (addEventRequired) FireBusinessObjectAdded(bo);
         }
-
+        /// <summary>
+        /// Handles the event of the Business object becoming invalid.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void SavedEventHandler(object sender, BOEventArgs e)
         {
             bool addEventRequired = false;
@@ -793,18 +807,18 @@ namespace Habanero.BO
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, and limiting the number of objects loaded. 
-        /// The limited list of <see cref="TBusinessObject"/>s specified as follows:
+        /// The limited list of TBusinessObjects specified as follows:
         /// If you want record 6 to 15 then 
-        /// <see cref="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
-        /// <see cref="numberOfRecordsToLoad"/> will be set to 10.
-        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <see cref="orderByClause"/>).
+        /// <paramref name="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
+        /// <paramref name="numberOfRecordsToLoad"/> will be set to 10. 
+        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <paramref name="orderByClause"/>).
         /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
         /// </summary>
         /// <remarks>
-        /// As a design decision, we have elected for the <see cref="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
-        /// Also, the <see cref="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
-        /// return all the remaining records from the specified <see cref="firstRecordToLoad"/>.
-        /// If you give '0' as the value for the <see cref="numberOfRecordsToLoad"/> parameter, it will load zero records.
+        /// As a design decision, we have elected for the <paramref name="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// Also, the <paramref name="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
+        /// return all the remaining records from the specified <paramref name="firstRecordToLoad"/>.
+        /// If you give '0' as the value for the <paramref name="numberOfRecordsToLoad"/> parameter, it will load zero records.
         /// </remarks>
         /// <example>
         /// The following code demonstrates how to loop through the invoices in the data store, 
@@ -841,18 +855,18 @@ namespace Habanero.BO
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, and limiting the number of objects loaded. 
-        /// The limited list of <see cref="TBusinessObject"/>s specified as follows:
-        /// If you want record 6 to 15 then 
-        /// <see cref="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
-        /// <see cref="numberOfRecordsToLoad"/> will be set to 10.
-        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <see cref="orderByClause"/>).
-        /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
+        /// The limited list of TBusinessObjects specified as follows:
+        /// If you want record 6 to 15 then
+        /// <paramref name="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
+        /// <paramref name="numberOfRecordsToLoad"/> will be set to 10.
+        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <paramref name="orderByClause"/>).
+        /// If there are fewer than 15 records in total, then the remaining records after record 6 will be returned. 
         /// </summary>
         /// <remarks>
-        /// As a design decision, we have elected for the <see cref="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
-        /// Also, the <see cref="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
-        /// return all the remaining records from the specified <see cref="firstRecordToLoad"/>.
-        /// If you give '0' as the value for the <see cref="numberOfRecordsToLoad"/> parameter, it will load zero records.
+        /// As a design decision, we have elected for the <paramref name="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// Also, the <paramref name="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
+        /// return all the remaining records from the specified <paramref name="firstRecordToLoad"/>.
+        /// If you give '0' as the value for the <paramref name="numberOfRecordsToLoad"/> parameter, it will load zero records.
         /// </remarks>
         /// <example>
         /// The following code demonstrates how to loop through the invoices in the data store, 
@@ -1362,7 +1376,12 @@ namespace Habanero.BO
 
             SaveAllInTransaction(committer);
         }
-
+        /// <summary>
+        /// Addsl all the Business objects to the <paramref name="transaction"/> including the 
+        /// Business objects in the Added, Created, Removed and Marked for deleted collections.
+        /// And then commits the <paramref name="transaction"/> to the DataSource.
+        /// </summary>
+        /// <param name="transaction"></param>
         protected virtual void SaveAllInTransaction(ITransactionCommitter transaction)
         {
             foreach (TBusinessObject bo in this)
@@ -1449,12 +1468,11 @@ namespace Habanero.BO
                 }
             }
         }
-
-        [Obsolete("Should use Cancel Edits")]
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
         /// </summary>
+        [Obsolete("Should use Cancel Edits")]
         public void RestoreAll()
         {
             CancelEdits();
@@ -1661,8 +1679,8 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// The list of business objects that have been adde to this relationship 
-        /// collection (<see cref="RelatedBusinessObjectCollection{TBusinessObject}.Add(TBusinessObject)"/>) and have not
+        /// The list of business objects that have been adde to this Business Object 
+        /// collection (<see cref="BusinessObjectCollection{TBusinessObject}.Add(TBusinessObject)"/>) and have not
         /// yet been persisted.
         /// </summary>
         public List<TBusinessObject> AddedBusinessObjects
@@ -1706,10 +1724,10 @@ namespace Habanero.BO
             return newBO;
         }
         /// <summary>
-        /// Creates a new <see cref="TBusinessObject"/> for this BusinessObjectCollection.
+        /// Creates a new TBusinessObject for this BusinessObjectCollection.
         /// The new BusinessObject is not added in to the collection.
         /// </summary>
-        /// <returns>A new <see cref="TBusinessObject"/>.</returns>
+        /// <returns>A new TBusinessObject</returns>
         protected virtual TBusinessObject CreateNewBusinessObject()
         {
             TBusinessObject newBO;

@@ -211,6 +211,11 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Creates a new empty TreeView
         /// </summary>
+        ITreeView CreateTreeView();
+
+        /// <summary>
+        /// Creates a new empty TreeView
+        /// </summary>
         /// <param name="name">The name of the TreeView</param>
         ITreeView CreateTreeView(string name);
 

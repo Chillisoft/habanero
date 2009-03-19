@@ -53,7 +53,9 @@ namespace Habanero.BO.ClassDefinition
 		private Type _relatedObjectClassType;
 		private string _relatedObjectAssemblyName;
 		private string _relatedObjectClassName;
-
+        /// <summary>
+        /// The OrderBy Criteria being used by this relationship.
+        /// </summary>
         protected OrderCriteria _orderCriteria;
 
         #region Constructors

@@ -109,7 +109,7 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates whether all of the property values of the object are valid
         /// </summary>
-        /// <param name="message">If the object is not valid then this returns the reason for it being invalid/param>
+        /// <param name="message">If the object is not valid then this returns the reason for it being invalid</param>
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid(out string message)
         {
@@ -126,7 +126,7 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Returns an invalid message if the object is valid <see IsValid()>
+        /// Returns an invalid message if the object is valid <see cref="IsValid()"/>
         ///</summary>
         public string IsValidMessage
         {
@@ -138,6 +138,9 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Returns the Business Object that this Status is for.
+        /// </summary>
         public IBusinessObject BusinessObject
         {
             get { return _bo; }
@@ -177,6 +180,16 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />. </param>
+        ///<exception cref="T:System.NullReferenceException">The <paramref name="obj" /> parameter is null.</exception><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
             BOStatus otherStatus = obj as BOStatus;
@@ -184,6 +197,14 @@ namespace Habanero.BO
             return (this._flagState == otherStatus._flagState);
         }
 
+        ///<summary>
+        ///Serves as a hash function for a particular type. 
+        ///</summary>
+        ///
+        ///<returns>
+        ///A hash code for the current <see cref="T:System.Object" />.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
             return _flagState.GetHashCode();

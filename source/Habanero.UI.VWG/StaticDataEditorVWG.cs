@@ -34,6 +34,10 @@ namespace Habanero.UI.VWG
     {
         private readonly StaticDataEditorManager _staticDataEditorManager;
 
+        ///<summary>
+        /// Creates the <see cref="StaticDataEditorVWG"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public StaticDataEditorVWG(IControlFactory controlFactory)
         {
             _staticDataEditorManager = new StaticDataEditorManager(this, controlFactory);

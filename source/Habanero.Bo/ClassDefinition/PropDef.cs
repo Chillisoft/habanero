@@ -174,35 +174,39 @@ namespace Habanero.BO.ClassDefinition
         {
         }
 
-        /// <summary>
-        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
-        /// The default value and the property type are loaded when they are needed.
-        /// </summary>
-        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
-        /// <param name="assemblyName">The assembly name of the property type</param>
-        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
-        /// <param name="propRWStatus">Rules for how a property can be accessed.
-        /// See PropReadWriteRule enumeration for more detail.</param>
-        /// <param name="databaseFieldName">The database field name - this
-        /// allows you to have a database field name that is different to the
-        /// property name, which is useful for migrating systems where
-        /// the database has already been set up.</param>
-        /// <param name="defaultValueString">The default value that a property 
-        /// of a new object will be set to</param>
-        /// <param name="compulsory">Whether this property is a required field or not.</param>
-        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
-        /// <param name="length">The maximum length for a string</param>
-        /// <param name="displayName">The display name for the property</param>
-        /// <param name="description">The description of the property</param>
-        //public PropDef
-        //    (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
-        //     string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length,
-        //     string displayName, string description)
-        //    : this(
-        //        propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString,
-        //        compulsory, autoIncrementing, length, displayName, description)
-        //{
-        //}
+//        /// <summary>
+//        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+//        /// The default value and the property type are loaded when they are needed.
+//        /// </summary>
+//        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+//        /// <param name="assemblyName">The assembly name of the property type</param>
+//        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
+//        /// <param name="propRWStatus">Rules for how a property can be accessed.
+//        /// See PropReadWriteRule enumeration for more detail.</param>
+//        /// <param name="databaseFieldName">The database field name - this
+//        /// allows you to have a database field name that is different to the
+//        /// property name, which is useful for migrating systems where
+//        /// the database has already been set up.</param>
+//        /// <param name="defaultValueString">The default value that a property 
+//        /// of a new object will be set to</param>
+//        /// <param name="compulsory">Whether this property is a required field or not.</param>
+//        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+//        /// <param name="length">The maximum length for a string</param>
+//        /// <param name="displayName">The display name for the property</param>
+//        /// <param name="description">The description of the property</param>
+//        public PropDef
+//            (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+//             string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length,
+//             string displayName, string description)
+//            : this(
+//                propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString,
+//                compulsory, autoIncrementing, length, displayName, description)
+//        {
+//        }
+
+
+
+
         /// <summary>
         /// This constructor is used to create a propdef using property type assembly and class name and other information. 
         /// The default value and the property type are loaded when they are needed.
@@ -645,10 +649,9 @@ namespace Habanero.BO.ClassDefinition
         /// property rule.  A boolean is returned and an error message,
         /// where appropriate, is stored in a referenced parameter.
         /// </summary>
-        /// <param name="propValue">The property value to be tested</param>
+        /// <param name="propValue">The property value to be tested in the user interface, clarifies error messaging</param>
         /// <param name="errorMessage">A string which may be amended to reflect
         /// an error message if the value is not valid</param>
-        /// in the user interface, clarifies error messaging</param>
         /// <returns>Returns true if valid, false if not</returns>
         public bool IsValueValid(object propValue, ref string errorMessage)
         {
@@ -697,7 +700,12 @@ namespace Habanero.BO.ClassDefinition
             }
             return valid;
         }
-
+        /// <summary>
+        /// Is lookup list item with a value of propValue valid if not outs Error message
+        /// </summary>
+        /// <param name="propValue"></param>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
         protected bool IsLookupListItemValid(object propValue, ref string errorMessage)
         {
             if (!this.HasLookupList()) return true;
@@ -728,7 +736,15 @@ namespace Habanero.BO.ClassDefinition
             }
             return true;
         }
-
+        /// <summary>
+        /// Checks whether the particular buisness object set to a property for this PropDef
+        /// meets the criteria for the <see cref="BusinessObjectLookupList"/>.
+        /// </summary>
+        /// <param name="propValue"></param>
+        /// <param name="businessObject">The Business object that is being checked to see if it matches the criteria</param>
+        /// <param name="list">The <see cref="BusinessObjectLookupList"/> that the bo is being compared to</param>
+        /// <param name="errorMessage">An error message if the businessObject does not match the criteria</param>
+        /// <returns></returns>
         protected bool CheckBusinessObjectMeetsLookupListCriteria(object propValue
                 , IBusinessObject businessObject
                 , BusinessObjectLookupList list, ref string errorMessage)
@@ -1121,6 +1137,14 @@ namespace Habanero.BO.ClassDefinition
                    && Equals(obj._classDef, _classDef) && Equals(obj._unitOfMeasure, _unitOfMeasure);
         }
 
+        ///<summary>
+        ///Serves as a hash function for a particular type. 
+        ///</summary>
+        ///
+        ///<returns>
+        ///A hash code for the current <see cref="T:System.Object" />.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
             unchecked

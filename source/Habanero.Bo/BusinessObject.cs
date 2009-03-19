@@ -41,28 +41,66 @@ namespace Habanero.BO
 
         #region IBusinessObject Members
 
+        /// <summary>
+        /// Event fired when this <see cref="IBusinessObject"/> is updated.
+        /// </summary>
         public event EventHandler<BOEventArgs> Updated;
+        /// <summary>
+        /// Event that is fired when this <see cref="IBusinessObject"/> is Saved.
+        /// </summary>
         public event EventHandler<BOEventArgs> Saved;
+        /// <summary>
+        /// Event that is fired when this <see cref="IBusinessObject"/> is deleted.
+        /// </summary>
         public event EventHandler<BOEventArgs> Deleted;
+        /// <summary>
+        /// Event that is fired when this <see cref="IBusinessObject"/> is Restored.
+        /// </summary>
         public event EventHandler<BOEventArgs> Restored;
+        /// <summary>
+        /// Event that is fired when this <see cref="IBusinessObject"/> is MarkedForDeletion.
+        /// </summary>
         public event EventHandler<BOEventArgs> MarkedForDeletion;
+        /// <summary>
+        /// Event that is fired when this <see cref="IBusinessObject"/> is PropertyUpdated.
+        /// </summary>
         public event EventHandler<BOPropUpdatedEventArgs> PropertyUpdated;
+        /// <summary>
+        /// Event that is fired when this <see cref="IBusinessObject"/> is IDUpdated.
+        /// </summary>
         public event EventHandler<BOEventArgs> IDUpdated;
 
         #endregion
 
         #region Fields
-
+        /// <summary>
+        /// The Collection of Business Object Properties for this Business Object.
+        /// </summary>
         protected BOPropCol _boPropCol;
 
         //set object as new by default.
         private BOStatus _boStatus;
+        /// <summary>
+        /// The Update Log being used for this Business Object.
+        /// </summary>
         protected IBusinessObjectUpdateLog _businessObjectUpdateLog;
-
+        /// <summary>
+        /// The Class Definition <see cref="IClassDef"/> for this business object.
+        /// </summary>
         protected ClassDef _classDef;
+        /// <summary> The Concurrency Control mechanism used by this Business object </summary>
         protected IConcurrencyControl _concurrencyControl;
+        /// <summary>
+        /// the Collection of alternate keys used by this <see cref="IBusinessObject"/>
+        /// </summary>
         protected BOKeyCol _keysCol;
+        /// <summary>
+        /// The Primary key for this <see cref="IBusinessObject"/>
+        /// </summary>
         protected IPrimaryKey _primaryKey;
+        /// <summary>
+        /// The Relationships owned by this <see cref="IBusinessObject"/>
+        /// </summary>
         protected IRelationshipCol _relationshipCol;
         private ITransactionLog _transactionLog;
         private IBusinessObjectAuthorisation _authorisationRules;
@@ -92,7 +130,11 @@ namespace Habanero.BO
 
         // TODO_ - Mark 03 Feb 2009 : The only detail that is recorded off of a BOProp is the current value. Is this correct?
         //      I noticed that the prop values that have come out of a seriaizable context are all going to be the persisted values as well.
-
+        /// <summary>
+        /// Constructs an <see cref="IBusinessObject"/> from a serialised source.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         protected BusinessObject(SerializationInfo info, StreamingContext context)
         {
             Initialise(ClassDef.ClassDefs[this.GetType()]);
@@ -120,7 +162,11 @@ namespace Habanero.BO
             _boStatus.BusinessObject = this;
             AddToObjectManager();
         }
-
+        /// <summary>
+        /// Gets the Objects data for the purposes of serialisation.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         [SecurityPermissionAttribute(SecurityAction.Demand,
             SerializationFormatter = true)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -161,6 +207,14 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        ///Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        ///</summary>
+        ///
+        ///<returns>
+        ///A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
             return this.ID.GetAsValue() == null ? base.ToString() : this.ID.GetAsValue().ToString();
@@ -1024,6 +1078,9 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Fires Updates Event for <see cref="IBusinessObject"/>
+        /// </summary>
         protected void FireMarkForDeleteEvent()
         {
             if (MarkedForDeletion != null)
@@ -1032,6 +1089,9 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Fires Updates Event for <see cref="IBusinessObject"/>
+        /// </summary>
         protected void FireUpdatedEvent()
         {
             if (Updated != null)
@@ -1040,7 +1100,10 @@ namespace Habanero.BO
             }
         }
 
-
+        /// <summary>
+        /// Fires Updated Event for <see cref="IBusinessObject"/>
+        /// </summary>
+        /// <param name="prop"></param>
         protected void FirePropertyUpdatedEvent(IBOProp prop)
         {
             if (PropertyUpdated != null)
@@ -1048,7 +1111,9 @@ namespace Habanero.BO
                 PropertyUpdated(this, new BOPropUpdatedEventArgs(this, prop));
             }
         }
-
+        /// <summary>
+        /// Fires IDUpdated Event for <see cref="IBusinessObject"/>
+        /// </summary>
         protected void FireIDUpdatedEvent()
         {
             if (IDUpdated != null)
@@ -1226,7 +1291,11 @@ namespace Habanero.BO
 
             _boStatus.SetBOFlagValue(BOStatus.Statuses.isDirty, hasDirtyProps);
         }
-
+        /// <summary>
+        /// Is the <see cref="IBusinessObject"/> archived or not. This can be overriden by a
+        /// specific business object to implement required behaviour.
+        /// </summary>
+        /// <returns></returns>
         protected internal virtual bool IsArchived()
         {
             return false;

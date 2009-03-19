@@ -75,8 +75,6 @@ namespace Habanero.UI.Win
         /// Sets the collection of tab pages for the collection of business
         /// objects provided
         /// </summary>
-        /// <param name="value">The business object collection to create tab pages
-        /// for</param>
         public IBusinessObjectCollection BusinessObjectCollection
         {
             get { return BOColTabControlManager.BusinessObjectCollection; }

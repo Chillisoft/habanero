@@ -85,6 +85,7 @@ namespace Habanero.UI.Win
             ICollapsiblePanel control = _collapsiblePanelGroupManager.AddControl
                 (contentControl, headingText, minimumControlHeight);
             control.Uncollapsed += ((sender, e) => FireItemSelected(control));
+            control.Uncollapsed += (sender, e) => FireItemSelectedIndexChanged(control);
             return control;
         }
 
@@ -97,6 +98,17 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Occurs when the SelectedIndex property is changed
+        /// </summary>
+        public event EventHandler SelectedIndexChanged;
+        private void FireItemSelectedIndexChanged(ICollapsiblePanel collapsiblePanel)
+        {
+            if (SelectedIndexChanged != null)
+            {
+                SelectedIndexChanged(collapsiblePanel, new EventArgs());
+            }
+        }
         /// <summary>
         /// Sets whether all the <see cref="ICollapsiblePanel"/> controls are collapsed or expanded AllCollapsed = true will 
         ///   <see cref="ICollapsiblePanel.Collapsed"/> = true for all the <see cref="ICollapsiblePanel"/>s.
@@ -133,11 +145,6 @@ namespace Habanero.UI.Win
 //            get { throw new System.NotImplementedException(); }
 //            set { throw new System.NotImplementedException(); }
 //        }
-
-        /// <summary>
-        /// Occurs when the SelectedIndex property is changed
-        /// </summary>
-        public event EventHandler SelectedIndexChanged;
 
         /// <summary>
         /// Adds an <see cref="IControlHabanero"/> to this control. The <paramref name="contentControl"/> is

@@ -181,18 +181,18 @@ namespace Habanero.BO
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, and limiting the number of objects loaded. 
-        /// The limited list of <see cref="T"/>s specified as follows:
+        /// The limited list of Ts specified as follows:
         /// If you want record 6 to 15 then 
-        /// <see cref="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
-        /// <see cref="numberOfRecordsToLoad"/> will be set to 10.
-        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <see cref="orderCriteria"/>).
+        /// <paramref name="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
+        /// <paramref name="numberOfRecordsToLoad"/> will be set to 10.
+        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <paramref name="orderCriteria"/>).
         /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
         /// </summary>
         /// <remarks>
-        /// As a design decision, we have elected for the <see cref="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
-        /// Also, the <see cref="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
-        /// return all the remaining records from the specified <see cref="firstRecordToLoad"/>.
-        /// If you give '0' as the value for the <see cref="numberOfRecordsToLoad"/> parameter, it will load zero records.
+        /// As a design decision, we have elected for the <paramref name="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// Also, the <paramref name="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
+        /// return all the remaining records from the specified <paramref name="firstRecordToLoad"/>.
+        /// If you give '0' as the value for the <paramref name="numberOfRecordsToLoad"/> parameter, it will load zero records.
         /// </remarks>
         /// <example>
         /// The following code demonstrates how to loop through the invoices in the data store, 
@@ -223,18 +223,18 @@ namespace Habanero.BO
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, and limiting the number of objects loaded. 
-        /// The limited list of <see cref="T"/>s specified as follows:
+        /// The limited list of Ts specified as follows:
         /// If you want record 6 to 15 then 
-        /// <see cref="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
-        /// <see cref="numberOfRecordsToLoad"/> will be set to 10.
-        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <see cref="orderCriteriaString"/>).
+        /// <paramref name="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
+        /// <paramref name="numberOfRecordsToLoad"/> will be set to 10.
+        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <paramref name="orderCriteriaString"/>).
         /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
         /// </summary>
         /// <remarks>
-        /// As a design decision, we have elected for the <see cref="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
-        /// Also, the <see cref="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
-        /// return all the remaining records from the specified <see cref="firstRecordToLoad"/>.
-        /// If you give '0' as the value for the <see cref="numberOfRecordsToLoad"/> parameter, it will load zero records.
+        /// As a design decision, we have elected for the <paramref name="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// Also, the <paramref name="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
+        /// return all the remaining records from the specified <paramref name="firstRecordToLoad"/>.
+        /// If you give '0' as the value for the <paramref name="numberOfRecordsToLoad"/> parameter, it will load zero records.
         /// </remarks>
         /// <example>
         /// The following code demonstrates how to loop through the invoices in the data store, 
@@ -264,7 +264,7 @@ namespace Habanero.BO
         //TODO 17 Feb 2009 Mark: Add the GetBusinessObjectCollection with Limit eith the ClassDef parameter 
         /// <summary>
         /// Loads the Business object collection with the appropriate items.
-        /// See <see cref="GetBusinessObjectCollection{T}(Criteria,OrderCriteria,int,int,out int)<>"/> for a full explanation.
+        /// See <see cref="GetBusinessObjectCollection{T}(Criteria,OrderCriteria,int,int,out int)"/> for a full explanation.
         /// </summary>
         /// <param name="def"></param>
         /// <param name="criteria"></param>

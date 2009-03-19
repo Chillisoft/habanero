@@ -69,6 +69,9 @@ namespace Habanero.DB
         private static IDatabaseConnection _currentDatabaseConnection;
         private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = 30;
+        /// <summary>
+        /// The <see cref="SqlFormatter"/> that is used to format the Swl for the database type represented by this database connection
+        /// </summary>
         protected SqlFormatter _sqlFormatter;
 
 

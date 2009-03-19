@@ -152,7 +152,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IGridBase.SelectedBusinessObject"/>
+        /// See <see cref="IBOColSelectorControl.SelectedBusinessObject"/>
         /// </summary>
         public IBusinessObject SelectedBusinessObject
         {
@@ -289,7 +289,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IGridBase.BusinessObjectCollection"/>
+        /// See <see cref="IBOColSelectorControl.BusinessObjectCollection"/>
         /// </summary>
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
@@ -297,7 +297,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IGridBase.GetBusinessObjectAtRow"/>
+        /// See <see cref="IBOColSelectorControl.GetBusinessObjectAtRow"/>
         /// </summary>
         public IBusinessObject GetBusinessObjectAtRow(int rowIndex)
         {
@@ -367,7 +367,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IGridBase.Clear"/>
+        /// See <see cref="IBOColSelectorControl.Clear"/>
         /// </summary>
         public void Clear()
         {

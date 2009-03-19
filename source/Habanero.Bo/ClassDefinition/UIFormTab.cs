@@ -31,7 +31,6 @@ namespace Habanero.BO.ClassDefinition
         private IList _list;
         private string _name;
         private UIFormGrid _uiFormGrid;
-        private UIForm _uiForm;
         //private UIDefName _name;
 
         /// <summary>
@@ -154,11 +153,10 @@ namespace Habanero.BO.ClassDefinition
             get { return _uiFormGrid; }
         }
 
-        public UIForm UIForm
-        {
-            get { return _uiForm; }
-            internal set { _uiForm = value; }
-        }
+        /// <summary>
+        /// Returns the <see cref="UIForm"/> that this <see cref="UIFormTab"/> is defined for.
+        /// </summary>
+        public UIForm UIForm { get; internal set; }
 
         /////<summary>
         /////Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
@@ -306,6 +304,10 @@ namespace Habanero.BO.ClassDefinition
             return result;
         }
 
+        ///<summary>
+        /// Get the count of the Maximum number of fields
+        ///</summary>
+        ///<returns></returns>
         public int GetMaxFieldCount()
         {
             int maxFieldCount = 0;
@@ -317,6 +319,10 @@ namespace Habanero.BO.ClassDefinition
             return maxFieldCount;
         }
 
+        ///<summary>
+        /// Get the Max rows In the Columns.
+        ///</summary>
+        ///<returns></returns>
         public int GetMaxRowsInColumns()
         {
             int maxRowsInColumns = 0;

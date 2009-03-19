@@ -88,6 +88,12 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsNotNull(collection);
             Assert.AreEqual(0, collection.Count);
             Assert.AreSame(contactPersonClassDef, collection.ClassDef);
+            Assert.IsNotNull(collection.SelectQuery.Criteria);
+            Assert.IsNotNull(collection.SelectQuery.Criteria.Field);
+            Assert.AreEqual("OrganisationID", collection.SelectQuery.Criteria.Field.PropertyName);
+            Assert.IsNotNull(collection.SelectQuery.Criteria.Field.Source);
+            Assert.AreEqual("ContactPersonTestBO", collection.SelectQuery.Criteria.Field.Source.Name);
+            Assert.AreEqual(organisation.OrganisationID.Value, collection.SelectQuery.Criteria.FieldValue);
             Assert.IsInstanceOfType(typeof(ContactPersonTestBO), collection.CreateBusinessObject());
         }        
 

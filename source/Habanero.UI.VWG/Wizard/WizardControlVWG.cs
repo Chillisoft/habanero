@@ -39,8 +39,21 @@ namespace Habanero.UI.VWG
         private readonly IPanel _wizardStepPanel;
         private IButton _cancelButton;
 
+        /// <summary>
+        /// Raised when the wizard is complete to notify the containing control or controlling object.
+        /// </summary>
         public event EventHandler Finished;
+
+        /// <summary>
+        /// Raised when a message is communicated so the controlling object can display or log the message.
+        ///  uses an <see cref="Action{T}"/> which is merely a predifined delegate that takes one parameter of Type T and
+        /// returns a void.
+        /// </summary>
         public event Action<string> MessagePosted;
+
+        /// <summary>
+        /// Raised when the wizard step changes. The new step is passed through as an event argument.
+        /// </summary>
         public event Action<IWizardStep> StepChanged;
 
 

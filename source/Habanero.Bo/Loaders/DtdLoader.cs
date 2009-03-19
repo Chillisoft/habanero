@@ -31,10 +31,13 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class DtdLoader
     {
-        private ITextFileLoader _textFileLoader;
+        private readonly ITextFileLoader _textFileLoader;
         private readonly string _dtdPath;
         private readonly ResourceManager _resourceManager;
 
+        ///<summary>
+        /// Constructs the DataTypeLoader.
+        ///</summary>
         public DtdLoader() {
             _resourceManager = new ResourceManager("Habanero.BO.Loaders.Dtds", typeof(DtdLoader).Assembly);
         }

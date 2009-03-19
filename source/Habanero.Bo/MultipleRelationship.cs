@@ -52,6 +52,12 @@ namespace Habanero.BO
     ///</summary>
     public abstract class MultipleRelationshipBase : Relationship
     {
+        /// <summary>
+        /// Constrcutor for <see cref="MultipleRelationshipBase"/>
+        /// </summary>
+        /// <param name="owningBo">The <see cref="IBusinessObject"/> that owns this BO.</param>
+        /// <param name="lRelDef">The <see cref="IRelationshipDef"/> that identifies  </param>
+        /// <param name="lBOPropCol"></param>
         protected MultipleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
@@ -67,6 +73,7 @@ namespace Habanero.BO
     public class MultipleRelationship<TBusinessObject> : MultipleRelationshipBase, IMultipleRelationship
         where TBusinessObject : class, IBusinessObject, new()
     {
+        /// <summary> The collection storing the Related Business Objects. </summary>
         protected RelatedBusinessObjectCollection<TBusinessObject> _boCol;
 
         /// <summary>
@@ -82,7 +89,7 @@ namespace Habanero.BO
         {
             _boCol =
                 (RelatedBusinessObjectCollection<TBusinessObject>)
-                RelationshipUtils.CreateNewRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
+                RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
         }
 
         internal override void DereferenceChildren(TransactionCommitter committer)
@@ -153,7 +160,9 @@ namespace Habanero.BO
                 return false; // || 
             }
         }
-
+        /// <summary>
+        /// Are any of the Collections that store edits to this Relationship dirty.
+        /// </summary>
         protected bool HasDirtyEditingCollections
         {
             get
@@ -189,11 +198,16 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Do the initialisation of this relationship.
+        /// </summary>
         protected override void DoInitialisation()
         {
             RelationshipUtils.SetupCriteriaForRelationship(this, _boCol);
         }
-
+        /// <summary>
+        /// Updates the Relationship as Persisted
+        /// </summary>
         internal override void UpdateRelationshipAsPersisted()
         {
         }

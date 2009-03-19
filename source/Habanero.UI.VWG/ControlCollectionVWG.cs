@@ -30,6 +30,10 @@ namespace Habanero.UI.VWG
     {
         private readonly Control.ControlCollection _col;
 
+        ///<summary>
+        /// Constructs the <see cref="ControlCollectionVWG"/>. This is essentially a wrapper class.
+        ///</summary>
+        ///<param name="col"></param>
         public ControlCollectionVWG(Control.ControlCollection col)
         {
             _col = col;

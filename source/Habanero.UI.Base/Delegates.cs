@@ -2,7 +2,7 @@ namespace Habanero.UI.Base
 {
     ///<summary>
     /// A delegate for a function with the specified return type and one parameter of the specified parameter type.
-    /// This is the equivalent of the System.Func<T,TReturn> in .Net 3.
+    /// This is the equivalent of the System.Func&lt;T,TReturn&gt; in .Net 3.
     ///</summary>
     ///<param name="arg0">The first argument of the function.</param>
     ///<typeparam name="TArg0">The type of the first argument of the function.</typeparam>

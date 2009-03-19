@@ -43,6 +43,61 @@ namespace Habanero.Test.Util
             ReflectionUtilities.ExecuteMethod(simpleClass, "InvalidMethod");
         }
 
+        [Test]
+        public void Test_ExecutePrivateMethod_WithNoArguments()
+        {
+            //--------------- Set up test pack ------------------
+            ClassWithPrivateMethod classWithPrivateMethod = new ClassWithPrivateMethod();
+            //--------------- Test Preconditions ----------------
+            Assert.IsFalse(classWithPrivateMethod.PrivateMethodCalled);
+            //--------------- Execute Test ----------------------
+            ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod, "MyPrivateMethod");
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(classWithPrivateMethod.PrivateMethodCalled);
+        }
+
+        [Test]
+        public void Test_ExecutePrivateMethod_WithArguments()
+        {
+            //--------------- Set up test pack ------------------
+            ClassWithPrivateMethod classWithPrivateMethod = new ClassWithPrivateMethod();
+            string testStringParam = TestUtil.GetRandomString();
+            int testIntParam = TestUtil.GetRandomInt();
+            //--------------- Test Preconditions ----------------
+            Assert.IsFalse(classWithPrivateMethod.PrivateMethodCalled);
+            Assert.IsNull(classWithPrivateMethod.StringParamValue);
+            Assert.IsFalse(classWithPrivateMethod.IntParamValue.HasValue);
+            //--------------- Execute Test ----------------------
+            ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod, "MyPrivateMethodWithParams", testStringParam, testIntParam);
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(classWithPrivateMethod.PrivateMethodCalled);
+            Assert.AreEqual(testStringParam, classWithPrivateMethod.StringParamValue);
+            Assert.IsTrue(classWithPrivateMethod.IntParamValue.HasValue);
+            Assert.AreEqual(testIntParam, classWithPrivateMethod.IntParamValue.Value);
+        }
+
+        private class ClassWithPrivateMethod
+        {
+
+            private void MyPrivateMethod()
+            {
+                PrivateMethodCalled = true;
+            }
+
+            private void MyPrivateMethodWithParams(string stringParam, int intParam)
+            {
+                PrivateMethodCalled = true;
+                StringParamValue = stringParam;
+                IntParamValue = intParam;
+            }
+
+            public int? IntParamValue { get; private set; }
+
+            public string StringParamValue { get; private set; }
+
+            public bool PrivateMethodCalled { get; private set; }
+        }
+
         private class SimpleClass
         {
             private bool _methodCalled = false;

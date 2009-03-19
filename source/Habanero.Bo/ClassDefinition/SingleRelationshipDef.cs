@@ -27,8 +27,6 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class SingleRelationshipDef : RelationshipDef
     {
-        private bool _owningBOHasForeignKey = true;
-
         #region Constructors
 
         /// <summary>
@@ -47,6 +45,7 @@ namespace Habanero.BO.ClassDefinition
             : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction
                 )
         {
+            OwningBOHasForeignKey = true;
         }
 
         /// <summary>
@@ -70,26 +69,37 @@ namespace Habanero.BO.ClassDefinition
         {
         }
 
+        ///<summary>
+        /// Constructs a single Relationship
+        ///</summary>
+        ///<param name="relationshipName"></param>
+        ///<param name="relatedObjectAssemblyName"></param>
+        ///<param name="relatedObjectClassName"></param>
+        ///<param name="relKeyDef"></param>
+        ///<param name="keepReferenceToRelatedObject"></param>
+        ///<param name="deleteParentAction"></param>
+        ///<param name="relationshipType"></param>
         public SingleRelationshipDef (  string relationshipName, 
                                         string relatedObjectAssemblyName, 
                                         string relatedObjectClassName,
-                                        RelKeyDef relKeyDef, 
+                                        IRelKeyDef relKeyDef, 
                                         bool keepReferenceToRelatedObject, 
                                         DeleteParentAction deleteParentAction, RelationshipType relationshipType)
             : base(
                 relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef,
                 keepReferenceToRelatedObject, deleteParentAction, relationshipType)
         {
+            OwningBOHasForeignKey = true;
         }
 
         #endregion Constructors
 
-        public override bool OwningBOHasForeignKey {
-            get {  return _owningBOHasForeignKey; }
-            set {
-                _owningBOHasForeignKey = value;
-        }} 
-        
+        ///<summary>
+        /// Returns true where the owning business object has the foreign key for this relationship false otherwise.
+        /// This is used to differentiate between the two sides of the relationship.
+        ///</summary>
+        public override bool OwningBOHasForeignKey { get; set; }
+
 
         /// <summary>
         /// Overrides abstract method of RelationshipDef to create a new

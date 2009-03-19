@@ -26,6 +26,9 @@ namespace Habanero.BO
     ///</summary>
     public class DataAccessorInMemory : IDataAccessor
     {
+        /// <summary>
+        /// The <see cref="DataStoreInMemory"/> that is used by this data accessor.
+        /// </summary>
         protected readonly DataStoreInMemory _dataStore;
         private readonly IBusinessObjectLoader _businessObjectLoader;
 

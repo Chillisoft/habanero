@@ -118,6 +118,10 @@ namespace Habanero.BO
             return (_relProps.ContainsKey(propName));
         }
 
+        /// <summary>
+        /// Returns a copy of the key's Criteria (ie the search string matching this key). 
+        /// </summary>
+        /// <returns>Returns a Criteria object</returns>
         public Criteria Criteria
         {
             get

@@ -32,17 +32,32 @@ namespace Habanero.UI.VWG
             set { throw new System.NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Event Occurs when a business object is selected
+        /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
+
+        /// <summary>
+        /// Clears the business object collection and the rows in the data table
+        /// </summary>
         public void Clear()
         {
             throw new System.NotImplementedException();
         }
 
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOColSelectorControl"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOColSelectorControl"></see>.</returns>
         public int NoOfItems
         {
             get { throw new System.NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Returns the business object at the specified row number
+        /// </summary>
+        /// <param name="row">The row number in question</param>
+        /// <returns>Returns the busines object at that row, or null
+        /// if none is found</returns>
         public IBusinessObject GetBusinessObjectAtRow(int row)
         {
             throw new System.NotImplementedException();

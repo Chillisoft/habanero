@@ -160,45 +160,6 @@ namespace Habanero.BO.ClassDefinition
         public UIDef UIDef { get; internal set; }
 
         ///<summary>
-        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
-        ///</summary>
-        ///
-        ///<returns>
-        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
-        ///</returns>
-        ///
-        /////<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
-        //public override bool Equals(object obj)
-        //{
-        //    if (obj == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    UIForm otherUiForm = obj as UIForm;
-        //    if (otherUiForm == null) return false;
-        //    if ((otherUiForm.Title != this.Title) || (otherUiForm.Width != this.Width) || (otherUiForm.Height != this.Height)) return false;
-
-        //    if (this.Count != otherUiForm.Count) return false;
-        //    foreach (UIFormTab tab in this)
-        //    {
-        //        bool found = false;
-        //        foreach (UIFormTab otherTab in otherUiForm)
-        //        {
-        //            if (otherTab.Equals(tab))
-        //            {
-        //                found = true;
-        //            }
-        //        }
-        //        if (!found)
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //    return true;
-        //}
-
-        ///<summary>
         /// overloads the operator == 
         ///</summary>
         ///<param name="a"></param>

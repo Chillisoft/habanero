@@ -31,11 +31,17 @@ namespace Habanero.UI.VWG
     {
         private const int WIDTH_FACTOR = 6;
 
+        ///<summary>
+        /// Constructs the Label
+        ///</summary>
+        ///<param name="labelText"></param>
         public LabelVWG(string labelText)
         {
             base.Text = labelText;
         }
-
+        ///<summary>
+        /// Constructs the Label
+        ///</summary>
         public LabelVWG()
         {
         }

@@ -153,6 +153,10 @@ namespace Habanero.BO.ClassDefinition
 
         #endregion Properties
 
+        ///<summary>
+        /// Returns true where the owning business object has the foreign key for this relationship false otherwise.
+        /// This is used to differentiate between the two sides of the relationship.
+        ///</summary>
         public override bool OwningBOHasForeignKey { get {
             return false;
         } set {  } }

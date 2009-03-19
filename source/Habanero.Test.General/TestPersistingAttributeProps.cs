@@ -52,7 +52,8 @@ namespace Habanero.Test.General
         public void TestNonPersistablePropDef()
         {
             //Create Contact person
-            new Car();
+            new Car();//TO Load ClassDefs
+            new Engine();//TO Load ClassDefs
             ContactPerson person = new ContactPerson();
             ClassDef contactPersonClassdef = person.ClassDef;
             ClassDef clonedClassDef = contactPersonClassdef.Clone();

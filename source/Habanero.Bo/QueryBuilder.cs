@@ -299,12 +299,23 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// Creates a select query to return the count of objects in a table for that classdef
+        ///</summary>
+        ///<param name="classDef"></param>
+        ///<returns></returns>
         public static ISelectQuery CreateSelectCountQuery(ClassDef classDef)
         {
             return CreateSelectCountQuery(classDef, null);
 
         }
-
+        ///<summary>
+        /// Creates a select query to return the count of objects in a table for that classdef with the criteria
+        ///</summary>
+        ///<param name="classDef">The class def for the class that the count is being returned</param>
+        ///<param name="criteria">The Criteria for the class that the count is being returned</param>
+        ///<returns></returns>
+        ///<exception cref="ArgumentNullException"></exception>
         public static ISelectQuery CreateSelectCountQuery(IClassDef classDef, Criteria criteria)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");

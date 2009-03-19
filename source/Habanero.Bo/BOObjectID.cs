@@ -33,6 +33,9 @@ namespace Habanero.BO
     /// </summary>
     public class BOObjectID : BOPrimaryKey
     {
+        /// <summary>
+        /// The BOProp that is used to store the ObjectIdentity
+        /// </summary>
         protected IBOProp _objectIDProp;
 
         /// <summary>
@@ -111,6 +114,14 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// The globally unique object identifier for the object that this Primary Key represents. 
+        /// This is the implementation of a fundamental Object Oriented concept 
+        /// that every object should be globally uniquely identifiable.
+        /// The value returned from this property will be the actual value of the primary key property 
+        /// for objects with a <see cref="Guid"/> id, or it will be a newly created <see cref="Guid"/> 
+        /// for objects with composite or non-guid primary keys.
+        ///</summary>
         public override Guid ObjectID
         {
             get
@@ -149,6 +160,10 @@ namespace Habanero.BO
             return (Guid)ObjectIDProp.Value;
         }
 
+        /// <summary>
+        /// Returns a string containing all the properties and their values
+        /// </summary>
+        /// <returns>Returns a string</returns>
         public override string AsString_CurrentValue()
         {
             if (IsObjectNew && (_objectID != Guid.Empty))
@@ -158,6 +173,12 @@ namespace Habanero.BO
             return Convert.ToString(ObjectIDProp.Value);
         }
 
+        /// <summary>
+        /// Returns a string containing all the properties and their values,
+        /// but using the values held before the last time they were edited.  This
+        /// method differs from AsString_LastPersistedValue in that the properties may have
+        /// been edited several times since their last persistence.
+        /// </summary>
         public override string AsString_PreviousValue()
         {
             if (IsObjectNew && (_objectID != Guid.Empty))

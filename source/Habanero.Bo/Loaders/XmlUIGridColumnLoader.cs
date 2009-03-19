@@ -35,7 +35,7 @@ namespace Habanero.BO.Loaders
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.Loaders.XmlUIGridColumnLoader");
         private string _heading;
         private string _propertyName;
-        private Type _gridControlType;
+//        private Type _gridControlType;
         private bool _editable;
         private int _width;
         private UIGridColumn.PropAlignment _alignment;

@@ -418,10 +418,10 @@ namespace Habanero.BO
         /// </summary>
         protected abstract void TryRollback(Exception origException);
 
-        ///// <summary>
-        ///// Tries to execute an individual transaction against the datasource.
-        ///// 1'st phase of a 2 phase database commit.
-        ///// </summary>
+        /// <summary>
+        /// Tries to execute an individual transaction against the datasource.
+        /// 1'st phase of a 2 phase database commit.
+        /// </summary>
         internal protected virtual void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             _executedTransactions.Add(transaction);
@@ -436,13 +436,20 @@ namespace Habanero.BO
         /// <param name="businessObject">The business object to decorate</param>
         /// <returns>A decorated Business object (TransactionalBusinessObject)</returns>
         protected internal abstract TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject);
-
+        
+        /// <summary>
+        /// Deference Related Children.
+        /// </summary>
+        /// <param name="businessObject"></param>
         protected void DereferenceRelatedChildren(IBusinessObject businessObject)
         {
             RelationshipCol relationships = (RelationshipCol) businessObject.Relationships;
             relationships.DereferenceChildren(this);
         }
-
+        /// <summary>
+        /// Deletes Related Children.
+        /// </summary>
+        /// <param name="businessObject"></param>
         protected void DeleteRelatedChildren(IBusinessObject businessObject)
         {
             RelationshipCol relationships = (RelationshipCol)businessObject.Relationships;

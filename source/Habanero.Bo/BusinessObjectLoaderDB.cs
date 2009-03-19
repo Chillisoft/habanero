@@ -566,7 +566,11 @@ namespace Habanero.BO
         }
 
         #endregion
-
+        /// <summary>
+        /// Creates a Generic Collection of the appropriate Typee.
+        /// </summary>
+        /// <param name="BOType">The Type of collection to create</param>
+        /// <returns></returns>
         protected new static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
         {
             Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);

@@ -62,6 +62,9 @@ namespace Habanero.BO
             _boAddedHandler = BOAddedHandler;
         }
 
+        /// <summary>
+        /// Deregisters for all events to the <see cref="DataSetProvider._table"/>
+        /// </summary>
         protected override void DeregisterForTableEvents()
         {
             try
@@ -77,6 +80,9 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Registers for all events to the <see cref="DataSetProvider._table"/>
+        /// </summary>
         protected override void RegisterForTableEvents()
         {
             this.DeregisterForTableEvents();

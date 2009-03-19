@@ -82,6 +82,9 @@ namespace Habanero.UI.VWG
             set { this.SelectedIndex = TabPages.IndexOf(value); }
         }
 
+        /// <summary>
+        /// Gets or sets the index of the currently selected tab page
+        /// </summary>
         public new int SelectedIndex
         {
             get

@@ -165,7 +165,10 @@ namespace Habanero.UI.VWG
             //    focusMethod.Invoke(controlToFocus, new object[] { });
             //}
         }
-
+        /// <summary>
+        /// Sets up the forms size based on the BOPanel and the Buttons.
+        /// </summary>
+        /// <param name="def"></param>
         protected virtual void SetupFormSize(UIForm def)
         {
             int width = def.Width;

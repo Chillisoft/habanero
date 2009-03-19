@@ -31,6 +31,10 @@ namespace Habanero.UI.VWG
     {
         private readonly DateTimePickerManager _manager;
 
+        ///<summary>
+        /// Constructs the <see cref="DateTimePickerVWG"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public DateTimePickerVWG(IControlFactory controlFactory)
         {
             DateTimePickerManager.ValueGetter<DateTime> valueGetter = delegate()
@@ -100,24 +104,39 @@ namespace Habanero.UI.VWG
             }
         }
 
+        ///<summary>
+        ///Raises the ValueChanged event.
+        ///</summary>
+        ///<param name="eventargs">An <see cref="T:System.EventArgs"></see> that contains the event data. </param>
         protected override void OnValueChanged(EventArgs eventargs)
         {
             _manager.OnValueChanged(eventargs);
             base.OnValueChanged(eventargs);
         }
-
+        /// <summary>
+        /// Resize the manager
+        /// </summary>
+        /// <param name="eventargs"></param>
         protected override void OnResize(EventArgs eventargs)
         {
             base.OnResize(eventargs);
             _manager.OnResize(eventargs);
         }
-
+        /// <summary>
+        /// Handle On Click by the manager.
+        /// </summary>
+        /// <param name="eventargs"></param>
         protected override void OnClick(EventArgs eventargs)
         {
             base.OnClick(eventargs);
             _manager.ChangeToValueMode();
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:Gizmox.WebGUI.Forms.Control.KeyDown"></see> event.
+        ///</summary>
+        ///
+        ///<param name="e">A <see cref="T:Gizmox.WebGUI.Forms.KeyEventArgs"></see> that contains the event data. </param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -140,24 +159,39 @@ namespace Habanero.UI.VWG
             }
         }
 
+        ///<summary>
+        ///Raises the ForeColorChanged event.
+        ///</summary>
+        ///
+        ///<param name="e">An <see cref="T:System.EventArgs"></see> that contains the event data. </param>
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
             _manager.UpdateFocusState();
         }
-
+        /// <summary>
+        /// Raises the OnEnabledChanged.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
             _manager.UpdateFocusState();
         }
-
+        /// <summary>
+        /// Raises the OnGotFocus
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
             _manager.UpdateFocusState();
         }
 
+        /// <summary>
+        /// Raises the OnLostFocus
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);

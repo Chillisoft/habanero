@@ -31,6 +31,9 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class ReadOnlyGridVWG : GridBaseVWG, IReadOnlyGrid
     {
+        /// <summary>
+        /// Constructs the <see cref="ReadOnlyGridVWG"/>
+        /// </summary>
         public ReadOnlyGridVWG()
         {
             this.ReadOnly = true;

@@ -23,8 +23,16 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// A class for that Inherits from <see cref="TransactionalBusinessObject"/> and implements specific behaviour
+    /// for persisting this to In Memory Data Store.
+    ///</summary>
     public class TransactionalBusinessObjectInMemory : TransactionalBusinessObject
     {
+        /// <summary>
+        /// Constructor for <see cref="TransactionalBusinessObjectInMemory"/>
+        /// </summary>
+        /// <param name="businessObject"></param>
         protected internal TransactionalBusinessObjectInMemory(IBusinessObject businessObject) : base(businessObject)
         {
         }

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Windows.Forms;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
@@ -28,6 +29,17 @@ namespace Habanero.UI.Win
     ///</summary>
     public static class ControlsHelper
     {
+
+        /////<summary>
+        ///// Executes the provided delegate in the specified control's thread.
+        ///// Use this method to avoid problems with cross thread calls.
+        /////</summary>
+        /////<param name="control">The control running on the thread to be used.</param>
+        /////<param name="invoker">The delegate to execute on the control's thread.</param>
+        //public static void SafeGui(IControlHabanero control, MethodInvoker invoker)
+        //{
+        //    if (control is Control) SafeGui((Control)control, invoker);
+        //}
 
         ///<summary>
         /// Executes the provided delegate in the specified control's thread.

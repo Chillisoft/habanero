@@ -31,6 +31,16 @@ namespace Habanero.UI.VWG
     public abstract class GridBaseVWG : DataGridViewVWG, IGridBase
     {
         /// <summary>
+        /// Constructor for <see cref="GridBaseVWG"/>
+        /// </summary>
+        protected GridBaseVWG()
+        {
+            _manager = new GridBaseManager(this);
+            this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
+            _manager.CollectionChanged += delegate { FireCollectionChanged(); };
+        }
+
+        /// <summary>
         /// Occurs when a business object is selected
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
@@ -61,7 +71,7 @@ namespace Habanero.UI.VWG
         public event EventHandler<BOEventArgs> BusinessObjectEdited;
 
         private readonly GridBaseManager _manager;
-        
+
         /// <summary>
         /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
         /// by the "name" attribute on the UI element in the class definitions
@@ -89,13 +99,6 @@ namespace Habanero.UI.VWG
         {
             if (DataSetProvider == null) return;
             DataSetProvider.UpdateBusinessObjectRowValues(businessObject);
-        }
-
-        protected GridBaseVWG()
-        {
-            _manager = new GridBaseManager(this);
-            this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
-            _manager.CollectionChanged += delegate { FireCollectionChanged(); };
         }
 
         /// <summary>

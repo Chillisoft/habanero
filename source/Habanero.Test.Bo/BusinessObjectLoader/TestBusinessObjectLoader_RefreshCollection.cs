@@ -293,7 +293,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(0, cpCol.Count);
 
             //---------------Execute Test ----------------------
-            cpCol.RestoreAll();
+            cpCol.CancelEdits();
 
             cp.MarkForDelete();
             //---------------Test Result -----------------------

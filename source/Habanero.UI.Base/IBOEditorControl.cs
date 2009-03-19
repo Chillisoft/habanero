@@ -62,8 +62,8 @@ namespace Habanero.UI.Base
     /// <summary>
     /// This is an interface for the Windows and VWG controls that implement the 
     /// ability to edit a Business Object where the business object is being edited via
-    ///  a Panel with the associated <see cref="PanelInfo"/>s and <see cref="PanelInfo.FieldInfo"/>s.</br>
-    /// The <see cref="IPanelInfo"/> is built from the <see cref="UIDef"/> that is part of the <see cref="IClassDef"/></br>
+    ///  a Panel with the associated <see cref="PanelInfo"/>s and <see cref="PanelInfo.FieldInfo"/>s.<br/>
+    /// The <see cref="IPanelInfo"/> is built from the <see cref="UIDef"/> that is part of the <see cref="IClassDef"/><br/>
     /// This interface therefore implements both the <see cref="IBOEditorControl"/> and the <see cref="IBusinessObjectPanel"/>
     /// </summary>
     public interface IBOPanelEditorControl : IBOEditorControl, IBusinessObjectPanel

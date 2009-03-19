@@ -439,7 +439,9 @@ namespace Habanero.UI.Win
         private IButton _cancelButton;
         private IButton _saveButton;
         private TBusinessObject _lastSelectedBusinessObject;
-
+        /// <summary>
+        /// Event for when the Business object is selected
+        /// </summary>
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectSelected;
 
         ///<summary>

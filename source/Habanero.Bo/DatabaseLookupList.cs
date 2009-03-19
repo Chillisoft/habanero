@@ -245,6 +245,12 @@ namespace Habanero.BO
         ///</summary>
         public IPropDef PropDef { get; set; }
 
+        /// <summary>
+        /// Returns the lookup list contents being held where the list is keyed on the list key 
+        ///  either a Guid, int or Business object i.e. the value being stored for the property.
+        /// The display value can be looked up.
+        /// </summary>
+        ///<returns>The Key Value Lookup List</returns>
         public Dictionary<string, string> GetIDValueLookupList()
         {
             if (_keyLookupList == null) GetLookupList();
@@ -271,6 +277,13 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// Returns true if the <see cref="ILookupList"/> should validate the value of the 
+        /// <see cref="IBOProp"/> against the items in the <see cref="ILookupList"/>.
+        /// Eg, if the BOProp's value is set to an
+        /// item not in the list and this value is True, a validation error will occur upon save.  If this 
+        /// value is set to false no validation will occur.
+        ///</summary>
         public bool LimitToList { get; set; }
 
         #endregion Type Initialisation

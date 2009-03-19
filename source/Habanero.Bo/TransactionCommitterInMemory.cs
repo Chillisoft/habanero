@@ -75,7 +75,10 @@ namespace Habanero.BO
         {
            return new TransactionalBusinessObjectInMemory(businessObject);
         }
-
+        /// <summary>
+        /// Commits the transaction to the In Memory data Store.
+        /// </summary>
+        /// <param name="transaction"></param>
         protected internal override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             if (transaction is TransactionalBusinessObject)

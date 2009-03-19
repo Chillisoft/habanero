@@ -2110,7 +2110,73 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
             //---------------Test Result -----------------------
-            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
+        }
+
+        [Test]
+        public void TestIsMatch_NullPropertyValue_Equals_NullMatchValue_ShouldMatch()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, null);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+        }
+
+        [Test]
+        public void TestIsMatch_NonNullPropertyValue_Equals_NullMatchValue_ShouldNotMatch()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = TestUtil.GetRandomString();
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, null);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp, false);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
+        }
+
+        [Test]
+        public void TestIsMatch_NonNullGuidValue_Equals_NullMatchValue_ShouldNotMatch()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            OrganisationTestBO organisationTestBO = new OrganisationTestBO();
+            cp.OrganisationID = organisationTestBO.OrganisationID;
+            Criteria nameCriteria = new Criteria("OrganisationID", Criteria.ComparisonOp.Equals, null);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp, false);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
+        }
+
+        [Test]
+        public void TestIsMatch_NullPersistedPropertyValue_Equals_NullMatchValue_ShouldMatch()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = TestUtil.GetRandomString();
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, null);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
         }
 
         [Test, ExpectedException(typeof(InvalidOperationException))]

@@ -31,11 +31,20 @@ namespace Habanero.UI.VWG
     {
         private readonly IControlFactory _controlFactory;
 
+        ///<summary>
+        /// Constructs teh <see cref="OKCancelDialogFactoryVWG"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public OKCancelDialogFactoryVWG(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
         }
 
+        /// <summary>
+        /// Creates a panel containing OK and Cancel buttons
+        /// </summary>
+        /// <param name="nestedControl">The control to place above the buttons</param>
+        /// <returns>Returns the created panel</returns>
         public IOKCancelPanel CreateOKCancelPanel(IControlHabanero nestedControl)
         {
             OKCancelPanelGiz mainPanel = new OKCancelPanelGiz(_controlFactory);

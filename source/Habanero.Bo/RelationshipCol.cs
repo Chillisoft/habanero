@@ -69,6 +69,14 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// Returns the Number of Relationships in this Collection
+        ///</summary>
+        public int Count
+        {
+            get { return _relationships.Count; }
+        }
+
 
         /// <summary>
         /// Adds a relationship to the business object
@@ -203,6 +211,7 @@ namespace Habanero.BO
 			return _relationships.ContainsKey(relationshipName);
     	}
 
+        
     	#endregion
 
     	/// <summary>

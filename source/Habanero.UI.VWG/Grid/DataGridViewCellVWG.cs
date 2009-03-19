@@ -37,7 +37,9 @@ namespace Habanero.UI.VWG
         {
             _dataGridViewCell = cell;
         }
-
+        /// <summary>
+        /// Returns the underlying DataGridViewCell
+        /// </summary>
         public DataGridViewCell DataGridViewCell
         {
             get { return _dataGridViewCell; }
@@ -167,6 +169,5 @@ namespace Habanero.UI.VWG
         {
             get { return _dataGridViewCell.DefaultNewRowValue; }
         }
-
     }
 }

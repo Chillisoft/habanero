@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -50,7 +52,41 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the TreeView class.
     /// </summary>
     [TestFixture]
-    public class TestTreeView
+    public class TestTreeViewVWG
     {
+        protected virtual IControlFactory GetControlFactory()
+        {
+            ControlFactoryVWG factory = new ControlFactoryVWG();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
+        [Test]
+        public void Test_TreeNode_TreeView()
+        {
+            //--------------- Set up test pack ------------------
+            ITreeView treeView = GetControlFactory().CreateTreeView("test");
+            ITreeNode node = GetControlFactory().CreateTreeNode("TestNode");
+            treeView.Nodes.Add(node);
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, treeView.Nodes.Count);
+            //--------------- Execute Test ----------------------
+            ITreeView returnedTreeView = node.TreeView;
+            //--------------- Test Result -----------------------
+            Assert.AreSame(treeView, returnedTreeView);
+        }
     }
+    /// <summary>
+    /// This test class tests the TreeView class.
+    /// </summary>
+    [TestFixture]
+    public class TestTreeViewWin : TestTreeViewVWG
+    {
+        protected override IControlFactory GetControlFactory()
+        {
+            ControlFactoryWin factory = new ControlFactoryWin();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
+    }
+
 }

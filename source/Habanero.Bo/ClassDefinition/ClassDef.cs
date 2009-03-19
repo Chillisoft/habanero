@@ -79,6 +79,9 @@ namespace Habanero.BO.ClassDefinition
     /// </futureEnhancements>
     public class ClassDef : IClassDef
     {
+        /// <summary>
+        /// The collection of classDefs used for the the Singleton.
+        /// </summary>
         protected static ClassDefCol _classDefCol;
         private string _assemblyName;
         private string _className;
@@ -265,6 +268,9 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        /// <summary>
+        /// The name of the class type for the class definition (excluding the namespace and the type parameter).
+        /// </summary>
         public string ClassNameExcludingTypeParameter
         {
             get { return _className; }
@@ -901,7 +907,16 @@ namespace Habanero.BO.ClassDefinition
 
         #region Equals
 
-
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />. </param>
+        ///<exception cref="T:System.NullReferenceException">The <paramref name="obj" /> parameter is null.</exception><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -935,6 +950,14 @@ namespace Habanero.BO.ClassDefinition
 //            return Equals(obj._className, _className) && Equals(obj._classType, _classType) && Equals(obj._primaryKeyDef, _primaryKeyDef) && Equals(obj._propDefCol, _propDefCol) && Equals(obj.TypeParameter, TypeParameter);
         }
 
+        ///<summary>
+        ///Serves as a hash function for a particular type. 
+        ///</summary>
+        ///
+        ///<returns>
+        ///A hash code for the current <see cref="T:System.Object" />.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
             unchecked

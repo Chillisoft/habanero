@@ -197,6 +197,9 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void Test3LayerDeleteRelated()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            AddressTestBO.LoadDefaultClassDef();
+//            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.DeleteAllContactPeople();
             BORegistry.DataAccessor = new DataAccessorDB();
@@ -211,6 +214,12 @@ namespace Habanero.Test.BO.TransactionCommitters
             org.Save();
             contactPersonTestBO.Save();
 
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1,org.ContactPeople.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+            Assert.AreEqual(1, org.Relationships.Count);
+            Assert.IsTrue(org.Relationships.Contains("ContactPeople"));
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, org.Relationships["ContactPeople"].DeleteParentAction);
             //---------------Execute Test ----------------------
             //IBusinessObjectCollection colContactPeople = org.Relationships["ContactPeople"].GetRelatedBusinessObjectCol();
             //ContactPersonTestBO loadedCP = (ContactPersonTestBO)colContactPeople[0];
@@ -240,10 +249,13 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void Test3LayerDeleteRelated_WithDeletedObjectChildAndGrandchild()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            AddressTestBO.LoadDefaultClassDef();
+
+            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
-            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
 
             OrganisationTestBO org = new OrganisationTestBO();
             contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
@@ -255,6 +267,16 @@ namespace Habanero.Test.BO.TransactionCommitters
 
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(org);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, org.ContactPeople.Count);
+            Assert.AreEqual(1, ((IMultipleRelationship) org.Relationships["Addresses"]).BusinessObjectCollection.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+            Assert.AreEqual(2, org.Relationships.Count);
+            Assert.IsTrue(org.Relationships.Contains("ContactPeople"));
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, org.Relationships["ContactPeople"].DeleteParentAction);
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, org.Relationships["Addresses"].DeleteParentAction);
+
             //---------------Execute Test ----------------------
 
             committer.CommitTransaction();

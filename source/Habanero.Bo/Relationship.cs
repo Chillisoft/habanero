@@ -46,7 +46,7 @@ namespace Habanero.BO
         /// <param name="boType">The type parameter to be used</param>
         /// <param name="relationship">The relationship that this <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> is the collection for</param>
         /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
-        internal static IBusinessObjectCollection CreateNewRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
+        private static IBusinessObjectCollection CreateNewRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
         {
 //            Utilities.CheckTypeCanBeCreated(boType);
             Type relatedCollectionType = typeof(RelatedBusinessObjectCollection<>);
@@ -88,6 +88,9 @@ namespace Habanero.BO
     ///</summary>
     public abstract class RelationshipBase : IRelationship
     {
+        /// <summary>
+        /// The Key that defines this relationship I.e. OwningProps and their related props.
+        /// </summary>
         protected IRelKey _relKey;
 
         ///<summary>
@@ -133,16 +136,38 @@ namespace Habanero.BO
         ///</summary>
         public abstract IBusinessObject OwningBO { get; }
 
+        /// <summary>
+        /// Cancels Edits on this relationship and all its children.
+        /// </summary>
         internal abstract void CancelEdits();
-
+        /// <summary>
+        /// Adds all dirty children to the <see cref="TransactionCommitter"/>
+        /// </summary>
+        /// <param name="committer"></param>
         internal abstract void AddDirtyChildrenToTransactionCommitter(TransactionCommitter committer);
 
+        /// <summary>
+        /// Dereferences the Children if required and adds the relevant Deref Block to the transaction committer.
+        /// </summary>
+        /// <param name="committer"></param>
         internal abstract void DereferenceChildren(TransactionCommitter committer);
 
+        /// <summary>
+        /// Deletes the Children if required and adds the relevant children to the transaction committer.
+        /// </summary>
+        /// <param name="committer"></param>
         internal abstract void DeleteChildren(TransactionCommitter committer);
 
+        /// <summary>
+        /// Dereferences the Removed Children and adds the dereference transactionItem to the transaction committer
+        /// </summary>
+        /// <param name="committer"></param>
         internal abstract void DereferenceRemovedChildren(TransactionCommitter committer);
 
+        /// <summary>
+        /// Adds all the marked for deleted children to the transaction committer and commits it.
+        /// </summary>
+        /// <param name="committer"></param>
         internal abstract void DeleteMarkedForDeleteChildren(TransactionCommitter committer);
 
         /// <summary>
@@ -191,7 +216,9 @@ namespace Habanero.BO
     /// </summary>
     public abstract class Relationship : RelationshipBase
     {
+        /// <summary> The Definition that defines this relationship. </summary>
         protected RelationshipDef _relDef;
+        /// <summary> The Busienss Object that owns this relationship </summary>
         protected readonly IBusinessObject _owningBo;
         private bool _initialised;
 
@@ -270,13 +297,20 @@ namespace Habanero.BO
             DoInitialisation();
             _initialised = true;
         }
-
+        /// <summary>
+        /// Do the initialisation of this relationship.
+        /// </summary>
         protected abstract void DoInitialisation();
         ///<summary>
         /// Is the relationship initialised or not.
         ///</summary>
         public override bool Initialised { get { return _initialised; } }
 
+        /// <summary>
+        /// DereferenceThe Child <see cref="IBusinessObject"/> identified by <paramref name="bo"/>
+        /// </summary>
+        /// <param name="committer">The transaction commtter responsible for persisting this dereference.</param>
+        /// <param name="bo">The Business Object being dereferenced.</param>
         protected void DereferenceChild(TransactionCommitter committer, IBusinessObject bo)
         {
             foreach (RelPropDef relPropDef in RelationshipDef.RelKeyDef)
@@ -286,8 +320,12 @@ namespace Habanero.BO
             if (bo.Status.IsNew) return;
             committer.ExecuteTransactionToDataSource(committer.CreateTransactionalBusinessObject(bo));
         }
-        
-        protected void DeleteChild(TransactionCommitter committer, IBusinessObject bo)
+        /// <summary>
+        /// Deletes the Child Bo identified by <paramref name="bo"/>
+        /// </summary>
+        /// <param name="committer"></param>
+        /// <param name="bo"></param>
+        protected virtual void DeleteChild(TransactionCommitter committer, IBusinessObject bo)
         {
             if (bo == null) return;
             bo.MarkForDelete();
