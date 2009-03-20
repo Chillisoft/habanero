@@ -254,7 +254,7 @@ namespace Habanero.UI.Win
         /// <param name="title">The page title to appear in the tab</param>
         public ITabPage CreateTabPage(string title)
         {
-            return new TabPageWin {Text = title};
+            return new TabPageWin {Text = title, Name = title};
         }
 
         /// <summary>

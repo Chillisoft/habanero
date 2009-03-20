@@ -356,6 +356,15 @@ namespace Habanero.BO
             {
                 DeregisterForTableEvents();
                 DataRow row = _table.LoadDataRow(values, true);
+                foreach (DataColumn column in _table.Columns)
+                {
+                    string propName = column.ColumnName;
+                    if (businessObject.Props.Contains(propName))
+                    {
+                        IBOProp prop = businessObject.Props[propName];
+                        if (prop != null) row.SetColumnError(propName, prop.InvalidReason);
+                    }
+                }
                 if (businessObject != null) row.RowError = businessObject.Status.IsValidMessage;
             }
             finally

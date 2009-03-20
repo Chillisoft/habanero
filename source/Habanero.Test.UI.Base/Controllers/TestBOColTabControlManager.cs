@@ -19,6 +19,14 @@ namespace Habanero.Test.UI.Base.Controllers
         {
             return new BusinessObjectControlStubVWG();
         }
+        protected override IBusinessObjectControl BusinessObjectControlCreator()
+        {
+            return new BusinessObjectControlStubVWG();
+        }
+        protected override Type TypeOfBusienssObjectControl()
+        {
+            return typeof(BusinessObjectControlStubVWG);
+        }
     }
     [TestFixture]
     public class TestBOColTabControlManager
@@ -289,7 +297,7 @@ namespace Habanero.Test.UI.Base.Controllers
         }
 
         [Test]
-        public void TestBusinessObejctAddedToCollection()
+        public void Test_BusinessObejctAddedToCollection()
         {
             ITabControl tabControl = GetControlFactory().CreateTabControl();
             BOColTabControlManager selectorManger = CreateBOTabControlManager(tabControl);
@@ -297,11 +305,181 @@ namespace Habanero.Test.UI.Base.Controllers
             BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>
                                                          {new MyBO(), new MyBO(), new MyBO()};
             selectorManger.BusinessObjectCollection = myBoCol;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, selectorManger.TabControl.TabPages.Count);
             //---------------Execute Test ----------------------
             selectorManger.BusinessObjectCollection.Add(addedBo);
             //---------------Test Result -----------------------
             Assert.AreEqual(4, selectorManger.TabControl.TabPages.Count);
-            //---------------Tear down -------------------------
+            Assert.AreEqual(addedBo.ToString(), selectorManger.TabControl.TabPages[3].Text);
+            Assert.AreEqual(addedBo.ToString(), selectorManger.TabControl.TabPages[3].Name);
+        }
+
+        [Test]
+        public void Test_WhenUsingCreator_WhenBusinessObejctAddedToCollection_ShouldAddTab()
+        {
+            ITabControl tabControl = GetControlFactory().CreateTabControl();
+            IControlFactory controlFactory = GetControlFactory();
+            BOColTabControlManager selectorManger = new BOColTabControlManager(tabControl, controlFactory);
+            BusinessObjectControlCreatorDelegate creator = BusinessObjectControlCreator;
+            selectorManger.BusinessObjectControlCreator = creator;
+
+            MyBO addedBo = new MyBO();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO> { new MyBO(), new MyBO(), new MyBO() };
+            selectorManger.BusinessObjectCollection = myBoCol;
+            bool pageAddedEventFired = false;
+            TabPageEventArgs ex = null;
+            selectorManger.TabPageAdded += (sender,e) =>
+                                           {
+                                               pageAddedEventFired = true;
+                                               ex = e;
+                                           };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, selectorManger.TabControl.TabPages.Count);
+            Assert.IsFalse(pageAddedEventFired);
+            //---------------Execute Test ----------------------
+            selectorManger.BusinessObjectCollection.Add(addedBo);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, selectorManger.TabControl.TabPages.Count);
+            ITabPage tabPage = selectorManger.TabControl.TabPages[3];
+            Assert.AreEqual(addedBo.ToString(), tabPage.Text);
+            Assert.AreEqual(addedBo.ToString(), tabPage.Name);
+            Assert.AreEqual(1,tabPage.Controls.Count);
+            IControlHabanero boControl = tabPage.Controls[0];
+            Assert.IsTrue(pageAddedEventFired);
+            Assert.IsNotNull(ex);
+            Assert.AreSame(tabPage, ex.TabPage);
+            Assert.AreSame(boControl, ex.BOControl);
+        }
+
+        [Test]
+        public void Test_WhenUsingCreator_WhenBusinessObejctRemovedToCollection_ShouldRemoveTab()
+        {
+            ITabControl tabControl = GetControlFactory().CreateTabControl();
+            IControlFactory controlFactory = GetControlFactory();
+            BOColTabControlManager selectorManger = new BOColTabControlManager(tabControl, controlFactory);
+            BusinessObjectControlCreatorDelegate creator = BusinessObjectControlCreator;
+            selectorManger.BusinessObjectControlCreator = creator;
+
+            MyBO removedBo = new MyBO();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO> { removedBo, new MyBO(), new MyBO() };
+            selectorManger.BusinessObjectCollection = myBoCol;
+            bool pageRemovedEventFired = false;
+            TabPageEventArgs ex = null;
+            selectorManger.TabPageRemoved += (sender, e) =>
+            {
+                pageRemovedEventFired = true;
+                ex = e;
+            };
+            ITabPage tabPage = selectorManger.TabControl.TabPages[0];
+            IControlHabanero boControlToBeRemoved = tabPage.Controls[0];
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, selectorManger.TabControl.TabPages.Count);
+            Assert.IsFalse(pageRemovedEventFired);
+            //---------------Execute Test ----------------------
+            selectorManger.BusinessObjectCollection.Remove(removedBo);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, selectorManger.TabControl.TabPages.Count);
+            
+            Assert.AreEqual(removedBo.ToString(), tabPage.Text);
+            Assert.AreEqual(removedBo.ToString(), tabPage.Name);
+            Assert.AreEqual(1, tabPage.Controls.Count);
+            
+            Assert.IsTrue(pageRemovedEventFired);
+            Assert.IsNotNull(ex);
+            Assert.AreSame(tabPage, ex.TabPage);
+            Assert.AreSame(boControlToBeRemoved, ex.BOControl);
+        }
+
+        [Test]
+        public void Test_WhenUsingCreator_SetUpBOTabColManagerWithDelegateForCreating_aBOControl()
+        {
+            //---------------Set up test pack-------------------
+            ITabControl tabControl = GetControlFactory().CreateTabControl();
+            IControlFactory controlFactory = GetControlFactory();
+            BOColTabControlManager selectorManger = new BOColTabControlManager(tabControl, controlFactory);
+            BusinessObjectControlCreatorDelegate creator = BusinessObjectControlCreator;
+            //---------------Assert Precondition----------------
+            Assert.IsNull(selectorManger.BusinessObjectControlCreator);
+            //---------------Execute Test ----------------------
+            selectorManger.BusinessObjectControlCreator = creator;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(selectorManger.BusinessObjectControlCreator);
+            Assert.AreEqual(creator, selectorManger.BusinessObjectControlCreator);
+        }
+
+        [Test]
+        public void Test_WhenUsingCreator_WhenSetBOCol_ShouldCreateTabPageWithControlFromCreator()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectControlCreatorDelegate creator;
+            BOColTabControlManager selectorManger = GetSelectorManger(out creator);
+            MyBO expectedBO = new MyBO();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>
+                                                         {expectedBO};
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(selectorManger.BusinessObjectControlCreator);
+            Assert.AreEqual(creator, selectorManger.BusinessObjectControlCreator);
+            Assert.AreEqual(0, selectorManger.TabControl.TabPages.Count);
+            //---------------Execute Test ----------------------
+            selectorManger.BusinessObjectCollection = myBoCol;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, selectorManger.TabControl.TabPages.Count);
+            ITabPage page = selectorManger.TabControl.TabPages[0];
+            Assert.AreEqual(1, page.Controls.Count);
+            IControlHabanero boControl = page.Controls[0];
+            Assert.IsInstanceOfType(TypeOfBusienssObjectControl(), boControl);
+            IBusinessObjectControl businessObjectControl = (IBusinessObjectControl) boControl;
+            Assert.AreSame(expectedBO, businessObjectControl.BusinessObject);
+            Assert.AreSame(boControl, selectorManger.BusinessObjectControl);
+        }
+
+        protected virtual Type TypeOfBusienssObjectControl()
+        {
+            return typeof(BusinessObjectControlStubWin);
+        }
+
+        private BOColTabControlManager GetSelectorManger(out BusinessObjectControlCreatorDelegate creator)
+        {
+            IControlFactory controlFactory = GetControlFactory();
+            ITabControl tabControl = controlFactory.CreateTabControl();
+            BOColTabControlManager selectorManger = new BOColTabControlManager(tabControl, controlFactory);
+            creator = BusinessObjectControlCreator;
+            selectorManger.BusinessObjectControlCreator = creator;
+            return selectorManger;
+        }
+
+        [Test]
+        public void Test_WhenChangeTabIndex_ShouldNotRecreateTheBOControl()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectControlCreatorDelegate creator;
+            BOColTabControlManager selectorManger = GetSelectorManger(out creator);
+
+            MyBO firstBO = new MyBO();
+            MyBO secondBO = new MyBO();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO> { firstBO, secondBO };
+            selectorManger.BusinessObjectCollection = myBoCol;
+            ITabPage firstTabPage = selectorManger.TabControl.TabPages[0];
+            IBusinessObjectControl firstBOControl = (IBusinessObjectControl)firstTabPage.Controls[0];
+            ITabPage secondTabPage = selectorManger.TabControl.TabPages[1];
+            IBusinessObjectControl secondBOControl = (IBusinessObjectControl)secondTabPage.Controls[0];
+            //---------------Assert Precondition----------------
+            Assert.AreSame(secondBO, secondBOControl.BusinessObject);
+            Assert.AreSame(firstBOControl, selectorManger.BusinessObjectControl);
+            Assert.AreEqual(2, selectorManger.TabControl.TabPages.Count);
+            Assert.AreEqual(0, selectorManger.TabControl.SelectedIndex);
+            //---------------Execute Test ----------------------
+            selectorManger.CurrentBusinessObject = secondBO;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, selectorManger.TabControl.SelectedIndex);
+            Assert.AreSame(secondBOControl, secondTabPage.Controls[0]);
+            Assert.AreSame(secondBOControl, selectorManger.BusinessObjectControl);
+        }
+
+        protected virtual IBusinessObjectControl BusinessObjectControlCreator()
+        {
+            return new BusinessObjectControlStubWin();
         }
 
         private BOColTabControlManager CreateBOTabControlManager(ITabControl tabControl)

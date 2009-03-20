@@ -205,13 +205,6 @@ namespace Habanero.UI.Base
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         void RefreshGrid();
 
-        /// <summary>
-        /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
-        /// return a <see cref="ReadOnlyDataSetProvider"/>, while an editable grid would return an editable one.
-        /// </summary>
-        /// <param name="col">The collection to create the datasetprovider for</param>
-        /// <returns>Returns the data set provider</returns>
-        IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
 
         /// <summary>
         /// Occurs when a row is double-clicked by the user
@@ -234,6 +227,12 @@ namespace Habanero.UI.Base
         ///</summary>
         ///<param name="businessObject">The <see cref="IBusinessObject"/> for which the row must be refreshed.</param>
         void RefreshBusinessObjectRow(IBusinessObject businessObject);
+        /// <summary>
+        /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
+        /// return a <see cref="ReadOnlyDataSetProvider"/>, while an editable grid would return an editable one.
+        /// </summary>
+        /// <param name="col">The collection to create the datasetprovider for</param>
+        /// <returns>Returns the data set provider</returns>
+        IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
     }
-
 }

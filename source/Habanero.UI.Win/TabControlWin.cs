@@ -37,7 +37,10 @@ namespace Habanero.UI.Win
         Base.AnchorStyles IControlHabanero.Anchor
         {
             get { return (Base.AnchorStyles)base.Anchor; }
-            set { base.Anchor = (System.Windows.Forms.AnchorStyles)value; }
+            set
+            {
+                base.Anchor = (System.Windows.Forms.AnchorStyles) value;
+            }
         }
 
         /// <summary>

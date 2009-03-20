@@ -776,8 +776,7 @@ namespace Habanero.UI.VWG
         /// <param name="title">The page title to appear in the tab</param>
         public virtual ITabPage CreateTabPage(string title)
         {
-            TabPageVWG page = new TabPageVWG();
-            page.Text = title;
+            TabPageVWG page = new TabPageVWG {Text = title, Name = title};
             return page;
         }
 

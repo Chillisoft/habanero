@@ -92,7 +92,7 @@
 ////            colTabCtlMapper.BOEditorControlWin = busControl;
 
 ////            //---------------Test Result -----------------------
-////            Assert.AreSame(busControl, colTabCtlMapper.BoControl);
+////            Assert.AreSame(busControl, colTabCtlMapper.BOControl);
 ////            //---------------Tear down -------------------------
 ////        }
 

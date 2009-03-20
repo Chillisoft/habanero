@@ -39,6 +39,15 @@ namespace Habanero.UI.Win
         private readonly BOColTabControlManager _boColTabControlManager;
 
         /// <summary>
+        /// Occurs when the collection in the grid is changed
+        /// </summary>
+        public event EventHandler<TabPageEventArgs> TabPageAdded;
+
+        /// <summary>
+        /// Occurs when the collection in the grid is changed
+        /// </summary>
+        public event EventHandler<TabPageEventArgs> TabPageRemoved;
+        /// <summary>
         /// Constructor to initialise a new tab control
         /// </summary>
         public BOColTabControlWin(IControlFactory controlFactory)
@@ -50,6 +59,23 @@ namespace Habanero.UI.Win
             layoutManager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
             _boColTabControlManager = new BOColTabControlManager(_tabControl, _controlFactory);
             _boColTabControlManager.BusinessObjectSelected += delegate { FireBusinessObjectSelected(); };
+            _boColTabControlManager.TabPageAdded += (sender, e) => FireTabPageAdded(e.TabPage, e.BOControl);
+            _boColTabControlManager.TabPageRemoved += (sender, e) => FireTabPageRemoved(e.TabPage, e.BOControl);
+        }
+
+        private void FireTabPageAdded(ITabPage tabPage, IBusinessObjectControl boControl)
+        {
+            if (this.TabPageAdded == null) return;
+
+            TabPageEventArgs eventArgs = new TabPageEventArgs(tabPage, boControl);
+            this.TabPageAdded(this, eventArgs);
+        }
+        private void FireTabPageRemoved(ITabPage tabPage, IBusinessObjectControl boControl)
+        {
+            if (this.TabPageRemoved == null) return;
+
+            TabPageEventArgs eventArgs = new TabPageEventArgs(tabPage, boControl);
+            this.TabPageRemoved(this, eventArgs);
         }
 
         private void FireBusinessObjectSelected()
@@ -70,6 +96,7 @@ namespace Habanero.UI.Win
             get { return _boColTabControlManager.BusinessObjectControl; }
             set { BOColTabControlManager.BusinessObjectControl = value; }
         }
+
 
         /// <summary>
         /// Sets the collection of tab pages for the collection of business
@@ -123,6 +150,19 @@ namespace Habanero.UI.Win
                 BOColTabControlManager.CurrentBusinessObject = value;
                 BOColTabControlManager.TabChanged(); //required for win because the tabchanged event is not fired.
             }
+        }
+
+        /// <summary>
+        /// Gets and Sets the Business Object Control Creator. This is a delegate for creating a
+        ///  Business Object Control. This can be used as an alternate to setting the control
+        /// on the <see cref="IBOColTabControl"/> so that a different instance of the control
+        ///  is created for each tab instead of them  using the same control with diff data.
+        /// This has been created for performance reasons.
+        /// </summary>
+        public BusinessObjectControlCreatorDelegate BusinessObjectControlCreator
+        {
+            get { return this.BOColTabControlManager.BusinessObjectControlCreator; }
+            set { this.BOColTabControlManager.BusinessObjectControlCreator = value; }
         }
 
         /// <summary>

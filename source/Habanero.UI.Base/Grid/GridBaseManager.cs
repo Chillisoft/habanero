@@ -29,6 +29,7 @@ using Habanero.Util;
 
 namespace Habanero.UI.Base
 {
+
     /// <summary>
     /// This manager groups common logic for IEditableGridControl objects.
     /// Do not use this object in working code.
@@ -86,7 +87,7 @@ namespace Habanero.UI.Base
                 FireCollectionChanged();
                 return;
             }
-            //Hack: this is to overcome abug in Gizmox where the grid was freezing after delete
+            //Hack: this is to overcome a bug_ in Gizmox where the grid was freezing after delete
             // but should not cause a problem with win since it removed the currently selected item which is the deleted item
             col.BusinessObjectRemoved += delegate { SelectedBusinessObject = null; };
 

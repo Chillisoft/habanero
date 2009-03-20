@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using System.ComponentModel;
 using Habanero.Base;
 
 namespace Habanero.UI.Base
@@ -40,13 +42,17 @@ namespace Habanero.UI.Base
         /// </summary>
         IBusinessObjectControl BusinessObjectControl { set; get;}
 
-//        /// <summary>
-//        /// Sets the collection of tab pages for the collection of business
-//        /// objects provided
-//        /// </summary>
-//        /// <param name="value">The business object collection to create tab pages
-//        /// for</param>
-//        IBusinessObjectCollection BusinessObjectCollection { set; get; }
+        /////////
+        /// <summary>
+        /// Occurs when the collection in the grid is changed
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        event EventHandler<TabPageEventArgs> TabPageAdded;
+        /// <summary>
+        /// Occurs when the collection in the grid is changed
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        event System.EventHandler<TabPageEventArgs> TabPageRemoved;
 
         /// <summary>
         /// Returns the TabControl object
@@ -75,5 +81,13 @@ namespace Habanero.UI.Base
         /// </summary>
         IBusinessObject CurrentBusinessObject { get; set; }
 
+        /// <summary>
+        /// Gets and Sets the Business Object Control Creator. This is a delegate for creating a
+        ///  Business Object Control. This can be used as an alternate to setting the control
+        /// on the <see cref="IBOColTabControl"/> so that a different instance of the control
+        ///  is created for each tab instead of them  using the same control with diff data.
+        /// This has been created for performance reasons.
+        /// </summary>
+        BusinessObjectControlCreatorDelegate BusinessObjectControlCreator { get; set; }
     }
 }

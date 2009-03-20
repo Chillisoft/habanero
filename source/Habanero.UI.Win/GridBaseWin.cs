@@ -26,6 +26,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+
     /// <summary>
     /// Provides a DataGridView that is adapted to show business objects
     /// </summary>
