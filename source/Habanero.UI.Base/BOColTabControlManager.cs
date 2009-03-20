@@ -385,6 +385,7 @@ namespace Habanero.UI.Base
             else if (BusinessObjectControlCreator != null)
             {
                 IBusinessObjectControl businessObjectControl = BusinessObjectControlCreator();
+                businessObjectControl.Dock = DockStyle.Fill;
                 businessObjectControl.BusinessObject = bo;
                 page.Controls.Add(businessObjectControl);
             }
