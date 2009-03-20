@@ -99,7 +99,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             }
 
             [Test]
-            public void TestAfterLoadCalled_GetCollection()
+            public void TestAfterLoadCalled_GetCollection_Generic_Reloaded()
             {
                 //---------------Set up test pack-------------------
                 ContactPersonTestBO.LoadDefaultClassDef();
@@ -120,8 +120,32 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.IsTrue(col[0].AfterLoadCalled);
             }
 
+
             [Test]
-            public void TestAfterLoadCalled_GetCollection_NotReloaded()
+            public void TestAfterLoadCalled_GetCollection_NonGeneric_Reloaded()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
+                TestUtil.WaitForGC();
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                Criteria criteria = new Criteria
+                    ("ContactPersonID", Criteria.ComparisonOp.Equals, cp.ContactPersonID.ToString("B"));
+                IBusinessObjectCollection col =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.Count);
+                ContactPersonTestBO loadedCP = (ContactPersonTestBO)col[0];
+                Assert.AreNotSame(cp, loadedCP);
+                Assert.IsTrue(loadedCP.AfterLoadCalled);
+                Assert.IsInstanceOfType(typeof(BusinessObjectCollection<ContactPersonTestBO>), col);
+            }
+
+            [Test]
+            public void TestAfterLoadCalled_GetCollection_Generic_NotReloaded()
             {
                 //---------------Set up test pack-------------------
                 ContactPersonTestBO.LoadDefaultClassDef();
@@ -145,31 +169,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 //This works because if the object is not dirty then it is refreshed from the database
             }
 
-
             [Test]
-            public void TestAfterLoadCalled_GetCollection_Untyped()
-            {
-                //---------------Set up test pack-------------------
-                ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
-                ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-                BusinessObjectManager.Instance.ClearLoadedObjects();
-                TestUtil.WaitForGC();
-                //---------------Assert Precondition----------------
-
-                //---------------Execute Test ----------------------
-                Criteria criteria = new Criteria
-                    ("ContactPersonID", Criteria.ComparisonOp.Equals, cp.ContactPersonID.ToString("B"));
-                IBusinessObjectCollection col =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
-                //---------------Test Result -----------------------
-                Assert.AreEqual(1, col.Count);
-                ContactPersonTestBO loadedCP = (ContactPersonTestBO) col[0];
-                Assert.AreNotSame(cp, loadedCP);
-                Assert.IsTrue(loadedCP.AfterLoadCalled);
-            }
-
-            [Test]
-            public void TestAfterLoadCalled_GetCollection_Untyped_NotReloaded()
+            public void TestAfterLoadCalled_GetCollection_NonGeneric_NotReloaded()
             {
                 //---------------Set up test pack-------------------
                 ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -189,10 +190,11 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 ContactPersonTestBO loadedCP = (ContactPersonTestBO) col[0];
                 Assert.AreSame(cp, loadedCP);
                 Assert.IsTrue(loadedCP.AfterLoadCalled);
+                Assert.IsInstanceOfType(typeof(BusinessObjectCollection<ContactPersonTestBO>), col);
             }
 
             [Test]
-            public void Test_GetBusinessObjectCollection_Typed_LoadOfSubTypeDoesntLoadSuperTypedObjects()
+            public void Test_GetBusinessObjectCollection_Generic_LoadOfSubTypeDoesntLoadSuperTypedObjects()
             {
                 //---------------Set up test pack-------------------
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
@@ -209,7 +211,24 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             }
 
             [Test]
-            public void Test_GetBusinessObjectCollection_Typed_LoadOfSubTypeDoesntLoadSuperTypedObjects_Fresh()
+            public void Test_GetBusinessObjectCollection_NonGeneric_LoadOfSubTypeDoesntLoadSuperTypedObjects()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef classDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                Shape shape = Shape.CreateSavedShape();
+                Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
+
+                //---------------Execute Test ----------------------
+                IBusinessObjectCollection loadedCircles =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(0, loadedCircles.Count);
+                Assert.IsInstanceOfType(typeof (BusinessObjectCollection<CircleNoPrimaryKey>), loadedCircles);
+            }
+
+            [Test]
+            public void Test_GetBusinessObjectCollection_Generic_LoadOfSubTypeDoesntLoadSuperTypedObjects_Fresh()
             {
                 //---------------Set up test pack-------------------
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
@@ -226,10 +245,28 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.AreEqual(0, loadedCircles.Count);
             }
 
+            [Test]
+            public void Test_GetBusinessObjectCollection_NonGeneric_LoadOfSubTypeDoesntLoadSuperTypedObjects_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef classDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                Shape shape = Shape.CreateSavedShape();
+                Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
+                BusinessObjectManager.Instance.ClearLoadedObjects();
+
+                //---------------Execute Test ----------------------
+                IBusinessObjectCollection loadedCircles =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(0, loadedCircles.Count);
+                Assert.IsInstanceOfType(typeof(BusinessObjectCollection<CircleNoPrimaryKey>), loadedCircles);
+            }
+
             #region Test that the load returns the correct sub type
 
             [Test]
-            public void Test_GetBusinessObjectCollection_Typed_ReturnsSubType_Fresh()
+            public void Test_GetBusinessObjectCollection_Generic_ReturnsSubType_Fresh()
             {
                 //---------------Set up test pack-------------------
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
@@ -248,7 +285,70 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             }
 
             [Test]
-            public void Test_GetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_DiscriminatorShared_Fresh()
+            public void Test_GetBusinessObjectCollection_NonGeneric_ReturnsSubType_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
+                Criteria criteria = Criteria.FromPrimaryKey(circle.ID);
+                BusinessObjectManager.Instance.ClearLoadedObjects();
+
+                ClassDef classDef = ClassDef.Get<Shape>();
+                //---------------Execute Test ----------------------
+                IBusinessObjectCollection loadedShapes =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, loadedShapes.Count);
+                Assert.IsInstanceOfType(typeof(Shape), loadedShapes[0]);
+                Shape loadedShape = (Shape)loadedShapes[0];
+                Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
+                Assert.IsInstanceOfType(typeof(BusinessObjectCollection<Shape>), loadedShapes);
+            }
+
+            [Test]
+            public void Test_GetBusinessObjectCollection_Generic_ReturnsSubType_NonFresh()
+            {
+                //---------------Set up test pack-------------------
+                CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
+                Criteria criteria = Criteria.FromPrimaryKey(circle.ID);
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<Shape> loadedShapes =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>(criteria);
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, loadedShapes.Count);
+                Shape loadedShape = loadedShapes[0];
+                Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
+                Assert.AreSame(circle, loadedShape);
+            }
+
+            [Test]
+            public void Test_GetBusinessObjectCollection_NonGeneric_ReturnsSubType_NonFresh()
+            {
+                //---------------Set up test pack-------------------
+                CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
+                Criteria criteria = Criteria.FromPrimaryKey(circle.ID);
+
+                ClassDef classDef = ClassDef.Get<Shape>();
+                //---------------Execute Test ----------------------
+                IBusinessObjectCollection loadedShapes =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, loadedShapes.Count);
+                Assert.IsInstanceOfType(typeof(Shape), loadedShapes[0]);
+                Shape loadedShape = (Shape)loadedShapes[0];
+                Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
+                Assert.IsInstanceOfType(typeof(BusinessObjectCollection<Shape>), loadedShapes);
+                Assert.AreSame(circle, loadedShape);
+            }
+
+            [Test]
+            public void Test_GetBusinessObjectCollection_Generic_ReturnsSubType_TwoLevelsDeep_DiscriminatorShared_Fresh()
             {
                 //---------------Set up test pack-------------------
                 SetupDataAccessor();
@@ -266,7 +366,26 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             }
 
             [Test]
-            public void Test_GetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_Fresh()
+            public void Test_GetBusinessObjectCollection_NonGeneric_ReturnsSubType_TwoLevelsDeep_DiscriminatorShared_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();
+
+                FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
+                FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
+
+                ClassDef classDef = ClassDef.Get<Shape>();
+                //---------------Execute Test ----------------------
+                IBusinessObject loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, filledCircle.ID);
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(Shape), loadedShape);
+                Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test]
+            public void Test_GetBusinessObjectCollection_Generic_ReturnsSubType_TwoLevelsDeep_Fresh()
             {
                 //---------------Set up test pack-------------------
                 SetupDataAccessor();
@@ -279,7 +398,27 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>
                     (filledCircle.ID);
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof (FilledCircleNoPrimaryKey), loadedShape);
+                Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test]
+            public void Test_GetBusinessObjectCollection_NonGeneric_ReturnsSubType_TwoLevelsDeep_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();
+
+                FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
+                FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
+
+                ClassDef classDef = ClassDef.Get<Shape>();
+                //---------------Execute Test ----------------------
+                IBusinessObject loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
+                    (classDef, filledCircle.ID);
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(Shape), loadedShape);
+                Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
                 //---------------Tear Down -------------------------          
             }
 

@@ -278,6 +278,23 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param> 
         protected override void DoRefresh<T>(BusinessObjectCollection<T> collection)
         {
+            DoRefreshShared<T>(collection);
+        }
+
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        /// <param name="collection">The collection to refresh</param>
+        protected override void DoRefresh(IBusinessObjectCollection collection)
+        {
+            DoRefreshShared<IBusinessObject>(collection);
+        }
+
+        private void DoRefreshShared<T>(IBusinessObjectCollection collection)
+            where T : IBusinessObject
+        {
             IClassDef classDef = collection.ClassDef;
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
@@ -310,9 +327,8 @@ namespace Habanero.BO
                 //The first record is past the end of the available records, so return an empty collection.
                 ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
             }
-
-            collection.TotalCountAvailableForPaging = totalNoOfRecords == -1 ? collection.Count : totalNoOfRecords;
-
+            int totalCountAvailableForPaging = totalNoOfRecords == -1 ? collection.Count : totalNoOfRecords;
+            collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
 
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
@@ -324,44 +340,6 @@ namespace Habanero.BO
             //  the other option would be for the business object collection to have another method (other than clone)
             //   that returns another type of object that has these methods to eliminate all these 
             //   public accessors
-            RestoreEditedLists(collection);
-        }
-
-        /// <summary>
-        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
-        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
-        /// only fire for the new objects added to the collection, not for the ones that already existed).
-        /// </summary>
-        /// <param name="collection">The collection to refresh</param>
-        protected override void DoRefresh(IBusinessObjectCollection collection)
-        {
-            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
-            IClassDef classDef = collection.ClassDef;
-            QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
-            int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
-            if (IsLoadNecessary(selectQuery, totalNoOfRecords))
-            {
-                ISqlStatement statement = selectQuery.CreateSqlStatement();
-
-                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
-
-                using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
-                {
-                    while (dr.Read())
-                    {
-                        IBusinessObject loadedBo = LoadBOFromReader(classDef, dr, selectQuery);
-                        AddBusinessObjectToCollection(collection, loadedBo);
-                    }
-                }
-            }
-            else
-            {
-                //The first record is past the end of the available records, so return an empty collection.
-                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
-            }
-            int totalCountAvailableForPaging = totalNoOfRecords == -1 ? collection.Count : totalNoOfRecords;
-            collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
-
             RestoreEditedLists(collection);
         }
 
@@ -441,7 +419,7 @@ namespace Habanero.BO
         /// <param name="correctSubClassDef"></param>
         /// <returns></returns>
         private T GetLoadedBoOfSpecifiedType<T>(T loadedBo, IClassDef correctSubClassDef)
-            where T : class, IBusinessObject, new()
+            where T : IBusinessObject
         {
             if (correctSubClassDef != null)
             {

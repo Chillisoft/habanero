@@ -587,6 +587,60 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(expectedMainSelect, actualStatement);
         }
 
+        [Test]
+        public void Test_CreateSQL_LoadWithLimit_PaginatedFind_HasCorrectFieldNames()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.FirstRecordToLoad = 3;
+            selectQuery.Limit = 5;
+            selectQuery.OrderCriteria = OrderCriteria.FromString("Surname");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "TOP", "");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, selectQuery.FirstRecordToLoad);
+            Assert.AreEqual(5, selectQuery.Limit);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            string actualStatement = statement.Statement.ToString();
+            //---------------Test Result -----------------------
+            const string expectedFirstSelect = "(SELECT TOP 8 contact_person.ContactPersonID, contact_person.Surname_field, contact_person.FirstName_field, contact_person.DateOfBirth FROM contact_person ORDER BY contact_person.Surname_field ASC) As FirstSelect";
+            StringAssert.Contains(expectedFirstSelect, actualStatement);
+            string expectedSecondSelect = string.Format("(SELECT TOP 5 FirstSelect.ContactPersonID, FirstSelect.Surname_field, FirstSelect.FirstName_field, FirstSelect.DateOfBirth FROM {0} ORDER BY FirstSelect.Surname_field DESC ) AS SecondSelect", expectedFirstSelect);
+            StringAssert.Contains(expectedSecondSelect, actualStatement);
+            string expectedMainSelect = string.Format("SELECT SecondSelect.ContactPersonID, SecondSelect.Surname_field, SecondSelect.FirstName_field, SecondSelect.DateOfBirth FROM {0} ORDER BY SecondSelect.Surname_field ASC", expectedSecondSelect);
+            Assert.AreEqual(expectedMainSelect, actualStatement);
+        }
+
+        [Test]
+        public void Test_CreateSQL_LoadWithLimit_PaginatedFind_HasCorrectFieldNames_WithDelimiters()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.FirstRecordToLoad = 3;
+            selectQuery.Limit = 5;
+            selectQuery.OrderCriteria = OrderCriteria.FromString("Surname");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, selectQuery.FirstRecordToLoad);
+            Assert.AreEqual(5, selectQuery.Limit);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            string actualStatement = statement.Statement.ToString();
+            //---------------Test Result -----------------------
+            const string expectedFirstSelect = "(SELECT TOP 8 [contact_person].[ContactPersonID], [contact_person].[Surname_field], [contact_person].[FirstName_field], [contact_person].[DateOfBirth] FROM [contact_person] ORDER BY [contact_person].[Surname_field] ASC) As [FirstSelect]";
+            StringAssert.Contains(expectedFirstSelect, actualStatement);
+            string expectedSecondSelect = string.Format("(SELECT TOP 5 [FirstSelect].[ContactPersonID], [FirstSelect].[Surname_field], [FirstSelect].[FirstName_field], [FirstSelect].[DateOfBirth] FROM {0} ORDER BY [FirstSelect].[Surname_field] DESC ) AS [SecondSelect]", expectedFirstSelect);
+            StringAssert.Contains(expectedSecondSelect, actualStatement);
+            string expectedMainSelect = string.Format("SELECT [SecondSelect].[ContactPersonID], [SecondSelect].[Surname_field], [SecondSelect].[FirstName_field], [SecondSelect].[DateOfBirth] FROM {0} ORDER BY [SecondSelect].[Surname_field] ASC", expectedSecondSelect);
+            Assert.AreEqual(expectedMainSelect, actualStatement);
+        }
+
         //TODO  17 Jan 2009: Do test for LIMIT
 
         [Test]
@@ -610,9 +664,63 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             const string expectedFirstSelect = "(SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 6) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
-            string expectedSecondSelect = string.Format("(SELECT FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC LIMIT 4 ) AS SecondSelect", expectedFirstSelect);
+            string expectedSecondSelect = string.Format("(SELECT FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC LIMIT 4) AS SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
             string expectedMainSelect = string.Format("SELECT SecondSelect.MyBoID FROM {0} ORDER BY SecondSelect.MyBOID ASC", expectedSecondSelect);
+            Assert.AreEqual(expectedMainSelect, actualStatement);
+        }
+
+        [Test]
+        public void Test_CreateSQL_LoadWithLimit_AtEnd_PaginatedFind_HasCorrectFieldNames()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.FirstRecordToLoad = 3;
+            selectQuery.Limit = 5;
+            selectQuery.OrderCriteria = OrderCriteria.FromString("Surname");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, selectQuery.FirstRecordToLoad);
+            Assert.AreEqual(5, selectQuery.Limit);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            string actualStatement = statement.Statement.ToString();
+            //---------------Test Result -----------------------
+            const string expectedFirstSelect = "(SELECT contact_person.ContactPersonID, contact_person.Surname_field, contact_person.FirstName_field, contact_person.DateOfBirth FROM contact_person ORDER BY contact_person.Surname_field ASC LIMIT 8) As FirstSelect";
+            StringAssert.Contains(expectedFirstSelect, actualStatement);
+            string expectedSecondSelect = string.Format("(SELECT FirstSelect.ContactPersonID, FirstSelect.Surname_field, FirstSelect.FirstName_field, FirstSelect.DateOfBirth FROM {0} ORDER BY FirstSelect.Surname_field DESC LIMIT 5) AS SecondSelect", expectedFirstSelect);
+            StringAssert.Contains(expectedSecondSelect, actualStatement);
+            string expectedMainSelect = string.Format("SELECT SecondSelect.ContactPersonID, SecondSelect.Surname_field, SecondSelect.FirstName_field, SecondSelect.DateOfBirth FROM {0} ORDER BY SecondSelect.Surname_field ASC", expectedSecondSelect);
+            Assert.AreEqual(expectedMainSelect, actualStatement);
+        }
+
+        [Test]
+        public void Test_CreateSQL_LoadWithLimit_AtEnd_PaginatedFind_HasCorrectFieldNames_WithDelimiters()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.FirstRecordToLoad = 3;
+            selectQuery.Limit = 5;
+            selectQuery.OrderCriteria = OrderCriteria.FromString("Surname");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, selectQuery.FirstRecordToLoad);
+            Assert.AreEqual(5, selectQuery.Limit);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            string actualStatement = statement.Statement.ToString();
+            //---------------Test Result -----------------------
+            const string expectedFirstSelect = "(SELECT [contact_person].[ContactPersonID], [contact_person].[Surname_field], [contact_person].[FirstName_field], [contact_person].[DateOfBirth] FROM [contact_person] ORDER BY [contact_person].[Surname_field] ASC LIMIT 8) As [FirstSelect]";
+            StringAssert.Contains(expectedFirstSelect, actualStatement);
+            string expectedSecondSelect = string.Format("(SELECT [FirstSelect].[ContactPersonID], [FirstSelect].[Surname_field], [FirstSelect].[FirstName_field], [FirstSelect].[DateOfBirth] FROM {0} ORDER BY [FirstSelect].[Surname_field] DESC LIMIT 5) AS [SecondSelect]", expectedFirstSelect);
+            StringAssert.Contains(expectedSecondSelect, actualStatement);
+            string expectedMainSelect = string.Format("SELECT [SecondSelect].[ContactPersonID], [SecondSelect].[Surname_field], [SecondSelect].[FirstName_field], [SecondSelect].[DateOfBirth] FROM {0} ORDER BY [SecondSelect].[Surname_field] ASC", expectedSecondSelect);
             Assert.AreEqual(expectedMainSelect, actualStatement);
         }
 

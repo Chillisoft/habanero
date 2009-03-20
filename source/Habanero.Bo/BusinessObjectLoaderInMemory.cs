@@ -225,6 +225,29 @@ namespace Habanero.BO
             LoadBOCollection(collection, loadedBos);
         }
 
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        /// <param name="collection">The collection to refresh</param>
+        protected override void DoRefresh(IBusinessObjectCollection collection)
+        {
+            ISelectQuery selectQuery = collection.SelectQuery;
+            Criteria criteria = selectQuery.Criteria;
+            OrderCriteria orderCriteria = selectQuery.OrderCriteria;
+
+            IClassDef classDef = collection.ClassDef;
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+
+            IBusinessObjectCollection loadedBos = _dataStore.FindAll(classDef.ClassType, criteria);
+            loadedBos.Sort(orderCriteria);
+
+            collection.TotalCountAvailableForPaging = loadedBos.Count;
+            ApplyLimitsToList(selectQuery, loadedBos);
+            LoadBOCollection(collection, loadedBos);
+        }
+
         private static void ApplyLimitsToList(ISelectQuery selectQuery, IList loadedBos)
         {
             int firstRecordToLoad = selectQuery.FirstRecordToLoad;
@@ -249,29 +272,6 @@ namespace Habanero.BO
             {
                 loadedBos.RemoveAt(selectQuery.Limit);
             }
-        }
-
-        /// <summary>
-        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
-        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
-        /// only fire for the new objects added to the collection, not for the ones that already existed).
-        /// </summary>
-        /// <param name="collection">The collection to refresh</param>
-        protected override void DoRefresh(IBusinessObjectCollection collection)
-        {
-            ISelectQuery selectQuery = collection.SelectQuery;
-            Criteria criteria = selectQuery.Criteria;
-            OrderCriteria orderCriteria = selectQuery.OrderCriteria;
-
-            IClassDef classDef = collection.ClassDef;
-            QueryBuilder.PrepareCriteria(classDef, criteria);
-
-            IBusinessObjectCollection loadedBos = _dataStore.FindAll(classDef.ClassType, criteria);
-            loadedBos.Sort(orderCriteria);
-
-            collection.TotalCountAvailableForPaging = loadedBos.Count;
-            ApplyLimitsToList(selectQuery, loadedBos);
-            LoadBOCollection(collection, loadedBos);
         }
 
 

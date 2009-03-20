@@ -148,13 +148,7 @@ namespace Habanero.BO
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             StringBuilder builder = statement.Statement;
             CheckRecordOffSetAndAppendFields(builder);
-            builder.Append("SELECT ");
-            AppendLimitClauseAtBeginning(builder);
-            AppendFields(builder);
-            AppendFrom(builder);
-            AppendWhereClause(builder, statement);
-            AppendOrderByClause(builder);
-            AppendLimitClauseAtEnd(builder);
+            AppendMainSelectClause(statement, builder);
             if (this.FirstRecordToLoad > 0)
             {
                 AppendOrderByFirstSelect(builder);
@@ -163,6 +157,17 @@ namespace Habanero.BO
                 AppendOrderBySecondSelect(builder);
             }
             return statement;
+        }
+
+        private void AppendMainSelectClause(SqlStatement statement, StringBuilder builder)
+        {
+            builder.Append("SELECT ");
+            AppendLimitClauseAtBeginning(builder);
+            AppendFields(builder);
+            AppendFrom(builder);
+            AppendWhereClause(builder, statement);
+            AppendOrderByClause(builder);
+            AppendLimitClauseAtEnd(builder);
         }
 
         private void CheckRecordOffSetAndAppendFields(StringBuilder builder)
@@ -188,11 +193,12 @@ namespace Habanero.BO
 
         private void AppendOrderBySecondSelect(StringBuilder builder)
         {
-            builder.Append(") AS SecondSelect");
+            builder.Append(") AS " + DelimitTable("SecondSelect"));
             builder.Append(" ORDER BY ");
             foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
             {
-                builder.Append("SecondSelect.").Append(field.FieldName);
+                string orderByFieldName = GetOrderByFieldName(field);
+                builder.Append(DelimitField("SecondSelect", orderByFieldName));
                 if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
                 {
                     builder.Append(" ASC");
@@ -206,11 +212,12 @@ namespace Habanero.BO
 
         private void AppendOrderByFirstSelect(StringBuilder builder)
         {
-            builder.Append(") As FirstSelect");
+            builder.Append(") As " + DelimitTable("FirstSelect"));
             builder.Append(" ORDER BY ");
             foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
             {
-                builder.Append("FirstSelect.").Append(field.FieldName);
+                string orderByFieldName = GetOrderByFieldName(field);
+                builder.Append(DelimitField("FirstSelect", orderByFieldName));
                 if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
                 {
                     builder.Append(" DESC");
@@ -221,12 +228,23 @@ namespace Habanero.BO
             }
         }
 
+
+        private string GetOrderByFieldName(OrderCriteria.Field orderField)
+        {
+            if (Fields.ContainsKey(orderField.PropertyName))
+            {
+                QueryField queryField = Fields[orderField.PropertyName];
+                return queryField.FieldName;
+            }
+            return orderField.FieldName;
+        }
+
         private void AppendNoOfRecordsClauseAtEnd(StringBuilder builder)
         {
             string limitClauseAtEnd = _sqlFormatter.GetLimitClauseCriteriaForEnd(this.Limit);
             if (!String.IsNullOrEmpty(limitClauseAtEnd))
             {
-                builder.Append(limitClauseAtEnd + " ");
+                builder.Append(limitClauseAtEnd);
             }
         }
 
@@ -355,6 +373,11 @@ namespace Habanero.BO
         {
             if (string.IsNullOrEmpty(entityName)) return _sqlFormatter.DelimitField(fieldName);
             return string.Format("{0}.{1}", _sqlFormatter.DelimitTable(entityName), _sqlFormatter.DelimitField(fieldName));
+        }
+
+        private string DelimitTable(string tableName)
+        {
+            return _sqlFormatter.DelimitTable(tableName);
         }
     }
 }

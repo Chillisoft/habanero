@@ -14,6 +14,7 @@ namespace Habanero.Test.UI.Base
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+            ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             GlobalUIRegistry.ControlFactory = new ControlFactoryWin();
         }

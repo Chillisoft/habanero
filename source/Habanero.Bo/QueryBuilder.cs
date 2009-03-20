@@ -118,6 +118,7 @@ namespace Habanero.BO
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
+            //TODO Mark 20 Mar 2009: Souldn't the following code be stripped out into a PrepareOrderBy method that is called before loading? (Similar to PrepareCriteria)
             foreach (OrderCriteria.Field field in orderCriteria.Fields)
             {
                 Source source = field.Source;
