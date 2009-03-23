@@ -503,6 +503,7 @@ namespace Habanero.UI.Base
         private void BusinessObjectAddedHandler(object sender, BOEventArgs e)
         {
             //Soriya - Think this might be needed - if (e.BusinessObject.Status.IsDeleted) return;
+            if (this.GetTabPage(e.BusinessObject) != null)return;
             AddTabPage(e.BusinessObject);
         }
 
