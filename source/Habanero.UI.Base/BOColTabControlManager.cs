@@ -190,14 +190,14 @@ namespace Habanero.UI.Base
             set
             {
                 CheckBusinessObjectControlSet("BusinessObjectCollection");
-                DereigsterForBusinessObjectCollectionEvents();
+                DeregisterForBusinessObjectCollectionEvents();
                 _businessObjectCollection = value;
                 ReloadCurrentCollection();
             }
             get { return _businessObjectCollection; }
         }
 
-        private void DereigsterForBusinessObjectCollectionEvents()
+        private void DeregisterForBusinessObjectCollectionEvents()
         {
             if (_businessObjectCollection != null)
             {
@@ -502,6 +502,7 @@ namespace Habanero.UI.Base
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectAddedHandler(object sender, BOEventArgs e)
         {
+            //Soriya - Think this might be needed - if (e.BusinessObject.Status.IsDeleted) return;
             AddTabPage(e.BusinessObject);
         }
 

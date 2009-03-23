@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace Habanero.UI.Base {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -56,27 +59,21 @@ namespace Habanero.UI.Base {
                 resourceCulture = value;
             }
         }
-        /// <summary>
-        /// The image for the gradient of colour applied to the heading.
-        /// </summary>
+
         public static System.Drawing.Bitmap headergradient {
             get {
                 object obj = ResourceManager.GetObject("headergradient", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// The image for the pin being off.
-        /// </summary>
+
         public static System.Drawing.Bitmap pinoff_withcolour {
             get {
                 object obj = ResourceManager.GetObject("pinoff_withcolour", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// The image for the pin being on.
-        /// </summary>
+
         public static System.Drawing.Bitmap pinon_withcolour {
             get {
                 object obj = ResourceManager.GetObject("pinon_withcolour", resourceCulture);

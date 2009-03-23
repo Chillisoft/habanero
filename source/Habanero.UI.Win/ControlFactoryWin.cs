@@ -1101,7 +1101,7 @@ namespace Habanero.UI.Win
         ///</summary>
         public void ConfigurePinOffStyleLabel(ILabel label)
         {
-            LabelWin labelWin = (LabelWin)CreateLabel();
+            LabelWin labelWin = (LabelWin)label;
             labelWin.BackgroundImage = CollapsiblePanelResource.pinoff_withcolour;
             labelWin.FlatStyle = FlatStyle.Flat;
             //labelWin.ForeColor = Color.White;
@@ -1114,7 +1114,7 @@ namespace Habanero.UI.Win
         ///<param name="label"></param>
         public void ConfigurePinOnStyleLabel(ILabel label)
         {
-            LabelWin labelWin = (LabelWin)CreateLabel();
+            LabelWin labelWin = (LabelWin)label;
             labelWin.BackgroundImage = CollapsiblePanelResource.pinon_withcolour;
             labelWin.FlatStyle = FlatStyle.Flat;
             //labelWin.ForeColor = Color.White;

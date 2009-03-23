@@ -481,7 +481,43 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(3, boColTabControl.TabControl.TabPages.Count);
             Assert.IsFalse(pageAddedEventFired);
             //---------------Execute Test ----------------------
+            boColTabControl.BusinessObjectCollection.Add(addedBo); 
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, boColTabControl.TabControl.TabPages.Count);
+            ITabPage tabPage = boColTabControl.TabControl.TabPages[3];
+            Assert.AreEqual(addedBo.ToString(), tabPage.Text);
+            Assert.AreEqual(addedBo.ToString(), tabPage.Name);
+            Assert.AreEqual(1, tabPage.Controls.Count);
+            IControlHabanero boControl = tabPage.Controls[0];
+            Assert.IsTrue(pageAddedEventFired);
+            Assert.IsNotNull(ex);
+            Assert.AreSame(tabPage, ex.TabPage);
+            Assert.AreSame(boControl, ex.BOControl);
+        }
+
+        [Ignore("This does not work")]
+        [Test]
+        public void Test_WhenUsingCreator_WhenBusinessObejctAddedToCollection_ShouldAddTab_CorrectName()
+        {
+            BusinessObjectControlCreatorDelegate creator;
+            IBOColTabControl boColTabControl = CreateBOTabControlWithControlCreator(out creator);
+
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO> { new MyBO(), new MyBO(), new MyBO() };
+            boColTabControl.BusinessObjectCollection = myBoCol;
+            bool pageAddedEventFired = false;
+            TabPageEventArgs ex = null;
+            boColTabControl.TabPageAdded += (sender, e) =>
+            {
+                pageAddedEventFired = true;
+                ex = e;
+            };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, boColTabControl.TabControl.TabPages.Count);
+            Assert.IsFalse(pageAddedEventFired);
+            //---------------Execute Test ----------------------
+            MyBO addedBo = new MyBO();
             boColTabControl.BusinessObjectCollection.Add(addedBo);
+            addedBo.TestProp = TestUtil.GetRandomString(); 
             //---------------Test Result -----------------------
             Assert.AreEqual(4, boColTabControl.TabControl.TabPages.Count);
             ITabPage tabPage = boColTabControl.TabControl.TabPages[3];
