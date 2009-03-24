@@ -250,4 +250,5 @@ namespace Habanero.Base
             set { _exceptionNotifier = value; }
         }
     }
+
 }

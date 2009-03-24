@@ -113,4 +113,39 @@ namespace Habanero.UI.Win
             GlobalRegistry.UIExceptionNotifier = ExceptionNotifier;
         }
 	}
+
+    ///<summary>
+    /// Provides a template for an InMemory Habanero application, including
+    /// standard fields and initialisations.  Specific details covered are:
+    /// <ul>
+    /// <li>The class definitions that define how the data is represented
+    /// and limited</li>
+    /// <li>A logger to record debugging and error messages</li>
+    /// <li>An exception notifier to communicate exceptions to the user</li>
+    /// <li>Automatic version upgrades when an application is out-of-date</li>
+    /// <li>A synchronisation controller</li>
+    /// <li>A control factory to create controls</li>
+    /// <li>A data accessor that specifies what type of data source is used (InMemory)</li>
+    /// </ul>
+    /// To set up and launch an application:
+    /// <ol>
+    /// <li>Instantiate the application with the constructor</li>
+    /// <li>Specify any individual settings as required</li>
+    /// <li>Call the Startup() method to launch the application</li>
+    /// </ol>
+    ///</summary>
+    public class HabaneroAppMemory : HabaneroAppWin
+    {
+        public HabaneroAppMemory(string appName, string appVersion) : base(appName, appVersion)
+        {
+        }
+        /// <summary>
+        /// Sets up the database connection.  If not provided, then
+        /// reads the connection from the config file.
+        /// </summary>
+        protected override void SetupDatabaseConnection()
+        {
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+        }
+    }
 }
