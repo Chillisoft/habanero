@@ -37,6 +37,12 @@ namespace Habanero.BO
         private readonly Dictionary<string, IRelProp> _relProps;
 
         /// <summary>
+        /// Event raised when the value for one of the Properties (<see cref="IRelProp"/>) for this <see cref="IRelKey"/> is changed
+        /// </summary>
+        public event EventHandler RelatedPropValueChanged;
+
+
+        /// <summary>
         /// Constructor to initialise a new instance. This initialises the RelKey and sets all its
         /// relationship properties (IRelProp).
         /// </summary>
@@ -49,8 +55,16 @@ namespace Habanero.BO
             _relProps = new Dictionary<string, IRelProp>();
             foreach (RelPropDef relPropDef in _relKeyDef)
             {
-                this.Add(relPropDef.CreateRelProp(lBoPropCol));
+                IRelProp relProp = relPropDef.CreateRelProp(lBoPropCol);
+                relProp.PropValueUpdated += (sender, e) => FireRelatedPropValueChangedEvent();
+                this.Add(relProp);
             }
+        }
+
+        private void FireRelatedPropValueChangedEvent()
+        {
+            if (this.RelatedPropValueChanged ==null) return;
+            this.RelatedPropValueChanged(this, new EventArgs());
         }
 
         /// <summary>
@@ -153,6 +167,7 @@ namespace Habanero.BO
                 //return null;
             }
         }
+
 
         /// <summary>
         /// Indicates if there is a related object.

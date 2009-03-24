@@ -97,7 +97,7 @@ namespace Habanero.UI.Base
         private readonly object _value;
 
         ///<summary>
-        /// The pair of values shown in the Combo Box (i.e. the Key, Value Pair)
+        /// The pair of values shown in the Combo Box (i.e. the Key, Value Pair) <see cref="ComboPair"/>
         ///</summary>
         ///<param name="key"></param>
         ///<param name="value"></param>

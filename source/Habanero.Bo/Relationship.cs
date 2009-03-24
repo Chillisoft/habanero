@@ -289,8 +289,6 @@ namespace Habanero.BO
             get { return _relDef.RelatedObjectClassDef; }
         }
 
-        //TODO: This should be temporary code and will b removed when define reverse relationships in Firestarter and classdefs.
-
         internal void Initialise()
         {
             if (_initialised) return;
@@ -301,6 +299,7 @@ namespace Habanero.BO
         /// Do the initialisation of this relationship.
         /// </summary>
         protected abstract void DoInitialisation();
+
         ///<summary>
         /// Is the relationship initialised or not.
         ///</summary>

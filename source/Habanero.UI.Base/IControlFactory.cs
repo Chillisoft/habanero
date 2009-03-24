@@ -766,13 +766,13 @@ namespace Habanero.UI.Base
         /// Adds event handlers to the ComboBox that are suitable for the UI environment
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        void AddHandlers(LookupComboBoxMapper mapper);
+        void AddHandlers(ILookupComboBoxMapper mapper);
 
         /// <summary>
         /// Removes event handlers previously assigned to the ComboBox
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        void RemoveCurrentHandlers(LookupComboBoxMapper mapper);
+        void RemoveCurrentHandlers(ILookupComboBoxMapper mapper);
     }
 
     /// <summary>

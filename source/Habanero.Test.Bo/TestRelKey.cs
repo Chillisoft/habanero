@@ -34,6 +34,7 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
         [Test]
         public void Test_Criteria_OneProp()
@@ -100,5 +101,26 @@ namespace Habanero.Test.BO
 
         }
 
+        [Test]
+        public void Test_UpdateRelatedObject_ShouldRaiseEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            ISingleRelationship relationship = (ISingleRelationship)contactPersonTestBO.Relationships["Organisation"];
+            bool eventCalled = false;
+
+            relationship.RelKey.RelatedPropValueChanged += delegate { eventCalled = true; };
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation").OwningBOHasForeignKey);
+            Assert.IsFalse(eventCalled);
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.Organisation = organisationTestBO;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(eventCalled);
+        }
     }
 }

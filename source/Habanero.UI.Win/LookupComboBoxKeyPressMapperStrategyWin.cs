@@ -27,13 +27,13 @@ namespace Habanero.UI.Win
     /// </summary>
     internal class LookupComboBoxKeyPressMapperStrategyWin : ILookupComboBoxMapperStrategy
     {
-        private LookupComboBoxMapper _mapper;
+        private ILookupComboBoxMapper _mapper;
 
         /// <summary>
         /// Removes event handlers previously assigned to the ComboBox
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
+        public void RemoveCurrentHandlers(ILookupComboBoxMapper mapper)
         {
             _mapper = mapper;
             ComboBoxWin comboBoxWin = this.ComboBox(mapper);
@@ -47,7 +47,7 @@ namespace Habanero.UI.Win
         /// Adds event handlers to the ComboBox that are suitable for the UI environment
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void AddHandlers(LookupComboBoxMapper mapper)
+        public void AddHandlers(ILookupComboBoxMapper mapper)
         {
             ComboBoxWin comboBoxWin = this.ComboBox(mapper);
             if (comboBoxWin != null)
@@ -63,7 +63,7 @@ namespace Habanero.UI.Win
             }
         }
 
-        private ComboBoxWin ComboBox(LookupComboBoxMapper mapper)
+        private ComboBoxWin ComboBox(ILookupComboBoxMapper mapper)
         {
             ComboBoxWin comboBoxWin = null;
             IControlHabanero control = mapper.Control;

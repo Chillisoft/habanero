@@ -187,8 +187,8 @@ namespace Habanero.BO
         private readonly IDictionary<EventHandler<BOPropUpdatedEventArgs>, EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>> _propertyUpdatedHandlers = new Dictionary<EventHandler<BOPropUpdatedEventArgs>, EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>>();
 
         private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectRemoved;
-        private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectAdded;
-        private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectUpdated;
+        private event EventHandler<BOEventArgs<TBusinessObject>> _businessObjectAdded;
+        private event EventHandler<BOEventArgs<TBusinessObject>> _businessObjectUpdated;
         private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectIDUpdated;
         private event EventHandler<BOPropUpdatedEventArgs<TBusinessObject>> _BusinessObjectPropertyUpdated;
 
@@ -200,10 +200,10 @@ namespace Habanero.BO
             add {
                 EventHandler<BOEventArgs<TBusinessObject>> addedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
                 _addedHandlers[value] = addedHandler;
-                _BusinessObjectAdded += addedHandler;
+                _businessObjectAdded += addedHandler;
         }
             remove {
-                _BusinessObjectAdded -= _addedHandlers[value];
+                _businessObjectAdded -= _addedHandlers[value];
                 _addedHandlers.Remove(value);
             }
         }
@@ -215,11 +215,11 @@ namespace Habanero.BO
         {
             add
             {
-                _BusinessObjectAdded += value;
+                _businessObjectAdded += value;
             }
             remove
             {
-                _BusinessObjectAdded -=value;
+                _businessObjectAdded -=value;
             }
         }
 
@@ -267,11 +267,11 @@ namespace Habanero.BO
             {
                 EventHandler<BOEventArgs<TBusinessObject>> updatedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
                 _updatedHandlers[value] = updatedHandler;
-                _BusinessObjectUpdated += updatedHandler;
+                _businessObjectUpdated += updatedHandler;
             }
             remove
             {
-                _BusinessObjectUpdated -= _updatedHandlers[value];
+                _businessObjectUpdated -= _updatedHandlers[value];
                 _updatedHandlers.Remove(value);
             }
         }
@@ -283,11 +283,11 @@ namespace Habanero.BO
         {
             add
             {
-                _BusinessObjectUpdated += value;
+                _businessObjectUpdated += value;
             }
             remove
             {
-                _BusinessObjectUpdated -= value;
+                _businessObjectUpdated -= value;
             }
         }
 
@@ -366,9 +366,9 @@ namespace Habanero.BO
         /// <param name="bo">The business object added</param>
         private void FireBusinessObjectAdded(TBusinessObject bo)
         {
-            if (_BusinessObjectAdded != null)
+            if (_businessObjectAdded != null)
             {
-                _BusinessObjectAdded(this, new BOEventArgs<TBusinessObject>(bo));
+                _businessObjectAdded(this, new BOEventArgs<TBusinessObject>(bo));
             }
         }
 
@@ -386,9 +386,9 @@ namespace Habanero.BO
 
         private void FireBusinessObjectUpdated(TBusinessObject bo)
         {
-            if (_BusinessObjectUpdated != null)
+            if (_businessObjectUpdated != null)
             {
-                _BusinessObjectUpdated(this, new BOEventArgs<TBusinessObject>(bo));
+                _businessObjectUpdated(this, new BOEventArgs<TBusinessObject>(bo));
             }
         }
 

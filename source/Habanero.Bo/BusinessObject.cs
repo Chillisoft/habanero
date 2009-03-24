@@ -23,6 +23,9 @@ using System.Collections;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -30,14 +33,97 @@ using log4net;
 
 namespace Habanero.BO
 {
+
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
     /// This Class implements the Layer SuperType - Fowler (xxx)
     /// </summary>
-    public class BusinessObject : IBusinessObject, ISerializable
+    public class BusinessObject : IBusinessObject, ISerializable//, IXmlSerializable
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
+
+
+//        #region XMLSerialisation
+//
+//        public XmlSchema GetSchema()
+//        {
+//            return null;
+//        }
+//
+//        public void ReadXml(XmlReader r)
+//        {
+//            _attributes = new NameValueCollection();
+//            _name = r.GetAttribute("Name");
+//            while (r.MoveToNextAttribute())
+//                _attributes.Add(r.Name, r.Value);
+//
+//            r.Read();
+
+//            Initialise(ClassDef.ClassDefs[this.GetType()]);
+//            foreach (IBOProp prop in _boPropCol)
+//            {
+//                try
+//                {
+//                    prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
+//                }
+//                catch (SerializationException ex)
+//                {
+//                    if (ex.Message.Contains("Member") && ex.Message.Contains("was not found"))
+//                    {
+//                        continue;
+//                    }
+//                    throw;
+//                }
+//                catch (Exception ex)
+//                {
+//                    string message = "The Business Object " + this.ClassName + " could not be deserialised because the property " + prop.PropertyName + " raised an exception";
+//                    throw new HabaneroDeveloperException(message, message, ex);
+//                }
+//            }
+//            _boStatus = (BOStatus)info.GetValue("Status", typeof(BOStatus));
+//            _boStatus.BusinessObject = this;
+//            AddToObjectManager();
+//        }
+//
+//        public void WriteXml(XmlWriter w)
+//        {
+//        // TODO_ - Mark 03 Feb 2009 : The only detail that is recorded off of a BOProp is the current value. Is this correct?
+//        //      I noticed that the prop values that have come out of a seriaizable context are all going to be the persisted values as well.
+//        /// <summary>
+//        /// Constructs an <see cref="IBusinessObject"/> from a serialised source.
+//        /// </summary>
+//        /// <param name="info"></param>
+//        /// <param name="context"></param>
+//        protected BusinessObject(SerializationInfo info, StreamingContext context)
+//        {
+//
+//        }
+//        /// <summary>
+//        /// Gets the Objects data for the purposes of serialisation.
+//        /// </summary>
+//        /// <param name="info"></param>
+//        /// <param name="context"></param>
+//        [SecurityPermissionAttribute(SecurityAction.Demand,
+//            SerializationFormatter = true)]
+//        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+//        {
+//            foreach (IBOProp prop in _boPropCol)
+//            {
+//                w.WriteAttributeString(prop.PropertyName, Convert.ToString(prop.Value));
+//            }
+//            this.Status.WriteXML(w);
+//        }
+//        }
+//        			w.WriteAttributeString("Name", _name);
+//			foreach (string key in _attributes.Keys)
+//			{
+//				string value = _attributes[key];
+//				w.WriteAttributeString(key,value);
+//			}
+//        #endregion
+
+
 
         #region IBusinessObject Members
 

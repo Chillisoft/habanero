@@ -151,7 +151,7 @@ namespace Habanero.UI.Base
             {
                 RemoveCurrentBOPropHandlers();
                 _businessObject = value;
-                if (value != null) value.IsValid();//This forces the object to do validation.
+                if (value != null) value.IsValid();//This forces the object to do validation so that the error provider is filled correctly.
 
                 if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
                 {
@@ -229,7 +229,21 @@ namespace Habanero.UI.Base
 //            }
             return _boProp;
         }
+        protected virtual bool IsPropertyVirtual()
+        {
+            return IsPropertyViaRelationship() || IsPropertyReflective();
+        }
 
+        private bool IsPropertyViaRelationship()
+        {
+            return _propertyName.IndexOf(".") != -1;
+        }
+
+
+        private bool IsPropertyReflective()
+        {
+            return _propertyName.IndexOf("-") != -1;
+        }
 
         /// <summary>
         /// Updates the isEditable flag and updates 
@@ -238,15 +252,13 @@ namespace Habanero.UI.Base
         private void UpdateIsEditable()
         {
             bool virtualPropertySetExists = false;
-            if (_businessObject != null && _propertyName.IndexOf(".") == -1 && _propertyName.IndexOf("-") != -1)
+            if (_businessObject != null && IsPropertyReflective()  &&  !IsPropertyViaRelationship())
             {
-                string virtualPropName = _propertyName.Substring(1, _propertyName.Length - 2);
-                PropertyInfo propertyInfo =
-                    ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
-                virtualPropertySetExists = propertyInfo != null && propertyInfo.CanWrite;
+                virtualPropertySetExists = DoesVirtualPropertyHaveSetter();
             }
             _isEditable = !_isReadOnly && _businessObject != null
                           && (CurrentBOProp() != null || virtualPropertySetExists);
+
             //TODO: make this support single-table-inheritance.
             //if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsGuidObjectID &&
             //    _businessObject.ID.Contains(_propertyName) &&
@@ -259,31 +271,7 @@ namespace Habanero.UI.Base
                 if (_businessObject != null)
                     if (CurrentBOProp() != null)
                     {
-                        IBOProp boProp = CurrentBOProp();
-                        IPropDef propDef = boProp.PropDef;
-                        switch (propDef.ReadWriteRule)
-                        {
-                            case PropReadWriteRule.ReadOnly:
-                                _isEditable = false;
-                                break;
-                            case PropReadWriteRule.WriteOnce:
-                                object persistedPropertyValue = boProp.PersistedPropertyValue;
-                                if (persistedPropertyValue is string)
-                                {
-                                    _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
-                                }
-                                else
-                                {
-                                    _isEditable = persistedPropertyValue == null;
-                                }
-                                break;
-                            case PropReadWriteRule.WriteNew:
-                                _isEditable = _businessObject.Status.IsNew;
-                                break;
-                            case PropReadWriteRule.WriteNotNew:
-                                _isEditable = !_businessObject.Status.IsNew;
-                                break;
-                        }
+                        CheckReadWriteRules();
                     }
             }
             if (_isEditable)
@@ -300,6 +288,44 @@ namespace Habanero.UI.Base
             _control.Enabled = _isEditable;
         }
 
+        private void CheckReadWriteRules()
+        {
+            IBOProp boProp = CurrentBOProp();
+            IPropDef propDef = boProp.PropDef;
+            switch (propDef.ReadWriteRule)
+            {
+                case PropReadWriteRule.ReadOnly:
+                    _isEditable = false;
+                    break;
+                case PropReadWriteRule.WriteOnce:
+                    object persistedPropertyValue = boProp.PersistedPropertyValue;
+                    if (persistedPropertyValue is string)
+                    {
+                        _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
+                    }
+                    else
+                    {
+                        _isEditable = persistedPropertyValue == null;
+                    }
+                    break;
+                case PropReadWriteRule.WriteNew:
+                    _isEditable = _businessObject.Status.IsNew;
+                    break;
+                case PropReadWriteRule.WriteNotNew:
+                    _isEditable = !_businessObject.Status.IsNew;
+                    break;
+            }
+        }
+
+        private bool DoesVirtualPropertyHaveSetter()
+        {
+            string virtualPropName = _propertyName.Substring(1, _propertyName.Length - 2);
+            PropertyInfo propertyInfo =
+                ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
+            bool virtualPropertySetExists = propertyInfo != null && propertyInfo.CanWrite;
+            return virtualPropertySetExists;
+        }
+
 
         /// <summary>
         /// Handler to carry out changes where the value of a business
@@ -311,7 +337,6 @@ namespace Habanero.UI.Base
         {
             UpdateControlValueFromBusinessObject();
         }
-
 
         /// <summary>
         /// Creates a new control mapper of a specified type.  If no 'mapperTypeName'

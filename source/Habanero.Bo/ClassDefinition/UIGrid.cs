@@ -170,6 +170,8 @@ namespace Habanero.BO.ClassDefinition
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
+            // If both are null, or both are same instance, return true.
+            if (ReferenceEquals(this, obj)) return true;
 
             UIGrid otherUiGrid = obj as UIGrid;
             if (otherUiGrid == null) return false;
@@ -242,6 +244,28 @@ namespace Habanero.BO.ClassDefinition
                 newUIGrid.Add(column.Clone());
             }
             return newUIGrid;
+        }
+        /// <summary>
+        /// Determines whether this object is equal to obj.
+        /// </summary>
+        /// <param name="obj">The object being compared to</param>
+        /// <returns></returns>
+        public bool Equals(UIGrid obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return this.Equals((object) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = (_list != null ? _list.GetHashCode() : 0);
+                result = (result * 397) ^ (SortColumn != null ? SortColumn.GetHashCode() : 0);
+                result = (result * 397) ^ (FilterDef != null ? FilterDef.GetHashCode() : 0);
+                return result;
+            }
         }
     }
 }

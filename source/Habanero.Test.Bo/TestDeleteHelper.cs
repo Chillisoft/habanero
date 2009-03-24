@@ -353,7 +353,7 @@ namespace Habanero.Test.BO
 
         private void AddChildIfNeeded(string childName, RelationshipCol relationshipCol)
         {
-            RelationshipDefCol relationshipDefCol = ClassDef.RelationshipDefCol;
+            IRelationshipDefCol relationshipDefCol = ClassDef.RelationshipDefCol;
             if (relationshipDefCol.Contains(childName))
             {
                 IRelationshipDef relationshipDef = relationshipDefCol[childName];

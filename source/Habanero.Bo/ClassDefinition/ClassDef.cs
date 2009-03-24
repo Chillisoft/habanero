@@ -166,7 +166,7 @@ namespace Habanero.BO.ClassDefinition
                         PrimaryKeyDef primaryKeyDef,
                         IPropDefCol propDefCol,
                         KeyDefCol keyDefCol,
-                        RelationshipDefCol relationshipDefCol)
+                        IRelationshipDefCol relationshipDefCol)
             :
                 this(
                 classType, null, null, null, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol,
@@ -178,7 +178,7 @@ namespace Habanero.BO.ClassDefinition
         /// As before, but excludes the table name
         /// </summary>
         public ClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol,
-                        RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
+                        IRelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(assemblyName, className, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
         {
         }
@@ -187,7 +187,7 @@ namespace Habanero.BO.ClassDefinition
         /// As before, but excludes the table name
         /// </summary>
         public ClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol,
-                        KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
+                        KeyDefCol keyDefCol, IRelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(
                 null, assemblyName, className, null, displayName, primaryKeyDef, propDefCol, keyDefCol,
                 relationshipDefCol, uiDefCol)
@@ -195,7 +195,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         private ClassDef(Type classType, string assemblyName, string className, string tableName, string displayName,
-                         PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol,
+                         PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, IRelationshipDefCol relationshipDefCol,
                          UIDefCol uiDefCol)
         {
             if (classType != null)
@@ -219,7 +219,7 @@ namespace Habanero.BO.ClassDefinition
                 }
             }
             _keysCol = keyDefCol;
-            _relationshipDefCol = relationshipDefCol;
+            _relationshipDefCol = (RelationshipDefCol) relationshipDefCol;
             _uiDefCol = uiDefCol ?? new UIDefCol();
             _uiDefCol.ClassDef = this;
         }
@@ -418,10 +418,10 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// The collection of relationship definitions
         /// </summary>
-        public RelationshipDefCol RelationshipDefCol
+        public IRelationshipDefCol RelationshipDefCol
         {
             get { return _relationshipDefCol; }
-            set { _relationshipDefCol = value; }
+            set { _relationshipDefCol = (RelationshipDefCol) value; }
         }
 
         /// <summary>

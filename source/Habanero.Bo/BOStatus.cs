@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Xml;
+using System.Xml.Schema;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
@@ -30,6 +32,32 @@ namespace Habanero.BO
     public class BOStatus : IBOStatus
     {
         private IBusinessObject _bo;
+        private Statuses _flagState = Statuses.isNew;
+
+//        public XmlSchema GetSchema()
+//                {
+//                    return null;
+//                }
+//
+//        public void ReadXml(XmlReader r)
+//                {
+////                    _attributes = new NameValueCollection();
+////                    _name = r.GetAttribute("Name");
+////                    while (r.MoveToNextAttribute())
+////                        _attributes.Add(r.Name, r.Value);
+////        
+////                    r.Read();
+//                }
+//
+//        public void WriteXml(XmlWriter w)
+//                {
+////                    w.WriteAttributeString("Status", _flagState);
+////                    foreach (string key in _attributes.Keys)
+////                    {
+////                        string value = _attributes[key];
+////                        w.WriteAttributeString(key, value);
+////                    }
+//                }
 
         ///<summary>
         ///</summary>
@@ -39,8 +67,6 @@ namespace Habanero.BO
             if (bo == null) throw new ArgumentNullException("bo");
             _bo = bo;
         }
-
-        private Statuses _flagState = Statuses.isNew;
 
         /// <summary>
         /// An enumeration that describes the object's state

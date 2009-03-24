@@ -17,27 +17,29 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.Relationship
+namespace Habanero.Test.BO
 {
 
     [TestFixture]
-    public class RelPropTester
+    public class TestRelProp
     {
         private RelPropDef mRelPropDef;
         private PropDefCol mPropDefCol;
 
         [SetUp]
-        public void init()
+        public void SetUp()
         {
             PropDef propDef = new PropDef("Prop", typeof(string), PropReadWriteRule.ReadWrite, null);
             mRelPropDef = new RelPropDef(propDef, "PropName");
             mPropDefCol = new PropDefCol();
             mPropDefCol.Add(propDef);
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [Test]
@@ -67,6 +69,53 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(relPropDef.RelatedClassPropName, relProp.RelatedClassPropName);
 
             Assert.IsFalse(relProp.IsNull);
+        }
+
+        [Test]
+        public void Test_UpdateRelatedObject_ShouldRaiseEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            ISingleRelationship relationship = (ISingleRelationship)contactPersonTestBO.Relationships["Organisation"];
+            bool eventCalled = false;
+
+            IRelKey key = relationship.RelKey;
+            IRelProp relProp = key[0];
+            relProp.PropValueUpdated += delegate { eventCalled = true; };
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation").OwningBOHasForeignKey);
+            Assert.IsFalse(eventCalled);
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.Organisation = organisationTestBO;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(eventCalled);
+        }
+        [Test]
+        public void Test_UpdatePropValue_ShouldRaiseEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            ISingleRelationship relationship = (ISingleRelationship)contactPersonTestBO.Relationships["Organisation"];
+            bool eventCalled = false;
+
+            IRelKey key = relationship.RelKey;
+            IRelProp relProp = key[0];
+            IBOProp prop = relProp.BOProp;
+            relProp.PropValueUpdated += delegate { eventCalled = true; };
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation").OwningBOHasForeignKey);
+            Assert.IsFalse(eventCalled);
+            //---------------Execute Test ----------------------
+            prop.Value = Guid.NewGuid();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(eventCalled);
         }
     }
 }

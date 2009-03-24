@@ -17,12 +17,14 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Xml.Serialization;
+
 namespace Habanero.Base
 {
     ///<summary>
     /// The Current Status of a Business Object.
     ///</summary>
-    public interface IBOStatus
+    public interface IBOStatus//: IXmlSerializable
     {
         /// <summary>
         /// Indicates if the business object is new

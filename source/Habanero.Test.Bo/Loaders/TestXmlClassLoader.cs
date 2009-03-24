@@ -394,7 +394,7 @@ namespace Habanero.Test.BO.Loaders
 					</relationship>
 				</class>
 			");
-            RelationshipDefCol relDefCol = def.RelationshipDefCol;
+            IRelationshipDefCol relDefCol = def.RelationshipDefCol;
             Assert.AreEqual(1, relDefCol.Count, "There should be one relationship def from the given xml definition");
             Assert.IsNotNull(relDefCol["TestRelationship"],
                              "'TestRelationship' should be the name of the relationship created");
@@ -505,7 +505,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNotNull(def.SuperClassDef);
             IClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
             Assert.AreSame(parentDef, superClassDef);
-            RelationshipDefCol relDefCol = def.RelationshipDefCol;
+            IRelationshipDefCol relDefCol = def.RelationshipDefCol;
             Assert.AreEqual(1, relDefCol.Count, "There should be one relationship def from the given xml definition");
             Assert.IsNotNull(relDefCol["TestRelationship"], "'TestRelationship' should be the name of the relationship created");
         }

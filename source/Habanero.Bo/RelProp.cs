@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
@@ -32,6 +33,11 @@ namespace Habanero.BO
         private readonly RelPropDef _relPropDef;
 
         /// <summary>
+        /// The event that is raised when the <see cref="IRelProp.BOProp"/>'s value is changed
+        /// </summary>
+        public event EventHandler PropValueUpdated;
+
+        /// <summary>
         /// Constructor to initialise a new property
         /// </summary>
         /// <param name="mRelPropDef">The relationship property definition</param>
@@ -40,6 +46,14 @@ namespace Habanero.BO
         {
             this._relPropDef = mRelPropDef;
             _boProp = lBoProp;
+            lBoProp.Updated += (sender, e) => FirePropValueUpdatedEvent();
+        }
+
+        private void FirePropValueUpdatedEvent()
+        {
+            if (this.PropValueUpdated == null) return;
+
+            this.PropValueUpdated(this, new EventArgs());
         }
 
         /// <summary>
@@ -65,6 +79,8 @@ namespace Habanero.BO
         {
             get { return _boProp == null || _boProp.Value == null; }
         }
+
+
 
         /// <summary>
         /// Returns the related property's expression

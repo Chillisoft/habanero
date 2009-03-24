@@ -24,10 +24,11 @@ using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
+    
     /// <summary>
     /// Manages a collection of relationship definitions
     /// </summary>
-    public class RelationshipDefCol : IEnumerable<IRelationshipDef>
+    public class RelationshipDefCol : IRelationshipDefCol
     {
         private readonly Dictionary<string, IRelationshipDef> _relDefs;
 
@@ -156,7 +157,7 @@ namespace Habanero.BO.ClassDefinition
         ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
         ///</returns>
         ///<filterpriority>1</filterpriority>
-        IEnumerator<IRelationshipDef> IEnumerable<IRelationshipDef>.GetEnumerator()
+       public IEnumerator<IRelationshipDef> GetEnumerator()
 		{
 			return _relDefs.Values.GetEnumerator();
 		}

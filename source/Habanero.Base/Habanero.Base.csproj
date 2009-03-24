@@ -124,6 +124,7 @@
     <Compile Include="IExpression.cs" />
     <Compile Include="IParameterSQLInfo.cs" />
     <Compile Include="IRelationshipDef.cs" />
+    <Compile Include="IRelationshipDefCol.cs" />
     <Compile Include="IRelKeyDef.cs" />
     <Compile Include="IRelPropDef.cs" />
     <Compile Include="ISqlFormatter.cs" />

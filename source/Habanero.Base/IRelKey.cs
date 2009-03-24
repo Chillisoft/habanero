@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 
 namespace Habanero.Base
@@ -79,5 +80,9 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns a Criteria object</returns>
         Criteria Criteria { get; }
+        /// <summary>
+        /// Event raised when the value for one of the Properties (<see cref="IRelProp"/>) for this <see cref="IRelKey"/> is changed
+        /// </summary>
+        event EventHandler RelatedPropValueChanged;
     }
 }

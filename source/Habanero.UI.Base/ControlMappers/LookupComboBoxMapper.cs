@@ -25,9 +25,37 @@ using Habanero.BO;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Wraps a ComboBox in order to display and capture a lookup property of the business object 
+    /// An interface for a mapper that <br/>
+    /// Wraps/Decorates a ComboBox in order to display and capture a lookup property of the business object 
     /// </summary>
-    public class LookupComboBoxMapper : ComboBoxMapper
+    public interface ILookupComboBoxMapper
+    {
+        /// <summary>
+        /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
+        /// </summary>
+        EventHandler SelectedIndexChangedHandler { get; set; }
+
+        /// <summary>
+        /// Returns the control being mapped
+        /// </summary>
+        IControlHabanero Control { get; }
+
+        /// <summary>
+        /// Updates the properties on the represented business object
+        /// </summary>
+        void ApplyChangesToBusinessObject();
+
+        /// <summary>
+        /// Updates the value on the control from the corresponding property
+        /// on the represented <see cref="IControlMapper.BusinessObject"/>
+        /// </summary>
+        void UpdateControlValueFromBusinessObject();
+    }
+
+    /// <summary>
+    /// Wraps/Decorates a ComboBox in order to display and capture a lookup property of the business object 
+    /// </summary>
+    public class LookupComboBoxMapper : ComboBoxMapper, ILookupComboBoxMapper
     {
         private ILookupComboBoxMapperStrategy _mapperStrategy;
 
@@ -40,9 +68,6 @@ namespace Habanero.UI.Base
         /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
         /// </summary>
         public EventHandler SelectedIndexChangedHandler { get; set; }
-        //private readonly IControlFactory _controlFactory;
-        //private bool _allowRightClick = true;
-        //private bool _isRightClickInitialised;
 
         /// <summary>
         /// Constructor to initialise the mapper
@@ -54,21 +79,9 @@ namespace Habanero.UI.Base
         public LookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
             : base(cbx, propName, isReadOnly, factory)
         {
-            //_controlFactory = controlFactory;
             _comboBox = cbx;
             _mapperStrategy = factory.CreateLookupComboBoxDefaultMapperStrategy();
             _mapperStrategy.AddHandlers(this);
-            //_mapperStrategy.AddItemSelectedEventHandler(this);
-
-            ////_comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            //_comboBox.SelectedIndexChanged += ValueChangedHandler;
-            //_comboBox.KeyPress += delegate(object sender, KeyPressEventArgs e)
-            //                          {
-            //                              if (e.KeyChar == 13)
-            //                              {
-            //                                  ValueChangedHandler(sender, e);
-            //                              }
-            //                          };
         }
 
         /// <summary>
@@ -112,7 +125,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Gets or sets the strategy assigned to this mapper
+        /// Gets or sets the strategy assigned to this mapper <see cref="ILookupComboBoxMapperStrategy"/>
         /// </summary>
         public ILookupComboBoxMapperStrategy MapperStrategy
         {
@@ -175,51 +188,16 @@ namespace Habanero.UI.Base
                 foreach (KeyValuePair<string, string> pair in _collection)
                 {
                     if (pair.Value == null) continue;
-                    //TODO Brett: Removed with new lookup list need to test if still works reliably
-//                    if (pair.Value is IBusinessObject)
-//                    {
-//                        BusinessObject pairValueBo = (BusinessObject) pair.Value;
-//                        if (pairValueBo.ClassDef.PrimaryKeyDef.IsGuidObjectID
-//                            && pairValueBo.ID.GetAsGuid().Equals(boPropertyValue))
-//                        {
-//                            _comboBox.SelectedItem = pair.Key;
-//                            break;
-//                        }
-//                        if (boPropertyValue != null &&
-//                            String.Compare(pairValueBo.ID.ToString(), boPropertyValue.ToString()) == 0)
-//                        {
-//                            _comboBox.SelectedItem = pair.Key;
-//                            break;
-//                        }
-//                        if (boPropertyValue != null &&
-//                            pairValueBo.ID[0].Value != null &&
-//                            String.Compare(pairValueBo.ID[0].Value.ToString(), boPropertyValue.ToString()) == 0)
-//                        {
-//                            _comboBox.SelectedItem = pair.Key;
-//                            break;
-//                        }
-//                    }
 
                     bool found = false;
                     if (pair.Value != null)
                     {
                         found = pair.Value.Equals(Convert.ToString(boPropertyValue));
-//                        //TODO Brett 09 Jan 2009: Removed with new lookup list need to test if still works reliably.
-//                        if (pair.Value is string)
-//                        {
-//                            found = pair.Value.Equals(Convert.ToString(boPropertyValue));
-//                        }
-//                        else
-//                        {
-//                            found = pair.Value.Equals(boPropertyValue);
-//                        }
                     }
                     if (!found) continue;
                     _comboBox.SelectedItem = pair.Key;
                     break;
                 }
-                //_comboBox.SelectionStart = 0;
-                //_comboBox.SelectionLength = 0;
             }
             catch (ObjectDisposedException)
             {
@@ -290,9 +268,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="col">The look up list retrieved from the businessobject that will be customised</param>
         protected virtual void CustomiseLookupList(Dictionary<string, string> col)
-        {
-            
-        }
+        {}
 
         /// <summary>
         /// Returns the property value of the business object being mapped
@@ -300,7 +276,7 @@ namespace Habanero.UI.Base
         /// <returns>Returns the property value in appropriate object form</returns>
         protected override object GetPropertyValue()
         {
-            if (_propertyName.IndexOf(".") != -1 || _propertyName.IndexOf("-") != -1)
+            if (IsPropertyVirtual())
             {
                 return base.GetPropertyValue();
             }
@@ -308,6 +284,7 @@ namespace Habanero.UI.Base
                 ? null
                 : _businessObject.GetPropertyValueString(_propertyName);
         }
+
 
         /// <summary>
         /// Sets up the items to be listed in the ComboBox

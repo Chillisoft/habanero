@@ -502,9 +502,14 @@ namespace Habanero.UI.Base
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectAddedHandler(object sender, BOEventArgs e)
         {
-            //Soriya - Think this might be needed - if (e.BusinessObject.Status.IsDeleted) return;
-            if (this.GetTabPage(e.BusinessObject) != null)return;
-            AddTabPage(e.BusinessObject);
+            IBusinessObject busObject = e.BusinessObject;
+            if (HasTabPage(busObject))return;
+            AddTabPage(busObject);
+        }
+
+        private bool HasTabPage(IBusinessObject busObject)
+        {
+            return this.GetTabPage(busObject) != null;
         }
 
         #endregion

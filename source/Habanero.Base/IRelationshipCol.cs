@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
@@ -53,8 +52,7 @@ namespace Habanero.Base
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship specified is a multiple relationship, when a
         /// single one was expected</exception>
-        T GetRelatedObject<T>(string relationshipName)
-            where T : class, IBusinessObject, new();
+        T GetRelatedObject<T>(string relationshipName) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Returns a collection of business objects that are connected to
@@ -94,7 +92,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="name">The relationship name</param>
         /// <returns>The Relationship object</returns>
-        IRelationship this[string name] { get;}
+        IRelationship this[string name] { get; }
 
         ///<summary>
         /// Determines whether the Relationship Collections contains the specified Relationship

@@ -25,7 +25,7 @@ using Habanero.BO;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Wraps a <see cref="IComboBox"/> in order to display and capture a lookup property of the business object 
+    /// Wraps/Decorates a <see cref="IComboBox"/> in order to display and capture a lookup property of the business object 
     /// </summary>
     public abstract class ComboBoxMapper : ControlMapper
     {

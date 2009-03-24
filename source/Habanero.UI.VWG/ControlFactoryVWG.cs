@@ -1224,7 +1224,7 @@ namespace Habanero.UI.VWG
         /// Removes event handlers previously assigned to the ComboBox
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
+        public void RemoveCurrentHandlers(ILookupComboBoxMapper mapper)
         {
             throw new NotImplementedException();
         }
@@ -1233,7 +1233,7 @@ namespace Habanero.UI.VWG
         /// Adds event handlers to the ComboBox that are suitable for the UI environment
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void AddHandlers(LookupComboBoxMapper mapper)
+        public void AddHandlers(ILookupComboBoxMapper mapper)
         {
             throw new NotImplementedException();
         }
@@ -1253,7 +1253,7 @@ namespace Habanero.UI.VWG
         /// Removes event handlers previously assigned to the ComboBox
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
+        public void RemoveCurrentHandlers(ILookupComboBoxMapper mapper)
         {
         }
 
@@ -1261,13 +1261,13 @@ namespace Habanero.UI.VWG
         /// Adds event handlers to the ComboBox that are suitable for the UI environment
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void AddHandlers(LookupComboBoxMapper mapper)
+        public void AddHandlers(ILookupComboBoxMapper mapper)
         {
         }
 
         #endregion
 
-        public void AddItemSelectedEventHandler(LookupComboBoxMapper mapper)
+        public void AddItemSelectedEventHandler(ILookupComboBoxMapper mapper)
         {
         }
     }

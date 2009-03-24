@@ -144,7 +144,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNotNull(classDefTestClass);
             Assert.IsNotNull(classDefInherited.SuperClassDef);
             Assert.IsNull(classDefInherited.PrimaryKeyDef);
-            RelationshipDefCol relDefCol = classDefInherited.RelationshipDefCol;
+            IRelationshipDefCol relDefCol = classDefInherited.RelationshipDefCol;
             Assert.AreEqual(1, relDefCol.Count, "There should be one relationship def from the given xml definition");
             Assert.IsNotNull(relDefCol["TestRelationship"], "'TestRelationship' should be the name of the relationship created");
         }

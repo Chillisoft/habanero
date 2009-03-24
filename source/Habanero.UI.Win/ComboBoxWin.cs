@@ -39,7 +39,7 @@ namespace Habanero.UI.Win
         {
             InitializeComponent();
             _manager = new ComboBoxManager(this);
-           }
+        }
 
         /// <summary>
         /// Gets or sets the anchoring style.
@@ -47,9 +47,8 @@ namespace Habanero.UI.Win
         /// <value></value>
         Base.AnchorStyles IControlHabanero.Anchor
         {
-            
-            get { return (Base.AnchorStyles)base.Anchor; }
-            set { base.Anchor = (System.Windows.Forms.AnchorStyles)value; }
+            get { return (Base.AnchorStyles) base.Anchor; }
+            set { base.Anchor = (System.Windows.Forms.AnchorStyles) value; }
         }
 
         /// <summary>
@@ -59,7 +58,8 @@ namespace Habanero.UI.Win
         public new IComboBoxObjectCollection Items
         {
             get
-            {   IComboBoxObjectCollection objectCollection = new ComboBoxObjectCollectionWin(base.Items);
+            {
+                IComboBoxObjectCollection objectCollection = new ComboBoxObjectCollectionWin(base.Items);
                 return objectCollection;
             }
         }
@@ -69,15 +69,8 @@ namespace Habanero.UI.Win
         /// </summary>
         object IComboBox.SelectedItem
         {
-            get
-            {
-                return _manager.GetSelectedItem(this.SelectedItem);
-
-            }
-            set
-            {
-                this.SelectedItem = _manager.GetItemToSelect(value);
-            }
+            get { return _manager.GetSelectedItem(this.SelectedItem); }
+            set { this.SelectedItem = _manager.GetItemToSelect(value); }
         }
 
         /// <summary>
@@ -86,14 +79,8 @@ namespace Habanero.UI.Win
         /// </summary>
         object IListControl.SelectedValue
         {
-            get
-            {
-                return _manager.GetSelectedValue(this.SelectedItem);
-            }
-            set
-            {
-                SelectedItem = _manager.GetValueToSelect(value);
-            }
+            get { return _manager.GetSelectedValue(this.SelectedItem); }
+            set { SelectedItem = _manager.GetValueToSelect(value); }
         }
 
         Base.AutoCompleteMode IComboBox.AutoCompleteMode
@@ -216,7 +203,6 @@ namespace Habanero.UI.Win
             {
                 return _items.GetEnumerator();
             }
-
         }
 
         /// <summary>

@@ -52,7 +52,7 @@ namespace Habanero.BO.ClassDefinition
                 propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
                 List<string> relNames = new List<string>();
                 relNames.AddRange(relationshipName.Split(new string[]{"|"}, StringSplitOptions.RemoveEmptyEntries));
-                RelationshipDefCol relationshipDefCol = classDef.RelationshipDefCol;
+                IRelationshipDefCol relationshipDefCol = classDef.RelationshipDefCol;
                 IPropDef propDef = null;
                 foreach (string relName in relNames)
                 {

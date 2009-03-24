@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+
 namespace Habanero.Base
 {
     /// <summary>
@@ -52,5 +54,10 @@ namespace Habanero.Base
         /// Indicates if the property is null
         /// </summary>
         bool IsNull { get; }
+
+        /// <summary>
+        /// The event that is raised when the <see cref="IRelProp.BOProp"/>'s value is changed
+        /// </summary>
+        event EventHandler PropValueUpdated;
     }
 }

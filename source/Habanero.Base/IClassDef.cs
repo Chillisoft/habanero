@@ -170,6 +170,11 @@ namespace Habanero.Base
         string ClassNameExcludingTypeParameter { get; }
 
         /// <summary>
+        /// The collection of relationship definitions
+        /// </summary>
+        IRelationshipDefCol RelationshipDefCol { get; set; }
+
+        /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance
         /// any inheritance structure.
         /// </summary>

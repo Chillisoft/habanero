@@ -48,7 +48,7 @@ namespace Habanero.BO
 		    reason = "";
 
 		    ClassDef classDef = (ClassDef) bo.ClassDef;
-		    RelationshipDefCol relationshipDefCol = classDef.RelationshipDefCol;
+		    IRelationshipDefCol relationshipDefCol = classDef.RelationshipDefCol;
 			MatchList listOfPaths = FindPreventDeleteRelationships(relationshipDefCol);
 			Dictionary<string, int> results = new Dictionary<string, int>();
 			CheckCanDeleteSafe(bo, new List<IBusinessObject>(), listOfPaths, "", ref results);
@@ -143,7 +143,7 @@ namespace Habanero.BO
 		/// </summary>
 		/// <param name="relationshipDefCol"></param>
 		/// <returns></returns>
-		public static MatchList FindPreventDeleteRelationships(RelationshipDefCol relationshipDefCol)
+		public static MatchList FindPreventDeleteRelationships(IRelationshipDefCol relationshipDefCol)
 		{
 			return FindRelationships<MultipleRelationshipDef>(relationshipDefCol, PreventDeleteRelationshipCondition);
 		}
@@ -158,16 +158,16 @@ namespace Habanero.BO
         /// <param name="relationshipDefCol"></param>
         /// <param name="matchesConditionDelegate"></param>
         /// <returns></returns>
-		public static MatchList FindRelationships<TRelationshipDef>(RelationshipDefCol relationshipDefCol,
+		public static MatchList FindRelationships<TRelationshipDef>(IRelationshipDefCol relationshipDefCol,
 			MatchesConditionDelegate<TRelationshipDef> matchesConditionDelegate)
 			where TRelationshipDef : RelationshipDef
 		{
-			return FindRelationshipsSafe(relationshipDefCol, matchesConditionDelegate, new List<RelationshipDefCol>());
+			return FindRelationshipsSafe(relationshipDefCol, matchesConditionDelegate, new List<IRelationshipDefCol>());
 		}
 
 
-		private static MatchList FindRelationshipsSafe<TRelationshipDef>(RelationshipDefCol relationshipDefCol,
-			MatchesConditionDelegate<TRelationshipDef> matchesConditionDelegate, List<RelationshipDefCol> alreadyChecked)
+		private static MatchList FindRelationshipsSafe<TRelationshipDef>(IRelationshipDefCol relationshipDefCol,
+			MatchesConditionDelegate<TRelationshipDef> matchesConditionDelegate, List<IRelationshipDefCol> alreadyChecked)
 			where TRelationshipDef : RelationshipDef
 		{
 			MatchList listOfPaths = new MatchList();
@@ -175,7 +175,7 @@ namespace Habanero.BO
             if (relationshipDefCol == null) return listOfPaths;
 			if (alreadyChecked.Contains(relationshipDefCol)) return listOfPaths;
 			alreadyChecked.Add(relationshipDefCol);
-			foreach (RelationshipDef relationshipDef in relationshipDefCol)
+			foreach (IRelationshipDef relationshipDef in relationshipDefCol)
 			{
 				string relationshipName = relationshipDef.RelationshipName;
 				TRelationshipDef castedRelationshipDef =

@@ -60,8 +60,7 @@ namespace Habanero.BO
         /// <param name="lBOPropCol"></param>
         protected MultipleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
-        {
-        }
+        {}
 
         internal abstract IBusinessObjectCollection GetLoadedBOColInternal();
     }

@@ -832,6 +832,33 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(contactPersonTestBO.Props["OrganisationID"].IsDirty, "This prop should be updated");
             Assert.AreEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
         }
+
+        [Test]
+        public void Test_UpdateRelatedObject_ShouldRaiseEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+                    ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            ISingleRelationship relationship = (ISingleRelationship)contactPersonTestBO.Relationships["Organisation"];
+            bool eventCalled = false;
+            relationship.RelatedBusinessObjectChanged += delegate { eventCalled = true; };
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation").OwningBOHasForeignKey);
+            Assert.IsFalse(eventCalled);
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.Organisation = organisationTestBO;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(eventCalled);
+            Assert.IsTrue(contactPersonTestBO.Props["OrganisationID"].IsDirty, "This prop should be updated");
+            Assert.AreEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
+        }
+
+
+
+
 //        [Test]
 //        public void Test_UpdateUsingIDRelatedObjectNoReverseRelationship_UnReferenced()
 //        {
