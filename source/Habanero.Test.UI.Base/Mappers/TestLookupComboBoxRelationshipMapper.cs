@@ -16,9 +16,6 @@ namespace Habanero.Test.UI.Base.Mappers
     [TestFixture]
     public class TestRelationshipComboBoxMapperVWG
     {
-        protected const string LOOKUP_ITEM_2 = "Test2";
-        protected const string LOOKUP_ITEM_1 = "Test1";
-        protected DataStoreInMemory _store;
         protected IControlFactory _controlFactory;
         private ClassDef _cpClassDef;
         private ClassDef _orgClassDef;
@@ -34,19 +31,17 @@ namespace Habanero.Test.UI.Base.Mappers
             _controlFactory = new ControlFactoryVWG();
             GlobalUIRegistry.ControlFactory = _controlFactory;
         }
-#pragma warning disable 168
+
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
             CreateControlFactory();
-            _store = new DataStoreInMemory();
-            BORegistry.DataAccessor = new DataAccessorInMemory(_store);
-            Dictionary<string, string> collection = Sample.BOLookupCollection;
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             _cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             _orgClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
-#pragma warning restore 168
 
         [Test]
         public void Test_Constructor()
@@ -56,32 +51,12 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Execute Test ----------------------
             const string relationshipName = "Organisation";
             RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper
-                (cmbox, _cpClassDef, relationshipName, false, GetControlFactory());
+                (cmbox, relationshipName, false, GetControlFactory());
             //---------------Test Result -----------------------
             Assert.AreSame(cmbox, mapper.Control);
             Assert.AreSame(relationshipName, mapper.RelationshipName);
             Assert.AreEqual(false, mapper.IsReadOnly);
             Assert.AreSame(GetControlFactory(), mapper.ControlFactory);
-        }
-
-        [Test]
-        public void Test_Constructor_ClassDefNull_ShouldRaiseError()
-        {
-            //---------------Set up test pack-------------------
-            IComboBox cmbox = GetControlFactory().CreateComboBox();
-            //---------------Execute Test ----------------------
-            const string relationshipName = "RelationshipDoesNotExist";
-            try
-            {
-                new RelationshipComboBoxMapper(cmbox, null, relationshipName, false, GetControlFactory());
-                Assert.Fail("expected ArgumentNullException");
-            }
-                //---------------Test Result -----------------------
-            catch (ArgumentNullException ex)
-            {
-                StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("classDef", ex.ParamName);
-            }
         }
 
         [Test]
@@ -92,7 +67,7 @@ namespace Habanero.Test.UI.Base.Mappers
             const string relationshipName = "RelationshipDoesNotExist";
             try
             {
-                new RelationshipComboBoxMapper(null, _cpClassDef, relationshipName, false, GetControlFactory());
+                new RelationshipComboBoxMapper(null, relationshipName, false, GetControlFactory());
                 Assert.Fail("expected ArgumentNullException");
             }
                 //---------------Test Result -----------------------
@@ -112,7 +87,7 @@ namespace Habanero.Test.UI.Base.Mappers
             const string relationshipName = "RelationshipDoesNotExist";
             try
             {
-                new RelationshipComboBoxMapper(cmbox, _cpClassDef, relationshipName, false, null);
+                new RelationshipComboBoxMapper(cmbox, relationshipName, false, null);
                 Assert.Fail("expected ArgumentNullException");
             }
                 //---------------Test Result -----------------------
@@ -131,7 +106,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Execute Test ----------------------
             try
             {
-                new RelationshipComboBoxMapper(cmbox, _cpClassDef, null, false, GetControlFactory());
+                new RelationshipComboBoxMapper(cmbox, null, false, GetControlFactory());
                 Assert.Fail("expected ArgumentNullException");
             }
                 //---------------Test Result -----------------------
@@ -147,11 +122,13 @@ namespace Habanero.Test.UI.Base.Mappers
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
-            //---------------Execute Test ----------------------
             const string relationshipName = "RelationshipDoesNotExist";
+            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
+            //---------------Execute Test ----------------------
+            
             try
             {
-                new RelationshipComboBoxMapper(cmbox, _cpClassDef, relationshipName, false, GetControlFactory());
+                mapper.BusinessObject = new ContactPersonTestBO();
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
@@ -168,11 +145,12 @@ namespace Habanero.Test.UI.Base.Mappers
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
-            //---------------Execute Test ----------------------
             const string relationshipName = "ContactPeople";
+            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
+            //---------------Execute Test ----------------------
             try
             {
-                new RelationshipComboBoxMapper(cmbox, _orgClassDef, relationshipName, false, GetControlFactory());
+                mapper.BusinessObject = new OrganisationTestBO();
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
@@ -193,7 +171,7 @@ namespace Habanero.Test.UI.Base.Mappers
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             const string relationshipName = "Organisation";
             RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper
-                (cmbox, _cpClassDef, relationshipName, false, GetControlFactory());
+                (cmbox, relationshipName, false, GetControlFactory());
             IBusinessObjectCollection boCol = new BusinessObjectCollection<OrganisationTestBO>();
             //---------------Execute Test ----------------------
             mapper.BusinessObjectCollection = boCol;
@@ -209,7 +187,7 @@ namespace Habanero.Test.UI.Base.Mappers
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             const string relationshipName = "Organisation";
             RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper
-                (cmbox, _cpClassDef, relationshipName, false, GetControlFactory());
+                (cmbox, relationshipName, false, GetControlFactory());
             IBusinessObjectCollection boCol = GetBoColWithOneItem();
             //---------------Assert Preconditions---------------
             Assert.AreEqual(1, boCol.Count);
@@ -268,6 +246,7 @@ namespace Habanero.Test.UI.Base.Mappers
             RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
             ContactPersonTestBO person = new ContactPersonTestBO();
             person.Organisation = boCol[0];
+            mapper.ClassDef = _cpClassDef;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boCol.Count);
             Assert.IsNull(cmbox.SelectedItem);
@@ -295,6 +274,7 @@ namespace Habanero.Test.UI.Base.Mappers
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             BusinessObjectCollection<OrganisationTestBO> boCol;
             RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
+            mapper.ClassDef = _cpClassDef;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boCol.Count);
             Assert.IsNull(cmbox.SelectedItem);
@@ -471,6 +451,38 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
+        public virtual void Test_AddBOToCol_NullOrEmptyToStringRaisesError()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            RelationshipComboBoxMapper mapper1 = GetMapper(cmbox);
+            BusinessObjectCollection<ContactPersonTestBO> boCol = new BusinessObjectCollection<ContactPersonTestBO> { new ContactPersonTestBO() };
+            mapper1.BusinessObjectCollection = boCol;
+            RelationshipComboBoxMapper mapper = mapper1;
+            ContactPersonTestBO newBO = new ContactPersonTestBO();
+            newBO.Surname = "";
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, boCol.Count);
+            Assert.AreEqual(2, mapper.Control.Items.Count);
+            Assert.IsNull(newBO.ToString());
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                boCol.Add(newBO);
+                Assert.Fail("expected Err");
+            }
+           //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                string message = string.Format("Cannot add a business object of type '{0}' "
+                        + "to the 'ComboBoxCollectionSelector' if its ToString is null or zero length"
+                        , newBO.ClassDef.ClassName);
+                StringAssert.Contains(message, ex.Message);
+            }
+        }
+
+        [Test]
         public virtual void Test_WhenSetNull_DoesNotRaiseError()
         {
             //---------------Set up test pack-------------------
@@ -562,8 +574,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void
-            Test_ApplyChangesToBusObj_WhenAnItemIsSelectedAndRelatedBONull_ShouldUpdatesTheBusinessObjectWithTheSelectedValue
+        public void Test_ApplyChangesToBusObj_WhenAnItemIsSelectedAndRelatedBONull_ShouldUpdatesTheBusinessObjectWithTheSelectedValue
             ()
         {
             //---------------Set up test pack-------------------
@@ -794,7 +805,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            RelationshipComboBoxMapper mapper1 = new RelationshipComboBoxMapper(cmbox, _cpClassDef, relationshipName, false, GetControlFactory());
+            RelationshipComboBoxMapper mapper1 = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
             //---------------Test Result -----------------------
             Assert.IsFalse(mapper1.IsReadOnly);
             Assert.IsTrue(mapper1.Control.Enabled);
@@ -809,7 +820,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            RelationshipComboBoxMapper mapper1 = new RelationshipComboBoxMapper(cmbox, _cpClassDef, relationshipName, true, GetControlFactory());
+            RelationshipComboBoxMapper mapper1 = new RelationshipComboBoxMapper(cmbox,  relationshipName, true, GetControlFactory());
             //---------------Test Result -----------------------
             Assert.IsTrue(mapper1.IsReadOnly);
             Assert.IsFalse(mapper1.Control.Enabled);
@@ -822,7 +833,7 @@ namespace Habanero.Test.UI.Base.Mappers
             IComboBox cmbox = _controlFactory.CreateComboBox();
             const string relationshipName = "Organisation";
             BusinessObjectCollection<OrganisationTestBO> boCol = GetBoColWithOneItem();
-            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, _cpClassDef, relationshipName, false, GetControlFactory());
+            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
             mapper.BusinessObjectCollection = boCol;
             OrganisationTestBO organisationTestBO = boCol[0];
             ContactPersonTestBO person = CreateCPWithRelatedOrganisation(organisationTestBO);
@@ -850,7 +861,7 @@ namespace Habanero.Test.UI.Base.Mappers
             IComboBox cmbox = _controlFactory.CreateComboBox();
             const string relationshipName = "Organisation";
             BusinessObjectCollection<OrganisationTestBO> boCol = GetBoColWithOneItem();
-            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, _cpClassDef, relationshipName, true, GetControlFactory());
+            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, true, GetControlFactory());
             mapper.BusinessObjectCollection = boCol;
             OrganisationTestBO organisationTestBO = boCol[0];
             ContactPersonTestBO person = CreateCPWithRelatedOrganisation(organisationTestBO);
@@ -864,6 +875,21 @@ namespace Habanero.Test.UI.Base.Mappers
             bool enabled = cmbox.Enabled;
             //---------------Test Result -----------------------
             Assert.IsFalse(enabled);
+        }
+
+        [Test]
+        public void Test_CreateControlMapper()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = _controlFactory.CreateComboBox();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IControlMapper controlMapper = ControlMapper.Create
+                ("RelationshipComboBoxMapper", "Habanero.UI.Base", cmbox, TestUtil.GetRandomString(), false,
+                 GetControlFactory());
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(RelationshipComboBoxMapper), controlMapper);
         }
 
 
@@ -926,7 +952,7 @@ namespace Habanero.Test.UI.Base.Mappers
         private RelationshipComboBoxMapper GetMapper(IComboBox cmbox)
         {
             const string relationshipName = "Organisation";
-            return new RelationshipComboBoxMapper(cmbox, _cpClassDef, relationshipName, false, GetControlFactory());
+            return new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
         }
 
         private static object LastComboBoxItem(IComboBox cmbox)
@@ -1207,384 +1233,6 @@ namespace Habanero.Test.UI.Base.Mappers
         }
     }
 
-    public class RelationshipComboBoxMapper : ILookupComboBoxMapper
-    {
-        private readonly IClassDef _classDef;
-
-        /// <summary>
-        /// Is this control readonly or can the value be changed via the user interface.
-        /// </summary>
-        public bool IsReadOnly { get; private set; }
-
-        /// <summary>
-        /// The Control factory used to create controls of the specified type.
-        /// </summary>
-        public IControlFactory ControlFactory { get; private set; }
-
-        /// <summary>
-        /// The name of the relationship that is being mapped by this Mapper
-        /// </summary>
-        public string RelationshipName { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
-        /// </summary>
-        public EventHandler SelectedIndexChangedHandler { get; set; }
-
-        /// <summary>
-        /// The Control <see cref="IComboBox"/> that is being mapped by this Mapper.
-        /// </summary>
-        public IComboBox Control { get; private set; }
-
-        /// <summary>
-        /// Returns the control being mapped
-        /// </summary>
-        IControlHabanero ILookupComboBoxMapper.Control
-        {
-            get { return this.Control; }
-        }
-
-        private IBusinessObjectCollection _businessObjectCollection;
-        private IBusinessObject _businessObject;
-        private readonly RelationshipDef _relationshipDef;
-        private ISingleRelationship _singleRelationship;
-        private ILookupComboBoxMapperStrategy _mapperStrategy;
-
-
-        public RelationshipComboBoxMapper
-            (IComboBox comboBox, IClassDef classDef, string relationshipName, bool isReadOnly,
-             IControlFactory controlFactory)
-        {
-            if (comboBox == null) throw new ArgumentNullException("comboBox");
-            if (classDef == null) throw new ArgumentNullException("classDef");
-            if (relationshipName == null) throw new ArgumentNullException("relationshipName");
-            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
-            _classDef = classDef;
-            CheckRelationshipDefined(_classDef, relationshipName);
-            _relationshipDef = (RelationshipDef) _classDef.RelationshipDefCol[relationshipName];
-            CheckRelationshipIsSingle(relationshipName, _relationshipDef);
-
-            IsReadOnly = isReadOnly;
-            ControlFactory = controlFactory;
-            Control = comboBox;
-            RelationshipName = relationshipName;
-            _mapperStrategy = ControlFactory.CreateLookupComboBoxDefaultMapperStrategy();
-            _mapperStrategy.AddHandlers(this);
-            UpdateIsEditable();
-        }
-
-        /// <summary>
-        /// Gets and sets the Business Object Collection that is used to fill the combo box items.
-        /// </summary>
-        public IBusinessObjectCollection BusinessObjectCollection
-        {
-            get { return _businessObjectCollection; }
-            set
-            {
-                CheckBusinessObjectCollectionCorrectType(value);
-                if (_businessObjectCollection != null)
-                {
-                    BusinessObjectCollection.BusinessObjectAdded -= BusinessObjectAddedHandler;
-                    BusinessObjectCollection.BusinessObjectRemoved -= BusinessObjectRemovedHandler;
-                }
-                _businessObjectCollection = value;
-
-                SetComboBoxCollection(this.Control, this._businessObjectCollection, true);
-
-                if (_businessObjectCollection == null) return;
-                BusinessObjectCollection.BusinessObjectAdded += BusinessObjectAddedHandler;
-                BusinessObjectCollection.BusinessObjectRemoved += BusinessObjectRemovedHandler;
-            }
-        }
-
-        private void CheckBusinessObjectCollectionCorrectType(IBusinessObjectCollection value)
-        {
-            if (value != null && _relationshipDef.RelatedObjectClassType != value.ClassDef.ClassType)
-            {
-                string errorMessage = string.Format
-                    ("You cannot set the Business Object Collection to the '{0}' "
-                     + "since it is not of the appropriate type ('{1}') for this '{2}'", value.ClassDef.ClassNameFull,
-                     _relationshipDef.RelatedObjectClassName, this.GetType().FullName);
-                throw new HabaneroDeveloperException(errorMessage, errorMessage);
-            }
-        }
-
-        /// <summary>
-        /// Sets the property value to that provided.  If the property value
-        /// is invalid, the error provider will be given the reason why the
-        /// value is invalid.
-        /// </summary>
-        protected virtual void SetRelatedBusinessObject(IBusinessObject value)
-        {
-            if (_businessObject == null) return;
-
-            try
-            {
-                _singleRelationship.SetRelatedObject(value);
-            }
-            catch (HabaneroIncorrectTypeException ex)
-            {
-////TODO Brett 24 Mar 2009: Write tests and implement                this.ErrorProvider.SetError(Control, ex.Message);
-                return;
-            }
-            UpdateErrorProviderErrorMessage();
-        }
-
-        /// <summary>
-        /// This handler is called when a business object has been added to
-        /// the collection - it subsequently adds the item to the ComboBox
-        /// list as well.
-        /// </summary>
-        /// <param name="sender">The object that notified of the change</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void BusinessObjectAddedHandler(object sender, BOEventArgs e)
-        {
-            Control.Items.Add(e.BusinessObject);
-        }
-
-        /// <summary>
-        /// This handler is called when a business object has been removed from
-        /// the collection - it subsequently removes the item from the ComboBox
-        /// list as well.
-        /// </summary>
-        /// <param name="sender">The object that notified of the change</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void BusinessObjectRemovedHandler(object sender, BOEventArgs e)
-        {
-            Control.Items.Remove(e.BusinessObject);
-        }
-
-        private void CheckRelationshipIsSingle(string relationshipName, RelationshipDef relationshipDef)
-        {
-            if (IsSingleRelationship(relationshipDef)) return;
-            string message = "The relationship '" + relationshipName + "' for the ClassDef '" + _classDef.ClassNameFull
-                             + "' is not a single relationship."
-                             + " The 'RelationshipComboBoxMapper' can only be used for single relationships";
-            throw new HabaneroDeveloperException(message, message);
-        }
-
-        private static void CheckRelationshipDefined(IClassDef classDef, string relationshipName)
-        {
-            if (classDef.RelationshipDefCol.Contains(relationshipName)) return;
-            string message = "The relationship '" + relationshipName + "' does not exist on the ClassDef '"
-                             + classDef.ClassNameFull + "'";
-            throw new HabaneroDeveloperException(message, message);
-        }
-
-        private static bool IsSingleRelationship(RelationshipDef relationshipDef)
-        {
-            return typeof (SingleRelationshipDef).IsInstanceOfType(relationshipDef);
-        }
-
-        /// <summary>
-        /// Set the list of objects in the ComboBox to a specific collection of
-        /// business objects.<br/>
-        /// Important: If you are changing the business object collection,
-        /// use the SetBusinessObjectCollection method instead, which will call this method
-        /// automatically.
-        /// </summary>
-        /// <param name="cbx">The ComboBox being controlled</param>
-        /// <param name="col">The business object collection used to populate the items list</param>
-        /// <param name="includeBlank">Whether to include a blank item at the
-        /// top of the list</param>
-        private void SetComboBoxCollection(IComboBox cbx, IBusinessObjectCollection col, bool includeBlank)
-        {
-            int width = cbx.Width;
-
-            cbx.Items.Clear();
-            if (includeBlank)
-            {
-                cbx.Items.Add("");
-            }
-            if (col == null) return;
-
-            //This is a bit of a hack but is used to get the 
-            //width of the dropdown list when it drops down
-            // uses the preferedwith calculation on the 
-            //Label to do this. Makes drop down width equal to the 
-            // width of the longest name shown.
-            ILabel lbl = this.ControlFactory.CreateLabel("", false);
-            foreach (IBusinessObject businessObject in col)
-            {
-                lbl.Text = businessObject.ToString();
-                if (lbl.PreferredWidth > width)
-                {
-                    width = lbl.PreferredWidth;
-                }
-                cbx.Items.Add(businessObject);
-            }
-            cbx.DropDownWidth = width;
-        }
-
-        /// <summary>
-        /// Gets and sets the business object that has a property
-        /// being mapped by this mapper.  In other words, this property
-        /// does not return the exact business object being shown in the
-        /// control, but rather the business object shown in the
-        /// form.  Where the business object has been amended or
-        /// altered, the <see cref="UpdateControlValueFromBusinessObject"/> method is automatically called here to 
-        /// implement the changes in the control itself.
-        /// </summary>
-        public virtual IBusinessObject BusinessObject
-        {
-            get { return _businessObject; }
-            set
-            {
-                CheckBusinessObjectCorrectType(value);
-
-                RemoveCurrentBOHandlers();
-                _businessObject = value;
-                _singleRelationship = _businessObject == null ? null : GetRelationship();
-                UpdateIsEditable();
-                UpdateControlValueFromBusinessObject();
-                AddCurrentBOHandlers();
-//                this.UpdateErrorProviderErrorMessage();
-            }
-        }
-
-        private void UpdateIsEditable()
-        {
-            if (IsReadOnly) 
-            {
-                this.Control.Enabled = false;
-                return;
-            }
-            if (IsRelationshipComposition())
-            {
-                if (_businessObject != null )
-                {
-                    this.Control.Enabled = _businessObject.Status.IsNew;
-                }
-            }
-        }
-
-        private bool IsRelationshipComposition()
-        {
-            if (_singleRelationship == null) return false;
-            return _singleRelationship.RelationshipDef.RelationshipType == RelationshipType.Composition;
-        }
-
-        private void RemoveCurrentBOHandlers()
-        {
-            if (_businessObject == null) return;
-            _singleRelationship.RelatedBusinessObjectChanged -= RelatedBusinessObjectChanged_Handler;
-            _businessObject.Saved -= _businessObject_OnSaved;
-        }
-
-        /// <summary>
-        /// Gets or sets the strategy assigned to this mapper <see cref="ILookupComboBoxMapperStrategy"/>
-        /// </summary>
-        public ILookupComboBoxMapperStrategy MapperStrategy
-        {
-            get { return _mapperStrategy; }
-            set
-            {
-                _mapperStrategy = value;
-                _mapperStrategy.RemoveCurrentHandlers(this);
-                _mapperStrategy.AddHandlers(this);
-            }
-        }
-
-        private void AddCurrentBOHandlers()
-        {
-            if (_businessObject == null) return;
-            _singleRelationship.RelatedBusinessObjectChanged += RelatedBusinessObjectChanged_Handler;
-            _businessObject.Saved += _businessObject_OnSaved;
-        }
-
-        private void _businessObject_OnSaved(object sender, BOEventArgs e)
-        {
-            UpdateIsEditable();
-        }
-
-        private void RelatedBusinessObjectChanged_Handler(object sender, EventArgs e)
-        {
-            UpdateControlValueFromBusinessObject();
-        }
-
-        private void CheckBusinessObjectCorrectType(IBusinessObject value)
-        {
-            if (value != null && !_classDef.ClassType.IsInstanceOfType(value))
-            {
-                string errorMessage = string.Format
-                    ("You cannot set the Business Object to the '{0}' identified as '{1}' "
-                     + "since it is not of the appropriate type ('{2}') for this '{3}'", value.ClassDef.ClassNameFull,
-                     value.ToString(), _classDef.ClassNameFull, this.GetType().FullName);
-                throw new HabaneroDeveloperException(errorMessage, errorMessage);
-            }
-        }
-
-        /// <summary>
-        /// Updates the value on the control from the corresponding property
-        /// on the represented <see cref="IControlMapper.BusinessObject"/>
-        /// </summary>
-        public virtual void UpdateControlValueFromBusinessObject()
-        {
-            InternalUpdateControlValueFromBo();
-            this.UpdateErrorProviderErrorMessage();
-        }
-
-        /// <summary>
-        /// Updates the value on the control from the corresponding property
-        /// on the represented <see cref="IControlMapper.BusinessObject"/>
-        /// </summary>
-        protected virtual void InternalUpdateControlValueFromBo()
-        {
-            object relatedBO = GetRelatedBusinessObject();
-            if (relatedBO != null)
-            {
-                IComboBoxObjectCollection comboBoxObjectCollection = this.Control.Items;
-                if (!comboBoxObjectCollection.Contains(relatedBO))
-                {
-                    comboBoxObjectCollection.Add(relatedBO);
-                }
-            }
-            Control.SelectedItem = relatedBO;
-        }
-
-        /// <summary>
-        /// Returns the property value of the business object being mapped
-        /// </summary>
-        /// <returns>Returns the property value in appropriate object form</returns>
-        protected internal object GetRelatedBusinessObject()
-        {
-            return _singleRelationship == null ? null : _singleRelationship.GetRelatedObject();
-        }
-
-        private ISingleRelationship GetRelationship()
-        {
-            IRelationship relationship = _businessObject == null
-                                             ? null
-                                             : _businessObject.Relationships[this.RelationshipName];
-            ISingleRelationship singleRelationship = null;
-            if (relationship is ISingleRelationship)
-            {
-                singleRelationship = (ISingleRelationship) relationship;
-            }
-            return singleRelationship;
-        }
-
-        /// <summary>
-        /// Sets the Error Provider Error with the appropriate value for the property e.g. if it is invalid then
-        ///  sets the error provider with the invalid reason else sets the error provider with a zero length string.
-        /// </summary>
-        public virtual void UpdateErrorProviderErrorMessage()
-        {
-        }
-
-        public void ApplyChangesToBusinessObject()
-        {
-            object item = this.Control.SelectedItem;
-            if (item is IBusinessObject)
-            {
-                SetRelatedBusinessObject((IBusinessObject) item);
-            }
-            else
-            {
-                SetRelatedBusinessObject(null);
-            }
-        }
-    }
 
 //
 //    internal class CustomAddRelationshipComboBoxMapper : RelationshipComboBoxMapper

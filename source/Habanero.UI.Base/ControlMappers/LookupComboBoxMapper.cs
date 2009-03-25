@@ -28,28 +28,28 @@ namespace Habanero.UI.Base
     /// An interface for a mapper that <br/>
     /// Wraps/Decorates a ComboBox in order to display and capture a lookup property of the business object 
     /// </summary>
-    public interface ILookupComboBoxMapper
+    public interface ILookupComboBoxMapper:IControlMapper
     {
         /// <summary>
         /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
         /// </summary>
         EventHandler SelectedIndexChangedHandler { get; set; }
 
-        /// <summary>
-        /// Returns the control being mapped
-        /// </summary>
-        IControlHabanero Control { get; }
-
-        /// <summary>
-        /// Updates the properties on the represented business object
-        /// </summary>
-        void ApplyChangesToBusinessObject();
-
-        /// <summary>
-        /// Updates the value on the control from the corresponding property
-        /// on the represented <see cref="IControlMapper.BusinessObject"/>
-        /// </summary>
-        void UpdateControlValueFromBusinessObject();
+//        /// <summary>
+//        /// Returns the control being mapped
+//        /// </summary>
+//        IControlHabanero Control { get; }
+//
+//        /// <summary>
+//        /// Updates the properties on the represented business object
+//        /// </summary>
+//        void ApplyChangesToBusinessObject();
+//
+//        /// <summary>
+//        /// Updates the value on the control from the corresponding property
+//        /// on the represented <see cref="IControlMapper.BusinessObject"/>
+//        /// </summary>
+//        void UpdateControlValueFromBusinessObject();
     }
 
     /// <summary>

@@ -81,6 +81,11 @@ namespace Habanero.BO.ClassDefinition
         public UIDefCol UIDefCol { get; internal set; }
 
         /// <summary>
+        /// The Class Definition that this UIDef belongs to.
+        /// </summary>
+        public ClassDef ClassDef { get; set; }
+
+        /// <summary>
         /// Returns the form property definitions
         /// </summary>
         /// <returns>Returns a UIForm object</returns>

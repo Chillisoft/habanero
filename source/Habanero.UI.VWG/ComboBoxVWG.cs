@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
@@ -122,11 +123,11 @@ namespace Habanero.UI.VWG
             {
                 get { return _items.Count; }
             }
-
-            /// <summary>
-            /// Gets or sets the label to display
-            /// </summary>
-            public string Label { get; set; }
+//
+//            /// <summary>
+//            /// Gets or sets the label to display
+//            /// </summary>
+//            public string Label { get; set; }
 
             /// <summary>
             /// Removes the specified item from the ComboBox
@@ -145,14 +146,6 @@ namespace Habanero.UI.VWG
                 _items.Clear();
             }
 
-            /// <summary>
-            /// Populates the collection using the given BusinessObjectCollection
-            /// </summary>
-            /// <param name="collection">A BusinessObjectCollection</param>
-            public void SetCollection(IBusinessObjectCollection collection)
-            {
-                throw new System.NotImplementedException();
-            }
 
             /// <summary>
             /// Retrieves the item at the specified index within the collection
@@ -191,6 +184,17 @@ namespace Habanero.UI.VWG
                 return _items.IndexOf(value);
             }
 
+            /// <summary>
+            /// Inserts an item into the collection at the specified index.
+            /// </summary>
+            /// <param name="index">The zero-based index location where the item is inserted</param>
+            /// <param name="item">An object representing the item to insert.</param>
+            /// <exception cref="ArgumentNullException">The item was null</exception>
+            /// <exception cref="ArgumentOutOfRangeException">The index was less than zero.-or- The index was greater than the count of items in the collection.</exception>
+            public void Insert(int index, object item)
+            {
+                _items.Insert(index, item);
+            }
             ///<summary>
             ///Returns an enumerator that iterates through a collection.
             ///</summary>

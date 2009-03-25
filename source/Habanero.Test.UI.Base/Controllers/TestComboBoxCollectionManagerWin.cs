@@ -254,5 +254,127 @@ namespace Habanero.Test.UI.Base.Controllers
             //---------------Test Result -----------------------
             Assert.AreEqual(2, selectorManger.Control.Items.Count);
         }
+
+        [Test]
+        public void Test_EditItemFromCollection_UpdatesItemInCombo()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO> { { new MyBO(), new MyBO() } };
+            selectorManger.SetCollection(myBOs, false);
+            MyBO myBO = myBOs[0];
+            string origToString = myBO.ToString();
+            Guid newValue = Guid.NewGuid();
+            int index = cmbox.Items.IndexOf(myBO);
+            cmbox.SelectedIndex = index;
+            //---------------Assert precondition----------------
+            Assert.AreEqual(2, cmbox.Items.Count);
+            Assert.AreEqual(0, cmbox.SelectedIndex);
+            Assert.AreSame(myBO, cmbox.Items[index]);
+            Assert.AreEqual(origToString, cmbox.Items[index].ToString());
+            Assert.AreEqual(origToString, cmbox.Text);
+            //---------------Execute Test ----------------------
+            myBO.MyBoID = newValue;
+            //---------------Test Result -----------------------
+            string newToString = myBO.ToString();
+            Assert.AreNotEqual(origToString, newToString);
+            Assert.AreEqual(index, cmbox.SelectedIndex);
+            //Assert.AreNotEqual(origToString, cmbox.Text);
+            //Assert.AreEqual(newToString, cmbox.Text);
+        }
+        [Test]
+        public void Test_EditSecondItemFromCollection_UpdatesItemInCombo()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO> { { new MyBO(), new MyBO() } };
+            selectorManger.SetCollection(myBOs, false);
+            MyBO myBO = myBOs[1];
+            string origToString = myBO.ToString();
+            Guid newValue = Guid.NewGuid();
+            int index = cmbox.Items.IndexOf(myBO);
+            cmbox.SelectedIndex = index;
+            //---------------Assert precondition----------------
+            Assert.AreEqual(2, cmbox.Items.Count);
+            Assert.AreEqual(1, cmbox.SelectedIndex);
+            Assert.AreSame(myBO, cmbox.Items[index]);
+            Assert.AreEqual(origToString, cmbox.Items[index].ToString());
+            Assert.AreEqual(origToString, cmbox.Text);
+            //---------------Execute Test ----------------------
+            myBO.MyBoID = newValue;
+            //---------------Test Result -----------------------
+            string newToString = myBO.ToString();
+            Assert.AreNotEqual(origToString, newToString);
+            Assert.AreEqual(index, cmbox.SelectedIndex);
+            //Assert.AreNotEqual(origToString, cmbox.Text);
+            //Assert.AreEqual(newToString, cmbox.Text);
+        }
+        [Test]
+        public void Test_EditUnselectedItemFromCollection_UpdatesItemInCombo_DoesNotSelectItem()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO> { { new MyBO(), new MyBO() } };
+            selectorManger.SetCollection(myBOs, false);
+            MyBO myBO = myBOs[1];
+            string origToString = myBO.ToString();
+            Guid newValue = Guid.NewGuid();
+            int index = cmbox.Items.IndexOf(myBO);
+            //---------------Assert precondition----------------
+            Assert.AreEqual(2, cmbox.Items.Count);
+            Assert.AreEqual(0, cmbox.SelectedIndex);
+            Assert.AreSame(myBO, cmbox.Items[index]);
+            Assert.AreEqual(origToString, cmbox.Items[index].ToString());
+            Assert.AreNotEqual(index, cmbox.SelectedIndex);
+            //---------------Execute Test ----------------------
+            myBO.MyBoID = newValue;
+            //---------------Test Result -----------------------
+            string newToString = myBO.ToString();
+            Assert.AreNotEqual(origToString, newToString);
+            Assert.AreEqual(0, cmbox.SelectedIndex);
+        }
+        [Test]
+        public void Test_EditUnselectedItemFromCollection_UpdatesItemInCombo_DoesNotSelectItem_WithBlank()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory, false);
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO> { { new MyBO(), new MyBO() } };
+            selectorManger.SetCollection(myBOs, true);
+            MyBO myBO = myBOs[1];
+            string origToString = myBO.ToString();
+            Guid newValue = Guid.NewGuid();
+            int index = cmbox.Items.IndexOf(myBO);
+            //---------------Assert precondition----------------
+            Assert.AreEqual(3, cmbox.Items.Count);
+            Assert.AreEqual(-1, cmbox.SelectedIndex);
+            Assert.AreSame(myBO, cmbox.Items[index]);
+            Assert.AreEqual(origToString, cmbox.Items[index].ToString());
+            Assert.AreNotEqual(index, cmbox.SelectedIndex);
+            //---------------Execute Test ----------------------
+            myBO.MyBoID = newValue;
+            //---------------Test Result -----------------------
+            string newToString = myBO.ToString();
+            Assert.AreNotEqual(origToString, newToString);
+            Assert.AreEqual(-1, cmbox.SelectedIndex);
+//            Assert.AreNotEqual(origToString, cmbox.Text);
+//            Assert.AreEqual(newToString, cmbox.Text);
+        }
+
     }
 }

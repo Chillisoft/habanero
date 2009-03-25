@@ -24,6 +24,7 @@ using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using log4net;
 
@@ -67,6 +68,12 @@ namespace Habanero.UI.Base
         protected string _propertyName;
 
         private IBOProp _boProp;
+
+        ///<summary>
+        /// Gets and Sets the Class Def of the Business object whose property
+        /// this control maps.
+        ///</summary>
+        public IClassDef ClassDef { get; set; }
 
         /// <summary>
         /// Constructor to instantiate a new instance of the class
@@ -338,6 +345,10 @@ namespace Habanero.UI.Base
             UpdateControlValueFromBusinessObject();
         }
 
+//                public RelationshipComboBoxMapper
+//            (IComboBox comboBox, IClassDef classDef, string relationshipName, bool isReadOnly,
+//             IControlFactory controlFactory)
+
         /// <summary>
         /// Creates a new control mapper of a specified type.  If no 'mapperTypeName'
         /// has been specified, an appropriate mapper for standard controls will
@@ -357,7 +368,8 @@ namespace Habanero.UI.Base
         /// a subclass of the ControlMapper class.</exception>
         /// <param name="controlFactory">The control factory</param>
         public static IControlMapper Create
-            (string mapperTypeName, string mapperAssembly, IControlHabanero ctl, string propertyName, bool isReadOnly,
+            (string mapperTypeName, string mapperAssembly, IControlHabanero ctl, 
+             string propertyName, bool isReadOnly,
              IControlFactory controlFactory)
         {
             if (string.IsNullOrEmpty(mapperTypeName)) mapperTypeName = "TextBoxMapper";
@@ -377,7 +389,8 @@ namespace Habanero.UI.Base
                         (String.Format
                              ("No suitable 'mapperType' has been provided in the class "
                               + "definitions for the form control '{0}'.  Either add the "
-                              + "'mapperType' attribute or check that spelling and " + "capitalisation are correct.",
+                              + "'mapperType' attribute or check that spelling and " 
+                              + "capitalisation are correct.",
                               ctl.Name));
                 }
             }
@@ -392,6 +405,7 @@ namespace Habanero.UI.Base
             {
                 mapperType = TypeLoader.LoadType(mapperAssembly, mapperTypeName);
             }
+            
             IControlMapper controlMapper;
             if (mapperType != null 
                && mapperType.FindInterfaces ((type, filterCriteria) => type == typeof (IControlMapper), "").Length > 0)

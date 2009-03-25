@@ -19,6 +19,7 @@
 
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
@@ -50,6 +51,12 @@ namespace Habanero.UI.Base
         /// Gets the error provider for this control <see cref="IErrorProvider"/>
         /// </summary>
         IErrorProvider ErrorProvider { get; }
+
+        ///<summary>
+        /// Gets and Sets the Class Def of the Business object whose property
+        /// this control maps.
+        ///</summary>
+        IClassDef ClassDef { get; set; }
 
         /// <summary>
         /// Updates the properties on the represented business object

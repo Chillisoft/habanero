@@ -143,7 +143,8 @@ namespace Habanero.UI.Base
             if (formTab == null) throw new ArgumentNullException("formTab");
             IPanel panel = ControlFactory.CreatePanel();
             PanelInfo panelInfo = new PanelInfo();
-            GridLayoutManager layoutManager = panelInfo.LayoutManager = SetupLayoutManager(formTab, panel);
+            GridLayoutManager layoutManager =  SetupLayoutManager(formTab, panel);
+            panelInfo.LayoutManager = layoutManager;
             AddFieldsToLayoutManager(formTab, panelInfo);
             SetupInputControlColumnWidth(panelInfo, formTab);
 
@@ -261,11 +262,9 @@ namespace Habanero.UI.Base
                 {
                     UIFormColumn currentFormColumn = formTab[currentColumnNo];
 
-                    if (--rowSpanTrackerForColumn[currentColumnNo] > 0)
-                        continue;
+                    if (--rowSpanTrackerForColumn[currentColumnNo] > 0) continue;
                     // keep skipping this grid position until a previous row span in this column has been decremented 
-                    if (--columnSpanTrackerForRow[currentRowNo] > 0)
-                        continue;
+                    if (--columnSpanTrackerForRow[currentRowNo] > 0) continue;
                     // keep skipping this grid position until a previous column span in this row has been decremented
 
                     int currentFieldNoInColumn = currentFieldPositionInColumns[currentColumnNo];
@@ -347,7 +346,6 @@ namespace Habanero.UI.Base
             IControlMapper controlMapper;
             IControlHabanero inputControl = ConfigureInputControl(formField, out controlMapper);
 
-
             int numberOfGridColumnsToSpan = 1 + (CONTROLS_PER_COLUMN * (formField.ColSpan - 1));
             GridLayoutManager.ControlInfo inputControlInfo = new GridLayoutManager.ControlInfo
                 (inputControl, numberOfGridColumnsToSpan, formField.RowSpan);
@@ -363,7 +361,7 @@ namespace Habanero.UI.Base
             controlMapper = ControlMapper.Create
                 (formField.MapperTypeName, formField.MapperAssembly, inputControl, formField.PropertyName,
                  !formField.Editable, ControlFactory);
-
+            controlMapper.ClassDef = GetClassDef(formField);
             if (!String.IsNullOrEmpty(formField.Alignment)) SetInputControlAlignment(formField, inputControl);
             SetInputControlNumLines(formField, inputControl);
 
@@ -381,12 +379,25 @@ namespace Habanero.UI.Base
             return inputControl;
         }
 
+        private static ClassDef GetClassDef(UIFormField formField)
+        {
+            UIFormColumn column = formField.UIFormColumn;
+            if (column == null) return null;
+            UIFormTab tab = column.UIFormTab;
+            if (tab == null) return null;
+
+            UIForm form = tab.UIForm;
+            if (form == null) return null;
+
+            UIDef def = form.UIDef;
+            if (def == null) return null;
+            return def.ClassDef;
+        }
+
         private static void AddMultiLineTextbox(UIFormField formField, IControlHabanero inputControl)
         {
-            if (formField.RowSpan > 1)
-            {
-                if (inputControl is ITextBox) ((ITextBox) inputControl).Multiline = true;
-            }
+            if (formField.RowSpan <= 1) return;
+            if (inputControl is ITextBox) ((ITextBox) inputControl).Multiline = true;
         }
 
         private void AddDateTimePickerParameters(UIFormField formField, IControlHabanero inputControl)
@@ -401,46 +412,40 @@ namespace Habanero.UI.Base
 
         private static void AddDecimalPlacesToNumericUpDown(UIFormField formField, IControlHabanero inputControl)
         {
-            if (!String.IsNullOrEmpty(formField.DecimalPlaces))
+            if (String.IsNullOrEmpty(formField.DecimalPlaces)) return;
+            if (inputControl is INumericUpDown
+                && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
             {
-                if (inputControl is INumericUpDown
-                    && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
+                int decimalPlaces = Convert.ToInt32(formField.DecimalPlaces);
+                if (decimalPlaces >= 0)
                 {
-                    int decimalPlaces = Convert.ToInt32(formField.DecimalPlaces);
-                    if (decimalPlaces >= 0)
-                    {
-                        ((INumericUpDown) inputControl).DecimalPlaces = decimalPlaces;
-                    }
+                    ((INumericUpDown) inputControl).DecimalPlaces = decimalPlaces;
                 }
             }
         }
 
         private static void AddComboBoxItems(UIFormField formField, IControlHabanero inputControl)
         {
-            if (!String.IsNullOrEmpty(formField.Options))
+            if (String.IsNullOrEmpty(formField.Options)) return;
+            if (inputControl is IComboBox && formField.MapperTypeName.ToLower() == "listcomboboxmapper")
             {
-                if (inputControl is IComboBox && formField.MapperTypeName.ToLower() == "listcomboboxmapper")
+                string[] items = formField.Options.Split('|');
+                IComboBox comboBox = ((IComboBox) inputControl);
+                comboBox.Items.Add(""); // This creates the blank item for the ComboBox 
+                foreach (string item in items)
                 {
-                    string[] items = formField.Options.Split('|');
-                    IComboBox comboBox = ((IComboBox) inputControl);
-                    comboBox.Items.Add(""); // This creates the blank item for the ComboBox 
-                    foreach (string item in items)
-                    {
-                        comboBox.Items.Add(item);
-                    }
+                    comboBox.Items.Add(item);
                 }
             }
         }
 
         private static void AddEmailFunctionalityToTextBox(UIFormField formField, IControlHabanero inputControl)
         {
-            if (!String.IsNullOrEmpty(formField.IsEmail))
+            if (String.IsNullOrEmpty(formField.IsEmail)) return;
+            if (inputControl is ITextBox && Convert.ToBoolean(formField.IsEmail))
             {
-                if (inputControl is ITextBox && Convert.ToBoolean(formField.IsEmail))
-                {
-                    ITextBox textBox = (ITextBox) inputControl;
-                    textBox.DoubleClick += EmailTextBoxDoubleClickedHandler;
-                }
+                ITextBox textBox = (ITextBox) inputControl;
+                textBox.DoubleClick += EmailTextBoxDoubleClickedHandler;
             }
         }
 
@@ -465,15 +470,13 @@ namespace Habanero.UI.Base
 
         private static void SetInputControlNumLines(UIFormField formField, IControlHabanero inputControl)
         {
-            if (inputControl is ITextBox)
-            {
-                if (formField.RowSpan <= 1) return;
+            if (!(inputControl is ITextBox)) return;
+            if (formField.RowSpan <= 1) return;
 
-                ITextBox textBox = ((ITextBox) inputControl);
-                textBox.Multiline = true;
-                textBox.AcceptsReturn = true;
-                textBox.ScrollBars = ScrollBars.Vertical;
-            }
+            ITextBox textBox = ((ITextBox) inputControl);
+            textBox.Multiline = true;
+            textBox.AcceptsReturn = true;
+            textBox.ScrollBars = ScrollBars.Vertical;
         }
 
         private static void SetInputControlAlignment(UIFormField formField, IControlHabanero inputControl)

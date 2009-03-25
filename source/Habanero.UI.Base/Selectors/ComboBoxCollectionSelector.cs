@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -37,11 +38,22 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="comboBox">The ComboBox object to map</param>
         /// <param name="controlFactory">The control factory used to create controls</param>
-        public ComboBoxCollectionSelector(IComboBox comboBox, IControlFactory controlFactory)
+        public ComboBoxCollectionSelector(IComboBox comboBox, IControlFactory controlFactory) : this(comboBox, controlFactory, true)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to create a new collection ComboBox mapper object.
+        /// </summary>
+        /// <param name="comboBox">The ComboBox object to map</param>
+        /// <param name="controlFactory">The control factory used to create controls</param>
+        /// <param name="autoSelectFirstItem"></param>
+        public ComboBoxCollectionSelector(IComboBox comboBox, IControlFactory controlFactory, bool autoSelectFirstItem)
         {
             if (comboBox == null) throw new ArgumentNullException("comboBox");
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             Control = comboBox;
+            AutoSelectFirstItem = autoSelectFirstItem;
             _controlFactory = controlFactory;
             Control.SelectedIndexChanged += delegate { FireBusinessObjectSelected(); };
         }
@@ -65,8 +77,19 @@ namespace Habanero.UI.Base
             if (Collection == null) return;
             Collection.BusinessObjectAdded += BusinessObjectAddedHandler;
             Collection.BusinessObjectRemoved += BusinessObjectRemovedHandler;
-
+            collection.BusinessObjectPropertyUpdated += Collection_OnBusinessObjectUpdated;
         }
+
+        private void Collection_OnBusinessObjectUpdated(object sender, BOPropUpdatedEventArgs e)
+        {
+            IBusinessObject o = e.BusinessObject;
+            int selectedIndex = this.Control.SelectedIndex;
+            int indexOf = this.Control.Items.IndexOf(o);
+            this.Control.Items.Remove(o);
+            this.Control.Items.Insert(indexOf, o);
+            this.Control.SelectedIndex = selectedIndex;
+        }
+
         /// <summary>
         /// Event Occurs when a business object is selected
         /// </summary>
@@ -102,6 +125,18 @@ namespace Habanero.UI.Base
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectAddedHandler(object sender, BOEventArgs e)
         {
+            IComboBoxObjectCollection items = Control.Items;
+            IBusinessObject businessObject = e.BusinessObject;
+            if (businessObject == null) return;
+
+//            log.Debug("BusinessObjectAddedHandler : ComboItems.Count = " + items.Count);
+            if (items.Contains(businessObject)) return;
+            if (string.IsNullOrEmpty(businessObject.ToString()))
+            {
+                string message = string.Format("Cannot add a business object of type '{0}' to the '{1}' if its ToString is null or zero length", businessObject.ClassDef.ClassName, this.GetType().Name);
+                throw new HabaneroDeveloperException(message, message);
+            }
+
             Control.Items.Add(e.BusinessObject);
         }
 
@@ -142,6 +177,8 @@ namespace Habanero.UI.Base
         /// Returns the ComboBox control
         /// </summary>
         public IComboBox Control { get; private set; }
+
+        public bool AutoSelectFirstItem { get; set; }
 
         /// <summary>
         /// Returns the control factory used to generate controls
@@ -196,7 +233,7 @@ namespace Habanero.UI.Base
                 }
                 cbx.Items.Add(businessObject);
             }
-            if (col.Count > 0) cbx.SelectedIndex = numBlankItems;
+            if (col.Count > 0 && AutoSelectFirstItem) cbx.SelectedIndex = numBlankItems;
             cbx.DropDownWidth = width;
         }
 

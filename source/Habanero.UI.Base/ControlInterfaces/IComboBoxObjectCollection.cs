@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using Habanero.Base;
 using Habanero.BO;
@@ -39,10 +40,10 @@ namespace Habanero.UI.Base
         /// </summary>
         int Count { get; }
 
-        /// <summary>
-        /// Gets or sets the label to display
-        /// </summary>
-        string Label { get; set; }
+//        /// <summary>
+//        /// Gets or sets the label to display
+//        /// </summary>
+//        string Label { get; set; }
 
         /// <summary>
         /// Removes the specified item from the ComboBox
@@ -55,11 +56,11 @@ namespace Habanero.UI.Base
         /// </summary>
         void Clear();
 
-        /// <summary>
-        /// Populates the collection using the given BusinessObjectCollection
-        /// </summary>
-        /// <param name="collection">A BusinessObjectCollection</param>
-        void SetCollection(IBusinessObjectCollection collection);
+        ///// <summary>
+        ///// Populates the collection using the given BusinessObjectCollection
+        ///// </summary>
+        ///// <param name="collection">A BusinessObjectCollection</param>
+        //void SetCollection(IBusinessObjectCollection collection);
 
         /// <summary>
         /// Retrieves the item at the specified index within the collection
@@ -83,5 +84,13 @@ namespace Habanero.UI.Base
         /// <returns>The zero-based index where the item is
         /// located within the collection; otherwise, -1</returns>
         int IndexOf(object value);
+        /// <summary>
+        /// Inserts an item into the collection at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index location where the item is inserted</param>
+        /// <param name="item">An object representing the item to insert.</param>
+        /// <exception cref="ArgumentNullException">The item was null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">The index was less than zero.-or- The index was greater than the count of items in the collection.</exception>
+        void Insert(int index, object item);
     }
 }

@@ -257,5 +257,56 @@ namespace Habanero.BO.ClassDefinition
             }
             return totalRowSpan;
         }
+
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public bool Equals(UIFormColumn obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return this.Equals((object) obj);
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type. 
+        /// 
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object" />.
+        /// </returns>
+        /// <filterpriority>2</filterpriority>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = (_list != null ? _list.GetHashCode() : 0);
+                result = (result * 397) ^ Width;
+                result = (result * 397) ^ (UIFormTab != null ? UIFormTab.GetHashCode() : 0);
+                return result;
+            }
+        }
+
+        ///<summary>
+        /// Inserts a formField. at the specified index.
+        /// If Index Less than or equal to zero then the form field wil be inserted at the first postion
+        /// If the index is greater than the Count of the list then it will be inserted at the last position.
+        ///</summary>
+        ///<param name="index">The position at which the formField should be inserted</param>
+        ///<param name="formField">The FormField to be iserted.</param>
+        public void Insert(int index, UIFormField formField)
+        {
+            if (_list.Contains(formField)) return;
+            if (index >= _list.Count) index = _list.Count;
+            if (index < 0) index = 0;
+            formField.UIFormColumn = this;
+            _list.Insert(index, formField);
+        }
     }
 }

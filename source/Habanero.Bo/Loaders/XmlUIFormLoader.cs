@@ -139,13 +139,13 @@ namespace Habanero.BO.Loaders
             }
             if (contentType == "columnLayout") {
                 UIFormTab tab = _defClassFactory.CreateUIFormTab();
-                columns.ForEach(delegate(UIFormColumn obj) { tab.Add(obj); });
+                columns.ForEach(tab.Add);
                 _uiForm.Add(tab);
             }
             else if (contentType == "field") {
                 UIFormTab tab = _defClassFactory.CreateUIFormTab();
                 UIFormColumn col = _defClassFactory.CreateUIFormColumn();
-                fields.ForEach(delegate(UIFormField obj) { col.Add(obj); });
+                fields.ForEach(col.Add);
                 tab.Add(col);
                 _uiForm.Add(tab);
             }

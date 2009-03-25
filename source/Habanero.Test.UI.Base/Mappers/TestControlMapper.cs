@@ -395,6 +395,22 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(controlFactory, controlMapper.ControlFactory);
         }
 
+        [Test]
+        public void Test_SetClassDef()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory controlFactory = GetControlFactory();
+            ITextBox ctl = controlFactory.CreateTextBox();
+            string propName = TestUtil.GetRandomString();
+            ControlMapperStub mapper = new ControlMapperStub(ctl, propName, true, controlFactory);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapper.ClassDef = _shape.ClassDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(_shape.ClassDef, mapper.ClassDef);
+
+        }
         #endregion //Test Mapper Creation
 
         #region Tests for normal mapper
@@ -1252,6 +1268,7 @@ namespace Habanero.Test.UI.Base
             get { return _onUpdateControlValueFromBusinessObject; }
             set { _onUpdateControlValueFromBusinessObject = value; }
         }
+
 
         public override void UpdateControlValueFromBusinessObject()
         {

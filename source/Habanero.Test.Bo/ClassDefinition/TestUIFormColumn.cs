@@ -89,10 +89,11 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_NotEqualsNull()
         {
             UIFormColumn uiFormColumn1 = new UIFormColumn();
-            UIFormColumn uiFormColumn2 = null;
+            const UIFormColumn uiFormColumn2 = null;
             Assert.IsFalse(uiFormColumn1 == uiFormColumn2);
             Assert.IsFalse(uiFormColumn2 == uiFormColumn1);
             Assert.IsFalse(uiFormColumn1.Equals(uiFormColumn2));
+            Assert.IsFalse(uiFormColumn1.Equals((object)uiFormColumn2));
         }
 
         [Test]
@@ -107,6 +108,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(uiFormColumn2 == uiFormColumn1);
             Assert.IsFalse(uiFormColumn2 != uiFormColumn1);
             Assert.IsTrue(uiFormColumn1.Equals(uiFormColumn2));
+            Assert.IsTrue(uiFormColumn1.Equals((object)uiFormColumn2));
         }
         [Test]
         public void Test_NotEquals_SameFirstItemDiffSecondItem()
@@ -122,6 +124,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(uiFormColumn1 != uiFormColumn2);
             Assert.IsFalse(uiFormColumn2 == uiFormColumn1);
             Assert.IsFalse(uiFormColumn1.Equals(uiFormColumn2));
+            Assert.IsFalse(uiFormColumn1.Equals((object)uiFormColumn2));
 
         }
 
@@ -144,9 +147,11 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             bool operatorEquals = uiFormColumn1 == uiFormColumn2;
             bool equalsMethod = uiFormColumn1.Equals(uiFormColumn2);
+            bool equalsObjectMethod = uiFormColumn1.Equals((object)uiFormColumn2);
             //---------------Test Result -----------------------
             Assert.IsFalse(operatorEquals);
             Assert.IsFalse(equalsMethod);
+            Assert.IsFalse(equalsObjectMethod);
             //---------------Tear Down -------------------------          
         }
         [Test]
@@ -161,6 +166,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsFalse(uiFormColumn1 == uiFormColumn2);
             Assert.IsFalse(uiFormColumn2 == uiFormColumn1);
             Assert.IsFalse(uiFormColumn1.Equals(uiFormColumn2));
+            Assert.IsFalse(uiFormColumn1.Equals((object)uiFormColumn2));
 
         }
 
@@ -176,6 +182,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsFalse(uiFormColumn1 == uiFormColumn2);
             Assert.IsFalse(uiFormColumn2 == uiFormColumn1);
             Assert.IsFalse(uiFormColumn1.Equals(uiFormColumn2));
+            Assert.IsFalse(uiFormColumn1.Equals((object)uiFormColumn2));
             //---------------Test Result -----------------------
 
             //---------------Tear Down -------------------------          
@@ -298,6 +305,91 @@ namespace Habanero.Test.BO.ClassDefinition
             column.UIFormTab = tab;
             //---------------Test Result -----------------------
             Assert.AreSame(tab, column.UIFormTab);
+        }
+        [Test]
+        public void Test_Insert_WhenNoItems_ShouldInsertInfirstLocation()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn column = new UIFormColumn();
+            UIFormField field = GetNewFormField();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, column.Count);
+            //---------------Execute Test ----------------------
+            column.Insert(0, field);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, column.Count);
+            Assert.AreSame(field, column[0]);
+            Assert.AreSame(column, field.UIFormColumn);
+        }
+        [Test]
+        public void Test_Insert_WhenOneItem_ShouldInsertFieldAtIndex()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn column = new UIFormColumn();
+            UIFormField field = GetNewFormField();
+            column.Insert(0, GetNewFormField());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, column.Count);
+            Assert.AreNotSame(field, column[0]);
+            //---------------Execute Test ----------------------
+            column.Insert(0, field);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, column.Count);
+            Assert.AreSame(field, column[0]);
+        }
+        [Test]
+        public void Test_Insert_WhenFieldAlreadyExists_DoesNothing()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn column = new UIFormColumn();
+            UIFormField field = GetNewFormField();
+            column.Insert(0, field);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, column.Count);
+            Assert.AreSame(field, column[0]);
+            //---------------Execute Test ----------------------
+            column.Insert(0, field);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, column.Count);
+            Assert.AreSame(field, column[0]);
+        }
+        [Test]
+        public void Test_Insert_WhenIndexGreaterThanNoOfItems_AddsItemToEndOfList()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn column = new UIFormColumn();
+            UIFormField field = GetNewFormField();
+            column.Insert(0, GetNewFormField());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, column.Count);
+            Assert.AreNotSame(field, column[0]);
+            //---------------Execute Test ----------------------
+            column.Insert(3, field);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, column.Count);
+            Assert.AreNotSame(field, column[0]);
+            Assert.AreSame(field, column[1]);
+        }
+        [Test]
+        public void Test_Insert_WhenIndexNegative_AddsItemToBeginOfList()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn column = new UIFormColumn();
+            UIFormField field = GetNewFormField();
+            column.Insert(0, GetNewFormField());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, column.Count);
+            Assert.AreNotSame(field, column[0]);
+            //---------------Execute Test ----------------------
+            column.Insert(-1, field);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, column.Count);
+            Assert.AreSame(field, column[0]);
+        }
+
+        private UIFormField GetNewFormField()
+        {
+            return new UIFormField("fdaf",TestUtil.GetRandomString() , "fdfsdaf", "fdfasd", "fdfasd","fdfasd",  false,"fdafads", new Hashtable(), new TriggerCol(), new UIFormField.LayoutStyle()  );
         }
 
 

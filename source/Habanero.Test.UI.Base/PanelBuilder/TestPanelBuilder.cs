@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -997,6 +998,21 @@ namespace Habanero.Test.UI.Base
         }
 
 
+        [Test]
+        public void Test_BuildPanelForTab_SetsClassDefForControlMappers()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory);
+            //---------------Test Result -----------------------
+            PanelInfo.FieldInfo info = panelInfo.FieldInfos[0];
+            IClassDef def = info.ControlMapper.ClassDef;
+            Assert.AreSame(classDef, def);
+        }
         [Test]
         public void Test_BuildPanelForTab_InputControlsHaveCorrectEnabledState()
         {

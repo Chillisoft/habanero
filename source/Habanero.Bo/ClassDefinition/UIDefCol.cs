@@ -132,10 +132,20 @@ namespace Habanero.BO.ClassDefinition
             get { return _defs.Count; }
         }
 
+        private ClassDef _classDef;
+
         ///<summary>
         /// Returns the class definition for the UIDefCol.
         ///</summary>
-        public ClassDef ClassDef { get; internal set; }
+        public ClassDef ClassDef
+        {
+            get { return _classDef; }
+            internal set { _classDef = value;
+                foreach (KeyValuePair<string, UIDef> def in _defs)
+                {
+                    def.Value.ClassDef = value;
+                }}
+        }
 
         #region Equals
 
