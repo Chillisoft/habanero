@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Xml.Serialization;
 
 namespace Habanero.Base
 {
@@ -25,7 +26,7 @@ namespace Habanero.Base
     /// Provides an interface for business objects. This interface contains all the publically accessable
     /// methods for Business Objects.
     /// </summary>
-    public interface IBusinessObject
+    public interface IBusinessObject : IXmlSerializable
     {
         //set; }
 

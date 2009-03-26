@@ -43,6 +43,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             AssertFileHasBeenCreated(dataFile);
         }
+
         [Test]
         public void Test_DeSerialiseBusinessObject()
         {
@@ -74,6 +75,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(myBO.MyBoID, deserialisedBO.MyBoID);
             Assert.AreEqual( myBO.Status, deserialisedBO.Status);
         }
+
         [Test]
         public void Test_SerialiseBusinessObjectCollection()
         {
@@ -132,6 +134,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, deserialisedBOCol.Count);
             Assert.AreEqual(2, deserialisedBOCol.CreatedBusinessObjects.Count);
         } 
+
 //        [Test]
 //        public void Test_SerialiseBOPrimaryKey()
 //        {

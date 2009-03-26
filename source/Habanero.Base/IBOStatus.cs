@@ -24,7 +24,7 @@ namespace Habanero.Base
     ///<summary>
     /// The Current Status of a Business Object.
     ///</summary>
-    public interface IBOStatus//: IXmlSerializable
+    public interface IBOStatus
     {
         /// <summary>
         /// Indicates if the business object is new
