@@ -140,7 +140,6 @@ namespace Habanero.BO
         public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
             IClassDef classDef = ClassDef.Get<T>();
-            bool inheritance = classDef.IsUsingClassTableInheritance();
             Source source = selectQuery.Source;
             QueryBuilder.PrepareSource(classDef, ref source);
             selectQuery.Source = source;
@@ -583,8 +582,19 @@ namespace Habanero.BO
 
             IBusinessObject boFromObjectManager = GetObjectFromObjectManager(key, bo.ClassDef.ClassType);
 
-            if (boFromObjectManager == null || !bo.GetType().IsInstanceOfType(boFromObjectManager))
+            if (boFromObjectManager == null )
             {
+                BusinessObjectManager.Instance.Add(bo);
+                return bo;
+            }
+            //This is a Hack to deal with the fact that Class table inheritance does not work well
+            // i.e. if ContactPerson inherits from Contact and you load a collection of Contacts then
+            // the contact person will load as type contact. If you later try load this as a ContactPerson
+            // then the incorrect type is loaded from the BusinessObjectManager.
+            if (!bo.GetType().IsInstanceOfType(boFromObjectManager) && bo.ClassDef.IsUsingClassTableInheritance())
+            {
+//                 ((ClassDef)bo.ClassDef).SuperClassDef
+                BusinessObjectManager.Instance.Remove(boFromObjectManager);
                 BusinessObjectManager.Instance.Add(bo);
                 return bo;
             }

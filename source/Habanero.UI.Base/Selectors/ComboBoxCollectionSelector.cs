@@ -72,14 +72,14 @@ namespace Habanero.UI.Base
             {
                 Collection.BusinessObjectAdded -= BusinessObjectAddedHandler;
                 Collection.BusinessObjectRemoved -= BusinessObjectRemovedHandler;
-                collection.BusinessObjectPropertyUpdated -= Collection_OnBusinessObjectUpdated;
+                Collection.BusinessObjectPropertyUpdated -= Collection_OnBusinessObjectUpdated;
             }
             Collection = collection;
             SetComboBoxCollection(Control, Collection, includeBlank);
             if (Collection == null) return;
             Collection.BusinessObjectAdded += BusinessObjectAddedHandler;
             Collection.BusinessObjectRemoved += BusinessObjectRemovedHandler;
-            collection.BusinessObjectPropertyUpdated += Collection_OnBusinessObjectUpdated;
+            Collection.BusinessObjectPropertyUpdated += Collection_OnBusinessObjectUpdated;
         }
 
         private void Collection_OnBusinessObjectUpdated(object sender, BOPropUpdatedEventArgs e)

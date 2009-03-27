@@ -285,7 +285,10 @@ namespace Habanero.Base
                 if ((_string[0] == '\'') && (_string[_string.Length - 1] == '\''))
                 {
                     _string.Remove(0, 1);
-                    _string.Remove(_string.Length - 1, 1);
+                    if (_string.Length != 0)
+                    {
+                        _string.Remove(_string.Length - 1, 1);
+                    }
                 }
             }
             return this;

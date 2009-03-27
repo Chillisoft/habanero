@@ -305,8 +305,11 @@ namespace Habanero.BO
             }
             remove
             {
-                _BusinessObjectPropertyUpdated -= _propertyUpdatedHandlers[value];
-                _propertyUpdatedHandlers.Remove(value);
+                if (_propertyUpdatedHandlers.ContainsKey(value))
+                {
+                    _BusinessObjectPropertyUpdated -= _propertyUpdatedHandlers[value];
+                    _propertyUpdatedHandlers.Remove(value);
+                }
             }
         }
 

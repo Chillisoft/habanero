@@ -238,6 +238,30 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.AreEqual(filledCircle.Colour, loadedFilledCircle.Colour);
                 //---------------Tear Down -------------------------
             }
+
+            [Test]
+            public void TestLoad_ClassTableInheritance__GetBOAsParent_ThenGetBOAsShape_ThenGetAsCircle_ShouldLoadCircle()
+            {
+                //---------------Set up test pack-------------------
+                FilledCircle.GetClassDefWithClassInheritanceHierarchy();
+                Circle circle = Circle.CreateSavedCircle();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
+                //---------------Assert Preconditions---------------
+                //---------------Execute Test ----------------------
+                Shape circleLoadedAsShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>("ShapeID = " + circle.ShapeID);
+                Circle loadedCircle =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
+
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(circleLoadedAsShape);
+                Assert.AreEqual(circle.ShapeName, circleLoadedAsShape.ShapeName);
+
+                Assert.IsNotNull(loadedCircle);
+                Assert.AreNotSame(loadedCircle, circle);
+                Assert.AreNotSame(loadedCircle, circleLoadedAsShape);
+                Assert.AreEqual(circle.Radius, loadedCircle.Radius);
+                Assert.AreEqual(circle.ShapeName, loadedCircle.ShapeName);
+            }
         }
 
         #endregion
