@@ -116,7 +116,8 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise a new business object
         /// </summary>
-        public BusinessObject() : this(null)
+        public BusinessObject()
+            : this(null)
         {
         }
 
@@ -162,7 +163,7 @@ namespace Habanero.BO
                     throw new HabaneroDeveloperException(message, message, ex);
                 }
             }
-            _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
+            _boStatus = (BOStatus)info.GetValue("Status", typeof(BOStatus));
             _boStatus.BusinessObject = this;
             AddToObjectManager();
         }
@@ -244,13 +245,13 @@ namespace Habanero.BO
             finally
             {
                 ReleaseWriteLocks();
-//                ReleaseReadLocks();                
+                //                ReleaseReadLocks();                
             }
         }
 
         private void Initialise(ClassDef classDef)
         {
-            _boStatus = new BOStatus(this) {IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true};
+            _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
             if (classDef == null)
             {
                 if (ClassDef.ClassDefs.Contains(GetType()))
@@ -319,7 +320,7 @@ namespace Habanero.BO
             {
                 if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
                 {
-                    _primaryKey = (BOPrimaryKey) classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                    _primaryKey = (BOPrimaryKey)classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(_boPropCol);
                 }
             }
             else
@@ -374,7 +375,7 @@ namespace Habanero.BO
         /// </summary>
         public RelationshipCol Relationships
         {
-            get { return (RelationshipCol) _relationshipCol; }
+            get { return (RelationshipCol)_relationshipCol; }
             set { _relationshipCol = value; }
         }
 
@@ -420,11 +421,11 @@ namespace Habanero.BO
         {
             get
             {
-//                if (_primaryKey == null)
-//                {
-//                    CheckClassDefNotNull();
-//                    SetupPrimaryKey();
-//                }
+                //                if (_primaryKey == null)
+                //                {
+                //                    CheckClassDefNotNull();
+                //                    SetupPrimaryKey();
+                //                }
                 return _primaryKey;
             }
         }
@@ -449,7 +450,7 @@ namespace Habanero.BO
         {
             PrimaryKeyDef primaryKeyDef = ClassDef.GetPrimaryKeyDef();
             if (primaryKeyDef == null) return;
-            _primaryKey = (BOPrimaryKey) primaryKeyDef.CreateBOKey(this.Props);
+            _primaryKey = (BOPrimaryKey)primaryKeyDef.CreateBOKey(this.Props);
         }
 
         /// <summary>
@@ -467,7 +468,7 @@ namespace Habanero.BO
         IClassDef IBusinessObject.ClassDef
         {
             get { return _classDef; }
-            set { _classDef = (ClassDef) value; }
+            set { _classDef = (ClassDef)value; }
         }
 
 
@@ -526,7 +527,7 @@ namespace Habanero.BO
             output += "Type: " + GetType().Name + Environment.NewLine;
             foreach (IBOProp entry in _boPropCol)
             {
-//                BOProp prop = (BOProp) entry.Value;
+                //                BOProp prop = (BOProp) entry.Value;
                 output += entry.PropertyName + " - " + entry.PropertyValueString + Environment.NewLine;
             }
             return output;
@@ -629,7 +630,7 @@ namespace Habanero.BO
         ///<returns>Returns the value if found</returns>
         public T GetPropertyValue<T>(string propName)
         {
-            return (T) GetPropertyValue(propName);
+            return (T)GetPropertyValue(propName);
         }
 
         /// <summary>
@@ -680,7 +681,7 @@ namespace Habanero.BO
                 return prop.PersistedPropertyValue;
             }
 
-            BusinessObject businessObject = (BusinessObject) Relationships.GetRelatedObject(source.Name);
+            BusinessObject businessObject = (BusinessObject)Relationships.GetRelatedObject(source.Name);
             if (businessObject == null) return null;
             if (source.Joins.Count > 0)
             {
@@ -696,7 +697,7 @@ namespace Habanero.BO
             string errMessage = String.Format
                 ("The given property name '{0}' does not exist in the "
                  + "collection of properties for the class '{1}'.", propName, GetType().Name);
-            throw new InvalidPropertyNameException (errMessage);
+            throw new InvalidPropertyNameException(errMessage);
         }
 
         /// <summary>
@@ -707,16 +708,16 @@ namespace Habanero.BO
         public void SetPropertyValue(string propName, object newPropValue)
         {
             IBOProp prop = GetProperty(propName);
-//            if (prop == null)
-//            {
-//                throw new InvalidPropertyNameException
-//                    (String.Format
-//                         ("The given property name '{0}' does not exist in the "
-//                          + "collection of properties for the class '{1}'.", propName, ClassName));
-//            }
+            //            if (prop == null)
+            //            {
+            //                throw new InvalidPropertyNameException
+            //                    (String.Format
+            //                         ("The given property name '{0}' does not exist in the "
+            //                          + "collection of properties for the class '{1}'.", propName, ClassName));
+            //            }
             object propValue = prop.Value;
             object newPropValue1;
-            ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
+            ((BOProp)prop).ParsePropValue(newPropValue, out newPropValue1);
             if (PropValueHasChanged(propValue, newPropValue1))
             {
                 if (!Status.IsEditing)
@@ -725,12 +726,12 @@ namespace Habanero.BO
                 }
                 _boStatus.IsDirty = true;
                 prop.Value = newPropValue1;
-//                if (prop.IsValid)
-//                {
-                    //FireUpdatedEvent();
-                    //TODO Mark 13 Mar 2009: This should rather be fired from any BOProp being updated, not from this SetPropertyValue method.
-                    FirePropertyUpdatedEvent(prop);
-//                }
+                //                if (prop.IsValid)
+                //                {
+                //FireUpdatedEvent();
+                //TODO Mark 13 Mar 2009: This should rather be fired from any BOProp being updated, not from this SetPropertyValue method.
+                FirePropertyUpdatedEvent(prop);
+                //                }
             }
         }
 
@@ -933,15 +934,15 @@ namespace Habanero.BO
             //This has been removed. The new philosophy with allowing the user to create items have them show
             // in the collection and the UI. It should be allowed that the user can (delete) the object.
             // The transaction committer will be modified to ignore an object that is marked as deleted and new.
-//            if (Status.IsNew)
-//            {
-//                throw new HabaneroDeveloperException
-//                    (String.Format
-//                         ("This '{0}' cannot be deleted as it has never existed in the database.", ClassDef.DisplayName),
-//                     String.Format
-//                         ("A '{0}' cannot be deleted when its status is new and does not exist in the database.",
-//                          ClassDef.ClassName));
-//            }
+            //            if (Status.IsNew)
+            //            {
+            //                throw new HabaneroDeveloperException
+            //                    (String.Format
+            //                         ("This '{0}' cannot be deleted as it has never existed in the database.", ClassDef.DisplayName),
+            //                     String.Format
+            //                         ("A '{0}' cannot be deleted when its status is new and does not exist in the database.",
+            //                          ClassDef.ClassName));
+            //            }
             if (!Status.IsEditing)
             {
                 BeginEdit(true);
@@ -1007,15 +1008,15 @@ namespace Habanero.BO
             foreach (IRelationship relationship in this.Relationships)
             {
                 if (!(relationship is IMultipleRelationship)) continue;
-                IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
+                IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
 
                 IList createdBos = multipleRelationship.CurrentBusinessObjectCollection.CreatedBusinessObjects;
                 while (createdBos.Count > 0)
                 {
-                    IBusinessObject businessObject = (IBusinessObject) createdBos[createdBos.Count - 1];
+                    IBusinessObject businessObject = (IBusinessObject)createdBos[createdBos.Count - 1];
                     createdBos.Remove(businessObject);
                     if (relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated) continue;
-                    ((BOStatus) businessObject.Status).IsDeleted = true;
+                    ((BOStatus)businessObject.Status).IsDeleted = true;
                 }
                 multipleRelationship.CurrentBusinessObjectCollection.RemovedBusinessObjects.Clear();
             }
@@ -1057,7 +1058,7 @@ namespace Habanero.BO
             //{
             //    transactionCommitter.AddTransaction(_transactionLog);
             //}
-            this.Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter) transactionCommitter);
+            this.Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter)transactionCommitter);
 
             if (_businessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
             {
@@ -1180,12 +1181,11 @@ namespace Habanero.BO
         /// <param name="r"></param>
         public void ReadXml(XmlReader r)
         {
-            //while(r.Read())
-            //{
-                
-            //}
-            throw new NotImplementedException();
-
+            r.GetAttribute("BusinessObject");
+            while (r.MoveToNextAttribute())
+                if (r.Name != "BusinessObject" && r.Name != "Status")
+                    this.SetPropertyValue(r.Name, r.Value);
+            r.Read();
         }
 
         /// <summary>
@@ -1194,17 +1194,14 @@ namespace Habanero.BO
         /// <param name="w"></param>
         public void WriteXml(XmlWriter w)
         {
+            w.WriteAttributeString("BusinessObject", Convert.ToString(this.ID.GetAsValue()));
             foreach (IBOProp prop in _boPropCol)
             {
                 w.WriteAttributeString(prop.PropertyName, Convert.ToString(prop.Value));
             }
-            //what should be referenced for the status value?
-            //how can i get it to print the correct status enum name? 
-            //w.WriteAttributeString("Status",Status.);
-            //must use bin serialization then deserialize-> gets enum name
         }
 
-      #endregion
+        #endregion
 
         #region Concurrency
 
@@ -1253,16 +1250,16 @@ namespace Habanero.BO
             }
         }
 
-//        /// <summary>
-//        /// Releases write locks from the database
-//        /// </summary>
-//        protected virtual void ReleaseReadLocks()
-//        {
-//            if (!(_concurrencyControl == null))
-//            {
-//                _concurrencyControl.ReleaseReadLocks();
-//            }
-//        }
+        //        /// <summary>
+        //        /// Releases write locks from the database
+        //        /// </summary>
+        //        protected virtual void ReleaseReadLocks()
+        //        {
+        //            if (!(_concurrencyControl == null))
+        //            {
+        //                _concurrencyControl.ReleaseReadLocks();
+        //            }
+        //        }
 
         #endregion //Concurrency
 

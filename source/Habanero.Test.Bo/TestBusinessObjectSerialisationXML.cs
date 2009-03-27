@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using Habanero.Base;
 using Habanero.BO;
@@ -14,7 +12,6 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBusinessObjectSerialisationXML
     {
-        [Ignore]//deserialise not implemented
         [Test]
         public void Test_XmlSerialiseDeserialise_ReturnsCorrectType()
         {
@@ -25,12 +22,10 @@ namespace Habanero.Test.BO
             OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
-            //IFormatter formatter = new BinaryFormatter();
             XmlSerializer xs = new XmlSerializer(typeof(Person));
             MemoryStream memoryStream = new MemoryStream();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Execute Test ----------------------
-            //formatter.Serialize(memoryStream, originalPerson);
             xs.Serialize(memoryStream, originalPerson);
             memoryStream.Seek(0, SeekOrigin.Begin);
             Object deserialisedPerson = xs.Deserialize(memoryStream);
@@ -38,7 +33,6 @@ namespace Habanero.Test.BO
             Assert.IsInstanceOfType(typeof(Person), deserialisedPerson);
         }
 
-        [Ignore]//deserialise not implemented
         [Test]
         public void Test_XmlSerialiseDeserialise_ReturnsCorrectClassDef()
         {
@@ -60,7 +54,6 @@ namespace Habanero.Test.BO
             Assert.AreSame(classDef, deserialisedPerson.ClassDef);
         }
 
-        [Ignore]//deserialise not implemented
         [Test]
         public void Test_XmlSerialiseAndDeserialise()
         {
@@ -81,11 +74,9 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreNotSame(deserialisedPerson, originalPerson);
             AssertPersonsAreEqual(originalPerson, deserialisedPerson);
-            //not deserialisng
-            Assert.AreEqual(originalPerson.FirstName,deserialisedPerson.FirstName);
+            Assert.AreEqual(originalPerson.FirstName, deserialisedPerson.FirstName);
         }
 
-        [Ignore]//deserialise not implemented
         [Test]
         public void Test_Serialise_AddBOPropAndDeserialise()
         {
@@ -115,32 +106,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(defaultValue, deserialisedPerson.GetPropertyValue(newpropertyName));
         }
 
-        [Ignore]//deserialise not implemented
-        [Test]
-        public void Test_SerialiseDeserialise_ReturnsCorrectStatus()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            Structure.Car.LoadDefaultClassDef();
-            OrganisationPerson.LoadDefaultClassDef();
-            Person.LoadDefaultClassDef();
-            Person originalPerson = Person.CreateSavedPerson();
-            XmlSerializer xs = new XmlSerializer(typeof(Person));
-            MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-
-            //---------------Execute Test ----------------------
-            xs.Serialize(memoryStream, originalPerson);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            Person deserialisedPerson = (Person)xs.Deserialize(memoryStream);
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(originalPerson.Status, deserialisedPerson.Status);
-            Assert.AreSame(deserialisedPerson, deserialisedPerson.Status.BusinessObject);
-        }
-
-        [Ignore]//deserialise not implemented
         [Test]
         public void TestSerialiseDeserialiseBusinessObjectCollection()
         {
@@ -157,28 +122,23 @@ namespace Habanero.Test.BO
             originalPeople.Add(person2);
             Person person3 = Person.CreateSavedPerson();
             originalPeople.Add(person3);
-
             XmlSerializer xs = new XmlSerializer(typeof(BusinessObjectCollection<Person>));
             MemoryStream memoryStream = new MemoryStream();
             BusinessObjectManager.Instance.ClearLoadedObjects();
-
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPeople);
             memoryStream.Seek(0, SeekOrigin.Begin);
             //this line causes test to hang/infinite loop?
-            BusinessObjectCollection<Person> deserialisedPeople = null;
-            //(BusinessObjectCollection<Person>)xs.Deserialize(memoryStream);
-
+            BusinessObjectCollection<Person> deserialisedPeople = 
+                (BusinessObjectCollection<Person>)xs.Deserialize(memoryStream);
             //---------------Test Result -----------------------
             Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
-
             Assert.AreNotSame(originalPeople, deserialisedPeople);
             AssertPersonsAreEqual(deserialisedPeople[0], originalPeople[0]);
             AssertPersonsAreEqual(deserialisedPeople[1], originalPeople[1]);
             AssertPersonsAreEqual(deserialisedPeople[2], originalPeople[2]);
         }
 
-        [Ignore]//deserialise not implemented
         [Test]
         public void TestSerialiseDeserialiseBusinessObjectCollection_CreatedBusObjAreIncluded()
         {
@@ -191,18 +151,14 @@ namespace Habanero.Test.BO
             BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
             originalPeople.CreateBusinessObject();
             originalPeople.CreateBusinessObject();
-
             XmlSerializer xs = new XmlSerializer(typeof(BusinessObjectCollection<Person>));
             MemoryStream memoryStream = new MemoryStream();
             BusinessObjectManager.Instance.ClearLoadedObjects();
-
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPeople);
             memoryStream.Seek(0, SeekOrigin.Begin);
-            //this line causes test to hang/infinite loop?
-            BusinessObjectCollection<Person> deserialisedPeople = null;
-            //(BusinessObjectCollection<Person>)xs.Deserialize(memoryStream);
-
+            BusinessObjectCollection<Person> deserialisedPeople = 
+                (BusinessObjectCollection<Person>)xs.Deserialize(memoryStream);
             //---------------Test Result -----------------------
             Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
             Assert.AreEqual(originalPeople.CreatedBusinessObjects.Count, deserialisedPeople.CreatedBusinessObjects.Count);
@@ -218,14 +174,9 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
-
-            //MyBO.LoadClassDefs_Integer_PrimaryKey();
-
             BusinessObject myBO = new MyBO();
-            
             const string fileName = @"C:\xmlBOs.xml";
             File.Delete(fileName);
-
             //---------------Assert Precondition----------------
             AssertFileDoesNotExist(fileName);
             //---------------Execute Test ----------------------
@@ -237,7 +188,6 @@ namespace Habanero.Test.BO
             AssertFileHasBeenCreated(fileName);
         }
 
-        [Ignore]//deserialise not implemented
         [Test]
         public void Test_ReadXmlFile()
         {
@@ -245,7 +195,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
-            
+
             const string fileName = @"C:\xmlBOs.xml";
             File.Delete(fileName);
 
@@ -253,7 +203,7 @@ namespace Habanero.Test.BO
             XmlSerializer xs = new XmlSerializer(typeof(MyBO));
             //using (FileStream fs = new FileStream(fileName, FileMode.Create))
             //{
-            StreamWriter sw = new StreamWriter(fileName);  
+            StreamWriter sw = new StreamWriter(fileName);
             xs.Serialize(sw, myBO);
             //}
             sw.Close();
@@ -264,9 +214,9 @@ namespace Habanero.Test.BO
             MyBO deserialisedBO;
             //using (Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             //{
-            StreamReader sr=new StreamReader(fileName);
+            StreamReader sr = new StreamReader(fileName);
             //this line pulls out a magic guid- not the one in the file?- deserialize had not been implemented
-                deserialisedBO = (MyBO)xs.Deserialize(sr);
+            deserialisedBO = (MyBO)xs.Deserialize(sr);
             //}
             //---------------Test Result -----------------------
             Assert.AreEqual(myBO.MyBoID, deserialisedBO.MyBoID);
@@ -280,21 +230,20 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDefWithDefault("default prop");
             IBusinessObjectCollection myBOCol = GetMyBOColWithTwoBOs();
-            const string dataFile = @"C:\xmlBOCol.xml";
-            File.Delete(dataFile);
+            const string fileName = @"C:\xmlBOCol.xml";
+            File.Delete(fileName);
 
             XmlSerializer xs = new XmlSerializer(typeof(BusinessObjectCollection<MyBO>));
             //---------------Assert Precondition----------------
-            AssertFileDoesNotExist(dataFile);
+            AssertFileDoesNotExist(fileName);
             Assert.AreEqual(2, myBOCol.Count);
             //---------------Execute Test ----------------------
-            // Serialize the BO.
-            using (FileStream fs = new FileStream(dataFile, FileMode.Create))
+            using (FileStream fs = new FileStream(fileName, FileMode.Create))
             {
                 xs.Serialize(fs, myBOCol);
             }
             //---------------Test Result -----------------------
-            AssertFileHasBeenCreated(dataFile);
+            AssertFileHasBeenCreated(fileName);
         }
 
         private static void AssertPersonsAreEqual(IBusinessObject originalPerson, IBusinessObject deserialisedPerson)
@@ -325,13 +274,4 @@ namespace Habanero.Test.BO
             return myBOCol;
         }
     }
-    //[Serializable]
-    //internal class TrySerialisable
-    //{
-    //    public void GetObjectData(SerializationInfo info, StreamingContext context)
-    //    {
-    //        info.AddValue("someValue", 1);
-    //    }
-    //}
-
 }
