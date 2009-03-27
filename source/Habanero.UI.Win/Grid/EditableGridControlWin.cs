@@ -175,7 +175,7 @@ namespace Habanero.UI.Win
         {
             if (this.BusinessObjectSelected != null)
             {
-                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
+                this.BusinessObjectSelected(this, e);
             }
         }
 

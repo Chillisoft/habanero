@@ -67,10 +67,12 @@ namespace Habanero.UI.Base
         /// top of the list</param>
 		public void SetCollection(IBusinessObjectCollection collection, bool includeBlank)
         {
+            //TODO Brett 26 Mar 2009: Register for Business Object updated event as well as prop updated.
             if (Collection != null)
             {
                 Collection.BusinessObjectAdded -= BusinessObjectAddedHandler;
                 Collection.BusinessObjectRemoved -= BusinessObjectRemovedHandler;
+                collection.BusinessObjectPropertyUpdated -= Collection_OnBusinessObjectUpdated;
             }
             Collection = collection;
             SetComboBoxCollection(Control, Collection, includeBlank);
