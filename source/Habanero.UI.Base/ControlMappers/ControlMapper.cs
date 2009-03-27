@@ -236,6 +236,10 @@ namespace Habanero.UI.Base
 //            }
             return _boProp;
         }
+        /// <summary>
+        /// is the property a virtual property i.e. is it loaded via reflection or via a relationship.
+        /// </summary>
+        /// <returns></returns>
         protected virtual bool IsPropertyVirtual()
         {
             return IsPropertyViaRelationship() || IsPropertyReflective();
@@ -483,7 +487,7 @@ namespace Habanero.UI.Base
                 return;
             }
 
-           if(!_businessObject.Status.IsNew) ErrorProvider.SetError(_control, CurrentBOProp().InvalidReason);
+            ErrorProvider.SetError(_control, CurrentBOProp().InvalidReason);
         }
         /// <summary>
         /// Returns the Error Provider's Error message.

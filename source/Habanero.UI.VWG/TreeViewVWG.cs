@@ -36,9 +36,6 @@ namespace Habanero.UI.VWG
     {
         private readonly TreeNodeCollectionVWG _nodes;
 
-        private event TreeViewEventHandler _afterSelect;
-        private event TreeViewCancelEventHandler _beforeSelect;
-
         #region Utility Methods
 
         private static ITreeNode GetITreeNode(TreeNode treeNode)
@@ -73,20 +70,12 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// An event that is fired after the <see cref="ITreeNode"/>  is selected.
         /// </summary>
-        public new event TreeViewEventHandler AfterSelect
-        {
-            add { _afterSelect += value; }
-            remove { _afterSelect -= value; }
-        }
+        public new event TreeViewEventHandler AfterSelect;
 
         /// <summary>
         /// An event that is fired just before the <see cref="ITreeNode"/> is selected.
         /// </summary>
-        public new event TreeViewCancelEventHandler BeforeSelect
-        {
-            add { _beforeSelect += value; }
-            remove { _beforeSelect -= value; }
-        }
+        public new event TreeViewCancelEventHandler BeforeSelect;
 
         /// <summary>Occurs before the tree node is expanded.</summary>
         /// <filterpriority>1</filterpriority>
@@ -121,19 +110,39 @@ namespace Habanero.UI.VWG
         {
             return GetITreeNode(base.GetNodeAt(intX, intY));
         }
+        ///<summary>
+        ///Raises the <see cref="AfterCheck" /> event.
+        ///</summary>
+        ///<param name="e">A <see cref="TreeViewEventArgs" /> that contains the event data. </param>
+        protected override void OnAfterCheck(TreeViewEventArgs e)
+        {
+            base.OnAfterCheck(e);
+            if (this.AfterCheck == null) return;
+            Base.TreeViewEventArgs treeViewEventArgs = new Base.TreeViewEventArgs(GetITreeNode(e.Node), (TreeViewAction)e.Action);
+            this.AfterCheck(this, treeViewEventArgs);
+        }
 
         ///<summary>
-        ///Raises the <see cref="E:Gizmox.WebGUI.Forms.TreeView.AfterSelect" /> event.
+        ///Raises the <see cref="AfterExpand" /> event.
         ///</summary>
-        ///
-        ///<param name="e">A <see cref="T:Gizmox.WebGUI.Forms.TreeViewEventArgs" /> that contains the event data. </param>
-        protected override void OnAfterSelect(TreeViewEventArgs e)
+        ///<param name="e">A <see cref="TreeViewEventArgs" /> that contains the event data. </param>
+        protected override void OnAfterExpand(TreeViewEventArgs e)
         {
-            base.OnAfterSelect(e);
-            if (this._afterSelect == null) return;
-            Base.TreeViewEventArgs treeViewEventArgs = new Base.TreeViewEventArgs(
-                GetITreeNode(e.Node), (TreeViewAction)e.Action);
-            this._afterSelect(this, treeViewEventArgs);
+            base.OnAfterExpand(e);
+            if (this.AfterExpand == null) return;
+            Base.TreeViewEventArgs treeViewEventArgs = new Base.TreeViewEventArgs(GetITreeNode(e.Node), (TreeViewAction)e.Action);
+            this.AfterExpand(this, treeViewEventArgs);
+        }
+        ///<summary>
+        ///Raises the <see cref="AfterCollapse" /> event.
+        ///</summary>
+        ///<param name="e">A <see cref="TreeViewEventArgs" /> that contains the event data. </param>
+        protected override void OnAfterCollapse(TreeViewEventArgs e)
+        {
+            base.OnAfterCollapse(e);
+            if (this.AfterCollapse == null) return;
+            Base.TreeViewEventArgs treeViewEventArgs = new Base.TreeViewEventArgs(GetITreeNode(e.Node), (TreeViewAction)e.Action);
+            this.AfterCollapse(this, treeViewEventArgs);
         }
 
         ///<summary>
@@ -144,12 +153,63 @@ namespace Habanero.UI.VWG
         protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
         {
             base.OnBeforeSelect(e);
-            if (this._beforeSelect == null || e.Cancel) return;
+            if (this.BeforeSelect == null || e.Cancel) return;
             Base.TreeViewCancelEventArgs treeViewCancelEventArgs = new Base.TreeViewCancelEventArgs(
                 GetITreeNode(e.Node), e.Cancel, (TreeViewAction)e.Action);
-            this._beforeSelect(this, treeViewCancelEventArgs);
+            this.BeforeSelect(this, treeViewCancelEventArgs);
             e.Cancel = treeViewCancelEventArgs.Cancel;
         }
+        ///<summary>
+        ///Raises the <see cref="BeforeCollapse" /> event.
+        ///</summary>
+        ///<param name="e">A <see cref="TreeViewCancelEventArgs" /> that contains the event data. </param>
+        protected override void OnBeforeCollapse(TreeViewCancelEventArgs e)
+        {
+            base.OnBeforeCollapse(e);
+            if (this.BeforeCollapse == null || e.Cancel) return;
+            Base.TreeViewCancelEventArgs treeViewCancelEventArgs = new Base.TreeViewCancelEventArgs(GetITreeNode(e.Node), e.Cancel, (TreeViewAction)e.Action);
+            this.BeforeCollapse(this, treeViewCancelEventArgs);
+            e.Cancel = treeViewCancelEventArgs.Cancel;
+        }
+        ///<summary>
+        ///Raises the <see cref="BeforeCheck" /> event.
+        ///</summary>
+        ///<param name="e">A <see cref="TreeViewCancelEventArgs" /> that contains the event data. </param>
+        protected override void OnBeforeCheck(TreeViewCancelEventArgs e)
+        {
+            base.OnBeforeCheck(e);
+            if (this.BeforeCheck == null || e.Cancel) return;
+            Base.TreeViewCancelEventArgs treeViewCancelEventArgs = new Base.TreeViewCancelEventArgs(GetITreeNode(e.Node), e.Cancel, (TreeViewAction)e.Action);
+            this.BeforeCheck(this, treeViewCancelEventArgs);
+            e.Cancel = treeViewCancelEventArgs.Cancel;
+        }
+        ///<summary>
+        ///Raises the <see cref="ITreeView.BeforeExpand" /> event.
+        ///</summary>
+        ///<param name="e">A <see cref="TreeViewCancelEventArgs" /> that contains the event data. </param>
+        protected override void OnBeforeExpand(TreeViewCancelEventArgs e)
+        {
+            base.OnBeforeExpand(e);
+            if (this.BeforeExpand == null || e.Cancel) return;
+            Base.TreeViewCancelEventArgs treeViewCancelEventArgs = new Base.TreeViewCancelEventArgs(GetITreeNode(e.Node), e.Cancel, (TreeViewAction)e.Action);
+            this.BeforeExpand(this, treeViewCancelEventArgs);
+            e.Cancel = treeViewCancelEventArgs.Cancel;
+        }
+        ///<summary>
+        ///Raises the <see cref="E:Gizmox.WebGUI.Forms.TreeView.AfterSelect" /> event.
+        ///</summary>
+        ///
+        ///<param name="e">A <see cref="T:Gizmox.WebGUI.Forms.TreeViewEventArgs" /> that contains the event data. </param>
+        protected override void OnAfterSelect(TreeViewEventArgs e)
+        {
+            base.OnAfterSelect(e);
+            if (this.AfterSelect == null) return;
+            Base.TreeViewEventArgs treeViewEventArgs = new Base.TreeViewEventArgs(
+                GetITreeNode(e.Node), (TreeViewAction)e.Action);
+            this.AfterSelect(this, treeViewEventArgs);
+        }
+
+
 
         #endregion // Event Handling
 

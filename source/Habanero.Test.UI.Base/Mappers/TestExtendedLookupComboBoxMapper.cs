@@ -45,7 +45,9 @@ namespace Habanero.Test.UI.Base.Mappers
 
         private static IControlFactory GetControlFactory()
         {
-            return new ControlFactoryWin();
+            ControlFactoryWin factory = new ControlFactoryWin();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
         }
 
         [Test]

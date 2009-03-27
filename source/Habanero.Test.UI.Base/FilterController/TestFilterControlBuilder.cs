@@ -435,7 +435,10 @@ namespace Habanero.Test.UI.Base.FilterController
         /// Event handler that fires when the value in the Filter control changes
         /// </summary>
         public event EventHandler ValueChanged;
-
+        private void FireValueChanged()
+        {
+            ValueChanged(this, new EventArgs());
+        }
         ///<summary>
         /// The name of the property being filtered by.
         ///</summary>

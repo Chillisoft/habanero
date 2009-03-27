@@ -31,7 +31,7 @@ namespace Habanero.BO.ClassDefinition
         private string _name;
         private UIForm _uiForm;
         private UIGrid _uiGrid;
-        private ClassDef _classDef;
+//        private ClassDef _classDef;
 
         /// <summary>
         /// Constructor to initialise a new definition with the name, form

@@ -9,9 +9,6 @@
 //------------------------------------------------------------------------------
 
 namespace Habanero.UI.Base {
-    using System;
-    
-    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -20,8 +17,8 @@ namespace Habanero.UI.Base {
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "2.0.0.0")]
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute]
     public class CollapsiblePanelResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
@@ -59,21 +56,27 @@ namespace Habanero.UI.Base {
                 resourceCulture = value;
             }
         }
-
+        /// <summary>
+        /// The bitmap for the header gradient for teh collapsible panel
+        /// </summary>
         public static System.Drawing.Bitmap headergradient {
             get {
                 object obj = ResourceManager.GetObject("headergradient", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
+        /// <summary>
+        /// The bitmap for the pinOff for the collapsible panel
+        /// </summary>
         public static System.Drawing.Bitmap pinoff_withcolour {
             get {
                 object obj = ResourceManager.GetObject("pinoff_withcolour", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
+        /// <summary>
+        /// The bitmap for the pinon for the collapsible panel
+        /// </summary>
         public static System.Drawing.Bitmap pinon_withcolour {
             get {
                 object obj = ResourceManager.GetObject("pinon_withcolour", resourceCulture);

@@ -177,7 +177,10 @@ namespace Habanero.UI.Base
         /// Returns the ComboBox control
         /// </summary>
         public IComboBox Control { get; private set; }
-
+        /// <summary>
+        /// Must the first combo box item be auto selected or not. If it is autoselect then this item will be shown as selected
+        /// when the combo box is loaded and the Selected event will be fired.
+        /// </summary>
         public bool AutoSelectFirstItem { get; set; }
 
         /// <summary>

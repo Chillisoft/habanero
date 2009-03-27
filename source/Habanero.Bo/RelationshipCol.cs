@@ -146,6 +146,7 @@ namespace Habanero.BO
         /// single one was expected</exception>
         public IBusinessObject GetRelatedObject(string relationshipName)
         {
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             ISingleRelationship relationship = GetSingle(relationshipName);
             return relationship.GetRelatedObject();
         }
@@ -175,6 +176,7 @@ namespace Habanero.BO
         ///<returns>THe single relationship</returns>
         public ISingleRelationship GetSingle(string relationshipName)
         {
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             IRelationship relationship = GetRelationshipAsSingle(relationshipName);
             return (ISingleRelationship)relationship;
         }
@@ -187,11 +189,13 @@ namespace Habanero.BO
         public SingleRelationship<T> GetSingle<T>(string relationshipName)
              where T : class, IBusinessObject, new()
         {
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             IRelationship relationship = GetRelationshipAsSingle(relationshipName);
             return (SingleRelationship<T>)relationship;
         }
 
         private IRelationship GetRelationshipAsSingle(string relationshipName) {
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             IRelationship relationship = this[relationshipName];
             if (relationship is IMultipleRelationship)
             {
@@ -227,6 +231,7 @@ namespace Habanero.BO
 		/// multiple one was expected</exception>
 		public virtual IBusinessObjectCollection GetRelatedCollection(string relationshipName)
 		{
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             IMultipleRelationship multipleRelationship = GetMultiple(relationshipName);
             return multipleRelationship.BusinessObjectCollection;
 		}
@@ -245,6 +250,7 @@ namespace Habanero.BO
         public BusinessObjectCollection<TBusinessObject> GetRelatedCollection<TBusinessObject>(string relationshipName)
             where TBusinessObject : BusinessObject, new()
 		{
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             MultipleRelationship<TBusinessObject> multipleRelationship = GetMultiple<TBusinessObject>(relationshipName);
             return multipleRelationship.BusinessObjectCollection;
         }
@@ -276,6 +282,7 @@ namespace Habanero.BO
         }
 
         private IMultipleRelationship GetRelationshipAsMultiple(string relationshipName) {
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             IRelationship relationship = this[relationshipName];
             if (relationship is ISingleRelationship)
             {
@@ -299,6 +306,7 @@ namespace Habanero.BO
         /// single one</exception>
         public void SetRelatedObject(string relationshipName, IBusinessObject relatedObject)
         {
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             IRelationship relationship = this[relationshipName];
             if (relationship is IMultipleRelationship)
             {

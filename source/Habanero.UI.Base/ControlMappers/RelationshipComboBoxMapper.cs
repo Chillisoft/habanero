@@ -61,7 +61,7 @@ namespace Habanero.UI.Base
 
         /// <summary>
         /// Constructs a <see cref="RelationshipComboBoxMapper"/> with the <paramref name="comboBox"/>
-        ///  <and <paramref name="relationshipName"/>
+        ///  <paramref name="relationshipName"/>
         /// </summary>
         /// <param name="comboBox">The combo box that is being mapped to</param>
         /// <param name="relationshipName">The name of the relation that is being mapped to</param>
@@ -368,6 +368,9 @@ namespace Habanero.UI.Base
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Updates the properties on the represented business object
+        /// </summary>
         public void ApplyChangesToBusinessObject()
         {
             object item = this.Control.SelectedItem;

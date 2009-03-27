@@ -167,7 +167,11 @@ namespace Habanero.UI.Base
                 return null;
             }
         }
-
+        /// <summary>
+        /// returns the Business Object control for any particular Tab.
+        /// </summary>
+        /// <param name="selectedTab"></param>
+        /// <returns></returns>
         protected virtual IBusinessObjectControl GetBusinessObjectControl(ITabPage selectedTab)
         {
             if (selectedTab.Controls.Count > 0)

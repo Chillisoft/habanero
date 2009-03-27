@@ -140,6 +140,7 @@ namespace Habanero.BO
         public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
             IClassDef classDef = ClassDef.Get<T>();
+            bool inheritance = classDef.IsUsingClassTableInheritance();
             Source source = selectQuery.Source;
             QueryBuilder.PrepareSource(classDef, ref source);
             selectQuery.Source = source;
@@ -155,7 +156,7 @@ namespace Habanero.BO
                     loadedBo = LoadBOFromReader<T>(dr, selectQueryDB);
 
                     //Checks to see if the loaded object is the base of a single table inheritance structure
-                    // and has a sub type
+                    // and has a sub type if so then returns the correct sub type.
                     correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
                     //Checks to see if there is a duplicate object meeting this criteria
                     if (dr.Read()) ThrowRetrieveDuplicateObjectException(statement, loadedBo);
@@ -309,15 +310,16 @@ namespace Habanero.BO
                     while (dr.Read())
                     {
                         T loadedBo = (T) LoadBOFromReader(collection.ClassDef, dr, selectQuery);
-                        //If the origional collection had the new business object then
-                        // use add internal this adds without any events being raised etc.
-                        //else adds via the Add method (normal add) this raises events such that the 
-                        // user interface can be updated.
+
                         //Checks to see if the loaded object is the base of a single table inheritance structure
                         // and has a sub type
                         IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
                         // loads an object of the correct sub type (for single table inheritance)
                         loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
+                        //If the origional collection had the new business object then
+                        // use add internal this adds without any events being raised etc.
+                        //else adds via the Add method (normal add) this raises events such that the 
+                        // user interface can be updated.
                         AddBusinessObjectToCollection(collection, loadedBo);
                     }
                 }
@@ -581,7 +583,7 @@ namespace Habanero.BO
 
             IBusinessObject boFromObjectManager = GetObjectFromObjectManager(key, bo.ClassDef.ClassType);
 
-            if (boFromObjectManager == null)
+            if (boFromObjectManager == null || !bo.GetType().IsInstanceOfType(boFromObjectManager))
             {
                 BusinessObjectManager.Instance.Add(bo);
                 return bo;
@@ -613,7 +615,14 @@ namespace Habanero.BO
             return find.Count > 0 ? find[0] : null;
         }
 
-        private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)
+        /// <summary>
+        /// Checks to see if the loaded object is the base of a single table inheritance structure
+        ///   and has a sub type
+        /// </summary>
+        /// <param name="bo"></param>
+        /// <param name="dataReader"></param>
+        /// <returns></returns>
+        protected static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)
         {
             ClassDef classDef = (ClassDef) bo.ClassDef;
             ClassDefCol subClasses = classDef.AllChildren;

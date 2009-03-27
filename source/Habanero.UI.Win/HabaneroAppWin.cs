@@ -136,6 +136,12 @@ namespace Habanero.UI.Win
     ///</summary>
     public class HabaneroAppMemory : HabaneroAppWin
     {
+        ///<summary>
+        /// Creates a windows application that runs using an in memory database. I.e. no database connection is set up
+        /// and the DataAccessor is set to be InMemory.
+        ///</summary>
+        ///<param name="appName"></param>
+        ///<param name="appVersion"></param>
         public HabaneroAppMemory(string appName, string appVersion) : base(appName, appVersion)
         {
         }

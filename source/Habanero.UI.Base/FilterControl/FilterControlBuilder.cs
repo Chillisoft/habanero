@@ -75,7 +75,6 @@ namespace Habanero.UI.Base
                 filterControl.AddCustomFilter(filterPropertyDef.Label, filterPropertyDef.PropertyName, customFilter);
             }
 
-            
         }
 
         private void SetupLayoutManager(IFilterControl filterControl, FilterDef filterDef)

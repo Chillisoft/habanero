@@ -281,7 +281,16 @@ WizardStepStub wizardStepStub = new WizardStepStub();
         {
             Cancelled = true;
         }
-
+        /// <summary>
+        /// Implemented so as to stop compiler warnings for not being used.
+        /// </summary>
+        private void FireEvents()
+        {
+            this.DoubleClick(this, new EventArgs());
+            this.Replay();
+            this.VisibleChanged(this, new EventArgs());
+            this.TextChanged(this, new EventArgs());
+        }
         #region IControlInterface
 
         /// <summary>

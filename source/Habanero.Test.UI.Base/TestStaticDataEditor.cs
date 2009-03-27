@@ -35,6 +35,7 @@ namespace Habanero.Test.UI.Base
         [TestFixtureSetUp]
         public void SetupFixture()
         {
+            
         }
 
 
@@ -62,7 +63,8 @@ namespace Habanero.Test.UI.Base
 
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryWin();
+                GlobalUIRegistry.ControlFactory = new ControlFactoryWin();
+                return GlobalUIRegistry.ControlFactory;
             }
 
             protected override void TearDownForm(IFormHabanero frm)
@@ -86,7 +88,8 @@ namespace Habanero.Test.UI.Base
 
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryVWG();
+                GlobalUIRegistry.ControlFactory = new ControlFactoryVWG();
+                return GlobalUIRegistry.ControlFactory;
             }
 
             protected override void TearDownForm(IFormHabanero frm)

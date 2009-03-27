@@ -36,13 +36,19 @@ namespace Habanero.UI.VWG
         /// Event Occurs when a business object is selected
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
-
+        
         /// <summary>
         /// Clears the business object collection and the rows in the data table
         /// </summary>
         public void Clear()
         {
+            FireBusinessObjectSelected();
             throw new System.NotImplementedException();
+        }
+
+        private void FireBusinessObjectSelected()
+        {
+            BusinessObjectSelected(this, new BOEventArgs(null));
         }
 
         /// <summary>Gets the number of rows displayed in the <see cref="IBOColSelectorControl"></see>.</summary>

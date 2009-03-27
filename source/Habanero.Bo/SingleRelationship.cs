@@ -233,7 +233,7 @@ namespace Habanero.BO
             }
             //Load Related Object from database 
             if (_storedKeyCriteria == null
-                || (_storedKeyCriteria != null && ! _storedKeyCriteria.Equals(newKeyCriteria)))
+                || (_storedKeyCriteria != null && !_storedKeyCriteria.Equals(newKeyCriteria)))
             {
                 if (HasRelatedObject())
                 {

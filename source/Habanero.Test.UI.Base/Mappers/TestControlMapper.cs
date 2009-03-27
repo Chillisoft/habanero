@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -38,7 +39,9 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.Win.ControlFactoryWin();
+                ControlFactoryWin factory = new ControlFactoryWin();
+                GlobalUIRegistry.ControlFactory = factory;
+                return factory;
             }
 
             [Test]

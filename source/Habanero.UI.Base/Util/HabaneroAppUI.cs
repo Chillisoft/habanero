@@ -49,6 +49,9 @@ namespace Habanero.UI.Base
     public abstract class HabaneroAppUI : HabaneroApp
     {
         private IDefClassFactory _defClassFactory;
+        /// <summary>
+        /// The applications private key
+        /// </summary>
         protected string _privateKey;
 
         /// <summary>
