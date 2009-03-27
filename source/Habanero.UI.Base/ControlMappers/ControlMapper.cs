@@ -483,7 +483,7 @@ namespace Habanero.UI.Base
                 return;
             }
 
-            ErrorProvider.SetError(_control, CurrentBOProp().InvalidReason);
+           if(!_businessObject.Status.IsNew) ErrorProvider.SetError(_control, CurrentBOProp().InvalidReason);
         }
         /// <summary>
         /// Returns the Error Provider's Error message.
