@@ -171,7 +171,7 @@ namespace Habanero.BO.ClassDefinition
         /// collection will be new objects. See PropDef.CreateBOProp
         /// for more info.</param>
         /// <returns>Returns the new BOPropCol object</returns>
-        public BOPropCol CreateBOPropertyCol(bool isNewObject)
+        public IBOPropCol CreateBOPropertyCol(bool isNewObject)
         {
             BOPropCol lBOPropertyCol = new BOPropCol();
             foreach (IPropDef lPropDef in this)

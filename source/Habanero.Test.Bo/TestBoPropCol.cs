@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -24,9 +25,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-
-
-
     [TestFixture]
     public class TestBoPropCol
     {
@@ -138,6 +136,26 @@ namespace Habanero.Test.BO
             Assert.IsTrue(propCol.Contains("Prop3"), "BOPropCol should contain Prop3 after adding it.");
             propCol.Remove("Prop3");
             Assert.AreEqual(0, propCol.Count, "Remove should remove a BOProp from a BOPropCol");
+        }
+
+        [Test]
+        public void Test_IsValid_ErrorDescriptions()
+        {
+            //--------------- Set up test pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            MyBO myBO = new MyBO();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            IList<IBOError> errors;
+            bool isValid = myBO.Props.IsValid(out errors);
+            //--------------- Test Result -----------------------
+            Assert.IsFalse(isValid);
+            Assert.AreEqual(1, errors.Count);
+            StringAssert.Contains("Test Prop' is a compulsory field and has no value", errors[0].Message);
+            Assert.AreEqual(ErrorLevel.Error, errors[0].Level);
+            Assert.AreSame(null, errors[0].BusinessObject);
         }
     }
 

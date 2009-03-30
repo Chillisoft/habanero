@@ -187,7 +187,7 @@ namespace Habanero.BO
         /// <returns>Returns an object</returns>
         public object GetAsValue()
         {
-            BOPropCol boPropCol = this.GetBOPropCol();
+            IBOPropCol boPropCol = this.GetBOPropCol();
             foreach (BOProp  boProp in boPropCol)
             {
                 //HACK: This is really wierd code the boPropCol does not have an int accessor.
@@ -246,7 +246,7 @@ namespace Habanero.BO
             PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
             if (primaryKeyDef.IsCompositeKey) return null;
 
-            BOPropCol boPropCol = classDef.CreateBOPropertyCol(true);
+            IBOPropCol boPropCol = classDef.CreateBOPropertyCol(true);
             BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
             if (boPrimaryKey != null)
             {

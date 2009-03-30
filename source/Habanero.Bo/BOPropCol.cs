@@ -1,29 +1,11 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
+using System.Text;
 
-namespace Habanero.Base
+namespace Habanero.BO
 {
     /// <summary>
     /// Manages a collection of BOProp objectsn (See <see cref="IBOProp"/>)
@@ -33,7 +15,7 @@ namespace Habanero.Base
     /// This collection in should thus not be used by the application developer.
     /// This collection is typically controlled by an <see cref="IBusinessObject"/>
     /// </summary>
-    public class BOPropCol : IEnumerable<IBOProp>
+    public class BOPropCol : IBOPropCol
     {
         private readonly Dictionary<string, IBOProp> _boProps;
 
@@ -55,9 +37,9 @@ namespace Habanero.Base
             if (Contains(boProp.PropertyName.ToUpper()))
             {
                 throw new InvalidPropertyException(String.Format(
-                    "The BOProp with the name '{0}' is being added to the " +
-                    "prop collection, but already exists in the collection.",
-                    boProp.PropertyName));
+                                                       "The BOProp with the name '{0}' is being added to the " +
+                                                       "prop collection, but already exists in the collection.",
+                                                       boProp.PropertyName));
             }
             _boProps.Add(boProp.PropertyName.ToUpper(), boProp);
         }
@@ -68,7 +50,7 @@ namespace Habanero.Base
         /// Copies the properties from another collection into this one
         /// </summary>
         /// <param name="propCol">A collection of properties</param>
-        public void Add(BOPropCol propCol)
+        public void Add(IBOPropCol propCol)
         {
             foreach (IBOProp prop in propCol.Values)
             {
@@ -108,8 +90,8 @@ namespace Habanero.Base
                 if (!Contains(propName.ToUpper()))
                 {
                     throw new InvalidPropertyNameException(String.Format(
-                        "A BOProp with the name '{0}' does not exist in the " +
-                        "prop collection.", propName));
+                                                               "A BOProp with the name '{0}' does not exist in the " +
+                                                               "prop collection.", propName));
                 }
                 return _boProps[propName.ToUpper()];
             }
@@ -124,7 +106,7 @@ namespace Habanero.Base
             get
             {
                 string dirtlyXml = "<Properties>";
-                foreach (IBOProp prop in this.SortedValues )
+                foreach (IBOProp prop in this.SortedValues)
                 {
                     if (prop.IsDirty)
                     {
@@ -184,9 +166,31 @@ namespace Habanero.Base
         }
 
         /// <summary>
+        /// Indicates whether all of the held property values are valid
+        /// </summary>
+        /// <param name="errors">A list of errors</param>
+        /// <returns>Returns true if all the property values are valid, false
+        /// if any one is invalid</returns>
+        public bool IsValid(out IList<IBOError> errors)
+        {
+            bool propsValid = true;
+            errors = new List<IBOError>();
+            foreach (IBOProp prop in this)
+            {
+                prop.Validate();
+                if (!prop.IsValid)
+                {
+                    errors.Add(new BOError(prop.InvalidReason, ErrorLevel.Error));
+                    propsValid = false;
+                }
+            }
+            return propsValid;
+        }
+
+        /// <summary>
         /// Returns a collection containing all the values being held
         /// </summary>
-        public ICollection  Values
+        public ICollection Values
         {
             get { return _boProps.Values; }
         }
@@ -194,7 +198,7 @@ namespace Habanero.Base
         /// <summary>
         /// Returns the collection of property values as a SortedList
         /// </summary>
-        public IEnumerable SortedValues
+        public System.Collections.IEnumerable SortedValues
         {
             get { return new SortedList(_boProps).Values; }
         }
@@ -260,7 +264,7 @@ namespace Habanero.Base
                     if (keyValuePair.Value.PropDef.AutoIncrementing) return true;
                 }
                 return false;
-               
+
             }
         }
     }

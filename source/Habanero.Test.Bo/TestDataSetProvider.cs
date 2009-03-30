@@ -794,7 +794,7 @@ namespace Habanero.Test.BO
                 {
                 }
 
-                public override IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
+                public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
                 {
                     return new MySingleRelationship(owningBo, this, lBOPropCol);
                 }
@@ -804,7 +804,7 @@ namespace Habanero.Test.BO
             {
                 private MyContactPerson _myContactPerson;
 
-                public MySingleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol) : base(owningBo, lRelDef, lBOPropCol)
+                public MySingleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol) : base(owningBo, lRelDef, lBOPropCol)
                 {
                 }
 

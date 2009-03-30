@@ -93,7 +93,6 @@
   <ItemGroup>
     <Compile Include="BOEventArgs.cs" />
     <Compile Include="BOKeyEventArgs.cs" />
-    <Compile Include="BOPropCol.cs" />
     <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOPropUpdatedEventArgs.cs" />
     <Compile Include="Criteria\Criteria.cs" />
@@ -110,6 +109,8 @@
     <Compile Include="HabaneroApp.cs" />
     <Compile Include="Criteria\HabaneroStringBuilder.cs" />
     <Compile Include="IApplicationVersionUpgrader.cs" />
+    <Compile Include="IBOError.cs" />
+    <Compile Include="IBOPropCol.cs" />
     <Compile Include="IBusinessObjectAuthorisation.cs" />
     <Compile Include="IBOKey.cs" />
     <Compile Include="IBOProp.cs" />

@@ -412,7 +412,7 @@ namespace Habanero.BO
         /// Returns a copy of the collection of properties in the key
         /// </summary>
         /// <returns>Returns a new BOProp collection</returns>
-        public BOPropCol GetBOPropCol()
+        public IBOPropCol GetBOPropCol()
         {
             BOPropCol col = new BOPropCol();
             foreach (BOProp boProp in _props.Values)

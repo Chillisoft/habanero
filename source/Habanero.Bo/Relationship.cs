@@ -230,7 +230,7 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        protected Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        protected Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
         {
             _relDef = lRelDef;
             _owningBo = owningBo;

@@ -108,7 +108,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="lBOPropCol">The master property collection</param>
         /// <returns>Returns a new BOKey object that mirrors this
         /// key definition</returns>
-        public override BOKey CreateBOKey(BOPropCol lBOPropCol)
+        public override BOKey CreateBOKey(IBOPropCol lBOPropCol)
         {
 		    BOPrimaryKey lBOKey = mIsGUIDObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
             foreach (PropDef lPropDef in this)

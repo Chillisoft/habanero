@@ -109,7 +109,7 @@ namespace Habanero.BO.ClassDefinition
         /// this relationship</param>
         /// <param name="lBOPropCol">The collection of properties</param>
         /// <returns></returns>
-        public override IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
+        public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
         {
             Type relationshipBOType = typeof(SingleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
             return (ISingleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);

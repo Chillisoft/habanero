@@ -118,6 +118,6 @@ namespace Habanero.Base
         /// Returns a copy of the collection of properties in the key
         /// </summary>
         /// <returns>Returns a new BOProp collection</returns>
-        BOPropCol GetBOPropCol();
+        IBOPropCol GetBOPropCol();
     }
 }

@@ -53,7 +53,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCreateRelProp()
         {
-            BOPropCol propCol = _propDefCol.CreateBOPropertyCol(true);
+            IBOPropCol propCol = _propDefCol.CreateBOPropertyCol(true);
             IRelProp relProp = _relPropDef.CreateRelProp(propCol);
 
             Assert.AreEqual("Prop", relProp.OwnerPropertyName);

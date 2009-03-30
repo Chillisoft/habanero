@@ -69,7 +69,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCreateRelKey()
         {
-            BOPropCol propCol = mPropDefCol.CreateBOPropertyCol(true);
+            IBOPropCol propCol = mPropDefCol.CreateBOPropertyCol(true);
             IRelKey relKey = mRelKeyDef.CreateRelKey(propCol);
             Assert.IsTrue(relKey.Contains("Prop"));
             Assert.IsTrue(relKey.Contains("Prop2"));

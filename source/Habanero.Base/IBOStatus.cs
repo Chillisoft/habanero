@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace Habanero.Base
@@ -57,7 +58,12 @@ namespace Habanero.Base
 
         bool IsValid(out string message);
 
-        //bool IsValid(out List<ErrorDescription> errorDescriptions);
+        /// <summary>
+        /// Indicates whether all of the property values of the object are valid
+        /// </summary>
+        /// <param name="errors">If the object is not valid then this list is populated with the errors</param>
+        /// <returns>Returns true if all are valid </returns>
+        bool IsValid(out IList<IBOError> errors);
 
 
         /// <summary>

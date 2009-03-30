@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
@@ -112,7 +113,66 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid(out string message)
         {
-            return _bo.IsValidInternal(out message);
+            message = "";
+            IList<IBOError> errors;
+            bool isValid = IsValid(out errors);
+            foreach (IBOError error in errors)
+            {
+                message += error.Message + Environment.NewLine;
+            }
+            return isValid;
+            
+
+            //message = "";
+            //if (IsDeleted) return true;
+
+            //string customRuleErrors;
+            //bool valid = _bo.Props.IsValid(out message);
+            //valid &= _bo.AreCustomRulesValidInternal(out customRuleErrors);
+            //if (!String.IsNullOrEmpty(customRuleErrors))
+            //{
+            //    message = customRuleErrors + Environment.NewLine + message;
+            //}
+            //return valid;
+        }
+
+        /// <summary>
+        /// Indicates whether all of the property values of the object are valid
+        /// </summary>
+        /// <param name="errors">If the object is not valid then this list is populated with the errors</param>
+        /// <returns>Returns true if all are valid </returns>
+        public bool IsValid(out IList<IBOError> errors)
+        {
+            errors = new List<IBOError>();
+            if (IsDeleted) return true;
+
+            bool valid = _bo.Props.IsValid(out errors);
+            foreach (BOError error in errors)
+            {
+                error.BusinessObject = this.BusinessObject;
+            }
+            
+            IList<IBOError> customRuleErrors;
+            valid &= _bo.AreCustomRulesValidInternal(out customRuleErrors);
+            if (customRuleErrors != null)
+            {
+                foreach (BOError error in customRuleErrors)
+                {
+                    error.BusinessObject = this.BusinessObject;
+                    errors.Add(error);
+                }
+            }
+
+            string customRuleErrorsString;
+            valid &= _bo.AreCustomRulesValidInternal(out customRuleErrorsString);
+            if (!String.IsNullOrEmpty(customRuleErrorsString))
+            {
+                BOError customError = new BOError(customRuleErrorsString, ErrorLevel.Error);
+                customError.BusinessObject = this.BusinessObject;
+                errors.Add(customError);
+            }
+
+            return valid;
         }
 
         /// <summary>
@@ -121,7 +181,8 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid()
         {
-            return _bo.IsValidInternal();
+            string invalidReason;
+            return IsValid(out invalidReason);
         }
 
         ///<summary>
@@ -132,7 +193,7 @@ namespace Habanero.BO
             get
             {
                 string message;
-                _bo.IsValidInternal(out message);
+                IsValid(out message);
                 return message;
             }
         }

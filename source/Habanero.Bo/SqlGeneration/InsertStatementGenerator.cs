@@ -63,7 +63,7 @@ namespace Habanero.BO.SqlGeneration
         {
             _statementCollection = new SqlStatementCollection();
             _currentClassDef = _bo.ClassDef;
-            BOPropCol propsToInclude;
+            IBOPropCol propsToInclude;
             string tableName;
 
             propsToInclude = GetPropsToInclude(_currentClassDef);
@@ -95,7 +95,7 @@ namespace Habanero.BO.SqlGeneration
         /// <param name="propsToInclude">A collection of properties to insert,
         /// if the previous include-all boolean was not set to true</param>
         /// <param name="tableName">The table name</param>
-        private void GenerateSingleInsertStatement(BOPropCol propsToInclude, string tableName)
+        private void GenerateSingleInsertStatement(IBOPropCol propsToInclude, string tableName)
         {
             ISupportsAutoIncrementingField supportsAutoIncrementingField = null;
             if (_bo.HasAutoIncrementingField)
@@ -123,7 +123,7 @@ namespace Habanero.BO.SqlGeneration
             _statementCollection.Insert(0, _insertSql);
         }
 
-        private void ModifyForInheritance(BOPropCol propsToInclude)
+        private void ModifyForInheritance(IBOPropCol propsToInclude)
         {
             //Recursively
             //Look at the superclass and if it is single table inheritance then 
@@ -132,7 +132,7 @@ namespace Habanero.BO.SqlGeneration
 
             ClassDef classDef = _currentClassDef; //rather than _bo.ClassDef\
 
-            BOPropCol discriminatorProps = new BOPropCol();
+            IBOPropCol discriminatorProps = new BOPropCol();
             AddDiscriminatorProperties(classDef, propsToInclude, discriminatorProps);
             foreach (BOProp boProp in discriminatorProps)
             {
@@ -140,7 +140,7 @@ namespace Habanero.BO.SqlGeneration
             }
         }
 
-        private void AddDiscriminatorProperties(ClassDef classDef, BOPropCol propsToInclude, BOPropCol discriminatorProps)
+        private void AddDiscriminatorProperties(ClassDef classDef, IBOPropCol propsToInclude, IBOPropCol discriminatorProps)
         {
             ClassDef classDefWithSTI = null;
             //foreach (ClassDef def in classDef.ImmediateChildren)
@@ -234,7 +234,7 @@ namespace Habanero.BO.SqlGeneration
         ///    4) The child has no ID and just inherits the parent's ID (still has the parent's
         ///        ID as a field in its own table)
         /// </summary>
-        private void AddParentID(BOPropCol propsToInclude)
+        private void AddParentID(IBOPropCol propsToInclude)
         {
             ClassDef currentClassDef = _currentClassDef;
             while (currentClassDef.SuperClassClassDef != null &&
@@ -273,12 +273,12 @@ namespace Habanero.BO.SqlGeneration
         /// Builds a collection of properties to include in the insertion,
         /// depending on the inheritance type
         /// </summary>
-        private BOPropCol GetPropsToInclude(ClassDef currentClassDef)
+        private IBOPropCol GetPropsToInclude(ClassDef currentClassDef)
         {
-            BOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+            IBOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 
             //BRETT/PETER TODO: this is to be changed, just here for now.
-            BOPropCol propsToInclude = new BOPropCol();
+            IBOPropCol propsToInclude = new BOPropCol();
             
             foreach (BOProp prop in propsToIncludeTemp)
             {

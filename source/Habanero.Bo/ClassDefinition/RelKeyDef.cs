@@ -137,7 +137,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="lBoPropCol">The collection of properties</param>
         /// <returns>Returns the new RelKey object</returns>
-        public IRelKey CreateRelKey(BOPropCol lBoPropCol)
+        public IRelKey CreateRelKey(IBOPropCol lBoPropCol)
         {
             RelKey lRelKey = new RelKey(this, lBoPropCol);
             return lRelKey;

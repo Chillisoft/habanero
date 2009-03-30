@@ -56,7 +56,7 @@ namespace Habanero.Base
         /// <summary>
         /// The BOProps in this business object
         /// </summary>
-        BOPropCol Props { get; }
+        IBOPropCol Props { get; }
 
         ///<summary>
         /// This method can be overridden by a class that inherits from Business object.

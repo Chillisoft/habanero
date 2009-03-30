@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -224,7 +225,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 set { }
             }
 
-            public override IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
+            public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
             {
                 return null;
             }
@@ -321,7 +322,7 @@ namespace Habanero.Test.BO.ClassDefinition
             get { return _classDef.PropDefcol; }
         }
 
-        internal BOPropCol PropCol
+        internal IBOPropCol PropCol
         {
             get { return _boPropCol; }
         }
@@ -338,6 +339,7 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         #endregion //For Testing
+
     }
 
     internal class MockBOWithCompulsoryField : BusinessObject

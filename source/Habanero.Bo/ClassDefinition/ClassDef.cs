@@ -479,9 +479,9 @@ namespace Habanero.BO.ClassDefinition
         /// loaded from the DB. If it is new, then the property is
         /// initialised with the default value.</param>
         /// <returns>Returns the collection of BOProps</returns>
-        public BOPropCol CreateBOPropertyCol(bool newObject)
+        public IBOPropCol CreateBOPropertyCol(bool newObject)
         {
-            BOPropCol propCol = _propDefCol.CreateBOPropertyCol(newObject);
+            IBOPropCol propCol = _propDefCol.CreateBOPropertyCol(newObject);
             if (this.SuperClassDef != null)
             {
                 ClassDef superClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
@@ -536,7 +536,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="bo">The business object that owns this collection</param>
         /// <returns>Returns the new collection or null if no relationship 
         /// definition collection exists</returns>
-        public RelationshipCol CreateRelationshipCol(BOPropCol propCol, IBusinessObject bo)
+        public RelationshipCol CreateRelationshipCol(IBOPropCol propCol, IBusinessObject bo)
         {
             if (_relationshipDefCol == null)
             {
@@ -556,7 +556,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="col">The collection of properties</param>
         /// <returns>Returns the new key collection</returns>
-        public BOKeyCol createBOKeyCol(BOPropCol col)
+        public BOKeyCol createBOKeyCol(IBOPropCol col)
         {
             BOKeyCol keyCol = _keysCol.CreateBOKeyCol(col);
             if (this.SuperClassClassDef != null)

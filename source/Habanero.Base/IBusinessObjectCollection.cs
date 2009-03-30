@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Security.Permissions;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {

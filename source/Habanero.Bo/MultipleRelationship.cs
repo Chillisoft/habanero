@@ -58,7 +58,7 @@ namespace Habanero.BO
         /// <param name="owningBo">The <see cref="IBusinessObject"/> that owns this BO.</param>
         /// <param name="lRelDef">The <see cref="IRelationshipDef"/> that identifies  </param>
         /// <param name="lBOPropCol"></param>
-        protected MultipleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        protected MultipleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {}
 
@@ -83,7 +83,7 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
             _boCol =

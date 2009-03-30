@@ -17,35 +17,20 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-
 namespace Habanero.Base
 {
 
-    /// <summary>
-    /// Provides BOProp related arguments to an event
-    /// </summary>
-    public class BOPropEventArgs: EventArgs
+    public enum ErrorLevel
     {
-        
-        private readonly IBOProp _prop;
+        Error,
+        Warning
+    }
 
-        /// <summary>
-        /// Constructor to initialise a new event argument
-        /// with the affected BOProp
-        /// </summary>
-        /// <param name="prop">The affected BOProp</param>
-        public BOPropEventArgs(IBOProp prop)
-        {
-            _prop = prop;
-        }
+    public interface IBOError
+    {
 
-        /// <summary>
-        /// Gets the BOProp affected in the event
-        /// </summary>
-        public IBOProp Prop
-        {
-            get { return _prop; }
-        }
+        IBusinessObject BusinessObject { get; }
+        ErrorLevel Level { get; }
+        string Message { get; }
     }
 }

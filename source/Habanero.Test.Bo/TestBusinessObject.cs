@@ -18,11 +18,13 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -211,13 +213,145 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
-            bool isValid = bo.IsValidInternal();
+            bool isValid = bo.Status.IsValid();
             //---------------Test Result -----------------------
             StringAssert.Contains("Test Prop' is a compulsory field and has no value", boProp.InvalidReason);
             Assert.IsFalse(boProp.IsValid);
             StringAssert.Contains("Test Prop' is a compulsory field and has no value", bo.Status.IsValidMessage);
             Assert.IsFalse(isValid);
         }
+
+
+        [Test]
+        public void Test_IsValid_Valid_EmptyErrorDescriptions()
+        {
+            //--------------- Set up test pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MyBO myBO = new MyBO();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            IList<IBOError> errors;
+            bool isValid = myBO.Status.IsValid(out errors);
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(isValid);
+            Assert.AreEqual(0, errors.Count);
+        }
+
+
+        [Test]
+        public void Test_IsValid_Errors()
+        {
+            //--------------- Set up test pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            MyBO myBO = new MyBO();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            IList<IBOError> errors;
+            bool isValid = myBO.Status.IsValid(out errors);
+            //--------------- Test Result -----------------------
+            Assert.IsFalse(isValid);
+            Assert.AreEqual(1, errors.Count);
+            StringAssert.Contains("Test Prop' is a compulsory field and has no value", errors[0].Message);
+            Assert.AreEqual(ErrorLevel.Error, errors[0].Level);
+            Assert.AreSame(myBO, errors[0].BusinessObject);
+        }
+
+
+        private class BOWithCustomErrors : MockBO
+        {
+            protected override bool AreCustomRulesValid(out string customRuleErrors)
+            {
+                customRuleErrors = "ERROR";
+                return false;
+            }
+        }
+        [Test]
+        public void Test_IsValid_CustomErrors_Errors()
+        {
+            //--------------- Set up test pack ------------------
+            ClassDef.ClassDefs.Clear();
+            BOWithCustomErrors myBO = new BOWithCustomErrors();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            IList<IBOError> errors;
+            bool isValid = myBO.Status.IsValid(out errors);
+            //--------------- Test Result -----------------------
+            Assert.IsFalse(isValid);
+            Assert.AreEqual(1, errors.Count);
+            StringAssert.Contains("ERROR", errors[0].Message);
+            Assert.AreEqual(ErrorLevel.Error, errors[0].Level);
+            Assert.AreSame(myBO, errors[0].BusinessObject);
+        }
+
+        private class BOWithCustomErrors_Errors : MockBO
+        {
+            protected override bool AreCustomRulesValid(out IList<IBOError> errors)
+            {
+                errors = new List<IBOError>();
+                errors.Add(new BOError("ERROR1", ErrorLevel.Error));
+                errors.Add(new BOError("ERROR2", ErrorLevel.Warning));
+                return false;
+            }
+        }
+
+
+
+        [Test]
+        public void Test_IsValid_CustomErors_ListOfErrors()
+        {
+            //--------------- Set up test pack ------------------
+            ClassDef.ClassDefs.Clear();
+            BOWithCustomErrors_Errors myBO = new BOWithCustomErrors_Errors();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            IList<IBOError> errors;
+            bool isValid = myBO.Status.IsValid(out errors);
+            //--------------- Test Result -----------------------
+            Assert.IsFalse(isValid);
+            Assert.AreEqual(2, errors.Count);
+            StringAssert.Contains("ERROR1", errors[0].Message);
+            Assert.AreEqual(ErrorLevel.Error, errors[0].Level);
+            Assert.AreSame(myBO, errors[0].BusinessObject);  
+            StringAssert.Contains("ERROR2", errors[1].Message);
+            Assert.AreEqual(ErrorLevel.Warning, errors[1].Level);
+            Assert.AreSame(myBO, errors[1].BusinessObject);
+        }
+
+
+        private class BOWithCustomErrors_NullErrors : MockBO
+        {
+            protected override bool AreCustomRulesValid(out IList<IBOError> errors)
+            {
+                errors = null;
+                return true;
+            }
+        }
+
+
+
+        [Test]
+        public void Test_IsValid_CustomErors_NullErrors()
+        {
+            //--------------- Set up test pack ------------------
+            ClassDef.ClassDefs.Clear();
+            BOWithCustomErrors_NullErrors myBO = new BOWithCustomErrors_NullErrors();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            IList<IBOError> errors;
+            bool isValid = myBO.Status.IsValid(out errors);
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(isValid);
+            Assert.AreEqual(0, errors.Count);
+
+        }
+
 
 //        [Test]
 //        public void Test_BusinessObject_WithNoBrokenRules_Isvalid_AfterValidateCalled()
@@ -1157,19 +1291,6 @@ namespace Habanero.Test.BO
             string toString = myBO.ToString();
             //---------------Test Result -----------------------
             Assert.AreEqual(myBO.ID.GetAsValue().ToString(), toString);
-        }
-
-        [Test]
-        public void Test_Name()
-        {
-            //--------------- Set up test pack ------------------
-            
-            //--------------- Test Preconditions ----------------
-
-            //--------------- Execute Test ----------------------
-
-            //--------------- Test Result -----------------------
-
         }
 
     }

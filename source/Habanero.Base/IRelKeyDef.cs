@@ -70,6 +70,6 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="lBoPropCol">The collection of properties</param>
         /// <returns>Returns the new RelKey object</returns>
-        IRelKey CreateRelKey(BOPropCol lBoPropCol);
+        IRelKey CreateRelKey(IBOPropCol lBoPropCol);
     }
 }

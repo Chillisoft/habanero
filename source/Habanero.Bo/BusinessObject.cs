@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
@@ -80,7 +81,7 @@ namespace Habanero.BO
         /// <summary>
         /// The Collection of Business Object Properties for this Business Object.
         /// </summary>
-        protected BOPropCol _boPropCol;
+        protected IBOPropCol _boPropCol;
 
         //set object as new by default.
         private BOStatus _boStatus;
@@ -738,7 +739,7 @@ namespace Habanero.BO
         /// <summary>
         /// The BOProps in this business object
         /// </summary>
-        public BOPropCol Props
+        public IBOPropCol Props
         {
             get { return _boPropCol; }
         }
@@ -758,42 +759,11 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates whether all of the property values are valid
         /// </summary>
-        /// <param name="invalidReason">A string to modify with a reason
-        /// for any invalid values</param>
-        /// <returns>Returns true if all are valid</returns>
-        internal bool IsValidInternal(out string invalidReason)
-        {
-             invalidReason = "";
-            if (Status.IsDeleted) return true;
-
-            string customRuleErrors;
-            bool valid = Props.IsValid(out invalidReason);
-            valid &= AreCustomRulesValid(out customRuleErrors);
-            if (!String.IsNullOrEmpty(customRuleErrors))
-            {
-                invalidReason = customRuleErrors + Environment.NewLine + invalidReason;
-            }
-            return valid;
-        }
-
-        /// <summary>
-        /// Indicates whether all of the property values are valid
-        /// </summary>
         /// <returns>Returns true if all are valid</returns>
         [Obsolete("Please use IsValid on the Status property of the BusinessObject: eg. myBO.Status.IsValid()")]
         public bool IsValid()
         {
-            return IsValidInternal();
-        }
-
-        /// <summary>
-        /// Indicates whether all of the property values are valid
-        /// </summary>
-        /// <returns>Returns true if all are valid</returns>
-        internal bool IsValidInternal()
-        {
-            string invalidReason;
-            return IsValidInternal(out invalidReason);
+            return Status.IsValid();
         }
 
         /// <summary>
@@ -1183,6 +1153,38 @@ namespace Habanero.BO
         {
             customRuleErrors = "";
             return true;
+        }
+
+        /// <summary>
+        /// Override this method in subclasses of BusinessObject to check custom rules for that
+        /// class.  The default implementation returns true and sets customRuleErrors to the empty string.
+        /// </summary>
+        /// <param name="errors">The errors</param>
+        /// <returns>true if no custom rule errors are encountered.</returns>
+        protected virtual bool AreCustomRulesValid(out IList<IBOError> errors)
+        {
+            errors = new System.Collections.Generic.List<IBOError>();
+            return true;
+        }
+
+        /// <summary>
+        /// Calls through to <see cref="AreCustomRulesValid(out string)"/>
+        /// </summary>
+        /// <param name="customRuleErrors">The error string to display</param>
+        /// <returns>true if no custom rule errors are encountered.</returns>
+        internal bool AreCustomRulesValidInternal(out string customRuleErrors)
+        {
+            return AreCustomRulesValid(out customRuleErrors);
+        }
+
+        /// <summary>
+        /// Calls through to <see cref="AreCustomRulesValid(out IList{IBOError})"/>
+        /// </summary>
+        /// <param name="errors">The errors/param>
+        /// <returns>true if no custom rule errors are encountered.</returns>
+        internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
+        {
+            return AreCustomRulesValid(out errors);
         }
 
         #endregion //Persistance

@@ -263,7 +263,7 @@ namespace Habanero.BO.ClassDefinition
         /// this relationship e.g. The department</param>
         /// <param name="lBOPropCol">The collection of properties of the Business object</param>
         /// <returns>The new relationship object created</returns>
-        public abstract IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol);
+        public abstract IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol);
 
         ///<summary>
         /// Can the child business object be added to this relationship. Typically a persisted child business object 

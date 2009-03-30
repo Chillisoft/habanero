@@ -55,7 +55,7 @@ namespace Habanero.Base
         /// collection will be new objects. See PropDef.CreateBOProp
         /// for more info.</param>
         /// <returns>Returns the new BOPropCol object</returns>
-        BOPropCol CreateBOPropertyCol(bool isNewObject);
+        IBOPropCol CreateBOPropertyCol(bool isNewObject);
 
         /// <summary>
         /// Add an existing property definition to the collection

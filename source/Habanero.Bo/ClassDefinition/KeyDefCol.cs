@@ -134,7 +134,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="lBOPropCol">The collection of properties</param>
         /// <returns>Returns a new BOKey collection object containing a mirror
         /// of this key definition collection</returns>
-        public BOKeyCol CreateBOKeyCol(BOPropCol lBOPropCol)
+        public BOKeyCol CreateBOKeyCol(IBOPropCol lBOPropCol)
         {
             BOKeyCol lBOKeyCol = new BOKeyCol();
             foreach (KeyDef lKeyDef in this)

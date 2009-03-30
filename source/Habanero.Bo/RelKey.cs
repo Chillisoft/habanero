@@ -49,7 +49,7 @@ namespace Habanero.BO
         /// <param name="lRelKeyDef">The relationship key definition</param>
         /// <param name="lBoPropCol">The properties of the business object that this relationship key
         /// is being created form</param>
-        public RelKey(RelKeyDef lRelKeyDef, BOPropCol lBoPropCol)
+        public RelKey(RelKeyDef lRelKeyDef, IBOPropCol lBoPropCol)
         {
             _relKeyDef = lRelKeyDef;
             _relProps = new Dictionary<string, IRelProp>();

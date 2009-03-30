@@ -121,7 +121,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="bo">The business object that will manage these
         /// relationships</param>
         /// <returns>Returns the new collection created</returns>
-        public RelationshipCol CreateRelationshipCol(BOPropCol lBoPropCol, IBusinessObject bo)
+        public RelationshipCol CreateRelationshipCol(IBOPropCol lBoPropCol, IBusinessObject bo)
         {
             RelationshipCol lRelationshipCol = new RelationshipCol(bo);
             foreach (RelationshipDef lRelationshipDef in this)

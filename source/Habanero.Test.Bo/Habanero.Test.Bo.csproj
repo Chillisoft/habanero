@@ -117,6 +117,7 @@
     <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Association.cs" />
     <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Base.cs" />
     <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Composition.cs" />
+    <Compile Include="TestBOError.cs" />
     <Compile Include="TestBOObjectID.cs" />
     <Compile Include="TestBOPropInteger.cs" />
     <Compile Include="TestBOSerialisation.cs" />

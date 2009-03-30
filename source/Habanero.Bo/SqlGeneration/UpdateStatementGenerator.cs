@@ -54,7 +54,7 @@ namespace Habanero.BO.SqlGeneration
         public SqlStatementCollection Generate()
         {
             _statementCollection = new SqlStatementCollection();
-            BOPropCol propsToInclude;
+            IBOPropCol propsToInclude;
             string tableName;
             ClassDef currentClassDef = _bo.ClassDef;
 
@@ -83,7 +83,7 @@ namespace Habanero.BO.SqlGeneration
         /// if the previous include-all boolean was not set to true</param>
         /// <param name="isSuperClassStatement">Whether a super-class is involved</param>
         /// <param name="currentClassDef">The current class definition</param>
-        private void GenerateSingleUpdateStatement(string tableName, BOPropCol propsToInclude,
+        private void GenerateSingleUpdateStatement(string tableName, IBOPropCol propsToInclude,
                                                    bool isSuperClassStatement, ClassDef currentClassDef)
         {
             _updateSql = new SqlStatement(_connection);
@@ -126,11 +126,11 @@ namespace Habanero.BO.SqlGeneration
         /// Builds a collection of properties to include in the update,
         /// depending on the inheritance type
         /// </summary>
-        private static BOPropCol GetPropsToInclude(ClassDef currentClassDef)
+        private static IBOPropCol GetPropsToInclude(ClassDef currentClassDef)
         {
-            BOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+            IBOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 
-            BOPropCol propsToInclude = new BOPropCol();
+            IBOPropCol propsToInclude = new BOPropCol();
 
             foreach (BOProp prop in propsToIncludeTemp)
             {

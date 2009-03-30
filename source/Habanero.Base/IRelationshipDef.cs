@@ -184,7 +184,7 @@ namespace Habanero.Base
         /// this relationship e.g. The department</param>
         /// <param name="lBOPropCol">The collection of properties of the Business object</param>
         /// <returns>The new relationship object created</returns>
-        IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol);
+        IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol);
 
         ///<summary>
         /// Checks to see if the child can be added to the relationship

@@ -73,7 +73,7 @@ namespace Habanero.BO
         ///<param name="businessObject">The BusinessObject to be updated</param>
         public BusinessObjectLastUpdatePropertiesLog(BusinessObject businessObject)
         {
-            BOPropCol boPropCol = businessObject.Props;
+            IBOPropCol boPropCol = businessObject.Props;
             string propName;
             propName = "UserLastUpdated";
             if (boPropCol.Contains(propName))

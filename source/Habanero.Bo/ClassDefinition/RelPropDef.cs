@@ -95,7 +95,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="boPropCol">The collection of properties</param>
         /// <returns>The newly created RelProp object</returns>
-        protected internal IRelProp CreateRelProp(BOPropCol boPropCol)
+        protected internal IRelProp CreateRelProp(IBOPropCol boPropCol)
 		{
 		    IBOProp boProp = boPropCol[OwnerPropertyName];
 		    return new RelProp(this, boProp);
