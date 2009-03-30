@@ -211,12 +211,12 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
-            bo.IsValid();
+            bool isValid = bo.IsValidInternal();
             //---------------Test Result -----------------------
             StringAssert.Contains("Test Prop' is a compulsory field and has no value", boProp.InvalidReason);
             Assert.IsFalse(boProp.IsValid);
             StringAssert.Contains("Test Prop' is a compulsory field and has no value", bo.Status.IsValidMessage);
-            Assert.IsFalse(bo.IsValid());
+            Assert.IsFalse(isValid);
         }
 
 //        [Test]
@@ -271,11 +271,10 @@ namespace Habanero.Test.BO
             myBO.TestProp = TestUtil.GetRandomString();
             myBO.Save();
             Assert.AreEqual("", myBO.Status.IsValidMessage);
-            Assert.IsTrue(myBO.IsValid());
+            Assert.IsTrue(myBO.Status.IsValid());
             myBO.TestProp = "";
             IBOProp boProp = myBO.Props["TestProp"];
             //---------------Assert Precondition----------------
-            Assert.IsFalse(myBO.IsValid());
             Assert.IsFalse(myBO.Status.IsValid());
             Assert.AreNotEqual("", myBO.Status.IsValidMessage);
             Assert.IsFalse(boProp.IsValid);
@@ -283,7 +282,6 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             myBO.CancelEdits();
             //---------------Test Result -----------------------
-            Assert.IsTrue(myBO.IsValid());
             Assert.IsTrue(myBO.Status.IsValid());
             Assert.AreEqual("", myBO.Status.IsValidMessage);
             Assert.IsTrue(boProp.IsValid);
@@ -376,10 +374,12 @@ namespace Habanero.Test.BO
             bo.SetPropertyValue("TestProp", "abcde");
             string reason;
             Assert.IsTrue
-                (bo.IsValid(out reason), "BO should be valid with a TestProp value of 'abcde' but returned : " + reason);
+                (bo.Status.IsValid(out reason), "BO should be valid with a TestProp value of 'abcde' but returned : " + reason);
             bo.SetPropertyValue("TestProp", "abcdef");
-            Assert.IsFalse(bo.IsValid(), "BO should not be valid with a TestProp value of 'abcdef'");
+            Assert.IsFalse(bo.Status.IsValid(), "BO should not be valid with a TestProp value of 'abcdef'");
         }
+
+
 
         [Test]
         public void TestApplyEditResetsPreviousValues()
@@ -1158,5 +1158,19 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(myBO.ID.GetAsValue().ToString(), toString);
         }
+
+        [Test]
+        public void Test_Name()
+        {
+            //--------------- Set up test pack ------------------
+            
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+
+            //--------------- Test Result -----------------------
+
+        }
+
     }
 }

@@ -150,7 +150,7 @@ namespace Habanero.UI.Base
             {
                 _singleRelationship.SetRelatedObject(value);
             }
-            catch (HabaneroIncorrectTypeException ex)
+            catch (HabaneroIncorrectTypeException)
             {
                 ////TODO Brett 24 Mar 2009: Write tests and implement                this.ErrorProvider.SetError(Control, ex.Message);
                 return;
@@ -236,11 +236,12 @@ namespace Habanero.UI.Base
 
         private void UpdateIsEditable()
         {
-            if (IsReadOnly)
+            if (IsReadOnly || _businessObject == null)
             {
                 this.Control.Enabled = false;
                 return;
             }
+            this.Control.Enabled = true;
             if (IsRelationshipComposition())
             {
                 if (_businessObject != null)

@@ -248,7 +248,7 @@ namespace Habanero.Test.UI.Base
             IControlMapper SurnameControlMapper = panelInfo.FieldInfos["Surname"].ControlMapper;
             person.Surname = "";
             //---------------Assert Precondition----------------
-            Assert.IsFalse(person.IsValid());
+            Assert.IsFalse(person.Status.IsValid());
             Assert.AreEqual("", SurnameControlMapper.GetErrorMessage());
             //---------------Execute Test ----------------------
             panelInfo.UpdateErrorProvidersErrorMessages();

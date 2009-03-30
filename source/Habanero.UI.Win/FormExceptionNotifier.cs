@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections;
-using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Base;
@@ -306,7 +305,7 @@ namespace Habanero.UI.Win
 
             private static IDictionary GetEmailErrorSettings()
             {
-                IDictionary dictionary = ((IDictionary)ConfigurationSettings.GetConfig("EmailErrorConfig"));
+                IDictionary dictionary = ((IDictionary)System.Configuration.ConfigurationManager.GetSection("EmailErrorConfig"));
                 return dictionary;
             }
         }

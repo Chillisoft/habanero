@@ -531,7 +531,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, table.Rows.Count);
             //---------------Execute Test ----------------------
             MyBO myBO = collection.CreateBusinessObject();
-            myBO.IsValid(out errMessage);
+            myBO.Status.IsValid(out errMessage);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, table.Rows.Count);
             DataRow row1 = table.Rows[0];
@@ -562,15 +562,15 @@ namespace Habanero.Test.BO
             
             //-------------Assert Preconditions -------------
             Assert.AreEqual(testPropValueOrigValue, row1["TestProp"]);
-            Assert.IsTrue(foundBO.IsValid());
+            Assert.IsTrue(foundBO.Status.IsValid());
             Assert.AreEqual("", row1.RowError);
             //---------------Execute Test ----------------------
             myBo.TestProp = "";
-            foundBO.IsValid(out errMessage);
+            foundBO.Status.IsValid(out errMessage);
             dataSetProvider.UpdateBusinessObjectRowValues(foundBO);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(testPropValueOrigValue, foundBO.TestProp);
-            Assert.IsFalse(foundBO.IsValid());
+            Assert.IsFalse(foundBO.Status.IsValid());
             Assert.AreEqual(errMessage,row1.RowError);
         }
         [Test]

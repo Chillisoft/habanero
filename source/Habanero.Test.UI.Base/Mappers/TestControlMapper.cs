@@ -167,12 +167,12 @@ namespace Habanero.Test.UI.Base
                 textBoxMapper.BusinessObject = shape;
                 
                 //---------------Assert Precondition----------------
-                Assert.IsTrue(shape.IsValid());
+                Assert.IsTrue(shape.Status.IsValid());
                 Assert.AreEqual("", textBoxMapper.ErrorProvider.GetError(textBox));
                 //---------------Execute Test ----------------------
                 shape.ShapeName = "";
                 //---------------Test Result -----------------------
-                Assert.IsFalse(shape.IsValid());
+                Assert.IsFalse(shape.Status.IsValid());
                 Assert.AreNotEqual("", textBoxMapper.ErrorProvider.GetError(textBox));
             }
 
@@ -291,7 +291,7 @@ namespace Habanero.Test.UI.Base
                 textBoxMapper.BusinessObject = shape;
                 shape.ShapeName = "";
                 //---------------Assert Precondition----------------
-                Assert.IsFalse(shape.IsValid());
+                Assert.IsFalse(shape.Status.IsValid());
                 Assert.AreEqual("", textBoxMapper.ErrorProvider.GetError(textBox));
                 //---------------Execute Test ----------------------
                 textBoxMapper.UpdateErrorProviderErrorMessage();
@@ -1244,11 +1244,11 @@ namespace Habanero.Test.UI.Base
             ControlMapperStub textBoxMapper;
             ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out textBoxMapper);
             textBoxMapper.BusinessObject = shape;
-            shape.IsValid();
+            shape.Status.IsValid();
             textBoxMapper.UpdateErrorProviderErrorMessage();
             string expectedErrorProviderErroMessage = textBoxMapper.ErrorProvider.GetError(textBox);
             //---------------Assert Precondition----------------
-            Assert.IsFalse(shape.IsValid());
+            Assert.IsFalse(shape.Status.IsValid());
             Assert.AreNotEqual("", expectedErrorProviderErroMessage);
             //---------------Execute Test ----------------------
             string message = textBoxMapper.GetErrorMessage();

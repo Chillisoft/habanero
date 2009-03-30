@@ -147,25 +147,6 @@ namespace Habanero.BO.ClassDefinition
                 }}
         }
 
-        #region Equals
-
-        //TODO: public override bool Equals(object obj)
-        //{
-        //    //TODO: if (obj == null) return false;
-        //    //TODO: if (obj.GetType() != typeof(UIDefCol)) return false;
-        //    UIDefCol otherUiDefCol = (UIDefCol)obj;
-        //    //TODO: if (this.Count != otherUiDefCol.Count) return false;
-        //    foreach (UIDef def in this)
-        //    {
-        //        //if (!otherUiDefCol.Contains(def.PropertyName)) return false;
-
-        //        otherUiDef = otherUiDefCol[def.Name];
-        //    }
-        //    return true;
-        //}
-
-        #endregion
-
         ///<summary>
         /// Clones the uidefcol.  The new ui defCol will have a clone of each UIGrid and UIForm.
         ///  i.e. this is a deep copy of the uiDefCol
@@ -214,6 +195,20 @@ namespace Habanero.BO.ClassDefinition
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// Hashcode for the UIDefCol is the sum of the hashcodes of the UIDefs it contains
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            int hashCode = 0;
+            foreach (UIDef def in this)
+            {
+                hashCode += def.GetHashCode();
+            }
+            return hashCode;
         }
 
         ///<summary>

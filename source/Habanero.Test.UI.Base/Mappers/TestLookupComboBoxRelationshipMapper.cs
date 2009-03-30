@@ -164,6 +164,21 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
+        public void Test_ControlShouldNotBeEnabled_WhenNoBusinessObjectSet()
+        {
+            //--------------- Set up test pack ------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string relationshipName = "Organisation";
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
+            //--------------- Test Result -----------------------
+            Assert.IsNull(mapper.BusinessObject);
+            Assert.IsFalse(mapper.Control.Enabled);
+        }
+
+        [Test]
         public void Test_SetBOCollection_WhenEmpty_ShouldSetItemsInComboBox()
         {
             //---------------Set up test pack-------------------
@@ -245,10 +260,12 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boCol.Count);
             Assert.IsNull(cmbox.SelectedItem);
+            Assert.IsFalse(mapper.Control.Enabled);
             //---------------Execute Test ----------------------
             mapper.BusinessObject = person;
             //---------------Test Result -----------------------
             Assert.AreSame(person, mapper.BusinessObject);
+            Assert.IsTrue(mapper.Control.Enabled);
             Assert.IsNotNull(cmbox.SelectedItem);
             Assert.AreEqual(person.Organisation, cmbox.SelectedItem);
         }
@@ -817,17 +834,18 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             IComboBox cmbox = _controlFactory.CreateComboBox();
             const string relationshipName = "Organisation";
+            RelationshipComboBoxMapper mapper1 = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
             
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            RelationshipComboBoxMapper mapper1 = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
+            mapper1.BusinessObject = new ContactPersonTestBO();
             //---------------Test Result -----------------------
             Assert.IsFalse(mapper1.IsReadOnly);
             Assert.IsTrue(mapper1.Control.Enabled);
         }
         [Test]
-        public void Test_WhenIsReadOnly_ControlShouldNotBeEditable_()
+        public void Test_WhenIsReadOnly_ControlShouldNotBeEditable()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = _controlFactory.CreateComboBox();

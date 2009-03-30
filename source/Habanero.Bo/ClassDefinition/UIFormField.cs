@@ -348,6 +348,15 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// Hashcode for the UIFormField
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return (this.PropertyName + this.ControlTypeName + this.Label).GetHashCode();
+        }
+
+        /// <summary>
         /// Indicates whether two fields are equal
         /// </summary>
         public static bool operator ==(UIFormField a, UIFormField b)

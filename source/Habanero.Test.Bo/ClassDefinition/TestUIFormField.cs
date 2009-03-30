@@ -249,6 +249,37 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(uiFormField1.Equals(uiFormField2));
             //Assert.AreEqual(uiFormField1, uiFormField2);
         }
+
+        [Test]
+        public void Test_HashCode_Equals()
+        {
+            //--------------- Set up test pack ------------------
+            UIFormField uiFormField1 = CreateFormField();
+            UIFormField uiFormField2 = CreateFormField();
+
+            //--------------- Test Preconditions ----------------
+            Assert.IsTrue(uiFormField1.Equals(uiFormField2));
+            //--------------- Execute Test ----------------------
+            
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(uiFormField1.GetHashCode(), uiFormField2.GetHashCode());
+        }
+
+        [Test]
+        public void Test_HashCode_NotEquals()
+        {
+            //--------------- Set up test pack ------------------
+            UIFormField uiFormField1 = CreateFormField();
+            UIFormField uiFormField2 = CreateFormField("otherPropName");
+
+            //--------------- Test Preconditions ----------------
+            Assert.IsFalse(uiFormField1.Equals(uiFormField2));
+            //--------------- Execute Test ----------------------
+
+            //--------------- Test Result -----------------------
+            Assert.AreNotEqual(uiFormField1.GetHashCode(), uiFormField2.GetHashCode());
+        }
+
         [Test]
         public void Test_NotEquals()
         {
@@ -533,6 +564,7 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         private UIFormField CreateFormField() { return new UIFormField("L", "L", "", "", "", "", true, "", null, null, UIFormField.LayoutStyle.Label); }
+        private UIFormField CreateFormField(string propName) { return new UIFormField("L", propName, "", "", "", "", true, "", null, null, UIFormField.LayoutStyle.Label); }
 
         // Grants access to protected fields
         private class UIFormFieldInheritorStub : UIFormField

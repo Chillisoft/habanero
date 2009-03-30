@@ -114,7 +114,7 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         protected internal virtual bool IsValid(out string invalidReason)
         {
-            return _businessObject.IsValid(out invalidReason);
+            return _businessObject.Status.IsValid(out invalidReason);
         }
 
         ///<summary>

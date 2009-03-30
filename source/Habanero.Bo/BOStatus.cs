@@ -29,16 +29,16 @@ namespace Habanero.BO
     [Serializable]
     public class BOStatus : IBOStatus
     {
-        private IBusinessObject _bo;
+        private BusinessObject _bo;
         private Statuses _flagState = Statuses.isNew;
 
         ///<summary>
         ///</summary>
         ///<param name="bo"></param>
-        public BOStatus(IBusinessObject bo)
+        public BOStatus(BusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
-            _bo = bo;
+            _bo = (BusinessObject) bo;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid(out string message)
         {
-            return _bo.IsValid(out message);
+            return _bo.IsValidInternal(out message);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid()
         {
-            return _bo.IsValid();
+            return _bo.IsValidInternal();
         }
 
         ///<summary>
@@ -132,7 +132,7 @@ namespace Habanero.BO
             get
             {
                 string message;
-                _bo.IsValid(out message);
+                _bo.IsValidInternal(out message);
                 return message;
             }
         }
@@ -146,7 +146,7 @@ namespace Habanero.BO
             internal set
             {
                 if (value == null) throw new ArgumentNullException("value");
-                _bo = value;
+                _bo = (BusinessObject) value;
             }
         }
 

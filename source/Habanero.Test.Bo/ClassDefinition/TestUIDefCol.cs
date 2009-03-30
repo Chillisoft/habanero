@@ -112,6 +112,42 @@ namespace Habanero.Test.BO.ClassDefinition
             AssertAreEqual(uIDefCol1, uIDefCol2);
 //            Assert.AreEqual(uIDefCol1, uIDefCol2);
         }
+
+        [Test]
+        public void Test_HashCode_Equals()
+        {
+            //--------------- Set up test pack ------------------
+            UIDefCol uIDefCol1 = new UIDefCol();
+            UIDef def = new UIDef("UiDefname", null, null);
+            uIDefCol1.Add(def);
+            UIDefCol uIDefCol2 = new UIDefCol();
+            uIDefCol2.Add(def);
+            //--------------- Test Preconditions ----------------
+            AssertAreEqual(uIDefCol1, uIDefCol2);
+            //--------------- Execute Test ----------------------
+
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(uIDefCol1.GetHashCode(), uIDefCol2.GetHashCode());
+        }
+
+        [Test]
+        public void Test_HashCode_NotEquals()
+        {
+            //--------------- Set up test pack ------------------
+            UIDefCol uIDefCol1 = new UIDefCol();
+            UIDef def = new UIDef("UiDefname", null, null);
+            UIDef def2 = new UIDef("UiDefName2", null, null);
+            uIDefCol1.Add(def);
+            UIDefCol uIDefCol2 = new UIDefCol();
+            uIDefCol2.Add(def2);
+            //--------------- Test Preconditions ----------------
+            AssertNotEqual(uIDefCol1, uIDefCol2);
+            //--------------- Execute Test ----------------------
+
+            //--------------- Test Result -----------------------
+            Assert.AreNotEqual(uIDefCol1.GetHashCode(), uIDefCol2.GetHashCode());
+        }
+
         [Test]
         public void Test_NotEqualsWrongType()
         {

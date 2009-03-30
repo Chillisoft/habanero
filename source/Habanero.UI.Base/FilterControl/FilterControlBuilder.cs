@@ -72,7 +72,7 @@ namespace Habanero.UI.Base
                                                                                      filterPropertyDef.PropertyName,
                                                                                      FilterClauseOperator.OpEquals);
                 SetParametersOnFilter(filterPropertyDef, filterType, customFilter);
-                filterControl.AddCustomFilter(filterPropertyDef.Label, filterPropertyDef.PropertyName, customFilter);
+                filterControl.AddCustomFilter(filterPropertyDef.Label, customFilter);
             }
 
         }

@@ -205,7 +205,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsNull(controlWin.BusinessObject);
             string errMessage;
-            Assert.IsFalse(boInvalid.IsValid(out errMessage));
+            Assert.IsFalse(boInvalid.Status.IsValid(out errMessage));
             AssertErrorProvidersHaveBeenCleared(controlWin);
             StringAssert.Contains("Surname'", errMessage);
             //---------------Execute Test ----------------------
@@ -225,7 +225,7 @@ namespace Habanero.Test.UI.Base
             IBOPanelEditorControl controlWin = new BOEditorControlWin(boInvalid.ClassDef);
             controlWin.BusinessObject = boInvalid;
             //---------------Assert Precondition----------------
-            Assert.IsFalse(boInvalid.IsValid());
+            Assert.IsFalse(boInvalid.Status.IsValid());
             AssertErrorProviderHasErrors(controlWin, "Surname");
             //---------------Execute Test ----------------------
             controlWin.BusinessObject = ContactPersonTestBO.CreateSavedContactPerson();
@@ -244,7 +244,7 @@ namespace Habanero.Test.UI.Base
             IBOPanelEditorControl controlWin = new BOEditorControlWin(boInvalid.ClassDef);
             controlWin.BusinessObject = boInvalid;
             //---------------Assert Precondition----------------
-            Assert.IsFalse(boInvalid.IsValid());
+            Assert.IsFalse(boInvalid.Status.IsValid());
             AssertErrorProviderHasErrors(controlWin, "Surname");
             //---------------Execute Test ----------------------
             controlWin.BusinessObject = null;
@@ -360,7 +360,7 @@ namespace Habanero.Test.UI.Base
             IBOPanelEditorControl controlWin = CreateEditorControl(person.ClassDef);
             
             //---------------Assert Precondition----------------
-            Assert.IsTrue(person.IsValid());
+            Assert.IsTrue(person.Status.IsValid());
             //---------------Execute Test ----------------------
             controlWin.BusinessObject = person;
             bool dirty = controlWin.IsDirty;

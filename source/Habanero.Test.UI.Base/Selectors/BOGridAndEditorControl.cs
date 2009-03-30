@@ -925,7 +925,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Assert Precondition----------------
             Assert.IsTrue(currentBO.Status.IsNew);
-            Assert.IsTrue(currentBO.IsValid());
+            Assert.IsTrue(currentBO.Status.IsValid());
             //  ---------------Execute Test ----------------------
             newButton.PerformClick();
             // ---------------Test Result -----------------------
@@ -983,7 +983,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsNotNull(currentBO);
             Assert.IsTrue(currentBO.Status.IsNew);
-            Assert.IsTrue(currentBO.IsValid());
+            Assert.IsTrue(currentBO.Status.IsValid());
             //  ---------------Execute Test ----------------------
             saveButton.PerformClick();
             // ---------------Test Result -----------------------

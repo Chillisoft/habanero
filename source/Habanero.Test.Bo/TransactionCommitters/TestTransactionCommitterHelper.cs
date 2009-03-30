@@ -30,6 +30,7 @@ namespace Habanero.Test.BO.TransactionCommitters
     {
         public static void AssertBOStateIsValidAfterInsert_Updated(BusinessObject businessObject)
         {
+           
             Assert.IsFalse(businessObject.Status.IsNew);
             Assert.IsFalse(businessObject.Status.IsDirty);
             Assert.IsFalse(businessObject.Status.IsDeleted);

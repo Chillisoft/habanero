@@ -244,6 +244,15 @@ namespace Habanero.BO.ClassDefinition
             return true;
         }
 
+        /// <summary>
+        /// Returns the hash code for this object.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return (this.PropertyName + this.Heading + this.GridControlTypeName + this.Editable).GetHashCode();
+        }
+
         ///<summary>
         /// overloads the operator == 
         ///</summary>

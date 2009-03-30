@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Xml.Serialization;
 
 namespace Habanero.Base
@@ -53,7 +54,11 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="message">If the object is not valid then this returns the reason for it being invalid</param>
         /// <returns>Returns true if all are valid </returns>
+
         bool IsValid(out string message);
+
+        //bool IsValid(out List<ErrorDescription> errorDescriptions);
+
 
         /// <summary>
         /// Indicates whether all of the property values of the object are valid
@@ -65,6 +70,8 @@ namespace Habanero.Base
         /// Returns an invalid message if the object is valid <see cref="IsValid()"/>
         ///</summary>
         string IsValidMessage { get; }
+
+        //List<ErrorDescription> IsValidDescriptions { get; }
 
         /// <summary>
         /// Returns the Business Object that this Status is for.

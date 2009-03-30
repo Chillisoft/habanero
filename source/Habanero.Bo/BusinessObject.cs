@@ -749,9 +749,21 @@ namespace Habanero.BO
         /// <param name="invalidReason">A string to modify with a reason
         /// for any invalid values</param>
         /// <returns>Returns true if all are valid</returns>
+        [Obsolete("Please use IsValid on the Status property of the BusinessObject: eg. myBO.Status.IsValid()")]
         public bool IsValid(out string invalidReason)
         {
-            invalidReason = "";
+            return _boStatus.IsValid(out invalidReason);
+        }
+
+        /// <summary>
+        /// Indicates whether all of the property values are valid
+        /// </summary>
+        /// <param name="invalidReason">A string to modify with a reason
+        /// for any invalid values</param>
+        /// <returns>Returns true if all are valid</returns>
+        internal bool IsValidInternal(out string invalidReason)
+        {
+             invalidReason = "";
             if (Status.IsDeleted) return true;
 
             string customRuleErrors;
@@ -768,10 +780,20 @@ namespace Habanero.BO
         /// Indicates whether all of the property values are valid
         /// </summary>
         /// <returns>Returns true if all are valid</returns>
+        [Obsolete("Please use IsValid on the Status property of the BusinessObject: eg. myBO.Status.IsValid()")]
         public bool IsValid()
         {
+            return IsValidInternal();
+        }
+
+        /// <summary>
+        /// Indicates whether all of the property values are valid
+        /// </summary>
+        /// <returns>Returns true if all are valid</returns>
+        internal bool IsValidInternal()
+        {
             string invalidReason;
-            return IsValid(out invalidReason);
+            return IsValidInternal(out invalidReason);
         }
 
         /// <summary>

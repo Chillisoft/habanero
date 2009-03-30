@@ -161,6 +161,36 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void Test_HashCodeEquals()
+        {
+            //---------------Set up test pack-------------------
+            UIGridColumn gridColumn = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn clonedGridColumn = gridColumn.Clone();
+
+            //---------------Assert preconditions----------------
+            Assert.IsTrue(gridColumn.Equals(clonedGridColumn));
+            //---------------Execute Test ----------------------
+            //---------------Test Result -----------------------
+            Assert.AreEqual(gridColumn.GetHashCode(), clonedGridColumn.GetHashCode());
+        }
+
+        [Test]
+        public void Test_HashCodeNotEquals()
+        {
+            //---------------Set up test pack-------------------
+            UIGridColumn gridColumn = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn otherColumn = new UIGridColumn("pp", "qq", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+
+            //---------------Assert preconditions----------------
+            Assert.IsFalse(gridColumn.Equals(otherColumn));
+            //---------------Execute Test ----------------------
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(gridColumn.GetHashCode(), otherColumn.GetHashCode());
+        }
+
+
+
+        [Test]
         public void Test_NotEqualsNull()
         {
             UIGridColumn uiGridColumn1 = new UIGridColumn("", "", "", "",false,0,UIGridColumn.PropAlignment.centre, null);
