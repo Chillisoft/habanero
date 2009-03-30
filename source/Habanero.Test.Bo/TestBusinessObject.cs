@@ -262,6 +262,35 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_CancelEdit_ShouldClearIsValidErrorMessage()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            MyBO myBO = (MyBO) classDef.CreateNewBusinessObject();
+            myBO.TestProp = TestUtil.GetRandomString();
+            myBO.Save();
+            Assert.AreEqual("", myBO.Status.IsValidMessage);
+            Assert.IsTrue(myBO.IsValid());
+            myBO.TestProp = "";
+            IBOProp boProp = myBO.Props["TestProp"];
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(myBO.IsValid());
+            Assert.IsFalse(myBO.Status.IsValid());
+            Assert.AreNotEqual("", myBO.Status.IsValidMessage);
+            Assert.IsFalse(boProp.IsValid);
+            Assert.AreNotEqual("", boProp.InvalidReason);
+            //---------------Execute Test ----------------------
+            myBO.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(myBO.IsValid());
+            Assert.IsTrue(myBO.Status.IsValid());
+            Assert.AreEqual("", myBO.Status.IsValidMessage);
+            Assert.IsTrue(boProp.IsValid);
+            Assert.AreEqual("", boProp.InvalidReason);
+        }
+
+        [Test]
         public void TestGetPropertyValueToDisplay()
         {
             ClassDef.ClassDefs.Clear();

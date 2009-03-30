@@ -17,9 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -37,7 +35,7 @@ namespace Habanero.Test.BO.ClassDefinition
             string propName = TestUtil.GetRandomString();
             string label = TestUtil.GetRandomString();
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            FilterClauseOperator opEquals = FilterClauseOperator.OpEquals;
+            const FilterClauseOperator opEquals = FilterClauseOperator.OpEquals;
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             FilterPropertyDef def = 
@@ -59,7 +57,7 @@ namespace Habanero.Test.BO.ClassDefinition
             FilterPropertyDef def = 
                 new FilterPropertyDef(propName, label, "BoolCheckBoxFilter", "Habanero.Test.UI.Base", FilterClauseOperator.OpEquals, null);
 
-            IList<FilterPropertyDef> defs = new List<FilterPropertyDef>() {def};
+            IList<FilterPropertyDef> defs = new List<FilterPropertyDef> {def};
 
             
             //---------------Assert PreConditions---------------            

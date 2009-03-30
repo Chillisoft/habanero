@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -8,7 +7,6 @@ using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Mappers
@@ -57,6 +55,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(relationshipName, mapper.RelationshipName);
             Assert.AreEqual(false, mapper.IsReadOnly);
             Assert.AreSame(GetControlFactory(), mapper.ControlFactory);
+            Assert.IsTrue(mapper.IncludeBlankITem);
         }
 
         [Test]
@@ -214,6 +213,23 @@ namespace Habanero.Test.UI.Base.Mappers
             mapper.BusinessObjectCollection = new BusinessObjectCollection<OrganisationTestBO>();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cmbox.Items.Count, "Should have blank item");
+            Assert.IsNull(cmbox.SelectedItem);
+        }
+
+        [Test]
+        public void Test_SetBOCollection_WhenIncludeBlankITemFalse_DoesNotIncludeBlankItem()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            BusinessObjectCollection<OrganisationTestBO> boCol;
+            RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
+            mapper.IncludeBlankITem = false;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(mapper.IncludeBlankITem);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObjectCollection = new BusinessObjectCollection<OrganisationTestBO>();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, cmbox.Items.Count, "Should not have blank item");
             Assert.IsNull(cmbox.SelectedItem);
         }
 

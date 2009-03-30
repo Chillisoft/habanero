@@ -21,6 +21,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 using Habanero.DB;
+using NUnit.Framework;
 
 namespace Habanero.Test
 {
@@ -195,6 +196,22 @@ namespace Habanero.Test
         public static bool GetRandomBoolean()
         {
             return (GetRandomInt(100000) > 50000);
+        }
+
+        
+        public static void AssertStringEmpty(string stringValue, string stringName)
+        {
+            AssertStringEmpty(stringValue, stringName, stringName + " Should not be empty");
+        }
+
+        public static void AssertStringNotEmpty(string stringValue, string stringName)
+        {
+            Assert.IsFalse(String.IsNullOrEmpty(stringValue), stringName + " Should not be null");
+        }
+
+        public static void AssertStringEmpty(string stringValue, string stringName, string errorMessage)
+        {
+            Assert.IsTrue(String.IsNullOrEmpty(stringValue), stringName + " : " + errorMessage);
         }
     }
 }

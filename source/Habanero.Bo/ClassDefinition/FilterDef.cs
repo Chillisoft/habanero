@@ -24,11 +24,11 @@ namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Defines a filter for a grid.  Consists of a set of <see cref="FilterPropertyDef"/>s, and a few settings, such as
-    /// FilterMode (can be Filter or Search) and a number of columns (where 0 means a flow layout is used).
+    /// FilterMode (can be Filter or Search) and a number of columns that the filter controls will be layed out in
+    /// using the ColumnLayoutManager (where 0 means a FlowLayoutManager is used).
     /// </summary>
     public class FilterDef
     {
-
         /// <summary>
         /// The standard constructor, which takes the list of <see cref="FilterPropertyDef"/>s defining the fields of the filter.
         /// </summary>

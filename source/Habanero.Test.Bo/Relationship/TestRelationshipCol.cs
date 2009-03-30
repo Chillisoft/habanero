@@ -127,7 +127,7 @@ namespace Habanero.Test.BO.Relationship
             ClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
-            string relationshipName = "MyRelationship";
+            const string relationshipName = "MyRelationship";
 
             //---------------Execute Test ----------------------
             SingleRelationship<MyRelatedBo> relationship = bo1.Relationships.GetSingle<MyRelatedBo>(relationshipName);

@@ -31,7 +31,7 @@ namespace Habanero.UI.Base
         private IRelationshipDef _relationshipDef;
         private ISingleRelationship _singleRelationship;
         private ILookupComboBoxMapperStrategy _mapperStrategy;
-        private readonly ComboBoxCollectionSelector _comboBoxCollectionSelecttor;
+        private readonly ComboBoxCollectionSelector _comboBoxCollectionSelector;
 
         /// <summary>
         /// The Control <see cref="IComboBox"/> that is being mapped by this Mapper.
@@ -55,6 +55,12 @@ namespace Habanero.UI.Base
         public string RelationshipName { get; private set; }
 
         /// <summary>
+        /// Get and Set whether to include a blank item in the selector or not.
+        /// By default this is true.
+        /// </summary>
+        public bool IncludeBlankITem { get; set; }
+
+        /// <summary>
         /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
         /// </summary>
         public EventHandler SelectedIndexChangedHandler { get; set; }
@@ -71,19 +77,18 @@ namespace Habanero.UI.Base
             (IComboBox comboBox, string relationshipName, bool isReadOnly, IControlFactory controlFactory)
         {
             if (comboBox == null) throw new ArgumentNullException("comboBox");
-//            if (classDef == null) throw new ArgumentNullException("classDef");
             if (relationshipName == null) throw new ArgumentNullException("relationshipName");
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
-            //SetupRelationshipForBO(classDef, relationshipName);
 
             IsReadOnly = isReadOnly;
             ControlFactory = controlFactory;
             Control = comboBox;
             RelationshipName = relationshipName;
+            this.IncludeBlankITem = true;
             _mapperStrategy = ControlFactory.CreateLookupComboBoxDefaultMapperStrategy();
             _mapperStrategy.AddHandlers(this);
             UpdateIsEditable();
-            _comboBoxCollectionSelecttor = new ComboBoxCollectionSelector(comboBox, controlFactory, false);
+            _comboBoxCollectionSelector = new ComboBoxCollectionSelector(comboBox, controlFactory, false);
         }
         /// <summary>
         /// Returns the name of the property being edited in the control
@@ -110,11 +115,11 @@ namespace Habanero.UI.Base
         /// </summary>
         public IBusinessObjectCollection BusinessObjectCollection
         {
-            get { return _comboBoxCollectionSelecttor.Collection; }
+            get { return _comboBoxCollectionSelector.Collection; }
             set
             {
                 CheckBusinessObjectCollectionCorrectType(value);
-               _comboBoxCollectionSelecttor.SetCollection(value, true);
+               _comboBoxCollectionSelector.SetCollection(value, this.IncludeBlankITem);
             }
         }
 
@@ -272,6 +277,8 @@ namespace Habanero.UI.Base
             }
         }
 
+
+
         private void AddCurrentBOHandlers()
         {
             if (_businessObject == null) return;
@@ -326,7 +333,15 @@ namespace Habanero.UI.Base
                     comboBoxObjectCollection.Add(relatedBO);
                 }
             }
-            Control.SelectedItem = relatedBO;
+            _comboBoxCollectionSelector.DeregisterForControlEvents();
+            try
+            {
+                Control.SelectedItem = relatedBO;
+            }
+            finally
+            {
+                _comboBoxCollectionSelector.RegisterForControlEvents();
+            }
         }
 
         /// <summary>
@@ -373,14 +388,29 @@ namespace Habanero.UI.Base
         /// </summary>
         public void ApplyChangesToBusinessObject()
         {
-            object item = this.Control.SelectedItem;
-            if (item is IBusinessObject)
+            try
             {
-                SetRelatedBusinessObject((IBusinessObject) item);
+                object item = this.Control.SelectedItem;
+                if (item is IBusinessObject)
+                {
+                    RemoveCurrentBOHandlers();
+                    try
+                    {
+                        SetRelatedBusinessObject((IBusinessObject) item);
+                    }
+                    finally
+                    {
+                        AddCurrentBOHandlers();
+                    }
+                }
+                else
+                {
+                    SetRelatedBusinessObject(null);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                SetRelatedBusinessObject(null);
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
     }

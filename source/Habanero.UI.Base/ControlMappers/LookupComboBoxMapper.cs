@@ -164,7 +164,7 @@ namespace Habanero.UI.Base
             }
             else
             {
-                if (GetPropertyValue() == null)
+                if (!PropertyHasAValue())
                 {
                     _comboBox.SelectedIndex = -1;
                     _comboBox.Text = "";
@@ -174,6 +174,11 @@ namespace Habanero.UI.Base
                     SetValueFromLookupList();
                 }
             }
+        }
+
+        private bool PropertyHasAValue()
+        {
+            return !string.IsNullOrEmpty(Convert.ToString(GetPropertyValue()));
         }
 
         /// <summary>

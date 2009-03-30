@@ -257,33 +257,19 @@ namespace Habanero.BO
             {
                 transactionCommitter.AddBusinessObject(businessObject);
             }
-//            if (this.RelationshipDef.RelationshipType == RelationshipType.Association)
-//            {
             if (!this.OwningBO.Status.IsDeleted)
             {
                 foreach (TBusinessObject businessObject in _boCol.AddedBusinessObjects)
                 {
-//                    ISingleRelationship reverseRelationship =
-//                        GetReverseRelationship(businessObject) as ISingleRelationship;
-//                    if (reverseRelationship == null)
-//                    {
-//                        reverseRelationship = CreateReverseRelationship(businessObject);
-//                    }
-//                    if (reverseRelationship != null)
-//                    {
+
                         transactionCommitter.AddTransaction
                             (new TransactionalSingleRelationship_Added(this, businessObject));
-//                    }
                 }
             }
             foreach (TBusinessObject businessObject in _boCol.RemovedBusinessObjects)
             {
-//                ISingleRelationship reverseRelationship = GetReverseRelationship(businessObject) as ISingleRelationship;
-//                if (reverseRelationship != null)
-//                {
                     transactionCommitter.AddTransaction
                         (new TransactionalSingleRelationship_Removed(this, businessObject));
-//                }
             }
         }
 

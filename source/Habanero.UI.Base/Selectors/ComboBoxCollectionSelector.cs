@@ -55,7 +55,26 @@ namespace Habanero.UI.Base
             Control = comboBox;
             AutoSelectFirstItem = autoSelectFirstItem;
             _controlFactory = controlFactory;
-            Control.SelectedIndexChanged += delegate { FireBusinessObjectSelected(); };
+            RegisterForControlEvents();
+        }
+        /// <summary>
+        /// Registers this controller for the <see cref="IComboBox.SelectedIndexChanged"/> event.
+        /// </summary>
+        public void RegisterForControlEvents()
+        {
+            Control.SelectedIndexChanged += Control_OnSelectedIndexChanged;
+        }
+        /// <summary>
+        /// Deregisters this controller for the <see cref="IComboBox.SelectedIndexChanged"/> event.
+        /// </summary>
+        public void DeregisterForControlEvents()
+        {
+            Control.SelectedIndexChanged -= Control_OnSelectedIndexChanged;
+        }
+
+        private void Control_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            FireBusinessObjectSelected();
         }
 
         /// <summary>
@@ -84,11 +103,11 @@ namespace Habanero.UI.Base
 
         private void Collection_OnBusinessObjectUpdated(object sender, BOPropUpdatedEventArgs e)
         {
-            IBusinessObject o = e.BusinessObject;
+            IBusinessObject businessObject = e.BusinessObject;
             int selectedIndex = this.Control.SelectedIndex;
-            int indexOf = this.Control.Items.IndexOf(o);
-            this.Control.Items.Remove(o);
-            this.Control.Items.Insert(indexOf, o);
+            int indexOf = this.Control.Items.IndexOf(businessObject);
+            this.Control.Items.Remove(businessObject);
+            this.Control.Items.Insert(indexOf, businessObject);
             this.Control.SelectedIndex = selectedIndex;
         }
 

@@ -656,6 +656,7 @@ namespace Habanero.BO.ClassDefinition
         public bool IsValueValid(object propValue, ref string errorMessage)
         {
             string tmpErrMsg = "";
+            errorMessage = "";
             string displayNameFull = this.ClassDef == null ? DisplayName : this.ClassDef.ClassName + "." + DisplayName;
             if (_compulsory)
             {
@@ -688,7 +689,7 @@ namespace Habanero.BO.ClassDefinition
                     return false;
                 }
             }
-            errorMessage = "";
+            
             bool valid = true;
             foreach (IPropRule propRule in _propRules)
             {
@@ -708,6 +709,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         protected bool IsLookupListItemValid(object propValue, ref string errorMessage)
         {
+            errorMessage = "";
             if (!this.HasLookupList()) return true;
             if (!this.LookupList.LimitToList) return true;
 
@@ -825,6 +827,7 @@ namespace Habanero.BO.ClassDefinition
 
         private bool IsValueValidType(object propValue, ref string errorMessage)
         {
+            errorMessage = "";
             if (propValue == null) return true;
             if (propValue is string && string.IsNullOrEmpty((string) propValue)) return true;
             if (this.HasLookupList()) return true;

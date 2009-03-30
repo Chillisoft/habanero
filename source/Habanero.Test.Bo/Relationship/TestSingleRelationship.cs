@@ -743,8 +743,7 @@ namespace Habanero.Test.BO.Relationship
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse_NoReverse();
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
-            SingleRelationship<OrganisationTestBO> organisationRelationship =
-                contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+            contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
 
             //---------------Assert Precondition----------------
             Assert.IsTrue(contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation").OwningBOHasForeignKey);

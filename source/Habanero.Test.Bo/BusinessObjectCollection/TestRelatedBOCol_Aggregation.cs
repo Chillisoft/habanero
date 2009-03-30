@@ -235,6 +235,25 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             util.AssertOneObjectInRemovedAndPersisted(cpCol);
             util.AssertRemovedEventFired();
         }
+
+        [Test]
+        public void Test_SetSingleReverseRelationship_WhenMultipleReverseRelationshipNotLoaded_ShouldUpdateRelatedBOCol()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            IMultipleRelationship relationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
+            ContactPersonTestBO contactPerson = organisation.ContactPeople.CreateBusinessObject();
+
+            //---------------Assert Precondition----------------
+            //Assert.IsNull(contactPerson.Organisation);
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisationTestBO;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, relationship.BusinessObjectCollection.Count);
+            Assert.AreEqual(1, relationship.BusinessObjectCollection.CreatedBusinessObjects.Count);
+        }
     }
 
     [TestFixture]

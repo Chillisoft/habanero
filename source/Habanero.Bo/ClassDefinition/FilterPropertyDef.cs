@@ -81,8 +81,9 @@ namespace Habanero.BO.ClassDefinition
 
         /// <summary>
         /// A set of parameters to apply to the instantiated filter.  These are applied using reflection.  For instance, if
-        /// a parameter is specified in this dictionary called 'AllowNull' with a value of 'true', then once the filter is 
-        /// instantiated (which must be of type ICustomFilter), the AllowNull property will be set with a value of true via
+        /// a parameter is specified in this dictionary called 'AllowNull' with a value of 'true', then once the filter
+        /// (which must be of type ICustomFilter) is 
+        /// instantiated , the AllowNull property will be set with a value of true via
         /// reflection.
         /// </summary>
         public Dictionary<string, string> Parameters { get; set; }

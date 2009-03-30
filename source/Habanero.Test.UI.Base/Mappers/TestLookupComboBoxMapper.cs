@@ -131,6 +131,28 @@ namespace Habanero.Test.UI.Base.Mappers
                 Assert.AreEqual(LOOKUP_ITEM_1, cmbox.SelectedItem, "Item is not set.");
                 Assert.AreEqual(s.SampleLookupID.ToString(), cmbox.SelectedValue, "Value is not set");
             }
+            [Test]
+            public void Test_ResetBusinessObj_WhenHasNullValueForProperty_WhenPreviousBOHadAValue_ShouldSetSelectedItemNull_BUGFIX()
+            {
+                //---------------Set up test pack-------------------
+                IComboBox cmbox = GetControlFactory().CreateComboBox();
+                const string propName = "SampleLookupID";
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                Sample s = new Sample();
+                mapper.LookupList = Sample.LookupCollection;
+                s.SampleLookupID = (Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_1);
+                mapper.BusinessObject = s;
+                Sample sWithNullPropValue = new Sample();
+                //---------------Assert Precondition----------------
+                Assert.IsNotNull(cmbox.SelectedItem);
+                Assert.AreEqual(LOOKUP_ITEM_1, cmbox.SelectedItem, "Item is not set.");
+                Assert.AreEqual(s.SampleLookupID.ToString(), cmbox.SelectedValue, "Value is not set");
+                Assert.IsTrue(string.IsNullOrEmpty(sWithNullPropValue.GetPropertyValueString("SampleLookupID")));
+                //---------------Execute Test ----------------------
+                mapper.BusinessObject = sWithNullPropValue;
+                //---------------Test Result -----------------------
+                TestUtil.AssertStringEmpty(Convert.ToString(cmbox.SelectedItem), "cmbox.SelectedItem", "there should be no item selected");
+            }
 
             [Test]
             public void TestSetBusinessObject_Null_DoesNotRaiseError_BUGFIX()

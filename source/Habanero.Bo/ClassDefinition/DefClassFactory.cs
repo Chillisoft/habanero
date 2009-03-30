@@ -380,12 +380,13 @@ namespace Habanero.BO.ClassDefinition
 		}
 
         ///<summary>
+        /// Creates an individual <see cref="FilterPropertyDef"/> that will be used on the <see cref="FilterDef"/>
         ///</summary>
-        ///<param name="propertyName"></param>
-        ///<param name="label"></param>
-        ///<param name="filterType"></param>
-        ///<param name="filterTypeAssembly"></param>
-        ///<param name="filterClauseOperator"></param>
+        ///<param name="propertyName">The Property Name that this <see cref="FilterPropertyDef"/> is mapped to</param>
+        ///<param name="label">The Label Text that is displayed for this <see cref="FilterPropertyDef"/></param>
+        ///<param name="filterType">The FilterType e.g. StringComboBoxFilter that is  to use for this <see cref="FilterPropertyDef"/></param>
+        ///<param name="filterTypeAssembly">The FilterType Assembly that is  to use for this <see cref="FilterPropertyDef"/></param>
+        ///<param name="filterClauseOperator">The <see cref="FilterClauseOperator"/> that is  to use for this <see cref="FilterPropertyDef"/></param>
         ///<param name="parameters"></param>
         ///<returns></returns>
         public FilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, 
@@ -396,9 +397,10 @@ namespace Habanero.BO.ClassDefinition
         }
 
         ///<summary>
+        /// Creates a <see cref="FilterDef"/>
         ///</summary>
-        ///<param name="filterPropertyDefs"></param>
-        ///<returns></returns>
+        ///<param name="filterPropertyDefs">The <see cref="FilterPropertyDef"/>s that are placed on the FilterDef</param>
+        ///<returns>The newly created FilterDef</returns>
         public FilterDef CreateFilterDef(IList<FilterPropertyDef> filterPropertyDefs) { return new FilterDef(filterPropertyDefs);}
 	}
 }
