@@ -1,22 +1,20 @@
-using System;
-using System.Threading;
-using Habanero.Base;
-using Habanero.BO;
-using Habanero.BO.ClassDefinition;
+ï»¿using Habanero.Base;
 using NUnit.Framework;
+using Habanero.BO;
 
 namespace Habanero.Test.BO.Relationship
 {
     [TestFixture]
-    public class TestMultipleRelationshipCancelEdits_Aggregation : TestMultipleRelationshipCancelEdits_Base
+    [Ignore("Working on this")] //TODO Mark 24 Mar 2009: Ignored Tests - Working on this
+    public class TestMultipleRelationshipCancelEdits_Association : TestMultipleRelationshipCancelEdits_Base
     {
         protected override RelationshipType GetRelationshipType()
         {
-            return RelationshipType.Aggregation;
+            return RelationshipType.Association;
         }
 
         /// <summary>
-        /// • If edits to a car are cancelled then it must cancel edits to all its tyres.
+        /// â€¢ If edits to a car are cancelled then it must cancel edits to all its tyres.
         /// </summary>
         [Test]
         public virtual void Test_Acceptance_CancelEditParent_CancelsEditsForDirtyChildren()
@@ -25,7 +23,7 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO organisationTestBO;
             RelationshipCol relationships;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship =
+            MultipleRelationship<ContactPersonTestBO> associationRelationship =
                 GetRelationship(out organisationTestBO, out relationships, out cpCol);
 
             ContactPersonTestBO existingChild;
@@ -40,7 +38,7 @@ namespace Habanero.Test.BO.Relationship
                                 out createdChildWithEdits, out createdChild);
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(aggregateRelationship.IsDirty);
+            Assert.IsTrue(associationRelationship.IsDirty);
             Assert.IsTrue(relationships.IsDirty);
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
 
@@ -59,12 +57,11 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(createdChildWithEdits.Status.IsDirty);
             Assert.IsTrue(createdChild.Status.IsDirty);
 
-
             //---------------Execute Test ----------------------
             organisationTestBO.CancelEdits();
 
             //---------------Test Result -----------------------
-            Assert.IsFalse(aggregateRelationship.IsDirty);
+            Assert.IsFalse(associationRelationship.IsDirty);
             Assert.IsFalse(relationships.IsDirty);
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
             Assert.AreEqual(4, cpCol.Count);
@@ -84,14 +81,14 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on the relationship, then the dirty children should be cancelled
+        /// â€¢ If CancelEdit is called on the relationship, then the dirty children should be cancelled
         /// </summary>
         [Test]
         public virtual void Test_Acceptance_CancelEdit_CancelsEditsForDirtyChildren()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
 
             ContactPersonTestBO existingChild;
             ContactPersonTestBO editedChild;
@@ -105,8 +102,8 @@ namespace Habanero.Test.BO.Relationship
                                 out createdChildWithEdits, out createdChild);
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(6, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(6, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(5, cpCol.Count);
             Assert.AreEqual(4, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
@@ -123,11 +120,11 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(createdChild.Status.IsDirty);
 
             //---------------Execute Test ----------------------
-            aggregateRelationship.CancelEdits();
+            associationRelationship.CancelEdits();
 
             //---------------Test Result -----------------------
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
 
             Assert.AreEqual(4, cpCol.Count);
             Assert.AreEqual(4, cpCol.PersistedBusinessObjects.Count);
@@ -146,7 +143,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on the relationship, then 
+        /// â€¢ If CancelEdit is called on the relationship, then 
         /// a Dirty child will be cancelled.
         /// </summary>
         [Test]
@@ -154,25 +151,25 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO editedChild = CreateEditedChild(cpCol);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.IsTrue(editedChild.Status.IsDirty);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             //---------------Execute Test ----------------------
-            aggregateRelationship.CancelEdits();
+            associationRelationship.CancelEdits();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.Count);
-            Assert.IsFalse(editedChild.Status.IsDirty);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(editedChild.Status.IsDirty);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -181,7 +178,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on the relationship, then 
+        /// â€¢ If CancelEdit is called on the relationship, then 
         /// an Added child will be removed and cancelled.
         /// </summary>
         [Test]
@@ -189,25 +186,25 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO addedChild = CreateAddedChild(cpCol);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.IsTrue(addedChild.Status.IsDirty);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             //---------------Execute Test ----------------------
-            aggregateRelationship.CancelEdits();
+            associationRelationship.CancelEdits();
             //---------------Test Result -----------------------
             Assert.AreEqual(0, cpCol.Count);
             Assert.IsFalse(addedChild.Status.IsDirty);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -216,7 +213,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on the relationship, then 
+        /// â€¢ If CancelEdit is called on the relationship, then 
         /// an Created child will be removed and cancelled.
         /// </summary>
         [Test]
@@ -224,25 +221,25 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO createdChild = CreateCreatedChild(cpCol);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.IsTrue(createdChild.Status.IsDirty);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             //---------------Execute Test ----------------------
-            aggregateRelationship.CancelEdits();
+            associationRelationship.CancelEdits();
             //---------------Test Result -----------------------
             Assert.AreEqual(0, cpCol.Count);
             Assert.IsFalse(createdChild.Status.IsDirty);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -251,7 +248,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on the relationship, then 
+        /// â€¢ If CancelEdit is called on the relationship, then 
         /// an Removed child will be added and cancelled.
         /// </summary>
         [Test]
@@ -259,25 +256,25 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO removedChild = CreateRemovedChild(cpCol);
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, cpCol.Count);
             Assert.IsTrue(removedChild.Status.IsDirty);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             //---------------Execute Test ----------------------
-            aggregateRelationship.CancelEdits();
+            associationRelationship.CancelEdits();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.IsFalse(removedChild.Status.IsDirty);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -286,7 +283,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on the relationship, then 
+        /// â€¢ If CancelEdit is called on the relationship, then 
         /// a Deleted child will be cancelled and the mark for delete will be undone.
         /// </summary>
         [Test]
@@ -294,25 +291,25 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO deletedChild = CreateDeletedChild(cpCol);
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, cpCol.Count);
             Assert.IsTrue(deletedChild.Status.IsDirty);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.MarkedForDeleteBusinessObjects.Count);
             //---------------Execute Test ----------------------
-            aggregateRelationship.CancelEdits();
+            associationRelationship.CancelEdits();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.IsFalse(deletedChild.Status.IsDirty);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -323,7 +320,7 @@ namespace Habanero.Test.BO.Relationship
 
 
         /// <summary>
-        /// • If CancelEdit is called on a Dirty child, then 
+        /// â€¢ If CancelEdit is called on a Dirty child, then 
         /// edits to the child will be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -331,15 +328,15 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO editedChild = CreateEditedChild(cpCol);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.IsTrue(editedChild.Status.IsDirty);
             AssertEditedPropDirtyState(true, editedChild);
             AssertFKDirtyState(false, editedChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -352,8 +349,8 @@ namespace Habanero.Test.BO.Relationship
             AssertEditedPropDirtyState(false, editedChild);
             AssertFKDirtyState(false, editedChild);
             Assert.IsFalse(editedChild.Status.IsDirty);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -362,7 +359,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on a Added child, then 
+        /// â€¢ If CancelEdit is called on a Added child, then 
         /// edits to the child will be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -371,15 +368,15 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO addedChild = CreateAddedChild(cpCol);
             addedChild = EditChild(addedChild);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(true, addedChild);
             AssertFKDirtyState(true, addedChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -391,8 +388,8 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(false, addedChild);
             AssertFKDirtyState(true, addedChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -401,7 +398,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on a Created child, then 
+        /// â€¢ If CancelEdit is called on a Created child, then 
         /// edits to the child will be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -410,14 +407,14 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO createdChild = EditChild(CreateCreatedChild(cpCol));
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(true, createdChild);
             AssertFKDirtyState(true, createdChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
@@ -429,8 +426,8 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(false, createdChild);
             AssertFKDirtyState(true, createdChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
@@ -439,7 +436,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on a Removed child, then 
+        /// â€¢ If CancelEdit is called on a Removed child, then 
         /// edits to the child will be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -448,14 +445,14 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO removedChild = EditChild(CreateRemovedChild(cpCol));
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, cpCol.Count);
             AssertEditedPropDirtyState(true, removedChild);
             AssertFKDirtyState(true, removedChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
@@ -467,8 +464,8 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(0, cpCol.Count);
             AssertEditedPropDirtyState(false, removedChild);
             AssertFKDirtyState(true, removedChild);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
@@ -477,7 +474,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on a Deleted child, then 
+        /// â€¢ If CancelEdit is called on a Deleted child, then 
         /// edits to the child will be cancelled, and the mark for delete will be undone.
         /// </summary>
         [Test]
@@ -485,14 +482,14 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO deletedChild = EditChild(CreateDeletedChild(cpCol));
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, cpCol.Count);
             AssertEditedPropDirtyState(true, deletedChild);
             Assert.IsTrue(deletedChild.Status.IsDeleted);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
@@ -504,8 +501,8 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(false, deletedChild);
             Assert.IsFalse(deletedChild.Status.IsDeleted);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
@@ -517,9 +514,9 @@ namespace Habanero.Test.BO.Relationship
         //=========================================================================================================================
         //=========================================================================================================================
         //=========================================================================================================================
-        
+
         /// <summary>
-        /// • If the child owns the edit and the child's edit is cancelled, then 
+        /// â€¢ If the child owns the edit and the child's edit is cancelled, then 
         /// the Added child will be removed and cancelled.
         /// </summary>
         [Test]
@@ -527,15 +524,15 @@ namespace Habanero.Test.BO.Relationship
         public virtual void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForAddedChild()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO; 
+            OrganisationTestBO organisationTestBO;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out organisationTestBO, out cpCol);
             ContactPersonTestBO addedChild = CreateAddedChild_ChildOwnsEdit(organisationTestBO);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.IsTrue(addedChild.Status.IsDirty);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -546,8 +543,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.AreEqual(0, cpCol.Count);
             Assert.IsFalse(addedChild.Status.IsDirty);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -556,7 +553,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If the child owns the edit and the child's edit is cancelled, then 
+        /// â€¢ If the child owns the edit and the child's edit is cancelled, then 
         /// the Created child will be removed and cancelled.
         /// </summary>
         [Test]
@@ -566,13 +563,13 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out organisationTestBO, out cpCol);
             ContactPersonTestBO createdChild = CreateCreatedChild_ChildOwnsEdit(organisationTestBO);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.IsTrue(createdChild.Status.IsDirty);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
@@ -583,8 +580,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.AreEqual(0, cpCol.Count);
             Assert.IsFalse(createdChild.Status.IsDirty);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -593,7 +590,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If the child owns the edit and the child's edit is cancelled, then 
+        /// â€¢ If the child owns the edit and the child's edit is cancelled, then 
         /// the Removed child will be added and cancelled.
         /// </summary>
         [Test]
@@ -602,13 +599,13 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out organisationTestBO, out cpCol);
             ContactPersonTestBO removedChild = CreateRemovedChild_ChildOwnsEdit(organisationTestBO);
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, cpCol.Count);
             Assert.IsTrue(removedChild.Status.IsDirty);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -619,17 +616,17 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.IsFalse(removedChild.Status.IsDirty);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
         }
-        
+
         ///// <summary>
-        ///// • If CancelEdit is called on a Dirty child, then 
+        ///// â€¢ If CancelEdit is called on a Dirty child, then 
         ///// edits to the child will be cancelled, and the relationship will be left as is.
         ///// </summary>
         //[Test]
@@ -637,15 +634,15 @@ namespace Habanero.Test.BO.Relationship
         //{
         //    //---------------Set up test pack-------------------
         //    BusinessObjectCollection<ContactPersonTestBO> cpCol;
-        //    MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+        //    MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
         //    ContactPersonTestBO editedChild = CreateEditedChild(cpCol);
         //    //---------------Assert Precondition----------------
         //    Assert.AreEqual(1, cpCol.Count);
         //    Assert.IsTrue(editedChild.Status.IsDirty);
         //    AssertEditedPropDirtyState(true, editedChild);
         //    AssertFKDirtyState(false, editedChild);
-        //    Assert.IsTrue(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+        //    Assert.IsTrue(associationRelationship.IsDirty);
+        //    Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
         //    Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
         //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
         //    Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -658,8 +655,8 @@ namespace Habanero.Test.BO.Relationship
         //    AssertEditedPropDirtyState(false, editedChild);
         //    AssertFKDirtyState(false, editedChild);
         //    Assert.IsFalse(editedChild.Status.IsDirty);
-        //    Assert.IsFalse(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+        //    Assert.IsFalse(associationRelationship.IsDirty);
+        //    Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
         //    Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
         //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
         //    Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -668,7 +665,7 @@ namespace Habanero.Test.BO.Relationship
         //}
 
         /// <summary>
-        /// • If CancelEdit is called on the parent when a child is Added through edits on the child, then 
+        /// â€¢ If CancelEdit is called on the parent when a child is Added through edits on the child, then 
         /// edits to the child will not be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -678,27 +675,27 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out organisationTestBO, out cpCol);
             ContactPersonTestBO addedChild = EditChild(CreateAddedChild_ChildOwnsEdit(organisationTestBO));
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(true, addedChild);
             AssertFKDirtyState(true, addedChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             //---------------Execute Test ----------------------
-            aggregateRelationship.CancelEdits();
+            associationRelationship.CancelEdits();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(true, addedChild);
             AssertFKDirtyState(true, addedChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -707,7 +704,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on the parent when a child is Created and associated through 
+        /// â€¢ If CancelEdit is called on the parent when a child is Created and associated through 
         /// edits on the child, then edits to the child will not be cancelled, and 
         /// the relationship will be left as is.
         /// </summary>
@@ -718,27 +715,27 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out organisationTestBO, out cpCol);
             ContactPersonTestBO createdChild = EditChild(CreateCreatedChild_ChildOwnsEdit(organisationTestBO));
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(true, createdChild);
             AssertFKDirtyState(true, createdChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             //---------------Execute Test ----------------------
-            aggregateRelationship.CancelEdits();
+            associationRelationship.CancelEdits();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(true, createdChild);
             AssertFKDirtyState(true, createdChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
@@ -747,7 +744,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If CancelEdit is called on the parent when a child is Removed through 
+        /// â€¢ If CancelEdit is called on the parent when a child is Removed through 
         /// edits on the child, then edits to the child will not be cancelled, and 
         /// the relationship will be left as is.
         /// </summary>
@@ -758,27 +755,27 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out organisationTestBO, out cpCol);
             ContactPersonTestBO removedChild = EditChild(CreateRemovedChild_ChildOwnsEdit(organisationTestBO));
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, cpCol.Count);
             AssertEditedPropDirtyState(true, removedChild);
             AssertFKDirtyState(true, removedChild);
-            Assert.IsTrue(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsTrue(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             //---------------Execute Test ----------------------
-            aggregateRelationship.CancelEdits();
+            associationRelationship.CancelEdits();
             //---------------Test Result -----------------------
             Assert.AreEqual(0, cpCol.Count);
             AssertEditedPropDirtyState(true, removedChild);
             AssertFKDirtyState(true, removedChild);
-            Assert.IsFalse(aggregateRelationship.IsDirty);
-            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.IsFalse(associationRelationship.IsDirty);
+            Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
@@ -787,7 +784,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         ///// <summary>
-        ///// • If CancelEdit is called on a Deleted child, then 
+        ///// â€¢ If CancelEdit is called on a Deleted child, then 
         ///// edits to the child will be cancelled, and the mark for delete will be undone.
         ///// </summary>
         //[Test]
@@ -795,14 +792,14 @@ namespace Habanero.Test.BO.Relationship
         //{
         //    //---------------Set up test pack-------------------
         //    BusinessObjectCollection<ContactPersonTestBO> cpCol;
-        //    MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
+        //    MultipleRelationship<ContactPersonTestBO> associationRelationship = GetRelationship(out cpCol);
         //    ContactPersonTestBO deletedChild = EditChild(CreateDeletedChild(cpCol));
         //    //---------------Assert Precondition----------------
         //    Assert.AreEqual(0, cpCol.Count);
         //    AssertEditedPropDirtyState(true, deletedChild);
         //    Assert.IsTrue(deletedChild.Status.IsDeleted);
-        //    Assert.IsTrue(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+        //    Assert.IsTrue(associationRelationship.IsDirty);
+        //    Assert.AreEqual(1, associationRelationship.GetDirtyChildren().Count);
         //    Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
         //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
         //    Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
@@ -814,8 +811,8 @@ namespace Habanero.Test.BO.Relationship
         //    Assert.AreEqual(1, cpCol.Count);
         //    AssertEditedPropDirtyState(false, deletedChild);
         //    Assert.IsFalse(deletedChild.Status.IsDeleted);
-        //    Assert.IsFalse(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
+        //    Assert.IsFalse(associationRelationship.IsDirty);
+        //    Assert.AreEqual(0, associationRelationship.GetDirtyChildren().Count);
         //    Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
         //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
         //    Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);

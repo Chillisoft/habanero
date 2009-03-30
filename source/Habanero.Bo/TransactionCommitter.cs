@@ -186,6 +186,8 @@ namespace Habanero.BO
             BeginDataSource();
         }
 
+        #region "Begin" Methods
+
         /// <summary>
         /// If the transaction is a transactional business object then the Upate object before persisting method
         /// of the transactional business object is called. The default behaviour of this is to call through to the 
@@ -221,6 +223,31 @@ namespace Habanero.BO
             CheckForDuplicateObjects();
             CheckForConcurrencyErrors();
         }
+
+        /// <summary>
+        /// Check that the object is in a valid state i.e. no <see cref="IPropRule"/>'s are broken.
+        /// </summary>
+        private void CheckObjectsAreValid()
+        {
+            string allMessages = "";
+            foreach (ITransactional transaction in _originalTransactions)
+            {
+                if (!(transaction is TransactionalBusinessObject)) continue;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
+
+                string errMsg;
+                if (!trnBusObj.IsValid(out errMsg))
+                {
+                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(allMessages))
+            {
+                throw new BusObjectInAnInvalidStateException(allMessages);
+            }
+        }
+
         /// <summary>
         /// Verifies that any <see cref="TransactionalBusinessObject"/>'s that are marked can be persisted
         ///   can be deleted. <see cref="TransactionalBusinessObject.CheckCanDelete"/>
@@ -249,68 +276,6 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Checks any Concurrency control errors for the <see cref="TransactionalBusinessObject"/>
-        /// </summary>
-        private void CheckForConcurrencyErrors()
-        {
-            foreach (ITransactional transaction in _originalTransactions)
-            {
-                if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
-                trnBusObj.CheckForConcurrencyErrors();
-            }
-        }
-
-        /// <summary>
-        /// Checks for any Duplicate objects by checking the objects <see cref="IPrimaryKey"/> and alternate keys 
-        /// <see cref="IKeyDef"/>.
-        /// </summary>
-        private void CheckForDuplicateObjects()
-        {
-            string allMessages = "";
-            foreach (ITransactional transaction in _originalTransactions)
-            {
-                if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
-
-                string errMsg;
-                if (trnBusObj.HasDuplicateIdentifier(out errMsg))
-                {
-                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(allMessages))
-            {
-                throw new BusObjDuplicateConcurrencyControlException(allMessages);
-            }
-        }
-
-        /// <summary>
-        /// Check that the object is in a valid state i.e. no <see cref="IPropRule"/>'s are broken.
-        /// </summary>
-        private void CheckObjectsAreValid()
-        {
-            string allMessages = "";
-            foreach (ITransactional transaction in _originalTransactions)
-            {
-                if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
-
-                string errMsg;
-                if (!trnBusObj.IsValid(out errMsg))
-                {
-                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(allMessages))
-            {
-                throw new BusObjectInAnInvalidStateException(allMessages);
-            }
-        }
-
-        /// <summary>
         /// Verifies that any <see cref="TransactionalBusinessObject"/>'s that are marked for deletion
         ///   can be deleted. <see cref="TransactionalBusinessObject.CheckCanDelete"/>
         /// </summary>
@@ -320,7 +285,7 @@ namespace Habanero.BO
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
 
                 if (!trnBusObj.IsDeleted) continue;
 
@@ -338,9 +303,49 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Checks for any Duplicate objects by checking the objects <see cref="IPrimaryKey"/> and alternate keys 
+        /// <see cref="IKeyDef"/>.
+        /// </summary>
+        private void CheckForDuplicateObjects()
+        {
+            string allMessages = "";
+            foreach (ITransactional transaction in _originalTransactions)
+            {
+                if (!(transaction is TransactionalBusinessObject)) continue;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
+
+                string errMsg;
+                if (trnBusObj.HasDuplicateIdentifier(out errMsg))
+                {
+                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(allMessages))
+            {
+                throw new BusObjDuplicateConcurrencyControlException(allMessages);
+            }
+        }
+
+        /// <summary>
+        /// Checks any Concurrency control errors for the <see cref="TransactionalBusinessObject"/>
+        /// </summary>
+        private void CheckForConcurrencyErrors()
+        {
+            foreach (ITransactional transaction in _originalTransactions)
+            {
+                if (!(transaction is TransactionalBusinessObject)) continue;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                trnBusObj.CheckForConcurrencyErrors();
+            }
+        }
+
+        /// <summary>
         /// Begins the transaction on the appropriate databasource.
         /// </summary>
         protected abstract void BeginDataSource();
+        
+        #endregion "Begin" Methods
 
         /// <summary>
         /// Executes the transactions and rolls back in the event of an error.
@@ -364,6 +369,26 @@ namespace Habanero.BO
             }
         }
 
+        #region "Execute" Methods
+
+        /// <summary>
+        /// Tries to execute an individual transaction against the datasource.
+        /// 1'st phase of a 2 phase database commit.
+        /// </summary>
+        internal protected virtual void ExecuteTransactionToDataSource(ITransactional transaction)
+        {
+            _executedTransactions.Add(transaction);
+        }
+
+        /// <summary>
+        /// In the event of any errors occuring during executing statements to the datasource 
+        /// <see cref="ExecuteTransactionToDataSource"/> or during committing to the datasource
+        /// <see cref="CommitToDatasource"/>
+        /// </summary>
+        protected abstract void TryRollback(Exception origException);
+
+        #endregion "Execute" Methods
+
         /// <summary>
         /// Commits all the successfully executed statements to the datasource.
         /// 2'nd phase of a 2 phase database commit and 
@@ -379,18 +404,6 @@ namespace Habanero.BO
             else
             {
                 UpdateTransactionsAsRolledBack();
-            }
-        }
-
-        private void UpdateTransactionsAsRolledBack()
-        {
-            foreach (ITransactional transaction in _originalTransactions)
-            {
-                transaction.UpdateAsRolledBack();
-            }
-            foreach (ITransactional transaction in _executedTransactions)
-            {
-                transaction.UpdateAsRolledBack();
             }
         }
 
@@ -411,23 +424,17 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// In the event of any errors occuring during executing statements to the datasource 
-        /// <see cref="ExecuteTransactionToDataSource"/> or during committing to the datasource
-        /// <see cref="CommitToDatasource"/>
-        /// </summary>
-        protected abstract void TryRollback(Exception origException);
-
-        /// <summary>
-        /// Tries to execute an individual transaction against the datasource.
-        /// 1'st phase of a 2 phase database commit.
-        /// </summary>
-        internal protected virtual void ExecuteTransactionToDataSource(ITransactional transaction)
+        private void UpdateTransactionsAsRolledBack()
         {
-            _executedTransactions.Add(transaction);
+            foreach (ITransactional transaction in _originalTransactions)
+            {
+                transaction.UpdateAsRolledBack();
+            }
+            foreach (ITransactional transaction in _executedTransactions)
+            {
+                transaction.UpdateAsRolledBack();
+            }
         }
-
-
 
         /// <summary>
         /// Used to decorate a businessObject in a TransactionalBusinessObject. To be overridden in the concrete 

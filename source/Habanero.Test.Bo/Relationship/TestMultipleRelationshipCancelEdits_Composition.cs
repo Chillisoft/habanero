@@ -11,6 +11,7 @@ namespace Habanero.Test.BO.Relationship
         {
             return RelationshipType.Composition;
         }
+
         protected void CreateDirtyChildren(BusinessObjectCollection<ContactPersonTestBO> cpCol,
                                 out ContactPersonTestBO existingChild,
                                 out ContactPersonTestBO editedChild,
@@ -26,7 +27,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If edits to a car are cancelled then it must cancel edits to all its tyres.
+        /// • If edits to an invoice are cancelled then it must cancel edits to all its invoice lines.
         /// </summary>
         [Test]
         public override void Test_Acceptance_CancelEditParent_CancelsEditsForDirtyChildren()
@@ -36,7 +37,7 @@ namespace Habanero.Test.BO.Relationship
             RelationshipCol relationships;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> aggregateRelationship =
-                GetAggregationRelationship(out organisationTestBO, out relationships, out cpCol);
+                GetRelationship(out organisationTestBO, out relationships, out cpCol);
 
             ContactPersonTestBO existingChild;
             ContactPersonTestBO editedChild;
@@ -95,7 +96,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out cpCol);
+            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
 
             ContactPersonTestBO existingChild;
             ContactPersonTestBO editedChild;
@@ -152,7 +153,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            Habanero.BO.MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out cpCol);
+            Habanero.BO.MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetRelationship(out cpCol);
             ContactPersonTestBO createdChild = CreateCreatedChild(cpCol);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
