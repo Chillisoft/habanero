@@ -55,7 +55,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(relationshipName, mapper.RelationshipName);
             Assert.AreEqual(false, mapper.IsReadOnly);
             Assert.AreSame(GetControlFactory(), mapper.ControlFactory);
-            Assert.IsTrue(mapper.IncludeBlankITem);
+            Assert.IsTrue(mapper.IncludeBlankItem);
         }
 
         [Test]
@@ -238,9 +238,9 @@ namespace Habanero.Test.UI.Base.Mappers
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             BusinessObjectCollection<OrganisationTestBO> boCol;
             RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
-            mapper.IncludeBlankITem = false;
+            mapper.IncludeBlankItem = false;
             //---------------Assert Precondition----------------
-            Assert.IsFalse(mapper.IncludeBlankITem);
+            Assert.IsFalse(mapper.IncludeBlankItem);
             //---------------Execute Test ----------------------
             mapper.BusinessObjectCollection = new BusinessObjectCollection<OrganisationTestBO>();
             //---------------Test Result -----------------------

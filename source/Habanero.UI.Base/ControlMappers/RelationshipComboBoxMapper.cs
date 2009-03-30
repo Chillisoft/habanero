@@ -58,7 +58,7 @@ namespace Habanero.UI.Base
         /// Get and Set whether to include a blank item in the selector or not.
         /// By default this is true.
         /// </summary>
-        public bool IncludeBlankITem { get; set; }
+        public bool IncludeBlankItem { get; set; }
 
         /// <summary>
         /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
@@ -84,7 +84,7 @@ namespace Habanero.UI.Base
             ControlFactory = controlFactory;
             Control = comboBox;
             RelationshipName = relationshipName;
-            this.IncludeBlankITem = true;
+            this.IncludeBlankItem = true;
             _mapperStrategy = ControlFactory.CreateLookupComboBoxDefaultMapperStrategy();
             _mapperStrategy.AddHandlers(this);
             UpdateIsEditable();
@@ -119,7 +119,7 @@ namespace Habanero.UI.Base
             set
             {
                 CheckBusinessObjectCollectionCorrectType(value);
-               _comboBoxCollectionSelector.SetCollection(value, this.IncludeBlankITem);
+               _comboBoxCollectionSelector.SetCollection(value, this.IncludeBlankItem);
             }
         }
 
