@@ -27,10 +27,10 @@ namespace Habanero.UI.Win
         ///<summary>
         /// Constructor for <see cref="ComboBoxSelectorWin"/>
         ///</summary>
-        public ComboBoxSelectorWin():this(GlobalUIRegistry.ControlFactory)
+        public ComboBoxSelectorWin() : this(GlobalUIRegistry.ControlFactory)
         {
         }
-                
+
         private void FireBusinessObjectSelected()
         {
             if (this.BusinessObjectSelected != null)
@@ -38,6 +38,7 @@ namespace Habanero.UI.Win
                 this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
             }
         }
+
         /// <summary>
         /// Gets and Sets the business object collection displayed in the grid.  This
         /// collection must be pre-loaded using the collection's Load() command or from the
@@ -80,12 +81,14 @@ namespace Habanero.UI.Win
         {
             get { return this; }
         }
+
         /// <summary>Gets the number of rows displayed in the <see cref="IBOColSelectorControl"></see>.</summary>
         /// <returns>The number of rows in the <see cref="IBOColSelectorControl"></see>.</returns>
         public int NoOfItems
         {
             get { return this.Items.Count; }
         }
+
         /// <summary>
         /// Returns the business object at the specified row number
         /// </summary>
@@ -95,7 +98,16 @@ namespace Habanero.UI.Win
         public IBusinessObject GetBusinessObjectAtRow(int row)
         {
             if (IndexOutOfRange(row)) return null;
-            return (IBusinessObject)this.Items[row];
+            return (IBusinessObject) this.Items[row];
+        }
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem
+        {
+            get { return _manager.AutoSelectFirstItem; }
+            set { _manager.AutoSelectFirstItem = value; }
         }
 
         private bool IndexOutOfRange(int row)

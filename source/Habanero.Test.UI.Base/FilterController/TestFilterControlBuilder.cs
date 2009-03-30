@@ -58,8 +58,6 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual(1, filterControl.FilterControls.Count);
             Assert.IsNotNull(filterControl.GetChildControl(propName));
             Assert.IsInstanceOfType(typeof(StringTextBoxFilter), filterControl.FilterControls[0]);
-
-            //---------------Tear Down -------------------------          
         }
 
 
@@ -78,9 +76,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Test Result -----------------------
             Assert.AreEqual(2, filterControl.FilterControls.Count);
             Assert.AreEqual(testprop1, filterControl.FilterControls[0].PropertyName);
-            Assert.AreEqual(testprop2, filterControl.FilterControls[1].PropertyName);
-            
-            //---------------Tear Down -------------------------          
+            Assert.AreEqual(testprop2, filterControl.FilterControls[1].PropertyName);    
         }
 
 
@@ -99,9 +95,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.IsInstanceOfType(typeof(StringTextBoxFilter), filterControl.FilterControls[0]);
             Assert.IsInstanceOfType(typeof(ITextBox), filterControl.FilterControls[0].Control);    
             Assert.IsInstanceOfType(typeof(BoolCheckBoxFilter), filterControl.FilterControls[1]);
-            Assert.IsInstanceOfType(typeof(ICheckBox), filterControl.FilterControls[1].Control);
-            
-            //---------------Tear Down -------------------------          
+            Assert.IsInstanceOfType(typeof(ICheckBox), filterControl.FilterControls[1].Control);    
         }
 
 
@@ -110,7 +104,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             //---------------Set up test pack-------------------
             FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
-            const string filterType = "Habanero.Test.UI.Base.FilterController.SimpleFilter";
+            const string filterType = "Habanero.Test.UI.Base.FilterController.SimpleFilterStub";
             const string filterTypeAssembly = "Habanero.Test.UI.Base";
             FilterDef filterDef = CreateFilterDef_1PropertyWithTypeAndAssembly(filterType, filterTypeAssembly);
 
@@ -120,9 +114,7 @@ namespace Habanero.Test.UI.Base.FilterController
             
             //---------------Test Result -----------------------
             Assert.AreEqual(1, filterControl.FilterControls.Count);
-            Assert.IsInstanceOfType(typeof(SimpleFilter), filterControl.FilterControls[0]);
-
-            //---------------Tear Down -------------------------          
+            Assert.IsInstanceOfType(typeof(SimpleFilterStub), filterControl.FilterControls[0]); 
         }
 
         [Test]
@@ -138,9 +130,7 @@ namespace Habanero.Test.UI.Base.FilterController
             builder.BuildFilterControl(filterDef, filterControl);
             
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, filterControl.FilterControls.Count);
-
-            //---------------Tear Down -------------------------          
+            Assert.AreEqual(1, filterControl.FilterControls.Count);   
         }
 
         [Test]
@@ -155,8 +145,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Test Result -----------------------
             Assert.AreEqual(FilterModes.Filter, filterControl.FilterMode);
-            
-            //---------------Tear Down -------------------------          
+      
         }
 
         [Test]
@@ -172,8 +161,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Test Result -----------------------
             Assert.AreEqual(FilterModes.Search, filterControl.FilterMode);
-            
-            //---------------Tear Down -------------------------          
+
         }
 
         [Test]
@@ -189,8 +177,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(FlowLayoutManager), filterControl.LayoutManager);
-
-            //---------------Tear Down -------------------------          
+   
         }
 
         [Test]
@@ -209,8 +196,7 @@ namespace Habanero.Test.UI.Base.FilterController
             GridLayoutManager layoutManager = (GridLayoutManager) filterControl.LayoutManager;
             Assert.AreEqual(6, layoutManager.Columns.Count);
             Assert.AreEqual(1, layoutManager.Rows.Count);
-
-            //---------------Tear Down -------------------------          
+ 
         }
 
         [Test]
@@ -229,8 +215,7 @@ namespace Habanero.Test.UI.Base.FilterController
             GridLayoutManager layoutManager = (GridLayoutManager) filterControl.LayoutManager;
             Assert.AreEqual(4, layoutManager.Columns.Count);
             Assert.AreEqual(2, layoutManager.Rows.Count);
-
-            //---------------Tear Down -------------------------          
+    
         }
 
         [Test]
@@ -247,8 +232,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Test Result -----------------------
             Assert.AreEqual(op, customFilter.FilterClauseOperator);
-
-            //---------------Tear Down -------------------------          
+   
         }
 
 
@@ -268,8 +252,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(BoolCheckBoxFilter), customFilter);
             BoolCheckBoxFilter checkBoxFilter = (BoolCheckBoxFilter)customFilter;
-            Assert.IsTrue(checkBoxFilter.IsChecked);
-            //---------------Tear Down -------------------------          
+            Assert.IsTrue(checkBoxFilter.IsChecked);   
         }
 
         [Test]
@@ -307,13 +290,12 @@ namespace Habanero.Test.UI.Base.FilterController
             FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
 
             FilterPropertyDef filterPropertyDef1 =
-                CreateFilterPropertyDefWithType("Habanero.Test.UI.Base.FilterController.SimpleFilter", "Habanero.Test.UI.Base");
+                CreateFilterPropertyDefWithType("Habanero.Test.UI.Base.FilterController.SimpleFilterStub", "Habanero.Test.UI.Base");
             //---------------Execute Test ----------------------
             ICustomFilter customFilter = builder.BuildCustomFilter(filterPropertyDef1);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SimpleFilter), customFilter);
-            //---------------Tear Down -------------------------          
+            Assert.IsInstanceOfType(typeof(SimpleFilterStub), customFilter);
         }
         [Test]
         public void Test_TestToHookIntoSimpleFilterEvents()
@@ -323,9 +305,8 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            SimpleFilter simpleFilter = new SimpleFilter(GetControlFactory(), "SomeName", FilterClauseOperator.OpEquals);
-            simpleFilter.ValueChanged += delegate { };
-            //---------------Test Result -----------------------
+            SimpleFilterStub simpleFilterStub = new SimpleFilterStub(GetControlFactory(), "SomeName", FilterClauseOperator.OpEquals);
+            simpleFilterStub.ValueChanged += delegate { };
         }
 
         private static FilterDef CreateFilterDef_1Property()
@@ -401,14 +382,13 @@ namespace Habanero.Test.UI.Base.FilterController
             FilterPropertyDef filterPropertyDef3 = CreateFilterPropertyDef();
             return new FilterDef(new List<FilterPropertyDef> { filterPropertyDef1, filterPropertyDef2, filterPropertyDef3 });
         }
-
     }
     
-    internal class SimpleFilter : ICustomFilter
+    internal class SimpleFilterStub : ICustomFilter
     {
         private readonly IControlHabanero _textBox;
 #pragma warning disable 168
-        public SimpleFilter(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
+        public SimpleFilterStub(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
 #pragma warning restore 168
         {
             _textBox = controlFactory.CreateTextBox();

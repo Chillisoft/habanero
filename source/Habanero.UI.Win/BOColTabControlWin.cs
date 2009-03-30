@@ -216,6 +216,16 @@ namespace Habanero.UI.Win
             return this.BOColTabControlManager.GetBusinessObjectAtRow(row);
         }
 
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem
+        {
+            get { return this.BOColTabControlManager.AutoSelectFirstItem; }
+            set { this.BOColTabControlManager.AutoSelectFirstItem = value; }
+        }
+
         #endregion
     }
 }

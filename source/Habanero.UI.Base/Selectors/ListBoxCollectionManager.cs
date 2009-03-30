@@ -27,6 +27,7 @@ namespace Habanero.UI.Base
             Control = listBox;
             _controlFactory = controlFactory;
             Control.SelectedIndexChanged += delegate { FireBusinessObjectSelected(); };
+            this.AutoSelectFirstItem = true;
         }
 
         /// <summary>
@@ -181,7 +182,7 @@ namespace Habanero.UI.Base
             {
                 cbx.Items.Add(businessObject);
             }
-            if (col.Count > 0) cbx.SelectedIndex = 0;
+            if (col.Count > 0 && this.AutoSelectFirstItem) cbx.SelectedIndex = 0;
         }
 
 
@@ -210,6 +211,14 @@ namespace Habanero.UI.Base
         {
             get { return Control.Items.Count; }
         }
+        
+
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem { get; set; }
+
         /// <summary>
         /// Returns the business object at the specified row number
         /// </summary>

@@ -28,6 +28,7 @@ namespace Habanero.UI.Win
             _controlFactory = controlFactory;
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             this.ItemSelected += delegate { FireBusinessObjectSelected(); };
+            this.AutoSelectFirstItem = true;
         }
 
         private void FireBusinessObjectSelected()
@@ -69,7 +70,10 @@ namespace Habanero.UI.Win
 
         private void SelectFirstItem()
         {
-            SelectedBusinessObject = _businessObjectCollection[0];
+            if (AutoSelectFirstItem)
+            {
+                SelectedBusinessObject = _businessObjectCollection[0]; 
+            }  
         }
 
         private void CreateBOCollapsiblePanels()
@@ -221,6 +225,11 @@ namespace Habanero.UI.Win
         {
             return IndexOutOfRange(row) ? null : BusinessObjectCollection[row];
         }
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem { get; set; }
 
         private bool IndexOutOfRange(int row)
         {

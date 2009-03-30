@@ -92,6 +92,15 @@ namespace Habanero.UI.VWG
             return _manager.GetBusinessObjectAtRow(row);
         }
 
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem
+        {
+            get { return _manager.AutoSelectFirstItem; }
+            set { _manager.AutoSelectFirstItem = value; }
+        }
+
         ///<summary>
         /// Returns the Underlying ListBoxControl that is used by this selector
         ///</summary>

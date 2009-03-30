@@ -128,7 +128,18 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(collection, colSelector.BusinessObjectCollection);
             Assert.AreEqual(ActualNumberOfRows(0), colSelector.NoOfItems, "By default should always put 1 item in blank");
         }
-
+        [Test]
+        public virtual void Test_SetAutoSelectFirstItem_ShouldChangeAutoSelection()
+        {
+            //---------------Set up test pack-------------------
+            IBOColSelectorControl colSelector = CreateSelector();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(colSelector.AutoSelectFirstItem);
+            //---------------Execute Test ----------------------
+            colSelector.AutoSelectFirstItem = false;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(colSelector.AutoSelectFirstItem);
+        }
 
         [Test]
         public virtual void Test_SetBOCol_SetsItemsInSelector()
@@ -425,8 +436,29 @@ namespace Habanero.Test.UI.Base
             Assert.IsNull(colSelector.SelectedBusinessObject);
             Assert.AreEqual(-1, SelectedIndex(colSelector));
         }
+
         [Test]
-        public virtual void Test_AutoSelectsFirstItem()
+        public virtual void Test_SetBOCollection_WhenAutoSelectFalse_ShouldNot_AutoSelectsFirstItem()
+        {
+            //---------------Set up test pack-------------------
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);
+            colSelector.AutoSelectFirstItem = false;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, colSelector.NoOfItems);
+            Assert.AreEqual(-1, SelectedIndex(colSelector));
+            Assert.AreEqual(null, colSelector.SelectedBusinessObject);
+            Assert.IsFalse(colSelector.AutoSelectFirstItem);
+            //---------------Execute Test ----------------------
+            colSelector.BusinessObjectCollection = collection;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item");
+            Assert.IsNull( colSelector.SelectedBusinessObject);
+        }
+
+        [Test]
+        public virtual void Test_SetBOCollection_WhenAutoSelectsFirstItem_ShouldSelectFirstItem()
         {
             //---------------Set up test pack-------------------
             IBOColSelectorControl colSelector = CreateSelector();
@@ -436,6 +468,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(0, colSelector.NoOfItems);
             Assert.AreEqual(-1, SelectedIndex(colSelector));
             Assert.AreEqual(null, colSelector.SelectedBusinessObject);
+            Assert.IsTrue(colSelector.AutoSelectFirstItem);
             //---------------Execute Test ----------------------
             colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------

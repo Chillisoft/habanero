@@ -57,7 +57,8 @@ namespace Habanero.UI.Base
             UiDefName = uiDefName;
             _gridBase.AutoGenerateColumns = false;
             _gridLoader = DefaultGridLoader;
-            _gridBase.AllowUserToAddRows = false; 
+            _gridBase.AllowUserToAddRows = false;
+            AutoSelectFirstItem = true;
         }
 
         ///<summary>
@@ -93,10 +94,10 @@ namespace Habanero.UI.Base
 
             _gridLoader(_gridBase, _boCol);
 
-            if (_gridBase.Rows.Count > 0)
+            if (_gridBase.Rows.Count > 0 )
             {
                 SelectedBusinessObject = null;
-                _gridBase.Rows[0].Selected = true;
+                _gridBase.Rows[0].Selected = AutoSelectFirstItem;
             }
             FireCollectionChanged();
         }
@@ -366,6 +367,12 @@ namespace Habanero.UI.Base
         {
             get { return _dataSetProvider != null ? _dataSetProvider.IDColumnName : "HABANERO_OBJECTID"; }
         }
+        
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem { get; set; }
 
         /// <summary>
         /// See <see cref="IBOColSelectorControl.Clear"/>

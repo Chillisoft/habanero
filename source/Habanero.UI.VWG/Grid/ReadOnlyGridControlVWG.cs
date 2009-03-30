@@ -173,6 +173,16 @@ namespace Habanero.UI.VWG
             return this.Grid.GetBusinessObjectAtRow(row);
         }
 
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem
+        {
+            get { return this.Grid.AutoSelectFirstItem; }
+            set { this.Grid.AutoSelectFirstItem = value; }
+        }
+
         /// <summary>
         /// Gets the button control, which contains a set of default buttons for
         /// editing the objects and can be customised

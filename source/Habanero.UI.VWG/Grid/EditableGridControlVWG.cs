@@ -241,6 +241,16 @@ namespace Habanero.UI.VWG
             return this.Grid.GetBusinessObjectAtRow(row);
         }
 
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem
+        {
+            get { return this.Grid.AutoSelectFirstItem; }
+            set { this.Grid.AutoSelectFirstItem = value; }
+        }
+
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the

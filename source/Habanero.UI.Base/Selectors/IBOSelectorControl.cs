@@ -88,6 +88,11 @@ namespace Habanero.UI.Base
         /// if none is found</returns>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         IBusinessObject GetBusinessObjectAtRow(int row);
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        bool AutoSelectFirstItem { get; set; }
     }
     /// <summary>
     /// Provides a common interface that is specialised for showing a collection of 

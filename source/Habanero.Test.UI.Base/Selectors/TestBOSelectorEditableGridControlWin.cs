@@ -177,7 +177,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public override void Test_AutoSelectsFirstItem()
+        public override void Test_SetBOCollection_WhenAutoSelectsFirstItem_ShouldSelectFirstItem()
         {
             //---------------Set up test pack-------------------
             IBOColSelectorControl colSelector = CreateSelector();

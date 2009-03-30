@@ -53,6 +53,26 @@ namespace Habanero.Test.UI.Base
             }
         }
 
+        [Test]
+        public override void Test_SetBOCollection_WhenAutoSelectFalse_ShouldNot_AutoSelectsFirstItem()
+        {
+            //---------------Set up test pack-------------------
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);
+            colSelector.AutoSelectFirstItem = false;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, colSelector.NoOfItems);
+            Assert.AreEqual(0, SelectedIndex(colSelector));
+            Assert.AreEqual(null, colSelector.SelectedBusinessObject);
+            Assert.IsFalse(colSelector.AutoSelectFirstItem);
+            //---------------Execute Test ----------------------
+            colSelector.BusinessObjectCollection = collection;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item");
+            //This doesn't work in VWG you cannot select no tab
+            // Assert.IsNull(colSelector.SelectedBusinessObject);
+        }
         [Ignore(" This test is not working on VWG: Brett 03 Mar 2009:")] //TODO 
         [Test]
         public override void Test_SelectedBusinessObject_ReturnsNullIfNoItemSelected()
@@ -200,13 +220,34 @@ namespace Habanero.Test.UI.Base
         {
             Assert.Fail("Not yet implemented");
         }
+
         [Test]
-        public override void Test_AutoSelectsFirstItem()
+        public override void Test_SetBOCollection_WhenAutoSelectFalse_ShouldNot_AutoSelectsFirstItem()
         {
             //---------------Set up test pack-------------------
             IBOColSelectorControl colSelector = CreateSelector();
             IBusinessObject myBO;
-            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);            //---------------Assert Precondition----------------
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO);
+            colSelector.AutoSelectFirstItem = false;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, colSelector.NoOfItems);
+            Assert.AreEqual(0, SelectedIndex(colSelector));
+            Assert.AreEqual(null, colSelector.SelectedBusinessObject);
+            Assert.IsFalse(colSelector.AutoSelectFirstItem);
+            //---------------Execute Test ----------------------
+            colSelector.BusinessObjectCollection = collection;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item");
+            Assert.IsNull(colSelector.SelectedBusinessObject);
+        }
+        [Test]
+        public override void Test_SetBOCollection_WhenAutoSelectsFirstItem_ShouldSelectFirstItem()
+        {
+            //---------------Set up test pack-------------------
+            IBOColSelectorControl colSelector = CreateSelector();
+            IBusinessObject myBO;
+            IBusinessObjectCollection collection = GetCollectionWithTowBOs(out myBO); 
+            //---------------Assert Precondition----------------
             Assert.AreEqual(1, colSelector.NoOfItems);
             Assert.AreEqual(0, SelectedIndex(colSelector));
             Assert.AreEqual(null, colSelector.SelectedBusinessObject);

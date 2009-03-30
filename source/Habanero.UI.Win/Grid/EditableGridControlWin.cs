@@ -61,10 +61,10 @@ namespace Habanero.UI.Win
             _filterControl = _controlFactory.CreateFilterControl();
             InitialiseButtons();
             InitialiseFilterControl();
-            BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
-            manager.AddControl(_filterControl, BorderLayoutManager.Position.North);
-            manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
-            manager.AddControl(_buttons, BorderLayoutManager.Position.South);
+            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(this);
+            layoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
+            layoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+            layoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
             this.Grid.BusinessObjectSelected += Grid_OnBusinessObjectSelected;
             //this.Grid.Rows[0].
         }
@@ -203,6 +203,15 @@ namespace Habanero.UI.Win
         public IBusinessObject GetBusinessObjectAtRow(int row)
         {
             return this.Grid.GetBusinessObjectAtRow(row);
+        }
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem
+        {
+            get { return this.Grid.AutoSelectFirstItem; }
+            set { this.Grid.AutoSelectFirstItem = value; }
         }
 
         /// <summary>

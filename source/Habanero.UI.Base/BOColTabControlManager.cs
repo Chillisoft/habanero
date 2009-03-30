@@ -118,6 +118,7 @@ namespace Habanero.UI.Base
             _pageBoTable = new Dictionary<ITabPage, IBusinessObject>();
             _boPageTable = new Dictionary<IBusinessObject, ITabPage>();
             TabControl.SelectedIndexChanged += delegate { FireBusinessObjectSelected(); };
+            this.AutoSelectFirstItem = true;
         }
 
         private void FireTabPageAdded(ITabPage tabPage, IBusinessObjectControl boControl)
@@ -224,7 +225,7 @@ namespace Habanero.UI.Base
             {
                 AddTabPage(bo);
             }
-            if (_businessObjectCollection.Count > 0)
+            if (_businessObjectCollection.Count > 0 && AutoSelectFirstItem)
             {
                 TabControl.SelectedIndex = 0;
             }
@@ -373,6 +374,12 @@ namespace Habanero.UI.Base
         /// 
         ///</summary>
         public BusinessObjectControlCreatorDelegate BusinessObjectControlCreator { get; set; }
+
+
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem { get; set; }
 
         /// <summary>
         /// Adds a tab page to represent the given business object

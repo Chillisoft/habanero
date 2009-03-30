@@ -93,6 +93,15 @@ namespace Habanero.UI.VWG
             return (IBusinessObject) this.Items[row];
         }
 
+        /// <summary>
+        /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
+        /// </summary>
+        public bool AutoSelectFirstItem
+        {
+            get { return this._manager.AutoSelectFirstItem; }
+            set { this._manager.AutoSelectFirstItem = value; }
+        }
+
         private bool IndexOutOfRange(int row)
         {
             return row < 0 || row >= NoOfItems;
