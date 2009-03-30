@@ -17,12 +17,15 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB;
+using Habanero.Test.Structure;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
@@ -781,6 +784,29 @@ namespace Habanero.Test.BO.Relationship
 
             //---------------Test Result -----------------------
             Assert.IsNull(loadedContactPerson.OrganisationID);
+
+        }
+
+        [Test]
+        public void Test_NewParentWithClassTableInheritance_NewChild()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader()));
+
+            Habanero.Test.Structure.Person person = new Person();
+            person.LastName = "bob";
+            Vehicle vehicle = new Vehicle();
+            vehicle.DateAssembled = DateTime.Now;
+            person.VehiclesOwned.Add(vehicle);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            TransactionCommitter committer = (TransactionCommitter) BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(person);
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, committer.OriginalTransactions.Count, "There should only be two transactions: one insert for the person and one insert for the vehicle"); 
 
         }
         

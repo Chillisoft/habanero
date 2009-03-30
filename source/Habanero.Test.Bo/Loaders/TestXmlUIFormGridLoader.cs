@@ -51,7 +51,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(typeof(MyBO), formGrid.GridType);
         }
 
-        [Test]
+        [Test,Ignore("No more formGrid")]
         public void TestGridType()
         {
             //---------------Execute Test ----------------------
@@ -61,7 +61,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("Habanero.UI.Win", formGrid.GridType.Assembly.GetName().Name);
         }
 
-        [Test]
+        [Test, Ignore("No more formGrid")]
         public void TestGridTypeDefault()
         {
             //---------------Execute Test ----------------------

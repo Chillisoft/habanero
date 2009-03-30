@@ -361,7 +361,7 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                log.Error("Error rolling back transaction: " + Environment.NewLine +
+                log.Error("Error executing transaction: " + Environment.NewLine +
                           ExceptionUtilities.GetExceptionString(ex, 4, true));
                 TryRollback(ex);
                 UpdateTransactionsAsRolledBack();

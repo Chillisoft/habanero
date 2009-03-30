@@ -511,7 +511,7 @@ namespace Habanero.BO
             }
             if (this.RelationshipDef.RelationshipType == RelationshipType.Association)
             {
-                if (IsRelatedBOPropsDirty())
+                if (IsRelatedBOPropsDirty() && _relatedBo != null && !_relatedBo.Status.IsNew)
                 {
                         transactionCommitter.AddTransaction
                             (new TransactionalSingleRelationship_Added(this, _relatedBo));
