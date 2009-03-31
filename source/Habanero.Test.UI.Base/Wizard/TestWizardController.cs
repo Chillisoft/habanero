@@ -290,6 +290,8 @@ WizardStepStub wizardStepStub = new WizardStepStub();
             this.Replay();
             this.VisibleChanged(this, new EventArgs());
             this.TextChanged(this, new EventArgs());
+            this.Resize(this, new EventArgs());
+            this.Click(this, new EventArgs());
         }
         #region IControlInterface
 

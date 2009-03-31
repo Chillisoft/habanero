@@ -92,7 +92,6 @@ namespace Habanero.UI.Base
                 Collection.BusinessObjectAdded -= BusinessObjectAddedHandler;
                 Collection.BusinessObjectRemoved -= BusinessObjectRemovedHandler;
                 Collection.BusinessObjectPropertyUpdated -= Collection_OnBusinessObjectPropUpdated;
-                Collection.BusinessObjectUpdated -= Collection_OnBusinessObjectUpdated;
             }
             Collection = collection;
             SetComboBoxCollection(Control, Collection, includeBlank);
@@ -100,27 +99,18 @@ namespace Habanero.UI.Base
             Collection.BusinessObjectAdded += BusinessObjectAddedHandler;
             Collection.BusinessObjectRemoved += BusinessObjectRemovedHandler;
             Collection.BusinessObjectPropertyUpdated += Collection_OnBusinessObjectPropUpdated;
-            Collection.BusinessObjectUpdated += Collection_OnBusinessObjectUpdated;
         }
-
-        private void Collection_OnBusinessObjectUpdated(object sender, BOEventArgs e)
-        {
-            UpdatedBusinessObjectInCombo(e.BusinessObject);
-        }
-
+        
         private void Collection_OnBusinessObjectPropUpdated(object sender, BOPropUpdatedEventArgs e)
         {
-            UpdatedBusinessObjectInCombo(e.BusinessObject);
-        }
-
-        private void UpdatedBusinessObjectInCombo(IBusinessObject businessObject)
-        {
+            IBusinessObject businessObject = e.BusinessObject;
             int selectedIndex = this.Control.SelectedIndex;
             int indexOf = this.Control.Items.IndexOf(businessObject);
             this.Control.Items.Remove(businessObject);
             this.Control.Items.Insert(indexOf, businessObject);
             this.Control.SelectedIndex = selectedIndex;
         }
+
 
         /// <summary>
         /// Event Occurs when a business object is selected

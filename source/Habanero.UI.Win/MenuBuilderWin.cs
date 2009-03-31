@@ -183,6 +183,7 @@ namespace Habanero.UI.Win
                     if (_habaneroMenuItem.FormControlCreator != null)
                     {
                         _formControl = _habaneroMenuItem.FormControlCreator();
+                        _formControl.SetForm(_createdForm);
                         control = (IControlHabanero) _formControl;
                     }
                     else if (_habaneroMenuItem.ControlManagerCreator != null)

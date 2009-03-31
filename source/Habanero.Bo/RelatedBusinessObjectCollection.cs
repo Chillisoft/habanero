@@ -116,7 +116,6 @@ namespace Habanero.BO
                 bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
             }
         }
-
         private void RemoveRelatedObject(TBusinessObject bo)
         {
             ISingleRelationship reverseRelationship = GetReverseRelationship(bo) as ISingleRelationship;
@@ -163,6 +162,7 @@ namespace Habanero.BO
                 reverseRelationship.SetRelatedObject(this._relationship.OwningBO);
             }
         }
+
         private bool IsForeignKeySetup(TBusinessObject bo)
         {
             ISingleRelationship reverseRelationship = GetReverseRelationship(bo) as ISingleRelationship;
@@ -196,12 +196,15 @@ namespace Habanero.BO
         /// <param name="e"></param>
         protected override void RestoredEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject bo = (TBusinessObject)e.BusinessObject;
+            TBusinessObject bo = (TBusinessObject) e.BusinessObject;
             bool removedListContains = this.RemovedBusinessObjects.Contains(bo);
             bool addedListContains = this.AddedBusinessObjects.Contains(bo);
             base.RestoredEventHandler(sender, e);
             if (removedListContains) this.Add(bo);
-            if (addedListContains) DereferenceBO(bo);
+//            if (addedListContains)
+//            {
+//                DereferenceBO(bo);
+//            }
         }
 
         /// <summary>
@@ -211,9 +214,9 @@ namespace Habanero.BO
         /// <param name="e"></param>
         protected override void SavedEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject bo = (TBusinessObject)e.BusinessObject;
+            TBusinessObject bo = (TBusinessObject) e.BusinessObject;
             bool removedListContains = this.RemovedBusinessObjects.Contains(bo);
-            base.SavedEventHandler(sender,e);
+            base.SavedEventHandler(sender, e);
             if (removedListContains) RemoveFromPersistedCollection(bo);
             if (this.AddedBusinessObjects.Contains(bo)) this.AddedBusinessObjects.Remove(bo);
         }

@@ -121,7 +121,7 @@ namespace Habanero.BO
             {
                 AddColumn(uiProperty, (ClassDef) classDef);
             }
-            foreach (BusinessObject businessObject in _collection)
+            foreach (BusinessObject businessObject in _collection.Clone())
             {
                 LoadBusinessObject(businessObject);
             }

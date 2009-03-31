@@ -1082,7 +1082,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test__UpdatePropValueFiresPropertyUpdatedEvent()
+        public void Test_UpdatePropValueFiresPropertyUpdatedEvent()
         {
             //---------------Set up test pack-------------------
             Engine engine1 = new Engine();
@@ -1109,7 +1109,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test__UpdatePropValueDoesNotFireUpdatedEvent()
+        public void Test_UpdatePropValueDoesNotFireUpdatedEvent()
         {
             //---------------Set up test pack-------------------
             Engine engine1 = new Engine();
@@ -1124,7 +1124,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test__SaveFiresUpdatedEvent()
+        public void Test_SaveFiresUpdatedEvent()
         {
             //---------------Set up test pack-------------------
             Engine engine1 = new Engine();
@@ -1139,6 +1139,34 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.IsTrue(updatedEventFired);
+        }
+
+
+        [Test]
+        public void Test_CancelEdit_ShouldFirePropertyUpdatedEvent()
+        {
+            //---------------Set up test pack-------------------
+            Engine engine1 = new Engine();
+            bool propertyEventFired = false;
+            IBusinessObject eventBusinessObject = null;
+            IBOProp eventProp = null;
+            engine1.EngineNo = "20";
+            engine1.PropertyUpdated +=
+                delegate(object sender, BOPropUpdatedEventArgs eventArgs)
+                {
+                    eventBusinessObject = eventArgs.BusinessObject;
+                    eventProp = eventArgs.Prop;
+                    propertyEventFired = true;
+                };
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(propertyEventFired);
+            Assert.IsNull(eventBusinessObject);
+            Assert.IsNull(eventProp);
+            //---------------Execute Test ----------------------
+            engine1.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(propertyEventFired);
+            Assert.AreSame(engine1, eventBusinessObject);
         }
 
         [Test]

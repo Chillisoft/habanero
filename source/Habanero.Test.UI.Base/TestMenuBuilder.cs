@@ -30,7 +30,7 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
         protected abstract IMenuBuilder CreateMenuBuilder();
-        protected abstract IFormControl CreateFormControlStub();
+        protected abstract IFormControlStub CreateFormControlStub();
         protected abstract bool IsMenuDocked(IMainMenuHabanero menu, IFormHabanero form);
         protected abstract void AssertControlDockedInForm(IControlHabanero habanero, IFormHabanero frm);
 
@@ -54,7 +54,7 @@ namespace Habanero.Test.UI.Base
                 return new MenuBuilderWin();
             }
 
-            protected override IFormControl CreateFormControlStub()
+            protected override IFormControlStub CreateFormControlStub()
             {
                 return new FormControlStubWin();
             }
@@ -120,15 +120,27 @@ namespace Habanero.Test.UI.Base
 
             }
 
-            private class FormControlStubWin : UserControlWin, IFormControl
+            private class FormControlStubWin : UserControlWin, IFormControlStub
             {
                 public void SetForm(IFormHabanero form)
                 {
-
+                    SetFormCalled = true;
+                    SetFormArgument = form;
                 }
+
+                public IFormHabanero SetFormArgument { get; private set; }
+
+                public bool SetFormCalled { get; private set; }
+
+
             }
         }
 
+        protected interface IFormControlStub : IFormControl
+        {
+            IFormHabanero SetFormArgument { get; }
+            bool SetFormCalled { get; }
+        }
 
         [TestFixture]
         public class TestMenuBuilderVWG : TestMenuBuilder
@@ -143,7 +155,7 @@ namespace Habanero.Test.UI.Base
                 return new MenuBuilderVWG();
             }
 
-            protected override IFormControl CreateFormControlStub()
+            protected override IFormControlStub CreateFormControlStub()
             {
                 return new FormControlStubVWG();
             }
@@ -162,13 +174,53 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(DockStyle.Fill, control.Dock);
             }
 
-            private class FormControlStubVWG : UserControlVWG, IFormControl
+            private class FormControlStubVWG : UserControlVWG, IFormControlStub
             {
                 public void SetForm(IFormHabanero form)
                 {
-
+                    SetFormCalled = true;
+                    SetFormArgument = form;
                 }
+
+                public IFormHabanero SetFormArgument { get; private set; }
+
+                public bool SetFormCalled { get; private set; }
             }
+
+            [Test]
+            public override void Test_Click_WhenFormControlCreatorSet_ShouldCallSetFormOnFormControl()
+            {
+                //---------------Set up test pack-------------------
+                HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
+                HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+                HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
+
+                bool creatorCalled = false;
+                IFormControlStub formControlStub = CreateFormControlStub();
+                FormControlCreator formControlCreatorDelegate = delegate
+                {
+                    creatorCalled = true;
+                    return formControlStub;
+                };
+                menuItem.FormControlCreator += formControlCreatorDelegate;
+                IMenuBuilder menuBuilder = CreateMenuBuilder();
+                IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+                menu.DockInForm(habaneroMenu.Form);
+                IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+                //--------------- Test Preconditions ----------------
+                Assert.IsFalse(creatorCalled);
+                Assert.IsFalse(formControlStub.SetFormCalled);
+                Assert.IsNull(formControlStub.SetFormArgument);
+                //---------------Execute Test ----------------------
+                formsMenuItem.PerformClick();
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(creatorCalled);
+                Assert.IsTrue(formControlStub.SetFormCalled);
+                //The MenuBuilderVWG sites the control on a UserControl instead of a form (VWG does not support MDI Children), so this next assert would fail.
+                //Assert.IsNotNull(formControlStub.SetFormArgument);
+            }
+
         }
 
         [Test]
@@ -317,10 +369,43 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             formsMenuItem.PerformClick();
-            
+
             //---------------Test Result -----------------------
             Assert.IsTrue(called);
             //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public virtual void Test_Click_WhenFormControlCreatorSet_ShouldCallSetFormOnFormControl()
+        {
+            //---------------Set up test pack-------------------
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
+            
+            bool creatorCalled = false;
+            IFormControlStub formControlStub = CreateFormControlStub();
+            FormControlCreator formControlCreatorDelegate = delegate
+            {
+                creatorCalled = true;
+                return formControlStub;
+            };
+            menuItem.FormControlCreator += formControlCreatorDelegate;
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            menu.DockInForm(habaneroMenu.Form);
+            IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+            //--------------- Test Preconditions ----------------
+            Assert.IsFalse(creatorCalled);
+            Assert.IsFalse(formControlStub.SetFormCalled);
+            Assert.IsNull(formControlStub.SetFormArgument);
+            //---------------Execute Test ----------------------
+            formsMenuItem.PerformClick();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(creatorCalled);
+            Assert.IsTrue(formControlStub.SetFormCalled);
+            Assert.IsNotNull(formControlStub.SetFormArgument);
         }
 
         

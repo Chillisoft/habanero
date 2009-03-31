@@ -176,6 +176,7 @@ namespace Habanero.UI.VWG
                     if (_habaneroMenuItem.FormControlCreator != null)
                     {
                         if (_formControl == null) _formControl = _habaneroMenuItem.FormControlCreator();
+                        _formControl.SetForm(null);
                         control = (IControlHabanero) _formControl;
                     }
                     else if (_habaneroMenuItem.ControlManagerCreator != null)

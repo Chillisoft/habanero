@@ -190,6 +190,10 @@ namespace Habanero.BO
         {
             BusinessObjectManager.Instance.Add(this);
             this.ID.Updated += ((sender, e) => FireIDUpdatedEvent());
+            foreach(IBOProp boProp in this.Props)
+            {
+                boProp.Updated += (sender, e) => FirePropertyUpdatedEvent(e.Prop);
+            }
         }
 
         private void InitialisePrimaryKeyPropertiesBasedOnParentClass(Guid myID)
@@ -732,7 +736,7 @@ namespace Habanero.BO
                 //                {
                 //FireUpdatedEvent();
                 //TODO Mark 13 Mar 2009: This should rather be fired from any BOProp being updated, not from this SetPropertyValue method.
-                FirePropertyUpdatedEvent(prop);
+               // FirePropertyUpdatedEvent(prop);
                 //                }
             }
         }
@@ -1181,7 +1185,7 @@ namespace Habanero.BO
         /// <summary>
         /// Calls through to <see cref="AreCustomRulesValid(out IList{IBOError})"/>
         /// </summary>
-        /// <param name="errors">The errors/param>
+        /// <param name="errors">The errors</param>
         /// <returns>true if no custom rule errors are encountered.</returns>
         internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {

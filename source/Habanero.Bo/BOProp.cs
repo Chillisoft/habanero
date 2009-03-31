@@ -175,10 +175,16 @@ namespace Habanero.BO
         {
 //            _isValid = _origValueIsValid;
 //            _invalidReason = _origInvalidReason;
+            if (_currentValue == _persistedValue)
+            {
+                return;
+            }
+
             _currentValue = _persistedValue;
             _valueBeforeLastEdit = _persistedValue;
             Validate();
             _isDirty = false;
+            
             FireBOPropValueUpdated();
         }
 
