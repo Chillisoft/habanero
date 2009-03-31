@@ -376,5 +376,40 @@ namespace Habanero.Test.UI.Base.Controllers
 //            Assert.AreEqual(newToString, cmbox.Text);
         }
 
+        [Test]
+        public void Test_CancelEditsItemFromCollection_UpdatesItemInCombo()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO> { { new MyBO(), new MyBO() } };
+            selectorManger.SetCollection(myBOs, false);
+            MyBO myBO = myBOs[0];
+            Guid newValue = Guid.NewGuid();
+            int index = cmbox.Items.IndexOf(myBO);
+            cmbox.SelectedIndex = index;
+            myBO.MyBoID = newValue;
+            myBO.Save();
+            //---------------Assert precondition----------------
+            Assert.AreEqual(2, cmbox.Items.Count);
+            Assert.AreEqual(0, cmbox.SelectedIndex);
+            Assert.AreSame(myBO, cmbox.Items[index]);
+            Assert.AreEqual(index, cmbox.SelectedIndex);
+            //---------------Execute Test ----------------------
+            myBO.MyBoID = Guid.NewGuid();
+            myBO.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, cmbox.SelectedIndex);
+            Assert.AreEqual(index, cmbox.SelectedIndex);
+            Assert.AreSame(myBO, cmbox.Items[index]);
+            string newToString = myBO.ToString();
+            Assert.AreEqual(newToString, cmbox.Items[index].ToString());
+
+        }
+
     }
 }

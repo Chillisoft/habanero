@@ -91,19 +91,30 @@ namespace Habanero.UI.Base
             {
                 Collection.BusinessObjectAdded -= BusinessObjectAddedHandler;
                 Collection.BusinessObjectRemoved -= BusinessObjectRemovedHandler;
-                Collection.BusinessObjectPropertyUpdated -= Collection_OnBusinessObjectUpdated;
+                Collection.BusinessObjectPropertyUpdated -= Collection_OnBusinessObjectPropUpdated;
+                Collection.BusinessObjectUpdated -= Collection_OnBusinessObjectUpdated;
             }
             Collection = collection;
             SetComboBoxCollection(Control, Collection, includeBlank);
             if (Collection == null) return;
             Collection.BusinessObjectAdded += BusinessObjectAddedHandler;
             Collection.BusinessObjectRemoved += BusinessObjectRemovedHandler;
-            Collection.BusinessObjectPropertyUpdated += Collection_OnBusinessObjectUpdated;
+            Collection.BusinessObjectPropertyUpdated += Collection_OnBusinessObjectPropUpdated;
+            Collection.BusinessObjectUpdated += Collection_OnBusinessObjectUpdated;
         }
 
-        private void Collection_OnBusinessObjectUpdated(object sender, BOPropUpdatedEventArgs e)
+        private void Collection_OnBusinessObjectUpdated(object sender, BOEventArgs e)
         {
-            IBusinessObject businessObject = e.BusinessObject;
+            UpdatedBusinessObjectInCombo(e.BusinessObject);
+        }
+
+        private void Collection_OnBusinessObjectPropUpdated(object sender, BOPropUpdatedEventArgs e)
+        {
+            UpdatedBusinessObjectInCombo(e.BusinessObject);
+        }
+
+        private void UpdatedBusinessObjectInCombo(IBusinessObject businessObject)
+        {
             int selectedIndex = this.Control.SelectedIndex;
             int indexOf = this.Control.Items.IndexOf(businessObject);
             this.Control.Items.Remove(businessObject);
