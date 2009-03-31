@@ -307,8 +307,7 @@ namespace Habanero.BO
         /// timeout, which causes use of a cached version within the timeout
         /// period.
         /// </summary>
-        /// <param name="ignoreTimeout">Whether to ignore the timeout and reload
-        /// from the database regardless of when the lookup list was last loaded.</param>
+        /// <param name="ignoreTimeout">Whether to ignore the timeout and reload from the database regardless of when the lookup list was last loaded.</param>
         /// <returns>Returns a collection of string-value pairs</returns>
         public Dictionary<string, string> GetLookupList(bool ignoreTimeout)
         {
@@ -543,7 +542,7 @@ namespace Habanero.BO
         ///<returns>The Key Value Lookup List</returns>
         public Dictionary<string, string> GetIDValueLookupList()
         {
-            GetLookupList(true);
+            GetLookupList(false);
             return _keyValueDictionary;
         }
 

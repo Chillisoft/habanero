@@ -718,6 +718,7 @@ namespace Habanero.BO
             //            }
             object propValue = prop.Value;
             object newPropValue1;
+            if (!PropValueHasChanged(propValue, newPropValue)) return;
             ((BOProp)prop).ParsePropValue(newPropValue, out newPropValue1);
             if (PropValueHasChanged(propValue, newPropValue1))
             {

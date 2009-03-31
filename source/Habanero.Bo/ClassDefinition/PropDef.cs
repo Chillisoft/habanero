@@ -1174,6 +1174,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// 
         /// This method provides a the functionality to convert any object to the appropriate
         ///   type for the particular BOProp Type. e.g it will convert a valid guid string to 
         ///   a valid Guid Object.

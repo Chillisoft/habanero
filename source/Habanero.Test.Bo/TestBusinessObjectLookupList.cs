@@ -305,6 +305,24 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreSame(col, col2, "Both collections should be the same since the timeout has not been reached");
         }
+
+        [Test]
+        public void Test_GetIDValueLookupList_WhenTimeOutHasNotExpired_ShouldNotReload()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
+            source.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
+            const int timeout = 200000;
+            source.TimeOut = timeout;
+            Dictionary<string, string> col = source.GetIDValueLookupList();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(timeout, source.TimeOut);
+            Assert.IsNotNull(col);
+            //---------------Execute Test ----------------------
+            Dictionary<string, string> col2 = source.GetIDValueLookupList();
+            //---------------Test Result -----------------------
+            Assert.AreSame(col, col2, "Both collections should be the same since the timeout has not been reached");
+        }
         [Test]
         public void Test_GetLookupList_WhenTimeoutExpired_ShouldReloadList()
         {
