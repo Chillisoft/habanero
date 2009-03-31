@@ -140,6 +140,22 @@ namespace Habanero.Test.BO
             dbConnMock.Verify();
         }
 
+
+        [Test]
+        public void Test_SetTimeOut_ShouldUpdateNewTimeOut()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseLookupList source = new DatabaseLookupList(Sql,10000,  null, null, false);
+            const int expectedTimeout = 200000;
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(10000, source.TimeOut);
+            //---------------Execute Test ----------------------
+            source.TimeOut = expectedTimeout;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedTimeout, source.TimeOut);
+        }
+
         [Test]
         public void TestLookupListTimeout()
         {

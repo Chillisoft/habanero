@@ -55,6 +55,12 @@ namespace Habanero.Base
         bool LimitToList { get; }
 
         /// <summary>
+        /// The TimeOut the time in Milliseconds before the cache expires. I.e. if the current time + Timeout is
+        /// less than now then the lookup list will be reloaded else the currently loaded lookup list will be used. 
+        /// </summary>
+        int TimeOut { get; set; }
+
+        /// <summary>
         /// Returns the lookup list contents being held where the list is keyed on the list key 
         ///  either a Guid, int or Business object i.e. the value being stored for the property.
         /// The display value can be looked up.

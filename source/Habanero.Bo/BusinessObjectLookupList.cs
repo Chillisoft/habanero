@@ -40,7 +40,7 @@ namespace Habanero.BO
     public class BusinessObjectLookupList : ILookupList
     {
         private readonly bool _limitToList;
-        private readonly int _timeout;
+        private int _timeout;
         private Type _boType;
         private string _assemblyName;
         private string _className;
@@ -479,6 +479,16 @@ namespace Habanero.BO
         public bool LimitToList
         {
             get { return _limitToList;}
+        }
+
+        /// <summary>
+        /// The TimeOut the time in Milliseconds before the cache expires. I.e. if the current time + Timeout is
+        /// less than now then the lookup list will be reloaded else the currently loaded lookup list will be used. 
+        /// </summary>
+        public int TimeOut
+        {
+            get { return _timeout; }
+            set { _timeout = value; }
         }
 
         #endregion Type Initialisation

@@ -39,6 +39,7 @@ namespace Habanero.BO
         ///   displayed value may be a related string.
         /// </summary>
         private readonly Dictionary<string, string> _displayValueDictionary;
+
         /// <summary>
         /// Provides a key value pair where the persisted value can be returned for 
         ///   any displayed value. E.g. the persisted value may be a GUID but the
@@ -62,11 +63,10 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="collection">The string-Guid pair collection</param>
         /// <param name="limitToList">Whether to limit the items to those in the lookup list</param>
-        public SimpleLookupList(Dictionary<string, string> collection, bool limitToList) 
+        public SimpleLookupList(Dictionary<string, string> collection, bool limitToList)
         {
             _displayValueDictionary = collection;
             LimitToList = limitToList;
-            
         }
 
         /// <summary>
@@ -92,11 +92,7 @@ namespace Habanero.BO
         ///<summary>
         /// The property definition that this lookup list is for
         ///</summary>
-        public IPropDef PropDef
-        {
-            get ;
-            set;
-        }
+        public IPropDef PropDef { get; set; }
 
         ///<summary>
         /// Whether to validate that the property set is in this list.  Eg, if the BOProp's value is set to an
@@ -104,6 +100,12 @@ namespace Habanero.BO
         /// value is set to false no validation will occur.
         ///</summary>
         public bool LimitToList { get; set; }
+
+        /// <summary>
+        /// The TimeOut the time in Milliseconds before the cache expires. I.e. if the current time + Timeout is
+        /// less than now then the lookup list will be reloaded else the currently loaded lookup list will be used. 
+        /// </summary>
+        public int TimeOut { get; set; }
 
         /// <summary>
         /// Returns the lookup list contents being held where the list is keyed on the list key 
@@ -116,9 +118,8 @@ namespace Habanero.BO
             if (this.PropDef == null)
             {
                 throw new HabaneroDeveloperException
-                     ("There is an application setup error. There is no propdef set for the simple lookup list. Please contact your system administrator",
-                      "There is no propdef set for the simple lookup list.");
-
+                    ("There is an application setup error. There is no propdef set for the simple lookup list. Please contact your system administrator",
+                     "There is no propdef set for the simple lookup list.");
             }
             if (this.PropDef != null && _keyValueDictionary.Count != _displayValueDictionary.Count)
             {
