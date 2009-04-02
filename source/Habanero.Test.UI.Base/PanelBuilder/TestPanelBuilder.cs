@@ -994,6 +994,88 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_BuildPanel_TabOrder_Simple()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, panelInfo.FieldInfos.Count);
+            Assert.AreEqual(0, panelInfo.FieldInfos[0].InputControl.TabIndex);
+            Assert.AreEqual(1, panelInfo.FieldInfos[1].InputControl.TabIndex);
+        }
+
+        [Test]
+        public void Test_BuildPanel_TabOrder_TwoColumns()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["TwoColumns"].UIForm[0];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, panelInfo.FieldInfos.Count);
+            PanelInfo.FieldInfo fieldInfoC1R1 = panelInfo.FieldInfos[0];
+            PanelInfo.FieldInfo fieldInfoC2R1 = panelInfo.FieldInfos[1];
+            PanelInfo.FieldInfo fieldInfoC1R2 = panelInfo.FieldInfos[2];
+            PanelInfo.FieldInfo fieldInfoC2R2 = panelInfo.FieldInfos[3];
+            Assert.AreEqual("SampleText1:", fieldInfoC1R1.Label.Text); //just making sure
+            Assert.AreEqual("SampleText2:", fieldInfoC2R1.Label.Text);
+            Assert.AreEqual("SampleInt1:", fieldInfoC1R2.Label.Text);
+            Assert.AreEqual("SampleInt2:", fieldInfoC2R2.Label.Text);
+            Assert.AreEqual(0, fieldInfoC1R1.InputControl.TabIndex);
+            Assert.AreEqual(2, fieldInfoC2R1.InputControl.TabIndex);
+            Assert.AreEqual(1, fieldInfoC1R2.InputControl.TabIndex);
+            Assert.AreEqual(3, fieldInfoC2R2.InputControl.TabIndex);
+        }
+
+        [Test]
+        public void Test_BuildPanel_TabOrder_ThreeColumns()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["ThreeColumns"].UIForm[0];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(6, panelInfo.FieldInfos.Count);
+            PanelInfo.FieldInfo fieldInfoC1R1 = panelInfo.FieldInfos[0];
+            PanelInfo.FieldInfo fieldInfoC2R1 = panelInfo.FieldInfos[1];
+            PanelInfo.FieldInfo fieldInfoC3R1 = panelInfo.FieldInfos[2];
+            PanelInfo.FieldInfo fieldInfoC1R2 = panelInfo.FieldInfos[3];
+            PanelInfo.FieldInfo fieldInfoC2R2 = panelInfo.FieldInfos[4];
+            PanelInfo.FieldInfo fieldInfoC3R2 = panelInfo.FieldInfos[5];
+            Assert.AreEqual("SampleText1:", fieldInfoC1R1.Label.Text); //just making sure
+            Assert.AreEqual("SampleText2:", fieldInfoC2R1.Label.Text);
+            Assert.AreEqual("SampleText3:", fieldInfoC3R1.Label.Text);
+            Assert.AreEqual("SampleInt1:", fieldInfoC1R2.Label.Text);
+            Assert.AreEqual("SampleInt2:", fieldInfoC2R2.Label.Text);
+            Assert.AreEqual("SampleInt3:", fieldInfoC3R2.Label.Text);
+            Assert.AreEqual(0, fieldInfoC1R1.InputControl.TabIndex);
+            Assert.AreEqual(2, fieldInfoC2R1.InputControl.TabIndex);
+            Assert.AreEqual(4, fieldInfoC3R1.InputControl.TabIndex);
+            Assert.AreEqual(1, fieldInfoC1R2.InputControl.TabIndex);
+            Assert.AreEqual(3, fieldInfoC2R2.InputControl.TabIndex);
+            Assert.AreEqual(5, fieldInfoC3R2.InputControl.TabIndex);
+        }
+
+        //TODO: add tests that label and error provider get tabstop set to false
+        
+        [Test]
         public void Test_BuildTabControl_TwoTabPagesOnTabControl()
         {
             //---------------Set up test pack-------------------

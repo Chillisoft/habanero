@@ -124,7 +124,8 @@ namespace Habanero.UI.Base
                         for (int i = currentRowNo; i < currentRowNo + formField.RowSpan; i++) // update colspan of all rows that this field spans into.
                             columnSpanTrackerForRow[i] = formField.ColSpan;
 
-                        AddControlsForField(formField, panelInfo);
+                        PanelInfo.FieldInfo fieldInfo = AddControlsForField(formField, panelInfo);
+                        fieldInfo.InputControl.TabIndex = currentRowNo + (currentColumnNo*maxRowsInColumns);
                     }
                     else
                     {
@@ -135,13 +136,15 @@ namespace Habanero.UI.Base
             }
         }
 
-        private void AddControlsForField(UIFormField formField, IPanelInfo panelInfo)
+        private PanelInfo.FieldInfo AddControlsForField(UIFormField formField, IPanelInfo panelInfo)
         {
             ILabel label = CreateAndAddLabel(panelInfo, formField);
             IControlMapper controlMapper = CreateAndAddInputControl(panelInfo, formField);
             CreateAndAddErrorProviderPanel(panelInfo, formField);
 
-            panelInfo.FieldInfos.Add(new PanelInfo.FieldInfo(formField.PropertyName, label, controlMapper));
+            PanelInfo.FieldInfo fieldInfo = new PanelInfo.FieldInfo(formField.PropertyName, label, controlMapper);
+            panelInfo.FieldInfos.Add(fieldInfo);
+            return fieldInfo;
         }
 
         private void AddNullControlsForEmptyField(IPanelInfo panelInfo)
