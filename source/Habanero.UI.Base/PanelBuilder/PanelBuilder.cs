@@ -57,8 +57,18 @@ namespace Habanero.UI.Base
     /// The <see cref="IPanel"/> Built by the PanelBuilder has all the controls required for a <see cref="IBusinessObject"/> 
     ///     to be viewed and edited in. The Controls to be used are defind in the <see cref="UIFormTab"/> or the
     ///     <see cref="UIForm"/> depending on whether the <see cref="BuildPanelForForm(UIForm)"/> or <see cref="BuildPanelForTab"/>
-    ///     method is used.<br/>
-    ///</summary>
+    ///     method is used.
+    /// <br/><br/>
+    /// The PanelBuilder can create a panel for any environment based on
+    /// the implementation of <see cref="IControlFactory"/> that is passed through in
+    /// the constructor.
+    /// <br/><br/>
+    /// Once the panel has been constructed, you will need to assign the
+    /// instance of the business object.  See <see cref="IPanelInfo"/> for
+    /// these options.  Once editing is completed, you will need to persist
+    /// the changes. First call ApplyChangesToBusinessObject on the IPanelInfo
+    /// object, and then carry out persistence on the BusinessObject.
+    /// </summary>
     public class PanelBuilder
     {
         /// <summary>
@@ -132,12 +142,17 @@ namespace Habanero.UI.Base
             this.GroupControlCreator = controlFactory.CreateTabControl;
         }
 
-        ///<summary>
-        /// Builds a Panel for a single Tab as defined in the <see cref="UIFormTab"/>.
-        ///   There will be one <see cref="IPanelInfo"/> for the defined tab.
-        ///</summary>
-        ///<param name="formTab">The Tab that the panel is being built for.</param>
-        ///<returns></returns>
+        /// <summary>
+        /// Constructs a panel for editing the data of a single instance
+        /// of a BusinessObject, using the control layout as specified in
+        /// a <see cref="UIFormTab"/> object. 
+        /// </summary>
+        /// <param name="formTab">The tab object that indicates which controls
+        /// to create and how the controls are laid out</param>
+        /// <returns>Returns an IPanelInfo object that contains access to the
+        /// BusinessObject instance, the created panel, and all the controls,
+        /// mappers, labels and error providers that were created.
+        /// </returns>
         public IPanelInfo BuildPanelForTab(UIFormTab formTab)
         {
             if (formTab == null) throw new ArgumentNullException("formTab");
@@ -160,17 +175,17 @@ namespace Habanero.UI.Base
             return panelInfo;
         }
 
-        ///<summary>
-        /// Builds a Panel for a single Tab as defined in the <see cref="UIForm"/>.
-        ///   There will be one <see cref="IPanelInfo"/> for the defined uiForm.<br/>
-        /// If there are multiple tabs defined for the <paramref name="uiForm"/> then
-        ///  an actual <see cref="ITabPage"/> is created for each <see cref="UIFormTab"/> 
-        ///  and the <see cref="IPanel"/> created by <see cref="BuildPanelForTab"/> will 
-        ///  be placed on this TabPage.<br></br>
-        /// Else the <see cref="IPanel"/> is placed on the form directly.
-        ///</summary>
-        ///<param name="uiForm">The uiForm that the Panel is being built for.</param>
-        ///<returns></returns>
+        /// <summary>
+        /// Constructs a panel for editing the data of a single instance
+        /// of a BusinessObject, using the control layout as specified in
+        /// a <see cref="UIForm"/> object. 
+        /// </summary>
+        /// <param name="uiForm">The UIForm object that indicates which controls
+        /// to create and how the controls are laid out</param>
+        /// <returns>Returns an IPanelInfo object that contains access to the
+        /// BusinessObject instance, the created panel, and all the controls,
+        /// mappers, labels and error providers that were created.
+        /// </returns>
         public IPanelInfo BuildPanelForForm(UIForm uiForm)
         {
             return BuildPanelForForm(uiForm, this.GroupControlCreator);
@@ -185,9 +200,13 @@ namespace Habanero.UI.Base
         ///  be placed on this TabPage.<br></br>
         /// Else the <see cref="IPanel"/> is placed on the form directly.
         ///</summary>
-        ///<param name="uiForm">The uiForm that the Panel is being built for.</param>
+        /// <param name="uiForm">The UIForm object that indicates which controls
+        /// to create and how the controls are laid out</param>
         ///<param name="groupControlCreator">The <see cref="GroupControlCreator"/></param>
-        ///<returns></returns>
+        /// <returns>Returns an IPanelInfo object that contains access to the
+        /// BusinessObject instance, the created panel, and all the controls,
+        /// mappers, labels and error providers that were created.
+        /// </returns>
         public IPanelInfo BuildPanelForForm(UIForm uiForm, GroupControlCreator groupControlCreator)
         {
             if (uiForm == null) throw new ArgumentNullException("uiForm");
@@ -277,7 +296,8 @@ namespace Habanero.UI.Base
                             // update colspan of all rows that this field spans into.
                             columnSpanTrackerForRow[i] = formField.ColSpan;
 
-                        AddControlsForField(formField, panelInfo);
+                        PanelInfo.FieldInfo fieldInfo = AddControlsForField(formField, panelInfo);
+                        fieldInfo.InputControl.TabIndex = currentRowNo + (currentColumnNo * maxRowsInColumns);
                     }
                     else
                     {
@@ -288,7 +308,7 @@ namespace Habanero.UI.Base
             }
         }
 
-        private void AddControlsForField(UIFormField formField, IPanelInfo panelInfo)
+        private PanelInfo.FieldInfo AddControlsForField(UIFormField formField, IPanelInfo panelInfo)
         {
             IControlHabanero labelControl;
             IControlMapper controlMapper;
@@ -305,7 +325,9 @@ namespace Habanero.UI.Base
 
             CreateAndAddErrorProviderPanel(panelInfo, formField);
 
-            panelInfo.FieldInfos.Add(new PanelInfo.FieldInfo(formField.PropertyName, labelControl, controlMapper));
+            PanelInfo.FieldInfo fieldInfo = new PanelInfo.FieldInfo(formField.PropertyName, labelControl, controlMapper);
+            panelInfo.FieldInfos.Add(fieldInfo);
+            return fieldInfo;
         }
 
 
