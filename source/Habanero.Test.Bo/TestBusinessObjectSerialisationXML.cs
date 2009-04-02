@@ -160,38 +160,54 @@ namespace Habanero.Test.BO
             AssertPersonsAreEqual(deserialisedPeople.CreatedBusinessObjects[1], originalPeople.CreatedBusinessObjects[1]);
         }
 
-        [Test]
+        [Test, Ignore("Still being implemented")]
         public void Test_XmlSerialiseDeserialise_Composition_SingleRelationship()
         {
             //---------------Set up test -----------------------
-            //load correct class defs
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
-            //create objects
+            
             OrganisationTestBO organisation= OrganisationTestBO.CreateUnsavedOrganisation();
+            organisation.Name = TestUtil.GetRandomString();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
-            //create a single composition relationship
+            contactPerson.Surname = TestUtil.GetRandomString();
+
+            //Change relationship type to composite
             organisation.ContactPerson = contactPerson;
             ISingleRelationship relationship =
-                      (ISingleRelationship)contactPerson.Relationships["Organisation"];
+                      (ISingleRelationship)organisation.Relationships["ContactPerson"];
             relationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
-            organisation.Save();
 
-            //setup serialisaton
             XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
             MemoryStream memoryStream = new MemoryStream();
-            //make sure two objects with same reference are not created
+
+            //make sure we load contact from xml and not from memory
             BusinessObjectManager.Instance.ClearLoadedObjects();
+            
             //---------------Assert pre conditions -------------
-            Assert.AreEqual(RelationshipType.Composition,organisation.ContactPerson.Relationships["Organisation"].RelationshipDef.RelationshipType);
+            Assert.AreEqual(RelationshipType.Composition, organisation.Relationships["ContactPerson"].RelationshipDef.RelationshipType);
+            Assert.IsNotNull(organisation.Name);
+            Assert.IsNotNull(contactPerson.Surname);
+            Assert.AreEqual(0, Broker.GetBusinessObjectCollection<ContactPersonTestBO>("").Count);
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, organisation);
+
+            //StreamWriter sw = new StreamWriter("test.xml");
+            //xs.Serialize(sw, organisation);
+            //sw.Close();
+
             memoryStream.Seek(0, SeekOrigin.Begin);
             OrganisationTestBO deserialisedOrganisation = (OrganisationTestBO)xs.Deserialize(memoryStream);
             //---------------Test Result -----------------------
+            
             Assert.AreNotSame(organisation, deserialisedOrganisation);
-            //this line will fail if serilization for relationship is not implemented
-            Assert.AreEqual(RelationshipType.Composition, deserialisedOrganisation.ContactPerson.Relationships["Organisation"].RelationshipDef.RelationshipType);
+            //Assert.AreEqual(organisation, deserialisedOrganisation); //gets a new guid id
+            Assert.AreEqual(organisation.OrganisationID, deserialisedOrganisation.OrganisationID);
+            Assert.AreEqual(organisation.Name, deserialisedOrganisation.Name);
+
+            Assert.IsNotNull(deserialisedOrganisation.ContactPerson);
+            Assert.AreEqual(organisation.ContactPerson,deserialisedOrganisation.ContactPerson);
+            Assert.AreEqual(organisation.ContactPerson.Surname,deserialisedOrganisation.ContactPerson.Surname);
         }
 
 

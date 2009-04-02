@@ -190,7 +190,7 @@ namespace Habanero.BO
         {
             BusinessObjectManager.Instance.Add(this);
             this.ID.Updated += ((sender, e) => FireIDUpdatedEvent());
-            foreach(IBOProp boProp in this.Props)
+            foreach (IBOProp boProp in this.Props)
             {
                 boProp.Updated += (sender, e) => FirePropertyUpdatedEvent(e.Prop);
             }
@@ -735,7 +735,7 @@ namespace Habanero.BO
                 //                {
                 //FireUpdatedEvent();
                 //TODO Mark 13 Mar 2009: This should rather be fired from any BOProp being updated, not from this SetPropertyValue method.
-               // FirePropertyUpdatedEvent(prop);
+                // FirePropertyUpdatedEvent(prop);
                 //                }
             }
         }
@@ -1206,33 +1206,55 @@ namespace Habanero.BO
         /// <summary>
         /// Defines how to read Business Objects from serialized xml
         /// </summary>
-        /// <param name="r"></param>
-        public void ReadXml(XmlReader r)
+        /// <param name="reader"></param>
+        public void ReadXml(XmlReader reader)
         {
-            r.GetAttribute("BusinessObject");
-            while (r.MoveToNextAttribute())
-                if (r.Name != "BusinessObject" && r.Name != "Status")
-                    this.SetPropertyValue(r.Name, r.Value);
-            r.Read();
+            reader.GetAttribute("BusinessObject");
+            while (reader.MoveToNextAttribute())
+            {
+                if (reader.Name != "BusinessObject")
+                    this.SetPropertyValue(reader.Name, reader.Value);
+            }
+            
+            
+            //reader.MoveToContent();
+            //reader.Read();
+            ////if (//check if has content so we don't keep on recursing inside)
+            //string relationshipName = reader.Name;
+            //Type relatedObjectType = this.Relationships[relationshipName].RelationshipDef.RelatedObjectClassType;
+            //object relatedObject = Activator.CreateInstance(relatedObjectType);
+            //((IBusinessObject)relatedObject).ReadXml(reader);
+
+
+
+            reader.Read();
         }
 
         /// <summary>
         /// Defines how to write Business Objects to serialized xml 
         /// </summary>
-        /// <param name="w"></param>
-        public void WriteXml(XmlWriter w)
+        /// <param name="writer"></param>
+        public void WriteXml(XmlWriter writer)
         {
-            w.WriteAttributeString("BusinessObject", Convert.ToString(this.ID.GetAsValue()));
+            writer.WriteAttributeString("BusinessObject", Convert.ToString(this.ID.GetAsValue()));
             foreach (IBOProp prop in _boPropCol)
             {
-                w.WriteAttributeString(prop.PropertyName, Convert.ToString(prop.Value));
+                writer.WriteAttributeString(prop.PropertyName, Convert.ToString(prop.Value));
             }
-            //foreach (IRelationship relationship in _relationshipCol)
-            //{
-            //    //what type of relationship? composition,aggregation...
-            //    relationship.GetType();
-            //    w.WriteAttributeString(relationship.RelationshipName,Convert.ToString(relationship.OwningBO));
-            //}
+            foreach (IRelationship relationship in _relationshipCol)
+            {
+                //what type of relationship? composition,aggregation...
+                //if (relationship.RelationshipDef.RelationshipType != RelationshipType.Association)
+
+                if (relationship.RelationshipDef.RelationshipType == RelationshipType.Composition)
+                {
+                    writer.WriteStartElement(relationship.RelationshipName);
+                    ISingleRelationship singleRelationship = (ISingleRelationship)relationship;
+                    singleRelationship.GetRelatedObject().WriteXml(writer);
+                    writer.WriteEndElement();
+
+                }
+            }
 
         }
 

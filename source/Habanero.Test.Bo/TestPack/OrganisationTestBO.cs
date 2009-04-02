@@ -303,7 +303,8 @@ namespace Habanero.Test.BO
             return bo;
         }
 
-        internal static OrganisationTestBO CreateUnsavedOrganisation() {
+        internal static OrganisationTestBO CreateUnsavedOrganisation() 
+        {
             return new OrganisationTestBO();
         }
 
