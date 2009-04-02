@@ -151,6 +151,34 @@ namespace Habanero.Test
 							</tab>
 						</form>
 					</ui>
+					<ui name=""TwoColumns"">
+                        <form>
+							<columnLayout width=""200"">
+                                <field label=""SampleText1:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                <field label=""SampleInt1:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" editable=""false"" />
+                            </columnLayout>
+							<columnLayout width=""200"">
+                                <field label=""SampleText2:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                <field label=""SampleInt2:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" editable=""false"" />
+                            </columnLayout>
+						</form>
+					</ui>
+					<ui name=""ThreeColumns"">
+                        <form>
+							<columnLayout width=""200"">
+                                <field label=""SampleText1:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                <field label=""SampleInt1:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" editable=""false"" />
+                            </columnLayout>
+							<columnLayout width=""200"">
+                                <field label=""SampleText2:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                <field label=""SampleInt2:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" editable=""false"" />
+                            </columnLayout>
+							<columnLayout width=""200"">
+                                <field label=""SampleText3:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                <field label=""SampleInt3:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" editable=""false"" />
+                            </columnLayout>
+						</form>
+					</ui>
 					<ui name=""TwoTabs"">
                         <form>
 							<tab name=""Tab1"">

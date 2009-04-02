@@ -26,6 +26,24 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Constructs a panel with controls for editing the data of a single
+    /// instance of a BusinessObject.  The required layout of controls is
+    /// specified in the UIForm or UIFormTab object that is passed through.
+    /// An IPanelInfo instance is returned, which contains the panel that
+    /// has been constructed, along with access to the individual control
+    /// mappers, labels and error providers that were created.
+    /// <br/><br/>
+    /// The PanelBuilder can create a panel for any environment based on
+    /// the implementation of IControlFactory that is passed through in
+    /// the constructor.
+    /// <br/><br/>
+    /// Once the panel has been constructed, you will need to assign the
+    /// instance of the business object.  See <see cref="IPanelInfo"/> for
+    /// these options.  Once editing is completed, you will need to persist
+    /// the changes. First call ApplyChangesToBusinessObject on the IPanelInfo
+    /// object, and then carry out persistence on the BusinessObject.
+    /// </summary>
     public class PanelBuilder
     {
         private IControlFactory _factory;
@@ -40,6 +58,17 @@ namespace Habanero.UI.Base
 
         public IControlFactory Factory { get { return _factory; } set { _factory = value; } }
 
+        /// <summary>
+        /// Constructs a panel for editing the data of a single instance
+        /// of a BusinessObject, using the control layout as specified in
+        /// a <see cref="UIFormTab"/> object. 
+        /// </summary>
+        /// <param name="formTab">The tab object that indicates which controls
+        /// to create and how the controls are laid out</param>
+        /// <returns>Returns an IPanelInfo object that contains access to the
+        /// BusinessObject instance, the created panel, and all the controls,
+        /// mappers, labels and error providers that were created.
+        /// </returns>
         public IPanelInfo BuildPanelForTab(UIFormTab formTab)
         {
             IPanel panel = Factory.CreatePanel();
@@ -59,7 +88,17 @@ namespace Habanero.UI.Base
             return panelInfo;
         }
 
-
+        /// <summary>
+        /// Constructs a panel for editing the data of a single instance
+        /// of a BusinessObject, using the control layout as specified in
+        /// a <see cref="UIForm"/> object. 
+        /// </summary>
+        /// <param name="uiForm">The UIForm object that indicates which controls
+        /// to create and how the controls are laid out</param>
+        /// <returns>Returns an IPanelInfo object that contains access to the
+        /// BusinessObject instance, the created panel, and all the controls,
+        /// mappers, labels and error providers that were created.
+        /// </returns>
         public IPanelInfo BuildPanelForForm(UIForm uiForm)
         {
             PanelInfo panelInfo = new PanelInfo();
@@ -147,7 +186,8 @@ namespace Habanero.UI.Base
                             // update colspan of all rows that this field spans into.
                             columnSpanTrackerForRow[i] = formField.ColSpan;
 
-                        AddControlsForField(formField, panelInfo);
+                        PanelInfo.FieldInfo fieldInfo = AddControlsForField(formField, panelInfo);
+                        fieldInfo.InputControl.TabIndex = currentRowNo + (currentColumnNo*maxRowsInColumns);
                     }
                     else
                     {
@@ -159,7 +199,7 @@ namespace Habanero.UI.Base
             
         }
 
-        private void AddControlsForField(UIFormField formField, IPanelInfo panelInfo)
+        private PanelInfo.FieldInfo AddControlsForField(UIFormField formField, IPanelInfo panelInfo)
         {
             IControlHabanero labelControl;
             IControlMapper controlMapper;
@@ -171,19 +211,20 @@ namespace Habanero.UI.Base
             else
             {
                 labelControl = CreateAndAddGroupBox(panelInfo, formField);
-                controlMapper = CreateAndAddInputControlToContainerControl(panelInfo, formField, (IGroupBox)labelControl); ;
+                controlMapper = CreateAndAddInputControlToContainerControl(panelInfo, formField, (IGroupBox)labelControl);
             }
-
-
 
             CreateAndAddErrorProviderPanel(panelInfo, formField);
 
-            panelInfo.FieldInfos.Add(new PanelInfo.FieldInfo(formField.PropertyName, labelControl, controlMapper));
+            PanelInfo.FieldInfo fieldInfo = new PanelInfo.FieldInfo(formField.PropertyName, labelControl, controlMapper);
+            panelInfo.FieldInfos.Add(fieldInfo);
+            return fieldInfo;
         }
 
       
 
-        private IControlHabanero CreateAndAddGroupBox(IPanelInfo panelInfo, UIFormField formField) {
+        private IControlHabanero CreateAndAddGroupBox(IPanelInfo panelInfo, UIFormField formField)
+        {
             IControlHabanero labelControl = Factory.CreateGroupBox(formField.GetLabel());
             labelControl.Width = 0;  // don't affect the label column's fixed width
             labelControl.Name = formField.PropertyName;
@@ -228,7 +269,8 @@ namespace Habanero.UI.Base
             return controlMapper;
         }
 
-        private IControlHabanero ConfigureInputControl(UIFormField formField, out IControlMapper controlMapper) {
+        private IControlHabanero ConfigureInputControl(UIFormField formField, out IControlMapper controlMapper)
+        {
             IControlHabanero inputControl = Factory.CreateControl(formField.ControlTypeName,
                                                                   formField.ControlAssemblyName);
             controlMapper = ControlMapper.Create(formField.MapperTypeName,
