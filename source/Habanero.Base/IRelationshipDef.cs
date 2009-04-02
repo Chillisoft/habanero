@@ -37,10 +37,9 @@ namespace Habanero.Base
         DoNothing = 4
     }
     /// <summary>
-    /// An enumeration that gives some instructions or limitations in the
-    /// on a child business object being added/removed from the relationship as well
-    ///  as differnetiating when the owning business object is viewed as dirty.
-    /// This typically differentiats between a composition, aggregation and Association relationship.
+    /// An enumeration that provides instructions or limitations on the child business object being added/removed 
+    /// from the relationship as well as differentiating when the owning business object is viewed as dirty.
+    /// This typically differs for a Composition, Aggregation, or Association relationship.
     /// </summary>
     public enum RelationshipType
     {

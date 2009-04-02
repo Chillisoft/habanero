@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 
@@ -12,15 +14,18 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBusinessObjectSerialisationXML
     {
+
+        [TestFixtureSetUp]
+        public void TestSetUp()
+        {
+            ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader()));
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+        }
+
         [Test]
         public void Test_XmlSerialiseDeserialise_ReturnsCorrectType()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            Structure.Car.LoadDefaultClassDef();
-            OrganisationPerson.LoadDefaultClassDef();
-            Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             XmlSerializer xs = new XmlSerializer(typeof(Person));
             MemoryStream memoryStream = new MemoryStream();
@@ -38,7 +43,6 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
             OrganisationPerson.LoadDefaultClassDef();
             ClassDef classDef = Person.LoadDefaultClassDef();
@@ -55,14 +59,12 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_XmlSerialiseAndDeserialise()
+        public void Test_XmlSerialiseDeserialise()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            Structure.Car.LoadDefaultClassDef();
-            OrganisationPerson.LoadDefaultClassDef();
-            Person.LoadDefaultClassDef();
+            //Structure.Car.LoadDefaultClassDef();
+            // OrganisationPerson.LoadDefaultClassDef();
+            //Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             XmlSerializer xs = new XmlSerializer(typeof(Person));
             MemoryStream memoryStream = new MemoryStream();
@@ -78,11 +80,10 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_Serialise_AddBOPropAndDeserialise()
+        public void Test_XmlSerialise_AddBOPropAndDeserialise()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
             OrganisationPerson.LoadDefaultClassDef();
             ClassDef personClassDef = Person.LoadDefaultClassDef();
@@ -107,14 +108,9 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestSerialiseDeserialiseBusinessObjectCollection()
+        public void Test_XmlSerialiseDeserialise_BusinessObjectCollection()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            Structure.Car.LoadDefaultClassDef();
-            OrganisationPerson.LoadDefaultClassDef();
-            Person.LoadDefaultClassDef();
             BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
             Person person1 = Person.CreateSavedPerson();
             originalPeople.Add(person1);
@@ -128,8 +124,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPeople);
             memoryStream.Seek(0, SeekOrigin.Begin);
-            //this line causes test to hang/infinite loop?
-            BusinessObjectCollection<Person> deserialisedPeople = 
+            BusinessObjectCollection<Person> deserialisedPeople =
                 (BusinessObjectCollection<Person>)xs.Deserialize(memoryStream);
             //---------------Test Result -----------------------
             Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
@@ -140,11 +135,10 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestSerialiseDeserialiseBusinessObjectCollection_CreatedBusObjAreIncluded()
+        public void Test_XmlSerialiseDeserialise_BusinessObjectCollection_CreatedBusObjAreIncluded()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
             OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
@@ -157,32 +151,100 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPeople);
             memoryStream.Seek(0, SeekOrigin.Begin);
-            BusinessObjectCollection<Person> deserialisedPeople = 
+            BusinessObjectCollection<Person> deserialisedPeople =
                 (BusinessObjectCollection<Person>)xs.Deserialize(memoryStream);
             //---------------Test Result -----------------------
             Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
             Assert.AreEqual(originalPeople.CreatedBusinessObjects.Count, deserialisedPeople.CreatedBusinessObjects.Count);
-
             AssertPersonsAreEqual(deserialisedPeople.CreatedBusinessObjects[0], originalPeople.CreatedBusinessObjects[0]);
             AssertPersonsAreEqual(deserialisedPeople.CreatedBusinessObjects[1], originalPeople.CreatedBusinessObjects[1]);
         }
 
+        [Test]
+        public void Test_XmlSerialiseDeserialise_Composition_SingleRelationship()
+        {
+            //---------------Set up test -----------------------
+            //load correct class defs
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
+            //create objects
+            OrganisationTestBO organisation= OrganisationTestBO.CreateUnsavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            //create a single composition relationship
+            ISingleRelationship relationship =
+                      (ISingleRelationship)contactPerson.Relationships["Organisation"];
+            relationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
+            organisation.Save();
+
+            //setup serialisaton
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            //---------------Assert pre conditions -------------
+            //---------------Execute Test ----------------------
+            xs.Serialize(memoryStream, organisation);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            OrganisationTestBO deserialisedOrganisation = (OrganisationTestBO)xs.Deserialize(memoryStream);
+            //---------------Test Result -----------------------
+            Assert.AreNotSame(deserialisedOrganisation, organisation);
+            //---------------Test Result -----------------------
+
+        }
+
+
+
+        [Test, Ignore]
+        public void Test_SerialiseDeserialise_Aggregation()
+        {
+            //---------------Set up test -----------------------
+            //find composition test class
+            //there is an aggregation relationship between organisation and contactperson
+            //this default class def has contactppl rship
+            OrganisationTestBO.LoadDefaultClassDef();
+            //i think this is the class def with the correct structure for aggregation with contact person 
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            //create the organisation
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            //create a contact person
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
+            //link between the two classes 
+            organisationTestBO.ContactPeople.Add(contactPersonTestBO);
+            organisationTestBO.Save();
+
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            //---------------Assert pre conditions -------------
+            Assert.AreEqual(organisationTestBO.ContactPeople[0], contactPersonTestBO);
+            //---------------Execute Test ----------------------
+            xs.Serialize(memoryStream, organisationTestBO);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            OrganisationTestBO deserialisedOrganisation =
+                (OrganisationTestBO)xs.Deserialize(memoryStream);
+            //---------------Test Result -----------------------
+            Assert.AreNotSame(organisationTestBO, deserialisedOrganisation);
+            //implementing aggregation would mean that all the objects that are created will be returned.
+            //so both organisationTestBO AND contactperson need to be serialized AND deserialized 
+            //with only one call to the serialize and deserialize methods.
+            Assert.AreEqual(organisationTestBO.ContactPeople[0], deserialisedOrganisation.ContactPeople[0]);
+            Assert.AreEqual(organisationTestBO.ContactPeople[0].Surname, deserialisedOrganisation.ContactPeople[0].Surname);
+        }
+
         //this might go to the implementing class' tests
         [Test]
-        public void Test_CreateXmlFile()
+        public void Test_WriteXmlFile()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadDefaultClassDef();
-            BusinessObject myBO = new MyBO();
+            MultiPropBO.LoadClassDef();
+            MultiPropBO bo = new MultiPropBO();
             const string fileName = @"C:\xmlBOs.xml";
             File.Delete(fileName);
             //---------------Assert Precondition----------------
             AssertFileDoesNotExist(fileName);
             //---------------Execute Test ----------------------
-            XmlSerializer xs = new XmlSerializer(typeof(MyBO));
+            XmlSerializer xs = new XmlSerializer(typeof(MultiPropBO));
             StreamWriter sw = new StreamWriter(fileName);
-            xs.Serialize(sw, myBO);
+            xs.Serialize(sw, bo);
             sw.Close();
             //---------------Test Result -----------------------
             AssertFileHasBeenCreated(fileName);
@@ -193,41 +255,29 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            MyBO.LoadDefaultClassDef();
-            MyBO myBO = new MyBO();
-
+            MultiPropBO.LoadClassDef();
+            MultiPropBO bo = new MultiPropBO();
             const string fileName = @"C:\xmlBOs.xml";
             File.Delete(fileName);
-
-
-            XmlSerializer xs = new XmlSerializer(typeof(MyBO));
-            //using (FileStream fs = new FileStream(fileName, FileMode.Create))
-            //{
+            XmlSerializer xs = new XmlSerializer(typeof(MultiPropBO));
             StreamWriter sw = new StreamWriter(fileName);
-            xs.Serialize(sw, myBO);
-            //}
+            xs.Serialize(sw, bo);
             sw.Close();
             BusinessObjectManager.Instance = new BusinessObjectManager();
             //---------------Assert Precondition----------------
             AssertFileHasBeenCreated(fileName);
             //---------------Execute Test ----------------------
-            MyBO deserialisedBO;
-            //using (Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            //{
             StreamReader sr = new StreamReader(fileName);
-            //this line pulls out a magic guid- not the one in the file?- deserialize had not been implemented
-            deserialisedBO = (MyBO)xs.Deserialize(sr);
-            //}
+            MultiPropBO deserialisedBO = (MultiPropBO)xs.Deserialize(sr);
             //---------------Test Result -----------------------
-            Assert.AreEqual(myBO.MyBoID, deserialisedBO.MyBoID);
-            //Assert.AreEqual(myBO.Status, deserialisedBO.Status);
+            Assert.AreEqual(bo.MultiPropBOID, deserialisedBO.MultiPropBOID);
+            Assert.AreEqual(bo.StringProp, deserialisedBO.StringProp);
         }
 
         [Test]
         public void Test_WriteXmlFile_BusinessObjectCollection()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDefWithDefault("default prop");
             IBusinessObjectCollection myBOCol = GetMyBOColWithTwoBOs();
             const string fileName = @"C:\xmlBOCol.xml";
@@ -253,6 +303,31 @@ namespace Habanero.Test.BO
                 Assert.AreEqual(prop.Value, deserialisedPerson.GetPropertyValue(prop.PropertyName));
             }
         }
+
+        //[Test]
+        //public void Test_CreateXmlFile_WAggregation()
+        //{
+        //    //---------------Set up test pack-------------------
+
+        //    OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+        //    OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+        //    ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
+        //    ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
+        //    contactPersonTestBO.OrganisationID = organisationTestBO.OrganisationID;
+        //    contactPersonTestBO.Save();
+
+        //    const string fileName = @"C:\xmlBOsAggregation.xml";
+        //    File.Delete(fileName);
+        //    //---------------Assert Precondition----------------
+        //    AssertFileDoesNotExist(fileName);
+        //    //---------------Execute Test ----------------------
+        //    XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+        //    StreamWriter sw = new StreamWriter(fileName);
+        //    xs.Serialize(sw, organisationTestBO);
+        //    sw.Close();
+        //    //---------------Test Result -----------------------
+        //    AssertFileHasBeenCreated(fileName);
+        //}
 
         private static void AssertFileHasBeenCreated(string fullFileName)
         {

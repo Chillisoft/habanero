@@ -40,7 +40,7 @@ namespace Habanero.BO
     /// the common functionality used by business objects.
     /// This Class implements the Layer SuperType - Fowler (xxx)
     /// </summary>
-    public class BusinessObject : IBusinessObject, ISerializable, IXmlSerializable
+    public class BusinessObject : IBusinessObject, ISerializable
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
@@ -395,6 +395,24 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Gets and sets the collection of relationships
+        /// </summary>
+        IRelationshipCol IBusinessObject.Relationships
+        {
+            get { return _relationshipCol; }
+            set { _relationshipCol = value; }
+        }
+
+        /// <summary>
+        /// Returns or sets the class definition. Setting the classdef is not recommended
+        /// </summary>
+        IClassDef IBusinessObject.ClassDef
+        {
+            get { return _classDef; }
+            set { _classDef = (ClassDef)value; }
+        }
+
+        /// <summary>
         /// Returns the class name as specified in the class definition
         /// </summary>
         protected internal string ClassName
@@ -457,25 +475,6 @@ namespace Habanero.BO
             if (primaryKeyDef == null) return;
             _primaryKey = (BOPrimaryKey)primaryKeyDef.CreateBOKey(this.Props);
         }
-
-        /// <summary>
-        /// Gets and sets the collection of relationships
-        /// </summary>
-        IRelationshipCol IBusinessObject.Relationships
-        {
-            get { return _relationshipCol; }
-            set { _relationshipCol = value; }
-        }
-
-        /// <summary>
-        /// Returns or sets the class definition. Setting the classdef is not recommended
-        /// </summary>
-        IClassDef IBusinessObject.ClassDef
-        {
-            get { return _classDef; }
-            set { _classDef = (ClassDef)value; }
-        }
-
 
         /// <summary>
         /// Sets the concurrency control object
@@ -1228,6 +1227,13 @@ namespace Habanero.BO
             {
                 w.WriteAttributeString(prop.PropertyName, Convert.ToString(prop.Value));
             }
+            //foreach (IRelationship relationship in _relationshipCol)
+            //{
+            //    //what type of relationship? composition,aggregation...
+            //    relationship.GetType();
+            //    w.WriteAttributeString(relationship.RelationshipName,Convert.ToString(relationship.OwningBO));
+            //}
+
         }
 
         #endregion
