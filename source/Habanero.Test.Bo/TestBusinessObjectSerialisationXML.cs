@@ -171,6 +171,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO organisation= OrganisationTestBO.CreateUnsavedOrganisation();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             //create a single composition relationship
+            organisation.ContactPerson = contactPerson;
             ISingleRelationship relationship =
                       (ISingleRelationship)contactPerson.Relationships["Organisation"];
             relationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
@@ -179,16 +180,18 @@ namespace Habanero.Test.BO
             //setup serialisaton
             XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
             MemoryStream memoryStream = new MemoryStream();
+            //make sure two objects with same reference are not created
             BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Assert pre conditions -------------
+            Assert.AreEqual(RelationshipType.Composition,organisation.ContactPerson.Relationships["Organisation"].RelationshipDef.RelationshipType);
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, organisation);
             memoryStream.Seek(0, SeekOrigin.Begin);
             OrganisationTestBO deserialisedOrganisation = (OrganisationTestBO)xs.Deserialize(memoryStream);
             //---------------Test Result -----------------------
-            Assert.AreNotSame(deserialisedOrganisation, organisation);
-            //---------------Test Result -----------------------
-
+            Assert.AreNotSame(organisation, deserialisedOrganisation);
+            //this line will fail if serilization for relationship is not implemented
+            Assert.AreEqual(RelationshipType.Composition, deserialisedOrganisation.ContactPerson.Relationships["Organisation"].RelationshipDef.RelationshipType);
         }
 
 
@@ -237,7 +240,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MultiPropBO.LoadClassDef();
             MultiPropBO bo = new MultiPropBO();
-            const string fileName = @"C:\xmlBOs.xml";
+            const string fileName = @"xmlBOs.xml";
             File.Delete(fileName);
             //---------------Assert Precondition----------------
             AssertFileDoesNotExist(fileName);
@@ -257,7 +260,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MultiPropBO.LoadClassDef();
             MultiPropBO bo = new MultiPropBO();
-            const string fileName = @"C:\xmlBOs.xml";
+            const string fileName = @"xmlBOs.xml";
             File.Delete(fileName);
             XmlSerializer xs = new XmlSerializer(typeof(MultiPropBO));
             StreamWriter sw = new StreamWriter(fileName);
