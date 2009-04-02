@@ -24,7 +24,7 @@ namespace Habanero.UI.Base
 {
     /// <summary>
     /// Controls the behaviour of a wizard, which guides users through a process one
-    /// step at a time.
+    /// step at a time. Implementsts the <see cref="IWizardController"/>
     /// </summary>
     public class WizardController : IWizardController
     {

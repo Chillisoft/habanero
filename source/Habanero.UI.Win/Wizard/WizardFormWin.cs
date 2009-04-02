@@ -19,6 +19,7 @@
 
 using System;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.UI.Base;
 using DialogResult=System.Windows.Forms.DialogResult;
 using FormStartPosition=System.Windows.Forms.FormStartPosition;
@@ -34,7 +35,6 @@ namespace Habanero.UI.Win
     {
         private readonly IWizardController _wizardController;
         private readonly WizardControlWin _uxWizardControl;
-        private readonly IControlFactory _controlFactory;
         private string _wizardText;
 
         /// <summary>
@@ -42,8 +42,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="controller">the wizrd controller that controls moving the wizard steps and the </param>
         public WizardFormWin(IWizardController controller) : this(controller, GlobalUIRegistry.ControlFactory)
-        {
-        }
+        {}
 
         /// <summary>
         /// Initialises the WizardForm, sets the controller and starts the wizard.
@@ -53,9 +52,6 @@ namespace Habanero.UI.Win
         public WizardFormWin(IWizardController controller, IControlFactory controlFactory)
         {
             _wizardController = controller;
-
-            _controlFactory = controlFactory;
-//            _uxWizardControl = new WizardControlWin(controller, _controlFactory);
             _uxWizardControl = (WizardControlWin)controlFactory.CreateWizardControl(controller);
             this._uxWizardControl.MessagePosted += _uxWizardControl_MessagePosted;
             this._uxWizardControl.Finished += this._uxWizardControl_Finished;
@@ -69,18 +65,39 @@ namespace Habanero.UI.Win
 
         void WizardFormWin_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //TODO: should follow pattern of checking dirty status and if dirty ask user
-            this._wizardController.CancelWizard();
+            try
+            {
+                //TODO: should follow pattern of checking dirty status and if dirty ask user
+                this._wizardController.CancelWizard();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         private void CancelButton_OnClick(object sender, EventArgs e)
         {
-            this.Close();
+            try
+            {
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         private void _uxWizardControl_StepChanged(IWizardStep obj)
         {
-            this.Text = this.WizardText + " - " + obj.HeaderText;
+            try
+            {
+                this.Text = this.WizardText + " - " + obj.HeaderText;
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         /// <summary>
@@ -132,8 +149,15 @@ namespace Habanero.UI.Win
 
         private void _uxWizardControl_Finished(object sender, EventArgs e)
         {
-            DialogResult = Base.DialogResult.OK;
-            Close();
+            try
+            {
+                DialogResult = Base.DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         private static void _uxWizardControl_MessagePosted(string message)
@@ -173,11 +197,8 @@ namespace Habanero.UI.Win
             {
                 return form.ShowDialog() == (DialogResult)Base.DialogResult.OK;
             }
-            else
-            {
-                form.Show();
-                return true;
-            }
+            form.Show();
+            return true;
         }
     }
 }

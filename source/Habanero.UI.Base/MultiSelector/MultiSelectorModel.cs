@@ -104,7 +104,14 @@ namespace Habanero.UI.Base
             get { return _allOptions; }
             set
             {
-                _allOptions = ShallowCopy(value);
+                if (value == null)
+                {
+                    _allOptions = new List<T>();
+                }
+                else
+                {
+                    _allOptions = ShallowCopy(value);
+                }
                 if (_selectedOptions != null)
                 {
                     for (int i = _selectedOptions.Count - 1; i >= 0; i--)

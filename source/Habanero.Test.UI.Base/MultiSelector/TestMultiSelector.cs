@@ -188,7 +188,6 @@ namespace Habanero.Test.UI.Base
 
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Select).Enabled);
-                //---------------Tear Down -------------------------          
             }
 
             [Test]
@@ -202,7 +201,6 @@ namespace Habanero.Test.UI.Base
                 _selector.AvailableOptionsListBox.SelectedIndex = -1;
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Select).Enabled);
-                //---------------Tear Down -------------------------          
             }
 
             [Test]
@@ -213,12 +211,9 @@ namespace Habanero.Test.UI.Base
                 _selector.AllOptions = CreateListWithTwoOptions();
                 _selector.AvailableOptionsListBox.SelectedIndex = -1;
                 //---------------Execute Test ----------------------
-
                 _selector.GetButton(MultiSelectorButton.Select).PerformClick();
                 //---------------Test Result -----------------------
-
                 AssertNoneSelected(_selector);
-                //---------------Tear Down -------------------------      
             }
 
 
@@ -231,10 +226,8 @@ namespace Habanero.Test.UI.Base
                 _selector.AllOptions = options;
                 //---------------Execute Test ----------------------
                 _selector.SelectedOptions = options;
-
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
-                //---------------Tear Down -------------------------          
             }
 
             [Test]
@@ -246,12 +239,9 @@ namespace Habanero.Test.UI.Base
                 _selector.AllOptions = options;
                 _selector.SelectedOptions = options;
                 //---------------Execute Test ----------------------
-
                 _selector.SelectedOptionsListBox.SelectedIndex = 0;
-
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
-                //---------------Tear Down -------------------------          
             }
 
             [Test]
@@ -311,9 +301,23 @@ namespace Habanero.Test.UI.Base
             _selector.AllOptions = twoOptions;
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count);
+            Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count); 
+        }
 
-            //---------------Tear Down -------------------------          
+        [Test]
+        public void Test_SetAllOptions_ToNull_ShouldClearAllOptions()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+            List<TestT> twoOptions = CreateListWithTwoOptions();
+            _selector.AllOptions = twoOptions;
+            //---------------Assert Preconditions -------------
+            Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count); 
+            //---------------Execute Test ----------------------
+            _selector.AllOptions = null;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, _selector.AvailableOptionsListBox.Items.Count);
+            Assert.AreEqual(0, _selector.SelectedOptionsListBox.Items.Count);
         }
 
         [Test]

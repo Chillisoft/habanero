@@ -21,7 +21,8 @@ namespace Habanero.UI.Base
 {
     /// <summary>
     /// Controls the behaviour of a wizard, which guides users through a process one
-    /// step at a time.
+    /// step at a time. Each step in the wizard is represented by a user control that implements
+    /// the IWizardStep Interface.
     /// </summary>
     public interface IWizardController
     {

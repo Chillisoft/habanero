@@ -22,7 +22,7 @@ using System;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Provides a single step in a wizard control
+    /// Provides a single step in a wizard control which is used by the <see cref="IWizardController"/>
     /// </summary>
     public interface IWizardStep : IControlHabanero
     {
