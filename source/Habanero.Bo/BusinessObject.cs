@@ -1209,25 +1209,34 @@ namespace Habanero.BO
         /// <param name="reader"></param>
         public void ReadXml(XmlReader reader)
         {
-            reader.GetAttribute("BusinessObject");
+            //reader.GetAttribute("BusinessObject");
             while (reader.MoveToNextAttribute())
             {
-                if (reader.Name != "BusinessObject")
+                //if (reader.Name != "BusinessObject")
                     this.SetPropertyValue(reader.Name, reader.Value);
             }
-            
-            
-            //reader.MoveToContent();
-            //reader.Read();
-            ////if (//check if has content so we don't keep on recursing inside)
-            //string relationshipName = reader.Name;
-            //Type relatedObjectType = this.Relationships[relationshipName].RelationshipDef.RelatedObjectClassType;
-            //object relatedObject = Activator.CreateInstance(relatedObjectType);
-            //((IBusinessObject)relatedObject).ReadXml(reader);
 
-
-
+            reader.MoveToContent();
             reader.Read();
+            if (!string.IsNullOrEmpty(reader.Name))
+            {
+                string relationshipName = reader.Name;
+                if (this.Relationships.Contains(relationshipName))
+                {
+                    IRelationship relationship = this.Relationships[relationshipName];
+                    Type relatedObjectType = relationship.RelationshipDef.RelatedObjectClassType;
+                    reader.MoveToContent();
+                    reader.Read();
+                    IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
+                     relatedObject.ReadXml(reader);
+                    if(relationship is ISingleRelationship)
+                    {
+                        ((ISingleRelationship)relationship).SetRelatedObject(relatedObject);
+                    }
+                }
+            }
+
+            //reader.Read();
         }
 
         /// <summary>
@@ -1236,7 +1245,6 @@ namespace Habanero.BO
         /// <param name="writer"></param>
         public void WriteXml(XmlWriter writer)
         {
-            writer.WriteAttributeString("BusinessObject", Convert.ToString(this.ID.GetAsValue()));
             foreach (IBOProp prop in _boPropCol)
             {
                 writer.WriteAttributeString(prop.PropertyName, Convert.ToString(prop.Value));
@@ -1250,7 +1258,9 @@ namespace Habanero.BO
                 {
                     writer.WriteStartElement(relationship.RelationshipName);
                     ISingleRelationship singleRelationship = (ISingleRelationship)relationship;
+                    writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
                     singleRelationship.GetRelatedObject().WriteXml(writer);
+                    writer.WriteEndElement();
                     writer.WriteEndElement();
 
                 }
