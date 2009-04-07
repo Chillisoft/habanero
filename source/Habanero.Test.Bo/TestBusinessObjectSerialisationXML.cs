@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -16,7 +17,6 @@ namespace Habanero.Test.BO
     /// TODO:
     /// - error message for non-recognised attribute, non-recognised classname
     /// - what happens if xml is missing key attributes (eg value for ID)
-    /// - invalid xml (eg no closing tags, empty file)
     /// </summary>
     [TestFixture]
     public class TestBusinessObjectSerialisationXML
@@ -34,6 +34,49 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader()));
             BORegistry.DataAccessor = new DataAccessorInMemory();
+        }
+
+        [Test]
+        public void Test_DeserialiseXml_InvalidXml_ThrowsException()
+        {
+            //---------------Set up test pack-------------------
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <OrganisationTestBO OrganisationID="""" Name="""">");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            Exception exceptionThrown = null;
+            try
+            {
+                OrganisationTestBO organisation = (OrganisationTestBO) xs.Deserialize(new StringReader(xml));
+            }
+            catch (Exception ex)
+            {
+                exceptionThrown = ex;
+            }
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(exceptionThrown);
+            Assert.IsInstanceOfType(typeof(InvalidOperationException),exceptionThrown);
+            Assert.AreEqual("There is an error in XML document (2, 46).", exceptionThrown.Message);
+        }
+
+        [Test]
+        public void Test_DeserialiseXml_NoAttributes()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_NoRelationships();
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <OrganisationTestBO />");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            OrganisationTestBO organisation = (OrganisationTestBO)xs.Deserialize(new StringReader(xml));
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(organisation);
+            Assert.IsNull(organisation.Name);
+
         }
 
         [Test]
@@ -171,63 +214,7 @@ namespace Habanero.Test.BO
             AssertPersonsAreEqual(deserialisedPeople.CreatedBusinessObjects[1], originalPeople.CreatedBusinessObjects[1]);
         }
 
-        //[Test]
-        //public void Test_XmlSerialiseDeserialise_Composition_SingleRelationship()
-        //{
-        //    //---------------Set up test -----------------------
-        //    ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-        //    OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
-            
-        //    OrganisationTestBO organisation= OrganisationTestBO.CreateUnsavedOrganisation();
-        //    organisation.Name = TestUtil.GetRandomString();
-        //    ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
-        //    contactPerson.Surname = TestUtil.GetRandomString();
-
-        //    //Change relationship type to composite
-        //    organisation.ContactPerson = contactPerson;
-        //    ISingleRelationship relationship =
-        //              (ISingleRelationship)organisation.Relationships["ContactPerson"];
-        //    relationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
-
-        //    XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
-        //    MemoryStream memoryStream = new MemoryStream();
-
-        //    //make sure we load contact from xml and not from memory
-        //    BusinessObjectManager.Instance.ClearLoadedObjects();
-            
-        //    //---------------Assert pre conditions -------------
-        //    Assert.AreEqual(RelationshipType.Composition, organisation.Relationships["ContactPerson"].RelationshipDef.RelationshipType);
-        //    Assert.IsNotNull(organisation.Name);
-        //    Assert.IsNotNull(contactPerson.Surname);
-        //    Assert.AreEqual(0, Broker.GetBusinessObjectCollection<ContactPersonTestBO>("").Count);
-        //    //---------------Execute Test ----------------------
-        //    xs.Serialize(memoryStream, organisation);
-
-        //    //StreamWriter sw = new StreamWriter("test.xml");
-        //    //xs.Serialize(sw, organisation);
-        //    //sw.Close();
-
-        //    memoryStream.Seek(0, SeekOrigin.Begin);
-        //    OrganisationTestBO deserialisedOrganisation = (OrganisationTestBO)xs.Deserialize(memoryStream);
-        //    //---------------Test Result -----------------------
-            
-        //    Assert.AreNotSame(organisation, deserialisedOrganisation);
-        //    //Assert.AreEqual(organisation, deserialisedOrganisation); //gets a new guid id
-        //    Assert.AreEqual(organisation.OrganisationID, deserialisedOrganisation.OrganisationID);
-        //    Assert.AreEqual(organisation.Name, deserialisedOrganisation.Name);
-
-        //    Assert.IsNotNull(deserialisedOrganisation.ContactPerson);
-        //    Assert.AreEqual(organisation.ContactPerson,deserialisedOrganisation.ContactPerson);
-        //    Assert.AreEqual(organisation.ContactPerson.Surname,deserialisedOrganisation.ContactPerson.Surname);
-        //}
-
-
-
-
-
-
-
-
+       
 
 
         [Test]
@@ -335,24 +322,39 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_SerialiseXml_Composition_SingleRelationship_EmptyCollection()
+        {
+            //---------------Set up test pack-------------------
+            LoadClassDefs_Composition_SingleRelationship();
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            MemoryStream memoryStream = new MemoryStream();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            xs.Serialize(memoryStream, organisation);
+            //---------------Test Result -----------------------
+            XmlDocument doc = GetXmlDocument(memoryStream);
+
+            XmlNode orgNode = doc.ChildNodes[1];
+            Assert.AreEqual(0, orgNode.ChildNodes.Count);
+        }
+
+        [Test]
         public void Test_SerialiseXml_Composition_SingleRelationship()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            LoadClassDefs_Composition_SingleRelationship();
 
             OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
-            //Change relationship type to composite
             organisation.ContactPerson = contactPerson;
-            ISingleRelationship relationship =
-                      (ISingleRelationship)organisation.Relationships["ContactPerson"];
-            relationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
 
             MemoryStream memoryStream = new MemoryStream();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(RelationshipType.Composition, organisation.Relationships["ContactPerson"].RelationshipDef.RelationshipType);
+            Assert.AreEqual(RelationshipType.Composition,
+                            organisation.Relationships["ContactPerson"].RelationshipDef.RelationshipType);
             //---------------Execute Test ----------------------
             XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
             xs.Serialize(memoryStream, organisation);
@@ -371,7 +373,81 @@ namespace Habanero.Test.BO
             Assert.AreEqual(5,contactPersonNode.Attributes.Count);
         }
 
+        [Test]
+        public void Test_SerialiseXml_Composition_MultipleRelationship_EmptyCollection()
+        {
+            //---------------Set up test pack-------------------
+            LoadClassDefs_Composition_MultipleRelationship();
 
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+
+            MemoryStream memoryStream = new MemoryStream();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(RelationshipType.Composition,
+                            organisation.Relationships["ContactPeople"].RelationshipDef.RelationshipType);
+            Assert.AreEqual(0, organisation.ContactPeople.Count);
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            xs.Serialize(memoryStream, organisation);
+            //---------------Test Result -----------------------
+            XmlDocument doc = GetXmlDocument(memoryStream);
+
+            XmlNode orgNode = doc.ChildNodes[1];
+            Assert.AreEqual(0, orgNode.ChildNodes.Count);
+        }
+
+        [Test]
+        public void Test_SerialiseXml_Composition_MultipleRelationship()
+        {
+            //---------------Set up test pack-------------------
+            LoadClassDefs_Composition_MultipleRelationship();
+
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            ContactPersonTestBO contactPerson1 = ContactPersonTestBO.CreateUnsavedContactPerson();
+            ContactPersonTestBO contactPerson2 = ContactPersonTestBO.CreateUnsavedContactPerson();
+
+            organisation.ContactPeople.Add(contactPerson1);
+            organisation.ContactPeople.Add(contactPerson2);
+
+            MemoryStream memoryStream = new MemoryStream();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(RelationshipType.Composition,
+                            organisation.Relationships["ContactPeople"].RelationshipDef.RelationshipType);
+            Assert.AreEqual(2,organisation.ContactPeople.Count);
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            xs.Serialize(memoryStream, organisation);
+            //---------------Test Result -----------------------
+            XmlDocument doc = GetXmlDocument(memoryStream);
+
+            XmlNode orgNode = doc.ChildNodes[1];
+            Assert.AreEqual(1, orgNode.ChildNodes.Count);
+            XmlNode contactPersonsNode = orgNode.ChildNodes[0];
+            Assert.AreEqual("ContactPeople", contactPersonsNode.Name);
+
+            Assert.AreEqual(2, contactPersonsNode.ChildNodes.Count);
+            Assert.AreNotEqual(contactPersonsNode.ChildNodes[0],contactPersonsNode.ChildNodes[1]);
+        }
+        
+        [Test]
+        public void Test_DeserialiseXml_Composition_SingleRelationship_EmptyCollection()
+        {
+            //---------------Set up test pack-------------------
+            LoadClassDefs_Composition_SingleRelationship();
+
+            const string organisationID = "83e11f9f-705f-40d6-8cfb-101efcb72727";
+            string organisationName = TestUtil.GetRandomString();
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <OrganisationTestBO OrganisationID=""{0}"" Name=""{1}""/>",
+                organisationID, organisationName);
+
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            OrganisationTestBO organisation = (OrganisationTestBO)xs.Deserialize(new StringReader(xml));
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(organisation);
+            Assert.IsNull(organisation.ContactPerson);
+        }
 
         [Test]
         public void Test_DeserialiseXml_Composition_SingleRelationship()
@@ -408,7 +484,115 @@ namespace Habanero.Test.BO
             Assert.AreEqual(contactPersonSurname,person.Surname);
         }
 
+        [Test]
+        public void Test_DeserialiseXml_Composition_MultipleRelationship_EmptyCollection()
+        {
+            //---------------Set up test pack-------------------
+            LoadClassDefs_Composition_MultipleRelationship();
 
+            const string organisationID = "83e11f9f-705f-40d6-8cfb-101efcb72727";
+            string organisationName = TestUtil.GetRandomString();
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <OrganisationTestBO OrganisationID=""{0}"" Name=""{1}""/>",
+                organisationID, organisationName);
+
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            OrganisationTestBO organisation = (OrganisationTestBO)xs.Deserialize(new StringReader(xml));
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(organisation);
+            Assert.AreEqual(0,organisation.ContactPeople.Count);
+        }
+
+        [Test]
+        public void Test_DeserialiseXml_Composition__MultipleRelationship_OneRelatedObject()
+        {
+            //---------------Set up test pack-------------------
+            LoadClassDefs_Composition_MultipleRelationship();
+
+            const string contactPersonID = "14c2a7d9-47de-47ab-99b9-ce6834947988";
+            string contactPersonSurname = TestUtil.GetRandomString();
+
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <OrganisationTestBO OrganisationID=""f566ee917a8e4a178c5e4d1f0fbd9802"" Name="""">
+                                                <ContactPeople>
+                                                    <ContactPersonTestBO ContactPersonID=""{0}"" Surname=""{1}""
+                                                                         OrganisationID=""f566ee917a8e4a178c5e4d1f0fbd9802""/>
+                                                </ContactPeople>
+                                            </OrganisationTestBO>
+                                        
+                                        ", contactPersonID, contactPersonSurname);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            OrganisationTestBO organisation = (OrganisationTestBO)xs.Deserialize(new StringReader(xml));
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(organisation);
+            Assert.AreEqual(1, organisation.ContactPeople.Count);
+            ContactPersonTestBO contactPerson = organisation.ContactPeople[0];
+
+            Assert.AreEqual(contactPersonID, contactPerson.ContactPersonID.ToString());
+            Assert.AreEqual(contactPersonSurname, contactPerson.Surname);
+
+        }
+
+        [Test] public void Test_DeserialiseXml_Composition__MultipleRelationship()
+        {
+            //---------------Set up test pack-------------------
+            LoadClassDefs_Composition_MultipleRelationship();
+
+            const string contactPersonID1 = "14c2a7d9-47de-47ab-99b9-ce6834947988";
+            const string contactPersonID2 = "e0a6391a-fc34-42af-8100-8c13a686cf42";
+            string contactPersonSurname1 = TestUtil.GetRandomString();
+            string contactPersonSurname2 = TestUtil.GetRandomString();
+
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <OrganisationTestBO OrganisationID=""f566ee917a8e4a178c5e4d1f0fbd9802"" Name="""">
+                                                <ContactPeople>
+                                                    <ContactPersonTestBO ContactPersonID=""{0}"" Surname=""{1}""
+                                                                         OrganisationID=""f566ee917a8e4a178c5e4d1f0fbd9802""/>
+                                                    <ContactPersonTestBO ContactPersonID=""{2}"" Surname=""{3}""
+                                                                         OrganisationID=""f566ee917a8e4a178c5e4d1f0fbd9802""/>   
+                                                </ContactPeople>
+                                            </OrganisationTestBO>
+                                        
+                                        ", contactPersonID1, contactPersonSurname1,contactPersonID2,contactPersonSurname2);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            OrganisationTestBO organisation = (OrganisationTestBO)xs.Deserialize(new StringReader(xml));
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(organisation);
+            Assert.AreEqual(2,organisation.ContactPeople.Count);
+            ContactPersonTestBO contactPerson1 = organisation.ContactPeople[0];
+            ContactPersonTestBO contactPerson2 = organisation.ContactPeople[1];
+
+            Assert.AreEqual(contactPersonID1,contactPerson1.ContactPersonID.ToString());
+            Assert.AreEqual(contactPersonID2,contactPerson2.ContactPersonID.ToString());
+            Assert.AreEqual(contactPersonSurname1, contactPerson1.Surname);
+            Assert.AreEqual(contactPersonSurname2, contactPerson2.Surname);
+
+        }
+
+        private static void LoadClassDefs_Composition_MultipleRelationship()
+        {
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+
+            //Change relationship type to composite
+            IRelationshipDef relationshipDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPeople"];
+            relationshipDef.RelationshipType = RelationshipType.Composition;
+        }
+
+        private static void LoadClassDefs_Composition_SingleRelationship()
+        {
+            OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
+
+            //Change relationship type to composite
+            IRelationshipDef relationshipDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPerson"];
+            relationshipDef.RelationshipType = RelationshipType.Composition;
+        }
 
         private static XmlDocument GetXmlDocument(Stream memoryStream)
         {

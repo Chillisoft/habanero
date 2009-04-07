@@ -437,13 +437,12 @@ namespace Habanero.BO
             {
                 throw new NullReferenceException
                     (String.Format
-                         ("An error occurred while loading the class definitions (ClassDef.xml) for "
+                         ("An error occurred while loading the class definitions (usually ClassDef.xml) for "
                           + "'{0}'. Check that the class exists in that "
                           + "namespace and assembly and that there are corresponding "
                           + "class definitions for this class.\n"
-                          + "Please check that the ClassDef.xml file is either an imbedded resource "
-                          + "or is copied to the output directory via the appropriate postbuild command "
-                          + "(for more help see FAQ)", GetType()));
+                          + "Please check that the ClassDef.xml file is either an embedded resource "
+                          + "or is copied to the output directory via the appropriate postbuild command ", GetType()));
             }
         }
 
@@ -1187,11 +1186,9 @@ namespace Habanero.BO
         /// <param name="reader"></param>
         public void ReadXml(XmlReader reader)
         {
-            //reader.GetAttribute("BusinessObject");
             while (reader.MoveToNextAttribute())
             {
-                //if (reader.Name != "BusinessObject")
-                    this.SetPropertyValue(reader.Name, reader.Value);
+                this.SetPropertyValue(reader.Name, reader.Value);
             }
 
             reader.MoveToContent();
@@ -1205,16 +1202,32 @@ namespace Habanero.BO
                     Type relatedObjectType = relationship.RelationshipDef.RelatedObjectClassType;
                     reader.MoveToContent();
                     reader.Read();
-                    IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
-                     relatedObject.ReadXml(reader);
-                    if(relationship is ISingleRelationship)
+
+                    if (relationship is ISingleRelationship)
                     {
+                        IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
+                        relatedObject.ReadXml(reader);
                         ((ISingleRelationship)relationship).SetRelatedObject(relatedObject);
+                    }
+                    else if (relationship is IMultipleRelationship)
+                    {
+                        ReadRelatedObject(reader, relationship, relatedObjectType);
                     }
                 }
             }
+        }
 
-            //reader.Read();
+        private static void ReadRelatedObject(XmlReader reader, IRelationship relationship, Type relatedObjectType)
+        {
+            IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
+            relatedObject.ReadXml(reader);
+            ((IMultipleRelationship)relationship).BusinessObjectCollection.Add(relatedObject);
+
+            string elementName = reader.Name;
+            if (elementName == relatedObjectType.Name)
+            {
+                ReadRelatedObject(reader, relationship, relatedObjectType);
+            }
         }
 
         /// <summary>
@@ -1234,12 +1247,37 @@ namespace Habanero.BO
 
                 if (relationship.RelationshipDef.RelationshipType == RelationshipType.Composition)
                 {
-                    writer.WriteStartElement(relationship.RelationshipName);
-                    ISingleRelationship singleRelationship = (ISingleRelationship)relationship;
-                    writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
-                    singleRelationship.GetRelatedObject().WriteXml(writer);
-                    writer.WriteEndElement();
-                    writer.WriteEndElement();
+                    if (relationship is ISingleRelationship)
+                    {
+                        ISingleRelationship singleRelationship = (ISingleRelationship)relationship;
+                        IBusinessObject relatedObject = singleRelationship.GetRelatedObject();
+                        if (relatedObject != null)
+                        {
+                            writer.WriteStartElement(relationship.RelationshipName);
+                            writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
+                            relatedObject.WriteXml(writer);
+                            writer.WriteEndElement();
+                            writer.WriteEndElement();
+                        }
+                    }
+                    else if (relationship is IMultipleRelationship)
+                    {
+                        IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
+                        IBusinessObjectCollection relatedObjects = multipleRelationship.BusinessObjectCollection;
+                        if (relatedObjects.Count != 0)
+                        {
+                            writer.WriteStartElement(relationship.RelationshipName);
+                            foreach (IBusinessObject relatedObject in relatedObjects)
+                            {
+
+                                writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
+                                relatedObject.WriteXml(writer);
+                                writer.WriteEndElement();
+
+                            }
+                            writer.WriteEndElement();
+                        }
+                    }
 
                 }
             }
