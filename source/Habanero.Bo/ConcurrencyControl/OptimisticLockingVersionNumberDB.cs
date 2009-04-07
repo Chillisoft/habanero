@@ -192,7 +192,7 @@ namespace Habanero.BO.ConcurrencyControl
                 if (!(drHasData) && !_busObj.Status.IsDeleted)
                 {
                     //The object you are trying to update has been deleted by another user.
-                    throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, _busObj.ID.ToString(),
+                    throw new BusObjDeleteConcurrencyControlException(_busObj.ClassDef.ClassName, _busObj.ID.ToString(),
                                                                       _busObj);
                 }
                 int versionNumberBusinessObject = (int) _versionNumber.Value;
@@ -222,13 +222,13 @@ namespace Habanero.BO.ConcurrencyControl
         {
             if (verificationStage == VerificationStage.BeforeBeginEdit)
             {
-                throw new BusObjBeginEditConcurrencyControlException(_busObj.ClassName,
+                throw new BusObjBeginEditConcurrencyControlException(_busObj.ClassDef.ClassName,
                                                                      userNameLastUpdated,
                                                                      machineLastUpdated,
                                                                      DateTime.Parse(dateLastUpdatedInDB),
                                                                      _busObj.ID.ToString(), _busObj);
             }
-            throw new BusObjOptimisticConcurrencyControlException(_busObj.ClassName,
+            throw new BusObjOptimisticConcurrencyControlException(_busObj.ClassDef.ClassName,
                                                                   userNameLastUpdated,
                                                                   machineLastUpdated,
                                                                   DateTime.Parse(dateLastUpdatedInDB),

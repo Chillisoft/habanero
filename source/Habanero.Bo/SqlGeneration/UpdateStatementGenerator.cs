@@ -69,7 +69,7 @@ namespace Habanero.BO.SqlGeneration
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
             propsToInclude = GetPropsToInclude(_bo.ClassDef);
-            tableName = _bo.TableName;
+            tableName = StatementGeneratorUtils.GetTableName(_bo);
             GenerateSingleUpdateStatement(tableName, propsToInclude, false, _bo.ClassDef);
             return _statementCollection;
         }

@@ -57,7 +57,7 @@ namespace Habanero.BO.SqlGeneration
 
             SqlStatement deleteSql = new SqlStatement(_connection);
             deleteSql.Statement = new StringBuilder(
-                @"DELETE FROM " + SqlFormattingHelper.FormatTableName(_bo.TableName, _connection) +
+                @"DELETE FROM " + SqlFormattingHelper.FormatTableName(StatementGeneratorUtils.GetTableName(_bo), _connection) +
                                                     " WHERE " + _bo.ID.PersistedDatabaseWhereClause(deleteSql));
             statementCollection.Add(deleteSql);
             ClassDef currentClassDef = _bo.ClassDef;

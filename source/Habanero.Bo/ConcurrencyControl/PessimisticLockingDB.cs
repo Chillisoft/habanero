@@ -85,7 +85,7 @@ namespace Habanero.BO.ConcurrencyControl
                 throw new BusObjPessimisticConcurrencyControlException(
                         string.Format(
                         "The lock on the business object {0} has a duration of {1} minutes and has been exceeded for the object {2}"
-                        ,_busObj.ClassName,this._lockDurationInMinutes,_busObj.ID));
+                        , _busObj.ClassDef.ClassName, this._lockDurationInMinutes, _busObj.ID));
             }
         }
 
@@ -130,7 +130,7 @@ namespace Habanero.BO.ConcurrencyControl
                 if (!(drHasData))
                 {
                     //The object you are trying to edit has been deleted by another user.
-                    throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, 
+                    throw new BusObjDeleteConcurrencyControlException(_busObj.ClassDef.ClassName, 
                                                                       _busObj.ID.ToString(), _busObj);
                 }
                 bool locked = !(dr[_boPropLocked.DatabaseFieldName] == DBNull.Value) && Convert.ToBoolean(dr[_boPropLocked.DatabaseFieldName]);
@@ -139,7 +139,7 @@ namespace Habanero.BO.ConcurrencyControl
                 {
                     string userLocked = (string)dr[this._boPropUserLocked.DatabaseFieldName];
                     string machineLocked = (string)dr[this._boPropMachineLocked.DatabaseFieldName];
-                    throw new BusObjPessimisticConcurrencyControlException(_busObj.ClassName, userLocked,
+                    throw new BusObjPessimisticConcurrencyControlException(_busObj.ClassDef.ClassName, userLocked,
                                                                            machineLocked, dateLocked,
                                                                            this._busObj.ID.ToString(),
                                                                            this._busObj);

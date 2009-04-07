@@ -67,7 +67,7 @@ namespace Habanero.BO.SqlGeneration
             string tableName;
 
             propsToInclude = GetPropsToInclude(_currentClassDef);
-            tableName = _bo.TableName;
+            tableName = StatementGeneratorUtils.GetTableName(_bo);
             GenerateSingleInsertStatement(propsToInclude, tableName);
 
             if (_bo.ClassDef.IsUsingClassTableInheritance())

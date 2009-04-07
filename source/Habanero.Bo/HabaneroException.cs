@@ -1261,7 +1261,7 @@ namespace Habanero.BO
                         "You cannot delete the '{0}', as the IsDeleted is set to false for the object. " +
                         "ObjectID: {1}, also identified as {2} \n " + 
                         "Message: {3}",
-                        bo.ClassName, bo.ID, bo,message))
+                        bo.ClassDef.ClassName, bo.ID, bo,message))
         {
         }
     }
@@ -1285,7 +1285,7 @@ namespace Habanero.BO
                         "You cannot Edit the '{0}', as the IsEditable is set to false for the object. " +
                         "ObjectID: {1}, also identified as {2} \n " + 
                         "Message: {3}",
-                        bo.ClassName, bo.ID, bo,message))
+                        bo.ClassDef.ClassName, bo.ID, bo, message))
         {
         }
     }

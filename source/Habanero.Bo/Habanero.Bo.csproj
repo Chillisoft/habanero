@@ -347,6 +347,7 @@
     </Compile>
     <Compile Include="SqlGeneration\DeleteStatementGenerator.cs" />
     <Compile Include="SqlGeneration\InsertStatementGenerator.cs" />
+    <Compile Include="SqlGeneration\StatementGeneratorUtils.cs" />
     <Compile Include="SqlGeneration\UpdateStatementGenerator.cs" />
     <Compile Include="SupportsAutoIncrementingFieldBO.cs" />
     <Compile Include="TransactionalBusinessObject.cs" />

@@ -160,7 +160,7 @@ namespace Habanero.BO
                 }
                 catch (Exception ex)
                 {
-                    string message = "The Business Object " + this.ClassName + " could not be deserialised because the property " + prop.PropertyName + " raised an exception";
+                    string message = "The Business Object " + this.ClassDef.ClassName + " could not be deserialised because the property " + prop.PropertyName + " raised an exception";
                     throw new HabaneroDeveloperException(message, message, ex);
                 }
             }
@@ -343,7 +343,7 @@ namespace Habanero.BO
             }
         }
 
-        private ClassDef GetClassDefToUseForPrimaryKey()
+        internal ClassDef GetClassDefToUseForPrimaryKey()
         {
             ClassDef classDefToUseForPrimaryKey = _classDef;
             while (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance())
@@ -372,7 +372,7 @@ namespace Habanero.BO
         /// </summary>
         internal string DirtyXML
         {
-            get { return "<" + ClassName + " ID='" + ID + "'>" + _boPropCol.DirtyXml + "</" + ClassName + ">"; }
+            get { return "<" + this.ClassDef.ClassName + " ID='" + ID + "'>" + _boPropCol.DirtyXml + "</" + this.ClassDef.ClassName + ">"; }
         }
 
         /// <summary>
@@ -410,28 +410,6 @@ namespace Habanero.BO
         {
             get { return _classDef; }
             set { _classDef = (ClassDef)value; }
-        }
-
-        /// <summary>
-        /// Returns the class name as specified in the class definition
-        /// </summary>
-        protected internal string ClassName
-        {
-            get { return _classDef.ClassName; }
-        }
-
-        /// <summary>
-        /// Returns the table name
-        /// </summary>
-        protected internal string TableName
-        {
-            get
-            {
-                ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
-                return (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance())
-                           ? classDefToUseForPrimaryKey.SuperClassClassDef.TableName
-                           : classDefToUseForPrimaryKey.TableName;
-            }
         }
 
         /// <summary>
@@ -562,7 +540,7 @@ namespace Habanero.BO
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanCreate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to create a {1}", Thread.CurrentPrincipal.Identity.Name,
-                 this.ClassName);
+                 this.ClassDef.ClassName);
             return false;
         }
 
@@ -579,7 +557,7 @@ namespace Habanero.BO
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanRead)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
-                 this.ClassName);
+                 this.ClassDef.ClassName);
             return false;
         }
 
@@ -601,7 +579,7 @@ namespace Habanero.BO
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanUpdate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to update {1} Identified By {2}",
-                 Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.AsString_CurrentValue());
+                 Thread.CurrentPrincipal.Identity.Name, this.ClassDef.ClassName, this.ID.AsString_CurrentValue());
             return false;
         }
 
@@ -622,7 +600,7 @@ namespace Habanero.BO
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanDelete)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
-                 Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.AsString_CurrentValue());
+                 Thread.CurrentPrincipal.Identity.Name, this.ClassDef.ClassName, this.ID.AsString_CurrentValue());
             return false;
         }
 
@@ -816,7 +794,7 @@ namespace Habanero.BO
         {
             if (Status.IsEditing)
             {
-                throw new EditingException(ClassName, ID.ToString(), this);
+                throw new EditingException(this.ClassDef.ClassName, ID.ToString(), this);
             }
         }
 
