@@ -47,7 +47,11 @@ namespace Habanero.UI.Base
     }
 
     /// <summary>
-    /// Displays data in a customizable grid
+    /// Displays data in a customizable grid. This is the commmon interface that is implemented by Windows
+    /// and Visual web Gui or any other Controls framework. The use of this interface allows the architecture
+    /// to swap out any control library with any other control library without affecting the program.
+    /// This allows an application written using Habanero to easily be transformed from a windows app to a
+    /// Visual Web Gui App.
     /// </summary>
     public interface IDataGridView : IControlHabanero
     {

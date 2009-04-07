@@ -540,6 +540,13 @@ namespace Habanero.UI.VWG
                 return this._dataGridViewRow.SetValues(values);
             }
 
+            /// <summary>Gets and sets a tag value for this <see cref="IDataGridViewRow"/></summary>
+            public object Tag
+            {
+                get { return _dataGridViewRow.Tag; }
+                set { _dataGridViewRow.Tag = value; }
+            }
+
             /// <summary>Gets the collection of cells that populate the row.</summary>
             /// <returns>A <see cref="IDataGridViewCellCollection"></see> that contains all of the cells in the row.</returns>
             /// <filterpriority>1</filterpriority>

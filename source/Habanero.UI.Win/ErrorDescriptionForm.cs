@@ -53,6 +53,7 @@ namespace Habanero.UI.Win
             this.Text = "Error Description";
             this.Width = 500;
             this.Height = 400;
+            this.Closing += (sender, e) => ErrorDescriptionFormClosing(sender, e);
         }
 
         ///<summary>

@@ -99,7 +99,6 @@ namespace Habanero.UI.Win
             get
             {
                 return base.CurrentRow == null ? null : new DataGridViewRowWin(base.CurrentRow);
-                
             }
         }
 
@@ -148,7 +147,6 @@ namespace Habanero.UI.Win
             get { return new DataGridViewCellWin(base[columnIndex, rowIndex]); }
             set { base[columnIndex, rowIndex] = value == null ? null : ((DataGridViewCellWin) value).DataGridViewCell; }
         }
-
 
         /// <summary>Sorts the contents of the <see cref="IDataGridView"></see> control in ascending or
         /// descending order based on the contents of the specified column.</summary>
@@ -577,6 +575,13 @@ namespace Habanero.UI.Win
             public bool SetValues(params object[] values)
             {
                 return this._dataGridViewRow.SetValues(values);
+            }
+
+            /// <summary>Gets and sets a tag value for this <see cref="IDataGridViewRow"/></summary>
+            public object Tag
+            {
+                get { return _dataGridViewRow.Tag; }
+                set { _dataGridViewRow.Tag = value; }
             }
 
             /// <summary>Gets the collection of cells that populate the row.</summary>

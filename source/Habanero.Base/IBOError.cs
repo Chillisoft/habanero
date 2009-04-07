@@ -19,18 +19,36 @@
 
 namespace Habanero.Base
 {
-
+    /// <summary>
+    /// The Error Level for this Error e.g. Error or Warning
+    /// </summary>
     public enum ErrorLevel
     {
+        /// <summary>
+        /// Is this an Error e.g. the Object cannot be saved unless this is fixed.
+        /// </summary>
         Error,
+        /// <summary>
+        /// Is this a warning e.g. the object can be saved but is not considered to be in a valid state untill it is repaired.
+        /// </summary>
         Warning
     }
-
+    /// <summary>
+    /// An interface representing a particular Error on a <see cref="IBusinessObject"/>.
+    /// </summary>
     public interface IBOError
     {
-
+        /// <summary>
+        /// The Business Object that the error occured on.
+        /// </summary>
         IBusinessObject BusinessObject { get; }
+        /// <summary>
+        /// The <see cref="ErrorLevel"/> of the business object.
+        /// </summary>
         ErrorLevel Level { get; }
+        /// <summary>
+        /// The Message to be shown to the End user for a particular error message.
+        /// </summary>
         string Message { get; }
     }
 }

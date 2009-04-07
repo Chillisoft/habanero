@@ -129,5 +129,9 @@ namespace Habanero.UI.Base
         /// <see cref="IDataGridView"></see> is operating in virtual mode. -or-This row is a shared row.</exception>
         /// <filterpriority>1</filterpriority>
         bool SetValues(params object[] values);
+
+        /// <summary>Gets and sets a tag value for this <see cref="IDataGridViewRow"/></summary>
+        [Browsable(false)]
+        object Tag { get; set; }
     }
 }

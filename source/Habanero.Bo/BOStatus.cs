@@ -39,7 +39,7 @@ namespace Habanero.BO
         public BOStatus(BusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
-            _bo = (BusinessObject) bo;
+            _bo = bo;
         }
 
         /// <summary>

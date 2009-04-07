@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -37,7 +35,7 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDefColInheritor col = new ClassDefColInheritor();
             col.CallFinalize();
         }
-
+#pragma warning disable 168
         [Test]
         public void TestIndexer_NotFound()
         {
@@ -49,6 +47,7 @@ namespace Habanero.Test.BO.ClassDefinition
             try
             {
                 ClassDef classDef = col["ass", "class"];
+
                 Assert.Fail("Expected error when trying to get a classdef that doesn't exist using the indexer");
             }
             catch (HabaneroDeveloperException ex)
@@ -57,7 +56,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 StringAssert.Contains("No ClassDef has been loaded for ", ex.Message);
             }
         }
-
+#pragma warning restore 168
         [Test]
         public void TestGetsAndSets()
         {
@@ -66,7 +65,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(0, col.Values.Count);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
         public void TestAddDuplicateException()
         {
             ClassDef classDef = new ClassDef("ass", "class", null, null, null, null, null);
@@ -78,9 +77,9 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestRemove()
         {
-            ClassDef classDef = new ClassDef(typeof(String), null, null, null, null, null,null);
+            ClassDef classDef = new ClassDef(typeof (String), null, null, null, null, null, null);
             ClassDefCol col = new ClassDefCol();
-            
+
             col.Add(classDef);
             Assert.AreEqual(1, col.Count);
             col.Remove(classDef);
@@ -88,11 +87,11 @@ namespace Habanero.Test.BO.ClassDefinition
 
             col.Add(classDef);
             Assert.AreEqual(1, col.Count);
-            col.Remove(typeof(String));
+            col.Remove(typeof (String));
             Assert.AreEqual(0, col.Count);
         }
 
-        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+        [Test, ExpectedException(typeof (HabaneroArgumentException))]
         public void TestLoadColClassDefException()
         {
             ClassDefCol.LoadColClassDef(null);
@@ -133,7 +132,6 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(classDef1, foundClass1);
             Assert.AreSame(classDef2, foundClass2);
             Assert.AreSame(classDef3, foundClass3);
-
         }
 
         [Test]
@@ -168,8 +166,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestIndexer_Get()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = new ClassDef(typeof(MockBo), new PrimaryKeyDef(),
-                new PropDefCol(), new KeyDefCol(), new RelationshipDefCol());
+            ClassDef classDef = new ClassDef
+                (typeof (MockBo), new PrimaryKeyDef(), new PropDefCol(), new KeyDefCol(), new RelationshipDefCol());
             ClassDefCol col = new ClassDefCol();
             col.Add(classDef);
             //---------------Assert Preconditions --------------
@@ -182,8 +180,6 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private class MockBo : BusinessObject
         {
-            
         }
-
     }
 }

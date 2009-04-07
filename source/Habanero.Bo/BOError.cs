@@ -22,23 +22,35 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
-  
+    /// <summary>
+    /// An Error that has occured on a <see cref="IBusinessObject"/>.
+    /// </summary>
     public class BOError : IBOError
     {
-       
-
-
+       /// <summary>
+       /// the constructor for a <see cref="BOError"/> 
+       /// </summary>
+       /// <param name="message">The error message that is being shown to the user</param>
+       /// <param name="level">The warning/Error Level (<see cref="ErrorLevel"/> of the Error</param>
         public BOError(string message, ErrorLevel level)
         {
             Message = message;
             Level = level;
         }
 
-
+        /// <summary>
+        /// The Business Object that the error occured on.
+        /// </summary>
         public IBusinessObject BusinessObject { get; internal set; }
 
+        /// <summary>
+        /// The <see cref="ErrorLevel"/> of the business object.
+        /// </summary>
         public ErrorLevel Level { get; private set; }
 
+        /// <summary>
+        /// The Message to be shown to the End user for a particular error message.
+        /// </summary>
         public string Message { get; private set; }
     }
 }
