@@ -122,7 +122,7 @@ namespace Habanero.BO.Loaders
 			_propDef = _defClassFactory.CreatePropDef(_propertyName, _assemblyName, _typeName, _readWriteRule,
                 _databaseFieldName, _defaultValueString, _compulsory, _autoIncrementing, _length, _displayName, _description, _keepValuePrivate);
 
-            if (_reader.Name == "rule")
+            while (_reader.Name == "rule")
             {
                 XmlRuleLoader loader = new XmlRuleLoader(DtdLoader, _defClassFactory);
                 loader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef);

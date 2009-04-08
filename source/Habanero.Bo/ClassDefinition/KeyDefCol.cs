@@ -95,7 +95,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="keyName">The name of the key definition</param>
         /// <returns>Returns the definition matching the name
         /// provided or null if none are found</returns>
-        protected internal KeyDef this[string keyName]
+        public KeyDef this[string keyName]
         {
             get
             {

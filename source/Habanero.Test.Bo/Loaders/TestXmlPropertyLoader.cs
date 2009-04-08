@@ -255,6 +255,19 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
+        public void TestPropertyWithTwoPropRules()
+        {
+            PropDef def =
+                _loader.LoadProperty(
+                    @"<property  name=""TestProp"">
+                        <rule name=""StringRule""><add key=""maxLength"" value=""8""/></rule>
+                        <rule name=""StringRule2""><add key=""minLength"" value=""3""/></rule>
+                      </property>");
+            Assert.AreEqual(2, def.PropRules.Count);
+        }
+
+
+        [Test]
         public void TestPropertyWithDatabaseLookupList()
         {
             ClassDef classDef = MyBO.LoadDefaultClassDef();

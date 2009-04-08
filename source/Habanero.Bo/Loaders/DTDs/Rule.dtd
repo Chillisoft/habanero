@@ -6,7 +6,7 @@
 <!ELEMENT rule (add*)>
 <!ATTLIST rule
 	name CDATA #REQUIRED
-	class NMTOKEN #IMPLIED
-  assembly NMTOKEN #IMPLIED
+	class CDATA #IMPLIED
+  assembly CDATA #IMPLIED
   message CDATA #IMPLIED
 >
