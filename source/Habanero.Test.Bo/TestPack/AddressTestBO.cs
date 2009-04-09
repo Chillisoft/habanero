@@ -226,18 +226,18 @@ namespace Habanero.Test.BO
             return address;
         }
 
-        private static AddressTestBO CreateUnsavedAddress(Guid contactPersonID)
+        public static AddressTestBO CreateUnsavedAddress(Guid contactPersonID)
         {
             return CreateUnsavedAddress(contactPersonID, TestUtil.GetRandomString());
         }
 
-        private static AddressTestBO CreateUnsavedAddress(ContactPerson contactPerson, string firstLine)
+        public static AddressTestBO CreateUnsavedAddress(ContactPerson contactPerson, string firstLine)
         {
             return CreateUnsavedAddress(contactPerson.ContactPersonID, firstLine);
 
         }
 
-        private static AddressTestBO CreateUnsavedAddress(Guid contactPersonID, string firstLine)
+        public static AddressTestBO CreateUnsavedAddress(Guid contactPersonID, string firstLine)
         {
             AddressTestBO address = new AddressTestBO();
             address.ContactPersonID = contactPersonID;
@@ -245,7 +245,7 @@ namespace Habanero.Test.BO
             return address;
         }
 
-        private static AddressTestBO CreateUnsavedAddress(ContactPerson contactPerson)
+        public static AddressTestBO CreateUnsavedAddress(ContactPerson contactPerson)
         {
             return CreateUnsavedAddress(contactPerson.ContactPersonID);
         }

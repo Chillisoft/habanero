@@ -52,7 +52,7 @@ namespace Habanero.BO
     public class BusinessObjectManager
     {
         /// <summary>
-        /// Teh Single Instance of the <see cref="BusinessObjectManager"/> used by the Singleton.
+        /// The Single Instance of the <see cref="BusinessObjectManager"/> used by the Singleton.
         /// </summary>
         protected static BusinessObjectManager _businessObjectManager = new BusinessObjectManager();
 
@@ -85,7 +85,8 @@ namespace Habanero.BO
         #region IBusObjectManager Members
 
         /// <summary>
-        /// How many busiess objects are currently loaded. This is used primarily for debugging and testing.
+        /// Gets the number of business objects currently loaded. This is used
+        /// primarily for debugging and testing.
         /// </summary>
         internal int Count
         {

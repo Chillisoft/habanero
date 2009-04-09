@@ -17,8 +17,8 @@ namespace Habanero.Test.BO
     /// TODO:
     /// - error message for non-recognised attribute, non-recognised classname
     /// - what happens if xml is missing key attributes (eg value for ID)
-    /// - ensure full recursion of object hierarchy- serialise the related objects of a related object
-    /// - may require new testBO class with multiple levels of relationships
+    /// - acceptance test with big hierarchy
+    /// - aggregation, association
     /// </summary>
     [TestFixture]
     public class TestBusinessObjectSerialisationXML
@@ -430,6 +430,59 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, contactPersonsNode.ChildNodes.Count);
             Assert.AreNotEqual(contactPersonsNode.ChildNodes[0],contactPersonsNode.ChildNodes[1]);
         }
+
+
+        [Test]
+        public void Test_SerialiseXml_Composition_MultipleLevels()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_NoReverseRelationship();
+            ContactPersonTestBO.LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured();
+
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            organisation.ContactPeople.Add(contactPerson);
+            AddressTestBO address = new AddressTestBO();
+            address.ContactPersonTestBO = contactPerson;
+            
+            IRelationshipDef contactPeopleRelDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPeople"];
+            contactPeopleRelDef.RelationshipType = RelationshipType.Composition;
+
+            IRelationshipDef addressesRelDef = ClassDef.Get<ContactPersonTestBO>().RelationshipDefCol["AddressTestBOs"];
+            addressesRelDef.RelationshipType = RelationshipType.Composition;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(RelationshipType.Composition,
+                            organisation.Relationships["ContactPeople"].RelationshipDef.RelationshipType);
+            Assert.AreEqual(RelationshipType.Composition,
+                            contactPerson.Relationships["AddressTestBOs"].RelationshipDef.RelationshipType);
+
+            MemoryStream memoryStream = new MemoryStream();
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            xs.Serialize(memoryStream, organisation);
+            //---------------Test Result -----------------------
+            XmlDocument doc = GetXmlDocument(memoryStream);
+
+            XmlNode orgNode = doc.ChildNodes[1];
+            Assert.AreEqual("OrganisationTestBO", orgNode.Name);
+            Assert.AreEqual(1, orgNode.ChildNodes.Count);
+
+            XmlNode contactPeopleRelNode = orgNode.ChildNodes[0];
+            Assert.AreEqual("ContactPeople", contactPeopleRelNode.Name);
+            Assert.AreEqual(1, contactPeopleRelNode.ChildNodes.Count);
+
+            XmlNode contactPersonNode = contactPeopleRelNode.ChildNodes[0];
+            Assert.AreEqual("ContactPersonTestBO", contactPersonNode.Name);
+            Assert.AreEqual(1, contactPersonNode.ChildNodes.Count);
+
+            XmlNode addressesNode = contactPersonNode.ChildNodes[0];
+            Assert.AreEqual("AddressTestBOs", addressesNode.Name);
+            Assert.AreEqual(1, addressesNode.ChildNodes.Count);
+
+            XmlNode addressNode = addressesNode.ChildNodes[0];
+            Assert.AreEqual("AddressTestBO", addressNode.Name);
+            Assert.AreEqual(0, addressNode.ChildNodes.Count);
+        }
         
         [Test]
         public void Test_DeserialiseXml_Composition_SingleRelationship_EmptyCollection()
@@ -573,36 +626,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual(contactPersonID2,contactPerson2.ContactPersonID.ToString());
             Assert.AreEqual(contactPersonSurname1, contactPerson1.Surname);
             Assert.AreEqual(contactPersonSurname2, contactPerson2.Surname);
-
         }
 
-        private static void LoadClassDefs_Composition_MultipleRelationship()
-        {
-            OrganisationTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-
-            //Change relationship type to composite
-            IRelationshipDef relationshipDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPeople"];
-            relationshipDef.RelationshipType = RelationshipType.Composition;
-        }
-
-        private static void LoadClassDefs_Composition_SingleRelationship()
-        {
-            OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
-
-            //Change relationship type to composite
-            IRelationshipDef relationshipDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPerson"];
-            relationshipDef.RelationshipType = RelationshipType.Composition;
-        }
-
-        private static XmlDocument GetXmlDocument(Stream memoryStream)
-        {
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            XmlDocument doc = new XmlDocument();
-            doc.Load(memoryStream);
-            return doc;
-        }
+        
 
 
         [Test, Ignore]
@@ -708,13 +734,7 @@ namespace Habanero.Test.BO
             AssertFileHasBeenCreated(fileName);
         }
 
-        private static void AssertPersonsAreEqual(IBusinessObject originalPerson, IBusinessObject deserialisedPerson)
-        {
-            foreach (IBOProp prop in originalPerson.Props)
-            {
-                Assert.AreEqual(prop.Value, deserialisedPerson.GetPropertyValue(prop.PropertyName));
-            }
-        }
+        
 
         //[Test]
         //public void Test_CreateXmlFile_WAggregation()
@@ -740,6 +760,61 @@ namespace Habanero.Test.BO
         //    //---------------Test Result -----------------------
         //    AssertFileHasBeenCreated(fileName);
         //}
+
+        [Test, Ignore("The code is there (commented out at the bottom) - it uses the bomanager to pull it off, but needs a finally to make sure it gets put back if there is an exception")]
+        public void Test_CloneBusinessObject_DifferentID()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_NoRelationships();
+
+            OrganisationTestBO organisation = new OrganisationTestBO();
+            organisation.Name = TestUtil.GetRandomString();
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            //OrganisationTestBO organisationClone = (OrganisationTestBO) organisation.Clone();
+            ////---------------Test Result -----------------------
+            //Assert.AreNotSame(organisation, organisationClone);
+            //Assert.AreEqual(organisation.Name, organisationClone.Name);
+            //Assert.AreNotEqual(organisation.OrganisationID, organisationClone.OrganisationID);
+        }
+
+        private static void LoadClassDefs_Composition_MultipleRelationship()
+        {
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+
+            //Change relationship type to composite
+            IRelationshipDef relationshipDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPeople"];
+            relationshipDef.RelationshipType = RelationshipType.Composition;
+        }
+
+        private static void LoadClassDefs_Composition_SingleRelationship()
+        {
+            OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
+
+            //Change relationship type to composite
+            IRelationshipDef relationshipDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPerson"];
+            relationshipDef.RelationshipType = RelationshipType.Composition;
+        }
+
+        private static XmlDocument GetXmlDocument(Stream memoryStream)
+        {
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(memoryStream);
+            return doc;
+        }
+
+        private static void AssertPersonsAreEqual(IBusinessObject originalPerson, IBusinessObject deserialisedPerson)
+        {
+            foreach (IBOProp prop in originalPerson.Props)
+            {
+                Assert.AreEqual(prop.Value, deserialisedPerson.GetPropertyValue(prop.PropertyName));
+            }
+        }
 
         private static void AssertFileHasBeenCreated(string fullFileName)
         {
