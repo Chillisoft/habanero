@@ -30,6 +30,17 @@ namespace Habanero.UI.Win
     ///</summary>
     public class MenuBuilderWin : IMenuBuilder
     {
+        private readonly IControlFactory _controlFactory;
+        /// <summary>
+        /// Constructs a <see cref="MenuBuilderWin"/> with the appropriate controlFactory
+        /// </summary>
+        /// <param name="controlFactory"></param>
+        public MenuBuilderWin(IControlFactory controlFactory)
+        {
+            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
+            _controlFactory = controlFactory;
+        }
+
         ///<summary>
         /// Builds the Main Menu based on a <paramref name="habaneroMenu"/>
         ///</summary>
@@ -37,7 +48,7 @@ namespace Habanero.UI.Win
         ///<returns></returns>
         public IMainMenuHabanero BuildMainMenu(HabaneroMenu habaneroMenu)
         {
-            MainMenuWin mainMenu = new MainMenuWin();
+            IMainMenuHabanero mainMenu = ControlFactory.CreateMainMenu();
             mainMenu.Name = habaneroMenu.Name;
             foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
             {
@@ -46,21 +57,44 @@ namespace Habanero.UI.Win
             return mainMenu;
         }
 
-        private static IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
+        /// <summary>
+        /// Returns the control factory being used to create the Menu and the MenuItems
+        /// </summary>
+        public IControlFactory ControlFactory
         {
-            MenuItemWin menuItem = new MenuItemWin(habaneroMenu.Name);
+            get { return _controlFactory; }
+        }
+
+        private IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
+        {
+//            MenuItemWin menuItem = new MenuItemWin(habaneroMenu.Name);
+            IMenuItem menuItem = this.ControlFactory.CreateMenuItem(habaneroMenu.Name);
             foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
             {
                 menuItem.MenuItems.Add(BuildMenu(submenu));
             }
             foreach (HabaneroMenu.Item habaneroMenuItem in habaneroMenu.MenuItems)
             {
-                MenuItemWin childMenuItem = new MenuItemWin(habaneroMenuItem);
+                IMenuItem childMenuItem = this.ControlFactory.CreateMenuItem(habaneroMenuItem);
                 childMenuItem.Click += delegate { childMenuItem.DoClick(); };
                 menuItem.MenuItems.Add(childMenuItem);
             }
             return menuItem;
         }
+
+//                    MenuItemVWG menuItem = new MenuItemVWG(habaneroMenu.Name);
+//            foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
+//            {
+//                menuItem.MenuItems.Add(BuildMenu(submenu));
+//            }
+//            foreach (HabaneroMenu.Item habaneroMenuItem in habaneroMenu.MenuItems)
+//            {
+//                MenuItemVWG childMenuItem = new MenuItemVWG(habaneroMenuItem);
+//                childMenuItem.Click += delegate { childMenuItem.DoClick(); };
+//                   
+//                menuItem.MenuItems.Add(childMenuItem);
+//            }
+//            return menuItem;
     }
     
     ///<summary>
@@ -167,7 +201,7 @@ namespace Habanero.UI.Win
                 else
                 {
                     if (ReshowForm()) return;
-                    if (_habaneroMenuItem.Form == null) return;
+                    if (_habaneroMenuItem.Form == null || _habaneroMenuItem.Form.Controls.Count <= 0) return;
                     _createdForm = _habaneroMenuItem.ControlFactory.CreateForm();
                     _createdForm.Width = 800;
                     _createdForm.Height = 600;

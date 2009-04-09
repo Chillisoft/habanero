@@ -29,6 +29,18 @@ namespace Habanero.UI.VWG
     ///</summary>
     public class MenuBuilderVWG : IMenuBuilder
     {
+        private readonly IControlFactory _controlFactory;
+
+        /// <summary>
+        /// Creates a <see cref="MenuBuilderVWG"/> with the appropriate Control Factory.
+        /// </summary>
+        /// <param name="controlFactory"></param>
+        public MenuBuilderVWG(IControlFactory controlFactory)
+        {
+            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
+            _controlFactory = controlFactory;
+        }
+
         /// <summary>
         /// Constructor for <see cref="BuildMainMenu"/>
         /// </summary>
@@ -36,7 +48,7 @@ namespace Habanero.UI.VWG
         /// <returns></returns>
         public IMainMenuHabanero BuildMainMenu(HabaneroMenu habaneroMenu)
         {
-            MainMenuVWG mainMenu = new MainMenuVWG(habaneroMenu);
+            IMainMenuHabanero mainMenu =  new MainMenuVWG(habaneroMenu);
             mainMenu.Name = habaneroMenu.Name;
             foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
             {
@@ -45,16 +57,24 @@ namespace Habanero.UI.VWG
             return mainMenu;
         }
 
-        private IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
+        /// <summary>
+        /// Returns the control factory being used to create the Menu and the MenuItems
+        /// </summary>
+        public IControlFactory ControlFactory
         {
-            MenuItemVWG menuItem = new MenuItemVWG(habaneroMenu.Name);
+            get { return _controlFactory; }
+        }
+
+        protected virtual IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
+        {
+            IMenuItem menuItem = new MenuItemVWG(habaneroMenu.Name);
             foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
             {
                 menuItem.MenuItems.Add(BuildMenu(submenu));
             }
             foreach (HabaneroMenu.Item habaneroMenuItem in habaneroMenu.MenuItems)
             {
-                MenuItemVWG childMenuItem = new MenuItemVWG(habaneroMenuItem);
+                IMenuItem childMenuItem = new MenuItemVWG(habaneroMenuItem);
                 childMenuItem.Click += delegate { childMenuItem.DoClick(); };
                    
                 menuItem.MenuItems.Add(childMenuItem);
@@ -172,7 +192,7 @@ namespace Habanero.UI.VWG
                 else
                 {
                     IControlHabanero control;
-                    if (_habaneroMenuItem.Form == null) return;
+                    if (_habaneroMenuItem.Form == null || _habaneroMenuItem.Form.Controls.Count <= 0) return;
                     if (_habaneroMenuItem.FormControlCreator != null)
                     {
                         if (_formControl == null) _formControl = _habaneroMenuItem.FormControlCreator();

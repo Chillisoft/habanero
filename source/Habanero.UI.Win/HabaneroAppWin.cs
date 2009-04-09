@@ -134,7 +134,7 @@ namespace Habanero.UI.Win
     /// <li>Call the Startup() method to launch the application</li>
     /// </ol>
     ///</summary>
-    public class HabaneroAppMemory : HabaneroAppWin
+    public class HabaneroAppMemoryWin : HabaneroAppWin
     {
         ///<summary>
         /// Creates a windows application that runs using an in memory database. I.e. no database connection is set up
@@ -142,7 +142,7 @@ namespace Habanero.UI.Win
         ///</summary>
         ///<param name="appName"></param>
         ///<param name="appVersion"></param>
-        public HabaneroAppMemory(string appName, string appVersion) : base(appName, appVersion)
+        public HabaneroAppMemoryWin(string appName, string appVersion) : base(appName, appVersion)
         {
         }
         /// <summary>

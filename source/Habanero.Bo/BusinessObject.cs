@@ -27,7 +27,6 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Schema;
-using System.Xml.Serialization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -35,7 +34,6 @@ using log4net;
 
 namespace Habanero.BO
 {
-
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
@@ -51,26 +49,32 @@ namespace Habanero.BO
         /// Event fired when this <see cref="IBusinessObject"/> is updated.
         /// </summary>
         public event EventHandler<BOEventArgs> Updated;
+
         /// <summary>
         /// Event that is fired when this <see cref="IBusinessObject"/> is Saved.
         /// </summary>
         public event EventHandler<BOEventArgs> Saved;
+
         /// <summary>
         /// Event that is fired when this <see cref="IBusinessObject"/> is deleted.
         /// </summary>
         public event EventHandler<BOEventArgs> Deleted;
+
         /// <summary>
         /// Event that is fired when this <see cref="IBusinessObject"/> is Restored.
         /// </summary>
         public event EventHandler<BOEventArgs> Restored;
+
         /// <summary>
         /// Event that is fired when this <see cref="IBusinessObject"/> is MarkedForDeletion.
         /// </summary>
         public event EventHandler<BOEventArgs> MarkedForDeletion;
+
         /// <summary>
         /// Event that is fired when this <see cref="IBusinessObject"/> is PropertyUpdated.
         /// </summary>
         public event EventHandler<BOPropUpdatedEventArgs> PropertyUpdated;
+
         /// <summary>
         /// Event that is fired when this <see cref="IBusinessObject"/> is IDUpdated.
         /// </summary>
@@ -79,6 +83,7 @@ namespace Habanero.BO
         #endregion
 
         #region Fields
+
         /// <summary>
         /// The Collection of Business Object Properties for this Business Object.
         /// </summary>
@@ -86,28 +91,35 @@ namespace Habanero.BO
 
         //set object as new by default.
         private BOStatus _boStatus;
+
         /// <summary>
         /// The Update Log being used for this Business Object.
         /// </summary>
         protected IBusinessObjectUpdateLog _businessObjectUpdateLog;
+
         /// <summary>
         /// The Class Definition <see cref="IClassDef"/> for this business object.
         /// </summary>
         protected ClassDef _classDef;
+
         /// <summary> The Concurrency Control mechanism used by this Business object </summary>
         protected IConcurrencyControl _concurrencyControl;
+
         /// <summary>
         /// the Collection of alternate keys used by this <see cref="IBusinessObject"/>
         /// </summary>
         protected BOKeyCol _keysCol;
+
         /// <summary>
         /// The Primary key for this <see cref="IBusinessObject"/>
         /// </summary>
         protected IPrimaryKey _primaryKey;
+
         /// <summary>
         /// The Relationships owned by this <see cref="IBusinessObject"/>
         /// </summary>
         protected IRelationshipCol _relationshipCol;
+
         private ITransactionLog _transactionLog;
         private IBusinessObjectAuthorisation _authorisationRules;
 
@@ -118,8 +130,7 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise a new business object
         /// </summary>
-        public BusinessObject()
-            : this(null)
+        public BusinessObject() : this(null)
         {
         }
 
@@ -161,21 +172,23 @@ namespace Habanero.BO
                 }
                 catch (Exception ex)
                 {
-                    string message = "The Business Object " + this.ClassDef.ClassName + " could not be deserialised because the property " + prop.PropertyName + " raised an exception";
+                    string message = "The Business Object " + this.ClassDef.ClassName
+                                     + " could not be deserialised because the property " + prop.PropertyName
+                                     + " raised an exception";
                     throw new HabaneroDeveloperException(message, message, ex);
                 }
             }
-            _boStatus = (BOStatus)info.GetValue("Status", typeof(BOStatus));
+            _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
             _boStatus.BusinessObject = this;
             AddToObjectManager();
         }
+
         /// <summary>
         /// Gets the Objects data for the purposes of serialisation.
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        [SecurityPermissionAttribute(SecurityAction.Demand,
-            SerializationFormatter = true)]
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             foreach (IBOProp prop in _boPropCol)
@@ -257,7 +270,7 @@ namespace Habanero.BO
 
         private void Initialise(ClassDef classDef)
         {
-            _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
+            _boStatus = new BOStatus(this) {IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true};
             if (classDef == null)
             {
                 if (ClassDef.ClassDefs.Contains(GetType()))
@@ -326,7 +339,7 @@ namespace Habanero.BO
             {
                 if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
                 {
-                    _primaryKey = (BOPrimaryKey)classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                    _primaryKey = (BOPrimaryKey) classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(_boPropCol);
                 }
             }
             else
@@ -373,7 +386,11 @@ namespace Habanero.BO
         /// </summary>
         internal string DirtyXML
         {
-            get { return "<" + this.ClassDef.ClassName + " ID='" + ID + "'>" + _boPropCol.DirtyXml + "</" + this.ClassDef.ClassName + ">"; }
+            get
+            {
+                return "<" + this.ClassDef.ClassName + " ID='" + ID + "'>" + _boPropCol.DirtyXml + "</"
+                       + this.ClassDef.ClassName + ">";
+            }
         }
 
         /// <summary>
@@ -381,7 +398,7 @@ namespace Habanero.BO
         /// </summary>
         public RelationshipCol Relationships
         {
-            get { return (RelationshipCol)_relationshipCol; }
+            get { return (RelationshipCol) _relationshipCol; }
             set { _relationshipCol = value; }
         }
 
@@ -410,7 +427,7 @@ namespace Habanero.BO
         IClassDef IBusinessObject.ClassDef
         {
             get { return _classDef; }
-            set { _classDef = (ClassDef)value; }
+            set { _classDef = (ClassDef) value; }
         }
 
         /// <summary>
@@ -451,7 +468,7 @@ namespace Habanero.BO
         {
             PrimaryKeyDef primaryKeyDef = ClassDef.GetPrimaryKeyDef();
             if (primaryKeyDef == null) return;
-            _primaryKey = (BOPrimaryKey)primaryKeyDef.CreateBOKey(this.Props);
+            _primaryKey = (BOPrimaryKey) primaryKeyDef.CreateBOKey(this.Props);
         }
 
         /// <summary>
@@ -612,7 +629,7 @@ namespace Habanero.BO
         ///<returns>Returns the value if found</returns>
         public T GetPropertyValue<T>(string propName)
         {
-            return (T)GetPropertyValue(propName);
+            return (T) GetPropertyValue(propName);
         }
 
         /// <summary>
@@ -663,7 +680,7 @@ namespace Habanero.BO
                 return prop.PersistedPropertyValue;
             }
 
-            BusinessObject businessObject = (BusinessObject)Relationships.GetRelatedObject(source.Name);
+            BusinessObject businessObject = (BusinessObject) Relationships.GetRelatedObject(source.Name);
             if (businessObject == null) return null;
             if (source.Joins.Count > 0)
             {
@@ -700,7 +717,7 @@ namespace Habanero.BO
             object propValue = prop.Value;
             object newPropValue1;
             if (!PropValueHasChanged(propValue, newPropValue)) return;
-            ((BOProp)prop).ParsePropValue(newPropValue, out newPropValue1);
+            ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
             if (PropValueHasChanged(propValue, newPropValue1))
             {
                 if (!Status.IsEditing)
@@ -931,7 +948,9 @@ namespace Habanero.BO
         /// Marks the business object for deleting.  Calling Save() will
         /// then carry out the deletion from the database.
         /// </summary>
-        [Obsolete("This method has been replaced with MarkForDelete() since it is far more explicit that this does not instantly delete the business object.")]
+        [Obsolete(
+            "This method has been replaced with MarkForDelete() since it is far more explicit that this does not instantly delete the business object."
+            )]
         public void Delete()
         {
             MarkForDelete();
@@ -982,15 +1001,15 @@ namespace Habanero.BO
             foreach (IRelationship relationship in this.Relationships)
             {
                 if (!(relationship is IMultipleRelationship)) continue;
-                IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
+                IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
 
                 IList createdBos = multipleRelationship.CurrentBusinessObjectCollection.CreatedBusinessObjects;
                 while (createdBos.Count > 0)
                 {
-                    IBusinessObject businessObject = (IBusinessObject)createdBos[createdBos.Count - 1];
+                    IBusinessObject businessObject = (IBusinessObject) createdBos[createdBos.Count - 1];
                     createdBos.Remove(businessObject);
                     if (relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated) continue;
-                    ((BOStatus)businessObject.Status).IsDeleted = true;
+                    ((BOStatus) businessObject.Status).IsDeleted = true;
                 }
                 multipleRelationship.CurrentBusinessObjectCollection.RemovedBusinessObjects.Clear();
             }
@@ -1032,7 +1051,7 @@ namespace Habanero.BO
             //{
             //    transactionCommitter.AddTransaction(_transactionLog);
             //}
-            this.Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter)transactionCommitter);
+            this.Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter) transactionCommitter);
 
             if (_businessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
             {
@@ -1090,6 +1109,7 @@ namespace Habanero.BO
                 PropertyUpdated(this, new BOPropUpdatedEventArgs(this, prop));
             }
         }
+
         /// <summary>
         /// Fires IDUpdated Event for <see cref="IBusinessObject"/>
         /// </summary>
@@ -1172,6 +1192,7 @@ namespace Habanero.BO
         #endregion //Persistance
 
         #region XMLSerialization
+
         /// <summary>
         /// Method implemented for legacy purposes only. Returns null.
         /// </summary>
@@ -1208,9 +1229,9 @@ namespace Habanero.BO
 
                     if (relationship is ISingleRelationship)
                     {
-                        IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
+                        IBusinessObject relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
                         relatedObject.ReadXml(reader);
-                        ((ISingleRelationship)relationship).SetRelatedObject(relatedObject);
+                        ((ISingleRelationship) relationship).SetRelatedObject(relatedObject);
                     }
                     else if (relationship is IMultipleRelationship)
                     {
@@ -1222,9 +1243,9 @@ namespace Habanero.BO
 
         private static void ReadRelatedObject(XmlReader reader, IRelationship relationship, Type relatedObjectType)
         {
-            IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
+            IBusinessObject relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
             relatedObject.ReadXml(reader);
-            ((IMultipleRelationship)relationship).BusinessObjectCollection.Add(relatedObject);
+            ((IMultipleRelationship) relationship).BusinessObjectCollection.Add(relatedObject);
 
             string elementName = reader.Name;
             if (elementName == relatedObjectType.Name)
@@ -1252,7 +1273,7 @@ namespace Habanero.BO
                 {
                     if (relationship is ISingleRelationship)
                     {
-                        ISingleRelationship singleRelationship = (ISingleRelationship)relationship;
+                        ISingleRelationship singleRelationship = (ISingleRelationship) relationship;
                         IBusinessObject relatedObject = singleRelationship.GetRelatedObject();
                         if (relatedObject != null)
                         {
@@ -1265,26 +1286,22 @@ namespace Habanero.BO
                     }
                     else if (relationship is IMultipleRelationship)
                     {
-                        IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
+                        IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
                         IBusinessObjectCollection relatedObjects = multipleRelationship.BusinessObjectCollection;
                         if (relatedObjects.Count != 0)
                         {
                             writer.WriteStartElement(relationship.RelationshipName);
                             foreach (IBusinessObject relatedObject in relatedObjects)
                             {
-
                                 writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
                                 relatedObject.WriteXml(writer);
                                 writer.WriteEndElement();
-
                             }
                             writer.WriteEndElement();
                         }
                     }
-
                 }
             }
-
         }
 
         #endregion
@@ -1420,6 +1437,7 @@ namespace Habanero.BO
 
             _boStatus.SetBOFlagValue(BOStatus.Statuses.isDirty, hasDirtyProps);
         }
+
         /// <summary>
         /// Is the <see cref="IBusinessObject"/> archived or not. This can be overriden by a
         /// specific business object to implement required behaviour.

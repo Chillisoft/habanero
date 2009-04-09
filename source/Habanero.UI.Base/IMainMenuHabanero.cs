@@ -36,6 +36,12 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="form">The form to set up with the menu</param>
         void DockInForm(IFormHabanero form);
+
+        /// <summary>
+        /// Gets and Sets the name of the MainMenu
+        /// </summary>
+        /// <returns>A string representing the name.</returns>
+        string Name { get; set; }
     }
 
 }

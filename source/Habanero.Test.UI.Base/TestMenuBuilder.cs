@@ -44,14 +44,19 @@ namespace Habanero.Test.UI.Base
         [TestFixture]
         public class TestMenuBuilderWin : TestMenuBuilder
         {
+            private IControlFactory _factory;
+
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryWin();
+                if ((_factory == null)) _factory = new ControlFactoryWin();
+
+                GlobalUIRegistry.ControlFactory = _factory;
+                return _factory;
             }
 
             protected override IMenuBuilder CreateMenuBuilder()
             {
-                return new MenuBuilderWin();
+                return new MenuBuilderWin(GetControlFactory());
             }
 
             protected override IFormControlStub CreateFormControlStub()
@@ -85,6 +90,37 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(found, "Form was not found");
             }
 
+
+            [Test]
+            public void Test_Construct_SetsControlFactory()
+            {
+                //---------------Set up test pack-------------------
+
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                IMenuBuilder menuBuilder = new MenuBuilderWin(GetControlFactory());
+                //---------------Test Result -----------------------
+                Assert.AreSame(GetControlFactory(), menuBuilder.ControlFactory);
+
+            }
+            [Test]
+            public void Test_Construct_WithNullControlFactory_ShouldRaiseError()
+            {
+                //---------------Execute Test ----------------------
+                try
+                {
+                    new MenuBuilderWin(null);
+                    Assert.Fail("expected ArgumentNullException");
+                }
+                    //---------------Test Result -----------------------
+                catch (ArgumentNullException ex)
+                {
+                    StringAssert.Contains("Value cannot be null", ex.Message);
+                    StringAssert.Contains("controlFactory", ex.ParamName);
+                }
+            }
+
             [Test]
             public void TestCloseFormAndClickCreatesNewForm()
             {
@@ -92,7 +128,7 @@ namespace Habanero.Test.UI.Base
                 HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
                 IFormHabanero frm = habaneroMenu.Form;
                 frm.Show();
-                HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+                HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
                 HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
     
 
@@ -145,14 +181,19 @@ namespace Habanero.Test.UI.Base
         [TestFixture]
         public class TestMenuBuilderVWG : TestMenuBuilder
         {
+            private ControlFactoryVWG _factory;
+
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryVWG();
+                if ((_factory == null)) _factory = new ControlFactoryVWG();
+
+                GlobalUIRegistry.ControlFactory = _factory;
+                return _factory;
             }
 
             protected override IMenuBuilder CreateMenuBuilder()
             {
-                return new MenuBuilderVWG();
+                return new MenuBuilderVWG(GetControlFactory());
             }
 
             protected override IFormControlStub CreateFormControlStub()
@@ -187,12 +228,43 @@ namespace Habanero.Test.UI.Base
                 public bool SetFormCalled { get; private set; }
             }
 
+
+            [Test]
+            public void Test_Construct_SetsControlFactory()
+            {
+                //---------------Set up test pack-------------------
+
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                IMenuBuilder menuBuilder = new MenuBuilderVWG(GetControlFactory());
+                //---------------Test Result -----------------------
+                Assert.AreSame(GetControlFactory(), menuBuilder.ControlFactory);
+
+            }
+
+            [Test]
+            public void Test_Construct_WithNullControlFactory_ShouldRaiseError()
+            {
+                //---------------Execute Test ----------------------
+                try
+                {
+                    new MenuBuilderVWG(null);
+                    Assert.Fail("expected ArgumentNullException");
+                }
+                //---------------Test Result -----------------------
+                catch (ArgumentNullException ex)
+                {
+                    StringAssert.Contains("Value cannot be null", ex.Message);
+                    StringAssert.Contains("controlFactory", ex.ParamName);
+                }
+            }
             [Test]
             public override void Test_Click_WhenFormControlCreatorSet_ShouldCallSetFormOnFormControl()
             {
                 //---------------Set up test pack-------------------
                 HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-                HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+                HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
                 HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
 
                 bool creatorCalled = false;
@@ -223,13 +295,14 @@ namespace Habanero.Test.UI.Base
 
         }
 
+
         [Test]
         public void TestSimpleMenuStructure()
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
             string subMenuName = TestUtil.GetRandomString();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(subMenuName);
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(subMenuName);
             string menuItemName = TestUtil.GetRandomString();
             submenu.AddMenuItem(menuItemName);
             IMenuBuilder menuBuilder = CreateMenuBuilder();
@@ -249,9 +322,9 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
             string subMenuName1 = TestUtil.GetRandomString();
-            HabaneroMenu submenu1 = habaneroMenu.AddSubmenu(subMenuName1);
+            HabaneroMenu submenu1 = habaneroMenu.AddSubMenu(subMenuName1);
             string subMenuName2 = TestUtil.GetRandomString();
-            HabaneroMenu submenu2 = habaneroMenu.AddSubmenu(subMenuName2);
+            HabaneroMenu submenu2 = habaneroMenu.AddSubMenu(subMenuName2);
             submenu1.AddMenuItem(TestUtil.GetRandomString());
             submenu2.AddMenuItem(TestUtil.GetRandomString());
             submenu2.AddMenuItem(TestUtil.GetRandomString());
@@ -273,7 +346,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
             string subMenuName = TestUtil.GetRandomString();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(subMenuName);
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(subMenuName);
             string menuItemName1 = TestUtil.GetRandomString();
             submenu.AddMenuItem(menuItemName1);
             string menuItemName2 = TestUtil.GetRandomString();
@@ -295,12 +368,12 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
             string subMenuName = TestUtil.GetRandomString();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(subMenuName);
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(subMenuName);
             string menuItemName1 = TestUtil.GetRandomString();
             submenu.AddMenuItem(menuItemName1);
 
             string subsubMenuName = TestUtil.GetRandomString();
-            HabaneroMenu subsubmenu = submenu.AddSubmenu(subsubMenuName);
+            HabaneroMenu subsubmenu = submenu.AddSubMenu(subsubMenuName);
 
             string menuItemName2 = TestUtil.GetRandomString();
             subsubmenu.AddMenuItem(menuItemName2);
@@ -324,7 +397,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             bool called = false;
             menuItem.FormControlCreator = delegate
@@ -338,14 +411,45 @@ namespace Habanero.Test.UI.Base
                 return new ControlManagerStub(GetControlFactory());
             };
             IMenuBuilder menuBuilder = CreateMenuBuilder();
-            //---------------Execute Test ----------------------
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            //---------------Assert Precondition ---------------
+            Assert.IsNull(menuItem.Form);
+            //---------------Execute Test ----------------------
             IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
             formsMenuItem.PerformClick();
 
             //---------------Test Result -----------------------
-            Assert.IsFalse(called);
-            //---------------Tear Down -------------------------          
+            Assert.IsFalse(called);      
+        }
+
+        [Test]
+        public void Test_PerformClick_WhenMenuFormHasNoControlSet_ShouldNotCallCreators()
+        {
+            //---------------Set up test pack-------------------
+            HabaneroMenu habaneroMenu = new HabaneroMenu("Main", GetControlFactory().CreateForm(), GetControlFactory());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
+            bool called = false;
+            menuItem.FormControlCreator = delegate
+            {
+                called = true;
+                return CreateFormControlStub();
+            };
+            menuItem.ControlManagerCreator = delegate
+            {
+                called = true;
+                return new ControlManagerStub(GetControlFactory());
+            };
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            //---------------Assert Precondition ---------------
+            Assert.IsNotNull(menuItem.Form);
+            Assert.AreEqual(0, menuItem.Form.Controls.Count);
+            //---------------Execute Test ----------------------
+            IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+            formsMenuItem.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(called);      
         }
 
         [Test]
@@ -353,7 +457,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             bool called = false;
             FormControlCreator formControlCreatorDelegate = delegate
@@ -380,7 +484,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             
             bool creatorCalled = false;
@@ -415,7 +519,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             bool called = false;
             EventHandler customerHandler = delegate
@@ -439,7 +543,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             bool called = false;
             IControlFactory controlFactoryPassedToCreator = null;
@@ -461,7 +565,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(called);
             Assert.AreSame(habaneroMenu.ControlFactory, controlFactoryPassedToCreator);
-            //---------------Tear Down -------------------------         
         }
 
 
@@ -470,7 +573,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             bool customHandlerCalled = false;
             EventHandler customerHandler = delegate
@@ -494,7 +597,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsFalse(formControlHandlerCalled);
             Assert.IsTrue(customHandlerCalled);
-            //---------------Tear Down -------------------------                
         }
 
         [Test]
@@ -505,7 +607,7 @@ namespace Habanero.Test.UI.Base
             GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
             Exception exception = new Exception();
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             menuItem.CustomHandler += delegate {
                 throw exception;
@@ -537,7 +639,7 @@ namespace Habanero.Test.UI.Base
             GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
             Exception exception = new Exception();
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             menuItem.FormControlCreator += delegate
             {
@@ -570,7 +672,7 @@ namespace Habanero.Test.UI.Base
             GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
             Exception exception = new Exception();
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             menuItem.ControlManagerCreator += delegate
             {
@@ -600,7 +702,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             submenu.AddMenuItem(TestUtil.GetRandomString());
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IFormHabanero form = habaneroMenu.Form;
@@ -619,7 +721,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
             IFormHabanero frm = habaneroMenu.Form;
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             IFormControl expectedFormControl = CreateFormControlStub();
             menuItem.FormControlCreator += (() => expectedFormControl);
@@ -641,7 +743,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             IFormControl expectedFormControl = CreateFormControlStub();
             menuItem.FormControlCreator += (() => expectedFormControl);
@@ -668,7 +770,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
+            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem1 = submenu.AddMenuItem(TestUtil.GetRandomString());
             IFormControl expectedFormControl1 = CreateFormControlStub();
             menuItem1.FormControlCreator += (() => expectedFormControl1);

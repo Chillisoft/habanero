@@ -234,5 +234,7 @@ namespace Habanero.UI.Base
         /// <param name="col">The collection to create the datasetprovider for</param>
         /// <returns>Returns the data set provider</returns>
         IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
+
+
     }
 }

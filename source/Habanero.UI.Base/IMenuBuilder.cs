@@ -30,5 +30,10 @@ namespace Habanero.UI.Base
         ///<param name="habaneroMenu"></param>
         ///<returns></returns>
         IMainMenuHabanero BuildMainMenu(HabaneroMenu habaneroMenu);
+
+        /// <summary>
+        /// Returns the control factory being used to create the Menu and the MenuItems
+        /// </summary>
+        IControlFactory ControlFactory { get; }
     }
 }

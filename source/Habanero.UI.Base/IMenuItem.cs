@@ -17,6 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using System.ComponentModel;
+
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -46,10 +49,24 @@ namespace Habanero.UI.Base
         /// <summary>
         /// The Child Menu items for this <see cref="IMenuItem"/>.
         /// </summary>
+        [Browsable(false)]
         IMenuItemCollection MenuItems { get; }
         /// <summary>
         /// Performs the Click event for this <see cref="IMenuItem"/>.
         /// </summary>
+        [Browsable(false)]
         void PerformClick();
+
+        /// <summary>
+        /// Occurs when the MenuItem is Clicked
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        event EventHandler Click;
+
+        /// <summary>
+        /// This actually executes the Code when PerformClick is selected <see cref="IMenuItem"/>.
+        /// </summary>
+        [Browsable(false)]
+        void DoClick();
     }
 }

@@ -45,7 +45,7 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu menu = new HabaneroMenu("Main");
             string menuName = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
-            HabaneroMenu submenu = menu.AddSubmenu(menuName);
+            HabaneroMenu submenu = menu.AddSubMenu(menuName);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, menu.Submenus.Count);
             Assert.AreSame(submenu, menu.Submenus[0]);
@@ -57,7 +57,7 @@ namespace Habanero.Test.UI.Base
         public void TestAddMenuItem()
         {
             //---------------Set up test pack-------------------
-            HabaneroMenu submenu = new HabaneroMenu("Main").AddSubmenu("Submenu");
+            HabaneroMenu submenu = new HabaneroMenu("Main").AddSubMenu("Submenu");
             string menuItemName = TestUtil.GetRandomString();
 
             //---------------Assert PreConditions---------------            

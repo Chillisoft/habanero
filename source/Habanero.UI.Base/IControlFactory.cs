@@ -649,6 +649,26 @@ namespace Habanero.UI.Base
         ///</summary>
         ///<returns></returns>
         IBOCollapsiblePanelSelector CreateCollapsiblePanelSelector();
+
+        /// <summary>
+        /// Creates an <see cref="IMainMenuHabanero"/>
+        /// </summary>
+        /// <returns>returns the Created Main Menu</returns>
+        IMainMenuHabanero CreateMainMenu();
+
+        /// <summary>
+        /// Creates an <see cref="IMenuItem"/> with the name.
+        /// </summary>
+        /// <param name="name">The Name of the MenuItem</param>
+        /// <returns>returns the Created MenuItem</returns>
+        IMenuItem CreateMenuItem(string name);
+
+        /// <summary>
+        /// Creates an <see cref="IMenuItem"/> with the name.
+        /// </summary>
+        /// <param name="item">the HabaneroMenu.Item that the IMenuItem is being created for</param>
+        /// <returns>returns the Created MenuItem</returns>
+        IMenuItem CreateMenuItem(HabaneroMenu.Item item);
     }
 
     /// <summary>

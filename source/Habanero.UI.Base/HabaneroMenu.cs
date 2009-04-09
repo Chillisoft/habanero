@@ -24,7 +24,7 @@ namespace Habanero.UI.Base
 {
 
     ///<summary>
-    /// A delegate for Creating a <see cref="IFilterControl"/>
+    /// A delegate for Creating a <see cref="IFormControl"/>
     ///</summary>
     public delegate IFormControl FormControlCreator();
     ///<summary>
@@ -47,8 +47,13 @@ namespace Habanero.UI.Base
     }
 
     ///<summary>
-    /// A class for managing a menu including its list of sub menus (other Habanero Menus)
+    /// A class for managing a menu including its list of sub menus (other Habanero Menus).
+    /// This class is used by a menu builder to build a specific Menu e.g. A main menu or an outlook style menu.<br/>
+    /// With this class you can either <see cref="AddSubMenu"/> or <see cref="AddMenuItem"/>.
+    /// Where adding a sub menu will create another HabaneroMenu and adding a MenuItem will add a leaf
+    /// item to the menu. Selecting the MenuItem(<see cref="Item"/>) will cause the 
     ///</summary>
+    /// 
     public class HabaneroMenu
     {
         private readonly List<HabaneroMenu> _submenus = new List<HabaneroMenu>();
@@ -114,14 +119,24 @@ namespace Habanero.UI.Base
         {
             get { return _controlFactory; }
         }
-
         ///<summary>
         /// Adds a sub menu to this menu. This method creates a new <see cref="HabaneroMenu"/> with the name
         /// <paramref name="menuName"/> and adds it as a sub menu.
         ///</summary>
         ///<param name="menuName"></param>
         ///<returns></returns>
+        [Obsolete("Please use correctly spelt AddSubMenu")]
         public HabaneroMenu AddSubmenu(string menuName)
+        {
+            return AddSubMenu(menuName);
+        }
+        ///<summary>
+        /// Adds a sub menu to this menu. This method creates a new <see cref="HabaneroMenu"/> with the name
+        /// <paramref name="menuName"/> and adds it as a sub menu.
+        ///</summary>
+        ///<param name="menuName"></param>
+        ///<returns></returns>
+        public HabaneroMenu AddSubMenu(string menuName)
         {
             HabaneroMenu submenu = new HabaneroMenu(menuName, _form, _controlFactory);
             this._submenus.Add(submenu);
@@ -141,7 +156,11 @@ namespace Habanero.UI.Base
         }
 
         ///<summary>
-        /// A particular menu item that ????
+        /// A particular menu item that will be built into a Leaf Node of the Relevant Menu.
+        /// The MenuBulder will build a menu item represented by this Item.
+        /// This Item can be set up with either a <see cref="CustomHandler"/> <br/>
+        ///  or a <see cref="ControlManagerCreator"/> or a <see cref="FormControlCreator"/>.
+        /// These are used by the relevant MenuItemControl to respond the its click event. 
         ///</summary>
         public class Item
         {
@@ -154,9 +173,7 @@ namespace Habanero.UI.Base
             ///</summary>
             ///<param name="name"></param>
             public Item(string name) : this(name, null, null)
-            {
-     
-            }
+            {}
             /// <summary>
             /// Construcotr for an <see cref="Item"/>
             /// </summary>
@@ -179,18 +196,21 @@ namespace Habanero.UI.Base
             }
 
             ///<summary>
-            /// The Creator that creates the form when this menu is selected
+            /// The Creator that creates the form when this menu Item is selected.
+            /// This is used where a pop up form is created in response to the MenuItem Click Event.
             ///</summary>
             public FormControlCreator FormControlCreator { get; set; }
 
             ///<summary>
             /// Gets and sets the <see cref="ControlManagerCreator"/> delegate.
+            /// This is a delegate that creates a <see cref="IControlManager"/>. The control manager
+            /// wraps a control.
             ///</summary>
             public ControlManagerCreator ControlManagerCreator { get; set; }
 
             ///<summary>
             /// Gets and Sets the CustomHandler that is used when the menu is clicked. This allows
-            /// the developer to hook into this event to imlement custom logic when the menu item is clicked.
+            /// the developer to hook into this event to implement custom logic when the menu item is clicked.
             ///</summary>
             public EventHandler CustomHandler { get; set; }
 

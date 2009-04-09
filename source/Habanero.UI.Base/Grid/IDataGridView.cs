@@ -469,5 +469,11 @@ namespace Habanero.UI.Base
         /// <param name="rowIndex">The index of the row containing the cell</param>
         /// <returns>The DataGridViewCell at the specified location</returns>
         IDataGridViewCell this[int columnIndex, int rowIndex] { set; get; }
+
+
+        /// <summary>
+        /// Updates the Grid with the latest data. (This updates the visual aspects of the grid.
+        /// </summary>
+        void Update();
     }
 }

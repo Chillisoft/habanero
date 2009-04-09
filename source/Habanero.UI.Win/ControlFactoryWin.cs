@@ -158,7 +158,7 @@ namespace Habanero.UI.Win
             else
             {
                 throw new UnknownTypeNameException(
-                    string.Format(
+                    String.Format(
                         "The control type name {0} does not inherit from {1}.", controlType.FullName, typeof (Control)));
             }
             return ctl;
@@ -226,8 +226,8 @@ namespace Habanero.UI.Win
         {
             INumericUpDown ctl = CreateNumericUpDown();
             ctl.DecimalPlaces = 2;
-            ctl.Maximum = decimal.MaxValue;
-            ctl.Minimum = decimal.MinValue;
+            ctl.Maximum = Decimal.MaxValue;
+            ctl.Minimum = Decimal.MinValue;
             return ctl;
         }
 
@@ -539,7 +539,7 @@ namespace Habanero.UI.Win
             if (!columnType.IsSubclassOf(typeof(DataGridViewColumn)))
             {
                 throw new UnknownTypeNameException(
-                    string.Format(
+                    String.Format(
                         "The column type name {0} does not inherit from {1}.", columnType.FullName,
                         typeof(DataGridViewColumn)));
             }
@@ -1147,7 +1147,16 @@ namespace Habanero.UI.Win
         ///<returns></returns>
         public IBOComboBoxSelector CreateComboBoxSelector()
         {
-            return new ComboBoxSelectorWin(this);
+            ComboBoxSelectorWin comboBoxWin = new ComboBoxSelectorWin(this);
+            //Note_: This is a workaround in windows to avoid this default from breaking all the tests 
+            //  because if the Thread's ApartmentState is not STA then setting the AutoCompleteSource default 
+            //  gives an error
+            if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
+            {
+                comboBoxWin.AutoCompleteSource = AutoCompleteSource.ListItems;
+                comboBoxWin.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            }
+            return comboBoxWin;
         }
 
         ///<summary>
@@ -1166,6 +1175,35 @@ namespace Habanero.UI.Win
         public IBOCollapsiblePanelSelector CreateCollapsiblePanelSelector()
         {
             return new CollapsiblePanelSelectorWin(this);
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IMainMenuHabanero"/>
+        /// </summary>
+        /// <returns></returns>
+        public IMainMenuHabanero CreateMainMenu()
+        {
+            return new MainMenuWin();
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IMenuItem"/> with the name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>returns the Created MenuItem</returns>
+        public IMenuItem CreateMenuItem(string name)
+        {
+            return new MenuItemWin(name);
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IMenuItem"/> with the name.
+        /// </summary>
+        /// <param name="item">the HabaneroMenu.Item that the IMenuItem is being created for</param>
+        /// <returns>returns the Created MenuItem</returns>
+        public IMenuItem CreateMenuItem(HabaneroMenu.Item item)
+        {
+            return new MenuItemWin(item);
         }
     }
 

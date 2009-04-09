@@ -1168,7 +1168,11 @@ namespace Habanero.UI.VWG
         ///<returns></returns>
         public IBOComboBoxSelector CreateComboBoxSelector()
         {
-            return new ComboBoxSelectorVWG();
+            ComboBoxSelectorVWG comboBox = new ComboBoxSelectorVWG();
+            comboBox.Height = TEXTBOX_HEIGHT;
+            comboBox.AutoCompleteSource = Gizmox.WebGUI.Forms.AutoCompleteSource.ListItems;
+            comboBox.AutoCompleteMode = Gizmox.WebGUI.Forms.AutoCompleteMode.SuggestAppend;
+            return comboBox;
         }
 
         ///<summary>
@@ -1187,6 +1191,35 @@ namespace Habanero.UI.VWG
         public IBOCollapsiblePanelSelector CreateCollapsiblePanelSelector()
         {
             return new CollapsiblePanelSelectorVWG(this);
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IMainMenuHabanero"/>
+        /// </summary>
+        /// <returns></returns>
+        public IMainMenuHabanero CreateMainMenu()
+        {
+            return new MainMenuVWG();
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IMenuItem"/> with the name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>returns the Created MenuItem</returns>
+        public IMenuItem CreateMenuItem(string name)
+        {
+            return new MenuItemVWG(name);
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IMenuItem"/> with the name.
+        /// </summary>
+        /// <param name="item">the HabaneroMenu.Item that the IMenuItem is being created for</param>
+        /// <returns>returns the Created MenuItem</returns>
+        public IMenuItem CreateMenuItem(HabaneroMenu.Item item)
+        {
+            return new MenuItemVWG(item);
         }
 
         #endregion
