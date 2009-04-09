@@ -10,5 +10,6 @@
 		assembly NMTOKEN #REQUIRED
 		table CDATA #IMPLIED
 		displayName CDATA #IMPLIED
+    typeParameter CDATA #IMPLIED
 >
 

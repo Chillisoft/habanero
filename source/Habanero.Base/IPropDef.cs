@@ -197,5 +197,12 @@ namespace Habanero.Base
         /// <param name="value">The value to be converted</param>
         /// <returns>The converted string.</returns>
         string ConvertValueToString(object value);
+
+        ///<summary>
+        /// Makes a shallow clone of this property definition (i.e. the clone includes a list of all the
+        ///  property rules but the property rules have not been cloned
+        ///</summary>
+        ///<returns></returns>
+        IPropDef Clone();
     }
 }

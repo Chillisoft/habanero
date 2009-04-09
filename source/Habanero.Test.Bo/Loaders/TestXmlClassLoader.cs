@@ -109,6 +109,22 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
+        public void TestTypeParameter()
+        {
+            ClassDef def =
+                _loader.LoadClass(
+                    @"
+				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" typeParameter=""TestTypeParameter"">
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			");
+            Assert.AreEqual("TestTypeParameter", def.TypeParameter);
+        }
+
+        [Test]
         public void TestPropDefClassDefIsSet()
         {
             //---------------Set up test pack-------------------

@@ -290,10 +290,11 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _propDefs.Count; }
         }
+
         /// <summary>
         /// Clears all the properties set for this <see cref="KeyDef"/>
         /// </summary>
-        protected internal void Clear()
+        public void Clear()
         {
             _propDefs.Clear();
             UpdateKeyNameBuildt();

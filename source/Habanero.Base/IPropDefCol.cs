@@ -90,5 +90,10 @@ namespace Habanero.Base
         /// <param name="propertyName">The propertyName to match</param>
         /// <returns>Returns true if found, false if not</returns>
         bool Contains(string propertyName);
+        /// <summary>
+        /// Removes a property definition from the collection
+        /// </summary>
+        /// <param name="propDef">The Property definition to remove</param>
+        void Remove(IPropDef propDef);
     }
 }

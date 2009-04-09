@@ -131,7 +131,7 @@ namespace Habanero.BO.ClassDefinition
         /// Removes a property definition from the collection
         /// </summary>
         /// <param name="propDef">The Property definition to remove</param>
-        protected void Remove(PropDef propDef)
+        public void Remove(IPropDef propDef)
         {
             if (Contains(propDef))
             {

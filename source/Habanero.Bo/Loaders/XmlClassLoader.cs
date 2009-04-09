@@ -41,6 +41,8 @@ namespace Habanero.BO.Loaders
         private SuperClassDef _superClassDef;
         private string _tableName;
         private UIDefCol _uiDefCol;
+        private string _typeParameter;
+
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -108,6 +110,11 @@ namespace Habanero.BO.Loaders
             {
                 classDef.TableName = _tableName;
             }
+            if (!string.IsNullOrEmpty(_typeParameter))
+            {
+                classDef.TypeParameter = _typeParameter;
+            }
+
             return classDef;
         }
 
@@ -121,6 +128,7 @@ namespace Habanero.BO.Loaders
             LoadClassInfo();
             LoadTableName();
             LoadDisplayName();
+            LoadTypeParameter();
             _reader.Read();
 
             List<string> keyDefXmls = new List<string>();
@@ -284,6 +292,14 @@ namespace Habanero.BO.Loaders
         private void LoadDisplayName()
         {
             _displayName = _reader.GetAttribute("displayName");
+        }
+
+        /// <summary>
+        /// Loads the type parameter attribute
+        /// </summary>
+        private void LoadTypeParameter()
+        {
+            _typeParameter = _reader.GetAttribute("typeParameter");
         }
 
         /// <summary>
