@@ -108,6 +108,27 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
+        public void TestFilterDef_AlternateFormat()
+        {
+            //---------------Set up test pack-------------------
+            XmlFilterLoader loader = new XmlFilterLoader();
+            const string filterDefXml = @"
+                            <filter>
+			                    <filterProperty name=""name""  label=""label"" >
+			                    </filterProperty>
+			                </filter>
+	            ";
+
+            //---------------Execute Test ----------------------
+            FilterDef filterDef = loader.LoadFilterDef(filterDefXml);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(filterDef);
+            Assert.AreEqual(1, filterDef.FilterPropertyDefs.Count);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void TestFilterMode_Search()
         {
             //---------------Set up test pack-------------------

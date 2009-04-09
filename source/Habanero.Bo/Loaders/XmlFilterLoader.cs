@@ -77,6 +77,7 @@ namespace Habanero.BO.Loaders
 
             while (_reader.Name == "filterProperty")
             {
+
                 string propertyName = _reader.GetAttribute("name");
                 string label = _reader.GetAttribute("label");
                 string filterType = _reader.GetAttribute("filterType");
@@ -102,6 +103,7 @@ namespace Habanero.BO.Loaders
                      _reader.Read();
                 }
                 _propertyDefs.Add(filterPropertyDef);
+                if (!_reader.IsStartElement()) _reader.ReadEndElement();
             }
             while (_reader.Name == "filter") _reader.Read();
         }
