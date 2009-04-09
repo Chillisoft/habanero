@@ -17,6 +17,8 @@ namespace Habanero.Test.BO
     /// TODO:
     /// - error message for non-recognised attribute, non-recognised classname
     /// - what happens if xml is missing key attributes (eg value for ID)
+    /// - ensure full recursion of object hierarchy- serialise the related objects of a related object
+    /// - may require new testBO class with multiple levels of relationships
     /// </summary>
     [TestFixture]
     public class TestBusinessObjectSerialisationXML
