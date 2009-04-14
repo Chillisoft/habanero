@@ -226,29 +226,31 @@ namespace Habanero.UI.Base
                 {
                     IPropDef propDef = _businessObject.ClassDef.PropDefColIncludingInheritance[_propertyName];
                     IBOProp boProp = CurrentBOProp();
-                    switch (propDef.ReadWriteRule)
-                    {
-                        case PropReadWriteRule.ReadOnly:
-                            _isEditable = false;
-                            break;
-                        case PropReadWriteRule.WriteOnce:
-                            object persistedPropertyValue = boProp.PersistedPropertyValue;
-                            if (persistedPropertyValue is string)
-                            {
-                                _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
-                            }
-                            else
-                            {
-                                _isEditable = persistedPropertyValue == null;
-                            }
-                            break;
-                        case PropReadWriteRule.WriteNew:
-                            _isEditable = _businessObject.Status.IsNew;
-                            break;
-                        case PropReadWriteRule.WriteNotNew:
-                            _isEditable = !_businessObject.Status.IsNew;
-                            break;
-                    }
+                    string message;
+                    _isEditable = boProp.IsEditable(out message);
+                    //switch (propDef.ReadWriteRule)
+                    //{
+                    //    case PropReadWriteRule.ReadOnly:
+                    //        _isEditable = false;
+                    //        break;
+                    //    case PropReadWriteRule.WriteOnce:
+                    //        object persistedPropertyValue = boProp.PersistedPropertyValue;
+                    //        if (persistedPropertyValue is string)
+                    //        {
+                    //            _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
+                    //        }
+                    //        else
+                    //        {
+                    //            _isEditable = persistedPropertyValue == null;
+                    //        }
+                    //        break;
+                    //    case PropReadWriteRule.WriteNew:
+                    //        _isEditable = _businessObject.Status.IsNew;
+                    //        break;
+                    //    case PropReadWriteRule.WriteNotNew:
+                    //        _isEditable = !_businessObject.Status.IsNew;
+                    //        break;
+                    //}
                 }
             }
             if (_isEditable)

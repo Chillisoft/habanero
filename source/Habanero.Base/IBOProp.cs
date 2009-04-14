@@ -169,5 +169,23 @@ namespace Habanero.Base
         /// <param name="propValue">The value to assign</param>
         /// <param name="isObjectNew">Whether the object is new or not</param>
         void InitialiseProp(object propValue, bool isObjectNew);
+
+        ///<summary>
+        /// Returns whether the BOProperty is Editable or not. The BOProp may not be editable
+        ///  based on a number of factors. 
+        ///  1) If its ReadWrite Rules are set to ReadOnly etc.
+        ///  2) The user may not have permissions to edit this property Value.
+        ///</summary>
+        ///<param name="message"></param>
+        ///<returns></returns>
+        bool IsEditable(out string message);
+
+        ///<summary>
+        /// Returns whether the BOProperty is Readable or not. The BOProp may not be Readable
+        ///  if the user may not have permissions to read the property Value.
+        ///</summary>
+        ///<param name="message">the reason why the user cannot read the property.</param>
+        ///<returns></returns>
+        bool IsReadable(out string message);
     }
 }
