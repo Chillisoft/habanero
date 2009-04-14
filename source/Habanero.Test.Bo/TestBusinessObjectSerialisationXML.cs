@@ -15,10 +15,8 @@ namespace Habanero.Test.BO
 {
     /// <summary>
     /// TODO:
-    /// - error message for non-recognised attribute, non-recognised classname
-    /// - what happens if xml is missing key attributes (eg value for ID)
     /// - acceptance test with big hierarchy
-    /// - aggregation, association
+    /// - multiple levels deserialise
     /// </summary>
     [TestFixture]
     public class TestBusinessObjectSerialisationXML
@@ -42,6 +40,7 @@ namespace Habanero.Test.BO
         public void Test_DeserialiseXml_InvalidXml_ThrowsException()
         {
             //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_NoRelationships();
             string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
                                             <OrganisationTestBO OrganisationID="""" Name="""">");
             //---------------Assert Precondition----------------
@@ -60,7 +59,100 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsNotNull(exceptionThrown);
             Assert.IsInstanceOfType(typeof(InvalidOperationException),exceptionThrown);
+            Assert.AreEqual("There is an error in XML document (2, 91).", exceptionThrown.Message);
+            Assert.IsTrue(exceptionThrown.InnerException.Message.Contains("Unexpected end of file"));
+        }
+
+        [Test]
+        public void Test_DeserialiseXml_NonRecognisedClassName_ThrowsException()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_NoRelationships();
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <NonRecognisedClass Name=""AName""/>");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            Exception exceptionThrown = null;
+            try
+            {
+                OrganisationTestBO organisation = (OrganisationTestBO)xs.Deserialize(new StringReader(xml));
+            }
+            catch (Exception ex)
+            {
+                exceptionThrown = ex;
+            }
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(exceptionThrown);
+            Assert.IsInstanceOfType(typeof(InvalidOperationException), exceptionThrown);
             Assert.AreEqual("There is an error in XML document (2, 46).", exceptionThrown.Message);
+            Assert.IsTrue(exceptionThrown.InnerException.Message.Contains("was not expected."));
+        }
+
+        [Test]
+        public void Test_DeserialiseXml_NonRecognisedAttribute_ThrowsException()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_NoRelationships();
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <OrganisationTestBO OrganisationID=""83e11f9f-705f-40d6-8cfb-101efcb72727""
+                                                                 Age =""42"" />");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            Exception exceptionThrown = null;
+            try
+            {
+                OrganisationTestBO organisation = (OrganisationTestBO)xs.Deserialize(new StringReader(xml));
+            }
+            catch (Exception ex)
+            {
+                exceptionThrown = ex;
+            }
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(exceptionThrown);
+            Assert.IsInstanceOfType(typeof(InvalidOperationException), exceptionThrown);
+            Assert.AreEqual("There is an error in XML document (3, 66).", exceptionThrown.Message);
+            Assert.IsTrue(exceptionThrown.InnerException.Message.Contains("The given property name 'Age' does not exist"));
+        }
+
+        [Test]
+        public void Test_DeserialiseXml_NonRecognisedRelationship_ThrowsException()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <OrganisationTestBO OrganisationID=""f566ee917a8e4a178c5e4d1f0fbd9802"" Name="""">
+                                                <NonRecognisedRelationship>
+                                                    <ContactPersonTestBO ContactPersonID=""1234""
+                                                                         Surname=""Smith""
+                                                                         OrganisationID=""f566ee917a8e4a178c5e4d1f0fbd9802""
+                                                    />   
+                                                </NonRecognisedRelationship>
+                                            </OrganisationTestBO>");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            Exception exceptionThrown = null;
+            try
+            {
+                OrganisationTestBO organisation = (OrganisationTestBO)xs.Deserialize(new StringReader(xml));
+            }
+            catch (Exception ex)
+            {
+                exceptionThrown = ex;
+            }
+            //---------------Test Result -----------------------
+
+            Assert.IsNotNull(exceptionThrown);
+            
+            Assert.IsInstanceOfType(typeof(InvalidOperationException), exceptionThrown);
+            Assert.AreEqual("There is an error in XML document (3, 50).", exceptionThrown.Message);
+            Assert.IsInstanceOfType(typeof(InvalidRelationshipNameException),exceptionThrown.InnerException);
+            Assert.IsTrue(exceptionThrown.InnerException.Message.Contains("The relationship 'NonRecognisedRelationship' does not exist on the class 'OrganisationTestBO'."));
         }
 
         [Test]
@@ -327,7 +419,7 @@ namespace Habanero.Test.BO
         public void Test_SerialiseXml_Composition_SingleRelationship_EmptyCollection()
         {
             //---------------Set up test pack-------------------
-            LoadClassDefs_Composition_SingleRelationship();
+            LoadClassDefs_SingleRelationship(RelationshipType.Composition);
             OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
             MemoryStream memoryStream = new MemoryStream();
             //---------------Assert Precondition----------------
@@ -346,7 +438,7 @@ namespace Habanero.Test.BO
         public void Test_SerialiseXml_Composition_SingleRelationship()
         {
             //---------------Set up test pack-------------------
-            LoadClassDefs_Composition_SingleRelationship();
+            LoadClassDefs_SingleRelationship(RelationshipType.Composition);
 
             OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
@@ -379,7 +471,7 @@ namespace Habanero.Test.BO
         public void Test_SerialiseXml_Composition_MultipleRelationship_EmptyCollection()
         {
             //---------------Set up test pack-------------------
-            LoadClassDefs_Composition_MultipleRelationship();
+            LoadClassDefs_MultipleRelationship(RelationshipType.Composition);
 
             OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
 
@@ -402,7 +494,7 @@ namespace Habanero.Test.BO
         public void Test_SerialiseXml_Composition_MultipleRelationship()
         {
             //---------------Set up test pack-------------------
-            LoadClassDefs_Composition_MultipleRelationship();
+            LoadClassDefs_MultipleRelationship(RelationshipType.Composition);
 
             OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
             ContactPersonTestBO contactPerson1 = ContactPersonTestBO.CreateUnsavedContactPerson();
@@ -488,7 +580,7 @@ namespace Habanero.Test.BO
         public void Test_DeserialiseXml_Composition_SingleRelationship_EmptyCollection()
         {
             //---------------Set up test pack-------------------
-            LoadClassDefs_Composition_SingleRelationship();
+            LoadClassDefs_SingleRelationship(RelationshipType.Composition);
 
             const string organisationID = "83e11f9f-705f-40d6-8cfb-101efcb72727";
             string organisationName = TestUtil.GetRandomString();
@@ -543,7 +635,7 @@ namespace Habanero.Test.BO
         public void Test_DeserialiseXml_Composition_MultipleRelationship_EmptyCollection()
         {
             //---------------Set up test pack-------------------
-            LoadClassDefs_Composition_MultipleRelationship();
+            LoadClassDefs_MultipleRelationship(RelationshipType.Composition);
 
             const string organisationID = "83e11f9f-705f-40d6-8cfb-101efcb72727";
             string organisationName = TestUtil.GetRandomString();
@@ -563,7 +655,7 @@ namespace Habanero.Test.BO
         public void Test_DeserialiseXml_Composition__MultipleRelationship_OneRelatedObject()
         {
             //---------------Set up test pack-------------------
-            LoadClassDefs_Composition_MultipleRelationship();
+            LoadClassDefs_MultipleRelationship(RelationshipType.Composition);
 
             const string contactPersonID = "14c2a7d9-47de-47ab-99b9-ce6834947988";
             string contactPersonSurname = TestUtil.GetRandomString();
@@ -594,7 +686,7 @@ namespace Habanero.Test.BO
         [Test] public void Test_DeserialiseXml_Composition__MultipleRelationship()
         {
             //---------------Set up test pack-------------------
-            LoadClassDefs_Composition_MultipleRelationship();
+            LoadClassDefs_MultipleRelationship(RelationshipType.Composition);
 
             const string contactPersonID1 = "14c2a7d9-47de-47ab-99b9-ce6834947988";
             const string contactPersonID2 = "e0a6391a-fc34-42af-8100-8c13a686cf42";
@@ -628,45 +720,97 @@ namespace Habanero.Test.BO
             Assert.AreEqual(contactPersonSurname2, contactPerson2.Surname);
         }
 
-        
-
-
-        [Test, Ignore]
-        public void Test_SerialiseDeserialise_Aggregation()
+        [Test]
+        public void Test_SerialiseXml_Aggregation_SingleRelationship()
         {
-            //---------------Set up test -----------------------
-            //find composition test class
-            //there is an aggregation relationship between organisation and contactperson
-            //this default class def has contactppl rship
-            OrganisationTestBO.LoadDefaultClassDef();
-            //i think this is the class def with the correct structure for aggregation with contact person 
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            //create the organisation
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            //create a contact person
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
-            //link between the two classes 
-            organisationTestBO.ContactPeople.Add(contactPersonTestBO);
-            organisationTestBO.Save();
+            //---------------Set up test pack-------------------
+            LoadClassDefs_SingleRelationship(RelationshipType.Aggregation);
 
-            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+
+            organisation.ContactPerson = contactPerson;
+
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            //---------------Assert pre conditions -------------
-            Assert.AreEqual(organisationTestBO.ContactPeople[0], contactPersonTestBO);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(RelationshipType.Aggregation,
+                            organisation.Relationships["ContactPerson"].RelationshipDef.RelationshipType);
             //---------------Execute Test ----------------------
-            xs.Serialize(memoryStream, organisationTestBO);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            OrganisationTestBO deserialisedOrganisation =
-                (OrganisationTestBO)xs.Deserialize(memoryStream);
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            xs.Serialize(memoryStream, organisation);
             //---------------Test Result -----------------------
-            Assert.AreNotSame(organisationTestBO, deserialisedOrganisation);
-            //implementing aggregation would mean that all the objects that are created will be returned.
-            //so both organisationTestBO AND contactperson need to be serialized AND deserialized 
-            //with only one call to the serialize and deserialize methods.
-            Assert.AreEqual(organisationTestBO.ContactPeople[0], deserialisedOrganisation.ContactPeople[0]);
-            Assert.AreEqual(organisationTestBO.ContactPeople[0].Surname, deserialisedOrganisation.ContactPeople[0].Surname);
+            XmlDocument doc = GetXmlDocument(memoryStream);
+
+            XmlNode orgNode = doc.ChildNodes[1];
+            Assert.AreEqual(1, orgNode.ChildNodes.Count);
+            XmlNode contactPersonsNode = orgNode.ChildNodes[0];
+            Assert.AreEqual("ContactPerson", contactPersonsNode.Name);
+
+            Assert.AreEqual(1, contactPersonsNode.ChildNodes.Count);
+            XmlNode contactPersonNode = contactPersonsNode.ChildNodes[0];
+            Assert.AreEqual("ContactPersonTestBO", contactPersonNode.Name);
+
+            Assert.AreEqual(5, contactPersonNode.Attributes.Count);
         }
+
+        [Test]
+        public void Test_SerialiseXml_Aggregation_MultipleRelationship()
+        {
+            //---------------Set up test pack-------------------
+            LoadClassDefs_MultipleRelationship(RelationshipType.Aggregation);
+
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            ContactPersonTestBO contactPerson1 = ContactPersonTestBO.CreateUnsavedContactPerson();
+            ContactPersonTestBO contactPerson2 = ContactPersonTestBO.CreateUnsavedContactPerson();
+
+            organisation.ContactPeople.Add(contactPerson1);
+            organisation.ContactPeople.Add(contactPerson2);
+
+            MemoryStream memoryStream = new MemoryStream();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(RelationshipType.Aggregation,
+                            organisation.Relationships["ContactPeople"].RelationshipDef.RelationshipType);
+            Assert.AreEqual(2, organisation.ContactPeople.Count);
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            xs.Serialize(memoryStream, organisation);
+            //---------------Test Result -----------------------
+            XmlDocument doc = GetXmlDocument(memoryStream);
+
+            XmlNode orgNode = doc.ChildNodes[1];
+            Assert.AreEqual(1, orgNode.ChildNodes.Count);
+            XmlNode contactPersonsNode = orgNode.ChildNodes[0];
+            Assert.AreEqual("ContactPeople", contactPersonsNode.Name);
+
+            Assert.AreEqual(2, contactPersonsNode.ChildNodes.Count);
+            Assert.AreNotEqual(contactPersonsNode.ChildNodes[0], contactPersonsNode.ChildNodes[1]);
+        }
+
+        [Test]
+        public void Test_SerialiseXml_Association_WritesNothing()
+        {
+            //---------------Set up test pack-------------------
+            LoadClassDefs_SingleRelationship(RelationshipType.Association);
+
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+
+            organisation.ContactPerson = contactPerson;
+
+            MemoryStream memoryStream = new MemoryStream();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(RelationshipType.Association,
+                            organisation.Relationships["ContactPerson"].RelationshipDef.RelationshipType);
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            xs.Serialize(memoryStream, organisation);
+            //---------------Test Result -----------------------
+            XmlDocument doc = GetXmlDocument(memoryStream);
+
+            XmlNode orgNode = doc.ChildNodes[1];
+            Assert.AreEqual(0, orgNode.ChildNodes.Count);
+        }
+      
 
         //this might go to the implementing class' tests
         [Test]
@@ -780,25 +924,24 @@ namespace Habanero.Test.BO
             //Assert.AreNotEqual(organisation.OrganisationID, organisationClone.OrganisationID);
         }
 
-        private static void LoadClassDefs_Composition_MultipleRelationship()
+        private static void LoadClassDefs_MultipleRelationship(RelationshipType relationshipType)
         {
             OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
 
-            //Change relationship type to composite
             IRelationshipDef relationshipDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPeople"];
-            relationshipDef.RelationshipType = RelationshipType.Composition;
+            relationshipDef.RelationshipType = relationshipType;
         }
 
-        private static void LoadClassDefs_Composition_SingleRelationship()
+        private static void LoadClassDefs_SingleRelationship(RelationshipType relationshipType)
         {
             OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
 
-            //Change relationship type to composite
-            IRelationshipDef relationshipDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPerson"];
-            relationshipDef.RelationshipType = RelationshipType.Composition;
+           IRelationshipDef relationshipDef = ClassDef.Get<OrganisationTestBO>().RelationshipDefCol["ContactPerson"];
+            relationshipDef.RelationshipType = relationshipType;
         }
+
 
         private static XmlDocument GetXmlDocument(Stream memoryStream)
         {

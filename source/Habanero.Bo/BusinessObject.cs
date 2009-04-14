@@ -1206,7 +1206,7 @@ namespace Habanero.BO
         /// <summary>
         /// Defines how to read Business Objects from serialized xml
         /// </summary>
-        /// <param name="reader"></param>
+        /// <param name="reader">The XmlReader</param>
         public void ReadXml(XmlReader reader)
         {
             while (reader.MoveToNextAttribute())
@@ -1239,6 +1239,16 @@ namespace Habanero.BO
                         ReadRelatedObject(reader, relationship, relatedObjectType);
                     }
                 }
+                else
+                {
+                    string className = this.ClassDef.ClassName;
+                    if (relationshipName != className && relationshipName != "ArrayOf" + className &&
+                        reader.NodeType != XmlNodeType.EndElement)
+                    {
+                        throw new InvalidRelationshipNameException(string.Format(
+                            "The relationship '{0}' does not exist on the class '{1}'.", relationshipName, className));
+                    }
+                }
             }
         }
 
@@ -1258,7 +1268,7 @@ namespace Habanero.BO
         /// <summary>
         /// Defines how to write Business Objects to serialized xml 
         /// </summary>
-        /// <param name="writer"></param>
+        /// <param name="writer">The XmlWriter</param>
         public void WriteXml(XmlWriter writer)
         {
             foreach (IBOProp prop in _boPropCol)
@@ -1270,37 +1280,47 @@ namespace Habanero.BO
                 //what type of relationship? composition,aggregation...
                 //if (relationship.RelationshipDef.RelationshipType != RelationshipType.Association)
 
-                if (relationship.RelationshipDef.RelationshipType == RelationshipType.Composition)
+                RelationshipType relationshipType = relationship.RelationshipDef.RelationshipType;
+                if (relationshipType == RelationshipType.Composition || relationshipType==RelationshipType.Aggregation)
                 {
-                    if (relationship is ISingleRelationship)
+                    WriteXmlNestedRelationship(writer, relationship);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Writes related objects that are in composite and aggregate relationships
+        /// as nested xml.
+        /// </summary>
+        private static void WriteXmlNestedRelationship(XmlWriter writer, IRelationship relationship)
+        {
+            if (relationship is ISingleRelationship)
+            {
+                ISingleRelationship singleRelationship = (ISingleRelationship) relationship;
+                IBusinessObject relatedObject = singleRelationship.GetRelatedObject();
+                if (relatedObject != null)
+                {
+                    writer.WriteStartElement(relationship.RelationshipName);
+                    writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
+                    relatedObject.WriteXml(writer);
+                    writer.WriteEndElement();
+                    writer.WriteEndElement();
+                }
+            }
+            else if (relationship is IMultipleRelationship)
+            {
+                IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
+                IBusinessObjectCollection relatedObjects = multipleRelationship.BusinessObjectCollection;
+                if (relatedObjects.Count != 0)
+                {
+                    writer.WriteStartElement(relationship.RelationshipName);
+                    foreach (IBusinessObject relatedObject in relatedObjects)
                     {
-                        ISingleRelationship singleRelationship = (ISingleRelationship) relationship;
-                        IBusinessObject relatedObject = singleRelationship.GetRelatedObject();
-                        if (relatedObject != null)
-                        {
-                            writer.WriteStartElement(relationship.RelationshipName);
-                            writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
-                            relatedObject.WriteXml(writer);
-                            writer.WriteEndElement();
-                            writer.WriteEndElement();
-                        }
+                        writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
+                        relatedObject.WriteXml(writer);
+                        writer.WriteEndElement();
                     }
-                    else if (relationship is IMultipleRelationship)
-                    {
-                        IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
-                        IBusinessObjectCollection relatedObjects = multipleRelationship.BusinessObjectCollection;
-                        if (relatedObjects.Count != 0)
-                        {
-                            writer.WriteStartElement(relationship.RelationshipName);
-                            foreach (IBusinessObject relatedObject in relatedObjects)
-                            {
-                                writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
-                                relatedObject.WriteXml(writer);
-                                writer.WriteEndElement();
-                            }
-                            writer.WriteEndElement();
-                        }
-                    }
+                    writer.WriteEndElement();
                 }
             }
         }
