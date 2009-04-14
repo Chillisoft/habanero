@@ -17,7 +17,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns the Height required by the Panel when it is Expanded.
         /// </summary>
-        public int ExpandedHeight { get; private set; }
+        public int ExpandedHeight { get; set; }
 
         ///<summary>
         /// Constructor for <see cref="CollapsiblePanelManager"/>

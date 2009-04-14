@@ -38,7 +38,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns the Height required by the Panel when it is Expanded.
         /// </summary>
-        int ExpandedHeight { get; }
+        int ExpandedHeight { get; set;}
 
         ///<summary>
         /// Fires the Uncollapsed event this is used by the <see cref="CollapsiblePanelManager"/>

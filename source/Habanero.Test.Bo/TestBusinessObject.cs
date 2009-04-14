@@ -260,6 +260,24 @@ namespace Habanero.Test.BO
             Assert.AreSame(myBO, errors[0].BusinessObject);
         }
 
+        [Test]
+        public void Test_StatusIsDirty_WhenUpdateBOPropValue_ShouldBeSetToDirty()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            bo.SetPropertyValue("TestProp", "somevlaue");
+            bo.Save();
+            IBOProp boProp = bo.Props["TestProp"];
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsDirty);
+            //---------------Execute Test ----------------------
+            boProp.Value = "New Value";
+            //---------------Test Result -----------------------
+            Assert.IsTrue(bo.Status.IsDirty);
+        }
+
 
         private class BOWithCustomErrors : MockBO
         {

@@ -236,8 +236,8 @@ namespace Habanero.BO
                 _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
                 _valueBeforeLastEdit = _currentValue;
                 _currentValue = newValue;
-                FireBOPropValueUpdated();
                 _isDirty = !Equals(_persistedValue, newValue);
+                FireBOPropValueUpdated();
             }
         }
         /// <summary>

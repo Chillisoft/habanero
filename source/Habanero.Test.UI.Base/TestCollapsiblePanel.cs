@@ -119,6 +119,18 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_SetExpandedHeight_ShouldReturnNewExpandedHeight()
+        {
+            //---------------Set up test pack-------------------
+            ICollapsiblePanel panel = CreateControl();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            panel.ExpandedHeight = 500;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(500, panel.ExpandedHeight);
+        }
+        [Test]
         public void TestCollapsePanel_CollapseTwice()
         {
             //---------------Set up test pack-------------------

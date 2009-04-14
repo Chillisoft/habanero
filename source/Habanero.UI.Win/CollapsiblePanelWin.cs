@@ -30,6 +30,7 @@ namespace Habanero.UI.Win
         public int ExpandedHeight
         {
             get { return _collapsiblePanelManager.ExpandedHeight; }
+            set { _collapsiblePanelManager.ExpandedHeight = value; }
         }
 
         /// <summary>

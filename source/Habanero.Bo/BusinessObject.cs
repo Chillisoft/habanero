@@ -206,7 +206,14 @@ namespace Habanero.BO
             this.ID.Updated += ((sender, e) => FireIDUpdatedEvent());
             foreach (IBOProp boProp in this.Props)
             {
-                boProp.Updated += (sender, e) => FirePropertyUpdatedEvent(e.Prop);
+                boProp.Updated += (sender, e) =>
+                                  {
+                                      if (e.Prop.IsDirty)
+                                      {
+                                          _boStatus.IsDirty = true;
+                                      }
+                                      FirePropertyUpdatedEvent(e.Prop);
+                                  };
             }
         }
 
@@ -726,12 +733,6 @@ namespace Habanero.BO
                 }
                 _boStatus.IsDirty = true;
                 prop.Value = newPropValue1;
-                //                if (prop.IsValid)
-                //                {
-                //FireUpdatedEvent();
-                //TODO Mark 13 Mar 2009: This should rather be fired from any BOProp being updated, not from this SetPropertyValue method.
-                // FirePropertyUpdatedEvent(prop);
-                //                }
             }
         }
 
@@ -1485,7 +1486,7 @@ namespace Habanero.BO
         //    MemoryStream memoryStream = new MemoryStream();
         //    xs.Serialize(memoryStream, this);
         //    memoryStream.Seek(0, SeekOrigin.Begin);
-            
+
         //    //_deserialisationKeepsSameIDValues = true;
 
         //    IBusinessObject clonedBO = (IBusinessObject)xs.Deserialize(memoryStream);
