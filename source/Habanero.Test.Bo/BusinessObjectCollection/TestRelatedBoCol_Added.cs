@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -455,8 +456,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsFalse(util.AddedEventFired);
         }
 
-
-
         [Test]
         public void TestAddMethod_RestoreBusinessObject()
         {
@@ -484,6 +483,147 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsNull(myBO.OrganisationID);
         }
 
+        [Ignore(" This needs to be reviewed urgently")] //TODO Brett 10 Apr 2009:
+        [Test]
+        public void Test_FixBug_AddMethod_RestoreBusinessObject_WhenObjectWasOnPreviousRelationshipShouldRestoreToPrevious()
+        {
+            //---------------Set up test pack-------------------
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
+            ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
+            cpCol.Add(myBO);
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.Save();
+            Guid? origionalOrganisationID = myBO.OrganisationID;
+
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            MultipleRelationship<ContactPersonTestBO> contactPeopleRel = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol2 = new RelatedBusinessObjectCollection<ContactPersonTestBO>(contactPeopleRel);
+            cpCol.Remove(myBO);
+            cpCol2.Add(myBO);
+            //---------------Assert Precondition----------------
+            util.AssertOneObjectInRemovedAndPersisted(cpCol);
+            util.AssertOneObjectInCurrentAndAddedCollection(cpCol2);
+            Assert.IsTrue(myBO.Status.IsDirty);
+            util.AssertAddedAndRemovedEventsNotFired();
+            Assert.AreEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
+            Assert.AreNotEqual(origionalOrganisationID, myBO.OrganisationID);
+            //---------------Execute Test ----------------------
+            myBO.CancelEdits();
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(myBO.Status.IsDirty);
+            util.AssertAddedAndRemovedEventsNotFired();
+            Assert.AreNotEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
+            Assert.AreEqual(origionalOrganisationID, myBO.OrganisationID);
+            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
+            util.AssertAllCollectionsHaveNoItems(cpCol2);
+        }
+
+        [Ignore(" This needs to be reviewed urgently")] //TODO Brett 10 Apr 2009:
+        [Test]
+        public void Test_FixBug_AddMethod_RestoreOrigCollection_WhenObjectWasOnPreviousRelationshipShouldRestoreToPrevious()
+        {
+            //---------------Set up test pack-------------------
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
+            ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
+            cpCol.Add(myBO);
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.Save();
+            Guid? origionalOrganisationID = myBO.OrganisationID;
+
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            MultipleRelationship<ContactPersonTestBO> contactPeopleRel = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol2 = new RelatedBusinessObjectCollection<ContactPersonTestBO>(contactPeopleRel);
+            cpCol.Remove(myBO);
+            cpCol2.Add(myBO);
+            //---------------Assert Precondition----------------
+            util.AssertOneObjectInRemovedAndPersisted(cpCol);
+            util.AssertOneObjectInCurrentAndAddedCollection(cpCol2);
+            Assert.IsTrue(myBO.Status.IsDirty);
+            util.AssertAddedAndRemovedEventsNotFired();
+            Assert.AreEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
+            Assert.AreNotEqual(origionalOrganisationID, myBO.OrganisationID);
+            //---------------Execute Test ----------------------
+            cpCol.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(myBO.Status.IsDirty);
+            util.AssertAddedAndRemovedEventsNotFired();
+            Assert.AreNotEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
+            Assert.AreEqual(origionalOrganisationID, myBO.OrganisationID);
+            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
+            util.AssertAllCollectionsHaveNoItems(cpCol2);
+        }
+        [Test]
+        public void Test_FixBug_AddMethod_RestoreNewCollection_WhenObjectWasOnPreviousRelationshipShouldRestoreToPrevious()
+        {
+            //---------------Set up test pack-------------------
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
+            ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
+            cpCol.Add(myBO);
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.Save();
+            Guid? origionalOrganisationID = myBO.OrganisationID;
+
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            MultipleRelationship<ContactPersonTestBO> contactPeopleRel = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol2 = new RelatedBusinessObjectCollection<ContactPersonTestBO>(contactPeopleRel);
+            cpCol.Remove(myBO);
+            cpCol2.Add(myBO);
+            //---------------Assert Precondition----------------
+            util.AssertOneObjectInRemovedAndPersisted(cpCol);
+            util.AssertOneObjectInCurrentAndAddedCollection(cpCol2);
+            Assert.IsTrue(myBO.Status.IsDirty);
+            util.AssertAddedAndRemovedEventsNotFired();
+            Assert.AreEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
+            Assert.AreNotEqual(origionalOrganisationID, myBO.OrganisationID);
+            //---------------Execute Test ----------------------
+            cpCol2.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(myBO.Status.IsDirty);
+            util.AssertAddedAndRemovedEventsNotFired();
+            Assert.AreNotEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
+            Assert.AreEqual(origionalOrganisationID, myBO.OrganisationID);
+            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
+            util.AssertAllCollectionsHaveNoItems(cpCol2);
+        }
+        [Test]
+        public void Test_FixBug_AddMethod_RestoreNewRelationship_WhenObjectWasOnPreviousRelationshipShouldRestoreToPrevious()
+        {
+            //---------------Set up test pack-------------------
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
+            ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
+            cpCol.Add(myBO);
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.Save();
+            Guid? origionalOrganisationID = myBO.OrganisationID;
+
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            MultipleRelationship<ContactPersonTestBO> contactPeopleRel = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            //RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol2 = new RelatedBusinessObjectCollection<ContactPersonTestBO>(contactPeopleRel);
+            IBusinessObjectCollection cpCol2 = contactPeopleRel.CurrentBusinessObjectCollection;
+            cpCol.Remove(myBO);
+            cpCol2.Add(myBO);
+            //---------------Assert Precondition----------------
+            util.AssertOneObjectInRemovedAndPersisted(cpCol);
+            util.AssertOneObjectInCurrentAndAddedCollection(cpCol2);
+            Assert.IsTrue(myBO.Status.IsDirty);
+            util.AssertAddedAndRemovedEventsNotFired();
+            Assert.AreEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
+            Assert.AreNotEqual(origionalOrganisationID, myBO.OrganisationID);
+            //---------------Execute Test ----------------------
+            contactPeopleRel.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(myBO.Status.IsDirty);
+            util.AssertAddedAndRemovedEventsNotFired();
+            Assert.AreNotEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
+            Assert.AreEqual(origionalOrganisationID, myBO.OrganisationID);
+            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
+            util.AssertAllCollectionsHaveNoItems(cpCol2);
+        }
         [Test]
         public void TestAddMethod_RefreshAllBusinessObject()
         {

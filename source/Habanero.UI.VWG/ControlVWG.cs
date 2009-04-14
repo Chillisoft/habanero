@@ -19,6 +19,8 @@
 
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using AnchorStyles=Habanero.UI.Base.AnchorStyles;
+using DockStyle=Habanero.UI.Base.DockStyle;
 
 
 namespace Habanero.UI.VWG
@@ -29,13 +31,15 @@ namespace Habanero.UI.VWG
     [MetadataTag("P")]
     public class ControlVWG : Control, IControlHabanero
     {
+        #region IControlHabanero
+
         /// <summary>
         /// Gets or sets the anchoring style.
         /// </summary>
         /// <value></value>
-        Base.AnchorStyles IControlHabanero.Anchor
+        AnchorStyles IControlHabanero.Anchor
         {
-            get { return (Base.AnchorStyles)base.Anchor; }
+            get { return (AnchorStyles)base.Anchor; }
             set { base.Anchor = (Gizmox.WebGUI.Forms.AnchorStyles)value; }
         }
 
@@ -51,11 +55,14 @@ namespace Habanero.UI.VWG
         /// Gets or sets which control borders are docked to its parent
         /// control and determines how a control is resized with its parent
         /// </summary>
-        Base.DockStyle IControlHabanero.Dock
+        DockStyle IControlHabanero.Dock
         {
             get { return DockStyleVWG.GetDockStyle(base.Dock); }
             set { base.Dock = DockStyleVWG.GetDockStyle(value); }
         }
+
+        #endregion
+
 
         int IControlHabanero.Bottom
         {

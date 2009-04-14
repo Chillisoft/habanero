@@ -202,6 +202,9 @@
     <Compile Include="RadioButtonVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SplitContainerVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SplitterVWG.cs">
       <SubType>Component</SubType>
     </Compile>

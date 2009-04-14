@@ -217,6 +217,9 @@
     <Compile Include="Grid\ReadOnlyGridControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SplitContainerWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SplitterWin.cs">
       <SubType>Component</SubType>
     </Compile>

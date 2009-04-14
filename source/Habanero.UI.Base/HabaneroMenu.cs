@@ -106,8 +106,10 @@ namespace Habanero.UI.Base
         {
             get { return _menuItems; }
         }
-
-        internal IFormHabanero Form
+        /// <summary>
+        /// The form that this menu is associated with.
+        /// </summary>
+        public IFormHabanero Form
         {
             get { return _form; }
         }
@@ -223,7 +225,7 @@ namespace Habanero.UI.Base
             }
 
             ///<summary>
-            /// Gest the <see cref="IFormHabanero"/> that this menu is associated with
+            /// Gets the <see cref="IFormHabanero"/> that this menu is associated with
             ///</summary>
             public IFormHabanero Form
             {

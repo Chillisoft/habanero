@@ -127,11 +127,13 @@
     </Compile>
     <Compile Include="Selectors\BOGridAndEditorControl.cs" />
     <Compile Include="TestGroupBox.cs" />
+    <Compile Include="TestMainMenu.cs" />
     <Compile Include="TestMessageBoxConfirmer.cs" />
     <Compile Include="TestNumericUpDown.cs" />
     <Compile Include="TestPictureBox.cs" />
     <Compile Include="TestProgressBar.cs" />
     <Compile Include="TestRadioButton.cs" />
+    <Compile Include="TestSplitContainer.cs" />
     <Compile Include="TestSplitter.cs" />
     <Compile Include="TestTabControl.cs" />
     <Compile Include="TestTabPage.cs" />

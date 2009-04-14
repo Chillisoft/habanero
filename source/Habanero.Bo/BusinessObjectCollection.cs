@@ -595,6 +595,7 @@ namespace Habanero.BO
             lock (KeyObjectHashTable)
             {
                 bo = e.BusinessObject as TBusinessObject;
+
                 if (!this.MarkedForDeleteBusinessObjects.Remove(bo) || (this.Contains(bo))) return;
                 if (this.AddedBusinessObjects.Contains(bo) && this.Contains(bo))
                 {

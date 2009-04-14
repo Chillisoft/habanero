@@ -178,6 +178,8 @@ namespace Habanero.BO
 
         ///<summary>
         /// The collection of business objects under the control of this relationship.
+        /// This collection is not refreshed from the Database prior to being returned. I.e. This returns the 
+        /// collection exactly in the state that it is in Memory.
         ///</summary>
         public IBusinessObjectCollection CurrentBusinessObjectCollection
         {
@@ -242,8 +244,8 @@ namespace Habanero.BO
             }
             foreach (TBusinessObject addedChild in _boCol.AddedBusinessObjects.ToArray())
             {
-                addedChild.CancelEdits();
                 _boCol.Remove(addedChild);
+                addedChild.CancelEdits();
             }
             foreach (TBusinessObject dirtyChild in GetDirtyChildren())
             {

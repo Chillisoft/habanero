@@ -59,5 +59,13 @@ namespace Habanero.UI.Base
         ///   expanded </param>
         /// <returns></returns>
         ICollapsiblePanel AddControl(IControlHabanero contentControl, string headingText, int minimumControlHeight);
+
+        /// <summary>
+        /// Adds an <see cref="ICollapsiblePanel"/> to this control. The <paramref name="collapsiblePanel"/> is
+        ///   added to this <see cref="ICollapsiblePanelGroupControl"/>
+        /// </summary>
+        /// <param name="collapsiblePanel"></param>
+        /// <returns>The collapsible Panel</returns>
+        ICollapsiblePanel AddControl(ICollapsiblePanel collapsiblePanel);
     }
 }

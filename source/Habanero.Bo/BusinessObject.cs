@@ -913,6 +913,7 @@ namespace Habanero.BO
             ReleaseWriteLocks();
             FireUpdatedEvent();
             FireRestoredEvent();
+            _boPropCol.RestorePropertyValues();
         }
 
         /// <summary>

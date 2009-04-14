@@ -129,5 +129,14 @@ namespace Habanero.UI.VWG
             get { return (Base.DialogResult)base.DialogResult; }
             set { base.DialogResult = (Gizmox.WebGUI.Forms.DialogResult)value; }
         }
+//
+//        /// <summary>
+//        /// Gets or sets the MainMenu that is displayed in the form.
+//        /// </summary>
+//        public new IMainMenuHabanero Menu
+//        {
+//            get { return  base.Menu; }
+//            set { base.Menu = (MainMenu) value; }
+//        }
     }
 }

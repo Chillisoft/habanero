@@ -89,6 +89,19 @@ namespace Habanero.UI.Win
             return control;
         }
 
+        /// <summary>
+        /// Adds an <see cref="ICollapsiblePanel"/> to this control. The <paramref name="collapsiblePanel"/> is
+        ///   added to this <see cref="ICollapsiblePanelGroupControl"/>
+        /// </summary>
+        /// <param name="collapsiblePanel"></param>
+        /// <returns>The collapsible Panel</returns>
+        public ICollapsiblePanel AddControl(ICollapsiblePanel collapsiblePanel)
+        {
+            ICollapsiblePanel control = _collapsiblePanelGroupManager.AddControl(collapsiblePanel);
+            control.Uncollapsed += ((sender, e) => FireItemSelected(control));
+            return control;
+        }
+
 
         private void FireItemSelected(ICollapsiblePanel collapsiblePanel)
         {

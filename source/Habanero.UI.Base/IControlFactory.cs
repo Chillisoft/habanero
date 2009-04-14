@@ -669,6 +669,19 @@ namespace Habanero.UI.Base
         /// <param name="item">the HabaneroMenu.Item that the IMenuItem is being created for</param>
         /// <returns>returns the Created MenuItem</returns>
         IMenuItem CreateMenuItem(HabaneroMenu.Item item);
+
+        /// <summary>
+        /// Creates an <see cref="IMainMenuHabanero"/> with associated habaneroMenu.
+        /// </summary>
+        /// <param name="habaneroMenu">the HabaneroMenu that the IMainMenuHabanero is being created for</param>
+        /// <returns>returns the Created IMainMenuHabanero</returns>
+        IMainMenuHabanero CreateMainMenu(HabaneroMenu habaneroMenu);
+
+        /// <summary>
+        /// Creates an <see cref="ISplitContainer"/>
+        /// </summary>
+        /// <returns>returns the created split container</returns>
+        ISplitContainer CreateSplitContainer();
     }
 
     /// <summary>

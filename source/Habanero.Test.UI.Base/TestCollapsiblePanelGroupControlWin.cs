@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -93,22 +94,6 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_AddControl()
-        {
-            //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(0, control.PanelsList.Count);
-            //---------------Execute Test ----------------------
-            ICollapsiblePanel collapsiblePanel = control.AddControl(GetControlFactory().CreatePanel(), "", 53);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, control.PanelsList.Count);
-            Assert.AreEqual(1, control.Controls.Count);
-            Assert.AreSame(collapsiblePanel, control.PanelsList[0]);
-            Assert.AreEqual(53 + collapsiblePanel.CollapseButton.Height, collapsiblePanel.ExpandedHeight);
-        }
-
-        [Test]
         public void Test_CollapsiblePanelExpandedHeight()
         {
             //---------------Set up test pack-------------------
@@ -127,6 +112,22 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_AddControl()
+        {
+            //---------------Set up test pack-------------------
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, control.PanelsList.Count);
+            //---------------Execute Test ----------------------
+            ICollapsiblePanel collapsiblePanel = control.AddControl(GetControlFactory().CreatePanel(), "", 53);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, control.PanelsList.Count);
+            Assert.AreEqual(1, control.Controls.Count);
+            Assert.AreSame(collapsiblePanel, control.PanelsList[0]);
+            Assert.AreEqual(53 + collapsiblePanel.CollapseButton.Height, collapsiblePanel.ExpandedHeight);
+        }
+
+        [Test]
         public void Test_AddTwoControl()
         {
             //---------------Set up test pack-------------------
@@ -142,6 +143,52 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, control.Controls.Count);
             ICollapsiblePanel cp2 = control.PanelsList[1];
             Assert.AreSame(content2, cp2.ContentControl);
+        }
+        [Test]
+        public void Test_AddControl_WhenControlIsCollapsiblePanel_ShouldAdd()
+        {
+            //---------------Set up test pack-------------------
+            ICollapsiblePanelGroupControl groupControl = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanel collapsiblePanel = GetControlFactory().CreateCollapsiblePanel("Name");
+            collapsiblePanel.MinimumSize = new Size(123, 76);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, groupControl.PanelsList.Count);
+            Assert.AreEqual("Name", collapsiblePanel.Name);
+            Assert.AreEqual("Name", collapsiblePanel.CollapseButton.Text);
+            Assert.AreEqual("Name", collapsiblePanel.CollapseButton.Name);
+            //---------------Execute Test ----------------------
+            //            ICollapsiblePanel collapsiblePanel = groupControl.AddControl(GetControlFactory().CreatePanel(), "", 53);
+            ICollapsiblePanel returnedCollapsiblePanel = groupControl.AddControl(collapsiblePanel);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(collapsiblePanel, returnedCollapsiblePanel);
+            Assert.AreEqual(1, groupControl.PanelsList.Count);
+            Assert.AreEqual(1, groupControl.Controls.Count);
+            Assert.AreSame(collapsiblePanel, groupControl.PanelsList[0]);
+            Assert.AreEqual(53 + collapsiblePanel.CollapseButton.Height, collapsiblePanel.ExpandedHeight);
+            Assert.AreEqual("Name", collapsiblePanel.CollapseButton.Text);
+            Assert.AreEqual("Name", collapsiblePanel.CollapseButton.Name);
+        }
+
+        [Test]
+        public void Test_AddTwoControl__WhenControlIsCollapsiblePanel_ShouldAdd()
+        {
+            //---------------Set up test pack-------------------
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanel collapsiblePanel1 = GetControlFactory().CreateCollapsiblePanel("Panel1");
+            collapsiblePanel1.MinimumSize = new Size(123, 76);
+            ICollapsiblePanel collapsiblePanel2 = GetControlFactory().CreateCollapsiblePanel("Panel2");
+            collapsiblePanel2.MinimumSize = new Size(123, 55);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, control.PanelsList.Count);
+            //---------------Execute Test ----------------------
+            control.AddControl(collapsiblePanel1);
+            control.AddControl(collapsiblePanel2);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, control.PanelsList.Count);
+            Assert.AreEqual(2, control.Controls.Count);
+            ICollapsiblePanel cp2 = control.PanelsList[1];
+            Assert.AreSame(collapsiblePanel2, cp2);
         }
 
         [Test]

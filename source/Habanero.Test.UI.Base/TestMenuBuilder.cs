@@ -152,7 +152,7 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(1, childForm.Controls.Count);
                 Assert.IsInstanceOfType(typeof(FormControlStubWin), winForm.MdiChildren[0].Controls[0]);
                 Assert.AreNotSame(expectedFormControl, winForm.MdiChildren[0].Controls[0]);
-                //---------------Tear down -------------------------
+                
 
             }
 
@@ -313,7 +313,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(subMenuName, menu.MenuItems[0].Text);
             Assert.AreEqual(1, menu.MenuItems[0].MenuItems.Count);
             Assert.AreEqual(menuItemName, menu.MenuItems[0].MenuItems[0].Text);
-            //---------------Tear Down -------------------------          
+                      
         }
 
         [Test]
@@ -337,7 +337,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, menu.MenuItems[0].MenuItems.Count);
             Assert.AreEqual(subMenuName2, menu.MenuItems[1].Text);
             Assert.AreEqual(2, menu.MenuItems[1].MenuItems.Count);
-            //---------------Tear Down -------------------------          
+                      
         }
 
         [Test]
@@ -359,7 +359,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, menu.MenuItems[0].MenuItems.Count);
             Assert.AreEqual(menuItemName1, menu.MenuItems[0].MenuItems[0].Text);
             Assert.AreEqual(menuItemName2, menu.MenuItems[0].MenuItems[1].Text);
-            //---------------Tear Down -------------------------          
+                      
         }
 
         [Test]
@@ -389,7 +389,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(menuItemName1, createdSubMenu.MenuItems[1].Text);
             Assert.AreEqual(menuItemName2, createdSubsubMenu.MenuItems[0].Text);
 
-            //---------------Tear Down -------------------------          
+                      
         }
 
         [Test]
@@ -476,7 +476,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.IsTrue(called);
-            //---------------Tear Down -------------------------          
+                      
         }
 
         [Test]
@@ -535,7 +535,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.IsTrue(called);
-            //---------------Tear Down -------------------------                
+                            
         }
 
         [Test]
@@ -735,7 +735,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             AssertControlDockedInForm((IControlHabanero)expectedFormControl, frm);
-            //---------------Tear Down -------------------------          
+                      
         }
 
         [Test]
@@ -761,7 +761,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             AssertControlDockedInForm((IControlHabanero)expectedFormControl, habaneroMenu.Form);
-            //---------------Tear Down -------------------------          
+                      
         }
 
         [Test]

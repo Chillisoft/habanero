@@ -48,8 +48,8 @@ namespace Habanero.UI.VWG
         /// <returns></returns>
         public IMainMenuHabanero BuildMainMenu(HabaneroMenu habaneroMenu)
         {
-            IMainMenuHabanero mainMenu =  new MainMenuVWG(habaneroMenu);
-            mainMenu.Name = habaneroMenu.Name;
+            IMainMenuHabanero mainMenu = this.ControlFactory.CreateMainMenu(habaneroMenu);
+//            mainMenu.Name = habaneroMenu.Name;
             foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
             {
                 mainMenu.MenuItems.Add(BuildMenu(submenu));
@@ -67,22 +67,20 @@ namespace Habanero.UI.VWG
 
         protected virtual IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
         {
-            IMenuItem menuItem = new MenuItemVWG(habaneroMenu.Name);
+            IMenuItem menuItem = this.ControlFactory.CreateMenuItem(habaneroMenu.Name);
             foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
             {
                 menuItem.MenuItems.Add(BuildMenu(submenu));
             }
             foreach (HabaneroMenu.Item habaneroMenuItem in habaneroMenu.MenuItems)
             {
-                IMenuItem childMenuItem = new MenuItemVWG(habaneroMenuItem);
+                IMenuItem childMenuItem = this.ControlFactory.CreateMenuItem((habaneroMenuItem));
                 childMenuItem.Click += delegate { childMenuItem.DoClick(); };
-                   
+
                 menuItem.MenuItems.Add(childMenuItem);
             }
             return menuItem;
         }
-
-      
     }
 
     ///<summary>
@@ -91,18 +89,22 @@ namespace Habanero.UI.VWG
     internal class MainMenuVWG : MainMenu, IMainMenuHabanero
     {
         protected readonly HabaneroMenu _habaneroMenu;
+        private readonly MenuItemCollectionVWG _menuItems;
 
-        public MainMenuVWG() { }
+        public MainMenuVWG()
+        {
+            _menuItems = new MenuItemCollectionVWG(base.MenuItems);
+        }
 
-        public MainMenuVWG(HabaneroMenu habaneroMenu)
-            : this()
+        public MainMenuVWG(HabaneroMenu habaneroMenu) : this()
         {
             _habaneroMenu = habaneroMenu;
+            if (_habaneroMenu != null) this.Name = _habaneroMenu.Name;
         }
 
         private IControlFactory GetControlFactory()
         {
-            if (_habaneroMenu != null) 
+            if (_habaneroMenu != null)
                 if (_habaneroMenu.ControlFactory != null)
                     return _habaneroMenu.ControlFactory;
             return GlobalUIRegistry.ControlFactory;
@@ -113,7 +115,7 @@ namespace Habanero.UI.VWG
         ///</summary>
         public new IMenuItemCollection MenuItems
         {
-            get { return new MenuItemCollectionVWG(base.MenuItems); }
+            get { return _menuItems; }
         }
 
         /// <summary>
@@ -147,7 +149,7 @@ namespace Habanero.UI.VWG
 
         public IMenuItem this[int index]
         {
-            get { return ( MenuItemVWG)(_menuItemCollection[index]); }
+            get { return (MenuItemVWG) (_menuItemCollection[index]); }
         }
 
         public void Add(IMenuItem menuItem)
@@ -162,7 +164,7 @@ namespace Habanero.UI.VWG
         private IFormControl _formControl;
         private IControlManager _controlManager;
 
-        public MenuItemVWG(HabaneroMenu.Item habaneroMenuItem): this(habaneroMenuItem.Name)
+        public MenuItemVWG(HabaneroMenu.Item habaneroMenuItem) : this(habaneroMenuItem.Name)
         {
             _habaneroMenuItem = habaneroMenuItem;
         }
@@ -207,8 +209,8 @@ namespace Habanero.UI.VWG
                     }
                     else
                     {
-                        throw new Exception(
-                            "Please set up the MenuItem with at least one Creational or custom handling delegate");
+                        throw new Exception
+                            ("Please set up the MenuItem with at least one Creational or custom handling delegate");
                     }
                     control.Dock = Base.DockStyle.Fill;
                     IControlHabanero controlToNestIn = _habaneroMenuItem.Form.Controls[0];

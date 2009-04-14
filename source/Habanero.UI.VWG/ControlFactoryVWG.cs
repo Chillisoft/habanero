@@ -659,7 +659,10 @@ namespace Habanero.UI.VWG
         ///</summary>
         public ICollapsiblePanel CreateCollapsiblePanel(string name)
         {
-            return new CollapsiblePanelVWG(this) {Text = name};
+            CollapsiblePanelVWG collapsiblePanel = new CollapsiblePanelVWG(this) {Text = name, Name = name};
+            collapsiblePanel.CollapseButton.Text = name;
+            collapsiblePanel.CollapseButton.Name = name;
+            return collapsiblePanel;
         }
 
 //
@@ -1220,6 +1223,25 @@ namespace Habanero.UI.VWG
         public IMenuItem CreateMenuItem(HabaneroMenu.Item item)
         {
             return new MenuItemVWG(item);
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IMainMenuHabanero"/> with associated habaneroMenu.
+        /// </summary>
+        /// <param name="habaneroMenu">the HabaneroMenu that the IMainMenuHabanero is being created for</param>
+        /// <returns>returns the Created IMainMenuHabanero</returns>
+        public IMainMenuHabanero CreateMainMenu(HabaneroMenu habaneroMenu)
+        {
+            return new MainMenuVWG(habaneroMenu);
+        }
+
+        /// <summary>
+        /// Creates an <see cref="ISplitContainer"/>
+        /// </summary>
+        /// <returns>returns the created split container</returns>
+        public ISplitContainer CreateSplitContainer()
+        {
+            return new SplitContainerVWG();
         }
 
         #endregion

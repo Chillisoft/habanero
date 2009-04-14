@@ -31,6 +31,7 @@ namespace Habanero.UI.Win
     public class MenuBuilderWin : IMenuBuilder
     {
         private readonly IControlFactory _controlFactory;
+
         /// <summary>
         /// Constructs a <see cref="MenuBuilderWin"/> with the appropriate controlFactory
         /// </summary>
@@ -81,51 +82,33 @@ namespace Habanero.UI.Win
             }
             return menuItem;
         }
-
-//                    MenuItemVWG menuItem = new MenuItemVWG(habaneroMenu.Name);
-//            foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
-//            {
-//                menuItem.MenuItems.Add(BuildMenu(submenu));
-//            }
-//            foreach (HabaneroMenu.Item habaneroMenuItem in habaneroMenu.MenuItems)
-//            {
-//                MenuItemVWG childMenuItem = new MenuItemVWG(habaneroMenuItem);
-//                childMenuItem.Click += delegate { childMenuItem.DoClick(); };
-//                   
-//                menuItem.MenuItems.Add(childMenuItem);
-//            }
-//            return menuItem;
     }
-    
+
     ///<summary>
     /// The standard windows main menu structure object. <see cref="MainMenu"/>
     ///</summary>
     internal class MainMenuWin : MainMenu, IMainMenuHabanero
     {
         protected readonly HabaneroMenu _habaneroMenu;
+        private readonly MenuItemCollectionWin _menuItems;
 
-        public MainMenuWin() { }
-
-        public MainMenuWin(HabaneroMenu habaneroMenu)
-            : this()
+        public MainMenuWin()
         {
-            _habaneroMenu = habaneroMenu;
+            _menuItems = new MenuItemCollectionWin(base.MenuItems);
         }
 
-        //private IControlFactory GetControlFactory()
-        //{
-        //    if (_habaneroMenu != null) 
-        //        if (_habaneroMenu.ControlFactory != null)
-        //            return _habaneroMenu.ControlFactory;
-        //    return GlobalUIRegistry.ControlFactory;
-        //}
+        public MainMenuWin(HabaneroMenu habaneroMenu) : this()
+        {
+            _habaneroMenu = habaneroMenu;
+            if (_habaneroMenu != null) this.Name = _habaneroMenu.Name;
+        }
 
         ///<summary>
         /// The collection of menu items for this menu <see cref="Menu.MenuItemCollection"/>
         ///</summary>
         public new IMenuItemCollection MenuItems
         {
-            get { return new MenuItemCollectionWin(base.MenuItems); }
+            get { return _menuItems; }
         }
 
         /// <summary>
@@ -140,6 +123,7 @@ namespace Habanero.UI.Win
             formWin.Menu = this;
         }
     }
+
     /// <summary>
     /// A menuItems Collection representing the <see cref="Menu.MenuItemCollection"/>
     /// </summary>
@@ -159,12 +143,12 @@ namespace Habanero.UI.Win
 
         public IMenuItem this[int index]
         {
-            get { return (IMenuItem)_menuItemCollection[index]; }
+            get { return (IMenuItem) _menuItemCollection[index]; }
         }
 
         public void Add(IMenuItem menuItem)
         {
-            _menuItemCollection.Add((MenuItem)menuItem);
+            _menuItemCollection.Add((MenuItem) menuItem);
         }
     }
 
@@ -175,13 +159,12 @@ namespace Habanero.UI.Win
         private IFormControl _formControl;
         private IControlManager _controlManager;
 
-        public MenuItemWin(HabaneroMenu.Item habaneroMenuItem)
-            : this(habaneroMenuItem.Name)
+        public MenuItemWin(HabaneroMenu.Item habaneroMenuItem) : this(habaneroMenuItem.Name)
         {
             _habaneroMenuItem = habaneroMenuItem;
         }
-        public MenuItemWin(string text)
-            : base(text)
+
+        public MenuItemWin(string text) : base(text)
         {
         }
 
@@ -210,8 +193,8 @@ namespace Habanero.UI.Win
                     _createdForm.Text = _habaneroMenuItem.Name;
                     _createdForm.Controls.Clear();
 
-                    BorderLayoutManager layoutManager = _habaneroMenuItem
-                        .ControlFactory.CreateBorderLayoutManager(_createdForm);
+                    BorderLayoutManager layoutManager = _habaneroMenuItem.ControlFactory.CreateBorderLayoutManager
+                        (_createdForm);
 
                     IControlHabanero control;
                     if (_habaneroMenuItem.FormControlCreator != null)
@@ -227,17 +210,17 @@ namespace Habanero.UI.Win
                     }
                     else
                     {
-                        throw new Exception(
-                            "Please set up the MenuItem with at least one Creational or custom handling delegate");
+                        throw new Exception
+                            ("Please set up the MenuItem with at least one Creational or custom handling delegate");
                     }
                     layoutManager.AddControl(control, BorderLayoutManager.Position.Centre);
                     _createdForm.Show();
                     _createdForm.Closed += delegate
-                    {
-                        _createdForm = null;
-                        _formControl = null;
-                        _controlManager = null;
-                    };
+                                           {
+                                               _createdForm = null;
+                                               _formControl = null;
+                                               _controlManager = null;
+                                           };
                 }
             }
             catch (Exception ex)
@@ -270,5 +253,4 @@ namespace Habanero.UI.Win
             return false;
         }
     }
-    
 }

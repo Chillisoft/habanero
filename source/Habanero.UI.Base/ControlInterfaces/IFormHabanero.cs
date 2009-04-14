@@ -176,6 +176,10 @@ namespace Habanero.UI.Base
         /// taken to close the form
         /// </summary>
         DialogResult DialogResult { get; set; }
+//
+//        /// <summary>
+//        /// Gets or sets the MainMenu that is displayed in the form.
+//        /// </summary>
+//        IMainMenuHabanero Menu { set; get; }
     }
-
 }

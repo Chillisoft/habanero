@@ -1053,7 +1053,10 @@ namespace Habanero.UI.Win
         ///</summary>
         public ICollapsiblePanel CreateCollapsiblePanel(string name)
         {
-            return new CollapsiblePanelWin(this) {Name = name, Text = name};
+            CollapsiblePanelWin collapsiblePanel = new CollapsiblePanelWin(this) { Text = name, Name = name };
+            collapsiblePanel.CollapseButton.Text = name;
+            collapsiblePanel.CollapseButton.Name = name;
+            return collapsiblePanel;
         }
 
         /// <summary>
@@ -1204,6 +1207,25 @@ namespace Habanero.UI.Win
         public IMenuItem CreateMenuItem(HabaneroMenu.Item item)
         {
             return new MenuItemWin(item);
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IMainMenuHabanero"/> with associated habaneroMenu.
+        /// </summary>
+        /// <param name="habaneroMenu">the HabaneroMenu that the IMainMenuHabanero is being created for</param>
+        /// <returns>returns the Created IMainMenuHabanero</returns>
+        public IMainMenuHabanero CreateMainMenu(HabaneroMenu habaneroMenu)
+        {
+            return new MainMenuWin(habaneroMenu);
+        }
+
+        /// <summary>
+        /// Creates an <see cref="ISplitContainer"/>
+        /// </summary>
+        /// <returns>returns the created split container</returns>
+        public ISplitContainer CreateSplitContainer()
+        {
+            return new SplitContainerWin();
         }
     }
 

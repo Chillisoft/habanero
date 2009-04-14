@@ -19,14 +19,6 @@ namespace Habanero.UI.VWG
         private readonly CollapsiblePanelGroupManager _collapsiblePanelGroupManager;
 
         /// <summary>
-        /// A List of all <see cref="ICollapsiblePanel"/>s that are being managed and displayed by this Control.
-        /// </summary>
-        public List<ICollapsiblePanel> PanelsList
-        {
-            get { return _collapsiblePanelGroupManager.PanelsList; }
-        }
-
-        /// <summary>
         /// Returns the <see cref="ICollapsiblePanelGroupControl.ColumnLayoutManager"/> that is used for Laying out the <see cref="ICollapsiblePanel"/>s
         ///   on this control.
         /// </summary>
@@ -38,6 +30,14 @@ namespace Habanero.UI.VWG
         public CollapsiblePanelGroupControlVWG()
         {
             _collapsiblePanelGroupManager = new CollapsiblePanelGroupManager(this, GlobalUIRegistry.ControlFactory);
+        }
+
+        /// <summary>
+        /// A List of all <see cref="ICollapsiblePanel"/>s that are being managed and displayed by this Control.
+        /// </summary>
+        public List<ICollapsiblePanel> PanelsList
+        {
+            get { return _collapsiblePanelGroupManager.PanelsList; }
         }
 
         /// <summary>
@@ -77,7 +77,20 @@ namespace Habanero.UI.VWG
             control.Uncollapsed += ((sender, e) => FireItemSelected(control));
             return control;
         }
-                                                        
+
+        /// <summary>
+        /// Adds an <see cref="ICollapsiblePanel"/> to this control. The <paramref name="collapsiblePanel"/> is
+        ///   added to this <see cref="ICollapsiblePanelGroupControl"/>
+        /// </summary>
+        /// <param name="collapsiblePanel"></param>
+        /// <returns>The collapsible Panel</returns>
+        public ICollapsiblePanel AddControl(ICollapsiblePanel collapsiblePanel)
+        {
+            ICollapsiblePanel control = _collapsiblePanelGroupManager.AddControl(collapsiblePanel);
+            control.Uncollapsed += ((sender, e) => FireItemSelected(control));
+            return control;
+        }
+
 
         /// <summary>
         /// Event handler for the Uncollapsed Event.

@@ -421,6 +421,29 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boProp.IsValid);
             Assert.AreEqual("", boProp.InvalidReason);
         }
+        [Test]
+        public void Test_CancelEdit_ShouldRestorePropertyValues()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            MyBO myBO = (MyBO) classDef.CreateNewBusinessObject();
+            string origionalPropertyValue = myBO.TestProp = TestUtil.GetRandomString();
+            myBO.Save();
+            Assert.AreEqual("", myBO.Status.IsValidMessage);
+            Assert.IsTrue(myBO.Status.IsValid());
+            myBO.TestProp = "";
+            IBOProp boProp = myBO.Props["TestProp"];
+            //---------------Assert Precondition----------------
+
+            Assert.AreNotEqual(origionalPropertyValue, myBO.TestProp);
+            Assert.AreNotEqual(origionalPropertyValue, boProp.Value);
+            //---------------Execute Test ----------------------
+            myBO.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(origionalPropertyValue, myBO.TestProp);
+            Assert.AreEqual(origionalPropertyValue, boProp.Value);
+        }
 
         [Test]
         public void TestGetPropertyValueToDisplay()
@@ -451,7 +474,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
         }
-
 
         [Test]
         public void TestBOLookupListWithString()

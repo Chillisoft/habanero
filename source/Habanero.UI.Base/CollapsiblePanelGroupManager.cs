@@ -72,16 +72,34 @@ namespace Habanero.UI.Base
             (IControlHabanero contentControl, string headingText, int minimumControlHeight)
         {
             ICollapsiblePanel collapsiblePanel = ControlFactory.CreateCollapsiblePanel();
+            collapsiblePanel.ContentControl = contentControl;
+            collapsiblePanel.CollapseButton.Text = headingText;
+            AddCollapsiblePanel(collapsiblePanel, minimumControlHeight);
+            return collapsiblePanel;
+        }
+
+        private void AddCollapsiblePanel(ICollapsiblePanel collapsiblePanel, int minimumControlHeight)
+        {
             ColumnLayoutManager.AddControl(collapsiblePanel);
             this.PanelsList.Add(collapsiblePanel);
-            collapsiblePanel.ContentControl = contentControl;
             collapsiblePanel.Height = collapsiblePanel.CollapseButton.Height + minimumControlHeight;
             collapsiblePanel.Collapsed = true;
-            collapsiblePanel.CollapseButton.Text = headingText;
             collapsiblePanel.Uncollapsed += delegate
                                             {
                                                 CollapseUnpinnedPanels(collapsiblePanel);
                                             };
+        }
+
+        /// <summary>
+        /// Adds an <see cref="ICollapsiblePanel"/> to this control. The <paramref name="collapsiblePanel"/> is
+        ///    added to the CollapsiblePanelGroupControl.
+        /// </summary>
+        /// <param name="collapsiblePanel">The collapsiblePanelBeingAdded</param>
+        /// <returns></returns>
+        public ICollapsiblePanel AddControl(ICollapsiblePanel collapsiblePanel)
+        {
+            int minimumControlHeight = collapsiblePanel.MinimumSize.Height - collapsiblePanel.CollapseButton.Height;
+            AddCollapsiblePanel(collapsiblePanel, minimumControlHeight);
             return collapsiblePanel;
         }
 

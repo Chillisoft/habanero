@@ -23,7 +23,7 @@ namespace Habanero.UI.Base
     /// The main menu interface used to represent the main menu structure that has been 
     /// set up for it's specific implementation
     ///</summary>
-    public interface IMainMenuHabanero
+    public interface IMainMenuHabanero//:IControlHabanero
     {
         ///<summary>
         /// The collection of menu items for this menu
