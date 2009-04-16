@@ -68,24 +68,27 @@ namespace Habanero.BO
                 foreach (string key in _parameters.Keys)
                 {
                     object value = _parameters[key];
-					if (value != null)
-					{
-						switch (key)
-						{
-							case "min":
-								_minValue = Convert.ToDecimal(value);
-								break;
-							case "max":
-								_maxValue = Convert.ToDecimal(value);
-								break;
-							default:
-								throw new InvalidXmlDefinitionException(String.Format(
-                                	"The rule type '{0}' for decimals does not exist. " +
-                                	"Check spelling and capitalisation, or see the " +
-                                	"documentation for existing options or ways to " +
-                                	"add options of your own.", key));
-						}
-					}
+                    if (value == null) return;
+                    if (value is string)
+                    {
+                        if (string.IsNullOrEmpty(Convert.ToString(value))) return;
+                    }
+                    switch (key)
+                    {
+                        case "min":
+                            _minValue = Convert.ToDecimal(value);
+                            break;
+                        case "max":
+                            _maxValue = Convert.ToDecimal(value);
+                            break;
+                        default:
+                            throw new InvalidXmlDefinitionException
+                                (String.Format
+                                     ("The rule type '{0}' for decimals does not exist. "
+                                      + "Check spelling and capitalisation, or see the "
+                                      + "documentation for existing options or ways to "
+                                      + "add options of your own.", key));
+                    }
                 }
             }
             catch (InvalidXmlDefinitionException)

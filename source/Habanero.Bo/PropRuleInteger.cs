@@ -67,6 +67,10 @@ namespace Habanero.BO
                 {
                     object value = _parameters[key];
                     if (value == null) continue;
+                    if (value is string)
+                    {
+                        if (string.IsNullOrEmpty(Convert.ToString(value))) return;
+                    }
                     switch (key)
                     {
                         case "min":
