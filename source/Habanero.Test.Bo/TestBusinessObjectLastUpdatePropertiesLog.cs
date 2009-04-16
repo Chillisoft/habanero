@@ -196,6 +196,11 @@ namespace Habanero.Test.BO
                 get { return "MyUserName"; }
             }
 
+            public bool HasCurrentUser
+            {
+                get { return !String.IsNullOrEmpty(CurrentUserName); }
+            }
+
             #endregion
         }
     }

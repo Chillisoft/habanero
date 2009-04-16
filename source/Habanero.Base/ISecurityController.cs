@@ -32,5 +32,10 @@ namespace Habanero.Base
         /// Returns the current user's name.
         ///</summary>
         string CurrentUserName{ get; }
+
+        /// <summary>
+        /// Returns true if there is a current user.
+        /// </summary>
+        bool HasCurrentUser { get;}
     }
 }
