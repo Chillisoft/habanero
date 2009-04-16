@@ -117,19 +117,12 @@ namespace Habanero.BO
         /// Commits all the successfully executed statements to the datasource.
         /// 2'nd phase of a 2 phase database commit.
         /// </summary>
-        protected override void CommitToDatasource()
+        protected override bool CommitToDatasource()
         {
             try
             {
                 _dbTransaction.Commit();
-                _commitSuccess = true;
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error commiting transaction: " + Environment.NewLine +
-                    ExceptionUtilities.GetExceptionString(ex, 4, true));
-                TryRollback(ex);
-                throw;
+                return true;
             }
             finally
             {
@@ -145,17 +138,11 @@ namespace Habanero.BO
         /// <see cref="TransactionCommitter.ExecuteTransactionToDataSource"/> or during committing to the datasource
         /// <see cref="TransactionCommitter.CommitToDatasource"/>
         /// </summary>
-        protected override void TryRollback(Exception origException)
+        protected override void TryRollback()
         {
             try
             {
                 if (_dbTransaction != null) _dbTransaction.Rollback();
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error rolling back transaction: " + Environment.NewLine +
-                    ExceptionUtilities.GetExceptionString(ex, 4, true));
-                throw origException;
             }
             finally
             {

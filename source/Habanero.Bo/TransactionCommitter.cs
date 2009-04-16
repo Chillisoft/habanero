@@ -363,7 +363,15 @@ namespace Habanero.BO
             {
                 log.Error("Error executing transaction: " + Environment.NewLine +
                           ExceptionUtilities.GetExceptionString(ex, 4, true));
-                TryRollback(ex);
+                try
+                {
+                    TryRollback();
+                }
+                catch (Exception rollBackException)
+                {
+                    log.Error("Error rolling back transaction: " + Environment.NewLine +
+                        ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                }
                 UpdateTransactionsAsRolledBack();
                 throw;
             }
@@ -385,7 +393,7 @@ namespace Habanero.BO
         /// <see cref="ExecuteTransactionToDataSource"/> or during committing to the datasource
         /// <see cref="CommitToDatasource"/>
         /// </summary>
-        protected abstract void TryRollback(Exception origException);
+        protected abstract void TryRollback();
 
         #endregion "Execute" Methods
 
@@ -396,13 +404,39 @@ namespace Habanero.BO
         /// </summary>
         private void Commit()
         {
-            CommitToDatasource();
+            try
+            {
+                _commitSuccess = CommitToDatasource();
+            } catch (Exception ex)
+            {
+                try
+                {
+                    TryRollback();
+                }
+                catch (Exception rollBackException)
+                {
+                    log.Error("Error rolling back transaction: " + Environment.NewLine +
+                        ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                }
+                throw;
+            }
             if (_commitSuccess)
             {
                 UpdateTransactionsAsCommited();
             }
             else
             {
+                try
+                {
+                    TryRollback();
+                }
+                catch (Exception rollBackException)
+                {
+                    log.Error("Error rolling back transaction: " + Environment.NewLine +
+                        ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                    throw;
+                }
+                
                 UpdateTransactionsAsRolledBack();
             }
         }
@@ -411,7 +445,7 @@ namespace Habanero.BO
         /// Commits all the successfully executed statements to the datasource.
         /// 2'nd phase of a 2 phase database commit.
         /// </summary>
-        protected abstract void CommitToDatasource();
+        protected abstract bool CommitToDatasource();
 
         /// <summary>
         /// Marks all the ITransactional objects as committed.

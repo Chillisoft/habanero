@@ -103,9 +103,9 @@ namespace Habanero.BO
         /// Commits all the successfully executed statements to the datasource.
         /// 2'nd phase of a 2 phase database commit.
         /// </summary>
-        protected override void CommitToDatasource()
+        protected override bool CommitToDatasource()
         {
-            _commitSuccess = true;
+           return true;
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Habanero.BO
         /// <see cref="TransactionCommitter.ExecuteTransactionToDataSource"/> or during committing to the datasource
         /// <see cref="TransactionCommitter.CommitToDatasource"/>
         /// </summary>
-        protected override void TryRollback(Exception origException)
+        protected override void TryRollback()
         {
 
         }

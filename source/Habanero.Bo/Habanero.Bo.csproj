@@ -74,6 +74,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Db4objects.Db4o, Version=7.4.88.12908, Culture=neutral, PublicKeyToken=6199cd4f203aa8eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Db4objects.Db4o.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\log4net.dll</HintPath>
@@ -356,6 +360,7 @@
     <Compile Include="TransactionalSingleRelationship.cs" />
     <Compile Include="TransactionCommitterDB.cs" />
     <Compile Include="TransactionCommitter.cs" />
+    <Compile Include="TransactionCommitterDB4O.cs" />
     <Compile Include="TransactionCommitterInMemory.cs" />
     <Compile Include="TransactionLogBusObj.cs" />
     <Compile Include="TransactionLogTable.cs">
