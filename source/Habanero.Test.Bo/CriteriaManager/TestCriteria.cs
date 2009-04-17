@@ -554,8 +554,8 @@ namespace Habanero.Test.BO
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch);
-
         }
+
         [Test]
         public void TestToString_Guid()
         {

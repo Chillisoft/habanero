@@ -41,6 +41,8 @@ namespace Habanero.Test.Structure
         {
             
         }
+
+
         public new static ClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

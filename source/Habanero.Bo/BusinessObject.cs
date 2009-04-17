@@ -437,6 +437,14 @@ namespace Habanero.BO
             set { _classDef = (ClassDef) value; }
         }
 
+
+        /// <summary>
+        /// A property to store the business object's full classdef name.  this is used when persisting to an object database
+        /// so that the object can be queried based on its classdef (without the necessity of persisting the entire classdef
+        /// for each object).
+        /// </summary>
+        public string ClassDefName { get; set; }
+
         /// <summary>
         /// Returns the primary key ID of this object.  If there is no primary key on this
         /// class, the primary key of the nearest suitable parent is found and populated

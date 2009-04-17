@@ -32,7 +32,7 @@ namespace Habanero.Base
     /// If you simply require a list of Business Objects with limited intelligence then check out
     /// <see cref="IBusinessObjectList"/>
     /// </summary>
-	public interface IBusinessObjectCollection : ICollection //IList<BusinessObject>
+	public interface IBusinessObjectCollection : ICollection, IList //IList<BusinessObject>
 	{
 		/// <summary>
 		/// Handles the event of a business object being added

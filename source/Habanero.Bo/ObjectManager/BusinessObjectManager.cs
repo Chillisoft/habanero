@@ -97,7 +97,7 @@ namespace Habanero.BO
         /// Add a business object to the object manager.
         /// </summary>
         /// <param name="businessObject"></param>
-        internal void Add(IBusinessObject businessObject)
+        public void Add(IBusinessObject businessObject)
         {
             lock (_loadedBusinessObjects)
             {
@@ -145,7 +145,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="businessObject">The business object being checked.</param>
         /// <returns>Whether the busienss object is loadd or not</returns>
-        internal bool Contains(IBusinessObject businessObject)
+        public bool Contains(IBusinessObject businessObject)
         {
             //if (Contains(businessObject.ID))
             //{
@@ -185,7 +185,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id"> The business object id being checked (bo.Id).</param>
         /// <returns> Whether the busienss object is loadd or not</returns>
-        internal bool Contains(IPrimaryKey id)
+        public bool Contains(IPrimaryKey id)
         {
             return Contains(id.ObjectID);
         }
@@ -380,7 +380,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="objectID">The business object id of the object being returned. (usually bo.ID.GetObjectID</param>
         /// <returns>The business object from the object manger.</returns>
-        internal IBusinessObject this[Guid objectID]
+        public IBusinessObject this[Guid objectID]
         {
             get
             {
@@ -401,7 +401,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="objectID">The business object id of the object being returned. (bo.ID) </param>
         /// <returns>The business object from the object manger.</returns>
-        internal IBusinessObject this[IPrimaryKey objectID]
+        public IBusinessObject this[IPrimaryKey objectID]
         {
             //get { return this[objectID.AsString_CurrentValue()]; }
             get { return this[objectID.ObjectID]; }

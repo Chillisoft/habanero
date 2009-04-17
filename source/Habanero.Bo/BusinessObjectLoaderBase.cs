@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
@@ -597,7 +598,7 @@ namespace Habanero.BO
                 QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
 
             BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(relationshipCriteria, preparedOrderCriteria);
-            LoadBOCollection(relatedCol, col);
+            LoadBOCollection(relatedCol, (ICollection) col);
             //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
             relatedCol.SelectQuery.Criteria = relationshipCriteria;
             relatedCol.SelectQuery.OrderCriteria = preparedOrderCriteria;
@@ -621,7 +622,22 @@ namespace Habanero.BO
             {
                 AddBusinessObjectToCollection(collection, loadedBo);
             }
+            Console.Out.WriteLine("before: " + collection.Count);
             RestoreEditedLists(collection);
+            Console.Out.WriteLine("after: " + collection.Count);
+        }
+
+        /// <summary>
+        /// Adds all the business objects from the <paramref name="loadedBOs"/> collection to the
+        /// <see cref="IBusinessObjectCollection"/>
+        /// </summary>
+        /// <param name="collection">the collection being added to</param>
+        /// <param name="loadedBOs">the collection of loaded BOs to add</param>
+        protected static void LoadBOCollection<T>(IBusinessObjectCollection collection, IList<T> loadedBOs)
+        {
+            IList col = new ArrayList();
+            foreach (T loadedBO in loadedBOs) col.Add(loadedBO);
+            LoadBOCollection(collection, col);
         }
 
         /// <summary>
@@ -705,6 +721,21 @@ namespace Habanero.BO
             CheckNotTypedAsBusinessObject<T>();
             ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
             return (T) GetBusinessObjectByValue(classDef, idValue);
+        }
+
+        protected static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key, Type boType)
+        {
+            BusinessObjectManager businessObjectManager = BusinessObjectManager.Instance;
+            if (key.IsGuidObjectID)
+            {
+                lock (businessObjectManager)
+                {
+                    return businessObjectManager.Contains(key) ? businessObjectManager[key] : null;
+                }
+            }
+            BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
+            IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
+            return find.Count > 0 ? find[0] : null;
         }
     }
 }

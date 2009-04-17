@@ -22,6 +22,7 @@ using Habanero.DB;
 
 namespace Habanero.BO
 {
+
     ///<summary>
     /// A Data Accessor for Retrieving and committing data from a relational database.
     ///</summary>

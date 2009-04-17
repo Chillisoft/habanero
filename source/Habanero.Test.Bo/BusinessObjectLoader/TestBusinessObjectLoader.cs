@@ -25,6 +25,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB4O;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader
@@ -1525,15 +1526,17 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
         #region Nested type: TestBusinessObjectLoaderDB4O
 
-        [Ignore("Peter/Hagashen working on this")]
+        [Ignore("Peter working")]
         [TestFixture]
         public class TestBusinessObjectLoaderDB4O : TestBusinessObjectLoader
         {
             protected override void SetupDataAccessor()
             {
+                if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
                 string db4oFileStore = "DataStore.db4o";
                 if (File.Exists(db4oFileStore)) File.Delete(db4oFileStore);
-                BORegistry.DataAccessor = new DataAccessorDB4O(db4oFileStore);
+                DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileStore);
+                BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
             }
 
             protected override void DeleteEnginesAndCars()
@@ -1546,80 +1549,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         #endregion
     }
 
-    public class DataAccessorDB4O : IDataAccessor {
 
-        private readonly IBusinessObjectLoader _businessObjectLoader;
-        private string _fileName;
-
-        public DataAccessorDB4O(string fileName)
-        {
-            _fileName = fileName;
-            _businessObjectLoader = new BusinessObjectLoaderDB4O(fileName);
-        }
-
-        public IBusinessObjectLoader BusinessObjectLoader
-        {
-            get { return _businessObjectLoader; }
-        }
-
-        public ITransactionCommitter CreateTransactionCommitter() {
-            return new TransactionCommitterDB4O(_fileName);
-        }
-    }
-
-    public class BusinessObjectLoaderDB4O : IBusinessObjectLoader
-    {
-        private string _fileName;
-
-        public BusinessObjectLoaderDB4O(string fileName) {
-            _fileName = fileName;
-        }
-
-        public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey) { throw new NotImplementedException(); }
-        public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new() {
-            IObjectContainer db = Db4oFactory.OpenFile(_fileName);
-            try
-            {
-                IList<T> pilots = db.Query<T>(obj => criteria.IsMatch(obj, false));
-                if (pilots.Count > 0) return pilots[0];
-                return null;
-            } 
-            finally
-            {
-                if (db != null) db.Close();
-            }
-        }
-        public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria) { throw new NotImplementedException(); }
-        public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery) { throw new NotImplementedException(); }
-        public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString) { throw new NotImplementedException(); }
-        public T GetRelatedBusinessObject<T>(SingleRelationship<T> relationship) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship) { throw new NotImplementedException(); }
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria) { throw new NotImplementedException(); }
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteriaString, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObjectCollection GetBusinessObjectCollection(ClassDef def, Criteria criteria, OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int records) { throw new NotImplementedException(); }
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria) { throw new NotImplementedException(); }
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery) { throw new NotImplementedException(); }
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria, string orderCriteria) { throw new NotImplementedException(); }
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria) { throw new NotImplementedException(); }
-        public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public void Refresh(IBusinessObjectCollection collection) { throw new NotImplementedException(); }
-        public IBusinessObject Refresh(IBusinessObject businessObject) { throw new NotImplementedException(); }
-        public RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IMultipleRelationship relationship) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship) { throw new NotImplementedException(); }
-        public IBusinessObject GetBusinessObjectByValue(ClassDef classDef, object idValue) { throw new NotImplementedException(); }
-        public IBusinessObject GetBusinessObjectByValue(Type type, object idValue) { throw new NotImplementedException(); }
-        public T GetBusinessObjectByValue<T>(object idValue) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public int GetCount(IClassDef classDef, Criteria criteria) { throw new NotImplementedException(); }
-    }
+   
 
     //Test persistable properties.
 

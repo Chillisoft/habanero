@@ -251,11 +251,11 @@ namespace Habanero.Base
                 switch (_logicalOp)
                 {
                     case LogicalOp.And:
-                        return _leftCriteria.IsMatch(businessObject) && _rightCriteria.IsMatch(businessObject);
+                        return _leftCriteria.IsMatch(businessObject, usePersistedValue) && _rightCriteria.IsMatch(businessObject, usePersistedValue);
                     case LogicalOp.Or:
-                        return _leftCriteria.IsMatch(businessObject) || _rightCriteria.IsMatch(businessObject);
+                        return _leftCriteria.IsMatch(businessObject, usePersistedValue) || _rightCriteria.IsMatch(businessObject, usePersistedValue);
                     case LogicalOp.Not:
-                        return !_rightCriteria.IsMatch(businessObject);
+                        return !_rightCriteria.IsMatch(businessObject, usePersistedValue);
                 }
             }
 

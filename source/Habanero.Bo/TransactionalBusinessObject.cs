@@ -54,7 +54,7 @@ namespace Habanero.BO
         ///<summary>
         /// Returns the business object that this objects decorates.
         ///</summary>
-        protected internal BusinessObject BusinessObject
+        public BusinessObject BusinessObject
         {
             get { return _businessObject; }
         }

@@ -610,21 +610,6 @@ namespace Habanero.BO
             return boFromObjectManager;
         }
 
-        private static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key, Type boType)
-        {
-            BusinessObjectManager businessObjectManager = BusinessObjectManager.Instance;
-            if (key.IsGuidObjectID)
-            {
-                lock (businessObjectManager)
-                {
-                    return businessObjectManager.Contains(key) ? businessObjectManager[key] : null;
-                }
-            }
-            BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
-            IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
-            return find.Count > 0 ? find[0] : null;
-        }
-
         /// <summary>
         /// Checks to see if the loaded object is the base of a single table inheritance structure
         ///   and has a sub type

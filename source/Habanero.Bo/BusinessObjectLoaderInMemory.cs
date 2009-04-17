@@ -222,7 +222,7 @@ namespace Habanero.BO
             loadedBos.Sort(orderCriteria.Compare);
             collection.TotalCountAvailableForPaging = loadedBos.Count;
             ApplyLimitsToList(selectQuery, loadedBos);
-            LoadBOCollection(collection, loadedBos);
+            LoadBOCollection(collection, (ICollection) loadedBos);
         }
 
         /// <summary>
