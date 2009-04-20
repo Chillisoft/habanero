@@ -27,9 +27,9 @@ namespace Habanero.BO.ClassDefinition
     /// <summary>
     /// Maintains a collection of key definitions (KeyDef objects)
     /// </summary>
-    public class KeyDefCol: IEnumerable<KeyDef>
+    public class KeyDefCol : IEnumerable<KeyDef>
     {
-        private Dictionary<string, KeyDef> _keyDefs;
+        private readonly Dictionary<string, KeyDef> _keyDefs;
 
         /// <summary>
         /// A basic constructor that sets up an empty collection
@@ -47,35 +47,34 @@ namespace Habanero.BO.ClassDefinition
         {
             if (Contains(keyDef))
             {
-                throw new ArgumentException(String.Format(
-                    "A key definition with the name '{0}' already " +
-                    "exists.", keyDef.KeyName));
+                throw new ArgumentException
+                    (String.Format("A key definition with the name '{0}' already " + "exists.", keyDef.KeyName));
             }
             _keyDefs.Add(keyDef.KeyName, keyDef);
         }
 
-		/// <summary>
-		/// Removes a key definition from the collection
-		/// </summary>
-		/// <param name="keyDef">The Key Definition to remove</param>
-		protected void Remove(KeyDef keyDef)
-		{
-			if (Contains(keyDef))
-			{
+        /// <summary>
+        /// Removes a key definition from the collection
+        /// </summary>
+        /// <param name="keyDef">The Key Definition to remove</param>
+        protected void Remove(KeyDef keyDef)
+        {
+            if (Contains(keyDef))
+            {
                 _keyDefs.Remove(keyDef.KeyName);
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Indicates if the specified Key Definition exists
-		/// in the collection.
-		/// </summary>
-		/// <param name="keyDef">The Key Definition to search for</param>
-		/// <returns>Returns true if found, false if not</returns>
-		protected bool Contains(KeyDef keyDef)
-		{
-		    return (_keyDefs.ContainsValue(keyDef));
-		}
+        /// <summary>
+        /// Indicates if the specified Key Definition exists
+        /// in the collection.
+        /// </summary>
+        /// <param name="keyDef">The Key Definition to search for</param>
+        /// <returns>Returns true if found, false if not</returns>
+        protected bool Contains(KeyDef keyDef)
+        {
+            return (_keyDefs.ContainsValue(keyDef));
+        }
 
         /// <summary>
         /// Indicates whether the collection contains the key definition specified
@@ -101,13 +100,14 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (!Contains(keyName))
                 {
-                    throw new ArgumentException(String.Format(
-                        "The key name '{0}' does not exist in the " +
-                        "collection of key definitions.", keyName));
+                    throw new ArgumentException
+                        (String.Format
+                             ("The key name '{0}' does not exist in the " + "collection of key definitions.", keyName));
                 }
                 return _keyDefs[keyName];
             }
         }
+
         /// <summary>
         /// returns the key def at the index/
         /// </summary>
@@ -144,23 +144,20 @@ namespace Habanero.BO.ClassDefinition
             return lBOKeyCol;
         }
 
-		//public IEnumerator GetEnumerator()
-		//{
-		//    return _keyDefs.Values.GetEnumerator();
-		//}
+        //public IEnumerator GetEnumerator()
+        //{
+        //    return _keyDefs.Values.GetEnumerator();
+        //}
 
         /// <summary>
         /// Gets the count of items in this collection
         /// </summary>
         public int Count
         {
-            get
-            {
-                return _keyDefs.Count;
-            }
+            get { return _keyDefs.Count; }
         }
 
-    	#region IEnumerable<KeyDef> Members
+        #region IEnumerable<KeyDef> Members
 
         ///<summary>
         ///Returns an enumerator that iterates through the collection.
@@ -171,13 +168,13 @@ namespace Habanero.BO.ClassDefinition
         ///</returns>
         ///<filterpriority>1</filterpriority>
         IEnumerator<KeyDef> IEnumerable<KeyDef>.GetEnumerator()
-    	{
-    		return _keyDefs.Values.GetEnumerator();
-    	}
+        {
+            return _keyDefs.Values.GetEnumerator();
+        }
 
-    	#endregion
+        #endregion
 
-		#region IEnumerable Members
+        #region IEnumerable Members
 
         ///<summary>
         ///Returns an enumerator that iterates through a collection.
@@ -188,10 +185,10 @@ namespace Habanero.BO.ClassDefinition
         ///</returns>
         ///<filterpriority>2</filterpriority>
         IEnumerator IEnumerable.GetEnumerator()
-		{
-			return _keyDefs.Values.GetEnumerator();
-		}
+        {
+            return _keyDefs.Values.GetEnumerator();
+        }
 
-		#endregion
+        #endregion
     }
 }

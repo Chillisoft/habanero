@@ -589,7 +589,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             util.AssertOneObjectInRemovedAndPersisted(cpCol);
             util.AssertOneObjectInCurrentAndAddedCollection(cpCol2);
             Assert.IsTrue(myBO.Status.IsDirty);
-            util.AssertAddedAndRemovedEventsNotFired();
+//            util.AssertAddedAndRemovedEventsNotFired();
             Assert.AreEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
             Assert.AreNotEqual(origionalOrganisationID, myBO.OrganisationID);
             //---------------Execute Test ----------------------
@@ -627,7 +627,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             util.AssertOneObjectInRemovedAndPersisted(cpCol);
             util.AssertOneObjectInCurrentAndAddedCollection(cpCol2);
             Assert.IsTrue(myBO.Status.IsDirty);
-            util.AssertAddedAndRemovedEventsNotFired();
+//            util.AssertAddedAndRemovedEventsNotFired();
             Assert.AreEqual(organisationTestBO.OrganisationID, myBO.OrganisationID);
             Assert.AreNotEqual(origionalOrganisationID, myBO.OrganisationID);
             //---------------Execute Test ----------------------
