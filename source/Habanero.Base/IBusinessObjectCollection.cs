@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using System.Security.Permissions;
-using System.Collections.Generic;
 
 namespace Habanero.Base
 {
@@ -32,17 +31,17 @@ namespace Habanero.Base
     /// If you simply require a list of Business Objects with limited intelligence then check out
     /// <see cref="IBusinessObjectList"/>
     /// </summary>
-	public interface IBusinessObjectCollection : ICollection, IList //IList<BusinessObject>
-	{
-		/// <summary>
-		/// Handles the event of a business object being added
-		/// </summary>
-		event EventHandler<BOEventArgs> BusinessObjectAdded;
+    public interface IBusinessObjectCollection : IList //IList<BusinessObject>
+    {
+        /// <summary>
+        /// Handles the event of a business object being added
+        /// </summary>
+        event EventHandler<BOEventArgs> BusinessObjectAdded;
 
-		/// <summary>
-		/// Handles the event of a business object being removed
-		/// </summary>
-		event EventHandler<BOEventArgs> BusinessObjectRemoved;
+        /// <summary>
+        /// Handles the event of a business object being removed
+        /// </summary>
+        event EventHandler<BOEventArgs> BusinessObjectRemoved;
 
         ///// <summary>
         ///// Handles the event of any business object in this collection being edited
@@ -71,13 +70,13 @@ namespace Habanero.Base
         /// </summary>
         IClassDef ClassDef { get; set; }
 
-        /// <summary>
-		/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.
-		/// </summary>
-		/// <returns>
-		/// True if the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only; otherwise, false.
-		/// </returns>
-		bool IsReadOnly { get; }
+//        /// <summary>
+//		/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.
+//		/// </summary>
+//		/// <returns>
+//		/// True if the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only; otherwise, false.
+//		/// </returns>
+//		bool IsReadOnly { get; }
 
         /// <summary>
         /// Indicates whether any of the business objects have been amended 
@@ -88,86 +87,82 @@ namespace Habanero.Base
         ///<summary>
         /// the select query that is used to load this business object collection.
         ///</summary>
-        ISelectQuery SelectQuery
-        {
-            get;
-            set;
-        }
+        ISelectQuery SelectQuery { get; set; }
 
         /// <summary>
-		/// Finds a business object that has the key string specified.<br/>
-		/// Note_: the format of the search term is strict, so that a Guid ID
-		/// may be stored as "boIDname=########-####-####-####-############".
-		/// In the case of such Guid ID's, rather use the FindByGuid() function.
-		/// Composite primary keys may be stored otherwise, such as a
-		/// concatenation of the key names.
-		/// </summary>
-		/// <param name="key">The orimary key as a string</param>
-		/// <returns>Returns the business object if found, or null if not</returns>
+        /// Finds a business object that has the key string specified.<br/>
+        /// Note_: the format of the search term is strict, so that a Guid ID
+        /// may be stored as "boIDname=########-####-####-####-############".
+        /// In the case of such Guid ID's, rather use the FindByGuid() function.
+        /// Composite primary keys may be stored otherwise, such as a
+        /// concatenation of the key names.
+        /// </summary>
+        /// <param name="key">The orimary key as a string</param>
+        /// <returns>Returns the business object if found, or null if not</returns>
         IBusinessObject Find(Guid key);
 
-		/// <summary>
-		/// Returns a new collection that is a copy of this collection
-		/// </summary>
-		/// <returns>Returns the cloned copy</returns>
-		IBusinessObjectCollection Clone();
+        /// <summary>
+        /// Returns a new collection that is a copy of this collection
+        /// </summary>
+        /// <returns>Returns the cloned copy</returns>
+        IBusinessObjectCollection Clone();
 
-		/// <summary>
-		/// Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1"></see>.
-		/// </summary>
+        /// <summary>
+        /// Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1"></see>.
+        /// </summary>
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"></see>.</param>
         /// <returns>
-		/// The index of item if found in the list; otherwise, -1.
-		/// </returns>
-		int IndexOf(IBusinessObject item);
+        /// The index of item if found in the list; otherwise, -1.
+        /// </returns>
+        int IndexOf(IBusinessObject item);
 
-		/// <summary>
-		/// Gets or sets the element at the specified index.
-		/// </summary>
-		/// <param name="index">The zero-based index of the element to get or set.</param>
-		/// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
-		/// <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
+        /// <summary>
+        /// Gets or sets the element at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the element to get or set.</param>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
+        /// <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
         /// <returns>The element at the specified index.</returns>
-        IBusinessObject this[int index] { get; set; }
+        new IBusinessObject this[int index] { get; set; }
 
-		/// <summary>
-		/// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
-		/// </summary>
-		/// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
-		/// <exception cref="T:System.NotSupportedException">
-		/// The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
-		void Add(IBusinessObject item);
+        /// <summary>
+        /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+        /// </summary>
+        /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+        /// <exception cref="T:System.NotSupportedException">
+        /// The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
+        void Add(IBusinessObject item);
 
-		/// <summary>
-		/// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> contains a specific value.
-		/// </summary>
-		/// <returns>
-		/// True if item is found in the <see cref="T:System.Collections.Generic.ICollection`1"></see>; otherwise, false.
-		/// </returns>
-		/// <param name="item">The object to locate in the 
-		/// <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
-		bool Contains(IBusinessObject item);
+        /// <summary>
+        /// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> contains a specific value.
+        /// </summary>
+        /// <returns>
+        /// True if item is found in the <see cref="T:System.Collections.Generic.ICollection`1"></see>; otherwise, false.
+        /// </returns>
+        /// <param name="item">The object to locate in the 
+        /// <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+        bool Contains(IBusinessObject item);
 
-		/// <summary>
-		/// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"></see> to an <see cref="T:System.Array"></see>, starting at a particular <see cref="T:System.Array"></see> index.
-		/// </summary>
-		/// <param name="array">The one-dimensional <see cref="T:System.Array"></see> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"></see>. The <see cref="T:System.Array"></see> must have zero-based indexing.</param>
-		/// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
-		/// <exception cref="T:System.ArgumentOutOfRangeException">arrayIndex is less than 0.</exception>
-		/// <exception cref="T:System.ArgumentNullException">Array is null.</exception>
-		/// <exception cref="T:System.ArgumentException">Array is multidimensional or arrayIndex
-		/// is equal to or greater than the length of array.-or-The number of elements in
-		/// the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is 
-		/// greater than the available space from arrayIndex to the end of the destination array, or 
-		/// Type T cannot be cast automatically to the type of the destination array.</exception>
-		void CopyTo(IBusinessObject[] array, int arrayIndex);
+        /// <summary>
+        /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"></see> to an <see cref="T:System.Array"></see>, starting at a particular <see cref="T:System.Array"></see> index.
+        /// </summary>
+        /// <param name="array">The one-dimensional <see cref="T:System.Array"></see> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"></see>. The <see cref="T:System.Array"></see> must have zero-based indexing.</param>
+        /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">arrayIndex is less than 0.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Array is null.</exception>
+        /// <exception cref="T:System.ArgumentException">Array is multidimensional or arrayIndex
+        /// is equal to or greater than the length of array.-or-The number of elements in
+        /// the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is 
+        /// greater than the available space from arrayIndex to the end of the destination array, or 
+        /// Type T cannot be cast automatically to the type of the destination array.</exception>
+        void CopyTo(IBusinessObject[] array, int arrayIndex);
 
-		/// <summary>
-		/// Removes the first occurrence of a specific object from the 
-		/// <see cref="T:System.Collections.Generic.ICollection`1"></see>.
-		/// </summary>
-		/// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
-		/// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
+        /// <summary>
+        /// Removes the first occurrence of a specific object from the 
+        /// <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+        /// </summary>
+        /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
         /// <returns>
         /// True if item was successfully removed from the 
         /// <see cref="T:System.Collections.Generic.ICollection`1"></see>; otherwise, false.
@@ -176,16 +171,16 @@ namespace Habanero.Base
         /// </returns>
         bool Remove(IBusinessObject item);
 
-        /// <summary>
-        /// Removes the business object at the index position specified
-        /// </summary>
-        /// <param name="index">The index position to remove from</param>
-        void RemoveAt(int index);
-
-		/// <summary>
-		/// Clears the collection
-		/// </summary>
-		void Clear();
+//        /// <summary>
+//        /// Removes the business object at the index position specified
+//        /// </summary>
+//        /// <param name="index">The index position to remove from</param>
+//        void RemoveAt(int index);
+//
+//		/// <summary>
+//		/// Clears the collection
+//		/// </summary>
+//		void Clear();
 
         /// <summary>
         /// Indicates whether all of the business objects in the collection
@@ -269,11 +264,10 @@ namespace Habanero.Base
         /// <param name="limit">The limit</param>
         void LoadWithLimit(string searchCriteria, string orderByClause, int limit);
 
-        
 
         //TODO  17 Jan 2009: Do load with limit for objects and mixes of these.
 
-        
+
         /// <summary>
         /// Allows the adding of business objects to the collection without
         /// this causing the added event to be fired.
@@ -335,18 +329,20 @@ namespace Habanero.Base
         ///</summary>
         int TotalCountAvailableForPaging { get; set; }
 
-        
+
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
         /// </summary>
         [Obsolete("This has been replaced with CancelEdits : 04 Mar 2009")]
         void RestoreAll();
+
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
         /// </summary>
         void CancelEdits();
+
         /// <summary>
         /// Loads business objects that match the search criteria provided
         /// and an extra criteria literal, 
@@ -358,12 +354,14 @@ namespace Habanero.Base
         /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
         /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
         /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
-        void LoadWithLimit(string searchCriteria, string orderByClause, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords);
+        void LoadWithLimit
+            (string searchCriteria, string orderByClause, int firstRecordToLoad, int numberOfRecordsToLoad,
+             out int totalNoOfRecords);
 
         /// <summary>
         /// Refreshes the business objects in the collection
         /// </summary>
         [ReflectionPermission(SecurityAction.Demand)]
         void Refresh();
-	}
+    }
 }

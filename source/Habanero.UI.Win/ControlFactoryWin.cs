@@ -1227,6 +1227,64 @@ namespace Habanero.UI.Win
         {
             return new SplitContainerWin();
         }
+
+
+
+        /// <summary>
+        /// Creates a <see cref="IBOPanelEditorControl"/> for the Generic Type T.<br/>
+        /// This is a simple control that is built to allow the user to view and edit a business object.<br/>
+        /// The controls placed on the Panel are defined by the user interface definition defined in the classDef
+        /// for the Business Object (of type T).
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="uiDefName">The User Interface definition to use when creating the Control</param>
+        /// <returns></returns>
+        public IBOPanelEditorControl CreateBOEditorControl<T>(string uiDefName) where T : class, IBusinessObject
+        {
+            return new BOEditorControlWin<T>(this, uiDefName);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IBOPanelEditorControl"/> for the Generic Type T.<br/>
+        /// This is a simple control that is built to allow the user to view and edit a business object.<br/>
+        /// The controls placed on the Panel are defined by the user interface definition defined in the classDef
+        /// for the Business Object (of type T).<br/>
+        /// The default uiDef is used as the user interface definition for defining which controls are used to view and edit this business object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IBOPanelEditorControl CreateBOEditorControl<T>() where T : class, IBusinessObject
+        {
+            return new BOEditorControlWin<T>(this, "default");
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IBOPanelEditorControl"/> for the type defined by <paramref name="classDef"/>
+        /// This is a simple control that is built to allow the user to view and edit a business object.<br/>
+        /// The controls placed on the Panel are defined by the user interface definition defined in the classDef
+        /// for the Business Object.<br/>
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <param name="uiDefName">The uiDef defined in the classDef that is to be used.</param>
+        /// <returns></returns>
+        public IBOPanelEditorControl CreateBOEditorControl(IClassDef classDef, string uiDefName)
+        {
+            return new BOEditorControlWin(this, classDef, uiDefName);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IBOPanelEditorControl"/> for the type defined by <paramref name="classDef"/>
+        /// This is a simple control that is built to allow the user to view and edit a business object.<br/>
+        /// The controls placed on the Panel are defined by the user interface definition defined in the classDef
+        /// for the Business Object.<br/>
+        /// The default uiDef is used as the user interface definition for defining which controls are used to view and edit this business object
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <returns></returns>
+        public IBOPanelEditorControl CreateBOEditorControl(IClassDef classDef)
+        {
+            return new BOEditorControlWin(this, classDef, "default");
+        }
     }
 
 

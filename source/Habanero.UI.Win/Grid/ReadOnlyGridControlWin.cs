@@ -535,6 +535,8 @@ namespace Habanero.UI.Win
 
         #region Implementation of IBOSelectorAndEditor
 
+        //TODO Brett 18 Apr 2009: These methods need to be implemented for all these controls.
+        //Enable Disable buttons in the case of a readonlygrid control
         ///<summary>
         /// Gets and sets whether the user can add Business objects via this control
         ///</summary>

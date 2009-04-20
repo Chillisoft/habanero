@@ -155,9 +155,9 @@ namespace Habanero.UI.Base
         event EventHandler Closed;
 
         //TODO Deerasha 15Apr2009 implement this in FormWin and FormVWG
-        /// <summary>
-        /// Occurs before closing the form
-        /// </summary>
+       // /// <summary>
+       // /// Occurs before closing the form
+       // /// </summary>
         //event EventHandler Closing;
         
         /// <summary>

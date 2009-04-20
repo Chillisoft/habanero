@@ -1,27 +1,27 @@
-using System;
+﻿using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.Win
+namespace Habanero.UI.VWG
 {
     ///<summary>
     /// A Control for Editing/Viewing an <see cref="IBusinessObject"/>.
     ///</summary>
-    public class BOEditorControlWin : UserControlWin, IBOPanelEditorControl
+    public class BOEditorControlVWG : UserControlVWG, IBOPanelEditorControl
     {
         private readonly IPanelInfo _panelInfo;
 
         ///<summary>
-        /// The Constructor for the <see cref="BOEditorControlWin"/> which passes in the
+        /// The Constructor for the <see cref="BOEditorControlVWG"/> which passes in the
         /// <paramref name="classDef"/> for the <see cref="IBusinessObject"/> and the <paramref name="uiDefName"/> that 
         ///  is used to defined the User Interface for the <see cref="IBusinessObject"/>      
         ///</summary>
         ///<param name="controlFactory">The control factory which is used to create the Controls on this form.</param>
         ///<param name="classDef">The <see cref="IClassDef"/> for the  <see cref="IBusinessObject"/> that will be edited by this control</param>
         ///<param name="uiDefName">The user interface defined in the <see cref="IClassDef"/> that will be used to Build this control</param>
-        public BOEditorControlWin(IControlFactory controlFactory, IClassDef classDef, string uiDefName)
+        public BOEditorControlVWG(IControlFactory controlFactory, IClassDef classDef, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (classDef == null) throw new ArgumentNullException("classDef");
@@ -32,14 +32,14 @@ namespace Habanero.UI.Win
         }
 
         ///<summary>
-        /// The Constructor for the <see cref="BOEditorControlWin"/> which passes in the
+        /// The Constructor for the <see cref="BOEditorControlVWG"/> which passes in the
         /// <paramref name="classDef"/> for the <see cref="IBusinessObject"/> and
         ///  this control will be built using the default <see cref="UIDef"/> and the <see cref="IControlFactory"/> 
         ///  from the <see cref="GlobalUIRegistry.ControlFactory"/>
         ///  is used to defined the User Interface for the <see cref="IBusinessObject"/>      
         ///</summary>
         ///<param name="classDef">The <see cref="IClassDef"/> for the  <see cref="IBusinessObject"/> that will be edited by this control</param>
-        public BOEditorControlWin(IClassDef classDef) : this(GlobalUIRegistry.ControlFactory, classDef, "default")
+        public BOEditorControlVWG(IClassDef classDef) : this(GlobalUIRegistry.ControlFactory, classDef, "default")
         {
         }
 
@@ -56,6 +56,7 @@ namespace Habanero.UI.Win
                 SetEnableState();
             }
         }
+
         /// <summary>
         /// Sets the forms enabled state.
         /// </summary>
@@ -67,49 +68,40 @@ namespace Habanero.UI.Win
         }
 
         ///<summary>
-        /// The PanelInfo for the <see cref="BOEditorControlWin"/>.
+        /// The PanelInfo for the <see cref="BOEditorControlVWG"/>.
         ///</summary>
-        public IPanelInfo PanelInfo
+        public virtual IPanelInfo PanelInfo
         {
             get { return _panelInfo; }
         }
 
-//        /// <summary>
-//        /// Displays any errors or invalid fields associated with the BusinessObjectInfo
-//        /// being edited.  A typical use would involve activating the ErrorProviders
-//        /// on a BO panel.
-//        /// </summary>
-//        public void DisplayErrors()
-//        {
-//            _panelInfo.ApplyChangesToBusinessObject();
-//        }
-//
-//        /// <summary>
-//        /// Hides all the error providers.  Typically used where a new object has just
-//        /// been added and the interface is being cleaned up.
-//        /// </summary>
-//        public void ClearErrors()
-//        {
-//            _panelInfo.ClearErrorProviders();
-//        }
+        //        /// <summary>
+        //        /// Displays any errors or invalid fields associated with the BusinessObjectInfo
+        //        /// being edited.  A typical use would involve activating the ErrorProviders
+        //        /// on a BO panel.
+        //        /// </summary>
+        //        public void DisplayErrors()
+        //        {
+        //            _panelInfo.ApplyChangesToBusinessObject();
+        //        }
+        //
+        //        /// <summary>
+        //        /// Hides all the error providers.  Typically used where a new object has just
+        //        /// been added and the interface is being cleaned up.
+        //        /// </summary>
+        //        public void ClearErrors()
+        //        {
+        //            _panelInfo.ClearErrorProviders();
+        //        }
 
         #region Implementation of IBOEditorControl
-
-        /// <summary>
-        /// Applies any changes that have occured in any of the Controls on this control's to their related
-        /// Properties on the Business Object.
-        /// </summary>
-        public void ApplyChangesToBusinessObject()
-        {
-            _panelInfo.ApplyChangesToBusinessObject();
-        }
 
         /// <summary>
         /// Does the business object controlled by this control or any of its Aggregate or Composite children have and Errors.
         /// </summary>
         public bool HasErrors
         {
-            get { return this.BusinessObject == null? false: !this.BusinessObject.IsValid(); }
+            get { return this.BusinessObject == null ? false : !this.BusinessObject.IsValid(); }
         }
 
         /// <summary>
@@ -132,7 +124,7 @@ namespace Habanero.UI.Win
         /// Does the business object being managed by this control have any edits that have not been persisted.
         /// </summary>
         /// <returns></returns>
-        public bool IsDirty
+        public new bool IsDirty
         {
             get
             {
@@ -140,7 +132,13 @@ namespace Habanero.UI.Win
                 return this.BusinessObject == null ? false : this.BusinessObject.Status.IsDirty;
             }
         }
-// 
+
+        public void ApplyChangesToBusinessObject()
+        {
+            this.PanelInfo.ApplyChangesToBusinessObject();
+        }
+
+        // 
         /// <summary>
         /// Returns a list of all warnings for the business object controlled by this control or any of its children.
         /// </summary>
@@ -156,17 +154,17 @@ namespace Habanero.UI.Win
     ///<summary>
     /// A Control for Editing/Viewing an <see cref="IBusinessObject"/> of type T.
     ///</summary>
-    public class BOEditorControlWin<T> : UserControlWin, IBOPanelEditorControl where T : class, IBusinessObject
+    public class BOEditorControlVWG<T> : UserControlVWG, IBOPanelEditorControl where T : class, IBusinessObject
     {
         private readonly IPanelInfo _panelInfo;
 
         ///<summary>
-        /// The Constructor for <see cref="BOEditorControlWin{T}"/>
+        /// The Constructor for <see cref="BOEditorControlVWG{T}"/>
         ///</summary>
         ///<param name="controlFactory"></param>
         ///<param name="uiDefName">the user interface that identifies the <see cref="UIDef"/> that will be used
         /// for building the <see cref="IBusinessObject"/>'s Controls. </param>
-        public BOEditorControlWin(IControlFactory controlFactory, string uiDefName)
+        public BOEditorControlVWG(IControlFactory controlFactory, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
@@ -174,16 +172,27 @@ namespace Habanero.UI.Win
             _panelInfo = BOEditorControlUtils.CreatePanelInfo(controlFactory, classDef, uiDefName, this);
             SetEnableState();
         }
+
         ///<summary>
-        /// The Constructor for the <see cref="BOEditorControlWin"/> 
+        /// The Constructor for the <see cref="BOEditorControlVWG"/> 
         ///  this control will be built using the default <see cref="UIDef"/> and the <see cref="IControlFactory"/> 
         ///  from the <see cref="GlobalUIRegistry.ControlFactory"/>
         ///  is used to defined the User Interface for the <see cref="IBusinessObject"/>      
         ///</summary>
-        public BOEditorControlWin()
-            : this(GlobalUIRegistry.ControlFactory, "default")
+        public BOEditorControlVWG() : this(GlobalUIRegistry.ControlFactory, "default")
         {
         }
+        ///<summary>
+        /// The Constructor for the <see cref="BOEditorControlVWG"/> 
+        ///  this control will be built using the default <see cref="UIDef"/> and the <see cref="IControlFactory"/> 
+        ///  from the <see cref="GlobalUIRegistry.ControlFactory"/>
+        ///  is used to defined the User Interface for the <see cref="IBusinessObject"/>      
+        ///</summary>
+        public BOEditorControlVWG(IControlFactory controlFactory)
+            : this(controlFactory, "default")
+        {
+        }
+
         /// <summary>
         /// Gets or sets the business object being represented
         /// </summary>
@@ -197,6 +206,7 @@ namespace Habanero.UI.Win
                 SetEnableState();
             }
         }
+
         /// <summary>
         /// Sets the forms enabled state.
         /// </summary>
@@ -206,8 +216,9 @@ namespace Habanero.UI.Win
             this.PanelInfo.Panel.Enabled = this.Enabled;
             this.PanelInfo.ControlsEnabled = this.Enabled;
         }
+
         ///<summary>
-        /// The PanelInfo for the <see cref="BOEditorControlWin"/>.
+        /// The PanelInfo for the <see cref="BOEditorControlVWG"/>.
         ///</summary>
         public IPanelInfo PanelInfo
         {
@@ -272,7 +283,7 @@ namespace Habanero.UI.Win
         /// Does the business object being managed by this control have any edits that have not been persisted.
         /// </summary>
         /// <returns></returns>
-        public bool IsDirty
+        public new bool IsDirty
         {
             get
             {
@@ -294,7 +305,7 @@ namespace Habanero.UI.Win
     }
 
     /// <summary>
-    /// A Utility Class used by <see cref="BOEditorControlWin"/> and <see cref="BOEditorControlWin{T}"/> providing common functionality.
+    /// A Utility Class used by <see cref="BOEditorControlVWG"/> and <see cref="BOEditorControlVWG{T}"/> providing common functionality.
     /// </summary>
     internal static class BOEditorControlUtils
     {
@@ -307,14 +318,14 @@ namespace Habanero.UI.Win
             }
             catch (HabaneroDeveloperException ex)
             {
-                string developerMessage = "The 'BOEditorControlWin' could not be created since the the uiDef '"
+                string developerMessage = "The 'BOEditorControlVWG' could not be created since the the uiDef '"
                                           + uiDefName + "' does not exist in the classDef for '"
                                           + classDef.ClassNameFull + "'";
                 throw new HabaneroDeveloperException(developerMessage, developerMessage, ex);
             }
             if (uiForm == null)
             {
-                string developerMessage = "The 'BOEditorControlWin' could not be created since the the uiDef '"
+                string developerMessage = "The 'BOEditorControlVWG' could not be created since the the uiDef '"
                                           + uiDefName + "' in the classDef '" + classDef.ClassNameFull
                                           + "' does not have a UIForm defined";
                 throw new HabaneroDeveloperException(developerMessage, developerMessage);

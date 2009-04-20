@@ -31,6 +31,11 @@ namespace Habanero.UI.Base
     public interface IBOEditorControl : IBusinessObjectControl
     {
         /// <summary>
+        /// Applies any changes that have occured in any of the Controls on this control's to their related
+        /// Properties on the Business Object.
+        /// </summary>
+        void ApplyChangesToBusinessObject();
+        /// <summary>
         /// Does the business object controlled by this control or any of its Aggregate or Composite children have and Errors.
         /// </summary>
         bool HasErrors { get; }
@@ -68,6 +73,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IBOPanelEditorControl : IBOEditorControl, IBusinessObjectPanel
     {
+
     }
 
     /// <summary>

@@ -23,15 +23,38 @@ using System.Drawing;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
-    public class TestControlFactory
+
+    public abstract class TestControlFactory
     {
+        private IControlFactory _factory;
+
+        [SetUp]
+        public void TestSetup()
+        {
+            _factory = GetControlFactory();
+            ClassDef.ClassDefs.Clear();
+            
+        }
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
+        {
+            //Code that is executed before any test is run in this class. If multiple tests
+            // are executed then it will still only be called once.
+        }
+
+        [TearDown]
+        public void TestTearDown()
+        {
+            //Code that is executed after each and every test is executed in this fixture/class.
+        }
         protected virtual int GetStandardTextBoxHeight()
         {
             return 21;
@@ -451,26 +474,7 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        private IControlFactory _factory;
 
-        [SetUp]
-        public void TestSetup()
-        {
-            _factory = GetControlFactory();
-        }
-
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
-        {
-            //Code that is executed before any test is run in this class. If multiple tests
-            // are executed then it will still only be called once.
-        }
-
-        [TearDown]
-        public void TestTearDown()
-        {
-            //Code that is executed after each and every test is executed in this fixture/class.
-        }
 
         [Test]
         public void Test_CreateMainMenu()
@@ -1241,6 +1245,60 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             IBOCollapsiblePanelSelector control = factory.CreateCollapsiblePanelSelector();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(control);
+        }
+
+        [Test]
+        public void Test_Create_BOEditorControl_Generic_WithUIDef()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = GetControlFactory();
+            ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IBOPanelEditorControl control = factory.CreateBOEditorControl<ContactPersonTestBO>("default");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(control);
+        }
+
+        [Test]
+        public void Test_Create_BOEditorControl_Generic()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = GetControlFactory();
+            ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IBOPanelEditorControl control = factory.CreateBOEditorControl<ContactPersonTestBO>();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(control);
+        }
+        [Test]
+        public void Test_Create_BOEditorControl_NonGeneric_WithUIDef()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = GetControlFactory();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IBOPanelEditorControl control = factory.CreateBOEditorControl(classDef, "default");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(control);
+        }
+        [Test]
+        public void Test_Create_BOEditorControl_NonGeneric()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = GetControlFactory();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IBOPanelEditorControl control = factory.CreateBOEditorControl(classDef);
             //---------------Test Result -----------------------
             Assert.IsNotNull(control);
         }

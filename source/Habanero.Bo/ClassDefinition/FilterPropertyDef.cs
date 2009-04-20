@@ -53,7 +53,6 @@ namespace Habanero.BO.ClassDefinition
             if (string.IsNullOrEmpty(FilterTypeAssembly)) FilterTypeAssembly = "Habanero.UI.Base";
         }
 
-
         /// <summary>
         /// The name of the property this filter applies to.
         /// </summary>

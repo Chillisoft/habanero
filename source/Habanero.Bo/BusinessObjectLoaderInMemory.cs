@@ -163,8 +163,6 @@ namespace Habanero.BO
             return _dataStore.Find(classDef.ClassType, criteriaObject);
         }
 
-
-
         /// <summary>
         /// Reloads a businessObject from the datasource using the id of the object.
         /// A dirty object will not be refreshed from the database and the appropriate error will be raised.

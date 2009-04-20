@@ -288,5 +288,21 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="filterPropertyDefs"></param>
         ///<returns></returns>
         FilterDef CreateFilterDef(IList<FilterPropertyDef> filterPropertyDefs);
+
+        /// <summary>
+        /// Creates a <see cref="PropRuleSingle"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        PropRuleSingle CreatePropRuleSingle(string name, string message);
+
+        /// <summary>
+        /// Creates a <see cref="PropRuleDouble"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        PropRuleDouble CreatePropRuleDouble(string name, string message);
 	}
 }

@@ -1588,7 +1588,7 @@ namespace Habanero.BO
         ///true if the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only; otherwise, false.
         ///</returns>
         ///
-        bool IBusinessObjectCollection.IsReadOnly
+        bool IList.IsReadOnly
         {
             get { return false; }
         }

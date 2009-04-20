@@ -293,6 +293,15 @@ namespace Habanero.Test.UI.Base
         #region Implementation of IBOEditorControl
 
         /// <summary>
+        /// Applies any changes that have occured in any of the Controls on this control's to their related
+        /// Properties on the Business Object.
+        /// </summary>
+        public void ApplyChangesToBusinessObject()
+        {
+            
+        }
+
+        /// <summary>
         /// Does the business object controlled by this control or any of its Aggregate or Composite children have and Errors.
         /// </summary>
         public bool HasErrors

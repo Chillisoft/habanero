@@ -58,8 +58,8 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="filterDef">The <see cref="FilterDef"/> defining what filter fields are required</param>
         /// <param name="filterControl">The <see cref="IFilterControl"/> to place the filter controls on.</param>
-        public void BuildFilterControl(FilterDef filterDef, IFilterControl filterControl) {
-            filterControl.Controls.Clear();
+        public void BuildFilterControl(FilterDef filterDef, IFilterControl filterControl)
+        {
             filterControl.FilterControls.Clear();
             filterControl.FilterMode = filterDef.FilterMode;
 
@@ -70,7 +70,7 @@ namespace Habanero.UI.Base
                 Type filterType = TypeLoader.LoadType(filterPropertyDef.FilterTypeAssembly, filterPropertyDef.FilterType);
                 ICustomFilter customFilter = (ICustomFilter)Activator.CreateInstance(filterType, _controlFactory,
                                                                                      filterPropertyDef.PropertyName,
-                                                                                     FilterClauseOperator.OpEquals);
+                                                                                     filterPropertyDef.FilterClauseOperator);
                 SetParametersOnFilter(filterPropertyDef, filterType, customFilter);
                 filterControl.AddCustomFilter(filterPropertyDef.Label, customFilter);
             }

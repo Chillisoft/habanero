@@ -255,6 +255,7 @@ namespace Habanero.BO
                 OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            col.ClassDef = classDef;
             col.SelectQuery.Criteria = criteria;
             col.SelectQuery.OrderCriteria = orderCriteria;
             col.SelectQuery.FirstRecordToLoad = firstRecordToLoad;

@@ -180,7 +180,7 @@ namespace Habanero.Base
         /// NNB For performance reasons it was decided to not run the validation code 
         /// every time Isvalid is called on the boProp instead the boProp has a <see cref="Validate"/>
         /// which runs the validation code and sets the valid message and status on the BOProp.
-        /// This is used by the <see cref="BOPropCol"/> when  IsValid is called on the <see cref="BOPropCol"/>.
+        /// This is used by the <see cref="IBOPropCol"/> when  IsValid is called on the <see cref="IBOPropCol"/>.
         /// </summary>
         void Validate();
     }

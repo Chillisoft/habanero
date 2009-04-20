@@ -34,9 +34,7 @@ namespace Habanero.BO
     ///</summary>
     public class DataStoreInMemory
     {
-
-        private Dictionary<Guid, IBusinessObject> _objects =
-            new Dictionary<Guid, IBusinessObject>();
+        private Dictionary<Guid, IBusinessObject> _objects = new Dictionary<Guid, IBusinessObject>();
 
         ///<summary>
         /// Returns the number of objects in the memory store.

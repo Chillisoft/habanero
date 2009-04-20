@@ -62,6 +62,9 @@
     <Compile Include="BOColTabControlVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="BOEditorControlVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="BorderLayoutManagerVWG.cs" />
     <Compile Include="BusinessObjectPanelVWG.cs">
       <SubType>UserControl</SubType>

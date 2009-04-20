@@ -9,7 +9,7 @@ namespace Habanero.UI.Win
     /// An interface for a Group on <see cref="ICollapsiblePanel"/>s. 
     ///   The collapsible Panels are placed one above the other and when the one opens the panels below
     ///   are moved down.
-    /// The Interface works simply, you add the controls (<see cref="AddControl"/>) that will be displayed on 
+    /// The Interface works simply, you add the controls (AddControl) that will be displayed on 
     ///     an <see cref="ICollapsiblePanel"/> on this control in the order that you want them displayed.
     /// This control will then create the <see cref="ICollapsiblePanel"/> with the appropriate heading text and
     ///     the appropriate Expanded (<see cref="ICollapsiblePanel.ExpandedHeight"/> and Collapsed height.

@@ -112,8 +112,8 @@ namespace Habanero.BO.Loaders
 			if (!_documentValid)
 			{
 				throw new InvalidXmlDefinitionException("The '" + _element.Name + "' " +
-				                                        "node does not conform to its Document Type Definition (DTD). " +
-				                                        _invalidDocumentArgs.Message);
+                        "node does not conform to its Document Type Definition (DTD). " +
+                        _invalidDocumentArgs.Message);
 			}
 		}
 

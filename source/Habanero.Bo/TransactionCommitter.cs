@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
 using log4net;
 
 namespace Habanero.BO
@@ -79,7 +78,9 @@ namespace Habanero.BO
         /// A list of all the transactions that are added to the transaction committer by the application developer.
         /// </summary>
         private readonly List<ITransactional> _originalTransactions = new List<ITransactional>();
+
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitter");
+
         /// <summary>
         /// A list of all transactions that are executed by the transaction committer.
         /// The executed transactions may exceed the origionalTransactions due to the fact that the
@@ -89,10 +90,12 @@ namespace Habanero.BO
         /// the _executedTransactions list.
         /// </summary>
         protected List<ITransactional> _executedTransactions = new List<ITransactional>();
+
         /// <summary>
         /// A flag to indicate whether the commitToDataSource was successful or not.s
         /// </summary>
         protected bool _commitSuccess;
+
         private bool _runningUpdatingBeforePersisting;
 
         ///<summary>
@@ -132,8 +135,8 @@ namespace Habanero.BO
         ///<param name="transaction"></param>
         public void AddTransaction(ITransactional transaction)
         {
-            ITransactional foundTransactional = _originalTransactions.Find(
-                    obj => obj.TransactionID() == transaction.TransactionID());
+            ITransactional foundTransactional = _originalTransactions.Find
+                (obj => obj.TransactionID() == transaction.TransactionID());
             if (foundTransactional != null) return;
             _originalTransactions.Add(transaction);
         }
@@ -148,7 +151,7 @@ namespace Habanero.BO
             Execute();
             Commit();
         }
-       
+
         /// <summary>
         /// A List of all the transactions that where actually committed to the data source. This will include any updates required
         /// as a result of concurrency control, transaction logging, or deleting or dereferrencing children.
@@ -233,7 +236,7 @@ namespace Habanero.BO
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
 
                 string errMsg;
                 if (!trnBusObj.IsValid(out errMsg))
@@ -258,7 +261,7 @@ namespace Habanero.BO
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
                 if (trnBusObj.BusinessObject.Status.IsNew && trnBusObj.BusinessObject.Status.IsDeleted)
                 {
                     continue;
@@ -285,7 +288,7 @@ namespace Habanero.BO
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
 
                 if (!trnBusObj.IsDeleted) continue;
 
@@ -312,7 +315,7 @@ namespace Habanero.BO
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
 
                 string errMsg;
                 if (trnBusObj.HasDuplicateIdentifier(out errMsg))
@@ -344,7 +347,7 @@ namespace Habanero.BO
         /// Begins the transaction on the appropriate databasource.
         /// </summary>
         protected abstract void BeginDataSource();
-        
+
         #endregion "Begin" Methods
 
         /// <summary>
@@ -361,16 +364,18 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                log.Error("Error executing transaction: " + Environment.NewLine +
-                          ExceptionUtilities.GetExceptionString(ex, 4, true));
+                log.Error
+                    ("Error executing transaction: " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 4, true));
                 try
                 {
                     TryRollback();
                 }
                 catch (Exception rollBackException)
                 {
-                    log.Error("Error rolling back transaction: " + Environment.NewLine +
-                        ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                    log.Error
+                        ("Error rolling back transaction: " + Environment.NewLine
+                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
                 }
                 UpdateTransactionsAsRolledBack();
                 throw;
@@ -383,7 +388,7 @@ namespace Habanero.BO
         /// Tries to execute an individual transaction against the datasource.
         /// 1'st phase of a 2 phase database commit.
         /// </summary>
-        internal protected virtual void ExecuteTransactionToDataSource(ITransactional transaction)
+        protected internal virtual void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             _executedTransactions.Add(transaction);
         }
@@ -407,7 +412,8 @@ namespace Habanero.BO
             try
             {
                 _commitSuccess = CommitToDatasource();
-            } catch (Exception ex)
+            }
+            catch
             {
                 try
                 {
@@ -415,8 +421,9 @@ namespace Habanero.BO
                 }
                 catch (Exception rollBackException)
                 {
-                    log.Error("Error rolling back transaction: " + Environment.NewLine +
-                        ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                    log.Error
+                        ("Error rolling back transaction: " + Environment.NewLine
+                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
                 }
                 throw;
             }
@@ -432,11 +439,12 @@ namespace Habanero.BO
                 }
                 catch (Exception rollBackException)
                 {
-                    log.Error("Error rolling back transaction: " + Environment.NewLine +
-                        ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                    log.Error
+                        ("Error rolling back transaction: " + Environment.NewLine
+                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
                     throw;
                 }
-                
+
                 UpdateTransactionsAsRolledBack();
             }
         }
@@ -476,8 +484,9 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="businessObject">The business object to decorate</param>
         /// <returns>A decorated Business object (TransactionalBusinessObject)</returns>
-        protected internal abstract TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject);
-        
+        protected internal abstract TransactionalBusinessObject CreateTransactionalBusinessObject
+            (IBusinessObject businessObject);
+
         /// <summary>
         /// Deference Related Children.
         /// </summary>
@@ -487,15 +496,15 @@ namespace Habanero.BO
             RelationshipCol relationships = (RelationshipCol) businessObject.Relationships;
             relationships.DereferenceChildren(this);
         }
+
         /// <summary>
         /// Deletes Related Children.
         /// </summary>
         /// <param name="businessObject"></param>
         protected void DeleteRelatedChildren(IBusinessObject businessObject)
         {
-            RelationshipCol relationships = (RelationshipCol)businessObject.Relationships;
+            RelationshipCol relationships = (RelationshipCol) businessObject.Relationships;
             relationships.DeleteChildren(this);
         }
     }
-
 }

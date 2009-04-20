@@ -90,7 +90,6 @@
     <Compile Include="Controllers\TestBOColTabControlManager.cs" />
     <Compile Include="Grid\TestDataGridViewColumnCollection.cs" />
     <Compile Include="Mappers\TestLookupComboBoxRelationshipMapper.cs" />
-    <Compile Include="TestBOEditorControl_Generic.cs" />
     <Compile Include="TestBusinessObjectDeletor.cs" />
     <Compile Include="Controllers\TestListBoxCollectionManager.cs" />
     <Compile Include="Selectors\TestBOSelector.cs" />
@@ -106,7 +105,7 @@
     <Compile Include="Selectors\TestReadOnlyGridControlSelector.cs" />
     <Compile Include="Selectors\TestBOSelectorAndBOEditorManager.cs" />
     <Compile Include="TestGroupBoxGroupControl.cs" />
-    <Compile Include="TestBOEditorControl.cs" />
+    <Compile Include="TestBOEditorControlWin.cs" />
     <Compile Include="TestCollapsiblePanel.cs" />
     <Compile Include="FilterController\TestFilterControlBuilder.cs" />
     <Compile Include="FilterController\TestFilterControlManager.cs" />

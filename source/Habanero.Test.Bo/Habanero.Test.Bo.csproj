@@ -115,12 +115,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassDefinition\TestClassDefHelper.cs" />
+    <Compile Include="ClassDefinition\TestDefClassFactory.cs" />
     <Compile Include="ClassDefinition\TestFilterDef.cs" />
     <Compile Include="Loaders\TestClassDefValidator.cs" />
     <Compile Include="Loaders\TestXmlBusinessObjectLookupListLoader.cs" />
     <Compile Include="Loaders\TestXmlDatabaseLookupListLoader.cs" />
     <Compile Include="Loaders\TestXmlFilterLoader.cs" />
     <Compile Include="Loaders\TestXmlSimpleLookupListLoader.cs" />
+    <Compile Include="PropRule\TestPropRuleDouble.cs" />
+    <Compile Include="PropRule\TestPropRuleSingle.cs" />
     <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Aggregation.cs" />
     <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Association.cs" />
     <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Base.cs" />

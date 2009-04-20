@@ -151,6 +151,27 @@ namespace Habanero.BO.ClassDefinition
 		{
 			return new PropRuleString(name, message, null);
 		}
+        /// <summary>
+        /// Creates a <see cref="PropRuleSingle"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public PropRuleSingle CreatePropRuleSingle(string name, string message)
+        {
+            return new PropRuleSingle(name, message, null);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="PropRuleDouble"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public PropRuleDouble CreatePropRuleDouble(string name, string message)
+        {
+            return new PropRuleDouble(name, message, null);
+        }
 
         ///<summary>
         ///</summary>

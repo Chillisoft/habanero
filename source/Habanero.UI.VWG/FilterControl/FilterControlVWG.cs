@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
@@ -399,7 +400,10 @@ namespace Habanero.UI.VWG
         ///<param name="customFilter">The custom filter</param>
         public void AddCustomFilter(string labelText, ICustomFilter customFilter)
         {
+            Debug.Assert(this.Controls.Count > 0);
              _filterControlManager.AddCustomFilter(labelText, customFilter);
+             Debug.Assert(this.Controls.Count > 0);
+             Debug.Assert(this._controlPanel.Controls.Count != 0);
         }
 
         /// <summary>

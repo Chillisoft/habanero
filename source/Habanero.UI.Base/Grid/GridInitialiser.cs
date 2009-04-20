@@ -103,8 +103,6 @@ namespace Habanero.UI.Base
         /// <param name="uiDefName">The name of the UI definition</param>
         public void InitialiseGrid(IClassDef classDef, string uiDefName)
         {
-            //if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
-
             UIGrid gridDef = GetGridDef((ClassDef) classDef, uiDefName);
             if (gridDef.FilterDef != null)
             {

@@ -11,7 +11,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// A List of all <see cref="ICollapsiblePanel"/>s that are being managed and displayed by this Control.
         /// Warning: This must be treated as a ReadOnly List. I.e. Adding or removing items from this list
-        /// will result in the Panel being in an inconsitent state use <see cref="AddControl"/> instead.
+        /// will result in the Panel being in an inconsitent state use AddControl instead.
         /// </summary>
         public List<ICollapsiblePanel> PanelsList { get; private set; }
 

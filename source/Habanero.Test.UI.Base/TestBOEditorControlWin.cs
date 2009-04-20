@@ -1,20 +1,28 @@
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
     [TestFixture]
-    public class TestBOEditorControl
+    public class TestBOEditorControlWin
     {
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
+        {
+            _controlFactory = CreateControlFactory();
+        }
+        private IControlFactory _controlFactory;
         private const string CUSTOM_UIDEF_NAME = "custom1";
 
-        private static ClassDef GetCustomClassDef()
+        protected static ClassDef GetCustomClassDef()
         {
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDef_NoOrganisationRelationship();
@@ -27,9 +35,30 @@ namespace Habanero.Test.UI.Base
             return classDef;
         }
 
-        private static IControlFactory GetControlFactory()
+        protected virtual IControlFactory GetControlFactory()
+        {
+            if (_controlFactory == null)
+            {
+                _controlFactory = CreateControlFactory();
+                GlobalUIRegistry.ControlFactory = _controlFactory;
+            }
+            return _controlFactory;
+        }
+
+        protected virtual IControlFactory CreateControlFactory()
         {
             return new ControlFactoryWin();
+        }
+
+        protected virtual IBOPanelEditorControl CreateEditorControl(ClassDef classDef)
+        {
+            return new BOEditorControlWin(classDef);
+        }
+
+        protected virtual IBOPanelEditorControl CreateEditorControl
+            (IControlFactory controlFactory, IClassDef def, string uiDefName)
+        {
+            return new BOEditorControlWin(controlFactory, def, uiDefName);
         }
 
         private static void AssertControlsAreEnabled(IBusinessObjectPanel controlWin)
@@ -50,9 +79,24 @@ namespace Habanero.Test.UI.Base
                  "IBusinessObjectPanel's BOPanel should be disabled at construction since no BO is set");
         }
 
-        protected virtual IBOPanelEditorControl CreateEditorControl(ClassDef classDef)
+        [Test]
+        public virtual void TestConstructor_NullControlFactory_ShouldRaiseError()
         {
-            return new BOEditorControlWin(classDef);
+            // ---------------Set up test pack-------------------
+            ClassDef def = GetCustomClassDef();
+            // ---------------Assert Precondition----------------
+            // ---------------Execute Test ----------------------
+            try
+            {
+                CreateEditorControl(null, def, CUSTOM_UIDEF_NAME);
+
+                Assert.Fail("Null controlFactory should be prevented");
+            }
+                //    ---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                Assert.AreEqual("controlFactory", ex.ParamName);
+            }
         }
 
         [Test]
@@ -64,7 +108,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BOEditorControlWin(GetControlFactory(), def, null);
+                CreateEditorControl(GetControlFactory(), def, null);
 
                 Assert.Fail("Null uiDefName should be prevented");
             }
@@ -72,26 +116,6 @@ namespace Habanero.Test.UI.Base
             catch (ArgumentNullException ex)
             {
                 Assert.AreEqual("uiDefName", ex.ParamName);
-            }
-        }
-
-        [Test]
-        public virtual void TestConstructor_NullControlFactory_ShouldRaiseError()
-        {
-            // ---------------Set up test pack-------------------
-            ClassDef def = GetCustomClassDef();
-            // ---------------Assert Precondition----------------
-            // ---------------Execute Test ----------------------
-            try
-            {
-                new BOEditorControlWin(null, def, CUSTOM_UIDEF_NAME);
-
-                Assert.Fail("Null controlFactory should be prevented");
-            }
-                //    ---------------Test Result -----------------------
-            catch (ArgumentNullException ex)
-            {
-                Assert.AreEqual("controlFactory", ex.ParamName);
             }
         }
 
@@ -104,7 +128,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BOEditorControlWin(GetControlFactory(), null, CUSTOM_UIDEF_NAME);
+                CreateEditorControl(GetControlFactory(), null, CUSTOM_UIDEF_NAME);
 
                 Assert.Fail("Null controlFactory should be prevented");
             }
@@ -125,13 +149,13 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BOEditorControlWin(GetControlFactory(), def, CUSTOM_UIDEF_NAME);
+                CreateEditorControl(GetControlFactory(), def, CUSTOM_UIDEF_NAME);
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
-                string expectedDeveloperMessage = "The 'BOEditorControlWin";
+                string expectedDeveloperMessage = "The 'BOEditorControl";
                 StringAssert.Contains(expectedDeveloperMessage, ex.Message);
                 expectedDeveloperMessage = "' could not be created since the the uiDef '" + CUSTOM_UIDEF_NAME
                                            + "' in the classDef '" + def.ClassNameFull
@@ -149,7 +173,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsNotNull(GlobalUIRegistry.ControlFactory);
             //---------------Execute Test ----------------------
-            IBOPanelEditorControl controlWin = new BOEditorControlWin(def);
+            IBOPanelEditorControl controlWin = CreateEditorControl(def);
             //---------------Test Result -----------------------
             Assert.IsNotNull(controlWin);
             AssertControlsAreDisabled(controlWin);
@@ -161,7 +185,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            IBOPanelEditorControl controlWin = new BOEditorControlWin(GetCustomClassDef());
+            IBOPanelEditorControl controlWin = CreateEditorControl(GetCustomClassDef());
             OrganisationTestBO businessObject = OrganisationTestBO.CreateSavedOrganisation();
             //---------------Assert Precondition----------------
             Assert.IsNull(controlWin.BusinessObject);
@@ -179,7 +203,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            IBOPanelEditorControl controlWin = new BOEditorControlWin(GetCustomClassDef());
+            IBOPanelEditorControl controlWin = CreateEditorControl(GetCustomClassDef());
             OrganisationTestBO businessObject = OrganisationTestBO.CreateSavedOrganisation();
             controlWin.BusinessObject = businessObject;
             //---------------Assert Precondition----------------
@@ -201,7 +225,7 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO boInvalid = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
-            IBOPanelEditorControl controlWin = new BOEditorControlWin(boInvalid.ClassDef);
+            IBOPanelEditorControl controlWin = CreateEditorControl(boInvalid.ClassDef);
             //---------------Assert Precondition----------------
             Assert.IsNull(controlWin.BusinessObject);
             string errMessage;
@@ -222,7 +246,7 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO boInvalid = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
-            IBOPanelEditorControl controlWin = new BOEditorControlWin(boInvalid.ClassDef);
+            IBOPanelEditorControl controlWin = CreateEditorControl(boInvalid.ClassDef);
             controlWin.BusinessObject = boInvalid;
             //---------------Assert Precondition----------------
             Assert.IsFalse(boInvalid.Status.IsValid());
@@ -233,6 +257,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(controlWin.BusinessObject.IsValid());
             AssertErrorProvidersHaveBeenCleared(controlWin);
         }
+
         [Test]
         public void Test_IfInvalidState_WhenSetBOToNull_ShouldClearErrorProviders()
         {
@@ -241,7 +266,7 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO boInvalid = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
-            IBOPanelEditorControl controlWin = new BOEditorControlWin(boInvalid.ClassDef);
+            IBOPanelEditorControl controlWin = CreateEditorControl(boInvalid.ClassDef);
             controlWin.BusinessObject = boInvalid;
             //---------------Assert Precondition----------------
             Assert.IsFalse(boInvalid.Status.IsValid());
@@ -358,7 +383,7 @@ namespace Habanero.Test.UI.Base
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO person = ContactPersonTestBO.CreateSavedContactPerson();
             IBOPanelEditorControl controlWin = CreateEditorControl(person.ClassDef);
-            
+
             //---------------Assert Precondition----------------
             Assert.IsTrue(person.Status.IsValid());
             //---------------Execute Test ----------------------
@@ -367,6 +392,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsFalse(dirty);
         }
+
         [Test]
         public virtual void Test_IsDirty_WhenControlIsEdited_ShouldBeTrue()
         {
@@ -380,12 +406,35 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsTrue(controlWin.BusinessObject.IsValid());
             Assert.IsFalse(controlWin.IsDirty);
+            TestUtil.AssertStringNotEmpty(person.Surname, "person.Surname");
             //---------------Execute Test ----------------------
             SetSurnameTextBoxToNull(controlWin);
             bool isDirty = controlWin.IsDirty;
             //---------------Test Result -----------------------
             Assert.IsTrue(isDirty);
+            TestUtil.AssertStringEmpty(person.Surname, "person.Surname");
         }
+        [Test]
+        public virtual void Test_ApplyChangesToBo_WhenControlIsEdited_ShouldUpdateTheBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+            GetCustomClassDef();
+            GlobalUIRegistry.ControlFactory = GetControlFactory();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ContactPersonTestBO person = ContactPersonTestBO.CreateSavedContactPerson();
+            IBOPanelEditorControl controlWin = CreateEditorControl(person.ClassDef);
+            controlWin.BusinessObject = person;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(controlWin.BusinessObject.IsValid());
+            Assert.IsFalse(controlWin.IsDirty);
+            TestUtil.AssertStringNotEmpty(person.Surname, "person.Surname");
+            //---------------Execute Test ----------------------
+            SetSurnameTextBoxToNull(controlWin);
+            controlWin.ApplyChangesToBusinessObject();
+            //---------------Test Result -----------------------
+            TestUtil.AssertStringEmpty(person.Surname, "person.Surname");
+        }
+
         [Test]
         public virtual void Test_IsDirty_WhenBONull_ShouldBeFalse()
         {
@@ -399,6 +448,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsFalse(controlWin.BusinessObject.IsValid());
             Assert.IsFalse(controlWin.IsDirty);
+
             //---------------Execute Test ----------------------
             controlWin.BusinessObject = null;
             bool isDirty = controlWin.IsDirty;
@@ -426,7 +476,7 @@ namespace Habanero.Test.UI.Base
             IPanelInfo panelInfo = controlWin.PanelInfo;
             foreach (PanelInfo.FieldInfo fieldInfo in panelInfo.FieldInfos)
             {
-                Assert.AreEqual("", fieldInfo.ControlMapper.GetErrorMessage(),"Errors should be cleared");
+                Assert.AreEqual("", fieldInfo.ControlMapper.GetErrorMessage(), "Errors should be cleared");
             }
         }
 
@@ -436,7 +486,7 @@ namespace Habanero.Test.UI.Base
 //            //   ---------------Set up test pack-------------------
 //            GlobalUIRegistry.ControlFactory = GetControlFactory();
 //            BORegistry.DataAccessor = new DataAccessorInMemory();
-//            BOEditorControlWin controlWin = new BOEditorControlWin(GetCustomClassDef());
+//            BOEditorControlWin controlWin = CreateEditorControl(GetCustomClassDef());
 //            controlWin.BusinessObject = null;
 //            //---------------Assert Precondition----------------
 //            Assert.IsNull(controlWin.BusinessObject);
@@ -451,7 +501,7 @@ namespace Habanero.Test.UI.Base
 //            //   ---------------Set up test pack-------------------
 //            GlobalUIRegistry.ControlFactory = GetControlFactory();
 //            BORegistry.DataAccessor = new DataAccessorInMemory();
-//            BOEditorControlWin controlWin = new BOEditorControlWin(GetCustomClassDef());
+//            BOEditorControlWin controlWin = CreateEditorControl(GetCustomClassDef());
 //            controlWin.BusinessObject = null;
 //            //---------------Assert Precondition----------------
 //            Assert.IsNull(controlWin.BusinessObject);
@@ -460,5 +510,100 @@ namespace Habanero.Test.UI.Base
 //            //  ---------------Test Result -----------------------
 //            Assert.IsNull(controlWin.BusinessObject);
 //        }
+    }
+
+    [TestFixture]
+    public class TestBOEditorControlWin_Generic : TestBOEditorControlWin
+    {
+//        private const string CUSTOM_UIDEF_NAME = "custom1";
+
+        protected override IBOPanelEditorControl CreateEditorControl(ClassDef classDef)
+        {
+            if (classDef != null && classDef.ClassName == "OrganisationTestBO")
+            {
+                return new BOEditorControlWin<OrganisationTestBO>();
+            }
+            return new BOEditorControlWin<ContactPersonTestBO>();
+        }
+
+        protected override IBOPanelEditorControl CreateEditorControl
+            (IControlFactory controlFactory, IClassDef classDef, string uiDefName)
+        {
+            if (classDef != null && classDef.ClassName == "OrganisationTestBO")
+            {
+                return new BOEditorControlWin<OrganisationTestBO>(controlFactory, uiDefName);
+            }
+            return new BOEditorControlWin<ContactPersonTestBO>(controlFactory, uiDefName);
+        }
+
+
+        [Test]
+        public override void TestConstructor_NullClassDef_ShouldRaiseError()
+        {
+            //Not relevant for a Generic since the ClassDef is implied from the Generic Type
+        }
+
+    }
+
+    [TestFixture]
+    public class TestBOEditorControlVWG : TestBOEditorControlWin
+    {
+        protected override IControlFactory CreateControlFactory()
+        {
+            return new ControlFactoryVWG();
+        }
+
+        protected override IBOPanelEditorControl CreateEditorControl(ClassDef classDef)
+        {
+            return new BOEditorControlVWG(classDef);
+        }
+
+        protected override IBOPanelEditorControl CreateEditorControl
+            (IControlFactory controlFactory, IClassDef def, string uiDefName)
+        {
+            return new BOEditorControlVWG(controlFactory, def, uiDefName);
+        }
+
+        [Test]
+        public override void Test_IfValidState_WhenSetControlValueToInvalidValue_ShouldUpdatesErrorProviders()
+        {
+            //The error provider is not refreshed immediately in VWG
+            //Modify test to do an Update
+        }
+
+        [Test]
+        public override void Test_HasErrors_WhenBOValid_ButCompulsorytFieldSetToNull_ShouldBeTrue()
+        {
+            //The error provider is not refreshed immediately in VWG
+            //Modify test to do an Update
+        }
+    }
+
+    [TestFixture]
+    public class TestBOEditorControlVWG_Generic : TestBOEditorControlVWG
+    {
+        protected override IBOPanelEditorControl CreateEditorControl(ClassDef classDef)
+        {
+            if (classDef.ClassName == "OrganisationTestBO")
+            {
+                return new BOEditorControlVWG<OrganisationTestBO>();
+            }
+            return new BOEditorControlVWG<ContactPersonTestBO>();
+        }
+
+        protected override IBOPanelEditorControl CreateEditorControl
+            (IControlFactory controlFactory, IClassDef classDef, string uiDefName)
+        {
+            if (classDef.ClassName == "OrganisationTestBO")
+            {
+                return new BOEditorControlVWG<OrganisationTestBO>(controlFactory, uiDefName);
+            }
+            return new BOEditorControlVWG<ContactPersonTestBO>(controlFactory, uiDefName);
+        }
+        [Test]
+        public override void TestConstructor_NullClassDef_ShouldRaiseError()
+        {
+            //Not relevant for a Generic since the ClassDef is implied from the Generic Type
+        }
     }
 }
