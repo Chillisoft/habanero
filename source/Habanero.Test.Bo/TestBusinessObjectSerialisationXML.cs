@@ -13,11 +13,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    /// <summary>
-    /// TODO:
-    /// - acceptance test with big hierarchy
-    /// - multiple levels deserialise
-    /// </summary>
     [TestFixture]
     public class TestBusinessObjectSerialisationXML
     {
@@ -785,6 +780,42 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, contactPersonsNode.ChildNodes.Count);
             Assert.AreNotEqual(contactPersonsNode.ChildNodes[0], contactPersonsNode.ChildNodes[1]);
         }
+       
+        [Test]
+        public void Test_DeserialiseXml_Aggregation_MultipleLvels()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_NoReverseRelationship();
+            ContactPersonTestBO.LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured();
+            const string contactPersonID1 = "14c2a7d9-47de-47ab-99b9-ce6834947988";
+            string contactPersonSurname1 = TestUtil.GetRandomString();
+
+            string xml = string.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                            <OrganisationTestBO OrganisationID=""f566ee917a8e4a178c5e4d1f0fbd9802"" Name="""">
+                                                <ContactPeople>
+                                                    <ContactPersonTestBO ContactPersonID=""{0}"" Surname=""{1}""
+                                                                         OrganisationID=""f566ee917a8e4a178c5e4d1f0fbd9802"">
+
+                                                        <AddressTestBOs>
+                                                            <AddressTestBO ContactPersonID= ""{0}"" AddressID=""FA2C558E-1847-4dd2-822C-D98FC0FC41ED""
+                                                                            AddressLine1=""1 Line""/>
+                                                         </AddressTestBOs>
+                                                    </ContactPersonTestBO>
+                                                </ContactPeople>
+                                            </OrganisationTestBO>
+                                        
+                                        ", contactPersonID1, contactPersonSurname1);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            XmlSerializer xs = new XmlSerializer(typeof(OrganisationTestBO));
+            OrganisationTestBO organisation = (OrganisationTestBO)xs.Deserialize(new StringReader(xml));
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(organisation);
+            Assert.AreEqual(1, organisation.ContactPeople.Count);
+            ContactPersonTestBO contactPerson = organisation.ContactPeople[0];
+            Assert.AreEqual(1, contactPerson.AddressTestBOs.Count);
+            
+        }     
 
         [Test]
         public void Test_SerialiseXml_Association_WritesNothing()
