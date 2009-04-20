@@ -53,16 +53,6 @@ namespace Habanero.BO.ClassDefinition
         protected string _keyNameBuilt = "";
 
         /// <summary>
-        /// The Key Name to dispay to the user
-        /// </summary>
-        protected string _keyNameForDisplay = "";
-
-        /// <summary>
-        /// The message to dispaly to the user in the case of a failure.
-        /// </summary>
-        protected string _message;
-
-        /// <summary>
         /// this is a flag used to 
         ///indicate whether the the keyname should be built up 
         ///from the property names or not
@@ -90,6 +80,7 @@ namespace Habanero.BO.ClassDefinition
         /// an underscore.</param>
         public KeyDef(string keyName)
         {
+            KeyNameForDisplay = "";
             //if (string.IsNullOrEmpty(keyName)) throw new ArgumentNullException("keyName");
             _propDefs = new Dictionary<string, IPropDef>();
             KeyName = keyName;
@@ -158,21 +149,13 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Returns just the key name as given by the user
         /// </summary>
-        public string KeyNameForDisplay
-        {
-            get { return _keyNameForDisplay; }
-            set { _keyNameForDisplay = value; }
-        }
+        public string KeyNameForDisplay { get; set; }
 
         /// <summary>
         /// Gets and sets the message to show to the user if a key validation
         /// fails.  A default message will be provided if this is null.
         /// </summary>
-        public string Message
-        {
-            get { return _message; }
-            set { _message = value; }
-        }
+        public string Message { get; set; }
 
         #endregion Properties
 

@@ -88,6 +88,8 @@
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
     <Compile Include="Controllers\TestBOColTabControlManager.cs" />
+    <Compile Include="TestCollapsibleMenu.cs" />
+    <Compile Include="TestCollapsibleMenuBuilder.cs" />
     <Compile Include="Grid\TestDataGridViewColumnCollection.cs" />
     <Compile Include="Mappers\TestLookupComboBoxRelationshipMapper.cs" />
     <Compile Include="TestBusinessObjectDeletor.cs" />
@@ -130,7 +132,9 @@
     </Compile>
     <Compile Include="Selectors\BOGridAndEditorControl.cs" />
     <Compile Include="TestGroupBox.cs" />
+    <Compile Include="TestMainEditorPanel.cs" />
     <Compile Include="TestMainMenu.cs" />
+    <Compile Include="TestMainTitleIconControl.cs" />
     <Compile Include="TestMessageBoxConfirmer.cs" />
     <Compile Include="TestNumericUpDown.cs" />
     <Compile Include="TestPictureBox.cs" />

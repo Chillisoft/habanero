@@ -24,6 +24,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
 namespace Habanero.BO
@@ -174,6 +175,28 @@ namespace Habanero.BO
             col.SelectQuery.Criteria = criteria;
             return col;
         }
+        ///<summary>
+        /// find all objects of type boType that match the criteria.
+        ///</summary>
+        /// <param name="classDef"></param>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
+        public IBusinessObjectCollection FindAll(IClassDef classDef, Criteria criteria)
+        {
+            Type boType = classDef.ClassType;
+            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
+            IBusinessObjectCollection col = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
+            col.ClassDef = classDef;           
+            foreach (IBusinessObject bo in _objects.Values)
+            {
+                //if (!BOType.IsInstanceOfType(bo)) continue;
+                if (classDef.ClassName != bo.ClassDef.ClassName) continue;
+                if (criteria == null || criteria.IsMatch(bo)) col.Add(bo);
+            }
+            col.SelectQuery.Criteria = criteria;
+            return col;
+        }
+
         /// <summary>
         /// Clears all the objects in the memory datastore
         /// </summary>
@@ -219,6 +242,7 @@ namespace Habanero.BO
                 }
             }
         }
+
 
 
     }

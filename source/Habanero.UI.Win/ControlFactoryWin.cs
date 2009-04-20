@@ -1285,6 +1285,14 @@ namespace Habanero.UI.Win
         {
             return new BOEditorControlWin(this, classDef, "default");
         }
+        /// <summary>
+        /// Creates a <see cref="MainTitleIconControlWin"/>
+        /// </summary>
+        /// <returns></returns>
+        public IMainTitleIconControl CreateMainTitleIconControl()
+        {
+            return new MainTitleIconControlWin(this);
+        }
     }
 
 

@@ -86,6 +86,8 @@
     <Compile Include="ControlInterfaces\IListView.cs" />
     <Compile Include="ControlInterfaces\IListViewItem.cs" />
     <Compile Include="ControlInterfaces\IListViewItemCollection.cs" />
+    <Compile Include="ControlInterfaces\IMainEditorPanel.cs" />
+    <Compile Include="ControlInterfaces\IMainTitleIconControl.cs" />
     <Compile Include="ControlInterfaces\IPictureBox.cs" />
     <Compile Include="ControlInterfaces\ISplitContainer.cs" />
     <Compile Include="ControlInterfaces\IStaticDataEditor.cs" />

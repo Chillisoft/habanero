@@ -56,9 +56,6 @@ namespace Habanero.Test.UI.Base
                 System.Windows.Forms.Control control = (System.Windows.Forms.Control)controlHabanero;
                 return control.Dock.ToString();
             }
-
-            
-          
         }
 
         public abstract class TestBaseMethodsVWG : TestBaseMethods

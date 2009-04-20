@@ -92,7 +92,8 @@
     <Compile Include="ButtonWin.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ControlCollectionWin.cs" />
+    <Compile Include="ControlCollectionWin.cs">
+    </Compile>
     <Compile Include="ControlMapperStrategyWin.cs" />
     <Compile Include="ControlWin.cs">
       <SubType>Component</SubType>
@@ -186,6 +187,12 @@
     <Compile Include="ListComboBoxMapperStrategyWin.cs" />
     <Compile Include="LookupComboBoxDefaultMapperStrategyWin.cs" />
     <Compile Include="LookupComboBoxKeyPressMapperStrategyWin.cs" />
+    <Compile Include="MainEditorPanelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MainTitleIconControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MenuBuilderWin.cs">
       <SubType>Component</SubType>
     </Compile>

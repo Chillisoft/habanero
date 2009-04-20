@@ -1302,5 +1302,18 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(control);
         }
+        
+        [Test]
+        public void Test_Create_MainTitleIconControl()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = GetControlFactory();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IMainTitleIconControl control = factory.CreateMainTitleIconControl();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(control);
+        }
     }
 }

@@ -1300,6 +1300,15 @@ namespace Habanero.UI.VWG
             return new BOEditorControlVWG(this, classDef, "default");
         }
 
+        /// <summary>
+        /// Creates a <see cref="MainTitleIconControlVWG"/>
+        /// </summary>
+        /// <returns></returns>
+        public IMainTitleIconControl CreateMainTitleIconControl()
+        {
+            return new MainTitleIconControlVWG(this);
+        }
+
         #endregion
     }
  

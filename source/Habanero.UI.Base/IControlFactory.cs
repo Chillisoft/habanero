@@ -726,6 +726,12 @@ namespace Habanero.UI.Base
         /// <param name="classDef"></param>
         /// <returns></returns>
         IBOPanelEditorControl CreateBOEditorControl(IClassDef classDef);
+
+        /// <summary>
+        /// Creates a <see cref="IMainTitleIconControl"/>
+        /// </summary>
+        /// <returns></returns>
+        IMainTitleIconControl CreateMainTitleIconControl();
     }
 
     /// <summary>

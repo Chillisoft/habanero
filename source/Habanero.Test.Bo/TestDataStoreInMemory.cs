@@ -271,6 +271,7 @@ namespace Habanero.Test.BO
             BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
+            OrganisationTestBO.LoadDefaultClassDef();
             DataStoreInMemory dataStore = new DataStoreInMemory();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
@@ -284,7 +285,7 @@ namespace Habanero.Test.BO
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
             cp2.Surname = TestUtil.GetRandomString();
             cp2.Save();
-
+            dataStore.Add(OrganisationTestBO.CreateSavedOrganisation());
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col = dataStore.FindAll<ContactPersonTestBO>(criteria);
             //---------------Test Result -----------------------
@@ -292,7 +293,6 @@ namespace Habanero.Test.BO
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
             Assert.AreEqual(criteria, col.SelectQuery.Criteria);
-            //---------------Tear Down -------------------------
         }
 
         [Test]
@@ -302,6 +302,37 @@ namespace Habanero.Test.BO
             BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
+            OrganisationTestBO.LoadDefaultClassDef();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now;
+            cp1.Surname = TestUtil.GetRandomString();
+            cp1.Save();
+            dataStore.Add(cp1);
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.DateOfBirth = now;
+            cp2.Surname = TestUtil.GetRandomString();
+            cp2.Save();
+            dataStore.Add(cp2);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            dataStore.Add(OrganisationTestBO.CreateSavedOrganisation());
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col = dataStore.FindAll(typeof(ContactPersonTestBO), criteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.Contains(cp1, col);
+            Assert.Contains(cp2, col);
+        }
+
+        [Test]
+        public void TestFindAll_UsingClassDef()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            OrganisationTestBO.LoadDefaultClassDef();
             DataStoreInMemory dataStore = new DataStoreInMemory();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
@@ -316,13 +347,35 @@ namespace Habanero.Test.BO
             dataStore.Add(cp2);
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
 
+            dataStore.Add(OrganisationTestBO.CreateSavedOrganisation());
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col = dataStore.FindAll(typeof(ContactPersonTestBO), criteria);
+            IBusinessObjectCollection col = dataStore.FindAll(ClassDef.Get<ContactPersonTestBO>(), criteria);
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
-            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestFindAll_ClassDef_NullCriteria()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            OrganisationTestBO.LoadDefaultClassDef();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now;
+            dataStore.Add(cp1);
+            dataStore.Add(OrganisationTestBO.CreateSavedOrganisation());
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col = dataStore.FindAll(ClassDef.Get<ContactPersonTestBO>(), null);
+            
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(cp1, col);
+            Assert.IsNull(col.SelectQuery.Criteria);
         }
 
         [Test]
@@ -331,11 +384,13 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
+            OrganisationTestBO.LoadDefaultClassDef();
             DataStoreInMemory dataStore = new DataStoreInMemory();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
             cp1.DateOfBirth = now;
             dataStore.Add(cp1);
+            dataStore.Add(OrganisationTestBO.CreateSavedOrganisation());
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col = dataStore.FindAll<ContactPersonTestBO>(null);
             
@@ -343,7 +398,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, col.Count);
             Assert.Contains(cp1, col);
             Assert.IsNull(col.SelectQuery.Criteria);
-            //---------------Tear Down -------------------------
         }
 
         [Ignore("TODO: fix, but this is hanging in Hudson")]

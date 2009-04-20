@@ -192,7 +192,7 @@ namespace Habanero.BO
         /// </summary>
         public int GetCount(IClassDef classDef, Criteria criteria)
         {
-            IBusinessObjectCollection collection = _dataStore.FindAll(classDef.ClassType, criteria);
+            IBusinessObjectCollection collection = _dataStore.FindAll(classDef, criteria);
             return collection.Count;
         }
 
@@ -238,7 +238,7 @@ namespace Habanero.BO
             IClassDef classDef = collection.ClassDef;
             QueryBuilder.PrepareCriteria(classDef, criteria);
 
-            IBusinessObjectCollection loadedBos = _dataStore.FindAll(classDef.ClassType, criteria);
+            IBusinessObjectCollection loadedBos = _dataStore.FindAll(classDef, criteria);
             loadedBos.Sort(orderCriteria);
 
             collection.TotalCountAvailableForPaging = loadedBos.Count;

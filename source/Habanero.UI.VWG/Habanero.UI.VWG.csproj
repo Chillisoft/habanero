@@ -111,6 +111,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DockStyleVWG.cs" />
+    <Compile Include="CollapsibleMenuVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Grid\EditableGridControlVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -179,6 +182,9 @@
     <Compile Include="ListViewVWG.cs" />
     <Compile Include="ListViewVWG.designer.cs">
       <DependentUpon>ListViewVWG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainTitleIconControlVWG.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MenuBuilderVWG.cs">
       <SubType>Component</SubType>
