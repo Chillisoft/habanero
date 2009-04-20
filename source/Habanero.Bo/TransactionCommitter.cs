@@ -506,5 +506,8 @@ namespace Habanero.BO
             RelationshipCol relationships = (RelationshipCol) businessObject.Relationships;
             relationships.DeleteChildren(this);
         }
+
+        protected internal abstract void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject) where T : class, IBusinessObject, new();
+        protected internal abstract void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject) where T : class, IBusinessObject, new();
     }
 }

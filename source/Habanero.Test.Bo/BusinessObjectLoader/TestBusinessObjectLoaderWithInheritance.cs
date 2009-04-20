@@ -17,9 +17,12 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.IO;
+using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB4O;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 
@@ -279,6 +282,21 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 BORegistry.DataAccessor = new DataAccessorInMemory(_dataStore);
             }
         }
+
+        [TestFixture]
+        public class TestBusinessObjectLoaderDB4OWithInheritance : TestBusinessObjectLoaderWithInheritance
+        {
+
+            protected override void SetupDataAccessor()
+            {
+                if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
+                const string db4oFileStore = "DataStore.db4o";
+                if (File.Exists(db4oFileStore)) File.Delete(db4oFileStore);
+                DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileStore);
+                BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
+            }
+        }
+
 
         #endregion
 

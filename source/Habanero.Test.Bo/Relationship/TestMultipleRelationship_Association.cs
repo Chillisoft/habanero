@@ -19,10 +19,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB4O;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
@@ -445,7 +448,7 @@ namespace Habanero.Test.BO.Relationship
         ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
         /// </summary>
         [Test]
-        public void Test_AddedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves()
+        public virtual void Test_AddedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -536,7 +539,7 @@ namespace Habanero.Test.BO.Relationship
         ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
         /// </summary>
         [Test]
-        public void Test_RemovedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves()
+        public virtual void Test_RemovedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -567,7 +570,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        public void Test_AddDirtyChildrenToTransactionCommitter_AddedChild()
+        public virtual void Test_AddDirtyChildrenToTransactionCommitter_AddedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -579,8 +582,8 @@ namespace Habanero.Test.BO.Relationship
             relationship.BusinessObjectCollection.Add(contactPerson);
             SingleRelationship<OrganisationTestBO> reverseRelationship = contactPerson.Relationships.GetSingle<OrganisationTestBO>("Organisation");
 
-            
-            TransactionCommitterStub tc = new TransactionCommitterStub();
+
+            TransactionCommitter tc = (TransactionCommitter) BORegistry.DataAccessor.CreateTransactionCommitter();
 
             //---------------Assert PreConditions---------------            
             Assert.AreEqual(0, tc.OriginalTransactions.Count);
@@ -618,5 +621,124 @@ namespace Habanero.Test.BO.Relationship
             TestUsingDatabase.SetupDBDataAccessor();
         }
     }
+
+        [TestFixture]
+    public class TestMultipleRelationship_Association_DB4O : TestMultipleRelationship_Association
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            base.SetupTest();
+            if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
+            const string db4oFileStore = "DataStore.db4o";
+            if (File.Exists(db4oFileStore)) File.Delete(db4oFileStore);
+            DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileStore);
+            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
+        }
+
+        /// <summary>
+        /// Added child (ie an already persisted object that has been added to the relationship): 
+        ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
+        /// Note: for DB4O it was decided to make the entire object persist as you cannot simply persist a property or two easily.
+        /// </summary>
+        [Test]
+        public override void Test_AddedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Association;
+            organisationTestBO.ContactPeople.Add(contactPerson);
+            contactPerson.Surname = TestUtil.GetRandomString();
+
+            //---------------Assert PreConditions---------------            
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+            Assert.IsTrue(contactPerson.Props["OrganisationID"].IsDirty);
+            Assert.IsTrue(organisationTestBO.Status.IsDirty);
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.Save();
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contactPerson.Status.IsDirty);
+            Assert.IsFalse(contactPerson.Props["OrganisationID"].IsDirty);
+            Assert.IsFalse(organisationTestBO.Status.IsDirty);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        /// <summary>
+        /// Removed child (ie an already persisted object that has been removed from the relationship): 
+        ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
+        /// Note: for DB4O it was decided to make the entire object persist as you cannot simply persist a property or two easily.
+        /// </summary>
+        [Test]
+        public override void Test_RemovedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Association;
+            ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
+            contactPerson.Save();
+
+            contactPerson.Surname = TestUtil.GetRandomString();
+            organisationTestBO.ContactPeople.Remove(contactPerson);
+
+            //---------------Assert PreConditions---------------            
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+            Assert.IsTrue(contactPerson.Props["OrganisationID"].IsDirty);
+            Assert.IsNull(contactPerson.Props["OrganisationID"].Value);
+            Assert.IsTrue(organisationTestBO.Status.IsDirty);
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.Save();
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contactPerson.Status.IsDirty);
+            Assert.IsFalse(contactPerson.Props["OrganisationID"].IsDirty);
+            Assert.IsNull(contactPerson.Props["OrganisationID"].Value);
+            Assert.IsFalse(organisationTestBO.Status.IsDirty);
+        }
+
+        /// Note: for DB4O it was decided to make the entire object persist as you cannot simply persist a property or two easily.
+        [Test]
+        public override void Test_AddDirtyChildrenToTransactionCommitter_AddedChild()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            MultipleRelationship<ContactPersonTestBO> relationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Association;
+
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            relationship.BusinessObjectCollection.Add(contactPerson);
+            SingleRelationship<OrganisationTestBO> reverseRelationship = contactPerson.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+
+
+            TransactionCommitter tc = (TransactionCommitter)BORegistry.DataAccessor.CreateTransactionCommitter();
+
+            //---------------Assert PreConditions---------------            
+            Assert.AreEqual(0, tc.OriginalTransactions.Count);
+            Assert.IsNotNull(reverseRelationship);
+
+            //---------------Execute Test ----------------------
+            relationship.AddDirtyChildrenToTransactionCommitter(tc);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, tc.OriginalTransactions.Count);
+
+            Assert.IsInstanceOfType(typeof(TransactionalBusinessObject), tc.OriginalTransactions[0]);
+            Assert.IsInstanceOfType(typeof(ContactPersonTestBO), ((TransactionalBusinessObject)tc.OriginalTransactions[0]).BusinessObject);
+        }
+    }
+
+
+
+    
+          
 
 }

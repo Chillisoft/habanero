@@ -474,8 +474,8 @@ namespace Habanero.BO
         private void AddWithoutEvents(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
-            base.Add(bo);
             if (bo.ID != null) if (KeyObjectHashTable.Contains(bo.ID.ObjectID)) return;
+            base.Add(bo);
             if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.ObjectID, bo);
             RegisterBOEvents(bo);
         }

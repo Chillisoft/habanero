@@ -1526,7 +1526,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
         #region Nested type: TestBusinessObjectLoaderDB4O
 
-        [Ignore("Peter working")]
         [TestFixture]
         public class TestBusinessObjectLoaderDB4O : TestBusinessObjectLoader
         {

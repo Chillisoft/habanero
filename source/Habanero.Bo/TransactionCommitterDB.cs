@@ -88,6 +88,16 @@ namespace Habanero.BO
             return new TransactionalBusinessObjectDB(businessObject);
         }
 
+        protected internal override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject) {
+            this.AddTransaction(new TransactionalSingleRelationship_Added(relationship, businessObject));
+
+        }
+        protected internal override void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject)
+        {
+            this.AddTransaction(new TransactionalSingleRelationship_Removed(relationship, businessObject));
+
+        }
+
         /// <summary>
         /// Tries to execute an individual transaction against the datasource.
         /// 1'st phase of a 2 phase database commit.

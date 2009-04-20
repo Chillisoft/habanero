@@ -467,7 +467,7 @@ namespace Habanero.BO
         {
             ArrayList addedBoArray = new ArrayList();
             addedBoArray.AddRange(collection.AddedBusinessObjects);
-            
+
             RestoreCreatedCollection(collection);
             RestoreRemovedCollection(collection);
             RestoreMarkForDeleteCollection(collection);
@@ -623,9 +623,7 @@ namespace Habanero.BO
             {
                 AddBusinessObjectToCollection(collection, loadedBo);
             }
-            Console.Out.WriteLine("before: " + collection.Count);
             RestoreEditedLists(collection);
-            Console.Out.WriteLine("after: " + collection.Count);
         }
 
         /// <summary>

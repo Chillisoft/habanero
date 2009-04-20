@@ -1108,7 +1108,8 @@ namespace Habanero.BO.ClassDefinition
         public IPropertyComparer<T> CreatePropertyComparer<T>(string propertyName) where T : IBusinessObject
         {
             Type comparerType = typeof (PropertyComparer<,>);
-            comparerType = comparerType.MakeGenericType(typeof (T), GetPropertyType(propertyName));
+            Type propertyType = GetPropertyType(propertyName);
+            comparerType = comparerType.MakeGenericType(typeof (T), propertyType);
             IPropertyComparer<T> comparer = (IPropertyComparer<T>) Activator.CreateInstance(comparerType, propertyName);
             return comparer;
         }

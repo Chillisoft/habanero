@@ -513,13 +513,11 @@ namespace Habanero.BO
             {
                 if (IsRelatedBOPropsDirty() && _relatedBo != null && !_relatedBo.Status.IsNew)
                 {
-                        transactionCommitter.AddTransaction
-                            (new TransactionalSingleRelationship_Added(this, _relatedBo));
+                    transactionCommitter.AddAddedChildBusinessObject(this, _relatedBo);
                 }
                 else if (IsRemoved)
                 {
-                        transactionCommitter.AddTransaction
-                            (new TransactionalSingleRelationship_Removed(this, this.RemovedBO));
+                    transactionCommitter.AddRemovedChildBusinessObject(this, RemovedBO);
                 }
             }
         }

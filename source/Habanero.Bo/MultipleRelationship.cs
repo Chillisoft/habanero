@@ -263,15 +263,12 @@ namespace Habanero.BO
             {
                 foreach (TBusinessObject businessObject in _boCol.AddedBusinessObjects)
                 {
-
-                        transactionCommitter.AddTransaction
-                            (new TransactionalSingleRelationship_Added(this, businessObject));
+                    transactionCommitter.AddAddedChildBusinessObject(this, businessObject);
                 }
             }
             foreach (TBusinessObject businessObject in _boCol.RemovedBusinessObjects)
             {
-                    transactionCommitter.AddTransaction
-                        (new TransactionalSingleRelationship_Removed(this, businessObject));
+                transactionCommitter.AddRemovedChildBusinessObject(this, businessObject);
             }
         }
 

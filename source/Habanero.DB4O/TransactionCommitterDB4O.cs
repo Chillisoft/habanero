@@ -78,5 +78,14 @@ namespace Habanero.DB4O
         {
             return new TransactionalBusinessObjectDB4O(businessObject);
         }
+
+        protected override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject)
+        {
+            this.AddBusinessObject(businessObject);
+        }
+        protected override void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject)
+        {
+            this.AddBusinessObject(businessObject);
+        }
     }
 }

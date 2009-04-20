@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Db4objects.Db4o;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 
@@ -20,7 +21,8 @@ namespace Habanero.DB4O
         private delegate T DBSearch<T>(IObjectContainer db);
         private T WithDB4O<T>(DBSearch<T> action)
         {
-            return action(DB4ORegistry.DB);
+           return action(DB4ORegistry.DB);
+           
 
             //IObjectContainer db = Db4oFactory.OpenFile(_fileName);
             //try
@@ -59,6 +61,10 @@ namespace Habanero.DB4O
 
         private T GetFirstObjectFromMatchedObjects<T>(IList<T> matchingObjects, string className, bool errorIfNotFound) where T : class, IBusinessObject
         {
+            if (matchingObjects.Count > 1)
+            {
+                throw new HabaneroDeveloperException("There was an error with loading the class " + className + ".", "The query returned more than one record when only one was expected");
+            }
             T matchedBO = (T)((matchingObjects.Count > 0) ? matchingObjects[0] : null);
             if (matchedBO == null)
             {
@@ -87,6 +93,10 @@ namespace Habanero.DB4O
         {
             return WithDB4O(db =>
                             {
+                                // validate the criteria against a sample object
+                                T newObj = new T();
+                                criteria.IsMatch(newObj);
+
                                 IList<T> matchingObjects = db.Query<T>(obj => criteria.IsMatch(obj, false));
                                 return (T)GetFirstObjectFromMatchedObjects(matchingObjects, typeof(T).Name, false);
                             }
@@ -114,8 +124,18 @@ namespace Habanero.DB4O
         }
         public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
         public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString) { throw new NotImplementedException(); }
-        public T GetRelatedBusinessObject<T>(SingleRelationship<T> relationship) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship) { throw new NotImplementedException(); }
+        public T GetRelatedBusinessObject<T>(SingleRelationship<T> relationship) where T : class, IBusinessObject, new() {
+            return GetBusinessObject<T>(Criteria.FromRelationship(relationship));
+        }
+        public IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship) {
+            IRelationshipDef relationshipDef = relationship.RelationshipDef;
+            if (relationshipDef.RelatedObjectClassDef != null)
+                return GetBusinessObject(relationshipDef.RelatedObjectClassDef,
+                                         Criteria.FromRelationship(relationship));
+            return null;
+        
+        
+        }
         protected override void DoRefresh(IBusinessObjectCollection collection)
         {
             ISelectQuery selectQuery = collection.SelectQuery;
@@ -126,14 +146,14 @@ namespace Habanero.DB4O
 
             WithDB4O<IBusinessObject>(db =>
             {
-                IList<IBusinessObject> matchingObjects;
+                IList<BusinessObject> matchingObjects;
                 if (criteria == null)
                 {
-                    matchingObjects = db.Query<IBusinessObject>();
+                    matchingObjects = db.Query<BusinessObject>(obj => obj.ClassDefName == collection.ClassDef.ClassName);
                 }
                 else
                 {
-                    matchingObjects = db.Query<IBusinessObject>(obj => criteria.IsMatch(obj, false));
+                    matchingObjects = db.Query<BusinessObject>(obj => obj.ClassDefName == collection.ClassDef.ClassName && criteria.IsMatch(obj, false));
                 }
                 List<IBusinessObject> loadedBOs = new List<IBusinessObject>(matchingObjects.Count);
                 foreach (IBusinessObject matchingObject in matchingObjects)
@@ -245,7 +265,26 @@ namespace Habanero.DB4O
             }
         }
 
-        public IBusinessObject Refresh(IBusinessObject businessObject) { throw new NotImplementedException(); }
-        public int GetCount(IClassDef classDef, Criteria criteria) { throw new NotImplementedException(); }
+        public IBusinessObject Refresh(IBusinessObject businessObject)
+        {
+            if (businessObject.Status.IsNew)
+            {
+                return businessObject;
+            }
+            if (businessObject.Status.IsEditing)
+            {
+                throw new HabaneroDeveloperException
+                    ("A Error has occured since the object being refreshed is being edited.",
+                     "A Error has occured since the object being refreshed is being edited. ID :- "
+                     + businessObject.ID.AsString_CurrentValue() + " - Class : " + businessObject.ClassDef.ClassNameFull);
+            }
+            businessObject = GetBusinessObject(businessObject.ClassDef, businessObject.ID);
+            return businessObject;
+        }
+        public int GetCount(IClassDef classDef, Criteria criteria) {
+
+            IBusinessObjectCollection collection = GetBusinessObjectCollection(classDef, criteria);
+            return collection.Count;
+        }
     }
 }

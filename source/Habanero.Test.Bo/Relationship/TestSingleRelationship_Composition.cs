@@ -19,10 +19,13 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB4O;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
@@ -432,6 +435,21 @@ namespace Habanero.Test.BO.Relationship
         {
             base.SetupTest();
             TestUsingDatabase.SetupDBDataAccessor();
+        }
+    }
+
+    [TestFixture]
+    public class TestSingleRelationship_Composition_DB4O : TestSingleRelationship_Composition
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            base.SetupTest();
+            if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
+            const string db4oFileStore = "DataStore.db4o";
+            if (File.Exists(db4oFileStore)) File.Delete(db4oFileStore);
+            DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileStore);
+            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
         }
     }
 }

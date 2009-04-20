@@ -2610,7 +2610,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const string surname = "TestSurname";
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(surname);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            cp1.OrganisationID = organisation.OrganisationID;
+            cp1.Organisation = organisation;
             cp1.Save();
             ContactPersonTestBO.CreateSavedContactPerson(surname);
             ContactPersonTestBO.CreateSavedContactPerson();
@@ -3843,7 +3843,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         #endregion //Test that the load returns the correct sub type
     }
 
-    [Ignore("Peter working")]
     [TestFixture]
     public class TestBusinessObjectLoader_GetBusinessObjectCollectionDB4O
         : TestBusinessObjectLoader_GetBusinessObjectCollection

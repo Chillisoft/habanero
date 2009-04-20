@@ -18,11 +18,14 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.IO;
+using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.DB4O;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
 using Habanero.Util;
 using NUnit.Framework;
@@ -340,6 +343,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
     }
 
+
     [TestFixture]
     public class TestRelatedBOCol_Composition_UsingDB : TestRelatedBOCol_Composition
     {
@@ -360,4 +364,21 @@ DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql
             BORegistry.DataAccessor = new DataAccessorDB();
         }
     }
+
+
+    [TestFixture]
+    public class TestRelatedBOCol_Composition_UsingDB4O : TestRelatedBOCol_Composition
+    {
+        [TestFixtureSetUp]
+        public override void TestFixtureSetup()
+        {
+            if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
+            const string db4oFileStore = "DataStore.db4o";
+            if (File.Exists(db4oFileStore)) File.Delete(db4oFileStore);
+            DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileStore);
+            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
+        }
+    }
+
+
 }
