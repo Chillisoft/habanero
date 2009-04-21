@@ -12,6 +12,7 @@ namespace Habanero.DB4O
         public DataAccessorDB4O(IObjectContainer objectContainer)
         {
             _objectContainer = objectContainer;
+            Db4oFactory.Configure().ObjectClass(typeof(BusinessObjectDTO)).CascadeOnUpdate(true);
             _businessObjectLoader = new BusinessObjectLoaderDB4O(_objectContainer);
         }
 
@@ -20,7 +21,7 @@ namespace Habanero.DB4O
             get { return _businessObjectLoader; }
         }
 
-        public ITransactionCommitter CreateTransactionCommitter()
+        public virtual ITransactionCommitter CreateTransactionCommitter()
         {
             return new TransactionCommitterDB4O(_objectContainer);
         }

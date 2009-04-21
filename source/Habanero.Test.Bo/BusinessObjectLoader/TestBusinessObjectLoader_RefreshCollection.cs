@@ -420,6 +420,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(1, cpCol.Count);
             Assert.AreEqual(1, cpCol.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(2, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cpCol);
@@ -1274,7 +1275,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO.CreateSavedContactPerson();
             return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
         }
-                    private static ContactPersonTestBO CreateSavedContactPerson(string surnameValue, int integerPropertyValue)
+                    
+        
+        private static ContactPersonTestBO CreateSavedContactPerson(string surnameValue, int integerPropertyValue)
         {
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = surnameValue;
@@ -1299,33 +1302,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             return;
         }
         
-               [TestFixture]
-        public class TestBusinessObjectLoader_RefreshCollectionDB4O :
-            TestBusinessObjectLoader_RefreshCollection
-        {
-         #region Setup/Teardown
 
-        [SetUp]
-        public override void SetupTest()
-        {
-            base.SetupTest();
-        }
-
-        #endregion
-
-        protected override void DeleteEnginesAndCars()
-        {
-            
-        }
-
-        protected override void SetupDataAccessor()
-        {
-            if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
-            const string db4oFileStore = "DataStore.db4o";
-            if (File.Exists(db4oFileStore)) File.Delete(db4oFileStore);
-            DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileStore);
-            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
-        }
-    }
   }      
 }

@@ -10,7 +10,7 @@ namespace Habanero.DB4O
 {
     public class TransactionCommitterDB4O : TransactionCommitter
     {
-        private readonly IObjectContainer _objectContainer;
+        protected IObjectContainer _objectContainer;
 
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitterDB4O");
         public TransactionCommitterDB4O(IObjectContainer objectContainer)
@@ -45,17 +45,25 @@ namespace Habanero.DB4O
 
                 if (tbo.BusinessObject.Status.IsDeleted)
                 {
-                    //IList<BusinessObject> matchingObjects =
-                    //                db.Query<BusinessObject>(
-                    //                    obj => obj.ClassDefName == classDef.ClassName && criteria.IsMatch(obj, false));
-
-                    IBusinessObject boToDelete = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(tbo.BusinessObject.ClassDef,
-                                                                                                                tbo.BusinessObject.ID);
-                    _objectContainer.Delete(boToDelete);
+                    IList<BusinessObjectDTO> matchingObjects = _objectContainer.Query<BusinessObjectDTO>(
+                                        obj => obj.ClassDefName == tbo.BusinessObject.ClassDef.ClassName && obj.ID == tbo.BusinessObject.ID.ToString());
+                    BusinessObjectDTO dtoToDelete = matchingObjects[0];
+                    _objectContainer.Delete(dtoToDelete);
                 }
-                else
+                else if (tbo.BusinessObject.Status.IsNew)
                 {
-                    _objectContainer.Store(tbo.BusinessObject);
+                    BusinessObjectDTO dto = new BusinessObjectDTO(tbo.BusinessObject);
+                    _objectContainer.Store(dto);
+                } else
+                {
+                    IList<BusinessObjectDTO> matchingObjects = _objectContainer.Query<BusinessObjectDTO>(
+                                        obj => obj.ClassDefName == tbo.BusinessObject.ClassDef.ClassName && obj.ID == tbo.BusinessObject.ID.ToString());
+                    BusinessObjectDTO dtoToUpdate = matchingObjects[0];
+                    foreach (IBOProp boProp in tbo.BusinessObject.Props)
+                    {
+                        dtoToUpdate.Props[boProp.PropertyName.ToUpper()] = boProp.Value;
+                    }
+                    _objectContainer.Store(dtoToUpdate);
                 }
                 _executedTransactions.Add(transaction);
             }

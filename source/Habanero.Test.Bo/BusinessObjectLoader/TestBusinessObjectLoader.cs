@@ -25,7 +25,9 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB4O;
+using Habanero.Test.Structure;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader
@@ -1524,28 +1526,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         #endregion
 
 
-        #region Nested type: TestBusinessObjectLoaderDB4O
-
-        [TestFixture]
-        public class TestBusinessObjectLoaderDB4O : TestBusinessObjectLoader
-        {
-            protected override void SetupDataAccessor()
-            {
-                if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
-                string db4oFileStore = "DataStore.db4o";
-                if (File.Exists(db4oFileStore)) File.Delete(db4oFileStore);
-                DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileStore);
-                BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
-            }
-
-            protected override void DeleteEnginesAndCars()
-            {
-                // do nothing
-            }
-           
-        }
-
-        #endregion
+       
     }
 
 

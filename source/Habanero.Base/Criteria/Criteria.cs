@@ -259,7 +259,6 @@ namespace Habanero.Base
                 }
             }
 
-            //todo: criterias with relationships - this will pass the source through to the GetPropertyValue
             object leftValue;
             if (_field.Source != null && _field.Source.ChildSource != null)
             {
@@ -275,6 +274,11 @@ namespace Habanero.Base
                 else
                     leftValue = businessObject.GetPropertyValue(null, _field.PropertyName);
             }
+            string className = businessObject.GetType().FullName; 
+            return CheckValueAgainstSingleCriteria(leftValue, className);
+        }
+
+        private bool CheckValueAgainstSingleCriteria(object leftValue, string className) {
             if (leftValue == null)
             {
                 return IsNullMatch();
@@ -283,10 +287,11 @@ namespace Habanero.Base
             IComparable boPropertyValue = leftValue as IComparable;
             if (boPropertyValue == null)
             {
+                
                 throw new InvalidOperationException(
                     string.Format(
                         "Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", _field.PropertyName,
-                        businessObject.GetType().FullName));
+                        className));
             }
             IComparable compareToValue = _fieldValue as IComparable;
             compareToValue = ConvertDateTimeStringToValue(compareToValue);
@@ -314,6 +319,33 @@ namespace Habanero.Base
         public bool IsMatch<T>(T businessObject) where T : class, IBusinessObject 
         {
             return IsMatch(businessObject, true);
+        }
+
+        /// <summary>
+        /// Evaluates the <see cref="BusinessObjectDTO"/> passed in to see if it matches the criteria that have been set up
+        /// </summary>
+        /// <param name="dto">The <see cref="BusinessObjectDTO"/> to check for a match against the criteria</param>
+        /// <returns>True if the <see cref="BusinessObjectDTO"/> matches the criteria, false if it does not</returns>
+        public bool IsMatch(BusinessObjectDTO dto) 
+        {
+            if (IsComposite())
+            {
+                switch (_logicalOp)
+                {
+                    case LogicalOp.And:
+                        return _leftCriteria.IsMatch(dto) && _rightCriteria.IsMatch(dto);
+                    case LogicalOp.Or:
+                        return _leftCriteria.IsMatch(dto) || _rightCriteria.IsMatch(dto);
+                    case LogicalOp.Not:
+                        return !_rightCriteria.IsMatch(dto);
+                }
+            }
+
+            //todo: criterias with relationships
+
+            object leftValue = dto.Props[_field.PropertyName.ToUpper()];
+            string className = dto.ClassDefName;
+            return CheckValueAgainstSingleCriteria(leftValue, className);
         }
 
         private static IComparable ConvertDateTimeStringToValue(IComparable y)

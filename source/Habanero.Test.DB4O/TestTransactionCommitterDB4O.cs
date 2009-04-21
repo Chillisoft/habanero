@@ -12,34 +12,35 @@ using Habanero.DB4O;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.TransactionCommitters
+namespace Habanero.Test.DB4O
 {
     [TestFixture]
     public class TestTransactionCommitterDB4O
     {
-
+        const string _db4oFileName = "TestDB4O.DB";
         [TestFixtureSetUp]
         public void SetupFixture()
         {
             ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader()));
+
         }
 
         [SetUp]
         public void Setup()
         {
             if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
-            const string db4oFileName = "TestDB4O.DB";
-            if (File.Exists(db4oFileName)) File.Delete(db4oFileName);
-            DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileName);
+            if (File.Exists(_db4oFileName)) File.Delete(_db4oFileName);
+            DB4ORegistry.DB = Db4oFactory.OpenFile(_db4oFileName);
             BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
+           
         }
 
         [Test]
         public void Test_CommitTransaction()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterDB4O committer = new TransactionCommitterDB4O(DB4ORegistry.DB);
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
             Person person = new Person {LastName = "Bob"};
             committer.AddBusinessObject(person);
             //---------------Execute Test ----------------------
@@ -53,34 +54,39 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void Test_CommitTransaction_WritesToDBFile()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterDB4O committer = new TransactionCommitterDB4O(DB4ORegistry.DB);
-            Person person = new Person {LastName = "Bob"};
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            Person person = new Person { LastName = "Bob" };
             committer.AddBusinessObject(person);
             //---------------Assert PreConditions---------------            
-            AssertBONotInDataStore(typeof(Person));
+            AssertBONotInDataStore(typeof(BusinessObjectDTO));
             //---------------Execute Test ----------------------
             committer.CommitTransaction();
+            DB4ORegistry.DB.Close();
+            DB4ORegistry.DB = Db4oFactory.OpenFile(_db4oFileName);
+            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
             //---------------Test Result -----------------------
-            AssertBOInDataStore(1, typeof(Person));
+            AssertBOInDataStore(1, typeof(BusinessObjectDTO));
         }
 
         [Test]
         public void Test_CommitTransaction_TwoObjects()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterDB4O committer = new TransactionCommitterDB4O(DB4ORegistry.DB);
-            Person person = new Person {LastName = "Bob"};
-            Car car = new Car { CarRegNo="123456"};
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            Person person = new Person { LastName = "Bob" };
+            Structure.Car car = new Structure.Car { RegistrationNo = "123456" };
             committer.AddBusinessObject(person);
             committer.AddBusinessObject(car);
 
             //---------------Assert PreConditions---------------  
-            AssertBONotInDataStore(typeof(Person));
+            AssertBONotInDataStore(typeof(BusinessObjectDTO));
             //---------------Execute Test ----------------------
             committer.CommitTransaction();
+            DB4ORegistry.DB.Close();
+            DB4ORegistry.DB = Db4oFactory.OpenFile(_db4oFileName);
+            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
             //---------------Test Result -----------------------
-            AssertBOInDataStore(1, typeof(Person));
-            AssertBOInDataStore(1, typeof(Car));
+            AssertBOInDataStore(2, typeof(BusinessObjectDTO));
             //---------------Tear Down -------------------------          
         }
 
@@ -88,15 +94,18 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void Test_TryRollback()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterDB4O committer = new StubTransactionCommiterDB4O(DB4ORegistry.DB);
+            ITransactionCommitter committer = new StubTransactionCommiterDB4O(DB4ORegistry.DB);
             Person person = new Person { LastName = "Bob" };
             committer.AddBusinessObject(person);
             //---------------Assert PreConditions---------------            
-            AssertBONotInDataStore(typeof(Person));
+            AssertBONotInDataStore(typeof(BusinessObjectDTO));
             //---------------Execute Test ----------------------
             committer.CommitTransaction();
+            DB4ORegistry.DB.Close();
+            DB4ORegistry.DB = Db4oFactory.OpenFile(_db4oFileName);
+            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
             //---------------Test Result -----------------------
-            AssertBONotInDataStore(typeof(Person));
+            AssertBONotInDataStore(typeof(BusinessObjectDTO));
             //---------------Tear Down -------------------------    
         }
 
@@ -104,13 +113,14 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void Test_CommitTransaction_SetsClassDefFullName()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterDB4O committer = new StubTransactionCommiterDB4O(DB4ORegistry.DB);
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
             Person person = new Person { LastName = "Bob" };
             committer.AddBusinessObject(person);
             //---------------Assert PreConditions---------------   
             Assert.IsTrue(string.IsNullOrEmpty(person.ClassDefName));
             //---------------Execute Test ----------------------
             committer.CommitTransaction();
+
             //---------------Test Result -----------------------
             StringAssert.AreEqualIgnoringCase(typeof(Person).Name, person.ClassDefName);
             //---------------Tear Down -------------------------          
@@ -128,16 +138,18 @@ namespace Habanero.Test.BO.TransactionCommitters
             firstTransactionCommitter.CommitTransaction();
 
             //---------------Assert Preconditions--------------
-            AssertBOInDataStore(1, typeof(Person));
+            AssertBOInDataStore(1, typeof(BusinessObjectDTO));
 
             //---------------Execute Test ----------------------
             person.LastName = Guid.NewGuid().ToString("N");
             ITransactionCommitter secondTransactionCommitter = new TransactionCommitterDB4O(DB4ORegistry.DB);
             secondTransactionCommitter.AddBusinessObject(person);
             secondTransactionCommitter.CommitTransaction();
-
+            DB4ORegistry.DB.Close();
+            DB4ORegistry.DB = Db4oFactory.OpenFile(_db4oFileName);
+            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
             //---------------Test Result -----------------------
-            AssertBOInDataStore(1, typeof(Person));
+            AssertBOInDataStore(1, typeof(BusinessObjectDTO));
             Assert.AreSame(person, loader.GetBusinessObject<Person>(person.ID));
             Assert.IsFalse(person.Status.IsDirty);
             //---------------Tear Down -------------------------
@@ -154,42 +166,24 @@ namespace Habanero.Test.BO.TransactionCommitters
             firstTransactionCommitter.CommitTransaction();
 
             //---------------Assert Preconditions--------------
-            AssertBOInDataStore(1, typeof(Person));
+            AssertBOInDataStore(1, typeof(BusinessObjectDTO));
 
             //---------------Execute Test ----------------------
             person.MarkForDelete();
             ITransactionCommitter secondTransactionCommitter = new TransactionCommitterDB4O(DB4ORegistry.DB);
             secondTransactionCommitter.AddBusinessObject(person);
             secondTransactionCommitter.CommitTransaction();
-
+            DB4ORegistry.DB.Close();
+            DB4ORegistry.DB = Db4oFactory.OpenFile(_db4oFileName);
+            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
             //---------------Test Result -----------------------
-            AssertBONotInDataStore(typeof(Person));
+            AssertBONotInDataStore(typeof(BusinessObjectDTO));
         }
 
-        [Test]
-        public void Test_CommitTransaction_UpdatesStatus()
-        {
-            //---------------Set up test pack-------------------
-            Person person = new Person { LastName = "Bob" };
-            ITransactionCommitter firstTransactionCommitter = new TransactionCommitterDB4O(DB4ORegistry.DB);
-            firstTransactionCommitter.AddBusinessObject(person);
+       
+       
 
-            //---------------Assert Preconditions--------------
-            Assert.IsTrue(person.Status.IsDirty);
-            Assert.IsTrue(person.Status.IsNew);
 
-            //---------------Execute Test ----------------------
-            firstTransactionCommitter.CommitTransaction();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            GC.Collect();
-            Person loadedPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Person>(person.ID);
-
-            //---------------Test Result -----------------------
-            Assert.IsFalse(loadedPerson.Status.IsDirty);
-            Assert.IsFalse(loadedPerson.Status.IsNew);
-
-            //---------------Tear Down -------------------------          
-        }
         private static void AssertBOInDataStore(int count, Type boType) {
             Assert.AreEqual(count, DB4ORegistry.DB.Query(boType).Count);
         }
@@ -200,8 +194,9 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
     }
 
-    internal class StubTransactionCommiterDB4O : TransactionCommitterDB4O {
-        public StubTransactionCommiterDB4O(IObjectContainer objectContainer) : base(objectContainer) {}
+    internal class StubTransactionCommiterDB4O : TransactionCommitterDB4O
+    {
+        public StubTransactionCommiterDB4O(IObjectContainer objectContainer) : base(objectContainer) { }
         protected override bool CommitToDatasource() { return false; }
     }
 }

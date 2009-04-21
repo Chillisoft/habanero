@@ -840,6 +840,40 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+        public static ClassDef LoadClassDefWithOrganisationAndAddressRelationships()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" databaseField=""Surname_field"" />
+                    <property  name=""FirstName"" compulsory=""true"" databaseField=""FirstName_field"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" >
+                      <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />
+                    </property>
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"" reverseRelationship=""ContactPeople"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DoNothing"" reverseRelationship=""ContactPersonTestBO"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""OrganisationID"" property=""OrganisationID"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+                    </ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
 
         public override string ToString()
         {

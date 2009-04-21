@@ -2628,7 +2628,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CriteriaString_ThroughRelationship_TwoLevels()
+        public virtual void Test_CriteriaString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             Engine.LoadClassDef_IncludingCarAndOwner();
@@ -2651,7 +2651,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CriteriaString_ThroughRelationship_TwoLevels_SearchOnNULL()
+        public virtual void Test_CriteriaString_ThroughRelationship_TwoLevels_SearchOnNULL()
         {
             //---------------Set up test pack-------------------
             Engine.DeleteAllEngines();
@@ -2671,7 +2671,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
 
         [Test]
-        public void Test_Load_CriteriaString_ThroughRelationship_TwoLevels()
+        public virtual void Test_Load_CriteriaString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             Engine.LoadClassDef_IncludingCarAndOwner();
@@ -2693,7 +2693,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.Contains(engine, col);
         }
 
-        private static void CreateEngineWithCarWithContact()
+        protected void CreateEngineWithCarWithContact()
         {
             string surname;
             string regno;
@@ -3843,33 +3843,5 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         #endregion //Test that the load returns the correct sub type
     }
 
-    [TestFixture]
-    public class TestBusinessObjectLoader_GetBusinessObjectCollectionDB4O
-        : TestBusinessObjectLoader_GetBusinessObjectCollection
-    {
-        #region Setup/Teardown
-
-        [SetUp]
-        public override void SetupTest()
-        {
-            base.SetupTest();
-        }
-
-        #endregion
-
-        protected override void DeleteEnginesAndCars()
-        {
-            
-        }
-
-        protected override void SetupDataAccessor()
-        {
-            if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
-            const string db4oFileStore = "DataStore.db4o";
-            if (File.Exists(db4oFileStore)) File.Delete(db4oFileStore);
-            DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileStore);
-            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
-        }
-    }
 
 }

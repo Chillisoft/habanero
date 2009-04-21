@@ -468,10 +468,21 @@ namespace Habanero.BO
             ArrayList addedBoArray = new ArrayList();
             addedBoArray.AddRange(collection.AddedBusinessObjects);
 
+            Console.Out.WriteLine("before created: " + collection.CreatedBusinessObjects.Count);
             RestoreCreatedCollection(collection);
+            Console.Out.WriteLine("after created: " + collection.CreatedBusinessObjects.Count);
+
+            Console.Out.WriteLine("before removed: " + collection.CreatedBusinessObjects.Count);
             RestoreRemovedCollection(collection);
+            Console.Out.WriteLine("after removed: " + collection.CreatedBusinessObjects.Count);
+
+            Console.Out.WriteLine("before deleted: " + collection.CreatedBusinessObjects.Count);
             RestoreMarkForDeleteCollection(collection);
+            Console.Out.WriteLine("after deleted: " + collection.CreatedBusinessObjects.Count);
+
+            Console.Out.WriteLine("before added: " + collection.CreatedBusinessObjects.Count);
             RestoreAddedCollection(collection, addedBoArray);
+            Console.Out.WriteLine("after added: " + collection.CreatedBusinessObjects.Count);
         }
         /// <summary>
         /// Restores the items in the <see cref="IBusinessObjectCollection.AddedBusinessObjects"/> collection
@@ -623,7 +634,10 @@ namespace Habanero.BO
             {
                 AddBusinessObjectToCollection(collection, loadedBo);
             }
+            Console.Out.WriteLine("before: " + collection.Count);
             RestoreEditedLists(collection);
+            Console.Out.WriteLine("after: " + collection.Count);
+
         }
 
         /// <summary>
@@ -735,6 +749,13 @@ namespace Habanero.BO
             BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
             IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
             return find.Count > 0 ? find[0] : null;
+        }
+
+        protected static void SetStatusAfterLoad(IBusinessObject bo)
+        {
+            BusinessObject businessObject = (BusinessObject)bo;
+            businessObject.SetStatus(BOStatus.Statuses.isNew, false);
+            businessObject.AfterLoad();
         }
     }
 }

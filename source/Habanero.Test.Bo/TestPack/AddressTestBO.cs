@@ -249,5 +249,17 @@ namespace Habanero.Test.BO
         {
             return CreateUnsavedAddress(contactPerson.ContactPersonID);
         }
+
+        public static AddressTestBO CreateUnsavedAddress(ContactPersonTestBO contactPerson, string firstLine)
+        {
+            AddressTestBO address = new AddressTestBO();
+            address.ContactPersonTestBO = contactPerson;
+            address.AddressLine1 = firstLine;
+            return address;
+        }
+        public static AddressTestBO CreateUnsavedAddress(ContactPersonTestBO contactPerson)
+        {
+            return CreateUnsavedAddress(contactPerson, TestUtil.GetRandomString());
+        }
     }
 }

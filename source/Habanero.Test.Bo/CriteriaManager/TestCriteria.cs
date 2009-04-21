@@ -1540,6 +1540,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestIsMatch_OneProp_Like_ValuesIdentical()
         {
@@ -2386,6 +2387,96 @@ namespace Habanero.Test.BO
         }
 
         #endregion //Comparison Operators
+
+        #region IsMatch on BusinessObjectDTO
+
+
+        [Test]
+        public void TestIsMatch_OnBusinessObjectDTO_OneProp_Like()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "This is MyValue Surname";
+            BusinessObjectDTO dto = new BusinessObjectDTO(cp);
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue%");
+            bool isMatch = criteria.IsMatch(dto);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestIsMatch_OnBusinessObjectDTO_TwoProps_And()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            DateTime dob = DateTime.Now;
+            cp.DateOfBirth = dob;
+            string surname = Guid.NewGuid().ToString("N");
+            cp.Surname = surname;
+            cp.Save();
+            BusinessObjectDTO dto = new BusinessObjectDTO(cp);
+
+            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dob);
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
+
+            //---------------Execute Test ----------------------
+            Criteria twoPropCriteria = new Criteria(dobCriteria, Criteria.LogicalOp.And, nameCriteria);
+            bool isMatch = twoPropCriteria.IsMatch(dto);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestIsMatch_OnBusinessObjectDTO_TwoProps_Not()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithBoolean();
+            MyBO bo = new MyBO();
+            bo.TestBoolean = false;
+            BusinessObjectDTO dto = new BusinessObjectDTO(bo);
+
+            Criteria notCriteria = new Criteria(null, Criteria.LogicalOp.Not, new Criteria("TestBoolean", Criteria.ComparisonOp.Equals, true));
+
+            //---------------Execute Test ----------------------
+            bool isMatch = notCriteria.IsMatch(dto);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+        }
+
+        [Test]
+        public void TestIsMatch_OnBusinessObjectDTO_TwoProps_Or()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            DateTime dob = DateTime.Now;
+            cp.DateOfBirth = dob;
+            string surname = Guid.NewGuid().ToString("N");
+            cp.Surname = surname;
+            cp.Save();
+            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dob.AddDays(2));
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
+            BusinessObjectDTO dto = new BusinessObjectDTO(cp);
+
+            //---------------Execute Test ----------------------
+            Criteria twoPropCriteria = new Criteria(dobCriteria, Criteria.LogicalOp.Or, nameCriteria);
+            bool isMatch = twoPropCriteria.IsMatch(dto);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------
+        }
+
+        #endregion
 
 
         #region DateTime

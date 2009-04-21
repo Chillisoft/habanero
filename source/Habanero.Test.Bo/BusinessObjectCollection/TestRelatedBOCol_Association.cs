@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.IO;
 using Db4objects.Db4o;
 using Habanero.Base;
@@ -264,8 +265,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
-            ContactPersonTestBO.DeleteAllContactPeople();
-            OrganisationTestBO.DeleteAllOrganisations();
+            DeleteAllContactPersonAndOrganisations();
+
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             GetAssociationRelationship(organisationTestBO, out cpCol);
@@ -284,6 +285,9 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             util.AssertOneObjectInRemovedAndPersisted(cpCol);
             util.AssertRemovedEventFired();
+        }
+
+        protected virtual void DeleteAllContactPersonAndOrganisations() {
         }
 
 
@@ -872,6 +876,12 @@ DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql
             //But not if only run tests for the Test Class.
         }
 
+        protected override void DeleteAllContactPersonAndOrganisations() {
+            ContactPersonTestBO.DeleteAllContactPeople();
+            OrganisationTestBO.DeleteAllOrganisations();
+
+        }
+
         public override void Test_ResetParent_NewChild_SetToNull()
         {
             //DO nothing cannot get this test to work reliably on DB wierd data is always in DB when run all tests
@@ -880,19 +890,6 @@ DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql
     }
 
 
-    [TestFixture]
-    public class TestRelatedBOCol_Association_WithDB4O : TestRelatedBOCol_Association
-    {
-        [TestFixtureSetUp]
-        public override void TestFixtureSetup()
-        {
-            if (DB4ORegistry.DB != null) DB4ORegistry.DB.Close();
-            const string db4oFileStore = "DataStore.db4o";
-            if (File.Exists(db4oFileStore)) File.Delete(db4oFileStore);
-            DB4ORegistry.DB = Db4oFactory.OpenFile(db4oFileStore);
-            BORegistry.DataAccessor = new DataAccessorDB4O(DB4ORegistry.DB);
-        }
-    }
 
     [Ignore("//TODO Brett 06 Feb 2009: Install oracle client on machine")]
     [TestFixture]

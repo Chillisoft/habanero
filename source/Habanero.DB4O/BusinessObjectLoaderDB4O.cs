@@ -37,11 +37,11 @@ namespace Habanero.DB4O
 
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
-            Criteria criteria = ((BOPrimaryKey)primaryKey).GetKeyCriteria();
             return WithDB4O(db =>
                             {
-                                IList<T> matchingObjects = db.Query<T>(obj => criteria.IsMatch(obj, false));
-                                return (T)GetFirstObjectFromMatchedObjects(matchingObjects, typeof(T).Name, true);
+                                string typeName = typeof(T).Name;
+                                IList<BusinessObjectDTO> matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassName == typeName && obj.ID == primaryKey.ToString());
+                                return GetFirstObjectFromMatchedObjects<T>(matchingObjects, null, true);
                             }
                 );
         }
@@ -51,31 +51,60 @@ namespace Habanero.DB4O
             Criteria criteria = ((BOPrimaryKey)primaryKey).GetKeyCriteria();
             return WithDB4O(db =>
                             {
-                                IList<BusinessObject> matchingObjects =
-                                    db.Query<BusinessObject>(
-                                        obj => obj.ClassDefName == classDef.ClassName && criteria.IsMatch(obj, false));
-                                return GetFirstObjectFromMatchedObjects(matchingObjects, classDef.ClassName, true);
+                                IList<BusinessObjectDTO> matchingObjects =
+                                    db.Query<BusinessObjectDTO>(
+                                        obj => obj.ClassDefName == classDef.ClassName && obj.ID == primaryKey.ToString());
+                                return GetFirstObjectFromMatchedObjects<BusinessObject>(matchingObjects, classDef, true);
                             }
                 );
         }
 
-        private T GetFirstObjectFromMatchedObjects<T>(IList<T> matchingObjects, string className, bool errorIfNotFound) where T : class, IBusinessObject
+        private static T GetFirstObjectFromMatchedObjects<T>(IList<BusinessObjectDTO> matchingObjects, IClassDef classDef, bool errorIfNotFound) where T : class, IBusinessObject, new()
         {
+
             if (matchingObjects.Count > 1)
             {
+                string className = classDef != null ? classDef.ClassName : typeof(T).Name;
                 throw new HabaneroDeveloperException("There was an error with loading the class " + className + ".", "The query returned more than one record when only one was expected");
             }
-            T matchedBO = (T)((matchingObjects.Count > 0) ? matchingObjects[0] : null);
-            if (matchedBO == null)
+            BusinessObjectDTO matchedDTO = ((matchingObjects.Count > 0) ? matchingObjects[0] : null);
+            if (matchedDTO == null)
             {
+                string className = classDef != null ? classDef.ClassName : typeof(T).Name;
                 if (errorIfNotFound) throw new BusObjDeleteConcurrencyControlException(string.Format("A Error has occured since the object you are trying to refresh has been deleted by another user. There are no records in the database for the Class: {0} identified by", className));
                 return null;
             }
-            if (BusinessObjectManager.Instance.Contains(matchedBO.ID))
+
+            T bo = GetBoFromDTO<T>(classDef, matchedDTO);
+
+            T businessObjectFromManager = null;
+            Type typeToGet = classDef == null ? typeof (T) : classDef.ClassType;
+            businessObjectFromManager = (T)GetObjectFromObjectManager(bo.ID, typeToGet);
+            if (businessObjectFromManager != null)
             {
-                return (T)BusinessObjectManager.Instance[matchedBO.ID];
+                return businessObjectFromManager;
             }
-            return matchedBO;
+            else
+            {
+                BusinessObjectManager.Instance.Add(bo);
+            }
+           
+            SetStatusAfterLoad(bo);
+
+
+            return bo;
+        }
+
+        private static T GetBoFromDTO<T>(IClassDef classDef, BusinessObjectDTO matchedBO) where T : class, IBusinessObject, new()
+        {
+            T tempBO ;
+            if (classDef != null) tempBO = (T) classDef.CreateNewBusinessObject(); else tempBO = new T();
+            BusinessObjectManager.Instance.Remove(tempBO);
+            foreach (IBOProp boProp in tempBO.Props)
+            {
+                tempBO.Props[boProp.PropertyName].InitialiseProp(matchedBO.Props[boProp.PropertyName.ToUpper()]);
+            }
+            return tempBO;
         }
 
 
@@ -96,9 +125,9 @@ namespace Habanero.DB4O
                                 // validate the criteria against a sample object
                                 T newObj = new T();
                                 criteria.IsMatch(newObj);
-
-                                IList<T> matchingObjects = db.Query<T>(obj => criteria.IsMatch(obj, false));
-                                return (T)GetFirstObjectFromMatchedObjects(matchingObjects, typeof(T).Name, false);
+                                string typeName = typeof(T).Name;
+                                IList<BusinessObjectDTO> matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassName == typeName && criteria.IsMatch(obj));
+                                return GetFirstObjectFromMatchedObjects<T>(matchingObjects, null, false);
                             }
                 );
         }
@@ -106,10 +135,14 @@ namespace Habanero.DB4O
         {
             return WithDB4O(db =>
                             {
-                                IList<BusinessObject> matchingObjects =
-                                    db.Query<BusinessObject>(
-                                        obj => obj.ClassDefName == classDef.ClassName && criteria.IsMatch(obj, false));
-                                return GetFirstObjectFromMatchedObjects(matchingObjects, classDef.ClassName, false);
+                                // validate the criteria against a sample object
+                                IBusinessObject newObj = classDef.CreateNewBusinessObject();
+                                criteria.IsMatch(newObj);
+
+                                IList<BusinessObjectDTO> matchingObjects =
+                                    db.Query<BusinessObjectDTO>(
+                                        obj => obj.ClassDefName == classDef.ClassName && criteria.IsMatch(obj));
+                                return GetFirstObjectFromMatchedObjects<BusinessObject>(matchingObjects, classDef, false);
                             }
                 );
 
@@ -146,25 +179,28 @@ namespace Habanero.DB4O
 
             WithDB4O<IBusinessObject>(db =>
             {
-                IList<BusinessObject> matchingObjects;
+                IList<BusinessObjectDTO> matchingObjects;
                 if (criteria == null)
                 {
-                    matchingObjects = db.Query<BusinessObject>(obj => obj.ClassDefName == collection.ClassDef.ClassName);
+                    matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == collection.ClassDef.ClassName);
                 }
                 else
                 {
-                    matchingObjects = db.Query<BusinessObject>(obj => obj.ClassDefName == collection.ClassDef.ClassName && criteria.IsMatch(obj, false));
+                    matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == collection.ClassDef.ClassName && criteria.IsMatch(obj));
                 }
                 List<IBusinessObject> loadedBOs = new List<IBusinessObject>(matchingObjects.Count);
-                foreach (IBusinessObject matchingObject in matchingObjects)
+                foreach (BusinessObjectDTO matchingObject in matchingObjects)
                 {
-                    if (BusinessObjectManager.Instance.Contains(matchingObject.ID))
+                    BusinessObject tempBO = GetBoFromDTO<BusinessObject>(collection.ClassDef, matchingObject);
+                    if (BusinessObjectManager.Instance.Contains(tempBO.ID))
                     {
-                        loadedBOs.Add(GetLoadedBusinessObject(matchingObject)); //BusinessObjectManager.Instance[matchingObject.ID]);
+                        loadedBOs.Add(GetLoadedBusinessObject(tempBO)); //BusinessObjectManager.Instance[matchingObject.ID]);
                     }
                     else
                     {
-                        loadedBOs.Add(matchingObject);
+                        loadedBOs.Add(tempBO);
+                        BusinessObjectManager.Instance.Add(tempBO);
+                        SetStatusAfterLoad(tempBO);
                     }
                 }
                 loadedBOs.Sort(orderCriteria.Compare);
@@ -186,25 +222,31 @@ namespace Habanero.DB4O
 
             WithDB4O<T>(db =>
                         {
-                            IList<T> matchingObjects;
+                            IList<BusinessObjectDTO> matchingObjects;
                             if (criteria == null)
                             {
-                                matchingObjects = db.Query<T>();
+                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == collection.ClassDef.ClassName);
                             }
                             else
                             {
-                                matchingObjects = db.Query<T>(obj => criteria.IsMatch(obj, false));
+                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == collection.ClassDef.ClassName && criteria.IsMatch(obj));
                             }
-                            List<IBusinessObject> loadedBOs = new List<IBusinessObject>(matchingObjects.Count);
-                            foreach (T matchingObject in matchingObjects)
+                            List<T> loadedBOs = new List<T>(matchingObjects.Count);
+
+                            foreach (BusinessObjectDTO matchingObject in matchingObjects)
                             {
-                                if (BusinessObjectManager.Instance.Contains(matchingObject.ID))
+
+
+                                T bo = GetBoFromDTO<T>(collection.ClassDef, matchingObject);
+                                if (BusinessObjectManager.Instance.Contains(bo.ID))
                                 {
-                                    loadedBOs.Add(GetLoadedBusinessObject(matchingObject)); //BusinessObjectManager.Instance[matchingObject.ID]);
+                                    loadedBOs.Add((T) GetLoadedBusinessObject(bo)); //BusinessObjectManager.Instance[matchingObject.ID]);
                                 }
                                 else
                                 {
-                                    loadedBOs.Add(matchingObject);
+                                    loadedBOs.Add(bo);
+                                    BusinessObjectManager.Instance.Add(bo);
+                                    SetStatusAfterLoad(bo);
                                 }
                             }
                             loadedBOs.Sort(orderCriteria.Compare);

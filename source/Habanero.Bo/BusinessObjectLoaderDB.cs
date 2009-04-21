@@ -650,9 +650,7 @@ namespace Habanero.BO
                 }
                 i++;
             }
-            BusinessObject businessObject = ((BusinessObject) bo);
-            businessObject.SetStatus(BOStatus.Statuses.isNew, false);
-            businessObject.AfterLoad();
+            SetStatusAfterLoad(bo);
         }
     }
 }

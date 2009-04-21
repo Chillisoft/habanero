@@ -297,7 +297,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TransactionCommitters\TestTransactionCommitterDB.cs" />
-    <Compile Include="TransactionCommitters\TestTransactionCommitterDB4O.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitterFactory.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitterHelper.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitterInMemory.cs" />

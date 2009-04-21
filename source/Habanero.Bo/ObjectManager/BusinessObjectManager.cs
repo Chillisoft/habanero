@@ -283,7 +283,7 @@ namespace Habanero.BO
         /// seperate instance of the business object is loaded in the object manager then it will not be removed.
         /// </summary>
         /// <param name="businessObject">business object to be removed.</param>
-        internal void Remove(IBusinessObject businessObject)
+        public void Remove(IBusinessObject businessObject)
         {
             lock (_loadedBusinessObjects)
             {
