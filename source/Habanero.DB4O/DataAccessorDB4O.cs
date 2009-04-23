@@ -4,10 +4,13 @@ using Habanero.BO;
 
 namespace Habanero.DB4O
 {
+    ///<summary>
+    /// The data accessor used when using the DB4O datastore.
+    ///</summary>
     public class DataAccessorDB4O : IDataAccessor
     {
         private readonly IBusinessObjectLoader _businessObjectLoader;
-        private IObjectContainer _objectContainer;
+        private readonly IObjectContainer _objectContainer;
 
         public DataAccessorDB4O(IObjectContainer objectContainer)
         {
@@ -21,7 +24,7 @@ namespace Habanero.DB4O
             get { return _businessObjectLoader; }
         }
 
-        public virtual ITransactionCommitter CreateTransactionCommitter()
+        public ITransactionCommitter CreateTransactionCommitter()
         {
             return new TransactionCommitterDB4O(_objectContainer);
         }

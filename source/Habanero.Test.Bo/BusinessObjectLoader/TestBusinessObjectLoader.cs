@@ -742,7 +742,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test, ExpectedException(typeof (InvalidPropertyNameException))]
-        public void TestGetBusinessObject_PropNameNotCorrect()
+        public virtual void TestGetBusinessObject_PropNameNotCorrect()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();

@@ -354,5 +354,48 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("MyReverseRelationship", relDef.ReverseRelationshipName);
         }
 
+        [Test]
+        public void Test_WithTypeParameter()
+        {
+            //---------------Set up test pack-------------------
+            XmlClassLoader loader = new XmlClassLoader();
+            ClassDef personClassDef =
+                loader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"" typeParameter=""Human"">
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(personClassDef);
+            
+
+             const string relXml = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""single"" 
+                        relatedClass=""ContactPersonTestBO"" 
+						relatedAssembly=""Habanero.Test.BO""
+                        typeParameter=""Human""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+             //---------------Assert PreConditions---------------   
+             Assert.IsTrue(ClassDef.ClassDefs.Contains("Habanero.Test.BO", "ContactPersonTestBO_Human"));
+
+            //---------------Execute Test ----------------------
+            
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(relXml, itsPropDefs);
+            //---------------Test Result -----------------------
+
+            Assert.AreSame(personClassDef, relDef.RelatedObjectClassDef);
+            //---------------Tear Down -------------------------          
+        }
+
     }
 }

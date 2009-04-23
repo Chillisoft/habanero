@@ -188,11 +188,28 @@ namespace Habanero.BO.ClassDefinition
     	{
     		get
     		{
-    		    return ClassDef.ClassDefs[RelatedObjectAssemblyName, RelatedObjectClassName];
+
+    		    return ClassDef.ClassDefs[RelatedObjectAssemblyName, RelatedObjectClassNameWithTypeParameter];
     		}
     	}
 
-		#endregion Properties
+        private string RelatedObjectClassNameWithTypeParameter
+        {
+            get
+            {
+                if (!String.IsNullOrEmpty(RelatedObjectTypeParameter))
+                    return RelatedObjectClassName + "_" + RelatedObjectTypeParameter;
+                return RelatedObjectClassName;
+            }
+        }
+
+        /// <summary>
+        /// The type parameter of the related object type.  This allows you to relate a class with another one that is
+        /// type parametrised (ie has multiple classdefs for one .net type)
+        /// </summary>
+        public string RelatedObjectTypeParameter { get; set; }
+        
+        #endregion Properties
 
 		#region Type Initialisation
 

@@ -932,7 +932,7 @@ namespace Habanero.Test.BO.Loaders
             //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)
             {
-                StringAssert.Contains("The relationship 'TestRelatedClass' could not be loaded for because when trying to retrieve its related class the folllowing", ex.Message);
+                StringAssert.Contains("The relationship 'TestRelatedClass' could not be loaded because when trying to retrieve its related class the folllowing", ex.Message);
             }
         }
 

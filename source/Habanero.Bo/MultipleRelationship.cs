@@ -181,10 +181,23 @@ namespace Habanero.BO
         /// This collection is not refreshed from the Database prior to being returned. I.e. This returns the 
         /// collection exactly in the state that it is in Memory.
         ///</summary>
-        public IBusinessObjectCollection CurrentBusinessObjectCollection
+        IBusinessObjectCollection IMultipleRelationship.CurrentBusinessObjectCollection
+        {
+            get { return CurrentBusinessObjectCollection; }
+        }
+
+        ///<summary>
+        /// The collection of business objects under the control of this relationship.
+        /// This collection is not refreshed from the Database prior to being returned. I.e. This returns the 
+        /// collection exactly in the state that it is in Memory.
+        ///</summary>
+        public BusinessObjectCollection<TBusinessObject> CurrentBusinessObjectCollection
         {
             get { return _boCol; }
         }
+
+
+
 
         /// <summary>
         /// Returns the collection for this relationship.  The collection is refreshed before
@@ -194,6 +207,7 @@ namespace Habanero.BO
         {
             get
             {
+                RelationshipUtils.SetupCriteriaForRelationship(this, _boCol);
                 BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
                 return _boCol;
             }

@@ -91,7 +91,6 @@ namespace Habanero.DB4O
            
             SetStatusAfterLoad(bo);
 
-
             return bo;
         }
 
@@ -103,6 +102,7 @@ namespace Habanero.DB4O
             foreach (IBOProp boProp in tempBO.Props)
             {
                 tempBO.Props[boProp.PropertyName].InitialiseProp(matchedBO.Props[boProp.PropertyName.ToUpper()]);
+
             }
             return tempBO;
         }
@@ -123,8 +123,9 @@ namespace Habanero.DB4O
             return WithDB4O(db =>
                             {
                                 // validate the criteria against a sample object
-                                T newObj = new T();
-                                criteria.IsMatch(newObj);
+                                //T newObj = new T();
+                                //BusinessObjectManager.Instance.Remove(newObj);
+                                //criteria.IsMatch(newObj);
                                 string typeName = typeof(T).Name;
                                 IList<BusinessObjectDTO> matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassName == typeName && criteria.IsMatch(obj));
                                 return GetFirstObjectFromMatchedObjects<T>(matchingObjects, null, false);
@@ -136,8 +137,9 @@ namespace Habanero.DB4O
             return WithDB4O(db =>
                             {
                                 // validate the criteria against a sample object
-                                IBusinessObject newObj = classDef.CreateNewBusinessObject();
-                                criteria.IsMatch(newObj);
+                                ///IBusinessObject newObj = classDef.CreateNewBusinessObject();
+                                //BusinessObjectManager.Instance.Remove(newObj);
+                                //criteria.IsMatch(newObj);
 
                                 IList<BusinessObjectDTO> matchingObjects =
                                     db.Query<BusinessObjectDTO>(

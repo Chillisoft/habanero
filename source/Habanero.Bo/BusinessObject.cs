@@ -972,6 +972,7 @@ namespace Habanero.BO
         /// </summary>
         protected internal virtual void AfterLoad()
         {
+            FireUpdatedEvent();
         }
 
         /// <summary>

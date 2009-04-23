@@ -177,6 +177,12 @@ namespace Habanero.Base
         IClassDef RelatedObjectClassDef { get; }
 
         /// <summary>
+        /// The type parameter of the related object type.  This allows you to relate a class with another one that is
+        /// type parametrised (ie has multiple classdefs for one .net type)
+        /// </summary>
+        string RelatedObjectTypeParameter { get;  }
+
+        /// <summary>
         /// Create and return a new Relationship based on the relationship definition.
         /// </summary>
         /// <param name="owningBo">The business object that owns

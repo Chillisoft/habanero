@@ -58,6 +58,10 @@ namespace Habanero.DB4O
                 {
                     IList<BusinessObjectDTO> matchingObjects = _objectContainer.Query<BusinessObjectDTO>(
                                         obj => obj.ClassDefName == tbo.BusinessObject.ClassDef.ClassName && obj.ID == tbo.BusinessObject.ID.ToString());
+                    if (matchingObjects.Count == 0)
+                    {
+                        throw new BusObjDeleteConcurrencyControlException(string.Format("The object of type {0} with ID: {1} has been deleted from the data store.", tbo.BusinessObject.ClassDef.ClassName, tbo.BusinessObject.ID));
+                    }
                     BusinessObjectDTO dtoToUpdate = matchingObjects[0];
                     foreach (IBOProp boProp in tbo.BusinessObject.Props)
                     {

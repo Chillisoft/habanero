@@ -335,7 +335,7 @@ namespace Habanero.BO.Loaders
                 {
                     throw new InvalidXmlDefinitionException
                         (string.Format
-                             ("The relationship '{0}' could not be loaded for because when trying to retrieve its related class the folllowing error was thrown '{1}'",
+                             ("The relationship '{0}' could not be loaded because when trying to retrieve its related class the folllowing error was thrown '{1}'",
                               relationshipDef.RelationshipName, ex.Message), ex);
                 }
             }

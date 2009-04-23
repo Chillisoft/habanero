@@ -43,6 +43,7 @@ namespace Habanero.BO.Loaders
         private RelationshipType _relationshipType;
         private bool _owningBOHasForeignKey;
         private string _reverseRelationshipName;
+        //private string _typeParameter;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -108,6 +109,7 @@ namespace Habanero.BO.Loaders
                     _deleteParentAction, _relationshipType);
                 relationshipDef.OwningBOHasForeignKey = _owningBOHasForeignKey;
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
+               // relationshipDef.RelatedObjectTypeParameter = _typeParameter;
                 return relationshipDef;
             }
             if (_type == "multiple")
@@ -118,6 +120,7 @@ namespace Habanero.BO.Loaders
                         _relKeyDef, _keepReferenceToRelatedObject, 
                         _orderBy, _deleteParentAction, _relationshipType);
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
+                //relationshipDef.RelatedObjectTypeParameter = _typeParameter;
                 return relationshipDef;
             }
             throw new InvalidXmlDefinitionException(
@@ -174,7 +177,7 @@ namespace Habanero.BO.Loaders
             _keepReferenceToRelatedObject = _reader.GetAttribute("keepReference") == "true";
             _owningBOHasForeignKey = _reader.GetAttribute("owningBOHasForeignKey") == "true";
             _reverseRelationshipName = _reader.GetAttribute("reverseRelationship");
-
+            //_typeParameter = _reader.GetAttribute("typeParameter");
 
             _orderBy = _reader.GetAttribute("orderBy");
 
