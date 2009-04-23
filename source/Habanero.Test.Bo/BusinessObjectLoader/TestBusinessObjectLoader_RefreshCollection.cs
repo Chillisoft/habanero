@@ -23,6 +23,7 @@ using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB4O;
 using NUnit.Framework;
 
@@ -129,6 +130,15 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.AreNotSame(secondInstanceOfCP1, cp1);
                 Assert.AreEqual(newSurname, secondInstanceOfCP1.Surname);
             }
+
+            [Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
+            public override void Test_Refresh_W_ParametrizedClassDef_Typed()
+            {
+                
+            }
+
+            [Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
+            public override void Test_Refresh_W_ParametrizedClassDef_Untyped() { }
         }
         #region Refresh
 
@@ -239,6 +249,101 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        public virtual void Test_Refresh_W_ParametrizedClassDef_Typed()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef parametrizedClassDef =
+                new XmlClassLoader().LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"" typeParameter=""SuperHero"">
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
+                    <property name=""SuperPowerDescription"" /> 
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(parametrizedClassDef);
+
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO(parametrizedClassDef);
+            cp1.Surname = TestUtil.GetRandomString();
+            cp1.FirstName = TestUtil.GetRandomString();
+            cp1.DateOfBirth = now.AddDays(-1);
+            cp1.Save();
+            ContactPersonTestBO cp2 = new ContactPersonTestBO(parametrizedClassDef);
+            cp2.Surname = TestUtil.GetRandomString();
+            cp2.FirstName = TestUtil.GetRandomString();
+            cp2.DateOfBirth = now.AddDays(-1);
+            cp2.Save();
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
+            
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>(parametrizedClassDef);
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreEqual(2, col.PersistedBusinessObjects.Count);
+            Assert.IsTrue(col[0].Props.Contains("SuperPowerDescription"));
+            Assert.IsTrue(col[1].Props.Contains("SuperPowerDescription"));
+        }
+
+
+        [Test]
+        public virtual void Test_Refresh_W_ParametrizedClassDef_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef parametrizedClassDef =
+                new XmlClassLoader().LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"" typeParameter=""SuperHero"">
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
+                    <property name=""SuperPowerDescription"" /> 
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(parametrizedClassDef);
+
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO(parametrizedClassDef);
+            cp1.Surname = TestUtil.GetRandomString();
+            cp1.FirstName = TestUtil.GetRandomString();
+            cp1.DateOfBirth = now.AddDays(-1);
+            cp1.Save();
+            ContactPersonTestBO cp2 = new ContactPersonTestBO(parametrizedClassDef);
+            cp2.Surname = TestUtil.GetRandomString();
+            cp2.FirstName = TestUtil.GetRandomString();
+            cp2.DateOfBirth = now.AddDays(-1);
+            cp2.Save();
+            ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
+
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>(parametrizedClassDef);
+
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreEqual(2, col.PersistedBusinessObjects.Count);
+            Assert.IsTrue(col[0].Props.Contains("SuperPowerDescription"));
+            Assert.IsTrue(col[1].Props.Contains("SuperPowerDescription"));
+        }
+
+
+        [Test]
         public void Test_Refresh_W_RemovedBOs_Typed()
         {
             //---------------Set up test pack-------------------
@@ -259,6 +364,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.Count);
         }
+
+
+
 
         [Test]
         public void Test_Refresh_W_RemovedBOs_UnTyped()

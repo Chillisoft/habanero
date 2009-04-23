@@ -151,6 +151,50 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestCreateBusinessObject_WithParametrizedClassDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            XmlClassLoader loader = new XmlClassLoader();
+            ClassDef basicClassDef =
+                loader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" type=""Guid"" />
+					<property  name=""TestProp"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef parametrizedClassDef =
+                loader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"" typeParameter=""Special"">
+					<property  name=""MyBoID"" type=""Guid"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestPropSpecial"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(basicClassDef);
+            ClassDef.ClassDefs.Add(parametrizedClassDef);
+
+            //---------------Assert PreConditions---------------    
+            Assert.AreEqual(2, ClassDef.ClassDefs.Count);
+
+            //---------------Execute Test ----------------------
+            IBusinessObject bo = parametrizedClassDef.CreateNewBusinessObject(true);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(MyBO), bo.GetType());
+            Assert.AreSame(parametrizedClassDef, bo.ClassDef);
+            Assert.IsTrue(bo.Props.Contains("TestPropSpecial"));
+        }
+
+        [Test]
         public void TestCreateBusinessObject_SetsDefaults()
         {
             //---------------Set up test pack-------------------

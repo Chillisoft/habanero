@@ -316,20 +316,20 @@ namespace Habanero.BO.Loaders
             }
         }
 
-        private static ClassDef GetRelatedObjectClassDef(ClassDefCol classDefs, IRelationshipDef relationshipDef)
+        private static ClassDef GetRelatedObjectClassDef(ClassDefCol classDefs, RelationshipDef relationshipDef)
         {
             ClassDef relatedObjectClassDef;
             try
             {
                 relatedObjectClassDef =
-                    classDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
+                    classDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassNameWithTypeParameter];
             }
             catch (HabaneroDeveloperException)
             {
                 try
                 {
                     relatedObjectClassDef =
-                        ClassDef.ClassDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
+                        ClassDef.ClassDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassNameWithTypeParameter];
                 }
                 catch (HabaneroDeveloperException ex)
                 {

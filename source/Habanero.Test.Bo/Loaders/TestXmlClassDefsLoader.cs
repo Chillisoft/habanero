@@ -936,6 +936,48 @@ namespace Habanero.Test.BO.Loaders
             }
         }
 
+
+        [Test]
+        public void Test_CheckRelationships_RelationshipWithTypeParameterChecksAgainstCorrectRelatedClassDef()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" 
+                        relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" typeParameter=""Special"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassSpecialID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" typeParameter=""Special"">
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+                            <property  name=""TestClassID"" type=""Guid"" />
+							<property  name=""TestClassSpecialID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            loader.LoadClassDefs(classDefsString);
+            //---------------Test Result -----------------------
+        }
+
+
+
         [Test]
         public void Test_Force_PrimaryKey_IsObjectID_AsCompulsoryWriteOnce_WithReadWriteRule_ReadWrite()
         {

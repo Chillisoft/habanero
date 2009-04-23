@@ -515,17 +515,33 @@ namespace Habanero.BO.ClassDefinition
         /// Creates a new business object
         /// </summary>
         /// <returns>Returns a new business object</returns>
-        private BusinessObject InstantiateBusinessObject()
+        private BusinessObject InstantiateBusinessObject(bool instantiateWithClassDef)
             // This was internal, but it's been made private because you should rather use CreateNewBusinessObject
         {
-            try
+            if (instantiateWithClassDef)
             {
-                return (BusinessObject) Activator.CreateInstance(MyClassType, true);
+                try
+                {
+                    return (BusinessObject)Activator.CreateInstance(MyClassType, new object[] { this });
+                }
+                catch (MissingMethodException ex)
+                {
+                    throw new MissingMethodException("Unable to instantiate a " + MyClassType.Name + " with a ClassDef.  Please inherit the constructor that takes a ClassDef as parameter. Or alternately call CreateNewBusinessObject with no parameter (or false) to use the default classdef for the type.", ex);
+                }
             }
-            catch (MissingMethodException ex)
+            else
             {
-                throw new MissingMethodException("Each class that implements " +
-                                                 "BusinessObject needs to have a parameterless constructor.", ex);
+
+                try
+                {
+
+                    return (BusinessObject) Activator.CreateInstance(MyClassType, true);
+                }
+                catch (MissingMethodException ex)
+                {
+                    throw new MissingMethodException("Each class that implements " +
+                                                     "BusinessObject needs to have a parameterless constructor.", ex);
+                }
             }
         }
 
@@ -569,13 +585,37 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// Creates a new business object using this class definition
+        /// Creates a new business object using the default class definition for the type linked to this <see cref="ClassDef"/>
         /// </summary>
         /// <returns>Returns the new object</returns>
         public IBusinessObject CreateNewBusinessObject()
         {
-            return InstantiateBusinessObject();
+            return InstantiateBusinessObject(false);
         }
+
+
+        /// <summary>
+        /// Creates a new business object either using the default class definition for the type linked to this <see cref="ClassDef"/>
+        /// or using this particular class definition (in the case where you might have more than one class definition for one C#
+        /// type, useful for user defined types)
+        /// Note that this means the business object being created must have a constructor that takes a <see cref="ClassDef"/>,
+        /// passing this through to the base class as follows:
+        /// <code>
+        /// public class Entity
+        /// {
+        ///    public Entity() {}
+        ///    public Entity(ClassDef def): base(def) { }
+        /// }
+        /// </code>
+        /// </summary>
+        /// <param name="instantiateWithClassDef">Whether to use the constructor that takes a classdef (in case you have multiple
+        /// classdefs for a .NET type)</param>
+        /// <returns>Returns the new object</returns>
+        public IBusinessObject CreateNewBusinessObject(bool instantiateWithClassDef)
+        {
+            return InstantiateBusinessObject(instantiateWithClassDef);
+        }
+
 
         #endregion //Creating BOs
 

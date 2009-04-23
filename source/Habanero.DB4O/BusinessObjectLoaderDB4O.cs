@@ -97,7 +97,15 @@ namespace Habanero.DB4O
         private static T GetBoFromDTO<T>(IClassDef classDef, BusinessObjectDTO matchedBO) where T : class, IBusinessObject, new()
         {
             T tempBO ;
-            if (classDef != null) tempBO = (T) classDef.CreateNewBusinessObject(); else tempBO = new T();
+
+            if (classDef != null)
+            {
+                bool useSpecificClassDef = (!string.IsNullOrEmpty(classDef.TypeParameter));
+                tempBO = (T)classDef.CreateNewBusinessObject(useSpecificClassDef);
+            } else
+            {
+                tempBO = new T();
+            }
             BusinessObjectManager.Instance.Remove(tempBO);
             foreach (IBOProp boProp in tempBO.Props)
             {

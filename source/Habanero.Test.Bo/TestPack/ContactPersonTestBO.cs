@@ -29,6 +29,9 @@ namespace Habanero.Test.BO
 {
     public class ContactPersonTestBO : BusinessObject
     {
+        public ContactPersonTestBO() : base() { }
+        public ContactPersonTestBO(ClassDef def) : base(def) { }
+
         #region ContactType enum
 
         public enum ContactType

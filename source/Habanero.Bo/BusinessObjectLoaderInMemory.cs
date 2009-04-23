@@ -210,17 +210,18 @@ namespace Habanero.BO
         protected override void DoRefresh<T>(BusinessObjectCollection<T> collection) 
             //where T : class, IBusinessObject, new()
         {
-            ISelectQuery selectQuery = collection.SelectQuery;
-            Criteria criteria = selectQuery.Criteria;
-            OrderCriteria orderCriteria = selectQuery.OrderCriteria;
+            DoRefresh((IBusinessObjectCollection)collection);
+            //ISelectQuery selectQuery = collection.SelectQuery;
+            //Criteria criteria = selectQuery.Criteria;
+            //OrderCriteria orderCriteria = selectQuery.OrderCriteria;
 
-            QueryBuilder.PrepareCriteria(collection.ClassDef, criteria);
+            //QueryBuilder.PrepareCriteria(collection.ClassDef, criteria);
 
-            List<T> loadedBos = _dataStore.FindAllInternal<T>(criteria);
-            loadedBos.Sort(orderCriteria.Compare);
-            collection.TotalCountAvailableForPaging = loadedBos.Count;
-            ApplyLimitsToList(selectQuery, loadedBos);
-            LoadBOCollection(collection, (ICollection) loadedBos);
+            //IBusinessObjectCollection loadedBos = _dataStore.FindAll(collection.ClassDef, criteria);
+            //loadedBos.Sort(orderCriteria);
+            //collection.TotalCountAvailableForPaging = loadedBos.Count;
+            //ApplyLimitsToList(selectQuery, loadedBos);
+            //LoadBOCollection(collection, (ICollection) loadedBos);
         }
 
         /// <summary>

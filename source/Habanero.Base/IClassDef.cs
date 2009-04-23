@@ -104,10 +104,29 @@ namespace Habanero.Base
 
 
         /// <summary>
-        /// Creates a new business object using this class definition
+        /// Creates a new business object using the default class definition for the type linked to this <see cref="ClassDef"/>
         /// </summary>
         /// <returns>Returns the new object</returns>
         IBusinessObject CreateNewBusinessObject();
+
+        /// <summary>
+        /// Creates a new business object either using the default class definition for the type linked to this <see cref="ClassDef"/>
+        /// or using this particular class definition (in the case where you might have more than one class definition for one C#
+        /// type, useful for user defined types)
+        /// Note that this means the business object being created must have a constructor that takes a <see cref="ClassDef"/>,
+        /// passing this through to the base class as follows:
+        /// <code>
+        /// public class Entity
+        /// {
+        ///    public Entity() {}
+        ///    public Entity(ClassDef def): base(def) { }
+        /// }
+        /// </code>
+        /// </summary>
+        /// <param name="instantiateWithClassDef">Whether to use the constructor that takes a classdef (in case you have multiple
+        /// classdefs for a .NET type)</param>
+        /// <returns>Returns the new object</returns>
+        IBusinessObject CreateNewBusinessObject(bool instantiateWithClassDef);
 
         /// <summary>
         /// The table this classdef maps to, if applicable.
@@ -168,6 +187,12 @@ namespace Habanero.Base
         /// The name of the class type for the class definition (excluding the namespace and the type parameter).
         /// </summary>
         string ClassNameExcludingTypeParameter { get; }
+
+        /// <summary>
+        /// The type parameter for this classdef (which allows there to be multiple classdefs per .net type as long
+        /// as they have unique type parameters).
+        /// </summary>
+        string TypeParameter { get; set; }
 
         /// <summary>
         /// The collection of relationship definitions
