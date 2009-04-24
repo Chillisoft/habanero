@@ -320,16 +320,6 @@ namespace Habanero.Test.BO.Relationship
 
 
 
-    [TestFixture]
-    public class TestMultipleRelationship_Composition_DB : TestMultipleRelationship_Composition
-    {
-        [SetUp]
-        public override void SetupTest()
-        {
-            base.SetupTest();
-            TestUsingDatabase.SetupDBDataAccessor();
-        }
-    }
 
 
 

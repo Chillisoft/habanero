@@ -140,6 +140,10 @@
       <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
       <Name>Habanero.Test</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
@@ -151,6 +155,13 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="StatementGeneratorTestHelper.cs" />
+    <Compile Include="TestBOPropLookupList_DatabaseLookupList_GuidID.cs" />
+    <Compile Include="TestBOPropLookupList_DatabaseLookupList_Int.cs" />
+    <Compile Include="TestBusinessObjectLoaderDB.cs" />
+    <Compile Include="TestBusinessObjectLoaderDBWithInheritance.cs" />
+    <Compile Include="TestBusinessObjectLoader_GetBusinessObjectCollectionDB.cs" />
+    <Compile Include="TestBusinessObjectLoader_RefreshCollectionDB.cs" />
+    <Compile Include="TestBusinessObjectLookupListDB.cs" />
     <Compile Include="TestCriteriaDB.cs" />
     <Compile Include="TestDatabaseConnection.cs" />
     <Compile Include="TestDbMigrator.cs" />
@@ -171,12 +182,23 @@
     </Compile>
     <Compile Include="TestDeleteStatementGenerator.cs" />
     <Compile Include="TestInsertStatementGenerator.cs" />
+    <Compile Include="TestMultipleRelationship_Aggregation_DB.cs" />
+    <Compile Include="TestMultipleRelationship_Association_DB.cs" />
+    <Compile Include="TestMultipleRelationship_Composition_DB.cs" />
     <Compile Include="TestMySqlDatabaseConnection.cs" />
     <Compile Include="TestNumberGeneratorDB.cs" />
     <Compile Include="TestParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestRelatedBOCol_Aggregation_UsingDB.cs" />
+    <Compile Include="TestRelatedBOCol_Association_WithDB.cs" />
+    <Compile Include="TestRelatedBOCol_Association_WithOracleDB.cs" />
+    <Compile Include="TestRelatedBOCol_Composition_UsingDB.cs" />
     <Compile Include="TestSelectQueryDB.cs" />
+    <Compile Include="TestSingleRelationship_Aggregation_DB.cs" />
+    <Compile Include="TestSingleRelationship_Association_DB.cs" />
+    <Compile Include="TestSingleRelationship_Composition_DB.cs" />
+    <Compile Include="TestSourceDB.cs" />
     <Compile Include="TestSQLStatement.cs">
       <SubType>Code</SubType>
     </Compile>

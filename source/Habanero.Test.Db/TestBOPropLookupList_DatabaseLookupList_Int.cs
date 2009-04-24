@@ -24,9 +24,10 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Test.BO;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.DB
 {
     [TestFixture]
     public class TestBOPropLookupList_DatabaseLookupList_Int : TestUsingDatabase
@@ -518,9 +519,19 @@ namespace Habanero.Test.BO
             return businessObjectStub;
         }
 
+
+
         #endregion
 
 
         //#endregion
+    }
+
+    internal class BusinessObjectStub : BusinessObject
+    {
+        public BusinessObjectStub(ClassDef def)
+            : base(def)
+        {
+        }
     }
 }

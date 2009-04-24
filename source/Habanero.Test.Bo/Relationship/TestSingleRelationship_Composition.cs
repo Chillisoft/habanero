@@ -427,15 +427,5 @@ namespace Habanero.Test.BO.Relationship
         }
     }
 
-    [TestFixture]
-    public class TestSingleRelationship_Composition_DB : TestSingleRelationship_Composition
-    {
-        [SetUp]
-        public override void SetupTest()
-        {
-            base.SetupTest();
-            TestUsingDatabase.SetupDBDataAccessor();
-        }
-    }
 
 }

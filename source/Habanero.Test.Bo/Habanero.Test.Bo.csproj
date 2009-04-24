@@ -171,8 +171,6 @@
     <Compile Include="TestBOPropGuid.cs" />
     <Compile Include="TestBOPropLookupList_BusinessObjectLookupList_IntID.cs" />
     <Compile Include="TestBOPropLookupList_BusinessObjectLookupList_GuidID.cs" />
-    <Compile Include="TestBOPropLookupList_DatabaseLookupList_GuidID.cs" />
-    <Compile Include="TestBOPropLookupList_DatabaseLookupList_Int.cs" />
     <Compile Include="TestBOPropLookupList_SimpleLookupList.cs" />
     <Compile Include="TestBoPropString.cs" />
     <Compile Include="TestBusinessObjectSerialisation.cs" />
@@ -225,7 +223,6 @@
     <Compile Include="BusinessObjectLoader\TestQueryBuilder.cs" />
     <Compile Include="BusinessObjectLoader\TestSelectQuery.cs" />
     <Compile Include="BusinessObjectLoader\TestSource.cs" />
-    <Compile Include="BusinessObjectLoader\TestSourceDB.cs" />
     <Compile Include="TestPropertyLink.cs" />
     <Compile Include="TestRelKey.cs" />
     <Compile Include="TestSimpleLookupList.cs" />

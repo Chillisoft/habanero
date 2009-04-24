@@ -37,19 +37,7 @@ namespace Habanero.Test.BO
         protected abstract void SetupDataAccessor();
         protected abstract void DeleteAllContactPeople();
         
-        [TestFixture]
-        public class TestBusinessObjectLookupListDB : TestBusinessObjectLookupList
-        {
-            protected override void SetupDataAccessor()
-            {
-                BORegistry.DataAccessor = new DataAccessorDB();
-            }
-
-            protected override void DeleteAllContactPeople()
-            {
-                ContactPersonTestBO.DeleteAllContactPeople();
-            }
-        }
+       
         [TestFixture]
         public class TestBusinessObjectLookupListMemory : TestBusinessObjectLookupList
         {

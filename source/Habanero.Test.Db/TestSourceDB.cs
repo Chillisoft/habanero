@@ -22,7 +22,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.BusinessObjectLoader
+namespace Habanero.Test.DB
 {
     [TestFixture]
     public class TestSourceDB

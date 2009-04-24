@@ -468,21 +468,13 @@ namespace Habanero.BO
             ArrayList addedBoArray = new ArrayList();
             addedBoArray.AddRange(collection.AddedBusinessObjects);
 
-            Console.Out.WriteLine("before created: " + collection.CreatedBusinessObjects.Count);
             RestoreCreatedCollection(collection);
-            Console.Out.WriteLine("after created: " + collection.CreatedBusinessObjects.Count);
 
-            Console.Out.WriteLine("before removed: " + collection.CreatedBusinessObjects.Count);
             RestoreRemovedCollection(collection);
-            Console.Out.WriteLine("after removed: " + collection.CreatedBusinessObjects.Count);
 
-            Console.Out.WriteLine("before deleted: " + collection.CreatedBusinessObjects.Count);
             RestoreMarkForDeleteCollection(collection);
-            Console.Out.WriteLine("after deleted: " + collection.CreatedBusinessObjects.Count);
 
-            Console.Out.WriteLine("before added: " + collection.CreatedBusinessObjects.Count);
             RestoreAddedCollection(collection, addedBoArray);
-            Console.Out.WriteLine("after added: " + collection.CreatedBusinessObjects.Count);
         }
         /// <summary>
         /// Restores the items in the <see cref="IBusinessObjectCollection.AddedBusinessObjects"/> collection
@@ -634,9 +626,7 @@ namespace Habanero.BO
             {
                 AddBusinessObjectToCollection(collection, loadedBo);
             }
-            Console.Out.WriteLine("before: " + collection.Count);
             RestoreEditedLists(collection);
-            Console.Out.WriteLine("after: " + collection.Count);
 
         }
 

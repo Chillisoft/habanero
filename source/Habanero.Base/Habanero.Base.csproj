@@ -248,7 +248,6 @@
     <Compile Include="RethrowingExceptionNotifier.cs" />
     <Compile Include="RSAPasswordCrypter.cs" />
     <Compile Include="Source.cs" />
-    <Compile Include="SourceDB.cs" />
     <Compile Include="SqlFormatter.cs" />
     <Compile Include="XMLWrapper.cs" />
   </ItemGroup>

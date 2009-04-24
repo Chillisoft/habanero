@@ -88,7 +88,7 @@ namespace Habanero.BO
         /// Gets the number of business objects currently loaded. This is used
         /// primarily for debugging and testing.
         /// </summary>
-        internal int Count
+        public int Count
         {
             get { return _loadedBusinessObjects.Count; }
         }
