@@ -124,7 +124,7 @@ namespace Habanero.BO
         {
             _criteriaString = criteria;
             _sortString = sort;
-            CheckSortCriteriaIsValid(this.BoType);
+            CheckSortCriteriaIsValid();
         }
 
         /// <summary>
@@ -161,12 +161,12 @@ namespace Habanero.BO
             _criteriaString = criteria;
             _sortString = sort;
             _limitToList = limitToList;
-
-
-            CheckSortCriteriaIsValid(type);
+            CheckSortCriteriaIsValid();
         }
-#pragma warning disable 168
-        private void CheckSortCriteriaIsValid(Type type)
+
+// ReSharper disable MemberCanBeMadeStatic
+        private void CheckSortCriteriaIsValid()
+// ReSharper restore MemberCanBeMadeStatic
         {
             //Note : Code commented out because not all ClassDefs are loaded when lookup Lists are being loaded.
             //try
@@ -177,11 +177,11 @@ namespace Habanero.BO
             //{
             //    string errMessage =
             //        "The sort criteria properties do not match the Properties of the Lookup Business Object of type " +
-            //        type.FullName;
+            //        AssemblyName + "." + ClassName;
             //    throw new HabaneroDeveloperException(errMessage, errMessage);
             //}
         }
-#pragma warning restore 168
+
         #endregion Constructors
 
         #region Properties
