@@ -87,13 +87,18 @@ namespace Habanero.BO
         {
             get
             {
-                if (!Contains(propName.ToUpper()))
+                IBOProp prop;
+                try
+                {
+                     prop = _boProps[propName.ToUpper()];
+                }
+                catch (Exception)
                 {
                     throw new InvalidPropertyNameException(String.Format(
                                                                "A BOProp with the name '{0}' does not exist in the " +
                                                                "prop collection.", propName));
                 }
-                return _boProps[propName.ToUpper()];
+                return prop;
             }
         }
 

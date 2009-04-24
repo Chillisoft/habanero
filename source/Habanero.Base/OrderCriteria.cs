@@ -170,6 +170,16 @@ namespace Habanero.Base
 
         {
             private readonly SortDirection _sortDirection;
+            private IClassDef _classDef;
+            /// <summary>
+            /// This is used as a type object because IPropertyComparer inherits from the base generic type 
+            /// IComparer<T> but you cannot set the use T at a field level.
+            /// We wanted to however cache this since it is taking a significant amount of time
+            /// in the loading.
+            /// </summary>
+            private object _comparer;
+
+            private string _fullNameExcludingPrimarySource;
 
             /// <summary>
             /// Creates a Field with the given name and SortDirection
@@ -181,7 +191,6 @@ namespace Habanero.Base
             public Field(string propertyName, string fieldName, Source source, SortDirection sortDirection)
                 : base(propertyName, fieldName, source)
             {
-
                 _sortDirection = sortDirection;
             }
 
@@ -303,8 +312,13 @@ namespace Habanero.Base
             /// The value returned is negated if the SortDirection is Descending</returns>
             public int Compare<T>(T bo1, T bo2) where T : IBusinessObject
             {
-                string fullPropName = this.FullNameExcludingPrimarySource;
-                IPropertyComparer<T> comparer = bo1.ClassDef.CreatePropertyComparer<T>(fullPropName);
+                if (_comparer == null)
+                {
+                    _classDef = bo1.ClassDef;
+                    _fullNameExcludingPrimarySource = this.FullNameExcludingPrimarySource;
+                    _comparer = _classDef.CreatePropertyComparer<IBusinessObject>(_fullNameExcludingPrimarySource);
+                }
+                IPropertyComparer<IBusinessObject> comparer = (IPropertyComparer<IBusinessObject>)_comparer;
                 comparer.PropertyName = PropertyName;
                 comparer.Source = Source != null && Source.ChildSource != null ? Source.ChildSource :  null;
                 int compareResult = comparer.Compare(bo1, bo2);
@@ -312,8 +326,6 @@ namespace Habanero.Base
                     return SortDirection == SortDirection.Ascending ? compareResult : -compareResult;
                 return 0;
             }
-
-          
 
             private static Field CreateField(string sourceAndFieldName, SortDirection sortDirection)
             {
@@ -340,8 +352,6 @@ namespace Habanero.Base
         int IComparer.Compare(object x, object y)
         {
                 return Compare((IBusinessObject) x, (IBusinessObject) y);
-
         }
-
     }
 }

@@ -978,6 +978,7 @@ namespace Habanero.Test.UI.Base
             MyBO.LoadDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IGridBase gridBase = CreateGridBaseStub();
+            gridBase.Columns.Add(_gridIdColumnName, _gridIdColumnName);
             gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
             //--------------Assert PreConditions----------------            
 

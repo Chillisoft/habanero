@@ -210,9 +210,14 @@ namespace Habanero.BO
         {
             get
             {
-                string message;
-                if (!this.IsReadable(out message))
+                if (!this.IsReadable())
                 {
+                    //We have created two IsReadable Methods one that 
+                    // builds the error message and one that does not.
+                    // these two are used to avoid the performance
+                    // overhead of creating the unneccessary string message.
+                    string message;
+                    this.IsReadable(out message);
                     throw new BOPropReadException(message);
                 }
                 return _currentValue;
@@ -438,6 +443,11 @@ namespace Habanero.BO
             return true;
         }
 
+        protected virtual bool IsReadable()
+        {
+            return _boPropAuthorisation == null || _boPropAuthorisation.IsAuthorised(BOPropActions.CanRead);
+        }
+
         ///<summary>
         /// Returns whether the BOProperty is Readable or not. The BOProp may not be Readable
         ///  if the user may not have permissions to read the property Value.
@@ -447,8 +457,7 @@ namespace Habanero.BO
         public virtual bool IsReadable(out string message)
         {
             message = "";
-            if (_boPropAuthorisation == null) return true;
-            if (!_boPropAuthorisation.IsAuthorised(BOPropActions.CanRead))
+            if (!IsReadable())
             {
                 message = string.Format
                     ("The logged on user {0} is not authorised to read the {1} ", Thread.CurrentPrincipal.Identity.Name,

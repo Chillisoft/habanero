@@ -706,12 +706,18 @@ namespace Habanero.BO
 
         internal IBOProp GetProperty(string propName)
         {
-            if (Props.Contains(propName))
+
+            try
+            {
                 return Props[propName];
-            string errMessage = String.Format
-                ("The given property name '{0}' does not exist in the "
-                 + "collection of properties for the class '{1}'.", propName, GetType().Name);
-            throw new InvalidPropertyNameException(errMessage);
+            }
+            catch (InvalidPropertyNameException)
+            {
+                string errMessage = String.Format
+                    ("The given property name '{0}' does not exist in the "
+                     + "collection of properties for the class '{1}'.", propName, GetType().Name);
+                throw new InvalidPropertyNameException(errMessage);
+            }
         }
 
         /// <summary>

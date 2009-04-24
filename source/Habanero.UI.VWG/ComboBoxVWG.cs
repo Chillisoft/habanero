@@ -31,6 +31,7 @@ namespace Habanero.UI.VWG
     public class ComboBoxVWG : ComboBox, IComboBox
     {
         private readonly ComboBoxManager _manager;
+        private readonly IComboBoxObjectCollection _objectCollection;
 
         ///<summary>
         /// Constructor for <see cref="ComboBoxVWG"/>
@@ -38,6 +39,7 @@ namespace Habanero.UI.VWG
         public ComboBoxVWG()
         {
             _manager = new ComboBoxManager(this);
+            _objectCollection = new ComboBoxObjectCollectionVWG(base.Items);
         }
 
         /// <summary>
@@ -58,8 +60,7 @@ namespace Habanero.UI.VWG
         {
             get
             {
-                IComboBoxObjectCollection objectCollection = new ComboBoxObjectCollectionVWG(base.Items);
-                return objectCollection;
+                return _objectCollection;
             }
         }
 

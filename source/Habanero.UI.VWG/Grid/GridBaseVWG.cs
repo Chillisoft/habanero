@@ -36,7 +36,7 @@ namespace Habanero.UI.VWG
         protected GridBaseVWG()
         {
             _manager = new GridBaseManager(this);
-            this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
+            _manager.BusinessObjectSelected += delegate { FireBusinessObjectSelected(); };
             _manager.CollectionChanged += delegate { FireCollectionChanged(); };
         }
 

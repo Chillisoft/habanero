@@ -35,6 +35,17 @@ namespace Habanero.UI.Win
         private readonly GridBaseManager _manager;
 
         /// <summary>
+        /// Constructor for <see cref="GridBaseWin"/>
+        /// </summary>
+        protected GridBaseWin()
+        {
+            _manager = new GridBaseManager(this);
+            _manager.CollectionChanged += delegate { FireCollectionChanged(); };
+            _manager.BusinessObjectSelected += delegate { FireBusinessObjectSelected(); };
+            DoubleClick += DoubleClickHandler;
+        }
+
+        /// <summary>
         /// Occurs when a business object is selected
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
@@ -43,6 +54,7 @@ namespace Habanero.UI.Win
         /// Occurs when the collection in the grid is changed
         /// </summary>
         public event EventHandler CollectionChanged;
+
         /// <summary>
         /// Event raised when the filter has been updated.
         /// </summary>
@@ -52,23 +64,6 @@ namespace Habanero.UI.Win
         /// Occurs when a row is double-clicked by the user
         /// </summary>
         public event RowDoubleClickedHandler RowDoubleClicked;
-
-        /// <summary>
-        /// Constructor for <see cref="GridBaseWin"/>
-        /// </summary>
-        protected GridBaseWin()
-        {
-            _manager = new GridBaseManager(this);
-            this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
-            _manager.CollectionChanged += delegate { FireCollectionChanged(); };
-
-            DoubleClick += DoubleClickHandler;
-            
-//            this.
-//            this.BusinessObjectEdited
-//                this.CellValueChanged
-//                    this.;
-        }
 
         /// <summary>
         /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated

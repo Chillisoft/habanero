@@ -535,15 +535,13 @@ namespace Habanero.UI.Win
 
         #region Implementation of IBOSelectorAndEditor
 
-        //TODO Brett 18 Apr 2009: These methods need to be implemented for all these controls.
-        //Enable Disable buttons in the case of a readonlygrid control
         ///<summary>
         /// Gets and sets whether the user can add Business objects via this control
         ///</summary>
         public bool AllowUsersToAddBO
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return false; }
+            set { this.Grid.AllowUserToAddRows = false; }
         }
 
         /// <summary>
@@ -551,8 +549,8 @@ namespace Habanero.UI.Win
         /// </summary>
         public bool AllowUsersToDeleteBO
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return this.Grid.AllowUserToDeleteRows; }
+            set { this.Grid.AllowUserToDeleteRows = value; }
         }
 
         /// <summary>
@@ -560,8 +558,8 @@ namespace Habanero.UI.Win
         /// </summary>
         public bool AllowUsersToEditBO
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return false; }
+            set { this.Grid.ReadOnly = true; }
         }
 
         /// <summary>

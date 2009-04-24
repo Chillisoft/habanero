@@ -831,14 +831,15 @@ namespace Habanero.BO.ClassDefinition
             if (propValue == null) return true;
             if (propValue is string && string.IsNullOrEmpty((string) propValue)) return true;
             if (this.HasLookupList()) return true;
-            if (propValue.GetType().IsSubclassOf(this.PropertyType)) return true;
+            Type propertyType = this.PropertyType;
+            if (propValue.GetType().IsSubclassOf(propertyType)) return true;
             try
             {
-                Convert.ChangeType(propValue, this.PropertyType);
+                Convert.ChangeType(propValue, propertyType);
             }
             catch (InvalidCastException)
             {
-                if (!(propValue is Guid && this.PropertyType == typeof (string)))
+                if (!(propValue is Guid && propertyType == typeof (string)))
                 {
                     errorMessage = GetErrorMessage(propValue,this.DisplayName);
                 }

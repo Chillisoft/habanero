@@ -627,7 +627,6 @@ namespace Habanero.BO
                 AddBusinessObjectToCollection(collection, loadedBo);
             }
             RestoreEditedLists(collection);
-
         }
 
         /// <summary>

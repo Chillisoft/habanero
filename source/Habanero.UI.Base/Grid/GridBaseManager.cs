@@ -29,7 +29,6 @@ using Habanero.Util;
 
 namespace Habanero.UI.Base
 {
-
     /// <summary>
     /// This manager groups common logic for IEditableGridControl objects.
     /// Do not use this object in working code.
@@ -41,10 +40,17 @@ namespace Habanero.UI.Base
         private IBusinessObjectCollection _boCol;
         private DataView _dataTableDefaultView;
         /// <summary>
+        /// Occurs when a business object is selected
+        /// </summary>
+        public event EventHandler<BOEventArgs> BusinessObjectSelected;
+        /// <summary>
         /// Handler for the CollectionChanged Event
         /// </summary>
         public event EventHandler CollectionChanged;
+
         private GridLoaderDelegate _gridLoader;
+        private readonly EventHandler _gridBase_OnSelectionChangedHandler;
+        private bool _fireBusinessObjectSelectedEvent;
 
         ///<summary>
         /// Constructor
@@ -58,7 +64,22 @@ namespace Habanero.UI.Base
             _gridBase.AutoGenerateColumns = false;
             _gridLoader = DefaultGridLoader;
             _gridBase.AllowUserToAddRows = false;
+
+            _gridBase_OnSelectionChangedHandler = GridBase_OnSelectionChanged;
+            _gridBase.SelectionChanged += _gridBase_OnSelectionChangedHandler;
             AutoSelectFirstItem = true;
+        }
+
+        private void GridBase_OnSelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                FireBusinessObjectSelected();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         ///<summary>
@@ -69,6 +90,14 @@ namespace Habanero.UI.Base
         {
         }
 
+        private void FireBusinessObjectSelected()
+        {
+            if (this.BusinessObjectSelected != null && _fireBusinessObjectSelectedEvent)
+            {
+                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
+            }
+        }
+
         /// <summary>
         /// See <see cref="IGridBase"/>.<see cref="IBusinessObjectCollection"/>
         /// </summary>
@@ -77,8 +106,8 @@ namespace Habanero.UI.Base
             if (_gridBase.Columns.Count <= 0)
             {
                 if (col == null) return;
-                throw new GridBaseSetUpException(
-                    "You cannot call SetBusinessObjectCollection if the grid's columns have not been set up");
+                throw new GridBaseSetUpException
+                    ("You cannot call SetBusinessObjectCollection if the grid's columns have not been set up");
             }
             _boCol = col;
             if (_boCol == null)
@@ -94,12 +123,36 @@ namespace Habanero.UI.Base
 
             _gridLoader(_gridBase, _boCol);
 
-            if (_gridBase.Rows.Count > 0 )
+            if (_gridBase.Rows.Count > 0)
             {
-                SelectedBusinessObject = null;
-                _gridBase.Rows[0].Selected = AutoSelectFirstItem;
+                if (!IsFirstRowSelected())
+                {
+                    try
+                    {
+                        _gridBase.SelectionChanged -= _gridBase_OnSelectionChangedHandler;
+                        _fireBusinessObjectSelectedEvent = false;
+                        SelectedBusinessObject = null;
+                        _fireBusinessObjectSelectedEvent = false;
+                        _gridBase.Rows[0].Selected = AutoSelectFirstItem;
+                    }
+                    finally
+                    {
+                        _gridBase.SelectionChanged += _gridBase_OnSelectionChangedHandler;
+                        _fireBusinessObjectSelectedEvent = true;
+                    }
+
+                }
+                if (AutoSelectFirstItem)
+                {
+                    FireBusinessObjectSelected();
+                }
             }
             FireCollectionChanged();
+        }
+
+        private bool IsFirstRowSelected()
+        {
+            return _gridBase.Rows[0].Selected;
         }
 
         /// <summary>
@@ -121,12 +174,19 @@ namespace Habanero.UI.Base
                 return;
             }
             DataView table = GetDataTable(boCol);
-            gridBase.DataSource = table;
-//            table.ListChanged += (sender, e) =>
-//                                 {
-//                                     gridBase.RefreshEdit();
-//                                 };
+            try
+            {
+                gridBase.SelectionChanged -= _gridBase_OnSelectionChangedHandler;
+                _fireBusinessObjectSelectedEvent = false;
+                gridBase.DataSource = table;
+            }
+            finally
+            {
+                gridBase.SelectionChanged += _gridBase_OnSelectionChangedHandler;
+                _fireBusinessObjectSelectedEvent = true;
+            }
         }
+
         /// <summary>
         /// Returns a DataView based on the <see cref="IBusinessObjectCollection"/> defined by <paramref name="boCol"/>.
         /// The Columns in the <see cref="DataView"/> will be the collumns defined in the Grids <see cref="UiDefName"/>
@@ -136,17 +196,17 @@ namespace Habanero.UI.Base
         protected DataView GetDataTable(IBusinessObjectCollection boCol)
         {
             _dataSetProvider = _gridBase.CreateDataSetProvider(boCol);
-            if (this.ClassDef == null || this.ClassDef!=_boCol.ClassDef)
+            if (this.ClassDef == null || this.ClassDef != _boCol.ClassDef)
             {
                 this.ClassDef = _boCol.ClassDef;
-            }  
-            UIDef uiDef = ((ClassDef)this.ClassDef).GetUIDef(UiDefName);
+            }
+            UIDef uiDef = ((ClassDef) this.ClassDef).GetUIDef(UiDefName);
             if (uiDef == null)
             {
-                throw new ArgumentException(
-                    String.Format(
-                        "You cannot Get the data for the grid {0} since the uiDef {1} cannot be found for the classDef {2}",
-                        this._gridBase.Name, UiDefName, ((ClassDef)this.ClassDef).ClassName));
+                throw new ArgumentException
+                    (String.Format
+                         ("You cannot Get the data for the grid {0} since the uiDef {1} cannot be found for the classDef {2}",
+                          this._gridBase.Name, UiDefName, ((ClassDef) this.ClassDef).ClassName));
             }
             DataTable dataTable = _dataSetProvider.GetDataTable(uiDef.UIGrid);
             _dataTableDefaultView = dataTable.DefaultView;
@@ -160,25 +220,42 @@ namespace Habanero.UI.Base
         {
             get
             {
-                int rownum = -1;
-                for (int i = 0; i < _gridBase.Rows.Count; i++)
-                    if (_gridBase.Rows[i].Selected) rownum = i;
-                return rownum < 0 ? null : this.GetBusinessObjectAtRow(rownum);
+//                int rownum = -1;
+//                for (int i = 0; i < _gridBase.Rows.Count; i++)
+//                    if (_gridBase.Rows[i].Selected) rownum = i;
+                for (int i = _gridBase.Rows.Count - 1; i >= 0; i--)
+                {
+                    if (_gridBase.Rows[i].Selected)
+                    {
+                        return this.GetBusinessObjectAtRow(i);
+                    }
+                }
+                return null;
             }
             set
             {
                 //TODO_Port: RemovePreviouslySelectedBusinessObjectsEventHandler();
                 if (_boCol == null && value != null)
                 {
-                    throw new GridBaseInitialiseException(
-                        "You cannot call SelectedBusinessObject if the collection is not set");
+                    throw new GridBaseInitialiseException
+                        ("You cannot call SelectedBusinessObject if the collection is not set");
                 }
                 IDataGridViewRowCollection gridRows = _gridBase.Rows;
-                ClearAllSelectedRows(gridRows);
-                if (value == null)
+                try
                 {
-                    _gridBase.CurrentCell = null;
-                    return;
+                    _gridBase.SelectionChanged -= _gridBase_OnSelectionChangedHandler;
+                    _fireBusinessObjectSelectedEvent = false;
+                    ClearAllSelectedRows(gridRows);
+                    if (value == null)
+                    {
+                        _gridBase.CurrentCell = null;
+                        return;
+                    }
+                }
+                finally
+                {
+                    _fireBusinessObjectSelectedEvent = true;
+                    _gridBase.SelectionChanged += _gridBase_OnSelectionChangedHandler;
                 }
                 BusinessObject bo = (BusinessObject) value;
                 bool boFoundAndHighlighted = false;
@@ -204,9 +281,9 @@ namespace Habanero.UI.Base
                         try
                         {
                             _gridBase.FirstDisplayedScrollingRowIndex = _gridBase.Rows.IndexOf(_gridBase.CurrentRow);
-                            gridRows[rowNum].Selected = true;  //Getting turned off for some reason
+                            gridRows[rowNum].Selected = true; //Getting turned off for some reason
                         }
-                        catch(InvalidOperationException)
+                        catch (InvalidOperationException)
                         {
                             //Do nothing - designed to catch error "No room is available to display rows"
                             //  when grid height is insufficient
@@ -252,8 +329,8 @@ namespace Habanero.UI.Base
             get
             {
                 if (_boCol == null) return new List<BusinessObject>();
-                BusinessObjectCollection<BusinessObject> busObjects =
-                    new BusinessObjectCollection<BusinessObject>(this.ClassDef);
+                BusinessObjectCollection<BusinessObject> busObjects = new BusinessObjectCollection<BusinessObject>
+                    (this.ClassDef);
                 foreach (IDataGridViewRow row in _gridBase.SelectedRows)
                 {
                     BusinessObject businessObject = (BusinessObject) GetBusinessObjectAtRow(row.Index);
@@ -315,9 +392,10 @@ namespace Habanero.UI.Base
                         return this._dataSetProvider.Find(result);
                     }
                 }
-            }else
+            }
+            else
             {
-                IDataGridViewRow findRow =_gridBase.Rows[rowIndex];
+                IDataGridViewRow findRow = _gridBase.Rows[rowIndex];
                 return this._boCol.Find(GetRowObjectIDValue(findRow));
             }
             return null;
@@ -332,7 +410,7 @@ namespace Habanero.UI.Base
             Guid boIdGuid = businessObject.ID.ObjectID;
             foreach (IDataGridViewRow row in _gridBase.Rows)
             {
-                if (GetRowObjectIDValue(row) == boIdGuid) 
+                if (GetRowObjectIDValue(row) == boIdGuid)
                 {
                     return row;
                 }
@@ -367,7 +445,7 @@ namespace Habanero.UI.Base
         {
             get { return _dataSetProvider != null ? _dataSetProvider.IDColumnName : "HABANERO_OBJECTID"; }
         }
-        
+
 
         /// <summary>
         /// Gets and sets whether this selector autoselects the first item or not when a new collection is set.
@@ -389,8 +467,8 @@ namespace Habanero.UI.Base
         {
             if (_dataTableDefaultView == null)
             {
-                throw new GridBaseInitialiseException(
-                    "You cannot apply filters as the collection for the grid has not been set");
+                throw new GridBaseInitialiseException
+                    ("You cannot apply filters as the collection for the grid has not been set");
             }
             _dataTableDefaultView.RowFilter = filterClause != null ? filterClause.GetFilterClauseString() : null;
         }
