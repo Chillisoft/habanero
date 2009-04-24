@@ -570,9 +570,12 @@ namespace Habanero.Test.UI.Base
             IControlHabanero row1InputControl = panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
             ITextBox row2InputControl =
                 (ITextBox) panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN];
+            ITextBox row3InputControl =
+                (ITextBox) panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN*3];
 
             Assert.IsTrue(row2InputControl.Multiline);
             Assert.AreEqual(row1InputControl.Height*2 + LayoutManager.DefaultGapSize, row2InputControl.Height);
+//            Assert.AreEqual(row2InputControl.Bottom+LayoutManager.DefaultGapSize,row3InputControl.Top);
         }
 #pragma warning restore 168
 
@@ -1084,10 +1087,10 @@ namespace Habanero.Test.UI.Base
             PanelInfo.FieldInfo fieldInfoC2R1 = panelInfo.FieldInfos[1];
             PanelInfo.FieldInfo fieldInfoC1R2 = panelInfo.FieldInfos[2];
             PanelInfo.FieldInfo fieldInfoC2R2 = panelInfo.FieldInfos[3];
-            Assert.AreEqual("SampleText1:", fieldInfoC1R1.Label.Text); //just making sure
-            Assert.AreEqual("SampleText2:", fieldInfoC2R1.Label.Text);
-            Assert.AreEqual("SampleInt1:", fieldInfoC1R2.Label.Text);
-            Assert.AreEqual("SampleInt2:", fieldInfoC2R2.Label.Text);
+            Assert.AreEqual("SampleText1:", fieldInfoC1R1.LabelControl.Text); //just making sure
+            Assert.AreEqual("SampleText2:", fieldInfoC2R1.LabelControl.Text);
+            Assert.AreEqual("SampleInt1:", fieldInfoC1R2.LabelControl.Text);
+            Assert.AreEqual("SampleInt2:", fieldInfoC2R2.LabelControl.Text);
             Assert.AreEqual(0, fieldInfoC1R1.InputControl.TabIndex);
             Assert.AreEqual(2, fieldInfoC2R1.InputControl.TabIndex);
             Assert.AreEqual(1, fieldInfoC1R2.InputControl.TabIndex);
@@ -1114,12 +1117,12 @@ namespace Habanero.Test.UI.Base
             PanelInfo.FieldInfo fieldInfoC1R2 = panelInfo.FieldInfos[3];
             PanelInfo.FieldInfo fieldInfoC2R2 = panelInfo.FieldInfos[4];
             PanelInfo.FieldInfo fieldInfoC3R2 = panelInfo.FieldInfos[5];
-            Assert.AreEqual("SampleText1:", fieldInfoC1R1.Label.Text); //just making sure
-            Assert.AreEqual("SampleText2:", fieldInfoC2R1.Label.Text);
-            Assert.AreEqual("SampleText3:", fieldInfoC3R1.Label.Text);
-            Assert.AreEqual("SampleInt1:", fieldInfoC1R2.Label.Text);
-            Assert.AreEqual("SampleInt2:", fieldInfoC2R2.Label.Text);
-            Assert.AreEqual("SampleInt3:", fieldInfoC3R2.Label.Text);
+            Assert.AreEqual("SampleText1:", fieldInfoC1R1.LabelControl.Text); //just making sure
+            Assert.AreEqual("SampleText2:", fieldInfoC2R1.LabelControl.Text);
+            Assert.AreEqual("SampleText3:", fieldInfoC3R1.LabelControl.Text);
+            Assert.AreEqual("SampleInt1:", fieldInfoC1R2.LabelControl.Text);
+            Assert.AreEqual("SampleInt2:", fieldInfoC2R2.LabelControl.Text);
+            Assert.AreEqual("SampleInt3:", fieldInfoC3R2.LabelControl.Text);
             Assert.AreEqual(0, fieldInfoC1R1.InputControl.TabIndex);
             Assert.AreEqual(2, fieldInfoC2R1.InputControl.TabIndex);
             Assert.AreEqual(4, fieldInfoC3R1.InputControl.TabIndex);

@@ -428,6 +428,28 @@ namespace Habanero.Test.BO.Security
         }
 
         [Test]
+        public void Test_IsReadable_ViaIBOProp_BOPropAuthorisation_AllowRead_True()
+        {
+            //---------------Set up test pack-------------------
+            MyBoAuthenticationStub.LoadDefaultClassDef();
+            IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_True();
+            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
+            prop1.SetAuthorisationRules(propAuthorisationStub);
+
+            //---------------Assert Precondition----------------
+            propAuthorisationStub.IsAuthorised(BOPropActions.CanRead);
+
+            //---------------Execute Test ----------------------
+            string message;
+            bool isReadable = myBoStub.Props["Prop1"].IsReadable(out message);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isReadable);
+            Assert.AreEqual("", message);
+        }
+
+        [Test]
         public void Test_BOPropAuthorisation_AllowRead_False()
         {
             //---------------Set up test pack-------------------

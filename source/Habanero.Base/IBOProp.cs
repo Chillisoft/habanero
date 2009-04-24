@@ -183,5 +183,23 @@ namespace Habanero.Base
         /// This is used by the <see cref="IBOPropCol"/> when  IsValid is called on the <see cref="IBOPropCol"/>.
         /// </summary>
         void Validate();
+
+        ///<summary>
+        /// Returns whether the BOProperty is Editable or not. The BOProp may not be editable
+        ///  based on a number of factors. 
+        ///  1) If its ReadWrite Rules are set to ReadOnly etc.
+        ///  2) The user may not have permissions to edit this property Value.
+        ///</summary>
+        ///<param name="message"></param>
+        ///<returns></returns>
+        bool IsEditable(out string message);
+
+        ///<summary>
+        /// Returns whether the BOProperty is Readable or not. The BOProp may not be Readable
+        ///  if the user may not have permissions to read the property Value.
+        ///</summary>
+        ///<param name="message">the reason why the user cannot read the property.</param>
+        ///<returns></returns>
+        bool IsReadable(out string message);
     }
 }

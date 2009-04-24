@@ -224,7 +224,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         ///<summary>
-        /// Returns the Number of rows required to draw this UFFormColumn
+        /// Returns the Number of rows required to draw this UIFormColumn
         ///</summary>
         ///<returns></returns>
         public int GetRowsRequired()

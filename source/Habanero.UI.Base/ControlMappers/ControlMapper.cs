@@ -302,30 +302,33 @@ namespace Habanero.UI.Base
         private void CheckReadWriteRules()
         {
             IBOProp boProp = CurrentBOProp();
-            IPropDef propDef = boProp.PropDef;
-            switch (propDef.ReadWriteRule)
-            {
-                case PropReadWriteRule.ReadOnly:
-                    _isEditable = false;
-                    break;
-                case PropReadWriteRule.WriteOnce:
-                    object persistedPropertyValue = boProp.PersistedPropertyValue;
-                    if (persistedPropertyValue is string)
-                    {
-                        _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
-                    }
-                    else
-                    {
-                        _isEditable = persistedPropertyValue == null;
-                    }
-                    break;
-                case PropReadWriteRule.WriteNew:
-                    _isEditable = _businessObject.Status.IsNew;
-                    break;
-                case PropReadWriteRule.WriteNotNew:
-                    _isEditable = !_businessObject.Status.IsNew;
-                    break;
-            }
+            string message;
+            _isEditable = boProp.IsEditable(out message);
+            //Should Add the message to tool tip text
+//            IPropDef propDef = boProp.PropDef;
+//            switch (propDef.ReadWriteRule)
+//            {
+//                case PropReadWriteRule.ReadOnly:
+//                    _isEditable = false;
+//                    break;
+//                case PropReadWriteRule.WriteOnce:
+//                    object persistedPropertyValue = boProp.PersistedPropertyValue;
+//                    if (persistedPropertyValue is string)
+//                    {
+//                        _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
+//                    }
+//                    else
+//                    {
+//                        _isEditable = persistedPropertyValue == null;
+//                    }
+//                    break;
+//                case PropReadWriteRule.WriteNew:
+//                    _isEditable = _businessObject.Status.IsNew;
+//                    break;
+//                case PropReadWriteRule.WriteNotNew:
+//                    _isEditable = !_businessObject.Status.IsNew;
+//                    break;
+//            }
         }
 
         private bool DoesVirtualPropertyHaveSetter()

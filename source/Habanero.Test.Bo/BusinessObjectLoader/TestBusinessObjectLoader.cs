@@ -399,6 +399,21 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreSame(cp.ID, loadedCP.ID);
         }
+        
+        [Test]
+        public void TestGetBusinessObject_String_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCP =
+                (ContactPersonTestBO) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, "Surname='"+cp.Surname+"'");
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(cp.ID, loadedCP.ID);
+        }
 
         [Test]
         [ExpectedException(typeof (BusObjDeleteConcurrencyControlException))]
@@ -507,6 +522,26 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
             ContactPersonTestBO cp =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(surname, cp.Surname);
+            Assert.AreEqual(firstName, cp.FirstName);
+        }
+        
+        [Test]
+        public void TestGetBusinessObject_SingleString_Typed()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            const string surname = "abc";
+            const string firstName = "aa";
+            ContactPersonTestBO.CreateSavedContactPerson("ZZ", "zzz");
+            ContactPersonTestBO.CreateSavedContactPerson(surname, firstName);
+            ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO cp =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>("Surname='"+surname+"'");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(surname, cp.Surname);

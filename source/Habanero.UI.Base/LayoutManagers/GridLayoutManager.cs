@@ -209,6 +209,7 @@ namespace Habanero.UI.Base
             if (_positionsOccupied[currentRowNum, currentColNum])
             {
                 IControlHabanero nullControl = _controlFactory.CreateControl();
+                //FixRow(currentRowNum,0);
                 nullControl.Visible = false;
                 nullControl.Name = "Null";
                 _controls.Add(nullControl);
@@ -293,7 +294,8 @@ namespace Habanero.UI.Base
                 ctl.Width = width;
 
                 int height = 0;
-                for (int rows = currentRow; rows < Math.Min(this.RowCount, currentRow + ctlInfo.RowSpan); rows++)
+
+                for (int rows = currentRow; rows < Math.Min(RowCount, currentRow + ctlInfo.RowSpan); rows++)
                 {
                     if (IsFixedRow(currentRow))
                     {
@@ -304,7 +306,9 @@ namespace Habanero.UI.Base
                         height += CalcRowHeight();
                     }
                 }
-                height += (this.GapSize*(ctlInfo.RowSpan - 1));
+
+                height += (GapSize*(ctlInfo.RowSpan - 1));
+                //height += GapSize;
                 ctl.Height = height;
 
                 int posIncrement = 0;

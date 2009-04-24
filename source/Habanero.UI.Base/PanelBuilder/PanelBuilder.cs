@@ -252,6 +252,7 @@ namespace Habanero.UI.Base
         {
             GridLayoutManager layoutManager = new GridLayoutManager(panel, ControlFactory);
             int maxRowsInColumns = formTab.GetMaxRowsInColumns();
+            
             int colCount = formTab.Count * CONTROLS_PER_COLUMN;
             layoutManager.SetGridSize(maxRowsInColumns, colCount);
             layoutManager.FixColumnBasedOnContents(0);

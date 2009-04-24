@@ -18,8 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
@@ -1254,6 +1256,49 @@ namespace Habanero.Test.UI.Base
             string message = textBoxMapper.GetErrorMessage();
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedErrorProviderErroMessage, message);
+        }
+
+        [Test]
+        public void Test_ControlDisabled_BoPropAuthorisation_CanUpdate_False()
+        {
+            //---------------Set up test pack-------------------
+            Shape shape;
+            ControlMapperStub textBoxMapper;
+            ITextBox textBox = GetTextBoxForShapeNameWhereShapeNameCompulsory(out shape, out textBoxMapper);
+            IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanUpdate_False();
+            BOProp prop1 = (BOProp)shape.Props["ShapeName"];
+            prop1.SetAuthorisationRules(propAuthorisationStub);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanUpdate));
+            //---------------Execute Test ----------------------
+            textBoxMapper.BusinessObject = shape;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(textBox.Enabled);
+        }
+
+        private static IBOPropAuthorisation GetPropAuthorisationStub_CanUpdate_False()
+        {
+            IBOPropAuthorisation authorisationStub = new BOPropAuthorisationStub();
+            authorisationStub.AddAuthorisedRole("A Role", BOPropActions.CanRead);
+            return authorisationStub;
+        }
+
+        internal class BOPropAuthorisationStub : IBOPropAuthorisation
+        {
+            private readonly List<BOPropActions> actionsAllowed = new List<BOPropActions>();
+
+            public void AddAuthorisedRole(string authorisedRole, BOPropActions actionToPerform)
+            {
+                if (actionsAllowed.Contains(actionToPerform)) return;
+
+                actionsAllowed.Add(actionToPerform);
+            }
+
+            public bool IsAuthorised(BOPropActions actionToPerform)
+            {
+                return (actionsAllowed.Contains(actionToPerform));
+            }
         }
     }
 

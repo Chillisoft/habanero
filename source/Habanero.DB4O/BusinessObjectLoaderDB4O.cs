@@ -165,8 +165,16 @@ namespace Habanero.DB4O
         {
             return GetBusinessObject(classDef, selectQuery.Criteria);
         }
-        public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new() { throw new NotImplementedException(); }
-        public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString) { throw new NotImplementedException(); }
+        public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
+        {
+            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
+            return GetBusinessObject<T>(criteriaObject);
+        }
+        public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString)
+        {
+            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
+            return GetBusinessObject(classDef,criteriaObject);
+        }
         public T GetRelatedBusinessObject<T>(SingleRelationship<T> relationship) where T : class, IBusinessObject, new() {
             return GetBusinessObject<T>(Criteria.FromRelationship(relationship));
         }
