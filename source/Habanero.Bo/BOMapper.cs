@@ -182,27 +182,19 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propertyName">The property name</param>
         /// <returns>Returns the class definition or null if not available</returns>
-        public ClassDef GetLookupListClassDef(string propertyName)
+        public IClassDef GetLookupListClassDef(string propertyName)
         {
             IClassDef classDef = _businessObject.ClassDef;
             IPropDef propDef = classDef.GetPropDef(propertyName, false);
 
             if (propDef != null && propDef.LookupList != null && propDef.HasLookupList())
             {
-                if (propDef.LookupList is DatabaseLookupList)
+                if (propDef.LookupList is ILookupListWithClassDef)
                 {
-                    DatabaseLookupList databaseLookupList = (DatabaseLookupList) propDef.LookupList;
-                    return databaseLookupList.ClassDef;
+                    ILookupListWithClassDef lookupList = (ILookupListWithClassDef)propDef.LookupList;
+                    return lookupList.ClassDef;
                 }
-                if (propDef.LookupList is BusinessObjectLookupList)
-                {
-                    BusinessObjectLookupList businessObjectLookupList = (BusinessObjectLookupList) propDef.LookupList;
-                    return businessObjectLookupList.LookupBoClassDef;
-                    //Type lookupListType = null;
-                    //TypeLoader.LoadClassType(ref lookupListType, businessObjectLookupList.AssemblyName,
-                    //                         businessObjectLookupList.ClassName, "Class", "Lookup List");
-                    //return ClassDef.ClassDefs[lookupListType];
-                }
+                
             }
             return null;
         }

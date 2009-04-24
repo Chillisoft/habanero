@@ -164,7 +164,7 @@ namespace Habanero.BO
         ///<summary>
         /// Returns a list of transactions that will be committed. (i.e. the list that the user origionally added.
         ///</summary>
-        internal List<ITransactional> OriginalTransactions
+        protected internal List<ITransactional> OriginalTransactions
         {
             get { return _originalTransactions; }
         }

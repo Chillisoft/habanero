@@ -19,7 +19,6 @@
 
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 
 namespace Habanero.Test.General

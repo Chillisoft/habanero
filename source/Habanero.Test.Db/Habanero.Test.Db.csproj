@@ -116,6 +116,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
       <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
       <Name>Habanero.DB</Name>
@@ -124,18 +128,30 @@
       <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
       <Name>Habanero.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.Bo\Habanero.Test.BO.csproj">
+      <Project>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</Project>
+      <Name>Habanero.Test.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.Structure\Habanero.Test.Structure.csproj">
+      <Project>{D59DAD41-663F-4AD7-9B22-04C2A7D7F9C2}</Project>
+      <Name>Habanero.Test.Structure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
       <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
       <Name>Habanero.Test</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
+    <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\Common\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="StatementGeneratorTestHelper.cs" />
+    <Compile Include="TestCriteriaDB.cs" />
     <Compile Include="TestDatabaseConnection.cs" />
     <Compile Include="TestDbMigrator.cs" />
     <Compile Include="TestConnectionStringFactory.cs">
@@ -153,16 +169,24 @@
     <Compile Include="TestDatabaseUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestDeleteStatementGenerator.cs" />
+    <Compile Include="TestInsertStatementGenerator.cs" />
     <Compile Include="TestMySqlDatabaseConnection.cs" />
+    <Compile Include="TestNumberGeneratorDB.cs" />
     <Compile Include="TestParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestSelectQueryDB.cs" />
     <Compile Include="TestSQLStatement.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestSQLStatementList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestTransactionCommitterDB.cs" />
+    <Compile Include="TestTransactionLoggerDB.cs" />
+    <Compile Include="TestUpdateStatementGenerator.cs" />
+    <Compile Include="TransactionCommitterStubDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />

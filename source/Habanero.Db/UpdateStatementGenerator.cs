@@ -18,10 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 
-namespace Habanero.BO.SqlGeneration
+namespace Habanero.DB
 {
     /// <summary>
     /// Generates "update" sql statements to update a specified business
@@ -110,11 +110,11 @@ namespace Habanero.BO.SqlGeneration
             _updateSql.Statement.Remove(_updateSql.Statement.Length - 2, 2); //remove the last ", "
             if (isSuperClassStatement)
             {
-                _updateSql.Statement.Append(" WHERE " + BOPrimaryKey.GetSuperClassKey(currentClassDef, _bo).PersistedDatabaseWhereClause(_updateSql));
+                _updateSql.Statement.Append(" WHERE " + StatementGeneratorUtils.PersistedDatabaseWhereClause(BOPrimaryKey.GetSuperClassKey(currentClassDef, _bo), _updateSql));
             }
             else
             {
-                _updateSql.Statement.Append(" WHERE " + _bo.ID.PersistedDatabaseWhereClause(_updateSql));
+                _updateSql.Statement.Append(" WHERE " + StatementGeneratorUtils.PersistedDatabaseWhereClause((BOKey) _bo.ID, _updateSql));
             }
             if (includedProps > 0)
             {
@@ -138,7 +138,7 @@ namespace Habanero.BO.SqlGeneration
             }
 
             while (currentClassDef.IsUsingSingleTableInheritance() ||
-                currentClassDef.IsUsingConcreteTableInheritance())
+                   currentClassDef.IsUsingConcreteTableInheritance())
             {
                 propsToInclude.Add(currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true));
                 currentClassDef = currentClassDef.SuperClassClassDef;

@@ -22,11 +22,11 @@ using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using Habanero.Util;
 
-namespace Habanero.BO
+namespace Habanero.DB
 {
     /// <summary>
     /// Provides a lookup-list sourced from a database using the
@@ -37,7 +37,7 @@ namespace Habanero.BO
     /// The sql statement will need to load two fields in correct order:
     /// a Guid (such as the object ID or primary key) and a string.
     /// </summary>
-    public class DatabaseLookupList : ILookupList
+    public class DatabaseLookupList : ILookupListWithClassDef
     {
         private string _statement;
         private Type _lookupObjectType;
@@ -82,9 +82,9 @@ namespace Habanero.BO
 //            }
 //            else
 //            {
-                _assemblyName = assemblyName;
-                _className = className;
-                _lookupObjectType = null;
+            _assemblyName = assemblyName;
+            _className = className;
+            _lookupObjectType = null;
 //            }
             _lastCallTime = DateTime.MinValue;
         }
@@ -149,9 +149,9 @@ namespace Habanero.BO
         /// <summary>
         /// Gets the class definition of the lookup type
         /// </summary>
-        public ClassDef ClassDef
+        public IClassDef ClassDef
         {
-            get { return MyLookupObjectType == null ? null : ClassDef.ClassDefs[MyLookupObjectType]; }
+            get { return MyLookupObjectType == null ? null : BO.ClassDefinition.ClassDef.ClassDefs[MyLookupObjectType]; }
         }
 
         #endregion Properties
@@ -223,8 +223,8 @@ namespace Habanero.BO
             if (this.PropDef == null)
             {
                 throw new HabaneroDeveloperException
-                     ("There is an application setup error. There is no propdef set for the database lookup list. Please contact your system administrator",
-                      "There is no propdef set for the database lookup list.");
+                    ("There is an application setup error. There is no propdef set for the database lookup list. Please contact your system administrator",
+                     "There is no propdef set for the database lookup list.");
 
             }
             if (!this.PropDef.TryParsePropValue(row[0], out parsedKey))

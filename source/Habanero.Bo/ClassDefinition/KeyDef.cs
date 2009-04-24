@@ -260,7 +260,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="propName">The property name in question</param>
         /// <returns>Returns true if found or false if not</returns>
-        internal bool Contains(string propName)
+        public bool Contains(string propName)
         {
             return (_propDefs.ContainsKey(propName));
         }

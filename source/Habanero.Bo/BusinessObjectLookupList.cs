@@ -37,7 +37,7 @@ namespace Habanero.BO
     /// NB: this class does not provide criteria, so the entire collection
     /// will be loaded.
     /// </summary>
-    public class BusinessObjectLookupList : ILookupList
+    public class BusinessObjectLookupList : ILookupListWithClassDef
     {
         private readonly bool _limitToList;
         private int _timeout;
@@ -348,6 +348,14 @@ namespace Habanero.BO
         /// Returns the class definition for the business object type that is the source of the list for this lookup
         ///</summary>
         public ClassDef LookupBoClassDef
+        {
+            get { return ClassDef.ClassDefs[BoType]; }
+        }
+
+        ///<summary>
+        /// Returns the class definition for the business object type that is the source of the list for this lookup
+        ///</summary>
+        IClassDef ILookupListWithClassDef.ClassDef
         {
             get { return ClassDef.ClassDefs[BoType]; }
         }

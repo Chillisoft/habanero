@@ -68,9 +68,13 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="className"></param>
         ///<param name="limitToList"></param>
         ///<returns></returns>
-        public DatabaseLookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className, bool limitToList)
+        public ILookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className, bool limitToList)
 		{
-			return new DatabaseLookupList(sqlString, timeout, assemblyName, className, limitToList);
+            Type databaseLookupListType = Util.TypeLoader.LoadType("Habanero.DB", "DatabaseLookupList");
+            return
+                (ILookupList)
+                Activator.CreateInstance(databaseLookupListType,
+                                         new object[] {sqlString, timeout, assemblyName, className, limitToList});
 		}
 
         ///<summary>

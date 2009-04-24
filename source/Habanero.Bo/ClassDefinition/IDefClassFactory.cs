@@ -66,7 +66,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="className"></param>
         ///<param name="limitToList"></param>
         ///<returns></returns>
-        DatabaseLookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className, bool limitToList);
+        ILookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className, bool limitToList);
 
         ///<summary>
         ///</summary>

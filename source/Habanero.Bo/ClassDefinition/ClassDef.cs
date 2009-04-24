@@ -654,7 +654,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the class definition of the super-class, or null
         /// if there is no super-class
         /// </summary>
-        internal ClassDef SuperClassClassDef
+        public ClassDef SuperClassClassDef
         {
             get
             {

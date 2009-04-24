@@ -19,12 +19,10 @@
 
 using System;
 using Habanero.Base;
-using Habanero.BO.SqlGeneration;
-using Habanero.DB;
 
 namespace Habanero.BO
 {
-    internal abstract class TransactionalSingleRelationship : ITransactionalDB
+    public abstract class TransactionalSingleRelationship : ITransactional
     {
         private readonly IRelationship _relationship;
         private readonly IBusinessObject _relatedBO;
@@ -78,16 +76,11 @@ namespace Habanero.BO
         ///</summary>
         public void UpdateAsRolledBack() { }
 
-        public virtual ISqlStatementCollection GetPersistSql()
-        {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(RelatedBO, DatabaseConnection.CurrentConnection);
-            return gen.GenerateForRelationship(Relationship, RelatedBO);
-        }
     }
 
-    internal class TransactionalSingleRelationship_Added : TransactionalSingleRelationship
+    public class TransactionalSingleRelationship_Added : TransactionalSingleRelationship
     {
-        internal TransactionalSingleRelationship_Added(IRelationship singleRelationship, IBusinessObject relatedBO)
+        protected internal TransactionalSingleRelationship_Added(IRelationship singleRelationship, IBusinessObject relatedBO)
             : base(singleRelationship, relatedBO)
         {}
 
@@ -102,9 +95,9 @@ namespace Habanero.BO
         }
     }
 
-    internal class TransactionalSingleRelationship_Removed : TransactionalSingleRelationship
+    public class TransactionalSingleRelationship_Removed : TransactionalSingleRelationship
     {
-        public TransactionalSingleRelationship_Removed(IRelationship singleRelationship , IBusinessObject relatedBO)
+        protected internal TransactionalSingleRelationship_Removed(IRelationship singleRelationship, IBusinessObject relatedBO)
             : base(singleRelationship, relatedBO)
         {}
 

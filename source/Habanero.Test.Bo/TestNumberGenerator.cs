@@ -102,7 +102,7 @@ namespace Habanero.Test.BO
         {
             //Delete entry from database for the number type.
             BOSequenceNumber.LoadNumberGenClassDef();
-            BOSequenceNumber.DeleteAllNumbers();
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From NumberGenerator");
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
             //---------------Set up test pack-------------------
             INumberGenerator numGen = new NumberGenerator("tmp");
@@ -158,71 +158,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, nextNum);
         }
 
-        [Test]
-        public void TestAcceptance_LockNumberGenerator()
-        {
-            //---------------Set up test pack-------------------
-            //Create an instance of the number for a specific type of number (e.g. Invoice number)
-            const string numberType = "tmp";
-            BOSequenceNumberLocking.LoadNumberGenClassDef();
-            INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);
-            numGen.SetSequenceNumber(0);
-            //get the next number for invoice number
-            numGen.NextNumber();
-            //Clear all loaded objects from object manager
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            //---------------Execute Test ----------------------
-            //Create a seperate instance of the number generator (simulating a simultaneous user).
-            INumberGenerator numGen2 = new NumberGeneratorPessimisticLocking(numberType);
-            //try Get second number
-            try
-            {
-                numGen2.NextNumber();
-                Assert.Fail("Should not b able to get second number since locked");
-            }
-            //---------------Test Result -----------------------
-            //should get locking error
-            catch(BusObjPessimisticConcurrencyControlException ex)
-            {
-                Assert.IsTrue(ex.Message.Contains("You cannot begin edits on the 'BOSequenceNumberLocking', as another user has started edits and therefore locked to this record"));
-            }
-        }
-
-        [Test]
-        public void TestAcceptance_LockNumberGenerator_ClearsAfter15Minutes()
-        {
-            //---------------Set up test pack-------------------
-            //Create an entry in the number generator table for entry type to seed with seed = 0 and lockduration = 15 minutes.
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            TestUtil.WaitForGC(); 
-            const string numberType = "tmp";
-            BOSequenceNumberLocking.LoadNumberGenClassDef();
-            BOSequenceNumberLocking.DeleteAllNumbers();
-            NumberGeneratorPessimisticLocking numGen = new NumberGeneratorPessimisticLocking(numberType);
-            numGen.SetSequenceNumber(0);
-
-            //get the next number for invoice number
-            int num = numGen.NextNumber();
-            BOSequenceNumberLocking boSequenceNumber1 = numGen.BoSequenceNumber;
-            Assert.AreEqual(1, num,"The first generated number should be 1");
-            // set the datetime locked to > 15 minutes ago.
-            UpdateDatabaseLockAsExpired(20);
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            TestUtil.WaitForGC(); 
-            //---------------Execute Test ----------------------
-            //Create a seperate instance of the number generator.
-            //try Get  number
-            NumberGeneratorPessimisticLocking numGen2 = new NumberGeneratorPessimisticLocking(numberType);
-            //try Get second number
-            num = numGen2.NextNumber();
-            BOSequenceNumberLocking boSequenceNumber2 = numGen2.BoSequenceNumber;
-            //---------------Test Result -----------------------
-            Assert.AreNotSame(numGen, numGen2);
-            Assert.AreNotSame(boSequenceNumber2, boSequenceNumber1);
-            //should not get locking error
-            //assert nextnumber = 1
-            Assert.AreEqual(1, num, "The second generated number should be 1. Time: " + DateTime.Now.ToLongTimeString());
-        }
+       
 
         [Test]
         public void TestAcceptance_NumberGeneratorCreatedInBeforeUpdateForAnObject()
@@ -268,15 +204,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------        
         }
 
-//        private static void CleanUpContactPersonNumberGenerator()
-//        {
-//            ContactPersonNumberGenerator.LoadDefaultClassDef();
-//            BOSequenceNumber.LoadNumberGenClassDef();
-//            ContactPersonNumberGenerator.DeleteAllContactPeople();
-//            INumberGenerator numGen = new NumberGenerator("GeneratedNumber");
-//            numGen.SetSequenceNumber(0);
-//        }
-        private static void CleanUpContactPersonNumberGenerator_ForInMemory()
+        public static void CleanUpContactPersonNumberGenerator_ForInMemory()
         {
             ContactPersonNumberGenerator.LoadDefaultClassDef();
             BOSequenceNumber.LoadNumberGenClassDef();
@@ -284,35 +212,6 @@ namespace Habanero.Test.BO
             numGen.SetSequenceNumber(0);
         }
 
-
-        [Test]
-        public void TestAcceptance_NumberGeneratorCreatedInBeforeUpdateForAnObject_2ObjectsInTransaction()
-        {
-            //---------------Set up test pack-------------------
-            //Create an object that sets the number generator for it.
-//            CleanUpContactPersonNumberGenerator();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            CleanUpContactPersonNumberGenerator_ForInMemory();
-            //---------------Set up test pack-------------------
-            //Create an objects that sets the number generator for it.
-            //Edit the objects.
-            ContactPersonNumberGenerator cp = new ContactPersonNumberGenerator();
-            cp.Surname = Guid.NewGuid().ToString();
-            ContactPersonNumberGenerator cp2 = new ContactPersonNumberGenerator();
-            cp2.Surname = Guid.NewGuid().ToString();
-            //---------------Execute Test ----------------------
-            //Add the objects 
-            TransactionCommitterStubDB trnCommit = new TransactionCommitterStubDB();
-            trnCommit.AddBusinessObject(cp);
-            trnCommit.AddBusinessObject(cp2);
-            trnCommit.CommitTransaction();
-
-            //---------------Test Result -----------------------
-            //check that the objects have its number set to the appropriate value.
-            Assert.AreEqual("1", cp.GeneratedNumber); 
-            Assert.AreEqual("2", cp2.GeneratedNumber);
-            //---------------Tear Down -------------------------        
-        }
 
         [Test]
         public void TestGetSecondNumber_FromSeperateNumberGeneratorInstance()
@@ -375,11 +274,12 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             //Delete entry from database for the number type.
-            BOSequenceNumber.LoadNumberGenClassDef("another_number_generator");
-            BOSequenceNumber.DeleteAllNumbers();
+            string tableName = "another_number_generator";
+            BOSequenceNumber.LoadNumberGenClassDef(tableName);
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From " + tableName);
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
             //---------------Set up test pack-------------------
-            INumberGenerator numGen = new NumberGenerator("tmp", "another_number_generator");
+            INumberGenerator numGen = new NumberGenerator("tmp", tableName);
             //---------------Execute Test ----------------------
             //get the next number for invoice number
             int sequenceNumber = numGen.NextNumber();
@@ -413,18 +313,10 @@ namespace Habanero.Test.BO
             INumberGenerator numGen = new NumberGenerator(numberType);
             numGen.SetSequenceNumber(0);
         }
-        private static void UpdateDatabaseLockAsExpired(int lockDuration)
-        {
-            SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection);
-            sqlStatement.Statement.Append("UPDATE `numbergenerator` SET ");
-            sqlStatement.Statement.Append(SqlFormattingHelper.FormatFieldName("DateTimeLocked", DatabaseConnection.CurrentConnection));
-            sqlStatement.Statement.Append(" = ");
-            sqlStatement.AddParameterToStatement(DateTime.Now.AddMinutes(-1 * lockDuration - 1));
-            DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatement);
-        }
+
     }
 
-    internal class ContactPersonNumberGenerator : BusinessObject
+    public class ContactPersonNumberGenerator : BusinessObject
     {
         //public ContactPersonNumberGenerator()
         //{
@@ -432,7 +324,7 @@ namespace Habanero.Test.BO
         //}
 
 
-        internal static ClassDef LoadDefaultClassDef()
+        public static ClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =

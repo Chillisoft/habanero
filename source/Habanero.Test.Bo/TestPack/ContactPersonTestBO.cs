@@ -883,7 +883,7 @@ namespace Habanero.Test.BO
             return Surname;
         }
 
-        internal static void DeleteAllContactPeople()
+        public static void DeleteAllContactPeople()
         {
             string sql = "DELETE FROM contact_person_address";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);

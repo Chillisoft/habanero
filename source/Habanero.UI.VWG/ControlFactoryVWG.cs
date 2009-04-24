@@ -633,7 +633,7 @@ namespace Habanero.UI.VWG
         ///<summary>
         /// Creates a <see cref="IBOSelectorAndEditor"/>
         ///</summary>
-        public IBOGridAndEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
+        public IBOGridAndEditorControl CreateGridAndBOEditorControl(IClassDef classDef)
         {
             throw new NotImplementedException();
         }

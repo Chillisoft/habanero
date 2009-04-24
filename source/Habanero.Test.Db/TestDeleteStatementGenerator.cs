@@ -19,7 +19,6 @@
 
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 using NUnit.Framework;
 

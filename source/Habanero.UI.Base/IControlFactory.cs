@@ -580,7 +580,7 @@ namespace Habanero.UI.Base
         ///<summary>
         /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        IBOGridAndEditorControl CreateGridAndBOEditorControl(ClassDef classDef);
+        IBOGridAndEditorControl CreateGridAndBOEditorControl(IClassDef classDef);
 
         ///<summary>
         /// Creates a <see cref="IBOGridAndEditorControl"/>

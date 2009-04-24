@@ -22,6 +22,7 @@ using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using Habanero.DB4O;
 using Habanero.Test.Structure;
 using NUnit.Framework;

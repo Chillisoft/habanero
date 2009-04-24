@@ -19,10 +19,10 @@
 
 using System.Text;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 
-namespace Habanero.BO.SqlGeneration
+namespace Habanero.DB
 {
     /// <summary>
     /// Generates "delete" sql statements to delete a specified business
@@ -58,13 +58,13 @@ namespace Habanero.BO.SqlGeneration
             SqlStatement deleteSql = new SqlStatement(_connection);
             deleteSql.Statement = new StringBuilder(
                 @"DELETE FROM " + SqlFormattingHelper.FormatTableName(StatementGeneratorUtils.GetTableName(_bo), _connection) +
-                                                    " WHERE " + _bo.ID.PersistedDatabaseWhereClause(deleteSql));
+                " WHERE " + StatementGeneratorUtils.PersistedDatabaseWhereClause((BOKey) _bo.ID, deleteSql));
             statementCollection.Add(deleteSql);
             ClassDef currentClassDef = _bo.ClassDef;
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 while (currentClassDef.SuperClassClassDef.SuperClassDef != null &&
-                    currentClassDef.SuperClassClassDef.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
+                       currentClassDef.SuperClassClassDef.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
                 {
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
@@ -73,7 +73,7 @@ namespace Habanero.BO.SqlGeneration
                     "DELETE FROM " +
                     SqlFormattingHelper.FormatTableName(currentClassDef.SuperClassClassDef.TableName, _connection) +
                     " WHERE " +
-                    BOPrimaryKey.GetSuperClassKey(currentClassDef, _bo).PersistedDatabaseWhereClause(deleteSql));
+                    StatementGeneratorUtils.PersistedDatabaseWhereClause(BOPrimaryKey.GetSuperClassKey(currentClassDef, _bo), deleteSql));
                 statementCollection.Add(deleteSql);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }

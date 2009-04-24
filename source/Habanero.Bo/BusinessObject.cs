@@ -391,7 +391,7 @@ namespace Habanero.BO
         /// Returns an XML string that contains the changes in the object
         /// since the last persistance to the database
         /// </summary>
-        internal string DirtyXML
+        public string DirtyXML
         {
             get
             {
@@ -883,6 +883,7 @@ namespace Habanero.BO
 
         #region Persistance
 
+        [Obsolete("Use Props.HasAutoIncrementingField")]
         internal bool HasAutoIncrementingField
         {
             get { return _boPropCol.HasAutoIncrementingField; }
@@ -1073,7 +1074,7 @@ namespace Habanero.BO
         /// <summary>
         /// This returns the Transaction Log object set up for this BusinessObject.
         /// </summary>
-        internal ITransactionLog TransactionLog
+        public ITransactionLog TransactionLog
         {
             get { return _transactionLog; }
         }

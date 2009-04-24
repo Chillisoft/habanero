@@ -161,26 +161,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             }
         }
 
-        private class MockBOWithUpdateBeforePersistDelegate : MockBO
-        {
-            public delegate void UpdateObjectBeforePersistingDelegate(ITransactionCommitter transactionCommitter);
-
-            private readonly UpdateObjectBeforePersistingDelegate _updateObjectBeforePersistingDelegate;
-
-            public MockBOWithUpdateBeforePersistDelegate(UpdateObjectBeforePersistingDelegate updateObjectBeforePersistingDelegate)
-            {
-                _updateObjectBeforePersistingDelegate = updateObjectBeforePersistingDelegate;
-            }
-
-            protected internal override void UpdateObjectBeforePersisting(ITransactionCommitter transactionCommitter)
-            {
-                if (_updateObjectBeforePersistingDelegate != null)
-                {
-                    _updateObjectBeforePersistingDelegate(transactionCommitter);
-                }
-                base.UpdateObjectBeforePersisting(transactionCommitter);
-            }
-        }
+      
 
         [Test]
         public void Test_CannotAddSameTransactionToCommitter()
@@ -407,41 +388,9 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
         }
-        [Test, ExpectedException(typeof (NotImplementedException))]
-        public void TestRaisesException_onError()
-        {
-            //---------------Set up test pack-------------------
-            TransactionCommitter committerDB = new TransactionCommitterStubDB();
-            StubFailingTransaction trn = new StubFailingTransaction();
-            committerDB.AddTransaction(trn);
-            committerDB.AddTransaction(new StubSuccessfullTransaction());
-            //---------------Execute Test ----------------------
-            committerDB.CommitTransaction();
-            //---------------Test Result -----------------------
-        }
+      
 
-        [Test]
-        public void TestRaisesException_onError_DoesNotCommit()
-        {
-            //---------------Set up test pack-------------------
-            TransactionCommitter committer = new TransactionCommitterStubDB();
-            StubDatabaseTransaction transactional1 = new StubDatabaseTransaction();
-            committer.AddTransaction(transactional1);
-            StubFailingTransaction transactional2 = new StubFailingTransaction();
-            committer.AddTransaction(transactional2);
-            //---------------Execute Test ----------------------
-            try
-            {
-                committer.CommitTransaction();
-                Assert.Fail("Failure should have occurred as a StubFailingTransaction was added");
-            }
-                //---------------Test Result -----------------------
-            catch (NotImplementedException)
-            {
-                Assert.IsFalse(transactional1.Committed);
-                Assert.IsFalse(transactional2.Committed);
-            }
-        }
+       
 
         [Test]
         public void TestUpdateBeforePersisting_ExecutedBeforeValidation()
@@ -460,54 +409,6 @@ namespace Habanero.Test.BO.TransactionCommitters
             Assert.AreEqual(1, committer.OriginalTransactions.Count);
         }
 
-        [Test]
-        public void TestUpdateBeforePersistCalled()
-        {
-            //---------------Set up test pack-------------------
-            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
-            bool updateBeforePersistCalled = false;
-            MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(
-                delegate {
-                    updateBeforePersistCalled = true;
-                });
-            trnCommitter.AddBusinessObject(mockBo);
-            //-------------Assert Preconditions -------------
-
-            //---------------Execute Test ----------------------
-            trnCommitter.CommitTransaction();
-            //---------------Test Result -----------------------
-            Assert.IsTrue(updateBeforePersistCalled);
-        }
-
-        [Test]
-        public void TestUpdateBeforePersistCalled_ForBoAddedInUpdateBeforePersist()
-        {
-            //---------------Set up test pack-------------------
-            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
-            bool updateBeforePersistCalled = false;
-            bool updateBeforePersistCalledForInner = false;
-            MockBOWithUpdateBeforePersistDelegate innerMockBo = new MockBOWithUpdateBeforePersistDelegate(
-                delegate {
-                    updateBeforePersistCalledForInner = true;
-                });
-            MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(
-                delegate(ITransactionCommitter committer)
-                {
-                    updateBeforePersistCalled = true;
-                    committer.AddBusinessObject(innerMockBo);
-                });
-            trnCommitter.AddBusinessObject(mockBo);
-            //-------------Assert Preconditions -------------
-            Assert.AreEqual(1, trnCommitter.OriginalTransactions.Count);
-            Assert.IsFalse(updateBeforePersistCalled);
-            Assert.IsFalse(updateBeforePersistCalledForInner);
-
-            //---------------Execute Test ----------------------
-            trnCommitter.CommitTransaction();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, trnCommitter.OriginalTransactions.Count);
-            Assert.IsTrue(updateBeforePersistCalled);
-            Assert.IsTrue(updateBeforePersistCalledForInner);
-        }
+      
     }
 }

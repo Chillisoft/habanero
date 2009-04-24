@@ -18,11 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
-using Habanero.DB;
+using Habanero.BO;
 
-namespace Habanero.BO
+namespace Habanero.DB
 {
-
     ///<summary>
     /// A Data Accessor for Retrieving and committing data from a relational database.
     ///</summary>

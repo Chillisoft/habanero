@@ -79,7 +79,7 @@ namespace Habanero.BO
             {
                 return _objectID.ToString();
             }
-            return IsObjectNew ? "" : PersistedDatabaseWhereClause(null);
+            return IsObjectNew ? "" : AsString_LastPersistedValue();
         }
 
         /// <summary>

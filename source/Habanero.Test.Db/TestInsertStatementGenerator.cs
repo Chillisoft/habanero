@@ -20,7 +20,6 @@
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;

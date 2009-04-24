@@ -23,7 +23,6 @@ using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using log4net;
 
 namespace Habanero.BO
@@ -83,7 +82,8 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propDef">The property definition</param>
         /// <param name="propValue">The initial value</param>
-        internal BOProp(IPropDef propDef, object propValue) : this(propDef)
+        public BOProp(IPropDef propDef, object propValue)
+            : this(propDef)
         {
             if (propDef == null) throw new ArgumentNullException("propDef");
             InitialiseProp(propValue, true);
@@ -352,60 +352,6 @@ namespace Habanero.BO
             internal set { _isObjectNew = value; }
         }
 
-        /// <summary>
-        /// This property returns the 
-        /// Returns a string containing the database field name and the 
-        /// persisted value, in the format of:<br/>
-        /// "[fieldname] = '[value]'" (eg. "children = '2'")<br/>
-        /// If a sql statement is provided, then the arguments are added
-        /// in parameterised form.
-        /// </summary>
-        /// <param name="sql">A sql statement used to generate and track
-        /// parameters</param>
-        /// <returns>Returns a string</returns>
-        internal string PersistedDatabaseNameFieldNameValuePair(SqlStatement sql)
-        {
-            if (PersistedPropertyValue == null)
-            {
-                return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
-            }
-            if (sql == null)
-            {
-                return DatabaseFieldName + " = '" + PersistedPropertyValueString + "'";
-            }
-            string paramName = sql.ParameterNameGenerator.GetNextParameterName();
-            sql.AddParameter(paramName, PersistedPropertyValue);
-            return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
-        }
-
-        /// <summary>
-        /// Returns a string containing the database field name and the 
-        /// property value, in the format of:<br/>
-        /// "[fieldname] = '[value]'" (eg. "children = '2'")<br/>
-        /// If a sql statement is provided, then the arguments are added
-        /// in parameterised form.
-        /// </summary>
-        /// <param name="sql">A sql statement used to generate and track
-        /// parameters</param>
-        /// <returns>Returns a string</returns>
-        internal string DatabaseNameFieldNameValuePair(SqlStatement sql)
-        {
-            if (_currentValue == null)
-            {
-                if (sql == null)
-                {
-                    return DatabaseFieldName + " = '" + PropertyValueString + "'";
-                }
-                return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
-            }
-            if (sql == null)
-            {
-                return DatabaseFieldName + " = '" + PropertyValueString + "'";
-            }
-            String paramName = sql.ParameterNameGenerator.GetNextParameterName();
-            sql.AddParameter(paramName, Value);
-            return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
-        }
 
         /// <summary>
         /// Returns the property type

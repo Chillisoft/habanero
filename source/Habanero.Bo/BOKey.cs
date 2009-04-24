@@ -24,7 +24,6 @@ using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using Habanero.Util;
 
 namespace Habanero.BO
@@ -336,7 +335,7 @@ namespace Habanero.BO
             string[] propsAsStrings = new string[_props.Count];
             int i = 0;
 
-            foreach (BOProp prop in _props.Values)
+            foreach (BOProp prop in this.GetBOPropCol().SortedValues)
             {
                 string classNameFull = prop.PropDef.ClassDef == null ? "" : prop.PropDef.ClassDef.ClassNameFull;
                 propsAsStrings[i++] = classNameFull + "." + prop.PropertyName + "=" + prop.Value;
@@ -380,32 +379,6 @@ namespace Habanero.BO
                 propsAsStrings[i++] = classNameFull + "." + prop.PropertyName + "=" + prop.ValueBeforeLastEdit;
             }
             return String.Join(";", propsAsStrings);
-        }
-
-        /// <summary>
-        /// Creates a "where" clause from the persisted properties held
-        /// </summary>
-        /// <param name="sql">The sql statement used to generate and track
-        /// parameters</param>
-        /// <returns>Returns a string</returns>
-        public virtual string PersistedDatabaseWhereClause(ISqlStatement sql)
-        {
-            StringBuilder whereClause = new StringBuilder(_props.Count*30);
-            foreach (BOProp prop in SortedValues) {
-                if (whereClause.Length > 0)
-                {
-                    whereClause.Append(" AND "); 
-                }
-                if (prop.PersistedPropertyValue == null)
-                {
-                    whereClause.Append(prop.DatabaseNameFieldNameValuePair((SqlStatement) sql));
-                }
-                else
-                {
-                    whereClause.Append(prop.PersistedDatabaseNameFieldNameValuePair((SqlStatement) sql));
-                }
-            }
-            return whereClause.ToString();
         }
 
         /// <summary>
@@ -512,7 +485,7 @@ namespace Habanero.BO
         /// <returns>Returns a hashcode integer</returns>
         public override int GetHashCode()
         {
-            return PersistedDatabaseWhereClause(null).GetHashCode();
+            return AsString_CurrentValue().GetHashCode();
         }
 
         IEnumerator<IBOProp> IEnumerable<IBOProp>.GetEnumerator()

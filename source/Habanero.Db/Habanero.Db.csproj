@@ -101,13 +101,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessObjectLoaderDB.cs" />
+    <Compile Include="ConcurrencyControl\OptimisticLockingVersionNumberDB.cs" />
+    <Compile Include="ConcurrencyControl\PessimisticLockingDB.cs" />
     <Compile Include="ConnectionStringFirebirdFactory.cs" />
     <Compile Include="ConnectionStringPostgreSqlFactory.cs" />
     <Compile Include="ConnectionStringSQLiteFactory.cs" />
+    <Compile Include="CriteriaDB.cs" />
+    <Compile Include="DataAccessorDB.cs" />
     <Compile Include="DatabaseConnectionFirebird.cs" />
     <Compile Include="DatabaseConnectionPostgreSql.cs" />
     <Compile Include="DatabaseConnectionSQLite.cs" />
+    <Compile Include="DatabaseLookupList.cs" />
+    <Compile Include="DeleteStatementGenerator.cs" />
     <Compile Include="InsertSqlStatement.cs" />
+    <Compile Include="InsertStatementGenerator.cs" />
+    <Compile Include="NumberGenerator\NumberGeneratorPessimisticLocking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -173,6 +182,7 @@
     <Compile Include="ParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SelectQueryDB.cs" />
     <Compile Include="SqlFormattingHelper.cs" />
     <Compile Include="SqlStatement.cs">
       <SubType>Code</SubType>
@@ -182,6 +192,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SqlStatementException.cs" />
+    <Compile Include="StatementGeneratorUtils.cs" />
+    <Compile Include="TransactionalBusinessObjectDB.cs" />
+    <Compile Include="TransactionalSingleRelationship_Added_DB.cs" />
+    <Compile Include="TransactionalSingleRelationship_Removed_DB.cs" />
+    <Compile Include="TransactionCommitterDB.cs" />
+    <Compile Include="TransactionLogTable.cs" />
+    <Compile Include="UpdateStatementGenerator.cs" />
     <Compile Include="XmlDatabaseConfig.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -193,6 +210,10 @@
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
       <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
       <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>

@@ -1021,7 +1021,7 @@ namespace Habanero.UI.Win
         ///<summary>
         /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        public IBOGridAndEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
+        public IBOGridAndEditorControl CreateGridAndBOEditorControl(IClassDef classDef)
         {
             return new BOGridAndEditorControlWin(this, classDef, "default");
         }

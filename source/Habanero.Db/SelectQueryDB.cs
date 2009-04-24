@@ -22,10 +22,9 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.DB;
 using Habanero.Util;
 
-namespace Habanero.BO
+namespace Habanero.DB
 {
     ///<summary>
     /// A class representing a Database SelectQuery.  Wraps an ISelectQuery (Decorator pattern)
@@ -347,20 +346,20 @@ namespace Habanero.BO
             CriteriaDB criteriaDB = new CriteriaDB(fullCriteria);
             string whereClause =
                 criteriaDB.ToString(_sqlFormatter, delegate(object value)
-                       {
-                           string paramName = statement.ParameterNameGenerator.GetNextParameterName();
-                           if (value == null) value = "NULL";
-                           if (value is DateTimeToday)
-                           {
-                               value = DateTimeToday.Value;
-                           }
-                           if (value is DateTimeNow)
-                           {
-                               value = DateTimeNow.Value;
-                           }
-                           statement.AddParameter(paramName, value);
-                           return paramName;
-                       });
+                                                   {
+                                                       string paramName = statement.ParameterNameGenerator.GetNextParameterName();
+                                                       if (value == null) value = "NULL";
+                                                       if (value is DateTimeToday)
+                                                       {
+                                                           value = DateTimeToday.Value;
+                                                       }
+                                                       if (value is DateTimeNow)
+                                                       {
+                                                           value = DateTimeNow.Value;
+                                                       }
+                                                       statement.AddParameter(paramName, value);
+                                                       return paramName;
+                                                   });
 
             builder.Append(whereClause);
         }

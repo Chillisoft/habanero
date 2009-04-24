@@ -23,6 +23,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -264,7 +265,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
     #region MockBO For Testing
 
-    internal class MockBO : BusinessObject
+    public class MockBO : BusinessObject
     {
         public MockBO()
         {

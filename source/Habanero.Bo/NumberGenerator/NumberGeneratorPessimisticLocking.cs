@@ -19,12 +19,12 @@
 
 using System;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.ConcurrencyControl;
+using Habanero.DB.ConcurrencyControl;
 using Habanero.BO.Loaders;
-using Habanero.DB;
 
-namespace Habanero.BO
+namespace Habanero.DB
 {
     /// <summary>
     /// This is a slightly more complex number generator class. This class implements a pessimistic locking strategy.
@@ -70,7 +70,7 @@ namespace Habanero.BO
             string searchCriteria = string.Format("NumberType = '{0}'", numberType);
             Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
             BOSequenceNumberLocking sequenceBOSequenceNumber =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOSequenceNumberLocking>(criteria);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOSequenceNumberLocking>(criteria);
             
             if (sequenceBOSequenceNumber == null)
             {
@@ -110,7 +110,7 @@ namespace Habanero.BO
         public void AddToTransaction(ITransactionCommitter transactionCommitter)
         {
             BusinessObject busObject = this.GetTransactionalBO();
-            busObject.UpdateObjectBeforePersisting(transactionCommitter);
+          //  busObject.UpdateObjectBeforePersisting(transactionCommitter);
             transactionCommitter.AddBusinessObject(busObject);
         }
     }
@@ -123,12 +123,12 @@ namespace Habanero.BO
         public BOSequenceNumberLocking()
         {
             SetConcurrencyControl(new PessimisticLockingDB(
-                    this, 15,
-                    this.Props["DateTimeLocked"],
-                    this.Props["UserLocked"],
-                    this.Props["MachineLocked"],
-                    this.Props["OperatingSystemUserLocked"],
-                    this.Props["Locked"]));
+                                      this, 15,
+                                      this.Props["DateTimeLocked"],
+                                      this.Props["UserLocked"],
+                                      this.Props["MachineLocked"],
+                                      this.Props["OperatingSystemUserLocked"],
+                                      this.Props["Locked"]));
         }
 
         internal static void LoadNumberGenClassDef()
@@ -137,7 +137,7 @@ namespace Habanero.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-               <class name=""BOSequenceNumberLocking"" assembly=""Habanero.BO"" table=""NumberGenerator"">
+               <class name=""BOSequenceNumberLocking"" assembly=""Habanero.DB"" table=""NumberGenerator"">
 					<property  name=""SequenceNumber"" type=""Int32"" />
                     <property  name=""NumberType""/>
 					<property  name=""DateTimeLocked"" type=""DateTime"" />
@@ -170,15 +170,6 @@ namespace Habanero.BO
         {
             get { return ((Int32?)(base.GetPropertyValue("SequenceNumber"))); }
             set { base.SetPropertyValue("SequenceNumber", value); }
-        }
-
-        /// <summary>
-        /// Deletes all the numbers stored in the database table holding the generated
-        /// numbers
-        /// </summary>
-        public static void DeleteAllNumbers()
-        {
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
         }
     }
 }

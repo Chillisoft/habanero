@@ -393,8 +393,8 @@ namespace Habanero.Test.BO
             BOProp prop = (BOProp) _prop;
             Assert.IsTrue(_prop.IsDirty);
             Assert.AreEqual("OriginalValue", _prop.PersistedPropertyValue);
-            Assert.AreEqual("PropName = 'New Value'", prop.DatabaseNameFieldNameValuePair(null));
-            Assert.AreEqual("PropName = 'OriginalValue'", prop.PersistedDatabaseNameFieldNameValuePair(null));
+            Assert.AreEqual("New Value", prop.PropertyValueString);
+            Assert.AreEqual("OriginalValue", prop.PersistedPropertyValueString);
         }
 
         [Test]

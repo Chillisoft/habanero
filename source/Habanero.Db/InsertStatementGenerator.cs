@@ -21,10 +21,10 @@ using System;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 
-namespace Habanero.BO.SqlGeneration
+namespace Habanero.DB
 {
     /// <summary>
     /// Generates "insert" sql statements to insert a specified business
@@ -98,7 +98,7 @@ namespace Habanero.BO.SqlGeneration
         private void GenerateSingleInsertStatement(IBOPropCol propsToInclude, string tableName)
         {
             ISupportsAutoIncrementingField supportsAutoIncrementingField = null;
-            if (_bo.HasAutoIncrementingField)
+            if (_bo.Props.HasAutoIncrementingField)
             {
                 supportsAutoIncrementingField = new SupportsAutoIncrementingFieldBO(_bo);
             }
@@ -117,9 +117,9 @@ namespace Habanero.BO.SqlGeneration
             }
 
             _insertSql.Statement.Append(String.Format(
-                "INSERT INTO {0} ({1}) VALUES ({2})",
-                SqlFormattingHelper.FormatTableName(tableName, _connection),
-                _dbFieldList, _dbValueList));
+                                            "INSERT INTO {0} ({1}) VALUES ({2})",
+                                            SqlFormattingHelper.FormatTableName(tableName, _connection),
+                                            _dbFieldList, _dbValueList));
             _statementCollection.Insert(0, _insertSql);
         }
 
@@ -238,7 +238,7 @@ namespace Habanero.BO.SqlGeneration
         {
             ClassDef currentClassDef = _currentClassDef;
             while (currentClassDef.SuperClassClassDef != null &&
-                currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
+                   currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
             {
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
@@ -257,10 +257,10 @@ namespace Habanero.BO.SqlGeneration
                 if (parentID.Count > 1)
                 {
                     throw new InvalidXmlDefinitionException("For a super class definition " +
-                        "using class table inheritance, the ID attribute can only refer to a " +
-                        "parent with a single primary key.  Leaving out the attribute will " +
-                        "allow composite primary keys where the child's copies have the same " +
-                        "field name as the parent.");
+                                                            "using class table inheritance, the ID attribute can only refer to a " +
+                                                            "parent with a single primary key.  Leaving out the attribute will " +
+                                                            "allow composite primary keys where the child's copies have the same " +
+                                                            "field name as the parent.");
                 }
                 IBOProp parentProp = parentID.CreateBOKey(_bo.Props).GetBOPropCol()[parentID.KeyName];
                 PropDef profDef = new PropDef(parentIDCopyFieldName, parentProp.PropertyType, PropReadWriteRule.ReadWrite, null);
@@ -282,7 +282,7 @@ namespace Habanero.BO.SqlGeneration
             
             foreach (BOProp prop in propsToIncludeTemp)
             {
-               if (prop.PropDef.Persistable)  propsToInclude.Add(prop);
+                if (prop.PropDef.Persistable)  propsToInclude.Add(prop);
             }
 
             if (currentClassDef.IsUsingClassTableInheritance())
@@ -291,7 +291,7 @@ namespace Habanero.BO.SqlGeneration
             }
 
             while (currentClassDef.IsUsingSingleTableInheritance() ||
-                currentClassDef.IsUsingConcreteTableInheritance())
+                   currentClassDef.IsUsingConcreteTableInheritance())
             {
                 propsToInclude.Add(currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true));
                 currentClassDef = currentClassDef.SuperClassClassDef;

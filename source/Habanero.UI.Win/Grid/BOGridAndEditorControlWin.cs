@@ -32,7 +32,7 @@ namespace Habanero.UI.Win
     ///</summary>
     public class BOGridAndEditorControlWin : UserControlWin, IBOGridAndEditorControl
     {
-        private readonly ClassDef _classDef;
+        private readonly IClassDef _classDef;
         private IControlFactory _controlFactory;
         private IBOEditorControl _iboEditorControl;
         private IReadOnlyGridControl _readOnlyGridControl;
@@ -55,7 +55,7 @@ namespace Habanero.UI.Win
         ///<param name="classDef"></param>
         ///<param name="uiDefName"></param>
         ///<exception cref="ArgumentNullException"></exception>
-        public BOGridAndEditorControlWin(IControlFactory controlFactory, ClassDef classDef, string uiDefName)
+        public BOGridAndEditorControlWin(IControlFactory controlFactory, IClassDef classDef, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (classDef == null) throw new ArgumentNullException("classDef");

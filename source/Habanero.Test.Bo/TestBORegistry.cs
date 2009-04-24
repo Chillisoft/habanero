@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.BO;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO

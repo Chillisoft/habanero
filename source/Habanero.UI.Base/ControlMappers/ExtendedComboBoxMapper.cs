@@ -92,7 +92,7 @@ namespace Habanero.UI.Base
         public void ShowPopupForm()
         {
             Type classType;
-            ClassDef lookupTypeClassDef = GetLookupTypeClassDef(out classType);
+            IClassDef lookupTypeClassDef = GetLookupTypeClassDef(out classType);
             PopupForm = ControlFactory.CreateForm();
             PopupForm.Height = 600;
             PopupForm.Width = 800;
@@ -105,10 +105,10 @@ namespace Habanero.UI.Base
             iboGridAndEditorControl.BusinessObjectCollection = col;
         }
 
-        private ClassDef GetLookupTypeClassDef(out Type classType)
+        private IClassDef GetLookupTypeClassDef(out Type classType)
         {
             BOMapper mapper = new BOMapper(BusinessObject);
-            ClassDef lookupTypeClassDef = mapper.GetLookupListClassDef(PropertyName);
+            IClassDef lookupTypeClassDef = mapper.GetLookupListClassDef(PropertyName);
             classType = lookupTypeClassDef.ClassType;
             return lookupTypeClassDef;
         }

@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.BO;
-using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 
 namespace Habanero.Test.General

@@ -353,19 +353,19 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_CreateBusinessObject_AlternateClassDef_NoConstructor()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef classDef = OrganisationTestBO.LoadDefaultClassDef();
             ClassDef alternateClassDef = classDef.Clone();
             alternateClassDef.TypeParameter = TestUtil.GetRandomString();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>
+            BusinessObjectCollection<OrganisationTestBO> orgCol = new BusinessObjectCollection<OrganisationTestBO>
                                                                       {ClassDef = alternateClassDef};
 
             //---------------Execute Test ----------------------
 
-            //this should not work because ContactPersonTestBO does not have a constructor that takes a ClassDef as parameter
-            ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
+            //this should not work because AddressTestBO does not have a constructor that takes a ClassDef as parameter
+            OrganisationTestBO orgBo = orgCol.CreateBusinessObject();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(alternateClassDef, newCP.ClassDef);
+            Assert.AreEqual(alternateClassDef, orgBo.ClassDef);
         }
 
         [Test]

@@ -21,11 +21,11 @@ using System;
 using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using log4net;
 
-namespace Habanero.BO
+namespace Habanero.DB
 {
     /// <summary>
     /// Provides a transaction committer that persists data to a
@@ -82,19 +82,19 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="businessObject">The business object to decorate in a TransactionalBusinessObjectDB</param>
         /// <returns>The decorated TransactionalBusinessObjectDB</returns>
-        protected internal override TransactionalBusinessObject CreateTransactionalBusinessObject(
+        protected override TransactionalBusinessObject CreateTransactionalBusinessObject(
             IBusinessObject businessObject)
         {
             return new TransactionalBusinessObjectDB(businessObject);
         }
 
-        protected internal override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject) {
-            this.AddTransaction(new TransactionalSingleRelationship_Added(relationship, businessObject));
+        protected override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject) {
+            this.AddTransaction(new TransactionalSingleRelationship_Added_DB(relationship, businessObject));
 
         }
-        protected internal override void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject)
+        protected override void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject)
         {
-            this.AddTransaction(new TransactionalSingleRelationship_Removed(relationship, businessObject));
+            this.AddTransaction(new TransactionalSingleRelationship_Removed_DB(relationship, businessObject));
 
         }
 
@@ -102,7 +102,7 @@ namespace Habanero.BO
         /// Tries to execute an individual transaction against the datasource.
         /// 1'st phase of a 2 phase database commit.
         /// </summary>
-        protected internal override void ExecuteTransactionToDataSource(ITransactional transaction)
+        protected override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             ITransactionalDB transactionDB = (ITransactionalDB)transaction;
 

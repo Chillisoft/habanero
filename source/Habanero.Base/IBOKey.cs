@@ -107,14 +107,6 @@ namespace Habanero.Base
         IBOProp this[int index] { get;  }
 
         /// <summary>
-        /// Creates a "where" clause from the persisted properties held
-        /// </summary>
-        /// <param name="sql">The sql statement used to generate and track
-        /// parameters</param>
-        /// <returns>Returns a string</returns>
-        string PersistedDatabaseWhereClause(ISqlStatement sql);
-
-        /// <summary>
         /// Returns a copy of the collection of properties in the key
         /// </summary>
         /// <returns>Returns a new BOProp collection</returns>

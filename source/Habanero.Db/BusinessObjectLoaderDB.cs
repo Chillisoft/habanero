@@ -21,10 +21,11 @@ using System;
 using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
-namespace Habanero.BO
+namespace Habanero.DB
 {
     ///<summary>
     /// This is an implementation of an <see cref="IBusinessObjectLoader"/>. This is used for loading objects from any database.

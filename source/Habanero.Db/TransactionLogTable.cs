@@ -20,9 +20,9 @@
 using System;
 using System.Security.Principal;
 using Habanero.Base;
-using Habanero.DB;
+using Habanero.BO;
 
-namespace Habanero.BO
+namespace Habanero.DB
 {
     /// <summary>
     /// Logs transactions in the same database that is used to store the
@@ -74,7 +74,7 @@ namespace Habanero.BO
         ///<param name="transactionLogTable">The log table name</param>
         public TransactionLogTable(BusinessObject busObjToLog, string transactionLogTable)
             : this(busObjToLog, transactionLogTable, "DateTimeUpdated",
-                "WindowsUser", "LogonUser","BusinessObjectToString", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
+                   "WindowsUser", "LogonUser","BusinessObjectToString", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
         {
 
         }
@@ -86,7 +86,7 @@ namespace Habanero.BO
         /// <param name="securityController"></param>
         public TransactionLogTable(BusinessObject busObjToLog,ISecurityController securityController)
             : this(busObjToLog, "transactionLog", "DateTimeUpdated",
-                "WindowsUser", "LogonUser", "BusinessObjectToString", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
+                   "WindowsUser", "LogonUser", "BusinessObjectToString", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
         {
             _securityController = securityController;
         }
@@ -140,9 +140,9 @@ namespace Habanero.BO
                                    string windowsUserFieldName, string logonUserFieldName,string businessObjectToStringFieldName, string machineUpdateName,
                                    string businessObjectTypeNameFieldName, string crudActionFieldName,
                                    string dirtyXMLFieldName,ISecurityController securityController):this(buObjToLog, transactionLogTable, dateTimeUpdatedFieldName,
-                                   windowsUserFieldName, logonUserFieldName,businessObjectToStringFieldName, machineUpdateName,
-                                   businessObjectTypeNameFieldName, crudActionFieldName,
-                                   dirtyXMLFieldName)
+                                                                                                         windowsUserFieldName, logonUserFieldName,businessObjectToStringFieldName, machineUpdateName,
+                                                                                                         businessObjectTypeNameFieldName, crudActionFieldName,
+                                                                                                         dirtyXMLFieldName)
         {
             _securityController = securityController;
         }

@@ -21,7 +21,6 @@ using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.DB;
 
 namespace Habanero.BO
 {
@@ -142,7 +141,7 @@ namespace Habanero.BO
     ///<summary>
     /// A simple sequential number generator business object
     ///</summary>
-    internal class BOSequenceNumber : BusinessObject
+    public class BOSequenceNumber : BusinessObject
     {
         private static string _tableName;
 
@@ -205,16 +204,6 @@ namespace Habanero.BO
             ClassDef itsClassDef = itsLoader.LoadClass(classDef);
             ClassDef.ClassDefs.Add(itsClassDef);
             return;
-        }
-
-        /// <summary>
-        /// Deletes all the numbers being stored in the database table that holds
-        /// the generated numbers
-        /// </summary>
-        public static void DeleteAllNumbers()
-        {
-            //DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From " + _tableName);
         }
     }
 }

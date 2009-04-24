@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using Habanero.Base;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;

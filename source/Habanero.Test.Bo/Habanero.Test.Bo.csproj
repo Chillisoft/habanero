@@ -134,6 +134,7 @@
     <Compile Include="TestBOSerialisation.cs" />
     <Compile Include="TestBusinessObjectSerialisationXML.cs" />
     <Compile Include="TestBOStatus.cs" />
+    <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_AddedBOs.cs" />
@@ -153,7 +154,6 @@
     <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Composition.cs" />
     <Compile Include="TestBOPrimaryKey.cs" />
     <Compile Include="ClassDefinition\TestPrimaryKeyDef.cs" />
-    <Compile Include="CriteriaManager\TestCriteriaDB.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
     <Compile Include="DataMappers\TestDataMapper_Int.cs" />
@@ -206,9 +206,6 @@
     <Compile Include="TestPack\BOWithIntID_DifferentType.cs" />
     <Compile Include="TestPack\ContactPersonTestBO.cs" />
     <Compile Include="TestPack\OrganisationTestBO.cs" />
-    <Compile Include="SqlGeneration\StatementGeneratorTestHelper.cs" />
-    <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
-    <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
     <Compile Include="TestBORegistry.cs" />
     <Compile Include="TestBusinessObjectManager.cs" />
     <Compile Include="CriteriaManager\TestCriteria.cs" />
@@ -220,7 +217,6 @@
     <Compile Include="TestDataStoreInMemory.cs" />
     <Compile Include="TestBusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="TestBusinessObjectUpdateLog.cs" />
-    <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="DataMappers\TestDataMapper_Bool.cs" />
     <Compile Include="DataMappers\TestDataMapper_DateTime.cs" />
     <Compile Include="DataMappers\TestDataMapper_Guid.cs" />
@@ -228,7 +224,6 @@
     <Compile Include="TestPropertyComparer.cs" />
     <Compile Include="BusinessObjectLoader\TestQueryBuilder.cs" />
     <Compile Include="BusinessObjectLoader\TestSelectQuery.cs" />
-    <Compile Include="BusinessObjectLoader\TestSelectQueryDB.cs" />
     <Compile Include="BusinessObjectLoader\TestSource.cs" />
     <Compile Include="BusinessObjectLoader\TestSourceDB.cs" />
     <Compile Include="TestPropertyLink.cs" />
@@ -238,8 +233,6 @@
     <Compile Include="TransactionCommitters\TestTransactionCommitter.cs" />
     <Compile Include="Relationship\TestMultipleRelationship.cs" />
     <Compile Include="Loaders\TestXmlTriggerLoader.cs" />
-    <Compile Include="SqlGeneration\TestDeleteStatementGenerator.cs" />
-    <Compile Include="SqlGeneration\TestUpdateStatementGenerator.cs" />
     <Compile Include="TestBOKeyCol.cs" />
     <Compile Include="CriteriaManager\TestCriteriaExpression.cs" />
     <Compile Include="CriteriaManager\TestExpression.cs" />
@@ -267,7 +260,6 @@
     <Compile Include="Loaders\TestXmlRelationshipLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormColumnLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormTabLoader.cs" />
-    <Compile Include="SqlGeneration\TestInsertStatementGenerator.cs" />
     <Compile Include="TestDataSetProvider.cs" />
     <Compile Include="TestEditableDataProvider.cs" />
     <Compile Include="TestReadOnlyDataSetProvider.cs" />
@@ -296,7 +288,6 @@
     <Compile Include="Relationship\TestSingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TransactionCommitters\TestTransactionCommitterDB.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitterFactory.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitterHelper.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitterInMemory.cs" />

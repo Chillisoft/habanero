@@ -22,11 +22,13 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Test.BO;
 using Habanero.Test.BO.ClassDefinition;
+using Habanero.Test.BO.TransactionCommitters;
 using NUnit.Framework;
 using Rhino.Mocks;
 
-namespace Habanero.Test.BO.TransactionCommitters
+namespace Habanero.Test.DB
 {
     [TestFixture]
     public class TestTransactionCommitterDB : TestUsingDatabase
@@ -61,16 +63,105 @@ namespace Habanero.Test.BO.TransactionCommitters
             // are executed then it will still only be called once.
         }
 
+        [Test, ExpectedException(typeof(NotImplementedException))]
+        public void TestRaisesException_onError()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committerDB = new TransactionCommitterStubDB();
+            StubFailingTransaction trn = new StubFailingTransaction();
+            committerDB.AddTransaction(trn);
+            committerDB.AddTransaction(new StubSuccessfullTransaction());
+            //---------------Execute Test ----------------------
+            committerDB.CommitTransaction();
+            //---------------Test Result -----------------------
+        }
+
+        [Test]
+        public void TestUpdateBeforePersistCalled()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            bool updateBeforePersistCalled = false;
+            MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(
+                delegate
+                {
+                    updateBeforePersistCalled = true;
+                });
+            trnCommitter.AddBusinessObject(mockBo);
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            trnCommitter.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(updateBeforePersistCalled);
+        }
+
+        [Test]
+        public void TestUpdateBeforePersistCalled_ForBoAddedInUpdateBeforePersist()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            bool updateBeforePersistCalled = false;
+            bool updateBeforePersistCalledForInner = false;
+            MockBOWithUpdateBeforePersistDelegate innerMockBo = new MockBOWithUpdateBeforePersistDelegate(
+                delegate
+                {
+                    updateBeforePersistCalledForInner = true;
+                });
+            MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(
+                delegate(ITransactionCommitter committer)
+                {
+                    updateBeforePersistCalled = true;
+                    committer.AddBusinessObject(innerMockBo);
+                });
+            trnCommitter.AddBusinessObject(mockBo);
+            //-------------Assert Preconditions -------------
+            Assert.AreEqual(1, trnCommitter.GetOriginalTransactions().Count);
+            Assert.IsFalse(updateBeforePersistCalled);
+            Assert.IsFalse(updateBeforePersistCalledForInner);
+
+            //---------------Execute Test ----------------------
+            trnCommitter.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, trnCommitter.GetOriginalTransactions().Count);
+            Assert.IsTrue(updateBeforePersistCalled);
+            Assert.IsTrue(updateBeforePersistCalledForInner);
+        }
+
+        [Test]
+        public void TestRaisesException_onError_DoesNotCommit()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committer = new TransactionCommitterStubDB();
+            StubDatabaseTransaction transactional1 = new StubDatabaseTransaction();
+            committer.AddTransaction(transactional1);
+            StubFailingTransaction transactional2 = new StubFailingTransaction();
+            committer.AddTransaction(transactional2);
+            //---------------Execute Test ----------------------
+            try
+            {
+                committer.CommitTransaction();
+                Assert.Fail("Failure should have occurred as a StubFailingTransaction was added");
+            }
+            //---------------Test Result -----------------------
+            catch (NotImplementedException)
+            {
+                Assert.IsFalse(transactional1.Committed);
+                Assert.IsFalse(transactional2.Committed);
+            }
+        }
+
+
         private static void DoTestCheckForDuplicateObjects()
         {
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO duplicateContactPerson = new ContactPersonTestBO
-                 {
-                     ContactPersonID = Guid.NewGuid(),
-                     Surname = contactPersonCompositeKey.Surname,
-                     FirstName = contactPersonCompositeKey.FirstName
-                 };
+                                                             {
+                                                                 ContactPersonID = Guid.NewGuid(),
+                                                                 Surname = contactPersonCompositeKey.Surname,
+                                                                 FirstName = contactPersonCompositeKey.FirstName
+                                                             };
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(duplicateContactPerson);
             //---------------Execute Test ----------------------
@@ -186,7 +277,7 @@ namespace Habanero.Test.BO.TransactionCommitters
                 get { return _rollBackExecuted; }
             }
 
-            protected internal override void UpdateAsTransactionRolledBack()
+            protected override void UpdateAsTransactionRolledBack()
             {
                 base.UpdateAsTransactionRolledBack();
                 _rollBackExecuted = true;
@@ -702,7 +793,10 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //---------------Set up test pack-------------------
             MockBO mockBo = new MockBO();
-            mockBo.SetStatus(BOStatus.Statuses.isNew, false);
+            TransactionCommitterInMemory inMemoryCommitter = new TransactionCommitterInMemory(new DataStoreInMemory());
+            inMemoryCommitter.AddBusinessObject(mockBo);
+            inMemoryCommitter.CommitTransaction();
+            
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
             mockBo.MarkForDelete();
             committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo));
@@ -934,6 +1028,27 @@ namespace Habanero.Test.BO.TransactionCommitters
             public IBusinessObjectLoader BusinessObjectLoader { get { return _businessObjectLoader; } set { _businessObjectLoader = value; } }
 
             public ITransactionCommitter CreateTransactionCommitter() { return null; }
+        }
+
+        private class MockBOWithUpdateBeforePersistDelegate : MockBO
+        {
+            public delegate void UpdateObjectBeforePersistingDelegate(ITransactionCommitter transactionCommitter);
+
+            private readonly UpdateObjectBeforePersistingDelegate _updateObjectBeforePersistingDelegate;
+
+            public MockBOWithUpdateBeforePersistDelegate(UpdateObjectBeforePersistingDelegate updateObjectBeforePersistingDelegate)
+            {
+                _updateObjectBeforePersistingDelegate = updateObjectBeforePersistingDelegate;
+            }
+
+            protected override void UpdateObjectBeforePersisting(ITransactionCommitter transactionCommitter)
+            {
+                if (_updateObjectBeforePersistingDelegate != null)
+                {
+                    _updateObjectBeforePersistingDelegate(transactionCommitter);
+                }
+                base.UpdateObjectBeforePersisting(transactionCommitter);
+            }
         }
     }
 }
