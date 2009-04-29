@@ -336,7 +336,8 @@ namespace Habanero.Test.BO
         public void TestField_Compare_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            new Car();
+            new Engine(); //TO Load ClassDefs
+            new Car();//TO Load ClassDefs
             ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("ZZZZ");
             ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson("AAAA");
             Car car1 = Car.CreateSavedCar("2", contactPerson1);

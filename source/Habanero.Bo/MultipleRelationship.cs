@@ -82,7 +82,7 @@ namespace Habanero.BO
         {
             _boCol =
                 (RelatedBusinessObjectCollection<TBusinessObject>)
-                RelationshipUtils.CreateNewRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
+                RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
         }
 
         internal override void DereferenceChildren(TransactionCommitter committer)

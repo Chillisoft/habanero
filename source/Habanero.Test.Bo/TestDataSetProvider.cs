@@ -598,9 +598,10 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            new Address();
-            
-            new Car();
+            new Address();//TO Load ClassDefs
+
+            new Engine();//TO Load ClassDefs
+            new Car();//TO Load ClassDefs
             ClassDef classDef = MyContactPerson.LoadClassDef();
             const string columnName = "Father.DateOfBirth";
             UIGrid uiGrid = CreateUiGridWithColumn(classDef, columnName);
@@ -636,8 +637,9 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            new Address();
-            new Car();
+            new Address();//TO Load ClassDefs
+            new Engine();//TO Load ClassDefs
+            new Car();//TO Load ClassDefs
 //            DateTime startDate = DateTime.Now;
             ClassDef classDef = MyContactPerson.LoadClassDef();
             const string columnName = "-DateProperty-";

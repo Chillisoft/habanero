@@ -307,9 +307,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCreateSqlStatement_WithOrder_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
-            new Car();
-            new ContactPerson();
-
+            new Engine();//TO Load ClassDefs
+            new Car();//TO Load ClassDefs
+            new ContactPerson();//TO Load ClassDefs
             ClassDef addressClassDef = new Address().ClassDef;
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(addressClassDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(addressClassDef, "ContactPerson.Surname");
@@ -327,9 +327,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCreateSqlStatement_WithOrder_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            new Car();
-            new ContactPerson();
-            
+            new Engine();//TO Load ClassDefs
+            new Car();//TO Load ClassDefs
+            new ContactPerson();//TO Load ClassDefs
             ClassDef engineClassDef = new Engine().ClassDef;
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(engineClassDef);
