@@ -396,18 +396,30 @@ namespace Habanero.BO
         /// <returns>Returns a business object</returns>
         public IBusinessObject Find(int rowNum)
         {
-            string objectID = this._table.Rows[rowNum][_idColumnName].ToString();
-            return _collection.Find(new Guid(objectID));
+            DataRow row = this._table.Rows[rowNum];
+            return this.Find(row);
+        }
+
+        /// <summary>
+        /// Returns the business object at the row specified
+        /// </summary>
+        /// <param name="row)">The row related to the business object</param>
+        /// <returns>Returns a business object</returns>
+        public IBusinessObject Find(DataRow row)
+        {
+            string objectID = row[_idColumnName].ToString();
+            Guid id = new Guid(objectID);
+            return this.Find(id);
         }
 
         /// <summary>
         /// Returns a business object that matches the ID provided
         /// </summary>
-        /// <param name="strId">The ID</param>
+        /// <param name="objectID">The ID</param>
         /// <returns>Returns a business object</returns>
-        public IBusinessObject Find(Guid strId)
+        public IBusinessObject Find(Guid objectID)
         {
-            return _collection.Find(strId);
+            return _collection.Find(objectID);
         }
 
         /// <summary>

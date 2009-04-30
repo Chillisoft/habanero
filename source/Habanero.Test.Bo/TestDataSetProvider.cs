@@ -343,12 +343,9 @@ namespace Habanero.Test.BO
         [Test]
         public void TestOrderItemAddAndFindBO()
         {
-            SetupTestData();
-            OrderItem car = OrderItem.AddOrder1Car();
-            OrderItem chair = OrderItem.AddOrder2Chair();
-            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
-            col.LoadAll();
-            col.Sort("OrderNumber", true, true);
+            OrderItem car;
+            OrderItem chair;
+            BusinessObjectCollection<OrderItem> col = GetCollection(out car, out chair);
             Assert.AreEqual(car, col[0]);
             Assert.AreEqual(chair, col[1]);
 
@@ -389,7 +386,19 @@ namespace Habanero.Test.BO
             Assert.AreEqual(roof, provider.Find(roof.ID.ObjectID));
         }
 
-       [Ignore("Peter: TODO 13 Feb 2009: This is hanging the build on the server")]
+        private BusinessObjectCollection<OrderItem> GetCollection(out OrderItem car, out OrderItem chair)
+        {
+            SetupTestData();
+            OrderItem.ClearTable();
+            car = OrderItem.AddOrder1Car();
+            chair = OrderItem.AddOrder2Chair();
+            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
+            col.LoadAll();
+            col.Sort("OrderNumber", true, true);
+            return col;
+        }
+
+        [Ignore("Peter: TODO 13 Feb 2009: This is hanging the build on the server")]
         [Test]
         public void TestOrderItemRemove()
         {
@@ -420,6 +429,32 @@ namespace Habanero.Test.BO
             Assert.IsTrue(causedException);
             //Assert.IsNull(provider.Find("OrderNumber=2 AND Product=chair"));
             Assert.IsNull(provider.Find(chair.ID.ObjectID));
+        }
+
+        [Test]
+        public void Test_Find_UsingRow_ShouldReturnBusinessObject()
+        {
+            //--------------- Set up test pack ------------------
+            OrderItem car;
+            OrderItem chair;
+            BusinessObjectCollection<OrderItem> col = GetCollection(out car, out chair);
+            IDataSetProvider provider = new ReadOnlyDataSetProvider(col);
+            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+            DataTable dataTable = provider.GetDataTable(uiGrid);
+            
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(2, col.Count, "Should b 2 BO's in col");
+            Assert.AreEqual(2, dataTable.Rows.Count, "Should be 2 rows in datatable");
+            Assert.AreSame(car, col[0]);
+            Assert.AreSame(chair, col[1]);
+            //--------------- Execute Test ----------------------
+            DataRow row1 = dataTable.Rows[0];
+            DataRow row2 = dataTable.Rows[1];
+            IBusinessObject bo1 = provider.Find(row1);
+            IBusinessObject bo2 = provider.Find(row2);
+            //--------------- Test Result -----------------------
+            Assert.AreSame(car, bo1);
+            Assert.AreSame(chair, bo2);
         }
 
         [Test]

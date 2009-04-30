@@ -150,9 +150,24 @@ namespace Habanero.UI.Win
         /// </summary>
         private void ConfirmRowDeletion(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (ConfirmDeletion && !CheckUserConfirmsDeletionDelegate())
+            try
             {
-                e.Cancel = true;
+                if (ConfirmDeletion && !CheckUserConfirmsDeletionDelegate())
+                {
+                    e.Cancel = true;
+                
+                }
+                IBusinessObject businessObject = this.DataSetProvider.Find(e.Row.Index);
+                string message;
+                if (!businessObject.IsDeletable(out message))
+                {
+                    e.Cancel = true;
+                    throw new BusObjDeleteException(businessObject, message);
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 

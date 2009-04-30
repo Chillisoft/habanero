@@ -38,9 +38,9 @@ namespace Habanero.Base
         /// <summary>
         /// Finds an IBusinessObject given the ID.
         /// </summary>
-        /// <param name="id">The id of the bo to search for</param>
+        /// <param name="objectID">The id of the bo to search for</param>
         /// <returns>The business object corresponding to the ID</returns>
-        IBusinessObject Find(Guid id);
+        IBusinessObject Find(Guid objectID);
 
         /// <summary>
         /// Returns the business object at the row number specified
@@ -48,6 +48,13 @@ namespace Habanero.Base
         /// <param name="rowNum">The row number</param>
         /// <returns>Returns a business object</returns>
         IBusinessObject Find(int rowNum);
+
+        /// <summary>
+        /// Returns the business object at the row specified
+        /// </summary>
+        /// <param name="row)">The row related to the business object</param>
+        /// <returns>Returns a business object</returns>
+        IBusinessObject Find(DataRow row);
 
         /// <summary>
         /// Finds the row number in which a specified business object resides

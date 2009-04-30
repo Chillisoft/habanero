@@ -1255,7 +1255,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="bo">The business object in question</param>
         /// <param name="message">Additional err message</param>
-        public BusObjDeleteException(BusinessObject bo, string message):
+        public BusObjDeleteException(IBusinessObject bo, string message):
                 base(
                     string.Format(
                         "You cannot delete the '{0}', as the IsDeleted is set to false for the object. " +

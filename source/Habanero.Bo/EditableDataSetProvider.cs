@@ -124,6 +124,7 @@ namespace Habanero.BO
             try
             {
                 IBusinessObject changedBo = GetBusinessObjectForRow(row);
+                string message;
                 if (changedBo == null) return;
                 try
                 {
