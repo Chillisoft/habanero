@@ -153,7 +153,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Tear Down -------------------------          
         }
 
-        //Bug Fix: This test investigates the scenario where a bug was occuring
+        //BugFix: This test investigates the scenario where a bug_ was occuring
         [Test]
         public void TestSetBusinessObjectForDateTimePickerMapper_DoesntFirePropertyUpdate()
         {
@@ -164,8 +164,7 @@ namespace Habanero.Test.UI.Base.Mappers
             DateTimePickerMapper dtpMapper;
             IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
             bool updatedEventFired = false;
-            sampleBusinessObject.Props["SampleDate"].Updated += delegate(object sender, BOPropEventArgs e)
-            {
+            sampleBusinessObject.Props["SampleDate"].Updated += delegate {
                 updatedEventFired = true;
             };
             //---------------Verify test pack-------------------
@@ -178,7 +177,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsFalse(updatedEventFired);
         }
 
-        //Bug Fix: This tests the scenario where a bug was occuring
+        //BugFix: This tests the scenario where a bug_ was occuring
         [Test]
         public void TestSetBusinessObjectForDateTimePickerMapper_Changed_DoesntFirePropertyUpdate()
         {
@@ -189,8 +188,7 @@ namespace Habanero.Test.UI.Base.Mappers
             DateTimePickerMapper dtpMapper;
             IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
             bool updatedEventFired = false;
-            sampleBusinessObject.Props["SampleDate"].Updated += delegate(object sender, BOPropEventArgs e)
-            {
+            sampleBusinessObject.Props["SampleDate"].Updated += delegate {
                 updatedEventFired = true;
             };
             dtpMapper.BusinessObject = new Sample();

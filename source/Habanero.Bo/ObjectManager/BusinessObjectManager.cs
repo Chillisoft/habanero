@@ -191,40 +191,6 @@ namespace Habanero.BO
         }
 
         //TODO Brett/Sori 10/02/2009 : this method should be removed
-        /// <summary>
-        /// Checks whether the business object is currently loaded.
-        /// </summary>
-        /// <param name="objectID">The string identity (usually bo.ID.GetObjectID()) of the object being checked.</param>
-        ///<returns>Whether the business object is in the <see cref="BusinessObjectManager"/> or not.</returns>
-        internal bool Contains(string objectID)
-        {
-            //lock (_loadedBusinessObjects)
-            //{
-            //    bool containsKey = _loadedBusinessObjects.ContainsKey(objectID);
-            //    if (containsKey)
-            //    {
-            //        if (!BusinessObjectWeakReferenceIsAlive(objectID))
-            //        {
-            //            _loadedBusinessObjects.Remove(objectID);
-            //            return false;
-            //        }
-            //        return true;
-            //    }
-            //}
-            //return false;
-
-            foreach (KeyValuePair<Guid, WeakReference> pair in _loadedBusinessObjects)
-            {
-                WeakReference weakReference = pair.Value;
-                if (!weakReference.IsAlive) continue;
-                IBusinessObject businessObject = (IBusinessObject)weakReference.Target;
-                if (businessObject.ID.ObjectID.ToString() == objectID)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         ///<summary>
         /// Checks whether the business object is in the <see cref="BusinessObjectManager"/>.

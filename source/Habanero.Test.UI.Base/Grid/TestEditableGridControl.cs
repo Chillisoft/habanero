@@ -1016,9 +1016,9 @@ namespace Habanero.Test.UI.Base
             protected override void AssertComboBoxItemCount(IDataGridViewColumn dataGridViewColumn, int expectedCount)
             {
                 //TODO: get this code working again when the Gizmox bug is fixed in GridInitialiser
-                //DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG)dataGridViewColumn;
-                //Assert.AreEqual(expectedCount,
-                //    ((Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn)dataGridViewColumnVWG.DataGridViewColumn).Items.Count);
+//                DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG)dataGridViewColumn;
+//                Assert.AreEqual(expectedCount,
+//                    ((Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn)dataGridViewColumnVWG.DataGridViewColumn).Items.Count);
             }
 
             protected override void AssertMainControlsOnForm(IFormHabanero form)

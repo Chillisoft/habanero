@@ -73,7 +73,6 @@ namespace Habanero.Test.UI.Base
             }
 
 
-            //TODO: Check the strategy is correct and how to test using NUnit Forms
             [Test]
             public void TestClickingOfCheckBoxUpdatesBO()
             {
@@ -93,7 +92,7 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(_sampleBusinessObject.SampleBoolean);
                 //---------------Tear down -------------------------
             }
-            private Form AddControlToForm(IControlHabanero parentControl)
+            private static Form AddControlToForm(IControlHabanero parentControl)
             {
                 Form frm = new Form();
                 frm.Controls.Clear();

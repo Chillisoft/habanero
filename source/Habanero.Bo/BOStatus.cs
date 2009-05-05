@@ -151,7 +151,7 @@ namespace Habanero.BO
             {
                 error.BusinessObject = this.BusinessObject;
             }
-            
+
             IList<IBOError> customRuleErrors;
             valid &= _bo.AreCustomRulesValidInternal(out customRuleErrors);
             if (customRuleErrors != null)
@@ -209,6 +209,27 @@ namespace Habanero.BO
                 if (value == null) throw new ArgumentNullException("value");
                 _bo = (BusinessObject) value;
             }
+        }
+
+        /// <summary>
+        /// Indicates whether all of the property values of the object are valid and that the business object is a valid state to persist.
+        /// Also returns true if the Business Object has any warnings or Suggestions <see cref="ErrorLevel"/>.
+        /// Warnings and Suggestions do not prevent the Business Object from being persisted but indicate that the
+        /// Business object is not in a valid state e.g. A Customer order can be saved but cannot be Approved if it has warnings.
+        /// </summary>
+        /// <param name="errors">If the object is not valid then this list is populated with the errors</param>
+        /// <returns>Returns true if all are valid </returns>
+        public bool HasWarnings(out IList<IBOError> errors)
+        {
+            IsValid(out errors);
+
+            IList<IBOError> warnings;
+            _bo.HasWarnings(out warnings);
+            foreach (IBOError error in warnings)
+            {
+                errors.Add(error);
+            }
+            return errors.Count != 0;
         }
 
         /// <summary>

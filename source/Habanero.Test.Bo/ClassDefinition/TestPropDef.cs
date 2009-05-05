@@ -961,7 +961,6 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsInstanceOfType(typeof(BOPropLookupList), prop);
         }
 
-        //[Ignore("//TODO Brett 05 Feb 2009: Working on this now")]
         [Test]
         public void Test_TestLookupListCriteria()
         {

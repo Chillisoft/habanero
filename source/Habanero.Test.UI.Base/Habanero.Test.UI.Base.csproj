@@ -161,7 +161,6 @@
     <Compile Include="FilterController\TestCompositeFilterClause.cs" />
     <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
     <Compile Include="FilterController\TestFilterControlDate.cs" />
-    <Compile Include="FilterController\TestFilterInputBoxCollection.cs" />
     <Compile Include="Grid\TestCalendarCell.cs">
     </Compile>
     <Compile Include="Grid\TestDataGridViewColumn.cs" />
@@ -174,7 +173,8 @@
     <Compile Include="Grid\TestReadOnlyGridControl.cs" />
     <Compile Include="LayoutManager\TestColumnLayoutManager.cs" />
     <Compile Include="LayoutManager\TestGridLayoutManager.cs" />
-    <Compile Include="Mappers\TestCollectionTabControlMapper.cs">
+    <Compile Include="Mappers\TestCollectionTabControlMapperVWG.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Mappers\TestControlMapperStrategyWin.cs" />
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
@@ -216,7 +216,6 @@
     <Compile Include="MultiSelector\TestMultiSelectorModel.cs" />
     <Compile Include="TestListView.cs" />
     <Compile Include="Mappers\TestListComboBoxMapper.cs" />
-    <Compile Include="PanelFactory\TestPanelFactory.cs" />
     <Compile Include="TestStaticDataEditor.cs" />
     <Compile Include="TestValidationRule.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />
@@ -270,6 +269,9 @@
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
       <Name>Habanero.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PanelFactory\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

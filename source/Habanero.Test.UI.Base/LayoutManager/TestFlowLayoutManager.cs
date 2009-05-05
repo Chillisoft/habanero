@@ -79,7 +79,7 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(ctl2LeftPos, ctl2.Left, "Control should be centre aligned.");
             }
 
-            //Note:this doesn't work in VWG in testing mode
+            //Note_:this doesn't work in VWG in testing mode
             [Test]
             public void TestCentreAlignRowTwoRows()
             {

@@ -72,7 +72,7 @@ namespace Habanero.Base
 
         /// <summary>
         /// Sets the setting with the specified name to the specified value (with a date of Now)
-        /// Note: If no setting exists it should be created.
+        /// Note_: If no setting exists it should be created.
         /// </summary>
         /// <param name="settingName">The name of the setting</param>
         /// <param name="settingValue">The value to set the setting to</param>

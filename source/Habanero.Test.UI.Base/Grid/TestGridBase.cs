@@ -292,7 +292,6 @@ namespace Habanero.Test.UI.Base
                 
             //}
 
-            //TODO: Test if it is the first one then will be auto selected then does it still fire.
             [Test]
             public void TestVWG_NonSelectedBusinessObjectEdited()
             {

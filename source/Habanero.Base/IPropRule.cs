@@ -21,6 +21,7 @@ using System;
 
 namespace Habanero.Base
 {
+
     /// <summary>
     /// Provides an interface for property rules that test the validity of
     /// a property value.  If you would like to implement your own property

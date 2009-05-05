@@ -86,10 +86,10 @@ namespace Habanero.Test.General
             }
         }
 
-        // TODO Eric - is something being tested here?
         [Test]
         public void TestCircleHasCorrectPropertyNames()
         {
+            //Merely testing that errros are not thrown
             objCircle.GetPropertyValue("ShapeName");
             objCircle.GetPropertyValue("Radius");
             objCircle.GetPropertyValue("ShapeID");
@@ -126,7 +126,7 @@ namespace Habanero.Test.General
                             "ShapeID in parent and child should be the same");
         }
 
-        //Note: doesn't update the ShapeID because it is an ObjectID and is part of the parent's PK
+        //Note_: doesn't update the ShapeID because it is an ObjectID and is part of the parent's PK
         [Test]
         public void TestCircleUpdateSql()
         {
@@ -164,9 +164,6 @@ namespace Habanero.Test.General
             Assert.AreEqual(strID, itsDeleteSql[1].Parameters[0].Value,
                             "Parameter ShapeID has incorrect value in second delete statement in where clause.");
         }
-
-        // TODO: Would like to separate these tests out later, but needs a structure
-        //  change and I'm out of time right now.
         [Test]
         public void TestDatabaseReadWrite()
         {

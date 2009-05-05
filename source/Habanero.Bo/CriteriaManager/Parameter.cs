@@ -60,7 +60,7 @@ namespace Habanero.BO.CriteriaManager
         /// This must have the syntax:<br/>
         /// <code>parameterName sqlOperator parameterValue</code>
         /// (e.g. <code>Field1 >= 3</code>)<br/> 
-        /// NOTE: The parameter value should not be enclosed in inverted 
+        /// NOTE_: The parameter value should not be enclosed in inverted 
         /// commas.</param>
         public Parameter(string parameterClause)
         {
@@ -80,7 +80,7 @@ namespace Habanero.BO.CriteriaManager
         /// <param name="parameterName">The property name of the parameter</param>
         /// <param name="sqlOperator">The sql operator</param>
         /// <param name="parameterValue">This should be a parameter as per a sql 
-        /// "where" clause. NOTE: Do not parse out a ' as '' since the criteria 
+        /// "where" clause. NOTE_: Do not parse out a ' as '' since the criteria 
         /// manager will do this.</param>
         public Parameter(string parameterName, string sqlOperator, string parameterValue)
         {

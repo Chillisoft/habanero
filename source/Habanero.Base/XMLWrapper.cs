@@ -115,7 +115,7 @@ namespace Habanero.Base
         /// <summary>
         /// Updates the XML document file with changes made to the XML
         /// structure.<br/>
-        /// NOTE: This method will only execute if the object was originally
+        /// NOTE_: This method will only execute if the object was originally
         /// created with the constructor that specifies a _filename.  Alternatively,
         /// use the variant of this method that takes a file name as a parameter.
         /// </summary>
@@ -124,8 +124,7 @@ namespace Habanero.Base
         {
             if (_filename != string.Empty)
             {
-                XmlTextWriter writer = new XmlTextWriter(_filename,
-                                                         Encoding.UTF8);
+                XmlTextWriter writer = new XmlTextWriter(_filename, Encoding.UTF8);
                 _doc.WriteTo(writer);
                 writer.Close();
             }

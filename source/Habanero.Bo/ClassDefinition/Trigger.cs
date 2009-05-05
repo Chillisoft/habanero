@@ -44,7 +44,7 @@ namespace Habanero.BO.ClassDefinition
 
         /// <summary>
         /// Constructor to initialise a new trigger.<br/>
-        /// NOTE: you cannot set both a target and triggeredBy value.
+        /// NOTE_: you cannot set both a target and triggeredBy value.
         /// </summary>
         /// <param name="triggeredBy">The property name of the field
         /// whose value change fires the trigger</param>

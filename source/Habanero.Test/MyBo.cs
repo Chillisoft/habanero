@@ -1570,6 +1570,11 @@ namespace Habanero.Test
             string sql = "DELETE FROM mybo";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
+
+        public void AddBusinessRule(IBusinessObjectRule businessObjectRuleStub)
+        {
+            this.BusinessObjectRules.Add(businessObjectRuleStub);
+        }
     }
 
     public class MyRelatedBo : BusinessObject

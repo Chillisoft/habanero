@@ -215,8 +215,6 @@ namespace Habanero.Test.General
                             "Parameter ShapeID has incorrect value in third delete statement in where clause.");
         }
 
-        // TODO: Would like to separate these tests out later, but needs a structure
-        //  change and I'm out of time right now.
         [Test]
         public void TestDatabaseReadWrite()
         {

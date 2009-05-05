@@ -26,10 +26,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    /// <summary>
-    /// TODO: Can add a new private method to return a boKey where the creation
-    /// of the boKey instance is uniform (see methods near the bottom)
-    /// </summary>
     [TestFixture]
     public class TestBoKey
     {

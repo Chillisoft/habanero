@@ -100,6 +100,7 @@
     <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOPropUpdatedEventArgs.cs" />
     <Compile Include="BusinessObjectDTO.cs" />
+    <Compile Include="IBusinessObjectRule.cs" />
     <Compile Include="InvalidRelationshipNameException.cs" />
     <Compile Include="Criteria\Criteria.cs" />
     <Compile Include="Criteria\CriteriaExpression.cs" />

@@ -57,8 +57,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             TestUtil.WaitForGC();
         }
 
-        //   TODO: remove option to do contactPerson.OrganisationID = xcsd.
-
         [Test]
         public void Test_AddMethod_AddPersistedChild()
         {

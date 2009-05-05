@@ -31,7 +31,11 @@ namespace Habanero.Base
         /// <summary>
         /// Is this a warning e.g. the object can be saved but is not considered to be in a valid state untill it is repaired.
         /// </summary>
-        Warning
+        Warning,
+        /// <summary>
+        /// Is this a suggestion e.g. the object can be saved and is considered valid but there may be a better way of doing it.
+        /// </summary>
+        Suggestion
     }
     /// <summary>
     /// An interface representing a particular Error on a <see cref="IBusinessObject"/>.

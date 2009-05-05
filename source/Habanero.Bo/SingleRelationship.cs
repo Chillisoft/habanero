@@ -90,7 +90,7 @@ namespace Habanero.BO
     public class SingleRelationship<TBusinessObject> : SingleRelationshipBase, ISingleRelationship
         where TBusinessObject : class, IBusinessObject, new()
     {
-        //TODO: Implement logging private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
+        // Implement logging private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
         private TBusinessObject _relatedBo;
         private Criteria _storedKeyCriteria;
 

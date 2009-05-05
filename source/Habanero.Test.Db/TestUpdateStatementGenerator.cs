@@ -42,20 +42,20 @@ namespace Habanero.Test.BO.SqlGeneration
             ClassDef.ClassDefs.Clear();
         }
 
-        //// TODO: this test awaits the addition of delimiters to MySQL
-        //[Test]
-        //public void TestDelimitedTableNameWithSpaces()
-        //{
-        //    ClassDef.ClassDefs.Clear();
-        //    TestAutoInc.LoadClassDefWithAutoIncrementingID();
-        //    TestAutoInc bo = new TestAutoInc();
-        //    ClassDef.ClassDefs[typeof(TestAutoInc)].TableName = "test autoinc";
-
-        //    UpdateStatementGenerator gen = new UpdateStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-        //    ISqlStatementCollection statementCol = gen.Generate();
-        //    UpdateSqlStatement statement = (UpdateSqlStatement)statementCol[0];
-        //    Assert.AreEqual("PUT STUFF HERE", statement.Statement.ToString());
-        //}
+        [Test]
+        public void TestDelimitedTableNameWithSpaces()
+        {
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID();
+            TestAutoInc bo = new TestAutoInc();
+            bo.Save();
+            ClassDef.ClassDefs[typeof(TestAutoInc)].TableName = "test autoinc";
+            bo.TestField = TestUtil.GetRandomString();
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(bo, DatabaseConnection.CurrentConnection);
+            ISqlStatementCollection statementCol = gen.Generate();
+            ISqlStatement statement = statementCol[0];
+            StringAssert.Contains("`test autoinc`", statement.Statement.ToString());
+        }
 
         [Test]
         public void TestUpdateStatementExcludesNonPersistableProps()

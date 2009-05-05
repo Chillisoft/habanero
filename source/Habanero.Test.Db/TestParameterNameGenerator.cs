@@ -132,7 +132,6 @@ namespace Habanero.Test.DB
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Firebird, "test", "test", "test", "test", "1000");
             IDbConnection dbConn = DatabaseConnectionFactory.CreateConnection(config).TestConnection;
             ParameterNameGenerator gen = new ParameterNameGenerator(dbConn);
-            //todo research prefix etc
             Assert.AreEqual("@Param0", gen.GetNextParameterName());
             Assert.AreEqual("@Param1", gen.GetNextParameterName());
             gen.Reset();

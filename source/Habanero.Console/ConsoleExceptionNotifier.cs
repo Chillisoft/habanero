@@ -29,15 +29,6 @@ namespace Habanero.Console
     public class ConsoleExceptionNotifier : IExceptionNotifier
     {
         /// <summary>
-        /// Constructor to initialise a new notifier
-        /// </summary>
-        public ConsoleExceptionNotifier()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-        /// <summary>
         /// Notifies the user of an exception that has occurred, by adding
         /// the error text to the console
         /// </summary>

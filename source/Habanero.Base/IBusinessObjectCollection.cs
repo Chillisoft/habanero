@@ -265,8 +265,6 @@ namespace Habanero.Base
         void LoadWithLimit(string searchCriteria, string orderByClause, int limit);
 
 
-        //TODO  17 Jan 2009: Do load with limit for objects and mixes of these.
-
 
         /// <summary>
         /// Allows the adding of business objects to the collection without

@@ -17,16 +17,12 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Text;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
-using DataGridViewSelectionMode=Habanero.UI.Base.DataGridViewSelectionMode;
 
 namespace Habanero.Test.UI.Base.Grid
 {
@@ -60,7 +56,7 @@ namespace Habanero.Test.UI.Base.Grid
     public abstract class TestDataGridView
     {
         protected abstract IControlFactory GetControlFactory();
-        
+
         private IDataGridView CreateDataGridView()
         {
             return GetControlFactory().CreateDataGridView();
@@ -76,8 +72,14 @@ namespace Habanero.Test.UI.Base.Grid
 
             protected override string GetUnderlyingDataGridViewSelectionModeToString(IDataGridView dataGridView)
             {
-                System.Windows.Forms.DataGridView control = (System.Windows.Forms.DataGridView)dataGridView;
+                System.Windows.Forms.DataGridView control = (System.Windows.Forms.DataGridView) dataGridView;
                 return control.SelectionMode.ToString();
+            }
+
+            protected override void AddToForm(IDataGridView dgv)
+            {
+                System.Windows.Forms.Form form = new System.Windows.Forms.Form();
+                form.Controls.Add((System.Windows.Forms.Control) dgv);
             }
         }
 
@@ -88,13 +90,19 @@ namespace Habanero.Test.UI.Base.Grid
             {
                 return new ControlFactoryVWG();
             }
+
             protected override string GetUnderlyingDataGridViewSelectionModeToString(IDataGridView dataGridView)
             {
-                Gizmox.WebGUI.Forms.DataGridView control = (Gizmox.WebGUI.Forms.DataGridView)dataGridView;
+                Gizmox.WebGUI.Forms.DataGridView control = (Gizmox.WebGUI.Forms.DataGridView) dataGridView;
                 return control.SelectionMode.ToString();
-            } 
-        }
+            }
 
+            protected override void AddToForm(IDataGridView dgv)
+            {
+                Gizmox.WebGUI.Forms.Form form = new Gizmox.WebGUI.Forms.Form();
+                form.Controls.Add((Gizmox.WebGUI.Forms.Control) dgv);
+            }
+        }
 
 
         [Test]
@@ -107,12 +115,13 @@ namespace Habanero.Test.UI.Base.Grid
             Assert.IsNotNull(dataGridView);
             //---------------Tear Down -------------------------   
         }
-        [Ignore("Can't seem to get the precondition passing  TODO - Mark 02 Feb 2009 ")]
-        [Test]//TODO - Mark 02 Feb 2009 : Get this working
+
+        [Test]
         public void Test_Rows_Remove()
         {
             //---------------Set up test pack-------------------
             IDataGridView dataGridView = GetControlFactory().CreateDataGridView();
+            AddToForm(dataGridView);
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("TestColumn");
             dataTable.Rows.Add("TestValue");
@@ -122,7 +131,7 @@ namespace Habanero.Test.UI.Base.Grid
             Assert.AreEqual(1, dataTable.Rows.Count);
             Assert.AreEqual(2, dataGridView.Rows.Count);
             //---------------Execute Test ----------------------
-            dataGridView.Rows.Remove(dataGridView.Rows[1]);
+            dataGridView.Rows.Remove(dataGridView.Rows[0]);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dataGridView.Rows.Count);
         }
@@ -133,6 +142,7 @@ namespace Habanero.Test.UI.Base.Grid
         }
 
         protected abstract string GetUnderlyingDataGridViewSelectionModeToString(IDataGridView dataGridView);
+
         protected void AssertDataGridViewSelectionModesSame(IDataGridView dataGridView)
         {
             DataGridViewSelectionMode DataGridViewSelectionMode = dataGridView.SelectionMode;
@@ -214,7 +224,7 @@ namespace Habanero.Test.UI.Base.Grid
             //---------------Execute Test ----------------------
             dataGridView.Sort(dataGridView.Columns[0], ListSortDirection.Ascending);
             //---------------Test Result -----------------------
-            string sortColumn = ((DataView)dataGridView.DataSource).Sort;
+            string sortColumn = ((DataView) dataGridView.DataSource).Sort;
             Assert.AreEqual("TestColumn ASC", sortColumn);
         }
 
@@ -227,12 +237,11 @@ namespace Habanero.Test.UI.Base.Grid
             //---------------Execute Test ----------------------
             dataGridView.Sort(dataGridView.Columns[0], ListSortDirection.Descending);
             //---------------Test Result -----------------------
-            string sortColumn = ((DataView)dataGridView.DataSource).Sort;
+            string sortColumn = ((DataView) dataGridView.DataSource).Sort;
             Assert.AreEqual("TestColumn DESC", sortColumn);
         }
 
         [Test]
-        [Ignore("Need to investigate how to get this working")] //TODO Mark 04 Mar 2009: Ignored Test - Need to investigate how to get this working
         public void Test_SortColumn_UnSorted()
         {
             //---------------Set up test pack-------------------
@@ -246,7 +255,8 @@ namespace Habanero.Test.UI.Base.Grid
         }
 
         [Test]
-        [Ignore("Need to investigate how to get this working")] //TODO Mark 04 Mar 2009: Ignored Test - Need to investigate how to get this working
+        [Ignore("Need to investigate how to get this working")]
+        //TODO Mark 04 Mar 2009: Ignored Test - Need to investigate how to get this working
         public void Test_SortColumn_Sorted()
         {
             //---------------Set up test pack-------------------
@@ -270,5 +280,7 @@ namespace Habanero.Test.UI.Base.Grid
             dataGridView.DataSource = dataTable.DefaultView;
             return dataGridView;
         }
+
+        protected abstract void AddToForm(IDataGridView dgv);
     }
 }

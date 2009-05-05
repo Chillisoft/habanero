@@ -168,7 +168,7 @@ namespace Habanero.BO
         private void CheckSortCriteriaIsValid()
 // ReSharper restore MemberCanBeMadeStatic
         {
-            //Note : Code commented out because not all ClassDefs are loaded when lookup Lists are being loaded.
+            //Note_ : Code commented out because not all ClassDefs are loaded when lookup Lists are being loaded.
             //try
             //{
             //    OrderCriteria orderCriteria = this.OrderCriteria;

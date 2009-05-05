@@ -34,7 +34,6 @@ namespace Habanero.Test.BO.SqlGeneration
             this.SetupDBConnection();
         }
 
-        // TODO: this test awaits the addition of delimiters to MySQL
         [Test]
         public void TestDelimitedTableNameWithSpaces()
         {
@@ -45,8 +44,8 @@ namespace Habanero.Test.BO.SqlGeneration
 
             DeleteStatementGenerator gen = new DeleteStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             ISqlStatementCollection statementCol = gen.Generate();
-            //DeleteSqlStatement statement = (DeleteSqlStatement)statementCol[0];
-            //Assert.AreEqual("PUT STUFF HERE", statement.Statement.ToString());
+            ISqlStatement statement = statementCol[0];
+            StringAssert.Contains("`test autoinc`", statement.Statement.ToString());
         }
     }
 }

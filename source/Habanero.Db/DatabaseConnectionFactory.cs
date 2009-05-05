@@ -97,7 +97,7 @@ namespace Habanero.DB
                     ? new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection",
                                                                                            config.GetConnectionString()) 
                     : new DatabaseConnectionFirebird(assemblyName, fullClassName, config.GetConnectionString());
-            } //todo check this actual implementation
+            }
             if (string.Compare(config.Vendor, DatabaseConfig.FirebirdEmbedded, true) == 0)
             {
                 return String.IsNullOrEmpty(assemblyName) 

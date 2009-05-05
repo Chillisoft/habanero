@@ -271,13 +271,12 @@ namespace Habanero.DB
 
         /// <summary>
         /// Builds a collection of properties to include in the insertion,
-        /// depending on the inheritance type
+        /// depending on the inheritance type.
         /// </summary>
         private IBOPropCol GetPropsToInclude(ClassDef currentClassDef)
         {
             IBOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 
-            //BRETT/PETER TODO: this is to be changed, just here for now.
             IBOPropCol propsToInclude = new BOPropCol();
             
             foreach (BOProp prop in propsToIncludeTemp)

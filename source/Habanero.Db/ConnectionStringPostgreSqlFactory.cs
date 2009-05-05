@@ -26,15 +26,6 @@ namespace Habanero.DB
     /// </summary>
     public class ConnectionStringPostgreSqlFactory : ConnectionStringFactory
 	{
-//		/// <summary>
-//        /// Constructor to initialise a new factory
-//        /// </summary>
-//		public ConnectionStringPostgreSqlFactory()
-//        {
-//            //
-//            // TODO: Add constructor logic here
-//            //
-//        }
 
         /// <summary>
         /// Checks that each of the arguments provided are valid

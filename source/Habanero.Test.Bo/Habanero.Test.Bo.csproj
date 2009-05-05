@@ -132,6 +132,7 @@
     <Compile Include="TestBOObjectID.cs" />
     <Compile Include="TestBOPropInteger.cs" />
     <Compile Include="TestBOSerialisation.cs" />
+    <Compile Include="TestBusinessObjectRules.cs" />
     <Compile Include="TestBusinessObjectSerialisationXML.cs" />
     <Compile Include="TestBOStatus.cs" />
     <Compile Include="TestNumberGenerator.cs" />

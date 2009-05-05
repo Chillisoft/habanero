@@ -236,15 +236,12 @@ namespace Habanero.UI.Win
             {
                 _currentControl = stepControl;
                 FireStepChanged(step);
-                //TODO: The border layout manager clearing panel etc not unit tested
                 _wizardStepPanel.Controls.Clear();
                 stepControl.Top = WizardControl.PADDING;
                 stepControl.Left = WizardControl.PADDING;
                 stepControl.Width = _wizardStepPanel.Width - WizardControl.PADDING*2;
                 stepControl.Height = _wizardStepPanel.Height - WizardControl.PADDING*2;
                 _wizardStepPanel.Controls.Add(stepControl);
-                //BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(_wizardStepPanel, _controlFactory);
-                //borderLayoutManager.AddControl(stepControl, BorderLayoutManager.Position.Centre);
 
                 step.InitialiseStep();
             }

@@ -779,13 +779,6 @@ namespace Habanero.Test.DB
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
-            //TODO Brett 12 Jan 2009: Validate on save 
-            //---------------Test Result -----------------------
-            //AssertBOStateIsValidAfterInsert_Updated(contactPersonTestBO);
-            //BOLoader.Instance.Refresh(contactPersonTestBO);
-            //MockBO savedMockBO =
-            //    BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + contactPersonTestBO.MockBOID.ToString("B") + "'");
-            //Assert.AreSame(contactPersonTestBO, savedMockBO);
         }
 
         [Test]

@@ -372,7 +372,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
             Assert.IsTrue(boMan.Contains(cp.ID.ObjectID));
-            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
             //Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID.ObjectID]);
             Assert.AreSame(cp, boMan[cp.ID]);
@@ -402,7 +401,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
             Assert.IsTrue(boMan.Contains(cp.ID.ObjectID));
-            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
             //Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID.ObjectID]);
             Assert.AreSame(cp, boMan[cp.ID]);
@@ -509,7 +507,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
             Assert.IsTrue(boMan.Contains(cp.ID.ObjectID));
-            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
             //Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID.ObjectID]);
             Assert.AreSame(cp, boMan[cp.ID]);
@@ -976,7 +973,6 @@ namespace Habanero.Test.BO
             boMan.AddBusinessObject(originalContactPerson, originalContactPerson.ID.ObjectID);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
-            Assert.IsTrue(boMan.Contains(originalContactPerson.ID.AsString_CurrentValue()));
             Assert.AreNotEqual(originalContactPerson.ID.AsString_CurrentValue(), originalContactPerson.ID.AsString_LastPersistedValue());
             Assert.AreNotEqual(originalContactPerson.ID.AsString_PreviousValue(), originalContactPerson.ID.AsString_LastPersistedValue());
             //---------------Execute Test ----------------------
@@ -1474,7 +1470,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(contactPersonTestBO));
 
             Assert.IsTrue(boMan.Contains(id));
-            Assert.IsTrue(boMan.Contains(id.AsString_CurrentValue()));
             Assert.AreSame(contactPersonTestBO, boMan[id.ObjectID]);
             Assert.AreSame(contactPersonTestBO, boMan[id]);
         }
@@ -1793,9 +1788,7 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(contactPersonTestBO.ContactPersonID);
             Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
             Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO));
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ID.AsString_CurrentValue()));
             Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ID));
-            Assert.IsFalse(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ContactPersonID.ToString("B")));
         }
 
         [Test]
@@ -1883,7 +1876,6 @@ namespace Habanero.Test.BO
             Assert.IsNull(boWithIntID.IntID);
             Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
             Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID.AsString_CurrentValue()));
             Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID));
         }
 

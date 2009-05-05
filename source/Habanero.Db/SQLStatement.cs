@@ -115,7 +115,7 @@ namespace Habanero.DB
             }
             else if (preparedValue is Decimal)
             {
-                newParameter.DbType = DbType.Double; //TODO: workaround for bug in Mysql/Connector with Mysql > 4.1.10
+                newParameter.DbType = DbType.Double; // workaround for bug in Mysql/Connector with Mysql > 4.1.10
             }
             else if (preparedValue is int)
             {
@@ -230,9 +230,6 @@ namespace Habanero.DB
             //TODO: need a hash code dependent on the data here because this is a value type.
             return base.GetHashCode();
         }
-
-
-
 
         /// <summary>
         /// Carries out instructions after execution of the sql statement

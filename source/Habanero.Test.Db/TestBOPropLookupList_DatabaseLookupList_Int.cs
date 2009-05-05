@@ -40,8 +40,6 @@ namespace Habanero.Test.DB
         private const string _sql = "select LookupID, LookupValue from database_lookup_int";
         private const int _noOfRowsInDatabase = 2;
 
-        //TODO: test where the propDef is string how to validate etc worried that the data
-        // type of the lookup value and the ID value is the same what happens.
         [SetUp]
         public void SetupTest()
         {
@@ -67,7 +65,6 @@ namespace Habanero.Test.DB
         //TODO :: If prop.value is set to a value of the appropriate type but is not in the list then the
         //   property must be set to be in an invalid state with the appropriate reason.
         //  Do same for simple lookup list
-        // TODO: Test BusinessObject is being constructed with appropriate BOPropLookupList
         [Test]
         public void Test_SetLookupListForPropDef()
         {

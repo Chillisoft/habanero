@@ -33,6 +33,9 @@ namespace Habanero.UI.VWG
     public class DataGridViewVWG : DataGridView, IDataGridView
     {
         private readonly DataGridViewManager _manager;
+        private readonly ControlCollectionVWG _controls;
+        private readonly DataGridViewRowCollectionVWG _rows;
+        private readonly DataGridViewColumnCollectionVWG _columns;
 
         /// <summary>
         /// Constructor for <see cref="DataGridViewVWG"/>
@@ -40,7 +43,11 @@ namespace Habanero.UI.VWG
         public DataGridViewVWG()
         {
             _manager = new DataGridViewManager(this);
+            _controls = new ControlCollectionVWG(base.Controls);
+            _rows = new DataGridViewRowCollectionVWG(base.Rows);
+            _columns = new DataGridViewColumnCollectionVWG(base.Columns);
         }
+
 
         /// <summary>
         /// Gets or sets the anchoring style.
@@ -57,7 +64,10 @@ namespace Habanero.UI.VWG
         /// </summary>
         IControlCollection IControlHabanero.Controls
         {
-            get { return new ControlCollectionVWG(base.Controls); }
+            get
+            {
+                return _controls;
+            }
         }
 
         /// <summary>
@@ -75,7 +85,10 @@ namespace Habanero.UI.VWG
         /// </summary>
         public new IDataGridViewRowCollection Rows
         {
-            get { return new DataGridViewRowCollectionVWG(base.Rows); }
+            get
+            {
+                return _rows;
+            }
         }
 
         /// <summary>
@@ -83,7 +96,10 @@ namespace Habanero.UI.VWG
         /// </summary>
         public new IDataGridViewColumnCollection Columns
         {
-            get { return new DataGridViewColumnCollectionVWG(base.Columns); }
+            get
+            {
+                return _columns;
+            }
         }
 
         /// <summary>Sorts the contents of the <see cref="IDataGridView"></see> control in ascending or
@@ -112,7 +128,10 @@ namespace Habanero.UI.VWG
         /// <filterpriority>1</filterpriority>
         IDataGridViewColumn IDataGridView.SortedColumn
         {
-            get { throw new System.NotImplementedException(); }
+            get
+            {
+                return base.SortedColumn == null ? null : new DataGridViewColumnVWG(base.SortedColumn);
+            }
         }
 
         /// <summary>

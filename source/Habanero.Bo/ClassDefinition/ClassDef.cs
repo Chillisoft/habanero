@@ -598,7 +598,7 @@ namespace Habanero.BO.ClassDefinition
         /// Creates a new business object either using the default class definition for the type linked to this <see cref="ClassDef"/>
         /// or using this particular class definition (in the case where you might have more than one class definition for one C#
         /// type, useful for user defined types)
-        /// Note that this means the business object being created must have a constructor that takes a <see cref="ClassDef"/>,
+        /// Note_ that this means the business object being created must have a constructor that takes a <see cref="ClassDef"/>,
         /// passing this through to the base class as follows:
         /// <code>
         /// public class Entity

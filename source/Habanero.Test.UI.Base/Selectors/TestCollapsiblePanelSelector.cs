@@ -13,42 +13,42 @@ namespace Habanero.Test.UI.Base
     /// </summary>
     /// 
 //    [Ignore(" To be implemented")] //TODO Brett 02 Mar 2009:
-//    [TestFixture]
-//    public class TestCollapsiblePanelSelectorVWG : TestCollapsiblePanelSelectorWin
-//    {
-//        protected override IControlFactory GetControlFactory()
-//        {
-//            ControlFactoryVWG factory = new ControlFactoryVWG();
-//            GlobalUIRegistry.ControlFactory = factory;
-//            return factory;
-//        }
-//
-//        protected override IBOSelectorControl CreateSelector()
-//        {
-//            return GetControlFactory().CreateCollapsiblePanelSelector();
-//        }
-//
-//        [Test]
-//        public override void Test_Constructor_nullControlFactory_RaisesError()
-//        {
-//            //---------------Set up test pack-------------------
-//
-//            //---------------Assert Precondition----------------
-//
-//            //---------------Execute Test ----------------------
-//            try
-//            {
-//                new CollapsiblePanelSelectorVWG(null);
-//                Assert.Fail("expected ArgumentNullException");
-//            }
-//                //---------------Test Result -----------------------
-//            catch (ArgumentNullException ex)
-//            {
-//                StringAssert.Contains("Value cannot be null", ex.Message);
-//                StringAssert.Contains("controlFactory", ex.ParamName);
-//            }
-//        }
-//    }
+    [TestFixture]
+    public class TestCollapsiblePanelSelectorVWG : TestCollapsiblePanelSelectorWin
+    {
+        protected override IControlFactory GetControlFactory()
+        {
+            ControlFactoryVWG factory = new ControlFactoryVWG();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
+
+        protected override IBOColSelectorControl CreateSelector()
+        {
+            return GetControlFactory().CreateCollapsiblePanelSelector();
+        }
+
+        [Test]
+        public override void Test_Constructor_nullControlFactory_RaisesError()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new CollapsiblePanelSelectorVWG(null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("controlFactory", ex.ParamName);
+            }
+        }
+    }
 
 
     /// <summary>

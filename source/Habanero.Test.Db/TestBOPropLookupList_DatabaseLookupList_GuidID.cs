@@ -118,7 +118,6 @@ namespace Habanero.Test.DB
         //TODO :: If prop.value is set to a value of the appropriate type but is not in the list then the
         //   property must be set to be in an invalid state with the appropriate reason.
         //  Do same for simple lookup list
-        // TODO: Test BusinessObject is being constructed with appropriate BOPropLookupList
         [Test]
         public void Test_SetLookupListForPropDef()
         {

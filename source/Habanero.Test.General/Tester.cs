@@ -313,7 +313,6 @@ namespace Habanero.Test.General
         public void TestObjectCompulsorySurnameNotSet()
         {
             ContactPerson myContact = new ContactPerson();
-            //TODO Brett 12 Jan 2009: Put validate into save method.
             myContact.Save();
         }
 

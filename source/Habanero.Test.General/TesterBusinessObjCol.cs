@@ -233,7 +233,6 @@ namespace Habanero.Test.General
             //criteria1 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "bb");
             //criteria2 = new Criteria("Surname", Criteria.ComparisonOp.Like, "abc");
             //criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
-            //TODO: Loader does not have an operator like.
             myCol = ContactPerson.LoadBusinessObjCol("Surname = 'bb' or Surname like 'abc%'", "Surname");
             Assert.AreEqual(3, myCol.Count);
         }
@@ -286,7 +285,6 @@ namespace Habanero.Test.General
             contactPerson3.Save();
 
             //ContactPerson.ClearObjectManager();
-            //TODO: Implement this need < 'Now' 
             myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth < 'Now'", "FirstName");
             Assert.AreEqual(3, myCol.Count);
             Assert.AreSame(contactPerson1, myCol[0]);

@@ -122,8 +122,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
         #endregion
 
-        //TODO: Add tests for this and remove in derigister
-        //   bo.ID.Updated += UpdateHashTable;
 
         #region Custom Asserts
 

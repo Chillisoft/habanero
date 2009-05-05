@@ -26,8 +26,10 @@ namespace Habanero.Test.General
     [TestFixture]
     public class TestCarsDrivenRelationship : TestUsingDatabase
     {
-        public TestCarsDrivenRelationship()
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
         {
+            SetupDBConnection();
         }
 
         public static void RunTest()
@@ -57,10 +59,6 @@ namespace Habanero.Test.General
             Assert.AreEqual(car.GetDriver().ID, person.ID);
             Assert.AreEqual(person.GetCarsDriven().Count, 1);
         }
-
-        //TODO: Peter - I Commented out the last line because I had to make the collection reload each time it's
-        //retrieved in case a new object is created that would go into this collection.  There are currently no 
-        //events caught by a collection if a new object is created.
         [Test]
             public void TestGetCarsDrivenByPersonHeldInMemory()
         {
@@ -87,7 +85,7 @@ namespace Habanero.Test.General
             Car carDriven = (Car) carsDriven[0];
             Assert.AreEqual(car.ID, carDriven.ID);
             IBusinessObjectCollection carsDriven2 = person.GetCarsDriven();
-            //Assert.IsTrue(object.ReferenceEquals(carsDriven, carsDriven2), "The references should be equal since the collection should be kept in memory");
+            Assert.IsTrue(object.ReferenceEquals(carsDriven, carsDriven2), "The references should be equal since the collection should be kept in memory");
         }
     }
 }

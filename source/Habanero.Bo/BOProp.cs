@@ -173,8 +173,6 @@ namespace Habanero.BO
         /// </summary>
         public void RestorePropValue()
         {
-//            _isValid = _origValueIsValid;
-//            _invalidReason = _origInvalidReason;
             if (_currentValue == _persistedValue)
             {
                 return;
@@ -442,7 +440,10 @@ namespace Habanero.BO
 
             return true;
         }
-
+        /// <summary>
+        /// Are there any authorisation rules preventing this property from being read.
+        /// </summary>
+        /// <returns></returns>
         protected virtual bool IsReadable()
         {
             return _boPropAuthorisation == null || _boPropAuthorisation.IsAuthorised(BOPropActions.CanRead);

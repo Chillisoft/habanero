@@ -21,7 +21,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
@@ -88,10 +87,7 @@ namespace Habanero.BO
         /// The Collection of Business Object Properties for this Business Object.
         /// </summary>
         protected IBOPropCol _boPropCol;
-
-        //set object as new by default.
         private BOStatus _boStatus;
-
         /// <summary>
         /// The Update Log being used for this Business Object.
         /// </summary>
@@ -122,7 +118,7 @@ namespace Habanero.BO
 
         private ITransactionLog _transactionLog;
         private IBusinessObjectAuthorisation _authorisationRules;
-
+        private IList<IBusinessObjectRule> _boRules;
         #endregion //Fields
 
         #region Constructors
@@ -706,7 +702,6 @@ namespace Habanero.BO
 
         internal IBOProp GetProperty(string propName)
         {
-
             try
             {
                 return Props[propName];
@@ -1184,7 +1179,21 @@ namespace Habanero.BO
         protected virtual bool AreCustomRulesValid(out IList<IBOError> errors)
         {
             errors = new List<IBOError>();
-            return true;
+
+            return errors.Count == 0;
+        }
+
+        protected IList<IBusinessObjectRule> BusinessObjectRules
+        {
+            get
+            {
+                //Lazy initialisation so as to prevent unneccessary objects being created during construction.
+                if (_boRules == null)
+                {
+                    _boRules  = new List<IBusinessObjectRule>();
+                }
+                return _boRules;
+            }
         }
 
         /// <summary>
@@ -1198,13 +1207,40 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Calls through to <see cref="AreCustomRulesValid(out IList{IBOError})"/>
+        /// Checks the <see cref="BusinessObjectRules"/>. Calls through to <see cref="AreCustomRulesValid(out IList{IBOError})"/>
         /// </summary>
         /// <param name="errors">The errors</param>
         /// <returns>true if no custom rule errors are encountered.</returns>
         internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {
-            return AreCustomRulesValid(out errors);
+            AreCustomRulesValid(out errors);
+            foreach (IBusinessObjectRule rule in this.BusinessObjectRules)
+            {
+                if (rule == null || rule.IsValid()) continue;
+                if(rule.ErrorLevel != ErrorLevel.Error) continue;
+                string message = rule.Message;
+                IBOError error = new BOError(message, rule.ErrorLevel);
+                errors.Add(error);
+            }
+            return errors == null || errors.Count == 0;
+        }
+        /// <summary>
+        /// Checks the <see cref="BusinessObjectRules"/> for any rules that have warnings or suggestions.
+        /// </summary>
+        /// <param name="errors">The warnings and suggestions</param>
+        /// <returns>true if no <see cref="BusinessObjectRules"/> errors are encountered.</returns>
+        internal bool HasWarnings(out IList<IBOError> errors)
+        {
+            errors = new List<IBOError>();
+            foreach (IBusinessObjectRule rule in this.BusinessObjectRules)
+            {
+                if (rule == null || rule.IsValid()) continue;
+                if (rule.ErrorLevel == ErrorLevel.Error) continue;
+                string message = rule.Message;
+                IBOError error = new BOError(message, rule.ErrorLevel);
+                errors.Add(error);
+            }
+            return errors.Count == 0;
         }
 
         #endregion //Persistance
@@ -1259,11 +1295,13 @@ namespace Habanero.BO
                 else
                 {
                     string className = this.ClassDef.ClassName;
-                    if (relationshipName != className && relationshipName != "ArrayOf" + className &&
-                        reader.NodeType != XmlNodeType.EndElement)
+                    if (relationshipName != className && relationshipName != "ArrayOf" + className
+                        && reader.NodeType != XmlNodeType.EndElement)
                     {
-                        throw new InvalidRelationshipNameException(string.Format(
-                            "The relationship '{0}' does not exist on the class '{1}'.", relationshipName, className));
+                        throw new InvalidRelationshipNameException
+                            (string.Format
+                                 ("The relationship '{0}' does not exist on the class '{1}'.", relationshipName,
+                                  className));
                     }
                 }
             }
@@ -1298,7 +1336,7 @@ namespace Habanero.BO
                 //if (relationship.RelationshipDef.RelationshipType != RelationshipType.Association)
 
                 RelationshipType relationshipType = relationship.RelationshipDef.RelationshipType;
-                if (relationshipType == RelationshipType.Composition || relationshipType==RelationshipType.Aggregation)
+                if (relationshipType == RelationshipType.Composition || relationshipType == RelationshipType.Aggregation)
                 {
                     WriteXmlNestedRelationship(writer, relationship);
                 }
@@ -1392,7 +1430,7 @@ namespace Habanero.BO
         }
 
         //        /// <summary>
-        //        /// Releases write locks from the database
+        //        /// Releases read locks from the database
         //        /// </summary>
         //        protected virtual void ReleaseReadLocks()
         //        {

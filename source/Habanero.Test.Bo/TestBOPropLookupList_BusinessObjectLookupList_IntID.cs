@@ -368,7 +368,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
-        //[Ignore("//TODO Brett 13 Jan 2009:  Currently implementing this")]
         [Test]
         public void Test_SetValue_PersistedBusinessObject_InList()
         {
@@ -385,7 +384,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
-        //[Ignore("//TODO Brett 13 Jan 2009:  Currently implementing this")]
         [Test]
         public void Test_SetValue_PersistedBusinessObject_NotInList()
         {
@@ -408,7 +406,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boProp.IsValid);
         }
 
-        //TODO  15 Jan 2009: test this with inheritance
         [Test]
         public void Test_SetValue_NewBusinessObject_NotInList()
         {

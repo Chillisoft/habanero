@@ -31,10 +31,9 @@ namespace Habanero.DB
     /// either from the cache or from the database if the cache value has
     /// expired
     /// </summary>
-    /// TODO ERIC : check caching function (in particular how does it work with dates).
     public class DatabaseSettings : ISettings
     {
-        private Hashtable _cachedSettings;
+        private readonly Hashtable _cachedSettings;
         private string _tableName = "settings";
 
         /// <summary>
@@ -160,10 +159,9 @@ namespace Habanero.DB
         {
             settingName = settingName.ToUpper();
             bool hasCurrentValue;
-            string currentValue;
             try
             {
-                currentValue = Convert.ToString(GetValue(settingName, DateTime.Now));
+                Convert.ToString(GetValue(settingName, DateTime.Now));
                 hasCurrentValue = true;
             }
             catch (UserException)
@@ -180,7 +178,7 @@ namespace Habanero.DB
                 statement = CreateInsertStatement(settingName, settingValue);
             }
             DatabaseConnection.CurrentConnection.ExecuteSql(new SqlStatementCollection(statement));
-            UpdateCache(settingName, settingValue);
+            UpdateCache(settingName);
         }
 
         /// <summary>
@@ -188,9 +186,7 @@ namespace Habanero.DB
         /// retrieving the updated setting from the database
         /// </summary>
         /// <param name="settingName">The setting name</param>
-        /// <param name="settingValue">The setting value</param>
-        /// TODO ERIC - extra parameter not used
-        private void UpdateCache(string settingName, string settingValue)
+        private void UpdateCache(string settingName)
         {
             if (_cachedSettings[settingName] != null)
             {
@@ -219,10 +215,7 @@ namespace Habanero.DB
                 {
                     return setting.Value;
                 }
-                else
-                {
-                    _cachedSettings.Remove(settingName);
-                }
+                _cachedSettings.Remove(settingName);
             }
             SqlStatement statement = CreateSelectStatement(settingName, date);
             IDataReader reader = null;
@@ -330,14 +323,14 @@ namespace Habanero.DB
                 _time = time;
                 _value = value;
             }
-
-            /// <summary>
-            /// Returns the time value held
-            /// </summary>
-            public DateTime Time
-            {
-                get { return _time; }
-            }
+//
+//            /// <summary>
+//            /// Returns the time value held
+//            /// </summary>
+//            public DateTime Time
+//            {
+//                get { return _time; }
+//            }
 
             /// <summary>
             /// Returns the setting value held

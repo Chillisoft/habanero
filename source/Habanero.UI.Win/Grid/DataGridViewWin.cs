@@ -186,7 +186,7 @@ namespace Habanero.UI.Win
         /// <filterpriority>1</filterpriority>
         IDataGridViewColumn IDataGridView.SortedColumn
         {
-            get { throw new System.NotImplementedException(); }
+            get { return base.SortedColumn == null ? null : new DataGridViewColumnWin(base.SortedColumn); }
         }
 
         /// <summary>

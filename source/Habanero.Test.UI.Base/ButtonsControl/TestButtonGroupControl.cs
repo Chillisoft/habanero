@@ -137,7 +137,7 @@ namespace Habanero.Test.UI.Base
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control) cntrl);
             }
 
-            //TODO: Note this code is not expected to pass in gizmox 
+            //TODO_: Note_ this code is not expected to pass in gizmox 
             // we need to learn how to set this up and the change test assert
             // to commented out assert.
             [Test]

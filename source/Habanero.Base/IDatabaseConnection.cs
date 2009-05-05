@@ -154,29 +154,11 @@ namespace Habanero.Base
         /// </summary>
         IsolationLevel IsolationLevel { get; }
 
-        //TODO Brett 17 Jan 2009: Remove these two methods
-        /// <summary>
-        /// Returns the beginning limit clause with the limit specified
-        /// </summary>
-        /// <param name="limit">The limit</param>
-        /// <returns>Returns a string</returns>
-        string GetLimitClauseForBeginning(int limit);
-
-        /// <summary>
-        /// Returns the ending limit clause with the limit specified
-        /// </summary>
-        /// <param name="limit">The limit</param>
-        /// <returns>Returns a string</returns>
-        string GetLimitClauseForEnd(int limit);
-
         /// <summary>
         /// Set the time-out period in seconds
         /// </summary>
         /// <param name="timeoutSeconds">The time-out period in seconds</param>
         void SetTimeoutPeriod(int timeoutSeconds);
-        
-        //string RightDateDelimiter { get; }
-        //string LeftDateDelimiter { get; }
 
     }
 }

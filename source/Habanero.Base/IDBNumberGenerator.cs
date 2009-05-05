@@ -26,8 +26,7 @@ namespace Habanero.Base
     /// receipt number for a retail business.  Incrementing the numbers
     /// as they are dispensed is one means of achieving uniqueness.
     /// </summary>
-    /// TODO:
-    /// - need to apply concurrency control to ensure new number not retrieved
+    /// need to apply concurrency control to ensure new number not retrieved
     /// by another user before first user saves and updates number (could
     /// update immediately)
     public interface IDBNumberGenerator

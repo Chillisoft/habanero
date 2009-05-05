@@ -233,8 +233,8 @@ namespace Habanero.Test.General
             Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
             Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
             Assert.AreEqual("]", dbConn.RightFieldDelimiter);
-            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
-            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
         }
 
         [Test]

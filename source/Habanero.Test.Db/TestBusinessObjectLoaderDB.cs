@@ -212,7 +212,7 @@ namespace Habanero.Test.DB
         /// <summary>
         /// Tests to ensure that if the object has been edited by another user
         ///  and the default strategy to reload has been replaced then one we do not get back is always the latest.
-        /// Note: This behaviour must be made configurable using a strategy TestGetTheFreshestObject_Strategy test 
+        /// Note_: This behaviour must be made configurable using a strategy TestGetTheFreshestObject_Strategy test 
         /// </summary>
         [Test, Ignore("Need to implement via a strategy")]
         public void TestDontGetTheFreshestObject_Strategy()
@@ -443,7 +443,7 @@ namespace Habanero.Test.DB
         /// Tests to ensure that if the object has been edited by
         /// another user and is not currently being edited by this user
         ///  then one we get back is always the latest.
-        /// Note: This behaviour is configurable using a strategy TestDontGetTheFreshestObject_Strategy test 
+        /// Note_: This behaviour is configurable using a strategy TestDontGetTheFreshestObject_Strategy test 
         /// </summary>
         [Test]
         public void TestGetTheFreshestObject_Strategy()

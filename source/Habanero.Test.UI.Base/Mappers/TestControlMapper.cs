@@ -560,8 +560,7 @@ namespace Habanero.Test.UI.Base
 
         #region TestIntRules
 
-//        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
-//        [Test]
+        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType_NoRule()
         {
             //---------------Set up test pack-------------------
@@ -576,8 +575,7 @@ namespace Habanero.Test.UI.Base
             StringAssert.Contains("It is not a type of System.Int32", mapperStub.ErrorProvider.GetError(_txtNormal));
         }
 
-//        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
-//        [Test]
+        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType()
         {
             //---------------Set up test pack-------------------
@@ -788,8 +786,7 @@ namespace Habanero.Test.UI.Base
 
         #region TestDateTimeRules
 
-//        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
-//        [Test]
+        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType_SetToString_NoRule()
         {
             //---------------Set up test pack-------------------
@@ -801,11 +798,10 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             mapperStub.TestSetPropertyValue("Error");
             //---------------Test Result -----------------------
-            StringAssert.Contains("It is not a type of DateTime", mapperStub.ErrorProvider.GetError(_txtNormal));
+            StringAssert.Contains("It is not a type of System.DateTime", mapperStub.ErrorProvider.GetError(_txtNormal));
         }
 
-//        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
-//        [Test]
+        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType_SetToInt_NoRule()
         {
             //---------------Set up test pack-------------------
@@ -817,7 +813,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             mapperStub.TestSetPropertyValue(5);
             //---------------Test Result -----------------------
-            StringAssert.Contains("It is not a type of DateTime", mapperStub.ErrorProvider.GetError(_txtNormal));
+            StringAssert.Contains("It is not a type of System.DateTime", mapperStub.ErrorProvider.GetError(_txtNormal));
         }
 
         [Test]

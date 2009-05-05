@@ -26,15 +26,6 @@ namespace Habanero.DB
     /// </summary>
     public class ConnectionStringMySqlFactory : ConnectionStringFactory
     {
-//        /// <summary>
-//        /// Constructor to initialise a new factory
-//        /// </summary>
-//        public ConnectionStringMySqlFactory()
-//        {
-//            //
-//            // TODO: Add constructor logic here
-//            //
-//        }
 
         /// <summary>
         /// Checks that each of the arguments provided are valid

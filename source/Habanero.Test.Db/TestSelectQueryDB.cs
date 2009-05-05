@@ -642,8 +642,6 @@ namespace Habanero.Test.DB
             Assert.AreEqual(expectedMainSelect, actualStatement);
         }
 
-        //TODO  17 Jan 2009: Do test for LIMIT
-
         [Test]
         public void Test_CreateSQL_LoadWithLimit_AtEnd_PaginatedFind()
         {

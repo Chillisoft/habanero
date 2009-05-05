@@ -519,8 +519,6 @@ namespace Habanero.Test.BO
             }
         }
 
-        //TODO Brett 14 Jan 2009: Do composite for previous and last persisted 
-
         private static BOPrimaryKey CreateBOPrimaryKeyString()
         {
             PropDef propDef1 = new PropDef("PropName1", typeof(String), PropReadWriteRule.ReadWrite, null)

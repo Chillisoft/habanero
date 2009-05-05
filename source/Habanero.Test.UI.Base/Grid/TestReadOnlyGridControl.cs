@@ -32,8 +32,6 @@ namespace Habanero.Test.UI.Base
         private const string _gridIdColumnName = "HABANERO_OBJECTID";
         //TODO: Tests that if init not called throws sensible errors
         //TODO: Date searchby
-        //TODO  07 Feb 2009: The bahaviour for updating a business object updating the grid should be moved to 
-        // DataSetProvider with test so that it is available in editable grids.
         [SetUp]
         public void SetupTest()
         {
@@ -581,9 +579,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-//        //TODO Brett : Jan 2009
-//        [Test, Ignore("TODO: fix this")]
-//        [Test]
+        [Test]
         public void TestAcceptance_SearchGridSearchesTheGrid()
         {
             //---------------Set up test pack-------------------

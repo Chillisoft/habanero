@@ -55,19 +55,9 @@ namespace Habanero.BO
         /// <param name="objToInitialise">The object to initialise</param>
         public void InitialiseObject(IBusinessObject objToInitialise)
         {
-            //log.Debug("Entered initialiseobject.") ;
-            //log.Debug(objToInitialise.GetType().Name);
             BusinessObject newBo = (BusinessObject) objToInitialise;
-            //log.Debug(_relationship);
-            //log.Debug(_relationship.RelKeyDef.Count + " props in relkeydef. ");
-
-            // TODO - this code should go in the SetRelatedBusinessObject method.
-			//foreach (DictionaryEntry relKeyDef in _relationship.RelKeyDef)
 			foreach (RelPropDef propDef in _relationship.RelKeyDef)
 			{
-                //RelPropDef propDef = (RelPropDef) relKeyDef.Value;
-                //log.Debug(propDef.OwnerPropertyName);
-                //log.Debug(propDef.RelatedClassPropName);
                 newBo.SetPropertyValue(propDef.OwnerPropertyName,
                                        _parentObject.GetPropertyValue(propDef.RelatedClassPropName));
             }

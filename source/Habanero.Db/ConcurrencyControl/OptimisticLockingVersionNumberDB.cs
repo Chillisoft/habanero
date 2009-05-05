@@ -147,7 +147,7 @@ namespace Habanero.DB.ConcurrencyControl
             if (_versionNumber.Value == null) _versionNumber.Value = 0;
             _versionNumber.Value = (int) _versionNumber.Value + 1;
             SetOperatingSystemUser();
-            //	TODO: maybe add thread identity on later.			threadIdentity = Thread.CurrentPrincipal.Identity.Name;
+            //	maybe add thread identity on later.			threadIdentity = Thread.CurrentPrincipal.Identity.Name;
         }
 
         /// <summary>

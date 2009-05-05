@@ -17,9 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 
 namespace Habanero.Base
 {
@@ -31,43 +29,41 @@ namespace Habanero.Base
         /// <summary>
         /// Indicates if the business object is new
         /// </summary>
-        bool IsNew { get;  }
+        bool IsNew { get; }
 
         /// <summary>
         /// Indicates if the business object has been marked for deletion
         /// </summary>
-        bool IsDeleted { get;  }
+        bool IsDeleted { get; }
 
         /// <summary>
         /// Gets and sets the flag which indicates if the business object
         /// is currently being edited
         /// </summary>
-        bool IsEditing { get;  }
+        bool IsEditing { get; }
 
         /// <summary>
         /// Indicates whether the business object has been amended since it
         /// was last persisted to the database
         /// </summary>
-        bool IsDirty { get;  }
+        bool IsDirty { get; }
 
         /// <summary>
-        /// Indicates whether all of the property values of the object are valid
+        /// Indicates whether all of the property values of the object are valid and that the business object is a valid state to persist
         /// </summary>
         /// <param name="message">If the object is not valid then this returns the reason for it being invalid</param>
         /// <returns>Returns true if all are valid </returns>
-
         bool IsValid(out string message);
 
         /// <summary>
-        /// Indicates whether all of the property values of the object are valid
+        /// Indicates whether all of the property values of the object are valid and that the business object is a valid state to persist
         /// </summary>
         /// <param name="errors">If the object is not valid then this list is populated with the errors</param>
         /// <returns>Returns true if all are valid </returns>
         bool IsValid(out IList<IBOError> errors);
 
-
         /// <summary>
-        /// Indicates whether all of the property values of the object are valid
+        /// Indicates whether all of the property values of the object are valid and that the business object is a valid state to persist
         /// </summary>
         /// <returns>Returns true if all are valid</returns>
         bool IsValid();
@@ -77,11 +73,19 @@ namespace Habanero.Base
         ///</summary>
         string IsValidMessage { get; }
 
-        //List<ErrorDescription> IsValidDescriptions { get; }
-
         /// <summary>
         /// Returns the Business Object that this Status is for.
         /// </summary>
         IBusinessObject BusinessObject { get; }
+
+        /// <summary>
+        /// Indicates whether all of the property values of the object are valid and that the business object is a valid state to persist.
+        /// Also returns true if the Business Object has any warnings or Suggestions <see cref="ErrorLevel"/>.
+        /// Warnings and Suggestions do not prevent the Business Object from being persisted but indicate that the
+        /// Business object is not in a valid state e.g. A Customer order can be saved but cannot be Approved if it has warnings.
+        /// </summary>
+        /// <param name="errors">If the object is not valid then this list is populated with the errors</param>
+        /// <returns>Returns true if all are valid </returns>
+        bool HasWarnings(out IList<IBOError> errors);
     }
 }
