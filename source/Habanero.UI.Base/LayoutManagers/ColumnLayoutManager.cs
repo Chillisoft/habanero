@@ -98,6 +98,7 @@ namespace Habanero.UI.Base
         /// <returns>Returns the control after it has been added</returns>
         public override IControlHabanero AddControl(IControlHabanero control)
         {
+            if (control == null) throw new ArgumentNullException("control");
             this.ManagedControl.Controls.Add(control);
             RefreshControlPositions();
             control.Resize += delegate { RefreshControlPositions(); };

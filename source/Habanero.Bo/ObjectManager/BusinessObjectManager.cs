@@ -190,8 +190,6 @@ namespace Habanero.BO
             return Contains(id.ObjectID);
         }
 
-        //TODO Brett/Sori 10/02/2009 : this method should be removed
-
         ///<summary>
         /// Checks whether the business object is in the <see cref="BusinessObjectManager"/>.
         ///</summary>

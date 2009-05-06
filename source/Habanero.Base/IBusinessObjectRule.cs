@@ -14,12 +14,12 @@ namespace Habanero.Base
         /// <summary>
         /// Returns the rule name
         /// </summary>
-        string Name { get; set; }
+        string Name { get; }
 
         /// <summary>
         /// Returns the error message for if the rule fails.
         /// </summary>
-        string Message { get; set; }
+        string Message { get; }
 
         /// <summary>
         /// The <see cref="ErrorLevel"/> for this BusinessObjectRule e.g. Warning, Error. 
