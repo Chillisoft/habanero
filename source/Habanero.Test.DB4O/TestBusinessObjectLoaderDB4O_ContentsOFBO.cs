@@ -89,6 +89,7 @@ namespace Habanero.Test.DB4O
             //---------------Set up test pack-------------------
             Person person = new Person { LastName = "Bob" };
             person.Save();
+
             CloseAndOpenDB4OConnection();
 
             //---------------Assert Preconditions--------------
@@ -102,6 +103,30 @@ namespace Habanero.Test.DB4O
             //---------------Test Result -----------------------
             Assert.AreEqual(loadedPerson.LastName, secondLoadedPerson.LastName);
             Assert.AreEqual(loadedPerson.PersonID, secondLoadedPerson.PersonID);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_LoadingObjectWithChangedClassDef_NewProperty()
+        {
+            //---------------Set up test pack-------------------
+            Person person = new Person { LastName = "Bob" };
+            person.Save();
+
+            ClassDef personClassDef = person.ClassDef;
+            CloseAndOpenDB4OConnection();
+
+            string propertyName = TestUtil.GetRandomString();
+            string defaultvalue = "defaultValue";
+            personClassDef.PropDefcol.Add(new PropDef(propertyName, typeof(string), PropReadWriteRule.ReadWrite, defaultvalue));
+
+
+            //---------------Assert Preconditions--------------
+            //---------------Execute Test ----------------------
+            Person loadedPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Person>(person.ID);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(loadedPerson.Props.Contains(propertyName));
+            Assert.AreEqual(defaultvalue, loadedPerson.GetPropertyValue(propertyName));
             //---------------Tear Down -------------------------          
         }
 

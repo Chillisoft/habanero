@@ -28,7 +28,7 @@ namespace Habanero.UI.Base
 
 //        private IBusinessObjectCollection _businessObjectCollection;
         private IBusinessObject _businessObject;
-        private IRelationshipDef _relationshipDef;
+        protected IRelationshipDef _relationshipDef;
         private ISingleRelationship _singleRelationship;
         private ILookupComboBoxMapperStrategy _mapperStrategy;
         private readonly ComboBoxCollectionSelector _comboBoxCollectionSelector;
@@ -211,10 +211,14 @@ namespace Habanero.UI.Base
                 _businessObject = value;
                 _singleRelationship = _businessObject == null ? null : GetRelationship();
                 UpdateIsEditable();
+                LoadCollectionForBusinessObject();
                 UpdateControlValueFromBusinessObject();
                 AddCurrentBOHandlers();
                 //                this.UpdateErrorProviderErrorMessage();
             }
+        }
+
+        protected virtual void LoadCollectionForBusinessObject() { 
         }
 
 

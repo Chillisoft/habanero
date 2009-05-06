@@ -244,6 +244,11 @@ namespace Habanero.BO
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
+            if (!String.IsNullOrEmpty(this.ClassDef.TypeParameter) && this._keysCol.Count > 0)
+                foreach (BOKey boKeyCol in _keysCol)
+                {
+                    return boKeyCol.ToString();
+                }
             return this.ID.GetAsValue() == null ? base.ToString() : this.ID.GetAsValue().ToString();
         }
 

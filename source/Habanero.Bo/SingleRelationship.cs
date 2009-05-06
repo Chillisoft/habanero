@@ -237,7 +237,7 @@ namespace Habanero.BO
             {
                 if (HasRelatedObject())
                 {
-                    _relatedBo = Broker.GetRelatedBusinessObject(this);
+                    _relatedBo = (TBusinessObject) BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject((ISingleRelationship)this); // use non-generic one because of type parameters
                     _storedKeyCriteria = newKeyCriteria;
                 }
                 else

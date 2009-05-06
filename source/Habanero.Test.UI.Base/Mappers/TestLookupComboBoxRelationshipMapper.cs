@@ -34,11 +34,16 @@ namespace Habanero.Test.UI.Base.Mappers
         public void TestFixtureSetup()
         {
             CreateControlFactory();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             _cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             _orgClassDef = OrganisationTestBO.LoadDefaultClassDef();
             GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
+        }
+
+        [SetUp]
+        public void SetupTest()
+        {
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [Test]
@@ -924,6 +929,49 @@ namespace Habanero.Test.UI.Base.Mappers
                  GetControlFactory());
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(RelationshipComboBoxMapper), controlMapper);
+        }
+
+        [Test]
+        public void Test_CreateAutoLoadingMapper()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = _controlFactory.CreateComboBox();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IControlMapper controlMapper = ControlMapper.Create
+                ("AutoLoadingRelationshipComboBoxMapper", "Habanero.UI.Base", cmbox, TestUtil.GetRandomString(), false,
+                 GetControlFactory());
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(AutoLoadingRelationshipComboBoxMapper), controlMapper);     
+            Assert.IsInstanceOfType(typeof(RelationshipComboBoxMapper), controlMapper);     
+        }
+
+        [Test]
+        public void Test_AutoLoadingMapper()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = _controlFactory.CreateComboBox();
+            IControlMapper controlMapper = ControlMapper.Create
+    ("AutoLoadingRelationshipComboBoxMapper", "Habanero.UI.Base", cmbox, "ContactPersonTestBO", false,
+     GetControlFactory());
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
+
+            ContactPersonTestBO person1 = ContactPersonTestBO.CreateSavedContactPerson();
+            ContactPersonTestBO person2 = ContactPersonTestBO.CreateSavedContactPerson();
+
+            AddressTestBO addressTestBo = new AddressTestBO();
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            controlMapper.BusinessObject = addressTestBo;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, cmbox.Items.Count);
+            Assert.IsTrue(cmbox.Items.Contains(person1));
+            Assert.IsTrue(cmbox.Items.Contains(person2));
+
         }
 
 

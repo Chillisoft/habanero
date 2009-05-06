@@ -109,7 +109,10 @@ namespace Habanero.DB4O
             BusinessObjectManager.Instance.Remove(tempBO);
             foreach (IBOProp boProp in tempBO.Props)
             {
-                tempBO.Props[boProp.PropertyName].InitialiseProp(matchedBO.Props[boProp.PropertyName.ToUpper()]);
+                try
+                {
+                    tempBO.Props[boProp.PropertyName].InitialiseProp(matchedBO.Props[boProp.PropertyName.ToUpper()]);
+                } catch (KeyNotFoundException) {}
 
             }
             return tempBO;
