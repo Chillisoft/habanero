@@ -951,12 +951,11 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_AutoLoadingMapper()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
             IComboBox cmbox = _controlFactory.CreateComboBox();
             IControlMapper controlMapper = ControlMapper.Create
     ("AutoLoadingRelationshipComboBoxMapper", "Habanero.UI.Base", cmbox, "ContactPersonTestBO", false,
      GetControlFactory());
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
+            //ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
 
             ContactPersonTestBO person1 = ContactPersonTestBO.CreateSavedContactPerson();
             ContactPersonTestBO person2 = ContactPersonTestBO.CreateSavedContactPerson();
@@ -1127,6 +1126,7 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_EditItemFromCollection_UpdatesItemInCombo()
         {
             //---------------Set up test pack-------------------
+
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             BusinessObjectCollection<OrganisationTestBO> boCol;
             RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
