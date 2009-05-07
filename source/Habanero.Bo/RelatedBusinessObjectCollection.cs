@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -43,6 +44,8 @@ namespace Habanero.BO
         {
             _relationship = (Relationship) relationship;
         }
+
+
 
         //Relationship 
         //-- should this reference the reverse relationship if exists 

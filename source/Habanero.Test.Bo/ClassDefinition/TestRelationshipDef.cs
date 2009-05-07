@@ -139,6 +139,20 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestCreateRelationship_WithTimeout_ShouldSetUpTimeout()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var expectedTimout = 10000;
+            MultipleRelationshipDef relDef = new MultipleRelationshipDef("rel", "", "", new RelKeyDef(), true, "", DeleteParentAction.Prevent, RelationshipType.Association, expectedTimout);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedTimout, relDef.TimeOut);
+        }
+
+        [Test]
         public void TestOwningBOHasForeignKey_Single_Default()
         {
             //---------------Execute Test ----------------------

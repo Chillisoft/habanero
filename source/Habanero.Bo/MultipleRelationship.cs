@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
@@ -48,7 +49,8 @@ namespace Habanero.BO
     }
 
     ///<summary>
-    /// The base class to be used for MultipleRelationships
+    /// The base class to be used for MultipleRelationships.
+    /// 
     ///</summary>
     public abstract class MultipleRelationshipBase : Relationship
     {
@@ -72,6 +74,11 @@ namespace Habanero.BO
     public class MultipleRelationship<TBusinessObject> : MultipleRelationshipBase, IMultipleRelationship
         where TBusinessObject : class, IBusinessObject, new()
     {
+        /// <summary>
+        /// The timout in milliseconds. The collection will not be automatically refreshed from the DB if the timeout has not expired
+        /// </summary>
+        public int TimeOut { get; private set; }
+
         /// <summary> The collection storing the Related Business Objects. </summary>
         protected RelatedBusinessObjectCollection<TBusinessObject> _boCol;
 
@@ -83,12 +90,20 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
-            : base(owningBo, lRelDef, lBOPropCol)
+        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol): this(owningBo, lRelDef, lBOPropCol, 0)
         {
-            _boCol =
-                (RelatedBusinessObjectCollection<TBusinessObject>)
-                RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
+        }
+        /// <summary>
+        /// Constructor to initialise a new relationship
+        /// </summary>
+        /// <param name="owningBo">The business object that owns the relationship</param>
+        /// <param name="lRelDef">The relationship definition</param>
+        /// <param name="lBOPropCol">The set of properties used to initialise the RelKey object</param>
+        /// <param name="timeOut">The timeout between when the collection was last loaded.</param>
+        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol, int timeOut) : base(owningBo, lRelDef, lBOPropCol)
+        {
+            _boCol = (RelatedBusinessObjectCollection<TBusinessObject>) RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
+            TimeOut = timeOut;
         }
 
         internal override void DereferenceChildren(TransactionCommitter committer)
@@ -171,6 +186,9 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// The collection of business objects that is managed by this relationship.
+        ///</summary>
         IBusinessObjectCollection IMultipleRelationship.BusinessObjectCollection
         {
             get { return this.BusinessObjectCollection; }
@@ -196,9 +214,6 @@ namespace Habanero.BO
             get { return _boCol; }
         }
 
-
-
-
         /// <summary>
         /// Returns the collection for this relationship.  The collection is refreshed before
         /// it is returned.
@@ -207,6 +222,15 @@ namespace Habanero.BO
         {
             get
             {
+                BusinessObjectCollection<TBusinessObject> currentCol = this.CurrentBusinessObjectCollection;
+                if (this.TimeOut > 0 && currentCol.TimeLastLoaded != null)
+                {
+                    TimeSpan timeSinceLastLoad  = DateTime.Now - currentCol.TimeLastLoaded.Value;
+                    if (timeSinceLastLoad.Milliseconds <= this.TimeOut) 
+                    {
+                        return currentCol;
+                    }
+                }
                 RelationshipUtils.SetupCriteriaForRelationship(this, _boCol);
                 BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
                 return _boCol;

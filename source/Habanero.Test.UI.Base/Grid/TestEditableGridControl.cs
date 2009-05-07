@@ -1118,6 +1118,7 @@ namespace Habanero.Test.UI.Base
                 //Get Grid with 4 items
                 BusinessObjectCollection<MyBO> col;
                 IEditableGridControl gridControl = GetGridWith_5_Rows(out col);
+                col.SaveAll();
                 AddControlToForm(gridControl);
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(5, gridControl.Grid.Rows.Count);

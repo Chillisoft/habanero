@@ -1229,6 +1229,7 @@ namespace Habanero.BO
             }
             return errors == null || errors.Count == 0;
         }
+
         /// <summary>
         /// Checks the <see cref="BusinessObjectRules"/> for any rules that have warnings or suggestions.
         /// </summary>

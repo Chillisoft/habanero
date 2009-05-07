@@ -207,16 +207,16 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="orderBy"></param>
         ///<param name="deleteParentAction"></param>
         ///<param name="relationshipType"></param>
+        ///<param name="timeout">The timout in milliseconds. The collection will not be automatically refreshed from the DB if the timeout has not expired</param>
         ///<returns></returns>
         public MultipleRelationshipDef CreateMultipleRelationshipDef
-            (string relationshipName, string relatedAssemblyName, string relatedClassName, 
-            RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy,
-            DeleteParentAction deleteParentAction, RelationshipType relationshipType)
+            (string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, 
+            DeleteParentAction deleteParentAction, RelationshipType relationshipType, int timeout)
 		{
 			return
 				new MultipleRelationshipDef(relationshipName, relatedAssemblyName, relatedClassName, relKeyDef,
 				                            keepReferenceToRelatedObject, orderBy,
-                                            deleteParentAction, relationshipType);
+                                            deleteParentAction, relationshipType, timeout);
 		}
 
         ///<summary>

@@ -178,7 +178,7 @@ namespace Habanero.Test.BO
             relKeyDef.Add(relPropDef);
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
                     "ContactPersonTestBO", relKeyDef,true, "", DeleteParentAction.DeleteRelated
-                    , RelationshipType.Composition);
+                    , RelationshipType.Composition, 0);
             relationshipDef.ReverseRelationshipName = "Organisation";
             itsClassDef.RelationshipDefCol.Add(relationshipDef);
             ClassDef.ClassDefs.Add(itsClassDef);
@@ -203,7 +203,7 @@ namespace Habanero.Test.BO
             relKeyDef.Add(relPropDef);
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
                     "ContactPersonTestBO", relKeyDef,true, "", DeleteParentAction.DeleteRelated
-                    , RelationshipType.Composition);
+                    , RelationshipType.Composition, 0);
         
             itsClassDef.RelationshipDefCol.Add(relationshipDef);
             ClassDef.ClassDefs.Add(itsClassDef);

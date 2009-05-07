@@ -143,11 +143,12 @@ namespace Habanero.BO
                 row.RowError = message;
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
-            finally
-            {
-                _collection.BusinessObjectRemoved += _removedHandler;
-            }
+//            finally
+//            {
+//                _collection.BusinessObjectRemoved += _removedHandler;
+//            }
         }
+
         /// <summary>
         /// Returns the business object mapped to a particular row.
         /// </summary>
@@ -162,7 +163,8 @@ namespace Habanero.BO
                 {
                     changedBo = _deletedRows[row];
                 }
-            } else
+            }
+            else
             {
                 changedBo = _collection.Find(GetRowID(row));
             }
@@ -182,7 +184,7 @@ namespace Habanero.BO
             DataRow row = e.Row;
             try
             {
-                DeregisterForBOEvents();
+//                DeregisterForBOEvents();
                 switch (e.Action)
                 {
                     case DataRowAction.Add:
@@ -205,10 +207,10 @@ namespace Habanero.BO
                 row.RowError = message;
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
-            finally
-            {
-                RegisterForBOEvents();
-            }
+//            finally
+//            {
+//                RegisterForBOEvents();
+//            }
         }
 
 
@@ -222,7 +224,6 @@ namespace Habanero.BO
             try
             {
                 IBusinessObject changedBo;
-                DeregisterForBOEvents();
                 if (row.RowState == DataRowState.Detached)
                 {
                     changedBo = _addedRows[row];
@@ -233,7 +234,15 @@ namespace Habanero.BO
                     changedBo = GetBusinessObjectForRow(row);
                     if (changedBo != null)
                     {
-                        changedBo.CancelEdits();
+                        try
+                        {
+                            DeregisterForBOEvents();
+                            changedBo.CancelEdits();
+                        }
+                        finally
+                        {
+                            RegisterForBOEvents();
+                        }
                         row.RowError = changedBo.Status.IsValidMessage;
                     }
                     else
@@ -247,10 +256,6 @@ namespace Habanero.BO
                 string message = "There was a problem saving. : " + ex.Message;
                 row.RowError = message;
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
-            }
-            finally
-            {
-                RegisterForBOEvents();
             }
         }
 
@@ -266,9 +271,18 @@ namespace Habanero.BO
                 IBusinessObject changedBo = GetBusinessObjectForRow(row);
                 if (changedBo != null)
                 {
-                    changedBo.Save();
+                    try
+                    {
+                        DeregisterForBOEvents();
+                        changedBo.Save();
+                    }
+                    finally
+                    {
+                        RegisterForBOEvents();
+                    }
                     row.RowError = changedBo.Status.IsValidMessage;
-                }else
+                }
+                else
                 {
                     row.RowError = "";
                 }
@@ -296,7 +310,8 @@ namespace Habanero.BO
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
                     if (IsReflectiveProperty(uiProperty)) continue;
-                    changedBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
+
+                    SetBOPropertyValue(changedBo, uiProperty.PropertyName, row);
                     IBOProp prop = changedBo.Props[uiProperty.PropertyName];
                     row.SetColumnError(uiProperty.PropertyName, prop.InvalidReason);
                 }
@@ -307,6 +322,19 @@ namespace Habanero.BO
                 string message = "There was a problem saving. : " + ex.Message;
                 row.RowError = message;
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
+        }
+
+        private void SetBOPropertyValue(IBusinessObject bo, string propertyName, DataRow row)
+        {
+            try
+            {
+                DeregisterForBOEvents();
+                bo.SetPropertyValue(propertyName, row[propertyName]);
+            }
+            finally
+            {
+                RegisterForBOEvents();
             }
         }
 
@@ -389,15 +417,7 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        try
-                        {
-                            DeregisterForBOEvents();
-                            newBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
-                        }
-                        finally
-                        {
-                            RegisterForBOEvents();
-                        }
+                        SetBOPropertyValue(newBo, uiProperty.PropertyName, row);
                     }
                 }
                 row.RowError = newBo.Status.IsValidMessage;

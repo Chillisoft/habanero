@@ -397,5 +397,48 @@ namespace Habanero.Test.BO.Loaders
             //---------------Tear Down -------------------------          
         }
 
+
+        [Test]
+        public void Test_WithTimeout()
+        {
+            //---------------Set up test pack-------------------
+            XmlClassLoader loader = new XmlClassLoader();
+            ClassDef personClassDef =
+                loader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(personClassDef);
+
+
+            const string relXml = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""multiple"" 
+                        relatedClass=""ContactPersonTestBO"" 
+						relatedAssembly=""Habanero.Test.BO""
+                        timeout=""2000""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Assert PreConditions---------------   
+            //---------------Execute Test ----------------------
+
+            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(relXml, itsPropDefs);
+            //---------------Test Result -----------------------
+
+            Assert.AreSame(personClassDef, relDef.RelatedObjectClassDef);
+            Assert.AreEqual(2000, relDef.TimeOut );
+            //---------------Tear Down -------------------------          
+        }
+
     }
 }

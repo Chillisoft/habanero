@@ -71,6 +71,10 @@ namespace Habanero.UI.VWG
         /// </summary>
         public void RejectChanges()
         {
+            if (this.BusinessObjectCollection != null)
+            {
+                this.BusinessObjectCollection.CancelEdits();
+            }
             if (this.DataSource is DataView)
             {
                 ((DataView)this.DataSource).Table.RejectChanges();

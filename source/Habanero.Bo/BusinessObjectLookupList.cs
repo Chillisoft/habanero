@@ -99,7 +99,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="assemblyName">The assembly containing the class</param>
         /// <param name="className">The class from which to load the values</param>
-        /// <param name="timeout">The period after which the cache expires</param>
+        /// <param name="timeout">The time period in milliseconds after which the cache expires</param>
         public BusinessObjectLookupList(string assemblyName, string className, int timeout)
         {
             _assemblyName = assemblyName;

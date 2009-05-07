@@ -44,6 +44,7 @@ namespace Habanero.BO.Loaders
         private bool _owningBOHasForeignKey;
         private string _reverseRelationshipName;
         private string _typeParameter;
+        private int _timeout;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -118,7 +119,7 @@ namespace Habanero.BO.Loaders
                     _defClassFactory.CreateMultipleRelationshipDef(
                         _name, _relatedAssemblyName, _relatedClassName, 
                         _relKeyDef, _keepReferenceToRelatedObject, 
-                        _orderBy, _deleteParentAction, _relationshipType);
+                        _orderBy, _deleteParentAction, _relationshipType, _timeout);
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
                 relationshipDef.RelatedObjectTypeParameter = _typeParameter;
                 return relationshipDef;
@@ -178,6 +179,17 @@ namespace Habanero.BO.Loaders
             _owningBOHasForeignKey = _reader.GetAttribute("owningBOHasForeignKey") == "true";
             _reverseRelationshipName = _reader.GetAttribute("reverseRelationship");
             _typeParameter = _reader.GetAttribute("typeParameter");
+            try
+            {
+                _timeout = Convert.ToInt32(_reader.GetAttribute("timeout"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("In a 'relationship' element, " +
+                    "the 'timeout' attribute has been given " +
+                    "an invalid integer value.", ex);
+            }
+            
 
             _orderBy = _reader.GetAttribute("orderBy");
 

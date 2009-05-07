@@ -327,6 +327,13 @@ namespace Habanero.Base
         ///</summary>
         int TotalCountAvailableForPaging { get; set; }
 
+        /// <summary>
+        /// The DateTime that the Collection was loaded.
+        /// This is used to determine whether the Collection should be Reloaded when 
+        /// the MultipleRelationship get BusinessObjectCollection is called.
+        /// </summary>
+        DateTime? TimeLastLoaded { get; set; }
+
 
         /// <summary>
         /// Restores all the business objects to their last persisted state, that

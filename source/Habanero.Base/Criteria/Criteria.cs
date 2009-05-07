@@ -350,7 +350,7 @@ namespace Habanero.Base
 
         private static IComparable ConvertDateTimeStringToValue(IComparable y)
         {
-            y = ConvertDateTImeToday(y);
+            y = ConvertDateTimeToday(y);
             y = ConvertDateTimeNow(y);
             return y;
         }
@@ -436,7 +436,7 @@ namespace Habanero.Base
             }
         }
 
-        private static IComparable ConvertDateTImeToday(IComparable y)
+        private static IComparable ConvertDateTimeToday(IComparable y)
         {
             if (y is DateTimeToday)
             {

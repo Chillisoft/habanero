@@ -51,14 +51,20 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (!Contains(propertyName.ToUpper()))
+                if (propertyName == null) throw new ArgumentNullException("propertyName");
+                //This is written to Catch the Exception and rethrow as a new exception so as to 
+                // overcomne the performance issues found during Profiling.
+                try
+                {
+                    return (_propDefs[propertyName.ToUpper()]);
+                }
+                catch (Exception ex)
                 {
                     throw new ArgumentException
                         (String.Format
                              ("The property name '{0}' does not exist in the " + "collection of property definitions.",
                               propertyName));
                 }
-                return (_propDefs[propertyName.ToUpper()]);
 
                 //else
 

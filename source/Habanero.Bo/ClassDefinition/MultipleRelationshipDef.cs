@@ -29,6 +29,12 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class MultipleRelationshipDef : RelationshipDef
     {
+        /// <summary>
+        /// The timout in milliseconds. 
+        /// The collection of Business Objects will not be automatically refreshed 
+        /// from the DB if the timeout has not expired
+        /// </summary>
+        public int TimeOut { get; private set; }
         // protected int _minNoOfRelatedObjects;
        // protected int _maxNoOfRelatedObjects;
 
@@ -51,7 +57,6 @@ namespace Habanero.BO.ClassDefinition
                                        Type relatedObjectClassType,
                                        IRelKeyDef relKeyDef,
                                        bool keepReferenceToRelatedObject,
-            //				IExpression searchCriteria, 
                                        string orderBy,
                                        DeleteParentAction deleteParentAction)
             : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
@@ -105,13 +110,15 @@ namespace Habanero.BO.ClassDefinition
         /// with regards to deleting a parent object.  See the DeleteParentAction 
         /// enumeration for more detail.</param>
         /// <param name="relationshipType">Provides specific instructions for adding/removing a child object.</param>
-        public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName,
-                                       string relatedObjectClassName, IRelKeyDef relKeyDef,
-                                       bool keepReferenceToRelatedObject, string orderBy,
-                                      DeleteParentAction deleteParentAction, RelationshipType relationshipType)
-            : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, relationshipType)
+        /// <param name="timeout">The timout in milliseconds. The collection will not be automatically refreshed from the DB if the timeout has nto expired</param>
+        public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName, 
+                    string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, 
+                    string orderBy, DeleteParentAction deleteParentAction, RelationshipType relationshipType, int timeout)
+             : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, 
+                        keepReferenceToRelatedObject, deleteParentAction, relationshipType)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
+            TimeOut = timeout;
             _orderCriteria = OrderCriteria.FromString(orderBy);
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             //_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
@@ -172,7 +179,7 @@ namespace Habanero.BO.ClassDefinition
 		public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
 		{
             Type relationshipBOType = typeof(MultipleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
-            return (IMultipleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);
+            return (IMultipleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol, this.TimeOut);
 		}
     }
 

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -60,15 +61,24 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_CreateMultipleRelationshipDef_Association()
         {
             //---------------Set up test pack-------------------
-
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            RelPropDef relPropDef = new RelPropDef(ClassDef.Get<OrganisationTestBO>().PropDefcol["OrganisationID"], "OrganisationID");
+            RelKeyDef relKeyDef = new RelKeyDef();
+            relKeyDef.Add(relPropDef);
+            const int expectedTimeout = 550;
+            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
+                "ContactPersonTestBO", relKeyDef, true, "", DeleteParentAction.DeleteRelated
+                , RelationshipType.Association, expectedTimeout);
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             //---------------Assert Precondition----------------
-
+            Assert.AreEqual(expectedTimeout, relationshipDef.TimeOut);
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.GetRandomString(),
-                TestUtil.GetRandomString(), TestUtil.GetRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated);
-
+            MultipleRelationship<ContactPersonTestBO> relationship = (MultipleRelationship<ContactPersonTestBO>) relationshipDef.CreateRelationship(organisation, organisation.Props);
             //---------------Test Result -----------------------
-            Assert.AreEqual(RelationshipType.Association, relationshipDef.RelationshipType);
+            Assert.AreEqual(expectedTimeout, relationship.TimeOut);
         }
 
 
@@ -82,7 +92,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.GetRandomString(),
                 TestUtil.GetRandomString(), TestUtil.GetRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
-                , RelationshipType.Composition);
+                , RelationshipType.Composition, 10000);
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Composition, relationshipDef.RelationshipType);
         }

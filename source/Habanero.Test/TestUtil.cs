@@ -20,6 +20,7 @@
 using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Threading;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -212,6 +213,11 @@ namespace Habanero.Test
         public static void AssertStringEmpty(string stringValue, string stringName, string errorMessage)
         {
             Assert.IsTrue(String.IsNullOrEmpty(stringValue), stringName + " : " + errorMessage);
+        }
+
+        public static void Wait(int timeout)
+        {
+            Thread.Sleep(timeout);
         }
     }
 }

@@ -1184,6 +1184,62 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             }
         }
 
+        [Test]
+        public void Test_SetTimeLastLoaded_ShouldSetTimeLastLoaded()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(col.TimeLastLoaded);
+            //---------------Execute Test ----------------------
+            DateTime expectedLastLoaded = DateTime.Now;
+            col.TimeLastLoaded = expectedLastLoaded;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedLastLoaded, col.TimeLastLoaded);
+        }
+
+        [Test]
+        public void Test_RefreshCollection_ShouldSetDateTimeLastLoaded()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(col.TimeLastLoaded);
+            //---------------Execute Test ----------------------
+            col.Refresh();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(col.TimeLastLoaded);
+        }
+        [Test]
+        public void Test_LoaderRefresh_ShouldSetDateTimeLastLoaded()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(col.TimeLastLoaded);
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(col.TimeLastLoaded);
+        }
+
+
+        [Test]
+        public void TestMethod()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+
+            //---------------Test Result -----------------------
+
+        }
+
         /// <summary>
         /// Asserts that the results for the collection are as expected
         /// </summary>

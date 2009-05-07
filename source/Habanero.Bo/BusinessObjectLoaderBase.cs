@@ -475,6 +475,7 @@ namespace Habanero.BO
             RestoreMarkForDeleteCollection(collection);
 
             RestoreAddedCollection(collection, addedBoArray);
+            collection.TimeLastLoaded = DateTime.Now;
         }
         /// <summary>
         /// Restores the items in the <see cref="IBusinessObjectCollection.AddedBusinessObjects"/> collection

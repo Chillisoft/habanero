@@ -1184,12 +1184,18 @@ namespace Habanero.BO.ClassDefinition
             {
                 return TableName;
             }
-            if (PropDefcol.Contains(propDef.PropertyName))
+            //This is coded to throw the exception instead of doing a Contains for performance Reasons
+            try
             {
+                IPropDef defcol = PropDefcol[propDef.PropertyName];
                 return GetTableName();
             }
-            ClassDef superClassClassDef = SuperClassClassDef;
-            return superClassClassDef != null ? superClassClassDef.GetTableName(propDef) : "";
+            catch (ArgumentException)
+            {
+                ClassDef superClassClassDef = SuperClassClassDef;
+                return superClassClassDef != null ? superClassClassDef.GetTableName(propDef) : "";
+            }
+
         }
 
 

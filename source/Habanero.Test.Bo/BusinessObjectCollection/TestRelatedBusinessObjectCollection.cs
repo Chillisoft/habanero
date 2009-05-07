@@ -730,5 +730,54 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsNotNull(relationship);
             Assert.AreSame(address.Relationships["ContactPersonTestBO"], relationship);
         }
+
+        [Test]
+        public void Test_SetTimeLastLoaded_ShouldSetTimeLastLoaded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            AddressTestBO address;
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            RelatedBusinessObjectCollection<AddressTestBO> col = new RelatedBusinessObjectCollection<AddressTestBO>(contactPersonTestBO.Relationships["Addresses"]);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(col.TimeLastLoaded);
+            //---------------Execute Test ----------------------
+            DateTime expectedLastLoaded = DateTime.Now;
+            col.TimeLastLoaded = expectedLastLoaded;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedLastLoaded, col.TimeLastLoaded);
+        }
+
+        [Test]
+        public void Test_RefreshCollection_ShouldSetDateTimeLastLoaded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            AddressTestBO address;
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            RelatedBusinessObjectCollection<AddressTestBO> col = new RelatedBusinessObjectCollection<AddressTestBO>(contactPersonTestBO.Relationships["Addresses"]);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(col.TimeLastLoaded);
+            //---------------Execute Test ----------------------
+            col.Refresh();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(col.TimeLastLoaded);
+        }
+        [Test]
+        public void Test_LoaderRefresh_ShouldSetDateTimeLastLoaded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            AddressTestBO address;
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            RelatedBusinessObjectCollection<AddressTestBO> col = new RelatedBusinessObjectCollection<AddressTestBO>(contactPersonTestBO.Relationships["Addresses"]);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(col.TimeLastLoaded);
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(col.TimeLastLoaded);
+        }
+
     }
 }

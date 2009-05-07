@@ -87,11 +87,17 @@ namespace Habanero.UI.Win
                 if (this.BusinessObjectCollection != null)
                 {
                     this.BusinessObjectCollection.CancelEdits();
+                    IBusinessObjectCollection col = this.BusinessObjectCollection;
+                    IBusinessObject bo = this.SelectedBusinessObject;
+                    SetBusinessObjectCollection(null);
+                    SetBusinessObjectCollection(col);
+                    SelectedBusinessObject = bo;
                 }
                 else if (this.DataSource is DataView)
                 {
                     ((DataView)this.DataSource).Table.RejectChanges();
                 }
+ 
             }
             catch (Exception ex)
             {
@@ -109,7 +115,7 @@ namespace Habanero.UI.Win
                 if (this.BusinessObjectCollection != null)
                 {
                     this.BusinessObjectCollection.SaveAll();
-                } else            if (this.DataSource is DataView)
+                } else if (this.DataSource is DataView)
                 {
                     ((DataView) this.DataSource).Table.AcceptChanges();
                 }

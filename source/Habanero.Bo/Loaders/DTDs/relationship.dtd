@@ -11,6 +11,7 @@
 	orderBy CDATA ""
 	deleteAction ( DeleteRelated | DereferenceRelated | Prevent | DoNothing ) "Prevent"
   typeParameter CDATA ""
+  timeout CDATA "0"
 >
 		<!ELEMENT relatedProperty EMPTY>
     <!ATTLIST relatedProperty

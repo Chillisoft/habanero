@@ -99,8 +99,6 @@ namespace Habanero.BO
 
         private ISelectQuery _selectQuery;
 
-
-
         /// <summary>
         /// Default constructor. 
         /// The classdef will be implied from TBusinessObject and the Current Database Connection will be used.
@@ -968,7 +966,6 @@ namespace Habanero.BO
             base.Clear();
             KeyObjectHashTable.Clear();
         }
-
 // ReSharper restore UnusedPrivateMember
 
         /// <summary>
@@ -1472,6 +1469,19 @@ namespace Habanero.BO
                 }
             }
         }
+
+        /// <summary>
+        /// The DateTime that the Collection was loaded.
+        /// This is used to determine whether the Collection should be Reloaded when 
+        /// the MultipleRelationship get BusinessObjectCollection is called.
+        /// </summary>
+        /// <summary>
+        /// The DateTime that the Collection was loaded.
+        /// This is used to determine whether the Collection should be Reloaded when 
+        /// the MultipleRelationship get BusinessObjectCollection is called.
+        /// </summary>
+        public DateTime? TimeLastLoaded { get; set; }
+
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database

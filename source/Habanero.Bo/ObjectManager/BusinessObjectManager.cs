@@ -239,7 +239,7 @@ namespace Habanero.BO
 
         private static bool WeakReferenceIsAlive(WeakReference boWeakRef)
         {
-            return (boWeakRef != null && boWeakRef.IsAlive && boWeakRef.Target != null);
+            return (boWeakRef != null && boWeakRef.Target != null && boWeakRef.IsAlive);
         }
 
         /// <summary>
