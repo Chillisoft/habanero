@@ -23,6 +23,8 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.ConcurrencyControl;
 using Habanero.BO.Loaders;
+using Habanero.DB;
+using Habanero.Test.BO.BusinessObjectLoader;
 using Habanero.Test.BO.TransactionCommitters;
 using NUnit.Framework;
 
@@ -39,6 +41,7 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
+
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -46,12 +49,40 @@ namespace Habanero.Test.BO
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
         }
+
         [TearDown]
         public  void TearDownTest()
         {
             //runs every time any testmethod is complete
             //DeleteObjects();
         }
+
+        [Test]
+        public void Test_Constructor_6Params_StoresDataAccessor()
+        {
+            //---------------Set up test pack-------------------
+            DataAccessorDB customDataAccessor = new DataAccessorDB();
+            //---------------Assert Precondition----------------
+            Assert.AreNotEqual(customDataAccessor, BORegistry.DataAccessor);
+            //---------------Execute Test ----------------------
+            OptimisticLockingVersionNumberDB optimisticLocking = new OptimisticLockingVersionNumberDB(null, null, null, null, null, customDataAccessor);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(customDataAccessor, optimisticLocking.DataAccessor);
+        }
+
+        [Test]
+        public void Test_Constructor_7Params_StoresDataAccessor()
+        {
+            //---------------Set up test pack-------------------
+            DataAccessorDB customDataAccessor = new DataAccessorDB();
+            //---------------Assert Precondition----------------
+            Assert.AreNotEqual(customDataAccessor, BORegistry.DataAccessor);
+            //---------------Execute Test ----------------------
+            OptimisticLockingVersionNumberDB optimisticLocking = new OptimisticLockingVersionNumberDB(null, null, null, null, null, null, customDataAccessor);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(customDataAccessor, optimisticLocking.DataAccessor);
+        }
+
         [Test]
         public void TestLockingVersionNumber_DoesNotCauseProblemsWithMultipleSaves()
         {
@@ -185,7 +216,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(versionNumber, contactPerson.VersionNumber);
             try
             {
-                TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+                TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
                 trnCommitter.AddBusinessObject(contactPerson);
                 trnCommitter.AddTransaction(new StubDatabaseFailureTransaction());
                 trnCommitter.CommitTransaction();
@@ -227,7 +258,8 @@ namespace Habanero.Test.BO
             IBOProp propVersionNumber = _boPropCol["VersionNumber"];
             SetConcurrencyControl(new OptimisticLockingVersionNumberDB(this, propDateLastUpdated,
                                                                        propUserLastUpdated, propMachineLastUpdated,
-                                                                       propVersionNumber));
+                                                                       propVersionNumber,
+                                                                       (DataAccessorDB) BORegistry.DataAccessor));
         }
         public static ClassDef LoadDefaultClassDef()
         {

@@ -451,6 +451,22 @@ namespace Habanero.Test.BO
         //    mock.VerifyAll();
         //}
 
+        //[Test]
+        //public void TestSave_ToDifferentDataAccessor()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    ClassDef.ClassDefs.Clear();
+        //    MyBO.LoadDefaultClassDef();
+
+        //    MyBO myBO = new MyBO();
+        //    //---------------Assert Precondition----------------
+
+        //    //---------------Execute Test ----------------------
+        //    myBO.Save();
+        //    //---------------Test Result -----------------------
+
+        //}
+
         [Test]
         public void TestDeleteObjce_WithAfterSaveImplemented()
         {

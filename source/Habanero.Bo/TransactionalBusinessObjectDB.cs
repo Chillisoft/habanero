@@ -48,27 +48,27 @@ namespace Habanero.BO
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        public virtual ISqlStatementCollection GetPersistSql()
+        public virtual ISqlStatementCollection GetPersistSql(IDatabaseConnection databaseConnection)
         {
             if (IsNewAndDeleted()) return null;
 
             SqlStatementCollection sqlStatementCollection;
             if (IsNew())
             {
-                sqlStatementCollection = GetInsertSql();
+                sqlStatementCollection = GetInsertSql(databaseConnection);
             } else if (IsDeleted)
             {
-                sqlStatementCollection = GetDeleteSql();
+                sqlStatementCollection = GetDeleteSql(databaseConnection);
             }
             else
             {
-                sqlStatementCollection = GetUpdateSql();
+                sqlStatementCollection = GetUpdateSql(databaseConnection);
             }
             IBOStatus boStatus = BusinessObject.Status;
             ITransactionalDB transactionLog = BusinessObject.TransactionLog as ITransactionalDB;
             if (transactionLog != null && (boStatus.IsNew || boStatus.IsDeleted || boStatus.IsDirty))
             {
-                sqlStatementCollection.Add(transactionLog.GetPersistSql());
+                sqlStatementCollection.Add(transactionLog.GetPersistSql(databaseConnection));
             }
             return sqlStatementCollection;
         }
@@ -77,9 +77,9 @@ namespace Habanero.BO
         /// Returns an "insert" sql statement list for inserting this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        private SqlStatementCollection GetInsertSql()
+        private SqlStatementCollection GetInsertSql(IDatabaseConnection databaseConnection)
         {
-            InsertStatementGenerator gen = new InsertStatementGenerator(BusinessObject, DatabaseConnection.CurrentConnection);
+            InsertStatementGenerator gen = new InsertStatementGenerator(BusinessObject, databaseConnection);
             return gen.Generate();
         }
 
@@ -87,9 +87,9 @@ namespace Habanero.BO
         /// Builds a "delete" sql statement list for this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        private SqlStatementCollection GetDeleteSql()
+        private SqlStatementCollection GetDeleteSql(IDatabaseConnection databaseConnection)
         {
-            DeleteStatementGenerator generator = new DeleteStatementGenerator(BusinessObject, DatabaseConnection.CurrentConnection);
+            DeleteStatementGenerator generator = new DeleteStatementGenerator(BusinessObject, databaseConnection);
             return generator.Generate();
         }
 
@@ -97,9 +97,9 @@ namespace Habanero.BO
         /// Returns an "update" sql statement list for updating this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        private SqlStatementCollection GetUpdateSql()
+        private SqlStatementCollection GetUpdateSql(IDatabaseConnection databaseConnection)
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(BusinessObject, DatabaseConnection.CurrentConnection);
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(BusinessObject, databaseConnection);
             return gen.Generate();
         }
 

@@ -144,7 +144,7 @@ namespace Habanero.BO
             QueryBuilder.PrepareSource(classDef, ref source);
             selectQuery.Source = source;
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
             IClassDef correctSubClassDef = null;
             T loadedBo = null;
@@ -207,7 +207,7 @@ namespace Habanero.BO
             QueryBuilder.PrepareSource(classDef, ref source);
             selectQuery.Source = source;
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
             IClassDef correctSubClassDef = null;
             IBusinessObject loadedBo = null;
@@ -281,7 +281,7 @@ namespace Habanero.BO
         protected override void DoRefresh<T>(BusinessObjectCollection<T> collection) 
         {
             IClassDef classDef = collection.ClassDef;
-            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
+            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery, _databaseConnection);
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
 
             int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
@@ -344,7 +344,7 @@ namespace Habanero.BO
         //TODO 17 Feb 2009 - Mark : NNB! This method is very different to the DoRefresh<T> method above. Check if this method is tested.
         protected override void DoRefresh(IBusinessObjectCollection collection)
         {
-            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
+            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery, _databaseConnection);
             QueryBuilder.PrepareCriteria(collection.ClassDef, selectQuery.Criteria);
             ISqlStatement statement = selectQuery.CreateSqlStatement();
 
@@ -414,7 +414,7 @@ namespace Habanero.BO
         public int GetCount(IClassDef classDef, Criteria criteria)
         {
             ISelectQuery selectQuery = QueryBuilder.CreateSelectCountQuery(classDef, criteria);
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("","","","");
             ISqlStatement statement = selectQueryDB.CreateSqlStatement(sqlFormatter);
             int totalNoOfRecords = 0;
@@ -665,6 +665,14 @@ namespace Habanero.BO
             BusinessObject businessObject = ((BusinessObject) bo);
             businessObject.SetStatus(BOStatus.Statuses.isNew, false);
             businessObject.AfterLoad();
+        }
+
+        /// <summary>
+        /// Gets the database connection assigned at construction of this loader
+        /// </summary>
+        internal IDatabaseConnection DatabaseConnection
+        {
+            get { return _databaseConnection; }
         }
     }
 }

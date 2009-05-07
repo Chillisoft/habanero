@@ -184,7 +184,7 @@ namespace Habanero.BO
         {
             get
             {
-                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
+                BORegistry.GetDataAccessor(typeof(TBusinessObject)).BusinessObjectLoader.Refresh(_boCol);
                 return _boCol;
             }
         }

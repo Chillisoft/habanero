@@ -390,7 +390,7 @@ namespace Habanero.UI.Win
                     }
                     searchClause += AdditionalSearchCriteria;
                 }
-                IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
+                IBusinessObjectCollection collection = BORegistry.GetDataAccessor(ClassDef.ClassType).BusinessObjectLoader.
                     GetBusinessObjectCollection(ClassDef, searchClause, OrderBy);
                 SetBusinessObjectCollection(collection);
             }

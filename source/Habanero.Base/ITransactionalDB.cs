@@ -31,6 +31,6 @@ namespace Habanero.Base
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        ISqlStatementCollection GetPersistSql();
+        ISqlStatementCollection GetPersistSql(IDatabaseConnection databaseConnection);
     }
 }

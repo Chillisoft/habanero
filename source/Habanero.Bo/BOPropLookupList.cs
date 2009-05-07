@@ -196,7 +196,7 @@ namespace Habanero.BO
             if (businessObject != null) return businessObject;
             try
             {
-                businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue
+                businessObject = BORegistry.GetDataAccessor(classDef.ClassType).BusinessObjectLoader.GetBusinessObjectByValue
                     (classDef, this.Value);
             }
             catch (BusObjDeleteConcurrencyControlException ex)

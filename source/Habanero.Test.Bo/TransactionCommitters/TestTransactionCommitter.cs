@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -349,7 +350,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void TestRaisesException_onError()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitter committerDB = new TransactionCommitterStubDB();
+            TransactionCommitter committerDB = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             StubFailingTransaction trn = new StubFailingTransaction();
             committerDB.AddTransaction(trn);
             committerDB.AddTransaction(new StubSuccessfullTransaction());
@@ -362,7 +363,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void TestRaisesException_onError_DoesNotCommit()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitter committer = new TransactionCommitterStubDB();
+            TransactionCommitter committer = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             StubDatabaseTransaction transactional1 = new StubDatabaseTransaction();
             committer.AddTransaction(transactional1);
             StubFailingTransaction transactional2 = new StubFailingTransaction();
@@ -402,7 +403,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void TestUpdateBeforePersistCalled()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             bool updateBeforePersistCalled = false;
             MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(
                 delegate(ITransactionCommitter committer)
@@ -422,7 +423,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void TestUpdateBeforePersistCalled_ForBoAddedInUpdateBeforePersist()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             bool updateBeforePersistCalled = false;
             bool updateBeforePersistCalledForInner = false;
             MockBOWithUpdateBeforePersistDelegate innerMockBo = new MockBOWithUpdateBeforePersistDelegate(

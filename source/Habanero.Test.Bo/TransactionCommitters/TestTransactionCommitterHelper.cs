@@ -54,7 +54,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         ///<summary>
         /// Execute
         ///</summary>
-        public override ISqlStatementCollection GetPersistSql()
+        public override ISqlStatementCollection GetPersistSql(IDatabaseConnection databaseConnection)
         {
             throw new NotImplementedException();
         }
@@ -100,14 +100,14 @@ namespace Habanero.Test.BO.TransactionCommitters
         ///<summary>
         /// Execute
         ///</summary>
-        public override ISqlStatementCollection GetPersistSql()
+        public override ISqlStatementCollection GetPersistSql(IDatabaseConnection databaseConnection)
         {
             ISqlStatementCollection col = new SqlStatementCollection();
             col.Add(
-                new SqlStatement(DatabaseConnection.CurrentConnection,
+                new SqlStatement(databaseConnection,
                                  "insert into stubdatabasetransaction values('1', 'test')"));
             col.Add(
-                new SqlStatement(DatabaseConnection.CurrentConnection,
+                new SqlStatement(databaseConnection,
                                  "insert into stubdatabasetransaction values('2', 'test')"));
             return col;
         }
@@ -149,10 +149,10 @@ namespace Habanero.Test.BO.TransactionCommitters
         ///<summary>
         /// Execute
         ///</summary>
-        public override ISqlStatementCollection GetPersistSql()
+        public override ISqlStatementCollection GetPersistSql(IDatabaseConnection databaseConnection)
         {
             return new SqlStatementCollection(
-                new SqlStatement(DatabaseConnection.CurrentConnection,
+                new SqlStatement(databaseConnection,
                                  "insert into stubdatabasetransaction values('1', 'test')"));
         }
 
@@ -198,7 +198,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             _committed = false;
         }
 
-        public override ISqlStatementCollection GetPersistSql()
+        public override ISqlStatementCollection GetPersistSql(IDatabaseConnection databaseConnection)
         {
             throw new NotImplementedException();
         }
@@ -300,12 +300,14 @@ namespace Habanero.Test.BO.TransactionCommitters
 
     internal class TransactionCommitterStubDB : TransactionCommitterDB
     {
-
+        public TransactionCommitterStubDB(IDatabaseConnection databaseConnection) : base(databaseConnection)
+        {
+        }
 
         protected internal override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             TransactionalBusinessObjectDB transactionDB = (TransactionalBusinessObjectDB)transaction;
-            transactionDB.GetPersistSql();
+            transactionDB.GetPersistSql(DB.DatabaseConnection.CurrentConnection);
         }
     }
 }

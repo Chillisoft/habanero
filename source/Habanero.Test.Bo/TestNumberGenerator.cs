@@ -102,7 +102,7 @@ namespace Habanero.Test.BO
         {
             //Delete entry from database for the number type.
             BOSequenceNumber.LoadNumberGenClassDef();
-            BOSequenceNumber.DeleteAllNumbers();
+            BOSequenceNumber.DeleteAllNumbers(DatabaseConnection.CurrentConnection);
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
             //---------------Set up test pack-------------------
             INumberGenerator numGen = new NumberGenerator("tmp");
@@ -197,7 +197,7 @@ namespace Habanero.Test.BO
             TestUtil.WaitForGC(); 
             const string numberType = "tmp";
             BOSequenceNumberLocking.LoadNumberGenClassDef();
-            BOSequenceNumberLocking.DeleteAllNumbers();
+            BOSequenceNumberLocking.DeleteAllNumbers(DatabaseConnection.CurrentConnection);
             NumberGeneratorPessimisticLocking numGen = new NumberGeneratorPessimisticLocking(numberType);
             numGen.SetSequenceNumber(0);
 
@@ -290,7 +290,7 @@ namespace Habanero.Test.BO
             cp2.Surname = Guid.NewGuid().ToString();
             //---------------Execute Test ----------------------
             //Add the objects 
-            TransactionCommitterStubDB trnCommit = new TransactionCommitterStubDB();
+            TransactionCommitterStubDB trnCommit = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             trnCommit.AddBusinessObject(cp);
             trnCommit.AddBusinessObject(cp2);
             trnCommit.CommitTransaction();
@@ -364,7 +364,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             //Delete entry from database for the number type.
             BOSequenceNumber.LoadNumberGenClassDef("another_number_generator");
-            BOSequenceNumber.DeleteAllNumbers();
+            BOSequenceNumber.DeleteAllNumbers(DatabaseConnection.CurrentConnection);
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
             //---------------Set up test pack-------------------
             INumberGenerator numGen = new NumberGenerator("tmp", "another_number_generator");

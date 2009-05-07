@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader
@@ -43,6 +44,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
             new Address();
+            BORegistry.ClearCustomDataAccessors();
         }
 
         [TearDown]
@@ -1434,6 +1436,20 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                     StringAssert.Contains(cpLoaded.ID.ToString(), ex.Message);
                 }
             }
+
+            [Test]
+            public void Test_DatabaseConnection_CorrectOneFromConstructor()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectLoaderDB boLoader = new BusinessObjectLoaderDB(DatabaseConnection.CurrentConnection);
+                //---------------Assert Precondition----------------
+                Assert.IsInstanceOfType(typeof(BusinessObjectLoaderDB), boLoader);
+                //---------------Execute Test ----------------------
+                IDatabaseConnection testDatabaseConnection = boLoader.DatabaseConnection;
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(testDatabaseConnection);
+                Assert.AreEqual(DatabaseConnection.CurrentConnection, testDatabaseConnection);
+            }
         }
 
         #endregion
@@ -1514,6 +1530,59 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.AreEqual(1, col.Count);
                 Assert.Contains(cp1, col);
                 //---------------Tear Down -------------------------
+            }
+
+            [Test]
+            public void Test_LoadFromNonDefaultDataAccessor()
+            {
+                //---------------Set up test pack-------------------
+                MyBO.LoadDefaultClassDef();
+                BORegistry.DataAccessor = new DataAccessorInMemory();
+                IDataAccessor customDataAccessor = new DataAccessorInMemory();
+                BORegistry.AddDataAccessor(typeof(MyBO), customDataAccessor);
+
+                MyBO myBO = new MyBO();
+                myBO.Save();
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                MyBO customSourceBO = BORegistry.GetDataAccessor(typeof(MyBO)).BusinessObjectLoader.GetBusinessObject<MyBO>(myBO.ID);
+
+                Exception exceptionThrown = null;
+                try
+                {
+                    MyBO defaultSourceBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(myBO.ID);
+                }
+                catch (Exception ex) { exceptionThrown = ex; }
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(exceptionThrown);
+                Assert.IsInstanceOfType(typeof(BusObjDeleteConcurrencyControlException), exceptionThrown);
+                //Assert.IsNull(defaultSourceBO);
+                Assert.IsNotNull(customSourceBO);
+                Assert.AreEqual(myBO, customSourceBO);
+            }
+
+            [Test]
+            public void Test_LoadFromDefaultDataAccessor_CustomTypeNotFound()
+            {
+                //---------------Set up test pack-------------------
+                MyBO.LoadDefaultClassDef();
+                BORegistry.DataAccessor = new DataAccessorInMemory();
+                IDataAccessor customDataAccessor = new DataAccessorInMemory();
+                BORegistry.AddDataAccessor(typeof(Shape), customDataAccessor);
+
+                MyBO myBO = new MyBO();
+                myBO.Save();
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                MyBO customSourceBO = BORegistry.GetDataAccessor(typeof(MyBO)).BusinessObjectLoader.GetBusinessObject<MyBO>(myBO.ID);
+                MyBO defaultSourceBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(myBO.ID);
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(defaultSourceBO);
+                Assert.IsNotNull(customSourceBO);
+                Assert.AreEqual(myBO, customSourceBO);
+                Assert.AreEqual(defaultSourceBO, customSourceBO);
             }
         }
 

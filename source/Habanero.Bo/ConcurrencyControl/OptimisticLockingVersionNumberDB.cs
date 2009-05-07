@@ -41,21 +41,19 @@ namespace Habanero.BO.ConcurrencyControl
     /// </summary>
     public class OptimisticLockingVersionNumberDB : IConcurrencyControl
     {
-        #region Nested type: VerificationStage
-
         private enum VerificationStage
         {
             BeforeBeginEdit,
             BeforePersist
         }
 
-        #endregion
         private readonly BusinessObject _busObj;
         private readonly IBOProp _dateLastUpdated;
         private readonly IBOProp _machineLastUpdated;
         private readonly IBOProp _operatingSystemUser;
         private readonly IBOProp _userLastUpdated;
         private readonly IBOProp _versionNumber;
+        private readonly DataAccessorDB _dataAccessor;
 
         /// <summary>
         /// Constructor to initialise a new instance with details of the last
@@ -69,17 +67,20 @@ namespace Habanero.BO.ConcurrencyControl
         /// <param name="machineLastUpdated">The machine name on which the
         /// object was last updated</param>
         /// <param name="versionNumber">The version number</param>
+        /// <param name="dataAccessor">The data accessor used to perform persistence operations</param>
         public OptimisticLockingVersionNumberDB(BusinessObject busObj,
                                                 IBOProp dateLastUpdated,
                                                 IBOProp userLastUpdated,
                                                 IBOProp machineLastUpdated,
-                                                IBOProp versionNumber)
+                                                IBOProp versionNumber,
+                                                DataAccessorDB dataAccessor)
         {
             _busObj = busObj;
             _dateLastUpdated = dateLastUpdated;
             _userLastUpdated = userLastUpdated;
             _machineLastUpdated = machineLastUpdated;
             _versionNumber = versionNumber;
+            _dataAccessor = dataAccessor;
             _operatingSystemUser = null;
         }
 
@@ -92,10 +93,19 @@ namespace Habanero.BO.ConcurrencyControl
                                                 IBOProp userLastUpdated,
                                                 IBOProp machineLastUpdated,
                                                 IBOProp versionNumber,
-                                                IBOProp operatingSystemUser)
-            : this(busObj, dateLastUpdated, userLastUpdated, machineLastUpdated, versionNumber)
+                                                IBOProp operatingSystemUser,
+                                                DataAccessorDB dataAccessor)
+            : this(busObj, dateLastUpdated, userLastUpdated, machineLastUpdated, versionNumber, dataAccessor)
         {
             _operatingSystemUser = operatingSystemUser;
+        }
+
+        /// <summary>
+        /// Gets the data accessor used to perform persistence operations
+        /// </summary>
+        internal DataAccessorDB DataAccessor
+        {
+            get { return _dataAccessor; }
         }
 
         #region IConcurrencyControl Members
@@ -176,10 +186,11 @@ namespace Habanero.BO.ConcurrencyControl
         private void CheckConcurrencyControl(VerificationStage verificationStage)
         {
             if (_busObj.Status.IsNew) return; //If the object is new there cannot be a concurrency error.
-            IDatabaseConnection connection = DatabaseConnection.CurrentConnection;
-            if (connection == null) return;
 
-            if (!(BORegistry.DataAccessor.BusinessObjectLoader is BusinessObjectLoaderDB)) return;
+            if (!(DataAccessor.BusinessObjectLoader is BusinessObjectLoaderDB)) return;
+            IDatabaseConnection connection =
+                ((BusinessObjectLoaderDB) DataAccessor.BusinessObjectLoader).DatabaseConnection;
+            if (connection == null) return;
 
             ISqlStatement statement = GetSQLStatement();
 
@@ -210,10 +221,10 @@ namespace Habanero.BO.ConcurrencyControl
 
         private ISqlStatement GetSQLStatement()
         {
-            BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB) BORegistry.DataAccessor.BusinessObjectLoader;
+            BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB) DataAccessor.BusinessObjectLoader;
             ISelectQuery selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);
 
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, boLoaderDB.DatabaseConnection);
             return selectQueryDB.CreateSqlStatement();
         }
 

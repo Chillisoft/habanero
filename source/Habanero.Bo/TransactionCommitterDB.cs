@@ -46,18 +46,26 @@ namespace Habanero.BO
 
 
         ///<summary>
-        /// Constructs the TransactionCommitterDB
-        ///</summary>
-        public TransactionCommitterDB(): this(null)
-        {
-        }
-
-        ///<summary>
         /// Constructs the TransactionCommitter for a specific database connection
         ///</summary>
         public TransactionCommitterDB(IDatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
+        }
+
+        /// <summary>
+        /// Constructs the TransactionCommitter using <see cref="DB.DatabaseConnection.CurrentConnection"/>
+        /// </summary>
+        public TransactionCommitterDB() : this(DB.DatabaseConnection.CurrentConnection)
+        {
+        }
+
+        ///<summary>
+        /// Gets the database connection used to perform database persistence
+        ///</summary>
+        internal IDatabaseConnection DatabaseConnection
+        {
+            get { return _databaseConnection; }
         }
 
         /// <summary>
@@ -73,7 +81,7 @@ namespace Habanero.BO
 
         private IDatabaseConnection GetDatabaseConnection()
         {
-            return _databaseConnection ?? DatabaseConnection.CurrentConnection;
+            return _databaseConnection ?? DB.DatabaseConnection.CurrentConnection;
         }
 
         /// <summary>
@@ -106,9 +114,9 @@ namespace Habanero.BO
                 }
             }
 
-            ISqlStatementCollection sql = transactionDB.GetPersistSql();
-            if (sql == null) return;
             IDatabaseConnection databaseConnection = GetDatabaseConnection();
+            ISqlStatementCollection sql = transactionDB.GetPersistSql(databaseConnection);
+            if (sql == null) return;
             databaseConnection.ExecuteSql(sql, _dbTransaction);
             base.ExecuteTransactionToDataSource(transaction);
         }

@@ -24,6 +24,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -174,7 +175,7 @@ namespace Habanero.Test.Util
             base.SetupDBOracleConnection();
             IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
-            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo).GetPersistSql();
+            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo).GetPersistSql(DatabaseConnection.CurrentConnection);
             ISqlStatement sqlStatement = sqlCol[0];
             IList parameters = sqlStatement.Parameters;
             IDbDataParameter byteStringParam = (IDbDataParameter)parameters[1];

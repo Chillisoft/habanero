@@ -17,7 +17,10 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
+using Habanero.DB;
+using Habanero.Test.BO.BusinessObjectLoader;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -25,12 +28,6 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBORegistry 
     {
-        [SetUp]
-        public void SetupTest()
-        {
-           
-        }
-
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -38,13 +35,23 @@ namespace Habanero.Test.BO
             // are executed then it will still only be called once.
         }
 
+        [TestFixtureTearDown]
+        public void FixtureTearDown()
+        {
+            BORegistry.ClearCustomDataAccessors();
+        }
+
+        [SetUp]
+        public void SetupTest()
+        {
+            BORegistry.ClearCustomDataAccessors();
+        }
+
         [TearDown]
         public void TearDownTest()
         {
         
         }
-
- 
 
         [Test]
         public void TestSetDataAccessor()
@@ -82,6 +89,56 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void TestDataAccessorDB_PassesConnectionInConstructorToBOLoader()
+        {
+            //---------------Set up test pack-------------------
+            IDatabaseConnection customConnection = new TestSelectQueryDB.DatabaseConnectionStub();
+            IDatabaseConnection defaultConnection = new TestSelectQueryDB.DatabaseConnectionStub();
+            DatabaseConnection.CurrentConnection = defaultConnection;
+            //---------------Assert Precondition----------------
+            Assert.AreNotEqual(customConnection, DatabaseConnection.CurrentConnection);
+            //---------------Execute Test ----------------------
+            DataAccessorDB dataAccessor = new DataAccessorDB(customConnection);
+            //---------------Test Result -----------------------
+            BusinessObjectLoaderDB businessObjectLoader = (BusinessObjectLoaderDB) dataAccessor.BusinessObjectLoader;
+            Assert.AreEqual(customConnection, businessObjectLoader.DatabaseConnection);
+            Assert.AreNotEqual(defaultConnection, businessObjectLoader.DatabaseConnection);
+        }
+
+        [Test]
+        public void TestDataAccessorDB_ParameterlessConstructorUsesCurrentConnection()
+        {
+            //---------------Set up test pack-------------------
+            IDatabaseConnection defaultConnection = new TestSelectQueryDB.DatabaseConnectionStub();
+            DatabaseConnection.CurrentConnection = defaultConnection;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(defaultConnection, DatabaseConnection.CurrentConnection);
+            //---------------Execute Test ----------------------
+            DataAccessorDB dataAccessor = new DataAccessorDB();
+            //---------------Test Result -----------------------
+            BusinessObjectLoaderDB businessObjectLoader = (BusinessObjectLoaderDB)dataAccessor.BusinessObjectLoader;
+            Assert.AreEqual(defaultConnection, businessObjectLoader.DatabaseConnection);
+        }
+        
+        [Test]
+        public void TestDataAccessorDB_PassesConnectionInConstructorToTransactionCommitter()
+        {
+            //---------------Set up test pack-------------------
+            IDatabaseConnection customConnection = new TestSelectQueryDB.DatabaseConnectionStub();
+            IDatabaseConnection defaultConnection = new TestSelectQueryDB.DatabaseConnectionStub();
+            DatabaseConnection.CurrentConnection = defaultConnection;
+            //---------------Assert Precondition----------------
+            Assert.AreNotEqual(customConnection, DatabaseConnection.CurrentConnection);
+            //---------------Execute Test ----------------------
+            DataAccessorDB dataAccessor = new DataAccessorDB(customConnection);
+            //---------------Test Result -----------------------
+            ITransactionCommitter transactionCommitter = dataAccessor.CreateTransactionCommitter();
+            Assert.IsInstanceOfType(typeof(TransactionCommitterDB), transactionCommitter);
+            TransactionCommitterDB transactionCommitterDB = (TransactionCommitterDB) transactionCommitter;
+            Assert.AreEqual(customConnection, transactionCommitterDB.DatabaseConnection);
+            Assert.AreNotEqual(defaultConnection, transactionCommitterDB.DatabaseConnection);
+        }
 
         [Test]
         public void TestDataAccessorInMemoryConstructor()
@@ -107,8 +164,59 @@ namespace Habanero.Test.BO
             Assert.IsInstanceOfType(typeof(TransactionCommitterInMemory), dataAccessor.CreateTransactionCommitter());
             //---------------Tear Down -------------------------
         }
-        
-    }
 
-   
+        [Test]
+        public void Test_GetDataAccessor_CustomClassDefConnection()
+        {
+            //---------------Set up test pack-------------------
+            DataAccessorInMemory defaultAccessor = new DataAccessorInMemory();
+            DataAccessorInMemory customAccessor = new DataAccessorInMemory();
+            BORegistry.DataAccessor = defaultAccessor;
+            BORegistry.AddDataAccessor(typeof (MyBO), customAccessor);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(defaultAccessor, BORegistry.DataAccessor);
+            //---------------Execute Test ----------------------
+            IDataAccessor testDataAccessor = BORegistry.GetDataAccessor(typeof (MyBO));
+            //---------------Test Result -----------------------
+            Assert.AreEqual(customAccessor, testDataAccessor);
+            Assert.AreNotSame(customAccessor, BORegistry.DataAccessor);
+        }
+
+        [Test]
+        public void Test_GetDataAccessor_CustomClassDefConnection_NotFound()
+        {
+            //---------------Set up test pack-------------------
+            DataAccessorInMemory defaultAccessor = new DataAccessorInMemory();
+            DataAccessorInMemory customAccessor = new DataAccessorInMemory();
+            BORegistry.DataAccessor = defaultAccessor;
+            BORegistry.AddDataAccessor(typeof(MyBO), customAccessor);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(defaultAccessor, BORegistry.DataAccessor);
+            //---------------Execute Test ----------------------
+            IDataAccessor testDataAccessor = BORegistry.GetDataAccessor(typeof(Shape));
+            //---------------Test Result -----------------------
+            Assert.AreEqual(defaultAccessor, testDataAccessor);
+            Assert.AreSame(defaultAccessor, BORegistry.DataAccessor);
+        }
+
+        [Test]
+        public void Test_ClearCustomDataAccessors_ClearsThem()
+        {
+            //---------------Set up test pack-------------------
+            DataAccessorInMemory defaultAccessor = new DataAccessorInMemory();
+            DataAccessorInMemory customAccessor = new DataAccessorInMemory();
+            BORegistry.DataAccessor = defaultAccessor;
+            BORegistry.AddDataAccessor(typeof(MyBO), customAccessor);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(defaultAccessor, BORegistry.DataAccessor);
+            Assert.AreEqual(customAccessor, BORegistry.GetDataAccessor(typeof(MyBO)));
+            //---------------Execute Test ----------------------
+            BORegistry.ClearCustomDataAccessors();
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(customAccessor, BORegistry.GetDataAccessor(typeof(MyBO)));
+            Assert.AreEqual(defaultAccessor, BORegistry.GetDataAccessor(typeof(MyBO)));
+            Assert.IsNotNull(BORegistry.DataAccessor);
+            Assert.AreEqual(defaultAccessor, BORegistry.DataAccessor);
+        }
+    }
 }

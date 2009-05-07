@@ -190,7 +190,7 @@ namespace Habanero.BO
 
                     if (this.BusinessObject.ClassDef.HasObjectID) continue;
                     if (this.BusinessObject.Status.IsNew && boKey.HasAutoIncrementingProperty) continue;
-                    if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, primaryKeyCriteria).
+                    if (BORegistry.GetDataAccessor(_businessObject.GetType()).BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, primaryKeyCriteria).
                        Count > 0)
                     {
                         errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
@@ -202,7 +202,7 @@ namespace Habanero.BO
                 if (primaryKeyCriteria != null)
                     keyCriteria = new Criteria(keyCriteria, Criteria.LogicalOp.And, new Criteria(Criteria.LogicalOp.Not, primaryKeyCriteria));
 
-                if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, keyCriteria).Count > 0)
+                if (BORegistry.GetDataAccessor(_businessObject.GetType()).BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, keyCriteria).Count > 0)
                     errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
             }
 

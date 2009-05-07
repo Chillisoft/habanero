@@ -38,7 +38,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public static T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<T>(primaryKey);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObject<T>(primaryKey);
         }
 
         /// <summary>
@@ -49,7 +50,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public static IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, primaryKey);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(classDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, primaryKey);
         }
 
         /// <summary>
@@ -60,7 +62,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public static T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<T>(criteria);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObject<T>(criteria);
         }
 
         /// <summary>
@@ -71,7 +74,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public static IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteria);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(classDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteria);
         }
 
         /// <summary>
@@ -84,7 +88,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, an error is raised</returns>
         public static T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<T>(selectQuery);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObject<T>(selectQuery);
         }
 
         /// <summary>
@@ -98,7 +103,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public static IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, selectQuery);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(classDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, selectQuery);
         }
 
         /// <summary>
@@ -111,7 +117,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public static T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<T>(criteriaString);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObject<T>(criteriaString);
         }
 
         /// <summary>
@@ -122,7 +129,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an error is raised</returns>
         public static IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteriaString);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(classDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteriaString);
         }
 
         /// <summary>
@@ -134,7 +142,8 @@ namespace Habanero.BO
         /// <returns>An object of type T if one was found, otherwise null</returns>
         public static T GetRelatedBusinessObject<T>(SingleRelationship<T> relationship) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(relationship);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(relationship);
         }
 
         /// <summary>
@@ -145,7 +154,8 @@ namespace Habanero.BO
         /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
         public static IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(relationship);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(relationship.RelatedObjectClassDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(relationship);
         }
 
         /// <summary>
@@ -156,7 +166,8 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteria);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteria);
         }
 
         /// <summary>
@@ -167,7 +178,8 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteriaString);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteriaString);
         }
 
         /// <summary>
@@ -178,20 +190,22 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(classDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
         }
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
         /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <typeparam name="T">The .type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
         public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) 
             where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteria, orderCriteria);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteria, orderCriteria);
         }
 
         /// <summary>
@@ -204,10 +218,11 @@ namespace Habanero.BO
         public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) 
             where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteriaString,
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteriaString,
                 orderCriteria);
         }
-        
+
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, and limiting the number of objects loaded. 
@@ -250,7 +265,8 @@ namespace Habanero.BO
                 int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
             where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteria,
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteria,
                 orderCriteria, firstRecordToLoad, numberOfRecordsToLoad, out totalNoOfRecords);
         }
 
@@ -296,7 +312,8 @@ namespace Habanero.BO
                 int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
             where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteriaString,
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteriaString,
                 orderCriteriaString, firstRecordToLoad, numberOfRecordsToLoad, out totalNoOfRecords);
         }
 
@@ -309,7 +326,8 @@ namespace Habanero.BO
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
         public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria,
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(classDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria,
                 orderCriteria);
         }
 
@@ -324,7 +342,8 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(selectQuery);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(selectQuery);
         }
 
         /// <summary>
@@ -338,7 +357,8 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, selectQuery);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(classDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, selectQuery);
         }
 
         /// <summary>
@@ -351,7 +371,8 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria, string orderCriteria)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, searchCriteria,
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(classDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, searchCriteria,
                 orderCriteria);
         }
 
@@ -364,7 +385,8 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, searchCriteria);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(classDef.ClassType);
+            return dataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, searchCriteria);
         }
 
         /// <summary>
@@ -376,7 +398,8 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public static void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(collection);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            dataAccessor.BusinessObjectLoader.Refresh(collection);
         }
 
         /// <summary>
@@ -387,7 +410,8 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public static void Refresh(IBusinessObjectCollection collection)
         {
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(collection);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(collection.ClassDef.ClassType);
+            dataAccessor.BusinessObjectLoader.Refresh(collection);
         }
 
         /// <summary>
@@ -399,7 +423,8 @@ namespace Habanero.BO
         /// <param name="businessObject">The businessObject to refresh</param>
         public static IBusinessObject Refresh(IBusinessObject businessObject)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.Refresh(businessObject);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(businessObject.GetType());
+            return dataAccessor.BusinessObjectLoader.Refresh(businessObject);
         }
 
         /// <summary>
@@ -414,7 +439,8 @@ namespace Habanero.BO
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         public static RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IMultipleRelationship relationship) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<T>(relationship);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(typeof(T));
+            return dataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<T>(relationship);
         }
 
         /// <summary>
@@ -429,7 +455,8 @@ namespace Habanero.BO
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         public static IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship)
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type,relationship);
+            IDataAccessor dataAccessor = BORegistry.GetDataAccessor(type);
+            return dataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type,relationship);
         }
     }
 }

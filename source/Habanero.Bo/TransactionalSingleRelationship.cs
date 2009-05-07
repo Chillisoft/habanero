@@ -78,9 +78,9 @@ namespace Habanero.BO
         ///</summary>
         public void UpdateAsRolledBack() { }
 
-        public virtual ISqlStatementCollection GetPersistSql()
+        public virtual ISqlStatementCollection GetPersistSql(IDatabaseConnection databaseConnection)
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(RelatedBO, DatabaseConnection.CurrentConnection);
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(RelatedBO, databaseConnection);
             return gen.GenerateForRelationship(Relationship, RelatedBO);
         }
     }

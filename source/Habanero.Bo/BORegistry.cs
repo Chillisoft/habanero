@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
@@ -27,7 +29,8 @@ namespace Habanero.BO
     ///</summary>
     public class BORegistry
     {
-        private static IDataAccessor _dataAccessor;
+        private static IDataAccessor _defaultDataAccessor;
+        private static readonly Dictionary<Type, IDataAccessor> _dataAccessors = new Dictionary<Type, IDataAccessor>();
 
         /// <summary>
         /// Gets and sets the DataAccessor to be used. This determines the location your
@@ -38,12 +41,49 @@ namespace Habanero.BO
         {
             get
             {
-                if (_dataAccessor == null) 
+                if (_defaultDataAccessor == null) 
                     throw new HabaneroApplicationException("The DataAccessor has not been set up on BORegistry. Please initialise it before attempting to load or save Business Objects.");
-                return _dataAccessor;
+                return _defaultDataAccessor;
             }
-            set { _dataAccessor = value; }
+            set { _defaultDataAccessor = value; }
         }
 
+        /// <summary>
+        /// Adds a custom <see cref="IDataAccessor"/> to use for a specific type.
+        /// Use this facility to support different databases in the same application.
+        /// </summary>
+        /// <param name="type">The type for this accessor</param>
+        /// <param name="dataAccessor">The data accessor to use for this type</param>
+        public static void AddDataAccessor(Type type, IDataAccessor dataAccessor)
+        {
+            _dataAccessors.Add(type, dataAccessor);
+        }
+
+        /// <summary>
+        /// Gets the data accessor for the specific type, if it has been assigned using
+        /// <see cref="AddDataAccessor"/>.  If none is found,
+        /// the default IDataAccessor will be found, as provided by the 
+        /// <see cref="DataAccessor"/> property.
+        /// </summary>
+        /// <param name="type">The type to search on</param>
+        /// <returns>Returns a custom data accessor</returns>
+        public static IDataAccessor GetDataAccessor(Type type)
+        {
+            if (_dataAccessors.ContainsKey(type))
+            {
+                return _dataAccessors[type];
+            }
+            return DataAccessor;
+        }
+
+        /// <summary>
+        /// Clears the registry of any custom accessors that have been set
+        /// for specific types.  The default <see cref="IDataAccessor"/> as defined in the
+        /// <see cref="DataAccessor"/> property remains intact.
+        /// </summary>
+        public static void ClearCustomDataAccessors()
+        {
+            _dataAccessors.Clear();
+        }
     }
 }

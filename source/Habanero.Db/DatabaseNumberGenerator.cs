@@ -168,9 +168,9 @@ namespace Habanero.DB
             /// </summary>
             /// <returns>Returns an ISqlStatementCollection containing
             /// the statement</returns>
-            public ISqlStatementCollection GetPersistSql()
+            public ISqlStatementCollection GetPersistSql(IDatabaseConnection databaseConnection)
             {
-                SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection,
+                SqlStatement statement = new SqlStatement(databaseConnection, 
                                                           " update " + _tableName + " set SettingValue = ");
                 statement.AddParameterToStatement(_newNumber.ToString());
                 statement.Statement.Append(" where SettingName = ");

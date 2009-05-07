@@ -321,7 +321,7 @@ namespace Habanero.BO
         public virtual IBusinessObjectCollection GetBusinessObjectCollection()
         {
             ClassDef classDef = LookupBoClassDef;
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+            return BORegistry.GetDataAccessor(classDef.ClassType).BusinessObjectLoader.GetBusinessObjectCollection
                 (classDef, this.Criteria, this.OrderCriteria);
         }
 
@@ -472,7 +472,7 @@ namespace Habanero.BO
         public ICollection GetValueCollection()
         {
             ClassDef classDef = LookupBoClassDef;
-            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+            IBusinessObjectCollection col = BORegistry.GetDataAccessor(classDef.ClassType).BusinessObjectLoader.GetBusinessObjectCollection
                 (classDef, "", "");
             return CreateValueList(col);
         }

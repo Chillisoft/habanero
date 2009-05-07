@@ -84,14 +84,14 @@ namespace Habanero.Test.BO
             //---------------Assert Preconditions --------------
             
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql();
+            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql(DatabaseConnection.CurrentConnection);
             //---------------Test Result -----------------------
             //check if the transaction committer has 2 object
             // check that the one object is the transaction log object.
             Assert.AreEqual(2, sqlStatementCollection.Count);
             ISqlStatement sqlStatement = sqlStatementCollection[1];
             TransactionLogTable transactionLogTable = new TransactionLogTable(cp);
-            Assert.AreEqual(transactionLogTable.GetPersistSql()[0].Statement.ToString(), sqlStatement.Statement.ToString());
+            Assert.AreEqual(transactionLogTable.GetPersistSql(DatabaseConnection.CurrentConnection)[0].Statement.ToString(), sqlStatement.Statement.ToString());
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace Habanero.Test.BO
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql();
+            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql(DatabaseConnection.CurrentConnection);
             //---------------Test Result -----------------------
             //check if the transaction committer has 2 object
             // check that the one object is the transaction log object.
@@ -132,7 +132,7 @@ namespace Habanero.Test.BO
             //Test that the transaction log 
             //---------------Set up test pack-------------------
             ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
-            TransactionCommitterDB tc = new TransactionCommitterDB();
+            TransactionCommitterDB tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             string dirtyXML = cp.DirtyXML;
             //---------------Execute Test ----------------------
@@ -163,10 +163,10 @@ namespace Habanero.Test.BO
             //Test that the transaction log 
             //---------------Set up test pack-------------------
             ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
-            TransactionCommitterDB tc = new TransactionCommitterDB();
+            TransactionCommitterDB tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             tc.CommitTransaction();
-            tc = new TransactionCommitterDB();
+            tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             cp.Surname = Guid.NewGuid().ToString();
             tc.AddBusinessObject(cp);
             //---------------Execute Test ----------------------
@@ -191,11 +191,11 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
-            TransactionCommitterDB tc = new TransactionCommitterDB();
+            TransactionCommitterDB tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             tc.CommitTransaction();
             cp.MarkForDelete();
-            tc = new TransactionCommitterDB();
+            tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             //---------------Execute Test ----------------------
             tc.CommitTransaction();
@@ -242,7 +242,7 @@ namespace Habanero.Test.BO
             cp2.Surname = AltSurname;
 
             //---------------Execute Test ----------------------
-            TransactionCommitterDB tc = new TransactionCommitterDB();
+            TransactionCommitterDB tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp1);
             tc.AddBusinessObject(cp2);
             try

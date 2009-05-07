@@ -694,7 +694,7 @@ namespace Habanero.BO
         [ReflectionPermission(SecurityAction.Demand)]
         public void Refresh()
         {
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
+            BORegistry.GetDataAccessor(typeof(TBusinessObject)).BusinessObjectLoader.Refresh(this);
         }
 
         #region Load Methods
@@ -1350,7 +1350,7 @@ namespace Habanero.BO
         /// </summary>
         public virtual void SaveAll()
         {
-            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            ITransactionCommitter committer = BORegistry.GetDataAccessor(typeof(TBusinessObject)).CreateTransactionCommitter();
 
             SaveAllInTransaction(committer);
         }

@@ -608,7 +608,7 @@ namespace Habanero.BO
         {
             BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue(classDef, idValue);
 
-            return boPrimaryKey == null ? null : BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, boPrimaryKey);
+            return boPrimaryKey == null ? null : BORegistry.GetDataAccessor(classDef.ClassType).BusinessObjectLoader.GetBusinessObject(classDef, boPrimaryKey);
         }
 
         ///<summary>

@@ -42,6 +42,7 @@ namespace Habanero.BO.ConcurrencyControl
         private readonly IBOProp _boPropMachineLocked;
         private readonly IBOProp _boPropOperatingSystemUser;
         private readonly IBOProp _boPropLocked;
+        private readonly DataAccessorDB _dataAccessor;
 
 
         /// <summary>
@@ -55,7 +56,10 @@ namespace Habanero.BO.ConcurrencyControl
         /// <param name="boPropMachineLocked">The machine name on which the object was last updated</param>
         /// <param name="boPropOperatingSystemUser">The Windows logged on user who locked the object</param>
         /// <param name="boPropLocked">The property that determines whether the object is locked or not</param>
-        public PessimisticLockingDB(BusinessObject busObj, int lockDurationInMinutes, IBOProp boPropDateTimeLocked, IBOProp boPropUserLocked, IBOProp boPropMachineLocked, IBOProp boPropOperatingSystemUser, IBOProp boPropLocked)
+        /// <param name="dataAccessor">The data accessor used to perform persistence operations</param>
+        public PessimisticLockingDB(BusinessObject busObj, int lockDurationInMinutes, IBOProp boPropDateTimeLocked,
+            IBOProp boPropUserLocked, IBOProp boPropMachineLocked, IBOProp boPropOperatingSystemUser, IBOProp boPropLocked,
+            DataAccessorDB dataAccessor)
         {
             _busObj = busObj;
             _lockDurationInMinutes = lockDurationInMinutes;
@@ -64,6 +68,25 @@ namespace Habanero.BO.ConcurrencyControl
             _boPropMachineLocked = boPropMachineLocked;
             _boPropOperatingSystemUser = boPropOperatingSystemUser;
             _boPropLocked = boPropLocked;
+            _dataAccessor = dataAccessor;
+        }
+
+        /// <summary>
+        /// Gets the data accessor used to perform persistence operations
+        /// </summary>
+        internal DataAccessorDB DataAccessor
+        {
+            get { return _dataAccessor; }
+        }
+
+        /// <summary>
+        /// Gets the database connection associated with the data accessor assigned
+        /// to this object
+        /// </summary>
+        /// <returns>Returns the connection on the BusinessObjectLoader</returns>
+        internal IDatabaseConnection GetConnection()
+        {
+            return ((BusinessObjectLoaderDB)DataAccessor.BusinessObjectLoader).DatabaseConnection;
         }
 
         /// <summary>
@@ -116,10 +139,11 @@ namespace Habanero.BO.ConcurrencyControl
         public void CheckConcurrencyBeforeBeginEditing()
         {
             if (_busObj.Status.IsNew) return;
-            IDatabaseConnection connection = DatabaseConnection.CurrentConnection;
+
+            if (!(DataAccessor.BusinessObjectLoader is BusinessObjectLoaderDB)) return;
+            IDatabaseConnection connection = GetConnection();
             if (connection == null) return;
 
-            if (!(BORegistry.DataAccessor.BusinessObjectLoader is BusinessObjectLoaderDB)) return;
             ISqlStatement statement = GetSQLStatement();
             using (IDataReader dr = connection.LoadDataReader(statement))
             {
@@ -153,12 +177,13 @@ namespace Habanero.BO.ConcurrencyControl
             UpdateLockingToDB();
             return;
         }
+
         private ISqlStatement GetSQLStatement()
         {
-            BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB)BORegistry.DataAccessor.BusinessObjectLoader;
+            BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB) DataAccessor.BusinessObjectLoader;
             ISelectQuery selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);
 
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, GetConnection());
             return selectQueryDB.CreateSqlStatement();
         }
         private bool LockDurationValid(DateTime dateLocked)
@@ -179,7 +204,7 @@ namespace Habanero.BO.ConcurrencyControl
         {
             ISqlStatementCollection sql = GetUpdateSql();
             if (sql == null) return;
-            DatabaseConnection.CurrentConnection.ExecuteSql(sql);
+            GetConnection().ExecuteSql(sql);
         }
 
         private void SetDateTimeLocked()
@@ -237,7 +262,7 @@ namespace Habanero.BO.ConcurrencyControl
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetUpdateSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(_busObj, DatabaseConnection.CurrentConnection);
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(_busObj, GetConnection());
             return gen.Generate();
         }
 

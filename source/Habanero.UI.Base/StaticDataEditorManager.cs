@@ -124,7 +124,7 @@ namespace Habanero.UI.Base
             {
                 _gridControl.Initialise(classDef);
                 _gridControl.Grid.SetBusinessObjectCollection(
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, ""));
+                    BORegistry.GetDataAccessor(classDef.ClassType).BusinessObjectLoader.GetBusinessObjectCollection(classDef, ""));
                 _gridControl.Enabled = true;
             }
             catch (Exception ex)

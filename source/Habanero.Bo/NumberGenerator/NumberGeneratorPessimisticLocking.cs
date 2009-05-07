@@ -128,7 +128,7 @@ namespace Habanero.BO
                     this.Props["UserLocked"],
                     this.Props["MachineLocked"],
                     this.Props["OperatingSystemUserLocked"],
-                    this.Props["Locked"]));
+                    this.Props["Locked"], (DataAccessorDB) BORegistry.DataAccessor));
         }
 
         internal static void LoadNumberGenClassDef()
@@ -176,9 +176,11 @@ namespace Habanero.BO
         /// Deletes all the numbers stored in the database table holding the generated
         /// numbers
         /// </summary>
-        public static void DeleteAllNumbers()
+        /// <param name="databaseConnection">The database connection used to execute the
+        /// deletion</param>
+        public static void DeleteAllNumbers(IDatabaseConnection databaseConnection)
         {
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
+            databaseConnection.ExecuteRawSql("Delete From numbergenerator");
         }
     }
 }

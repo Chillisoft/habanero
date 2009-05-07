@@ -87,7 +87,7 @@ namespace Habanero.Test.BO
             ContactPersonPessimisticLockingDB.LoadDefaultClassDef();
             ContactPersonPessimisticLockingDB cp = new ContactPersonPessimisticLockingDB();
             cp.Surname = Guid.NewGuid().ToString();
-            TransactionCommitter tc = new TransactionCommitterDB();
+            TransactionCommitter tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             tc.CommitTransaction();
             return cp;
@@ -128,6 +128,34 @@ namespace Habanero.Test.BO
             {
             }
             return "";
+        }
+
+        [Test]
+        public void Test_Constructor_StoresDataAccessor()
+        {
+            //---------------Set up test pack-------------------
+            DataAccessorDB customDataAccessor = new DataAccessorDB();
+            //---------------Assert Precondition----------------
+            Assert.AreNotEqual(customDataAccessor, BORegistry.DataAccessor);
+            //---------------Execute Test ----------------------
+            PessimisticLockingDB pessimisticLockingDB = new PessimisticLockingDB(null, 0, null, null, null, null, null, customDataAccessor);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(customDataAccessor, pessimisticLockingDB.DataAccessor);
+        }
+
+        [Test]
+        public void Test_GetConnection_GetsFromDataAccessor()
+        {
+            //---------------Set up test pack-------------------
+            DataAccessorDB dataAccessorDB = (DataAccessorDB) BORegistry.DataAccessor;
+            BusinessObjectLoaderDB businessObjectLoaderDB = (BusinessObjectLoaderDB) BORegistry.DataAccessor.BusinessObjectLoader;
+            PessimisticLockingDB pessimisticLockingDB = new PessimisticLockingDB(null, 0, null, null, null, null, null, dataAccessorDB);
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(businessObjectLoaderDB.DatabaseConnection);
+            //---------------Execute Test ----------------------
+            IDatabaseConnection connection = pessimisticLockingDB.GetConnection();
+            //---------------Test Result -----------------------
+            Assert.AreSame(businessObjectLoaderDB.DatabaseConnection, connection);
         }
 
         [Test]
@@ -407,7 +435,8 @@ namespace Habanero.Test.BO
 
             SetConcurrencyControl(new PessimisticLockingDB(this, 15, propDateLocked,
                                                            propUserLocked, propMachineLocked,
-                                                           propOperatingSystemUserLocked, _boPropLocked));
+                                                           propOperatingSystemUserLocked, _boPropLocked,
+                                                           (DataAccessorDB) BORegistry.DataAccessor));
         }
 
         public Guid ContactPersonID

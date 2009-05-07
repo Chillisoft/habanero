@@ -23,24 +23,35 @@ using Habanero.DB;
 namespace Habanero.BO
 {
     ///<summary>
-    /// A Data Accessor for Retrieving and committing data from a relational database.
+    /// A Data Accessor for retrieving and committing data from a relational database
     ///</summary>
     public class DataAccessorDB : IDataAccessor
     {
         private readonly IBusinessObjectLoader _businessObjectLoader;
-
+        private IDatabaseConnection _databaseConnection;
 
         ///<summary>
         /// The constructor for relational database data accessor. Sets up the appropriate
-        /// Business object loader for the databse using the current connection string.
+        /// Business Object loader for the database using the database connection as
+        /// provided by <see cref="DatabaseConnection.CurrentConnection"/>.
         ///</summary>
-        public DataAccessorDB()
+        public DataAccessorDB() : this(DatabaseConnection.CurrentConnection)
         {
-            _businessObjectLoader = new BusinessObjectLoaderDB(DatabaseConnection.CurrentConnection);
+        }
+
+        ///<summary>
+        /// The constructor for relational database data accessor. Sets up the appropriate
+        /// Business Object loader for the database using the database connection provided.
+        ///</summary>
+        /// <param name="databaseConnection">The database connection to use for persistence</param>
+        public DataAccessorDB(IDatabaseConnection databaseConnection)
+        {
+            _databaseConnection = databaseConnection;
+            _businessObjectLoader = new BusinessObjectLoaderDB(_databaseConnection);
         }
 
         /// <summary>
-        /// The <see cref="IDataAccessor.BusinessObjectLoader"/> to use to load BusinessObjects
+        /// Gets the <see cref="IDataAccessor.BusinessObjectLoader"/> to use to load BusinessObjects
         /// </summary>
         public IBusinessObjectLoader BusinessObjectLoader
         {
@@ -51,12 +62,10 @@ namespace Habanero.BO
         /// Creates a TransactionCommitter for you to use to persist BusinessObjects. A new TransactionCommitter is required
         /// each time an object or set of objects is persisted.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns a new <see cref="TransactionCommitterDB"/> object</returns>
         public ITransactionCommitter CreateTransactionCommitter()
         {
-            return new TransactionCommitterDB();
+            return new TransactionCommitterDB(_databaseConnection);
         }
-
-  
     }
 }

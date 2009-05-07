@@ -211,10 +211,10 @@ namespace Habanero.BO
         /// Deletes all the numbers being stored in the database table that holds
         /// the generated numbers
         /// </summary>
-        public static void DeleteAllNumbers()
+        public static void DeleteAllNumbers(IDatabaseConnection databaseConnection)
         {
-            //DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From " + _tableName);
+            //databaseConnection.ExecuteRawSql("Delete From numbergenerator");
+            databaseConnection.ExecuteRawSql("Delete From " + _tableName);
         }
     }
 }

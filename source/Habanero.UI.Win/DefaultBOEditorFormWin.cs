@@ -199,7 +199,7 @@ namespace Habanero.UI.Win
 
         protected virtual TransactionCommitter CreateSaveTransaction()
         {
-            TransactionCommitter committer = (TransactionCommitter) BORegistry.DataAccessor.CreateTransactionCommitter();
+            TransactionCommitter committer = (TransactionCommitter) BORegistry.GetDataAccessor(_bo.GetType()).CreateTransactionCommitter();
             committer.AddBusinessObject(_bo);
             return committer;
         }
