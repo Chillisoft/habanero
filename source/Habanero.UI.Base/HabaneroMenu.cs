@@ -58,7 +58,7 @@ namespace Habanero.UI.Base
     {
         private readonly List<HabaneroMenu> _submenus = new List<HabaneroMenu>();
         private readonly string _name;
-        private readonly IFormHabanero _form;
+        private readonly IControlHabanero _form;
         private readonly IControlFactory _controlFactory;
         private readonly List<Item> _menuItems = new List<Item>();
 
@@ -76,7 +76,7 @@ namespace Habanero.UI.Base
         ///<param name="menuName"></param>
         ///<param name="form"></param>
         ///<param name="controlFactory"></param>
-        public HabaneroMenu(string menuName, IFormHabanero form, IControlFactory controlFactory)
+        public HabaneroMenu(string menuName, IControlHabanero form, IControlFactory controlFactory)
         {
             _name = menuName;
             _form = form;
@@ -109,7 +109,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// The form that this menu is associated with.
         /// </summary>
-        public IFormHabanero Form
+        public IControlHabanero Form
         {
             get { return _form; }
         }
@@ -168,7 +168,7 @@ namespace Habanero.UI.Base
         {
             private readonly string _name;
             private readonly IControlFactory _controlFactory;
-            private readonly IFormHabanero _form;
+            private readonly IControlHabanero _form;
 
             ///<summary>
             /// Consructor for an <see cref="Item"/>
@@ -182,7 +182,7 @@ namespace Habanero.UI.Base
             /// <param name="name"></param>
             /// <param name="form"></param>
             /// <param name="controlFactory"></param>
-            public Item(string name, IFormHabanero form, IControlFactory controlFactory)
+            public Item(string name, IControlHabanero form, IControlFactory controlFactory)
             {
                 _name = name;
                 _controlFactory = controlFactory;
@@ -227,7 +227,7 @@ namespace Habanero.UI.Base
             ///<summary>
             /// Gets the <see cref="IFormHabanero"/> that this menu is associated with
             ///</summary>
-            public IFormHabanero Form
+            public IControlHabanero Form
             {
                 get { return _form; }
             }

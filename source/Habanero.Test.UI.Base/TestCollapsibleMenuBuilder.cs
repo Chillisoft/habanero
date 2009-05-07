@@ -308,7 +308,7 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             submenu.AddMenuItem(TestUtil.GetRandomString());
             IMenuBuilder menuBuilder = CreateMenuBuilder();
-            IFormHabanero form = habaneroMenu.Form;
+            IControlHabanero form = habaneroMenu.Form;
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             //-------------Assert Preconditions -------------
             Assert.IsFalse(IsMenuDocked(menu, form));
@@ -353,7 +353,7 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             submenu.AddMenuItem(TestUtil.GetRandomString());
             IMenuBuilder menuBuilder = CreateMenuBuilder();
-            IFormHabanero form = habaneroMenu.Form;
+            IControlHabanero form = habaneroMenu.Form;
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             form.Size = new Size(460, 900);
             //-------------Assert Preconditions -------------
@@ -676,7 +676,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            IFormHabanero frm = habaneroMenu.Form;
+            IControlHabanero frm = habaneroMenu.Form;
             HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             IFormControl expectedFormControl = CreateFormControlStub();
@@ -750,7 +750,7 @@ namespace Habanero.Test.UI.Base
         }
 
 
-        protected virtual void AssertControlDockedInForm(IControlHabanero control, IFormHabanero form)
+        protected virtual void AssertControlDockedInForm(IControlHabanero control, IControlHabanero form)
         {
             Assert.AreEqual(1, form.Controls.Count, "No container control found in form");
             IControlHabanero splitCntrl = form.Controls[0];
@@ -783,7 +783,7 @@ namespace Habanero.Test.UI.Base
             public bool SetFormCalled { get; private set; }
         }
 
-        protected virtual bool IsMenuDocked(IMainMenuHabanero menu, IFormHabanero form)
+        protected virtual bool IsMenuDocked(IMainMenuHabanero menu, IControlHabanero form)
         {
             return form.Controls.Count == 1;
         }
@@ -903,7 +903,7 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             submenu.AddMenuItem(TestUtil.GetRandomString());
             IMenuBuilder menuBuilder = CreateMenuBuilder();
-            IFormHabanero form = habaneroMenu.Form;
+            IControlHabanero form = habaneroMenu.Form;
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             form.Size = new Size(460, 900);
             //-------------Assert Preconditions -------------
@@ -931,7 +931,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(panel2.Height, editorControl.Height);
         }
 
-        protected override void AssertControlDockedInForm(IControlHabanero control, IFormHabanero form)
+        protected override void AssertControlDockedInForm(IControlHabanero control, IControlHabanero form)
         {
             Assert.AreEqual(1, form.Controls.Count, "No container control found in form");
             IControlHabanero splitCntrl = form.Controls[0];

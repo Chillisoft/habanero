@@ -126,7 +126,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-                IFormHabanero frm = habaneroMenu.Form;
+                IFormHabanero frm = (IFormHabanero) habaneroMenu.Form;
                 frm.Show();
                 HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
                 HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
@@ -705,7 +705,7 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             submenu.AddMenuItem(TestUtil.GetRandomString());
             IMenuBuilder menuBuilder = CreateMenuBuilder();
-            IFormHabanero form = habaneroMenu.Form;
+            IFormHabanero form = (IFormHabanero) habaneroMenu.Form;
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             //-------------Assert Preconditions -------------
             Assert.IsFalse(IsMenuDocked(menu, form));
@@ -720,7 +720,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            IFormHabanero frm = habaneroMenu.Form;
+            IFormHabanero frm = (IFormHabanero) habaneroMenu.Form;
             HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             IFormControl expectedFormControl = CreateFormControlStub();
@@ -754,13 +754,13 @@ namespace Habanero.Test.UI.Base
             formsMenuItem.PerformClick();
 
             //-------------Assert Preconditions -------------
-            AssertControlDockedInForm((IControlHabanero)expectedFormControl, habaneroMenu.Form);
+            AssertControlDockedInForm((IControlHabanero)expectedFormControl, (IFormHabanero) habaneroMenu.Form);
 
             //---------------Execute Test ----------------------
             formsMenuItem.PerformClick();
 
             //---------------Test Result -----------------------
-            AssertControlDockedInForm((IControlHabanero)expectedFormControl, habaneroMenu.Form);
+            AssertControlDockedInForm((IControlHabanero)expectedFormControl, (IFormHabanero) habaneroMenu.Form);
                       
         }
 
@@ -786,13 +786,13 @@ namespace Habanero.Test.UI.Base
             formsMenuItem1.PerformClick();
 
             //-------------Assert Preconditions -------------
-            AssertControlDockedInForm((IControlHabanero)expectedFormControl1, habaneroMenu.Form);
+            AssertControlDockedInForm((IControlHabanero)expectedFormControl1, (IFormHabanero) habaneroMenu.Form);
 
             //---------------Execute Test ----------------------
             formsMenuItem2.PerformClick();
 
             //---------------Test Result -----------------------
-            AssertControlDockedInForm((IControlHabanero)expectedFormControl2, habaneroMenu.Form);
+            AssertControlDockedInForm((IControlHabanero)expectedFormControl2, (IFormHabanero) habaneroMenu.Form);
         }
 
         public class ControlManagerStub : IControlManager

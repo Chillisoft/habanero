@@ -35,7 +35,7 @@ namespace Habanero.UI.Base
         /// display the controls loaded when the menu item is clicked.
         /// </summary>
         /// <param name="form">The form to set up with the menu</param>
-        void DockInForm(IFormHabanero form);
+        void DockInForm(IControlHabanero form);
 
         /// <summary>
         /// Gets and Sets the name of the MainMenu

@@ -123,7 +123,7 @@ namespace Habanero.UI.VWG
         /// display the controls loaded when the menu item is clicked.
         /// </summary>
         /// <param name="form">The form to set up with the menu</param>
-        public void DockInForm(IFormHabanero form)
+        public void DockInForm(IControlHabanero form)
         {
             IControlHabanero panel = GetControlFactory().CreatePanel();
             panel.Dock = Habanero.UI.Base.DockStyle.Fill;

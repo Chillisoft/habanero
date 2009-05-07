@@ -116,10 +116,10 @@ namespace Habanero.UI.Win
         /// display the controls loaded when the menu item is clicked.
         /// </summary>
         /// <param name="form">The form to set up with the menu</param>
-        public void DockInForm(IFormHabanero form)
+        public void DockInForm(IControlHabanero form)
         {
             Form formWin = (Form) form;
-            form.IsMdiContainer = true;
+            ((IFormHabanero)form).IsMdiContainer = true;
             formWin.Menu = this;
         }
     }
@@ -188,7 +188,7 @@ namespace Habanero.UI.Win
                     _createdForm = _habaneroMenuItem.ControlFactory.CreateForm();
                     _createdForm.Width = 800;
                     _createdForm.Height = 600;
-                    _createdForm.MdiParent = _habaneroMenuItem.Form;
+                    _createdForm.MdiParent = (IFormHabanero) _habaneroMenuItem.Form;
                     _createdForm.WindowState = Habanero.UI.Base.FormWindowState.Maximized;
                     _createdForm.Text = _habaneroMenuItem.Name;
                     _createdForm.Controls.Clear();
