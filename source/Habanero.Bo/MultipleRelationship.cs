@@ -223,18 +223,24 @@ namespace Habanero.BO
             get
             {
                 BusinessObjectCollection<TBusinessObject> currentCol = this.CurrentBusinessObjectCollection;
-                if (this.TimeOut > 0 && currentCol.TimeLastLoaded != null)
+                if (TimeOutHasExpired(currentCol))
                 {
-                    TimeSpan timeSinceLastLoad  = DateTime.Now - currentCol.TimeLastLoaded.Value;
-                    if (timeSinceLastLoad.Milliseconds <= this.TimeOut) 
-                    {
-                        return currentCol;
-                    }
+                    RelationshipUtils.SetupCriteriaForRelationship(this, currentCol);
+                    BORegistry.DataAccessor.BusinessObjectLoader.Refresh(currentCol);
+                    return currentCol;
                 }
-                RelationshipUtils.SetupCriteriaForRelationship(this, _boCol);
-                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
-                return _boCol;
+                return currentCol;
             }
+        }
+
+        private bool TimeOutHasExpired(IBusinessObjectCollection currentCol)
+        {
+            if (this.TimeOut <= 0 || currentCol.TimeLastLoaded == null)
+            {
+                return true;
+            }
+            TimeSpan timeSinceLastLoad = DateTime.Now - currentCol.TimeLastLoaded.Value;
+            return timeSinceLastLoad.Milliseconds >= this.TimeOut;
         }
 
         /// <summary>

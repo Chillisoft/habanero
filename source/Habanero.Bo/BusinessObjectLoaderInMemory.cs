@@ -19,11 +19,9 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -56,13 +54,13 @@ namespace Habanero.BO
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
             if (_dataStore.AllObjects.ContainsKey(primaryKey.ObjectID))
-                return (T)_dataStore.AllObjects[primaryKey.ObjectID];
+                return (T) _dataStore.AllObjects[primaryKey.ObjectID];
 
-            throw new BusObjDeleteConcurrencyControlException(
-                string.Format(
-                    "A Error has occured since the object you are trying to refresh has been deleted by another user."
-                    + " There are no records in the database for the Class: {0} identified by {1} \n", typeof (T).Name,
-                    primaryKey));
+            throw new BusObjDeleteConcurrencyControlException
+                (string.Format
+                     ("A Error has occured since the object you are trying to refresh has been deleted by another user."
+                      + " There are no records in the database for the Class: {0} identified by {1} \n", typeof (T).Name,
+                      primaryKey));
         }
 
         /// <summary>
@@ -75,14 +73,15 @@ namespace Habanero.BO
         {
 //            if (_dataStore.AllObjects.ContainsKey(primaryKey))
 //                return _dataStore.AllObjects[primaryKey];
-            IBusinessObject businessObject = _dataStore.Find(classDef.ClassType, ((BOPrimaryKey)primaryKey).GetKeyCriteria());
+            IBusinessObject businessObject = _dataStore.Find
+                (classDef.ClassType, ((BOPrimaryKey) primaryKey).GetKeyCriteria());
             if (businessObject == null)
             {
-                throw new BusObjDeleteConcurrencyControlException(
-                string.Format(
-                    "A Error has occured since the object you are trying to refresh has been deleted by another user."
-                    + " There are no records in the database for the Class: {0} identified by {1} \n", classDef.ClassNameFull,
-                    primaryKey));
+                throw new BusObjDeleteConcurrencyControlException
+                    (string.Format
+                         ("A Error has occured since the object you are trying to refresh has been deleted by another user."
+                          + " There are no records in the database for the Class: {0} identified by {1} \n",
+                          classDef.ClassNameFull, primaryKey));
             }
             return businessObject;
         }
@@ -178,9 +177,10 @@ namespace Habanero.BO
             }
             if (businessObject.Status.IsEditing)
             {
-                throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
-                    "A Error has occured since the object being refreshed is being edited. ID :- " +
-                    businessObject.ID.AsString_CurrentValue() + " Class : " + businessObject.ClassDef.ClassNameFull);
+                throw new HabaneroDeveloperException
+                    ("A Error has occured since the object being refreshed is being edited.",
+                     "A Error has occured since the object being refreshed is being edited. ID :- "
+                     + businessObject.ID.AsString_CurrentValue() + " Class : " + businessObject.ClassDef.ClassNameFull);
             }
             return businessObject;
         }
@@ -207,10 +207,10 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="collection">The collection to refresh</param>
-        protected override void DoRefresh<T>(BusinessObjectCollection<T> collection) 
+        protected override void DoRefresh<T>(BusinessObjectCollection<T> collection)
             //where T : class, IBusinessObject, new()
         {
-            DoRefresh((IBusinessObjectCollection)collection);
+            DoRefresh((IBusinessObjectCollection) collection);
             //ISelectQuery selectQuery = collection.SelectQuery;
             //Criteria criteria = selectQuery.Criteria;
             //OrderCriteria orderCriteria = selectQuery.OrderCriteria;
@@ -247,34 +247,34 @@ namespace Habanero.BO
             LoadBOCollection(collection, loadedBos);
         }
 
+//        private static void ApplyLimitsToList(ISelectQuery selectQuery, IList loadedBos)
+//        {
+//            int firstRecordToLoad = selectQuery.FirstRecordToLoad;
+//            if (firstRecordToLoad < 0)
+//            {
+//                throw new IndexOutOfRangeException("FirstRecordToLoad should not be negative.");
+//            }
+//            if (firstRecordToLoad > loadedBos.Count)
+//            {
+//                loadedBos.Clear();
+//                return;
+//            }
+//            if (firstRecordToLoad > 0)
+//            {
+//                for (int i = 0; i < firstRecordToLoad; i++)
+//                {
+//                    loadedBos.RemoveAt(0);
+//                }
+//            }
+//            if (selectQuery.Limit < 0) return;
+//            while (loadedBos.Count > selectQuery.Limit)
+//            {
+//                loadedBos.RemoveAt(selectQuery.Limit);
+//            }
+//        }
+
+
         private static void ApplyLimitsToList(ISelectQuery selectQuery, IList loadedBos)
-        {
-            int firstRecordToLoad = selectQuery.FirstRecordToLoad;
-            if (firstRecordToLoad < 0)
-            {
-                throw new IndexOutOfRangeException("FirstRecordToLoad should not be negative.");
-            }
-            if (firstRecordToLoad > loadedBos.Count)
-            {
-                loadedBos.Clear();
-                return;
-            }
-            if (firstRecordToLoad > 0)
-            {
-                for (int i = 0; i < firstRecordToLoad; i++)
-                {
-                    loadedBos.RemoveAt(0);
-                }
-            }
-            if (selectQuery.Limit < 0) return;
-            while (loadedBos.Count > selectQuery.Limit)
-            {
-                loadedBos.RemoveAt(selectQuery.Limit);
-            }
-        }
-
-
-        private static void ApplyLimitsToList(ISelectQuery selectQuery, IBusinessObjectCollection loadedBos)
         {
             int firstRecordToLoad = selectQuery.FirstRecordToLoad;
             if (firstRecordToLoad < 0)
@@ -326,8 +326,7 @@ namespace Habanero.BO
         {
             IRelationshipDef relationshipDef = relationship.RelationshipDef;
             if (relationshipDef.RelatedObjectClassDef != null)
-                return GetBusinessObject(relationshipDef.RelatedObjectClassDef,
-                                         Criteria.FromRelationship(relationship));
+                return GetBusinessObject(relationshipDef.RelatedObjectClassDef, Criteria.FromRelationship(relationship));
             return null;
         }
 
@@ -339,6 +338,7 @@ namespace Habanero.BO
         {
             return _dataStore;
         }
+
         #endregion
     }
 }

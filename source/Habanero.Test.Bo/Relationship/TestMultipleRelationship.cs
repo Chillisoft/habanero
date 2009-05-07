@@ -175,12 +175,66 @@ namespace Habanero.Test.BO.Relationship
             DateTime? initialTimeLastLoaded = collection.TimeLastLoaded;
             //---------------Assert Precondition----------------
             Assert.AreEqual(initialTimeLastLoaded, collection.TimeLastLoaded);
+            Assert.AreEqual(0, collection.Count);
             //---------------Execute Test ----------------------
+            ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
+            contactPerson.Save();
             TestUtil.Wait(10);
             IBusinessObjectCollection secondCollectionCall = rel.BusinessObjectCollection;
             //---------------Test Result -----------------------
-            Assert.AreEqual(initialTimeLastLoaded, secondCollectionCall.TimeLastLoaded);
             Assert.AreSame(collection, secondCollectionCall);
+            Assert.AreEqual(0, secondCollectionCall.Count);
+            Assert.AreEqual(initialTimeLastLoaded, secondCollectionCall.TimeLastLoaded);
+        }
+
+        [Test]
+        public void Test_LoadMultiplerelationship_TimeOutExceeded_WhenTimeOutZero_DoesResetTheTimeLastLoaded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef orgClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelationshipDef relationshipDef = (RelationshipDef)orgClassDef.RelationshipDefCol["ContactPeople"];
+            IMultipleRelationship rel = new MultipleRelationship<ContactPersonTestBO>(organisationTestBO, relationshipDef, organisationTestBO.Props, 0);
+            IBusinessObjectCollection collection = rel.BusinessObjectCollection;
+            DateTime? initialTimeLastLoaded = collection.TimeLastLoaded;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(collection.TimeLastLoaded);
+            Assert.AreEqual(initialTimeLastLoaded, collection.TimeLastLoaded);
+            //---------------Execute Test ----------------------
+            TestUtil.Wait(1000);
+            IBusinessObjectCollection secondCollectionCall = rel.BusinessObjectCollection;
+            //---------------Test Result -----------------------
+            Assert.AreSame(collection, secondCollectionCall);
+            Assert.IsNotNull(secondCollectionCall.TimeLastLoaded);
+            Assert.AreNotEqual(initialTimeLastLoaded, secondCollectionCall.TimeLastLoaded);
+        }
+
+        [Test]
+        public void Test_LoadMultiplerelationship_TimeOutExceeded_WhenTimeOutZero_UsingRelationship_DoesResetTheTimeLastLoaded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef orgClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelationshipDef relationshipDef = (RelationshipDef)orgClassDef.RelationshipDefCol["ContactPeople"];
+            //IMultipleRelationship rel = new MultipleRelationship<ContactPersonTestBO>(organisationTestBO, relationshipDef, organisationTestBO.Props, 0);
+            IBusinessObjectCollection collection = organisationTestBO.ContactPeople;
+            DateTime? initialTimeLastLoaded = collection.TimeLastLoaded;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(collection.TimeLastLoaded);
+            Assert.AreEqual(initialTimeLastLoaded, collection.TimeLastLoaded);
+            //---------------Execute Test ----------------------
+            TestUtil.Wait(1000);
+            IBusinessObjectCollection secondCollectionCall = organisationTestBO.ContactPeople;
+            //---------------Test Result -----------------------
+            Assert.AreSame(collection, secondCollectionCall);
+            Assert.IsNotNull(secondCollectionCall.TimeLastLoaded);
+            Assert.AreNotEqual(initialTimeLastLoaded, secondCollectionCall.TimeLastLoaded);
         }
 
         [Test]
@@ -196,13 +250,48 @@ namespace Habanero.Test.BO.Relationship
             IBusinessObjectCollection collection = rel.BusinessObjectCollection;
             DateTime? initialTimeLastLoaded = collection.TimeLastLoaded;
             //---------------Assert Precondition----------------
+            Assert.IsNotNull(collection.TimeLastLoaded);
             Assert.AreEqual(initialTimeLastLoaded, collection.TimeLastLoaded);
             //---------------Execute Test ----------------------
-            TestUtil.Wait(10);
+            ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
+            contactPerson.Save();
+            TestUtil.Wait(1000);
             IBusinessObjectCollection secondCollectionCall = rel.BusinessObjectCollection;
             //---------------Test Result -----------------------
-            Assert.AreNotEqual(initialTimeLastLoaded, secondCollectionCall.TimeLastLoaded);
             Assert.AreSame(collection, secondCollectionCall);
+            Assert.IsNotNull(secondCollectionCall.TimeLastLoaded);
+            Assert.AreEqual(1, secondCollectionCall.Count);
+            Assert.AreNotEqual(initialTimeLastLoaded, secondCollectionCall.TimeLastLoaded);
+        }
+
+        [Test]
+        public void Test_LoadMultiplerelationship_TimeOutExceeded_WhenTimeOutZero_UsingRelationship_DoesReloadFromDB()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef orgClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            IBusinessObjectCollection collection = organisationTestBO.ContactPeople;
+            DateTime? initialTimeLastLoaded = collection.TimeLastLoaded;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(collection.TimeLastLoaded);
+            Assert.AreEqual(initialTimeLastLoaded, collection.TimeLastLoaded);
+            Assert.AreEqual(0, collection.Count);
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
+            contactPerson.Save();
+            TestUtil.Wait(1000);
+            IBusinessObjectCollection secondCollectionCall = organisationTestBO.ContactPeople;
+            //---------------Test Result -----------------------
+            Assert.AreSame(collection, secondCollectionCall);
+            Assert.IsNotNull(secondCollectionCall.TimeLastLoaded);
+            Assert.AreEqual(1, secondCollectionCall.Count);
+            Assert.AreNotEqual(initialTimeLastLoaded, secondCollectionCall.TimeLastLoaded);
         }
 
         [Test]
@@ -223,8 +312,8 @@ namespace Habanero.Test.BO.Relationship
             TestUtil.Wait(100);
             IBusinessObjectCollection secondCollectionCall = rel.BusinessObjectCollection;
             //---------------Test Result -----------------------
-            Assert.AreNotEqual(initialTimeLastLoaded, secondCollectionCall.TimeLastLoaded);
             Assert.AreSame(collection, secondCollectionCall);
+            Assert.AreNotEqual(initialTimeLastLoaded, secondCollectionCall.TimeLastLoaded);
         }
 
         private MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
