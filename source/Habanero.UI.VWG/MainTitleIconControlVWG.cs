@@ -59,6 +59,7 @@ namespace Habanero.UI.VWG
 
             this.Dock = DockStyleVWG.GetDockStyle(DockStyle.Top);
             this.Controls.Add((PanelVWG)_panel);
+            this.Height = 23;
         }
 
         /// <summary>

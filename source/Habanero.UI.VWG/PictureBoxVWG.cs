@@ -23,7 +23,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.VWG
 {
-    internal class PictureBoxVWG : PictureBox,IPictureBox
+    public class PictureBoxVWG : PictureBox,IPictureBox
     {
         /// <summary>
         /// Gets or sets the anchoring style.

@@ -59,17 +59,17 @@ namespace Habanero.BO
         //protected readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
         //    new Dictionary<string, WeakReference>();
         /// <summary> The Busienss Objects Loaded in memory. This is a <see cref="WeakReference"/> so that the objects can still be garbage collected. </summary>
-        protected readonly Dictionary<Guid, WeakReference> _loadedBusinessObjects =
-            new Dictionary<Guid, WeakReference>();
+        protected readonly Dictionary<Guid, WeakReference> _loadedBusinessObjects = new Dictionary<Guid, WeakReference>
+            ();
 
         private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
+
         /// <summary>
         /// The constructor for the Busienss Object Manager.
         /// </summary>
         protected internal BusinessObjectManager()
         {
             _updateIDEventHandler = ObjectID_Updated_Handler;
-  
         }
 
         ///<summary>
@@ -309,6 +309,7 @@ namespace Habanero.BO
                 }
             }
         }
+
         /// <summary>
         /// Dereigisters for the IDValueUpdatedEvent.
         /// </summary>
@@ -415,14 +416,23 @@ namespace Habanero.BO
                     if (!WeakReferenceIsAlive(weakReference)) continue;
 
                     BusinessObject bo = (BusinessObject) weakReference.Target;
-                    if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
+                    try
                     {
-                        collection.Add(bo as T);
+                        if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
+                        {
+                            collection.Add(bo as T);
+                        }
+                    }
+                    //For Dynamic Business Objects the Props may have been added since the business object was loaded.
+                    catch (InvalidPropertyNameException ex)
+                    {
+                        //Do Nothing
                     }
                 }
                 return collection;
             }
         }
+
         /// <summary>
         /// Finds all the loaded business objects that match the type T and the Criteria given.
         /// </summary>
@@ -433,18 +443,26 @@ namespace Habanero.BO
         {
             lock (_loadedBusinessObjects)
             {
-                Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(boType);
-                IBusinessObjectCollection collection = (IBusinessObjectCollection)Activator.CreateInstance(boColType);
+                Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
+                IBusinessObjectCollection collection = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
                 WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
                 _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
                 foreach (WeakReference weakReference in valueArray)
                 {
                     if (!WeakReferenceIsAlive(weakReference)) continue;
 
-                    BusinessObject bo = (BusinessObject)weakReference.Target;
-                    if (boType.IsInstanceOfType(bo) && (criteria == null || criteria.IsMatch(bo, false)))
+                    BusinessObject bo = (BusinessObject) weakReference.Target;
+                    //For Dynamic Business Objects the Props may have been added since the business object was loaded.
+                    try
                     {
-                        collection.Add(bo);
+                        if (boType.IsInstanceOfType(bo) && (criteria == null || criteria.IsMatch(bo, false)))
+                        {
+                            collection.Add(bo);
+                        }
+                    }
+                    catch (InvalidPropertyNameException ex)
+                    {
+                        //Do Nothing
                     }
                 }
                 return collection;
