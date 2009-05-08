@@ -65,7 +65,8 @@ namespace Habanero.DB4O
             if (matchingObjects.Count > 1)
             {
                 string className = classDef != null ? classDef.ClassName : typeof(T).Name;
-                throw new HabaneroDeveloperException("There was an error with loading the class " + className + ".", "The query returned more than one record when only one was expected");
+                string message = "There was an error with loading the class " + className + ". The query returned more than one record when only one was expected";
+                throw new HabaneroDeveloperException(message,message);
             }
             BusinessObjectDTO matchedDTO = ((matchingObjects.Count > 0) ? matchingObjects[0] : null);
             if (matchedDTO == null)

@@ -36,6 +36,11 @@ namespace Habanero.DB
         /// MySql - the MySql .NET data provider will be used
         /// </summary>
         public const string MySql = "MYSQL";
+        
+        /// <summary>
+        /// DB4O - the DB4O .NET data provider will be used
+        /// </summary>
+        public const string DB4O = "DB4O";
 
         /// <summary>
         /// Microsoft Sql Server - the built in SqlClient data provider will be used

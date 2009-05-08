@@ -105,6 +105,7 @@ namespace Habanero.UI.VWG
     {
         private readonly IMenuItemCollection _menuItemCollection;
         private ISplitContainer _splitContainer;
+        private MainEditorPanelVWG _mainEditorPanel;
 
         /// <summary>
         /// Constructs a <see cref="CollapsibleMenuVWG"/>
@@ -144,9 +145,9 @@ namespace Habanero.UI.VWG
             splitContainer1.Orientation = Gizmox.WebGUI.Forms.Orientation.Vertical;
             this.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
             splitContainer1.Panel1.Controls.Add(this);
-            MainEditorPanelVWG mainEditorPanel = new MainEditorPanelVWG(this.ControlFactory);
-            mainEditorPanel.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
-            splitContainer1.Panel2.Controls.Add(mainEditorPanel);
+            _mainEditorPanel = new MainEditorPanelVWG(this.ControlFactory);
+            _mainEditorPanel.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
+            splitContainer1.Panel2.Controls.Add(_mainEditorPanel);
         }
 
         /// <summary>
@@ -170,7 +171,14 @@ namespace Habanero.UI.VWG
         {
             get { return _menuItemCollection; }
         }
-
+        /// <summary>
+        /// This is to set the text of the main title.
+        /// </summary>
+        public string MainTitleText
+        {
+            get { return _mainEditorPanel.MainTitleIconControl.Title.Text; }
+            set { _mainEditorPanel.MainTitleIconControl.Title.Text = value;}
+        }
         #endregion
     }
 
@@ -274,11 +282,12 @@ namespace Habanero.UI.VWG
                     SplitContainer splitContainer = (SplitContainer) _habaneroMenuItem.Form.Controls[0];
                     SplitterPanel panel2 = splitContainer.Panel2;
                     MainEditorPanelVWG mainEditorPanel = (MainEditorPanelVWG) panel2.Controls[0];
-                    mainEditorPanel.MainTitleIconControl.Text = this.Text;
+                    mainEditorPanel.MainTitleIconControl.Title.Text = this.Text;
                     mainEditorPanel.EditorPanel.Controls.Clear();
                     mainEditorPanel.EditorPanel.Controls.Add(control);
                     mainEditorPanel.Width -= 1;
                     mainEditorPanel.Width += 1;
+                    
                 }
             }
             catch (Exception ex)

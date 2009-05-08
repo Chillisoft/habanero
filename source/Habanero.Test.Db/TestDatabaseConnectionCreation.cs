@@ -419,6 +419,7 @@ namespace Habanero.Test.DB
         [Test]
         public void Test_CreateDatabaseConnection_Firebird()
         {
+            
             DatabaseConnection conn = new DatabaseConnectionFirebird
                 ("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection");
             conn.ConnectionString =
@@ -486,4 +487,6 @@ namespace Habanero.Test.DB
 
         #endregion
     }
+
+   
 }

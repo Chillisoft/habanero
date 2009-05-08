@@ -57,8 +57,7 @@ namespace Habanero.DB
             {
                 return String.IsNullOrEmpty(assemblyName) 
                     ? new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection", config.GetConnectionString()) 
-                    : new DatabaseConnectionMySql(assemblyName, fullClassName,
-                                                                                                                                                    config.GetConnectionString(assemblyName));
+                    : new DatabaseConnectionMySql(assemblyName, fullClassName,config.GetConnectionString(assemblyName));
             }
             if (string.Compare(config.Vendor, DatabaseConfig.SqlServer, true) == 0)
             {

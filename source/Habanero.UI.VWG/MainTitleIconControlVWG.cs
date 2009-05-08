@@ -36,11 +36,12 @@ namespace Habanero.UI.VWG
             _controlFactory = controlFactory;
             _panel = _controlFactory.CreatePanel();
             ((PanelVWG)_panel).BackgroundImage = "Images.headergradient.png";
+            
             _panel.BackColor = Color.Transparent;
             _panel.Dock = Habanero.UI.Base.DockStyle.Top;
-
+            
             _panel.Height = 23;
-
+            this.Size = new Size(_panel.Width,_panel.Height);
             _icon = _controlFactory.CreateLabel();
             ((LabelVWG)_icon).BackgroundImage = "";
             _icon.BackColor = Color.Transparent;

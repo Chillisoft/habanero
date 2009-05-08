@@ -26,7 +26,7 @@ using Habanero.BO.ClassDefinition;
 namespace Habanero.BO
 {
 	/// <summary>
-	/// A helper class that encapsulates the deletiong checking for a specified business object.
+	/// A helper class that encapsulates the deleting checking for a specified business object.
 	/// This class finds all the relationships that are marked as prevent delete for this business object
 	/// and any of its children business object. It then checks if there are any children that are marked as 
 	/// prevent delete. If there are any business objects in these relationships that are not marked as deleted

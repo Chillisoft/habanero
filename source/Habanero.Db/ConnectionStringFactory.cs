@@ -96,7 +96,9 @@ namespace Habanero.DB
                 case DatabaseConfig.Firebird:
                     return new ConnectionStringFirebirdFactory(false);
                 case DatabaseConfig.FirebirdEmbedded:
-                    return new ConnectionStringFirebirdFactory(true);
+                    return new ConnectionStringFirebirdFactory(true);                
+                case DatabaseConfig.DB4O:
+                    return new ConnectionStringDB4OFactory();
                 default:
                     return null;
             }
