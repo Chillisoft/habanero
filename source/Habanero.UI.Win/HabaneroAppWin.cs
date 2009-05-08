@@ -17,9 +17,13 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using System.Collections;
+using System.Configuration;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.DB;
+using Habanero.DB4O;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -152,6 +156,91 @@ namespace Habanero.UI.Win
         protected override void SetupDatabaseConnection()
         {
             BORegistry.DataAccessor = new DataAccessorInMemory();
+        }
+    }
+    ///<summary>
+    /// Provides a template for an InMemory Habanero application, including
+    /// standard fields and initialisations.  Specific details covered are:
+    /// <ul>
+    /// <li>The class definitions that define how the data is represented
+    /// and limited</li>
+    /// <li>A logger to record debugging and error messages</li>
+    /// <li>An exception notifier to communicate exceptions to the user</li>
+    /// <li>Automatic version upgrades when an application is out-of-date</li>
+    /// <li>A synchronisation controller</li>
+    /// <li>A control factory to create controls</li>
+    /// <li>A data accessor that specifies what type of data source is used (InMemory)</li>
+    /// </ul>
+    /// To set up and launch an application:
+    /// <ol>
+    /// <li>Instantiate the application with the constructor</li>
+    /// <li>Specify any individual settings as required</li>
+    /// <li>Call the Startup() method to launch the application</li>
+    /// </ol>
+    ///</summary>
+    public class HabaneroAppDB4OWin : HabaneroAppWin
+    {
+        private string _vendor;
+        private string _server;
+        private string _database;
+        private string _userName;
+        private string _password;
+        private string _port;
+        private int _portNumber;
+
+        ///<summary>
+        /// Creates a windows application that runs using an in memory database. I.e. no database connection is set up
+        /// and the DataAccessor is set to be InMemory.
+        ///</summary>
+        ///<param name="appName"></param>
+        ///<param name="appVersion"></param>
+        public HabaneroAppDB4OWin(string appName, string appVersion) : base(appName, appVersion)
+        {
+        }
+        /// <summary>
+        /// Sets up the database connection.  If not provided, then
+        /// reads the connection from the config file.
+        /// </summary>
+        protected override void SetupDatabaseConnection()
+        {
+            SetupDB4OConfiguration();
+            DB4ORegistry.CreateDB4OServerConfiguration(_server, _portNumber,_database);
+        }
+
+        private void SetupDB4OConfiguration()
+        {
+            IDictionary configuration = (IDictionary) ConfigurationManager.GetSection("DatabaseConfig");
+            if (configuration != null)
+            {
+                _vendor = (string)configuration["vendor"];
+                _server = (string)configuration["server"];
+                _database = (string)configuration["database"];
+                _userName = (string)configuration["username"];
+                _password = (string)configuration["password"];
+                _port = (string)configuration["port"];
+
+                if (string.IsNullOrEmpty(_vendor) || !_vendor.Equals("DB4O"))
+                {
+                    throw new ArgumentException("Missing database settings for the database configuration " +
+                                         "in the application configuration file. " +
+                                         "Ensure that you have a setting for 'vendor' " +
+                                         "- see documentation for possible options on the database " +
+                                         "vendor setting.");
+                }
+
+                if(!Int32.TryParse(_port,out _portNumber))
+                {
+                    throw new ArgumentException("The value given for 'Port' in the database configuration is an invald Int32 ("+_port+").");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("The database configuration could not be read. " +
+                                         "Check that your application configuration file exists (eg. app.config), " +
+                                         "that you have DatabaseConfig in the configSections, and that you have " +
+                                         "a section of settings in the DatabaseConfig category.");
+            }
+            return;
         }
     }
 }

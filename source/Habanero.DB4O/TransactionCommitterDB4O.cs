@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Db4objects.Db4o;
+using Db4objects.Db4o.Internal;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -42,11 +43,11 @@ namespace Habanero.DB4O
             {
                 TransactionalBusinessObject tbo = transaction as TransactionalBusinessObject;
                 tbo.BusinessObject.ClassDefName = tbo.BusinessObject.ClassDef.ClassName;
-
+                string primaryKey = tbo.BusinessObject.ID.ToString();
                 if (tbo.BusinessObject.Status.IsDeleted)
                 {
                     IList<BusinessObjectDTO> matchingObjects = _objectContainer.Query<BusinessObjectDTO>(
-                                        obj => obj.ClassDefName == tbo.BusinessObject.ClassDef.ClassName && obj.ID == tbo.BusinessObject.ID.ToString());
+                                        obj => obj.ClassDefName == tbo.BusinessObject.ClassDef.ClassName && obj.ID == primaryKey.ToString());
                     BusinessObjectDTO dtoToDelete = matchingObjects[0];
                     _objectContainer.Delete(dtoToDelete);
                 }
@@ -57,10 +58,14 @@ namespace Habanero.DB4O
                 } else
                 {
                     IList<BusinessObjectDTO> matchingObjects = _objectContainer.Query<BusinessObjectDTO>(
-                                        obj => obj.ClassDefName == tbo.BusinessObject.ClassDef.ClassName && obj.ID == tbo.BusinessObject.ID.ToString());
+                        delegate(BusinessObjectDTO obj)
+                            {
+                                return obj.ClassDefName == tbo.BusinessObject.ClassDef.ClassName &&
+                                       obj.ID == primaryKey;
+                            });
                     if (matchingObjects.Count == 0)
                     {
-                        throw new BusObjDeleteConcurrencyControlException(string.Format("The object of type {0} with ID: {1} has been deleted from the data store.", tbo.BusinessObject.ClassDef.ClassName, tbo.BusinessObject.ID));
+                        throw new BusObjDeleteConcurrencyControlException(string.Format("The object of type {0} with ID: {1} has been deleted from the data store.", tbo.BusinessObject.ClassDef.ClassName, primaryKey));
                     }
                     BusinessObjectDTO dtoToUpdate = matchingObjects[0];
                     foreach (IBOProp boProp in tbo.BusinessObject.Props)

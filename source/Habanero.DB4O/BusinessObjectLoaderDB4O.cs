@@ -197,23 +197,28 @@ namespace Habanero.DB4O
             Criteria criteria = selectQuery.Criteria;
             OrderCriteria orderCriteria = selectQuery.OrderCriteria;
 
-            QueryBuilder.PrepareCriteria(collection.ClassDef, criteria);
+            IClassDef classDef = collection.ClassDef;
+            QueryBuilder.PrepareCriteria(classDef, criteria);
 
             WithDB4O<IBusinessObject>(db =>
             {
                 IList<BusinessObjectDTO> matchingObjects;
                 if (criteria == null)
                 {
-                    matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == collection.ClassDef.ClassName);
+                    matchingObjects = db.Query<BusinessObjectDTO>(
+                        delegate(BusinessObjectDTO obj)
+                            {
+                                return obj.ClassDefName == classDef.ClassName;
+                            });
                 }
                 else
                 {
-                    matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == collection.ClassDef.ClassName && criteria.IsMatch(obj));
+                    matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == classDef.ClassName && criteria.IsMatch(obj));
                 }
                 List<IBusinessObject> loadedBOs = new List<IBusinessObject>(matchingObjects.Count);
                 foreach (BusinessObjectDTO matchingObject in matchingObjects)
                 {
-                    BusinessObject tempBO = GetBoFromDTO<BusinessObject>(collection.ClassDef, matchingObject);
+                    BusinessObject tempBO = GetBoFromDTO<BusinessObject>(classDef, matchingObject);
                     if (BusinessObjectManager.Instance.Contains(tempBO.ID))
                     {
                         loadedBOs.Add(GetLoadedBusinessObject(tempBO)); //BusinessObjectManager.Instance[matchingObject.ID]);
@@ -240,18 +245,19 @@ namespace Habanero.DB4O
             Criteria criteria = selectQuery.Criteria;
             OrderCriteria orderCriteria = selectQuery.OrderCriteria;
 
-            QueryBuilder.PrepareCriteria(collection.ClassDef, criteria);
+            IClassDef classDef = collection.ClassDef;
+            QueryBuilder.PrepareCriteria(classDef, criteria);
 
             WithDB4O<T>(db =>
                         {
                             IList<BusinessObjectDTO> matchingObjects;
                             if (criteria == null)
                             {
-                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == collection.ClassDef.ClassName);
+                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == classDef.ClassName);
                             }
                             else
                             {
-                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == collection.ClassDef.ClassName && criteria.IsMatch(obj));
+                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == classDef.ClassName && criteria.IsMatch(obj));
                             }
                             List<T> loadedBOs = new List<T>(matchingObjects.Count);
 
@@ -259,7 +265,7 @@ namespace Habanero.DB4O
                             {
 
 
-                                T bo = GetBoFromDTO<T>(collection.ClassDef, matchingObject);
+                                T bo = GetBoFromDTO<T>(classDef, matchingObject);
                                 if (BusinessObjectManager.Instance.Contains(bo.ID))
                                 {
                                     loadedBOs.Add((T) GetLoadedBusinessObject(bo)); //BusinessObjectManager.Instance[matchingObject.ID]);
