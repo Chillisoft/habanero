@@ -463,6 +463,14 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
+        /// Creates a DataGridViewTextBoxColumn
+        /// </summary>
+        public IDataGridViewColumn CreateDataGridViewTextBoxColumn()
+        {
+            return new DataGridViewColumnWin(new DataGridViewTextBoxColumn());
+        }
+
+        /// <summary>
         /// Creates a DataGridViewCheckBoxColumn
         /// </summary>
         public IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()

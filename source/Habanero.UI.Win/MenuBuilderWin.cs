@@ -61,6 +61,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Returns the control factory being used to create the Menu and the MenuItems
         /// </summary>
+
         public IControlFactory ControlFactory
         {
             get { return _controlFactory; }
@@ -68,7 +69,7 @@ namespace Habanero.UI.Win
 
         private IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
         {
-//            MenuItemWin menuItem = new MenuItemWin(habaneroMenu.Name);
+            //MenuItemWin menuItem = new MenuItemWin(habaneroMenu.Name);
             IMenuItem menuItem = this.ControlFactory.CreateMenuItem(habaneroMenu.Name);
             foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
             {

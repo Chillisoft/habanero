@@ -37,7 +37,7 @@ namespace Habanero.UI.Base
         /// The actual <see cref="Dictionary{TKey,TValue}"/> of values that will be displayed in the combo box. This is a key value dictionary
         /// where the key contains the value that will be displayed in the ComboBox and the Value is the Unique identifier for the record.
         /// An object identifier (<see cref="IBusinessObject.ID"/> - <see cref="IPrimaryKey.ObjectID"/>) in the case of a <see cref="BusinessObjectLookupList"/>.
-        /// or the Primary Key (field or composite fileds) in the case of a <see cref="DatabaseLookupList"/> or the key value for a <see cref="SimpleLookupList"/>.
+        /// or the Primary Key (field or composite fileds) in the case of a DatabaseLookupList or the key value for a <see cref="SimpleLookupList"/>.
         /// The Application developer can of course implement any other <see cref="ILookupList"/> that they require.
         /// </summary>
         protected Dictionary<string, string> _collection;

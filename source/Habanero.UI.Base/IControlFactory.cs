@@ -166,19 +166,21 @@ namespace Habanero.UI.Base
         [Obsolete("Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
         IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new();
 
- 
+
         /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
         [Obsolete("Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
-        IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new();
+        IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl)
+            where T : class, IBusinessObject, new();
 
 
         /// <summary>
         /// Creates a GridWithPanelControl
         /// </summary>
         [Obsolete("Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
-        IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new();
+        IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl,
+                                                               string uiDefName) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Creates a control to manage a group of buttons that display next to each other
@@ -383,6 +385,7 @@ namespace Habanero.UI.Base
         /// <param name="action">Action to be performed when the editing is completed or cancelled. Typically used if you want to update
         /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectEditDelegate action);
+
         /// <summary>
         /// Creates a form in which a business object can be edited
         /// </summary>
@@ -391,7 +394,8 @@ namespace Habanero.UI.Base
         /// used to design the edit form. Setting this to an empty string
         /// will use a UI definition with no name attribute specified.</param>
         /// <param name="groupControlCreator">The Creator that will be used to Create the <see cref="IGroupControl"/></param>
-        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, GroupControlCreator groupControlCreator);
+        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName,
+                                                GroupControlCreator groupControlCreator);
 
         ///// <summary>
         ///// Creates a ListView control
@@ -427,8 +431,8 @@ namespace Habanero.UI.Base
         /// This control is suitable for a business object collection with a limited
         /// number of objects.
         /// </summary>
-        IBOColTabControl CreateBOColTabControl(); 
-        
+        IBOColTabControl CreateBOColTabControl();
+
         ///<summary>
         /// Creates a DataGridView
         ///</summary>
@@ -443,6 +447,11 @@ namespace Habanero.UI.Base
         /// Creates a DataGridViewCheckBoxColumn
         /// </summary>
         IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn();
+
+        /// <summary>
+        /// Creates a DataGridViewTextBoxColumn
+        /// </summary>
+        IDataGridViewColumn CreateDataGridViewTextBoxColumn();
 
         /// <summary>
         /// Creates a DataGridViewComboBoxColumn
@@ -552,7 +561,8 @@ namespace Habanero.UI.Base
         ///<param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
         ///<param name="dialogCompletionDelegate">A delegate to be called when the MessageBox has been completed.</param>
         ///<returns>The message box result.</returns>
-        DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon, DialogCompletionDelegate dialogCompletionDelegate);
+        DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon,
+                                    DialogCompletionDelegate dialogCompletionDelegate);
 
         ///<summary>
         /// Displays a message box with specified text.
@@ -574,8 +584,8 @@ namespace Habanero.UI.Base
         ///<summary>
         /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>() 
-            where TBusinessObject:class, IBusinessObject;
+        IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>()
+            where TBusinessObject : class, IBusinessObject;
 
         ///<summary>
         /// Creates a <see cref="IBOGridAndEditorControl"/>
@@ -598,7 +608,7 @@ namespace Habanero.UI.Base
         ///</summary>
         ICollapsiblePanel CreateCollapsiblePanel(string name);
 
-        
+
         ///<summary>
         /// Creates a <see cref="IButton"/> configured with the collapsible style
         ///</summary>
@@ -638,6 +648,7 @@ namespace Habanero.UI.Base
         ///</summary>
         ///<returns></returns>
         IBOComboBoxSelector CreateComboBoxSelector();
+
         ///<summary>
         /// Creates an <see cref="IBOListBoxSelector"/>
         ///</summary>
@@ -804,7 +815,6 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IDateTimePickerMapperStrategy
     {
-
         /// <summary>
         /// Adds value changed event handlers.
         /// </summary>

@@ -29,6 +29,11 @@ namespace Habanero.Base.Exceptions
     public class HabaneroArgumentException : HabaneroDeveloperException
     {
         /// <summary>
+        /// The Name of the Parameter that had the exception.
+        /// </summary>
+        public string ParameterName { get; private set; }
+
+        /// <summary>
         /// Constructor to initialise a new exception
         /// </summary>
         public HabaneroArgumentException()
@@ -41,6 +46,7 @@ namespace Habanero.Base.Exceptions
         /// <param name="parameterName">The parameter name</param>
         public HabaneroArgumentException(string parameterName) : base("The argument '" + parameterName + "' is not valid. ", "")
         {
+            ParameterName = parameterName;
         }
 
         /// <summary>
@@ -55,6 +61,7 @@ namespace Habanero.Base.Exceptions
                                          Exception inner)
             : base("The argument '" + parameterName + "' is not valid. " + message, "", inner)
         {
+            ParameterName = parameterName;
         }
 
         /// <summary>
@@ -67,6 +74,7 @@ namespace Habanero.Base.Exceptions
                                          , Exception inner)
             : base("The argument '" + parameterName + "' is not valid. ", "", inner)
         {
+            ParameterName = parameterName;
         }
 
         /// <summary>
@@ -79,6 +87,7 @@ namespace Habanero.Base.Exceptions
                                          string message)
             : base("The argument '" + parameterName + "' is not valid. " + message, "")
         {
+            ParameterName = parameterName;
         }
 
         /// <summary>

@@ -955,6 +955,13 @@ namespace Habanero.UI.VWG
         }
 
         /// <summary>
+        /// Creates a DataGridViewTextBoxColumn
+        /// </summary>
+        public IDataGridViewColumn CreateDataGridViewTextBoxColumn()
+        {
+            return new DataGridViewColumnVWG(new DataGridViewTextBoxColumn());
+        }
+        /// <summary>
         /// Creates a DataGridViewComboBoxColumn
         /// </summary>
         public virtual IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn()

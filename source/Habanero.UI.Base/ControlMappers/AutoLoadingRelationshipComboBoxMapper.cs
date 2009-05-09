@@ -6,6 +6,9 @@ using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This mapper loads all the Business Objects of type relationshipDef.RelatedObjectClassDef.
+    /// </summary>
     public class AutoLoadingRelationshipComboBoxMapper : RelationshipComboBoxMapper
     {
         /// <summary>
@@ -19,6 +22,9 @@ namespace Habanero.UI.Base
         public AutoLoadingRelationshipComboBoxMapper(IComboBox comboBox, string relationshipName, bool isReadOnly, IControlFactory controlFactory) : base(comboBox, relationshipName, isReadOnly, controlFactory) {}
 
 
+        /// <summary>
+        /// Provides an overrideable method for Loading the collection of business objects
+        /// </summary>
         protected override void LoadCollectionForBusinessObject() { 
             if (this.BusinessObjectCollection == null)
             {

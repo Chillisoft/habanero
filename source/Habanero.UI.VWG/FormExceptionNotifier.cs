@@ -56,11 +56,11 @@ namespace Habanero.UI.VWG
             if (ex is UserException || ex is BusinessObjectException)
             {
                 MessageBox.Show(furtherMessage + Environment.NewLine + ex.Message, title);
-
             }
             else
             {
-                new CollapsibleExceptionNotifyForm(ex, furtherMessage, title).ShowDialog();
+                CollapsibleExceptionNotifyForm form = new CollapsibleExceptionNotifyForm(ex, furtherMessage, title);
+                form.ShowDialog();
             }
         }
 

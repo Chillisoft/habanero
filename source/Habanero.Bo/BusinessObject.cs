@@ -1188,17 +1188,23 @@ namespace Habanero.BO
             return errors.Count == 0;
         }
 
-        protected IList<IBusinessObjectRule> BusinessObjectRules
+        private IList<IBusinessObjectRule> BusinessObjectRules
         {
             get
             {
                 //Lazy initialisation so as to prevent unneccessary objects being created during construction.
                 if (_boRules == null)
                 {
-                    _boRules  = new List<IBusinessObjectRule>();
+                    _boRules = new List<IBusinessObjectRule>();
+                    LoadBusinessObjectRules(_boRules);
                 }
                 return _boRules;
             }
+        }
+
+        protected virtual void LoadBusinessObjectRules(IList<IBusinessObjectRule> boRules)
+        {
+            //This must be overridden in the inherited class with any custom rules.
         }
 
         /// <summary>
@@ -1221,11 +1227,8 @@ namespace Habanero.BO
             AreCustomRulesValid(out errors);
             foreach (IBusinessObjectRule rule in this.BusinessObjectRules)
             {
-                if (rule == null || rule.IsValid()) continue;
-                if(rule.ErrorLevel != ErrorLevel.Error) continue;
-                string message = rule.Message;
-                IBOError error = new BOError(message, rule.ErrorLevel);
-                errors.Add(error);
+                if (rule == null || !ErrorLevelIsError(rule) || rule.IsValid()) continue;
+                CreateBOError(rule, errors);
             }
             return errors == null || errors.Count == 0;
         }
@@ -1240,13 +1243,22 @@ namespace Habanero.BO
             errors = new List<IBOError>();
             foreach (IBusinessObjectRule rule in this.BusinessObjectRules)
             {
-                if (rule == null || rule.IsValid()) continue;
-                if (rule.ErrorLevel == ErrorLevel.Error) continue;
-                string message = rule.Message;
-                IBOError error = new BOError(message, rule.ErrorLevel);
-                errors.Add(error);
+                if (rule == null || ErrorLevelIsError(rule) || rule.IsValid()) continue;
+                CreateBOError(rule, errors);
             }
-            return errors.Count == 0;
+            return  errors.Count == 0;
+        }
+
+        private static bool ErrorLevelIsError(IBusinessObjectRule rule)
+        {
+            return rule.ErrorLevel == ErrorLevel.Error;
+        }
+
+        private void CreateBOError(IBusinessObjectRule rule, ICollection<IBOError> errors)
+        {
+            string message = rule.Message;
+            BOError error = new BOError(message, rule.ErrorLevel) {BusinessObject = this};
+            errors.Add(error);
         }
 
         #endregion //Persistance

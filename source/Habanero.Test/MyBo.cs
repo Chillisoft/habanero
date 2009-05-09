@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Xml;
 using Habanero.Base;
@@ -35,17 +36,22 @@ namespace Habanero.Test
     [Serializable]
     public class MyBO : BusinessObject
     {
+        private List<IBusinessObjectRule> _myRuleList;
+
         protected MyBO(SerializationInfo info, StreamingContext context) : base(info, context)
         {
+            _myRuleList = new List<IBusinessObjectRule>();
         }
 
         public MyBO(ClassDef def)
             : base(def)
         {
+            _myRuleList = new List<IBusinessObjectRule>();
         }
 
         public MyBO()
         {
+            _myRuleList = new List<IBusinessObjectRule>();
         }
 
         protected override ClassDef ConstructClassDef()
@@ -1573,7 +1579,19 @@ namespace Habanero.Test
 
         public void AddBusinessRule(IBusinessObjectRule businessObjectRuleStub)
         {
-            this.BusinessObjectRules.Add(businessObjectRuleStub);
+            
+            _myRuleList.Add(businessObjectRuleStub);
+        }
+
+        protected override void LoadBusinessObjectRules(IList<IBusinessObjectRule> boRules)
+        {
+            base.LoadBusinessObjectRules(boRules);
+            if (_myRuleList == null) return;
+
+            foreach (IBusinessObjectRule rule in _myRuleList)
+            {
+                boRules.Add(rule);
+            }
         }
     }
 

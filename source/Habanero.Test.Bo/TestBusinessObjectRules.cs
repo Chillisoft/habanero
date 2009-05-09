@@ -40,8 +40,9 @@ namespace Habanero.Test.BO
             IList<IBOError> msgList;
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(bo.Status.IsValid());
             Assert.IsTrue(ruleStub.IsValid());
+
+            Assert.IsTrue(bo.Status.IsValid());
             Assert.IsTrue(bo.Status.IsValid(out msg));
             Assert.IsTrue(bo.Status.IsValid(out msgList));
             //---------------Execute Test ----------------------
@@ -63,11 +64,13 @@ namespace Habanero.Test.BO
             string msg;
             IList<IBOError> msgList;
             //---------------Assert Precondition----------------
-            Assert.IsTrue(bo.Status.IsValid());
             Assert.IsFalse(ruleStub.IsValid());
+
+            Assert.IsTrue(bo.Status.IsValid());
             Assert.IsTrue(bo.Status.IsValid(out msg));
             Assert.IsTrue(bo.Status.IsValid(out msgList));
             //---------------Execute Test ----------------------
+            bo = new MyBO();
             bo.AddBusinessRule(ruleStub);
             //---------------Test Result -----------------------
             Assert.IsFalse(bo.Status.IsValid());
@@ -78,9 +81,12 @@ namespace Habanero.Test.BO
             IBOError error = msgList[0];
             Assert.AreEqual(error.Level, ErrorLevel.Error);
             Assert.AreSame(bo, error.BusinessObject);
-            Assert.IsTrue(bo.Status.HasWarnings(out msgList));
-            Assert.AreEqual(1, msgList.Count);
+            IList<IBOError> warningList;
+            Assert.IsTrue(bo.Status.HasWarnings(out warningList));
+            Assert.AreEqual(1, warningList.Count);
+            Assert.AreSame(bo, warningList[0].BusinessObject);
         }
+
         [Test]
         public void Test_ErrorLevel_WhenRuleIsWarning_ShouldNotBeError()
         {
@@ -93,6 +99,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(bo.Status.IsValid());
             Assert.IsFalse(ruleStub.IsValid());
             //---------------Execute Test ----------------------
+            bo = new MyBO();
             bo.AddBusinessRule(ruleStub);
             //---------------Test Result -----------------------
             Assert.IsTrue(bo.Status.IsValid());
@@ -100,8 +107,10 @@ namespace Habanero.Test.BO
             Assert.IsTrue(bo.Status.IsValid(out msgList));
             Assert.AreEqual(0, msgList.Count);
             TestUtil.AssertStringEmpty(msg, "msg");
-            Assert.IsTrue(bo.Status.HasWarnings(out msgList));
-            Assert.AreEqual(1, msgList.Count);
+            IList<IBOError> warningList;
+            Assert.IsTrue(bo.Status.HasWarnings(out warningList));
+            Assert.AreEqual(1, warningList.Count);
+            Assert.AreSame(bo, warningList[0].BusinessObject);
         }
 
         [Test]
@@ -115,6 +124,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(bo.Status.IsValid());
             Assert.IsFalse(ruleStub.IsValid());
             //---------------Execute Test ----------------------
+            bo = new MyBO();
             bo.AddBusinessRule(null);
             bo.AddBusinessRule(ruleStub);
             //---------------Test Result -----------------------
@@ -132,6 +142,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(bo.Status.IsValid());
             Assert.IsFalse(ruleStub.IsValid());
             //---------------Execute Test ----------------------
+            bo = new MyBO();
             bo.AddBusinessRule(new BusinessObjectRuleStub(false));
             bo.AddBusinessRule(new BusinessObjectRuleStub(true));
             bo.AddBusinessRule(ruleStub);

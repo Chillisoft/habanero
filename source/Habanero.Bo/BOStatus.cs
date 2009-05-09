@@ -121,19 +121,6 @@ namespace Habanero.BO
                 message += error.Message + Environment.NewLine;
             }
             return isValid;
-            
-
-            //message = "";
-            //if (IsDeleted) return true;
-
-            //string customRuleErrors;
-            //bool valid = _bo.Props.IsValid(out message);
-            //valid &= _bo.AreCustomRulesValidInternal(out customRuleErrors);
-            //if (!String.IsNullOrEmpty(customRuleErrors))
-            //{
-            //    message = customRuleErrors + Environment.NewLine + message;
-            //}
-            //return valid;
         }
 
         /// <summary>

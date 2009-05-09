@@ -71,11 +71,10 @@ namespace Habanero.BO
         /// that are to be updated when the BusinessObject is updated.
         ///</summary>
         ///<param name="businessObject">The BusinessObject to be updated</param>
-        public BusinessObjectLastUpdatePropertiesLog(BusinessObject businessObject)
+        public BusinessObjectLastUpdatePropertiesLog(IBusinessObject businessObject)
         {
             IBOPropCol boPropCol = businessObject.Props;
-            string propName;
-            propName = "UserLastUpdated";
+            string propName = "UserLastUpdated";
             if (boPropCol.Contains(propName))
             {
                 _userLastUpdatedBoProp = boPropCol[propName];
@@ -95,7 +94,7 @@ namespace Habanero.BO
         ///</summary>
         ///<param name="businessObject">The BusinessObject to be updated</param>
         ///<param name="securityController">The ISecurityController class</param>
-        public BusinessObjectLastUpdatePropertiesLog(BusinessObject businessObject, ISecurityController securityController)
+        public BusinessObjectLastUpdatePropertiesLog(IBusinessObject businessObject, ISecurityController securityController)
             : this(businessObject)
         {
             _securityController = securityController;

@@ -28,6 +28,9 @@ namespace Habanero.UI.Base
 
 //        private IBusinessObjectCollection _businessObjectCollection;
         private IBusinessObject _businessObject;
+        /// <summary>
+        /// The relationshipDef that is used for this Mapper.
+        /// </summary>
         protected IRelationshipDef _relationshipDef;
         private ISingleRelationship _singleRelationship;
         private ILookupComboBoxMapperStrategy _mapperStrategy;
@@ -217,7 +220,9 @@ namespace Habanero.UI.Base
                 //                this.UpdateErrorProviderErrorMessage();
             }
         }
-
+        /// <summary>
+        /// Provides an overrideable method for Loading the collection of business objects
+        /// </summary>
         protected virtual void LoadCollectionForBusinessObject() { 
         }
 
