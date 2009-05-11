@@ -30,7 +30,7 @@ namespace Habanero.BO.ClassDefinition
     public class PropDefCol : IPropDefCol
     {
         private readonly Dictionary<string, IPropDef> _propDefs;
-
+        
         /// <summary>
         /// A constructor to create a new empty collection
         /// </summary>
@@ -346,11 +346,18 @@ namespace Habanero.BO.ClassDefinition
                 throw new ArgumentException
                     (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
             }
-            catch (Exception)
+            catch (ArgumentException)
             {
-                IPropDef propDef = this[propName];
-                throw new ArgumentException
-                    (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
+                try
+                {
+                    IPropDef propDef = this[propName];
+                    throw new ArgumentException
+                        (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
+                }
+                catch (ArgumentException)
+                {
+                    //Do Nothing
+                }
             }
         }
     }
