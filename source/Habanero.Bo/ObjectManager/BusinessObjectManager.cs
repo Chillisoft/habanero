@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -404,11 +405,11 @@ namespace Habanero.BO
         /// <typeparam name="T">The Type of business object to find</typeparam>
         /// <param name="criteria">The Criteria to match on</param>
         /// <returns>A collection of all loaded matching business objects</returns>
-        public BusinessObjectCollection<T> Find<T>(Criteria criteria) where T : class, IBusinessObject, new()
+        public IList<T> Find<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             lock (_loadedBusinessObjects)
             {
-                BusinessObjectCollection<T> collection = new BusinessObjectCollection<T>();
+                IList<T> collection = new List<T>();
                 WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
                 _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
                 foreach (WeakReference weakReference in valueArray)
@@ -439,12 +440,11 @@ namespace Habanero.BO
         /// <param name="criteria">The Criteria to match on</param>
         /// <param name="boType">The business object type being searched for</param>
         /// <returns>A collection of all loaded matching business objects</returns>
-        public IBusinessObjectCollection Find(Criteria criteria, Type boType)
+        public IList Find(Criteria criteria, Type boType)
         {
             lock (_loadedBusinessObjects)
             {
-                Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
-                IBusinessObjectCollection collection = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
+                IList collection = new ArrayList();
                 WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
                 _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
                 foreach (WeakReference weakReference in valueArray)

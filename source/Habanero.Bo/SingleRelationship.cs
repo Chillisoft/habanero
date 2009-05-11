@@ -257,7 +257,7 @@ namespace Habanero.BO
 
         private TBusinessObject GetRelatedBusinessObjectFromBusinessObjectManager()
         {
-            BusinessObjectCollection<TBusinessObject> relatedBOCol =
+            IList<TBusinessObject> relatedBOCol =
                 BusinessObjectManager.Instance.Find<TBusinessObject>(_relKey.Criteria);
             TBusinessObject relatedBo = null;
             if (relatedBOCol.Count == 1)

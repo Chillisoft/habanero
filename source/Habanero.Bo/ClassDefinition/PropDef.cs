@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -787,8 +788,8 @@ namespace Habanero.BO.ClassDefinition
 
             if (boPrimaryKey != null)
             {
-                IBusinessObjectCollection find = BusinessObjectManager.Instance.Find(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
-                if (find.Count > 0) businessObject = find[0];
+                IList find = BusinessObjectManager.Instance.Find(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
+                if (find.Count > 0) businessObject = (IBusinessObject) find[0];
             }
             return businessObject;
         }
