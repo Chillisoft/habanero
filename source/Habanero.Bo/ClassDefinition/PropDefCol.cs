@@ -30,7 +30,7 @@ namespace Habanero.BO.ClassDefinition
     public class PropDefCol : IPropDefCol
     {
         private readonly Dictionary<string, IPropDef> _propDefs;
-        
+
         /// <summary>
         /// A constructor to create a new empty collection
         /// </summary>
@@ -131,7 +131,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns the new BOPropCol object</returns>
         public IBOPropCol CreateBOPropertyCol(bool isNewObject)
         {
-            var lBOPropertyCol = new BOPropCol();
+            BOPropCol lBOPropertyCol = new BOPropCol();
             foreach (IPropDef lPropDef in this)
             {
                 lBOPropertyCol.Add(lPropDef.CreateBOProp(isNewObject));
@@ -184,7 +184,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public IPropDefCol Clone()
         {
-            var newPropDefCol = new PropDefCol();
+            PropDefCol newPropDefCol = new PropDefCol();
             foreach (PropDef def in this)
             {
                 newPropDefCol.Add(def);
@@ -202,7 +202,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         public IPropDefCol Clone(bool clonePropDefs)
         {
-            var newPropDefCol = new PropDefCol();
+            PropDefCol newPropDefCol = new PropDefCol();
             foreach (PropDef def in this)
             {
                 if (clonePropDefs)
@@ -253,7 +253,7 @@ namespace Habanero.BO.ClassDefinition
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof (PropDefCol)) return false;
-            var otherPropDefCol = (PropDefCol) obj;
+            PropDefCol otherPropDefCol = (PropDefCol) obj;
             if (Count != otherPropDefCol.Count) return false;
             foreach (PropDef def in this)
             {
@@ -312,7 +312,7 @@ namespace Habanero.BO.ClassDefinition
              object defaultValue)
         {
             CheckPropNotAlreadyAdded(propName);
-            var lPropDef = new PropDef(propName, propType, propRWStatus, databaseFieldName, defaultValue);
+            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, databaseFieldName, defaultValue);
             _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
             return lPropDef;
         }
@@ -324,7 +324,7 @@ namespace Habanero.BO.ClassDefinition
         internal PropDef Add(string propName, Type propType, PropReadWriteRule propRWStatus, object defaultValue)
         {
             CheckPropNotAlreadyAdded(propName);
-            var lPropDef = new PropDef(propName, propType, propRWStatus, defaultValue);
+            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, defaultValue);
             _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
             return lPropDef;
         }
@@ -339,31 +339,31 @@ namespace Habanero.BO.ClassDefinition
             if (propName == null) throw new ArgumentNullException("propName");
             //---- This has been removed by Brett to improve performance related to the PropDefCol.Contains-------
 
-            //if (Contains(propName) || Contains(propName.ToUpper()))
-            //{
-            //            throw new ArgumentException
-            //                (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
-            //        }
-
-    try
+            if (Contains(propName.ToUpper()) || Contains(propName))
             {
-                IPropDef propDef = this[propName.ToUpper()];
                 throw new ArgumentException
                     (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
             }
-            catch (ArgumentException)
-            {
-                try
-                {
-                    IPropDef propDef = this[propName];
-                    throw new ArgumentException
-                        (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
-                }
-                catch (ArgumentException)
-                {
-                    //Do Nothing
-                }
-            }
+
+//    try
+//            {
+//                IPropDef propDef = this[propName.ToUpper()];
+//                throw new ArgumentException
+//                    (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
+//            }
+//            catch (ArgumentException)
+//            {
+////                try
+////                {
+////                    IPropDef propDef = this[propName];
+////                    throw new ArgumentException
+////                        (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
+////                }
+////                catch (ArgumentException)
+////                {
+//                    //Do Nothing
+////                }
+//            }
         }
     }
 }

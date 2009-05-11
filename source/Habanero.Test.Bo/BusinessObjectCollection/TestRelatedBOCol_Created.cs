@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -32,7 +31,9 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         private bool _removedEventFired;
         private DataAccessorInMemory _dataAccessor;
         private DataStoreInMemory _dataStore;
+
         #region SetupTeardown
+
         [SetUp]
         public void SetupTest()
         {
@@ -60,8 +61,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             _dataStore.ClearAllBusinessObjects();
             TestUtil.WaitForGC();
         }
-        #endregion
 
+        #endregion
 
         #region CreateNewBusinessObject
 
@@ -70,7 +71,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            var cpRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            MultipleRelationship<ContactPersonTestBO> cpRelationship =
+                organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             ContactPersonTestBO cp = cpRelationship.BusinessObjectCollection.CreateBusinessObject();
             cp.FirstName = TestUtil.GetRandomString();
             cp.Surname = TestUtil.GetRandomString();
@@ -78,25 +80,32 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<ContactPersonTestBO>
+                    (cpRelationship);
 
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
         }
+
         [Test]
         public void Test_LoadRelatedBoCol()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
-            ContactPersonTestBO cp = (ContactPersonTestBO)cpRelationship.BusinessObjectCollection.CreateBusinessObject();
+            IMultipleRelationship cpRelationship =
+                (IMultipleRelationship) organisationTestBO.Relationships["ContactPeople"];
+            ContactPersonTestBO cp =
+                (ContactPersonTestBO) cpRelationship.BusinessObjectCollection.CreateBusinessObject();
             cp.FirstName = TestUtil.GetRandomString();
             cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection cpCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(typeof(ContactPersonTestBO), cpRelationship);
+            IBusinessObjectCollection cpCol =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection
+                    (typeof (ContactPersonTestBO), cpRelationship);
 
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -107,8 +116,10 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
+            IMultipleRelationship cpRelationship =
+                (IMultipleRelationship) organisationTestBO.Relationships["ContactPeople"];
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
             cpCol.LoadAll();
             RegisterForAddedEvent(cpCol);
 
@@ -137,8 +148,10 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             // the main collection and should be added to the persisted collection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
+            IMultipleRelationship cpRelationship =
+                (IMultipleRelationship) organisationTestBO.Relationships["ContactPeople"];
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
             cpCol.LoadAll();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
@@ -172,8 +185,10 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
 
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
+            IMultipleRelationship cpRelationship =
+                (IMultipleRelationship) organisationTestBO.Relationships["ContactPeople"];
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
             cpCol.LoadAll();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
@@ -246,7 +261,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         private static RelatedBusinessObjectCollection<ContactPersonTestBO> CreateRelatedCPCol()
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
+            IMultipleRelationship cpRelationship =
+                (IMultipleRelationship) organisationTestBO.Relationships["ContactPeople"];
             return new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
         }
 
@@ -496,14 +512,17 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         private static RelatedBusinessObjectCollection<ContactPersonTestBO> CreateCollectionWith_OneBO()
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
+            IMultipleRelationship cpRelationship =
+                (IMultipleRelationship) organisationTestBO.Relationships["ContactPeople"];
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
 
             ContactPersonTestBO cp = cpCol.CreateBusinessObject();
             cp.FirstName = TestUtil.GetRandomString();
             cp.Surname = TestUtil.GetRandomString();
             cp.Save();
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<ContactPersonTestBO>
+                (cpRelationship);
         }
 
         private void AssertAddedAndRemovedEventsNotFired()
@@ -550,8 +569,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
         }
 
-        private static void AssertOneObjectInCurrentAndCreatedCollection
-            (IBusinessObjectCollection cpCol)
+        private static void AssertOneObjectInCurrentAndCreatedCollection(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
@@ -561,8 +579,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
         }
 
-        private static void AssertTwoCurrentObjects_OnePsersisted_OneCreated
-            (IBusinessObjectCollection cpCol)
+        private static void AssertTwoCurrentObjects_OnePsersisted_OneCreated(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(2, cpCol.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
@@ -571,8 +588,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
         }
 
-        private static void AssertOneObjectInCurrentAndPersistedCollection
-            (IBusinessObjectCollection cpCol)
+        private static void AssertOneObjectInCurrentAndPersistedCollection(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
@@ -593,6 +609,5 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         #endregion
-
     }
 }

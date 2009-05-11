@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -145,8 +144,10 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            var expectedTimout = 10000;
-            MultipleRelationshipDef relDef = new MultipleRelationshipDef("rel", "", "", new RelKeyDef(), true, "", DeleteParentAction.Prevent, RelationshipType.Association, expectedTimout);
+            int expectedTimout = 10000;
+            MultipleRelationshipDef relDef = new MultipleRelationshipDef
+                ("rel", "", "", new RelKeyDef(), true, "", DeleteParentAction.Prevent, RelationshipType.Association,
+                 expectedTimout);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedTimout, relDef.TimeOut);
@@ -354,7 +355,6 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         #endregion //For Testing
-
     }
 
     internal class MockBOWithCompulsoryField : BusinessObject
@@ -363,8 +363,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
         }
 
-        public MockBOWithCompulsoryField(ClassDef def)
-            : base(def)
+        public MockBOWithCompulsoryField(ClassDef def) : base(def)
         {
         }
 
@@ -375,7 +374,9 @@ namespace Habanero.Test.BO.ClassDefinition
 
         protected static ClassDef GetClassDef()
         {
-            return !ClassDef.IsDefined(typeof(MockBOWithCompulsoryField)) ? CreateClassDef() : ClassDef.ClassDefs[typeof(MockBOWithCompulsoryField)];
+            return !ClassDef.IsDefined(typeof (MockBOWithCompulsoryField))
+                       ? CreateClassDef()
+                       : ClassDef.ClassDefs[typeof (MockBOWithCompulsoryField)];
         }
 
         private static ClassDef CreateClassDef()
@@ -388,7 +389,7 @@ namespace Habanero.Test.BO.ClassDefinition
             primaryKey.IsGuidObjectID = true;
             primaryKey.Add(lPropDefCol["MockBOID"]);
             ClassDef lClassDef = new ClassDef
-                (typeof(MockBOWithCompulsoryField), primaryKey, lPropDefCol, keysCol, new RelationshipDefCol());
+                (typeof (MockBOWithCompulsoryField), primaryKey, lPropDefCol, keysCol, new RelationshipDefCol());
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
@@ -403,9 +404,10 @@ namespace Habanero.Test.BO.ClassDefinition
             lPropDefCol.Add("MockBOID", typeof (Guid), PropReadWriteRule.WriteOnce, "MockBOID", null);
             return lPropDefCol;
         }
+
         public Guid? MockBOProp1
         {
-            get { return (Guid?)this.GetPropertyValue("MockBOProp1"); }
+            get { return (Guid?) this.GetPropertyValue("MockBOProp1"); }
             set { this.SetPropertyValue("MockBOProp1", value); }
         }
     }
