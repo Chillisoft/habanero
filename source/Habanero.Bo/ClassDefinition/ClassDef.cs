@@ -97,7 +97,7 @@ namespace Habanero.BO.ClassDefinition
 
         private SuperClassDef _superClassDef;
         private UIDefCol _uiDefCol;
-        private string _singleTableInheritanceTableName;
+        private string _cachedTableName;
 
         #region Constructors
 
@@ -1161,20 +1161,21 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns the table name of first real table for this class.</returns>
         public string GetTableName()
         {
-            if (!string.IsNullOrEmpty(_singleTableInheritanceTableName))
+            if (!string.IsNullOrEmpty(_cachedTableName))
             {
-                return _singleTableInheritanceTableName;
+                return _cachedTableName;
             }
             if (IsUsingSingleTableInheritance())
             {
                 ClassDef superClassClassDef = SuperClassClassDef;
                 if (superClassClassDef != null)
                 {
-                    _singleTableInheritanceTableName = superClassClassDef.GetTableName();
-                    return _singleTableInheritanceTableName;
+                    _cachedTableName = superClassClassDef.GetTableName();
+                    return _cachedTableName;
                 }
             }
-            return TableName;
+            _cachedTableName = this.TableName;
+            return _cachedTableName;
         }
 
       
@@ -1191,18 +1192,6 @@ namespace Habanero.BO.ClassDefinition
                 return TableName;
             }
             return propDef.ClassDef.GetTableName();
-//            //This is coded to throw the exception instead of doing a Contains for performance Reasons
-//            try
-//            {
-//                IPropDef defcol = PropDefcol[propDef.PropertyName];
-//                return GetTableName();
-//            }
-//            catch (ArgumentException)
-//            {
-//                ClassDef superClassClassDef = SuperClassClassDef;
-//                return superClassClassDef != null ? superClassClassDef.GetTableName(propDef) : "";
-//            }
-
         }
 
 
