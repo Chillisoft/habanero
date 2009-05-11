@@ -337,10 +337,15 @@ namespace Habanero.BO.ClassDefinition
         private void CheckPropNotAlreadyAdded(string propName)
         {
             if (propName == null) throw new ArgumentNullException("propName");
+            //---- This has been removed by Brett to improve performance related to the PropDefCol.Contains-------
+
             //if (Contains(propName) || Contains(propName.ToUpper()))
             //{
+            //            throw new ArgumentException
+            //                (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
+            //        }
 
-            try
+    try
             {
                 IPropDef propDef = this[propName.ToUpper()];
                 throw new ArgumentException
