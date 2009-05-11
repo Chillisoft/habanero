@@ -39,6 +39,8 @@ namespace Habanero.BO.ClassDefinition
             _propDefs = new Dictionary<string, IPropDef>();
         }
 
+        #region IPropDefCol Members
+
         /// <summary>
         /// Provides an indexing facility for the collection so that items
         /// in the collection can be accessed like an array 
@@ -81,56 +83,6 @@ namespace Habanero.BO.ClassDefinition
         {
             CheckPropNotAlreadyAdded(propDef.PropertyName);
             _propDefs.Add(propDef.PropertyName.ToUpper(), propDef);
-        }
-
-        /// <summary>
-        /// Adds all the property definitions from the given collection
-        /// into this one.
-        /// </summary>
-        /// <param name="propDefCol">The collection of property definitions</param>
-        public void Add(IPropDefCol propDefCol)
-        {
-            foreach (PropDef def in propDefCol)
-            {
-                Add(def);
-            }
-        }
-
-        /// <summary>
-        /// Create a new property definition and add it to the collection
-        /// </summary>
-        /// <param name="propName">The name of the property, e.g. surname</param>
-        /// <param name="propType">The type of the property, e.g. string</param>
-        /// <param name="propRWStatus">Rules for how a property can be
-        /// accessed. See PropReadWriteRule enumeration for more detail.</param>
-        /// <param name="databaseFieldName">The database field name - this
-        /// allows you to have a database field name that is different to the
-        /// property name, which is useful for migrating systems where
-        /// the database has already been set up</param>
-        /// <param name="defaultValue">The default value that a property 
-        /// of a new object will be set to</param>
-        /// <returns>Returns the new definition created, after it has
-        /// been added to the collection</returns>
-        internal PropDef Add
-            (string propName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
-             object defaultValue)
-        {
-            CheckPropNotAlreadyAdded(propName);
-            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, databaseFieldName, defaultValue);
-            _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
-            return lPropDef;
-        }
-
-        /// <summary>
-        /// Creates and adds a new property definition as before, but 
-        /// assumes the database field name is the same as the property name.
-        /// </summary>
-        internal PropDef Add(string propName, Type propType, PropReadWriteRule propRWStatus, object defaultValue)
-        {
-            CheckPropNotAlreadyAdded(propName);
-            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, defaultValue);
-            _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
-            return lPropDef;
         }
 
         /// <summary>
@@ -179,7 +131,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns the new BOPropCol object</returns>
         public IBOPropCol CreateBOPropertyCol(bool isNewObject)
         {
-            BOPropCol lBOPropertyCol = new BOPropCol();
+            var lBOPropertyCol = new BOPropCol();
             foreach (IPropDef lPropDef in this)
             {
                 lBOPropertyCol.Add(lPropDef.CreateBOProp(isNewObject));
@@ -193,43 +145,12 @@ namespace Habanero.BO.ClassDefinition
         //}
 
         /// <summary>
-        /// Checks if a property definition with that name has already been added
-        /// and throws an exception if so
-        /// </summary>
-        /// <param name="propName">The property name</param>
-        private void CheckPropNotAlreadyAdded(string propName)
-        {
-            if (propName == null) throw new ArgumentNullException("propName");
-            //if (Contains(propName) || Contains(propName.ToUpper()))
-            //{
-            try{
-                IPropDef propDef = this[propName.ToUpper()];
-               
-            }
-            catch(Exception)
-            {
-                try
-                {
-                    IPropDef propDef = this[propName];
-
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentException
-                       (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets the number of definitions in this collection
         /// </summary>
         public int Count
         {
             get { return _propDefs.Count; }
         }
-
-        #region IEnumerable<PropDef> Members
 
         ///<summary>
         ///Returns an enumerator that iterates through the collection.
@@ -244,10 +165,6 @@ namespace Habanero.BO.ClassDefinition
             return _propDefs.Values.GetEnumerator();
         }
 
-        #endregion
-
-        #region IEnumerable Members
-
         ///<summary>
         ///Returns an enumerator that iterates through a collection.
         ///</summary>
@@ -259,6 +176,45 @@ namespace Habanero.BO.ClassDefinition
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _propDefs.Values.GetEnumerator();
+        }
+
+        ///<summary>
+        /// Clones the propdefcol. NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied).
+        ///</summary>
+        ///<returns></returns>
+        public IPropDefCol Clone()
+        {
+            var newPropDefCol = new PropDefCol();
+            foreach (PropDef def in this)
+            {
+                newPropDefCol.Add(def);
+            }
+            return newPropDefCol;
+        }
+
+        /// <summary>
+        /// Clones the propdefcol. This method was created so that you could control the depth of the copy. 
+        /// The reason is so that you can limit the
+        ///   extra memory used in cases where the propdef does not need to be copied.
+        /// </summary>
+        /// <param name="clonePropDefs">If true then makes a full copy of the propdefs else only 
+        /// makes a copy of the propdefcol.</param>
+        /// <returns></returns>
+        public IPropDefCol Clone(bool clonePropDefs)
+        {
+            var newPropDefCol = new PropDefCol();
+            foreach (PropDef def in this)
+            {
+                if (clonePropDefs)
+                {
+                    newPropDefCol.Add(def.Clone());
+                }
+                else
+                {
+                    newPropDefCol.Add(def);
+                }
+            }
+            return newPropDefCol;
         }
 
         #endregion
@@ -297,8 +253,8 @@ namespace Habanero.BO.ClassDefinition
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof (PropDefCol)) return false;
-            PropDefCol otherPropDefCol = (PropDefCol) obj;
-            if (this.Count != otherPropDefCol.Count) return false;
+            var otherPropDefCol = (PropDefCol) obj;
+            if (Count != otherPropDefCol.Count) return false;
             foreach (PropDef def in this)
             {
                 if (!otherPropDefCol.Contains(def.PropertyName)) return false;
@@ -323,43 +279,79 @@ namespace Habanero.BO.ClassDefinition
 
         #endregion
 
-        ///<summary>
-        /// Clones the propdefcol. NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied).
-        ///</summary>
-        ///<returns></returns>
-        public IPropDefCol Clone()
+        /// <summary>
+        /// Adds all the property definitions from the given collection
+        /// into this one.
+        /// </summary>
+        /// <param name="propDefCol">The collection of property definitions</param>
+        public void Add(IPropDefCol propDefCol)
         {
-            PropDefCol newPropDefCol = new PropDefCol();
-            foreach (PropDef def in this)
+            foreach (PropDef def in propDefCol)
             {
-                newPropDefCol.Add(def);
+                Add(def);
             }
-            return newPropDefCol;
         }
 
         /// <summary>
-        /// Clones the propdefcol. This method was created so that you could control the depth of the copy. 
-        /// The reason is so that you can limit the
-        ///   extra memory used in cases where the propdef does not need to be copied.
+        /// Create a new property definition and add it to the collection
         /// </summary>
-        /// <param name="clonePropDefs">If true then makes a full copy of the propdefs else only 
-        /// makes a copy of the propdefcol.</param>
-        /// <returns></returns>
-        public IPropDefCol Clone(bool clonePropDefs)
+        /// <param name="propName">The name of the property, e.g. surname</param>
+        /// <param name="propType">The type of the property, e.g. string</param>
+        /// <param name="propRWStatus">Rules for how a property can be
+        /// accessed. See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up</param>
+        /// <param name="defaultValue">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <returns>Returns the new definition created, after it has
+        /// been added to the collection</returns>
+        internal PropDef Add
+            (string propName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
+             object defaultValue)
         {
-            PropDefCol newPropDefCol = new PropDefCol();
-            foreach (PropDef def in this)
+            CheckPropNotAlreadyAdded(propName);
+            var lPropDef = new PropDef(propName, propType, propRWStatus, databaseFieldName, defaultValue);
+            _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
+            return lPropDef;
+        }
+
+        /// <summary>
+        /// Creates and adds a new property definition as before, but 
+        /// assumes the database field name is the same as the property name.
+        /// </summary>
+        internal PropDef Add(string propName, Type propType, PropReadWriteRule propRWStatus, object defaultValue)
+        {
+            CheckPropNotAlreadyAdded(propName);
+            var lPropDef = new PropDef(propName, propType, propRWStatus, defaultValue);
+            _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
+            return lPropDef;
+        }
+
+        /// <summary>
+        /// Checks if a property definition with that name has already been added
+        /// and throws an exception if so
+        /// </summary>
+        /// <param name="propName">The property name</param>
+        private void CheckPropNotAlreadyAdded(string propName)
+        {
+            if (propName == null) throw new ArgumentNullException("propName");
+            //if (Contains(propName) || Contains(propName.ToUpper()))
+            //{
+
+            try
             {
-                if (clonePropDefs)
-                {
-                    newPropDefCol.Add(def.Clone());
-                }
-                else
-                {
-                    newPropDefCol.Add(def);
-                }
+                IPropDef propDef = this[propName.ToUpper()];
+                throw new ArgumentException
+                    (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
             }
-            return newPropDefCol;
+            catch (Exception)
+            {
+                IPropDef propDef = this[propName];
+                throw new ArgumentException
+                    (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
+            }
         }
     }
 }
