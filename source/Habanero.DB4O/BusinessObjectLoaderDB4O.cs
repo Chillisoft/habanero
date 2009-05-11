@@ -258,7 +258,12 @@ namespace Habanero.DB4O
 
             IClassDef classDef = collection.ClassDef;
             QueryBuilder.PrepareCriteria(classDef, criteria);
-            string criteriaFieldValue = criteria.FieldValue.ToString();
+            string criteriaFieldValue = "";
+            if (criteria != null)
+            {
+                criteriaFieldValue = criteria.FieldValue.ToString();
+            }
+
             WithDB4O<T>(db =>
                         {
                             IList<BusinessObjectDTO> matchingObjects;
