@@ -935,7 +935,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO contactPersonTestBO = CreateSavedContactPersonNoAddresses();
             address = contactPersonTestBO.Addresses.CreateBusinessObject();
             address.Save();
-            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+            RelatedBusinessObjectCollection<AddressTestBO> collection = contactPersonTestBO.Addresses;
+            Assert.AreEqual(1, collection.Count);
             return contactPersonTestBO;
         }
         private static ContactPersonTestBO CreateContactPersonTestBO(out AddressTestBO address)

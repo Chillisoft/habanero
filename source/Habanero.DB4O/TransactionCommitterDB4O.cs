@@ -46,6 +46,8 @@ namespace Habanero.DB4O
                 string primaryKey = tbo.BusinessObject.ID.ToString();
                 if (tbo.BusinessObject.Status.IsDeleted)
                 {
+                    DeleteRelatedChildren(tbo.BusinessObject);
+                    DereferenceRelatedChildren(tbo.BusinessObject);
                     IList<BusinessObjectDTO> matchingObjects = _objectContainer.Query<BusinessObjectDTO>(
                                         obj => obj.ClassDefName == tbo.BusinessObject.ClassDef.ClassName && obj.ID == primaryKey.ToString());
                     BusinessObjectDTO dtoToDelete = matchingObjects[0];

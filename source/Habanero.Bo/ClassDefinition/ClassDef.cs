@@ -83,21 +83,23 @@ namespace Habanero.BO.ClassDefinition
         /// The collection of classDefs used for the the Singleton.
         /// </summary>
         protected static ClassDefCol _classDefCol;
+
         private string _assemblyName;
+        private string _cachedTableName;
         private string _className;
         private string _classNameFull;
         private Type _classType;
-        private string _tableName = "";
         private string _displayName = "";
+        private KeyDefCol _keysCol;
 
         private PrimaryKeyDef _primaryKeyDef;
         private IPropDefCol _propDefCol;
-        private KeyDefCol _keysCol;
+        private PropDefCol _propDefColIncludingInheritance;
         private RelationshipDefCol _relationshipDefCol;
 
         private SuperClassDef _superClassDef;
+        private string _tableName = "";
         private UIDefCol _uiDefCol;
-        private string _cachedTableName;
 
         #region Constructors
 
@@ -178,7 +180,8 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// As before, but excludes the table name
         /// </summary>
-        public ClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol,
+        public ClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol,
+                        KeyDefCol keyDefCol,
                         IRelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(assemblyName, className, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
         {
@@ -187,7 +190,8 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// As before, but excludes the table name
         /// </summary>
-        public ClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol,
+        public ClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef,
+                        IPropDefCol propDefCol,
                         KeyDefCol keyDefCol, IRelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(
                 null, assemblyName, className, null, displayName, primaryKeyDef, propDefCol, keyDefCol,
@@ -196,7 +200,8 @@ namespace Habanero.BO.ClassDefinition
         }
 
         private ClassDef(Type classType, string assemblyName, string className, string tableName, string displayName,
-                         PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, IRelationshipDefCol relationshipDefCol,
+                         PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol,
+                         IRelationshipDefCol relationshipDefCol,
                          UIDefCol uiDefCol)
         {
             if (classType != null)
@@ -229,91 +234,6 @@ namespace Habanero.BO.ClassDefinition
 
         #region Properties
 
-        /// <summary>
-        /// The name of the assembly for the class definition
-        /// </summary>
-        public string AssemblyName
-        {
-            get { return _assemblyName; }
-            set
-            {
-                if (_assemblyName != value)
-                {
-                    _classType = null;
-                    _classNameFull = null;
-                    _className = null;
-                }
-                _assemblyName = value;
-            }
-        }
-
-        /// <summary>
-        /// The name of the class type for the class definition
-        /// </summary>
-        public string ClassName
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(this.TypeParameter))
-                {
-                    return _className + "_" + this.TypeParameter;
-                }
-                return _className;
-            }
-            set
-            {
-                if (_className != value)
-                    _classType = null;
-                _classNameFull = value;
-                _className = ClassDefCol.StripOutNameSpace(_classNameFull);
-            }
-        }
-
-        /// <summary>
-        /// The name of the class type for the class definition (excluding the namespace and the type parameter).
-        /// </summary>
-        public string ClassNameExcludingTypeParameter
-        {
-            get { return _className; }
-
-        }
-
-        /// <summary>
-        /// The possibly full name of the class type for the class definition
-        /// </summary>
-        public string ClassNameFull
-        {
-            get { return _classNameFull; }
-            set
-            {
-                if (_classNameFull != value)
-                    _classType = null;
-                _classNameFull = value;
-                _className = ClassDefCol.StripOutNameSpace(_classNameFull);
-            }
-        }
-
-        /// <summary>
-        /// The type of the class definition
-        /// </summary>
-        public Type ClassType
-        {
-            get { return MyClassType; }
-            set { MyClassType = value; }
-        }
-
-        /// <summary>
-        /// The name of the table
-        /// </summary>
-        public string TableName
-        {
-            get
-            {
-                return _tableName;
-            }
-            set { _tableName = value; }
-        }
-
         ///<summary>
         /// The display name for the class
         ///</summary>
@@ -321,9 +241,9 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                return String.IsNullOrEmpty(_displayName) 
-                    ? StringUtilities.DelimitPascalCase(ClassName, " ") 
-                    : _displayName;
+                return String.IsNullOrEmpty(_displayName)
+                           ? StringUtilities.DelimitPascalCase(ClassName, " ")
+                           : _displayName;
             }
             set { _displayName = value; }
         }
@@ -349,37 +269,6 @@ namespace Habanero.BO.ClassDefinition
                     return currentClassDef.SuperClassClassDef.TableName;
                 }
                 return currentClassDef.TableName;
-            }
-        }
-
-
-        /// <summary>
-        /// The collection of property definitions
-        /// </summary>
-        public IPropDefCol PropDefcol
-        {
-            get { return _propDefCol; }
-            set { _propDefCol = value; }
-        }
-
-        /// <summary>
-        /// The collection of property definitions for this
-        /// class and any properties inherited from parent classes
-        /// </summary>
-        public IPropDefCol PropDefColIncludingInheritance
-        {
-            get
-            {
-                PropDefCol col = new PropDefCol();
-                col.Add(PropDefcol);
-
-                ClassDef currentClassDef = this;
-                while (currentClassDef.SuperClassClassDef != null)
-                {
-                    currentClassDef = currentClassDef.SuperClassClassDef;
-                    col.Add(currentClassDef.PropDefcol);
-                }
-                return col;
             }
         }
 
@@ -417,21 +306,136 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// The collection of relationship definitions
-        /// </summary>
-        public IRelationshipDefCol RelationshipDefCol
-        {
-            get { return _relationshipDefCol; }
-            set { _relationshipDefCol = (RelationshipDefCol) value; }
-        }
-
-        /// <summary>
         /// The collection of user interface definitions
         /// </summary>
         public UIDefCol UIDefCol
         {
             get { return _uiDefCol; }
             protected set { _uiDefCol = value; }
+        }
+
+        /// <summary>
+        /// The name of the assembly for the class definition
+        /// </summary>
+        public string AssemblyName
+        {
+            get { return _assemblyName; }
+            set
+            {
+                if (_assemblyName != value)
+                {
+                    _classType = null;
+                    _classNameFull = null;
+                    _className = null;
+                }
+                _assemblyName = value;
+            }
+        }
+
+        /// <summary>
+        /// The name of the class type for the class definition
+        /// </summary>
+        public string ClassName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(TypeParameter))
+                {
+                    return _className + "_" + TypeParameter;
+                }
+                return _className;
+            }
+            set
+            {
+                if (_className != value)
+                    _classType = null;
+                _classNameFull = value;
+                _className = ClassDefCol.StripOutNameSpace(_classNameFull);
+            }
+        }
+
+        /// <summary>
+        /// The name of the class type for the class definition (excluding the namespace and the type parameter).
+        /// </summary>
+        public string ClassNameExcludingTypeParameter
+        {
+            get { return _className; }
+        }
+
+        /// <summary>
+        /// The possibly full name of the class type for the class definition
+        /// </summary>
+        public string ClassNameFull
+        {
+            get { return _classNameFull; }
+            set
+            {
+                if (_classNameFull != value)
+                    _classType = null;
+                _classNameFull = value;
+                _className = ClassDefCol.StripOutNameSpace(_classNameFull);
+            }
+        }
+
+        /// <summary>
+        /// The type of the class definition
+        /// </summary>
+        public Type ClassType
+        {
+            get { return MyClassType; }
+            set { MyClassType = value; }
+        }
+
+        /// <summary>
+        /// The name of the table
+        /// </summary>
+        public string TableName
+        {
+            get { return _tableName; }
+            set { _tableName = value; }
+        }
+
+
+        /// <summary>
+        /// The collection of property definitions
+        /// </summary>
+        public IPropDefCol PropDefcol
+        {
+            get { return _propDefCol; }
+            set { _propDefCol = value; }
+        }
+
+        /// <summary>
+        /// The collection of property definitions for this
+        /// class and any properties inherited from parent classes
+        /// </summary>
+        public IPropDefCol PropDefColIncludingInheritance
+        {
+            get
+            {
+                if (_propDefColIncludingInheritance == null)
+                {
+                    _propDefColIncludingInheritance = new PropDefCol();
+                    _propDefColIncludingInheritance.Add(PropDefcol);
+
+                    ClassDef currentClassDef = this;
+                    while (currentClassDef.SuperClassClassDef != null)
+                    {
+                        currentClassDef = currentClassDef.SuperClassClassDef;
+                        _propDefColIncludingInheritance.Add(currentClassDef.PropDefcol);
+                    }
+                }
+                return _propDefColIncludingInheritance;
+            }
+        }
+
+        /// <summary>
+        /// The collection of relationship definitions
+        /// </summary>
+        public IRelationshipDefCol RelationshipDefCol
+        {
+            get { return _relationshipDefCol; }
+            set { _relationshipDefCol = (RelationshipDefCol) value; }
         }
 
         ///// <summary>
@@ -473,119 +477,6 @@ namespace Habanero.BO.ClassDefinition
         #region Creating BOs
 
         /// <summary>
-        /// Creates a collection of BO properties
-        /// </summary>
-        /// <param name="newObject">Whether the BOProp object being created 
-        /// is a new object or is being 
-        /// loaded from the DB. If it is new, then the property is
-        /// initialised with the default value.</param>
-        /// <returns>Returns the collection of BOProps</returns>
-        public IBOPropCol CreateBOPropertyCol(bool newObject)
-        {
-            IBOPropCol propCol = _propDefCol.CreateBOPropertyCol(newObject);
-            if (this.SuperClassDef != null)
-            {
-                ClassDef superClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
-                propCol.Add(superClassDef.CreateBOPropertyCol(newObject));
-                switch (this.SuperClassDef.ORMapping)
-                {
-                    case ORMapping.ConcreteTableInheritance:
-                        if (superClassDef.PrimaryKeyDef != null)
-                        {
-                            foreach (PropDef def in superClassDef.PrimaryKeyDef)
-                            {
-                                propCol.Remove(def.PropertyName);
-                            }
-                        }
-                        break;
-                    case ORMapping.SingleTableInheritance:
-                        if (this.PrimaryKeyDef != null)
-                        {
-                            foreach (PropDef def in this.PrimaryKeyDef)
-                            {
-                                propCol.Remove(def.PropertyName);
-                            }
-                        }
-                        break;
-                }
-            }
-            return propCol;
-        }
-
-        /// <summary>
-        /// Creates a new business object
-        /// </summary>
-        /// <returns>Returns a new business object</returns>
-        private BusinessObject InstantiateBusinessObject(bool instantiateWithClassDef)
-            // This was internal, but it's been made private because you should rather use CreateNewBusinessObject
-        {
-            if (instantiateWithClassDef)
-            {
-                try
-                {
-                    return (BusinessObject)Activator.CreateInstance(MyClassType, new object[] { this });
-                }
-                catch (MissingMethodException ex)
-                {
-                    throw new MissingMethodException("Unable to instantiate a " + MyClassType.Name + " with a ClassDef.  Please inherit the constructor that takes a ClassDef as parameter. Or alternately call CreateNewBusinessObject with no parameter (or false) to use the default classdef for the type.", ex);
-                }
-            }
-            else
-            {
-
-                try
-                {
-
-                    return (BusinessObject) Activator.CreateInstance(MyClassType, true);
-                }
-                catch (MissingMethodException ex)
-                {
-                    throw new MissingMethodException("Each class that implements " +
-                                                     "BusinessObject needs to have a parameterless constructor.", ex);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Creates a new collection of relationships.
-        /// </summary>
-        /// <param name="propCol">The collection of properties</param>
-        /// <param name="bo">The business object that owns this collection</param>
-        /// <returns>Returns the new collection or null if no relationship 
-        /// definition collection exists</returns>
-        public RelationshipCol CreateRelationshipCol(IBOPropCol propCol, IBusinessObject bo)
-        {
-            if (_relationshipDefCol == null)
-            {
-                return null;
-            }
-            RelationshipCol relCol = _relationshipDefCol.CreateRelationshipCol(propCol, bo);
-            if (this.SuperClassClassDef != null)
-            {
-                ClassDef superClassClassDef = (ClassDef) this.SuperClassDef.SuperClassClassDef;
-                relCol.Add(superClassClassDef.CreateRelationshipCol(propCol, bo));
-            }
-            return relCol;
-        }
-
-        /// <summary>
-        /// Creates a new collection of BO keys using the properties provided
-        /// </summary>
-        /// <param name="col">The collection of properties</param>
-        /// <returns>Returns the new key collection</returns>
-        public BOKeyCol createBOKeyCol(IBOPropCol col)
-        {
-            BOKeyCol keyCol = _keysCol.CreateBOKeyCol(col);
-            if (this.SuperClassClassDef != null)
-            {
-                ClassDef superClassClassDef = (ClassDef) this.SuperClassDef.SuperClassClassDef;
-
-                keyCol.Add(superClassClassDef.createBOKeyCol(col));
-            }
-            return keyCol;
-        }
-
-        /// <summary>
         /// Creates a new business object using the default class definition for the type linked to this <see cref="ClassDef"/>
         /// </summary>
         /// <returns>Returns the new object</returns>
@@ -617,6 +508,119 @@ namespace Habanero.BO.ClassDefinition
             return InstantiateBusinessObject(instantiateWithClassDef);
         }
 
+        /// <summary>
+        /// Creates a collection of BO properties
+        /// </summary>
+        /// <param name="newObject">Whether the BOProp object being created 
+        /// is a new object or is being 
+        /// loaded from the DB. If it is new, then the property is
+        /// initialised with the default value.</param>
+        /// <returns>Returns the collection of BOProps</returns>
+        public IBOPropCol CreateBOPropertyCol(bool newObject)
+        {
+            IBOPropCol propCol = _propDefCol.CreateBOPropertyCol(newObject);
+            if (SuperClassDef != null)
+            {
+                var superClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
+                propCol.Add(superClassDef.CreateBOPropertyCol(newObject));
+                switch (SuperClassDef.ORMapping)
+                {
+                    case ORMapping.ConcreteTableInheritance:
+                        if (superClassDef.PrimaryKeyDef != null)
+                        {
+                            foreach (PropDef def in superClassDef.PrimaryKeyDef)
+                            {
+                                propCol.Remove(def.PropertyName);
+                            }
+                        }
+                        break;
+                    case ORMapping.SingleTableInheritance:
+                        if (PrimaryKeyDef != null)
+                        {
+                            foreach (PropDef def in PrimaryKeyDef)
+                            {
+                                propCol.Remove(def.PropertyName);
+                            }
+                        }
+                        break;
+                }
+            }
+            return propCol;
+        }
+
+        /// <summary>
+        /// Creates a new business object
+        /// </summary>
+        /// <returns>Returns a new business object</returns>
+        private BusinessObject InstantiateBusinessObject(bool instantiateWithClassDef)
+            // This was internal, but it's been made private because you should rather use CreateNewBusinessObject
+        {
+            if (instantiateWithClassDef)
+            {
+                try
+                {
+                    return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this});
+                }
+                catch (MissingMethodException ex)
+                {
+                    throw new MissingMethodException(
+                        "Unable to instantiate a " + MyClassType.Name +
+                        " with a ClassDef.  Please inherit the constructor that takes a ClassDef as parameter. Or alternately call CreateNewBusinessObject with no parameter (or false) to use the default classdef for the type.",
+                        ex);
+                }
+            }
+            else
+            {
+                try
+                {
+                    return (BusinessObject) Activator.CreateInstance(MyClassType, true);
+                }
+                catch (MissingMethodException ex)
+                {
+                    throw new MissingMethodException("Each class that implements " +
+                                                     "BusinessObject needs to have a parameterless constructor.", ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates a new collection of relationships.
+        /// </summary>
+        /// <param name="propCol">The collection of properties</param>
+        /// <param name="bo">The business object that owns this collection</param>
+        /// <returns>Returns the new collection or null if no relationship 
+        /// definition collection exists</returns>
+        public RelationshipCol CreateRelationshipCol(IBOPropCol propCol, IBusinessObject bo)
+        {
+            if (_relationshipDefCol == null)
+            {
+                return null;
+            }
+            RelationshipCol relCol = _relationshipDefCol.CreateRelationshipCol(propCol, bo);
+            if (SuperClassClassDef != null)
+            {
+                var superClassClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
+                relCol.Add(superClassClassDef.CreateRelationshipCol(propCol, bo));
+            }
+            return relCol;
+        }
+
+        /// <summary>
+        /// Creates a new collection of BO keys using the properties provided
+        /// </summary>
+        /// <param name="col">The collection of properties</param>
+        /// <returns>Returns the new key collection</returns>
+        public BOKeyCol createBOKeyCol(IBOPropCol col)
+        {
+            BOKeyCol keyCol = _keysCol.CreateBOKeyCol(col);
+            if (SuperClassClassDef != null)
+            {
+                var superClassClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
+
+                keyCol.Add(superClassClassDef.createBOKeyCol(col));
+            }
+            return keyCol;
+        }
 
         #endregion //Creating BOs
 
@@ -659,46 +663,12 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (this.SuperClassDef != null)
+                if (SuperClassDef != null)
                 {
-                    return (ClassDef) this.SuperClassDef.SuperClassClassDef;
+                    return (ClassDef) SuperClassDef.SuperClassClassDef;
                 }
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Indicates whether ClassTableInheritance is being used. See
-        /// the ORMapping enumeration for more detail.
-        /// </summary>
-        /// <returns>Returns true if so, or false if there is no
-        /// super class or another type of inheritance is being used</returns>
-        public bool IsUsingClassTableInheritance()
-        {
-            return (this.SuperClassDef != null) && (this.SuperClassDef.ORMapping == ORMapping.ClassTableInheritance);
-        }
-
-        /// <summary>
-        /// Indicates whether ConcreteTableInheritance is being used. See
-        /// the ORMapping enumeration for more detail.
-        /// </summary>
-        /// <returns>Returns true if so, or false if there is no
-        /// super class or another type of inheritance is being used</returns>
-        public bool IsUsingConcreteTableInheritance()
-        {
-            return
-                (this.SuperClassDef != null) && (this.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance);
-        }
-
-        /// <summary>
-        /// Indicates whether SingleTableInheritance is being used. See
-        /// the ORMapping enumeration for more detail.
-        /// </summary>
-        /// <returns>Returns true if so, or false if there is no
-        /// super class or another type of inheritance is being used</returns>
-        public bool IsUsingSingleTableInheritance()
-        {
-            return (this.SuperClassDef != null) && (this.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance);
         }
 
         /// <summary>
@@ -710,7 +680,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                ClassDefCol children = new ClassDefCol();
+                var children = new ClassDefCol();
                 foreach (ClassDef def in ClassDefs)
                 {
                     if (def._superClassDef != null && def._superClassDef.SuperClassClassDef == this)
@@ -729,7 +699,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                ClassDefCol children = new ClassDefCol();
+                var children = new ClassDefCol();
                 ClassDefCol immediateChildren = ImmediateChildren;
                 if (immediateChildren.Count == 0) return children;
 
@@ -746,10 +716,44 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// Indicates whether ClassTableInheritance is being used. See
+        /// the ORMapping enumeration for more detail.
+        /// </summary>
+        /// <returns>Returns true if so, or false if there is no
+        /// super class or another type of inheritance is being used</returns>
+        public bool IsUsingClassTableInheritance()
+        {
+            return (SuperClassDef != null) && (SuperClassDef.ORMapping == ORMapping.ClassTableInheritance);
+        }
+
+        /// <summary>
         /// This parameter can be used to allow multiple classdefs for one .NET type, as long as the
         /// type parameter between the classdefs are different.
         /// </summary>
         public string TypeParameter { get; set; }
+
+        /// <summary>
+        /// Indicates whether ConcreteTableInheritance is being used. See
+        /// the ORMapping enumeration for more detail.
+        /// </summary>
+        /// <returns>Returns true if so, or false if there is no
+        /// super class or another type of inheritance is being used</returns>
+        public bool IsUsingConcreteTableInheritance()
+        {
+            return
+                (SuperClassDef != null) && (SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance);
+        }
+
+        /// <summary>
+        /// Indicates whether SingleTableInheritance is being used. See
+        /// the ORMapping enumeration for more detail.
+        /// </summary>
+        /// <returns>Returns true if so, or false if there is no
+        /// super class or another type of inheritance is being used</returns>
+        public bool IsUsingSingleTableInheritance()
+        {
+            return (SuperClassDef != null) && (SuperClassDef.ORMapping == ORMapping.SingleTableInheritance);
+        }
 
         /// <summary>
         /// Creates a list of classdefs in this inheritance hierarchy.  The first item in the list is this classdef,
@@ -774,6 +778,109 @@ namespace Habanero.BO.ClassDefinition
         #region Returning Defs
 
         /// <summary>
+        /// Searches the property definition collection and returns 
+        /// the lookup-list found under the property with the
+        /// name specified.  Also checks the super-class.
+        /// </summary>
+        /// <param name="propertyName">The property name in question</param>
+        /// <returns>Returns the lookup-list if the property is
+        /// found, or a NullLookupList object if not</returns>
+        public ILookupList GetLookupList(string propertyName)
+        {
+            if (PropDefcol.Contains(propertyName))
+            {
+                return PropDefcol[propertyName].LookupList;
+            }
+            return SuperClassDef == null
+                       ? new NullLookupList()
+                       : SuperClassClassDef.GetLookupList(propertyName);
+        }
+
+        /// <summary>
+        /// Searches the property definition collection and returns the 
+        /// property definition for the property with the name provided.
+        /// </summary>
+        /// <param name="propertyName">The property name in question</param>
+        /// <returns>Returns the property definition if found, or
+        /// throws an error if not</returns>
+        /// <exception cref="InvalidPropertyNameException">
+        /// This exception is thrown if the property is not found</exception>
+        public IPropDef GetPropDef(string propertyName)
+        {
+            return GetPropDef(propertyName, true);
+        }
+
+        ///<summary>
+        /// Returns a particular property definition for a class definition.
+        ///</summary>
+        ///<param name="source"></param>
+        ///<param name="propertyName"></param>
+        ///<param name="throwError"></param>
+        ///<returns></returns>
+        ///<exception cref="ArgumentException"></exception>
+        public IPropDef GetPropDef(Source source, string propertyName, bool throwError)
+        {
+            if (source == null) return GetPropDef(propertyName, throwError);
+            if (!RelationshipDefCol.Contains(source.Name))
+            {
+                if (throwError)
+                {
+                    throw new ArgumentException("The ClassDef for " + ClassName +
+                                                " does not contain a relationship with the name " +
+                                                source.Name +
+                                                " and thus cannot retrieve the PropDef through this relationship");
+                }
+                return null;
+            }
+
+            IClassDef relatedClassDef = RelationshipDefCol[source.Name].RelatedObjectClassDef;
+            if (source.Joins.Count > 0)
+            {
+                return relatedClassDef.GetPropDef(source.Joins[0].ToSource, propertyName, throwError);
+            }
+            return relatedClassDef.GetPropDef(propertyName, throwError);
+        }
+
+        /// <summary>
+        /// Searches the property definition collection and returns the 
+        /// property definition for the property with the name provided.
+        /// </summary>
+        /// <param name="propertyName">The property name in question</param>
+        /// <param name="throwError">Should an error be thrown if the property is not found</param>
+        /// <returns>Returns the property definition if found, or
+        /// throw an error if <paramref name="throwError"/> is true,
+        /// otherwise return null</returns>
+        /// <exception cref="InvalidPropertyNameException">
+        /// This exception is thrown if the property is not found and 
+        /// <paramref name="throwError"/> is true</exception>
+        public IPropDef GetPropDef(string propertyName, bool throwError)
+        {
+            IPropDef foundPropDef = null;
+            ClassDef currentClassDef = this;
+            while (currentClassDef != null)
+            {
+                if (currentClassDef.PropDefcol.Contains(propertyName))
+                {
+                    foundPropDef = currentClassDef.PropDefcol[propertyName];
+                    break;
+                }
+                currentClassDef = currentClassDef.SuperClassClassDef;
+            }
+            if (foundPropDef != null)
+            {
+                return foundPropDef;
+            }
+            if (throwError)
+            {
+                throw new InvalidPropertyNameException(String.Format(
+                                                           "The property definition for the property '{0}' could not be " +
+                                                           "found on a ClassDef of type '{1}'", propertyName,
+                                                           ClassNameFull));
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Takes the class definitions loaded into the IClassDefsLoader
         /// (eg. XmlClassDefsLoader)
         /// object and copies them across to the static ClassDefCol object.
@@ -786,25 +893,6 @@ namespace Habanero.BO.ClassDefinition
         {
             ClassDefCol classDefCol = loader.LoadClassDefs();
             ClassDefCol.LoadColClassDef(classDefCol);
-        }
-
-        /// <summary>
-        /// Searches the property definition collection and returns 
-        /// the lookup-list found under the property with the
-        /// name specified.  Also checks the super-class.
-        /// </summary>
-        /// <param name="propertyName">The property name in question</param>
-        /// <returns>Returns the lookup-list if the property is
-        /// found, or a NullLookupList object if not</returns>
-        public ILookupList GetLookupList(string propertyName)
-        {
-            if (this.PropDefcol.Contains(propertyName))
-            {
-                return this.PropDefcol[propertyName].LookupList;
-            }
-            return this.SuperClassDef == null 
-                ? new NullLookupList() 
-                : this.SuperClassClassDef.GetLookupList(propertyName);
         }
 
         /// <summary>
@@ -852,49 +940,6 @@ namespace Habanero.BO.ClassDefinition
             return null;
         }
 
-        /// <summary>
-        /// Searches the property definition collection and returns the 
-        /// property definition for the property with the name provided.
-        /// </summary>
-        /// <param name="propertyName">The property name in question</param>
-        /// <returns>Returns the property definition if found, or
-        /// throws an error if not</returns>
-        /// <exception cref="InvalidPropertyNameException">
-        /// This exception is thrown if the property is not found</exception>
-        public IPropDef GetPropDef(string propertyName)
-        {
-            return GetPropDef(propertyName, true);
-        }
-
-        ///<summary>
-        /// Returns a particular property definition for a class definition.
-        ///</summary>
-        ///<param name="source"></param>
-        ///<param name="propertyName"></param>
-        ///<param name="throwError"></param>
-        ///<returns></returns>
-        ///<exception cref="ArgumentException"></exception>
-        public IPropDef GetPropDef(Source source, string propertyName, bool throwError)
-        {
-            if (source == null) return GetPropDef(propertyName, throwError);
-            if (!this.RelationshipDefCol.Contains(source.Name))
-            {
-                if (throwError)
-                {
-                    throw new ArgumentException("The ClassDef for " + this.ClassName + " does not contain a relationship with the name " +
-                                                source.Name + " and thus cannot retrieve the PropDef through this relationship");
-                }
-                return null;
-            }
-
-            IClassDef relatedClassDef = this.RelationshipDefCol[source.Name].RelatedObjectClassDef;
-            if (source.Joins.Count > 0)
-            {
-                return relatedClassDef.GetPropDef(source.Joins[0].ToSource, propertyName, throwError);
-            }
-            return relatedClassDef.GetPropDef(propertyName, throwError);
-        }
-
         ///<summary>
         /// Retrieves the primary key definition for this class, traversing 
         /// the SuperClass structure to get the primary key definition if necessary
@@ -902,46 +947,8 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>The primary key for this class</returns>
         public PrimaryKeyDef GetPrimaryKeyDef()
         {
-            PrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(this, ClassDef.ClassDefs);
+            PrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(this, ClassDefs);
             return primaryKeyDef;
-        }
-
-        /// <summary>
-        /// Searches the property definition collection and returns the 
-        /// property definition for the property with the name provided.
-        /// </summary>
-        /// <param name="propertyName">The property name in question</param>
-        /// <param name="throwError">Should an error be thrown if the property is not found</param>
-        /// <returns>Returns the property definition if found, or
-        /// throw an error if <paramref name="throwError"/> is true,
-        /// otherwise return null</returns>
-        /// <exception cref="InvalidPropertyNameException">
-        /// This exception is thrown if the property is not found and 
-        /// <paramref name="throwError"/> is true</exception>
-        public IPropDef GetPropDef(string propertyName, bool throwError)
-        {
-            IPropDef foundPropDef = null;
-            ClassDef currentClassDef = this;
-            while (currentClassDef != null)
-            {
-                if (currentClassDef.PropDefcol.Contains(propertyName))
-                {
-                    foundPropDef = currentClassDef.PropDefcol[propertyName];
-                    break;
-                }
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
-            if (foundPropDef != null)
-            {
-                return foundPropDef;
-            }
-            if (throwError)
-            {
-                throw new InvalidPropertyNameException(String.Format(
-                                                           "The property definition for the property '{0}' could not be " +
-                                                           "found on a ClassDef of type '{1}'", propertyName, this.ClassNameFull));
-            }
-            return null;
         }
 
         #endregion //Returning defs
@@ -962,9 +969,10 @@ namespace Habanero.BO.ClassDefinition
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(ClassDef)) return false;
+            if (obj.GetType() != typeof (ClassDef)) return false;
             return Equals((ClassDef) obj);
         }
+
         /// <summary>
         /// Checks for equality between two classdefs. This checks that the properties
         /// are the same between the two.
@@ -973,14 +981,14 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         public bool Equals(ClassDef otherClsDef)
         {
-            if (otherClsDef.TypeParameter != this.TypeParameter) return false;
+            if (otherClsDef.TypeParameter != TypeParameter) return false;
             //This is a rough and ready equals test later need to improve
             if (PropDefcol == null) return false;
             if (PropDefcol.Count != otherClsDef.PropDefcol.Count)
             {
                 return false;
             }
-            foreach (PropDef def in this.PropDefcol)
+            foreach (PropDef def in PropDefcol)
             {
                 if (!otherClsDef.PropDefcol.Contains(def.PropertyName))
                 {
@@ -1004,45 +1012,15 @@ namespace Habanero.BO.ClassDefinition
             unchecked
             {
                 int result = (_className != null ? _className.GetHashCode() : 0);
-                result = (result * 397) ^ (_classType != null ? _classType.GetHashCode() : 0);
-                result = (result * 397) ^ (_primaryKeyDef != null ? _primaryKeyDef.GetHashCode() : 0);
-                result = (result * 397) ^ (_propDefCol != null ? _propDefCol.GetHashCode() : 0);
-                result = (result * 397) ^ (TypeParameter != null ? TypeParameter.GetHashCode() : 0);
+                result = (result*397) ^ (_classType != null ? _classType.GetHashCode() : 0);
+                result = (result*397) ^ (_primaryKeyDef != null ? _primaryKeyDef.GetHashCode() : 0);
+                result = (result*397) ^ (_propDefCol != null ? _propDefCol.GetHashCode() : 0);
+                result = (result*397) ^ (TypeParameter != null ? TypeParameter.GetHashCode() : 0);
                 return result;
             }
         }
 
-
         #endregion
-
-        ///<summary>
-        /// Does a deep clone of the classdef and return the clone.
-        /// NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied)
-        ///</summary>
-        ///<returns></returns>
-        public ClassDef Clone()
-        {
-            return Clone(false);
-        }
-
-        ///<summary>
-        /// Does a deep clone of the classdef and return the clone.
-        /// NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied)
-        ///</summary>
-        ///<returns></returns>
-        public ClassDef Clone(bool clonePropDefs)
-        {
-            IPropDefCol propDefClone = this.PropDefcol != null ? this.PropDefcol.Clone(clonePropDefs) : null;
-            UIDefCol uiDefClone = this.UIDefCol != null ? this.UIDefCol.Clone() : null;
-            ClassDef newClassDef = new ClassDef(this.AssemblyName, this.ClassName, this.PrimaryKeyDef,
-                                                propDefClone, this.KeysCol,
-                                                this.RelationshipDefCol, uiDefClone);
-            newClassDef.TableName = this.TableName;
-            newClassDef.DisplayName = this.DisplayName;
-
-            return newClassDef;
-        }
-
 
         /// <summary>
         /// Returns whether this class has an autoincrementing field or not. Checks the propdefs for whether
@@ -1060,21 +1038,7 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-
-        ///<summary>
-        /// traverses the inheritance hierachy to find the base class of this type in the case 
-        /// of single table inheritance.
-        ///</summary>
-        ///<returns></returns>
-        public ClassDef GetBaseClassOfSingleTableHierarchy()
-        {
-            ClassDef currentClassDef = this;
-            while (currentClassDef.IsUsingSingleTableInheritance())
-            {
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
-            return currentClassDef;
-        }
+        #region IClassDef Members
 
         ///<summary>
         /// Gets the type of the specified property for this classDef.
@@ -1097,33 +1061,33 @@ namespace Habanero.BO.ClassDefinition
                 // else get the related object
 
                 string[] parts = relationshipName.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
-                List<string> relNames = new List<string>(parts);
-                List<Type> relatedPropertyTypes = new List<Type>();
+                var relNames = new List<string>(parts);
+                var relatedPropertyTypes = new List<Type>();
                 relNames.ForEach(delegate(string relationship)
-                {
-                    if (RelationshipDefCol.Contains(relationship))
-                    {
-                        IRelationshipDef relationshipDef = RelationshipDefCol[relationship];
-                        IClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
-                        if (relatedObjectClassDef != null)
-                        {
-                            Type propertyType = relatedObjectClassDef.GetPropertyType(propertyName);
-                            relatedPropertyTypes.Add(propertyType);
-                        }
-                    }
-                });
+                                     {
+                                         if (RelationshipDefCol.Contains(relationship))
+                                         {
+                                             IRelationshipDef relationshipDef = RelationshipDefCol[relationship];
+                                             IClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+                                             if (relatedObjectClassDef != null)
+                                             {
+                                                 Type propertyType = relatedObjectClassDef.GetPropertyType(propertyName);
+                                                 relatedPropertyTypes.Add(propertyType);
+                                             }
+                                         }
+                                     });
                 Type currentPropertyType = null;
                 relatedPropertyTypes.ForEach(delegate(Type propertyType)
-                {
-                    if (currentPropertyType == null)
-                    {
-                        currentPropertyType = propertyType;
-                    }
-                    else if (currentPropertyType != propertyType)
-                    {
-                        currentPropertyType = typeof (object);
-                    }
-                });
+                                                 {
+                                                     if (currentPropertyType == null)
+                                                     {
+                                                         currentPropertyType = propertyType;
+                                                     }
+                                                     else if (currentPropertyType != propertyType)
+                                                     {
+                                                         currentPropertyType = typeof (object);
+                                                     }
+                                                 });
 
                 return currentPropertyType ?? typeof (object);
             }
@@ -1131,7 +1095,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 return typeof (object);
             }
-            IPropDef propDef = this.GetPropDef(propertyName, false);
+            IPropDef propDef = GetPropDef(propertyName, false);
             if (propDef != null && propDef.LookupList is NullLookupList)
             {
                 return propDef.PropertyType;
@@ -1151,7 +1115,7 @@ namespace Habanero.BO.ClassDefinition
             Type comparerType = typeof (PropertyComparer<,>);
             Type propertyType = GetPropertyType(propertyName);
             comparerType = comparerType.MakeGenericType(typeof (T), propertyType);
-            IPropertyComparer<T> comparer = (IPropertyComparer<T>) Activator.CreateInstance(comparerType, propertyName);
+            var comparer = (IPropertyComparer<T>) Activator.CreateInstance(comparerType, propertyName);
             return comparer;
         }
 
@@ -1174,11 +1138,10 @@ namespace Habanero.BO.ClassDefinition
                     return _cachedTableName;
                 }
             }
-            _cachedTableName = this.TableName;
+            _cachedTableName = TableName;
             return _cachedTableName;
         }
 
-      
 
         /// <summary>
         /// Returns the table name of the specified property
@@ -1194,6 +1157,51 @@ namespace Habanero.BO.ClassDefinition
             return propDef.ClassDef.GetTableName();
         }
 
+        #endregion
+
+        ///<summary>
+        /// Does a deep clone of the classdef and return the clone.
+        /// NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied)
+        ///</summary>
+        ///<returns></returns>
+        public ClassDef Clone()
+        {
+            return Clone(false);
+        }
+
+        ///<summary>
+        /// Does a deep clone of the classdef and return the clone.
+        /// NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied)
+        ///</summary>
+        ///<returns></returns>
+        public ClassDef Clone(bool clonePropDefs)
+        {
+            IPropDefCol propDefClone = PropDefcol != null ? PropDefcol.Clone(clonePropDefs) : null;
+            UIDefCol uiDefClone = UIDefCol != null ? UIDefCol.Clone() : null;
+            var newClassDef = new ClassDef(AssemblyName, ClassName, PrimaryKeyDef,
+                                           propDefClone, KeysCol,
+                                           RelationshipDefCol, uiDefClone);
+            newClassDef.TableName = TableName;
+            newClassDef.DisplayName = DisplayName;
+
+            return newClassDef;
+        }
+
+        ///<summary>
+        /// traverses the inheritance hierachy to find the base class of this type in the case 
+        /// of single table inheritance.
+        ///</summary>
+        ///<returns></returns>
+        public ClassDef GetBaseClassOfSingleTableHierarchy()
+        {
+            ClassDef currentClassDef = this;
+            while (currentClassDef.IsUsingSingleTableInheritance())
+            {
+                currentClassDef = currentClassDef.SuperClassClassDef;
+            }
+            return currentClassDef;
+        }
+
 
         ///<summary>
         /// Returns the Class Defition for a <see cref="IBusinessObject"/> of type T.
@@ -1202,7 +1210,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public static ClassDef Get<T>() where T : class, IBusinessObject
         {
-            return ClassDefs[typeof(T)];
+            return ClassDefs[typeof (T)];
         }
     }
 }

@@ -37,23 +37,33 @@ namespace Habanero.DB4O
 
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
-            return WithDB4O(db =>
-                            {
-                                string typeName = typeof(T).Name;
-                                IList<BusinessObjectDTO> matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassName == typeName && obj.ID == primaryKey.ToString());
-                                return GetFirstObjectFromMatchedObjects<T>(matchingObjects, null, true);
-                            }
+            return WithDB4O(delegate(IObjectContainer db)
+                                {
+                                    string typeName = typeof (T).Name;
+                                    IList<BusinessObjectDTO> matchingObjects =
+                                        db.Query<BusinessObjectDTO>(
+                                            delegate(BusinessObjectDTO obj)
+                                                {
+                                                    return obj.ClassName == typeName && obj.ID == primaryKey.ToString();
+                                                });
+                                    return GetFirstObjectFromMatchedObjects<T>(matchingObjects, null, true);
+                                }
                 );
         }
 
         public IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey)
         {
-            Criteria criteria = ((BOPrimaryKey)primaryKey).GetKeyCriteria();
+            BOPrimaryKey boPrimaryKey = ((BOPrimaryKey)primaryKey);
+            Criteria criteria = boPrimaryKey.GetKeyCriteria();
+            string primaryKeyString = boPrimaryKey.ToString();
             return WithDB4O(db =>
                             {
                                 IList<BusinessObjectDTO> matchingObjects =
                                     db.Query<BusinessObjectDTO>(
-                                        obj => obj.ClassDefName == classDef.ClassName && obj.ID == primaryKey.ToString());
+                                        obj =>
+                                            {
+                                                return obj.ClassDefName == classDef.ClassName && obj.ID == primaryKeyString;
+                                            });
                                 return GetFirstObjectFromMatchedObjects<BusinessObject>(matchingObjects, classDef, true);
                             }
                 );
@@ -203,17 +213,18 @@ namespace Habanero.DB4O
             WithDB4O<IBusinessObject>(db =>
             {
                 IList<BusinessObjectDTO> matchingObjects;
+                string className = classDef.ClassName;
                 if (criteria == null)
                 {
                     matchingObjects = db.Query<BusinessObjectDTO>(
                         delegate(BusinessObjectDTO obj)
                             {
-                                return obj.ClassDefName == classDef.ClassName;
+                                return obj.ClassDefName == className;
                             });
                 }
                 else
                 {
-                    matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == classDef.ClassName && criteria.IsMatch(obj));
+                    matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == className && criteria.IsMatch(obj));
                 }
                 List<IBusinessObject> loadedBOs = new List<IBusinessObject>(matchingObjects.Count);
                 foreach (BusinessObjectDTO matchingObject in matchingObjects)
@@ -247,17 +258,23 @@ namespace Habanero.DB4O
 
             IClassDef classDef = collection.ClassDef;
             QueryBuilder.PrepareCriteria(classDef, criteria);
-
+            string criteriaFieldValue = criteria.FieldValue.ToString();
             WithDB4O<T>(db =>
                         {
                             IList<BusinessObjectDTO> matchingObjects;
+                            string className = classDef.ClassName;
                             if (criteria == null)
                             {
-                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == classDef.ClassName);
+                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == className);
                             }
                             else
                             {
-                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == classDef.ClassName && criteria.IsMatch(obj));
+                                matchingObjects = db.Query<BusinessObjectDTO>(
+                                    delegate(BusinessObjectDTO obj)
+                                        {
+                                            criteria.FieldValue = criteriaFieldValue;
+                                            return obj.ClassDefName == className && criteria.IsMatch(obj);
+                                        });
                             }
                             List<T> loadedBOs = new List<T>(matchingObjects.Count);
 

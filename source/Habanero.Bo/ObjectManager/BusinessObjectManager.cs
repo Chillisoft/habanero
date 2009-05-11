@@ -414,9 +414,11 @@ namespace Habanero.BO
                 _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
                 foreach (WeakReference weakReference in valueArray)
                 {
-                    if (!WeakReferenceIsAlive(weakReference)) continue;
-
-                    BusinessObject bo = (BusinessObject) weakReference.Target;
+                    //----------Removed WeakReferenceAlive Check for performance reasons.
+                    //if (!WeakReferenceIsAlive(weakReference)) continue;
+                    //BusinessObject bo = (BusinessObject) weakReference.Target;
+                    IBusinessObject bo = GetBusinessObject(weakReference);
+                    if (bo == null) continue;
                     try
                     {
                         if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
@@ -448,9 +450,11 @@ namespace Habanero.BO
                 _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
                 foreach (WeakReference weakReference in valueArray)
                 {
-                    if (!WeakReferenceIsAlive(weakReference)) continue;
-
-                    BusinessObject bo = (BusinessObject)weakReference.Target;
+                    //----------Removed WeakReferenceAlive Check for performance reasons.
+                    //if (!WeakReferenceIsAlive(weakReference)) continue;
+                    //BusinessObject bo = (BusinessObject) weakReference.Target;
+                    IBusinessObject bo = GetBusinessObject(weakReference);
+                    if (bo == null) continue;
                     try
                     {
                         if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
@@ -464,6 +468,19 @@ namespace Habanero.BO
                         //Do Nothing
                     }
                 }
+                return null;
+            }
+        }
+
+        private static IBusinessObject GetBusinessObject(WeakReference weakReference)
+        {
+            try
+            {
+                return (BusinessObject)weakReference.Target;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
                 return null;
             }
         }
@@ -483,9 +500,12 @@ namespace Habanero.BO
                 _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
                 foreach (WeakReference weakReference in valueArray)
                 {
-                    if (!WeakReferenceIsAlive(weakReference)) continue;
-
-                    BusinessObject bo = (BusinessObject) weakReference.Target;
+                    //----------Removed WeakReferenceAlive Check for performance reasons.
+                    //if (!WeakReferenceIsAlive(weakReference)) continue;
+                    //BusinessObject bo = (BusinessObject) weakReference.Target;
+                    IBusinessObject bo = GetBusinessObject(weakReference);
+                    if (bo == null) continue;
+                    
                     //For Dynamic Business Objects the Props may have been added since the business object was loaded.
                     try
                     {
@@ -517,9 +537,11 @@ namespace Habanero.BO
                 _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
                 foreach (WeakReference weakReference in valueArray)
                 {
-                    if (!WeakReferenceIsAlive(weakReference)) continue;
-
-                    BusinessObject bo = (BusinessObject)weakReference.Target;
+                    //----------Removed WeakReferenceAlive Check for performance reasons.
+//                    if (!WeakReferenceIsAlive(weakReference)) continue;
+                    //BusinessObject bo = (BusinessObject) weakReference.Target;
+                    IBusinessObject bo = GetBusinessObject(weakReference);
+                    if (bo == null) continue;
                     //For Dynamic Business Objects the Props may have been added since the business object was loaded.
                     try
                     {
