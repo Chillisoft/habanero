@@ -137,7 +137,7 @@ namespace Habanero.BO.ClassDefinition
                           string tableName,
                           IPropDefCol propDefCol,
                           KeyDefCol keyDefCol,
-                          RelationshipDefCol relationshipDefCol,
+                          IRelationshipDefCol relationshipDefCol,
                           UIDefCol uiDefCol)
             : this(
                 classType, null, null, tableName, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol,
@@ -153,7 +153,7 @@ namespace Habanero.BO.ClassDefinition
                         PrimaryKeyDef primaryKeyDef,
                         IPropDefCol propDefCol,
                         KeyDefCol keyDefCol,
-                        RelationshipDefCol relationshipDefCol,
+                        IRelationshipDefCol relationshipDefCol,
                         UIDefCol uiDefCol)
             :
                 this(
@@ -569,17 +569,14 @@ namespace Habanero.BO.ClassDefinition
                         ex);
                 }
             }
-            else
+            try
             {
-                try
-                {
-                    return (BusinessObject) Activator.CreateInstance(MyClassType, true);
-                }
-                catch (MissingMethodException ex)
-                {
-                    throw new MissingMethodException("Each class that implements " +
-                                                     "BusinessObject needs to have a parameterless constructor.", ex);
-                }
+                return (BusinessObject) Activator.CreateInstance(MyClassType, true);
+            }
+            catch (MissingMethodException ex)
+            {
+                throw new MissingMethodException("Each class that implements " +
+                                                 "BusinessObject needs to have a parameterless constructor.", ex);
             }
         }
 
@@ -1150,7 +1147,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns the table name of the table that the specified property belongs to</returns>
         public string GetTableName(IPropDef propDef)
         {
-            if (IsUsingConcreteTableInheritance())
+            if (IsUsingConcreteTableInheritance() || propDef.ClassDef == null)
             {
                 return TableName;
             }

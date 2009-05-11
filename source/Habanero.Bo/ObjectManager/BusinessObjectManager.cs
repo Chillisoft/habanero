@@ -427,7 +427,7 @@ namespace Habanero.BO
                         }
                     }
                     //For Dynamic Business Objects the Props may have been added since the business object was loaded.
-                    catch (InvalidPropertyNameException ex)
+                    catch (InvalidPropertyNameException)
                     {
                         //Do Nothing
                     }
@@ -463,7 +463,7 @@ namespace Habanero.BO
                         }
                     }
                     //For Dynamic Business Objects the Props may have been added since the business object was loaded.
-                    catch (InvalidPropertyNameException ex)
+                    catch (InvalidPropertyNameException)
                     {
                         //Do Nothing
                     }
@@ -514,7 +514,7 @@ namespace Habanero.BO
                             collection.Add(bo);
                         }
                     }
-                    catch (InvalidPropertyNameException ex)
+                    catch (InvalidPropertyNameException)
                     {
                         //Do Nothing
                     }

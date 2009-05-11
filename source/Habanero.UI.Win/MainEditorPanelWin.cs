@@ -67,7 +67,11 @@ namespace Habanero.UI.Win
             BuildSubMenu(habaneroMenu, mainMenu.MenuItems);
             return mainMenu;
         }
-
+        /// <summary>
+        /// Builds a Menu for Win.
+        /// </summary>
+        /// <param name="habaneroMenu"></param>
+        /// <returns></returns>
         protected virtual IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
         {
             IMenuItem subMenuItem = new CollapsibleSubMenuItemWin(this.ControlFactory, habaneroMenu.Name);
@@ -77,7 +81,7 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Creates the Leaf Items defined by the <see cref="habaneroMenu"/> and addts them 
+        /// Creates the Leaf Items defined by the <see cref="HabaneroMenu"/> and addts them 
         /// to the <paramref name="menuItem"/>'s MenuItems Collection.
         /// </summary>
         /// <param name="habaneroMenu">The definition of the Menu</param>

@@ -336,6 +336,40 @@ namespace Habanero.Util
                 throw ex.InnerException;
             }
         }
+        ///<summary>
+        /// Sets the value of a property of an object using reflection
+        ///</summary>
+        ///<param name="obj">The object for which to set the value</param>
+        ///<param name="propertyName">The name of the property to be set</param>
+        ///<param name="value">The value that is to be set</param>
+        ///<exception cref="HabaneroArgumentException">This error is thrown when an invalid parameter is given</exception>
+        ///<exception cref="TargetInvocationException">This error is thrown when there is an error in finding the property on the supplied object</exception>
+        ///<exception cref="Exception">This is a general exception that is thrown if there is an error in retrieving the value.</exception>
+        public static void SetInternalPropertyValue(object obj, string propertyName, object value)
+        {
+            if (obj == null) throw new HabaneroArgumentException("obj");
+            if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");
+            Type type = obj.GetType();
+            string className = type.Name;
+            try
+            {
+                PropertyInfo propInfo = GetPrivatePropertyInfo(type, propertyName);
+                if (propInfo == null)
+                {
+                    throw new TargetInvocationException(new Exception(
+                                                            String.Format("Virtual property set for '{0}' does not exist for object of type '{1}'.", propertyName, className)));
+                }
+                object newValue = Convert.ChangeType(value, propInfo.PropertyType);
+                propInfo.SetValue(obj, newValue, new object[] { });
+            }
+            catch (TargetInvocationException ex)
+            {
+                log.Error(String.Format("Error setting virtual property '{0}' for object of type '{1}'" +
+                                        Environment.NewLine + "{2}", propertyName, className,
+                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                throw ex.InnerException;
+            }
+        }
         /// <summary>
         /// Executes a parameterless method of an object using reflection
         /// </summary>

@@ -43,6 +43,11 @@ namespace Habanero.BO
     public class BOPropLookupList : BOProp
     {
         /// <summary>
+        /// Used for caching to improve performance.
+        /// </summary>
+        private object _propValueWhenLookupListDisplayValueLastCalled;
+        private string _displayValueWhenLookupListDisplayValueLastCalled;
+        /// <summary>
         /// Constructor to initialise a new property
         /// </summary>
         /// <param name="propDef">The property definition</param>
@@ -166,17 +171,27 @@ namespace Habanero.BO
         {
             get
             {
-                string displayValue;
-                Dictionary<string, string> keyLookupList = _propDef.LookupList.GetIDValueLookupList();
-                if (this.Value == null) return null;
-                if (keyLookupList.TryGetValue(this.PropDef.ConvertValueToString(this.Value), out displayValue))
-                    return displayValue;
-                if (_propDef.LookupList is BusinessObjectLookupList)
+//                string displayValue;
+                object propValue = this.Value;
+                if (propValue == null) return null;
+                //-----This has been added to improve the performance based on Profiling LGMIS.
+                if (propValue.Equals(_propValueWhenLookupListDisplayValueLastCalled))
                 {
-                    BusinessObjectLookupList businessObjectLookupList = _propDef.LookupList as BusinessObjectLookupList;
+                    return _displayValueWhenLookupListDisplayValueLastCalled;
+                }
+                _propValueWhenLookupListDisplayValueLastCalled = propValue;
+
+                ILookupList lookupList = _propDef.LookupList;
+                Dictionary<string, string> keyLookupList = lookupList.GetIDValueLookupList();
+                if (keyLookupList.TryGetValue(this.PropDef.ConvertValueToString(propValue), out _displayValueWhenLookupListDisplayValueLastCalled))
+                    return _displayValueWhenLookupListDisplayValueLastCalled;
+                if (lookupList is BusinessObjectLookupList)
+                {
+                    BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
                     ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
                     IBusinessObject businessObject = GetBusinessObjectForProp(classDef);
-                    return businessObject == null ? null : businessObject.ToString();
+                    _displayValueWhenLookupListDisplayValueLastCalled = businessObject == null ? null : businessObject.ToString();
+                    return _displayValueWhenLookupListDisplayValueLastCalled;
                 }
                 return null;
             }

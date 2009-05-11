@@ -63,7 +63,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_ValidateProp_IsValid()
+        public void Test_ValidateProp_WhenPropNotValid_IsValidFalse()
         {
             //---------------Set up test pack-------------------
             //Test compulsory with no default set
@@ -79,6 +79,24 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsFalse(lBOProp.IsValid);
             StringAssert.Contains("'Prop Name With Rules' is a compulsory field and has no value.", lBOProp.InvalidReason);
+        }
+        [Test]
+        public void Test_ValidateProp_WhenPropValid_IsValidTrue()
+        {
+            //---------------Set up test pack-------------------
+            //Test compulsory with no default set
+            PropDef lPropDefWithRules = new PropDef("PropNameWithRules", "System", "String",
+                                                    PropReadWriteRule.ReadWrite, null, null, true, false);
+            lPropDefWithRules.AddPropRule(new PropRuleString(lPropDefWithRules.PropertyName, "", -1, -1, null));
+            IBOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(lBOProp.IsValid);
+            Assert.AreEqual("", lBOProp.InvalidReason);
+            //---------------Execute Test ----------------------
+            lBOProp.Value = "Some value";
+            lBOProp.Validate();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(lBOProp.IsValid);
         }
 
         [Test]

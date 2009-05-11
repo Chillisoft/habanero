@@ -53,9 +53,9 @@ namespace Habanero.BO
     ///   these objects must implement the <see cref="ITransactional"/> interface. This is typically used 
     ///   when the application developer needs to insert or updated a datasource that is not wrapped by a business object.
     ///   E.g. The application developer may implement a NumberGenerator to generate a code e.g. Product code.
-    ///   The Habanero Framework uses this capability to write out <see cref="TransactionLogTable"/>.
+    ///   The Habanero Framework uses this capability to write out TransactionLogTable.
     /// When <see cref="CommitTransaction"/> is called all the objects in the TransactionCommitter are executed to the
-    ///   datasource in the case of the <see cref="TransactionCommitterDB"/> these are executed within an individual 
+    ///   datasource in the case of the <see cref="ITransactionCommitter"/> these are executed within an individual 
     ///   transaction if the transaction fails then all updates to the database are rolled back.
     /// 
     /// In cases where a single object is edited and persisted the Transaction committer does not have to be 
@@ -506,8 +506,19 @@ namespace Habanero.BO
             RelationshipCol relationships = (RelationshipCol) businessObject.Relationships;
             relationships.DeleteChildren(this);
         }
-
+        /// <summary>
+        /// Add the Business Object for a child added to the relationship.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="relationship"></param>
+        /// <param name="businessObject"></param>
         protected internal abstract void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject) where T : class, IBusinessObject, new();
+        /// <summary>
+        /// Remove the Business Object for a child added to the relationship.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="relationship"></param>
+        /// <param name="businessObject"></param>
         protected internal abstract void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject) where T : class, IBusinessObject, new();
     }
 }

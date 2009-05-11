@@ -104,16 +104,16 @@ namespace Habanero.Base
 
 
         /// <summary>
-        /// Creates a new business object using the default class definition for the type linked to this <see cref="ClassDef"/>
+        /// Creates a new business object using the default class definition for the type linked to this <see cref="IClassDef"/>
         /// </summary>
         /// <returns>Returns the new object</returns>
         IBusinessObject CreateNewBusinessObject();
 
-        /// <summary>
-        /// Creates a new business object either using the default class definition for the type linked to this <see cref="ClassDef"/>
+        /// <summary> 
+        ///  Creates a new business object either using the default class definition for the type linked to this <see cref="IClassDef"/>
         /// or using this particular class definition (in the case where you might have more than one class definition for one C#
         /// type, useful for user defined types)
-        /// Note_ that this means the business object being created must have a constructor that takes a <see cref="ClassDef"/>,
+        /// Note_ that this means the business object being created must have a constructor that takes a <see cref="IClassDef"/>,
         /// passing this through to the base class as follows:
         /// <code>
         /// public class Entity

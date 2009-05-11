@@ -22,12 +22,21 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// An <see cref="ITransactional"/> object for persisting a single relationship.
+    /// This is used for single association relationships where the relationship has changed 
+    /// and you wish the changed relationship to be persisted to the database.
+    /// </summary>
     public abstract class TransactionalSingleRelationship : ITransactional
     {
         private readonly IRelationship _relationship;
         private readonly IBusinessObject _relatedBO;
         private readonly string _transactionID;
-
+        /// <summary>
+        /// Constructor for <see cref="TransactionalSingleRelationship"/>
+        /// </summary>
+        /// <param name="relationship"></param>
+        /// <param name="relatedBO"></param>
         protected TransactionalSingleRelationship(IRelationship relationship, IBusinessObject relatedBO)
         {
             if (relatedBO == null) throw new ArgumentNullException("relatedBO");
@@ -35,9 +44,13 @@ namespace Habanero.BO
             _relationship = relationship;
             _relatedBO = relatedBO;
         }
-
+        /// <summary>
+        /// Returns the Relationship for this <see cref="TransactionalSingleRelationship"/>
+        /// </summary>
         public IRelationship Relationship { get { return _relationship; } }
-
+        /// <summary>
+        /// The Related <see cref="IBusinessObject"/> for this <see cref="TransactionalSingleRelationship"/>
+        /// </summary>
         protected IBusinessObject RelatedBO
         {
             get { return _relatedBO; }
@@ -68,7 +81,9 @@ namespace Habanero.BO
             ((Relationship)Relationship).UpdateRelationshipAsPersisted();
             businessObject.UpdateDirtyStatusFromProperties();
         }
-
+        /// <summary>
+        /// Update the Underlying relationship collection e.g. The added or removed Business Object Collections are updated.
+        /// </summary>
         protected abstract void UpdateCollections();
 
         ///<summary>
@@ -77,13 +92,23 @@ namespace Habanero.BO
         public void UpdateAsRolledBack() { }
 
     }
-
+    /// <summary>
+    /// A <see cref="TransactionalSingleRelationship"/> for an item that is in the Added Business Object collection.
+    /// </summary>
     public class TransactionalSingleRelationship_Added : TransactionalSingleRelationship
     {
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="singleRelationship"></param>
+        /// <param name="relatedBO"></param>
         protected internal TransactionalSingleRelationship_Added(IRelationship singleRelationship, IBusinessObject relatedBO)
             : base(singleRelationship, relatedBO)
         {}
 
+        /// <summary>
+        /// Update the Underlying relationship collection e.g. The added or removed Business Object Collections are updated.
+        /// </summary>
         protected override void UpdateCollections()
         {
 //            RelationshipBase relationshipBase = (RelationshipBase)Relationship;
@@ -94,13 +119,23 @@ namespace Habanero.BO
             }
         }
     }
-
+    /// <summary>
+    /// A <see cref="TransactionalSingleRelationship"/> for an item that is in the Removed Business Object collection.
+    /// </summary>
     public class TransactionalSingleRelationship_Removed : TransactionalSingleRelationship
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="singleRelationship"></param>
+        /// <param name="relatedBO"></param>
         protected internal TransactionalSingleRelationship_Removed(IRelationship singleRelationship, IBusinessObject relatedBO)
             : base(singleRelationship, relatedBO)
         {}
 
+        /// <summary>
+        /// Update the Underlying relationship collection e.g. The added or removed Business Object Collections are updated.
+        /// </summary>
         protected override void UpdateCollections()
         {
 //            SingleRelationshipBase relationshipBase = (SingleRelationshipBase)Relationship;

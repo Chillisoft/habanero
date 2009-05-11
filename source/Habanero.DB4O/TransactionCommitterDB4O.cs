@@ -20,9 +20,7 @@ namespace Habanero.DB4O
         }
 
         protected override void BeginDataSource()
-        {
-
-        }
+        {}
 
         protected override void TryRollback()
         {

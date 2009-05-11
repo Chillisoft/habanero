@@ -61,6 +61,7 @@ namespace Habanero.BO
         protected object _valueBeforeLastEdit;
         private IBOPropAuthorisation _boPropAuthorisation;
 
+        private bool _loadedPropHasBeenValidated;
         /// <summary>
         /// Indicates that the value held by the property has been
         /// changed. This is fired any time that the current value of the property is set to a new value.
@@ -129,7 +130,16 @@ namespace Habanero.BO
         /// </summary>
         public void Validate()
         {
-            _isValid = _propDef.IsValueValid(this.Value, ref _invalidReason);
+            //---Added for performance based on profiling LGMIS.
+            if (!_loadedPropHasBeenValidated && !this.IsDirty)
+            {
+                _isValid = _propDef.IsValueValid(this.Value, ref _invalidReason);
+                _loadedPropHasBeenValidated = true;
+            } 
+            else if(this.IsDirty)
+            {
+                _isValid = _propDef.IsValueValid(this.Value, ref _invalidReason);
+            }
         }
 
         /// <summary>

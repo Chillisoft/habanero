@@ -133,6 +133,10 @@ namespace Habanero.UI.VWG
             }
         }
 
+        /// <summary>
+        /// Applies any changes that have occured in any of the Controls on this control's to their related
+        /// Properties on the Business Object.
+        /// </summary>
         public void ApplyChangesToBusinessObject()
         {
             this.PanelInfo.ApplyChangesToBusinessObject();

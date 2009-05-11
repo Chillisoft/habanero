@@ -76,11 +76,24 @@ namespace Habanero.BO
            return new TransactionalBusinessObjectInMemory(businessObject);
         }
 
+        /// <summary>
+        /// Add the Business Object for a child added to the relationship.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="relationship"></param>
+        /// <param name="businessObject"></param>
         protected internal override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject)
         {
             this.AddTransaction(new TransactionalSingleRelationship_Added(relationship, businessObject));
 
         }
+
+        /// <summary>
+        /// Remove the Business Object for a child added to the relationship.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="relationship"></param>
+        /// <param name="businessObject"></param>
         protected internal override void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject)
         {
             this.AddTransaction(new TransactionalSingleRelationship_Removed(relationship, businessObject));

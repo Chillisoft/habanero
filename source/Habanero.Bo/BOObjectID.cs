@@ -126,8 +126,9 @@ namespace Habanero.BO
         {
             get
             {
-                if (ObjectIDProp.Value == null) return Guid.Empty;
-                return (Guid) ObjectIDProp.Value;
+                object propValue = ObjectIDProp.Value;
+                if (propValue == null) return Guid.Empty;
+                return (Guid) propValue;
             }
         }
 

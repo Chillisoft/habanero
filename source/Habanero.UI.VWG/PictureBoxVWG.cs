@@ -23,6 +23,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.VWG
 {
+    /// <summary>
+    /// A <see cref="IPictureBox"/> for Visual Web Gui.
+    /// </summary>
     public class PictureBoxVWG : PictureBox,IPictureBox
     {
         /// <summary>

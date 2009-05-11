@@ -639,6 +639,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _classDef; }
             internal set { _classDef = (ClassDef) value; }
+           
         }
 
         #endregion

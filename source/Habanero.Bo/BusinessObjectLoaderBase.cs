@@ -725,7 +725,12 @@ namespace Habanero.BO
             ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
             return (T) GetBusinessObjectByValue(classDef, idValue);
         }
-
+        /// <summary>
+        /// Returns the Business Object for the primary Key from the object manager
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="boType"></param>
+        /// <returns></returns>
         protected static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key, Type boType)
         {
             BusinessObjectManager businessObjectManager = BusinessObjectManager.Instance;
@@ -741,7 +746,10 @@ namespace Habanero.BO
 //            return find.Count > 0 ? find[0] : null;
             return businessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria(), boType);
         }
-
+        /// <summary>
+        /// Sets the Status for the Business Object to NotNew.
+        /// </summary>
+        /// <param name="bo"></param>
         protected static void SetStatusAfterLoad(IBusinessObject bo)
         {
             BusinessObject businessObject = (BusinessObject)bo;

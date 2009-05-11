@@ -173,7 +173,7 @@ namespace Habanero.Base
             private IClassDef _classDef;
             /// <summary>
             /// This is used as a type object because IPropertyComparer inherits from the base generic type 
-            /// IComparer<T> but you cannot set the use T at a field level.
+            /// IComparer but you cannot set the use T at a field level.
             /// We wanted to however cache this since it is taking a significant amount of time
             /// in the loading.
             /// </summary>

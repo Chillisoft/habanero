@@ -19,104 +19,103 @@
 
 using System;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
 {
-	/// <summary>
-	/// Manages a super-class in the case where inheritance is being used.
-	/// </summary>
-	public class SuperClassDef
-	{
-		private ORMapping _orMapping;
-		private IClassDef _superClassClassDef;
-		private string _className;
-		private string _assemblyName;
-	    private string _id;
-	    private string _discriminator;
+    /// <summary>
+    /// Manages a super-class in the case where inheritance is being used.
+    /// </summary>
+    public class SuperClassDef
+    {
+        private ORMapping _orMapping;
+        private IClassDef _superClassClassDef;
+        private string _className;
+        private string _assemblyName;
+        private string _id;
+        private string _discriminator;
 
-		#region Constructors
+        #region Constructors
 
-		/// <summary>
-		/// Constructor to create a new super-class
-		/// </summary>
-		/// <param name="superClassDef">The class definition</param>
-		/// <param name="mapping">The type of OR-Mapping to use. See
-		/// the ORMapping enumeration for more detail.</param>
-		public SuperClassDef(IClassDef superClassDef, ORMapping mapping)
-		{
-			_orMapping = mapping;
-			MySuperClassDef = superClassDef;
-		}
+        /// <summary>
+        /// Constructor to create a new super-class
+        /// </summary>
+        /// <param name="superClassDef">The class definition</param>
+        /// <param name="mapping">The type of OR-Mapping to use. See
+        /// the ORMapping enumeration for more detail.</param>
+        public SuperClassDef(IClassDef superClassDef, ORMapping mapping)
+        {
+            _orMapping = mapping;
+            MySuperClassDef = superClassDef;
+        }
 
-		/// <summary>
-		/// Constructor to create a new super-class
-		/// </summary>
-		/// <param name="assemblyName">The assembly name of the superClass</param>
-		/// <param name="className">The class name of the superClass</param>
-		/// <param name="mapping">The type of OR-Mapping to use. See
-		/// the ORMapping enumeration for more detail.</param>
-		/// <param name="id">In ClassTableInheritance, this determines which property
-		/// in the child has a copy of the parent ID.  Provide an empty string if in
-		/// the code the child simply inherits the parent's ID.</param>
-		/// <param name="discriminator">In SingleTableInheritance, this determines
-		/// the name of the database column that stores the type name of the class
-		/// being stored in that particular row.</param>
-		public SuperClassDef(string assemblyName, string className, ORMapping mapping, string id, string discriminator)
-		{
-			_orMapping = mapping;
-			_superClassClassDef = null;
-			_assemblyName = assemblyName;
-			_className = className;
-		    ID = id;
-		    Discriminator = discriminator;
-		}
+        /// <summary>
+        /// Constructor to create a new super-class
+        /// </summary>
+        /// <param name="assemblyName">The assembly name of the superClass</param>
+        /// <param name="className">The class name of the superClass</param>
+        /// <param name="mapping">The type of OR-Mapping to use. See
+        /// the ORMapping enumeration for more detail.</param>
+        /// <param name="id">In ClassTableInheritance, this determines which property
+        /// in the child has a copy of the parent ID.  Provide an empty string if in
+        /// the code the child simply inherits the parent's ID.</param>
+        /// <param name="discriminator">In SingleTableInheritance, this determines
+        /// the name of the database column that stores the type name of the class
+        /// being stored in that particular row.</param>
+        public SuperClassDef(string assemblyName, string className, ORMapping mapping, string id, string discriminator)
+        {
+            _orMapping = mapping;
+            _superClassClassDef = null;
+            _assemblyName = assemblyName;
+            _className = className;
+            ID = id;
+            Discriminator = discriminator;
+        }
 
-		#endregion Constructors
+        #endregion Constructors
 
-		#region properties
+        #region properties
 
-		/// <summary>
-		/// Returns the type of ORMapping used.  See the ORMapping
-		/// enumeration for more detail.
-		/// </summary>
-		public ORMapping ORMapping
-		{
-			get { return _orMapping; }
-			protected set { _orMapping = value; }
-		}
+        /// <summary>
+        /// Returns the type of ORMapping used.  See the ORMapping
+        /// enumeration for more detail.
+        /// </summary>
+        public ORMapping ORMapping
+        {
+            get { return _orMapping; }
+            protected set { _orMapping = value; }
+        }
 
 
-		///<summary>
-		/// The assembly name of the SuperClass
-		///</summary>
-		public string AssemblyName
-		{
-			get { return _assemblyName; }
-			protected set
-			{
-				if (_assemblyName != value)
-				{
-					_superClassClassDef = null;
-					_className = null;
-				}
-				_assemblyName = value;
-			}
-		}
+        ///<summary>
+        /// The assembly name of the SuperClass
+        ///</summary>
+        public string AssemblyName
+        {
+            get { return _assemblyName; }
+            protected set
+            {
+                if (_assemblyName != value)
+                {
+                    _superClassClassDef = null;
+                    _className = null;
+                }
+                _assemblyName = value;
+            }
+        }
 
-		///<summary>
-		/// The class name of the SuperClass
-		///</summary>
-		public string ClassName
-		{
-			get { return _className; }
-			protected set
-			{
-				if (_className != value)
-					_superClassClassDef = null;
-				_className = value;
-			}
-		}
+        ///<summary>
+        /// The class name of the SuperClass
+        ///</summary>
+        public string ClassName
+        {
+            get { return _className; }
+            protected set
+            {
+                if (_className != value)
+                    _superClassClassDef = null;
+                _className = value;
+            }
+        }
 
         /// <summary>
         /// Returns the name of the property that identifies which field
@@ -132,9 +131,10 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (value != null && _orMapping != ORMapping.ClassTableInheritance)
                 {
-                    throw new ArgumentException("An 'ID' property has been specified " +
-                        "for a super-class definition where the OR-mapping type is other than " +
-                        "ClassTableInheritance.");
+                    throw new ArgumentException
+                        ("An 'ID' property has been specified "
+                         + "for a super-class definition where the OR-mapping type is other than "
+                         + "ClassTableInheritance.");
                 }
                 _id = value;
             }
@@ -152,56 +152,56 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (!String.IsNullOrEmpty(value) && _orMapping != ORMapping.SingleTableInheritance)
                 {
-                    throw new ArgumentException("A 'Discriminator' property has been specified " +
-                        "for a super-class definition where the OR-mapping type is other than " +
-                        "SingleTableInheritance.");
+                    throw new ArgumentException
+                        ("A 'Discriminator' property has been specified "
+                         + "for a super-class definition where the OR-mapping type is other than "
+                         + "SingleTableInheritance.");
                 }
                 _discriminator = value;
             }
         }
 
-		/// <summary>
-		/// Returns the class definition for this super-class
-		/// </summary>
-		public IClassDef SuperClassClassDef
-		{
-			get { return MySuperClassDef; }
-			protected set { MySuperClassDef = value; }
-		}
-		
-		#endregion properties
+        /// <summary>
+        /// Returns the class definition for this super-class
+        /// </summary>
+        public IClassDef SuperClassClassDef
+        {
+            get { return MySuperClassDef; }
+            protected set { MySuperClassDef = value; }
+        }
 
-		#region SuperClassDef Methods
+        #endregion properties
 
-		private IClassDef MySuperClassDef
-		{
-			get
-			{
-				if (_superClassClassDef == null)
-				{
+        #region SuperClassDef Methods
+
+        private IClassDef MySuperClassDef
+        {
+            get
+            {
+                if (_superClassClassDef == null)
+                {
                     //TODO Mark 2009-01-15: Look at how we can change this ClassDef.ClassDefs to the actual parent collection of this SuperClassDef's Class (Low priority)
                     _superClassClassDef = ClassDefHelper.GetSuperClassClassDef(this, ClassDef.ClassDefs);
-				}
-			    return _superClassClassDef;
-			}
-			set
-			{
-				//TODO error: What happens if it is null?
-				_superClassClassDef = value;
-				if (_superClassClassDef != null)
-				{
-					_assemblyName = _superClassClassDef.AssemblyName;
-					_className = _superClassClassDef.ClassNameFull;
-				}
-				else
-				{
-					_assemblyName = null;
-					_className = null;
-				}
-			}
-		}
+                }
+                return _superClassClassDef;
+            }
+            set
+            {
+                //TODO error: What happens if it is null?
+                _superClassClassDef = value;
+                if (_superClassClassDef != null)
+                {
+                    _assemblyName = _superClassClassDef.AssemblyName;
+                    _className = _superClassClassDef.ClassNameFull;
+                }
+                else
+                {
+                    _assemblyName = null;
+                    _className = null;
+                }
+            }
+        }
 
-	    #endregion SuperClassDef Methods
-
-	}
+        #endregion SuperClassDef Methods
+    }
 }

@@ -93,6 +93,8 @@ namespace Habanero.UI.Base
             get { return _collection; }
             set
             {
+                if (_collection == value) return;
+
                 _collection = value;
 
                 _comboBox.Items.Clear();

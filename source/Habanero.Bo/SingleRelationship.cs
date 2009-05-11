@@ -274,12 +274,13 @@ namespace Habanero.BO
                 foreach (IRelProp prop in this.RelKey)
                 {
                     object relatedPropValue = _relatedBo.GetPropertyValue(prop.RelatedClassPropName);
-                    if (prop.BOProp.Value == null)
+                    object propValue = prop.BOProp.Value;
+                    if (propValue == null)
                     {
                         if (relatedPropValue == null) continue;
                         return true;
                     }
-                    if (prop.BOProp.Value.Equals(relatedPropValue)) continue;
+                    if (propValue.Equals(relatedPropValue)) continue;
                     return true;
                 }
             }

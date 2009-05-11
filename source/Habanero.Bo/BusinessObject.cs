@@ -1201,7 +1201,10 @@ namespace Habanero.BO
                 return _boRules;
             }
         }
-
+        /// <summary>
+        /// Load the <see cref="IBusinessObjectRule"/>s for this BusinessObject.
+        /// </summary>
+        /// <param name="boRules"></param>
         protected virtual void LoadBusinessObjectRules(IList<IBusinessObjectRule> boRules)
         {
             //This must be overridden in the inherited class with any custom rules.

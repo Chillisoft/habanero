@@ -64,7 +64,11 @@ namespace Habanero.UI.VWG
         {
             get { return _controlFactory; }
         }
-
+        /// <summary>
+        /// Build an Actual Menu based on the habaneroMenu
+        /// </summary>
+        /// <param name="habaneroMenu"></param>
+        /// <returns></returns>
         protected virtual IMenuItem BuildMenu(HabaneroMenu habaneroMenu)
         {
             IMenuItem menuItem = this.ControlFactory.CreateMenuItem(habaneroMenu.Name);

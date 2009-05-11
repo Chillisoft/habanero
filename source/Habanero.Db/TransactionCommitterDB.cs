@@ -88,10 +88,23 @@ namespace Habanero.DB
             return new TransactionalBusinessObjectDB(businessObject);
         }
 
+        /// <summary>
+        /// Add the Business Object for a child added to the relationship.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="relationship"></param>
+        /// <param name="businessObject"></param>
         protected override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject) {
             this.AddTransaction(new TransactionalSingleRelationship_Added_DB(relationship, businessObject));
 
         }
+
+        /// <summary>
+        /// Remove the Business Object for a child added to the relationship.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="relationship"></param>
+        /// <param name="businessObject"></param>
         protected override void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject)
         {
             this.AddTransaction(new TransactionalSingleRelationship_Removed_DB(relationship, businessObject));

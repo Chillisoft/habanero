@@ -52,7 +52,7 @@ namespace Habanero.Base
         /// <summary>
         /// Returns the business object at the row specified
         /// </summary>
-        /// <param name="row)">The row related to the business object</param>
+        /// <param name="row">The row related to the business object</param>
         /// <returns>Returns a business object</returns>
         IBusinessObject Find(DataRow row);
 
