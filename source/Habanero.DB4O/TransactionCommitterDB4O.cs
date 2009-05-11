@@ -48,8 +48,11 @@ namespace Habanero.DB4O
                     DereferenceRelatedChildren(tbo.BusinessObject);
                     IList<BusinessObjectDTO> matchingObjects = _objectContainer.Query<BusinessObjectDTO>(
                                         obj => obj.ClassDefName == tbo.BusinessObject.ClassDef.ClassName && obj.ID == primaryKey.ToString());
-                    BusinessObjectDTO dtoToDelete = matchingObjects[0];
-                    _objectContainer.Delete(dtoToDelete);
+                    if (matchingObjects.Count > 0)
+                    {
+                        BusinessObjectDTO dtoToDelete = matchingObjects[0];
+                        _objectContainer.Delete(dtoToDelete);
+                    }
                 }
                 else if (tbo.BusinessObject.Status.IsNew)
                 {
