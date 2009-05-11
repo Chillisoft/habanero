@@ -9,6 +9,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB4O;
+using Habanero.Test.BO;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 
@@ -180,6 +181,26 @@ namespace Habanero.Test.DB4O
             AssertBONotInDataStore(typeof(BusinessObjectDTO));
         }
 
+        [Test]
+        public void TestDeleteRelated()
+        {
+            //---------------Set up test pack-------------------
+            AddressTestBO address;
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            contactPersonTestBO.MarkForDelete();
+            TransactionCommitter committer = new TransactionCommitterDB4O(DB4ORegistry.DB);
+            committer.AddBusinessObject(contactPersonTestBO);
+
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+            Assert.IsTrue(contactPersonTestBO.Status.IsDeleted);
+            Assert.IsTrue(address.Status.IsNew);
+            Assert.IsTrue(address.Status.IsDeleted);
+        }
        
        
 
