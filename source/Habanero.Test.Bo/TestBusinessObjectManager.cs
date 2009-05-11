@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Habanero.Base;
@@ -2196,7 +2197,7 @@ namespace Habanero.Test.BO
             //--------------- Execute Test ----------------------
             //BusinessObjectCollection<BOWithIntID> found = boMan.Find<BOWithIntID>(new Criteria("IntID", Criteria.ComparisonOp.Equals, id));
             Criteria criteria = new Criteria("IntID", Criteria.ComparisonOp.Equals, id);
-            IBusinessObjectCollection found = BusinessObjectManager.Instance.Find(criteria, typeof(BOWithIntID));
+            IList found = BusinessObjectManager.Instance.Find(criteria, typeof(BOWithIntID));
 
             //--------------- Test Result -----------------------
             Assert.AreEqual(1, found.Count);
@@ -2214,7 +2215,7 @@ namespace Habanero.Test.BO
 
             //--------------- Execute Test ----------------------
             //BusinessObjectCollection<ContactPersonTestBO> found = BusinessObjectManager.Instance.Find<ContactPersonTestBO>(criteria);
-            IBusinessObjectCollection found = BusinessObjectManager.Instance.Find(criteria, typeof(ContactPersonTestBO));
+            IList found = BusinessObjectManager.Instance.Find(criteria, typeof(ContactPersonTestBO));
 
             //--------------- Test Result -----------------------
             Assert.AreEqual(0, found.Count);
@@ -2231,7 +2232,7 @@ namespace Habanero.Test.BO
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
 
             //--------------- Execute Test ----------------------
-            IBusinessObjectCollection found = BusinessObjectManager.Instance.Find(criteria, typeof(ContactPersonTestBO));
+            IList found = BusinessObjectManager.Instance.Find(criteria, typeof(ContactPersonTestBO));
 
             //--------------- Test Result -----------------------
             Assert.AreEqual(1, found.Count);
@@ -2254,7 +2255,7 @@ namespace Habanero.Test.BO
             //----------------Assert preconditions ---------------
             Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
             //--------------- Execute Test ----------------------
-            IBusinessObjectCollection found = BusinessObjectManager.Instance.Find(null, typeof(ContactPersonTestBO));
+            IList found = BusinessObjectManager.Instance.Find(null, typeof(ContactPersonTestBO));
             //--------------- Test Result -----------------------
             Assert.AreEqual(3, found.Count);
 
