@@ -34,7 +34,7 @@ namespace Habanero.BO
     /// Whenever an object is requested to be loaded the Business Object loader first checks to see if the object already exists in the
     ///  object manager if it does then the object from the object manager is returned else the newly loaded object is added to the
     ///  object manager and then returned. NB: There are various strategies that the business object can implement to control the
-    ///  behaviour when the business object loader <see cref="BusinessObjectLoaderDB"/> gets a business object that is already in the object
+    ///  behaviour when the business object loader <see cref="IBusinessObjectLoader"/> gets a business object that is already in the object
     ///  manager. The default behaviour is to refresh all the objects data if the object is not in edit mode. If the object is in edit mode 
     ///  the default behaviour is to do nothing. This strategy helps to prevent Inconsistant read and Inconsistant write concurrency control
     ///  errors.
@@ -60,8 +60,7 @@ namespace Habanero.BO
         //protected readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
         //    new Dictionary<string, WeakReference>();
         /// <summary> The Busienss Objects Loaded in memory. This is a <see cref="WeakReference"/> so that the objects can still be garbage collected. </summary>
-        protected readonly Dictionary<Guid, WeakReference> _loadedBusinessObjects = new Dictionary<Guid, WeakReference>
-            ();
+        protected readonly Dictionary<Guid, WeakReference> _loadedBusinessObjects = new Dictionary<Guid, WeakReference>();
 
         private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
 
@@ -399,6 +398,7 @@ namespace Habanero.BO
         #endregion
 
         //TODO 20 Jan 2009: improve performance of this, it's currently just using brute force.
+
         /// <summary>
         /// Finds all the loaded business objects that match the type T and the Criteria given.
         /// </summary>
@@ -435,6 +435,40 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Finds the First Business Object that matches the type T and the Criteria given.
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
+        public IBusinessObject FindFirst<T>(Criteria criteria)
+        {
+            lock (_loadedBusinessObjects)
+            {
+
+                WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
+                _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
+                foreach (WeakReference weakReference in valueArray)
+                {
+                    if (!WeakReferenceIsAlive(weakReference)) continue;
+
+                    BusinessObject bo = (BusinessObject)weakReference.Target;
+                    try
+                    {
+                        if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
+                        {
+                            return bo;
+                        }
+                    }
+                    //For Dynamic Business Objects the Props may have been added since the business object was loaded.
+                    catch (InvalidPropertyNameException ex)
+                    {
+                        //Do Nothing
+                    }
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Finds all the loaded business objects that match the type T and the Criteria given.
         /// </summary>
         /// <param name="criteria">The Criteria to match on</param>
@@ -466,6 +500,40 @@ namespace Habanero.BO
                     }
                 }
                 return collection;
+            }
+        }
+
+        /// <summary>
+        /// Finds the First Business Object that matches the type boType and the Criteria given.
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <param name="boType"></param>
+        /// <returns></returns>
+        public IBusinessObject FindFirst(Criteria criteria, Type boType)
+        {
+            lock (_loadedBusinessObjects)
+            {
+                WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
+                _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
+                foreach (WeakReference weakReference in valueArray)
+                {
+                    if (!WeakReferenceIsAlive(weakReference)) continue;
+
+                    BusinessObject bo = (BusinessObject)weakReference.Target;
+                    //For Dynamic Business Objects the Props may have been added since the business object was loaded.
+                    try
+                    {
+                        if (boType.IsInstanceOfType(bo) && (criteria == null || criteria.IsMatch(bo, false)))
+                        {
+                            return bo;
+                        }
+                    }
+                    catch (InvalidPropertyNameException)
+                    {
+                        //Do Nothing
+                    }
+                }
+                return null;
             }
         }
     }

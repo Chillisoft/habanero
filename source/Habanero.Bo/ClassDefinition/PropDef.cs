@@ -788,8 +788,10 @@ namespace Habanero.BO.ClassDefinition
 
             if (boPrimaryKey != null)
             {
-                IList find = BusinessObjectManager.Instance.Find(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
-                if (find.Count > 0) businessObject = (IBusinessObject) find[0];
+//                IBusinessObjectCollection find = BusinessObjectManager.Instance.Find(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
+//                if (find.Count > 0) businessObject = find[0];
+                IBusinessObject found = BusinessObjectManager.Instance.FindFirst(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
+                businessObject = found;
             }
             return businessObject;
         }

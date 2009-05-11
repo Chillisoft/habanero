@@ -737,8 +737,9 @@ namespace Habanero.BO
                 }
             }
             BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
-            IList find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
-            return (IBusinessObject) (find.Count > 0 ? find[0] : null);
+//            IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
+//            return find.Count > 0 ? find[0] : null;
+            return businessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria(), boType);
         }
 
         protected static void SetStatusAfterLoad(IBusinessObject bo)

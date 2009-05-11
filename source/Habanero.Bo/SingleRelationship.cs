@@ -257,14 +257,14 @@ namespace Habanero.BO
 
         private TBusinessObject GetRelatedBusinessObjectFromBusinessObjectManager()
         {
-            IList<TBusinessObject> relatedBOCol =
-                BusinessObjectManager.Instance.Find<TBusinessObject>(_relKey.Criteria);
-            TBusinessObject relatedBo = null;
-            if (relatedBOCol.Count == 1)
-            {
-                relatedBo = relatedBOCol[0] == relatedBo ? null : relatedBOCol[0];
-            }
-            return relatedBo;
+//            BusinessObjectCollection<TBusinessObject> relatedBOCol =
+//                BusinessObjectManager.Instance.Find<TBusinessObject>(_relKey.Criteria);
+//            TBusinessObject relatedBo = null;
+//            if (relatedBOCol.Count == 1)
+//            {
+//                relatedBo = relatedBOCol[0] == relatedBo ? null : relatedBOCol[0];
+//            }
+            return (TBusinessObject) BusinessObjectManager.Instance.FindFirst<TBusinessObject>(_relKey.Criteria);
         }
 
         private bool RelatedBoForeignKeyHasChanged()

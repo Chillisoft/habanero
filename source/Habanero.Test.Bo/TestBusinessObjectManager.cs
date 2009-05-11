@@ -2097,6 +2097,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, boMan.Count);
 
         }
+
         [Test]
         public void Test_Find_TwoObjectTypesWithTheSameIDField_HaveSameValue()
         {
@@ -2174,6 +2175,255 @@ namespace Habanero.Test.BO
             //--------------- Test Result -----------------------
             Assert.AreEqual(3, found.Count);
 
+        }
+
+        [Test]
+        public void Test_Find_Generic_TwoObjectTypesWithTheSameIDField_HaveSameValue()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManagerStub.SetNewBusinessObjectManager();
+            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
+            boMan.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = id };
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+            //--------------- Execute Test ----------------------
+            //BusinessObjectCollection<BOWithIntID> found = boMan.Find<BOWithIntID>(new Criteria("IntID", Criteria.ComparisonOp.Equals, id));
+            Criteria criteria = new Criteria("IntID", Criteria.ComparisonOp.Equals, id);
+            IBusinessObjectCollection found = BusinessObjectManager.Instance.Find(criteria, typeof(BOWithIntID));
+
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(1, found.Count);
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+        }
+        [Test]
+        public void Test_Find_NonGeneric_NotFound()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString());
+
+            //--------------- Execute Test ----------------------
+            //BusinessObjectCollection<ContactPersonTestBO> found = BusinessObjectManager.Instance.Find<ContactPersonTestBO>(criteria);
+            IBusinessObjectCollection found = BusinessObjectManager.Instance.Find(criteria, typeof(ContactPersonTestBO));
+
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(0, found.Count);
+        }
+
+        [Test]
+        public void Test_Find_NonGeneric_OneMatch()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            string surname = cp.Surname = TestUtil.GetRandomString();
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
+
+            //--------------- Execute Test ----------------------
+            IBusinessObjectCollection found = BusinessObjectManager.Instance.Find(criteria, typeof(ContactPersonTestBO));
+
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(1, found.Count);
+            Assert.AreSame(cp, found[0]);
+
+        }
+
+        [Test]
+        public void Test_Find_NonGeneric_Null_ReturnsAllOfType()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            ContactPersonTestBO.LoadDefaultClassDef();
+#pragma warning disable 168
+            ContactPersonTestBO bo1 = new ContactPersonTestBO();  
+            ContactPersonTestBO bo2 = new ContactPersonTestBO();
+            ContactPersonTestBO bo3 = new ContactPersonTestBO();
+#pragma warning restore 168
+            //----------------Assert preconditions ---------------
+            Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
+            //--------------- Execute Test ----------------------
+            IBusinessObjectCollection found = BusinessObjectManager.Instance.Find(null, typeof(ContactPersonTestBO));
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(3, found.Count);
+
+        }
+
+        [Test]
+        public void Test_FindFirst_TwoObjectTypesWithTheSameIDField_HaveSameValue()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManagerStub.SetNewBusinessObjectManager();
+            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
+            boMan.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = id };
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = boMan.FindFirst<BOWithIntID>(new Criteria("IntID", Criteria.ComparisonOp.Equals, id));
+            //--------------- Test Result -----------------------
+//            Assert.AreEqual(1, found.Count);
+            Assert.IsNotNull(found);
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+        }
+        [Test]
+        public void Test_FindFirst_NotFound()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString());
+
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst<ContactPersonTestBO>(criteria);
+
+            //--------------- Test Result -----------------------
+//            Assert.AreEqual(0, found.Count);
+            Assert.IsNull(found);
+        }
+
+        [Test]
+        public void Test_FindFirst_OneMatch()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            string surname = cp.Surname = TestUtil.GetRandomString();
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
+
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst<ContactPersonTestBO>(criteria);
+
+            //--------------- Test Result -----------------------
+            Assert.IsNotNull(found);
+            Assert.AreSame(cp, found);
+
+        }
+
+        [Test]
+        public void Test_FindFirst_Null_ReturnsAllOfType()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            ContactPersonTestBO.LoadDefaultClassDef();
+#pragma warning disable 168
+            ContactPersonTestBO bo1 = new ContactPersonTestBO();  
+            ContactPersonTestBO bo2 = new ContactPersonTestBO();
+            ContactPersonTestBO bo3 = new ContactPersonTestBO();
+#pragma warning restore 168
+            //----------------Assert preconditions ---------------
+            Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst<ContactPersonTestBO>(null);
+            //--------------- Test Result -----------------------
+            Assert.IsNotNull(found);
+
+        }
+
+        [Test]
+        public void Test_FindFirst_Generic_TwoObjectTypesWithTheSameIDField_HaveSameValue()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManagerStub.SetNewBusinessObjectManager();
+            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
+            boMan.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = id };
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+            //--------------- Execute Test ----------------------
+            //BusinessObjectCollection<BOWithIntID> found = boMan.FindFirst<BOWithIntID>(new Criteria("IntID", Criteria.ComparisonOp.Equals, id));
+            Criteria criteria = new Criteria("IntID", Criteria.ComparisonOp.Equals, id);
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst(criteria, typeof(BOWithIntID));
+
+            //--------------- Test Result -----------------------
+            Assert.IsNotNull(found);
+            Assert.AreSame(boWithIntID, found);
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+        }
+        [Test]
+        public void Test_FindFirst_NonGeneric_NotFound()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString());
+
+            //--------------- Execute Test ----------------------
+            //BusinessObjectCollection<ContactPersonTestBO> found = BusinessObjectManager.Instance.FindFirst<ContactPersonTestBO>(criteria);
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst(criteria, typeof(ContactPersonTestBO));
+
+            //--------------- Test Result -----------------------
+//            Assert.AreEqual(0, found.Count);
+            Assert.IsNull(found);
+        }
+
+        [Test]
+        public void Test_FindFirst_NonGeneric_OneMatch()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            string surname = cp.Surname = TestUtil.GetRandomString();
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
+
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst(criteria, typeof(ContactPersonTestBO));
+
+            //--------------- Test Result -----------------------
+//            Assert.AreEqual(1, found.Count);
+            Assert.IsNotNull(found  );
+            Assert.AreSame(cp, found);
+
+        }
+
+        [Test]
+        public void Test_FindFirst_NonGeneric_Null_ReturnsAllOfType()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            ContactPersonTestBO.LoadDefaultClassDef();
+#pragma warning disable 168
+            ContactPersonTestBO bo1 = new ContactPersonTestBO();  
+            ContactPersonTestBO bo2 = new ContactPersonTestBO();
+            ContactPersonTestBO bo3 = new ContactPersonTestBO();
+#pragma warning restore 168
+            //----------------Assert preconditions ---------------
+            Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst(null, typeof(ContactPersonTestBO));
+            //--------------- Test Result -----------------------
+            Assert.IsNotNull(found);
         }
 
 
