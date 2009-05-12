@@ -264,7 +264,7 @@ namespace Habanero.DB4O
             if (criteria != null)
             {
                 criteriaFieldValue = criteria.FieldValue;
-                criteriaType = criteriaFieldValue.GetType();
+                if (criteriaFieldValue != null) criteriaType = criteriaFieldValue.GetType();
             }
             if(criteriaType==typeof(Guid))
             {
