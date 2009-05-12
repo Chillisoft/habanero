@@ -268,7 +268,7 @@ namespace Habanero.DB4O
             }
             if(criteriaType==typeof(Guid))
             {
-                criteriaFieldValue = Convert.ToString(criteriaFieldValue);
+                criteriaFieldValue = ((Guid)criteriaFieldValue).ToString("B");
             }
             WithDB4O<T>(db =>
                         {
