@@ -158,7 +158,7 @@ namespace Habanero.UI.Win
             this.CollapseButton.Text = name;
             this.Dock = DockStyleWin.GetDockStyle(DockStyle.Top);
             this.CollapseButton.ForeColor = Color.White;
-            //TODO Brett 20 Apr 2009: Nubb to do: ((ButtonWin)this.CollapseButton).BackgroundImage = "Images.headergradient.png";
+            ((ButtonWin)this.CollapseButton).BackgroundImage = CollapsiblePanelResource.headergradient;
             ((ButtonWin)this.CollapseButton).FlatStyle = FlatStyle.Flat;
             this.Collapsed = true;
             this.CollapseButton.Click += delegate { if (this.Collapsed) this.Collapsed = false; };
@@ -236,11 +236,13 @@ namespace Habanero.UI.Win
             {
                 this.Text = _habaneroMenuItem.Name;
                 this.FlatStyle = FlatStyle.Flat;
-                //TODO Brett 20 Apr 2009: Nubb to fix this.BackgroundImage = "Images.smBack.gif";
-                //TODO Brett 20 Apr 2009: Nubb to fix  this.Image = "Images.nbItemBullet.gif";
+                this.BackgroundImage = CollapsiblePanelResource.smBack;
+                this.Image = CollapsiblePanelResource.nbItemBullet;
                 this.TextImageRelation = TextImageRelation.ImageBeforeText;
                 this.TextAlign = ContentAlignment.MiddleLeft;
                 this.Click += ChangeButtonIcon;
+               
+               
             }
             MenuItems = new CollapsibleMenuItemCollectionWin(this);
         }
@@ -250,9 +252,9 @@ namespace Habanero.UI.Win
             foreach (Control control in this.Parent.Controls.Owner.Controls)
             {
                 Button button = (Button)control;
-                //TODO Brett 20 Apr 2009: Nubb to fix  if (button != this) button.Image = "Images.nbItemBullet.gif";
+                if (button != this) button.Image = CollapsiblePanelResource.nbItemBullet;
             }
-            //TODO Brett 20 Apr 2009: Nubb to fix  this.Image = "Images.nav_icon.png";
+            this.Image = CollapsiblePanelResource.nav_icon;
         }
 
         #region Implementation of IMenuItem

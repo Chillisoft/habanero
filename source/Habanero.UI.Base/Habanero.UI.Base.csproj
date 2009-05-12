@@ -275,7 +275,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CollapsiblePanelResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CollapsiblePanelResource.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -287,8 +287,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\headergradient.png" />
+    <None Include="Resources\nbItemBullet.gif" />
+    <None Include="Resources\nav_icon.png" />
     <Content Include="Resources\pinoff_withcolour.png" />
     <Content Include="Resources\pinon_withcolour.png" />
+    <None Include="Resources\smBack.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
