@@ -188,8 +188,7 @@ namespace Habanero.Test.DB4O
         {
             //---------------Set up test pack-------------------
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
             contactPersonTestBO.MarkForDelete();
             TransactionCommitter committer = new TransactionCommitterDB4O(DB4ORegistry.DB);
             committer.AddBusinessObject(contactPersonTestBO);

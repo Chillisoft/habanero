@@ -37,6 +37,7 @@ namespace Habanero.DB4O
 
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
+            string primaryKeyString = primaryKey.ToString();
             return WithDB4O(delegate(IObjectContainer db)
                                 {
                                     string typeName = typeof (T).Name;
@@ -44,7 +45,7 @@ namespace Habanero.DB4O
                                         db.Query<BusinessObjectDTO>(
                                             delegate(BusinessObjectDTO obj)
                                                 {
-                                                    return obj.ClassName == typeName && obj.ID == primaryKey.ToString();
+                                                    return obj.ClassName == typeName && obj.ID == primaryKeyString;
                                                 });
                                     return GetFirstObjectFromMatchedObjects<T>(matchingObjects, null, true);
                                 }
@@ -258,12 +259,17 @@ namespace Habanero.DB4O
 
             IClassDef classDef = collection.ClassDef;
             QueryBuilder.PrepareCriteria(classDef, criteria);
-            string criteriaFieldValue = "";
+            object criteriaFieldValue = null;
+            Type criteriaType = null;
             if (criteria != null)
             {
-                criteriaFieldValue = criteria.FieldValue.ToString();
+                criteriaFieldValue = criteria.FieldValue;
+                criteriaType = criteriaFieldValue.GetType();
             }
-
+            if(criteriaType==typeof(Guid))
+            {
+                criteriaFieldValue = Convert.ToString(criteriaFieldValue);
+            }
             WithDB4O<T>(db =>
                         {
                             IList<BusinessObjectDTO> matchingObjects;

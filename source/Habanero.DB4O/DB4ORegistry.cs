@@ -23,10 +23,7 @@ namespace Habanero.DB4O
             configuration.ObjectClass(typeof(BusinessObjectDTO)).CascadeOnUpdate(true);
             _server = server;
             _port = port;
-            if(DB4OServer==null)
-            {
-                DB4OServer = Db4oFactory.OpenServer(configuration,fileName, port);
-            }
+            DB4OServer = Db4oFactory.OpenServer(configuration,fileName, port);
         }        
         
         public static void OpenDB4OClient(string userName,string passWord)

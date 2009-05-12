@@ -8,8 +8,7 @@ using NUnit.Framework;
 namespace Habanero.Test.DB4O
 {
     [TestFixture]
-    public class TestBusinessObjectLoader_GetBusinessObjectCollectionDB4O
-        : TestBusinessObjectLoader_GetBusinessObjectCollection
+    public class TestBusinessObjectLoader_GetBusinessObjectCollectionDB4O : TestBusinessObjectLoader_GetBusinessObjectCollection
     {
         #region Setup/Teardown
 
