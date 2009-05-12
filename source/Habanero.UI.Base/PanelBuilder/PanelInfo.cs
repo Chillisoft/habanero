@@ -100,9 +100,16 @@ namespace Habanero.UI.Base
         /// </summary>
         public void ApplyChangesToBusinessObject()
         {
-            for (int fieldInfoNum = 0; fieldInfoNum < FieldInfos.Count; fieldInfoNum++)
+            try
             {
-                FieldInfos[fieldInfoNum].ControlMapper.ApplyChangesToBusinessObject();
+                for (int fieldInfoNum = 0; fieldInfoNum < FieldInfos.Count; fieldInfoNum++)
+                {
+                    FieldInfos[fieldInfoNum].ControlMapper.ApplyChangesToBusinessObject();
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 

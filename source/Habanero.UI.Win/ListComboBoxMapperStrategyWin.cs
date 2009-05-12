@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -38,11 +39,18 @@ namespace Habanero.UI.Win
             IControlHabanero control = mapper.Control;
             if (!(control is IComboBox)) return;
             ComboBoxWin comboBoxWin = (ComboBoxWin) control;
-            comboBoxWin.SelectedIndexChanged += delegate(object sender, EventArgs e)
-                                                    {
-                                                        mapper.ApplyChangesToBusinessObject();
-                                                        mapper.UpdateControlValueFromBusinessObject();
-                                                    };
+            comboBoxWin.SelectedIndexChanged += delegate
+            {
+                    try
+                    {
+                        mapper.ApplyChangesToBusinessObject();
+                        mapper.UpdateControlValueFromBusinessObject();
+                    }
+                    catch (Exception ex)
+                    {
+                        GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+                    }
+                };
         }
     }
 }

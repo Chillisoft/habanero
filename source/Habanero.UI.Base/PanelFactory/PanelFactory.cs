@@ -214,7 +214,7 @@ namespace Habanero.UI.Base
                     rowCount = uiFormColumn.Count;
                 }
             }
-            int intNoOfLayoutGridColumnsPerPanel = 3;
+            const int intNoOfLayoutGridColumnsPerPanel = 3;
             manager.SetGridSize(rowCount, colCount * intNoOfLayoutGridColumnsPerPanel);
             for (int col = 0; col < colCount; col++)
             {

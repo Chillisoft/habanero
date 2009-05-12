@@ -44,7 +44,7 @@ namespace Habanero.UI.Base
         private string _panelTabTest;
         private UIForm _uiForm;
         private UIFormTab _uiFormTab;
-        private string _uiDefName;
+        private readonly string _uiDefName;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class

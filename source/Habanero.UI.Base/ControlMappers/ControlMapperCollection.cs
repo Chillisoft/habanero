@@ -159,10 +159,10 @@ namespace Habanero.UI.Base
             }
         }
 
-
         /// <summary>
         /// Updates the business object properties being mapped by the mappers in this collection
         /// </summary>
+        [Obsolete("This method is no longer used by Habanero")]
         public void ApplyChangesToBusinessObject()
         {
             foreach (IControlMapper mapper in _collection)

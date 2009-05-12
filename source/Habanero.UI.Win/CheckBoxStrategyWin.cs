@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -37,10 +38,17 @@ namespace Habanero.UI.Win
             if (mapper.Control is ICheckBox)
             {
                 CheckBoxWin checkBox = (CheckBoxWin) mapper.Control;
-                checkBox.Click += delegate(object sender, EventArgs e)
+                checkBox.Click += delegate
                 {
-                    mapper.ApplyChangesToBusinessObject();
-                    mapper.UpdateControlValueFromBusinessObject();
+                    try
+                    {
+                        mapper.ApplyChangesToBusinessObject();
+                        mapper.UpdateControlValueFromBusinessObject();
+                    }
+                    catch (Exception ex)
+                    {
+                        GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+                    }
                 };
             }
         }

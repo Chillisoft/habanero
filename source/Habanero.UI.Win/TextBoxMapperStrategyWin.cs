@@ -85,14 +85,28 @@ namespace Habanero.UI.Win
 
         private void UpdateBoPropWithTextFromTextBox(object sender, EventArgs e)
         {
-            _mapper.ApplyChangesToBusinessObject();
+            try
+            {
+                _mapper.ApplyChangesToBusinessObject();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         private void KeyPressEventHandler(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
-            if (!IsValidCharacter(e.KeyChar))
+            try
             {
-                e.Handled = true;
+                if (!IsValidCharacter(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
