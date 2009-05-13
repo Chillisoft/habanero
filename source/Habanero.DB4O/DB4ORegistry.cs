@@ -1,4 +1,5 @@
-﻿using Db4objects.Db4o;
+﻿using System;
+using Db4objects.Db4o;
 using Db4objects.Db4o.Config;
 using Habanero.Base;
 
@@ -23,7 +24,14 @@ namespace Habanero.DB4O
             configuration.ObjectClass(typeof(BusinessObjectDTO)).CascadeOnUpdate(true);
             _server = server;
             _port = port;
-            DB4OServer = Db4oFactory.OpenServer(configuration,fileName, port);
+            try
+            {
+                DB4OServer = Db4oFactory.OpenServer(configuration, fileName, port);
+            }
+            catch (Exception ex)
+            {
+                       
+            }
         }        
         
         public static void OpenDB4OClient(string userName,string passWord)

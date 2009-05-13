@@ -44,9 +44,9 @@ namespace Habanero.DB4O
                                     IList<BusinessObjectDTO> matchingObjects =
                                         db.Query<BusinessObjectDTO>(
                                             delegate(BusinessObjectDTO obj)
-                                                {
-                                                    return obj.ClassName == typeName && obj.ID == primaryKeyString;
-                                                });
+                                            {
+                                                return obj.ClassName == typeName && obj.ID == primaryKeyString;
+                                            });
                                     return GetFirstObjectFromMatchedObjects<T>(matchingObjects, null, true);
                                 }
                 );
@@ -276,7 +276,12 @@ namespace Habanero.DB4O
                             string className = classDef.ClassName;
                             if (criteria == null)
                             {
-                                matchingObjects = db.Query<BusinessObjectDTO>(obj => obj.ClassDefName == className);
+                                matchingObjects = db.Query<BusinessObjectDTO>(
+                                    delegate(BusinessObjectDTO obj)
+                                    {
+                                        bool b = obj.ClassDefName == className;
+                                        return b;
+                                    });
                             }
                             else
                             {

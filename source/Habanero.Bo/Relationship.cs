@@ -327,7 +327,10 @@ namespace Habanero.BO
         protected virtual void DeleteChild(TransactionCommitter committer, IBusinessObject bo)
         {
             if (bo == null) return;
-            bo.MarkForDelete();
+            if (!bo.Status.IsDeleted)
+            {
+                bo.MarkForDelete();
+            }
 //            if (bo.Status.IsNew) return;
             committer.ExecuteTransactionToDataSource(committer.CreateTransactionalBusinessObject(bo));
         }

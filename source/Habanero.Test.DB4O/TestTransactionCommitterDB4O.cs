@@ -254,7 +254,14 @@ namespace Habanero.Test.DB4O
             if (DB4ORegistry.DB != null)
             {
                 if (DB4ORegistry.DB4OServer != null) DB4ORegistry.DB4OServer.Close();
-                DB4ORegistry.DB.Close();
+                try
+                {
+                    DB4ORegistry.DB.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
             if (File.Exists(_db4oFileName)) File.Delete(_db4oFileName);
             DB4ORegistry.CreateDB4OServerConfiguration("localhost",1252,_db4oFileName);

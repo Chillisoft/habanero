@@ -303,6 +303,10 @@ namespace Habanero.Base
         {
             if (propertyValue is Guid && compareToValue != null)
             {
+                if (compareToValue is Guid)
+                {
+                    return compareToValue;
+                }
                 Guid guidCompareToValue;
                 bool parsedOK = GuidTryParse( compareToValue.ToString(), out guidCompareToValue);
                 return parsedOK ? guidCompareToValue : compareToValue;
