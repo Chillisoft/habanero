@@ -26,12 +26,12 @@ namespace Habanero.UI.Base
         /// Provides an overrideable method for Loading the collection of business objects
         /// </summary>
         protected override void LoadCollectionForBusinessObject() { 
-            if (this.BusinessObjectCollection == null)
-            {
+           // if (this.BusinessObjectCollection == null)
+            //{
                 
                 this.BusinessObjectCollection = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(
                     _relationshipDef.RelatedObjectClassDef, "");
-            }       
+            //}       
         }
     }
 }
