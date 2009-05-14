@@ -1,0 +1,14 @@
+﻿#include parameter.dtd
+<!ELEMENT filterProperty (parameter*)>
+<!ATTLIST filterProperty 
+	name NMTOKEN #IMPLIED
+	label CDATA #IMPLIED
+  filterType NMTOKEN "StringTextBoxFilter"
+  filterTypeAssembly CDATA "Habanero.UI.Base"
+  operator ( OpEquals | OpLike | OpGreaterThan | OpGreaterThanOrEqualTo | OpLessThan | OpLessThanOrEqualTo ) "OpLike"
+>
+<!ELEMENT filter (filterProperty+)>
+<!ATTLIST filter 
+	filterMode NMTOKEN "Filter"
+  columns CDATA "0"
+>

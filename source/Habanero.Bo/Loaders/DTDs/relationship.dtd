@@ -1,0 +1,20 @@
+<!ELEMENT relationship (relatedProperty+)>
+<!ATTLIST relationship
+	name NMTOKEN #REQUIRED
+	type (single | multiple) #REQUIRED
+  relationshipType ( Association | Aggregation | Composition ) "Association"
+  owningBOHasForeignKey ( true | false ) "true"
+	relatedClass NMTOKEN #REQUIRED
+	relatedAssembly	NMTOKEN #REQUIRED
+	keepReference ( true | false ) "true"
+  reverseRelationship NMTOKEN #IMPLIED
+	orderBy CDATA ""
+	deleteAction ( DeleteRelated | DereferenceRelated | Prevent | DoNothing ) "Prevent"
+  typeParameter CDATA ""
+  timeout CDATA "0"
+>
+		<!ELEMENT relatedProperty EMPTY>
+    <!ATTLIST relatedProperty
+			property NMTOKEN #REQUIRED
+			relatedProperty NMTOKEN #REQUIRED
+		>

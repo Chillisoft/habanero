@@ -1,0 +1,80 @@
+<Project EditorVersion="1.1.0" ProjectFileName="C:\Brett\_All Info\_Programming\CSharpZone\Chapter3\Example1\CustomerExample.fsproj">
+  <ProjectSettings ProjectName="CustomerExample" SolutionDirectory="C:\Brett\_All Info\_Programming\CSharpZone\Chapter3\Example1" BaseProjectName="vcv" UiProjectName="vc" LogicProjectName="cf" BoProjectName="CustomerExample.BO" DefaultAssembly="Customer.BO">
+    <CustomPropertyTypes />
+    <CustomControlTypes />
+    <CustomControlMapperTypes />
+    <CustomGridControlTypes />
+  </ProjectSettings>
+  <Classes>
+    <Class Assembly="Customer.BO" ClassName="Customer" TableName="Customer" DisplayName="Customer">
+      <SuperClassDesc />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="CustomerID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="CustomerName" DisplayName="Customer Name" DatabaseFieldName="CustomerName" Compulsory="True" PropertyType="String">
+          <PropertyRule RuleName="CustomerName" HasRule="True">
+            <Parameters>
+              <KeyValuePair Key="maxLength" Value="100" />
+              <KeyValuePair Key="minLength" Value="5" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="CustomerID" DisplayName="CustomerID" DatabaseFieldName="CustomerID" ReadWriteRule="WriteNew" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="CustomerCode" PropDescription="CustomerCode is used to integrate to the Planning and Scheduling system." DisplayName="Customer Code" DatabaseFieldName="CustomerCode" Compulsory="True" ReadWriteRule="WriteNew" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="DateCustomerApproved" DisplayName="Date Customer Approved" DatabaseFieldName="DateCustomerApproved" DefaultValue="Today" PropertyType="DateTime">
+          <PropertyRule RuleName="MaxDate" HasRule="True">
+            <Parameters>
+              <KeyValuePair Key="max" Value="Today" />
+              <KeyValuePair Key="min" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships />
+      <Keys>
+        <Key KeyName="AK1">
+          <KeyProperties>
+            <KeyProperty PropertyName="CustomerCode" />
+          </KeyProperties>
+        </Key>
+        <Key KeyName="AK2" Message="Two Customers may not have the same customer name">
+          <KeyProperties>
+            <KeyProperty PropertyName="CustomerName" />
+          </KeyProperties>
+        </Key>
+      </Keys>
+      <Uis />
+      <CustomProperties />
+    </Class>
+  </Classes>
+</Project>

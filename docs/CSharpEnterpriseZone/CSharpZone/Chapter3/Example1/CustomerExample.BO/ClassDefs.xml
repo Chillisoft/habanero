@@ -1,0 +1,23 @@
+﻿<classes>
+  <class name="Customer" assembly="CustomerExample.BO">
+    <property name="CustomerName" compulsory="true">
+      <rule name="CustomerName">
+        <add key="maxLength" value="100" />
+        <add key="minLength" value="5" />
+      </rule>
+    </property>
+    <property name="CustomerID" type="Guid" readWriteRule="WriteNew" displayName="CustomerID" />
+    <property name="CustomerCode" readWriteRule="WriteNew" compulsory="true" description="CustomerCode is used to integrate to the Planning and Scheduling system." />
+    <property name="DateCustomerApproved" type="DateTime" default="Today">
+      <rule name="MaxDate">
+        <add key="max" value="Today" />
+      </rule>
+    </property>
+    <key name="AK2" message="Two Customers may not have the same customer name">
+      <prop name="CustomerName" />
+    </key>
+    <primaryKey>
+      <prop name="CustomerID" />
+    </primaryKey>
+  </class>
+</classes>

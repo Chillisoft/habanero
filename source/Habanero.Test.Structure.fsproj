@@ -1,0 +1,519 @@
+<Project EditorVersion="2.1.2" ProjectFileName="C:\Systems\Habanero\branches\v2.2\source\Habanero.Test.Structure.fsproj">
+  <ProjectSettings HabaneroDllPath="..\bin" ProjectName="Habanero.Test.Structure" BaseProjectName="ToBeDeleted" BoProjectName="Habanero.Test.Structure" DefaultAssembly="Habanero.Test.Structure">
+    <CustomPropertyTypes />
+    <CustomControlTypes />
+    <CustomControlMapperTypes />
+    <CustomGridControlTypes />
+  </ProjectSettings>
+  <Classes>
+    <Class Assembly="Habanero.Test.Structure" ClassName="Car" TableName="table_Car" DisplayName="Car">
+      <SuperClassDesc SuperClass="Vehicle" HasSuperClass="True" />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="CarID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="CarID" DisplayName="Car I D" DatabaseFieldName="field_Car_ID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="RegistrationNo" DisplayName="Registration No" DatabaseFieldName="field_Registration_No" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="Length" DisplayName="Length" DatabaseFieldName="field_Length" PropertyType="Double">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="IsConvertible" DisplayName="Is Convertible" DatabaseFieldName="field_Is_Convertible" PropertyType="Boolean">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="DriverID" DisplayName="Driver I D" DatabaseFieldName="field_Driver_ID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="Driver" RelatedClass="Person">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="DriverID" RelatedProperty="PersonID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+    <Class Assembly="Habanero.Test.Structure" ClassName="Engine" TableName="table_Engine" DisplayName="Engine">
+      <SuperClassDesc SuperClass="Part" HasSuperClass="True" InheritedIdProperty="EngineID" />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="EngineID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="EngineID" DisplayName="Engine I D" DatabaseFieldName="field_Engine_ID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="EngineNo" DisplayName="Engine No" DatabaseFieldName="field_Engine_No" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="DateManufactured" DisplayName="Date Manufactured" DatabaseFieldName="field_Date_Manufactured" PropertyType="DateTime">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="max" />
+              <KeyValuePair Key="min" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="HorsePower" DisplayName="Horse Power" DatabaseFieldName="field_Horse_Power" PropertyType="Int32">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="max" />
+              <KeyValuePair Key="min" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="FuelInjected" DisplayName="Fuel Injected" DatabaseFieldName="field_Fuel_Injected" PropertyType="Boolean">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="CarID" DisplayName="Car I D" DatabaseFieldName="field_Car_ID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="Car" RelatedClass="Car">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="CarID" RelatedProperty="CarID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+    <Class Assembly="Habanero.Test.Structure" ClassName="Entity" TableName="table_Entity" DisplayName="Entity">
+      <SuperClassDesc />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="EntityID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="EntityID" DisplayName="Entity I D" DatabaseFieldName="field_Entity_ID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="EntityType" DisplayName="Entity Type" DatabaseFieldName="field_Entity_Type" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships />
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+    <Class Assembly="Habanero.Test.Structure" ClassName="LegalEntity" TableName="table_LegalEntity" DisplayName="Legal Entity">
+      <SuperClassDesc SuperClass="Entity" HasSuperClass="True" />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="LegalEntityID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="LegalEntityID" DisplayName="Legal Entity I D" DatabaseFieldName="field_Legal_Entity_ID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="LegalEntityType" DisplayName="Legal Entity Type" DatabaseFieldName="field_Legal_Entity_Type" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="VehiclesOwned" Cardinality="Multiple" RelatedClass="Vehicle">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="LegalEntityID" RelatedProperty="OwnerID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+    <Class Assembly="Habanero.Test.Structure" ClassName="Organisation" TableName="table_Organisation" DisplayName="Organisation">
+      <SuperClassDesc SuperClass="LegalEntity" HasSuperClass="True" />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="OrganisationID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="Name" DisplayName="Name" DatabaseFieldName="field_Name" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="DateFormed" DisplayName="Date Formed" DatabaseFieldName="field_Date_Formed" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="OrganisationID" DisplayName="Organisation I D" DatabaseFieldName="field_Organisation_ID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="OrganisationPerson" Cardinality="Multiple" RelatedClass="OrganisationPerson">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="OrganisationID" RelatedProperty="OrganisatiionID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+    <Class Assembly="Habanero.Test.Structure" ClassName="OrganisationPerson" TableName="table_OrganisationPerson" DisplayName="Organisation Person">
+      <SuperClassDesc />
+      <PrimaryKey IsObjectID="False">
+        <KeyProperties>
+          <KeyProperty PropertyName="OrganisatiionID" />
+          <KeyProperty PropertyName="PersonID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="OrganisatiionID" DisplayName="Organisatiion I D" DatabaseFieldName="field_Organisatiion_ID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="PersonID" DisplayName="Person I D" DatabaseFieldName="field_Person_ID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="Relationship" DisplayName="Relationship" DatabaseFieldName="field_Relationship" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="Organisation" RelatedClass="Organisation">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="OrganisatiionID" RelatedProperty="OrganisationID" />
+          </RelationshipProperties>
+        </Relationship>
+        <Relationship RelationshipName="Person" RelatedClass="Person">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="PersonID" RelatedProperty="PersonID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+    <Class Assembly="Habanero.Test.Structure" ClassName="Part" TableName="table_Part" DisplayName="Part">
+      <SuperClassDesc SuperClass="Entity" HasSuperClass="True" InheritedIdProperty="PartID" />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="PartID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="PartID" DisplayName="Part I D" DatabaseFieldName="field_Part_ID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="ModelNo" DisplayName="Model No" DatabaseFieldName="field_Model_No" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="PartType" DisplayName="Part Type" DatabaseFieldName="field_Part_Type" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships />
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+    <Class Assembly="Habanero.Test.Structure" ClassName="Person" TableName="table_Person" DisplayName="Person">
+      <SuperClassDesc SuperClass="LegalEntity" HasSuperClass="True" />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="PersonID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="IDNumber" DisplayName="I D Number" DatabaseFieldName="field_ID_Number" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="FirstName" DisplayName="First Name" DatabaseFieldName="field_First_Name" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="LastName" DisplayName="Last Name" DatabaseFieldName="field_Last_Name" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="PersonID" DisplayName="Person I D" DatabaseFieldName="field_Person_ID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="CarsDriven" Cardinality="Multiple" RelatedClass="Car">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="PersonID" RelatedProperty="DriverID" />
+          </RelationshipProperties>
+        </Relationship>
+        <Relationship RelationshipName="OrganisationPerson" Cardinality="Multiple" RelatedClass="OrganisationPerson">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="PersonID" RelatedProperty="PersonID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+    <Class Assembly="Habanero.Test.Structure" ClassName="Vehicle" TableName="table_Vehicle" DisplayName="Vehicle">
+      <SuperClassDesc SuperClass="Entity" HasSuperClass="True" />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="VehicleID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="VehicleID" DisplayName="Vehicle I D" DatabaseFieldName="field_Vehicle_ID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="VehicleType" DisplayName="Vehicle Type" DatabaseFieldName="field_Vehicle_Type" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="DateAssembled" DisplayName="Date Assembled" DatabaseFieldName="field_Date_Assembled" PropertyType="DateTime">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="max" />
+              <KeyValuePair Key="min" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="OwnerID" DisplayName="Owner I D" DatabaseFieldName="field_Owner_ID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="Owner" RelatedClass="LegalEntity">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="OwnerID" RelatedProperty="LegalEntityID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+  </Classes>
+</Project>

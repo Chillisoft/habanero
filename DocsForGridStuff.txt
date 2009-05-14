@@ -1,0 +1,148 @@
+   /// <summary>
+    /// Defines controls, which are components with visual representation
+    /// </summary>
+    public interface IControlHabanero
+
+    /// <summary>
+    /// Represents a control that represents a single business object.
+    /// The primary purpose of this interface is to ensure that a master
+    /// control can access the current business object held in a sub-control
+    /// that inherits from this interface.  See IBOColTabControl for an
+    /// example usage.
+    /// </summary>
+    public interface IBusinessObjectControl : IControlHabanero
+
+
+    /// <summary>
+    /// Represents a panel containing a PanelInfo used to edit a single business object.
+    /// </summary>
+    public interface IBusinessObjectPanel : IBusinessObjectControl
+
+
+
+
+    /// <summary>
+    /// Provides an interface for controls used in GridAndBOEditorControlWin, which calls
+    /// through to DisplayErrors when the BO is invalid and cannot be persisted.
+    /// </summary>
+    public interface IBusinessObjectControlWithErrorDisplay : IBusinessObjectControl
+
+
+
+The only difference between BusinessObjectPanel and BusinessObjectControl
+is that BOPanel has a PanelInfo Prop and BOControl does some error stuff
+
+why are these different
+what is the damn error stuff for?
+
+BOControl at least has some tests
+BOPanel has no tests.
+BOControl does nothing with VWG BOPanel Implements the VWG Windows pattern
+
+Neither of these implements any buttons.
+
+    /// <summary>
+    /// Provides an editor for static data in an application.  Static data serves
+    /// a number purposes including providing source data for lookup lists used in
+    /// drop-downs.
+    /// <br/>
+    /// The editor typically consists of a TreeView on the left and an EditableGrid
+    /// on the right, where data for the selected type in the TreeView can be edited.
+    /// </summary>
+    public interface IStaticDataEditor: IControlHabanero
+
+
+IListView is currently not implemented
+
+
+
+    /// <summary>
+    /// Provides an Interface that is used by the Grid's in Habanero this extends the <see cref="IDataGridView"/> so that it is adapted to show business objects
+    /// </summary>
+    public interface IGridBase : IDataGridView
+    {
+
+
+EditableGrid. Write tests for SaveChanges make sure still works.
+
+   /// <summary>
+    /// Provides a grid on which the user can edit data and add new business objects directly.
+    /// <br/>
+    /// IMPORTANT: This grid does not provide any buttons or menus for users
+    /// to save the changes they have made, and all changes will be lost if the form
+    /// is closed and changes are not saved programmatically.  Either carry out a dirty check when the
+    /// parent form is closed and take appropriate save action using SaveChanges(), or use an
+    /// <see cref="IEditableGridControl"/> , which provides Save and Cancel buttons. 
+    /// </summary>
+    public interface IEditableGrid : IGridBase
+
+
+
+
+    /// <summary>
+    /// Provides a combination of editable grid, filter and buttons used to edit a
+    /// collection of business objects
+    /// </summary>
+    public interface IEditableGridControl : IGridControl
+
+
+
+
+Change DefaultBOEditorForm to use one of the Editor controls instead of building the Panel since it is doing an identical thing.
+
+
+
+
+FormController - Could easily change this to do tabs etc like the NakedObjects
+IFormControl
+
+
+What does this do ICollectionTabControlMapper
+
+what does this do IControlManager
+
+IGridAndBOEditorControl and IGridWithPanelControl what is the difference
+These are trying to achieve an identical objective but merely come from a different time period GridAndBOEditor is used by the ExtendedComboBox 
+whereas GridAndBoEditorControl appears to be used by Firestarter.
+
+
+
+ISelectedListViewItemCollection is currently commented out what is this.
+
+IListView Currently not implemented
+
+    /// <summary>
+    /// This class provides mapping from a business object collection to a
+    /// user interface ComboBox.  This mapper is used at code level when
+    /// you are explicitly providing a business object collection.
+    /// </summary>
+    public class ComboBoxCollectionSelector
+
+
+    /// <summary>
+    /// Maps a multiple relationship collection onto an <see cref="IEditableGridControl"/>
+    /// This is used for editing a Many relationship e.g. If an Invoice has many items
+    /// then this control mapper can be used to provide an editable grid of Invoice Items.
+    /// </summary>
+    public class EditableGridControlMapper : ControlMapper
+
+    ///<summary>
+    /// A <see cref="ComboBox"/> with a <see cref="Button"/> next to it on the right with a '...' displayed as the text.
+    ///</summary>
+    public interface IExtendedComboBox : IControlHabanero
+    {
+The actual controls that inherit from this pop up a form in which you can edit existing value, Add values or delete values of the Business object loaded into this combo box.
+
+//Not implemented in new architecture.
+//    /// <summary>
+//    /// Maps a ListView object in a user interface
+//    /// </summary>
+//    public class ListViewCollectionSelector
+
+
+
+
+NNB where need readonly use ReadOnlyCollection can also be generic
+
+
+Every Business Object must have a default UI. The default UI must have both a grid and a form.

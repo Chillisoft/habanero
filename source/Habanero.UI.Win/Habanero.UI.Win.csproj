@@ -1,0 +1,339 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E761E05B-B9CC-4EAC-B940-C19E42D3819C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.UI.Win</RootNamespace>
+    <AssemblyName>Habanero.UI.Win</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Habanero.UI.Win.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BOEditorControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BusinessObjectPanelWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CollapsiblePanelGroupControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CollapsiblePanelSelectorWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CollapsiblePanelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComboBoxAutoCompleteSourceWin.cs" />
+    <Compile Include="ComboBoxAutoCompleteModeWin.cs" />
+    <Compile Include="BOColTabControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BorderLayoutManagerWin.cs" />
+    <Compile Include="ButtonGroupControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CheckBoxStrategyWin.cs" />
+    <Compile Include="CheckBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComboBoxSelectorWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComboBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComboBoxWin.Designer.cs">
+      <DependentUpon>ComboBoxWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ButtonWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ControlCollectionWin.cs">
+    </Compile>
+    <Compile Include="ControlMapperStrategyWin.cs" />
+    <Compile Include="ControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DateRangeComboBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DateTimePickerMapperStrategyWin.cs" />
+    <Compile Include="DateTimePickerWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DateTimePicker\DateTimePickerControllerWin.cs" />
+    <Compile Include="DateTimePicker\DateTimePickerUtilWinTemp.cs" />
+    <Compile Include="DefaultBOEditorFormWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DockStyleWin.cs" />
+    <Compile Include="Grid\BOGridAndEditorControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid\DataGridViewImageColumnWin.cs" />
+    <Compile Include="Grid\EditableGridControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid\EditableGridWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ErrorDescriptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ErrorProviderWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedComboBoxWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FileChooserWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FilterControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FormExceptionNotifier.cs" />
+    <Compile Include="FormWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GridBaseWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GridWithPanelControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid\DataGridViewDateTimeColumnWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\DataGridViewCheckBoxColumnWin.cs" />
+    <Compile Include="Grid\DataGridViewColumnWin.cs" />
+    <Compile Include="Grid\DataGridViewComboBoxColumnWin.cs" />
+    <Compile Include="Grid\DataGridViewNumericUpDownColumnWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\DataGridViewSelectionModeWin.cs" />
+    <Compile Include="Grid\DataGridViewWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\EditableGridButtonsControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GroupBoxGroupControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GroupBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="HabaneroAppWin.cs" />
+    <Compile Include="HelpAboutBoxWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LabelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListBoxSelectorWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListBoxWin.Designer.cs">
+      <DependentUpon>ListBoxWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListComboBoxMapperStrategyWin.cs" />
+    <Compile Include="LookupComboBoxDefaultMapperStrategyWin.cs" />
+    <Compile Include="LookupComboBoxKeyPressMapperStrategyWin.cs" />
+    <Compile Include="MainEditorPanelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MainTitleIconControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MenuBuilderWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MultiSelectorWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MultiSelectorWin.Designer.cs">
+      <DependentUpon>MultiSelectorWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NumericUpDownMapperStrategyWin.cs" />
+    <Compile Include="NumericUpDownWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="OKCancelDialogFactoryWin.cs" />
+    <Compile Include="PanelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PictureBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProgressBarWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RadioButtonWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\ReadOnlyGridButtonsControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\ReadOnlyGridWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\ReadOnlyGridControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SplitContainerWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SplitterWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TabControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TabPageWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxMapperStrategyWin.cs" />
+    <Compile Include="TextBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ToolTipWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="StaticDataEditorWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TreeViewWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Util\ControlsHelper.cs" />
+    <Compile Include="ControlFactoryWin.cs">
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="Util\DialogUtilities.cs" />
+    <Compile Include="Wizard\MessageWizardStepWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\MessageWizardStepWin.designer.cs">
+      <DependentUpon>MessageWizardStepWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepWin.designer.cs">
+      <DependentUpon>NullWizardStepWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\WizardControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardFormWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardFormWin.designer.cs">
+      <DependentUpon>WizardFormWin.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.DB4O\Habanero.DB4O.csproj">
+      <Project>{82010EEF-C99E-4A26-BABE-C7E7DB43C2E1}</Project>
+      <Name>Habanero.DB4O</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.DB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
+      <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
+      <Name>Habanero.UI.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Wizard\MessageWizardStepWin.resx">
+      <DependentUpon>MessageWizardStepWin.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\WizardFormWin.resx">
+      <DependentUpon>WizardFormWin.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

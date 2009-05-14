@@ -1,0 +1,9 @@
+<!ELEMENT simpleLookupList (item*)>
+<!ATTLIST simpleLookupList
+  options CDATA #IMPLIED
+  >
+<!ELEMENT item EMPTY>
+<!ATTLIST item
+	display CDATA #REQUIRED
+	value   CDATA #REQUIRED
+>

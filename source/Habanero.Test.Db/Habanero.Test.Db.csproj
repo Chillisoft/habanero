@@ -1,0 +1,226 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1484CDE2-0A30-466F-9FEA-E79CE2751489}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Habanero.Test.DB</AssemblyName>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Habanero.Test.DB</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Db4objects.Db4o, Version=7.4.88.12908, Culture=neutral, PublicKeyToken=6199cd4f203aa8eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Db4objects.Db4o.dll</HintPath>
+    </Reference>
+    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=2.0.1.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="nmock, Version=1.0.1536.20687, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nmock.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql, Version=1.97.1.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.46.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.DB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.Bo\Habanero.Test.BO.csproj">
+      <Project>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</Project>
+      <Name>Habanero.Test.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.Structure\Habanero.Test.Structure.csproj">
+      <Project>{D59DAD41-663F-4AD7-9B22-04C2A7D7F9C2}</Project>
+      <Name>Habanero.Test.Structure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
+      <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
+      <Name>Habanero.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
+    <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="StatementGeneratorTestHelper.cs" />
+    <Compile Include="TestBOPropLookupList_DatabaseLookupList_GuidID.cs" />
+    <Compile Include="TestBOPropLookupList_DatabaseLookupList_Int.cs" />
+    <Compile Include="TestBusinessObjectLoaderDB.cs" />
+    <Compile Include="TestBusinessObjectLoaderDBWithInheritance.cs" />
+    <Compile Include="TestBusinessObjectLoader_GetBusinessObjectCollectionDB.cs" />
+    <Compile Include="TestBusinessObjectLoader_RefreshCollectionDB.cs" />
+    <Compile Include="TestBusinessObjectLookupListDB.cs" />
+    <Compile Include="TestCriteriaDB.cs" />
+    <Compile Include="TestDatabaseConnection.cs" />
+    <Compile Include="TestDbMigrator.cs" />
+    <Compile Include="TestConnectionStringFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDatabaseConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDatabaseConnectionCreation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDatabaseConnectionFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDatabaseUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDeleteStatementGenerator.cs" />
+    <Compile Include="TestInsertStatementGenerator.cs" />
+    <Compile Include="TestMultipleRelationship_Aggregation_DB.cs" />
+    <Compile Include="TestMultipleRelationship_Association_DB.cs" />
+    <Compile Include="TestMultipleRelationship_Composition_DB.cs" />
+    <Compile Include="TestMySqlDatabaseConnection.cs" />
+    <Compile Include="TestNumberGeneratorDB.cs" />
+    <Compile Include="TestParameterNameGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestRelatedBOCol_Aggregation_UsingDB.cs" />
+    <Compile Include="TestRelatedBOCol_Association_WithDB.cs" />
+    <Compile Include="TestRelatedBOCol_Association_WithOracleDB.cs" />
+    <Compile Include="TestRelatedBOCol_Composition_UsingDB.cs" />
+    <Compile Include="TestSelectQueryDB.cs" />
+    <Compile Include="TestSingleRelationship_Aggregation_DB.cs" />
+    <Compile Include="TestSingleRelationship_Association_DB.cs" />
+    <Compile Include="TestSingleRelationship_Composition_DB.cs" />
+    <Compile Include="TestSourceDB.cs" />
+    <Compile Include="TestSQLStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestSQLStatementList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestTransactionCommitterDB.cs" />
+    <Compile Include="TestTransactionLoggerDB.cs" />
+    <Compile Include="TestUpdateStatementGenerator.cs" />
+    <Compile Include="TransactionCommitterStubDB.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,11 @@
+#include parameter.dtd
+<!ELEMENT column (parameter*)>
+<!ATTLIST column
+	heading CDATA #IMPLIED
+	property CDATA #REQUIRED
+	type NMTOKEN	#IMPLIED
+	assembly NMTOKEN #IMPLIED
+	editable ( true | false ) "true"
+	width CDATA "100"
+	alignment ( left | right | center | centre ) "left"
+>

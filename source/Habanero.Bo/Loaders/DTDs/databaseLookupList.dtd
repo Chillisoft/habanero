@@ -1,0 +1,7 @@
+<!ELEMENT databaseLookupList EMPTY>
+<!ATTLIST databaseLookupList
+	sql CDATA #REQUIRED
+  timeout CDATA "10000"
+	class NMTOKEN #IMPLIED
+	assembly NMTOKEN #IMPLIED
+>
