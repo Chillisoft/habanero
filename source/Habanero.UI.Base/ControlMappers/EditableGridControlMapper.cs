@@ -1,3 +1,5 @@
+using Habanero.Base;
+
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -34,9 +36,15 @@ namespace Habanero.UI.Base
         /// </summary>
         protected override void InternalUpdateControlValueFromBo()
         {
-            _editableGrid.Initialise(_businessObject.Relationships[_propertyName].RelatedObjectClassDef);
-            _editableGrid.BusinessObjectCollection =_businessObject.Relationships.GetRelatedCollection(_propertyName);
-
+            if (_businessObject != null)
+            {
+                IRelationship relationship = _businessObject.Relationships[_propertyName];
+                _editableGrid.Initialise(relationship.RelatedObjectClassDef);
+                _editableGrid.BusinessObjectCollection =_businessObject.Relationships.GetRelatedCollection(_propertyName);
+            } else
+            {
+                _editableGrid.BusinessObjectCollection = null;
+            }
         }
     }
 }

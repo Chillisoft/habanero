@@ -41,7 +41,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(editableGrid, mapper.Control);
             Assert.AreEqual(propName, mapper.PropertyName);
             Assert.IsFalse(editableGrid.Buttons.Visible);
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -54,16 +53,53 @@ namespace Habanero.Test.UI.Base
             EditableGridControlMapper mapper = new EditableGridControlMapper(editableGrid, propName, false, GetControlFactory());
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
             //---------------Assert PreConditions---------------        
             Assert.IsNull(mapper.BusinessObject);
 
             //---------------Execute Test ----------------------
             mapper.BusinessObject = contactPersonTestBO;
             //---------------Test Result -----------------------
-
             Assert.AreSame(contactPersonTestBO, mapper.BusinessObject);
-            //---------------Tear Down -------------------------          
+            Assert.AreSame(addresses, editableGrid.BusinessObjectCollection);
+        }
+
+        [Test]
+        public void Test_BusinessObject_WhenNull()
+        {
+            //---------------Set up test pack-------------------
+            IEditableGridControl editableGrid = GetControlFactory().CreateEditableGridControl();
+
+            const string propName = "Addresses";
+            EditableGridControlMapper mapper = new EditableGridControlMapper(editableGrid, propName, false, GetControlFactory());
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            mapper.BusinessObject = contactPersonTestBO;
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
+            //---------------Assert PreConditions---------------        
+            Assert.AreSame(contactPersonTestBO, mapper.BusinessObject);
+            Assert.AreSame(addresses, editableGrid.BusinessObjectCollection);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(mapper.BusinessObject);
+            Assert.AreSame(null, editableGrid.BusinessObjectCollection);
+        }
+
+        [Test]
+        public void Test_BusinessObject_WhenNullInitialValue()
+        {
+            //---------------Set up test pack-------------------
+            IEditableGridControl editableGrid = GetControlFactory().CreateEditableGridControl();
+
+            const string propName = "Addresses";
+            EditableGridControlMapper mapper = new EditableGridControlMapper(editableGrid, propName, false, GetControlFactory());
+            //---------------Assert PreConditions---------------        
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(mapper.BusinessObject);
+            Assert.AreSame(null, editableGrid.BusinessObjectCollection);
         }
 
         [Test]
@@ -84,8 +120,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
 
             Assert.AreSame(contactPersonTestBO.Addresses, editableGrid.Grid.BusinessObjectCollection);
-            //---------------Tear Down -------------------------          
-
         }
     }
 
