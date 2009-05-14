@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
 namespace Habanero.DB
@@ -340,10 +341,17 @@ namespace Habanero.DB
         private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
         {
             Criteria fullCriteria = Criteria.MergeCriteria(_selectQuery.Criteria, _selectQuery.DiscriminatorCriteria);
+            ClassDef classDef = (ClassDef) _selectQuery.ClassDef;
+            if (classDef.ClassID.HasValue)
+            {
+                Criteria classIDCriteria = new Criteria("DMClassID", Criteria.ComparisonOp.Equals, classDef.ClassID.Value);
+                fullCriteria = Criteria.MergeCriteria(fullCriteria, classIDCriteria);
+            }
 
             if (fullCriteria == null) return;
             builder.Append(" WHERE ");
             CriteriaDB criteriaDB = new CriteriaDB(fullCriteria);
+            
             string whereClause =
                 criteriaDB.ToString(_sqlFormatter, delegate(object value)
                                                    {

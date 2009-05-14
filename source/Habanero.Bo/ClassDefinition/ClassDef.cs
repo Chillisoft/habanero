@@ -1035,6 +1035,8 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        public Guid? ClassID { get; set; }
+
         #region IClassDef Members
 
         ///<summary>

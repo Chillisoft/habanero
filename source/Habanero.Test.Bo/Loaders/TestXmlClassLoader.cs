@@ -90,6 +90,7 @@ namespace Habanero.Test.BO.Loaders
 			");
             Assert.AreEqual("TestClass", def.TableName);
 
+
         }
 
         [Test]
@@ -573,6 +574,50 @@ namespace Habanero.Test.BO.Loaders
                     <invalid/>
 				</class>
 			");
+        }
+
+        [Test]
+        public void TestClassDefID()
+        {
+            //---------------Set up test pack-------------------
+            Guid classDefID = Guid.NewGuid();
+            string classDefXml =
+                @"
+				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" classID=""" + classDefID.ToString("B") + @""" >
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			";
+
+            //---------------Execute Test ----------------------
+            ClassDef def = _loader.LoadClass(classDefXml);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(def.ClassID);
+            Assert.AreEqual(classDefID, def.ClassID);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestClassDefID_Null()
+        {
+            //---------------Set up test pack-------------------
+            string classDefXml =
+                @"
+				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			";
+
+            //---------------Execute Test ----------------------
+            ClassDef def = _loader.LoadClass(classDefXml);
+            //---------------Test Result -----------------------
+            Assert.IsNull(def.ClassID);
+            //---------------Tear Down -------------------------          
         }
     }
 

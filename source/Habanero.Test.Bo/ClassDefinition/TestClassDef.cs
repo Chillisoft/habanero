@@ -1034,5 +1034,16 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(classDef, classDef.UIDefCol.ClassDef);
         }
 
+        [Test] public void TestClassDef_ClassDefID_NullByDefault()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            //---------------Execute Test ----------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            //---------------Test Result -----------------------
+            Assert.IsNull(classDef.ClassID);
+            //---------------Tear Down -------------------------          
+        }
+
     }
 }
