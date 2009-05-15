@@ -155,6 +155,25 @@ namespace Habanero.Test
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
+        }        
+        
+        public static ClassDef LoadClassDefsHasModuleName()
+        {
+                        XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"" moduleName=""MyBOModule"">
+					<property  name=""MyBoID""  type=""Guid"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
         }
         public static ClassDef LoadClassDefs_Integer_PrimaryKey()
         {

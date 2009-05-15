@@ -186,7 +186,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(2, ClassDef.ClassDefs.Count);
 
             //---------------Execute Test ----------------------
-            IBusinessObject bo = parametrizedClassDef.CreateNewBusinessObject(true);
+            IBusinessObject bo = parametrizedClassDef.CreateNewBusinessObject();
 
             //---------------Test Result -----------------------
             Assert.AreSame(typeof(MyBO), bo.GetType());
@@ -1042,6 +1042,28 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             //---------------Test Result -----------------------
             Assert.IsNull(classDef.ClassID);
+            //---------------Tear Down -------------------------          
+        }        
+        
+        [Test] public void TestClassDef_ClassModuleName_NullByDefault()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            //---------------Execute Test ----------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            //---------------Test Result -----------------------
+            Assert.IsNull(classDef.Module);
+            //---------------Tear Down -------------------------          
+        }
+        
+        [Test] public void TestClassDef_ClassModuleName()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            //---------------Execute Test ----------------------
+            ClassDef classDef = MyBO.LoadClassDefsHasModuleName();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("MyBOModule",classDef.Module);
             //---------------Tear Down -------------------------          
         }
 

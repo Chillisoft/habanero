@@ -105,14 +105,10 @@ namespace Habanero.Base
 
         /// <summary>
         /// Creates a new business object using the default class definition for the type linked to this <see cref="IClassDef"/>
-        /// </summary>
-        /// <returns>Returns the new object</returns>
-        IBusinessObject CreateNewBusinessObject();
-
-        /// <summary> 
-        ///  Creates a new business object either using the default class definition for the type linked to this <see cref="IClassDef"/>
         /// or using this particular class definition (in the case where you might have more than one class definition for one C#
-        /// type, useful for user defined types)
+        /// type, useful for user defined types).  If this <see cref="IClassDef"/> has a <see cref="TypeParameter"/> then
+        /// the instantiation will happen with the <see cref="IClassDef"/> passed in as a parameter to the <see cref="IBusinessObject"/>
+        /// constructor.
         /// Note_ that this means the business object being created must have a constructor that takes a <see cref="IClassDef"/>,
         /// passing this through to the base class as follows:
         /// <code>
@@ -123,10 +119,8 @@ namespace Habanero.Base
         /// }
         /// </code>
         /// </summary>
-        /// <param name="instantiateWithClassDef">Whether to use the constructor that takes a classdef (in case you have multiple
-        /// classdefs for a .NET type)</param>
         /// <returns>Returns the new object</returns>
-        IBusinessObject CreateNewBusinessObject(bool instantiateWithClassDef);
+        IBusinessObject CreateNewBusinessObject();
 
         /// <summary>
         /// The table this classdef maps to, if applicable.

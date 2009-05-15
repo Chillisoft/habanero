@@ -259,7 +259,7 @@ namespace Habanero.UI.Base
                 cbx.Items.Add(businessObject);
             }
             if (col.Count > 0 && AutoSelectFirstItem) cbx.SelectedIndex = numBlankItems;
-            cbx.DropDownWidth = width;
+            cbx.DropDownWidth = width > cbx.Width ? width : cbx.Width;
         }
 
         ///<summary>
