@@ -15,8 +15,8 @@ namespace Habanero.Test.BO
         public void Test_Constructor()
         {
             //--------------- Set up test pack ------------------
-            string message = "message";
-            ErrorLevel errorLevel = ErrorLevel.Error;
+            const string message = "message";
+            const ErrorLevel errorLevel = ErrorLevel.Error;
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             IBusinessObject bo = new MyBO();

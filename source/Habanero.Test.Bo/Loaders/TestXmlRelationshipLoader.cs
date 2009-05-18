@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -32,8 +33,7 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlRelationshipLoader
     {
-        private String singleRelationshipString =
-            @"
+        private const string singleRelationshipString = @"
 					<relationship 
 						name=""TestRelationship"" 
 						type=""single"" 
@@ -44,8 +44,7 @@ namespace Habanero.Test.BO.Loaders
 
 					</relationship>";
 
-        private String multipleRelationshipString =
-            @"
+        private const string multipleRelationshipString = @"
 					<relationship 
 						name=""TestRelationship"" 
 						type=""multiple"" 
@@ -109,7 +108,9 @@ namespace Habanero.Test.BO.Loaders
         {
             RelationshipDef relDef = itsLoader.LoadRelationship(
                 singleRelationshipString.Replace("TestRelatedClass", "NonExistantTestRelatedClass"), itsPropDefs);
+#pragma warning disable 168
         	Type classType = relDef.RelatedObjectClassType;
+#pragma warning restore 168
         }
 
         [Test]
@@ -260,7 +261,9 @@ namespace Habanero.Test.BO.Loaders
             //---------------Execute Test ----------------------
             try
             {
+#pragma warning disable 168
                 SingleRelationshipDef relDef =
+#pragma warning restore 168
                     (SingleRelationshipDef) loader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
                 Assert.Fail("An error should have been raised as there is no relationship type of Bob");
             //---------------Test Result -----------------------
@@ -320,6 +323,132 @@ namespace Habanero.Test.BO.Loaders
             //---------------Test Result -----------------------
             Assert.IsFalse(relDef.OwningBOHasForeignKey);
             //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_InsertAction_DoNothing()
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringAssociation = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""single"" 
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                        owningBOHasForeignKey=""false""
+                        insertAction=""DoNothing""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringAssociation, itsPropDefs);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
+            Assert.AreEqual(InsertParentAction.DoNothing,relDef.InsertParentAction);
+        }
+        [Test]
+        public void Test_InsertAction_InsertRelationship()
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringComposition = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""single"" 
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                        owningBOHasForeignKey=""false""
+                        insertAction=""InsertRelationship""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
+            Assert.AreEqual(InsertParentAction.InsertRelationship, relDef.InsertParentAction);
+        }
+
+        [Test]
+        public void Test_InsertAction_Default_ShouldBeInsertRelationship()
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringComposition = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""single"" 
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
+            Assert.AreEqual(InsertParentAction.InsertRelationship, relDef.InsertParentAction);
+        }
+        [Test]
+        public void Test_Multiple_InsertAction_DoNothing()
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringAssociation = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""multiple"" 
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                        owningBOHasForeignKey=""false""
+                        insertAction=""DoNothing""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringAssociation, itsPropDefs);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
+            Assert.AreEqual(InsertParentAction.DoNothing,relDef.InsertParentAction);
+        } 
+
+        [Test]
+        public void Test_Multiple_InsertAction_InsertRelationship()
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringComposition = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""multiple"" 
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                        owningBOHasForeignKey=""false""
+                        insertAction=""InsertRelationship""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
+            Assert.AreEqual(InsertParentAction.InsertRelationship, relDef.InsertParentAction);
+        }
+
+        [Test]
+        public void Test_Multiple_InsertAction_Default_ShouldBeInsertRelationship()
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringComposition = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""multiple"" 
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
+            Assert.AreEqual(InsertParentAction.InsertRelationship, relDef.InsertParentAction);
         }
 
         [Test]

@@ -323,7 +323,7 @@ namespace Habanero.Util
                 if (propInfo == null)
                 {
                     throw new TargetInvocationException(new Exception(
-                                                            String.Format("Virtual property set for '{0}' does not exist for object of type '{1}'.", propertyName, className)));
+                                                            String.Format("Private property set for '{0}' does not exist for object of type '{1}'.", propertyName, className)));
                 }
                 object newValue = Convert.ChangeType(value, propInfo.PropertyType);
                 propInfo.SetValue(obj, newValue, new object[] { });

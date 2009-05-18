@@ -90,7 +90,8 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol): this(owningBo, lRelDef, lBOPropCol, 0)
+        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
+            : this(owningBo, lRelDef, lBOPropCol, 0)
         {
         }
         /// <summary>
@@ -100,9 +101,13 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to initialise the RelKey object</param>
         /// <param name="timeOut">The timeout between when the collection was last loaded.</param>
-        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol, int timeOut) : base(owningBo, lRelDef, lBOPropCol)
+        public MultipleRelationship
+            (IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol, int timeOut)
+            : base(owningBo, lRelDef, lBOPropCol)
         {
-            _boCol = (RelatedBusinessObjectCollection<TBusinessObject>) RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
+            _boCol =
+                (RelatedBusinessObjectCollection<TBusinessObject>)
+                RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
             TimeOut = timeOut;
         }
 
@@ -333,9 +338,12 @@ namespace Habanero.BO
             IList<TBusinessObject> dirtyChildren = new List<TBusinessObject>();
             if (!_owningBo.Status.IsDeleted)
             {
+                if (this.RelationshipDef.InsertParentAction == InsertParentAction.InsertRelationship)
+                {
                 foreach (TBusinessObject bo in _boCol.CreatedBusinessObjects)
                 {
                     dirtyChildren.Add(bo);
+                    }
                 }
             }
             foreach (TBusinessObject bo in _boCol.MarkedForDeleteBusinessObjects)

@@ -125,16 +125,18 @@ namespace Habanero.BO.ClassDefinition
         PropRuleString CreatePropRuleString(string name, string message);
 
         ///<summary>
+        /// Creates a Single Relationship Definitions <see cref="SingleRelationshipDef"/>
         ///</summary>
         ///<param name="relationshipName"></param>
         ///<param name="relatedAssemblyName"></param>
         ///<param name="relatedClassName"></param>
         ///<param name="relKeyDef"></param>
         ///<param name="keepReferenceToRelatedObject"></param>
-        ///<param name="deleteParentAction"></param>
-        ///<param name="relationshipType"></param>
+        ///<param name="deleteParentAction"><see cref="DeleteParentAction"/></param>
+        ///<param name="insertParentAction"><see cref="InsertParentAction"/></param>
+        ///<param name="relationshipType"><see cref="RelationshipType"/></param>
         ///<returns></returns>
-        SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, RelationshipType relationshipType);
+        SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType);
 
         ///<summary>
         ///</summary>
@@ -145,10 +147,11 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="keepReferenceToRelatedObject"></param>
         ///<param name="orderBy"></param>
         ///<param name="deleteParentAction"></param>
+        ///<param name="insertParentAction"><see cref="InsertParentAction"/></param>
         ///<param name="relationshipType"></param>
         ///<param name="timeout">The timout in milliseconds. The collection will not be automatically refreshed from the DB if the timeout has not expired</param>
         ///<returns></returns>
-        MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction, RelationshipType relationshipType, int timeout);
+        MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType, int timeout);
 
         ///<summary>
         ///</summary>

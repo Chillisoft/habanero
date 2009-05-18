@@ -665,9 +665,16 @@ namespace Habanero.DB
                 {
                     statement.SetupCommand(cmd);
                     //cmd.CommandText = sql;
+                    try
+                    {
                     totalRowsAffected += cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new DatabaseWriteException
+                            ("There was an error executing the statement : " + Environment.NewLine + cmd.CommandText, ex);
+                    }
                     statement.DoAfterExecute(this, transaction, cmd);
-                    //statement.UpdateAutoIncrement(this);
                 }
                 if (!inTransaction)
                 {
@@ -705,7 +712,8 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="sql">The sql statement object</param>
         /// <returns>Returns the number of rows affected</returns>
-        public int ExecuteSql(ISqlStatement sql) {
+        public int ExecuteSql(ISqlStatement sql)
+        {
             if (sql == null) throw new ArgumentNullException("sql");
             return ExecuteSql(new SqlStatementCollection(sql));
         }

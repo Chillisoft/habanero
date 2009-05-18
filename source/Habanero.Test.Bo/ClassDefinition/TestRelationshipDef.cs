@@ -72,7 +72,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [ExpectedException(typeof (HabaneroArgumentException))]
         public void TestCreateRelationshipWithNonBOType()
         {
-            RelationshipDef relDef = new SingleRelationshipDef
+            new SingleRelationshipDef
                 ("Relation1", typeof (String), mRelKeyDef, false, DeleteParentAction.Prevent);
         }
 
@@ -146,11 +146,12 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             int expectedTimout = 10000;
             MultipleRelationshipDef relDef = new MultipleRelationshipDef
-                ("rel", "", "", new RelKeyDef(), true, "", DeleteParentAction.Prevent, RelationshipType.Association,
+                ("rel", "", "", new RelKeyDef(), true, "", DeleteParentAction.Prevent, InsertParentAction.DoNothing, RelationshipType.Association,
                  expectedTimout);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedTimout, relDef.TimeOut);
+            Assert.AreEqual(InsertParentAction.DoNothing, relDef.InsertParentAction);
         }
 
         [Test]

@@ -177,8 +177,7 @@ namespace Habanero.Test.BO
             RelKeyDef relKeyDef = new RelKeyDef();
             relKeyDef.Add(relPropDef);
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
-                    "ContactPersonTestBO", relKeyDef,true, "", DeleteParentAction.DeleteRelated
-                    , RelationshipType.Composition, 0);
+                    "ContactPersonTestBO", relKeyDef,true, "", DeleteParentAction.DeleteRelated, InsertParentAction.InsertRelationship, RelationshipType.Composition, 0);
             relationshipDef.ReverseRelationshipName = "Organisation";
             itsClassDef.RelationshipDefCol.Add(relationshipDef);
             ClassDef.ClassDefs.Add(itsClassDef);
@@ -202,8 +201,7 @@ namespace Habanero.Test.BO
             RelKeyDef relKeyDef = new RelKeyDef();
             relKeyDef.Add(relPropDef);
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
-                    "ContactPersonTestBO", relKeyDef,true, "", DeleteParentAction.DeleteRelated
-                    , RelationshipType.Composition, 0);
+                    "ContactPersonTestBO", relKeyDef, true, "", DeleteParentAction.DeleteRelated, InsertParentAction.InsertRelationship, RelationshipType.Composition, 0);
         
             itsClassDef.RelationshipDefCol.Add(relationshipDef);
             ClassDef.ClassDefs.Add(itsClassDef);
@@ -227,8 +225,7 @@ namespace Habanero.Test.BO
             RelKeyDef relKeyDef = new RelKeyDef();
             relKeyDef.Add(relPropDef);
             IRelationshipDef relationshipDef = new SingleRelationshipDef("ContactPerson", "Habanero.Test.BO",
-                    "ContactPersonTestBO", relKeyDef,true, DeleteParentAction.DeleteRelated
-                    , RelationshipType.Aggregation);
+                    "ContactPersonTestBO", relKeyDef, true, DeleteParentAction.DeleteRelated, InsertParentAction.InsertRelationship, RelationshipType.Aggregation);
             relationshipDef.OwningBOHasForeignKey = false;
             itsClassDef.RelationshipDefCol.Add(relationshipDef);
             ClassDef.ClassDefs.Add(itsClassDef);

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -53,7 +54,14 @@ namespace Habanero.UI.Win
             this.Text = "Error Description";
             this.Width = 500;
             this.Height = 400;
-            this.Closing += (sender, e) => ErrorDescriptionFormClosing(sender, e);
+            this.Closing += delegate(object sender, CancelEventArgs e)
+                            {
+                                if (ErrorDescriptionFormClosing == null)
+                                {
+                                    return;
+                                }
+                                ErrorDescriptionFormClosing(sender, e);
+                            };
         }
 
         ///<summary>

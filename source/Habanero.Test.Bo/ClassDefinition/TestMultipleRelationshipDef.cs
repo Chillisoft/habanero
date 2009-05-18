@@ -70,8 +70,7 @@ namespace Habanero.Test.BO.ClassDefinition
             relKeyDef.Add(relPropDef);
             const int expectedTimeout = 550;
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
-                "ContactPersonTestBO", relKeyDef, true, "", DeleteParentAction.DeleteRelated
-                , RelationshipType.Association, expectedTimeout);
+                "ContactPersonTestBO", relKeyDef, true, "", DeleteParentAction.DeleteRelated, InsertParentAction.InsertRelationship, RelationshipType.Association, expectedTimeout);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             //---------------Assert Precondition----------------
             Assert.AreEqual(expectedTimeout, relationshipDef.TimeOut);
@@ -79,6 +78,7 @@ namespace Habanero.Test.BO.ClassDefinition
             MultipleRelationship<ContactPersonTestBO> relationship = (MultipleRelationship<ContactPersonTestBO>) relationshipDef.CreateRelationship(organisation, organisation.Props);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedTimeout, relationship.TimeOut);
+            Assert.AreEqual(InsertParentAction.InsertRelationship, relationship.RelationshipDef.InsertParentAction);
         }
 
 
@@ -91,8 +91,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Execute Test ----------------------
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.GetRandomString(),
-                TestUtil.GetRandomString(), TestUtil.GetRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
-                , RelationshipType.Composition, 10000);
+                TestUtil.GetRandomString(), TestUtil.GetRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated, InsertParentAction.InsertRelationship, RelationshipType.Composition, 10000);
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Composition, relationshipDef.RelationshipType);
         }

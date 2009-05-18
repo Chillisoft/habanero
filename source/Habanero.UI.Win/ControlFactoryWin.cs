@@ -693,6 +693,7 @@ namespace Habanero.UI.Win
         ///<returns>The message box result.</returns>
         public Base.DialogResult ShowMessageBox(string message)
         {
+            Cursor.Current = Cursors.Default;
             return (Base.DialogResult)MessageBox.Show(message);
         }
 

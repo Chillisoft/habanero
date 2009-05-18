@@ -232,6 +232,7 @@ Assert.IsNull(uiDef.UIDefCol);
         public void TestClassDef()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             UIDefCol uiDefCol = new UIDefCol();
             ClassDef classdef = MyBO.LoadDefaultClassDef();
             //---------------Assert Precondition----------------

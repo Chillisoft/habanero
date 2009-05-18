@@ -20,6 +20,7 @@
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectCollection
@@ -198,6 +199,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             //---------------Assert Preconditions --------------
             Assert.IsFalse(_addedEventFired);
+            Assert.AreEqual(InsertParentAction.InsertRelationship, cpRelationship.RelationshipDef.InsertParentAction);
             AssertOneObjectInCurrentAndCreatedCollection(cpCol);
 
             //---------------Execute Test ----------------------
@@ -207,6 +209,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsFalse(_addedEventFired);
             Assert.Contains(newCP, cpCol);
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
+            Assert.IsFalse(newCP.Status.IsNew);
+            Assert.IsFalse(newCP.Status.IsDirty);
         }
 
         [Test]

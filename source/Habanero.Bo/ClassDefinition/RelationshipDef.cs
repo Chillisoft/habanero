@@ -53,6 +53,7 @@ namespace Habanero.BO.ClassDefinition
 		private Type _relatedObjectClassType;
 		private string _relatedObjectAssemblyName;
 		private string _relatedObjectClassName;
+
         /// <summary>
         /// The OrderBy Criteria being used by this relationship.
         /// </summary>
@@ -75,7 +76,7 @@ namespace Habanero.BO.ClassDefinition
 							   IRelKeyDef relKeyDef,
                                bool keepReferenceToRelatedObject,
                                DeleteParentAction deleteParentAction)
-            : this(relationshipName, relatedObjectClassType, null, null, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RelationshipType.Association)
+            : this(relationshipName, relatedObjectClassType, null, null, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, InsertParentAction.InsertRelationship, RelationshipType.Association)
 		{
 
 		}
@@ -91,29 +92,14 @@ namespace Habanero.BO.ClassDefinition
         /// reference to the related object.  Could be false for memory-
         /// intensive applications.</param>
         ///<param name="deleteParentAction">The required action when the parent is deleted e.g. Dereference related, delete related, prevent delete</param>
+        /// <param name="insertParentAction"><see cref="InsertParentAction"/></param>
         /// <param name="relationshipType"></param>
-        protected RelationshipDef(string relationshipName,
-								string relatedObjectAssemblyName,
-								string relatedObjectClassName,
-								IRelKeyDef relKeyDef,
-								bool keepReferenceToRelatedObject,
-                                DeleteParentAction deleteParentAction,
-                                RelationshipType relationshipType 
-            )
-            : this(relationshipName, null, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, relationshipType)
+        protected RelationshipDef(string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType)
+            : this(relationshipName, null, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, insertParentAction, relationshipType)
 		{
-
- 
 		}
 
-    	private RelationshipDef(string relationshipName,
-								Type relatedObjectClassType,
-								string relatedObjectAssemblyName,
-								string relatedObjectClassName,
-								IRelKeyDef relKeyDef,
-								bool keepReferenceToRelatedObject,
-                                DeleteParentAction deleteParentAction,
-                                RelationshipType relationshipType)
+        private RelationshipDef(string relationshipName, Type relatedObjectClassType, string relatedObjectAssemblyName, string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(relKeyDef, "relKeyDef");
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
@@ -129,7 +115,8 @@ namespace Habanero.BO.ClassDefinition
 			RelKeyDef = relKeyDef;
             RelationshipName = relationshipName;
             KeepReferenceToRelatedObject = keepReferenceToRelatedObject;
-            DeleteParentAction = deleteParentAction;
+            this.DeleteParentAction = deleteParentAction;
+    	    this.InsertParentAction = insertParentAction;
     	    RelationshipType = relationshipType;
 		}
 
@@ -232,9 +219,15 @@ namespace Habanero.BO.ClassDefinition
 
         /// <summary>
         /// Provides specific instructions with regards to deleting a parent
-        /// object.  See the DeleteParentAction enumeration for more detail.
+        /// object.  See the <see cref="DeleteParentAction"/> enumeration for more detail.
         /// </summary>
         public DeleteParentAction DeleteParentAction { get; protected internal set; }
+
+        ///<summary>
+        /// Provides the specific instruction when a new object is added to an association relationship.
+        /// See <see cref="InsertParentAction"/> enumeration for more details
+        ///</summary>
+        public virtual InsertParentAction InsertParentAction { get; protected internal set; }
 
         ///<summary>
         /// The order by clause that the related object will be sorted by.

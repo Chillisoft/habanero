@@ -46,7 +46,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregationRelationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> aggregationRelationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(aggregationRelationship.IsDirty);
@@ -88,7 +89,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregationRelationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> aggregationRelationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             //---------------Assert Precondition----------------
             Assert.IsFalse(aggregationRelationship.IsDirty);
@@ -106,7 +108,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
@@ -156,7 +159,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
@@ -171,7 +175,6 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.IsTrue(relationship.IsDirty);
         }
-
 
 
         /// <summary>
@@ -208,7 +211,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -260,7 +264,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -278,12 +283,13 @@ namespace Habanero.Test.BO.Relationship
 
 
         [Test]
-        public void Test_GetDirtyChildren_Created()
+        public void Test_GetDirtyChildren_WhenCreated_WhenInsertParentAction_Insert_ShouldReturnCreatedChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -298,12 +304,33 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
+        public void Test_GetDirtyChildren_WhenCreated_WhenInsertParentAction_DoNothing_ShouldNotReturnCreatedChildren()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
+            ((RelationshipDef) relationship.RelationshipDef).InsertParentAction = InsertParentAction.DoNothing;
+            ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(InsertParentAction.DoNothing, relationship.RelationshipDef.InsertParentAction);
+            //---------------Execute Test ----------------------
+            IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, dirtyChildren.Count);
+        }
+
+        [Test]
         public void Test_GetDirtyChildren_Added()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(contactPerson);
@@ -322,7 +349,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -344,7 +372,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -370,7 +399,8 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
@@ -394,18 +424,16 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
         }
 
-        private MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        private MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship
+            (OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             const RelationshipType relationshipType = RelationshipType.Aggregation;
             MultipleRelationship<ContactPersonTestBO> relationship =
                 organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
-            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
+            RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
             relationshipDef.RelationshipType = relationshipType;
             cpCol = relationship.BusinessObjectCollection;
             return relationship;
         }
     }
-
-   
-
 }

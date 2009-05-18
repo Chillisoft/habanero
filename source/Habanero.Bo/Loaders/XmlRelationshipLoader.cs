@@ -45,6 +45,7 @@ namespace Habanero.BO.Loaders
         private string _reverseRelationshipName;
         private string _typeParameter;
         private int _timeout;
+        private InsertParentAction _insertParentAction;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -53,7 +54,8 @@ namespace Habanero.BO.Loaders
 		/// <param name="defClassFactory">The factory for the definition classes</param>
 		/// <param name="className">The name of the class that has this relationship</param>
         public XmlRelationshipLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory, string className)
-			: base(dtdLoader, defClassFactory) {
+            : base(dtdLoader, defClassFactory)
+        {
             _className = className;
 		}
 
@@ -103,11 +105,9 @@ namespace Habanero.BO.Loaders
         {
             if (_type == "single")
             {
-                SingleRelationshipDef relationshipDef = 
-                    _defClassFactory.CreateSingleRelationshipDef(
-                    _name, _relatedAssemblyName, _relatedClassName, 
-                    _relKeyDef, _keepReferenceToRelatedObject, 
-                    _deleteParentAction, _relationshipType);
+                SingleRelationshipDef relationshipDef = _defClassFactory.CreateSingleRelationshipDef
+                    (_name, _relatedAssemblyName, _relatedClassName, _relKeyDef, _keepReferenceToRelatedObject,
+                     _deleteParentAction, _insertParentAction, _relationshipType);
                 relationshipDef.OwningBOHasForeignKey = _owningBOHasForeignKey;
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
                 relationshipDef.RelatedObjectTypeParameter = _typeParameter;
@@ -115,11 +115,9 @@ namespace Habanero.BO.Loaders
             }
             if (_type == "multiple")
             {
-                MultipleRelationshipDef relationshipDef = 
-                    _defClassFactory.CreateMultipleRelationshipDef(
-                        _name, _relatedAssemblyName, _relatedClassName, 
-                        _relKeyDef, _keepReferenceToRelatedObject, 
-                        _orderBy, _deleteParentAction, _relationshipType, _timeout);
+                MultipleRelationshipDef relationshipDef = _defClassFactory.CreateMultipleRelationshipDef
+                    (_name, _relatedAssemblyName, _relatedClassName, _relKeyDef, _keepReferenceToRelatedObject, _orderBy,
+                     _deleteParentAction, _insertParentAction, _relationshipType, _timeout);
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
                 relationshipDef.RelatedObjectTypeParameter = _typeParameter;
                 return relationshipDef;
@@ -201,11 +199,35 @@ namespace Habanero.BO.Loaders
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("In a 'relationship' " +
-                    "element, the 'deleteAction' attribute has been given " +
-                    "an invalid value. The available options are " +
-                    "DeleteRelated, DereferenceRelated and " +
-                    "Prevent.", ex);
+                throw new InvalidXmlDefinitionException
+                    ("In a 'relationship' " + "element, the 'deleteAction' attribute has been given "
+                     + "an invalid value. The available options are " + "DeleteRelated, DereferenceRelated and "
+                     + "Prevent.", ex);
+            }
+            if (_relationshipType == RelationshipType.Association)
+            {
+                try
+                {
+                    string attribute = _reader.GetAttribute("insertAction");
+                    if (string.IsNullOrEmpty(attribute))
+                    {
+                        attribute = "InsertRelationship";
+                    }
+                    _insertParentAction =
+                        (InsertParentAction)
+                        Enum.Parse(typeof (InsertParentAction), attribute);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidXmlDefinitionException
+                        ("In a 'relationship' " + "element, the 'deleteAction' attribute has been given "
+                         + "an invalid value. The available options are " + "DeleteRelated, DereferenceRelated and "
+                         + "Prevent.", ex);
+                }
+            }
+            else
+            {
+                _insertParentAction = InsertParentAction.InsertRelationship;
             }
         }
 

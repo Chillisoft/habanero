@@ -74,29 +74,26 @@ namespace Habanero.BO.Loaders
             {
                 return LoadDtd(dtdName, new ArrayList());
             }
-            else
+            string dtdFileName = _dtdPath + dtdName + ".dtd";
+            if (!File.Exists(dtdFileName))
             {
-                string dtdFileName = _dtdPath + dtdName + ".dtd";
-                if (!File.Exists(dtdFileName))
+                string errorMessage = "The Document Type Definition (DTD) for " +
+                                      "the XML element '" + dtdName + "' was not found in the ";
+                if (string.IsNullOrEmpty(_dtdPath))
                 {
-                    string errorMessage = "The Document Type Definition (DTD) for " +
-                                          "the XML element '" + dtdName + "' was not found in the ";
-                    if (_dtdPath == null || _dtdPath.Length == 0)
-                    {
-                        errorMessage += "application's output/execution directory (eg. bin/debug). ";
-                    }
-                    else
-                    {
-                        errorMessage += "path: '" + _dtdPath + "'. ";
-                    }
-                    errorMessage += "Ensure that you have a .DTD file for each of the XML class " +
-                                    "definition elements you will be using, and that they are being copied to the " +
-                                    "application's output directory (eg. bin/debug).  Alternatively, check that " +
-                                    "the element name was spelt correctly and has the correct capitalisation.";
-                    throw new FileNotFoundException(errorMessage);
+                    errorMessage += "application's output/execution directory (eg. bin/debug). ";
                 }
-                return LoadDtd(dtdFileName, new ArrayList());
+                else
+                {
+                    errorMessage += "path: '" + _dtdPath + "'. ";
+                }
+                errorMessage += "Ensure that you have a .DTD file for each of the XML class " +
+                                "definition elements you will be using, and that they are being copied to the " +
+                                "application's output directory (eg. bin/debug).  Alternatively, check that " +
+                                "the element name was spelt correctly and has the correct capitalisation.";
+                throw new FileNotFoundException(errorMessage);
             }
+            return LoadDtd(dtdFileName, new ArrayList());
         }
 
         /// <summary>
@@ -108,7 +105,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a string containing the dtd</returns>
         internal string LoadDtd(string fileName, IList alreadyIncludedFiles)
         {
-            TextReader reader = null;
+            TextReader reader;
             string dtd = "";
             if (_resourceManager == null)
             {

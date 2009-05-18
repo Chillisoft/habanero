@@ -1026,7 +1026,13 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        ///<summary>
+        /// The ClassID that identifies this Class in the case where the class is loaded from a database.
+        ///</summary>
         public Guid? ClassID { get; set; }
+        ///<summary>
+        /// The module name that identifies this class for the case of building a menu for the standard menu editor.
+        ///</summary>
         public string Module { get; set; }
 
         #region IClassDef Members

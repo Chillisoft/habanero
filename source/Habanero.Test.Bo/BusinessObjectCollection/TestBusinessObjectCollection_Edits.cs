@@ -435,18 +435,34 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Remove_Refresh()
+        public void Test_Remove_RefreshBO_DoesNotAddRemovedBOBackToCol()
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
-
             //--------------Assert Preconditions--------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
 
             //-----Run tests----------------------------
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
+
+            ////-----Test results-------------------------
+            AssertOneObjectInRemovedAndPersistedCollection(cpCol);
+        } 
+        [Test]
+        public void Test_Remove_RefreshCol_DoesNotReloadRemovedBO()
+        {
+            //-----Create Test pack---------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            cpCol.Remove(cp);
+//            ContactPersonTestBO.CreateSavedContactPerson();
+            //--------------Assert Preconditions--------
+            AssertOneObjectInRemovedAndPersistedCollection(cpCol);
+
+            //-----Run tests----------------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cpCol);
 
             ////-----Test results-------------------------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);

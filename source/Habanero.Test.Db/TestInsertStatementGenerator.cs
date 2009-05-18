@@ -113,7 +113,7 @@ namespace Habanero.Test.BO.SqlGeneration
         public void TestInsertStatementExcludesNonPersistableProps()
         {
             ClassDef.ClassDefs.Clear();
-            string newPropName = "NewProp";
+            const string newPropName = "NewProp";
             MockBO bo = StatementGeneratorTestHelper.CreateMockBOWithExtraNonPersistableProp(newPropName);
 
             InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
@@ -131,11 +131,8 @@ namespace Habanero.Test.BO.SqlGeneration
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
             FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey();
             InsertStatementGenerator gen = new InsertStatementGenerator(filledCircle, DatabaseConnection.CurrentConnection);
-
-
             //---------------Execute Test ----------------------
             ISqlStatementCollection sqlStatementCollection = gen.Generate();
-
             //---------------Test Result -----------------------
             Assert.AreEqual(1, sqlStatementCollection.Count);
             ISqlStatement sqlStatement = sqlStatementCollection[0];
@@ -151,10 +148,8 @@ namespace Habanero.Test.BO.SqlGeneration
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
             FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey();
             InsertStatementGenerator gen = new InsertStatementGenerator(filledCircle, DatabaseConnection.CurrentConnection);
-            
             //---------------Execute Test ----------------------
             ISqlStatementCollection sqlStatementCollection = gen.Generate();
-
             //---------------Test Result -----------------------
             Assert.AreEqual(1, sqlStatementCollection.Count);
             ISqlStatement sqlStatement = sqlStatementCollection[0];
