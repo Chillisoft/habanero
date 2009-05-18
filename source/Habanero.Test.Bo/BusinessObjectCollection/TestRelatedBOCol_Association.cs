@@ -26,6 +26,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.DB4O;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectCollection
@@ -467,16 +468,16 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsFalse(contactPerson.Status.IsValid());
             Assert.AreEqual(DeleteParentAction.Prevent, relationship.DeleteParentAction);
             //---------------Execute Test ----------------------
-            organisationTestBO.MarkForDelete();
+            ReflectionUtilities.SetPropertyValue(organisationTestBO.Status, "IsDeleted", true); 
             try
             {
                 organisationTestBO.Save();
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
-            catch (BusinessObjectReferentialIntegrityException ex)
+            catch (BusObjPersistException ex)
             {
-                StringAssert.Contains("There are 1 objects related through the 'ContactPeople' relationship ", ex.Message);
+                StringAssert.Contains("1 Business Objects via the ContactPeople relationship", ex.Message);
             }
         }
         [Test]
@@ -605,16 +606,17 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsNotNull(contactPerson.OrganisationID);
             Assert.AreEqual(DeleteParentAction.Prevent, relationship.DeleteParentAction);
             //---------------Execute Test ----------------------
-            organisationTestBO.MarkForDelete();
+//            organisationTestBO.MarkForDelete();
+            ReflectionUtilities.SetPropertyValue(organisationTestBO.Status, "IsDeleted", true);
             try
             {
                 organisationTestBO.Save();
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
-            catch (BusinessObjectReferentialIntegrityException ex)
+            catch (BusObjPersistException ex)
             {
-                StringAssert.Contains("There are 1 objects related through the 'ContactPeople' relationship ", ex.Message);
+                StringAssert.Contains("since it is related to 1 Business Objects via the ContactPeople relationship", ex.Message);
             }
         }
         [Test]

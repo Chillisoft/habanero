@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
@@ -40,7 +41,7 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObject : IBusinessObject, ISerializable
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
+        private static readonly ILog Log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         #region IBusinessObject Members
 
@@ -83,11 +84,17 @@ namespace Habanero.BO
 
         #region Fields
 
+        private IBusinessObjectAuthorisation _authorisationRules;
+
         /// <summary>
         /// The Collection of Business Object Properties for this Business Object.
         /// </summary>
         protected IBOPropCol _boPropCol;
+
+        private IList<IBusinessObjectRule> _boRules;
+
         private BOStatus _boStatus;
+
         /// <summary>
         /// The Update Log being used for this Business Object.
         /// </summary>
@@ -117,8 +124,7 @@ namespace Habanero.BO
         protected IRelationshipCol _relationshipCol;
 
         private ITransactionLog _transactionLog;
-        private IBusinessObjectAuthorisation _authorisationRules;
-        private IList<IBusinessObjectRule> _boRules;
+
         #endregion //Fields
 
         #region Constructors
@@ -151,7 +157,7 @@ namespace Habanero.BO
         /// <param name="context"></param>
         protected BusinessObject(SerializationInfo info, StreamingContext context)
         {
-            Initialise(ClassDef.ClassDefs[this.GetType()]);
+            Initialise(ClassDef.ClassDefs[GetType()]);
             foreach (IBOProp prop in _boPropCol)
             {
                 try
@@ -168,7 +174,7 @@ namespace Habanero.BO
                 }
                 catch (Exception ex)
                 {
-                    string message = "The Business Object " + this.ClassDef.ClassName
+                    string message = "The Business Object " + ClassDef.ClassName
                                      + " could not be deserialised because the property " + prop.PropertyName
                                      + " raised an exception";
                     throw new HabaneroDeveloperException(message, message, ex);
@@ -191,7 +197,7 @@ namespace Habanero.BO
             {
                 info.AddValue(prop.PropertyName, prop.Value);
             }
-            info.AddValue("Status", this.Status);
+            info.AddValue("Status", Status);
         }
 
         #endregion // Serialisation of BusinessObject
@@ -199,17 +205,17 @@ namespace Habanero.BO
         private void AddToObjectManager()
         {
             BusinessObjectManager.Instance.Add(this);
-            this.ID.Updated += ((sender, e) => FireIDUpdatedEvent());
-            foreach (IBOProp boProp in this.Props)
+            ID.Updated += ((sender, e) => FireIDUpdatedEvent());
+            foreach (IBOProp boProp in Props)
             {
                 boProp.Updated += (sender, e) =>
-                                  {
-                                      if (e.Prop.IsDirty)
                                       {
-                                          _boStatus.IsDirty = true;
-                                      }
-                                      FirePropertyUpdatedEvent(e.Prop);
-                                  };
+                                          if (e.Prop.IsDirty)
+                                          {
+                                              _boStatus.IsDirty = true;
+                                          }
+                                          FirePropertyUpdatedEvent(e.Prop);
+                                      };
             }
         }
 
@@ -244,12 +250,12 @@ namespace Habanero.BO
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
-            if (!String.IsNullOrEmpty(this.ClassDef.TypeParameter) && this._keysCol.Count > 0)
+            if (!String.IsNullOrEmpty(ClassDef.TypeParameter) && _keysCol.Count > 0)
                 foreach (BOKey boKeyCol in _keysCol)
                 {
                     return boKeyCol.ToString();
                 }
-            return this.ID.GetAsValue() == null ? base.ToString() : this.ID.GetAsValue().ToString();
+            return ID.GetAsValue() == null ? base.ToString() : ID.GetAsValue().ToString();
         }
 
         /// <summary>
@@ -267,7 +273,7 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                log.Error("Error disposing BusinessObject.", ex);
+                Log.Error("Error disposing BusinessObject.", ex);
             }
             finally
             {
@@ -396,8 +402,8 @@ namespace Habanero.BO
         {
             get
             {
-                return "<" + this.ClassDef.ClassName + " ID='" + ID + "'>" + _boPropCol.DirtyXml + "</"
-                       + this.ClassDef.ClassName + ">";
+                return "<" + ClassDef.ClassName + " ID='" + ID + "'>" + _boPropCol.DirtyXml + "</"
+                       + ClassDef.ClassName + ">";
             }
         }
 
@@ -421,6 +427,13 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// A property to store the business object's full classdef name.  this is used when persisting to an object database
+        /// so that the object can be queried based on its classdef (without the necessity of persisting the entire classdef
+        /// for each object).
+        /// </summary>
+        public string ClassDefName { get; set; }
+
+        /// <summary>
         /// Gets and sets the collection of relationships
         /// </summary>
         IRelationshipCol IBusinessObject.Relationships
@@ -438,13 +451,6 @@ namespace Habanero.BO
             set { _classDef = (ClassDef) value; }
         }
 
-
-        /// <summary>
-        /// A property to store the business object's full classdef name.  this is used when persisting to an object database
-        /// so that the object can be queried based on its classdef (without the necessity of persisting the entire classdef
-        /// for each object).
-        /// </summary>
-        public string ClassDefName { get; set; }
 
         /// <summary>
         /// Returns the primary key ID of this object.  If there is no primary key on this
@@ -484,7 +490,7 @@ namespace Habanero.BO
         {
             PrimaryKeyDef primaryKeyDef = ClassDef.GetPrimaryKeyDef();
             if (primaryKeyDef == null) return;
-            _primaryKey = (BOPrimaryKey) primaryKeyDef.CreateBOKey(this.Props);
+            _primaryKey = (BOPrimaryKey) primaryKeyDef.CreateBOKey(Props);
         }
 
         /// <summary>
@@ -573,24 +579,7 @@ namespace Habanero.BO
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanCreate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to create a {1}", Thread.CurrentPrincipal.Identity.Name,
-                 this.ClassDef.ClassName);
-            return false;
-        }
-
-        ///<summary>
-        /// This method can be overridden by a class that inherits from Business object.
-        /// The method allows the Business object developer to add customised rules that determine.
-        /// The Readable rules of a business object.
-        /// E.g. Certain users may not be allowed to view certain objects.
-        /// </summary>
-        public virtual bool IsReadable(out string message)
-        {
-            message = "";
-            if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanRead)) return true;
-            message = string.Format
-                ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
-                 this.ClassDef.ClassName);
+                 ClassDef.ClassName);
             return false;
         }
 
@@ -612,7 +601,7 @@ namespace Habanero.BO
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanUpdate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to update {1} Identified By {2}",
-                 Thread.CurrentPrincipal.Identity.Name, this.ClassDef.ClassName, this.ID.AsString_CurrentValue());
+                 Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
             return false;
         }
 
@@ -629,23 +618,22 @@ namespace Habanero.BO
         public virtual bool IsDeletable(out string message)
         {
             message = "";
-            if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanDelete)) return true;
-            message = string.Format
-                ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
-                 Thread.CurrentPrincipal.Identity.Name, this.ClassDef.ClassName, this.ID.AsString_CurrentValue());
-            return false;
-        }
-
-        ///<summary>
-        /// Returns the value under the property name specified
-        ///</summary>
-        ///<param name="propName">The property name</param>
-        ///<typeparam name="T">The type to cast the retrieved property value to.</typeparam>
-        ///<returns>Returns the value if found</returns>
-        public T GetPropertyValue<T>(string propName)
-        {
-            return (T) GetPropertyValue(propName);
+            if (_authorisationRules != null && !_authorisationRules.IsAuthorised(BusinessObjectActions.CanDelete))
+            {
+                message = string.Format
+                    ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
+                     Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
+                return false;
+            }
+            foreach (IRelationship relationship in Relationships)
+            {
+                bool isDeletable = relationship.IsDeletable(out message);
+                if (!isDeletable)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -657,7 +645,7 @@ namespace Habanero.BO
         {
             if (propName == null) throw new ArgumentNullException("propName");
             string message;
-            if (!this.IsReadable(out message)) throw new BusObjReadException(message);
+            if (!IsReadable(out message)) throw new BusObjReadException(message);
 
             return GetProperty(propName).Value;
         }
@@ -696,28 +684,13 @@ namespace Habanero.BO
                 return prop.PersistedPropertyValue;
             }
 
-            BusinessObject businessObject = (BusinessObject) Relationships.GetRelatedObject(source.Name);
+            var businessObject = (BusinessObject) Relationships.GetRelatedObject(source.Name);
             if (businessObject == null) return null;
             if (source.Joins.Count > 0)
             {
                 return businessObject.GetPersistedPropertyValue(source.Joins[0].ToSource, propName);
             }
             return businessObject.GetPersistedPropertyValue(null, propName);
-        }
-
-        internal IBOProp GetProperty(string propName)
-        {
-            try
-            {
-                return Props[propName];
-            }
-            catch (InvalidPropertyNameException)
-            {
-                string errMessage = String.Format
-                    ("The given property name '{0}' does not exist in the "
-                     + "collection of properties for the class '{1}'.", propName, GetType().Name);
-                throw new InvalidPropertyNameException(errMessage);
-            }
         }
 
         /// <summary>
@@ -788,6 +761,59 @@ namespace Habanero.BO
             get { return _boStatus; }
         }
 
+        /// <summary>
+        /// Returns the value under the property name specified
+        /// </summary>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns a string</returns>
+        public string GetPropertyValueString(string propName)
+        {
+            return GetProperty(propName).PropertyValueString;
+        }
+
+        ///<summary>
+        /// This method can be overridden by a class that inherits from Business object.
+        /// The method allows the Business object developer to add customised rules that determine.
+        /// The Readable rules of a business object.
+        /// E.g. Certain users may not be allowed to view certain objects.
+        /// </summary>
+        public virtual bool IsReadable(out string message)
+        {
+            message = "";
+            if (_authorisationRules == null) return true;
+            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanRead)) return true;
+            message = string.Format
+                ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
+                 ClassDef.ClassName);
+            return false;
+        }
+
+        ///<summary>
+        /// Returns the value under the property name specified
+        ///</summary>
+        ///<param name="propName">The property name</param>
+        ///<typeparam name="T">The type to cast the retrieved property value to.</typeparam>
+        ///<returns>Returns the value if found</returns>
+        public T GetPropertyValue<T>(string propName)
+        {
+            return (T) GetPropertyValue(propName);
+        }
+
+        internal IBOProp GetProperty(string propName)
+        {
+            try
+            {
+                return Props[propName];
+            }
+            catch (InvalidPropertyNameException)
+            {
+                string errMessage = String.Format
+                    ("The given property name '{0}' does not exist in the "
+                     + "collection of properties for the class '{1}'.", propName, GetType().Name);
+                throw new InvalidPropertyNameException(errMessage);
+            }
+        }
+
 
         /// <summary>
         /// Sets the object's state into editing mode.  The original state can
@@ -826,18 +852,8 @@ namespace Habanero.BO
         {
             if (Status.IsEditing)
             {
-                throw new EditingException(this.ClassDef.ClassName, ID.ToString(), this);
+                throw new EditingException(ClassDef.ClassName, ID.ToString(), this);
             }
-        }
-
-        /// <summary>
-        /// Returns the value under the property name specified
-        /// </summary>
-        /// <param name="propName">The property name</param>
-        /// <returns>Returns a string</returns>
-        public string GetPropertyValueString(string propName)
-        {
-            return GetProperty(propName).PropertyValueString;
         }
 
         /// <summary>
@@ -893,6 +909,28 @@ namespace Habanero.BO
         internal bool HasAutoIncrementingField
         {
             get { return _boPropCol.HasAutoIncrementingField; }
+        }
+
+        /// <summary>
+        /// This returns the Transaction Log object set up for this BusinessObject.
+        /// </summary>
+        public ITransactionLog TransactionLog
+        {
+            get { return _transactionLog; }
+        }
+
+        private IList<IBusinessObjectRule> BusinessObjectRules
+        {
+            get
+            {
+                //Lazy initialisation so as to prevent unneccessary objects being created during construction.
+                if (_boRules == null)
+                {
+                    _boRules = new List<IBusinessObjectRule>();
+                    LoadBusinessObjectRules(_boRules);
+                }
+                return _boRules;
+            }
         }
 
         /// <summary>
@@ -957,7 +995,19 @@ namespace Habanero.BO
             }
             _boStatus.IsDirty = true;
             _boStatus.IsDeleted = true;
+            MarkChildrenForDelete();
             FireMarkForDeleteEvent();
+        }
+
+        private void MarkChildrenForDelete()
+        {
+            foreach (IRelationship relationship in Relationships)
+            {
+                if (relationship.DeleteParentAction == DeleteParentAction.DeleteRelated)
+                {
+                    relationship.MarkForDelete();
+                }
+            }
         }
 
 
@@ -1002,7 +1052,7 @@ namespace Habanero.BO
                 SetStateAsUpdated();
                 if (!BusinessObjectManager.Instance.Contains(this))
                 {
-                    if (!BusinessObjectManager.Instance.Contains(this.ID.ObjectID))
+                    if (!BusinessObjectManager.Instance.Contains(ID.ObjectID))
                     {
                         BusinessObjectManager.Instance.Add(this);
                     }
@@ -1016,15 +1066,15 @@ namespace Habanero.BO
         private void CleanUpAllRelationshipCollections()
         {
             if (!Status.IsDeleted) return;
-            foreach (IRelationship relationship in this.Relationships)
+            foreach (IRelationship relationship in Relationships)
             {
                 if (!(relationship is IMultipleRelationship)) continue;
-                IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
+                var multipleRelationship = (IMultipleRelationship) relationship;
 
                 IList createdBos = multipleRelationship.CurrentBusinessObjectCollection.CreatedBusinessObjects;
                 while (createdBos.Count > 0)
                 {
-                    IBusinessObject businessObject = (IBusinessObject) createdBos[createdBos.Count - 1];
+                    var businessObject = (IBusinessObject) createdBos[createdBos.Count - 1];
                     createdBos.Remove(businessObject);
                     if (relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated) continue;
                     ((BOStatus) businessObject.Status).IsDeleted = true;
@@ -1069,20 +1119,12 @@ namespace Habanero.BO
             //{
             //    transactionCommitter.AddTransaction(_transactionLog);
             //}
-            this.Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter) transactionCommitter);
+            Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter) transactionCommitter);
 
             if (_businessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
             {
                 _businessObjectUpdateLog.Update();
             }
-        }
-
-        /// <summary>
-        /// This returns the Transaction Log object set up for this BusinessObject.
-        /// </summary>
-        public ITransactionLog TransactionLog
-        {
-            get { return _transactionLog; }
         }
 
         private void CheckIsDeletable()
@@ -1188,19 +1230,6 @@ namespace Habanero.BO
             return errors.Count == 0;
         }
 
-        private IList<IBusinessObjectRule> BusinessObjectRules
-        {
-            get
-            {
-                //Lazy initialisation so as to prevent unneccessary objects being created during construction.
-                if (_boRules == null)
-                {
-                    _boRules = new List<IBusinessObjectRule>();
-                    LoadBusinessObjectRules(_boRules);
-                }
-                return _boRules;
-            }
-        }
         /// <summary>
         /// Load the <see cref="IBusinessObjectRule"/>s for this BusinessObject.
         /// </summary>
@@ -1228,7 +1257,7 @@ namespace Habanero.BO
         internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {
             AreCustomRulesValid(out errors);
-            foreach (IBusinessObjectRule rule in this.BusinessObjectRules)
+            foreach (IBusinessObjectRule rule in BusinessObjectRules)
             {
                 if (rule == null || !ErrorLevelIsError(rule) || rule.IsValid()) continue;
                 CreateBOError(rule, errors);
@@ -1244,12 +1273,12 @@ namespace Habanero.BO
         internal bool HasWarnings(out IList<IBOError> errors)
         {
             errors = new List<IBOError>();
-            foreach (IBusinessObjectRule rule in this.BusinessObjectRules)
+            foreach (IBusinessObjectRule rule in BusinessObjectRules)
             {
                 if (rule == null || ErrorLevelIsError(rule) || rule.IsValid()) continue;
                 CreateBOError(rule, errors);
             }
-            return  errors.Count == 0;
+            return errors.Count == 0;
         }
 
         private static bool ErrorLevelIsError(IBusinessObjectRule rule)
@@ -1260,7 +1289,7 @@ namespace Habanero.BO
         private void CreateBOError(IBusinessObjectRule rule, ICollection<IBOError> errors)
         {
             string message = rule.Message;
-            BOError error = new BOError(message, rule.ErrorLevel) {BusinessObject = this};
+            var error = new BOError(message, rule.ErrorLevel) {BusinessObject = this};
             errors.Add(error);
         }
 
@@ -1287,7 +1316,7 @@ namespace Habanero.BO
             {
                 string propertyName = reader.Name;
                 string propertyValue = reader.Value;
-                this.SetPropertyValue(propertyName, propertyValue);
+                SetPropertyValue(propertyName, propertyValue);
             }
 
             reader.MoveToContent();
@@ -1295,16 +1324,16 @@ namespace Habanero.BO
             if (!string.IsNullOrEmpty(reader.Name))
             {
                 string relationshipName = reader.Name;
-                if (this.Relationships.Contains(relationshipName))
+                if (Relationships.Contains(relationshipName))
                 {
-                    IRelationship relationship = this.Relationships[relationshipName];
+                    IRelationship relationship = Relationships[relationshipName];
                     Type relatedObjectType = relationship.RelationshipDef.RelatedObjectClassType;
                     reader.MoveToContent();
                     reader.Read();
 
                     if (relationship is ISingleRelationship)
                     {
-                        IBusinessObject relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
+                        var relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
                         relatedObject.ReadXml(reader);
                         ((ISingleRelationship) relationship).SetRelatedObject(relatedObject);
                     }
@@ -1315,7 +1344,7 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    string className = this.ClassDef.ClassName;
+                    string className = ClassDef.ClassName;
                     if (relationshipName != className && relationshipName != "ArrayOf" + className
                         && reader.NodeType != XmlNodeType.EndElement)
                     {
@@ -1325,19 +1354,6 @@ namespace Habanero.BO
                                   className));
                     }
                 }
-            }
-        }
-
-        private static void ReadRelatedObject(XmlReader reader, IRelationship relationship, Type relatedObjectType)
-        {
-            IBusinessObject relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
-            relatedObject.ReadXml(reader);
-            ((IMultipleRelationship) relationship).BusinessObjectCollection.Add(relatedObject);
-
-            string elementName = reader.Name;
-            if (elementName == relatedObjectType.Name)
-            {
-                ReadRelatedObject(reader, relationship, relatedObjectType);
             }
         }
 
@@ -1364,6 +1380,19 @@ namespace Habanero.BO
             }
         }
 
+        private static void ReadRelatedObject(XmlReader reader, IRelationship relationship, Type relatedObjectType)
+        {
+            var relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
+            relatedObject.ReadXml(reader);
+            ((IMultipleRelationship) relationship).BusinessObjectCollection.Add(relatedObject);
+
+            string elementName = reader.Name;
+            if (elementName == relatedObjectType.Name)
+            {
+                ReadRelatedObject(reader, relationship, relatedObjectType);
+            }
+        }
+
         /// <summary>
         /// Writes related objects that are in composite and aggregate relationships
         /// as nested xml.
@@ -1372,7 +1401,7 @@ namespace Habanero.BO
         {
             if (relationship is ISingleRelationship)
             {
-                ISingleRelationship singleRelationship = (ISingleRelationship) relationship;
+                var singleRelationship = (ISingleRelationship) relationship;
                 IBusinessObject relatedObject = singleRelationship.GetRelatedObject();
                 if (relatedObject != null)
                 {
@@ -1385,7 +1414,7 @@ namespace Habanero.BO
             }
             else if (relationship is IMultipleRelationship)
             {
-                IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
+                var multipleRelationship = (IMultipleRelationship) relationship;
                 IBusinessObjectCollection relatedObjects = multipleRelationship.BusinessObjectCollection;
                 if (relatedObjects.Count != 0)
                 {
@@ -1506,22 +1535,22 @@ namespace Habanero.BO
         protected internal virtual bool CanBePersisted(out string errMsg)
         {
             errMsg = "";
-            if (this.Status.IsDeleted && this.Status.IsNew)
+            if (Status.IsDeleted && Status.IsNew)
             {
                 errMsg = "The object has already been deleted from the dataBase and cannot be persisted again";
                 return false;
             }
-            if (this.Status.IsDeleted && !this.Status.IsNew)
+            if (Status.IsDeleted && !Status.IsNew)
             {
-                return this.IsDeletable(out errMsg);
+                return IsDeletable(out errMsg);
             }
 
-            if (this.Status.IsNew)
+            if (Status.IsNew)
             {
-                return this.IsCreatable(out errMsg);
+                return IsCreatable(out errMsg);
             }
 
-            return !this.Status.IsDirty || this.IsEditable(out errMsg);
+            return !Status.IsDirty || IsEditable(out errMsg);
         }
 
         internal void UpdateDirtyStatusFromProperties()

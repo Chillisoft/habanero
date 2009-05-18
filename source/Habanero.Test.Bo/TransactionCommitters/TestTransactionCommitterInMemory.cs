@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.TransactionCommitters
@@ -118,7 +119,7 @@ namespace Habanero.Test.BO.TransactionCommitters
 
         }
 
-        [Test, ExpectedException(typeof(BusinessObjectReferentialIntegrityException))]
+        [Test, ExpectedException(typeof(BusObjPersistException))]
         public void TestPreventDelete()
         {
             //---------------Set up test pack-------------------
@@ -127,8 +128,8 @@ namespace Habanero.Test.BO.TransactionCommitters
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
-            contactPersonTestBO.MarkForDelete();
-
+//            contactPersonTestBO.MarkForDelete();
+            ReflectionUtilities.SetPropertyValue(contactPersonTestBO.Status, "IsDeleted", true);
             ITransactionCommitter committer = new TransactionCommitterInMemory(dataStoreInMemory);
             committer.AddBusinessObject(contactPersonTestBO);
             //---------------Execute Test ----------------------

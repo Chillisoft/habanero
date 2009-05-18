@@ -25,6 +25,7 @@ using Habanero.DB;
 using Habanero.Test.BO;
 using Habanero.Test.BO.ClassDefinition;
 using Habanero.Test.BO.TransactionCommitters;
+using Habanero.Util;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -858,14 +859,16 @@ namespace Habanero.Test.DB
             Assert.AreEqual(mockBOProp1, mockBo.MockBOProp1);
         }
 
-        [Test, ExpectedException(typeof (BusinessObjectReferentialIntegrityException))]
+        [Test, ExpectedException(typeof (BusObjPersistException))]
         public void TestPreventDelete()
         {
             //---------------Set up test pack-------------------
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
-            contactPersonTestBO.MarkForDelete();
+//            contactPersonTestBO.MarkForDelete();
+            ReflectionUtilities.SetPropertyValue(contactPersonTestBO.Status, "IsDeleted", true);
+
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
             committerDB.AddBusinessObject(contactPersonTestBO);
             //---------------Execute Test ----------------------

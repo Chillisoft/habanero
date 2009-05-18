@@ -137,6 +137,21 @@ namespace Habanero.BO
         public abstract IBusinessObject OwningBO { get; }
 
         /// <summary>
+        /// Is there anything in this relationship to prevent the business object from being deleted.
+        /// e.g. if there are related business objects that are not marked as mark for delete.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public abstract bool IsDeletable(out string message);
+
+        /// <summary>
+        /// If the relationship is <see cref="IRelationship.DeleteParentAction"/>.DeleteRelated then
+        /// all the related objects and their relevant children will be marked for Delete.
+        /// See <see cref="IBusinessObject.MarkForDelete"/>
+        /// </summary>
+        public abstract void MarkForDelete();
+
+        /// <summary>
         /// Cancels Edits on this relationship and all its children.
         /// </summary>
         internal abstract void CancelEdits();

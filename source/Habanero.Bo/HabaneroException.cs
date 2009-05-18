@@ -1258,7 +1258,7 @@ namespace Habanero.BO
         public BusObjDeleteException(IBusinessObject bo, string message):
                 base(
                     string.Format(
-                        "You cannot delete the '{0}', as the IsDeleted is set to false for the object. " +
+                        "You cannot delete the '{0}', as the IsDeletable is set to false for the object. " +
                         "ObjectID: {1}, also identified as {2} \n " + 
                         "Message: {3}",
                         bo.ClassDef.ClassName, bo.ID, bo,message))

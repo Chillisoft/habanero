@@ -30,7 +30,7 @@ namespace Habanero.Test.UI.Base
     public abstract class TestReadOnlyGridControl //: TestUsingDatabase
     {
         private const string _gridIdColumnName = "HABANERO_OBJECTID";
-        //TODO: Tests that if init not called throws sensible errors
+        //TODO: Tests that if Init not called throws sensible errors
         //TODO: Date searchby
         [SetUp]
         public void SetupTest()
