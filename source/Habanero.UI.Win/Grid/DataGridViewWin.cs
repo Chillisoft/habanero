@@ -42,7 +42,7 @@ namespace Habanero.UI.Win
             _manager = new DataGridViewManager(this);
             this.DataError +=delegate
                              {
-                                 //do nothing  
+                                 //do nothing  necessary because of strange behaviour in windows grid
                              };
         }
 
@@ -451,7 +451,6 @@ namespace Habanero.UI.Win
                 {
                     return new DataGridViewImageColumnWin((DataGridViewImageColumn)column);
                 }
-                //TODO Brett 13 Mar 2009: Write test for this
                 if (column is DataGridViewComboBoxColumn)
                 {
                     return new DataGridViewComboBoxColumnWin((DataGridViewComboBoxColumn)column);

@@ -17,14 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.IO;
-using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
-using Habanero.DB4O;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
 using NUnit.Framework;
 
@@ -71,7 +66,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             util.RegisterForAddedAndRemovedEvents(cpCol);
             //---------------Assert Precondition----------------
@@ -91,7 +87,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             util.RegisterForAddedAndRemovedEvents(cpCol);
             //---------------Assert Precondition----------------
@@ -104,15 +101,16 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             util.AssertOneObjectInCurrentPersistedCollection(cpCol);
             Assert.AreSame(contactPerson.Organisation, associationRelationship.OwningBO);
         }
+
         [Test]
         public void Test_AddMethod_AddPersistedChildAndSaveParent()
         {
             //An already persisted driver can be added to a car
             //---------------Set up test pack-------------------
-
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             util.RegisterForAddedAndRemovedEvents(cpCol);
             //---------------Assert Precondition----------------
@@ -125,6 +123,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             util.AssertOneObjectInCurrentPersistedCollection(cpCol);
             Assert.AreSame(contactPerson.Organisation, associationRelationship.OwningBO);
         }
+
         [Test]
         public void Test_AddMethod_AddPersistedChildAndSaveParent_WithNoReverseRelationship()
         {
@@ -135,7 +134,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO.LoadDefaultClassDef_NoReverseRelationship();
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             util.RegisterForAddedAndRemovedEvents(cpCol);
             //---------------Assert Precondition----------------
@@ -149,10 +148,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(contactPerson.OrganisationID, organisationTestBO.OrganisationID);
         }
 
-        private static MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        private static MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship
+            (OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
-            RelationshipDef relationshipDef = (RelationshipDef)associationRelationship.RelationshipDef;
+            MultipleRelationship<ContactPersonTestBO> associationRelationship =
+                organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            RelationshipDef relationshipDef = (RelationshipDef) associationRelationship.RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Association;
             cpCol = associationRelationship.BusinessObjectCollection;
             return associationRelationship;
@@ -166,7 +167,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
@@ -197,7 +199,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             contactPerson.Save();
 
             OrganisationTestBO alternateOrganisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            
+
             //---------------Assert Precondition----------------
             util.AssertOneObjectInCurrentPersistedCollection(cpCol);
             Assert.IsFalse(contactPerson.Status.IsNew);
@@ -211,7 +213,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, cpCol.Count);
             Assert.IsFalse(cpCol.Contains(contactPerson));
             util.AssertOneObjectInRemovedAndPersisted(cpCol);
-            MultipleRelationship<ContactPersonTestBO> relationship = alternateOrganisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            MultipleRelationship<ContactPersonTestBO> relationship =
+                alternateOrganisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             BusinessObjectCollection<ContactPersonTestBO> cpAltCol = relationship.BusinessObjectCollection;
             Assert.AreSame(contactPerson.Organisation, relationship.OwningBO);
             Assert.AreSame(alternateOrganisationTestBO, contactPerson.Organisation);
@@ -226,7 +229,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             GetAssociationRelationship(organisationTestBO, out cpCol);
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -246,7 +250,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_SetParentNull()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
 
             //---------------Assert Precondition----------------
             Assert.IsNull(contactPerson.Organisation);
@@ -270,7 +275,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             GetAssociationRelationship(organisationTestBO, out cpCol);
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
             cpCol.LoadAll();
@@ -287,7 +293,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             util.AssertRemovedEventFired();
         }
 
-        protected virtual void DeleteAllContactPersonAndOrganisations() {
+        protected virtual void DeleteAllContactPersonAndOrganisations()
+        {
         }
 
 
@@ -299,7 +306,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             GetAssociationRelationship(organisationTestBO, out cpCol);
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
             cpCol.LoadAll();
@@ -319,13 +327,16 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         #region Delete Parent
+
 //-------------------------------------------DELETE Parent with added, removed and created children ----
         [Test]
         public void Test_DeleteParent_WithCreatedChild_DeleteRule_DeleteRelated()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson
+                (out contactPerson, out relationship);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
             Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
@@ -342,12 +353,14 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
         }
 
-        private static OrganisationTestBO CreateSavedOrganisation_WithOneValidCreatedContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+        private static OrganisationTestBO CreateSavedOrganisation_WithOneValidCreatedContactPerson
+            (out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
-            contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             cpCol.Add(contactPerson);
             return organisationTestBO;
         }
@@ -356,11 +369,14 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_DeleteParent_WithTwoCreatedChild_DeleteRule_DeleteRelated()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
-            ContactPersonTestBO secondContactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson
+                (out contactPerson, out relationship);
+            ContactPersonTestBO secondContactPerson = ContactPersonTestBO.CreateUnsavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             organisationTestBO.ContactPeople.Add(secondContactPerson);
-            
+
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
             Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
@@ -384,8 +400,10 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_DeleteParent_WithCreatedChild_DeleteRule_DeleteRelated_DoesNotValidate()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson
+                (out contactPerson, out relationship);
             contactPerson.Surname = null;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
@@ -407,9 +425,11 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_DeleteParent_WithCreatedChild_DeleteRule_DoNothing()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DoNothing;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DoNothing;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
             Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
@@ -430,10 +450,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_DeleteParent_WithCreatedChild_DeleteRule_DoNothing_DoesNotValidate()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
-            
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DoNothing;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson
+                (out contactPerson, out relationship);
+
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DoNothing;
             contactPerson.Surname = null;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
@@ -455,9 +477,11 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_DeleteParent_WithCreatedChild_DeleteRule_PreventDelete()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.Prevent;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.Prevent;
             contactPerson.Surname = null;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
@@ -476,18 +500,24 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                 //---------------Test Result -----------------------
             catch (BusinessObjectReferentialIntegrityException ex)
             {
-                StringAssert.Contains("There are 1 objects related through the 'ContactPeople' relationship ", ex.Message);
+                StringAssert.Contains
+                    ("There are 1 objects related through the 'ContactPeople' relationship ", ex.Message);
             }
         }
+
         [Test]
         public void Test_DeleteParent_WithTwoCreatedChild_DeleteRule_DerefRelated()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
-            ContactPersonTestBO secondContactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson
+                (out contactPerson, out relationship);
+            ContactPersonTestBO secondContactPerson = ContactPersonTestBO.CreateUnsavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             organisationTestBO.ContactPeople.Add(secondContactPerson);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction =
+                DeleteParentAction.DereferenceRelated;
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
             Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
@@ -496,10 +526,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsNotNull(contactPerson.OrganisationID);
             Assert.IsTrue(secondContactPerson.Status.IsNew);
             Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationship.DeleteParentAction);
-//            contactPerson.MarkedForDeletion += delegate(object sender, BOEventArgs e)
-//                                   {
-//                                       string aa = "";
-//                                   };
             //---------------Execute Test ----------------------
             organisationTestBO.MarkForDelete();
             organisationTestBO.Save();
@@ -517,8 +543,10 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_DeleteParent_WithAddedChild_DeleteRule_DeleteRelated()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson(out contactPerson, out relationship);
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson
+                (out contactPerson, out relationship);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
             Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.AddedBusinessObjects[0]);
@@ -539,9 +567,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_DeleteParent_WithAddedDirtyChild_DeleteRule_DeRefRelated()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction =
+                DeleteParentAction.DereferenceRelated;
             contactPerson.Surname = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
@@ -562,13 +593,17 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
             Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
         }
+
         [Test]
         public void Test_DeleteParent_WithAddedChild_DeleteRule_DeRefRelated()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction =
+                DeleteParentAction.DereferenceRelated;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
             Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.AddedBusinessObjects[0]);
@@ -593,9 +628,11 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_DeleteParent_WithAddedChild_DeleteRule_PreventDelete()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.Prevent;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.Prevent;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
             Assert.AreEqual(1, organisationTestBO.ContactPeople.Count);
@@ -611,19 +648,23 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                 organisationTestBO.Save();
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (BusinessObjectReferentialIntegrityException ex)
             {
-                StringAssert.Contains("There are 1 objects related through the 'ContactPeople' relationship ", ex.Message);
+                StringAssert.Contains
+                    ("There are 1 objects related through the 'ContactPeople' relationship ", ex.Message);
             }
         }
+
         [Test]
         public void Test_DeleteParent_WithRemovedChild_DeleteRule_PreventDelete()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidRemovedContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.Prevent;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidRemovedContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.Prevent;
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
@@ -646,13 +687,17 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, organisationTestBO.ContactPeople.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
         }
+
         [Test]
         public void Test_DeleteParent_WithRemovedChild_DeleteRule_Deref()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidRemovedContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidRemovedContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction =
+                DeleteParentAction.DereferenceRelated;
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
@@ -675,13 +720,17 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, organisationTestBO.ContactPeople.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
         }
+
         [Test]
         public void Test_DeleteParent_WithRemovedChild_DeleteRule_Delete()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidRemovedContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidRemovedContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction =
+                DeleteParentAction.DeleteRelated;
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
@@ -709,9 +758,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_DeleteParent_WithMark4Child_DeleteRule_DeRefRelated()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMarkForDeleteContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMarkForDeleteContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction =
+                DeleteParentAction.DereferenceRelated;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects[0]);
@@ -736,13 +788,17 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //Assert.IsFalse(contactPerson.Status.IsDirty, "Should not be dirty (permanetly deleted)");           
             Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
         }
+
         [Test]
         public void Test_DeleteParent_WithMark4Child_DeleteRule_DeleteRelated()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMarkForDeleteContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMarkForDeleteContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction =
+                DeleteParentAction.DeleteRelated;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects[0]);
@@ -763,13 +819,17 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //Assert.IsFalse(contactPerson.Status.IsDirty, "Should not be dirty (permanetly deleted)");           
             Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
         }
+
         [Test]
         public void Test_DeleteParent_WithPersistedChild_DeleteRule_DeleteRelated()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithPersistedContactPerson(out contactPerson, out relationship);
-            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
+            ContactPersonTestBO contactPerson;
+            MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithPersistedContactPerson
+                (out contactPerson, out relationship);
+            ((MultipleRelationshipDef) relationship.RelationshipDef).DeleteParentAction =
+                DeleteParentAction.DeleteRelated;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.Count);
             Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople[0]);
@@ -784,58 +844,69 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             organisationTestBO.MarkForDelete();
             organisationTestBO.Save();
             //---------------Test Result -----------------------
-            Assert.IsNotNull(contactPerson.OrganisationID, "Contact Person should be deleted does not set OrgID to null");
+            Assert.IsNotNull
+                (contactPerson.OrganisationID, "Contact Person should be deleted does not set OrgID to null");
             Assert.AreEqual(0, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
             Assert.IsTrue(contactPerson.Status.IsNew, "Should not be permanetly deleted");
             Assert.IsTrue(contactPerson.Status.IsDeleted, "Should be permanetly deleted");
             //Assert.IsFalse(contactPerson.Status.IsDirty, "Should not be dirty (permanetly deleted)");           
             Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
         }
-        private static OrganisationTestBO CreateSavedOrganisation_WithOneValidAddedContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+
+        private static OrganisationTestBO CreateSavedOrganisation_WithOneValidAddedContactPerson
+            (out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
-            contactPerson = ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            contactPerson = ContactPersonTestBO.CreateSavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             cpCol.Add(contactPerson);
             return organisationTestBO;
         }
-        private static OrganisationTestBO CreateSavedOrganisation_WithOneMarkForDeleteContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+
+        private static OrganisationTestBO CreateSavedOrganisation_WithOneMarkForDeleteContactPerson
+            (out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
-            contactPerson = ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            contactPerson = ContactPersonTestBO.CreateSavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             cpCol.Add(contactPerson);
             cpCol.SaveAll();
             contactPerson.MarkForDelete();
             return organisationTestBO;
         }
-        private static OrganisationTestBO CreateSavedOrganisation_WithPersistedContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+
+        private static OrganisationTestBO CreateSavedOrganisation_WithPersistedContactPerson
+            (out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
-            contactPerson = ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            contactPerson = ContactPersonTestBO.CreateSavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             cpCol.Add(contactPerson);
             cpCol.SaveAll();
             return organisationTestBO;
         }
-        private static OrganisationTestBO CreateSavedOrganisation_WithOneValidRemovedContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+
+        private static OrganisationTestBO CreateSavedOrganisation_WithOneValidRemovedContactPerson
+            (out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
-            contactPerson = ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            contactPerson = ContactPersonTestBO.CreateSavedContactPerson
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             cpCol.Add(contactPerson);
             cpCol.SaveAll();
             organisationTestBO.Save();
             cpCol.Remove(contactPerson);
             return organisationTestBO;
         }
+
         #endregion
-
     }
-
-
 }

@@ -62,7 +62,8 @@ namespace Habanero.BO
         /// <param name="lBOPropCol"></param>
         protected MultipleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
-        {}
+        {
+        }
 
         internal abstract IBusinessObjectCollection GetLoadedBOColInternal();
     }
@@ -90,9 +91,11 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol): this(owningBo, lRelDef, lBOPropCol, 0)
+        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
+            : this(owningBo, lRelDef, lBOPropCol, 0)
         {
         }
+
         /// <summary>
         /// Constructor to initialise a new relationship
         /// </summary>
@@ -100,9 +103,13 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to initialise the RelKey object</param>
         /// <param name="timeOut">The timeout between when the collection was last loaded.</param>
-        public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol, int timeOut) : base(owningBo, lRelDef, lBOPropCol)
+        public MultipleRelationship
+            (IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol, int timeOut)
+            : base(owningBo, lRelDef, lBOPropCol)
         {
-            _boCol = (RelatedBusinessObjectCollection<TBusinessObject>) RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
+            _boCol =
+                (RelatedBusinessObjectCollection<TBusinessObject>)
+                RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
             TimeOut = timeOut;
         }
 
@@ -174,6 +181,7 @@ namespace Habanero.BO
                 return false; // || 
             }
         }
+
         /// <summary>
         /// Are any of the Collections that store edits to this Relationship dirty.
         /// </summary>
@@ -250,6 +258,7 @@ namespace Habanero.BO
         {
             RelationshipUtils.SetupCriteriaForRelationship(this, _boCol);
         }
+
         /// <summary>
         /// Updates the Relationship as Persisted
         /// </summary>
@@ -272,10 +281,7 @@ namespace Habanero.BO
         ///</summary>
         public OrderCriteria OrderCriteria
         {
-            get
-            {
-                return _relDef.OrderCriteria ?? new OrderCriteria();
-            }
+            get { return _relDef.OrderCriteria ?? new OrderCriteria(); }
         }
 
         internal override void CancelEdits()
@@ -333,9 +339,12 @@ namespace Habanero.BO
             IList<TBusinessObject> dirtyChildren = new List<TBusinessObject>();
             if (!_owningBo.Status.IsDeleted)
             {
-                foreach (TBusinessObject bo in _boCol.CreatedBusinessObjects)
+                if (this.RelationshipDef.InsertParentAction == InsertParentAction.InsertRelationship)
                 {
-                    dirtyChildren.Add(bo);
+                    foreach (TBusinessObject bo in _boCol.CreatedBusinessObjects)
+                    {
+                        dirtyChildren.Add(bo);
+                    }
                 }
             }
             foreach (TBusinessObject bo in _boCol.MarkedForDeleteBusinessObjects)

@@ -10,6 +10,7 @@
   reverseRelationship NMTOKEN #IMPLIED
 	orderBy CDATA ""
 	deleteAction ( DeleteRelated | DereferenceRelated | Prevent | DoNothing ) "Prevent"
+	insertAction ( InsertRelationship | DoNothing ) "InsertRelationship"
   typeParameter CDATA ""
   timeout CDATA "0"
 >

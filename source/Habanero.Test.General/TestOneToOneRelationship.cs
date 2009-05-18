@@ -28,10 +28,6 @@ namespace Habanero.Test.General
     [TestFixture]
     public class TestOneToOneRelationship : TestUsingDatabase
     {
-        public TestOneToOneRelationship()
-        {
-        }
-
         public static void RunTest()
         {
             TestOneToOneRelationship test = new TestOneToOneRelationship();

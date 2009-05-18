@@ -25,6 +25,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 using log4net;
+
 // Limiting the number of records for a Select
 // -------------------------------------------
 // SQL Server: SELECT TOP 10 * FROM [TABLE]
@@ -53,7 +54,6 @@ using log4net;
 //
 //The support for Firebird is nothing like that for MySQL - and it took me quite a while to find the answer. Sometimes the geeks disappoint…
 
-
 namespace Habanero.DB
 {
     /// <summary>
@@ -69,6 +69,7 @@ namespace Habanero.DB
         private static IDatabaseConnection _currentDatabaseConnection;
         private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = 30;
+
         /// <summary>
         /// The <see cref="SqlFormatter"/> that is used to format the Swl for the database type represented by this database connection
         /// </summary>
@@ -135,15 +136,15 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                throw new DatabaseConnectionException(String.Format(
-                    "An error occurred while attempting to connect to the " +
-                    "database.  The assembly, '{0}', required for the " +
-                    "database vendor specified in the configuration (eg. " +
-                    "app.config) could not be loaded.  Please check that it " +
-                    "has been included in the dependencies or references, " +
-                    "or that it has been copied to the output/execution " +
-                    "folder for this application.", _assemblyName),
-                    ex);
+                throw new DatabaseConnectionException
+                    (String.Format
+                         ("An error occurred while attempting to connect to the "
+                          + "database.  The assembly, '{0}', required for the "
+                          + "database vendor specified in the configuration (eg. "
+                          + "app.config) could not be loaded.  Please check that it "
+                          + "has been included in the dependencies or references, "
+                          + "or that it has been copied to the output/execution " + "folder for this application.",
+                          _assemblyName), ex);
             }
         }
 
@@ -158,23 +159,25 @@ namespace Habanero.DB
             {
                 IDbConnection con = this.CreateDatabaseConnection();
                 //IDbConnection) Activator.CreateInstance(sampleCon.GetType()); // new MySqlConnection(ConnectionString));
-                try {
+                try
+                {
                     con.ConnectionString = this.ConnectionString;
                 }
-                catch (Exception ex) {
-                    throw new DatabaseConnectionException("There was an error " +
-                                                          "connecting to the database. The connection information was " +
-                                                          "rejected by the database - connection information is either " +
-                                                          "missing or incorrect.  In your configuration (eg. in app." +
-                                                          "config), you require settings for vendor, server and " +
-                                                          "database.  Depending on your setup, you may also need " +
-                                                          "username, password and port. Consult the documentation for " +
-                                                          "more detail on available options for these settings.", ex);
+                catch (Exception ex)
+                {
+                    throw new DatabaseConnectionException
+                        ("There was an error " + "connecting to the database. The connection information was "
+                         + "rejected by the database - connection information is either "
+                         + "missing or incorrect.  In your configuration (eg. in app."
+                         + "config), you require settings for vendor, server and "
+                         + "database.  Depending on your setup, you may also need "
+                         + "username, password and port. Consult the documentation for "
+                         + "more detail on available options for these settings.", ex);
                 }
-				//Mark - I have no Idea what the point of the next 3 lines are but I have commented them out because they are pointless :)
-				//if (con.State != ConnectionState.Open && this._className == "System.Data.OleDb.OleDbConnection") {
-				//    con.Open();
-				//}
+                //Mark - I have no Idea what the point of the next 3 lines are but I have commented them out because they are pointless :)
+                //if (con.State != ConnectionState.Open && this._className == "System.Data.OleDb.OleDbConnection") {
+                //    con.Open();
+                //}
 //			if (con.State != ConnectionState.Open) 
 //			{
 //				con.Open() ;
@@ -208,7 +211,8 @@ namespace Habanero.DB
                     {
                         dbConnection.Close();
                         dbConnection.Dispose();
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         log.Warn("Error closing and disposing connection", ex);
                     }
@@ -241,13 +245,12 @@ namespace Habanero.DB
         public string ErrorSafeConnectString()
         {
             string connectString = ConnectionString;
-            int pwdStartPos =
-                connectString.ToUpper(CultureInfo.InvariantCulture).IndexOf("pwd=".ToUpper(CultureInfo.InvariantCulture));
+            int pwdStartPos = connectString.ToUpper(CultureInfo.InvariantCulture).IndexOf
+                ("pwd=".ToUpper(CultureInfo.InvariantCulture));
             if (pwdStartPos <= 0)
             {
-                pwdStartPos =
-                    connectString.ToUpper(CultureInfo.InvariantCulture).IndexOf(
-                        "password=".ToUpper(CultureInfo.InvariantCulture));
+                pwdStartPos = connectString.ToUpper(CultureInfo.InvariantCulture).IndexOf
+                    ("password=".ToUpper(CultureInfo.InvariantCulture));
             }
             if (pwdStartPos >= 0)
             {
@@ -287,8 +290,9 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine +
-                          ExceptionUtilities.GetExceptionString(ex, 8, true));
+                log.Error
+                    ("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 8, true));
                 throw;
             }
         }
@@ -336,11 +340,12 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine +
-                          ExceptionUtilities.GetExceptionString(ex, 8, true));
+                log.Error
+                    ("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 8, true));
                 //throw ex;
-                throw new DatabaseConnectionException("An error occurred while attempting " +
-                    "to connect to the database.", ex);
+                throw new DatabaseConnectionException
+                    ("An error occurred while attempting " + "to connect to the database.", ex);
             }
         }
 
@@ -383,23 +388,25 @@ namespace Habanero.DB
         public IDataReader LoadDataReader(ISqlStatement selectSql, string strOrderByCriteria)
         {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
-  
+
             AppendOrderBy(selectSql, strOrderByCriteria);
             return LoadDataReader(selectSql);
         }
+
         /// <summary>
         /// Appends an order-by clause to the sql statement. " ORDER BY " is
         /// automatically prefixed by this method.
         /// </summary>
         /// <param name="statement"></param>
         /// <param name="orderByCriteria">The order-by clause</param>
-        private static void AppendOrderBy(ISqlStatement statement,  string orderByCriteria)
+        private static void AppendOrderBy(ISqlStatement statement, string orderByCriteria)
         {
             if (!string.IsNullOrEmpty(orderByCriteria))
             {
                 statement.Statement.Append(" ORDER BY " + orderByCriteria);
             }
         }
+
         /// <summary>
         /// Loads a data reader with the given raw sql select statement
         /// </summary>
@@ -408,7 +415,8 @@ namespace Habanero.DB
         /// <exception cref="DatabaseReadException">Thrown when an error
         /// occurred while setting up the data reader.  Also sends error
         /// output to the log.</exception>        
-        public IDataReader LoadDataReader(string selectSql) {
+        public IDataReader LoadDataReader(string selectSql)
+        {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
             IDbConnection con;
             try
@@ -422,12 +430,13 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error("Error reading from database : " + Environment.NewLine +
-                          ExceptionUtilities.GetExceptionString(ex, 10, true));
+                log.Error
+                    ("Error reading from database : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
                 log.Error("Sql: " + selectSql);
-                throw new DatabaseReadException(
-                    "There was an error reading the database. Please contact your system administrator.",
-                    "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
+                throw new DatabaseReadException
+                    ("There was an error reading the database. Please contact your system administrator.",
+                     "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
             }
         }
 
@@ -454,12 +463,13 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error("Error reading from database : " + Environment.NewLine +
-                          ExceptionUtilities.GetExceptionString(ex, 10, true));
+                log.Error
+                    ("Error reading from database : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
                 log.Error("Sql: " + selectSql);
-                throw new DatabaseReadException(
-                    "There was an error reading the database. Please contact your system administrator.",
-                    "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
+                throw new DatabaseReadException
+                    ("There was an error reading the database. Please contact your system administrator.",
+                     "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
             }
         }
 
@@ -475,8 +485,8 @@ namespace Habanero.DB
         {
             if (selectSql == null)
             {
-                throw new DatabaseConnectionException("The sql statement object " +
-                    "that has been passed to LoadDataReader() is null.");
+                throw new DatabaseConnectionException
+                    ("The sql statement object " + "that has been passed to LoadDataReader() is null.");
             }
             IDbConnection con;
             try
@@ -489,16 +499,18 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error("Error reading from database : " + Environment.NewLine +
-                         ExceptionUtilities.GetExceptionString(ex, 10, true));
+                log.Error
+                    ("Error reading from database : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
                 log.Error("Sql: " + selectSql);
 
-                Console.Out.WriteLine("Error reading from database : " + Environment.NewLine +
-                        ExceptionUtilities.GetExceptionString(ex, 10, true));
+                Console.Out.WriteLine
+                    ("Error reading from database : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
                 Console.Out.WriteLine("Sql: " + selectSql);
-                throw new DatabaseReadException(
-                        "There was an error reading the database. Please contact your system administrator.",
-                        "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
+                throw new DatabaseReadException
+                    ("There was an error reading the database. Please contact your system administrator.",
+                     "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
         }
 
@@ -575,10 +587,12 @@ namespace Habanero.DB
                 {
                     con = OpenConnection;
                     cmd = con.CreateCommand();
-                } try
+                }
+                try
                 {
                     cmd.CommandTimeout = _timeoutPeriod;
-                } catch (NotSupportedException  )
+                }
+                catch (NotSupportedException)
                 {
                 }
                 cmd.CommandText = sql;
@@ -587,15 +601,17 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error("Error writing to database : " + Environment.NewLine +
-                          ExceptionUtilities.GetExceptionString(ex, 10, true));
+                log.Error
+                    ("Error writing to database : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
                 log.Error("Sql: " + sql);
-                Console.WriteLine("Error writing to database : " + Environment.NewLine +
-                                  ExceptionUtilities.GetExceptionString(ex, 10, true));
+                Console.WriteLine
+                    ("Error writing to database : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
                 Console.WriteLine("Connect string: " + this.ErrorSafeConnectString());
-                throw new DatabaseWriteException(
-                    "There was an error writing to the database. Please contact your system administrator.",
-                    "The command executeNonQuery could not be completed.", ex, sql, ErrorSafeConnectString());
+                throw new DatabaseWriteException
+                    ("There was an error writing to the database. Please contact your system administrator.",
+                     "The command executeNonQuery could not be completed.", ex, sql, ErrorSafeConnectString());
             }
             finally
             {
@@ -665,9 +681,16 @@ namespace Habanero.DB
                 {
                     statement.SetupCommand(cmd);
                     //cmd.CommandText = sql;
-                    totalRowsAffected += cmd.ExecuteNonQuery();
+                    try
+                    {
+                        totalRowsAffected += cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new DatabaseWriteException
+                            ("There was an error executing the statement : " + Environment.NewLine + cmd.CommandText, ex);
+                    }
                     statement.DoAfterExecute(this, transaction, cmd);
-                    //statement.UpdateAutoIncrement(this);
                 }
                 if (!inTransaction)
                 {
@@ -677,16 +700,18 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error("Error writing to database : " + Environment.NewLine +
-                          ExceptionUtilities.GetExceptionString(ex, 10, true));
+                log.Error
+                    ("Error writing to database : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
                 log.Error("Sql: " + sql);
                 if (transaction != null)
                 {
                     transaction.Rollback();
                 }
-                throw new DatabaseWriteException(
-                    "There was an error writing to the database. Please contact your system administrator.",
-                    "The command executeNonQuery could not be completed.", ex, sql.ToString(), ErrorSafeConnectString());
+                throw new DatabaseWriteException
+                    ("There was an error writing to the database. Please contact your system administrator."
+                     + Environment.NewLine + "The command executeNonQuery could not be completed. :" + sql.ToString(),
+                     "The command executeNonQuery could not be completed.", ex, sql.ToString(), ErrorSafeConnectString());
             }
             finally
             {
@@ -705,7 +730,8 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="sql">The sql statement object</param>
         /// <returns>Returns the number of rows affected</returns>
-        public int ExecuteSql(ISqlStatement sql) {
+        public int ExecuteSql(ISqlStatement sql)
+        {
             if (sql == null) throw new ArgumentNullException("sql");
             return ExecuteSql(new SqlStatementCollection(sql));
         }
@@ -744,7 +770,7 @@ namespace Habanero.DB
             get { return IsolationLevel.RepeatableRead; }
         }
 
-        
+
         /// <summary>
         /// Returns a limit clause with the limit specified, with the format
         /// as " TOP [limit] " (eg. " TOP 4 ")
@@ -817,7 +843,7 @@ namespace Habanero.DB
                     {
                         DataColumn add = dt.Columns.Add();
                         string columnName = reader.GetName(i);
-                        if(!String.IsNullOrEmpty(columnName)) add.ColumnName = columnName;
+                        if (!String.IsNullOrEmpty(columnName)) add.ColumnName = columnName;
                         add.DataType = reader.GetFieldType(i);
                     }
                     do
@@ -835,14 +861,16 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error("Error in LoadDataTable:" + Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 8, true));
+                log.Error
+                    ("Error in LoadDataTable:" + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 8, true));
                 log.Error("Sql string: " + selectSql);
                 //				if (con != null && con.State != ConnectionState.Closed) {
                 //					con.Close();
                 //				}
-                throw new DatabaseReadException(
-                    "There was an error reading the database. Please contact your system administrator.",
-                    "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
+                throw new DatabaseReadException
+                    ("There was an error reading the database. Please contact your system administrator.",
+                     "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
         }
 
@@ -858,8 +886,9 @@ namespace Habanero.DB
         /// <returns></returns>
         public virtual long GetLastAutoIncrementingID(string tableName, IDbTransaction tran, IDbCommand command)
         {
-            throw new NotImplementedException("GetLastAutoIncrementingID is not implemented on DatabaseConnection of type " + _className +
-                                              " in assembly " + _assemblyName);
+            throw new NotImplementedException
+                ("GetLastAutoIncrementingID is not implemented on DatabaseConnection of type " + _className
+                 + " in assembly " + _assemblyName);
         }
     }
 }

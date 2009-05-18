@@ -86,7 +86,9 @@ namespace Habanero.BO.ClassDefinition
     	                               string relatedObjectClassName, IRelKeyDef relKeyDef,
     	                               bool keepReferenceToRelatedObject, string orderBy,
     	                               DeleteParentAction deleteParentAction)
-    		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RelationshipType.Association)
+            : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, 
+                    relKeyDef, keepReferenceToRelatedObject, deleteParentAction, 
+                    InsertParentAction.InsertRelationship, RelationshipType.Association)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
     	    _orderCriteria = OrderCriteria.FromString(orderBy);
@@ -111,11 +113,9 @@ namespace Habanero.BO.ClassDefinition
         /// enumeration for more detail.</param>
         /// <param name="relationshipType">Provides specific instructions for adding/removing a child object.</param>
         /// <param name="timeout">The timout in milliseconds. The collection will not be automatically refreshed from the DB if the timeout has nto expired</param>
-        public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName, 
-                    string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, 
-                    string orderBy, DeleteParentAction deleteParentAction, RelationshipType relationshipType, int timeout)
+        public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType, int timeout)
              : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, 
-                        keepReferenceToRelatedObject, deleteParentAction, relationshipType)
+                        keepReferenceToRelatedObject, deleteParentAction, insertParentAction, relationshipType)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
             TimeOut = timeout;

@@ -17,21 +17,14 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB4O;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
 {
-
-
     [TestFixture]
     public class TestMultipleRelationship_Association
     {
@@ -50,7 +43,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(associationRelationship.IsDirty);
@@ -71,7 +65,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship
+                (organisationTestBO, out cpCol);
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
@@ -89,7 +84,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             //---------------Assert Precondition----------------
             Assert.IsFalse(associationRelationship.IsDirty);
@@ -107,7 +103,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
@@ -132,7 +129,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
@@ -154,7 +152,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
@@ -180,7 +179,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
@@ -197,14 +197,14 @@ namespace Habanero.Test.BO.Relationship
         }
 
 
-
         [Test]
         public void Test_NotDirtyIfHasDirtyChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -230,7 +230,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship
+                (organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
@@ -247,15 +248,14 @@ namespace Habanero.Test.BO.Relationship
         }
 
 
-
-
         [Test]
         public void Test_GetDirtyChildren_Edited()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -280,7 +280,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -305,7 +306,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -332,7 +334,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(contactPerson);
@@ -354,7 +357,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -378,9 +382,10 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipCol relationships = organisationTestBO.Relationships;
+            //RelationshipCol relationships = organisationTestBO.Relationships;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship
+                (organisationTestBO, out cpCol);
 
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
@@ -405,21 +410,48 @@ namespace Habanero.Test.BO.Relationship
         /// Created child (ie a new object in the association relationship): saved when the parent is saved.
         /// </summary>
         [Test]
-        public void Test_CreatedChild_SavesWhenParentSaves()
+        public void Test_CreatedChild_WhenInsertParentAction_InsertRelationship_SavesWhenParentSaves()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
-            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            RelationshipDef relationshipDef =
+                (RelationshipDef) organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Association;
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
-
+            //---------------AssertPrecondtion------------------
+            Assert.AreEqual(InsertParentAction.InsertRelationship, relationshipDef.InsertParentAction);
             //---------------Execute Test ----------------------
             organisationTestBO.Save();
 
             //---------------Test Result -----------------------
             Assert.IsFalse(contactPerson.Status.IsDirty);
+        }
+        /// <summary>
+        /// Created child (ie a new object in the association relationship): saved when the parent is saved.
+        /// </summary>
+        [Test]
+        public void Test_CreatedChild_WhenInsertParentAction_DoNothing_DoesNotSavesWhenParentSaves()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
+            RelationshipDef relationshipDef =
+                (RelationshipDef) organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            relationshipDef.InsertParentAction = InsertParentAction.DoNothing;
+            relationshipDef.RelationshipType = RelationshipType.Association;
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
+            //---------------AssertPrecondtion------------------
+            Assert.AreEqual(InsertParentAction.DoNothing, relationshipDef.InsertParentAction);
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            //---------------Execute Test ----------------------
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+            Assert.IsTrue(contactPerson.Status.IsNew);
         }
 
         /// <summary>
@@ -431,7 +463,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
-            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            RelationshipDef relationshipDef =
+                (RelationshipDef) organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Association;
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
@@ -455,11 +488,12 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
-            RelationshipDef relationshipDef = (RelationshipDef) organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            RelationshipDef relationshipDef =
+                (RelationshipDef) organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Association;
             organisationTestBO.ContactPeople.Add(contactPerson);
             contactPerson.Surname = TestUtil.GetRandomString();
-            
+
             //---------------Assert PreConditions---------------            
             Assert.IsTrue(contactPerson.Status.IsDirty);
             Assert.IsTrue(contactPerson.Props["OrganisationID"].IsDirty);
@@ -476,15 +510,15 @@ namespace Habanero.Test.BO.Relationship
             //---------------Tear Down -------------------------          
         }
 
-      
-        
+
         [Test]
         public void Test_AddedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves_OnlyIDChanged()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
-            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            RelationshipDef relationshipDef =
+                (RelationshipDef) organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Association;
             organisationTestBO.ContactPeople.Add(contactPerson);
 
@@ -513,7 +547,8 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            RelationshipDef relationshipDef =
+                (RelationshipDef) organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Association;
             ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -544,13 +579,15 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            MultipleRelationship<ContactPersonTestBO> relationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
-            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
+            MultipleRelationship<ContactPersonTestBO> relationship =
+                organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Association;
 
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             relationship.BusinessObjectCollection.Add(contactPerson);
-            SingleRelationship<OrganisationTestBO> reverseRelationship = contactPerson.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+            SingleRelationship<OrganisationTestBO> reverseRelationship =
+                contactPerson.Relationships.GetSingle<OrganisationTestBO>("Organisation");
 
 
             TransactionCommitter tc = (TransactionCommitter) BORegistry.DataAccessor.CreateTransactionCommitter();
@@ -565,28 +602,21 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.AreEqual(1, tc.OriginalTransactions.Count);
 
-            Assert.IsInstanceOfType(typeof(TransactionalSingleRelationship_Added), tc.OriginalTransactions[0]);
-            Assert.AreSame(relationship, ((TransactionalSingleRelationship_Added)tc.OriginalTransactions[0]).Relationship);    
+            Assert.IsInstanceOfType(typeof (TransactionalSingleRelationship_Added), tc.OriginalTransactions[0]);
+            Assert.AreSame
+                (relationship, ((TransactionalSingleRelationship_Added) tc.OriginalTransactions[0]).Relationship);
         }
 
-        private static MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        private static MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship
+            (BusinessObject organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             const RelationshipType relationshipType = RelationshipType.Association;
             MultipleRelationship<ContactPersonTestBO> relationship =
                 organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
-            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
+            RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
             relationshipDef.RelationshipType = relationshipType;
             cpCol = relationship.BusinessObjectCollection;
             return relationship;
         }
     }
-
-    
-
-       
-
-
-    
-          
-
 }

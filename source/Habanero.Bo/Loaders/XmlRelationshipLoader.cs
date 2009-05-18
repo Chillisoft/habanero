@@ -32,9 +32,9 @@ namespace Habanero.BO.Loaders
     {
         private readonly string _className;
         private PropDefCol _propDefCol;
-    	private string _relatedAssemblyName;
-    	private string _relatedClassName;
-		private RelKeyDef _relKeyDef;
+        private string _relatedAssemblyName;
+        private string _relatedClassName;
+        private RelKeyDef _relKeyDef;
         private string _name;
         private string _type;
         private bool _keepReferenceToRelatedObject;
@@ -45,17 +45,19 @@ namespace Habanero.BO.Loaders
         private string _reverseRelationshipName;
         private string _typeParameter;
         private int _timeout;
+        private InsertParentAction _insertParentAction;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-		/// <param name="dtdLoader">The dtd loader</param>
-		/// <param name="defClassFactory">The factory for the definition classes</param>
-		/// <param name="className">The name of the class that has this relationship</param>
+        /// <param name="dtdLoader">The dtd loader</param>
+        /// <param name="defClassFactory">The factory for the definition classes</param>
+        /// <param name="className">The name of the class that has this relationship</param>
         public XmlRelationshipLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory, string className)
-			: base(dtdLoader, defClassFactory) {
+            : base(dtdLoader, defClassFactory)
+        {
             _className = className;
-		}
+        }
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -103,11 +105,9 @@ namespace Habanero.BO.Loaders
         {
             if (_type == "single")
             {
-                SingleRelationshipDef relationshipDef = 
-                    _defClassFactory.CreateSingleRelationshipDef(
-                    _name, _relatedAssemblyName, _relatedClassName, 
-                    _relKeyDef, _keepReferenceToRelatedObject, 
-                    _deleteParentAction, _relationshipType);
+                SingleRelationshipDef relationshipDef = _defClassFactory.CreateSingleRelationshipDef
+                    (_name, _relatedAssemblyName, _relatedClassName, _relKeyDef, _keepReferenceToRelatedObject,
+                     _deleteParentAction, _insertParentAction, _relationshipType);
                 relationshipDef.OwningBOHasForeignKey = _owningBOHasForeignKey;
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
                 relationshipDef.RelatedObjectTypeParameter = _typeParameter;
@@ -115,17 +115,15 @@ namespace Habanero.BO.Loaders
             }
             if (_type == "multiple")
             {
-                MultipleRelationshipDef relationshipDef = 
-                    _defClassFactory.CreateMultipleRelationshipDef(
-                        _name, _relatedAssemblyName, _relatedClassName, 
-                        _relKeyDef, _keepReferenceToRelatedObject, 
-                        _orderBy, _deleteParentAction, _relationshipType, _timeout);
+                MultipleRelationshipDef relationshipDef = _defClassFactory.CreateMultipleRelationshipDef
+                    (_name, _relatedAssemblyName, _relatedClassName, _relKeyDef, _keepReferenceToRelatedObject, _orderBy,
+                     _deleteParentAction, _insertParentAction, _relationshipType, _timeout);
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
                 relationshipDef.RelatedObjectTypeParameter = _typeParameter;
                 return relationshipDef;
             }
-            throw new InvalidXmlDefinitionException(
-                "There seems to be a problem with the relationship dtd as it should only allow relationships of type 'single' or 'multiple'.");
+            throw new InvalidXmlDefinitionException
+                ("There seems to be a problem with the relationship dtd as it should only allow relationships of type 'single' or 'multiple'.");
         }
 
         /// <summary>
@@ -147,7 +145,7 @@ namespace Habanero.BO.Loaders
         protected void LoadRelationshipDef()
         {
             _relatedClassName = _reader.GetAttribute("relatedClass");
-			_relatedAssemblyName = _reader.GetAttribute("relatedAssembly");
+            _relatedAssemblyName = _reader.GetAttribute("relatedAssembly");
             _name = _reader.GetAttribute("name");
             _type = _reader.GetAttribute("type");
 
@@ -155,24 +153,23 @@ namespace Habanero.BO.Loaders
 
             try
             {
-                _relationshipType =
-                    (RelationshipType)Enum.Parse(typeof (RelationshipType), relationshipTypeString);
+                _relationshipType = (RelationshipType) Enum.Parse(typeof (RelationshipType), relationshipTypeString);
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException(String.Format(
-                    "In the definition for the relationship '{0}' on class '{1}' "
-                    + "the 'relationshipType' " +
-                    "was set to an invalid value ('{2}'). The valid options are " +
-                    "Association, Aggregation and Composition.", _name, _className, relationshipTypeString), ex);
+                throw new InvalidXmlDefinitionException
+                    (String.Format
+                         ("In the definition for the relationship '{0}' on class '{1}' " + "the 'relationshipType' "
+                          + "was set to an invalid value ('{2}'). The valid options are "
+                          + "Association, Aggregation and Composition.", _name, _className, relationshipTypeString), ex);
             }
-            
+
             if (_type == null || (_type != "single" && _type != "multiple"))
             {
-                throw new InvalidXmlDefinitionException("In a 'relationship' " +
-                    "element, the 'type' attribute was not included or was given " +
-                    "an invalid value.  The 'type' refers to the type of " +
-                    "relationship and can be either 'single' or 'multiple'.");
+                throw new InvalidXmlDefinitionException
+                    ("In a 'relationship' " + "element, the 'type' attribute was not included or was given "
+                     + "an invalid value.  The 'type' refers to the type of "
+                     + "relationship and can be either 'single' or 'multiple'.");
             }
 
             _keepReferenceToRelatedObject = _reader.GetAttribute("keepReference") == "true";
@@ -185,27 +182,50 @@ namespace Habanero.BO.Loaders
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("In a 'relationship' element, " +
-                    "the 'timeout' attribute has been given " +
-                    "an invalid integer value.", ex);
+                throw new InvalidXmlDefinitionException
+                    ("In a 'relationship' element, " + "the 'timeout' attribute has been given "
+                     + "an invalid integer value.", ex);
             }
-            
+
 
             _orderBy = _reader.GetAttribute("orderBy");
 
             try
             {
                 _deleteParentAction =
-                    (DeleteParentAction)
-                    Enum.Parse(typeof (DeleteParentAction), _reader.GetAttribute("deleteAction"));
+                    (DeleteParentAction) Enum.Parse(typeof (DeleteParentAction), _reader.GetAttribute("deleteAction"));
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("In a 'relationship' " +
-                    "element, the 'deleteAction' attribute has been given " +
-                    "an invalid value. The available options are " +
-                    "DeleteRelated, DereferenceRelated and " +
-                    "Prevent.", ex);
+                throw new InvalidXmlDefinitionException
+                    ("In a 'relationship' " + "element, the 'deleteAction' attribute has been given "
+                     + "an invalid value. The available options are " + "DeleteRelated, DereferenceRelated and "
+                     + "Prevent.", ex);
+            }
+            if (_relationshipType == RelationshipType.Association)
+            {
+                try
+                {
+                    string attribute = _reader.GetAttribute("insertAction");
+                    if (string.IsNullOrEmpty(attribute))
+                    {
+                        attribute = "InsertRelationship";
+                    }
+                    _insertParentAction =
+                        (InsertParentAction)
+                        Enum.Parse(typeof (InsertParentAction), attribute);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidXmlDefinitionException
+                        ("In a 'relationship' " + "element, the 'deleteAction' attribute has been given "
+                         + "an invalid value. The available options are " + "DeleteRelated, DereferenceRelated and "
+                         + "Prevent.", ex);
+                }
+            }
+            else
+            {
+                _insertParentAction = InsertParentAction.InsertRelationship;
             }
         }
 
@@ -215,34 +235,35 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadRelKeyDef()
         {
-			_relKeyDef = _defClassFactory.CreateRelKeyDef();
+            _relKeyDef = _defClassFactory.CreateRelKeyDef();
             while (_reader.Name == "relatedProperty")
             {
                 string propName = _reader.GetAttribute("property");
                 string relPropName = _reader.GetAttribute("relatedProperty");
                 if (string.IsNullOrEmpty(propName))
                 {
-                    throw new InvalidXmlDefinitionException("A 'relatedProperty' element " +
-                        "is missing the 'property' attribute, which specifies the " +
-                        "property in this class to which the " +
-                        "relationship will link.");
+                    throw new InvalidXmlDefinitionException
+                        ("A 'relatedProperty' element " + "is missing the 'property' attribute, which specifies the "
+                         + "property in this class to which the " + "relationship will link.");
                 }
                 if (string.IsNullOrEmpty(relPropName))
                 {
-                    throw new InvalidXmlDefinitionException("A 'relatedProperty' element " +
-                        "is missing the 'relatedProperty' attribute, which specifies the " +
-                        "property in the related class to which the " + 
-                        "relationship will link.");
+                    throw new InvalidXmlDefinitionException
+                        ("A 'relatedProperty' element "
+                         + "is missing the 'relatedProperty' attribute, which specifies the "
+                         + "property in the related class to which the " + "relationship will link.");
                 }
                 if (!_propDefCol.Contains(propName))
                 {
-                    throw new InvalidXmlDefinitionException(string.Format("The property '{0}' defined in the "
-                        + "'relatedProperty' element " +
-                        "in its 'Property' attribute, which specifies the " +
-                        "property in the class '{1}' from which the " +
-                        "relationship '{2}' will link is not defined in the class '{1}'.", propName, _className ,_name));
+                    throw new InvalidXmlDefinitionException
+                        (string.Format
+                             ("The property '{0}' defined in the " + "'relatedProperty' element "
+                              + "in its 'Property' attribute, which specifies the "
+                              + "property in the class '{1}' from which the "
+                              + "relationship '{2}' will link is not defined in the class '{1}'.", propName, _className,
+                              _name));
                 }
-				_relKeyDef.Add(_defClassFactory.CreateRelPropDef(_propDefCol[propName], relPropName));
+                _relKeyDef.Add(_defClassFactory.CreateRelPropDef(_propDefCol[propName], relPropName));
                 ReadAndIgnoreEndTag();
             }
         }

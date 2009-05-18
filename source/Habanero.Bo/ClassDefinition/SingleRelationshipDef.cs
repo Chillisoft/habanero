@@ -61,11 +61,10 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="deleteParentAction"></param>
         public SingleRelationshipDef
             (string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName,
-             RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
+             IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
             : this(
                 relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef,
-                keepReferenceToRelatedObject, deleteParentAction, RelationshipType.Association
-                )
+                keepReferenceToRelatedObject, deleteParentAction, InsertParentAction.InsertRelationship, RelationshipType.Association)
         {
         }
 
@@ -78,16 +77,12 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="relKeyDef"></param>
         ///<param name="keepReferenceToRelatedObject"></param>
         ///<param name="deleteParentAction"></param>
+        ///<param name="insertParentAction"><see cref="InsertParentAction"/></param>
         ///<param name="relationshipType"></param>
-        public SingleRelationshipDef (  string relationshipName, 
-                                        string relatedObjectAssemblyName, 
-                                        string relatedObjectClassName,
-                                        IRelKeyDef relKeyDef, 
-                                        bool keepReferenceToRelatedObject, 
-                                        DeleteParentAction deleteParentAction, RelationshipType relationshipType)
+        public SingleRelationshipDef (string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType)
             : base(
                 relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef,
-                keepReferenceToRelatedObject, deleteParentAction, relationshipType)
+                keepReferenceToRelatedObject, deleteParentAction, insertParentAction, relationshipType)
         {
             OwningBOHasForeignKey = true;
         }

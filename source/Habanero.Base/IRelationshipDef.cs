@@ -36,6 +36,26 @@ namespace Habanero.Base
         /// <summary>Don't perform any delete related activities on the businessobjects in this relationship</summary>
         DoNothing = 4
     }
+
+    /// <summary>
+    /// An enumeration that gives some instructions or limitations in the
+    /// case where a parent is saved and the related objects are new.
+    /// For Composition and Aggregation this is always true.
+    /// This control is only required for an association relationship (<see cref="RelationshipType"/>.
+    /// In this case there are two options 
+    /// <li>1) If the owing BO is saved and there are new 
+    /// objects related to it via this relationship then these new related objects must be inserted.</li>
+    /// <li>2) If the owning BO is saved and there are new objects related to it via this relationship then
+    ///   these new objects must not be inserted. This is required where the Related Business Object has other Foreign keys
+    ///   and the inserted business object may result in Referential integrity violations in a relational database.</li>
+    /// </summary>
+    public enum InsertParentAction
+    {
+        /// <summary>Inserts the RelatedObject related objects if required when the parent is saved</summary>
+        InsertRelationship = 1,
+        /// <summary>Don't perform any insert related activities on the businessobjects in this relationship</summary>
+        DoNothing = 4
+    }
     /// <summary>
     /// An enumeration that provides instructions or limitations on the child business object being added/removed 
     /// from the relationship as well as differentiating when the owning business object is viewed as dirty.
@@ -145,9 +165,15 @@ namespace Habanero.Base
 
         /// <summary>
         /// Provides specific instructions with regards to deleting a parent
-        /// object.  See the DeleteParentAction enumeration for more detail.
+        /// object.  See the <see cref="DeleteParentAction"/> enumeration for more detail.
         /// </summary>
         DeleteParentAction DeleteParentAction { get; }
+
+        /// <summary>
+        /// Provides specific instructions with regards to inserting a new related
+        /// Business object.  See the <see cref="InsertParentAction"/> enumeration for more detail.
+        /// </summary>
+        InsertParentAction InsertParentAction { get; }
 
         ///<summary>
         /// The order by clause that the related object will be sorted by.
@@ -165,6 +191,7 @@ namespace Habanero.Base
         /// The name of the reverse relationship.
         ///</summary>
         string ReverseRelationshipName { get; set; }
+
         ///<summary>
         /// Returns true where the owning business object has the foreign key for this relationship false otherwise.
         /// This is used to differentiate between the two sides of the relationship.

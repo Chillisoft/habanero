@@ -144,6 +144,7 @@ namespace Habanero.Test.Structure
                     {
                         length = propRule.MaxLength;
                     }
+                    if (length <= 0) length = 50;
                     fieldType = "varchar(" + length + ")";
                     break;
                 case "GUID":
