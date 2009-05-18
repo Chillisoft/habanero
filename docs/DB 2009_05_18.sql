@@ -15,11 +15,11 @@
 
 
 --
--- Create schema habanero_test_trunk
+-- Create schema habanero_branch_lgmis
 --
 
-CREATE DATABASE IF NOT EXISTS habanero_test_trunk;
-USE habanero_test_trunk;
+CREATE DATABASE IF NOT EXISTS habanero_branch_lgmis;
+USE habanero_branch_lgmis;
 
 --
 -- Definition of table `another_number_generator`
@@ -85,7 +85,7 @@ CREATE TABLE `car_table` (
 
 /*!40000 ALTER TABLE `car_table` DISABLE KEYS */;
 INSERT INTO `car_table` (`Car_ID`,`Owner_Id`,`Car_Reg_No`,`Driver_FK1`,`Driver_FK2`) VALUES 
- ('{5517A3B8-9D52-4489-98E5-25124F4FCD2A}',NULL,'NP32459',NULL,NULL);
+ ('{94C6C82E-CFAB-44B3-BAC1-548DD92CED5A}',NULL,'NP32459',NULL,NULL);
 /*!40000 ALTER TABLE `car_table` ENABLE KEYS */;
 
 
@@ -222,14 +222,14 @@ CREATE TABLE `contactpersoncompositekey` (
 
 /*!40000 ALTER TABLE `contactpersoncompositekey` DISABLE KEYS */;
 INSERT INTO `contactpersoncompositekey` (`PK1_Prop1`,`PK1_Prop2`,`Surname`,`FirstName`,`DateOfBirth`,`DateLastUpdated`,`UserLastUpdated`,`MachineLastUpdated`,`VersionNumber`) VALUES 
- ('{856E17C0-87C7-47E5-A8F8-CF153F1B31C9}','{9A5029B0-6061-4841-A295-E63F43686372}','Surname','NewFirstName','1969-01-29 00:00:00','2009-05-18 11:36:24',NULL,NULL,1),
- ('{EE3504D5-C7C2-4107-9051-26D342EA3F11}','{45089EF3-8D3D-4F08-B9B8-9A62DD38D5D3}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 11:36:24',NULL,NULL,1),
- ('7b3233a9-d04f-4f97-8578-013b2321f32f1','b6fd97c7-4b05-4dc8-b649-f9f2909b487b','Vincent',NULL,NULL,'2009-05-18 11:36:24',NULL,NULL,1),
- ('7b3233a9-d04f-4f97-8578-013b2321f32f','b6fd97c7-4b05-4dc8-b649-f9f2909b487b','Vincent 2',NULL,NULL,'2009-05-18 11:36:24',NULL,NULL,1),
- ('{B0196F4E-36D3-4E5F-8BEC-83E1F88E2F31}','{03DA8BB8-1232-4C8F-A908-5081DF13D7B8}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 11:36:24',NULL,NULL,1),
- ('{07CB4C85-22C3-4810-80D4-336CBE653B58}','{A26C51BB-AA56-4F92-9A55-D6D303A8C2AF}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 11:36:24',NULL,NULL,1),
- ('{280D78CE-7ECB-4CEE-8F5F-3F3B47ABEFC1}','{3F25202C-D7E0-46A1-8904-618AD3448DFC}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 11:36:24',NULL,NULL,1),
- ('{A35488B0-3EEA-4628-9684-23B21F667D1F}','{7AB72E6E-70BC-4300-BC86-227C737E8552}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 11:36:24',NULL,NULL,1);
+ ('{5CB36B9B-12BF-428C-BAEE-B9F978CEBE88}','{6737E110-9FFA-4CF3-997C-47876AA25ED9}','Surname','NewFirstName','1969-01-29 00:00:00','2009-05-18 12:07:35',NULL,NULL,1),
+ ('{0FF4BCF8-CE39-44E3-A698-883E37A0BDA9}','{5EA6551C-1FF4-43A6-A42F-78E34E1430D0}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 12:07:35',NULL,NULL,1),
+ ('c80b0762-a74d-4995-bbb7-f9f4651225831','978422a5-6dff-46ba-9c04-67513089bfb7','Vincent',NULL,NULL,'2009-05-18 12:07:35',NULL,NULL,1),
+ ('c80b0762-a74d-4995-bbb7-f9f465122583','978422a5-6dff-46ba-9c04-67513089bfb7','Vincent 2',NULL,NULL,'2009-05-18 12:07:35',NULL,NULL,1),
+ ('{016B5023-7C6A-4341-8A69-1E28A1D30D0C}','{53CF2826-8D4B-413F-A7E2-FA40AE66019A}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 12:07:35',NULL,NULL,1),
+ ('{5D2EC23A-FDEB-464D-B0BE-1ABD67FEE9FE}','{7413AE46-6AFF-4A28-AA7F-8BA4C7B49571}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 12:07:35',NULL,NULL,1),
+ ('{0BECF874-BA01-47AE-B54C-66DB169EFB5B}','{34E311D5-F337-4767-88B7-E19FB180E511}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 12:07:35',NULL,NULL,1),
+ ('{220E0EED-DB4B-4E25-8035-C4A014557ED1}','{831DF393-A066-4BB4-9308-B7D1636BE8D3}','Vincent','Brad','1980-01-22 00:00:00','2009-05-18 12:07:35',NULL,NULL,1);
 /*!40000 ALTER TABLE `contactpersoncompositekey` ENABLE KEYS */;
 
 
@@ -298,6 +298,7 @@ CREATE TABLE `filledcircle_concrete` (
 
 /*!40000 ALTER TABLE `filledcircle_concrete` DISABLE KEYS */;
 INSERT INTO `filledcircle_concrete` (`FilledCircleID_field`,`Colour`,`ShapeID_field`,`CircleID_field`,`Radius`,`ShapeName`) VALUES 
+ ('{0147136E-C327-4C99-AC03-8F7EDD99D78D}',1,NULL,NULL,10,'1908ae0a-6013-428e-9340-e240b32a945c'),
  ('{027F697F-BE53-4219-96A5-AD9E4C2FF948}',1,NULL,NULL,10,'ac6aedd0-8a6f-49d4-bb61-27980bc925d1'),
  ('{0606D84A-2FD4-41C9-A2A8-C497EC46F4C3}',1,NULL,NULL,10,'ab800551-a58f-4d56-a9ba-8159e3a7c7c0'),
  ('{07927C3C-7D0F-4D18-B707-0932280AE1DF}',1,NULL,NULL,10,'a1ef6415-ed8c-447c-84c8-ec1063dd59bc'),
@@ -442,6 +443,7 @@ INSERT INTO `filledcircle_concrete` (`FilledCircleID_field`,`Colour`,`ShapeID_fi
  ('{84CF3206-D73E-4326-9EBD-D413599A6439}',1,NULL,NULL,10,'c14027df-a40f-45db-8fca-4c4ef1e90bc7'),
  ('{85C62466-5A5D-4720-B039-AB6604221DA1}',1,NULL,NULL,10,'906ff9a0-4e71-4f51-be70-11da6e7c3fc6'),
  ('{8613278A-49C3-4C49-AF2D-81D6E2675294}',1,NULL,NULL,10,'9f08bb1f-e8cd-4ddc-b49f-36745afce1f3'),
+ ('{873B3831-4337-4119-8FD2-E57B8FA8D833}',1,NULL,NULL,10,'a7e3827b-e030-49ba-89ae-c71db5401654'),
  ('{87818BC4-A62C-4E35-B5E7-9C54E27C23BE}',1,NULL,NULL,10,'611b66fb-b3fa-4128-ab09-0d2af8cbd024'),
  ('{87AA6CA7-9B02-4B5D-8C04-2EEA214E31BD}',1,NULL,NULL,10,'209a381e-eb9f-479f-ab45-1b11ba22a69a'),
  ('{88BDE9DE-6CEA-4E7C-A60A-4A04F03F11AB}',1,NULL,NULL,10,'25ff0ccc-ad89-4569-87b9-4299407819b1'),
@@ -458,6 +460,7 @@ INSERT INTO `filledcircle_concrete` (`FilledCircleID_field`,`Colour`,`ShapeID_fi
  ('{90891A0F-B486-4E57-A65D-F153524EA488}',1,NULL,NULL,10,'fd8e9a1a-b68b-4dc3-aee2-f39be6e3d72f'),
  ('{917A0A86-DEE6-4C18-9B3F-F122A2CC34FA}',1,NULL,NULL,10,'d054b47b-4c95-417c-901f-db03e23ba36b'),
  ('{929FAF33-95C0-42DF-88AA-E5C8E996C719}',1,NULL,NULL,10,'863406ff-06c7-4cc0-9dce-eb07794c43a5'),
+ ('{92A0A2F1-4D97-4C32-8011-641A262933DA}',1,NULL,NULL,10,'a6d22a69-08fe-4721-86a3-6df04ccf5042'),
  ('{93ED6AA8-4DDC-436A-917F-9A7D5D7C5EAB}',1,NULL,NULL,10,'d65c292b-57c4-42ca-a9bc-5c478bb74c20'),
  ('{945DA8DA-3667-4BF9-8638-4D1023FB6C08}',1,NULL,NULL,10,'dcbaa2e7-4936-4c22-a95f-5d386bab2906'),
  ('{967B29E9-7371-4071-82AA-010AD7BFB645}',1,NULL,NULL,10,'745275c4-7a2d-4514-881a-e03855f98ca7'),
@@ -558,6 +561,7 @@ INSERT INTO `filledcircle_concrete` (`FilledCircleID_field`,`Colour`,`ShapeID_fi
  ('{E8A907FC-0785-4F8A-A682-FED35A44522D}',1,NULL,NULL,10,'7018cd81-3b37-4747-affb-80a1bc58ec47'),
  ('{E922A7A7-5505-4343-9E55-196F19676099}',1,NULL,NULL,10,'d636727b-5317-4b39-8c7b-01ceffa9f5a2'),
  ('{E9CF5F4B-4941-495F-8F94-70756D0D7143}',1,NULL,NULL,10,'ad4ed8b5-4ede-416f-8473-ccd71910f4b9'),
+ ('{EA433B93-9A98-4F70-BFFC-530FC14BE900}',1,NULL,NULL,10,'348d9c71-b874-4cba-a875-2c8ef6988006'),
  ('{EA4568D1-72BA-4813-8D62-80A4F987216B}',1,NULL,NULL,10,'0667ff86-71ec-4f5e-a2ff-f3bdae4aadf6'),
  ('{EAB3061A-3F84-49E6-99E9-AE716CA00A5E}',1,NULL,NULL,10,'517480ec-778a-43e4-aeed-631343e74114'),
  ('{EC02BB9D-0BC2-443B-BD8E-2F7D405FE878}',1,NULL,NULL,10,'1dce2685-409c-4cac-9a4f-bc076be5fc00'),
@@ -1284,7 +1288,15 @@ INSERT INTO `mockbo` (`MockBOID`,`MockBOProp1`,`MockBOProp2`) VALUES
  ('{01E14503-5931-4D95-B475-1B30F9B2EB68}',NULL,NULL),
  ('{ABA7EC8C-CC82-443E-80D8-659880BE9A27}','{04E88017-4C08-459A-A14F-FC2D32434D23}',NULL),
  ('{5355E0CA-98C6-4B1A-92E4-D03C1E87DDAD}','{1EB32644-1A04-4637-A00C-2CD93496F5D3}',NULL),
- ('{CB036AB4-81B6-4E5C-9527-C482B02B7081}',NULL,NULL);
+ ('{CB036AB4-81B6-4E5C-9527-C482B02B7081}',NULL,NULL),
+ ('{A18A501B-4C4C-4638-9FB4-AF0D3CD9FCBD}',NULL,NULL),
+ ('{379CD8AC-38AF-42B3-86E2-B88D8B4508D4}','{F17D427D-F124-4E6B-98CA-B01A52374369}',NULL),
+ ('{3B0A781F-4895-417D-BA3A-CF8513DD0EAB}','{B4260C48-09AB-427D-88C6-BB0034B3BBE5}',NULL),
+ ('{788255FD-2B36-4FF3-94BE-83EB4340D9F5}',NULL,NULL),
+ ('{D11716AB-3235-4804-ACB6-813C90CBA842}',NULL,NULL),
+ ('{D5CDFBE5-C0D7-4DC7-9C48-8B14889A9A69}','{34C7F4DA-C970-4633-B65F-A41944756C50}',NULL),
+ ('{E61EA1BE-F6F8-4005-821F-8051D8E91D94}','{D8E6FE7D-2DBD-44B0-AC26-68C83F304C46}',NULL),
+ ('{AAFDAA2D-7E78-4F06-8C14-EA76A7AFC51A}',NULL,NULL);
 /*!40000 ALTER TABLE `mockbo` ENABLE KEYS */;
 
 
@@ -1307,10 +1319,10 @@ CREATE TABLE `mybo` (
 
 /*!40000 ALTER TABLE `mybo` DISABLE KEYS */;
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`,`ShapeID`) VALUES 
- ('{0BE4D900-E66B-4F44-8F8B-1BB7A27E3B91}',NULL,NULL,'{1E596C1E-7A30-471D-AE03-3CE6367F7E75}'),
- ('{48B3D33E-5D5D-4879-A015-BAC778BA7692}',NULL,NULL,NULL),
- ('{63DAFF8E-F4B5-49D9-BC01-FA912448DD4D}',NULL,NULL,NULL),
- ('{968CA9B2-922D-4B54-808C-1F403C7D907C}',NULL,NULL,NULL);
+ ('{20AD7C3D-228E-4289-9E19-DC134C8196B9}',NULL,NULL,NULL),
+ ('{4C4C9BDE-2F5F-4F42-9CBB-36D4D2D166AA}',NULL,NULL,NULL),
+ ('{85A5D0F9-CCB1-4927-A0CC-43C83C7865D0}',NULL,NULL,'{8C01D967-7DFF-4C7F-A7EB-0C367B702DF5}'),
+ ('{C64962F7-F5EA-4DA4-8A4A-8BA75DE98735}',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `mybo` ENABLE KEYS */;
 
 
@@ -1336,7 +1348,7 @@ CREATE TABLE `numbergenerator` (
 
 /*!40000 ALTER TABLE `numbergenerator` DISABLE KEYS */;
 INSERT INTO `numbergenerator` (`SequenceNumber`,`NumberType`,`UserLocked`,`Locked`,`MachineLocked`,`OperatingSystemUserLocked`,`DateTimeLocked`) VALUES 
- (1,'tmp','CHILLI\\Hagashen',0,'BSOD','CHILLI\\Hagashen','2009-05-18 11:33:31');
+ (1,'tmp','CHILLI\\Hagashen',0,'BSOD','CHILLI\\Hagashen','2009-05-18 12:04:42');
 /*!40000 ALTER TABLE `numbergenerator` ENABLE KEYS */;
 
 
@@ -1357,8 +1369,8 @@ CREATE TABLE `organisation` (
 
 /*!40000 ALTER TABLE `organisation` DISABLE KEYS */;
 INSERT INTO `organisation` (`OrganisationID`,`Name`) VALUES 
- ('{32B69EA3-E14F-4CD9-A0FC-B6BF49D1594D}',NULL),
- ('{5B29ADEE-4F4F-422A-8C7A-B259CDB64FB1}',NULL);
+ ('{5654F75B-FA82-41BC-B8CF-46AEDA725375}',NULL),
+ ('{88E6C20A-D437-4557-8334-A2E5D81BC9C3}',NULL);
 /*!40000 ALTER TABLE `organisation` ENABLE KEYS */;
 
 
@@ -1518,6 +1530,7 @@ INSERT INTO `table_class_part` (`field_Part_ID`,`field_Model_No`,`field_Part_Typ
  ('{13AEDD35-FC93-4A89-8967-03543B005EF8}','65f5ebccc0bd41ed93b46e218f7c1db9',NULL),
  ('{184F7770-3535-493D-B2F9-A3AA8741D358}','fadb086404794d478e8b5a82d1ccbf87',NULL),
  ('{19D2F331-1F11-4017-9E92-53681CCD8C4C}','9e1bd1bfe1d6440da1a82fad83fcee8f',NULL),
+ ('{1BE30C4D-24D5-413D-A889-766D80814906}','a4525f3052804dc3bc6e522b46205162',NULL),
  ('{1ECA1770-3318-4EB9-A0CC-3947E52A6F21}','87214e0a2ad44926899b6f7ccbdeb6b1',NULL),
  ('{2078DC38-A3FA-4673-B78D-E5322E740F0F}','df756654553b47ee848433fba7ecb477',NULL),
  ('{215A4B76-6BC4-4156-BE9B-D5B45D22366A}','0de719fcf37748e79520b1fd3caaec68',NULL),
@@ -1586,6 +1599,7 @@ INSERT INTO `table_class_part` (`field_Part_ID`,`field_Model_No`,`field_Part_Typ
  ('{9ED73FC1-606B-4642-8B28-F5519D8448CA}','7840c8aa42424774be43e91851c4ee20',NULL),
  ('{9EE8EF4B-AEE6-4465-8BD9-F35577603193}','a1e8f155703b4c7d9c680e041f7451ac',NULL),
  ('{A03686F5-F7BD-4728-9217-031F29AE67EA}','2a74b2735a42489e8e0aead0ffb782ea',NULL),
+ ('{A0B8A9DD-F58D-4C4B-9937-D5E7BE7EAF03}','7f59b621e48847f6bd7afa6dcb12dc5d',NULL),
  ('{A1819B36-537D-4653-B8F9-3E586F22A620}','39b391712c9d42fb95962a96ef80052c',NULL),
  ('{A28E9C38-A1D7-474D-ADC1-CC01E8FACC4E}','dd77be0811da408fa9370af4b6207e57',NULL),
  ('{A2C0B5CF-0DDD-4A61-AA70-8D71ED1D782D}','c435308ab4ae45c685256587c92e86f3',NULL),
@@ -1594,6 +1608,7 @@ INSERT INTO `table_class_part` (`field_Part_ID`,`field_Model_No`,`field_Part_Typ
  ('{A5207D8E-EE76-40E7-8650-7689154A4D8A}','d161a2bdb8514bf4a99ec39ae73f981f',NULL),
  ('{A5D73334-8B96-4A2A-AFB9-0DFEDA105A05}','ec4b289780a140f2af25c908bc1030cf',NULL),
  ('{A75E319E-8F93-4CCC-85DF-04F24CD2C926}','4976b19595764a16a5fcd35eac4537ee',NULL),
+ ('{AC088A6E-C19D-4C2B-AADF-FB9477F05361}','60fc7297782b498ba9705fab70e3378c',NULL),
  ('{ACEA759B-567D-41D6-A1E5-9079128D249E}','cb5f2c49cd444e94a9411f7301fba7bc',NULL),
  ('{B18CA642-FBEC-4252-9830-FFB72198801B}','63f2801248f84185b2a33f1454db18bb',NULL),
  ('{B4FA4CEE-C583-4D33-B579-ED708724B3E9}','3ec24e666b0144f289ef915902dc1a1c',NULL),
@@ -1612,6 +1627,7 @@ INSERT INTO `table_class_part` (`field_Part_ID`,`field_Model_No`,`field_Part_Typ
  ('{D07FDA55-29C7-43D6-B80E-6F428886A4CC}','4efffd5e25b44aeebdcfa5c508e50fba',NULL),
  ('{D12CD9E2-783C-4BD6-A2E7-3768EB56B5CC}','52367a3be7ce4f8dbed52c13b7154bae',NULL),
  ('{D37F69F7-161E-414C-8DAF-CA94EF5068D2}','c25323406dd1414da2eca9ca9c8f2627',NULL),
+ ('{D4BC5DD3-15FA-4FD2-9EE8-20AE9B5F0690}','4bae6d04a42348d09b96ca4ed5fc1d97',NULL),
  ('{D893A9A0-C44E-4D96-806D-9A0B538F4B2A}','4a18120e0f4043b381b6c4b2bebe269e',NULL),
  ('{DD94F991-7F1D-495A-9B2A-743736A21F6C}','90220f30dc05427e956d89304bad8e87',NULL),
  ('{DF41F131-FFC5-4EE7-A074-50B5518EECBE}','75cbab3fd17c4d209b845e114c9f7e28',NULL),
@@ -1695,7 +1711,7 @@ CREATE TABLE `table_engine` (
 
 /*!40000 ALTER TABLE `table_engine` DISABLE KEYS */;
 INSERT INTO `table_engine` (`ENGINE_ID`,`CAR_ID`,`ENGINE_NO`) VALUES 
- ('{3670768C-42C0-476B-BF5A-61B992DCF405}','{5517A3B8-9D52-4489-98E5-25124F4FCD2A}','NO111');
+ ('{AA586581-0253-4854-8D47-FB239D3928CA}','{94C6C82E-CFAB-44B3-BAC1-548DD92CED5A}','NO111');
 /*!40000 ALTER TABLE `table_engine` ENABLE KEYS */;
 
 
@@ -1725,6 +1741,7 @@ INSERT INTO `table_entity` (`field_Entity_ID`,`field_Entity_Type`) VALUES
  ('{13AEDD35-FC93-4A89-8967-03543B005EF8}','8cbb7d1039864cefaff295949205cb71'),
  ('{184F7770-3535-493D-B2F9-A3AA8741D358}',NULL),
  ('{19D2F331-1F11-4017-9E92-53681CCD8C4C}','915edd010b0d46ecb9a03790ef79bc05'),
+ ('{1BE30C4D-24D5-413D-A889-766D80814906}','b7fe83d60f0e4112b23087db7b06ff89'),
  ('{1ECA1770-3318-4EB9-A0CC-3947E52A6F21}','fb8b36ce54bf42bd90fb7e0d716f668b'),
  ('{2078DC38-A3FA-4673-B78D-E5322E740F0F}',NULL),
  ('{215A4B76-6BC4-4156-BE9B-D5B45D22366A}',NULL),
@@ -1793,6 +1810,7 @@ INSERT INTO `table_entity` (`field_Entity_ID`,`field_Entity_Type`) VALUES
  ('{9ED73FC1-606B-4642-8B28-F5519D8448CA}','3df526ca17ce49b39011aae1d0f3bc75'),
  ('{9EE8EF4B-AEE6-4465-8BD9-F35577603193}',NULL),
  ('{A03686F5-F7BD-4728-9217-031F29AE67EA}',NULL),
+ ('{A0B8A9DD-F58D-4C4B-9937-D5E7BE7EAF03}','615137b50b834386a50dffa1f5935ee6'),
  ('{A1819B36-537D-4653-B8F9-3E586F22A620}','f9d865ad45d14411b70a3b923465ef75'),
  ('{A28E9C38-A1D7-474D-ADC1-CC01E8FACC4E}',NULL),
  ('{A2C0B5CF-0DDD-4A61-AA70-8D71ED1D782D}','c48b5004c8574ab6a283ae9a16bd35e3'),
@@ -1801,6 +1819,7 @@ INSERT INTO `table_entity` (`field_Entity_ID`,`field_Entity_Type`) VALUES
  ('{A5207D8E-EE76-40E7-8650-7689154A4D8A}',NULL),
  ('{A5D73334-8B96-4A2A-AFB9-0DFEDA105A05}',NULL),
  ('{A75E319E-8F93-4CCC-85DF-04F24CD2C926}','a005905385fb47c6b091120426bee157'),
+ ('{AC088A6E-C19D-4C2B-AADF-FB9477F05361}',NULL),
  ('{ACEA759B-567D-41D6-A1E5-9079128D249E}',NULL),
  ('{B18CA642-FBEC-4252-9830-FFB72198801B}',NULL),
  ('{B4FA4CEE-C583-4D33-B579-ED708724B3E9}','37b169d667e543129035d6a484ac4cff'),
@@ -1819,6 +1838,7 @@ INSERT INTO `table_entity` (`field_Entity_ID`,`field_Entity_Type`) VALUES
  ('{D07FDA55-29C7-43D6-B80E-6F428886A4CC}',NULL),
  ('{D12CD9E2-783C-4BD6-A2E7-3768EB56B5CC}',NULL),
  ('{D37F69F7-161E-414C-8DAF-CA94EF5068D2}','2c17b2af392843148df7a1ee46857f7e'),
+ ('{D4BC5DD3-15FA-4FD2-9EE8-20AE9B5F0690}',NULL),
  ('{D893A9A0-C44E-4D96-806D-9A0B538F4B2A}','8e416adc891a4d0bb1898b9eca96894f'),
  ('{DD94F991-7F1D-495A-9B2A-743736A21F6C}','db8c2b40ec2d43a399fc8f499e18095a'),
  ('{DF41F131-FFC5-4EE7-A074-50B5518EECBE}','9a82f9bfe121474687aff1da5e9965f4'),
@@ -1873,7 +1893,7 @@ CREATE TABLE `testautoinc` (
   `testautoincid` int(10) unsigned NOT NULL auto_increment,
   `testfield` varchar(45) NOT NULL default '',
   PRIMARY KEY  (`testautoincid`)
-) ENGINE=InnoDB AUTO_INCREMENT=846 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=856 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `testautoinc`
@@ -2261,7 +2281,17 @@ INSERT INTO `testautoinc` (`testautoincid`,`testfield`) VALUES
  (842,'testing'),
  (843,'testing'),
  (844,'testing'),
- (845,'testing 123');
+ (845,'testing 123'),
+ (846,'testing 123'),
+ (847,'testing'),
+ (848,'testing'),
+ (849,'testing'),
+ (850,'testing 123'),
+ (851,'testing 123'),
+ (852,'testing'),
+ (853,'testing'),
+ (854,'testing'),
+ (855,'testing 123');
 /*!40000 ALTER TABLE `testautoinc` ENABLE KEYS */;
 
 
@@ -2303,7 +2333,7 @@ CREATE TABLE `transactionlog` (
   `DirtyXML` mediumtext,
   `BusinessObjectToString` varchar(255) default NULL,
   PRIMARY KEY  (`TransactionSequenceNo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2563 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2587 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `transactionlog`
@@ -2311,13 +2341,13 @@ CREATE TABLE `transactionlog` (
 
 /*!40000 ALTER TABLE `transactionlog` DISABLE KEYS */;
 INSERT INTO `transactionlog` (`TransactionSequenceNo`,`DateTimeUpdated`,`WindowsUser`,`LogonUser`,`MachineName`,`BusinessObjectTypeName`,`CRUDAction`,`DirtyXML`,`BusinessObjectToString`) VALUES 
- (2556,'2009-05-18 11:32:27','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Created','<ContactPersonTransactionLogging ID=\'7f197c82-d87a-4d09-9a09-56ea5e611ed5\'><Properties><Surname><PreviousValue></PreviousValue><NewValue>ce432301-1b74-487f-a9d7-95de52de070b</NewValue></Surname></Properties></ContactPersonTransactionLogging>','ce432301-1b74-487f-a9d7-95de52de070b'),
- (2557,'2009-05-18 11:32:27','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'7f197c82-d87a-4d09-9a09-56ea5e611ed5\'><Properties><Surname><PreviousValue>ce432301-1b74-487f-a9d7-95de52de070b</PreviousValue><NewValue>74b87ff8-21b4-460e-a008-5f85059d6b82</NewValue></Surname></Properties></ContactPersonTransactionLogging>','74b87ff8-21b4-460e-a008-5f85059d6b82'),
- (2558,'2009-05-18 11:32:27','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'7f197c82-d87a-4d09-9a09-56ea5e611ed5\'><Properties><Surname><PreviousValue>74b87ff8-21b4-460e-a008-5f85059d6b82</PreviousValue><NewValue>670fbcfd-abb4-4a4e-8c62-bfb1b255b102</NewValue></Surname></Properties></ContactPersonTransactionLogging>','670fbcfd-abb4-4a4e-8c62-bfb1b255b102'),
- (2559,'2009-05-18 11:32:27','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'7f197c82-d87a-4d09-9a09-56ea5e611ed5\'><Properties><Surname><PreviousValue>670fbcfd-abb4-4a4e-8c62-bfb1b255b102</PreviousValue><NewValue>0378dfa7-61b3-42fc-bc26-c240f561bc59</NewValue></Surname></Properties></ContactPersonTransactionLogging>','0378dfa7-61b3-42fc-bc26-c240f561bc59'),
- (2560,'2009-05-18 11:32:27','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'7f197c82-d87a-4d09-9a09-56ea5e611ed5\'><Properties><Surname><PreviousValue>0378dfa7-61b3-42fc-bc26-c240f561bc59</PreviousValue><NewValue>b1b0cea4-ce15-489d-8c9c-fb64c23c7abb</NewValue></Surname></Properties></ContactPersonTransactionLogging>','b1b0cea4-ce15-489d-8c9c-fb64c23c7abb'),
- (2561,'2009-05-18 11:32:27','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Deleted','<ContactPersonTransactionLogging ID=\'7f197c82-d87a-4d09-9a09-56ea5e611ed5\'><Properties></Properties></ContactPersonTransactionLogging>','b1b0cea4-ce15-489d-8c9c-fb64c23c7abb'),
- (2562,'2009-05-18 11:32:27','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Created','<ContactPersonTransactionLogging ID=\'7ed40f47-45c3-4dcd-b61b-265974e5e10a\'><Properties><Surname><PreviousValue></PreviousValue><NewValue>My Surname 1</NewValue></Surname></Properties></ContactPersonTransactionLogging>','My Surname 1');
+ (2580,'2009-05-18 12:03:35','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Created','<ContactPersonTransactionLogging ID=\'bb3aeed8-d2fd-4430-a74c-2230e8a0a0c3\'><Properties><Surname><PreviousValue></PreviousValue><NewValue>4796ad76-bdfe-4e27-84fd-b7b03116ee31</NewValue></Surname></Properties></ContactPersonTransactionLogging>','4796ad76-bdfe-4e27-84fd-b7b03116ee31'),
+ (2581,'2009-05-18 12:03:35','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'bb3aeed8-d2fd-4430-a74c-2230e8a0a0c3\'><Properties><Surname><PreviousValue>4796ad76-bdfe-4e27-84fd-b7b03116ee31</PreviousValue><NewValue>734de38a-c4c6-4ef3-ae70-ec0a5062fc9c</NewValue></Surname></Properties></ContactPersonTransactionLogging>','734de38a-c4c6-4ef3-ae70-ec0a5062fc9c'),
+ (2582,'2009-05-18 12:03:35','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'bb3aeed8-d2fd-4430-a74c-2230e8a0a0c3\'><Properties><Surname><PreviousValue>734de38a-c4c6-4ef3-ae70-ec0a5062fc9c</PreviousValue><NewValue>5fc97de3-6402-41a3-a018-5a01401965ec</NewValue></Surname></Properties></ContactPersonTransactionLogging>','5fc97de3-6402-41a3-a018-5a01401965ec'),
+ (2583,'2009-05-18 12:03:35','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'bb3aeed8-d2fd-4430-a74c-2230e8a0a0c3\'><Properties><Surname><PreviousValue>5fc97de3-6402-41a3-a018-5a01401965ec</PreviousValue><NewValue>915c84a5-2166-43a0-9baa-765d5c2c40fc</NewValue></Surname></Properties></ContactPersonTransactionLogging>','915c84a5-2166-43a0-9baa-765d5c2c40fc'),
+ (2584,'2009-05-18 12:03:35','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'bb3aeed8-d2fd-4430-a74c-2230e8a0a0c3\'><Properties><Surname><PreviousValue>915c84a5-2166-43a0-9baa-765d5c2c40fc</PreviousValue><NewValue>dec2b7bc-2e41-4f5a-adfa-fe8cb1675dd7</NewValue></Surname></Properties></ContactPersonTransactionLogging>','dec2b7bc-2e41-4f5a-adfa-fe8cb1675dd7'),
+ (2585,'2009-05-18 12:03:35','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Deleted','<ContactPersonTransactionLogging ID=\'bb3aeed8-d2fd-4430-a74c-2230e8a0a0c3\'><Properties></Properties></ContactPersonTransactionLogging>','dec2b7bc-2e41-4f5a-adfa-fe8cb1675dd7'),
+ (2586,'2009-05-18 12:03:35','CHILLI\\Hagashen','MyUserName','BSOD','ContactPersonTransactionLogging','Created','<ContactPersonTransactionLogging ID=\'46809790-ea4b-43d9-9cf2-34216c339768\'><Properties><Surname><PreviousValue></PreviousValue><NewValue>My Surname 1</NewValue></Surname></Properties></ContactPersonTransactionLogging>','My Surname 1');
 /*!40000 ALTER TABLE `transactionlog` ENABLE KEYS */;
 
 
