@@ -396,7 +396,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
-
+            Assert.AreEqual(1, cpCol.Count);
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
             createdCp.Surname = BOTestUtils.RandomString;
 
