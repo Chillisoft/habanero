@@ -111,7 +111,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO WHERE ClassID = ?Param0", statementString);
+            StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO WHERE DMClassID = ?Param0", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -172,7 +172,7 @@ namespace Habanero.Test.DB
             StringAssert.Contains("WHERE ([MyBO].[TestProp] = ?Param0)", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             Assert.AreEqual("test", statement.Parameters[0].Value);
-            StringAssert.EndsWith("([ClassID] = ?Param1)", statementString);
+            StringAssert.EndsWith("([DMClassID] = ?Param1)", statementString);
             Assert.AreEqual("?Param1", statement.Parameters[1].ParameterName);
             Assert.AreEqual(classDef.ClassID.Value.ToString("B").ToUpper(), statement.Parameters[1].Value);
             //---------------Tear Down -------------------------          

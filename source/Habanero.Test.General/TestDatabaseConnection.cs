@@ -241,7 +241,7 @@ namespace Habanero.Test.General
         public void Test_NoColumnName_DoesntError_SqlServer()
         {
             //---------------Set up test pack-------------------
-            DatabaseConfig databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_trunk", "sa", "sa", null);
+            DatabaseConfig databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_branch_lgmis", "sa", "sa", null);
             DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
             //DatabaseConnection.CurrentConnection = new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection","server=localhost;database=habanero_test_trunk;user=sa;password=sa");
             const string sql = "Select FirstName + ', ' + Surname from tbPersonTable";
@@ -261,3 +261,4 @@ namespace Habanero.Test.General
     }
 
 }
+

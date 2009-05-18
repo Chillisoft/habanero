@@ -344,7 +344,7 @@ namespace Habanero.DB
             ClassDef classDef = (ClassDef) _selectQuery.ClassDef;
             if (classDef != null && classDef.ClassID != null && classDef.ClassID.HasValue)
             {
-                Criteria classIDCriteria = new Criteria("ClassID", Criteria.ComparisonOp.Equals, classDef.ClassID.Value);
+                Criteria classIDCriteria = new Criteria("DMClassID", Criteria.ComparisonOp.Equals, classDef.ClassID.Value);
                 fullCriteria = Criteria.MergeCriteria(fullCriteria, classIDCriteria);
             }
 
