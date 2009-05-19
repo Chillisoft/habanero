@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System.Data;
-using System.Data.SqlClient;
 using Habanero.Base;
 using Habanero.BO;
 using log4net;
@@ -67,12 +66,12 @@ namespace Habanero.DB
             _dbConnection = databaseConnection.GetConnection();
             _dbConnection.Open();
             _dbTransaction = _dbConnection.BeginTransaction(databaseConnection.IsolationLevel);
-            IDbCommand command = _dbConnection.CreateCommand();
-            command.Transaction = _dbTransaction;
-            command.CommandText = "sp_MSForEachTable";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? NOCHECK CONSTRAINT ALL"));
-            command.ExecuteNonQuery();
+//            IDbCommand command = _dbConnection.CreateCommand();
+//            command.Transaction = _dbTransaction;
+//            command.CommandText = "sp_MSForEachTable";
+//            command.CommandType = CommandType.StoredProcedure;
+//            command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? NOCHECK CONSTRAINT ALL"));
+//            command.ExecuteNonQuery();
         }
 
         private IDatabaseConnection GetDatabaseConnection()
@@ -147,12 +146,12 @@ namespace Habanero.DB
         {
             try
             {
-                IDbCommand command = _dbConnection.CreateCommand();
-                command.Transaction = _dbTransaction;
-                command.CommandText = "sp_MSForEachTable";
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
-                command.ExecuteNonQuery();
+//                IDbCommand command = _dbConnection.CreateCommand();
+//                command.Transaction = _dbTransaction;
+//                command.CommandText = "sp_MSForEachTable";
+//                command.CommandType = CommandType.StoredProcedure;
+//                command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
+//                command.ExecuteNonQuery();
                 _dbTransaction.Commit();
                 return true;
             }
@@ -160,12 +159,12 @@ namespace Habanero.DB
             {
                 if (_dbConnection != null && _dbConnection.State == ConnectionState.Open)
                 {
-                    IDbCommand command = _dbConnection.CreateCommand();
-                    command.Transaction = _dbTransaction;
-                    command.CommandText = "sp_MSForEachTable";
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
-                    command.ExecuteNonQuery();
+//                    IDbCommand command = _dbConnection.CreateCommand();
+//                    command.Transaction = _dbTransaction;
+//                    command.CommandText = "sp_MSForEachTable";
+//                    command.CommandType = CommandType.StoredProcedure;
+//                    command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
+//                    command.ExecuteNonQuery();
                     _dbConnection.Close();
                 }
             }
@@ -186,12 +185,12 @@ namespace Habanero.DB
             {
                 if (_dbConnection != null && _dbConnection.State == ConnectionState.Open)
                 {
-                    IDbCommand command = _dbConnection.CreateCommand();
-                    command.Transaction = _dbTransaction;
-                    command.CommandText = "sp_MSForEachTable";
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
-                    command.ExecuteNonQuery();
+//                    IDbCommand command = _dbConnection.CreateCommand();
+//                    command.Transaction = _dbTransaction;
+//                    command.CommandText = "sp_MSForEachTable";
+//                    command.CommandType = CommandType.StoredProcedure;
+//                    command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
+//                    command.ExecuteNonQuery();
                     _dbConnection.Close();
                 }
             }
