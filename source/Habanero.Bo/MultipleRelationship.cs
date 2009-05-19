@@ -49,29 +49,6 @@ namespace Habanero.BO
         internal abstract IBusinessObjectCollection GetLoadedBOColInternal();
 
         /// <summary>
-        /// Is there anything in this relationship to prevent the business object from being deleted.
-        /// e.g. if there are related business objects that are not marked as mark for delete.
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public override bool IsDeletable(out string message)
-        {
-            message = "";
-            if (this.RelationshipDef.DeleteParentAction != DeleteParentAction.Prevent) return true;
-
-            IBusinessObjectCollection collection = this.GetLoadedBOColInternal();
-            collection.Refresh();
-            int noRelatedObjects = collection.Count;
-            if (noRelatedObjects <= 0) return true;
-            message = string.Format(
-                    "You cannot delete {0} Identified By {1} or {2} since it is related to {3} Business Objects via the {4} relationship",
-                    this._owningBo.ClassDef.ClassName, this._owningBo.ID.AsString_CurrentValue(), ToString(),
-                    noRelatedObjects,
-                    this.RelationshipName);
-            return false;
-        }
-
-        /// <summary>
         /// If the relationship is <see cref="IBusinessObject.MarkForDelete"/>.DeleteRelated then
         /// all the related objects and their relevant children will be marked for Delete.
         /// See <see cref="IRelationship.DeleteParentAction"/>
@@ -391,6 +368,27 @@ namespace Habanero.BO
                 }
             }
             return dirtyChildren;
+        }
+        /// <summary>
+        /// Is there anything in this relationship to prevent the business object from being deleted.
+        /// e.g. if there are related business objects that are not marked as mark for delete.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public override bool IsDeletable(out string message)
+        {
+            message = "";
+            if (this.RelationshipDef.DeleteParentAction != DeleteParentAction.Prevent) return true;
+
+            IBusinessObjectCollection collection = this.BusinessObjectCollection;
+            int noRelatedObjects = collection.Count;
+            if (noRelatedObjects <= 0) return true;
+            message = string.Format(
+                    "You cannot delete {0} Identified By {1} or {2} since it is related to {3} Business Objects via the {4} relationship",
+                    this._owningBo.ClassDef.ClassName, this._owningBo.ID.AsString_CurrentValue(), this._owningBo.ToString(),
+                    noRelatedObjects,
+                    this.RelationshipName);
+            return false;
         }
     }
 }

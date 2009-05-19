@@ -268,7 +268,7 @@ namespace Habanero.BO
                 message =
                     string.Format(
                         "You cannot delete {0} Identified By {1} or {2} since it is related to a Business Object via the {3} relationship",
-                        this.OwningBO.ClassDef.ClassName, this.OwningBO.ID.AsString_CurrentValue(), ToString(),
+                        this.OwningBO.ClassDef.ClassName, this.OwningBO.ID.AsString_CurrentValue(), this.OwningBO.ToString(),
                         this.RelationshipName);
                 return false;
             }

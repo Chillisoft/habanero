@@ -127,9 +127,17 @@ namespace Habanero.BO
                 if (changedBo == null) return;
                 try
                 {
-                    DeregisterForBOEvents();
-                    changedBo.MarkForDelete();
-                    _deletedRows.Add(row, changedBo);
+                    string message;
+                    
+                    if (changedBo.IsDeletable(out message))
+                    {
+                        DeregisterForBOEvents();
+                        changedBo.MarkForDelete();
+                        _deletedRows.Add(row, changedBo);
+                    }else
+                    {
+                        row.RejectChanges();
+                    }
                 }
                 finally
                 {
