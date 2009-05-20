@@ -17,13 +17,13 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.IO;
-using Db4objects.Db4o;
+//using System.IO;
+//using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
-using Habanero.DB4O;
+//using Habanero.DB;
+//using Habanero.DB4O;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
 using NUnit.Framework;
 

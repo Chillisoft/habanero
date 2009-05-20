@@ -111,6 +111,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="deleteParentAction">Provides specific instructions 
         /// with regards to deleting a parent object.  See the DeleteParentAction 
         /// enumeration for more detail.</param>
+        /// <param name="insertParentAction"></param>
         /// <param name="relationshipType">Provides specific instructions for adding/removing a child object.</param>
         /// <param name="timeout">The timout in milliseconds. The collection will not be automatically refreshed from the DB if the timeout has nto expired</param>
         public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType, int timeout)

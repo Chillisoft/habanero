@@ -100,6 +100,7 @@ namespace Habanero.Test.BO
         public void TestAddRowP_RowValueDBNull_BOProp_NUll_ShouldNotRaiseException_FIXBUG()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithUIAllDataTypes();
             BusinessObjectCollection<MyBO> boCollection = new BusinessObjectCollection<MyBO>();
@@ -110,21 +111,27 @@ namespace Habanero.Test.BO
 
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, boCollection.Count);
-            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
+            Assert.AreEqual(0, boCollection.PersistedBusinessObjects.Count, "Should be no created items to start");
+//            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
 
             //---------------Execute Test ----------------------
             itsTable.Rows.Add(new object[] { DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value });
             //---------------Test Result -----------------------
             Assert.IsFalse(itsTable.Rows[0].HasErrors);
+            //Behaviour has been changed to persist the business object
             Assert.AreEqual
-                (1, boCollection.CreatedBusinessObjects.Count,
+                (1, boCollection.PersistedBusinessObjects.Count,
                  "Adding a row to the table should use the collection to create the object");
+//            Assert.AreEqual
+//                (1, boCollection.CreatedBusinessObjects.Count,
+//                 "Adding a row to the table should use the collection to create the object");
             Assert.AreEqual(1, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
         }
         [Test]
         public void TestAddRowP_RowValueDBNull_BOProp_DateTime_NUll_ShouldNotRaiseException_FIXBUG()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             SetupTestData();
             BusinessObjectCollection<MyBO> boCollection = new BusinessObjectCollection<MyBO>();
 
@@ -134,14 +141,18 @@ namespace Habanero.Test.BO
 
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, boCollection.Count);
-            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
+            Assert.AreEqual(0, boCollection.PersistedBusinessObjects.Count, "Should be no created items to start");
+//            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
 
             //---------------Execute Test ----------------------
             itsTable.Rows.Add(new object[] { DBNull.Value, DBNull.Value, DBNull.Value });
             //---------------Test Result -----------------------
             Assert.AreEqual
-                (1, boCollection.CreatedBusinessObjects.Count,
+                (1, boCollection.PersistedBusinessObjects.Count,
                  "Adding a row to the table should use the collection to create the object");
+//            Assert.AreEqual
+//                (1, boCollection.CreatedBusinessObjects.Count,
+//                 "Adding a row to the table should use the collection to create the object");
             Assert.AreEqual(1, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
         }
         [Test]
@@ -150,9 +161,12 @@ namespace Habanero.Test.BO
             SetupTestData();
             Assert.AreEqual(2, _collection.Count, "Before Deleting a row shouldn't remove any Bo's from the collection.");
             itsTable.Rows[0].Delete();
-            Assert.AreEqual(1, _collection.Count, "Deleting a row shouldn't remove any Bo's from the collection.");
+            Assert.AreEqual(1, _collection.Count, "Deleting a row should remove any BO from the collection.");
             int numDeleted = _collection.MarkedForDeleteBusinessObjects.Count;
-            Assert.AreEqual(1, numDeleted, "BO should be marked as deleted.");
+            Assert.AreEqual(0, numDeleted, "BO should be marked as deleted.");
+            //This has been changed to permanently delete the Business Object
+//            int numDeleted = _collection.MarkedForDeleteBusinessObjects.Count;
+//            Assert.AreEqual(1, numDeleted, "BO should be marked as deleted.");
         }
 
         [Test]
@@ -170,7 +184,9 @@ namespace Habanero.Test.BO
             itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
             //---------------Test Result ----------------
             Assert.AreEqual(originalCount + 1, _collection.Count);
-            Assert.AreEqual(2 , _collection.CreatedBusinessObjects.Count);
+            //Changed to auto persist
+            Assert.AreEqual(1, _collection.CreatedBusinessObjects.Count);
+//            Assert.AreEqual(2 , _collection.CreatedBusinessObjects.Count);
             Assert.AreEqual(originalCount + 1, itsTable.Rows.Count);
 //            itsTable.RejectChanges();
 //            //---------------Test Result -----------------------
@@ -187,7 +203,9 @@ namespace Habanero.Test.BO
             itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
             //---------------Assert Precondition----------------
             Assert.AreEqual(originalCount + 1, _collection.Count);
-            Assert.AreEqual(originalCount, _collection.CreatedBusinessObjects.Count);
+            //Now Deletes automatically Brett May 2009
+//            Assert.AreEqual(originalCount, _collection.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalCount - 1, _collection.CreatedBusinessObjects.Count);
             Assert.AreEqual(originalCount + 1, itsTable.Rows.Count);
             //---------------Execute Test ----------------------
             itsTable.RejectChanges();
@@ -254,7 +272,9 @@ namespace Habanero.Test.BO
             _collection.Remove(itsBo1);
             //---------------Test Result -----------
             Assert.AreEqual(0, _collection.Count);
-            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+            //Now Deletes automatically Brett May 2009
+//            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, _collection.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(1, _collection.RemovedBusinessObjects.Count);
             Assert.AreEqual(DataRowState.Deleted, itsTable.Rows[0].RowState);
             Assert.AreEqual(1, itsTable.Rows.Count);
@@ -272,7 +292,9 @@ namespace Habanero.Test.BO
             itsTable.Rows[0].Delete();
             //---------------Test Result -----------
             Assert.AreEqual(0, _collection.Count);
-            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+            //Now Deletes automatically Brett May 2009
+//            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, _collection.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(1, _collection.RemovedBusinessObjects.Count);
             Assert.AreEqual(DataRowState.Deleted, itsTable.Rows[0].RowState);
             Assert.AreEqual(1, itsTable.Rows.Count);
@@ -290,7 +312,9 @@ namespace Habanero.Test.BO
             itsTable.Rows[1].Delete();
             //---------------Test Result -----------
             Assert.AreEqual(1, _collection.Count);
-            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+            //Now Deletes automatically Brett May 2009
+            Assert.AreEqual(0, _collection.MarkedForDeleteBusinessObjects.Count);
+//            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(DataRowState.Deleted, itsTable.Rows[1].RowState);
         }
         [Test]

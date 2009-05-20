@@ -28,7 +28,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public class EditableGridControlManager
     {
-        private readonly IEditableGridControl _gridControl;
+//        private readonly IEditableGridControl _gridControl;
         private readonly IGridInitialiser _gridInitialiser;
 
         ///<summary>
@@ -38,7 +38,7 @@ namespace Habanero.UI.Base
         ///<param name="controlFactory"></param>
         public EditableGridControlManager(IEditableGridControl gridControl, IControlFactory controlFactory)
         {
-            _gridControl = gridControl;
+//            _gridControl = gridControl;
             _gridInitialiser = new GridInitialiser(gridControl, controlFactory);
         }
 

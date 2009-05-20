@@ -27,7 +27,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
-using Habanero.DB4O;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader

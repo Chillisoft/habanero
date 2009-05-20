@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using log4net;
 
 namespace Habanero.BO
 {
@@ -32,6 +33,7 @@ namespace Habanero.BO
     public abstract class DataSetProvider : IDataSetProvider
     {
         private const string _idColumnName = "HABANERO_OBJECTID";
+        protected static readonly ILog log = LogManager.GetLogger("FireStarterModeller.UI.TreeViewController");
 
         /// <summary>
         /// The <see cref="IBusinessObjectCollection"/> of <see cref="IBusinessObject"/>s that
@@ -396,7 +398,17 @@ namespace Habanero.BO
         /// <returns>Returns a business object</returns>
         public IBusinessObject Find(int rowNum)
         {
-            DataRow row = this._table.Rows[rowNum];
+            DataRow row;
+            try
+            {
+                row = this._table.Rows[rowNum];
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                log.Error(ex.Message, ex);
+                throw;
+
+            }
             return this.Find(row);
         }
 
@@ -407,9 +419,16 @@ namespace Habanero.BO
         /// <returns>Returns a business object</returns>
         public IBusinessObject Find(DataRow row)
         {
-            string objectID = row[_idColumnName].ToString();
-            Guid id = new Guid(objectID);
-            return this.Find(id);
+            try
+            {
+                string objectID = row[_idColumnName].ToString();
+                Guid id = new Guid(objectID);
+                return this.Find(id);
+            }
+            catch (DeletedRowInaccessibleException)
+            {
+                return null;
+            }
         }
 
         /// <summary>

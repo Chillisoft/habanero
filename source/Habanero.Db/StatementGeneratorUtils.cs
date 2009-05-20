@@ -90,6 +90,7 @@ namespace Habanero.DB
         /// If a sql statement is provided, then the arguments are added
         /// in parameterised form.
         /// </summary>
+        /// <param name="prop"></param>
         /// <param name="sql">A sql statement used to generate and track
         /// parameters</param>
         /// <returns>Returns a string</returns>

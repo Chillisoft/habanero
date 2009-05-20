@@ -161,9 +161,13 @@ namespace Habanero.UI.Win
                 if (ConfirmDeletion && !CheckUserConfirmsDeletionDelegate())
                 {
                     e.Cancel = true;
-                
                 }
                 IBusinessObject businessObject = this.DataSetProvider.Find(e.Row.Index);
+                if (businessObject == null)
+                {
+                    this.RefreshGrid();
+                    return;
+                }
                 string message;
                 if (!businessObject.IsDeletable(out message))
                 {
@@ -240,6 +244,24 @@ namespace Habanero.UI.Win
                 }
             }
         }
+#pragma warning disable 168
+        /// <summary>
+        /// Carries out additional actions when a cell is clicked.  Specifically, if
+        /// a combobox cell is clicked, the cell goes into edit mode immediately.
+        /// </summary>
+        public void CellClickHandler(object sender, DataGridViewCellEventArgs e)
+        {
+            bool setToEditMode = CheckIfComboBoxShouldSetToEditMode(e.ColumnIndex, e.RowIndex);
+            if (!setToEditMode) return;
+            DataGridViewColumn dataGridViewColumn =
+                ((DataGridViewColumnWin) Columns[e.ColumnIndex]).DataGridViewColumn;
+            ControlsHelper.SafeGui(this, () => BeginEdit(true));
+            if (EditingControl is DataGridViewComboBoxEditingControl)
+            {
+                ((DataGridViewComboBoxEditingControl) EditingControl).DroppedDown = true;
+            }
+        }
+#pragma warning restore 168
 
         /// <summary>
         /// Displays a message box to the user to check if they want to proceed with
@@ -252,25 +274,6 @@ namespace Habanero.UI.Win
                 MessageBox.Show
                     ("Are you sure you want to delete the selected row(s)?", "Delete?", MessageBoxButtons.YesNo,
                      MessageBoxIcon.Exclamation) == System.Windows.Forms.DialogResult.Yes;
-        }
-
-        /// <summary>
-        /// Carries out additional actions when a cell is clicked.  Specifically, if
-        /// a combobox cell is clicked, the cell goes into edit mode immediately.
-        /// </summary>
-        public void CellClickHandler(object sender, DataGridViewCellEventArgs e)
-        {
-            bool setToEditMode = CheckIfComboBoxShouldSetToEditMode(e.ColumnIndex, e.RowIndex);
-            if (setToEditMode)
-            {
-                DataGridViewColumn dataGridViewColumn =
-                    ((DataGridViewColumnWin) Columns[e.ColumnIndex]).DataGridViewColumn;
-                ControlsHelper.SafeGui(this, () => BeginEdit(true));
-                if (EditingControl is DataGridViewComboBoxEditingControl)
-                {
-                    ((DataGridViewComboBoxEditingControl) EditingControl).DroppedDown = true;
-                }
-            }
         }
 
         /// <summary>

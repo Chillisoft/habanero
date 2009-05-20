@@ -16,16 +16,10 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
-
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB4O;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
