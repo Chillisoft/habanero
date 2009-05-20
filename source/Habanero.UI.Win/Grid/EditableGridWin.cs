@@ -166,6 +166,8 @@ namespace Habanero.UI.Win
                 if (businessObject == null)
                 {
                     this.RefreshGrid();
+                    GlobalUIRegistry.ControlFactory.ShowMessageBox(
+                        "There was a problem deleting the selected item please try again");
                     return;
                 }
                 string message;
