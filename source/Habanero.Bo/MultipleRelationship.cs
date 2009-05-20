@@ -248,7 +248,7 @@ namespace Habanero.BO
                 return true;
             }
             TimeSpan timeSinceLastLoad = DateTime.Now - currentCol.TimeLastLoaded.Value;
-            return timeSinceLastLoad.Milliseconds >= this.TimeOut;
+            return timeSinceLastLoad.TotalMilliseconds >= this.TimeOut;
         }
 
         /// <summary>
