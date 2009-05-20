@@ -193,6 +193,8 @@ namespace Habanero.Test.BO
 //            Assert.AreEqual(originalCount, itsTable.Rows.Count);
 //            Assert.AreEqual(originalCount, _collection.Count);
         }
+
+        [Ignore("This is has been removed because the system automatically saves valid new objects")] //0 May 2009: This is has been removed because the system automatically saves valid new objects
         [Test]
         public void TestRejectChangesRemovesNewRow()
         {
