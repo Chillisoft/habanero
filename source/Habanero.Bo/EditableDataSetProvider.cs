@@ -444,7 +444,11 @@ namespace Habanero.BO
                     row.AcceptChanges();
                 }
                 row.RowError = message;
-                _addedRows.Add(row, newBo);
+                if (newBo.Status.IsNew)
+                {
+                    _addedRows.Add(row, newBo);
+                }
+                
                 if (newBo.ID.ObjectID == Guid.Empty)
                 {
                     throw new HabaneroDeveloperException

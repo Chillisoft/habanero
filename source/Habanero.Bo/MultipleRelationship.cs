@@ -48,21 +48,7 @@ namespace Habanero.BO
 
         internal abstract IBusinessObjectCollection GetLoadedBOColInternal();
 
-        /// <summary>
-        /// If the relationship is <see cref="IBusinessObject.MarkForDelete"/>.DeleteRelated then
-        /// all the related objects and their relevant children will be marked for Delete.
-        /// See <see cref="IRelationship.DeleteParentAction"/>
-        /// </summary>
-        public override void  MarkForDelete()
-        {
-            if (this.RelationshipDef.DeleteParentAction != DeleteParentAction.DeleteRelated) return;
-            IBusinessObjectCollection collection = this.GetLoadedBOColInternal();
-            collection.Refresh();
-            for (int i = collection.Count -1 ; i >= 0; i--)
-            {
-                collection[i].MarkForDelete();
-            }
-        }
+
     }
 
     /// <summary>
@@ -150,6 +136,22 @@ namespace Habanero.BO
                 {
                     DeleteChild(committer, businessObject);
                 }
+            }
+        }
+
+        /// <summary>
+        /// If the relationship is <see cref="IBusinessObject.MarkForDelete"/>.DeleteRelated then
+        /// all the related objects and their relevant children will be marked for Delete.
+        /// See <see cref="IRelationship.DeleteParentAction"/>
+        /// </summary>
+        public override void MarkForDelete()
+        {
+            if (this.RelationshipDef.DeleteParentAction != DeleteParentAction.DeleteRelated) return;
+            IBusinessObjectCollection collection = this.BusinessObjectCollection;
+            collection.Refresh();
+            for (int i = collection.Count - 1; i >= 0; i--)
+            {
+                collection[i].MarkForDelete();
             }
         }
 
