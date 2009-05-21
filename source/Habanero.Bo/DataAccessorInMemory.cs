@@ -22,7 +22,7 @@ using Habanero.Base;
 namespace Habanero.BO
 {
     ///<summary>
-    /// The data accessor used when using the in memory datastore.
+    /// The data accessor used when using the in-memory data store.
     ///</summary>
     public class DataAccessorInMemory : IDataAccessor
     {
@@ -33,14 +33,14 @@ namespace Habanero.BO
         private readonly IBusinessObjectLoader _businessObjectLoader;
 
         ///<summary>
-        /// Creates a new in memory datastore.
+        /// Creates a new in-memory data store.
         ///</summary>
         public DataAccessorInMemory() : this(new DataStoreInMemory())
         {
         }
 
         ///<summary>
-        /// Alternate Constructore for the In Memory dataStore where the DataStore to be used is passed in.
+        /// Alternate constructor for the in-memory data store where the DataStore to be used is passed in.
         ///</summary>
         ///<param name="dataStore">The Data Store to be used.</param>
         public DataAccessorInMemory(DataStoreInMemory dataStore)
@@ -50,7 +50,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// The <see cref="IDataAccessor.BusinessObjectLoader"/> to use to load BusinessObjects
+        /// The <see cref="IDataAccessor.BusinessObjectLoader"/> to use to load BusinessObjects.
         /// </summary>
         public IBusinessObjectLoader BusinessObjectLoader
         {
