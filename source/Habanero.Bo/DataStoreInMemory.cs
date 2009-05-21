@@ -221,7 +221,8 @@ namespace Habanero.BO
             }
         }
         /// <summary>
-        /// Loads all the objects to the data store from the file specified by fullFileName
+        /// Loads all the objects to the data store from the file specified by fullFileName.
+        /// The file specified to be loaded must be a serialised binary file.
         /// </summary>
         /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
         public void Load(string fullFileName)
