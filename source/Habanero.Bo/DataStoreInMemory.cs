@@ -31,7 +31,7 @@ namespace Habanero.BO
 {
 
     ///<summary>
-    /// This is an in memory datastore this is designed to be used primarily for testing.
+    /// This is an in-memory data store designed to be used primarily for testing.
     ///</summary>
     public class DataStoreInMemory
     {
@@ -46,7 +46,7 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Returns an Dictionary of all the objects in the memory store.
+        /// Returns a Dictionary of all the objects in the memory store.
         ///</summary>
         public Dictionary<Guid, IBusinessObject> AllObjects
         {
@@ -74,7 +74,7 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Finds
+        /// Finds the object of type BOType that matches  and criteria.
         ///</summary>
         ///<param name="BOType"></param>
         ///<param name="criteria"></param>
@@ -118,7 +118,7 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Removes the object from the datastore.
+        /// Removes the object from the data store.
         ///</summary>
         ///<param name="businessObject"></param>
         public void Remove(IBusinessObject businessObject)
@@ -127,7 +127,7 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Find all object that match the criteria.
+        /// Find all objects that match the criteria.
         ///</summary>
         ///<param name="criteria"></param>
         ///<typeparam name="T"></typeparam>
@@ -141,7 +141,7 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Find all object that match the criteria.
+        /// Find all objects that match the criteria.
         ///</summary>
         ///<param name="criteria"></param>
         ///<typeparam name="T"></typeparam>
@@ -158,7 +158,7 @@ namespace Habanero.BO
             return col;
         }
         ///<summary>
-        /// find all objects of type boType that match the criteria.
+        /// Find all objects of type boType that match the criteria.
         ///</summary>
         ///<param name="BOType"></param>
         ///<param name="criteria"></param>
@@ -176,7 +176,7 @@ namespace Habanero.BO
             return col;
         }
         ///<summary>
-        /// find all objects of type boType that match the criteria.
+        /// Find all objects of type boType that match the criteria.
         ///</summary>
         /// <param name="classDef"></param>
         /// <param name="criteria"></param>
@@ -206,7 +206,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Saves all the objects in the dataStore to to the file defined in fullFileName
+        /// Saves all the objects from the data store to the file defined in fullFileName
         /// </summary>
         /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
         public void Save(string fullFileName)
@@ -221,7 +221,7 @@ namespace Habanero.BO
             }
         }
         /// <summary>
-        /// Loads all the objects in the dataStore to to the file defined in fullFileName
+        /// Loads all the objects to the data store from the file specified by fullFileName
         /// </summary>
         /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
         public void Load(string fullFileName)
