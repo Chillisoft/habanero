@@ -220,6 +220,8 @@ namespace Habanero.BO
                 formatter.Serialize(fs, this._objects);
             }
         }
+
+        //TODO deerasha 22 May 2009: overload Load to support xml serialisation
         /// <summary>
         /// Loads all the objects to the data store from the file specified by fullFileName.
         /// The file specified to be loaded must be a serialised binary file.
