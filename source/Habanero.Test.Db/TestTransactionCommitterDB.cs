@@ -361,9 +361,13 @@ namespace Habanero.Test.DB
             committer.AddBusinessObject(org);
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(1, org.ContactPeople.Count);
-            Assert.AreEqual(1, ((IMultipleRelationship) org.Relationships["Addresses"]).BusinessObjectCollection.Count);
-            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+            //Assert.AreEqual(1, org.ContactPeople.Count);
+            Assert.AreEqual(0, org.ContactPeople.Count);
+            Assert.AreEqual(1, org.ContactPeople.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, ((IMultipleRelationship) org.Relationships["Addresses"]).BusinessObjectCollection.Count);
+            Assert.AreEqual(1, ((IMultipleRelationship) org.Relationships["Addresses"]).BusinessObjectCollection.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(2, org.Relationships.Count);
             Assert.IsTrue(org.Relationships.Contains("ContactPeople"));
             Assert.AreEqual(DeleteParentAction.DeleteRelated, org.Relationships["ContactPeople"].DeleteParentAction);
@@ -889,22 +893,23 @@ namespace Habanero.Test.DB
             contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
             org.Save();
             contactPersonTestBO.Save();
-            org.MarkForDelete();
+            //org.MarkForDelete();
 
-            TransactionCommitterDB committer = new TransactionCommitterDB();
-            committer.AddBusinessObject(org);
+            //TransactionCommitterDB committer = new TransactionCommitterDB();
+            //committer.AddBusinessObject(org);
             //---------------Execute Test ----------------------
 
             try
             {
-                committer.CommitTransaction();
+                //committer.CommitTransaction();
+                org.MarkForDelete();
                 Assert.Fail();
             }
                 //---------------Test Result -----------------------
-            catch (BusinessObjectReferentialIntegrityException ex)
+            catch (BusObjDeleteException ex)
             {
-                Assert.IsTrue(
-                    ex.Message.Contains("There are 1 objects related through the 'ContactPeople.Addresses' relationship"));
+                StringAssert.Contains("as the IsDeletable is set to false for the object", ex.Message);
+                StringAssert.Contains("since it is related to 1 Business Objects via the Addresses relationship", ex.Message);
             }
             finally
             {

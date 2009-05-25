@@ -24,6 +24,8 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
+using Habanero.Util;
+using log4net;
 using DataGridViewSelectionMode=System.Windows.Forms.DataGridViewSelectionMode;
 using MessageBoxButtons=System.Windows.Forms.MessageBoxButtons;
 using MessageBoxIcon=System.Windows.Forms.MessageBoxIcon;
@@ -41,6 +43,8 @@ namespace Habanero.UI.Win
     /// </summary>
     public class EditableGridWin : GridBaseWin, IEditableGrid
     {
+        protected static readonly ILog _log = LogManager.GetLogger("Habanero.UI.Win.EditableGridWin");
+
         private DeleteKeyBehaviours _deleteKeyBehaviour;
 
         /// <summary>
@@ -63,8 +67,11 @@ namespace Habanero.UI.Win
             ComboBoxClickOnce = true;
             UserDeletingRow += ConfirmRowDeletion;
             CheckUserConfirmsDeletionDelegate += CheckUserWantsToDelete;
+            this.UserDeletedRow+=((sender, e) => ResetBOCollection());
             CellClick += CellClickHandler;
         }
+
+
 
         /// <summary>
         /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
@@ -86,12 +93,13 @@ namespace Habanero.UI.Win
             {
                 if (this.BusinessObjectCollection != null)
                 {
+                    //EditableDataSetProvider editableDataSetProvider = (EditableDataSetProvider)this.DataSetProvider;
+                    //editableDataSetProvider.DeregisterForEvents();
+                    
                     this.BusinessObjectCollection.CancelEdits();
-                    IBusinessObjectCollection col = this.BusinessObjectCollection;
-                    IBusinessObject bo = this.SelectedBusinessObject;
-                    SetBusinessObjectCollection(null);
-                    SetBusinessObjectCollection(col);
-                    SelectedBusinessObject = bo;
+                    ResetBOCollection();
+                    //editableDataSetProvider.RegisterForEvents();//This is not necessary as the SetBOCol ultimately
+                    //registers for all events 
                 }
                 else if (this.DataSource is DataView)
                 {
@@ -103,6 +111,20 @@ namespace Habanero.UI.Win
             {
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
+        }
+
+        private void ResetBOCollection()
+        {
+            IBusinessObjectCollection col = this.BusinessObjectCollection;
+            IBusinessObject bo = this.SelectedBusinessObject;
+            if (this.DataSource != null)
+            {
+                ((DataView) this.DataSource).Table.RejectChanges();
+
+            }
+            SetBusinessObjectCollection(null);
+            SetBusinessObjectCollection(col);
+            SelectedBusinessObject = bo;
         }
 
         /// <summary>
@@ -161,6 +183,7 @@ namespace Habanero.UI.Win
                 if (ConfirmDeletion && !CheckUserConfirmsDeletionDelegate())
                 {
                     e.Cancel = true;
+                    return;
                 }
                 IBusinessObject businessObject = this.DataSetProvider.Find(e.Row.Index);
                 if (businessObject == null)
@@ -168,6 +191,9 @@ namespace Habanero.UI.Win
                     //this.RefreshGrid();
                     //GlobalUIRegistry.ControlFactory.ShowMessageBox(
                     //    "There was a problem deleting the selected item please try again");
+
+                    _log.Debug("ConfirmRowDeletion - Row Index :" + e.Row.Index + " - No business object found");
+                    e.Cancel = true;
                     return;
                 }
                 string message;

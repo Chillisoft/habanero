@@ -161,6 +161,7 @@
     <Compile Include="Selectors\ListViewCollectionManager.cs" />
     <Compile Include="StaticDataEditorManager.cs">
     </Compile>
+    <Compile Include="TreeViewController.cs" />
     <Compile Include="Util\CustomValidationEventArgs.cs" />
     <Compile Include="Util\GlobalUIRegistry.cs" />
     <Compile Include="Grid\IDataGridView.cs" />

@@ -1228,17 +1228,21 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
 
         [Test]
-        public void TestMethod()
+        public void Test_CreateBusinessObject_ShouldAddToEndOfCollection()
         {
             //---------------Set up test pack-------------------
-            
+            ContactPersonTestBO.LoadDefaultClassDef();
+            CreateTwoSavedContactPeople();
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.LoadAll("Surname");
+
             //---------------Assert Precondition----------------
-
+            Assert.AreEqual(2, col.Count);
             //---------------Execute Test ----------------------
-
+            IBusinessObject businessObject = col.CreateBusinessObject();
             //---------------Test Result -----------------------
-
-        }
+            Assert.AreSame(businessObject, col[2]);
+        }      
 
         /// <summary>
         /// Asserts that the results for the collection are as expected

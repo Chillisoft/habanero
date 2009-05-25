@@ -33,7 +33,7 @@ namespace Habanero.BO
     public abstract class DataSetProvider : IDataSetProvider
     {
         private const string _idColumnName = "HABANERO_OBJECTID";
-        protected static readonly ILog log = LogManager.GetLogger("FireStarterModeller.UI.TreeViewController");
+        protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.DataSetProvider");
 
         /// <summary>
         /// The <see cref="IBusinessObjectCollection"/> of <see cref="IBusinessObject"/>s that
@@ -241,6 +241,7 @@ namespace Habanero.BO
         public virtual void DeregisterForEvents()
         {
             DeregisterForBOEvents();
+            DeregisterForTableEvents();
         }
         /// <summary>
         /// Derigisters the Data Set Provider from all events raised by the BO collection.

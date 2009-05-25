@@ -551,5 +551,6 @@ namespace Habanero.Test.BO
             SetupTestData();
             Assert.IsNull(((EditableDataSetProvider) _dataSetProvider).Connection);
         }
+
     }
 }

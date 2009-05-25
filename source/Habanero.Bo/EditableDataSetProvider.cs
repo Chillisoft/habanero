@@ -133,8 +133,14 @@ namespace Habanero.BO
                         DeregisterForBOEvents();
                         changedBo.MarkForDelete();
                         changedBo.Save();
-                        _deletedRows.Add(row, changedBo);
-                        row.AcceptChanges();
+                        //_deletedRows.Add(row, changedBo);
+
+                        //TODO Brett 25 May 2009: Put in try-finally
+                       //this.DeregisterForTableEvents();
+                       
+
+                       // row.AcceptChanges();
+                       //this.RegisterForTableEvents();
                     }
                     else
                     {
@@ -143,7 +149,7 @@ namespace Habanero.BO
                 }
                 finally
                 {
-                    RegisterForBOEvents();
+                   RegisterForBOEvents();
                 }
             }
             catch (Exception ex)
@@ -208,6 +214,7 @@ namespace Habanero.BO
                     case DataRowAction.Rollback:
                         RowRollback(e);
                         break;
+
                 }
             }
             catch (Exception ex)
