@@ -100,6 +100,35 @@ namespace Habanero.BO
                 }
             }
             return currentBO;
+        }        
+        
+        ///<summary>
+        /// Finds
+        ///</summary>
+        ///<param name="classDef">ClassDef to match on.</param>
+        ///<param name="criteria">Criteria being used to find the BusinessObject</param>
+        ///<returns></returns>
+        ///<exception cref="HabaneroDeveloperException"></exception>
+        public IBusinessObject Find(IClassDef classDef, Criteria criteria)
+        {
+            IBusinessObject currentBO = null;
+            foreach (IBusinessObject bo in _objects.Values)
+            {
+                if (!(bo.ClassDef==classDef)) continue;
+                if (!criteria.IsMatch(bo)) continue;
+                if (currentBO == null)
+                {
+                    currentBO = bo;
+                }
+                else
+                {
+                    throw new HabaneroDeveloperException("There was an error with loading the class '"
+                              + bo.ClassDef.ClassNameFull + "'", "Loading a '"
+                              + bo.ClassDef.ClassNameFull + "' with criteria '" + criteria
+                              + "' returned more than one record when only one was expected.");
+                }
+            }
+            return currentBO;
         }
 
         ///<summary>

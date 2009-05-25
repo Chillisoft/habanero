@@ -533,7 +533,7 @@ namespace Habanero.BO
         /// Returns the collection of BOKeys
         /// </summary>
         /// <returns>Returns a BOKeyCol object</returns>
-        internal BOKeyCol GetBOKeyCol()
+        public BOKeyCol GetBOKeyCol()
         {
             return _keysCol;
         }

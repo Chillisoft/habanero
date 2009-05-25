@@ -106,7 +106,7 @@ namespace Habanero.BO
         public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
-            return _dataStore.Find(classDef.ClassType, criteria);
+            return _dataStore.Find(classDef, criteria);
         }
 
         /// <summary>
