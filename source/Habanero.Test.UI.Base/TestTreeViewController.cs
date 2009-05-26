@@ -4,6 +4,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using Habanero.Util;
 using NUnit.Framework;
@@ -11,17 +12,27 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Base
 {
     [TestFixture]
-    public class TestTreeViewController
+    public class TestTreeViewControllerWin
     {
+
+        protected virtual IControlFactory GetControlFactory()
+        {
+            IControlFactory controlFactory = new ControlFactoryWin();
+            GlobalUIRegistry.ControlFactory = controlFactory;
+            return controlFactory;
+        }
+
         [TestFixtureSetUp]
         public void SetupFixture()
         {
            // base.SetupFixture();
+            ClassDef.ClassDefs.Clear();
             ClassDef organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
             organisationClassDef.RelationshipDefCol["ContactPeople"].RelationshipType = RelationshipType.Composition;
             AddressTestBO.LoadDefaultClassDef();
             ClassDef contactPersonTestBOClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
             contactPersonTestBOClassDef.RelationshipDefCol["Addresses"].RelationshipType = RelationshipType.Composition;
+            GetControlFactory();
         }
 
         [SetUp]
@@ -37,14 +48,15 @@ namespace Habanero.Test.UI.Base
             //-------------------------------------------------------------------------------------
             //UITestUtils.SetupTest();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            GlobalUIRegistry.ControlFactory = new ControlFactoryWin();
+            
         }
 
         [Test]
         public void Test_Acceptance_LoadBO_TwoChildren_OneWithNoChildrenAndOneWith2Children_Expanded_ShouldLoadCorrectChildren()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
+            //TreeViewWin treeView = new TreeViewWin();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
@@ -88,7 +100,7 @@ namespace Habanero.Test.UI.Base
             Test_Acceptance_LoadBO_TwoChildren_OneWithOneChild_AndOneWith2Children_Expanded_ShouldLoadCorrectChildren()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
@@ -132,7 +144,7 @@ namespace Habanero.Test.UI.Base
             ()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
@@ -182,7 +194,7 @@ namespace Habanero.Test.UI.Base
         public void Test_Acceptance_WhenAddBusinessObjectToChildCollection_ShouldAddToTree()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
@@ -213,7 +225,7 @@ namespace Habanero.Test.UI.Base
         public void Test_Acceptance_WhenRemoveBusinessObjectFromChildCollection_ShouldRemoveFromTree()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
@@ -243,7 +255,7 @@ namespace Habanero.Test.UI.Base
         public void Test_Acceptance_WhenRemoveBusinessObjectFromChildCollectionAndThenAddBack_ShouldAddBackToTree()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
@@ -281,7 +293,7 @@ namespace Habanero.Test.UI.Base
             Test_Acceptance_WhenRemoveBusinessObjectThatHasChildrenThenAddBack_ShouldAddBackToTree_AndAddChildrenBack()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
@@ -322,7 +334,7 @@ namespace Habanero.Test.UI.Base
         public void Test_WhenRemoveBusinessObject_ShouldRemoveChildrenFromNodeStates()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
@@ -362,7 +374,7 @@ namespace Habanero.Test.UI.Base
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
 
 
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             treeViewController.LoadTreeView(organisation);
             //-------------Assert Preconditions -------------
@@ -382,7 +394,7 @@ namespace Habanero.Test.UI.Base
 
             AddressTestBO addressTestBO = AddressTestBO.CreateUnsavedAddress(ContactPersonTestBO.CreateUnsavedContactPerson());
 
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
 
             //-------------Assert Preconditions -------------
@@ -402,11 +414,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            //ContactPersonTestBO contactPersonTestBO = organisation.ContactPeople.CreateBusinessObject();
-            //contactPersonTestBO.FirstName = TestUtil.GetRandomString();
-            //contactPersonTestBO.Surname = TestUtil.GetRandomString();
-            //contactPersonTestBO.Save();
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             //-------------Assert Preconditions -------------
             Assert.AreEqual(0, treeView.Nodes.Count);
@@ -428,7 +436,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             //-------------Assert Preconditions -------------
             Assert.AreEqual(0, treeView.Nodes.Count);
@@ -453,8 +461,8 @@ namespace Habanero.Test.UI.Base
             ContactPersonTestBO contactPersonTestBO = organisation.ContactPeople.CreateBusinessObject();
             contactPersonTestBO.FirstName = TestUtil.GetRandomString();
             contactPersonTestBO.Surname = TestUtil.GetRandomString();
-           
-            TreeViewWin treeView = new TreeViewWin();
+
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             //-------------Assert Preconditions -------------
             Assert.AreEqual(0, treeView.Nodes.Count);
@@ -479,8 +487,8 @@ namespace Habanero.Test.UI.Base
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             CreateUnsavedContactPerson(organisation);
             CreateUnsavedContactPerson(organisation);
-            
-            TreeViewWin treeView = new TreeViewWin();
+
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
            
             //-------------Assert Preconditions -------------
@@ -528,7 +536,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             AddressTestBO addressTestBO = AddressTestBO.CreateUnsavedAddress(ContactPersonTestBO.CreateUnsavedContactPerson());
             string customDisplayValue = TestUtil.GetRandomString();
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             
             //-------------Assert Preconditions -------------
@@ -549,7 +557,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
            
             treeViewController.LoadTreeView(organisation);
@@ -569,7 +577,7 @@ namespace Habanero.Test.UI.Base
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
 
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
 
             treeViewController.LoadTreeView(organisation, 2);
@@ -589,7 +597,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
 
             treeViewController.LoadTreeView(organisation);
@@ -607,9 +615,9 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
-           
 
-            TreeViewWin treeView = new TreeViewWin();
+
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
 
             treeViewController.LoadTreeView(organisation, 2);
@@ -637,7 +645,7 @@ namespace Habanero.Test.UI.Base
         public void Test_SetBusinessObjectVisibility_True_ShouldShowNode()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
@@ -667,7 +675,7 @@ namespace Habanero.Test.UI.Base
         public void Test_SetVisibility_False_ThenTrue()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
@@ -696,7 +704,7 @@ namespace Habanero.Test.UI.Base
         public void Test_SetVisibility_False_ThenTrue_CorrectOrder()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson1 = CreateUnsavedContactPerson(organisation);
@@ -729,7 +737,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadBusinessObjectCollection()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             AddressTestBO address = AddressTestBO.CreateUnsavedAddress(ContactPersonTestBO.CreateUnsavedContactPerson());
             IBusinessObjectCollection addresses = new BusinessObjectCollection<AddressTestBO> { address };
@@ -750,7 +758,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadBusinessObjectCollection_TwoItems()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             AddressTestBO address1 = AddressTestBO.CreateUnsavedAddress(contactPerson);
@@ -776,7 +784,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadBusinessObjectCollection_OneChild_Expanded()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
@@ -871,7 +879,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadTreeView_WithRelationship()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             AddressTestBO address = AddressTestBO.CreateUnsavedAddress(contactPerson);
@@ -880,6 +888,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof(IMultipleRelationship), relationship);
             IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
             Assert.AreEqual(1, multipleRelationship.BusinessObjectCollection.Count);
+            Assert.AreEqual(1, contactPerson.Addresses.Count);
             Assert.AreEqual(0, treeView.Nodes.Count);
             //---------------Execute Test ----------------------
             treeViewController.LoadTreeView(relationship);
@@ -894,7 +903,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadTreeView_WithRelationship_TwoChildren()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
 
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
@@ -919,7 +928,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadTreeView_WithRelationship_WhenExpandLevelsSpecified()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             AddressTestBO address = AddressTestBO.CreateUnsavedAddress(contactPerson);
@@ -946,7 +955,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadTreeView_WithRelationship_WhenExpandLevelsSpecified_WithDisplayLevelZero()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
@@ -970,7 +979,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadTreeView_WithRelationship_WhenExpandLevelsSpecified_WithDisplayLevelOne()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
@@ -997,7 +1006,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadTreeView_WithRelationship_WhenExpandLevelsSpecified_WithDisplayLevel()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
 
 
@@ -1034,7 +1043,7 @@ namespace Habanero.Test.UI.Base
         public void Test_AddNewParentToTreeView_ThenAddChildren_ThenExpandParent_ShouldHaveChildren()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
@@ -1082,7 +1091,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadRelationships_AddNewParentToTreeView_ThenAddChildren_ThenExpandParent_ShouldHaveChildre()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
@@ -1134,7 +1143,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BusinessObjectCollection_ChildRemoved_SetsSelectedNodeToNull()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation1 = OrganisationTestBO.CreateSavedOrganisation();
             OrganisationTestBO organisation2 = OrganisationTestBO.CreateSavedOrganisation();
@@ -1156,7 +1165,7 @@ namespace Habanero.Test.UI.Base
         public void Test_LoadTreeView_WithRelationship_OneChild_Expanded()
         {
             //---------------Set up test pack-------------------
-            TreeViewWin treeView = new TreeViewWin();
+            ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
@@ -1180,4 +1189,15 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(contactPerson.ToString(), childNode.Text);
         }
     }
+
+    //public class TestTreeViewControllerVWG : TestTreeViewControllerWin
+    //{
+
+    //    protected override IControlFactory GetControlFactory()
+    //    {
+    //        IControlFactory controlFactory = new ControlFactoryVWG();
+    //        GlobalUIRegistry.ControlFactory = controlFactory;
+    //        return controlFactory;
+    //    }
+    //}
 }
