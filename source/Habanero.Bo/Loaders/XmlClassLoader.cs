@@ -132,59 +132,66 @@ namespace Habanero.BO.Loaders
         /// </summary>
         protected override void LoadFromReader()
         {
-            _superClassDef = null;
-            _reader.Read();
-            LoadClassInfo();
-            LoadTableName();
-            LoadDisplayName();
-            LoadTypeParameter();
-            LoadClassID();
-            LoadModuleName();
-            _reader.Read();
-
-            List<string> keyDefXmls = new List<string>();
-            List<string> propDefXmls = new List<string>();
-            List<string> relationshipDefXmls = new List<string>();
-            List<string> uiDefXmls = new List<string>();
-            string superclassDescXML = null;
-            string primaryKeDefXML = null;
-            while (_reader.Name != "class")
+            try
             {
-                switch (_reader.Name)
-                {
-                    case "superClass":
-                        superclassDescXML = _reader.ReadOuterXml();
-                        break;
-                    case "property":
-                        propDefXmls.Add(_reader.ReadOuterXml());
-                        break;
-                    case "key":
-                        keyDefXmls.Add(_reader.ReadOuterXml());
-                        break;
-                    case "primaryKey":
-                        primaryKeDefXML = _reader.ReadOuterXml();
-                        break;
-                    case "relationship":
-                        relationshipDefXmls.Add(_reader.ReadOuterXml());
-                        break;
-                    case "ui":
-                        uiDefXmls.Add(_reader.ReadOuterXml());
-                        break;
-                    default:
-                        throw new InvalidXmlDefinitionException("The element '" +
-                                _reader.Name + "' is not a recognised class " +
-                                "definition element.  Ensure that you have the correct " +
-                                "spelling and capitalisation, or see the documentation " +
-                                "for available options.");
-                }
-            }
+                _superClassDef = null;
+                _reader.Read();
+                LoadClassInfo();
+                LoadTableName();
+                LoadDisplayName();
+                LoadTypeParameter();
+                LoadClassID();
+                LoadModuleName();
+                _reader.Read();
 
-            LoadSuperClassDesc(superclassDescXML);
-            LoadPropDefs(propDefXmls);
-            LoadKeyDefs(keyDefXmls);
-            LoadPrimaryKeyDef(primaryKeDefXML);
-            LoadRelationshipDefs(relationshipDefXmls);
-            LoadUIDefs(uiDefXmls);
+                List<string> keyDefXmls = new List<string>();
+                List<string> propDefXmls = new List<string>();
+                List<string> relationshipDefXmls = new List<string>();
+                List<string> uiDefXmls = new List<string>();
+                string superclassDescXML = null;
+                string primaryKeDefXML = null;
+                while (_reader.Name != "class")
+                {
+                    switch (_reader.Name)
+                    {
+                        case "superClass":
+                            superclassDescXML = _reader.ReadOuterXml();
+                            break;
+                        case "property":
+                            propDefXmls.Add(_reader.ReadOuterXml());
+                            break;
+                        case "key":
+                            keyDefXmls.Add(_reader.ReadOuterXml());
+                            break;
+                        case "primaryKey":
+                            primaryKeDefXML = _reader.ReadOuterXml();
+                            break;
+                        case "relationship":
+                            relationshipDefXmls.Add(_reader.ReadOuterXml());
+                            break;
+                        case "ui":
+                            uiDefXmls.Add(_reader.ReadOuterXml());
+                            break;
+                        default:
+                            throw new InvalidXmlDefinitionException("The element '" +
+                                    _reader.Name + "' is not a recognised class " +
+                                    "definition element.  Ensure that you have the correct " +
+                                    "spelling and capitalisation, or see the documentation " +
+                                    "for available options.");
+                    }
+                }
+
+                LoadSuperClassDesc(superclassDescXML);
+                LoadPropDefs(propDefXmls);
+                LoadKeyDefs(keyDefXmls);
+                LoadPrimaryKeyDef(primaryKeDefXML);
+                LoadRelationshipDefs(relationshipDefXmls);
+                LoadUIDefs(uiDefXmls);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException(string.Format("The Class Definition for {0} - {1} could not be loaded ", _className ,_displayName ), ex);
+            }
         }
 
         /// <summary>
