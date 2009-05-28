@@ -41,7 +41,7 @@ namespace Habanero.BO
         /// <summary>
         /// The Business Object that the error occured on.
         /// </summary>
-        public IBusinessObject BusinessObject { get; internal set; }
+        public IBusinessObject BusinessObject { get; set; }
 
         /// <summary>
         /// The <see cref="ErrorLevel"/> of the business object.
