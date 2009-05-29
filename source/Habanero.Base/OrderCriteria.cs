@@ -351,7 +351,7 @@ namespace Habanero.Base
         ///<exception cref="T:System.ArgumentException">Neither x nor y implements the <see cref="T:System.IComparable"></see> interface.-or- x and y are of different types and neither one can handle comparisons with the other. </exception><filterpriority>2</filterpriority>
         int IComparer.Compare(object x, object y)
         {
-                return Compare((IBusinessObject) x, (IBusinessObject) y);
+            return Compare((IBusinessObject) x, (IBusinessObject) y);
         }
     }
 }

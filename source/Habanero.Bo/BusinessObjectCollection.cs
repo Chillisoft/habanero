@@ -425,6 +425,7 @@ namespace Habanero.BO
             }
             if (addSuccessful) this.FireBusinessObjectAdded(bo);
         }
+
         /// <summary>
         /// Adds a business object to the collection of business objects without raising any events.
         /// But still verifies the object does not exist in Created, removed etc collections
@@ -921,6 +922,7 @@ namespace Habanero.BO
                 this.RemovedBusinessObjects.Clear();
                 this.AddedBusinessObjects.Clear();
                 this.MarkedForDeleteBusinessObjects.Clear();
+                this.TimeLastLoaded = null;
             }
         }
 
@@ -1303,11 +1305,31 @@ namespace Habanero.BO
                 Reverse();
             }
         }
-
+        /// <summary>
+        /// Sorts the Collection by the Order Criteria Set up during the Loading of this collection.
+        /// For <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/>'s this will be the 
+        /// Order Criteria set up in the orderBy in the ClassDef.xml or the <see cref="ClassDef"/>
+        /// </summary>
+        public new void Sort()
+        {
+            if (this.SelectQuery.OrderCriteria.Fields.Count > 0)
+            {
+                base.Sort(new StronglyTypedComperer<TBusinessObject>(this.SelectQuery.OrderCriteria));
+            }
+        }
+        /// <summary>
+        /// Sorts the collection by the property specified. The second parameter
+        /// indicates whether this property is a business object property or
+        /// whether it is a property defined in the code.  For example, a full name
+        /// would be a code-calculated property that is not itself a business
+        /// object property, even though it uses the BO properties of first name
+        /// and surname, and the argument would thus be set as false.
+        /// </summary>
+        /// <param name="comparer">The property name to sort on</param>
         void IBusinessObjectCollection.Sort(IComparer comparer)
         {
             if (comparer == null) throw new ArgumentNullException("comparer");
-            this.Sort(new StronglyTypedComperer<TBusinessObject>(comparer));
+            base.Sort(new StronglyTypedComperer<TBusinessObject>(comparer));
         }
 
 

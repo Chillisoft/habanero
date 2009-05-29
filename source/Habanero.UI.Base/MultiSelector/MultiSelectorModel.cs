@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Habanero.Base;
 
 namespace Habanero.UI.Base
 {
@@ -223,7 +224,16 @@ namespace Habanero.UI.Base
         {
             if (_allOptions.Contains(item) && !_selectedOptions.Contains(item))
             {
-                _selectedOptions.Add(item);
+                if (_selectedOptions is IBusinessObjectCollection)
+                {
+                    IBusinessObjectCollection col = (IBusinessObjectCollection)_selectedOptions;
+                    col.Add( (IBusinessObject) item);
+
+                }
+                else
+                {
+                    _selectedOptions.Add(item);
+                }
                 FireSelected(item);
             }
         }

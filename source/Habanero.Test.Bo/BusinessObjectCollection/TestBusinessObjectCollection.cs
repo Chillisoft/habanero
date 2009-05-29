@@ -187,6 +187,27 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, cpCol.Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
         }
+        //
+        //        Clear a business object collection
+        //This clears the current collection, persisted, removed, deleted and created list
+        [Test]
+        public void Test_Clear_ShouldClearTheTimeLastLoaded()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            ContactPersonTestBO.DeleteAllContactPeople();
+            CreateTwoSavedContactPeople();
+            cpCol.LoadAll();
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, cpCol.PersistedBusinessObjects.Count);
+
+            //---------------Execute Test ----------------------
+            cpCol.Clear();
+            //---------------Test Result -----------------------
+            Assert.IsNull(cpCol.TimeLastLoaded);
+        }
         [Test]
         public void Test_ClearClearsCreatedCollection()
         {
@@ -1226,18 +1247,82 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsNotNull(col.TimeLastLoaded);
         }
 
+        [Test]
+        public void Test_Sort_WithoutOrderCriteria_ShouldDoNothing()
+        {
+
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzzz", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            const string criteria = "FirstName = '" + firstName + "'";
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load(criteria, "");
+            col.Sort("Surname", true, false);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp1, col[0], "Collection should be in Surname Desc Order");
+            Assert.AreSame(cp2, col[1], "Collection should be in Surname Desc Order");
+            //---------------Execute Test ----------------------
+            col.Sort();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp1, col[0], "Collection Should not change the order since no default Sort criteria where set up");
+            Assert.AreSame(cp2, col[1]);
+        }
 
         [Test]
-        public void TestMethod()
+        public void Test_Sort_WhenOrderCriteriaSetUp_ShouldResortTheCollectionByTheOrderCriteria()
         {
             //---------------Set up test pack-------------------
-            
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzzz", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            const string criteria = "FirstName = '" + firstName + "'";
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load(criteria, "Surname");
+            col.Sort("Surname", true, false);
             //---------------Assert Precondition----------------
-
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp1, col[0], "Collection should be in Surname Desc Order");
+            Assert.AreSame(cp2, col[1], "Collection should be in Surname Desc Order");
             //---------------Execute Test ----------------------
-
+            col.Sort();
             //---------------Test Result -----------------------
-
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp2, col[0], "Collection should b sorted by the Surname Property as per the origional collection.Load");
+            Assert.AreSame(cp1, col[1]);
+        }
+        [Test]
+        public void Test_Sort_WhenOrderCriteriaSetup_AndCollectionSorted_ShouldNotChangeOrder()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzzz", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            const string criteria = "FirstName = '" + firstName + "'";
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load(criteria, "Surname");
+            col.Sort("Surname", true, true);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp2, col[0], "Collection should be in Surname Asc Order");
+            Assert.AreSame(cp1, col[1], "Collection should be in Surname Asc Order");
+            //---------------Execute Test ----------------------
+            col.Sort();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp2, col[0], "Collection should b sorted by the Surname Property as per the origional collection.Load");
+            Assert.AreSame(cp1, col[1]);
         }
 
         /// <summary>
