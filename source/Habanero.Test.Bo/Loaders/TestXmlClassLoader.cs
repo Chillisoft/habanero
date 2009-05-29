@@ -49,7 +49,7 @@ namespace Habanero.Test.BO.Loaders
             _loader.LoadClass("<class1 name=\"TestClass\" assembly=\"Habanero.Test.BO.Loaders\" />");
         }
 
-        [Test, ExpectedException(typeof(XmlException))]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestClassWithNoAssembly()
         {
             ClassDef def = _loader.LoadClass(@"
@@ -62,7 +62,7 @@ namespace Habanero.Test.BO.Loaders
 			");
         }
 
-        [Test, ExpectedException(typeof(XmlException))]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestClassWithNoClassname()
         {
             ClassDef def = _loader.LoadClass(@"

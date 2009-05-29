@@ -255,11 +255,12 @@ namespace Habanero.Test.BO.Loaders
                 //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)
             {
+                StringAssert.Contains("The Class Definition for TestClass -  could not be loaded ", ex.Message); 
                 StringAssert.Contains("The property 'PropDefDoesNonExist' defined "
                           + "in the 'relatedProperty' element in its 'Property' " 
                           + "attribute, which specifies the property in the class " 
                           + "'TestClass' from which the relationship 'TestRelatedClass' will link is not defined in the " 
-                          + "class 'TestClass'.", ex.Message);
+                          + "class 'TestClass'.", ex.InnerException.Message);
             }
         }
         [Test]
@@ -1084,7 +1085,8 @@ namespace Habanero.Test.BO.Loaders
             }
             catch (InvalidXmlDefinitionException ex)
             {
-                Assert.AreEqual("A primaryKey node must have one or more prop nodes", ex.Message);
+                Assert.AreEqual("The Class Definition for TestClass -  could not be loaded ", ex.Message);
+                Assert.AreEqual("A primaryKey node must have one or more prop nodes", ex.InnerException.Message);
                 //Assert.AreEqual("In the class called 'TestClass', the primary key has no properties defined.", ex.Message);
                 //TODO Mark: 09 Feb 2009 - Improve this error message to something similar to above
             }
@@ -1113,7 +1115,8 @@ namespace Habanero.Test.BO.Loaders
             }
             catch (InvalidXmlDefinitionException ex)
             {
-                Assert.AreEqual("A primaryKey node must have one or more prop nodes", ex.Message);
+                Assert.AreEqual("The Class Definition for TestClass -  could not be loaded ", ex.Message);
+                Assert.AreEqual("A primaryKey node must have one or more prop nodes", ex.InnerException.Message);
                 //Assert.AreEqual("In the class called 'TestClass', the primary key has no properties defined.", ex.Message);
                 //TODO Mark: 09 Feb 2009 - Improve this error message to something similar to above
             }
@@ -1143,9 +1146,10 @@ namespace Habanero.Test.BO.Loaders
                 //---------------Test Result -----------------------
                 Assert.Fail("Should have thrown an InvalidPropertyException");
             }
-            catch (InvalidPropertyException ex)
+            catch (InvalidXmlDefinitionException ex)
             {
-                Assert.AreEqual("You cannot have more than one property for a primary key that represents an object's Guid ID", ex.Message);
+                Assert.AreEqual("The Class Definition for TestClass -  could not be loaded ", ex.Message);
+                Assert.AreEqual("You cannot have more than one property for a primary key that represents an object's Guid ID", ex.InnerException.Message);
             }
         }
 
