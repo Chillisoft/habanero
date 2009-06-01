@@ -60,8 +60,8 @@ namespace Habanero.BO
 			}
 			if (reason.Length > 0)
 			{
-				reason = String.Format("Cannot delete this '{0}' for the following reasons:",
-					classDef.ClassName) + reason;
+				reason = String.Format("Cannot delete this '{0}' identified as '{1}' for the following reasons:",
+                    classDef.ClassName, bo.ToString()) + reason;
 			}
 			/*
 			 * Message format:-

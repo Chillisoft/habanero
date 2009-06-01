@@ -104,6 +104,7 @@ namespace Habanero.UI.Win
         public DatabaseConfig DatabaseConfig
         {
             set { _databaseConfig = value; }
+            get { return _databaseConfig; }
         }
 
         /// <summary>
