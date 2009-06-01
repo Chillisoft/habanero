@@ -65,7 +65,6 @@ namespace Habanero.UI.Base
             }
         }
 
-        //TODO Mark 18 Mar 2009: Review why this is needed
 
         public TreeViewController(ITreeView treeView)
         {
@@ -397,6 +396,7 @@ namespace Habanero.UI.Base
             if (isNewColTag)
             {
                 node = nodes.Add("");
+                node.Collapse(false);
                 if (_levelsToDisplay > -1 && node.Level > _levelsToDisplay)
                 {
                     nodes.Remove(node);
@@ -455,6 +455,7 @@ namespace Habanero.UI.Base
             if (!ObjectNodes.ContainsKey(businessObject))
             {
                 node = nodes.Add("");
+                node.Collapse(false);
                 if (_levelsToDisplay > -1 && node.Level > _levelsToDisplay)
                 {
                     nodes.Remove(node);
@@ -807,7 +808,6 @@ namespace Habanero.UI.Base
         public void SetVisibility(IBusinessObject businessObject, bool visible)
         {
             NodeState nodeState = GetBusinessObjectNodeState(businessObject);
-            //TODO: If null
             if (visible)
             {
                 int index = FindPositionIndexOf(businessObject);

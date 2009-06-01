@@ -174,7 +174,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual("Addresses", contactPerson2AddressRelationshipNode.Text);
             Assert.AreEqual
                 (1, contactPerson2AddressRelationshipNode.Nodes.Count,
-                 "Only the dummy should be present because the node is not expanded");
+                 "Only the dummy should be present because the ContactPerson Node is not expanded So No Addresses Should be loaded");
             //---------------Execute Test ----------------------
             contactPerson2AddressRelationshipNode.Expand();
             ReflectionUtilities.ExecutePrivateMethod(treeViewController, "ExpandNode", contactPerson2AddressRelationshipNode);
@@ -422,10 +422,10 @@ namespace Habanero.Test.UI.Base
             treeViewController.LoadTreeView(organisation);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, treeView.Nodes.Count);
-            ITreeNode dbNode = treeView.Nodes[0];
-            Assert.AreEqual(organisation.ToString(), dbNode.Text);
-            Assert.AreEqual(1, dbNode.Nodes.Count);
-            ITreeNode relationshipNode = dbNode.Nodes[0];
+            ITreeNode organisationNode = treeView.Nodes[0];
+            Assert.AreEqual(organisation.ToString(), organisationNode.Text);
+            Assert.AreEqual(1, organisationNode.Nodes.Count);
+            ITreeNode relationshipNode = organisationNode.Nodes[0];
             Assert.AreEqual
                 ("$DUMMY$", relationshipNode.Text,
                  "Dummy node present so that the tree view has the + icon for expanding");
@@ -687,17 +687,17 @@ namespace Habanero.Test.UI.Base
             ITreeNode rootNode = treeView.Nodes[0];
             Assert.AreEqual(organisation.ToString(), rootNode.Text);
             Assert.AreEqual(1, rootNode.Nodes.Count);
-            ITreeNode relationshipNode = rootNode.Nodes[0];
-            Assert.AreEqual("ContactPeople", relationshipNode.Text);
-            Assert.AreEqual(0, relationshipNode.Nodes.Count);
+            ITreeNode contactPeopleNode = rootNode.Nodes[0];
+            Assert.AreEqual("ContactPeople", contactPeopleNode.Text);
+            Assert.AreEqual(0, contactPeopleNode.Nodes.Count);
             //---------------Execute Test ----------------------
             treeViewController.SetVisibility(contactPerson, true);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, treeView.Nodes.Count);
             Assert.AreEqual(organisation.ToString(), rootNode.Text);
             Assert.AreEqual(1, rootNode.Nodes.Count);
-            Assert.AreEqual("ContactPeople", relationshipNode.Text);
-            Assert.AreEqual(1, relationshipNode.Nodes.Count);
+            Assert.AreEqual("ContactPeople", contactPeopleNode.Text);
+            Assert.AreEqual(1, contactPeopleNode.Nodes.Count);
         }
 
         [Test]
@@ -717,20 +717,20 @@ namespace Habanero.Test.UI.Base
             ITreeNode rootNode = treeView.Nodes[0];
             Assert.AreEqual(organisation.ToString(), rootNode.Text);
             Assert.AreEqual(1, rootNode.Nodes.Count);
-            ITreeNode relationshipNode = rootNode.Nodes[0];
-            Assert.AreEqual("ContactPeople", relationshipNode.Text);
-            Assert.AreEqual(2, relationshipNode.Nodes.Count);
+            ITreeNode contactPeopleNode = rootNode.Nodes[0];
+            Assert.AreEqual("ContactPeople", contactPeopleNode.Text);
+            Assert.AreEqual(2, contactPeopleNode.Nodes.Count);
             //---------------Execute Test ----------------------
             treeViewController.SetVisibility(contactPerson2, true);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, treeView.Nodes.Count);
             Assert.AreEqual(organisation.ToString(), rootNode.Text);
             Assert.AreEqual(1, rootNode.Nodes.Count);
-            Assert.AreEqual("ContactPeople", relationshipNode.Text);
-            Assert.AreEqual(3, relationshipNode.Nodes.Count);
-            Assert.AreEqual(treeViewController.GetBusinessObjectTreeNode(contactPerson1), relationshipNode.Nodes[0]);
-            Assert.AreEqual(treeViewController.GetBusinessObjectTreeNode(contactPerson2), relationshipNode.Nodes[1]);
-            Assert.AreEqual(treeViewController.GetBusinessObjectTreeNode(contactPerson3), relationshipNode.Nodes[2]);
+            Assert.AreEqual("ContactPeople", contactPeopleNode.Text);
+            Assert.AreEqual(3, contactPeopleNode.Nodes.Count);
+            Assert.AreEqual(treeViewController.GetBusinessObjectTreeNode(contactPerson1), contactPeopleNode.Nodes[0]);
+            Assert.AreEqual(treeViewController.GetBusinessObjectTreeNode(contactPerson2), contactPeopleNode.Nodes[1]);
+            Assert.AreEqual(treeViewController.GetBusinessObjectTreeNode(contactPerson3), contactPeopleNode.Nodes[2]);
         }
 
         [Test]
@@ -1036,9 +1036,6 @@ namespace Habanero.Test.UI.Base
            
         }
 
-
-
-
         [Test]
         public void Test_AddNewParentToTreeView_ThenAddChildren_ThenExpandParent_ShouldHaveChildren()
         {
@@ -1088,14 +1085,13 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_LoadRelationships_AddNewParentToTreeView_ThenAddChildren_ThenExpandParent_ShouldHaveChildre()
+        public void Test_LoadRelationships_AddNewParentToTreeView_ThenAddChildren_ThenExpandParent_ShouldHaveChildren()
         {
             //---------------Set up test pack-------------------
             ITreeView treeView = GlobalUIRegistry.ControlFactory.CreateTreeView();
             TreeViewController treeViewController = new TreeViewController(treeView);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO contactPerson = CreateUnsavedContactPerson(organisation);
-            IBusinessObjectCollection organisations = new BusinessObjectCollection<OrganisationTestBO> { organisation };
             treeViewController.LoadTreeView(organisation.Relationships["ContactPeople"], 2);
 
             //-------------Assert Preconditions -------------
@@ -1190,14 +1186,14 @@ namespace Habanero.Test.UI.Base
         }
     }
 
-    //public class TestTreeViewControllerVWG : TestTreeViewControllerWin
-    //{
+    public class TestTreeViewControllerVWG : TestTreeViewControllerWin
+    {
 
-    //    protected override IControlFactory GetControlFactory()
-    //    {
-    //        IControlFactory controlFactory = new ControlFactoryVWG();
-    //        GlobalUIRegistry.ControlFactory = controlFactory;
-    //        return controlFactory;
-    //    }
-    //}
+        protected override IControlFactory GetControlFactory()
+        {
+            IControlFactory controlFactory = new ControlFactoryVWG();
+            GlobalUIRegistry.ControlFactory = controlFactory;
+            return controlFactory;
+        }
+    }
 }

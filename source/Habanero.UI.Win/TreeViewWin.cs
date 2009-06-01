@@ -493,7 +493,8 @@ namespace Habanero.UI.Win
             /// <exception cref="T:System.NullReferenceException"><paramref name="value" /> is null reference in the <see cref="T:System.Collections.IList" />.</exception><filterpriority>2</filterpriority>
             void IList.Insert(int index, object value)
             {
-                ((IList)_nodes).Insert(index, value);
+                _nodes.Insert(index, (TreeNode) value);
+                    //(IList)_nodes).Insert(index, value);
             }
 
             /// <summary>
