@@ -835,29 +835,7 @@ namespace Habanero.DB
                 selectSql.SetupCommand(cmd);
                 IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-                DataTable dt = new DataTable();
-                dt.TableName = "TableName";
-                if (reader.Read())
-                {
-                    for (int i = 0; i < reader.FieldCount; i++)
-                    {
-                        DataColumn add = dt.Columns.Add();
-                        string columnName = reader.GetName(i);
-                        if (!String.IsNullOrEmpty(columnName)) add.ColumnName = columnName;
-                        add.DataType = reader.GetFieldType(i);
-                    }
-                    do
-                    {
-                        DataRow row = dt.NewRow();
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            row[i] = reader.GetValue(i);
-                        }
-                        dt.Rows.Add(row);
-                    } while (reader.Read());
-                }
-                reader.Close();
-                return dt;
+                return GetDataTable(reader, "TableName");
             }
             catch (Exception ex)
             {
@@ -871,6 +849,43 @@ namespace Habanero.DB
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
+            }
+        }
+
+        /// <summary>
+        /// Returns a dataTable with the data from the reader and the columns names and field types set up.
+        /// </summary>
+        /// <param name="reader">the Reader that the dataTable will be made from</param>
+        /// <param name="dataTableName">the name of the DataTable</param>
+        /// <returns></returns>
+        public static DataTable GetDataTable(IDataReader reader, string dataTableName)
+        {
+            DataTable dt = new DataTable {TableName = dataTableName};
+            if (reader.Read())
+            {
+                CreateDataColumns(reader, dt);
+                do
+                {
+                    DataRow row = dt.NewRow();
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        row[i] = reader.GetValue(i);
+                    }
+                    dt.Rows.Add(row);
+                } while (reader.Read());
+            }
+            reader.Close();
+            return dt;
+        }
+
+        private static void CreateDataColumns(IDataRecord reader, DataTable dt)
+        {
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                DataColumn add = dt.Columns.Add();
+                string columnName = reader.GetName(i);
+                if (!String.IsNullOrEmpty(columnName)) add.ColumnName = columnName;
+                add.DataType = reader.GetFieldType(i);
             }
         }
 
