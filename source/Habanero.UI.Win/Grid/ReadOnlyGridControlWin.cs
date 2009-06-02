@@ -84,7 +84,7 @@ namespace Habanero.UI.Win
 
             _doubleClickEditsBusinessObject = false;
             DoubleClickEditsBusinessObject = true;
-            this.Grid.BusinessObjectSelected +=Grid_OnBusinessObjectSelected;
+            this.Grid.BusinessObjectSelected += Grid_OnBusinessObjectSelected;
         }
 
         #region IReadOnlyGridControl Members
@@ -387,7 +387,8 @@ namespace Habanero.UI.Win
                 if (value)
                 {
                     _grid.RowDoubleClicked += Buttons_EditClicked;
-                } else
+                }
+                else
                 {
                     _grid.RowDoubleClicked -= Buttons_EditClicked;
                 }
@@ -432,24 +433,31 @@ namespace Habanero.UI.Win
 
         private void _filterControl_OnFilter(object sender, EventArgs e)
         {
-            if (FilterMode == FilterModes.Search)
+            try
             {
-                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
-                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
+                if (FilterMode == FilterModes.Search)
                 {
-                    if (!string.IsNullOrEmpty(searchClause))
+                    string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+                    if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
                     {
-                        searchClause += " AND ";
+                        if (!string.IsNullOrEmpty(searchClause))
+                        {
+                            searchClause += " AND ";
+                        }
+                        searchClause += AdditionalSearchCriteria;
                     }
-                    searchClause += AdditionalSearchCriteria;
+                    IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
+                        GetBusinessObjectCollection(ClassDef, searchClause, OrderBy);
+                    SetBusinessObjectCollection(collection);
                 }
-                IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
-                    GetBusinessObjectCollection(ClassDef, searchClause, OrderBy);
-                SetBusinessObjectCollection(collection);
+                else
+                {
+                    Grid.ApplyFilter(_filterControl.GetFilterClause());
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Grid.ApplyFilter(_filterControl.GetFilterClause());
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
@@ -463,73 +471,95 @@ namespace Habanero.UI.Win
 
         private void Buttons_DeleteClicked(object sender, EventArgs e)
         {
-            if (Grid.BusinessObjectCollection == null)
+            try
             {
-                throw new GridDeveloperException("You cannot call delete since the grid has not been set up");
-            }
-            IBusinessObject selectedBo = SelectedBusinessObject;
+                if (Grid.BusinessObjectCollection == null)
+                {
+                    throw new GridDeveloperException("You cannot call delete since the grid has not been set up");
+                }
+                IBusinessObject selectedBo = SelectedBusinessObject;
 
-            if (selectedBo != null)
+                if (selectedBo != null)
+                {
+                    _grid.SelectedBusinessObject = null;
+                    try
+                    {
+                        _businessObjectDeletor.DeleteBusinessObject(selectedBo);
+                    }
+                    catch (Exception ex)
+                    {
+                        GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting", "Problem Deleting");
+                    }
+                }
+            }
+            catch (Exception ex)
             {
-                _grid.SelectedBusinessObject = null;
-                try
-                {
-                    _businessObjectDeletor.DeleteBusinessObject(selectedBo);
-                }
-                catch (Exception ex)
-                {
-                    GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting", "Problem Deleting");
-                }
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
         private void Buttons_EditClicked(object sender, EventArgs e)
         {
-            if (Grid.BusinessObjectCollection == null)
+            try
             {
-                throw new GridDeveloperException("You cannot call edit since the grid has not been set up");
-            }
-            IBusinessObject selectedBo = SelectedBusinessObject;
-            if (selectedBo != null)
-            {
-                if (_businessObjectEditor != null)
+                if (Grid.BusinessObjectCollection == null)
                 {
-                    _businessObjectEditor.EditObject(selectedBo, UiDefName, null);
+                    throw new GridDeveloperException("You cannot call edit since the grid has not been set up");
                 }
+                IBusinessObject selectedBo = SelectedBusinessObject;
+                if (selectedBo != null)
+                {
+                    if (_businessObjectEditor != null)
+                    {
+                        _businessObjectEditor.EditObject(selectedBo, UiDefName, null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
         private void Buttons_AddClicked(object sender, EventArgs e)
         {
-            if (Grid.BusinessObjectCollection == null)
+            try
             {
-                throw new GridDeveloperException("You cannot call add since the grid has not been set up");
+                if (Grid.BusinessObjectCollection == null)
+                {
+                    throw new GridDeveloperException("You cannot call add since the grid has not been set up");
+                }
+                if (_businessObjectCreator == null)
+                {
+                    throw new GridDeveloperException(
+                        "You cannot call add as there is no business object creator set up for the grid");
+                }
+                IBusinessObject newBo = _businessObjectCreator.CreateBusinessObject();
+                if (_businessObjectEditor != null && newBo != null)
+                {
+                    _businessObjectEditor.EditObject(newBo, UiDefName,
+                                                     delegate(IBusinessObject bo, bool cancelled)
+                                                         {
+                                                             IBusinessObjectCollection collection =
+                                                                 this.Grid.BusinessObjectCollection;
+                                                             if (cancelled)
+                                                             {
+                                                                 collection.Remove(bo);
+                                                             }
+                                                             else
+                                                             {
+                                                                 if (!collection.Contains(bo))
+                                                                 {
+                                                                     collection.Add(bo);
+                                                                 }
+                                                                 Grid.SelectedBusinessObject = bo;
+                                                             }
+                                                         });
+                }
             }
-            if (_businessObjectCreator == null)
+            catch (Exception ex)
             {
-                throw new GridDeveloperException(
-                    "You cannot call add as there is no business object creator set up for the grid");
-            }
-            IBusinessObject newBo = _businessObjectCreator.CreateBusinessObject();
-            if (_businessObjectEditor != null && newBo != null)
-            {
-                _businessObjectEditor.EditObject(newBo, UiDefName, 
-                    delegate(IBusinessObject bo, bool cancelled)
-                    {
-                        IBusinessObjectCollection collection = this.Grid.BusinessObjectCollection;
-                        if (cancelled)
-                        {
-                            collection.Remove(bo);
-                        }
-                        else
-                        {
-                            if (!collection.Contains(bo))
-                            {
-                                collection.Add(bo);
-                            }
-                            Grid.SelectedBusinessObject = bo;
-                        }
-                    });
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 

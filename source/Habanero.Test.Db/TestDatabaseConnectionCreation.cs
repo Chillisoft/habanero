@@ -75,7 +75,7 @@ namespace Habanero.Test.DB
             DatabaseConnection conn =
                 new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection");
             //---------------Test Result -----------------------
-            Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
+            Assert.AreEqual(IsolationLevel.ReadUncommitted, conn.IsolationLevel);
         }
 
         [Test]
