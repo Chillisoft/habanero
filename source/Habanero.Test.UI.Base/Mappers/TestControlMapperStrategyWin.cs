@@ -326,6 +326,7 @@ namespace Habanero.Test.UI.Base
         public void Test_KeyPressMovesFocusToNextControl()
         {
             //---------------Set up test pack-------------------
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
             IControlHabanero parentControl = _factory.CreateControl();
             ControlMapperStrategyWin strategyWin = new ControlMapperStrategyWin();
             ITextBox textBox = _factory.CreateTextBox();

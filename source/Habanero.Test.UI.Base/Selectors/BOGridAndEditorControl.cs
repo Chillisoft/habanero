@@ -564,6 +564,7 @@ namespace Habanero.Test.UI.Base
         public void TestNewButtonClickedCreatesBO_ExistingCollection()
         {
             //---------------Set up test pack-------------------
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
             GetCustomClassDef();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BOGridAndEditorControlWin<OrganisationTestBO> andBOGridAndEditorControlWin = CreateGridAndBOEditorControlWin();
@@ -579,6 +580,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(andBOGridAndEditorControlWin.IBOEditorControl.Focused);
             //  ---------------Execute Test ----------------------
             andBOGridAndEditorControlWin.ButtonGroupControl["New"].PerformClick();
+
             // ---------------Test Result -----------------------
             Assert.AreEqual(5, andBOGridAndEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.AreEqual(5, organisationTestBOS.Count);
