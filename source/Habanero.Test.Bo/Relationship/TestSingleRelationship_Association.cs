@@ -20,15 +20,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
-using Habanero.DB4O;
 using Habanero.Test.Structure;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
@@ -427,7 +425,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(relationship.IsDirty);
 
             //---------------Execute Test ----------------------
-            myBO.MarkForDelete();
+            ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDeleted", true);
             bool isDirty = relationship.IsDirty;
 
             //---------------Test Result -----------------------
@@ -445,15 +443,19 @@ namespace Habanero.Test.BO.Relationship
             myBO.FirstName = TestUtil.GetRandomString();
             myBO.Organisation = organisationTestBO;
             organisationTestBO.Save();
-            myBO.MarkForDelete();
+            ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDeleted", true);
+            ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDirty", true);
 
+            //---------------Assert Preconditions---------------
+            Assert.IsTrue(myBO.Status.IsDeleted);
+            Assert.IsTrue(myBO.Status.IsDirty);
             //---------------Execute Test ----------------------
 
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.Contains(myBO, (ICollection)dirtyChildren);
             Assert.AreEqual(1, dirtyChildren.Count);
+            Assert.Contains(myBO, (ICollection)dirtyChildren);
         }
 
         [Test]

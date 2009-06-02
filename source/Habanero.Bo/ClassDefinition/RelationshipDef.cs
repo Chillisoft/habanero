@@ -54,6 +54,7 @@ namespace Habanero.BO.ClassDefinition
         private string _relatedObjectAssemblyName;
         private string _relatedObjectClassName;
 
+
         /// <summary>
         /// The OrderBy Criteria being used by this relationship.
         /// </summary>
@@ -96,8 +97,8 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="relationshipType"></param>
         protected RelationshipDef(string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType)
             : this(relationshipName, null, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, insertParentAction, relationshipType)
-        {
-        }
+		{
+		}
 
         private RelationshipDef(string relationshipName, Type relatedObjectClassType, string relatedObjectAssemblyName, string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType)
 		{

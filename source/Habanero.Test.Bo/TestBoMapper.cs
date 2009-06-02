@@ -235,7 +235,9 @@ namespace Habanero.Test.BO
         public void TestVirtualPropertyValue()
         {
             Mock mockDbConnection = new DynamicMock(typeof (IDatabaseConnection));
+#pragma warning disable 168
             IDatabaseConnection connection = (IDatabaseConnection) mockDbConnection.MockInstance;
+#pragma warning restore 168
 
             ClassDef.ClassDefs.Clear();
             itsClassDef = MyBO.LoadDefaultClassDef();

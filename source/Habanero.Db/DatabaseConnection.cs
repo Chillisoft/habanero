@@ -363,22 +363,6 @@ namespace Habanero.DB
             }
         }
 
-//		public IDbConnection GetConnection() {
-//			if (_currentDbConnection == null) {
-//				_currentDbConnection = GetNewConnection();
-//				_connections.Add(_currentDbConnection);
-//			}
-//			return _currentDbConnection;
-//		}
-
-        //		public IDataReader LoadDataReader(SqlStatement selectSql,
-        //		                                  string strSearchCriteria,
-        //		                                  string strOrderByCriteria) {
-        //			selectSql.AppendCriteria(strSearchCriteria) ;
-        //			selectSql.AppendOrderBy(strOrderByCriteria) ;
-        //			return LoadDataReader(selectSql);
-        //		}
-
         /// <summary>
         /// Loads a data reader and specifies an order-by clause
         /// </summary>
@@ -683,7 +667,7 @@ namespace Habanero.DB
                     //cmd.CommandText = sql;
                     try
                     {
-                        totalRowsAffected += cmd.ExecuteNonQuery();
+                    totalRowsAffected += cmd.ExecuteNonQuery();
                     }
                     catch (Exception ex)
                     {

@@ -19,13 +19,11 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB4O;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
@@ -449,7 +447,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(relationship.IsDirty);
 
             //---------------Execute Test ----------------------
-            myBO.MarkForDelete();
+            ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDeleted", true);
             bool isDirty = relationship.IsDirty;
 
             //---------------Test Result -----------------------
@@ -467,8 +465,8 @@ namespace Habanero.Test.BO.Relationship
             myBO.FirstName = TestUtil.GetRandomString();
             myBO.Organisation = organisationTestBO;
             organisationTestBO.Save();
-            myBO.MarkForDelete();
-
+            ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDeleted", true);
+            ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDirty", true);
             //---------------Execute Test ----------------------
 
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();

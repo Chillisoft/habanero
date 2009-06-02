@@ -24,6 +24,8 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
+using Habanero.Util;
+using log4net;
 using DataGridViewSelectionMode=System.Windows.Forms.DataGridViewSelectionMode;
 using MessageBoxButtons=System.Windows.Forms.MessageBoxButtons;
 using MessageBoxIcon=System.Windows.Forms.MessageBoxIcon;
@@ -41,6 +43,8 @@ namespace Habanero.UI.Win
     /// </summary>
     public class EditableGridWin : GridBaseWin, IEditableGrid
     {
+        protected static readonly ILog _log = LogManager.GetLogger("Habanero.UI.Win.EditableGridWin");
+
         private DeleteKeyBehaviours _deleteKeyBehaviour;
 
         /// <summary>
@@ -63,8 +67,11 @@ namespace Habanero.UI.Win
             ComboBoxClickOnce = true;
             UserDeletingRow += ConfirmRowDeletion;
             CheckUserConfirmsDeletionDelegate += CheckUserWantsToDelete;
+            this.UserDeletedRow+=((sender, e) => ResetBOCollection());
             CellClick += CellClickHandler;
         }
+
+
 
         /// <summary>
         /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
@@ -86,12 +93,13 @@ namespace Habanero.UI.Win
             {
                 if (this.BusinessObjectCollection != null)
                 {
+                    //EditableDataSetProvider editableDataSetProvider = (EditableDataSetProvider)this.DataSetProvider;
+                    //editableDataSetProvider.DeregisterForEvents();
+                    
                     this.BusinessObjectCollection.CancelEdits();
-                    IBusinessObjectCollection col = this.BusinessObjectCollection;
-                    IBusinessObject bo = this.SelectedBusinessObject;
-                    SetBusinessObjectCollection(null);
-                    SetBusinessObjectCollection(col);
-                    SelectedBusinessObject = bo;
+                    ResetBOCollection();
+                    //editableDataSetProvider.RegisterForEvents();//This is not necessary as the SetBOCol ultimately
+                    //registers for all events 
                 }
                 else if (this.DataSource is DataView)
                 {
@@ -103,6 +111,20 @@ namespace Habanero.UI.Win
             {
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
+        }
+
+        private void ResetBOCollection()
+        {
+            IBusinessObjectCollection col = this.BusinessObjectCollection;
+            IBusinessObject bo = this.SelectedBusinessObject;
+            if (this.DataSource != null)
+            {
+                ((DataView) this.DataSource).Table.RejectChanges();
+
+            }
+            SetBusinessObjectCollection(null);
+            SetBusinessObjectCollection(col);
+            SelectedBusinessObject = bo;
         }
 
         /// <summary>
@@ -161,9 +183,19 @@ namespace Habanero.UI.Win
                 if (ConfirmDeletion && !CheckUserConfirmsDeletionDelegate())
                 {
                     e.Cancel = true;
-                
+                    return;
                 }
                 IBusinessObject businessObject = this.DataSetProvider.Find(e.Row.Index);
+                if (businessObject == null)
+                {
+                    //this.RefreshGrid();
+                    //GlobalUIRegistry.ControlFactory.ShowMessageBox(
+                    //    "There was a problem deleting the selected item please try again");
+
+                    _log.Debug("ConfirmRowDeletion - Row Index :" + e.Row.Index + " - No business object found");
+                    e.Cancel = true;
+                    return;
+                }
                 string message;
                 if (!businessObject.IsDeletable(out message))
                 {
@@ -240,6 +272,24 @@ namespace Habanero.UI.Win
                 }
             }
         }
+#pragma warning disable 168
+        /// <summary>
+        /// Carries out additional actions when a cell is clicked.  Specifically, if
+        /// a combobox cell is clicked, the cell goes into edit mode immediately.
+        /// </summary>
+        public void CellClickHandler(object sender, DataGridViewCellEventArgs e)
+        {
+            bool setToEditMode = CheckIfComboBoxShouldSetToEditMode(e.ColumnIndex, e.RowIndex);
+            if (!setToEditMode) return;
+            DataGridViewColumn dataGridViewColumn =
+                ((DataGridViewColumnWin) Columns[e.ColumnIndex]).DataGridViewColumn;
+            ControlsHelper.SafeGui(this, () => BeginEdit(true));
+            if (EditingControl is DataGridViewComboBoxEditingControl)
+            {
+                ((DataGridViewComboBoxEditingControl) EditingControl).DroppedDown = true;
+            }
+        }
+#pragma warning restore 168
 
         /// <summary>
         /// Displays a message box to the user to check if they want to proceed with
@@ -252,25 +302,6 @@ namespace Habanero.UI.Win
                 MessageBox.Show
                     ("Are you sure you want to delete the selected row(s)?", "Delete?", MessageBoxButtons.YesNo,
                      MessageBoxIcon.Exclamation) == System.Windows.Forms.DialogResult.Yes;
-        }
-
-        /// <summary>
-        /// Carries out additional actions when a cell is clicked.  Specifically, if
-        /// a combobox cell is clicked, the cell goes into edit mode immediately.
-        /// </summary>
-        public void CellClickHandler(object sender, DataGridViewCellEventArgs e)
-        {
-            bool setToEditMode = CheckIfComboBoxShouldSetToEditMode(e.ColumnIndex, e.RowIndex);
-            if (setToEditMode)
-            {
-                DataGridViewColumn dataGridViewColumn =
-                    ((DataGridViewColumnWin) Columns[e.ColumnIndex]).DataGridViewColumn;
-                ControlsHelper.SafeGui(this, () => BeginEdit(true));
-                if (EditingControl is DataGridViewComboBoxEditingControl)
-                {
-                    ((DataGridViewComboBoxEditingControl) EditingControl).DroppedDown = true;
-                }
-            }
         }
 
         /// <summary>

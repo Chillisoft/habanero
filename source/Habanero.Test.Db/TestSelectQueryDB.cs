@@ -99,6 +99,24 @@ namespace Habanero.Test.DB
 
 
         [Test]
+        public void TestCreateSqlStatement_NoCriteria_WithClassID()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            classDef.ClassID = Guid.NewGuid();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO WHERE DMClassID = ?Param0", statementString);
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
         public void TestCreateSqlStatement_NoSourceNameInQueryFields()
         {
             //---------------Set up test pack-------------------
@@ -135,6 +153,31 @@ namespace Habanero.Test.DB
             Assert.AreEqual("test", statement.Parameters[0].Value);
             //---------------Tear Down -------------------------          
         }
+
+
+        [Test]
+        public void TestCreateSqlStatement_WithCriteria_WithClassID()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            classDef.ClassID = Guid.NewGuid();
+            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "test");
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.Contains("WHERE ([MyBO].[TestProp] = ?Param0)", statementString);
+            Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
+            Assert.AreEqual("test", statement.Parameters[0].Value);
+            StringAssert.EndsWith("([DMClassID] = ?Param1)", statementString);
+            Assert.AreEqual("?Param1", statement.Parameters[1].ParameterName);
+            Assert.AreEqual(classDef.ClassID.Value.ToString("B").ToUpper(), statement.Parameters[1].Value);
+            //---------------Tear Down -------------------------          
+        }
+
 
         [Test]
         public void TestCreateSqlStatement_WithCriteria_DateTimeToday()

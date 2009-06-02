@@ -314,10 +314,10 @@ namespace Habanero.UI.Win
 
         private void InitialiseFilterControl()
         {
-            _filterControl.Filter += _filterControl_OnFilter;
+            _filterControl.Filter += FilterControl_OnFilter;
         }
 
-        private void _filterControl_OnFilter(object sender, EventArgs e)
+        private void FilterControl_OnFilter(object sender, EventArgs e)
         {
             if (FilterMode == FilterModes.Search)
             {

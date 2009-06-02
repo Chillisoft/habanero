@@ -36,7 +36,7 @@ namespace Habanero.Test
     [Serializable]
     public class MyBO : BusinessObject
     {
-        private List<IBusinessObjectRule> _myRuleList;
+        private readonly List<IBusinessObjectRule> _myRuleList;
 
         protected MyBO(SerializationInfo info, StreamingContext context) : base(info, context)
         {
@@ -59,11 +59,12 @@ namespace Habanero.Test
             return _classDef;
         }
 
+// ReSharper disable UnusedMember.Global
         public string MyName
         {
             get { return "MyNameIsMyBo"; }
         }
-
+// ReSharper restore UnusedMember.Global
         public string TestProp
         {
             get
@@ -145,6 +146,25 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  type=""Guid"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }        
+        
+        public static ClassDef LoadClassDefsHasModuleName()
+        {
+                        XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"" moduleName=""MyBOModule"">
 					<property  name=""MyBoID""  type=""Guid"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />

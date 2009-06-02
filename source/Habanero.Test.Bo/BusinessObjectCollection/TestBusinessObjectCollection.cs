@@ -1278,6 +1278,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_Sort_WhenOrderCriteriaSetUp_ShouldResortTheCollectionByTheOrderCriteria()
         {
             //---------------Set up test pack-------------------
+
             ContactPersonTestBO.LoadDefaultClassDef();
             //            DateTime now = DateTime.Now;
             const string firstName = "abab";
@@ -1289,16 +1290,39 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             col.Load(criteria, "Surname");
             col.Sort("Surname", true, false);
             //---------------Assert Precondition----------------
+
             Assert.AreEqual(2, col.Count);
             Assert.AreSame(cp1, col[0], "Collection should be in Surname Desc Order");
             Assert.AreSame(cp2, col[1], "Collection should be in Surname Desc Order");
             //---------------Execute Test ----------------------
+
             col.Sort();
             //---------------Test Result -----------------------
+
+
+
             Assert.AreEqual(2, col.Count);
             Assert.AreSame(cp2, col[0], "Collection should b sorted by the Surname Property as per the origional collection.Load");
             Assert.AreSame(cp1, col[1]);
         }
+
+        public void Test_CreateBusinessObject_ShouldAddToEndOfCollection()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            CreateTwoSavedContactPeople();
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.LoadAll("Surname");
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, col.Count);
+            //---------------Execute Test ----------------------
+            IBusinessObject businessObject = col.CreateBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.AreSame(businessObject, col[2]);
+        }      
+
+        
         [Test]
         public void Test_Sort_WhenOrderCriteriaSetup_AndCollectionSorted_ShouldNotChangeOrder()
         {

@@ -781,7 +781,7 @@ namespace Habanero.Test.BO
             {
                 Assert.IsTrue
                     (ex.Message.Contains
-                         ("You cannot delete the 'MyBoNotEditableDeletable', as the IsDeleted is set to false for the object"));
+                         ("You cannot delete the 'MyBoNotEditableDeletable', as the IsDeletable is set to false for the object"));
             }
         }
 
@@ -838,6 +838,125 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_MarkForDelete_WhenHasRelatedBO_WhenPreventDelete_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.Save();
+            bo.MyMultipleRelationship.CreateBusinessObject();
+            IRelationship relationship = bo.Relationships["MyMultipleRelationship"];
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsDeleted);
+            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsEditing);
+            Assert.AreEqual(1, bo.MyMultipleRelationship.Count);
+            Assert.AreEqual(DeleteParentAction.Prevent, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            try
+            {
+                bo.MarkForDelete();
+                Assert.Fail("expected Error");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDeleteException ex)
+            {
+                StringAssert.Contains("You cannot delete MyBO Identified By", ex.Message);
+                StringAssert.Contains("since it is related to 1 Business Objects via the MyMultipleRelationship relationship", ex.Message);
+            }
+        }
+        [Test]
+        public void Test_IsDeletable_WhenMultiple_WhenHasRelatedBO_WhenPreventDelete_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.Save();
+            bo.MyMultipleRelationship.CreateBusinessObject();
+            IRelationship relationship = bo.Relationships["MyMultipleRelationship"];
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsDeleted);
+            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsEditing);
+            Assert.AreEqual(1, bo.MyMultipleRelationship.Count);
+            Assert.AreEqual(DeleteParentAction.Prevent, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            string message;
+            bool isDeletable = bo.IsDeletable(out message);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isDeletable);
+            StringAssert.Contains("You cannot delete MyBO Identified By", message);
+            StringAssert.Contains("since it is related to 1 Business Objects via the MyMultipleRelationship relationship", message);
+        }
+        [Test]
+        public void Test_IsDeletable_WhenSingle_WhenHasRelatedBO_WhenPreventDelete_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.Save();
+            SingleRelationship<MyRelatedBo> relationship = (SingleRelationship<MyRelatedBo>) bo.Relationships["MyRelationship"];
+            relationship.SetRelatedObject(new MyRelatedBo());
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsDeleted);
+            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsTrue(bo.Status.IsEditing);
+
+            Assert.IsNotNull(relationship.GetRelatedObject());
+            Assert.AreEqual(DeleteParentAction.Prevent, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            string message;
+            bool isDeletable = bo.IsDeletable(out message);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isDeletable);
+            StringAssert.Contains("You cannot delete MyBO Identified By", message);
+            StringAssert.Contains("since it is related to a Business Object via the MyRelationship relationship", message);
+        }
+        [Test]
+        public void Test_IsDeletable_WhenSingle_WhenHasRelatedBO_WhenPreventDelete_WhenRelatedBOMarked4Delete_ShouldReturnTrue()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.Save();
+            SingleRelationship<MyRelatedBo> relationship = (SingleRelationship<MyRelatedBo>) bo.Relationships["MyRelationship"];
+            MyRelatedBo myRelatedBO = new MyRelatedBo();
+            relationship.SetRelatedObject(myRelatedBO);
+            myRelatedBO.MarkForDelete();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsDeleted);
+            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsTrue(bo.Status.IsEditing);
+            Assert.IsNotNull(relationship.GetRelatedObject());
+            Assert.AreEqual(DeleteParentAction.Prevent, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            string message;
+            bool isDeletable = bo.IsDeletable(out message);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isDeletable);
+        }
+        //TODO: Cascade relationships
+        //TODO: MarkForDelete when CascadeDelete
+        [Test]
         public void Test_MarkForDelete_NewObjectDoesNotRaiseError()
         {
             //---------------Set up test pack-------------------
@@ -886,6 +1005,32 @@ namespace Habanero.Test.BO
             Assert.IsTrue(bo.Status.IsNew);
             Assert.IsTrue(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
+        }
+
+
+        [Test]
+        public void Test_MarkForDelete_WhenHasRelatedBO_WhenDeleteRelated_ShouldMarkForDeleteRelated()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.Save();
+            MyRelatedBo myRelatedBO = bo.MyMultipleRelationship.CreateBusinessObject();
+            IRelationship relationship = bo.Relationships["MyMultipleRelationship"];
+            ((RelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsDeleted);
+            Assert.IsFalse(myRelatedBO.Status.IsDeleted);
+            Assert.AreEqual(1, bo.MyMultipleRelationship.Count);
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+             bo.MarkForDelete();
+            //---------------Test Result -----------------------
+             Assert.IsTrue(bo.Status.IsDeleted);
+             Assert.IsTrue(myRelatedBO.Status.IsDeleted);
         }
 
         [Test, ExpectedException(typeof (BusObjEditableException))]

@@ -1,22 +1,3 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -66,6 +47,8 @@ namespace Habanero.BO
         }
 
         internal abstract IBusinessObjectCollection GetLoadedBOColInternal();
+
+
     }
 
     /// <summary>
@@ -81,7 +64,7 @@ namespace Habanero.BO
         public int TimeOut { get; private set; }
 
         /// <summary> The collection storing the Related Business Objects. </summary>
-        protected RelatedBusinessObjectCollection<TBusinessObject> _boCol;
+        private RelatedBusinessObjectCollection<TBusinessObject> _boCol;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -153,6 +136,22 @@ namespace Habanero.BO
                 {
                     DeleteChild(committer, businessObject);
                 }
+            }
+        }
+
+        /// <summary>
+        /// If the relationship is <see cref="IBusinessObject.MarkForDelete"/>.DeleteRelated then
+        /// all the related objects and their relevant children will be marked for Delete.
+        /// See <see cref="IRelationship.DeleteParentAction"/>
+        /// </summary>
+        public override void MarkForDelete()
+        {
+            if (this.RelationshipDef.DeleteParentAction != DeleteParentAction.DeleteRelated) return;
+            IBusinessObjectCollection collection = this.BusinessObjectCollection;
+            collection.Refresh();
+            for (int i = collection.Count - 1; i >= 0; i--)
+            {
+                collection[i].MarkForDelete();
             }
         }
 
@@ -371,6 +370,27 @@ namespace Habanero.BO
                 }
             }
             return dirtyChildren;
+        }
+        /// <summary>
+        /// Is there anything in this relationship to prevent the business object from being deleted.
+        /// e.g. if there are related business objects that are not marked as mark for delete.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public override bool IsDeletable(out string message)
+        {
+            message = "";
+            if (this.RelationshipDef.DeleteParentAction != DeleteParentAction.Prevent) return true;
+
+            IBusinessObjectCollection collection = this.BusinessObjectCollection;
+            int noRelatedObjects = collection.Count;
+            if (noRelatedObjects <= 0) return true;
+            message = string.Format(
+                    "You cannot delete {0} Identified By {1} or {2} since it is related to {3} Business Objects via the {4} relationship",
+                    this._owningBo.ClassDef.ClassName, this._owningBo.ID.AsString_CurrentValue(), this._owningBo.ToString(),
+                    noRelatedObjects,
+                    this.RelationshipName);
+            return false;
         }
     }
 }

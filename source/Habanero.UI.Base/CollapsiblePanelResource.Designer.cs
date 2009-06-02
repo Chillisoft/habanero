@@ -7,11 +7,8 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
+// ReSharper disable RedundantNameQualifier
 namespace Habanero.UI.Base {
-    using System;
-    
-    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -60,6 +57,9 @@ namespace Habanero.UI.Base {
             }
         }
         
+        ///<summary>
+        /// The BitMap that is used for the CollapsiblePanelHeader
+        ///</summary>
         public static System.Drawing.Bitmap headergradient {
             get {
                 object obj = ResourceManager.GetObject("headergradient", resourceCulture);
@@ -67,6 +67,8 @@ namespace Habanero.UI.Base {
             }
         }
         
+        ///<summary>
+        ///</summary>
         public static System.Drawing.Bitmap nav_icon {
             get {
                 object obj = ResourceManager.GetObject("nav_icon", resourceCulture);
@@ -74,6 +76,8 @@ namespace Habanero.UI.Base {
             }
         }
         
+        ///<summary>
+        ///</summary>
         public static System.Drawing.Bitmap nbItemBullet {
             get {
                 object obj = ResourceManager.GetObject("nbItemBullet", resourceCulture);
@@ -81,6 +85,8 @@ namespace Habanero.UI.Base {
             }
         }
         
+        ///<summary>
+        ///</summary>
         public static System.Drawing.Bitmap pinoff_withcolour {
             get {
                 object obj = ResourceManager.GetObject("pinoff_withcolour", resourceCulture);
@@ -88,6 +94,8 @@ namespace Habanero.UI.Base {
             }
         }
         
+        ///<summary>
+        ///</summary>
         public static System.Drawing.Bitmap pinon_withcolour {
             get {
                 object obj = ResourceManager.GetObject("pinon_withcolour", resourceCulture);
@@ -95,6 +103,8 @@ namespace Habanero.UI.Base {
             }
         }
         
+        ///<summary>
+        ///</summary>
         public static System.Drawing.Bitmap smBack {
             get {
                 object obj = ResourceManager.GetObject("smBack", resourceCulture);
@@ -103,3 +113,4 @@ namespace Habanero.UI.Base {
         }
     }
 }
+// ReSharper restore RedundantNameQualifier

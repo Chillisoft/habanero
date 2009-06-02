@@ -345,7 +345,7 @@ namespace Habanero.Test.BO.Loaders
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
             Assert.AreEqual(InsertParentAction.DoNothing,relDef.InsertParentAction);
-        } 
+        }
         [Test]
         public void Test_InsertAction_InsertRelationship()
         {

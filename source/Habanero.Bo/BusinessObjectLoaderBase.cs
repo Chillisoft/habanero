@@ -95,7 +95,7 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria)
         {
-            IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            IBusinessObjectCollection col = CreateCollectionOfType(classDef);
             col.ClassDef = classDef;
             col.SelectQuery.Criteria = criteria;
             Refresh(col);
@@ -254,7 +254,7 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef, Criteria criteria, 
                 OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
-            IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            IBusinessObjectCollection col = CreateCollectionOfType(classDef);
             col.ClassDef = classDef;
             col.SelectQuery.Criteria = criteria;
             col.SelectQuery.OrderCriteria = orderCriteria;
@@ -341,7 +341,7 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetBusinessObjectCollection
             (IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria)
         {
-            IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            IBusinessObjectCollection col = CreateCollectionOfType(classDef);
             if (orderCriteria == null) orderCriteria = new OrderCriteria();
             col.ClassDef = classDef;
             QueryBuilder.PrepareCriteria(classDef, criteria);
@@ -381,7 +381,7 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery)
         {
-            IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            IBusinessObjectCollection col = CreateCollectionOfType(classDef);
             col.ClassDef = classDef;
             col.SelectQuery = selectQuery;
             Refresh(col);
@@ -393,12 +393,12 @@ namespace Habanero.BO
         /// Creates a Generic Collection of <see cref="IBusinessObjectCollection"/> of the Generic
         /// Type determined by the <paramref name="boType"/>
         /// </summary>
-        /// <param name="boType"></param>
+        /// <param name="classDef">The ClassDef to use for the collection (and its <see cref="SelectQuery"/>)</param>
         /// <returns></returns>
-        protected static IBusinessObjectCollection CreateCollectionOfType(Type boType)
+        protected static IBusinessObjectCollection CreateCollectionOfType(IClassDef classDef)
         {
-            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
-            return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
+            Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(classDef.ClassType);
+            return (IBusinessObjectCollection) Activator.CreateInstance(boColType, classDef);
         }
 
 //        protected static void AddBusinessObjectToCollection<T>

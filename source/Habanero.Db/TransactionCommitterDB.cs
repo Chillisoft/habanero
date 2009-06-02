@@ -17,12 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Data;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using log4net;
 
 namespace Habanero.DB
@@ -39,16 +36,16 @@ namespace Habanero.DB
     /// </summary>
     public class TransactionCommitterDB : TransactionCommitter
     {
+        private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.TransactionCommitterDB");
         private readonly IDatabaseConnection _databaseConnection;
-        private IDbTransaction _dbTransaction;
         private IDbConnection _dbConnection;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitterDB");
+        private IDbTransaction _dbTransaction;
 
 
         ///<summary>
         /// Constructs the TransactionCommitterDB
         ///</summary>
-        public TransactionCommitterDB(): this(null)
+        public TransactionCommitterDB() : this(null)
         {
         }
 
@@ -69,6 +66,12 @@ namespace Habanero.DB
             _dbConnection = databaseConnection.GetConnection();
             _dbConnection.Open();
             _dbTransaction = _dbConnection.BeginTransaction(databaseConnection.IsolationLevel);
+//            IDbCommand command = _dbConnection.CreateCommand();
+//            command.Transaction = _dbTransaction;
+//            command.CommandText = "sp_MSForEachTable";
+//            command.CommandType = CommandType.StoredProcedure;
+//            command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? NOCHECK CONSTRAINT ALL"));
+//            command.ExecuteNonQuery();
         }
 
         private IDatabaseConnection GetDatabaseConnection()
@@ -94,9 +97,9 @@ namespace Habanero.DB
         /// <typeparam name="T"></typeparam>
         /// <param name="relationship"></param>
         /// <param name="businessObject"></param>
-        protected override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject) {
-            this.AddTransaction(new TransactionalSingleRelationship_Added_DB(relationship, businessObject));
-
+        protected override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject)
+        {
+            AddTransaction(new TransactionalSingleRelationship_Added_DB(relationship, businessObject));
         }
 
         /// <summary>
@@ -107,8 +110,7 @@ namespace Habanero.DB
         /// <param name="businessObject"></param>
         protected override void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject)
         {
-            this.AddTransaction(new TransactionalSingleRelationship_Removed_DB(relationship, businessObject));
-
+            AddTransaction(new TransactionalSingleRelationship_Removed_DB(relationship, businessObject));
         }
 
         /// <summary>
@@ -117,7 +119,7 @@ namespace Habanero.DB
         /// </summary>
         protected override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
-            ITransactionalDB transactionDB = (ITransactionalDB)transaction;
+            var transactionDB = (ITransactionalDB) transaction;
 
             if (transaction is TransactionalBusinessObjectDB)
             {
@@ -144,6 +146,12 @@ namespace Habanero.DB
         {
             try
             {
+//                IDbCommand command = _dbConnection.CreateCommand();
+//                command.Transaction = _dbTransaction;
+//                command.CommandText = "sp_MSForEachTable";
+//                command.CommandType = CommandType.StoredProcedure;
+//                command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
+//                command.ExecuteNonQuery();
                 _dbTransaction.Commit();
                 return true;
             }
@@ -151,6 +159,12 @@ namespace Habanero.DB
             {
                 if (_dbConnection != null && _dbConnection.State == ConnectionState.Open)
                 {
+//                    IDbCommand command = _dbConnection.CreateCommand();
+//                    command.Transaction = _dbTransaction;
+//                    command.CommandText = "sp_MSForEachTable";
+//                    command.CommandType = CommandType.StoredProcedure;
+//                    command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
+//                    command.ExecuteNonQuery();
                     _dbConnection.Close();
                 }
             }
@@ -171,11 +185,15 @@ namespace Habanero.DB
             {
                 if (_dbConnection != null && _dbConnection.State == ConnectionState.Open)
                 {
+//                    IDbCommand command = _dbConnection.CreateCommand();
+//                    command.Transaction = _dbTransaction;
+//                    command.CommandText = "sp_MSForEachTable";
+//                    command.CommandType = CommandType.StoredProcedure;
+//                    command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
+//                    command.ExecuteNonQuery();
                     _dbConnection.Close();
                 }
             }
         }
-
-
     }
 }

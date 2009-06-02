@@ -11,5 +11,7 @@
 		table CDATA #IMPLIED
 		displayName CDATA #IMPLIED
     typeParameter CDATA #IMPLIED
+    moduleName CDATA #IMPLIED
+  classID CDATA #IMPLIED
 >
 

@@ -327,7 +327,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="wizardController"></param>
         /// <returns></returns>
-        public IWizardForm CreateWizardForm(IWizardController wizardController)
+        public virtual IWizardForm CreateWizardForm(IWizardController wizardController)
         {
             return new WizardFormWin(wizardController, this);
         }

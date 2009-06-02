@@ -65,8 +65,6 @@ namespace Habanero.DB
 
         private static BOSequenceNumberLocking LoadSequenceNumber(string numberType)
         {
-//            BOSequenceNumberLocking sequenceBOSequenceNumber =
-//                BOLoader.Instance.GetBusinessObject<BOSequenceNumberLocking>(string.Format("NumberType = '{0}'", numberType));
             string searchCriteria = string.Format("NumberType = '{0}'", numberType);
             Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
             BOSequenceNumberLocking sequenceBOSequenceNumber =
@@ -110,7 +108,6 @@ namespace Habanero.DB
         public void AddToTransaction(ITransactionCommitter transactionCommitter)
         {
             BusinessObject busObject = this.GetTransactionalBO();
-          //  busObject.UpdateObjectBeforePersisting(transactionCommitter);
             transactionCommitter.AddBusinessObject(busObject);
         }
     }

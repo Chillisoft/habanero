@@ -551,7 +551,7 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="BOType">The Type of collection to create</param>
         /// <returns></returns>
-        protected new static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
+        protected static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
         {
             Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
             return (IBusinessObjectCollection) Activator.CreateInstance(boColType);

@@ -477,20 +477,12 @@ namespace Habanero.BO.ClassDefinition
         #region Creating BOs
 
         /// <summary>
-        /// Creates a new business object using the default class definition for the type linked to this <see cref="ClassDef"/>
-        /// </summary>
-        /// <returns>Returns the new object</returns>
-        public IBusinessObject CreateNewBusinessObject()
-        {
-            return InstantiateBusinessObject(false);
-        }
-
-
-        /// <summary>
-        /// Creates a new business object either using the default class definition for the type linked to this <see cref="ClassDef"/>
+        /// Creates a new business object using the default class definition for the type linked to this <see cref="IClassDef"/>
         /// or using this particular class definition (in the case where you might have more than one class definition for one C#
-        /// type, useful for user defined types)
-        /// Note_ that this means the business object being created must have a constructor that takes a <see cref="ClassDef"/>,
+        /// type, useful for user defined types).  If this <see cref="IClassDef"/> has a <see cref="IClassDef.TypeParameter"/> then
+        /// the instantiation will happen with the <see cref="IClassDef"/> passed in as a parameter to the <see cref="IBusinessObject"/>
+        /// constructor.
+        /// Note_ that this means the business object being created must have a constructor that takes a <see cref="IClassDef"/>,
         /// passing this through to the base class as follows:
         /// <code>
         /// public class Entity
@@ -500,11 +492,10 @@ namespace Habanero.BO.ClassDefinition
         /// }
         /// </code>
         /// </summary>
-        /// <param name="instantiateWithClassDef">Whether to use the constructor that takes a classdef (in case you have multiple
-        /// classdefs for a .NET type)</param>
         /// <returns>Returns the new object</returns>
-        public IBusinessObject CreateNewBusinessObject(bool instantiateWithClassDef)
+        public IBusinessObject CreateNewBusinessObject()
         {
+            bool instantiateWithClassDef = !String.IsNullOrEmpty(TypeParameter);
             return InstantiateBusinessObject(instantiateWithClassDef);
         }
 
@@ -1034,6 +1025,15 @@ namespace Habanero.BO.ClassDefinition
                 return false;
             }
         }
+
+        ///<summary>
+        /// The ClassID that identifies this Class in the case where the class is loaded from a database.
+        ///</summary>
+        public Guid? ClassID { get; set; }
+        ///<summary>
+        /// The module name that identifies this class for the case of building a menu for the standard menu editor.
+        ///</summary>
+        public string Module { get; set; }
 
         #region IClassDef Members
 

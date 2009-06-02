@@ -16,7 +16,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,9 +73,6 @@
       <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -145,6 +142,7 @@
     <Compile Include="TestTabControl.cs" />
     <Compile Include="TestTabPage.cs" />
     <Compile Include="TestTreeView.cs" />
+    <Compile Include="TestTreeViewController.cs" />
     <Compile Include="TestUserControl.cs" />
     <Compile Include="Grid\TestDataGridViewNumericUpDownColumn.cs" />
     <Compile Include="TestBaseMethods.cs" />

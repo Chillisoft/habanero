@@ -35,18 +35,13 @@ namespace Habanero.BO
     public class EditableDataSetProvider : DataSetProvider
     {
 //        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.EditableDataSetProvider");
+        private readonly DataTableNewRowEventHandler _newRowHandler;
+        private readonly DataRowChangeEventHandler _rowChangedHandler;
+        private readonly DataRowChangeEventHandler _rowDeletedHandler;
         private Dictionary<DataRow, IBusinessObject> _addedRows;
         private Dictionary<DataRow, IBusinessObject> _deletedRows;
 
         private bool _isBeingAdded;
-        private readonly DataRowChangeEventHandler _rowChangedHandler;
-        private readonly DataRowChangeEventHandler _rowDeletedHandler;
-        private readonly DataTableNewRowEventHandler _newRowHandler;
-
-        /// <summary>
-        /// Gets and sets the database connection
-        /// </summary>
-        public IDatabaseConnection Connection { get; set; }
 
 
         /// <summary>
@@ -61,6 +56,11 @@ namespace Habanero.BO
             _newRowHandler = NewRowHandler;
             _boAddedHandler = BOAddedHandler;
         }
+
+        /// <summary>
+        /// Gets and sets the database connection
+        /// </summary>
+        public IDatabaseConnection Connection { get; set; }
 
         /// <summary>
         /// Deregisters for all events to the <see cref="DataSetProvider._table"/>
@@ -85,7 +85,7 @@ namespace Habanero.BO
         /// </summary>
         protected override void RegisterForTableEvents()
         {
-            this.DeregisterForTableEvents();
+            DeregisterForTableEvents();
             _table.TableNewRow += _newRowHandler;
             _table.RowChanged += _rowChangedHandler;
             _table.RowDeleting += _rowDeletedHandler;
@@ -118,7 +118,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        protected void RowDeletedHandler(object sender, DataRowChangeEventArgs e)
+        private void RowDeletedHandler(object sender, DataRowChangeEventArgs e)
         {
             DataRow row = e.Row;
             try
@@ -127,13 +127,29 @@ namespace Habanero.BO
                 if (changedBo == null) return;
                 try
                 {
-                    DeregisterForBOEvents();
-                    changedBo.MarkForDelete();
-                    _deletedRows.Add(row, changedBo);
+                    string message;
+                    if (changedBo.IsDeletable(out message))
+                    {
+                        DeregisterForBOEvents();
+                        changedBo.MarkForDelete();
+                        changedBo.Save();
+                        //_deletedRows.Add(row, changedBo);
+
+                        //TODO Brett 25 May 2009: Put in try-finally
+                       //this.DeregisterForTableEvents();
+                       
+
+                       // row.AcceptChanges();
+                       //this.RegisterForTableEvents();
+                    }
+                    else
+                    {
+                        row.RejectChanges();
+                    }
                 }
                 finally
                 {
-                    RegisterForBOEvents();
+                   RegisterForBOEvents();
                 }
             }
             catch (Exception ex)
@@ -176,7 +192,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        protected void RowChangedHandler(object sender, DataRowChangeEventArgs e)
+        private void RowChangedHandler(object sender, DataRowChangeEventArgs e)
         {
             if (_isBeingAdded) return;
 
@@ -198,6 +214,7 @@ namespace Habanero.BO
                     case DataRowAction.Rollback:
                         RowRollback(e);
                         break;
+
                 }
             }
             catch (Exception ex)
@@ -392,9 +409,17 @@ namespace Habanero.BO
                 }
 
                 //log.Debug("Initialising obj");
-                if (this._objectInitialiser != null)
+                if (_objectInitialiser != null)
                 {
-                    this._objectInitialiser.InitialiseObject(newBo);
+                    try
+                    {
+                        DeregisterForBOEvents();
+                        _objectInitialiser.InitialiseObject(newBo);
+                    }
+                    finally
+                    {
+                        RegisterForBOEvents();
+                    }
                 }
                 // set all the values in the grid to the bo's current prop values (defaults)
                 // make sure the part entered to create the row is not changed.
@@ -419,8 +444,18 @@ namespace Habanero.BO
                         SetBOPropertyValue(newBo, uiProperty.PropertyName, row);
                     }
                 }
-                row.RowError = newBo.Status.IsValidMessage;
-                _addedRows.Add(row, newBo);
+                string message;
+                if (newBo.Status.IsValid(out message))
+                {
+                    newBo.Save();
+                    row.AcceptChanges();
+                }
+                row.RowError = message;
+                if (newBo.Status.IsNew)
+                {
+                    _addedRows.Add(row, newBo);
+                }
+                
                 if (newBo.ID.ObjectID == Guid.Empty)
                 {
                     throw new HabaneroDeveloperException

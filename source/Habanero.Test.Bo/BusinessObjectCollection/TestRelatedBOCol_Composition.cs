@@ -18,14 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.IO;
-using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
-using Habanero.DB4O;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
 using Habanero.Util;
 using NUnit.Framework;

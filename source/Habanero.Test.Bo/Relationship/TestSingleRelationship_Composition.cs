@@ -19,13 +19,10 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB4O;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship

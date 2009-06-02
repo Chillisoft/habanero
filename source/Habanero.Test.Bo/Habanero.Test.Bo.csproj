@@ -27,7 +27,7 @@
     </UpgradeBackupLocation>
     <SignAssembly>true</SignAssembly>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -98,9 +98,6 @@
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
-    </Reference>
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
@@ -305,10 +302,6 @@
     <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
       <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
       <Name>Habanero.Bo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.DB4O\Habanero.DB4O.csproj">
-      <Project>{82010EEF-C99E-4A26-BABE-C7E7DB43C2E1}</Project>
-      <Name>Habanero.DB4O</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
       <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>

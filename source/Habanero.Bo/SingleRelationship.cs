@@ -1,22 +1,3 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
@@ -69,7 +50,9 @@ namespace Habanero.BO
         /// <param name="lRelDef">The <see cref="IRelationshipDef"/> that this relationship is for </param>
         /// <param name="lBOPropCol">The Collection of business objects properties (<see cref="BOPropCol"/> that is used to create the relKey</param>
         protected SingleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
-            : base(owningBo, lRelDef, lBOPropCol){}
+            : base(owningBo, lRelDef, lBOPropCol)
+        {
+        }
 
         /// <summary>
         /// Removes the Business Object from the RelationshipBase.
@@ -80,7 +63,6 @@ namespace Habanero.BO
         /// Returns true if the Business object that owns this relationship has the foreign key and true otherwise.
         ///</summary>
         public abstract bool OwningBOHasForeignKey { get; set; }
-
     }
 
     /// <summary>
@@ -237,7 +219,10 @@ namespace Habanero.BO
             {
                 if (HasRelatedObject())
                 {
-                    _relatedBo = (TBusinessObject) BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject((ISingleRelationship)this); // use non-generic one because of type parameters
+                    _relatedBo =
+                        (TBusinessObject)
+                        BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject((ISingleRelationship) this);
+                        // use non-generic one because of type parameters
                     _storedKeyCriteria = newKeyCriteria;
                 }
                 else
@@ -265,6 +250,44 @@ namespace Habanero.BO
 //                relatedBo = relatedBOCol[0] == relatedBo ? null : relatedBOCol[0];
 //            }
             return (TBusinessObject) BusinessObjectManager.Instance.FindFirst<TBusinessObject>(_relKey.Criteria);
+        }
+
+        /// <summary>
+        /// Is there anything in this relationship to prevent the business object from being deleted.
+        /// e.g. if there are related business objects that are not marked as mark for delete.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public override bool IsDeletable(out string message)
+        {
+            message = "";
+            if (this.RelationshipDef.DeleteParentAction != DeleteParentAction.Prevent) return true;
+            IBusinessObject relatedObject = this.GetRelatedObject();
+            if (relatedObject != null && !relatedObject.Status.IsDeleted)
+            {
+                message =
+                    string.Format(
+                        "You cannot delete {0} Identified By {1} or {2} since it is related to a Business Object via the {3} relationship",
+                        this.OwningBO.ClassDef.ClassName, this.OwningBO.ID.AsString_CurrentValue(), this.OwningBO.ToString(),
+                        this.RelationshipName);
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// If the relationship is <see cref="IBusinessObject.MarkForDelete"/>.DeleteRelated then
+        /// all the related objects and their relevant children will be marked for Delete.
+        /// See <see cref="IRelationship.DeleteParentAction"/>
+        /// </summary>
+        public override void MarkForDelete()
+        {
+            if (this.DeleteParentAction != DeleteParentAction.DeleteRelated) return;
+            TBusinessObject relatedObject = this.GetRelatedObject();
+            if (relatedObject!= null && !relatedObject.Status.IsDeleted)
+            {
+                relatedObject.MarkForDelete();
+            }
         }
 
         private bool RelatedBoForeignKeyHasChanged()
@@ -433,7 +456,7 @@ namespace Habanero.BO
         private bool MustAddToDirtyBusinessObjects()
         {
             return IsRelatedBODirty() && (IsRelationshipCompositionOrAggregation()
-                    || _relatedBo.Status.IsNew || _relatedBo.Status.IsDeleted);
+                                          || _relatedBo.Status.IsNew || _relatedBo.Status.IsDeleted);
         }
 
         private bool IsRelationshipCompositionOrAggregation()
@@ -463,6 +486,7 @@ namespace Habanero.BO
         {
             // do nothing
         }
+
         /// <summary>
         /// UpdateRelationshipAsPersisted
         /// </summary>
@@ -480,6 +504,7 @@ namespace Habanero.BO
         {
             DereferenceChild(committer, GetRelatedObject());
         }
+
         /// <summary>
         /// Delete Children
         /// </summary>

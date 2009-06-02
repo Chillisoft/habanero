@@ -181,7 +181,7 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
-            TestUtil.Wait(10);
+            TestUtil.Wait(100);
             IBusinessObjectCollection secondCollectionCall = rel.BusinessObjectCollection;
             //---------------Test Result -----------------------
             Assert.AreSame(collection, secondCollectionCall);
@@ -229,7 +229,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsNotNull(collection.TimeLastLoaded);
             Assert.AreEqual(initialTimeLastLoaded, collection.TimeLastLoaded);
             //---------------Execute Test ----------------------
-            TestUtil.Wait(1000);
+            TestUtil.Wait(100);
             IBusinessObjectCollection secondCollectionCall = organisationTestBO.ContactPeople;
             //---------------Test Result -----------------------
             Assert.AreSame(collection, secondCollectionCall);
@@ -252,12 +252,14 @@ namespace Habanero.Test.BO.Relationship
             //---------------Assert Precondition----------------
             Assert.IsNotNull(collection.TimeLastLoaded);
             Assert.AreEqual(initialTimeLastLoaded, collection.TimeLastLoaded);
+            MultipleRelationship<ContactPersonTestBO> relationship = (MultipleRelationship<ContactPersonTestBO>)organisationTestBO.Relationships["ContactPeople"];
+            Assert.AreEqual(0, relationship.TimeOut);
             //---------------Execute Test ----------------------
             ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
-            TestUtil.Wait(1000);
+            TestUtil.Wait(100);
             IBusinessObjectCollection secondCollectionCall = rel.BusinessObjectCollection;
             //---------------Test Result -----------------------
             Assert.AreSame(collection, secondCollectionCall);
@@ -280,12 +282,14 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsNotNull(collection.TimeLastLoaded);
             Assert.AreEqual(initialTimeLastLoaded, collection.TimeLastLoaded);
             Assert.AreEqual(0, collection.Count);
+            MultipleRelationship<ContactPersonTestBO> relationship = (MultipleRelationship<ContactPersonTestBO>) organisationTestBO.Relationships["ContactPeople"];
+            Assert.AreEqual(0, relationship.TimeOut);
             //---------------Execute Test ----------------------
             ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
-            TestUtil.Wait(1000);
+            TestUtil.Wait(100);
             IBusinessObjectCollection secondCollectionCall = organisationTestBO.ContactPeople;
             //---------------Test Result -----------------------
             Assert.AreSame(collection, secondCollectionCall);

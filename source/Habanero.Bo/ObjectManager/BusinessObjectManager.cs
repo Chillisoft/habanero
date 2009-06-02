@@ -557,6 +557,42 @@ namespace Habanero.BO
                 }
                 return null;
             }
+        }  
+        
+        /// <summary>
+        /// Finds the First Business Object that matches the classDef classDef and the Criteria given.
+        /// </summary>
+        /// <param name="criteria">Criteria to match on.</param>
+        /// <param name="classDef">ClassDef that the BusinessObject must match.</param>
+        /// <returns></returns>
+        public IBusinessObject FindFirst(Criteria criteria, IClassDef classDef)
+        {
+            lock (_loadedBusinessObjects)
+            {
+                WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
+                _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
+                foreach (WeakReference weakReference in valueArray)
+                {
+                    //----------Removed WeakReferenceAlive Check for performance reasons.
+//                    if (!WeakReferenceIsAlive(weakReference)) continue;
+                    //BusinessObject bo = (BusinessObject) weakReference.Target;
+                    IBusinessObject bo = GetBusinessObject(weakReference);
+                    if (bo == null) continue;
+                    //For Dynamic Business Objects the Props may have been added since the business object was loaded.
+                    try
+                    {
+                        if (bo.ClassDef==classDef && (criteria == null || criteria.IsMatch(bo, false)))
+                        {
+                            return bo;
+                        }
+                    }
+                    catch (InvalidPropertyNameException)
+                    {
+                        //Do Nothing
+                    }
+                }
+                return null;
+            }
         }
     }
 }

@@ -112,8 +112,7 @@ namespace Habanero.DB4O
 
             if (classDef != null)
             {
-                bool useSpecificClassDef = (!string.IsNullOrEmpty(classDef.TypeParameter));
-                tempBO = (T)classDef.CreateNewBusinessObject(useSpecificClassDef);
+                tempBO = (T)classDef.CreateNewBusinessObject();
             } else
             {
                 tempBO = new T();

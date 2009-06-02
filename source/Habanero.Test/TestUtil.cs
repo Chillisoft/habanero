@@ -190,7 +190,7 @@ namespace Habanero.Test
             return value;
         }
 
-        public static DatabaseConfig GetDatabaseConfig() { 
+        public static DatabaseConfig GetDatabaseConfig() {
             return new DatabaseConfig("MySql", "localhost", "habanero_test_trunk", "root", "root", "3306");
         }
 
