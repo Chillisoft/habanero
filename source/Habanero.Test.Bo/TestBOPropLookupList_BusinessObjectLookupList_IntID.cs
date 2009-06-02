@@ -32,7 +32,6 @@ namespace Habanero.Test.BO
     public class TestBOPropLookupList_BusinessObjectLookupList_IntID
     {
         private const string _validLookupValue = "ValidValue";
-
         private PropDef _propDef_int;
         private BusinessObjectCollection<BOWithIntID> _collection_IntId;
         private BOWithIntID _validBusinessObject;

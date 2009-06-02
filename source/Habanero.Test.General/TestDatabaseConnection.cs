@@ -39,7 +39,6 @@ namespace Habanero.Test.General
             //@"data source=Core;database=WorkShopManagement;uid=sa;pwd=" + mPassWord;
         }
 
-
         [Test]
         public void Test_NoColumnName_DoesntError()
         {

@@ -72,5 +72,15 @@ namespace Habanero.DB
             }
             return id;
         }
+
+        /// <summary>
+        /// Gets the IsolationLevel <see cref="IsolationLevel"/> to use for this connection.
+        /// This is set to ReadUncommitted For SQL to overcome issues with trying to load children of a business
+        /// object while the children are already in the Transaction to be deleted resulting in a deadlock.
+        /// </summary>
+        public override IsolationLevel IsolationLevel
+        {
+            get { return IsolationLevel.ReadUncommitted; }
+        }
     }
 }
