@@ -224,11 +224,17 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public DeleteParentAction DeleteParentAction { get; protected internal set; }
 
+        private InsertParentAction _insertParentAction;
+
         ///<summary>
         /// Provides the specific instruction when a new object is added to an association relationship.
         /// See <see cref="InsertParentAction"/> enumeration for more details
         ///</summary>
-        public virtual InsertParentAction InsertParentAction { get; protected internal set; }
+        public virtual InsertParentAction InsertParentAction
+        {
+            get { return _insertParentAction; }
+            set { _insertParentAction = value; }
+        }
 
         ///<summary>
         /// The order by clause that the related object will be sorted by.

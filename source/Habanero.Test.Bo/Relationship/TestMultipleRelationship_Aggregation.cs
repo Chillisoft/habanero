@@ -308,12 +308,13 @@ namespace Habanero.Test.BO.Relationship
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship
                 (organisationTestBO, out cpCol);
-            ((RelationshipDef) relationship.RelationshipDef).InsertParentAction = InsertParentAction.DoNothing;
+            RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
+            relationshipDef.InsertParentAction = InsertParentAction.DoNothing;
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(InsertParentAction.DoNothing, relationship.RelationshipDef.InsertParentAction);
+            Assert.AreEqual(InsertParentAction.DoNothing, relationshipDef.InsertParentAction);
             //---------------Execute Test ----------------------
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
             //---------------Test Result -----------------------

@@ -138,7 +138,7 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void TestCreateRelationship_WithTimeout_ShouldSetUpTimeout()
+        public void TestConstruct_WithTimeout_ShouldSetUpTimeout()
         {
             //---------------Set up test pack-------------------
             //---------------Assert Precondition----------------
@@ -151,7 +151,6 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedTimout, relDef.TimeOut);
-            Assert.AreEqual(InsertParentAction.DoNothing, relDef.InsertParentAction);
         }
 
         [Test]

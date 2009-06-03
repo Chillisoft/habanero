@@ -277,7 +277,6 @@ namespace Habanero.BO
             get { return _relDef.DeleteParentAction; }
         }
 
-
         ///<summary>
         /// Returns the business object that owns this relationship e.g. Invoice has many lines
         /// the owning BO would be invoice.

@@ -371,6 +371,7 @@ namespace Habanero.BO
             }
             return dirtyChildren;
         }
+
         /// <summary>
         /// Is there anything in this relationship to prevent the business object from being deleted.
         /// e.g. if there are related business objects that are not marked as mark for delete.
