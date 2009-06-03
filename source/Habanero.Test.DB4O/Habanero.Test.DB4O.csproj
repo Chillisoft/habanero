@@ -75,10 +75,6 @@
       <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
       <Name>Habanero.BO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.DB4O\Habanero.DB4O.csproj">
-      <Project>{82010EEF-C99E-4A26-BABE-C7E7DB43C2E1}</Project>
-      <Name>Habanero.DB4O</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Habanero.Test.Bo\Habanero.Test.BO.csproj">
       <Project>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</Project>
       <Name>Habanero.Test.BO</Name>
