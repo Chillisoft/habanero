@@ -606,10 +606,10 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// This method can be overridden by a class that inherits from Business object.
-        /// The method allows the Business object developer to add customised rules that determine.
-        /// The Deletable state of a business object. E.g. Invoices can never be delted once created. 
-        /// Objects cannot be deteled once they have reached certain stages e.g. a customer order after it is accepted.
+        /// This method can be overridden by a class that inherits from BusinessObject.
+        /// The method allows the Business object developer to add customised rules that determine
+        /// the Deletable state of a business object, e.g. Invoices can never be deleted once created. 
+        /// Objects cannot be deleted once they have reached certain stages e.g. a customer order after it is accepted.
         /// These rules are applied to new object as well so if you want a new object 
         /// to be deletable then you must include this.Status.IsNew in evaluating IsDeletable.
         /// It also allows the Application developer to implement security controlling the 
