@@ -307,45 +307,4 @@ namespace Habanero.UI.VWG
 
         #endregion
     }
-
-    /// <summary>
-    /// A Utility Class used by <see cref="BOEditorControlVWG"/> and <see cref="BOEditorControlVWG{T}"/> providing common functionality.
-    /// </summary>
-    internal static class BOEditorControlUtils
-    {
-        private static UIForm GetUiForm(IClassDef classDef, string uiDefName)
-        {
-            UIForm uiForm;
-            try
-            {
-                uiForm = ((ClassDef) classDef).UIDefCol[uiDefName].UIForm;
-            }
-            catch (HabaneroDeveloperException ex)
-            {
-                string developerMessage = "The 'BOEditorControlVWG' could not be created since the the uiDef '"
-                                          + uiDefName + "' does not exist in the classDef for '"
-                                          + classDef.ClassNameFull + "'";
-                throw new HabaneroDeveloperException(developerMessage, developerMessage, ex);
-            }
-            if (uiForm == null)
-            {
-                string developerMessage = "The 'BOEditorControlVWG' could not be created since the the uiDef '"
-                                          + uiDefName + "' in the classDef '" + classDef.ClassNameFull
-                                          + "' does not have a UIForm defined";
-                throw new HabaneroDeveloperException(developerMessage, developerMessage);
-            }
-            return uiForm;
-        }
-
-        internal static IPanelInfo CreatePanelInfo
-            (IControlFactory controlFactory, IClassDef classDef, string uiDefName, IBOEditorControl iboEditorControl)
-        {
-            UIForm uiForm = GetUiForm(classDef, uiDefName);
-            PanelBuilder panelBuilder = new PanelBuilder(controlFactory);
-            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(uiForm);
-            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(iboEditorControl);
-            layoutManager.AddControl(panelInfo.Panel, BorderLayoutManager.Position.Centre);
-            return panelInfo;
-        }
-    }
 }

@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOColTabControlManager.cs" />
+    <Compile Include="BOEditorControlUtils.cs" />
     <Compile Include="BOSelectorAndBOEditorManager.cs" />
     <Compile Include="CollapsiblePanelGroupManager.cs" />
     <Compile Include="CollapsiblePanelManager.cs" />
