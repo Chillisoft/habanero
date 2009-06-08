@@ -87,7 +87,7 @@ namespace Habanero.BO
         /// <summary>
         /// Removes the handlers that are called in the event of updates
         /// </summary>
-        public void RemoveHandlersForUpdates()
+        public override void RemoveHandlersForUpdates()
         {
             _table.RowChanged -= RowChangedHandler;
             _table.RowDeleted -= RowDeletedHandler;

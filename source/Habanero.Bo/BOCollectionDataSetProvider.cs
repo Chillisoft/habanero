@@ -181,5 +181,7 @@ namespace Habanero.BO
         {
             set { _objectInitialiser = value; }
         }
+
+        public abstract void RemoveHandlersForUpdates();
     }
 }

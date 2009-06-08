@@ -129,6 +129,7 @@ namespace Habanero.UI.Grid
 		private void SetCollectionInSTAThread(IBusinessObjectCollection collection, string uiName)
         {
             _collection = collection;
+            if (_dataSetProvider != null) _dataSetProvider.RemoveHandlersForUpdates();
             _dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
             _dataSetProvider.ObjectInitialiser = _objectInitialiser;
             _uiName = uiName;

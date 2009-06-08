@@ -50,6 +50,24 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Removes the handlers that are called in the event of updates
+        /// </summary>
+        public override void RemoveHandlersForUpdates()
+        {
+            // From editable one
+            //_table.RowChanged -= RowChangedHandler;
+            //_table.RowDeleted -= RowDeletedHandler;
+            //_collection.BusinessObjectAdded -= BusinessObjectAddedToCollectionHandler;
+
+            foreach (BusinessObject businessObject in _collection)
+            {
+                businessObject.Updated -= new EventHandler<BOEventArgs>(UpdatedHandler);
+            }
+            _collection.BusinessObjectAdded -= new EventHandler<BOEventArgs>(AddedHandler);
+            _collection.BusinessObjectRemoved -= new EventHandler<BOEventArgs>(RemovedHandler);
+        }
+
+        /// <summary>
         /// Handles the event of a business object being removed. Removes the
         /// data row that contains the object.
         /// </summary>
