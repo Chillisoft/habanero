@@ -240,7 +240,7 @@ namespace Habanero.Test.BO.Security
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
-            propAuthorisationStub.IsAuthorised(BOPropActions.CanUpdate);
+            propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanUpdate);
 
             //---------------Execute Test ----------------------
             string message;
@@ -262,7 +262,7 @@ namespace Habanero.Test.BO.Security
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanUpdate));
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanUpdate));
             //---------------Execute Test ----------------------
             string message;
             bool isEditable = prop1.IsEditable(out message);
@@ -285,7 +285,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.Save();
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(propAuthorisationStub.IsAuthorised(BOPropActions.CanUpdate));
+            Assert.IsTrue(propAuthorisationStub.IsAuthorised(prop1,BOPropActions.CanUpdate));
 
             //---------------Execute Test ----------------------
             const string newPropValue = "1112";
@@ -309,7 +309,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.Save();
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanUpdate));
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanUpdate));
             Assert.IsFalse(myBoStub.Status.IsNew);
             string message;
             Assert.IsFalse(prop1.IsEditable(out message));
@@ -368,7 +368,7 @@ namespace Habanero.Test.BO.Security
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanUpdate));
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanUpdate));
             string message;
             Assert.IsFalse(prop1.IsEditable(out message));
 
@@ -416,7 +416,7 @@ namespace Habanero.Test.BO.Security
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
-            propAuthorisationStub.IsAuthorised(BOPropActions.CanRead);
+            propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanRead);
 
             //---------------Execute Test ----------------------
             string message;
@@ -438,7 +438,7 @@ namespace Habanero.Test.BO.Security
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
-            propAuthorisationStub.IsAuthorised(BOPropActions.CanRead);
+            propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanRead);
 
             //---------------Execute Test ----------------------
             string message;
@@ -460,7 +460,7 @@ namespace Habanero.Test.BO.Security
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanRead));
 
             //---------------Execute Test ----------------------
             string message;
@@ -484,7 +484,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.Save();
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
+            Assert.IsTrue(propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanRead));
             string message;
             Assert.IsTrue(prop1.IsReadable(out message));
 
@@ -509,7 +509,7 @@ namespace Habanero.Test.BO.Security
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanRead));
             string message;
             Assert.IsFalse(prop1.IsReadable(out message));
 
@@ -539,7 +539,7 @@ namespace Habanero.Test.BO.Security
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanRead));
             string message;
             Assert.IsFalse(prop1.IsReadable(out message));
 
@@ -606,7 +606,7 @@ namespace Habanero.Test.BO.Security
             actionsAllowed.Add(actionToPerform);
         }
 
-        public bool IsAuthorised(BOPropActions actionToPerform)
+        public bool IsAuthorised(IBOProp prop, BOPropActions actionToPerform)
         {
             return (actionsAllowed.Contains(actionToPerform));
         }

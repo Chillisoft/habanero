@@ -819,7 +819,9 @@ namespace Habanero.DB
                 selectSql.SetupCommand(cmd);
                 IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-                return GetDataTable(reader, "TableName");
+                DataTable dt = GetDataTable(reader);
+                reader.Close();
+                return dt;
             }
             catch (Exception ex)
             {
@@ -834,6 +836,35 @@ namespace Habanero.DB
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
+        }
+        /// <summary>
+        /// Returns the DataTable for the DataReader.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public DataTable GetDataTable(IDataReader reader)
+        {
+            DataTable dt = new DataTable {TableName = "TableName"};
+            if (reader.Read())
+            {
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    DataColumn add = dt.Columns.Add();
+                    string columnName = reader.GetName(i);
+                    if (!String.IsNullOrEmpty(columnName)) add.ColumnName = columnName;
+                    add.DataType = reader.GetFieldType(i);
+                }
+                do
+                {
+                    DataRow row = dt.NewRow();
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        row[i] = reader.GetValue(i);
+                    }
+                    dt.Rows.Add(row);
+                } while (reader.Read());
+            }
+            return dt;
         }
 
         /// <summary>

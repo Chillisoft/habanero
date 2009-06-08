@@ -21,7 +21,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
@@ -548,7 +547,6 @@ namespace Habanero.BO
             output += "Type: " + GetType().Name + Environment.NewLine;
             foreach (IBOProp entry in _boPropCol)
             {
-                //                BOProp prop = (BOProp) entry.Value;
                 output += entry.PropertyName + " - " + entry.PropertyValueString + Environment.NewLine;
             }
             return output;
@@ -576,12 +574,13 @@ namespace Habanero.BO
         {
             message = "";
             if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanCreate)) return true;
+            if (_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanCreate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to create a {1}", Thread.CurrentPrincipal.Identity.Name,
                  ClassDef.ClassName);
             return false;
         }
+
 
         ///<summary>
         /// This method can be overridden by a class that inherits from Business object.
@@ -598,7 +597,7 @@ namespace Habanero.BO
         {
             message = "";
             if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanUpdate)) return true;
+            if (_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanUpdate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to update {1} Identified By {2}",
                  Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
@@ -618,7 +617,7 @@ namespace Habanero.BO
         public virtual bool IsDeletable(out string message)
         {
             message = "";
-            if (_authorisationRules != null && !_authorisationRules.IsAuthorised(BusinessObjectActions.CanDelete))
+            if (_authorisationRules != null && !_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanDelete))
             {
                 message = string.Format
                     ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
@@ -684,7 +683,7 @@ namespace Habanero.BO
                 return prop.PersistedPropertyValue;
             }
 
-            var businessObject = (BusinessObject) Relationships.GetRelatedObject(source.Name);
+            BusinessObject businessObject = (BusinessObject) Relationships.GetRelatedObject(source.Name);
             if (businessObject == null) return null;
             if (source.Joins.Count > 0)
             {
@@ -781,7 +780,7 @@ namespace Habanero.BO
         {
             message = "";
             if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanRead)) return true;
+            if (_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanRead)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
                  ClassDef.ClassName);
@@ -1069,12 +1068,12 @@ namespace Habanero.BO
             foreach (IRelationship relationship in Relationships)
             {
                 if (!(relationship is IMultipleRelationship)) continue;
-                var multipleRelationship = (IMultipleRelationship) relationship;
+                IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
 
                 IList createdBos = multipleRelationship.CurrentBusinessObjectCollection.CreatedBusinessObjects;
                 while (createdBos.Count > 0)
                 {
-                    var businessObject = (IBusinessObject) createdBos[createdBos.Count - 1];
+                    IBusinessObject businessObject = (IBusinessObject) createdBos[createdBos.Count - 1];
                     createdBos.Remove(businessObject);
                     if (relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated) continue;
                     ((BOStatus) businessObject.Status).IsDeleted = true;
@@ -1289,7 +1288,7 @@ namespace Habanero.BO
         private void CreateBOError(IBusinessObjectRule rule, ICollection<IBOError> errors)
         {
             string message = rule.Message;
-            var error = new BOError(message, rule.ErrorLevel) {BusinessObject = this};
+            BOError error = new BOError(message, rule.ErrorLevel) {BusinessObject = this};
             errors.Add(error);
         }
 
@@ -1333,7 +1332,7 @@ namespace Habanero.BO
 
                     if (relationship is ISingleRelationship)
                     {
-                        var relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
+                        IBusinessObject relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
                         relatedObject.ReadXml(reader);
                         ((ISingleRelationship) relationship).SetRelatedObject(relatedObject);
                     }
@@ -1382,7 +1381,7 @@ namespace Habanero.BO
 
         private static void ReadRelatedObject(XmlReader reader, IRelationship relationship, Type relatedObjectType)
         {
-            var relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
+            IBusinessObject relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
             relatedObject.ReadXml(reader);
             ((IMultipleRelationship) relationship).BusinessObjectCollection.Add(relatedObject);
 
@@ -1401,7 +1400,7 @@ namespace Habanero.BO
         {
             if (relationship is ISingleRelationship)
             {
-                var singleRelationship = (ISingleRelationship) relationship;
+                ISingleRelationship singleRelationship = (ISingleRelationship) relationship;
                 IBusinessObject relatedObject = singleRelationship.GetRelatedObject();
                 if (relatedObject != null)
                 {
@@ -1414,7 +1413,7 @@ namespace Habanero.BO
             }
             else if (relationship is IMultipleRelationship)
             {
-                var multipleRelationship = (IMultipleRelationship) relationship;
+                IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
                 IBusinessObjectCollection relatedObjects = multipleRelationship.BusinessObjectCollection;
                 if (relatedObjects.Count != 0)
                 {
@@ -1564,6 +1563,7 @@ namespace Habanero.BO
             _boStatus.SetBOFlagValue(BOStatus.Statuses.isDirty, hasDirtyProps);
         }
 
+        [Obsolete("This is no longer used")]
         /// <summary>
         /// Is the <see cref="IBusinessObject"/> archived or not. This can be overriden by a
         /// specific business object to implement required behaviour.

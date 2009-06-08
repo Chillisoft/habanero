@@ -62,7 +62,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetAuthorisation(authorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanDelete));
+            Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanDelete));
 
             //---------------Execute Test ----------------------
             string message;
@@ -81,7 +81,7 @@ namespace Habanero.Test.BO.Security
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
             myBoStub.SetAuthorisation(authorisationStub);
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanDelete));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanDelete));
             //---------------Execute Test ----------------------
             string message;
             bool isDeletable = myBoStub.IsDeletable(out message);
@@ -104,7 +104,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.Save();
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanDelete));
+            Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanDelete));
             Assert.IsFalse(myBoStub.Status.IsNew);
 
             //---------------Execute Test ----------------------
@@ -128,7 +128,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetAuthorisation(authorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanDelete));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanDelete));
 
             //---------------Execute Test ----------------------
             try
@@ -157,7 +157,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetStatus(BOStatus.Statuses.isDeleted, true);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanDelete));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanDelete));
             Assert.IsTrue(myBoStub.Status.IsDeleted);
             Assert.IsFalse(myBoStub.Status.IsNew);
             //---------------Execute Test ----------------------
@@ -202,7 +202,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetAuthorisation(authorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanCreate));
+            Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanCreate));
 
             //---------------Execute Test ----------------------
             string message;
@@ -221,7 +221,7 @@ namespace Habanero.Test.BO.Security
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
             myBoStub.SetAuthorisation(authorisationStub);
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanCreate));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanCreate));
             //---------------Execute Test ----------------------
             string message;
             bool isCreatable = myBoStub.IsCreatable(out message);
@@ -243,7 +243,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetAuthorisation(authorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanCreate));
+            Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanCreate));
 
             //---------------Execute Test ----------------------
             myBoStub.Save();
@@ -261,7 +261,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetAuthorisation(authorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanCreate));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanCreate));
 
             //---------------Execute Test ----------------------
             try
@@ -302,7 +302,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetAuthorisation(authorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanUpdate));
+            Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanUpdate));
 
             //---------------Execute Test ----------------------
             string message;
@@ -322,7 +322,7 @@ namespace Habanero.Test.BO.Security
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
             myBoStub.SetAuthorisation(authorisationStub);
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanUpdate));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanUpdate));
             //---------------Execute Test ----------------------
             string message;
             bool isEditable = myBoStub.IsEditable(out message);
@@ -345,7 +345,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.Save();
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanUpdate));
+            Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanUpdate));
             Assert.IsFalse(myBoStub.Status.IsNew);
             Assert.IsFalse(myBoStub.Status.IsDirty);
 
@@ -370,7 +370,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.Save();
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanUpdate));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanUpdate));
             Assert.IsFalse(myBoStub.Status.IsNew);
             Assert.IsFalse(myBoStub.Status.IsDirty);
 
@@ -402,7 +402,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetPropertyValue("Prop1", "1112");
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanUpdate));
+            Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanUpdate));
             Assert.IsFalse(myBoStub.Status.IsNew);
             Assert.IsTrue(myBoStub.Status.IsDirty);
 
@@ -428,7 +428,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetStatus(BOStatus.Statuses.isDirty, true);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanUpdate));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanUpdate));
             Assert.IsTrue(prop1Prop.IsDirty);
             Assert.IsTrue(myBoStub.Status.IsDirty);
 
@@ -476,7 +476,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetAuthorisation(authorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanRead));
+            Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanRead));
 
             //---------------Execute Test ----------------------
             string message;
@@ -496,7 +496,7 @@ namespace Habanero.Test.BO.Security
             myBoStub.SetAuthorisation(authorisationStub);
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanRead));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanRead));
 
             //---------------Execute Test ----------------------
             string message;
@@ -524,7 +524,7 @@ namespace Habanero.Test.BO.Security
             BusinessObjectManager.Instance.ClearLoadedObjects();
             
             //---------------Assert Precondition----------------
-            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanRead));
+            Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanRead));
             Assert.IsFalse(myBoStub.Status.IsNew);
 
             //---------------Execute Test ----------------------
@@ -550,7 +550,7 @@ namespace Habanero.Test.BO.Security
             BusinessObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanRead));
+            Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanRead));
             Assert.IsFalse(myBoStub.Status.IsNew);
 
             //---------------Execute Test ----------------------
@@ -641,7 +641,7 @@ namespace Habanero.Test.BO.Security
             actionsAllowed.Add(actionToPerform);
         }
 
-        public bool IsAuthorised(BusinessObjectActions actionToPerform)
+        public bool IsAuthorised(IBusinessObject businessObject, BusinessObjectActions actionToPerform)
         {
             return (actionsAllowed.Contains(actionToPerform));
         }

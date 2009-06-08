@@ -1265,8 +1265,8 @@ namespace Habanero.Test.UI.Base
             BOProp prop1 = (BOProp)shape.Props["ShapeName"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
             //---------------Assert Precondition----------------
-            Assert.IsTrue(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
-            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanUpdate));
+            Assert.IsTrue(propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanRead));
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(prop1, BOPropActions.CanUpdate));
             //---------------Execute Test ----------------------
             textBoxMapper.BusinessObject = shape;
             //---------------Test Result -----------------------
@@ -1291,7 +1291,7 @@ namespace Habanero.Test.UI.Base
                 actionsAllowed.Add(actionToPerform);
             }
 
-            public bool IsAuthorised(BOPropActions actionToPerform)
+            public bool IsAuthorised(IBOProp prop,  BOPropActions actionToPerform)
             {
                 return (actionsAllowed.Contains(actionToPerform));
             }

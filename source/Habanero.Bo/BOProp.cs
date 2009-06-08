@@ -440,7 +440,7 @@ namespace Habanero.BO
         {
             if (!AreReadWriteRulesEditable(out message)) return false;
             if (_boPropAuthorisation == null) return true;
-            if (!_boPropAuthorisation.IsAuthorised(BOPropActions.CanUpdate))
+            if (!_boPropAuthorisation.IsAuthorised(this, BOPropActions.CanUpdate))
             {
                 message = string.Format
                     ("The logged on user {0} is not authorised to update the {1} ",
@@ -456,7 +456,7 @@ namespace Habanero.BO
         /// <returns></returns>
         protected virtual bool IsReadable()
         {
-            return _boPropAuthorisation == null || _boPropAuthorisation.IsAuthorised(BOPropActions.CanRead);
+            return _boPropAuthorisation == null || _boPropAuthorisation.IsAuthorised(this, BOPropActions.CanRead);
         }
 
         ///<summary>
