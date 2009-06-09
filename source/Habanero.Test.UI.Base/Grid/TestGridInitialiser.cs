@@ -462,6 +462,36 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestInitGrid_With_GridDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            UIGrid uiGridDef = classDef.UIDefCol["default"].UIGrid;
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
+            UIGridColumn columnDef1 = uiGridDef[0];
+            Assert.AreEqual("TestProp", columnDef1.PropertyName);
+            UIGridColumn columnDef2 = uiGridDef[1];
+            Assert.AreEqual("TestProp2", columnDef2.PropertyName);
+            //---------------Execute Test ----------------------
+
+            initialiser.InitialiseGrid(classDef, uiGridDef, "test");
+                //---------------Test Result -----------------------
+                IDataGridViewColumn idColumn = grid.Grid.Columns[0];
+                AssertVerifyIDFieldSetUpCorrectly(idColumn);
+
+                IDataGridViewColumn dataColumn1 = grid.Grid.Columns[1];
+                AssertThatDataColumnSetupCorrectly(classDef, columnDef1, dataColumn1);
+
+                IDataGridViewColumn dataColumn2 = grid.Grid.Columns[2];
+                AssertThatDataColumnSetupCorrectly(classDef, columnDef2, dataColumn2);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public virtual void TestInitGrid_LoadsDataGridViewDateTimeColumn()
         {
             //---------------Set up test pack-------------------

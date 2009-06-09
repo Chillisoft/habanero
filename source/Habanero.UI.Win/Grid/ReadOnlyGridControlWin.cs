@@ -115,6 +115,17 @@ namespace Habanero.UI.Win
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
         }
 
+        public void Initialise(IClassDef classDef, UIGrid gridDef, string uiDefName) {
+            if (classDef == null) throw new ArgumentNullException("classDef");
+            if (uiDefName == null) throw new ArgumentNullException("uiDefName");
+
+
+            _classDef = (ClassDef)classDef;
+            UiDefName = uiDefName;
+
+            _gridInitialiser.InitialiseGrid(classDef, gridDef, uiDefName);
+        }
+
         /// <summary>
         /// Gets and Sets the business object collection displayed in the grid.  This
         /// collection must be pre-loaded using the collection's Load() command or from the

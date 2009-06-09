@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.VWG
@@ -120,6 +121,10 @@ namespace Habanero.UI.VWG
         public void Initialise(IClassDef classDef, string uiDefName)
         {
             _editableGridManager.Initialise(classDef, uiDefName);
+        }
+
+        public void Initialise(IClassDef classDef, UIGrid gridDef, string uiDefName) {
+            _editableGridManager.Initialise(classDef, gridDef, uiDefName);
         }
 
 

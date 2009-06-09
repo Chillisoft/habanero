@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
@@ -56,6 +57,15 @@ namespace Habanero.UI.Base
         public void Initialise(IClassDef classDef, string uiDefName)
         {
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
+        }
+
+
+        /// <summary>
+        /// See <see cref="IGridControl.Initialise(IClassDef,UIGrid,string)"/>
+        /// </summary>
+        public void Initialise(IClassDef classDef, UIGrid uiGridDef, string uiDefName)
+        {
+            _gridInitialiser.InitialiseGrid(classDef, uiGridDef, uiDefName);
         }
     }
 }

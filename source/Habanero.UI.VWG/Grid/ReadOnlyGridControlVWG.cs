@@ -22,6 +22,7 @@ using System.ComponentModel;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using DialogResult=Gizmox.WebGUI.Forms.DialogResult;
 using MessageBoxButtons=Gizmox.WebGUI.Forms.MessageBoxButtons;
@@ -109,6 +110,16 @@ namespace Habanero.UI.VWG
             UiDefName = uiDefName;
 
             _gridInitialiser.InitialiseGrid(ClassDef, uiDefName);
+        }
+
+        public void Initialise(IClassDef classDef, UIGrid gridDef, string uiDefName) {
+            if (classDef == null) throw new ArgumentNullException("classDef");
+            if (uiDefName == null) throw new ArgumentNullException("uiDefName");
+
+            ClassDef = classDef;
+            UiDefName = uiDefName;
+
+            _gridInitialiser.InitialiseGrid(ClassDef, gridDef, uiDefName);
         }
 
         /// <summary>

@@ -823,6 +823,29 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestInitGrid_WithGridDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = LoadMyBoDefaultClassDef();
+            const string alternateUIDefName = "Alternate";
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(1, uiGridDef.Count, "1 defined column in the alternateUIDef");
+            //---------------Execute Test ----------------------
+            grid.Initialise(classDef, uiGridDef, alternateUIDefName);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(alternateUIDefName, grid.UiDefName);
+            Assert.AreEqual(classDef, grid.ClassDef);
+            Assert.AreEqual
+                (uiGridDef.Count + 1, grid.Grid.Columns.Count,
+                 "There should be 1 ID column and 1 defined column in the alternateUIDef");
+            //---------------Tear Down -------------------------          
+        }
+
         public void TestInitGrid_Twice_Fail()
         {
             //---------------Set up test pack-------------------

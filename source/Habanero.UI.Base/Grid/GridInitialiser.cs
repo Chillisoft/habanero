@@ -104,14 +104,20 @@ namespace Habanero.UI.Base
         public void InitialiseGrid(IClassDef classDef, string uiDefName)
         {
             UIGrid gridDef = GetGridDef((ClassDef) classDef, uiDefName);
-            if (gridDef.FilterDef != null)
+            InitialiseGrid(classDef, gridDef, uiDefName);
+        }
+
+        public void InitialiseGrid(IClassDef classDef, UIGrid uiGridDef, string uiDefName)
+        {
+            if (uiGridDef.FilterDef != null)
             {
                 FilterControlBuilder builder = new FilterControlBuilder(_controlFactory);
-                builder.BuildFilterControl(gridDef.FilterDef, _gridControl.FilterControl);
+                builder.BuildFilterControl(uiGridDef.FilterDef, _gridControl.FilterControl);
                 _gridControl.FilterControl.Visible = true;
-            } else if (_gridControl.FilterControl.FilterControls.Count == 0) { _gridControl.FilterControl.Visible = false; }
-    
-            SetUpGridColumns((ClassDef) classDef, gridDef);
+            }
+            else if (_gridControl.FilterControl.FilterControls.Count == 0) { _gridControl.FilterControl.Visible = false; }
+
+            SetUpGridColumns((ClassDef)classDef, uiGridDef);
             _gridControl.UiDefName = uiDefName;
             _gridControl.ClassDef = classDef;
 

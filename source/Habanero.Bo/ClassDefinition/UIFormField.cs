@@ -539,6 +539,8 @@ namespace Habanero.BO.ClassDefinition
             if (column == null) return null;
             UIDef uiDef = column.UIFormTab.UIForm.UIDef;
             if (uiDef == null) return null;
+            if (uiDef.ClassDef != null) return uiDef.ClassDef;
+            if (uiDef.UIDefCol == null) return null;
             return uiDef.UIDefCol.ClassDef;
         }
 
