@@ -191,7 +191,7 @@ namespace Habanero.Test
         }
 
         public static DatabaseConfig GetDatabaseConfig() {
-            return new DatabaseConfig("MySql", "localhost", "habanero_test_branch_2_3", "root", "root", "3306");
+            return new DatabaseConfig("MySql", "localhost", "habanero_test_tag_2_3_0", "root", "root", "3306");
         }
 
         public static bool GetRandomBoolean()

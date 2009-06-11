@@ -39,7 +39,7 @@ namespace Habanero.Test
 
             settings.Add("vendor", DatabaseConfig.MySql);
             settings.Add("server", "localhost");
-            settings.Add("database", "habanero_test_branch_2_3");
+            settings.Add("database", "habanero_test_tag_2_3_0");
             settings.Add("username", "root");
             settings.Add("password", "root");
             settings.Add("port", "3306");
