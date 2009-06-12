@@ -139,7 +139,7 @@ namespace Habanero.BO
         /// Constructor that specifies a class definition
         /// </summary>
         /// <param name="def">The class definition</param>
-        protected internal BusinessObject(ClassDef def)
+        protected internal BusinessObject(IClassDef def)
         {
             Initialise(def);
             AddToObjectManager();
@@ -281,7 +281,7 @@ namespace Habanero.BO
             }
         }
 
-        private void Initialise(ClassDef classDef)
+        private void Initialise(IClassDef classDef)
         {
             _boStatus = new BOStatus(this) {IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true};
             if (classDef == null)
@@ -289,7 +289,7 @@ namespace Habanero.BO
                 if (ClassDef.ClassDefs.Contains(GetType()))
                     _classDef = ClassDef.ClassDefs[GetType()];
             }
-            else _classDef = classDef;
+            else _classDef = (ClassDef) classDef;
             ConstructFromClassDef(true);
             Guid myID = Guid.NewGuid();
             if (_primaryKey != null)

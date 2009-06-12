@@ -280,8 +280,6 @@ namespace Habanero.DB
         {
             if (_selectQuery.Limit < 0) return;
 
-//            string limitClauseAtBeginning =
-//                DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
             string limitClauseAtBeginning = _sqlFormatter.GetLimitClauseCriteriaForBegin(this.Limit + this.FirstRecordToLoad);
             if (!String.IsNullOrEmpty(limitClauseAtBeginning))
             {
@@ -293,7 +291,6 @@ namespace Habanero.DB
         {
             if (_selectQuery.Limit < 0) return;
 
-//            string limitClauseAtEnd = DatabaseConnection.CurrentConnection.GetLimitClauseForEnd(_selectQuery.Limit);
             string limitClauseAtEnd = _sqlFormatter.GetLimitClauseCriteriaForEnd(this.Limit + this.FirstRecordToLoad);
             if (!String.IsNullOrEmpty(limitClauseAtEnd))
             {

@@ -173,5 +173,18 @@ TestDtd3";
             DtdLoader loader = new DtdLoader(new TextFileLoader(), "somepath");
             string dtd = loader.LoadDtd("somefile", new ArrayList());
         }
+
+        [Test]
+        public void TestMethod()
+        {
+            //---------------Set up test pack-------------------
+            DtdLoader loader = new DtdLoader();
+            string dtd = loader.LoadDtd("ui");
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            //---------------Test Result -----------------------
+            //---------------Tear Down -------------------------          
+        }
     }
 }

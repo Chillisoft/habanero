@@ -74,8 +74,7 @@ namespace Habanero.DB
         /// The <see cref="SqlFormatter"/> that is used to format the Swl for the database type represented by this database connection
         /// </summary>
         protected SqlFormatter _sqlFormatter;
-
-
+        
         /// <summary>
         /// Constructor that initialises a new set of null connections
         /// </summary>
@@ -84,8 +83,6 @@ namespace Habanero.DB
             _connections = new ArrayList(5);
             _sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
         }
-
-        //private IDbConnection sampleCon;
 
         /// <summary>
         /// Constructor that allows an assembly name and class name to
@@ -112,7 +109,6 @@ namespace Habanero.DB
             : this(assemblyName, className)
         {
             this.ConnectionString = connectString;
-            //_currentDbConnection = GetNewConnection();
         }
 
         /// <summary>
@@ -122,13 +118,6 @@ namespace Habanero.DB
         /// <returns>Returns an IDbConnection object</returns>
         private IDbConnection CreateDatabaseConnection()
         {
-            //Assembly dbAssembly;
-            //dbAssembly = Assembly.LoadWithPartialName(_assemblyName);
-            //if (dbAssembly == null)
-            //{
-            //    dbAssembly = Assembly.LoadFrom(_assemblyName + ".dll");
-            //}
-            //Type connectionType = dbAssembly.GetType(_className);
             try
             {
                 Type connectionType = TypeLoader.LoadType(_assemblyName, _className);
@@ -158,7 +147,6 @@ namespace Habanero.DB
             get
             {
                 IDbConnection con = this.CreateDatabaseConnection();
-                //IDbConnection) Activator.CreateInstance(sampleCon.GetType()); // new MySqlConnection(ConnectionString));
                 try
                 {
                     con.ConnectionString = this.ConnectionString;
@@ -174,14 +162,6 @@ namespace Habanero.DB
                          + "username, password and port. Consult the documentation for "
                          + "more detail on available options for these settings.", ex);
                 }
-                //Mark - I have no Idea what the point of the next 3 lines are but I have commented them out because they are pointless :)
-                //if (con.State != ConnectionState.Open && this._className == "System.Data.OleDb.OleDbConnection") {
-                //    con.Open();
-                //}
-//			if (con.State != ConnectionState.Open) 
-//			{
-//				con.Open() ;
-//			}
                 return con;
             }
         }
@@ -309,41 +289,20 @@ namespace Habanero.DB
             {
                 foreach (IDbConnection dbConnection in _connections)
                 {
-                    //if (dbConnection.State == ConnectionState.Open) {
-                    //	return dbConnection;
-                    //} else
                     if (dbConnection.State == ConnectionState.Closed)
                     {
-                        //dbConnection.Open();
                         return dbConnection;
                     }
                 }
                 IDbConnection newDbConnection = this.NewConnection;
                 _connections.Add(newDbConnection);
                 return newDbConnection;
-
-                //				if (_currentDbConnection == null || (_currentDbConnection.State == ConnectionState.Broken) ||
-                //					(_currentDbConnection.State == ConnectionState.Closed) ||
-                //					(_currentDbConnection.State == ConnectionState.Executing)) 
-                //				{
-                //					_currentDbConnection = GetNewConnection();
-                //					_currentDbConnection.Open();
-                //				}
-                //				else 
-                //				{
-                //					//if the provided connection is not open, we will open it
-                //					if (_currentDbConnection.State != ConnectionState.Open) 
-                //					{
-                //						_currentDbConnection.Open();
-                //					}
-                //				}
             }
             catch (Exception ex)
             {
                 log.Error
                     ("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine
                      + ExceptionUtilities.GetExceptionString(ex, 8, true));
-                //throw ex;
                 throw new DatabaseConnectionException
                     ("An error occurred while attempting " + "to connect to the database.", ex);
             }
@@ -580,7 +539,6 @@ namespace Habanero.DB
                 {
                 }
                 cmd.CommandText = sql;
-                //log.Debug("ExecuteRawSql with sql statement: " + sql.ToString());
                 return cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -660,7 +618,6 @@ namespace Habanero.DB
                     cmd.Transaction = transaction;
                 }
                 int totalRowsAffected = 0;
-                //log.Debug("ExecuteSql with sql statement collection: " + sql.ToString());
                 foreach (SqlStatement statement in sql)
                 {
                     statement.SetupCommand(cmd);
@@ -829,9 +786,6 @@ namespace Habanero.DB
                     ("Error in LoadDataTable:" + Environment.NewLine
                      + ExceptionUtilities.GetExceptionString(ex, 8, true));
                 log.Error("Sql string: " + selectSql);
-                //				if (con != null && con.State != ConnectionState.Closed) {
-                //					con.Close();
-                //				}
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());

@@ -103,9 +103,6 @@ namespace Habanero.DB
                 paramValue = DBNull.Value;
             }
             IDbDataParameter newParameter = _sampleCommand.CreateParameter();
-            //			if ((paramValue is string) && (_idbConnection is MySqlConnection)) {
-            //				((MySqlParameter) newParameter).MySqlDbType = MySqlDbType.String ;
-            //			}
             newParameter.ParameterName = paramName;
             object preparedValue = DatabaseUtil.PrepareValue(paramValue);
             newParameter.Value = preparedValue;
@@ -204,7 +201,7 @@ namespace Habanero.DB
         /// Returns the parameter name generator
         /// </summary>
         /// <returns>Returns a ParameterNameGenerator object</returns>
-        public ParameterNameGenerator ParameterNameGenerator
+        public IParameterNameGenerator ParameterNameGenerator
         {
             get { return _gen; }
         }

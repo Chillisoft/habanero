@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="http://tempuri.org/uis" elementFormDefault="qualified" targetNamespace="http://tempuri.org/uis" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="parameter">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+      <xs:attribute name="value" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="column">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameter" />
+      </xs:sequence>
+      <xs:attribute name="heading" type="xs:string" />
+      <xs:attribute name="property" type="xs:string" use="required" />
+      <xs:attribute name="type" type="xs:NMTOKEN" />
+      <xs:attribute name="assembly" type="xs:NMTOKEN" />
+      <xs:attribute default="true" name="editable">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="true" />
+            <xs:enumeration value="false" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute default="100" name="width" type="xs:string" />
+      <xs:attribute default="left" name="alignment">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="centre" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="filterProperty">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameter" />
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:NMTOKEN" />
+      <xs:attribute name="label" type="xs:string" />
+      <xs:attribute default="StringTextBoxFilter" name="filterType" type="xs:NMTOKEN" />
+      <xs:attribute default="Habanero.UI.Base" name="filterTypeAssembly" type="xs:string" />
+      <xs:attribute default="OpLike" name="operator">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="OpEquals" />
+            <xs:enumeration value="OpLike" />
+            <xs:enumeration value="OpGreaterThan" />
+            <xs:enumeration value="OpGreaterThanOrEqualTo" />
+            <xs:enumeration value="OpLessThan" />
+            <xs:enumeration value="OpLessThanOrEqualTo" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="filter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="filterProperty" />
+      </xs:sequence>
+      <xs:attribute default="Filter" name="filterMode" type="xs:NMTOKEN" />
+      <xs:attribute default="0" name="columns" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="grid">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="filter" />
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="column" />
+      </xs:sequence>
+      <xs:attribute default="" name="sortColumn" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="trigger">
+    <xs:complexType>
+      <xs:attribute name="triggeredBy" type="xs:NMTOKEN" />
+      <xs:attribute name="conditionValue" type="xs:string" />
+      <xs:attribute name="action" type="xs:NMTOKEN" use="required" />
+      <xs:attribute name="value" type="xs:string" />
+      <xs:attribute name="target" type="xs:NMTOKEN" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="field">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameter" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="trigger" />
+      </xs:sequence>
+      <xs:attribute name="label" type="xs:string" />
+      <xs:attribute name="property" type="xs:NMTOKEN" use="required" />
+      <xs:attribute name="type" type="xs:NMTOKEN" />
+      <xs:attribute name="assembly" type="xs:NMTOKEN" />
+      <xs:attribute name="mapperType" type="xs:NMTOKEN" />
+      <xs:attribute name="mapperAssembly" type="xs:NMTOKEN" />
+      <xs:attribute default="true" name="editable">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="true" />
+            <xs:enumeration value="false" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toolTipText" type="xs:string" />
+      <xs:attribute default="Label" name="layout">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="Label" />
+            <xs:enumeration value="GroupBox" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="columnLayout">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="field" />
+      </xs:sequence>
+      <xs:attribute default="-1" name="width" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="formGrid">
+    <xs:complexType>
+      <xs:attribute name="relationship" type="xs:NMTOKEN" use="required" />
+      <xs:attribute name="reverseRelationship" type="xs:NMTOKEN" use="required" />
+      <xs:attribute default="Habanero.UI.Win.EditableGridWin" name="type" type="xs:NMTOKEN" />
+      <xs:attribute default="Habanero.UI.Win" name="assembly" type="xs:NMTOKEN" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tab">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="columnLayout" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="field" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="formGrid" />
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="form">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="tab" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="columnLayout" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="field" />
+      </xs:sequence>
+      <xs:attribute default="300" name="width" type="xs:string" />
+      <xs:attribute default="250" name="height" type="xs:string" />
+      <xs:attribute default="" name="title" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ui">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="grid" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="form" />
+      </xs:sequence>
+      <xs:attribute default="default" name="name" type="xs:NMTOKEN" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -57,36 +57,5 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="command">The command</param>
         void SetupCommand(IDbCommand command);
-
-//        ///<summary>
-//        /// Adds a join clause to the sql statement
-//        ///</summary>
-//        ///<param name="joinType">The type of join to be created. eg. 'LEFT JOIN'</param>
-//        ///<param name="joinTable">The table to be joined to this sql statement</param>
-//        ///<param name="joinCriteria">The criteria on which the join is created</param>
-//        void AddJoin(string joinType, string joinTable, string joinCriteria);
-//
-//        /// <summary>
-//        /// Appends a criteria clause to the sql statement
-//        /// </summary>
-//        /// <param name="criteria">The criteria clause</param>
-//        void AppendCriteria(string criteria);
-//
-//        /// <summary>
-//        /// Appends an order-by clause to the sql statement
-//        /// </summary>
-//        /// <param name="orderByCriteria">The order-by clause</param>
-//        void AppendOrderBy(string orderByCriteria);
-//        
-//        /// <summary>
-//        /// Appends a where statement to the sql statement
-//        /// </summary>
-//        void AppendWhere();
-//
-//        /// <summary>
-//        /// Adds more fields to the select fields list in the statement.
-//        /// </summary>
-//        /// <param name="fields">The list of fields to add to the select statement</param>
-//        void AddSelectFields(List<string> fields);
     }
 }

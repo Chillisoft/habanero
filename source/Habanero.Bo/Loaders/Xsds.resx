@@ -118,73 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="_class" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\class.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="businessObjectLookupList" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\businessObjectLookupList.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="classes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\classes.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="column" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\column.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="columnLayout" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\columnLayout.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="databaseLookupList" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\databaseLookupList.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="field" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\field.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="form" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\form.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="formGrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\formGrid.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="grid" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\grid.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="key" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\key.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="parameter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\parameter.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="primaryKey" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\primaryKey.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="Prop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\Prop.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="property" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\property.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="relationship" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\relationship.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="Rule" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\Rule.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="simpleLookupList" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\simpleLookupList.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="superClass" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\superClass.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="tab" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\tab.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="trigger" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\trigger.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>xsds\classes.xsd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="ui" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\ui.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dtds\filter.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>xsds\ui.xsd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

@@ -45,8 +45,6 @@ namespace Habanero.Base
         /// <returns>Returns an IDbConnection object</returns>
         IDbConnection GetConnection();
 
-        //IDataReader LoadDataReader(SqlStatement selectSql, string strSearchCriteria, string strOrderByCriteria);
-
         /// <summary>
         /// Loads a data reader
         /// </summary>

@@ -25,7 +25,7 @@ namespace Habanero.DB
     /// <summary>
     /// Generates parameter names for parameterised sql statements
     /// </summary>
-    public class ParameterNameGenerator : IParameterNameGenerator
+    internal class ParameterNameGenerator : IParameterNameGenerator
     {
         private readonly IDbConnection _connection;
         private int _number;

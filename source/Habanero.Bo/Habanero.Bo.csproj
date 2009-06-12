@@ -140,10 +140,17 @@
     <Compile Include="IBusinessObjectLoader.cs" />
     <Compile Include="IDataAccessor.cs" />
     <Compile Include="IDataSetProvider.cs" />
+    <Compile Include="Loaders\ClassDefsXmlValidator.cs" />
     <Compile Include="Loaders\ClassDefValidator.cs" />
     <Compile Include="Loaders\XmlFilterLoader.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
+    <Compile Include="Loaders\XmlValidationResult.cs" />
+    <Compile Include="Loaders\Xsds.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Xsds.resx</DependentUpon>
+    </Compile>
     <Compile Include="NumberGenerator\NumberGenerator.cs" />
     <Compile Include="ObjectManager\BusinessObjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -363,12 +370,19 @@
     <None Include="Loaders\DTDs\tab.dtd" />
     <None Include="Loaders\DTDs\ui.dtd" />
     <None Include="Loaders\DTDs\Rule.dtd" />
+    <None Include="Loaders\XSDs\classes.xsd" />
+    <None Include="Loaders\XSDs\ui.xsd" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Loaders\Dtds.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Dtds.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Loaders\Xsds.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Xsds.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -74,6 +74,8 @@ namespace Habanero.BO.Loaders {
         ///		table CDATA #IMPLIED
         ///		displayName CDATA #IMPLIED
         ///    typeParameter CDATA #IMPLIED
+        ///    moduleName CDATA #IMPLIED
+        ///  classID CDATA #IMPLIED
         ///&gt;
         ///
         ///.
@@ -340,7 +342,7 @@ namespace Habanero.BO.Loaders {
         ///  reverseRelationship NMTOKEN #IMPLIED
         ///	orderBy CDATA &quot;&quot;
         ///	deleteAction ( DeleteRelated | DereferenceRelated | Prevent | DoNothing ) &quot;Prevent&quot;
-        ///  [rest of string was truncated]&quot;;.
+        ///	 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string relationship {
             get {

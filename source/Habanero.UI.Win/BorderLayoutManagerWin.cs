@@ -103,7 +103,8 @@ namespace Habanero.UI.Win
                                            Math.Min(splt.BackColor.B - 30, 255));
                         splt.BackColor = newBackColor;
 
-                        //TODO: port  splt.Dock = ((Control)_controls[i]).Dock;
+                        if (_controls[i].Dock != Base.DockStyle.Fill)
+                            splt.Dock = _controls[i].Dock;
                         ManagedControl.Controls.Add(splt);
                     }
                     this.ManagedControl.Controls.Add(habaneroControl);
