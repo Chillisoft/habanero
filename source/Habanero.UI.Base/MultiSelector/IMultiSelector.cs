@@ -68,7 +68,13 @@ namespace Habanero.UI.Base
         /// Gets the ListBox control that contains the available options that
         /// have not been selected
         /// </summary>
-        IListBox AvailableOptionsListBox { get; }
+        IListBox AvailableOptionsListBox { get; }       
+        
+        /// <summary>
+        /// Gets the GroupBox control that contains the available options that
+        /// have not been selected
+        /// </summary>
+        IGroupBox AvailableOptionsGroupBox { get; }
 
         /// <summary>
         /// Gets the model that manages the options
@@ -85,7 +91,13 @@ namespace Habanero.UI.Base
         /// Gets the ListBox control that contains the options that have been
         /// selected from those available
         /// </summary>
-        IListBox SelectedOptionsListBox { get; }
+        IListBox SelectedOptionsListBox { get; }        
+        
+        /// <summary>
+        /// Gets the GroupBox control that contains the options that have been
+        /// selected from those available
+        /// </summary>
+        IGroupBox SelectedOptionsGroupBox { get; }
 
         /// <summary>
         /// Gets the button control as indicated by the <see cref="MultiSelectorButton"/> enumeration.

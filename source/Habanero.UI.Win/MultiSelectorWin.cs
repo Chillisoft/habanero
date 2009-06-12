@@ -49,8 +49,8 @@ namespace Habanero.UI.Win
             InitializeComponent();
             _gridLayoutManager = new GridLayoutManager(this, controlFactory);
             PanelWin optionsPanel = new PanelWin();
-            groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            optionsPanel.Controls.Add(groupBox1);
+            _availableOptionsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            optionsPanel.Controls.Add(_availableOptionsGroupBox);
             PanelWin buttonPanel = new PanelWin();
             GridLayoutManager buttonPanelManager = new GridLayoutManager(buttonPanel,controlFactory);
             buttonPanelManager.SetGridSize(6,1);
@@ -68,8 +68,8 @@ namespace Habanero.UI.Win
             buttonPanelManager.FixRow(5, 25);
             buttonPanelManager.FixColumnBasedOnContents(0);
             PanelWin selectionsPanel = new PanelWin();
-            groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            selectionsPanel.Controls.Add(groupBox2);
+            _selectionsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            selectionsPanel.Controls.Add(_selectionsGroupBox);
             _gridLayoutManager.SetGridSize(1, 3);
             _gridLayoutManager.FixColumn(1, 100);
             _gridLayoutManager.AddControl(optionsPanel);
@@ -120,6 +120,11 @@ namespace Habanero.UI.Win
             get { return _availableOptionsListbox; }
         }
 
+        public IGroupBox AvailableOptionsGroupBox
+        {
+            get { return _availableOptionsGroupBox; }
+        }
+
         /// <summary>
         /// Gets the model that manages the options available or selected
         /// </summary>
@@ -149,6 +154,11 @@ namespace Habanero.UI.Win
         public IListBox SelectedOptionsListBox
         {
             get { return _selectionsListbox; }
+        }
+
+        public IGroupBox SelectedOptionsGroupBox
+        {
+            get { return _selectionsGroupBox; }
         }
 
         /// <summary>

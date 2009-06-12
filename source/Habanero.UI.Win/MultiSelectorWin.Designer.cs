@@ -42,9 +42,9 @@ namespace Habanero.UI.Win
             base.Dispose(disposing);
         }
 
-        private System.Windows.Forms.GroupBox groupBox1;
+        private GroupBoxWin _availableOptionsGroupBox;
         private ListBoxWin _availableOptionsListbox;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private GroupBoxWin _selectionsGroupBox;
         private ListBoxWin _selectionsListbox;
         private ButtonWin _btnSelect;
         private ButtonWin _btnSelectAll;
@@ -62,9 +62,9 @@ namespace Habanero.UI.Win
             components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 
-            this.groupBox1 = new GroupBoxWin();
+            this._availableOptionsGroupBox = new GroupBoxWin();
             this._availableOptionsListbox = new ListBoxWin();
-            this.groupBox2 = new GroupBoxWin();
+            this._selectionsGroupBox = new GroupBoxWin();
             this._selectionsListbox = new ListBoxWin();
             this._btnSelect = new ButtonWin();
             this._btnSelectAll = new ButtonWin();
@@ -72,17 +72,17 @@ namespace Habanero.UI.Win
             this._btnDeselect = new ButtonWin();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // _availableOptionsGroupBox
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this._availableOptionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox1.Controls.Add(this._availableOptionsListbox);
-            this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 369);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.Text = "Available AllOptions";
+            this._availableOptionsGroupBox.Controls.Add(this._availableOptionsListbox);
+            this._availableOptionsGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._availableOptionsGroupBox.Location = new System.Drawing.Point(3, 3);
+            this._availableOptionsGroupBox.Name = "_availableOptionsGroupBox";
+            this._availableOptionsGroupBox.Size = new System.Drawing.Size(200, 369);
+            this._availableOptionsGroupBox.TabIndex = 0;
+            this._availableOptionsGroupBox.Text = "Available AllOptions";
             // 
             // _availableOptionsListbox
             // 
@@ -95,17 +95,17 @@ namespace Habanero.UI.Win
             this._availableOptionsListbox.Size = new System.Drawing.Size(194, 342);
             this._availableOptionsListbox.TabIndex = 0;
             // 
-            // groupBox2
+            // _selectionsGroupBox
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this._selectionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this._selectionsListbox);
-            this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox2.Location = new System.Drawing.Point(290, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(200, 369);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.Text = "Selected AllOptions";
+            this._selectionsGroupBox.Controls.Add(this._selectionsListbox);
+            this._selectionsGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._selectionsGroupBox.Location = new System.Drawing.Point(290, 3);
+            this._selectionsGroupBox.Name = "_selectionsGroupBox";
+            this._selectionsGroupBox.Size = new System.Drawing.Size(200, 369);
+            this._selectionsGroupBox.TabIndex = 1;
+            this._selectionsGroupBox.Text = "Selected AllOptions";
             // 
             // _selectionsListbox
             // 
@@ -160,8 +160,8 @@ namespace Habanero.UI.Win
             //this.Controls.Add(this._btnDeselectAll);
             //this.Controls.Add(this._btnSelectAll);
             //this.Controls.Add(this._btnSelect);
-            //this.Controls.Add(this.groupBox2);
-            //this.Controls.Add(this.groupBox1);
+            //this.Controls.Add(this._selectionsGroupBox);
+            //this.Controls.Add(this._availableOptionsGroupBox);
             this.Size = new System.Drawing.Size(497, 381);
             this.Text = "MyMultiSelector";
             this.ResumeLayout(false);
