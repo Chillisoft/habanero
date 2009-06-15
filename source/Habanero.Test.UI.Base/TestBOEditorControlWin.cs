@@ -155,7 +155,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
-                string expectedDeveloperMessage = "The 'BOEditorControl";
+                string expectedDeveloperMessage = "The 'IBOEditorControl";
                 StringAssert.Contains(expectedDeveloperMessage, ex.Message);
                 expectedDeveloperMessage = "' could not be created since the the uiDef '" + CUSTOM_UIDEF_NAME
                                            + "' in the classDef '" + def.ClassNameFull
