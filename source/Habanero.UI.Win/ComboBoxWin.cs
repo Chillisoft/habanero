@@ -32,7 +32,7 @@ namespace Habanero.UI.Win
     public partial class ComboBoxWin : ComboBox, IComboBox
     {
         private readonly ComboBoxManager _manager;
-        private readonly IComboBoxObjectCollection _objectCollection;
+        private IComboBoxObjectCollection _objectCollection;
 
         ///<summary>
         /// Constructor for ComboBoxWin
@@ -62,6 +62,10 @@ namespace Habanero.UI.Win
         {
             get
             {
+                if (_objectCollection.Count != base.Items.Count)
+                {
+                    _objectCollection = new ComboBoxObjectCollectionWin(base.Items);
+                }
                 return _objectCollection;
             }
         }

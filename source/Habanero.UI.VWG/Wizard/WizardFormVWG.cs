@@ -74,6 +74,7 @@ namespace Habanero.UI.VWG
 
         private void CancelButton_OnClick(object sender, EventArgs e)
         {
+            DialogResult = Base.DialogResult.Cancel;
             this.Close();
         }
 

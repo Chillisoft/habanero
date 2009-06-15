@@ -18,11 +18,13 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using AutoCompleteSource=Habanero.UI.Base.AutoCompleteSource;
 
 namespace Habanero.Test.UI.Base
 {
@@ -37,6 +39,8 @@ namespace Habanero.Test.UI.Base
         {
             return GetControlFactory().CreateComboBox();
         }
+
+
     }
 
     /// <summary>
@@ -72,14 +76,33 @@ namespace Habanero.Test.UI.Base
             string AutoCompleteSourceToString = GetUnderlyingAutoCompleteSourceToString(comboBox);
             Assert.AreEqual(AutoCompleteSource.ToString(), AutoCompleteSourceToString);
         }
-
+        [TestFixture]
         public class TestComboBoxWin : TestComboBox
         {
             protected override IControlFactory GetControlFactory()
             {
                 return new ControlFactoryWin();
             }
-
+            [Test]
+            public void Test_NoSolutionSelected_ShouldNotFireSolutionSelected_WhenLoadButtonClicked()
+            {
+                //---------------Set up test pack-------------------
+                FormWin form = new FormWin();
+                List<string> defs = new List<string>();
+                defs.Add("AA");
+                defs.Add("BBB");
+                IComboBox selector = GetControlFactory().CreateComboBox();
+                form.Controls.Add((System.Windows.Forms.Control)selector);
+                System.Windows.Forms.ComboBox winCombo = (System.Windows.Forms.ComboBox)selector;
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(0, winCombo.Items.Count);
+                Assert.AreEqual(0, selector.Items.Count);
+                //---------------Execute Test ----------------------
+                selector.DataSource = defs;
+                //---------------Test Result -----------------------
+                Assert.AreEqual(2, winCombo.Items.Count);
+                Assert.AreEqual(2, selector.Items.Count);
+            }
             protected override string GetUnderlyingAutoCompleteSourceToString(IComboBox controlHabanero)
             {
                 System.Windows.Forms.ComboBox control = (System.Windows.Forms.ComboBox)controlHabanero;
@@ -140,7 +163,7 @@ namespace Habanero.Test.UI.Base
                 base.TestConversion_AutoCompleteSource_RecentlyUsedList();
             }
         }
-
+        [TestFixture]
         public class TestComboBoxVWG : TestComboBox
         {
             protected override IControlFactory GetControlFactory()
@@ -272,6 +295,9 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(AutoCompleteSource.RecentlyUsedList, control.AutoCompleteSource);
             AssertAutoCompleteSourcesSame(control);
         }
+
+
+
     internal class BusinessObjectControlStub : UserControlWin, IBOEditorControl
     {
         public bool DisplayErrorsCalled { get; private set; }

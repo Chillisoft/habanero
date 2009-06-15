@@ -9,7 +9,9 @@ namespace Habanero.UI.Win
     ///<summary>
     /// A Control for Editing/Viewing an <see cref="IBusinessObject"/>.
     ///</summary>
+// ReSharper disable ClassWithVirtualMembersNeverInherited.Global
     public class BOEditorControlWin : UserControlWin, IBOPanelEditorControl
+
     {
         private readonly IPanelInfo _panelInfo;
 
@@ -169,7 +171,7 @@ namespace Habanero.UI.Win
         public BOEditorControlWin(IControlFactory controlFactory, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
-            if (uiDefName == null) throw new ArgumentNullException("uiDefName");
+            if (string.IsNullOrEmpty(uiDefName)) throw new ArgumentNullException("uiDefName");
             ClassDef classDef = ClassDef.Get<T>();
             _panelInfo = BOEditorControlUtils.CreatePanelInfo(controlFactory, classDef, uiDefName, this);
             SetEnableState();
@@ -293,4 +295,5 @@ namespace Habanero.UI.Win
         #endregion
     }
 
+    // ReSharper restore ClassWithVirtualMembersNeverInherited.Global
 }

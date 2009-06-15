@@ -111,7 +111,6 @@ namespace Habanero.UI.Base
             return _wizardSteps[_currentStep = 0];
         }
 
-
         /// <summary>
         /// Checks if the current step is the last step.
         /// </summary>
@@ -185,7 +184,6 @@ namespace Habanero.UI.Base
         /// </summary>
         public virtual void CancelWizard()
         {
-            //TODO: Test and implement
             foreach (IWizardStep step in _wizardSteps)
             {
                 step.CancelStep();

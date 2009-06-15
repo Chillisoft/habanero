@@ -80,6 +80,7 @@ namespace Habanero.UI.Win
         {
             try
             {
+                DialogResult = Base.DialogResult.Cancel;
                 this.Close();
             }
             catch (Exception ex)
@@ -143,7 +144,7 @@ namespace Habanero.UI.Win
         /// </summary>
         IFormHabanero IFormHabanero.MdiParent
         {
-            get { throw new NotImplementedException(); }
+            get { return (IFormHabanero) this.MdiParent; }
             set { this.MdiParent = (Form)value; }
         }
 

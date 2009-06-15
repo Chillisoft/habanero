@@ -538,23 +538,23 @@ namespace Habanero.UI.Win
                 if (_businessObjectEditor != null && newBo != null)
                 {
                     _businessObjectEditor.EditObject(newBo, UiDefName,
-                                                     delegate(IBusinessObject bo, bool cancelled)
-                                                         {
-                                                             IBusinessObjectCollection collection =
-                                                                 this.Grid.BusinessObjectCollection;
-                                                             if (cancelled)
-                                                             {
-                                                                 collection.Remove(bo);
-                                                             }
-                                                             else
-                                                             {
-                                                                 if (!collection.Contains(bo))
-                                                                 {
-                                                                     collection.Add(bo);
-                                                                 }
-                                                                 Grid.SelectedBusinessObject = bo;
-                                                             }
-                                                         });
+                                     delegate(IBusinessObject bo, bool cancelled)
+                                         {
+                                             IBusinessObjectCollection collection =
+                                                 this.Grid.BusinessObjectCollection;
+                                             if (cancelled)
+                                             {
+                                                 collection.Remove(bo);
+                                             }
+                                             else
+                                             {
+                                                 if (!collection.Contains(bo))
+                                                 {
+                                                     collection.Add(bo);
+                                                 }
+                                                 Grid.SelectedBusinessObject = bo;
+                                             }
+                                         });
                 }
             }
             catch (Exception ex)
