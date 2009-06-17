@@ -43,10 +43,10 @@ namespace Habanero.Test.UI.Base.FilterController
             StringTextBoxFilter filter = new StringTextBoxFilter(GetControlFactory(), propertyName, filterClauseOperator);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ITextBox), filter.Control);
+            Assert.IsInstanceOf(typeof(ITextBox), filter.Control);
             Assert.AreEqual(propertyName, filter.PropertyName);
             Assert.AreEqual(filterClauseOperator, filter.FilterClauseOperator);
-            Assert.IsInstanceOfType(typeof(DataViewNullFilterClause), filter.GetFilterClause(new DataViewFilterClauseFactory()));
+            Assert.IsInstanceOf(typeof(DataViewNullFilterClause), filter.GetFilterClause(new DataViewFilterClauseFactory()));
         }
 
         [Test]

@@ -130,7 +130,7 @@ namespace Habanero.Test.UI.Base
             
             //---------------Test Result -----------------------
             Assert.IsNotNull(iboColTabControl.TabControl);
-            Assert.IsInstanceOfType(typeof(ITabControl), iboColTabControl.TabControl);
+            Assert.IsInstanceOf(typeof(ITabControl), iboColTabControl.TabControl);
         }
 
         [Test]
@@ -455,7 +455,7 @@ namespace Habanero.Test.UI.Base
             ITabPage page = boColTabControl.TabControl.TabPages[0];
             Assert.AreEqual(1, page.Controls.Count);
             IControlHabanero boControl = page.Controls[0];
-            Assert.IsInstanceOfType(ExpectedTypeOfBOControl(), boControl);
+            Assert.IsInstanceOf(ExpectedTypeOfBOControl(), boControl);
             IBusinessObjectControl businessObjectControl = (IBusinessObjectControl)boControl;
             Assert.AreSame(expectedBO, businessObjectControl.BusinessObject);
         }

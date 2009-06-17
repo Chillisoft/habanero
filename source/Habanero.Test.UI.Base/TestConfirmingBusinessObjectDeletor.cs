@@ -6,6 +6,7 @@ using Habanero.UI.Base;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
+using Is=Rhino.Mocks.Constraints.Is;
 
 namespace Habanero.Test.UI.Base
 {
@@ -42,7 +43,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IBusinessObjectDeletor), confirmingBusinessObjectDeletor);
+            Assert.IsInstanceOf(typeof(IBusinessObjectDeletor), confirmingBusinessObjectDeletor);
             Assert.AreSame(confirmer, confirmingBusinessObjectDeletor.Confirmer);
         }
 
@@ -58,7 +59,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer, customConfirmationMessageDelegate);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IBusinessObjectDeletor), confirmingBusinessObjectDeletor);
+            Assert.IsInstanceOf(typeof(IBusinessObjectDeletor), confirmingBusinessObjectDeletor);
             Assert.AreSame(confirmer, confirmingBusinessObjectDeletor.Confirmer);
             Assert.AreSame(customConfirmationMessageDelegate, confirmingBusinessObjectDeletor.CustomConfirmationMessageDelegate);
         }

@@ -55,7 +55,7 @@ namespace Habanero.Test.BO.Loaders
             //---------------Execute Test ----------------------
             ILookupList lookupList = itsLoader.LoadLookupList(xml);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(BusinessObjectLookupList), lookupList);
+            Assert.IsInstanceOf(typeof(BusinessObjectLookupList), lookupList);
             BusinessObjectLookupList source = (BusinessObjectLookupList)lookupList;
             //Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
             Assert.AreEqual("MyBO", source.ClassName);

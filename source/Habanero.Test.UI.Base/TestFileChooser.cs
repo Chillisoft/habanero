@@ -60,8 +60,8 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(fileChooser, "A File Chooser should have been created");
             Assert.AreEqual(2, fileChooser.Controls.Count);
-            Assert.IsInstanceOfType(typeof(ITextBox), fileChooser.Controls[0]);
-            Assert.IsInstanceOfType(typeof(IButton), fileChooser.Controls[1]);
+            Assert.IsInstanceOf(typeof(ITextBox), fileChooser.Controls[0]);
+            Assert.IsInstanceOf(typeof(IButton), fileChooser.Controls[1]);
             IButton button = (IButton)fileChooser.Controls[1];
             Assert.AreEqual(button.Text, "Select...");
             //---------------Tear Down -------------------------          

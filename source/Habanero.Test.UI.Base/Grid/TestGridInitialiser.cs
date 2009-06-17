@@ -359,7 +359,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(6, grid.Grid.Columns.Count);
             IDataGridViewColumn column3 = grid.Grid.Columns[3];
             Assert.AreEqual("TestDateTime", column3.Name);
-            Assert.IsInstanceOfType(typeof(IDataGridViewColumn), column3);
+            Assert.IsInstanceOf(typeof(IDataGridViewColumn), column3);
             AssertGridColumnTypeAfterCast(column3, customColumnType);
         }
 
@@ -483,7 +483,7 @@ namespace Habanero.Test.UI.Base
             IDataGridViewColumn column3 = grid.Grid.Columns[3];
             Assert.AreEqual("TestDateTime", column3.Name);
             Assert.AreEqual(uiDTColDef.Heading, column3.HeaderText);
-            Assert.IsInstanceOfType(typeof(IDataGridViewColumn), column3);
+            Assert.IsInstanceOf(typeof(IDataGridViewColumn), column3);
             AssertGridColumnTypeAfterCast(column3, GetDateTimeGridColumnType());
         }
 

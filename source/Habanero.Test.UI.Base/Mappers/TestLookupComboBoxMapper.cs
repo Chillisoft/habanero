@@ -560,7 +560,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
                 cmbox.SelectedItem = LOOKUP_ITEM_2;
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(LookupComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
+                Assert.IsInstanceOf(typeof(LookupComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
             }
 
@@ -578,7 +578,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
                 cmbox.Text = "Test2";
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(LookupComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
+                Assert.IsInstanceOf(typeof(LookupComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
             }
 
@@ -599,7 +599,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 cmbox.CallSendKeyBob();
 
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+                Assert.IsInstanceOf(typeof(LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
             }
 
@@ -620,7 +620,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 cmbox.SelectedItem = LOOKUP_ITEM_2;
 
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+                Assert.IsInstanceOf(typeof(LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_1), s.SampleLookupID);
                 //---------------Tear Down -------------------------
             }

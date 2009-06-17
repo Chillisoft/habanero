@@ -79,7 +79,7 @@ namespace Habanero.Test.BO
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
             //---------------Test Result -----------------------
             Assert.AreEqual(0, boMan.Count);
-//            Assert.IsInstanceOfType(typeof(BusinessObjectManager), boMan);
+//            Assert.IsInstanceOf(typeof(BusinessObjectManager), boMan);
         }
 
         [Test]

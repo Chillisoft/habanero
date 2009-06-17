@@ -130,7 +130,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IBOColSelectorControl colSelector = CreateSelector();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IReadOnlyGridControl), colSelector);
+            Assert.IsInstanceOf(typeof(IReadOnlyGridControl), colSelector);
         }
 
         [Ignore(" Not sure how to implement this in grids.")] //TODO  01 Mar 2009:

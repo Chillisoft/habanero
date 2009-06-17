@@ -110,7 +110,7 @@ namespace Habanero.Test.UI.Base
             IBOComboBoxSelector selector = (IBOComboBoxSelector) CreateSelector();
             //---------------Test Result -----------------------
             Assert.IsNotNull(selector.ComboBox);
-            Assert.IsInstanceOfType(typeof(IComboBox), selector.ComboBox);
+            Assert.IsInstanceOf(typeof(IComboBox), selector.ComboBox);
         }
 
         [Test]

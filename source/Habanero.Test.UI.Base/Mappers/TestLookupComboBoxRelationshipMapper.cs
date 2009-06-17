@@ -214,7 +214,7 @@ namespace Habanero.Test.UI.Base.Mappers
             mapper.BusinessObjectCollection = boCol;
             //---------------Test Result -----------------------
             Assert.AreEqual(2, cmbox.Items.Count, "Should have one object and blank item");
-            Assert.IsInstanceOfType(typeof (IBusinessObject), cmbox.Items[1]);
+            Assert.IsInstanceOf(typeof (IBusinessObject), cmbox.Items[1]);
             Assert.IsTrue(cmbox.Items.Contains(boCol[0]));
             Assert.IsNull(cmbox.SelectedItem);
         }
@@ -928,7 +928,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 ("RelationshipComboBoxMapper", "Habanero.UI.Base", cmbox, TestUtil.GetRandomString(), false,
                  GetControlFactory());
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(RelationshipComboBoxMapper), controlMapper);
+            Assert.IsInstanceOf(typeof(RelationshipComboBoxMapper), controlMapper);
         }
 
         [Test]
@@ -943,8 +943,8 @@ namespace Habanero.Test.UI.Base.Mappers
                 ("AutoLoadingRelationshipComboBoxMapper", "Habanero.UI.Base", cmbox, TestUtil.GetRandomString(), false,
                  GetControlFactory());
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(AutoLoadingRelationshipComboBoxMapper), controlMapper);     
-            Assert.IsInstanceOfType(typeof(RelationshipComboBoxMapper), controlMapper);     
+            Assert.IsInstanceOf(typeof(AutoLoadingRelationshipComboBoxMapper), controlMapper);     
+            Assert.IsInstanceOf(typeof(RelationshipComboBoxMapper), controlMapper);     
         }
 
         [Test]
@@ -1280,7 +1280,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Execute Test ----------------------
             cmbox.CallSendKeyBob();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof (LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreSame(newBO, person.Organisation, "For Windows the value should be changed.");
         }
 
@@ -1301,7 +1301,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Execute Test ----------------------
             cmbox.SelectedItem = newBO;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof (LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreNotSame(newBO, person.Organisation, "For Windows the value should be changed.");
             Assert.AreSame(organisationTestBO, person.Organisation, "For Windows the value should be changed.");
         }

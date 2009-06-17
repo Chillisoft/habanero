@@ -93,9 +93,9 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD, panel.Controls.Count);
-            Assert.IsInstanceOfType(typeof (ILabel), panel.Controls[0]);
-            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
-            Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[2]);
+            Assert.IsInstanceOf(typeof (ILabel), panel.Controls[0]);
+            Assert.IsInstanceOf(typeof (ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (IPanel), panel.Controls[2]);
 
             ILabel label = (ILabel) panel.Controls[0];
             Assert.AreEqual("Text:", label.Text);
@@ -114,9 +114,9 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD, panel.Controls.Count);
-            Assert.IsInstanceOfType(typeof (ILabel), panel.Controls[0]);
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[1]);
-            Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[2]);
+            Assert.IsInstanceOf(typeof (ILabel), panel.Controls[0]);
+            Assert.IsInstanceOf(typeof (INumericUpDown), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (IPanel), panel.Controls[2]);
         }
        
 
@@ -135,12 +135,12 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD, panel.Controls.Count);  //still has a null control in place
-            Assert.IsInstanceOfType(typeof (IGroupBox), panel.Controls[0]);
+            Assert.IsInstanceOf(typeof (IGroupBox), panel.Controls[0]);
             IGroupBox groupBox = (IGroupBox) panel.Controls[0];
 
-            Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[2]);
+            Assert.IsInstanceOf(typeof (IPanel), panel.Controls[2]);
             Assert.AreEqual(1, groupBox.Controls.Count);
-            Assert.IsInstanceOfType(typeof(INumericUpDown), groupBox.Controls[0]);
+            Assert.IsInstanceOf(typeof(INumericUpDown), groupBox.Controls[0]);
         }
 
 
@@ -159,7 +159,7 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
             //---------------Test Result -----------------------
             IGroupBox groupBox = (IGroupBox)panel.Controls[0];
-            Assert.IsInstanceOfType(typeof(ITextBox), groupBox.Controls[0]);
+            Assert.IsInstanceOf(typeof(ITextBox), groupBox.Controls[0]);
             Assert.AreEqual(3 * GetControlFactory().CreateTextBox().Height + 4, groupBox.Height);
             ITextBox textBox = (ITextBox)groupBox.Controls[0];
             Assert.IsTrue(textBox.Multiline);
@@ -280,18 +280,18 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD*expectedFields, panel.Controls.Count);
 
             //-- Row 1
-            Assert.IsInstanceOfType(typeof (ILabel), panel.Controls[0]);
+            Assert.IsInstanceOf(typeof (ILabel), panel.Controls[0]);
             ILabel row1Label = (ILabel) panel.Controls[0];
             Assert.AreEqual("Text:", row1Label.Text);
-            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
-            Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[2]);
+            Assert.IsInstanceOf(typeof (ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (IPanel), panel.Controls[2]);
 
             //-- Row 2
-            Assert.IsInstanceOfType(typeof (ILabel), panel.Controls[3]);
+            Assert.IsInstanceOf(typeof (ILabel), panel.Controls[3]);
             ILabel row2Label = (ILabel) panel.Controls[3];
             Assert.AreEqual("Integer:", row2Label.Text);
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[4]);
-            Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[5]);
+            Assert.IsInstanceOf(typeof (INumericUpDown), panel.Controls[4]);
+            Assert.IsInstanceOf(typeof (IPanel), panel.Controls[5]);
         }
 
         [Test]
@@ -349,27 +349,27 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             IControlCollection panelControls = panel.Controls;
             //-----Row 1 Column 1
-            Assert.IsInstanceOfType(typeof (ILabel), panelControls[0]);
+            Assert.IsInstanceOf(typeof (ILabel), panelControls[0]);
             Assert.AreEqual("Text:", panelControls[0].Text);
             Assert.AreEqual(formColumn[0].PropertyName, panelControls[0].Name);
-            Assert.IsInstanceOfType(typeof (ITextBox), panelControls[1]);
+            Assert.IsInstanceOf(typeof (ITextBox), panelControls[1]);
 
-            Assert.IsInstanceOfType(typeof (IPanel), panelControls[2]);
+            Assert.IsInstanceOf(typeof (IPanel), panelControls[2]);
             Assert.AreEqual(PanelBuilder.ERROR_PROVIDER_WIDTH, panelControls[2].Width);
             //----Row 1 Column 2
-            Assert.IsInstanceOfType(typeof (ILabel), panelControls[3]);
+            Assert.IsInstanceOf(typeof (ILabel), panelControls[3]);
             Assert.AreEqual("Integer:", panelControls[3].Text);
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panelControls[4]);
-            Assert.IsInstanceOfType(typeof (IPanel), panelControls[5]);
+            Assert.IsInstanceOf(typeof (INumericUpDown), panelControls[4]);
+            Assert.IsInstanceOf(typeof (IPanel), panelControls[5]);
             Assert.AreEqual(PanelBuilder.ERROR_PROVIDER_WIDTH, panelControls[5].Width);
             //---Row 2 Column 1
-            Assert.IsInstanceOfType(typeof (IControlHabanero), panelControls[6]);
-            Assert.IsInstanceOfType(typeof (IControlHabanero), panelControls[7]);
-            Assert.IsInstanceOfType(typeof (IControlHabanero), panelControls[8]);
+            Assert.IsInstanceOf(typeof (IControlHabanero), panelControls[6]);
+            Assert.IsInstanceOf(typeof (IControlHabanero), panelControls[7]);
+            Assert.IsInstanceOf(typeof (IControlHabanero), panelControls[8]);
             //---Row 2 Column 2
             Assert.AreEqual("Date:", panelControls[9].Text);
-            Assert.IsInstanceOfType(typeof (IDateTimePicker), panelControls[10]);
-            Assert.IsInstanceOfType(typeof (IPanel), panelControls[11]);
+            Assert.IsInstanceOf(typeof (IDateTimePicker), panelControls[10]);
+            Assert.IsInstanceOf(typeof (IPanel), panelControls[11]);
             Assert.AreEqual(PanelBuilder.ERROR_PROVIDER_WIDTH, panelControls[11].Width);
         }
 
@@ -525,11 +525,11 @@ namespace Habanero.Test.UI.Base
             ILabel col2TextBox2Label =
                 (ILabel) panel.Controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN*4];
 
-            Assert.IsNotInstanceOfType(typeof (ILabel), nullControl);
+            Assert.IsNotInstanceOf(typeof (ILabel), nullControl);
             Assert.AreEqual(textBoxCol2.Height*2 + LayoutManager.DefaultGapSize, textBoxCol1.Height);
             Assert.AreEqual(col1Text1RowSpan2Label.Left, nullControl.Left);
 
-            Assert.IsInstanceOfType(typeof (ILabel), col2TextBox2Label);
+            Assert.IsInstanceOf(typeof (ILabel), col2TextBox2Label);
             Assert.AreEqual("Col2TextBox2", col2TextBox2Label.Text);
             Assert.AreEqual(
                 textBoxCol1.Left + textBoxCol1.Width + PanelBuilder.ERROR_PROVIDER_WIDTH + GridLayoutManager.DefaultGapSize*2,
@@ -626,11 +626,11 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (ITextBox), panel.Controls[1]);
             ITextBox control = (ITextBox) panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Left, control.TextAlign);
 
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
+            Assert.IsInstanceOf(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
             INumericUpDown numericUpDown = (INumericUpDown) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
             Assert.AreEqual(HorizontalAlignment.Left, numericUpDown.TextAlign);
         }
@@ -649,7 +649,7 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (ITextBox), panel.Controls[1]);
             ITextBox control = (ITextBox) panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Right, control.TextAlign);
         }
@@ -669,7 +669,7 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (ITextBox), panel.Controls[1]);
             ITextBox control = (ITextBox) panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Center, control.TextAlign);
         }
@@ -716,7 +716,7 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (ITextBox), panel.Controls[1]);
             ITextBox control = (ITextBox) panel.Controls[1];
             Assert.IsTrue(control.Multiline);
             Assert.IsTrue(control.AcceptsReturn);
@@ -768,7 +768,7 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (INumericUpDown), panel.Controls[1]);
             INumericUpDown control = (INumericUpDown) panel.Controls[1];
             Assert.AreEqual(3, control.DecimalPlaces);
         }
@@ -789,7 +789,7 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (IComboBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (IComboBox), panel.Controls[1]);
             IComboBox control = (IComboBox) panel.Controls[1];
             Assert.AreEqual(3, control.Items.Count);
             Assert.AreEqual("", control.Items[0].ToString());
@@ -816,7 +816,7 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (ITextBox), panel.Controls[1]);
             ITextBox control = (ITextBox) panel.Controls[1];
         }
 #pragma warning restore 168
@@ -836,11 +836,11 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (IDateTimePicker), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (IDateTimePicker), panel.Controls[1]);
             IDateTimePicker control1 = (IDateTimePicker) panel.Controls[1];
             Assert.AreEqual(DateTimePickerFormat.Short, control1.Format);
 
-            Assert.IsInstanceOfType(typeof (IDateTimePicker), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
+            Assert.IsInstanceOf(typeof (IDateTimePicker), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
             IDateTimePicker control2 = (IDateTimePicker) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
             Assert.AreEqual(DateTimePickerFormat.Custom, control2.Format);
             Assert.AreEqual(singleFieldTab[0][1].DateFormat, control2.CustomFormat);
@@ -1146,7 +1146,7 @@ namespace Habanero.Test.UI.Base
             IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, panelInfo.Panel.Controls.Count); // only one control because it's the tab control
-            Assert.IsInstanceOfType(typeof (ITabControl), panelInfo.Panel.Controls[0]);
+            Assert.IsInstanceOf(typeof (ITabControl), panelInfo.Panel.Controls[0]);
             ITabControl tabControl = (ITabControl) panelInfo.Panel.Controls[0];
             Assert.AreEqual(form.Count, tabControl.TabPages.Count);
         }
@@ -1168,11 +1168,11 @@ namespace Habanero.Test.UI.Base
             ITabPage tabPage1 = tabControl.TabPages[0];
             ITabPage tabPage2 = tabControl.TabPages[1];
             Assert.AreEqual(1, tabPage1.Controls.Count);
-            Assert.IsInstanceOfType(typeof (IPanel), tabPage1.Controls[0]);
+            Assert.IsInstanceOf(typeof (IPanel), tabPage1.Controls[0]);
             IPanel tabPage1Panel = (IPanel) tabPage1.Controls[0];
             Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage1Panel.Controls.Count);
             Assert.AreEqual(1, tabPage2.Controls.Count);
-            Assert.IsInstanceOfType(typeof (IPanel), tabPage2.Controls[0]);
+            Assert.IsInstanceOf(typeof (IPanel), tabPage2.Controls[0]);
             IPanel tabPage2Panel = (IPanel) tabPage2.Controls[0];
             Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage2Panel.Controls.Count);
         }
@@ -1281,16 +1281,16 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form, GetControlFactory().CreateCollapsiblePanelGroupControl);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ICollapsiblePanelGroupControl), panelInfo.Panel.Controls[0]);
+            Assert.IsInstanceOf(typeof(ICollapsiblePanelGroupControl), panelInfo.Panel.Controls[0]);
             ICollapsiblePanelGroupControl groupControl = (ICollapsiblePanelGroupControl)panelInfo.Panel.Controls[0];
             ICollapsiblePanel panel_1 = groupControl.PanelsList[0];
             ICollapsiblePanel panel_2 = groupControl.PanelsList[1];
             Assert.AreEqual(2, panel_1.Controls.Count, "Should have the Collapse Button and the Content Control");
-            Assert.IsInstanceOfType(typeof(IPanel), panel_1.Controls[1]);
+            Assert.IsInstanceOf(typeof(IPanel), panel_1.Controls[1]);
             IPanel contentPanel_1 = (IPanel)panel_1.Controls[0];
             Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, contentPanel_1.Controls.Count, "Should have the Collapse Button and the Content Control");
             Assert.AreEqual(2, panel_2.Controls.Count);
-            Assert.IsInstanceOfType(typeof(IPanel), panel_2.Controls[1]);
+            Assert.IsInstanceOf(typeof(IPanel), panel_2.Controls[1]);
             IPanel contentPanel_2 = (IPanel)panel_2.Controls[0];
             Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, contentPanel_2.Controls.Count);
         }
@@ -1449,16 +1449,16 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form, GetControlFactory().CreateTabControl);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ITabControl), panelInfo.Panel.Controls[0]);
+            Assert.IsInstanceOf(typeof(ITabControl), panelInfo.Panel.Controls[0]);
             ITabControl tabControl = (ITabControl)panelInfo.Panel.Controls[0];
             ITabPage tabPage1 = tabControl.TabPages[0];
             ITabPage tabPage2 = tabControl.TabPages[1];
             Assert.AreEqual(1, tabPage1.Controls.Count);
-            Assert.IsInstanceOfType(typeof(IPanel), tabPage1.Controls[0]);
+            Assert.IsInstanceOf(typeof(IPanel), tabPage1.Controls[0]);
             IPanel tabPage1Panel = (IPanel)tabPage1.Controls[0];
             Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage1Panel.Controls.Count);
             Assert.AreEqual(1, tabPage2.Controls.Count);
-            Assert.IsInstanceOfType(typeof(IPanel), tabPage2.Controls[0]);
+            Assert.IsInstanceOf(typeof(IPanel), tabPage2.Controls[0]);
             IPanel tabPage2Panel = (IPanel)tabPage2.Controls[0];
             Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage2Panel.Controls.Count);
             Assert.AreEqual(30, panelInfo.MinimumPanelHeight);
@@ -1514,19 +1514,19 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (INumericUpDown), panel.Controls[1]);
             INumericUpDown control1 = (INumericUpDown) panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Left, control1.TextAlign);
 
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
+            Assert.IsInstanceOf(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
             INumericUpDown control2 = (INumericUpDown) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
             Assert.AreEqual(HorizontalAlignment.Right, control2.TextAlign);
 
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*2 + 1]);
+            Assert.IsInstanceOf(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*2 + 1]);
             INumericUpDown control3 = (INumericUpDown) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*2 + 1];
             Assert.AreEqual(HorizontalAlignment.Center, control3.TextAlign);
 
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*3 + 1]);
+            Assert.IsInstanceOf(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*3 + 1]);
             INumericUpDown control4 = (INumericUpDown) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*3 + 1];
             Assert.AreEqual(HorizontalAlignment.Center, control4.TextAlign);
         }
@@ -1558,7 +1558,7 @@ namespace Habanero.Test.UI.Base
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof (ITextBox), panel.Controls[1]);
             ITextBox control = (ITextBox) panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Right, control.TextAlign);
         }

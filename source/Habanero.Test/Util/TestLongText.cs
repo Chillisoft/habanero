@@ -192,7 +192,7 @@ namespace Habanero.Test.Util
             generalDataMapper.TryParsePropValue(test, out returnValue);
             //---------------Test Result -----------------------
             Assert.IsNotNull(returnValue);
-            Assert.IsInstanceOfType(typeof(LongText), returnValue);
+            Assert.IsInstanceOf(typeof(LongText), returnValue);
             LongText longText = (LongText) returnValue;
             Assert.AreSame(test, longText.Value);
         }
@@ -211,7 +211,7 @@ namespace Habanero.Test.Util
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(actualValue);
-            Assert.IsInstanceOfType(typeof (LongText), actualValue);
+            Assert.IsInstanceOf(typeof (LongText), actualValue);
             Assert.AreSame(longText, actualValue);
         }
 

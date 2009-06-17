@@ -55,7 +55,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Expected a constructor with null parameter to throw an exception");
-            Assert.IsInstanceOfType(typeof(ArgumentNullException), exception);
+            Assert.IsInstanceOf(typeof(ArgumentNullException), exception);
             ArgumentNullException argumentNullException = (ArgumentNullException)exception;
             Assert.AreEqual("fromSource", argumentNullException.ParamName);
         }
@@ -159,7 +159,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             catch (Exception ex) { exception = ex; }
             //-------------Test Result ----------------------
             Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(typeof(HabaneroDeveloperException), exception);
+            Assert.IsInstanceOf(typeof(HabaneroDeveloperException), exception);
             StringAssert.Contains("A source cannot merge with another source if they do not have the same base source.", exception.Message);
         }
 

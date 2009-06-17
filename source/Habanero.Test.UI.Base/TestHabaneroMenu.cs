@@ -84,7 +84,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(menuItem.FormControlCreator);
             Assert.IsNotNull(formControl);
-            Assert.IsInstanceOfType(typeof(FormControlStub), formControl);
+            Assert.IsInstanceOf(typeof(FormControlStub), formControl);
             Assert.AreSame(formControlStub,formControl);
             //---------------Tear Down -------------------------          
         }
@@ -102,7 +102,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(menuItem.ControlManagerCreator);
             Assert.IsNotNull(controlManager);
-            Assert.IsInstanceOfType(typeof(ControlManagerStub), controlManager);
+            Assert.IsInstanceOf(typeof(ControlManagerStub), controlManager);
             //---------------Tear Down -------------------------          
         }
 

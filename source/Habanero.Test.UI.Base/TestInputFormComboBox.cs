@@ -84,8 +84,8 @@ namespace Habanero.Test.UI.Base
             IPanel panel = inputFormComboBox.createControlPanel();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, panel.Controls.Count);
-            Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[0]);
-            Assert.IsInstanceOfType(typeof(IComboBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof(ILabel), panel.Controls[0]);
+            Assert.IsInstanceOf(typeof(IComboBox), panel.Controls[1]);
             Assert.Greater(panel.Controls[0].Top, panel.Top);
             Assert.IsFalse(panel.Controls[0].Font.Bold);
             Assert.AreEqual(panel.Width, panel.Controls[1].Width + 30);

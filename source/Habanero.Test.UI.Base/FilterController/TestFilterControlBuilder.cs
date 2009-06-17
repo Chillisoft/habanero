@@ -66,17 +66,17 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual(FilterModes.Filter, filterControl.FilterMode);
             Assert.AreEqual(1, filterControl.FilterControls.Count);
             Assert.IsNotNull(filterControl.GetChildControl(propName));
-            Assert.IsInstanceOfType(typeof (StringTextBoxFilter), filterControl.FilterControls[0]);
+            Assert.IsInstanceOf(typeof (StringTextBoxFilter), filterControl.FilterControls[0]);
             IPanel filterPanel = filterControl.FilterPanel;
             Assert.AreEqual(2, filterPanel.Controls.Count);
             IControlHabanero label = filterControl.FilterPanel.Controls[0];
-            Assert.IsInstanceOfType(typeof(ILabel), label);
+            Assert.IsInstanceOf(typeof(ILabel), label);
             Assert.Greater(label.Width, 0);
             Assert.Greater(label.Height, 0);
             Assert.Greater(label.Left, 0);
             Assert.IsTrue(label.Visible);
             IControlHabanero textBox = filterControl.FilterPanel.Controls[1];
-            Assert.IsInstanceOfType(typeof(ITextBox), textBox);
+            Assert.IsInstanceOf(typeof(ITextBox), textBox);
             Assert.GreaterOrEqual(textBox.Left, label.Left + label.Width);
         }
 
@@ -93,13 +93,13 @@ namespace Habanero.Test.UI.Base.FilterController
             IPanel filterPanel = filterControl.FilterPanel;
             Assert.AreEqual(2, filterPanel.Controls.Count);
             IControlHabanero label = filterControl.FilterPanel.Controls[0];
-            Assert.IsInstanceOfType(typeof(ILabel), label);
+            Assert.IsInstanceOf(typeof(ILabel), label);
             Assert.GreaterOrEqual(label.Width, 0);
             Assert.GreaterOrEqual(label.Height, 0);
             Assert.GreaterOrEqual(label.Left, 0);
             Assert.IsTrue(label.Visible);
             IControlHabanero textBox = filterControl.FilterPanel.Controls[1];
-            Assert.IsInstanceOfType(typeof(ITextBox), textBox);
+            Assert.IsInstanceOf(typeof(ITextBox), textBox);
             Assert.LessOrEqual(textBox.Left, label.Left + label.Width);
 
             //---------------Execute Test ----------------------
@@ -142,10 +142,10 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, filterControl.FilterControls.Count);
-            Assert.IsInstanceOfType(typeof (StringTextBoxFilter), filterControl.FilterControls[0]);
-            Assert.IsInstanceOfType(typeof (ITextBox), filterControl.FilterControls[0].Control);
-            Assert.IsInstanceOfType(typeof (BoolCheckBoxFilter), filterControl.FilterControls[1]);
-            Assert.IsInstanceOfType(typeof (ICheckBox), filterControl.FilterControls[1].Control);
+            Assert.IsInstanceOf(typeof (StringTextBoxFilter), filterControl.FilterControls[0]);
+            Assert.IsInstanceOf(typeof (ITextBox), filterControl.FilterControls[0].Control);
+            Assert.IsInstanceOf(typeof (BoolCheckBoxFilter), filterControl.FilterControls[1]);
+            Assert.IsInstanceOf(typeof (ICheckBox), filterControl.FilterControls[1].Control);
         }
 
 
@@ -164,7 +164,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, filterControl.FilterControls.Count);
-            Assert.IsInstanceOfType(typeof (SimpleFilterStub), filterControl.FilterControls[0]);
+            Assert.IsInstanceOf(typeof (SimpleFilterStub), filterControl.FilterControls[0]);
         }
 
         [Test]
@@ -224,7 +224,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IFilterControl filterControl = builder.BuildFilterControl(filterDef);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (FlowLayoutManager), filterControl.LayoutManager);
+            Assert.IsInstanceOf(typeof (FlowLayoutManager), filterControl.LayoutManager);
         }
 
         [Test]
@@ -239,7 +239,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IFilterControl filterControl = builder.BuildFilterControl(filterDef);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (GridLayoutManager), filterControl.LayoutManager);
+            Assert.IsInstanceOf(typeof (GridLayoutManager), filterControl.LayoutManager);
             GridLayoutManager layoutManager = (GridLayoutManager) filterControl.LayoutManager;
             Assert.AreEqual(6, layoutManager.Columns.Count);
             Assert.AreEqual(1, layoutManager.Rows.Count);
@@ -257,7 +257,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IFilterControl filterControl = builder.BuildFilterControl(filterDef);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (GridLayoutManager), filterControl.LayoutManager);
+            Assert.IsInstanceOf(typeof (GridLayoutManager), filterControl.LayoutManager);
             GridLayoutManager layoutManager = (GridLayoutManager) filterControl.LayoutManager;
             Assert.AreEqual(4, layoutManager.Columns.Count);
             Assert.AreEqual(2, layoutManager.Rows.Count);
@@ -295,7 +295,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Execute Test ----------------------
             ICustomFilter customFilter = builder.BuildCustomFilter(filterPropertyDef);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (BoolCheckBoxFilter), customFilter);
+            Assert.IsInstanceOf(typeof (BoolCheckBoxFilter), customFilter);
             BoolCheckBoxFilter checkBoxFilter = (BoolCheckBoxFilter) customFilter;
             Assert.IsTrue(checkBoxFilter.IsChecked);
         }
@@ -342,7 +342,7 @@ namespace Habanero.Test.UI.Base.FilterController
             ICustomFilter customFilter = builder.BuildCustomFilter(filterPropertyDef1);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (SimpleFilterStub), customFilter);
+            Assert.IsInstanceOf(typeof (SimpleFilterStub), customFilter);
         }
 
         [Test]

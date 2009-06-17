@@ -415,10 +415,10 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, gridWithPanelControl.Controls.Count);
-            Assert.IsInstanceOfType(typeof(IUserControlHabanero), gridWithPanelControl);
-            Assert.IsInstanceOfType(typeof(IBusinessObjectControl), gridWithPanelControl.Controls[0]);
-            Assert.IsInstanceOfType(typeof(IReadOnlyGridControl), gridWithPanelControl.Controls[1]);
-            Assert.IsInstanceOfType(typeof(IButtonGroupControl), gridWithPanelControl.Controls[2]);
+            Assert.IsInstanceOf(typeof(IUserControlHabanero), gridWithPanelControl);
+            Assert.IsInstanceOf(typeof(IBusinessObjectControl), gridWithPanelControl.Controls[0]);
+            Assert.IsInstanceOf(typeof(IReadOnlyGridControl), gridWithPanelControl.Controls[1]);
+            Assert.IsInstanceOf(typeof(IButtonGroupControl), gridWithPanelControl.Controls[2]);
             Assert.AreSame(businessObjectControl, gridWithPanelControl.BusinessObjectControl);
             Assert.IsFalse(businessObjectControl.Enabled);
         }
@@ -455,10 +455,10 @@ namespace Habanero.Test.UI.Base
                 GetControlFactory().CreateGridWithPanelControl<MyBO>(businessObjectControl, CUSTOM_UIDEF_NAME);
             //---------------Test Result -----------------------
             Assert.AreEqual(3, gridWithPanelControl.Controls.Count);
-            Assert.IsInstanceOfType(typeof(IUserControlHabanero), gridWithPanelControl);
-            Assert.IsInstanceOfType(typeof(IBusinessObjectControl), gridWithPanelControl.Controls[0]);
-            Assert.IsInstanceOfType(typeof(IReadOnlyGridControl), gridWithPanelControl.Controls[1]);
-            Assert.IsInstanceOfType(typeof(IButtonGroupControl), gridWithPanelControl.Controls[2]);
+            Assert.IsInstanceOf(typeof(IUserControlHabanero), gridWithPanelControl);
+            Assert.IsInstanceOf(typeof(IBusinessObjectControl), gridWithPanelControl.Controls[0]);
+            Assert.IsInstanceOf(typeof(IReadOnlyGridControl), gridWithPanelControl.Controls[1]);
+            Assert.IsInstanceOf(typeof(IButtonGroupControl), gridWithPanelControl.Controls[2]);
             Assert.AreSame(businessObjectControl, gridWithPanelControl.BusinessObjectControl);
         }
 

@@ -131,7 +131,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IBOColSelectorControl colSelector = CreateSelector();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (IEditableGridControl), colSelector);
+            Assert.IsInstanceOf(typeof (IEditableGridControl), colSelector);
         }
 
         [Test]

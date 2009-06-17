@@ -217,7 +217,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             IBusinessObject bo = _classDef.CreateNewBusinessObject();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(MyBO), bo);
+            Assert.IsInstanceOf(typeof(MyBO), bo);
             Assert.AreEqual("defaultValue", bo.GetPropertyValue("TestProp"));
         }
 

@@ -170,7 +170,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, titleIconControl.Controls.Count);
             Assert.AreEqual(DockStyle.Top, DockStyleVWG.GetDockStyle(titleIconControl.Dock));
 
-            Assert.IsInstanceOfType(typeof (IPanel), titleIconControl.Panel);
+            Assert.IsInstanceOf(typeof (IPanel), titleIconControl.Panel);
             const string headerImage = "Images.headergradient.png";
             AssertBackGroundImageIsSet(titleIconControl, headerImage);
             AssertBackGroundimageIsTile(titleIconControl);
@@ -179,14 +179,14 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(23, titleIconControl.Panel.Height);
             Assert.AreEqual(2, titleIconControl.Panel.Controls.Count);
 
-            Assert.IsInstanceOfType(typeof (ILabel), titleIconControl.Icon);
+            Assert.IsInstanceOf(typeof (ILabel), titleIconControl.Icon);
             Assert.IsNull(GetBackGroundImage(titleIconControl));
             Assert.AreEqual(Color.Transparent, titleIconControl.Icon.BackColor);
             AssertBackGroundImagelayoutCentre(titleIconControl);
             Assert.AreEqual(DockStyle.Left, titleIconControl.Icon.Dock);
 
 
-            Assert.IsInstanceOfType(typeof (ILabel), titleIconControl.Title);
+            Assert.IsInstanceOf(typeof (ILabel), titleIconControl.Title);
             Assert.IsEmpty("", titleIconControl.Title.Text);
             Assert.AreEqual(DockStyle.Fill, titleIconControl.Title.Dock);
             Assert.AreEqual(Color.Transparent, titleIconControl.Title.BackColor);
@@ -348,7 +348,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, titleIconControl.Controls.Count);
             Assert.AreEqual(DockStyle.Top, DockStyleWin.GetDockStyle(titleIconControl.Dock));
 
-            Assert.IsInstanceOfType(typeof(IPanel), titleIconControl.Panel);
+            Assert.IsInstanceOf(typeof(IPanel), titleIconControl.Panel);
             const string headerImage = "Images.headergradient.png";
             AssertBackGroundImageIsSet(titleIconControl, headerImage);
             AssertBackGroundimageIsTile(titleIconControl);
@@ -357,14 +357,14 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(23, titleIconControl.Panel.Height);
             Assert.AreEqual(2, titleIconControl.Panel.Controls.Count);
 
-            Assert.IsInstanceOfType(typeof(ILabel), titleIconControl.Icon);
+            Assert.IsInstanceOf(typeof(ILabel), titleIconControl.Icon);
             Assert.IsNull(GetBackGroundImage(titleIconControl));
             Assert.AreEqual(Color.Transparent, titleIconControl.Icon.BackColor);
             AssertBackGroundImagelayoutCentre(titleIconControl);
             Assert.AreEqual(DockStyle.Left, titleIconControl.Icon.Dock);
 
 
-            Assert.IsInstanceOfType(typeof(ILabel), titleIconControl.Title);
+            Assert.IsInstanceOf(typeof(ILabel), titleIconControl.Title);
             Assert.IsEmpty("", titleIconControl.Title.Text);
             Assert.AreEqual(DockStyle.Fill, titleIconControl.Title.Dock);
             Assert.AreEqual(Color.Transparent, titleIconControl.Title.BackColor);

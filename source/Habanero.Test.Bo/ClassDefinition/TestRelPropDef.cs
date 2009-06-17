@@ -78,7 +78,7 @@ namespace Habanero.Test.BO.ClassDefinition
             }
             //-------------Test Result ----------------------
             Assert.IsNotNull(exception, "An error should have been thrown because the prop does not exist.");
-            Assert.IsInstanceOfType(typeof(InvalidPropertyNameException), exception);
+            Assert.IsInstanceOf(typeof(InvalidPropertyNameException), exception);
             Assert.IsNull(relProp, "The relProp should not have been created.");
         }
 

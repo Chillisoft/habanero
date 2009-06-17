@@ -885,7 +885,7 @@ namespace Habanero.Test.UI.Base
             AddressTestBO address = AddressTestBO.CreateUnsavedAddress(contactPerson);
             IRelationship relationship = contactPerson.Relationships["Addresses"];
             //-------------Assert Preconditions -------------
-            Assert.IsInstanceOfType(typeof(IMultipleRelationship), relationship);
+            Assert.IsInstanceOf(typeof(IMultipleRelationship), relationship);
             IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
             Assert.AreEqual(1, multipleRelationship.BusinessObjectCollection.Count);
             Assert.AreEqual(1, contactPerson.Addresses.Count);
@@ -911,7 +911,7 @@ namespace Habanero.Test.UI.Base
             AddressTestBO address2 = AddressTestBO.CreateUnsavedAddress(contactPerson);
             IRelationship relationship = contactPerson.Relationships["Addresses"];
             //-------------Assert Preconditions -------------
-            Assert.IsInstanceOfType(typeof(IMultipleRelationship), relationship);
+            Assert.IsInstanceOf(typeof(IMultipleRelationship), relationship);
             IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
             Assert.AreEqual(2, multipleRelationship.BusinessObjectCollection.Count);
             Assert.AreEqual(0, treeView.Nodes.Count);
@@ -935,7 +935,7 @@ namespace Habanero.Test.UI.Base
             IRelationship relationship = contactPerson.Relationships["Addresses"];
 
             //-------------Assert Preconditions -------------
-            Assert.IsInstanceOfType(typeof(IMultipleRelationship), relationship);
+            Assert.IsInstanceOf(typeof(IMultipleRelationship), relationship);
             IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
             Assert.AreEqual(1, multipleRelationship.BusinessObjectCollection.Count);
             Assert.AreEqual(0, treeView.Nodes.Count);
@@ -962,7 +962,7 @@ namespace Habanero.Test.UI.Base
             AddressTestBO address = AddressTestBO.CreateUnsavedAddress(contactPerson);
             IRelationship relationship = organisation.Relationships["ContactPeople"];
             //-------------Assert Preconditions -------------
-            Assert.IsInstanceOfType(typeof(IMultipleRelationship), relationship);
+            Assert.IsInstanceOf(typeof(IMultipleRelationship), relationship);
             IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
             Assert.AreEqual(1, multipleRelationship.BusinessObjectCollection.Count);
             Assert.AreEqual(0, treeView.Nodes.Count);
@@ -986,7 +986,7 @@ namespace Habanero.Test.UI.Base
             AddressTestBO address = AddressTestBO.CreateUnsavedAddress(contactPerson);
             IRelationship relationship = organisation.Relationships["ContactPeople"];
             //-------------Assert Preconditions -------------
-            Assert.IsInstanceOfType(typeof(IMultipleRelationship), relationship);
+            Assert.IsInstanceOf(typeof(IMultipleRelationship), relationship);
             IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
             Assert.AreEqual(1, multipleRelationship.BusinessObjectCollection.Count);
             Assert.AreEqual(0, treeView.Nodes.Count);
@@ -1015,7 +1015,7 @@ namespace Habanero.Test.UI.Base
             AddressTestBO address = AddressTestBO.CreateUnsavedAddress(contactPerson);
             IRelationship relationship = organisation.Relationships["ContactPeople"];
             //-------------Assert Preconditions -------------
-            Assert.IsInstanceOfType(typeof(IMultipleRelationship), relationship);
+            Assert.IsInstanceOf(typeof(IMultipleRelationship), relationship);
             IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
             Assert.AreEqual(1, multipleRelationship.BusinessObjectCollection.Count);
             Assert.AreEqual(0, treeView.Nodes.Count);

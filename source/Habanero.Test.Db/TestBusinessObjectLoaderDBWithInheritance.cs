@@ -42,7 +42,7 @@ namespace Habanero.Test.DB
             Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(circle.ID);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(CircleNoPrimaryKey), loadedShape);
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace Habanero.Test.DB
             Shape loadedShape =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(filledCircle.ID);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(FilledCircleNoPrimaryKey), loadedShape);
             //---------------Tear Down -------------------------          
         }
 
@@ -77,7 +77,7 @@ namespace Habanero.Test.DB
             Shape loadedShape =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(filledCircle.ID);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(FilledCircleNoPrimaryKey), loadedShape);
             //---------------Tear Down -------------------------          
         }
 

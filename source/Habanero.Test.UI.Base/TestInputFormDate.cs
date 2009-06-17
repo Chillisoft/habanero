@@ -74,8 +74,8 @@ namespace Habanero.Test.UI.Base
             IPanel panel = inputFormDate.createControlPanel();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, panel.Controls.Count);
-            Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[0]);
-            Assert.IsInstanceOfType(typeof(IDateTimePicker), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof(ILabel), panel.Controls[0]);
+            Assert.IsInstanceOf(typeof(IDateTimePicker), panel.Controls[1]);
             Assert.Greater(panel.Controls[0].Top, panel.Top);
             Assert.IsFalse(panel.Controls[0].Font.Bold);
             int width = GetControlFactory().CreateLabel(message, true).PreferredWidth + 20;

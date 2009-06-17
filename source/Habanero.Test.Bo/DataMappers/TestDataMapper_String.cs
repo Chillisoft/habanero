@@ -84,7 +84,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(validValue, parsedValue);
-            Assert.IsInstanceOfType(typeof (String), parsedValue);
+            Assert.IsInstanceOf(typeof (String), parsedValue);
             Assert.IsTrue(parsedSucceed);
         }
 
@@ -102,7 +102,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(validValue, parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
             Assert.IsTrue(parsedSucceed);
         }
 
@@ -119,7 +119,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedString, parsedValue);
-            Assert.IsInstanceOfType(typeof(string), parsedValue);
+            Assert.IsInstanceOf(typeof(string), parsedValue);
         }
 
         [Test]
@@ -135,7 +135,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedGuid.ToString(), parsedValue);
-            Assert.IsInstanceOfType(typeof(string), parsedValue);
+            Assert.IsInstanceOf(typeof(string), parsedValue);
         }
 
         [Test]
@@ -151,7 +151,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual("", parsedValue);
-            Assert.IsInstanceOfType(typeof(string), parsedValue);
+            Assert.IsInstanceOf(typeof(string), parsedValue);
         }
         [Test]
         public void Test_DataMapper_ParsePropValue_Null()
@@ -183,7 +183,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(validValue, parsedValue);
-            Assert.IsInstanceOfType(typeof(String), parsedValue);
+            Assert.IsInstanceOf(typeof(String), parsedValue);
             Assert.IsTrue(parsedSucceed);
         }
 
@@ -201,7 +201,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(validValue, parsedValue);
-            Assert.IsInstanceOfType(typeof(string), parsedValue);
+            Assert.IsInstanceOf(typeof(string), parsedValue);
             Assert.IsTrue(parsedSucceed);
         }
 
@@ -221,7 +221,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), parsedValue);
             Assert.IsTrue(parsedValue is string, "Value should be a string");
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
             Assert.IsTrue(parsedSucceed);
         }
 
@@ -273,7 +273,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDateTime.ToString(_standardDateTimeFormat), parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
             Assert.IsTrue(parsedSucceed);
         }
 
@@ -291,7 +291,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDateTime.ToString("d"), parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
             Assert.IsTrue(parsedSucceed);
         }
 
@@ -356,7 +356,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual("", parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -372,7 +372,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedString, parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -388,7 +388,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedGuid.ToString("P"), parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -404,7 +404,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedGuid.ToString(), parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -420,7 +420,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual("", parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -436,7 +436,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedGuid.ToString("B"), parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -452,7 +452,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDateTime.ToString("d"), parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -468,7 +468,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDateTime.ToString(_standardDateTimeFormat), parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -484,7 +484,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedInt.ToString(), parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -500,7 +500,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedInt.ToString(), parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         [Test]
@@ -516,7 +516,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual("", parsedValue);
-            Assert.IsInstanceOfType(typeof (string), parsedValue);
+            Assert.IsInstanceOf(typeof (string), parsedValue);
         }
 
         #endregion

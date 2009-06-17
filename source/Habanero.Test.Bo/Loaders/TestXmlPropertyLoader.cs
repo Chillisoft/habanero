@@ -315,7 +315,7 @@ namespace Habanero.Test.BO.Loaders
 						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" />
 					</property>");
             Assert.IsNotNull(def.LookupList);
-            Assert.IsInstanceOfType(typeof(BusinessObjectLookupList), def.LookupList);
+            Assert.IsInstanceOf(typeof(BusinessObjectLookupList), def.LookupList);
             BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
             //Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
             Assert.AreEqual("MyBO", source.ClassName);

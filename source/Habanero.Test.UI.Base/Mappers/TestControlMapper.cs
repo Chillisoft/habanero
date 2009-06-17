@@ -375,7 +375,7 @@ namespace Habanero.Test.UI.Base
             string propName = TestUtil.GetRandomString();
             ControlMapperStub mapper = new ControlMapperStub(ctl, propName, false, controlFactory);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (ControlMapper), mapper);
+            Assert.IsInstanceOf(typeof (ControlMapper), mapper);
             Assert.AreSame(ctl, mapper.Control);
             Assert.AreEqual(propName, mapper.PropertyName);
             Assert.AreEqual(false, mapper.IsReadOnly);
@@ -392,7 +392,7 @@ namespace Habanero.Test.UI.Base
             string propName = TestUtil.GetRandomString();
             ControlMapperStub mapper = new ControlMapperStub(ctl, propName, true, controlFactory);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (ControlMapper), mapper);
+            Assert.IsInstanceOf(typeof (ControlMapper), mapper);
             ControlMapper controlMapper = mapper;
             Assert.AreSame(ctl, controlMapper.Control);
             Assert.AreEqual(propName, controlMapper.PropertyName);

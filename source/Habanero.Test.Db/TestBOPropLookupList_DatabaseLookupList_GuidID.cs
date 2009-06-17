@@ -126,7 +126,7 @@ namespace Habanero.Test.DB
             DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
 
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (NullLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (NullLookupList), propDef.LookupList);
             //---------------Execute Test ----------------------
             propDef.LookupList = databaseLookupList;
             //---------------Test Result -----------------------
@@ -163,11 +163,11 @@ namespace Habanero.Test.DB
             PropDef propDef = new PropDef("PropName", typeof (Guid), PropReadWriteRule.ReadWrite, null);
             DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (NullLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (NullLookupList), propDef.LookupList);
             //---------------Execute Test ----------------------
             propDef.LookupList = databaseLookupList;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (DatabaseLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             Assert.AreEqual(2, databaseLookupList.GetLookupList().Count);
             Assert.AreEqual(2, databaseLookupList.GetIDValueLookupList().Count);
@@ -182,7 +182,7 @@ namespace Habanero.Test.DB
             propDef.LookupList = databaseLookupList;
             Dictionary<string, string> list = databaseLookupList.GetLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (DatabaseLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedKey;
@@ -201,7 +201,7 @@ namespace Habanero.Test.DB
             propDef.LookupList = databaseLookupList;
             Dictionary<string, string> list = databaseLookupList.GetLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (DatabaseLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedKey;
@@ -221,7 +221,7 @@ namespace Habanero.Test.DB
             databaseLookupList.GetLookupList();
             Dictionary<string, string> list = databaseLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (DatabaseLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
@@ -241,7 +241,7 @@ namespace Habanero.Test.DB
             databaseLookupList.GetLookupList();
             Dictionary<string, string> list = databaseLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (DatabaseLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
@@ -261,7 +261,7 @@ namespace Habanero.Test.DB
             DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
             propDef.LookupList = databaseLookupList;
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (DatabaseLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (DatabaseLookupList), propDef.LookupList);
             //---------------Execute Test ----------------------
             try
             {
@@ -330,7 +330,7 @@ namespace Habanero.Test.DB
             boProp.InitialiseProp(_validID);
             //---------------Test Result -----------------------
             Assert.AreEqual(_validID, boProp.Value);
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
         }
 
         [Test]
@@ -399,7 +399,7 @@ namespace Habanero.Test.DB
             boProp.InitialiseProp(_validID);
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validID, boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
@@ -415,7 +415,7 @@ namespace Habanero.Test.DB
         //    boProp.InitialiseProp(_validBusinessObject);
         //    //---------------Test Result -----------------------
         //    Assert.IsNotNull(boProp.Value);
-        //    Assert.IsInstanceOfType(typeof(Guid), boProp.Value);
+        //    Assert.IsInstanceOf(typeof(Guid), boProp.Value);
         //    Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
         //    Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         //}
@@ -430,7 +430,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             boProp.InitialiseProp(_validID.ToString());
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validID, boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
@@ -557,7 +557,7 @@ namespace Habanero.Test.DB
             Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
-            Assert.IsInstanceOfType(typeof (BOPropLookupList), boProp);
+            Assert.IsInstanceOf(typeof (BOPropLookupList), boProp);
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
             try

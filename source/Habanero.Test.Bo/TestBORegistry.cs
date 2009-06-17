@@ -67,7 +67,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             IDataAccessor dataAccessor = new DataAccessorDB();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(BusinessObjectLoaderDB), dataAccessor.BusinessObjectLoader);
+            Assert.IsInstanceOf(typeof(BusinessObjectLoaderDB), dataAccessor.BusinessObjectLoader);
             //---------------Tear Down -------------------------
         }
 
@@ -79,7 +79,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             IDataAccessor dataAccessor = new DataAccessorDB();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(TransactionCommitterDB), dataAccessor.CreateTransactionCommitter());
+            Assert.IsInstanceOf(typeof(TransactionCommitterDB), dataAccessor.CreateTransactionCommitter());
             //---------------Tear Down -------------------------
         }
 
@@ -92,7 +92,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             IDataAccessor dataAccessor = new DataAccessorInMemory();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(BusinessObjectLoaderInMemory), dataAccessor.BusinessObjectLoader);
+            Assert.IsInstanceOf(typeof(BusinessObjectLoaderInMemory), dataAccessor.BusinessObjectLoader);
             //---------------Tear Down -------------------------
         }
 
@@ -105,7 +105,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             IDataAccessor dataAccessor = new DataAccessorInMemory();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(TransactionCommitterInMemory), dataAccessor.CreateTransactionCommitter());
+            Assert.IsInstanceOf(typeof(TransactionCommitterInMemory), dataAccessor.CreateTransactionCommitter());
             //---------------Tear Down -------------------------
         }
         
