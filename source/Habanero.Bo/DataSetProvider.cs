@@ -108,7 +108,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="uiGrid">The UIGridDef</param>
         /// <returns>Returns a DataTable object</returns>
-        public DataTable GetDataTable(UIGrid uiGrid)
+        public DataTable GetDataTable(IUIGrid uiGrid)
         {
             if (uiGrid == null) throw new ArgumentNullException("uiGrid");
             _table = new DataTable();

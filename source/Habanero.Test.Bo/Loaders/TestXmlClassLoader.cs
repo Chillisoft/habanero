@@ -550,7 +550,7 @@ namespace Habanero.Test.BO.Loaders
 					</ui>
 				</class>
 			");
-            UIDef uiDef = def.UIDefCol["default"];
+            IUIDef uiDef = def.UIDefCol["default"];
             Assert.IsNotNull(uiDef);
             Assert.IsNotNull(uiDef.UIForm);
             Assert.IsNull(uiDef.UIGrid);

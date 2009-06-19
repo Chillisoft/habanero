@@ -28,7 +28,7 @@ namespace Habanero.BO.ClassDefinition
     /// Manages property definitions for a column in a user interface grid,
     /// as specified in the class definitions xml file
     /// </summary>
-    public class UIGridColumn
+    public class UIGridColumn : IUIGridColumn
     {
         private string _heading;
         private string _propertyName;
@@ -36,25 +36,6 @@ namespace Habanero.BO.ClassDefinition
         private readonly Hashtable _parameters;
         private string _gridControlTypeName;
         private string _gridControlAssemblyName;
-
-        /// <summary>
-        /// An enumeration to specify a horizontal alignment in a grid
-        /// </summary>
-        public enum PropAlignment
-        {
-            ///<summary>
-            /// Aligns to the left of grid.
-            ///</summary>
-            left,
-            /// <summary>
-            /// Aligns to the right of the grid.
-            /// </summary>
-            right,
-            /// <summary>
-            /// Aligns to the center of the grid.
-            /// </summary>
-            centre
-        }
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -116,7 +97,7 @@ namespace Habanero.BO.ClassDefinition
         public string PropertyName
         {
             get { return _propertyName; }
-            protected set { _propertyName = value; }
+            set { _propertyName = value; }
         }
 
         /// <summary>
@@ -136,17 +117,17 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Indicates whether the column is editable
         /// </summary>
-        public bool Editable { get; protected set; }
+        public bool Editable { get; set; }
 
         /// <summary>
         /// Returns the width
         /// </summary>
-        public int Width { get; protected set; }
+        public int Width { get; set; }
 
         /// <summary>
         /// Returns the horizontal alignment
         /// </summary>
-        public PropAlignment Alignment { get; protected set; }
+        public PropAlignment Alignment { get; set; }
 
         /// <summary>
         /// Returns the Hashtable containing the property parameters
@@ -189,7 +170,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="classDef">The class definition that corresponds to this grid column. </param>
         ///<returns> The heading for this grid column </returns>
-        public string GetHeading(ClassDef classDef)
+        public string GetHeading(IClassDef classDef)
         {
             if (!String.IsNullOrEmpty(_heading))
             {
@@ -292,7 +273,7 @@ namespace Habanero.BO.ClassDefinition
         /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
         ///</summary>
         ///<returns>a new collection that is a shallow copy of this collection</returns>
-        public UIGridColumn Clone()
+        public IUIGridColumn Clone()
         {
             UIGridColumn newUIForm = new UIGridColumn(this.Heading,
                 this.PropertyName,this.GridControlTypeName,this.GridControlAssemblyName ,

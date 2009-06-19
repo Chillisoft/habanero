@@ -29,7 +29,7 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlUIFormColumnLoader : XmlLoader
     {
-        private UIFormColumn _column;
+        private IUIFormColumn _column;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -53,7 +53,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="formColumnElement">The xml string</param>
         /// <returns>Returns a UIFormColumn object</returns>
-        public UIFormColumn LoadUIFormColumn(string formColumnElement)
+        public IUIFormColumn LoadUIFormColumn(string formColumnElement)
         {
             return this.LoadUIFormColumn(this.CreateXmlElement(formColumnElement));
         }
@@ -63,9 +63,9 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="formColumnElement">The xml element</param>
         /// <returns>Returns a UIFormColumn object</returns>
-        public UIFormColumn LoadUIFormColumn(XmlElement formColumnElement)
+        public IUIFormColumn LoadUIFormColumn(XmlElement formColumnElement)
         {
-            return (UIFormColumn) this.Load(formColumnElement);
+            return (IUIFormColumn) this.Load(formColumnElement);
         }
 
         /// <summary>

@@ -350,7 +350,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(chair, col[1]);
 
             ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
-            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+            IUIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
             Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
             Assert.AreEqual(0, provider.FindRow(car));
             Assert.AreEqual(1, provider.FindRow(chair));
@@ -410,7 +410,7 @@ namespace Habanero.Test.BO
             col.LoadAll();
             col.Sort("OrderNumber", true, true);
             ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
-            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+            IUIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
             DataTable table = provider.GetDataTable(uiGrid);
             Assert.AreEqual(2, table.Rows.Count);
             col.Remove(chair);
@@ -439,7 +439,7 @@ namespace Habanero.Test.BO
             OrderItem chair;
             BusinessObjectCollection<OrderItem> col = GetCollection(out car, out chair);
             IDataSetProvider provider = new ReadOnlyDataSetProvider(col);
-            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+            IUIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
             DataTable dataTable = provider.GetDataTable(uiGrid);
             
             //--------------- Test Preconditions ----------------
@@ -475,7 +475,7 @@ namespace Habanero.Test.BO
             col.Sort("OrderNumber", true, true);
             Assert.AreEqual(2, col.Count);
             ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
-            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+            IUIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
             DataTable table = provider.GetDataTable(uiGrid);
             Assert.AreEqual(2, table.Rows.Count);
 
@@ -778,7 +778,7 @@ namespace Habanero.Test.BO
         private static UIGrid CreateUiGridWithColumn(ClassDef classDef, string columnName)
         {
             UIGrid uiGrid = new UIGrid();
-            UIGridColumn dateTimeUiGridColumn = new UIGridColumn(columnName, columnName, null, null, false, 100, UIGridColumn.PropAlignment.right, null);
+            UIGridColumn dateTimeUiGridColumn = new UIGridColumn(columnName, columnName, null, null, false, 100, PropAlignment.right, null);
             uiGrid.Add(dateTimeUiGridColumn);
             UIDef uiDef = new UIDef("TestUiDef", new UIForm(), uiGrid);
             classDef.UIDefCol.Add(uiDef);

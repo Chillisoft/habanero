@@ -41,7 +41,7 @@ namespace Habanero.BO.Loaders
         private Hashtable _parameters;
         private TriggerCol _triggers = new TriggerCol();
         private string _toolTipText;
-        private UIFormField.LayoutStyle _layout;
+        private LayoutStyle _layout;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -65,7 +65,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="xmlUIProp">The xml string</param>
         /// <returns>Returns a UIFormProperty object</returns>
-        public UIFormField LoadUIProperty(string xmlUIProp)
+        public IUIFormField LoadUIProperty(string xmlUIProp)
         {
             return this.LoadUIProperty(this.CreateXmlElement(xmlUIProp));
         }
@@ -75,9 +75,9 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="uiPropElement">The xml element</param>
         /// <returns>Returns a UIFormProperty object</returns>
-        public UIFormField LoadUIProperty(XmlElement uiPropElement)
+        public IUIFormField LoadUIProperty(XmlElement uiPropElement)
         {
-            return (UIFormField) Load(uiPropElement);
+            return (IUIFormField) Load(uiPropElement);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Habanero.BO.Loaders
             try
             {
                 layoutAttribute = _reader.GetAttribute("layout");
-                _layout = (UIFormField.LayoutStyle) Enum.Parse(typeof(UIFormField.LayoutStyle), layoutAttribute);
+                _layout = (LayoutStyle) Enum.Parse(typeof(LayoutStyle), layoutAttribute);
             }
             catch (Exception ex)
             {

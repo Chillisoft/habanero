@@ -29,7 +29,7 @@ namespace Habanero.BO.ClassDefinition
     /// Manages a property definition for a control in a user interface editing
     /// form, as specified in the class definitions xml file
     /// </summary>
-    public class UIFormField
+    public class UIFormField : IUIFormField
     {
         private string _label;
         private string _propertyName;
@@ -38,23 +38,8 @@ namespace Habanero.BO.ClassDefinition
 		private string _controlTypeName;
 		private Type _controlType;
         private readonly Hashtable _parameters;
-        private readonly TriggerCol _triggers;
+        private readonly ITriggerCol _triggers;
         private readonly string _toolTipText;
-
-        ///<summary>
-        /// The layout style for the UIForm Field <see cref="Label"/> and <see cref="GroupBox"/>
-        ///</summary>
-        public enum LayoutStyle
-        {
-            ///<summary>
-            /// The label should be to the left of the control.
-            ///</summary>
-            Label,
-            ///<summary>
-            /// The label will be shown in the group box around the control
-            ///</summary>
-            GroupBox
-        }
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -88,7 +73,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="parameters">The property attributes</param>
         /// <param name="triggers">The collection of triggers managed by the field</param>
         /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
-        public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers, LayoutStyle layout)
+        public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, ITriggerCol triggers, LayoutStyle layout)
 			: this(label, propertyName, null, controlTypeName, controlAssembly,
                     mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers, layout)
 		{}
@@ -96,7 +81,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// The master constructor for all of the possible arguments
         /// </summary>
-        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers, LayoutStyle layout)
+        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, ITriggerCol triggers, LayoutStyle layout)
         {
 			if (controlType != null)
         	{
@@ -125,7 +110,7 @@ namespace Habanero.BO.ClassDefinition
 		/// <summary>
         /// Returns the label
         /// </summary>
-        internal string Label
+		public string Label
         {
             get { return _label; }
             set { _label = value; }
@@ -137,13 +122,13 @@ namespace Habanero.BO.ClassDefinition
         public string PropertyName
         {
             get { return _propertyName; }
-            protected set { _propertyName = value; }
+            set { _propertyName = value; }
         }
 
         /// <summary>
         /// Returns the mapper type name
         /// </summary>
-        public string MapperTypeName { get; protected set; }
+        public string MapperTypeName { get; set; }
 
         ///<summary>
 		/// Returns the mapper assembly
@@ -159,7 +144,7 @@ namespace Habanero.BO.ClassDefinition
 		public string ControlAssemblyName
 		{
 			get { return _controlAssembly; }
-			protected set
+			set
 			{
 				if (_controlAssembly != value)
 				{
@@ -176,7 +161,7 @@ namespace Habanero.BO.ClassDefinition
 		public string ControlTypeName
 		{
 			get { return _controlTypeName; }
-			protected set
+			set
 			{
 				if (_controlTypeName != value)
 				{
@@ -192,13 +177,13 @@ namespace Habanero.BO.ClassDefinition
         public Type ControlType
         {
             get { return MyControlType; }
-			protected set { MyControlType = value; }
+			set { MyControlType = value; }
         }
 
         /// <summary>
         /// Indicates whether the control is editable
         /// </summary>
-        public bool Editable { get; protected set; }
+        public bool Editable { get; set; }
 
         ///<summary>
         /// Returns the text that will be shown in the Tool Tip for the control.
@@ -220,7 +205,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the collection of triggers managed by this
         /// field
         /// </summary>
-        public TriggerCol Triggers
+        public ITriggerCol Triggers
         {
             get { return _triggers; }
         }
@@ -236,7 +221,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="classDef">The class definition that this field is for.</param>
         ///<returns>The property definition that is refered to, otherwise null. </returns>
-        public IPropDef GetPropDefIfExists(ClassDef classDef)
+        public IPropDef GetPropDefIfExists(IClassDef classDef)
         {
             return ClassDefHelper.GetPropDefByPropName(classDef, PropertyName);
         }
@@ -255,7 +240,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="classDef">The class definition that corresponds to this form field. </param>
         /// <returns> The text that will be used for the tool tip for this control. </returns>
-        public string GetToolTipText(ClassDef classDef)
+        public string GetToolTipText(IClassDef classDef)
         {
             if (!String.IsNullOrEmpty(_toolTipText))
             {
@@ -288,7 +273,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="classDef">The class definition that corresponds to this form field. </param>
         ///<returns> The label for this form field </returns>
-        public string GetLabel(ClassDef classDef)
+        public string GetLabel(IClassDef classDef)
         {
             if (!String.IsNullOrEmpty(_label))
             {
@@ -475,7 +460,7 @@ namespace Habanero.BO.ClassDefinition
         public bool IsCompulsory
         {
             get {
-                ClassDef def = GetClassDef();
+                IClassDef def = GetClassDef();
                 if (def == null) return false;
                 IPropDef propDef = this.GetPropDefIfExists(def);
                 if (propDef == null) return false;
@@ -486,7 +471,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// The <see cref="UIFormColumn"/> that this form field is to be placed in.
         ///</summary>
-        public UIFormColumn UIFormColumn { get; internal set; }
+        public IUIFormColumn UIFormColumn { get; set; }
 
         ///<summary>
         /// Returns the alignment property of the form field or null if none is provided
@@ -533,11 +518,11 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public LayoutStyle Layout { get; set; }
 
-        private ClassDef GetClassDef()
+        private IClassDef GetClassDef()
         {
-            UIFormColumn column = this.UIFormColumn;
+            IUIFormColumn column = this.UIFormColumn;
             if (column == null) return null;
-            UIDef uiDef = column.UIFormTab.UIForm.UIDef;
+            IUIDef uiDef = column.UIFormTab.UIForm.UIDef;
             if (uiDef == null) return null;
             if (uiDef.ClassDef != null) return uiDef.ClassDef;
             if (uiDef.UIDefCol == null) return null;

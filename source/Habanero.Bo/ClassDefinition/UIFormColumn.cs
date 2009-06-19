@@ -27,7 +27,7 @@ namespace Habanero.BO.ClassDefinition
     /// interface editing form, as specified in the class definitions
     /// xml file
     /// </summary>
-    public class UIFormColumn : ICollection
+    public class UIFormColumn : IUIFormColumn
     {
         private readonly IList _list;
 
@@ -53,7 +53,7 @@ namespace Habanero.BO.ClassDefinition
         /// Adds a form field to the definition
         /// </summary>
         /// <param name="field">A form field definition</param>
-        public void Add(UIFormField field)
+        public void Add(IUIFormField field)
         {
             field.UIFormColumn = this;
             _list.Add(field);
@@ -63,7 +63,7 @@ namespace Habanero.BO.ClassDefinition
         /// Removes a form field from the definition
         /// </summary>
         /// <param name="field">A form field definition</param>
-        public void Remove(UIFormField field)
+        public void Remove(IUIFormField field)
         {
             _list.Remove(field);
         }
@@ -72,7 +72,7 @@ namespace Habanero.BO.ClassDefinition
         /// Checks if a form field is in the definition
         /// </summary>
         /// <param name="field">A form field definition</param>
-        public bool Contains(UIFormField field)
+        public bool Contains(IUIFormField field)
         {
             return _list.Contains(field);
         }
@@ -84,7 +84,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="index">The index position to access</param>
         /// <returns>Returns the property definition at the index position
         /// specified</returns>
-        public UIFormField this[int index]
+        public IUIFormField this[int index]
         {
             get { return (UIFormField)_list[index]; }
         }
@@ -143,13 +143,13 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// Returns the Form tab that this UIFormColumn is on.
         ///</summary>
-        public UIFormTab UIFormTab { get; internal set; }
+        public IUIFormTab UIFormTab { get; set; }
 
         ///<summary>
         /// Clones the collection.
         ///</summary>
         ///<returns>a new collection that is a shallow copy of this collection</returns>
-        public UIFormColumn Clone()
+        public IUIFormColumn Clone()
         {
             UIFormColumn newPropDefCol = new UIFormColumn();
             newPropDefCol.Width = this.Width;
@@ -267,7 +267,7 @@ namespace Habanero.BO.ClassDefinition
         ///</returns>
         ///
         ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
-        public bool Equals(UIFormColumn obj)
+        public bool Equals(IUIFormColumn obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -300,7 +300,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="index">The position at which the formField should be inserted</param>
         ///<param name="formField">The FormField to be iserted.</param>
-        public void Insert(int index, UIFormField formField)
+        public void Insert(int index, IUIFormField formField)
         {
             if (_list.Contains(formField)) return;
             if (index >= _list.Count) index = _list.Count;

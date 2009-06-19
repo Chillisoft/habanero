@@ -35,26 +35,28 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef.ClassDefs.Clear();
             
         }
+
+        
         [Test]
         public void TestTriggerAccess()
         {
-            UIFormField field = new UIFormField("label", "prop", "control", "ass", "mapper", "mapass",
-                true, null, null, null, UIFormField.LayoutStyle.Label);
-            Assert.IsNotNull(field.Triggers);
-            Assert.AreEqual(0, field.Triggers.Count);
+            //UIFormField field = new UIFormField("label", "prop", "control", "ass", "mapper", "mapass",
+            //    true, null, null, null, LayoutStyle.Label);
+            //Assert.IsNotNull(field.Triggers);
+            //Assert.AreEqual(0, field.Triggers.Count);
 
-            Trigger trigger = new Trigger("prop1", null, null, "action", "value");
-            field.Triggers.Add(trigger);
-            Assert.AreEqual(1, field.Triggers.Count);
+            //Trigger trigger = new Trigger("prop1", null, null, "action", "value");
+            //field.Triggers.Add(trigger);
+            //Assert.AreEqual(1, field.Triggers.Count);
         }
 
         [Test]
         public void TestFieldDefaultLabel()
         {
             UIFormField uiFormField;
-            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, null, null, null, LayoutStyle.Label);
             Assert.AreEqual("Test Property:", uiFormField.GetLabel());
-            uiFormField = new UIFormField(null, "TestProperty", typeof(CheckBox), null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            uiFormField = new UIFormField(null, "TestProperty", typeof(CheckBox), null, null, true, null, null, null, LayoutStyle.Label);
             Assert.AreEqual("Test Property?", uiFormField.GetLabel());
         }
 
@@ -63,9 +65,9 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             ClassDef classDef = CreateTestClassDef("");
             UIFormField uiFormField;
-            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, null, null, null, LayoutStyle.Label);
             Assert.AreEqual("Tested Property:", uiFormField.GetLabel(classDef));
-            uiFormField = new UIFormField(null, "TestProperty", typeof(CheckBox), null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            uiFormField = new UIFormField(null, "TestProperty", typeof(CheckBox), null, null, true, null, null, null, LayoutStyle.Label);
             Assert.AreEqual("Tested Property?", uiFormField.GetLabel(classDef));
         }
 
@@ -130,7 +132,7 @@ namespace Habanero.Test.BO.ClassDefinition
             string testPropertyName = "TestProperty";
             PropDef propDefUOM = (PropDef) classDef.PropDefcol[testPropertyName];
             propDefUOM.UnitOfMeasure = "NewUOM";
-            UIFormField uiFormField = new UIFormField(null, testPropertyName, typeof(TextBox), null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField = new UIFormField(null, testPropertyName, typeof(TextBox), null, null, true, null, null, null, LayoutStyle.Label);
 
             //---------------Assert Precondition----------------
             Assert.AreEqual("Tested Property", propDefUOM.DisplayName);
@@ -145,7 +147,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestFieldToolTip()
         {
             UIFormField uiFormField;
-            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, "This is my ToolTipText", null, null, UIFormField.LayoutStyle.Label);
+            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, "This is my ToolTipText", null, null, LayoutStyle.Label);
             Assert.AreEqual("This is my ToolTipText", uiFormField.GetToolTipText());
         }
 
@@ -154,7 +156,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             ClassDef classDef = CreateTestClassDef("");
             UIFormField uiFormField;
-            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, null, null, null, LayoutStyle.Label);
             Assert.AreEqual("This is a property for testing.", uiFormField.GetToolTipText(classDef));
         }
 
@@ -172,7 +174,7 @@ namespace Habanero.Test.BO.ClassDefinition
             classDef.RelationshipDefCol.Add(def);
 
             UIFormField uiFormField;
-            uiFormField = new UIFormField(null, "TestRel.TestProperty2", typeof(TextBox), null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            uiFormField = new UIFormField(null, "TestRel.TestProperty2", typeof(TextBox), null, null, true, null, null, null, LayoutStyle.Label);
             Assert.AreEqual("Tested Property2:", uiFormField.GetLabel(classDef));
         }
 
@@ -283,8 +285,8 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void Test_NotEquals()
         {
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, UIFormField.LayoutStyle.Label);
-            UIFormField uiFormField2 = new UIFormField("L", "L", "G", "", "", "", true, "", new Hashtable(), null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, LayoutStyle.Label);
+            UIFormField uiFormField2 = new UIFormField("L", "L", "G", "", "", "", true, "", new Hashtable(), null, LayoutStyle.Label);
             Assert.IsFalse(uiFormField1 == uiFormField2);
             Assert.IsTrue(uiFormField1 != uiFormField2);
             Assert.IsFalse(uiFormField1.Equals(uiFormField2));
@@ -293,8 +295,8 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void Test_NotEquals_LabelDiff()
         {
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, UIFormField.LayoutStyle.Label);
-            UIFormField uiFormField2 = new UIFormField("G", "L", "", "", "", "", true, "", new Hashtable(), null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, LayoutStyle.Label);
+            UIFormField uiFormField2 = new UIFormField("G", "L", "", "", "", "", true, "", new Hashtable(), null, LayoutStyle.Label);
             Assert.IsFalse(uiFormField1.Equals(uiFormField2));
             Assert.IsFalse(uiFormField1 == uiFormField2);
             //Assert.AreNotEqual(uiFormField1, uiFormField2);
@@ -311,7 +313,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestHasParameterValue_False()
         {
             //---------------Set up test pack-------------------
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -328,7 +330,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
             string parameterName = "bob";
             parameters.Add(parameterName, "I can like to have a value");
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, LayoutStyle.Label);
             
             //---------------Assert Precondition----------------
 
@@ -343,7 +345,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestRowSpan_NotSet()
         {
             //---------------Set up test pack-------------------
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -359,7 +361,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 3);
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -372,7 +374,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestColSpan_NotSet()
         {
             //---------------Set up test pack-------------------
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -388,7 +390,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable();
             parameters.Add("colSpan", 3);
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -403,7 +405,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable();
             parameters.Add("numLines", 3);
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, LayoutStyle.Label);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             int rowSpan = uiFormField1.RowSpan;
@@ -418,7 +420,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
             parameters.Add("numLines", 3);
             parameters.Add("rowSpan", 2);
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, LayoutStyle.Label);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             int rowSpan = uiFormField1.RowSpan;
@@ -430,7 +432,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestAlignment_NotSet()
         {
             //---------------Set up test pack-------------------
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -446,7 +448,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable();
             parameters.Add("alignment", "right");
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, UIFormField.LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -460,7 +462,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -474,7 +476,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -488,7 +490,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            UIFormField field = classDef.UIDefCol["AlternateVirtualProp"].GetFormField("-MyTestProp-");
+            IUIFormField field = classDef.UIDefCol["AlternateVirtualProp"].GetFormField("-MyTestProp-");
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -502,7 +504,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -517,7 +519,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             field.Label = "";
             //---------------Assert Precondition----------------
 
@@ -550,9 +552,9 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             UIFormField uiFormField1 = CreateFormField();
             //---------------Execute Test ----------------------
-            uiFormField1.Layout = UIFormField.LayoutStyle.GroupBox;
+            uiFormField1.Layout = LayoutStyle.GroupBox;
             //---------------Test Result -----------------------
-            Assert.AreEqual(UIFormField.LayoutStyle.GroupBox, uiFormField1.Layout);
+            Assert.AreEqual(LayoutStyle.GroupBox, uiFormField1.Layout);
         }
         [Test]
         public void Test_Layout_Default()
@@ -560,17 +562,17 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             UIFormField uiFormField1 = CreateFormField();
             //---------------Test Result -----------------------
-            Assert.AreEqual(UIFormField.LayoutStyle.Label, uiFormField1.Layout);
+            Assert.AreEqual(LayoutStyle.Label, uiFormField1.Layout);
         }
 
-        private UIFormField CreateFormField() { return new UIFormField("L", "L", "", "", "", "", true, "", null, null, UIFormField.LayoutStyle.Label); }
-        private UIFormField CreateFormField(string propName) { return new UIFormField("L", propName, "", "", "", "", true, "", null, null, UIFormField.LayoutStyle.Label); }
+        private UIFormField CreateFormField() { return new UIFormField("L", "L", "", "", "", "", true, "", null, null, LayoutStyle.Label); }
+        private UIFormField CreateFormField(string propName) { return new UIFormField("L", propName, "", "", "", "", true, "", null, null, LayoutStyle.Label); }
 
         // Grants access to protected fields
         private class UIFormFieldInheritorStub : UIFormField
         {
             public UIFormFieldInheritorStub()
-                : base("label", "prop", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label)
+                : base("label", "prop", "control", null, null, null, true, null, null, null, LayoutStyle.Label)
             {}
 
             public void SetLabel(string name)

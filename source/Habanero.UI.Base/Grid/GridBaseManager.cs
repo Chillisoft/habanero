@@ -200,7 +200,7 @@ namespace Habanero.UI.Base
             {
                 this.ClassDef = _boCol.ClassDef;
             }
-            UIDef uiDef = ((ClassDef) this.ClassDef).GetUIDef(UiDefName);
+            IUIDef uiDef = ((ClassDef) this.ClassDef).GetUIDef(UiDefName);
             if (uiDef == null)
             {
                 throw new ArgumentException

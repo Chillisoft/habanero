@@ -103,11 +103,11 @@ namespace Habanero.UI.Base
         /// <param name="uiDefName">The name of the UI definition</param>
         public void InitialiseGrid(IClassDef classDef, string uiDefName)
         {
-            UIGrid gridDef = GetGridDef((ClassDef) classDef, uiDefName);
+            IUIGrid gridDef = GetGridDef((ClassDef) classDef, uiDefName);
             InitialiseGrid(classDef, gridDef, uiDefName);
         }
 
-        public void InitialiseGrid(IClassDef classDef, UIGrid uiGridDef, string uiDefName)
+        public void InitialiseGrid(IClassDef classDef, IUIGrid uiGridDef, string uiDefName)
         {
             if (uiGridDef.FilterDef != null)
             {
@@ -140,9 +140,9 @@ namespace Habanero.UI.Base
             get { return _gridControl; }
         }
 
-        private UIGrid GetGridDef(ClassDef classDef, string uiDefName)
+        private IUIGrid GetGridDef(ClassDef classDef, string uiDefName)
         {
-            UIDef uiDef = classDef.GetUIDef(uiDefName);
+            IUIDef uiDef = classDef.GetUIDef(uiDefName);
             if (uiDef == null)
             {
                 throw new ArgumentException
@@ -150,7 +150,7 @@ namespace Habanero.UI.Base
                          ("You cannot initialise {0} because it does not contain a definition for UIDef {1} for the class def {2}",
                           this._gridControl.Grid.Name, uiDefName, classDef.ClassName));
             }
-            UIGrid gridDef = uiDef.UIGrid;
+            IUIGrid gridDef = uiDef.UIGrid;
             if (gridDef == null)
             {
                 throw new ArgumentException
@@ -161,7 +161,7 @@ namespace Habanero.UI.Base
             return gridDef;
         }
 
-        private void SetUpGridColumns(ClassDef classDef, UIGrid gridDef)
+        private void SetUpGridColumns(ClassDef classDef, IUIGrid gridDef)
         {
             this._gridControl.Grid.Columns.Clear();
             CreateIDColumn();
@@ -214,7 +214,7 @@ namespace Habanero.UI.Base
             return newColumn;
         }
 
-        private void CreateColumnForUIDef(IClassDef classDef, UIGrid gridDef)
+        private void CreateColumnForUIDef(IClassDef classDef, IUIGrid gridDef)
         {
             foreach (UIGridColumn gridColDef in gridDef)
             {

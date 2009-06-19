@@ -213,8 +213,8 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
 //            Assert.AreEqual("", grid.UiDefName);
@@ -240,13 +240,13 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
-            UIGridColumn columnDef1 = uiGridDef[0];
+            IUIGridColumn columnDef1 = uiGridDef[0];
             Assert.AreEqual("TestProp", columnDef1.PropertyName);
-            UIGridColumn columnDef2 = uiGridDef[1];
+            IUIGridColumn columnDef2 = uiGridDef[1];
             Assert.AreEqual("TestProp2", columnDef2.PropertyName);
             //---------------Execute Test ----------------------
             initialiser.InitialiseGrid(classDef);
@@ -270,14 +270,14 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = MyBO.LoadClassDefWith_Grid_2Columns_1stHasZeroWidth();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
-            UIGridColumn columnDef1 = uiGridDef[0];
+            IUIGridColumn columnDef1 = uiGridDef[0];
             Assert.AreEqual("TestProp", columnDef1.PropertyName);
             Assert.AreEqual(0, columnDef1.Width);
-            UIGridColumn columnDef2 = uiGridDef[1];
+            IUIGridColumn columnDef2 = uiGridDef[1];
             Assert.AreEqual("TestProp2", columnDef2.PropertyName);
             //---------------Execute Test ----------------------
             initialiser.InitialiseGrid(classDef);
@@ -298,8 +298,8 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             AddControlToForm(grid);
 
             //--------------Assert PreConditions----------------            
@@ -343,8 +343,8 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
             IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
 
             Type customColumnType = GetCustomGridColumnType();
             uiGridDef[2].GridControlTypeName = customColumnType.Name; //"CustomDataGridViewColumn";
@@ -371,8 +371,8 @@ namespace Habanero.Test.UI.Base
             const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol[alternateUIDefName];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(1, uiGridDef.Count, "1 defined column in the alternateUIDef");
             //---------------Execute Test ----------------------
@@ -394,13 +394,13 @@ namespace Habanero.Test.UI.Base
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             ClassDef classDef = LoadMyBoDefaultClassDef();
             //---------------Assert Preconditions---------------
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
-            UIGridColumn columnDef1 = uiGridDef[0];
+            IUIGridColumn columnDef1 = uiGridDef[0];
             Assert.AreEqual("TestProp", columnDef1.PropertyName);
-            UIGridColumn columnDef2 = uiGridDef[1];
+            IUIGridColumn columnDef2 = uiGridDef[1];
             Assert.AreEqual("TestProp2", columnDef2.PropertyName);
             //---------------Execute Test ----------------------
             initialiser.InitialiseGrid(classDef);
@@ -468,12 +468,12 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            UIGrid uiGridDef = classDef.UIDefCol["default"].UIGrid;
+            IUIGrid uiGridDef = classDef.UIDefCol["default"].UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
-            UIGridColumn columnDef1 = uiGridDef[0];
+            IUIGridColumn columnDef1 = uiGridDef[0];
             Assert.AreEqual("TestProp", columnDef1.PropertyName);
-            UIGridColumn columnDef2 = uiGridDef[1];
+            IUIGridColumn columnDef2 = uiGridDef[1];
             Assert.AreEqual("TestProp2", columnDef2.PropertyName);
             //---------------Execute Test ----------------------
 
@@ -498,9 +498,9 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
             IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
-            UIGridColumn uiDTColDef = uiGridDef[2];
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
+            IUIGridColumn uiDTColDef = uiGridDef[2];
             uiDTColDef.GridControlTypeName = "DataGridViewDateTimeColumn";
             AddControlToForm(grid);
 
@@ -539,7 +539,7 @@ namespace Habanero.Test.UI.Base
         }
 
         private static void AssertThatDataColumnSetupCorrectly
-            (IClassDef classDef, UIGridColumn columnDef1, IDataGridViewColumn dataColumn1)
+            (IClassDef classDef, IUIGridColumn columnDef1, IDataGridViewColumn dataColumn1)
         {
             Assert.AreEqual(columnDef1.PropertyName, dataColumn1.DataPropertyName); //Test Prop
             Assert.AreEqual(columnDef1.PropertyName, dataColumn1.Name);
@@ -553,7 +553,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(propDef.PropertyType, dataColumn1.ValueType);
         }
 
-        private static IPropDef GetPropDef(IClassDef classDef, UIGridColumn gridColumn)
+        private static IPropDef GetPropDef(IClassDef classDef, IUIGridColumn gridColumn)
         {
             IPropDef propDef = null;
             if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))

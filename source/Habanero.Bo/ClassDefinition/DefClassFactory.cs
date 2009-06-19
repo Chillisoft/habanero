@@ -28,7 +28,7 @@ namespace Habanero.BO.ClassDefinition
     /// A factory that produces instances of business object related classes.
     /// This class is used by xml loaders that read from the class definitions.
     /// </summary>
-	internal class DefClassFactory : IDefClassFactory
+	public class DefClassFactory : IDefClassFactory
 	{
         ///<summary>
         ///</summary>
@@ -246,7 +246,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="uiForm"></param>
         ///<param name="uiGrid"></param>
         ///<returns></returns>
-        public UIDef CreateUIDef(string name, UIForm uiForm, UIGrid uiGrid)
+        public IUIDef CreateUIDef(string name, IUIForm uiForm, IUIGrid uiGrid)
 		{
 			return new UIDef(name, uiForm, uiGrid);
 		}
@@ -254,7 +254,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        public UIFormColumn CreateUIFormColumn()
+        public IUIFormColumn CreateUIFormColumn()
 		{
 			return new UIFormColumn();
 		}
@@ -262,7 +262,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        public UIForm CreateUIFormDef()
+        public IUIForm CreateUIFormDef()
 		{
 			return new UIForm();
 		}
@@ -273,7 +273,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="gridType"></param>
         ///<param name="correspondingRelationshipName"></param>
         ///<returns></returns>
-        public UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName)
+        public IUIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName)
 		{
 			return new UIFormGrid(relationshipName, gridType, correspondingRelationshipName);
 		}
@@ -292,7 +292,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="triggers"></param>
         ///<param name="layout"></param>
         ///<returns></returns>
-        public UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, TriggerCol triggers, UIFormField.LayoutStyle layout)
+        public IUIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, ITriggerCol triggers, LayoutStyle layout)
 		{
 			return new UIFormField(label, propertyName, controlTypeName, controlAssembly,
                 mapperTypeName, mapperAssembly, editable, toolTipText, propertyAttributes, triggers, layout);
@@ -301,7 +301,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        public UIFormTab CreateUIFormTab()
+        public IUIFormTab CreateUIFormTab()
 		{
 			return new UIFormTab();
 		}
@@ -314,8 +314,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="action"></param>
         ///<param name="value"></param>
         ///<returns></returns>
-        public Trigger CreateTrigger(string triggeredBy, string target, string conditionValue, string action,
-                                                 string value)
+        public ITrigger CreateTrigger(string triggeredBy, string target, string conditionValue, string action, string value)
         {
             return new Trigger(triggeredBy, target, conditionValue, action, value);
         }
@@ -323,7 +322,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        public UIGrid CreateUIGridDef()
+        public IUIGrid CreateUIGridDef()
 		{
 			return new UIGrid();
 		}
@@ -339,8 +338,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="alignment"></param>
         ///<param name="propertyAttributes"></param>
         ///<returns></returns>
-        public UIGridColumn CreateUIGridProperty(string heading, string propertyName, String gridControlTypeName, String gridControlAssembly, bool editable,
-                                                   int width, UIGridColumn.PropAlignment alignment, Hashtable propertyAttributes)
+        public IUIGridColumn CreateUIGridProperty(string heading, string propertyName, string gridControlTypeName, string gridControlAssembly, bool editable, int width, PropAlignment alignment, Hashtable propertyAttributes)
 		{
             return new UIGridColumn(heading, propertyName, gridControlTypeName, gridControlAssembly, editable, width, alignment, propertyAttributes);
 		}
@@ -413,9 +411,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="filterClauseOperator">The <see cref="FilterClauseOperator"/> that is  to use for this <see cref="FilterPropertyDef"/></param>
         ///<param name="parameters"></param>
         ///<returns></returns>
-        public FilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, 
-                string filterTypeAssembly, FilterClauseOperator filterClauseOperator, 
-                Dictionary<string, string> parameters)
+        public IFilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, string filterTypeAssembly, FilterClauseOperator filterClauseOperator, Dictionary<string, string> parameters)
         {
             return new FilterPropertyDef(propertyName, label, filterType, filterTypeAssembly, filterClauseOperator, parameters);
         }
@@ -425,6 +421,6 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="filterPropertyDefs">The <see cref="FilterPropertyDef"/>s that are placed on the FilterDef</param>
         ///<returns>The newly created FilterDef</returns>
-        public FilterDef CreateFilterDef(IList<FilterPropertyDef> filterPropertyDefs) { return new FilterDef(filterPropertyDefs);}
+        public IFilterDef CreateFilterDef(IList<IFilterPropertyDef> filterPropertyDefs) { return new FilterDef(filterPropertyDefs);}
 	}
 }

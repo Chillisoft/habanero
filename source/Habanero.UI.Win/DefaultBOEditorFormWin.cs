@@ -75,10 +75,10 @@ namespace Habanero.UI.Win
 
             BOMapper mapper = new BOMapper(bo);
 
-            UIForm def;
+            IUIForm def;
             if (_uiDefName.Length > 0)
             {
-                UIDef uiMapper = mapper.GetUIDef(_uiDefName);
+                IUIDef uiMapper = mapper.GetUIDef(_uiDefName);
                 if (uiMapper == null)
                 {
                     throw new NullReferenceException("An error occurred while " +
@@ -91,7 +91,7 @@ namespace Habanero.UI.Win
             }
             else
             {
-                UIDef uiMapper = mapper.GetUIDef();
+                IUIDef uiMapper = mapper.GetUIDef();
                 if (uiMapper == null)
                 {
                     throw new NullReferenceException("An error occurred while " +
@@ -161,7 +161,7 @@ namespace Habanero.UI.Win
             borderLayoutManager.AddControl(Buttons, BorderLayoutManager.Position.South);
         }
 
-        private void SetupFormSize(UIForm def)
+        private void SetupFormSize(IUIForm def)
         {
             int width = def.Width;
             int minWidth = _boPanel.Width +

@@ -59,7 +59,7 @@ namespace Habanero.Test.BO.Loaders
 	            ", propName, label);
 
             //---------------Execute Test ----------------------
-            FilterDef filterDef = loader.LoadFilterDef(filterDefXml);
+            IFilterDef filterDef = loader.LoadFilterDef(filterDefXml);
             //---------------Test Result -----------------------
 
             Assert.IsNotNull(filterDef);
@@ -95,7 +95,7 @@ namespace Habanero.Test.BO.Loaders
 	            ", paramName, paramValue);
             
             //---------------Execute Test ----------------------
-            FilterDef filterDef = loader.LoadFilterDef(filterDefXml);
+            IFilterDef filterDef = loader.LoadFilterDef(filterDefXml);
             
             //---------------Test Result -----------------------
             Assert.IsNotNull(filterDef);
@@ -120,7 +120,7 @@ namespace Habanero.Test.BO.Loaders
 	            ";
 
             //---------------Execute Test ----------------------
-            FilterDef filterDef = loader.LoadFilterDef(filterDefXml);
+            IFilterDef filterDef = loader.LoadFilterDef(filterDefXml);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(filterDef);
@@ -141,7 +141,7 @@ namespace Habanero.Test.BO.Loaders
 	            ";
 
             //---------------Execute Test ----------------------
-            FilterDef filterDef = loader.LoadFilterDef(filterDefXml);
+            IFilterDef filterDef = loader.LoadFilterDef(filterDefXml);
 
             //---------------Test Result -----------------------
 
@@ -162,7 +162,7 @@ namespace Habanero.Test.BO.Loaders
 	            ";
 
             //---------------Execute Test ----------------------
-            FilterDef filterDef = loader.LoadFilterDef(filterDefXml);
+            IFilterDef filterDef = loader.LoadFilterDef(filterDefXml);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, filterDef.Columns);
@@ -183,7 +183,7 @@ namespace Habanero.Test.BO.Loaders
 	            ";
 
             //---------------Execute Test ----------------------
-            FilterDef filterDef = loader.LoadFilterDef(filterDefXml);
+            IFilterDef filterDef = loader.LoadFilterDef(filterDefXml);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(FilterClauseOperator.OpEquals, filterDef.FilterPropertyDefs[0].FilterClauseOperator);
@@ -201,7 +201,7 @@ namespace Habanero.Test.BO.Loaders
             //---------------Execute Test ----------------------
             try
             {
-                FilterDef filterDef = loader.LoadFilterDef(filterDefXml);
+                IFilterDef filterDef = loader.LoadFilterDef(filterDefXml);
                 Assert.Fail("An error should have occurred because a filter requires at least on filterProperty.");
             
             //---------------Test Result -----------------------

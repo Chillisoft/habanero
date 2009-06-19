@@ -27,8 +27,8 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlUILoader : XmlLoader
     {
-        private UIForm _uiForm;
-        private UIGrid _uiGrid;
+        private IUIForm _uiForm;
+        private IUIGrid _uiGrid;
         private string _name;
 
         //private string _xmlUICollections;
@@ -65,7 +65,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="uiDefElement">The xml string</param>
         /// <returns>Returns the UI definition object</returns>
-        public UIDef LoadUIDef(string uiDefElement)
+        public IUIDef LoadUIDef(string uiDefElement)
         {
             return LoadUIDef(this.CreateXmlElement(uiDefElement));
         }
@@ -75,7 +75,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="uiDefElement">The xml element</param>
         /// <returns>Returns the UI definition object</returns>
-        public UIDef LoadUIDef(XmlElement uiDefElement)
+        public IUIDef LoadUIDef(XmlElement uiDefElement)
         {
             return (UIDef) this.Load(uiDefElement);
         }

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -26,11 +27,11 @@ namespace Habanero.BO.ClassDefinition
     /// interface, as specified in the class definitions xml file.
     /// This consists of definitions for a grid display and an editing form.
     /// </summary>
-    public class UIDef : IEquatable<UIDef>
+    public class UIDef : IEquatable<UIDef>, IUIDef
     {
         private string _name;
-        private UIForm _uiForm;
-        private UIGrid _uiGrid;
+        private IUIForm _uiForm;
+        private IUIGrid _uiGrid;
 //        private ClassDef _classDef;
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="name">The name</param>
         /// <param name="uiForm">The form definition</param>
         /// <param name="uiGrid">The grid definition</param>
-        public UIDef(string name, UIForm uiForm, UIGrid uiGrid)
+        public UIDef(string name, IUIForm uiForm, IUIGrid uiGrid)
         {
             _name = name;
             _uiForm = uiForm;
@@ -51,7 +52,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Returns the form definition
         /// </summary>
-        public UIForm UIForm
+        public IUIForm UIForm
         {
             get { return _uiForm; }
             set { _uiForm = value; }
@@ -69,7 +70,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Returns the grid definition
         /// </summary>
-        public UIGrid UIGrid
+        public IUIGrid UIGrid
         {
             get { return _uiGrid; }
             set { _uiGrid = value; }
@@ -78,19 +79,19 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// Gets a Collection of UIDefs
         ///</summary>
-        public UIDefCol UIDefCol { get; internal set; }
+        public UIDefCol UIDefCol { get; set; }
 
         /// <summary>
         /// The Class Definition that this UIDef belongs to.
         /// </summary>
-        public ClassDef ClassDef { get; set; }
+        public IClassDef ClassDef { get; set; }
 
         /// <summary>
         /// Returns the form property definitions
         /// </summary>
         /// <returns>Returns a UIForm object</returns>
         [Obsolete("Please use the UIForm property instead as it returns the same UIForm. This method will be removed in later versions of Habanero")]
-        public UIForm GetUIFormProperties()
+        public IUIForm GetUIFormProperties()
         {
             return this.UIForm;
         }
@@ -100,7 +101,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <returns>Returns a UIGridDef object</returns>
         [Obsolete("Please use the UIGrid property instead as it returns the same UIGrid. This method will be removed in later versions of Habanero")]
-        public UIGrid GetUIGridProperties()
+        public IUIGrid GetUIGridProperties()
         {
             return this.UIGrid;
         }
@@ -111,9 +112,9 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="propertyName">The property name that you want the form field for</param>
         ///<returns>the form field or null</returns>
-        public UIFormField GetFormField(string propertyName)
+        public IUIFormField GetFormField(string propertyName)
         {
-            UIForm formProperties = this.UIForm;
+            IUIForm formProperties = this.UIForm;
 
             foreach (UIFormTab tab in formProperties)
             {
@@ -169,10 +170,10 @@ namespace Habanero.BO.ClassDefinition
         /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
         ///</summary>
         ///<returns>a new collection that is a shallow copy of this collection</returns>
-        public UIDef Clone()
+        public IUIDef Clone()
         {
-            UIForm clonedForm = this.UIForm != null? this.UIForm.Clone(): null;
-            UIGrid clonedGrid = this.UIGrid != null ? this.UIGrid.Clone() : null;
+            IUIForm clonedForm = this.UIForm != null? this.UIForm.Clone(): null;
+            IUIGrid clonedGrid = this.UIGrid != null ? this.UIGrid.Clone() : null;
             UIDef newUIForm = new UIDef(this.Name, clonedForm, clonedGrid);
             return newUIForm;
         }
@@ -190,8 +191,8 @@ namespace Habanero.BO.ClassDefinition
         {
             if (otherUIDef == null) return false;
             if (this.Name != otherUIDef.Name) return false;
-            if (this.UIForm != otherUIDef.UIForm) return false;
-            if (this.UIGrid != otherUIDef.UIGrid) return false;
+            if ((UIForm)this.UIForm != (UIForm)otherUIDef.UIForm) return false;
+            if ((UIGrid)this.UIGrid != (UIGrid)otherUIDef.UIGrid) return false;
             return true;
         }
         ///<summary>

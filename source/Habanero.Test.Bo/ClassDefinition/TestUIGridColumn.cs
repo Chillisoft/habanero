@@ -36,7 +36,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
 
             UIGridColumn column = new UIGridColumn("heading", null, null, null, true, 100,
-                                                   UIGridColumn.PropAlignment.left, parameters);
+                                                   PropAlignment.left, parameters);
 
             Assert.AreEqual(0, column.Parameters.Count);
             column.Parameters.Add("name", "value");
@@ -50,7 +50,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
 
             UIGridColumn column = new UIGridColumn("heading", null, null, null, true, 100,
-                                                   UIGridColumn.PropAlignment.left, null);
+                                                   PropAlignment.left, null);
 
             Assert.IsNull(column.GetParameterValue("somename"));
         }
@@ -59,7 +59,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestFieldDefaultLabel()
         {
             UIGridColumn uiGridColumn;
-            uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, UIGridColumn.PropAlignment.left, null);
+            uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left, null);
             Assert.AreEqual("Test Property", uiGridColumn.GetHeading());
         }
 
@@ -68,7 +68,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             ClassDef classDef = CreateTestClassDef("");
             UIGridColumn uiGridColumn;
-            uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, UIGridColumn.PropAlignment.left , null);
+            uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left , null);
             Assert.AreEqual("Tested Property", uiGridColumn.GetHeading(classDef));
         }
 
@@ -86,7 +86,7 @@ namespace Habanero.Test.BO.ClassDefinition
             classDef.RelationshipDefCol.Add(def);
 
             UIGridColumn uiGridColumn;
-            uiGridColumn = new UIGridColumn(null, "TestRel.TestProperty2", typeof(DataGridViewTextBoxColumn), false, 100, UIGridColumn.PropAlignment.left, null);
+            uiGridColumn = new UIGridColumn(null, "TestRel.TestProperty2", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left, null);
             Assert.AreEqual("Tested Property2", uiGridColumn.GetHeading(classDef));
         }
 
@@ -106,7 +106,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestSettingControlTypeSetsTypeNames()
         {
             UIGridColumn uiGridColumn = new UIGridColumn(null, "TestProperty",
-                "DataGridViewTextBoxColumn", "System.Windows.Forms", false, 100, UIGridColumn.PropAlignment.left, null);
+                "DataGridViewTextBoxColumn", "System.Windows.Forms", false, 100, PropAlignment.left, null);
             Assert.AreEqual("DataGridViewTextBoxColumn", uiGridColumn.GridControlTypeName);
             Assert.IsNull(uiGridColumn.GridControlType);
 
@@ -140,32 +140,32 @@ namespace Habanero.Test.BO.ClassDefinition
             column.SetWidth(200);
             Assert.AreEqual(200, column.Width);
 
-            Assert.AreEqual(UIGridColumn.PropAlignment.left, column.Alignment);
-            column.SetAlignment(UIGridColumn.PropAlignment.right);
-            Assert.AreEqual(UIGridColumn.PropAlignment.right, column.Alignment);
+            Assert.AreEqual(PropAlignment.left, column.Alignment);
+            column.SetAlignment(PropAlignment.right);
+            Assert.AreEqual(PropAlignment.right, column.Alignment);
         }
 
         [Test]
         public void TestCloneGridColumn()
         {
             //---------------Set up test pack-------------------
-            UIGridColumn gridColumn = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn gridColumn = new UIGridColumn("pp", "pp", "", "", false, 0, PropAlignment.centre, null);
 
             //---------------Execute Test ----------------------
-            UIGridColumn clonedGridColumn = gridColumn.Clone();
+            IUIGridColumn clonedGridColumn = gridColumn.Clone();
 
             //---------------Test Result -----------------------
             Assert.IsTrue(gridColumn.Equals(clonedGridColumn));
-            Assert.IsTrue(gridColumn == clonedGridColumn);
-            Assert.IsFalse(gridColumn != clonedGridColumn);
+            Assert.IsTrue(gridColumn == (UIGridColumn) clonedGridColumn);
+            Assert.IsFalse(gridColumn != (UIGridColumn) clonedGridColumn);
         }
 
         [Test]
         public void Test_HashCodeEquals()
         {
             //---------------Set up test pack-------------------
-            UIGridColumn gridColumn = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
-            UIGridColumn clonedGridColumn = gridColumn.Clone();
+            UIGridColumn gridColumn = new UIGridColumn("pp", "pp", "", "", false, 0, PropAlignment.centre, null);
+            IUIGridColumn clonedGridColumn = gridColumn.Clone();
 
             //---------------Assert preconditions----------------
             Assert.IsTrue(gridColumn.Equals(clonedGridColumn));
@@ -178,8 +178,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_HashCodeNotEquals()
         {
             //---------------Set up test pack-------------------
-            UIGridColumn gridColumn = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
-            UIGridColumn otherColumn = new UIGridColumn("pp", "qq", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn gridColumn = new UIGridColumn("pp", "pp", "", "", false, 0, PropAlignment.centre, null);
+            UIGridColumn otherColumn = new UIGridColumn("pp", "qq", "", "", false, 0, PropAlignment.centre, null);
 
             //---------------Assert preconditions----------------
             Assert.IsFalse(gridColumn.Equals(otherColumn));
@@ -193,7 +193,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void Test_NotEqualsNull()
         {
-            UIGridColumn uiGridColumn1 = new UIGridColumn("", "", "", "",false,0,UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn uiGridColumn1 = new UIGridColumn("", "", "", "",false,0,PropAlignment.centre, null);
             UIGridColumn uiGridColumn2 = null;
             Assert.IsFalse(uiGridColumn1 == uiGridColumn2);
             Assert.IsTrue(uiGridColumn1 != uiGridColumn2);
@@ -205,7 +205,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_NotSameType()
         {
             //---------------Set up test pack-------------------
-            UIGridColumn gridColumn = new UIGridColumn("", "", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn gridColumn = new UIGridColumn("", "", "", "", false, 0, PropAlignment.centre, null);
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
@@ -220,8 +220,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_NotEqual_DifName()
         {
             //---------------Set up test pack-------------------
-            UIGridColumn gridColumn1 = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
-            UIGridColumn gridColumn2 = new UIGridColumn("pp", "mm", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn gridColumn1 = new UIGridColumn("pp", "pp", "", "", false, 0, PropAlignment.centre, null);
+            UIGridColumn gridColumn2 = new UIGridColumn("pp", "mm", "", "", false, 0, PropAlignment.centre, null);
 
             //--------------Assert PreConditions----------------            
 
@@ -241,8 +241,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_NotEqual_Heading()
         {
             //---------------Set up test pack-------------------
-            UIGridColumn gridColumn1 = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
-            UIGridColumn gridColumn2 = new UIGridColumn("pp1", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn gridColumn1 = new UIGridColumn("pp", "pp", "", "", false, 0, PropAlignment.centre, null);
+            UIGridColumn gridColumn2 = new UIGridColumn("pp1", "pp", "", "", false, 0, PropAlignment.centre, null);
 
             //--------------Assert PreConditions----------------            
 

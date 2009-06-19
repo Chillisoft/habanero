@@ -40,7 +40,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadWithJustForm()
         {
-            UIDef def =
+            IUIDef def =
                 itsLoader.LoadUIDef(
                     @"
 				<ui name=""defTestName1"">
@@ -61,7 +61,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadWithJustGrid()
         {
-            UIDef def =
+            IUIDef def =
                 itsLoader.LoadUIDef(
                     @"
 				<ui name=""defTestName1"">
@@ -79,7 +79,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadWithBothGridAndForm()
         {
-            UIDef def =
+            IUIDef def =
                 itsLoader.LoadUIDef(
                     @"
 				<ui name=""defTestName1"">
@@ -107,7 +107,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestName()
         {
-            UIDef def =
+            IUIDef def =
                 itsLoader.LoadUIDef(
                     @"
 				<ui name=""defTestName1"">

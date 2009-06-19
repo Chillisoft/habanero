@@ -38,7 +38,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestDefaults()
         {
-            Trigger trigger =
+            ITrigger trigger =
                 loader.LoadTrigger(@"<trigger action=""action"" value=""value"" />");
             Assert.IsNull(trigger.TriggeredBy);
             Assert.IsNull(trigger.Target);
@@ -50,7 +50,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestTriggerWithTriggeredBy()
         {
-            Trigger trigger =
+            ITrigger trigger =
                 loader.LoadTrigger(
                     @"<trigger triggeredBy=""prop"" conditionValue=""value"" action=""action"" value=""value"" />");
             Assert.AreEqual("prop", trigger.TriggeredBy);
@@ -63,7 +63,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestTriggerWithTarget()
         {
-            Trigger trigger =
+            ITrigger trigger =
                 loader.LoadTrigger(
                     @"<trigger target=""prop"" conditionValue=""value"" action=""action"" value=""value"" />");
             Assert.IsNull(trigger.TriggeredBy); 
@@ -76,7 +76,7 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestCantSetBothTriggeredByAndTarget()
         {
-            Trigger trigger =
+            ITrigger trigger =
                 loader.LoadTrigger(
                     @"<trigger triggeredBy=""prop"" target=""prop"" action=""action"" value=""value"" />");
         }

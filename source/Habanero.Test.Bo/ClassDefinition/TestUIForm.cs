@@ -65,8 +65,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCloneUIForm()
         {
             //---------------Set up test pack-------------------
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -81,14 +81,14 @@ namespace Habanero.Test.BO.ClassDefinition
             uiForm.Width = 3;
 
             //---------------Execute Test ----------------------
-            UIForm clonedForm = uiForm.Clone();
+            IUIForm clonedForm = uiForm.Clone();
 
             //---------------Test Result -----------------------
-            Assert.IsTrue(uiForm == clonedForm);
+            Assert.IsTrue(uiForm == (UIForm) clonedForm);
             Assert.IsTrue(uiForm.Equals(clonedForm));
             Assert.AreNotSame(uiForm, clonedForm);
 
-            UIFormTab clonedUIFormTab = clonedForm[0];
+            IUIFormTab clonedUIFormTab = clonedForm[0];
             Assert.AreEqual(uiForm[0], clonedUIFormTab,
                               "Should be a deep copy and the columns should be equal but copied");
             Assert.AreNotSame(uiFormTab, clonedUIFormTab, "Should be a deep copy and the columns should be equal but copied (not same)");
@@ -312,8 +312,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public UIFormColumn CreateUIFormColumn_2Fields(string propName)
         {
             UIFormField field1 =
-                new UIFormField("label1", propName, "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+                new UIFormField("label1", propName, "control", null, null, null, true, null, null, null, LayoutStyle.Label);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);

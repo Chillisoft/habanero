@@ -75,10 +75,10 @@ namespace Habanero.Test.BO.ClassDefinition
             uiFormColumn.Width = 44;
 
             //---------------Execute Test ----------------------
-            UIFormColumn clonedFormColumn = uiFormColumn.Clone();
+            IUIFormColumn clonedFormColumn = uiFormColumn.Clone();
 
             //---------------Test Result -----------------------
-            Assert.IsTrue(uiFormColumn == clonedFormColumn);
+            Assert.IsTrue(uiFormColumn == (UIFormColumn) clonedFormColumn);
 
             Assert.IsTrue(uiFormColumn.Equals(clonedFormColumn));
             Assert.AreSame(uiFormColumn[0], clonedFormColumn[0]);
@@ -389,7 +389,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private UIFormField GetNewFormField()
         {
-            return new UIFormField("fdaf",TestUtil.GetRandomString() , "fdfsdaf", "fdfasd", "fdfasd","fdfasd",  false,"fdafads", new Hashtable(), new TriggerCol(), new UIFormField.LayoutStyle()  );
+            return new UIFormField("fdaf",TestUtil.GetRandomString() , "fdfsdaf", "fdfasd", "fdfasd","fdfasd",  false,"fdafads", new Hashtable(), new TriggerCol(), new LayoutStyle()  );
         }
 
 
@@ -401,7 +401,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private UIFormField CreateUIFormField(string label, string propName, Hashtable parameters)
         {
-            return new UIFormField(label, propName, "control", null, null, null, true, null, parameters, null, UIFormField.LayoutStyle.Label);
+            return new UIFormField(label, propName, "control", null, null, null, true, null, parameters, null, LayoutStyle.Label);
         }
 
         private UIFormField CreateUIFormField(string label, string propName)

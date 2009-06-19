@@ -30,7 +30,7 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlUIFormLoader : XmlLoader
     {
-        private UIForm _uiForm;
+        private IUIForm _uiForm;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -54,7 +54,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="formDefElement">The xml string</param>
         /// <returns>Returns a UIFormDef object</returns>
-        public UIForm LoadUIFormDef(string formDefElement)
+        public IUIForm LoadUIFormDef(string formDefElement)
         {
             return this.LoadUIFormDef(this.CreateXmlElement(formDefElement));
         }
@@ -64,9 +64,9 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="formDefElement">The xml element</param>
         /// <returns>Returns a UIFormDef object</returns>
-        public UIForm LoadUIFormDef(XmlElement formDefElement)
+        public IUIForm LoadUIFormDef(XmlElement formDefElement)
         {
-            return (UIForm) this.Load(formDefElement);
+            return (IUIForm) this.Load(formDefElement);
         }
 
         /// <summary>
@@ -101,8 +101,8 @@ namespace Habanero.BO.Loaders
 
 
             _reader.Read();
-            List<UIFormColumn> columns = new List<UIFormColumn>();
-            List<UIFormField> fields = new List<UIFormField>();
+            List<IUIFormColumn> columns = new List<IUIFormColumn>();
+            List<IUIFormField> fields = new List<IUIFormField>();
             string contentType = "";
             while (_reader.Name != "form") {
                 if (_reader.Name == "tab") {
@@ -138,13 +138,13 @@ namespace Habanero.BO.Loaders
                 }
             }
             if (contentType == "columnLayout") {
-                UIFormTab tab = _defClassFactory.CreateUIFormTab();
+                IUIFormTab tab = _defClassFactory.CreateUIFormTab();
                 columns.ForEach(tab.Add);
                 _uiForm.Add(tab);
             }
             else if (contentType == "field") {
-                UIFormTab tab = _defClassFactory.CreateUIFormTab();
-                UIFormColumn col = _defClassFactory.CreateUIFormColumn();
+                IUIFormTab tab = _defClassFactory.CreateUIFormTab();
+                IUIFormColumn col = _defClassFactory.CreateUIFormColumn();
                 fields.ForEach(col.Add);
                 tab.Add(col);
                 _uiForm.Add(tab);

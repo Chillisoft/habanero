@@ -38,15 +38,15 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDef_NoOrganisationRelationship();
             ClassDef classDef = OrganisationTestBO.LoadDefaultClassDef();
-            UIGrid originalGridDef = classDef.UIDefCol["default"].UIGrid;
-            UIGrid extraGridDef = originalGridDef.Clone();
+            IUIGrid originalGridDef = classDef.UIDefCol["default"].UIGrid;
+            IUIGrid extraGridDef = originalGridDef.Clone();
             // UIGridColumn extraColumn = originalGridDef[0].Clone();
             // extraGridDef.Add(extraColumn);
             extraGridDef.Remove(extraGridDef[extraGridDef.Count - 1]);
             // UIGridColumn extraColumn = new UIGridColumn("HABANERO_OBJECTID", "ProjectAssemblyInfoID", typeof(System.Windows.Forms.DataGridViewTextBoxColumn), true, 100, UIGridColumn.PropAlignment.right, null);
             // extraGridDef.Add(extraColum
-            UIForm originalformDef = classDef.UIDefCol["default"].UIForm;
-            UIForm formDef = originalformDef.Clone();
+            IUIForm originalformDef = classDef.UIDefCol["default"].UIForm;
+            IUIForm formDef = originalformDef.Clone();
             UIDef extraUIDef = new UIDef(CUSTOM_UIDEF_NAME, formDef, extraGridDef);
             classDef.UIDefCol.Add(extraUIDef);
             return classDef;

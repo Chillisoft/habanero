@@ -42,8 +42,8 @@ namespace Habanero.UI.Base
         private int _minimumPanelHeight;
         private int _minumumPanelWidth;
         private string _panelTabTest;
-        private UIForm _uiForm;
-        private UIFormTab _uiFormTab;
+        private IUIForm _uiForm;
+        private IUIFormTab _uiFormTab;
         private readonly string _uiDefName;
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Habanero.UI.Base
         /// panel - this is taken from the class definitions for the
         /// business object
         /// </summary>
-        public UIForm UIForm
+        public IUIForm UIForm
         {
             get { return _uiForm; }
             set { _uiForm = value; }
@@ -188,7 +188,7 @@ namespace Habanero.UI.Base
         /// for a single tab in the form.  By default, there is one
         /// tab for a form, even if it has not been explicitly defined.
         /// </summary>
-        public UIFormTab UiFormTab
+        public IUIFormTab UiFormTab
         {
             get { return _uiFormTab; }
             set { _uiFormTab = value; }

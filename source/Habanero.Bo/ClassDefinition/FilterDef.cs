@@ -27,13 +27,13 @@ namespace Habanero.BO.ClassDefinition
     /// FilterMode (can be Filter or Search) and a number of columns that the filter controls will be layed out in
     /// using the ColumnLayoutManager (where 0 means a FlowLayoutManager is used).
     /// </summary>
-    public class FilterDef
+    public class FilterDef : IFilterDef
     {
         /// <summary>
         /// The standard constructor, which takes the list of <see cref="FilterPropertyDef"/>s defining the fields of the filter.
         /// </summary>
         /// <param name="filterPropertyDefs">The fields defining what to filter on.</param>
-        public FilterDef(IList<FilterPropertyDef> filterPropertyDefs)
+        public FilterDef(IList<IFilterPropertyDef> filterPropertyDefs)
         {
             FilterPropertyDefs = filterPropertyDefs;
         }
@@ -41,7 +41,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// The list of <see cref="FilterPropertyDef"/>s which define each filter.
         /// </summary>
-        public IList<FilterPropertyDef> FilterPropertyDefs { get; set; }
+        public IList<IFilterPropertyDef> FilterPropertyDefs { get; set; }
 
         /// <summary>
         /// The mode of filtering, where <see cref="FilterModes.Filter"/> means to filter already loaded data, and 

@@ -54,7 +54,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            UIFormField formField = uiDef.GetFormField("prop1");
+            IUIFormField formField = uiDef.GetFormField("prop1");
             //---------------Test Result -----------------------
             Assert.AreEqual("prop1", formField.PropertyName);
         }
@@ -68,7 +68,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            UIFormField formField = uiDef.GetFormField("propDoesNotExist");
+            IUIFormField formField = uiDef.GetFormField("propDoesNotExist");
             //---------------Test Result -----------------------
             Assert.AreEqual(null, formField);
         }
@@ -82,9 +82,9 @@ namespace Habanero.Test.BO.ClassDefinition
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            UIDef clonedDef = uiDef.Clone();
+            IUIDef clonedDef = uiDef.Clone();
             //---------------Test Result -----------------------
-            Assert.IsTrue(uiDef == clonedDef);
+            Assert.IsTrue(uiDef == (UIDef) clonedDef);
             Assert.IsTrue(uiDef.Equals(clonedDef));
             Assert.AreNotSame(uiDef, clonedDef);
 
@@ -101,9 +101,9 @@ namespace Habanero.Test.BO.ClassDefinition
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            UIDef clonedDef = uiDef.Clone();
+            IUIDef clonedDef = uiDef.Clone();
             //---------------Test Result -----------------------
-            Assert.IsTrue(uiDef == clonedDef);
+            Assert.IsTrue(uiDef == (UIDef) clonedDef);
             Assert.IsTrue(uiDef.Equals(clonedDef));
             Assert.AreNotSame(uiDef, clonedDef);
 
@@ -122,10 +122,10 @@ namespace Habanero.Test.BO.ClassDefinition
 
             UIDef uiDef = new UIDef("Name", uiForm, uiGrid);
             //---------------Execute Test ----------------------
-            UIDef clonedDef = uiDef.Clone();
+            IUIDef clonedDef = uiDef.Clone();
 
             //---------------Test Result -----------------------
-            Assert.IsTrue(uiDef == clonedDef);
+            Assert.IsTrue(uiDef == (UIDef) clonedDef);
             Assert.IsTrue(uiDef.Equals(clonedDef));
             Assert.AreNotSame(uiDef, clonedDef);
 
@@ -138,7 +138,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             UIGridColumn uiGridCol =
                 new UIGridColumn
-                    ("Head", "Prop", "control", "Assembly", true, 100, UIGridColumn.PropAlignment.centre, null);
+                    ("Head", "Prop", "control", "Assembly", true, 100, PropAlignment.centre, null);
             UIGrid uiGrid = new UIGrid();
             uiGrid.SortColumn = "Prop";
             uiGrid.Add(uiGridCol);
@@ -195,8 +195,8 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private static UIForm GetUiForm()
         {
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);

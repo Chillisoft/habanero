@@ -27,9 +27,9 @@ namespace Habanero.BO.ClassDefinition
     /// <summary>
     /// Manages a collection of user interface definitions
     /// </summary>
-    public class UIDefCol :  IEnumerable<UIDef>
+    public class UIDefCol :  IEnumerable<IUIDef>
     {
-        private readonly Dictionary<string, UIDef> _defs;
+        private readonly Dictionary<string, IUIDef> _defs;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
@@ -37,14 +37,14 @@ namespace Habanero.BO.ClassDefinition
         public UIDefCol()
         {
             //_defs = new Hashtable();
-            _defs = new Dictionary<string, UIDef>();
+            _defs = new Dictionary<string, IUIDef>();
         }
 
         /// <summary>
         /// Adds a UI definition to the collection
         /// </summary>
         /// <param name="def">The UI definition to add</param>
-        public void Add(UIDef def)
+        public void Add(IUIDef def)
         {
             if (Contains(def.Name))
             {
@@ -96,7 +96,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="name">The name of the definition to access</param>
         /// <returns>Returns the definition with the name specified</returns>
-        public UIDef this[string name]
+        public IUIDef this[string name]
         {
             get
             {
@@ -141,7 +141,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _classDef; }
             internal set { _classDef = value;
-                foreach (KeyValuePair<string, UIDef> def in _defs)
+                foreach (KeyValuePair<string, IUIDef> def in _defs)
                 {
                     def.Value.ClassDef = value;
                 }}
@@ -262,7 +262,7 @@ namespace Habanero.BO.ClassDefinition
         ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
         ///</returns>
         ///<filterpriority>1</filterpriority>
-        IEnumerator<UIDef> IEnumerable<UIDef>.GetEnumerator()
+        IEnumerator<IUIDef> IEnumerable<IUIDef>.GetEnumerator()
         {
             return _defs.Values.GetEnumerator();
         }

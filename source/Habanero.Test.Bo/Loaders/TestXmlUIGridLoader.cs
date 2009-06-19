@@ -41,7 +41,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadPropertyCollection()
         {
-            UIGrid def =
+            IUIGrid def =
                 loader.LoadUIGridDef(
                     @"
 					<grid>
@@ -57,7 +57,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestSortColumn()
         {
-            UIGrid def =
+            IUIGrid def =
                 loader.LoadUIGridDef(
                     @"
 					<grid sortColumn=""testpropname1 desc"">
@@ -86,8 +86,8 @@ namespace Habanero.Test.BO.Loaders
 					</grid>", "testpropname1", "testlabel1");
            
             //---------------Execute Test ----------------------
-            UIGrid def = loader.LoadUIGridDef(gridDefXml);
-            FilterDef filterDef = def.FilterDef;
+            IUIGrid def = loader.LoadUIGridDef(gridDefXml);
+            IFilterDef filterDef = def.FilterDef;
             //---------------Test Result -----------------------
 
             Assert.IsNotNull(filterDef);

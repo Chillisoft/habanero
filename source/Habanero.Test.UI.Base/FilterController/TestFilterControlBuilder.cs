@@ -365,7 +365,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
         private static FilterDef CreateFilterDef_1Property(string propName)
         {
-            return new FilterDef(new List<FilterPropertyDef> {CreateFilterPropertyDef(propName)});
+            return new FilterDef(new List<IFilterPropertyDef> {CreateFilterPropertyDef(propName)});
         }
 
         private static FilterPropertyDef CreateFilterPropertyDef()
@@ -400,7 +400,7 @@ namespace Habanero.Test.UI.Base.FilterController
             (string filterType, string filterTypeAssembly)
         {
             return new FilterDef
-                (new List<FilterPropertyDef> {CreateFilterPropertyDefWithType(filterType, filterTypeAssembly)});
+                (new List<IFilterPropertyDef> {CreateFilterPropertyDefWithType(filterType, filterTypeAssembly)});
         }
 
         private static FilterPropertyDef CreateFilterPropertyDefWithType(string filterType, string filterTypeAssembly)
@@ -427,7 +427,7 @@ namespace Habanero.Test.UI.Base.FilterController
             (string propName1, string filterType1, string propName2, string filterType2)
         {
             return new FilterDef
-                (new List<FilterPropertyDef>
+                (new List<IFilterPropertyDef>
                      {
                          CreateFilterPropertyDef(propName1, filterType1, "", FilterClauseOperator.OpEquals),
                          CreateFilterPropertyDef(propName2, filterType2, "", FilterClauseOperator.OpLike)
@@ -440,7 +440,7 @@ namespace Habanero.Test.UI.Base.FilterController
             FilterPropertyDef filterPropertyDef2 = CreateFilterPropertyDef();
             FilterPropertyDef filterPropertyDef3 = CreateFilterPropertyDef();
             return new FilterDef
-                (new List<FilterPropertyDef> {filterPropertyDef1, filterPropertyDef2, filterPropertyDef3});
+                (new List<IFilterPropertyDef> {filterPropertyDef1, filterPropertyDef2, filterPropertyDef3});
         }
     }
 

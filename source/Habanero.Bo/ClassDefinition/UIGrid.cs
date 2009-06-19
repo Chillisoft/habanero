@@ -26,7 +26,7 @@ namespace Habanero.BO.ClassDefinition
     /// Manages property definitions for a user interface grid, as specified
     /// in the class definitions xml file
     /// </summary>
-    public class UIGrid : ICollection
+    public class UIGrid : IUIGrid
     {
         private readonly ArrayList _list;
 
@@ -42,7 +42,7 @@ namespace Habanero.BO.ClassDefinition
         /// Adds a grid property definition
         /// </summary>
         /// <param name="prop">The grid property definition</param>
-        public void Add(UIGridColumn prop)
+        public void Add(IUIGridColumn prop)
         {
             _list.Add(prop);
         }
@@ -51,7 +51,7 @@ namespace Habanero.BO.ClassDefinition
         /// Removes a grid property definition
         /// </summary>
         /// <param name="prop">The grid property definition</param>
-        public void Remove(UIGridColumn prop)
+        public void Remove(IUIGridColumn prop)
         {
             _list.Remove(prop);
         }
@@ -60,7 +60,7 @@ namespace Habanero.BO.ClassDefinition
         /// Checks if a grid property definition is in the Grid definition
         /// </summary>
         /// <param name="prop">The grid property definition</param>
-        public bool Contains(UIGridColumn prop)
+        public bool Contains(IUIGridColumn prop)
         {
             return _list.Contains(prop);
         }
@@ -72,7 +72,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="index">The index position to access</param>
         /// <returns>Returns the property definition at the index position
         /// specified</returns>
-        public UIGridColumn this[int index]
+        public IUIGridColumn this[int index]
         {
             get { return (UIGridColumn)_list[index]; }
         }		
@@ -83,7 +83,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="propName">The index position to access</param>
         /// <returns>Returns the property definition at the index position
         /// specified</returns>
-        public UIGridColumn this[string propName]
+        public IUIGridColumn this[string propName]
         {
             get
             {
@@ -155,7 +155,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// The definition of the filter that will be used for this grid.
         ///</summary>
-        public FilterDef FilterDef { get; set; }
+        public IFilterDef FilterDef { get; set; }
 
 
         ///<summary>
@@ -235,7 +235,7 @@ namespace Habanero.BO.ClassDefinition
         /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
         ///</summary>
         ///<returns>a new collection that is a shallow copy of this collection</returns>
-        public UIGrid Clone()
+        public IUIGrid Clone()
         {
             UIGrid newUIGrid = new UIGrid();
             newUIGrid.SortColumn = this.SortColumn;
@@ -250,7 +250,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="obj">The object being compared to</param>
         /// <returns></returns>
-        public bool Equals(UIGrid obj)
+        public bool Equals(IUIGrid obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;

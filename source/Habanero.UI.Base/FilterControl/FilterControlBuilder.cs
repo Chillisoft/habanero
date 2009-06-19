@@ -58,7 +58,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="filterDef">The <see cref="FilterDef"/> defining what filter fields are required</param>
         /// <param name="filterControl">The <see cref="IFilterControl"/> to place the filter controls on.</param>
-        public void BuildFilterControl(FilterDef filterDef, IFilterControl filterControl)
+        public void BuildFilterControl(IFilterDef filterDef, IFilterControl filterControl)
         {
             filterControl.FilterControls.Clear();
             filterControl.FilterMode = filterDef.FilterMode;
@@ -77,7 +77,7 @@ namespace Habanero.UI.Base
 
         }
 
-        private void SetupLayoutManager(IFilterControl filterControl, FilterDef filterDef)
+        private void SetupLayoutManager(IFilterControl filterControl, IFilterDef filterDef)
         {
             if (filterDef.Columns <= 0) return;
             GridLayoutManager layoutManager = new GridLayoutManager(filterControl.FilterPanel, _controlFactory);

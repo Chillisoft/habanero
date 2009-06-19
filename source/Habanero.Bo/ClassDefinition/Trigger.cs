@@ -34,7 +34,7 @@ namespace Habanero.BO.ClassDefinition
     /// readonly or adding attribute/parameter in field for enabled (problem is
     /// you can't have something disabled initially so you enable it using a
     /// trigger)
-    public class Trigger
+    public class Trigger : ITrigger
     {
         private string _triggeredBy;
         private string _target;

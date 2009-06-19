@@ -298,9 +298,9 @@ namespace Habanero.UI.Win
     /// </summary>
     internal static class BOEditorControlUtils
     {
-        private static UIForm GetUiForm(IClassDef classDef, string uiDefName)
+        private static IUIForm GetUiForm(IClassDef classDef, string uiDefName)
         {
-            UIForm uiForm;
+            IUIForm uiForm;
             try
             {
                 uiForm = ((ClassDef) classDef).UIDefCol[uiDefName].UIForm;
@@ -325,7 +325,7 @@ namespace Habanero.UI.Win
         internal static IPanelInfo CreatePanelInfo
             (IControlFactory controlFactory, IClassDef classDef, string uiDefName, IBOEditorControl iboEditorControl)
         {
-            UIForm uiForm = GetUiForm(classDef, uiDefName);
+            IUIForm uiForm = GetUiForm(classDef, uiDefName);
             PanelBuilder panelBuilder = new PanelBuilder(controlFactory);
             IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(uiForm);
             BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(iboEditorControl);

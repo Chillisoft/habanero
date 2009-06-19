@@ -753,8 +753,8 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
             Assert.AreEqual("default", grid.UiDefName);
@@ -807,8 +807,8 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = LoadMyBoDefaultClassDef();
             const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol[alternateUIDefName];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(1, uiGridDef.Count, "1 defined column in the alternateUIDef");
             //---------------Execute Test ----------------------
@@ -830,8 +830,8 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = LoadMyBoDefaultClassDef();
             const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol[alternateUIDefName];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(1, uiGridDef.Count, "1 defined column in the alternateUIDef");
             //---------------Execute Test ----------------------
@@ -852,8 +852,8 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             ClassDef classDef = LoadMyBoDefaultClassDef();
             //---------------Assert Preconditions---------------
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
             Assert.AreEqual("default", grid.UiDefName);
             Assert.IsNull(grid.ClassDef);
@@ -892,8 +892,8 @@ namespace Habanero.Test.UI.Base
 
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             ClassDef classDef = LoadMyBoDefaultClassDef();
-            UIDef uiDef = classDef.UIDefCol["default"];
-            UIGrid uiGridDef = uiDef.UIGrid;
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(2, uiGridDef.Count, "Precondition: 1 defined column in the default def");
             //---------------Execute Test ----------------------

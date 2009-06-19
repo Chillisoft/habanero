@@ -42,7 +42,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestDefaults()
         {
-            UIGridColumn uiProp =
+            IUIGridColumn uiProp =
                 loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" />");
             Assert.AreEqual(100, uiProp.Width);
         }
@@ -50,7 +50,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestSimpleUIProperty()
         {
-            UIGridColumn uiProp =
+            IUIGridColumn uiProp =
                 loader.LoadUIProperty(
                     @"<column heading=""testheading"" property=""testpropname"" type=""DataGridViewCheckBoxColumn"" width=""40"" />");
             Assert.AreEqual("testheading", uiProp.Heading);
@@ -62,7 +62,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestNoDefaultColumnType()
         {
             //---------------Set up test pack-------------------
-            UIGridColumn uiProp =
+            IUIGridColumn uiProp =
                loader.LoadUIProperty(
                    @"<column heading=""testheading"" property=""testpropname""   />");
             //---------------Verify test pack-------------------
@@ -85,7 +85,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestCustomColumnType()
         {
-            UIGridColumn uiProp =
+            IUIGridColumn uiProp =
                 loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""MyBO"" assembly=""Habanero.Test"" />");
             Assert.IsNull(uiProp.GridControlType);
             Assert.AreEqual("MyBO",uiProp.GridControlTypeName);
@@ -95,7 +95,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestAutomaticHeadingCreation()
         {
-            UIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" />");
+            IUIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" />");
             Assert.AreEqual(null, uiProp.Heading);
             Assert.AreEqual("testpropname", uiProp.GetHeading());
 
@@ -107,20 +107,20 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestAlignment()
         {
-            UIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" />");
-            Assert.AreEqual(UIGridColumn.PropAlignment.left, uiProp.Alignment);
+            IUIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" />");
+            Assert.AreEqual(PropAlignment.left, uiProp.Alignment);
 
             uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""left"" />");
-            Assert.AreEqual(UIGridColumn.PropAlignment.left, uiProp.Alignment);
+            Assert.AreEqual(PropAlignment.left, uiProp.Alignment);
 
             uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""right"" />");
-            Assert.AreEqual(UIGridColumn.PropAlignment.right, uiProp.Alignment);
+            Assert.AreEqual(PropAlignment.right, uiProp.Alignment);
 
             uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""centre"" />");
-            Assert.AreEqual(UIGridColumn.PropAlignment.centre, uiProp.Alignment);
+            Assert.AreEqual(PropAlignment.centre, uiProp.Alignment);
 
             uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""center"" />");
-            Assert.AreEqual(UIGridColumn.PropAlignment.centre, uiProp.Alignment);
+            Assert.AreEqual(PropAlignment.centre, uiProp.Alignment);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
@@ -158,7 +158,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyAttributes()
         {
-            UIGridColumn uiProp =
+            IUIGridColumn uiProp =
                 loader.LoadUIProperty(
                     @"<column heading=""testlabel"" property=""testpropname"" ><parameter name=""TestAtt"" value=""TestValue"" /><parameter name=""TestAtt2"" value=""TestValue2"" /></column>");
             Assert.AreEqual("TestValue", uiProp.GetParameterValue("TestAtt"));

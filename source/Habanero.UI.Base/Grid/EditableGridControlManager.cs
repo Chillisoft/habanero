@@ -63,7 +63,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IGridControl.Initialise(IClassDef,UIGrid,string)"/>
         /// </summary>
-        public void Initialise(IClassDef classDef, UIGrid uiGridDef, string uiDefName)
+        public void Initialise(IClassDef classDef, IUIGrid uiGridDef, string uiDefName)
         {
             _gridInitialiser.InitialiseGrid(classDef, uiGridDef, uiDefName);
         }

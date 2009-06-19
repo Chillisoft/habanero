@@ -83,14 +83,14 @@ namespace Habanero.UI.Base
         /// panel - this is taken from the class definitions for the
         /// business object
         /// </summary>
-        UIForm UIForm { get; set; }
+        IUIForm UIForm { get; set; }
 
         /// <summary>
         /// Gets the UIFormTab definition used to construct the panel
         /// for a single tab in the form.  By default, there is one
         /// tab for a form, even if it has not been explicitly defined.
         /// </summary>
-        UIFormTab UiFormTab { get; set; }
+        IUIFormTab UiFormTab { get; set; }
 
         /// <summary>
         /// Gets the UI definition name as set in the "name" attribute.

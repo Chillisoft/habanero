@@ -56,7 +56,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="xmlUIFormGrid">The xml string</param>
         /// <returns>Returns a UIFormGrid object</returns>
-        public UIFormGrid LoadUIFormGrid(string xmlUIFormGrid)
+        public IUIFormGrid LoadUIFormGrid(string xmlUIFormGrid)
         {
             return this.LoadUIFormGrid(this.CreateXmlElement(xmlUIFormGrid));
         }
@@ -66,9 +66,9 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="xmlUIFormGrid">The xml element</param>
         /// <returns>Returns a UIFormGrid object</returns>
-        public UIFormGrid LoadUIFormGrid(XmlElement xmlUIFormGrid)
+        public IUIFormGrid LoadUIFormGrid(XmlElement xmlUIFormGrid)
         {
-            return (UIFormGrid) Load(xmlUIFormGrid);
+            return (IUIFormGrid) Load(xmlUIFormGrid);
         }
 
         /// <summary>

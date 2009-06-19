@@ -385,7 +385,7 @@ namespace Habanero.Test
 
             protected abstract void SetupTypeNameVariables();
 
-            public UIForm GetSimpleUIFormDef()
+            public IUIForm GetSimpleUIFormDef()
             {
                XmlUIFormLoader loader = new XmlUIFormLoader();
                return 
@@ -399,7 +399,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private static UIForm GetSimpleUIFormDefWithReadWriteRuleValueReadOnly()
+            private static IUIForm GetSimpleUIFormDefWithReadWriteRuleValueReadOnly()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -415,7 +415,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIForm GetSimpleUIFormDef_NoColumnWidth()
+            public IUIForm GetSimpleUIFormDef_NoColumnWidth()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -429,7 +429,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIForm GetSimpleUIFormTabOneFieldRowAndColSpan()
+            public IUIForm GetSimpleUIFormTabOneFieldRowAndColSpan()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -449,7 +449,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIForm GetSimpleUIFormDefInt()
+            public IUIForm GetSimpleUIFormDefInt()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -463,7 +463,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIForm GetSimpleUIFormDefTwoRows()
+            public IUIForm GetSimpleUIFormDefTwoRows()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -478,7 +478,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIForm GetSimpleUIFormDef1Row2Columns()
+            public IUIForm GetSimpleUIFormDef1Row2Columns()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -495,7 +495,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIForm GetSimpleUIFormDef2Row2Columns1RowWithMoreControls()
+            public IUIForm GetSimpleUIFormDef2Row2Columns1RowWithMoreControls()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -512,7 +512,7 @@ namespace Habanero.Test
 							</tab>
 						</form>");
             }
-            public UIForm GetSimpleUIFormDef_1Column3RowsWithRowSpan()
+            public IUIForm GetSimpleUIFormDef_1Column3RowsWithRowSpan()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -529,7 +529,7 @@ namespace Habanero.Test
 							</tab>
 						</form>");
             }
-            public UIForm GetSimpleUIFormDef1Row2Columns1Row()
+            public IUIForm GetSimpleUIFormDef1Row2Columns1Row()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -546,7 +546,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIForm GetSimpleUIFormDef1Row1Column1Row()
+            public IUIForm GetSimpleUIFormDef1Row1Column1Row()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -560,7 +560,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private static UIForm GetSimpleUIFormDef1Row3Columns()
+            private static IUIForm GetSimpleUIFormDef1Row3Columns()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -580,7 +580,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private static UIForm GetSimpleUIFormDefTwoRowsOneHasCompulsoryProp()
+            private static IUIForm GetSimpleUIFormDefTwoRowsOneHasCompulsoryProp()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -595,7 +595,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private static UIForm GetSimpleUIFormOneFieldHasToolTip()
+            private static IUIForm GetSimpleUIFormOneFieldHasToolTip()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -610,7 +610,7 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private static UIForm GetSimpleUIFormDef_3Columns_1Column_2RowSpan()
+            private static IUIForm GetSimpleUIFormDef_3Columns_1Column_2RowSpan()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -634,7 +634,7 @@ namespace Habanero.Test
                             </form>");
             }
 
-            private static UIForm GetSimpleUIFormDef_2Columns_2_1_ColSpan()
+            private static IUIForm GetSimpleUIFormDef_2Columns_2_1_ColSpan()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -665,7 +665,7 @@ namespace Habanero.Test
                 Hashtable propertyAttributes = new Hashtable();
                 col.Add(
                     new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null,
-                                       propertyAttributes, null, UIFormField.LayoutStyle.Label));
+                                       propertyAttributes, null, LayoutStyle.Label));
                 tab.Add(col);
                 def.Add(tab);
                 return def;
@@ -682,7 +682,7 @@ namespace Habanero.Test
                 propertyAttributes.Add("numLines", 3);
                 col.Add(
                     new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null,
-                                       propertyAttributes, null, UIFormField.LayoutStyle.Label));
+                                       propertyAttributes, null, LayoutStyle.Label));
                 tab.Add(col);
                 def.Add(tab);
                 return def;
@@ -693,7 +693,7 @@ namespace Habanero.Test
                 UIGrid col = new UIGrid();
                 col.Add(
                     new UIGridColumn("Text:", "SampleText", "DataGridViewTextBoxColumn", null, true, 100,
-                                       UIGridColumn.PropAlignment.left, null));
+                                       PropAlignment.left, null));
                 return col;
             }
 
@@ -704,12 +704,12 @@ namespace Habanero.Test
                 def.Width = 350;
                 UIFormTab tab = new UIFormTab();
                 UIFormColumn col = new UIFormColumn(100);
-                col.Add(new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                col.Add(new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, LayoutStyle.Label));
                 col.Add(
                     new UIFormField("Date:", "SampleDate", _dateTimePickerTypeName, _dateTimePickerAssemblyName, _dateTimePickerMapperName, "", true, null,
-                                       new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                                       new Hashtable(), null, LayoutStyle.Label));
                 col.Add(
-                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, LayoutStyle.Label));
                 tab.Add(col);
                 def.Add(tab);
                 return def;
@@ -724,7 +724,7 @@ namespace Habanero.Test
                 def.Add(tab);
                 UIFormColumn col = new UIFormColumn(100);
                 tab.Add(col);
-                col.Add(new UIFormField("Private Text:", "SampleTextPrivate", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                col.Add(new UIFormField("Private Text:", "SampleTextPrivate", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, LayoutStyle.Label));
                 return def;
             }
 
@@ -737,7 +737,7 @@ namespace Habanero.Test
                 def.Add(tab);
                 UIFormColumn col = new UIFormColumn(100);
                 tab.Add(col);
-                col.Add(new UIFormField("Described Text:", "SampleTextDescribed", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, toolTipText, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                col.Add(new UIFormField("Described Text:", "SampleTextDescribed", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, toolTipText, new Hashtable(), null, LayoutStyle.Label));
                 return def;
             }
 
@@ -750,12 +750,12 @@ namespace Habanero.Test
                 UIFormColumn col1 = new UIFormColumn(100);
                 UIFormColumn col2 = new UIFormColumn(150);
                 col1.Add(
-                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, LayoutStyle.Label));
                 col1.Add(
                     new UIFormField("Date:", "SampleDate", _dateTimePickerTypeName, _dateTimePickerAssemblyName, _dateTimePickerMapperName, "", true, null,
-                                       new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                                       new Hashtable(), null, LayoutStyle.Label));
                 col2.Add(
-                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, LayoutStyle.Label));
                 tab.Add(col1);
                 tab.Add(col2);
                 def.Add(tab);
@@ -773,12 +773,12 @@ namespace Habanero.Test
                 UIFormColumn col1 = new UIFormColumn(100);
                 UIFormColumn col2 = new UIFormColumn(150);
                 col1.Add(
-                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, LayoutStyle.Label));
                 col1.Add(
                     new UIFormField("Date:", "SampleDate", _dateTimePickerTypeName, _dateTimePickerAssemblyName, _dateTimePickerMapperName, "", true, null,
-                                       new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                                       new Hashtable(), null, LayoutStyle.Label));
                 col2.Add(
-                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, LayoutStyle.Label));
                 tab1.Add(col1);
                 tab2.Add(col2);
                 def.Add(tab1);
@@ -797,13 +797,13 @@ namespace Habanero.Test
                 propertyAttributes.Add("numLines", 3);
                 propertyAttributes.Add("colSpan", 2);
                 col.Add(
-                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, propertyAttributes, null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, propertyAttributes, null, LayoutStyle.Label));
                 col.Add(
-                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, new Hashtable(), null, LayoutStyle.Label));
                 tab.Add(col);
                 UIFormColumn col2 = new UIFormColumn(100);
                 col2.Add(
-                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, new Hashtable(), null, LayoutStyle.Label));
                 tab.Add(col2);
                 def.Add(tab);
                 return def;
@@ -820,13 +820,13 @@ namespace Habanero.Test
                 propertyAttributes.Add("numLines", 3);
                 propertyAttributes.Add("rowSpan", 2);
                 col.Add(
-                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, propertyAttributes, null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, propertyAttributes, null, LayoutStyle.Label));
                 tab.Add(col);
                 UIFormColumn col2 = new UIFormColumn(100);
                 col2.Add(
-                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, new Hashtable(), null, LayoutStyle.Label));
                 col2.Add(
-                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null, new Hashtable(), null, LayoutStyle.Label));
                 tab.Add(col2);
                 def.Add(tab);
                 return def;
@@ -842,9 +842,9 @@ namespace Habanero.Test
                 Hashtable propertyAttributes = new Hashtable();
                 propertyAttributes.Add("readWriteRule", "ReadOnly");
                 col.Add(
-                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, propertyAttributes, null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, propertyAttributes, null, LayoutStyle.Label));
                 col.Add(
-                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, LayoutStyle.Label));
                 tab.Add(col);
                 def.Add(tab);
 
@@ -860,7 +860,7 @@ namespace Habanero.Test
                 UIFormColumn col = new UIFormColumn(100);
                 Hashtable propertyAttributes = new Hashtable();
                 propertyAttributes.Add(attributeName, attributeValue);
-                col.Add(new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, mapperTypeName, mapperAssemblyName, false, null, propertyAttributes, null, UIFormField.LayoutStyle.Label));
+                col.Add(new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, mapperTypeName, mapperAssemblyName, false, null, propertyAttributes, null, LayoutStyle.Label));
                 tab.Add(col);
                 def.Add(tab);
                 return def;
@@ -876,9 +876,9 @@ namespace Habanero.Test
                 Hashtable propertyAttributes = new Hashtable();
                 propertyAttributes.Add("readWriteRule", "WriteNew");
                 col.Add(
-                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, propertyAttributes, null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, propertyAttributes, null, LayoutStyle.Label));
                 col.Add(
-                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, UIFormField.LayoutStyle.Label));
+                    new UIFormField("Text2:", "SampleText2", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", true, null, new Hashtable(), null, LayoutStyle.Label));
                 tab.Add(col);
                 def.Add(tab);
 
@@ -886,93 +886,93 @@ namespace Habanero.Test
                 return def;
             }
 
-            public UIFormTab GetFormTabOneField()
+            public IUIFormTab GetFormTabOneField()
             {
                 return GetSimpleUIFormDef()[0];
             }
 
-            public UIFormTab GetFormTabOneIntegerField()
+            public IUIFormTab GetFormTabOneIntegerField()
             {
                 return GetSimpleUIFormDefInt()[0];
             }
 
-            public UIFormTab GetFormTabTwoFields()
+            public IUIFormTab GetFormTabTwoFields()
             {
                 return GetSimpleUIFormDefTwoRows()[0];
             }
 
-            public UIFormTab GetFormTabTwoColumns_1_1()
+            public IUIFormTab GetFormTabTwoColumns_1_1()
             {
                 return GetSimpleUIFormDef1Row2Columns()[0];
             }
 
-            public UIFormTab GetFormTabTwoColumns_1_2()
+            public IUIFormTab GetFormTabTwoColumns_1_2()
             {
                 return GetSimpleUIFormDef2Row2Columns1RowWithMoreControls()[0];
             }
 
-            public UIFormTab GetFormTabTwoColumnsOneRowWithWidths()
+            public IUIFormTab GetFormTabTwoColumnsOneRowWithWidths()
             {
                 return GetSimpleUIFormDef1Row2Columns1Row()[0];
             }
 
-            public UIFormTab GetFormTabOneColumnOneRowWithWidth()
+            public IUIFormTab GetFormTabOneColumnOneRowWithWidth()
             {
                 return GetSimpleUIFormDef1Row1Column1Row()[0];
             }
 
-            public UIFormTab GetFormTabThreeColumnsOneRowWithWidths()
+            public IUIFormTab GetFormTabThreeColumnsOneRowWithWidths()
             {
                 return GetSimpleUIFormDef1Row3Columns()[0];
             }
 
 
-            public UIFormTab GetFormTabOneFieldNoColumnWidth()
+            public IUIFormTab GetFormTabOneFieldNoColumnWidth()
             {
                 return GetSimpleUIFormDef_NoColumnWidth()[0];
             }
 
-            public UIFormTab GetFormTabThreeColumnsOneColumnWithRowSpan()
+            public IUIFormTab GetFormTabThreeColumnsOneColumnWithRowSpan()
             {
                 return GetSimpleUIFormDef_3Columns_1Column_2RowSpan()[0];
             }
 
-            public UIFormTab GetFormTabOneColumnThreeRowsWithRowSpan()
+            public IUIFormTab GetFormTabOneColumnThreeRowsWithRowSpan()
             {
                 return GetSimpleUIFormDef_1Column3RowsWithRowSpan()[0];
             }
 
 
-            public UIFormTab GetFormTabTwoColumns_2_1_ColSpan()
+            public IUIFormTab GetFormTabTwoColumns_2_1_ColSpan()
             {
                 return GetSimpleUIFormDef_2Columns_2_1_ColSpan()[0];
             }
 
 
-            public UIFormTab GetFormTabTwoFields_OneHasCompulsoryProp()
+            public IUIFormTab GetFormTabTwoFields_OneHasCompulsoryProp()
             {
                 return GetSimpleUIFormDefTwoRowsOneHasCompulsoryProp()[0];
             }
 
-            public UIFormTab GetFormTabOneField_ReadWriteParameter_ReadOnly()
+            public IUIFormTab GetFormTabOneField_ReadWriteParameter_ReadOnly()
             {
                 return GetSimpleUIFormDefWithReadWriteRuleValueReadOnly()[0];
                 
             }
 
 
-            public UIFormTab GetFormTabTwoFields_OneHasToolTip()
+            public IUIFormTab GetFormTabTwoFields_OneHasToolTip()
             {
                 return GetSimpleUIFormOneFieldHasToolTip()[0];
             }
 
 
-            public UIFormTab GetFormTabTwoFieldsWithNoAlignment()
+            public IUIFormTab GetFormTabTwoFieldsWithNoAlignment()
             {
                 return GetSimpleUIFormDef_NoAlignment()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_NoAlignment()
+            private static IUIForm GetSimpleUIFormDef_NoAlignment()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -987,12 +987,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldWithRightAlignment()
+            public IUIFormTab GetFormTabOneFieldWithRightAlignment()
             {
                 return GetSimpleUIFormDef_RightAlignment()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_RightAlignment()
+            private static IUIForm GetSimpleUIFormDef_RightAlignment()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1008,12 +1008,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldWithCenterAlignment()
+            public IUIFormTab GetFormTabOneFieldWithCenterAlignment()
             {
                 return GetSimpleUIFormDef_CenterAlignment()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_CenterAlignment()
+            private static IUIForm GetSimpleUIFormDef_CenterAlignment()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1029,12 +1029,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldWithInvalidAlignment()
+            public IUIFormTab GetFormTabOneFieldWithInvalidAlignment()
             {
                 return GetSimpleUIFormDef_InvalidAlignment()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_InvalidAlignment()
+            private static IUIForm GetSimpleUIFormDef_InvalidAlignment()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1050,12 +1050,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldsWithAlignment_NumericUpDown()
+            public IUIFormTab GetFormTabOneFieldsWithAlignment_NumericUpDown()
             {
                 return GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()
+            private static IUIForm GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1080,12 +1080,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldsWithNumericUpDown()
+            public IUIFormTab GetFormTabOneFieldsWithNumericUpDown()
             {
                 return GetSimpleUIFormDef_WithNumericUpDown()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_WithNumericUpDown()
+            private static IUIForm GetSimpleUIFormDef_WithNumericUpDown()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1102,12 +1102,12 @@ namespace Habanero.Test
             }
 
 
-            public UIFormTab GetFormTabOneFieldWithMultiLineParameter()
+            public IUIFormTab GetFormTabOneFieldWithMultiLineParameter()
             {
                 return GetSimpleUIFormDef_WithMultiLineParameter()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_WithMultiLineParameter()
+            private static IUIForm GetSimpleUIFormDef_WithMultiLineParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1123,12 +1123,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldWithInvalidMultiLineParameter()
+            public IUIFormTab GetFormTabOneFieldWithInvalidMultiLineParameter()
             {
                 return GetSimpleUIFormDef_WithInvalidMultiLineParameter()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_WithInvalidMultiLineParameter()
+            private static IUIForm GetSimpleUIFormDef_WithInvalidMultiLineParameter()
             {
                
                    XmlUIFormLoader loader = new XmlUIFormLoader();
@@ -1145,12 +1145,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldWithDecimalPlacesParameter()
+            public IUIFormTab GetFormTabOneFieldWithDecimalPlacesParameter()
             {
                 return GetSimpleUIFormDef_WithDecimalPlacesParameter()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_WithDecimalPlacesParameter()
+            private static IUIForm GetSimpleUIFormDef_WithDecimalPlacesParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1166,12 +1166,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldWithOptionsParameter()
+            public IUIFormTab GetFormTabOneFieldWithOptionsParameter()
             {
                 return GetSimpleUIFormDef_WithOptionsParameter()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_WithOptionsParameter()
+            private static IUIForm GetSimpleUIFormDef_WithOptionsParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1187,12 +1187,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldWithIsEmailParameter()
+            public IUIFormTab GetFormTabOneFieldWithIsEmailParameter()
             {
                 return GetSimpleUIFormDef_WithIsEmailParameter()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_WithIsEmailParameter()
+            private static IUIForm GetSimpleUIFormDef_WithIsEmailParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1211,12 +1211,12 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public UIFormTab GetFormTabOneFieldWithDateFormatParameter()
+            public IUIFormTab GetFormTabOneFieldWithDateFormatParameter()
             {
                 return GetSimpleUIFormDef_WithDateFormatParameter()[0];
             }
 
-            private static UIForm GetSimpleUIFormDef_WithDateFormatParameter()
+            private static IUIForm GetSimpleUIFormDef_WithDateFormatParameter()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
                 return
@@ -1234,7 +1234,7 @@ namespace Habanero.Test
 							</tab>
 						</form>");
             }
-            public UIFormTab GetFormTabOneFieldHasRowAndColSpan()
+            public IUIFormTab GetFormTabOneFieldHasRowAndColSpan()
             {
                 return GetSimpleUIFormTabOneFieldRowAndColSpan()[0];
             }

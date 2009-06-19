@@ -38,7 +38,7 @@ namespace Habanero.UI.Base
     {
 //        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
         private BusinessObject _currentBusinessObject;
-        private readonly UIForm _uiForm;
+        private readonly IUIForm _uiForm;
         private IControlHabanero _firstControl;
         private readonly IControlFactory _controlFactory;
         private readonly string _uiDefName;
@@ -78,7 +78,7 @@ namespace Habanero.UI.Base
             _controlFactory = controlFactory;
             BOMapper mapper = new BOMapper(bo);
 
-            UIDef uiDef = mapper.GetUIDef(uiDefName);
+            IUIDef uiDef = mapper.GetUIDef(uiDefName);
             if (uiDef == null)
             {
                 string errMessage = "Cannot create a panel factory for '" + bo.ClassDef.ClassName
@@ -195,7 +195,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="uiFormTab">The UIFormTab object</param>
         /// <returns>Returns the object containing the new panel</returns>
-        private IPanelFactoryInfo CreateOnePanel(UIFormTab uiFormTab)
+        private IPanelFactoryInfo CreateOnePanel(IUIFormTab uiFormTab)
         {
             if (uiFormTab.UIFormGrid != null)
             {
@@ -574,7 +574,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="formGrid">The grid to fill</param>
         /// <returns>Returns the object containing the panel</returns>
-        private PanelFactoryInfo CreatePanelWithGrid(UIFormGrid formGrid)
+        private PanelFactoryInfo CreatePanelWithGrid(IUIFormGrid formGrid)
         {
             IEditableGridControl myGrid = _controlFactory.CreateEditableGridControl();
 

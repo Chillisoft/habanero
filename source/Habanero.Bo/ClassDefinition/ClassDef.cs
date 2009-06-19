@@ -914,7 +914,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="uiDefName">The UI name in question</param>
         /// <returns>Returns the UI definition if found, or null if not found</returns>
-        public UIDef GetUIDef(string uiDefName)
+        public IUIDef GetUIDef(string uiDefName)
         {
             ClassDef currentClassDef = this;
             while (currentClassDef != null)

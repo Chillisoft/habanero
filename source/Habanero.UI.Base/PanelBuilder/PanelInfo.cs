@@ -129,7 +129,7 @@ namespace Habanero.UI.Base
         /// for a single tab in the form.  By default, there is one
         /// tab for a form, even if it has not been explicitly defined.
         /// </summary>
-        public UIFormTab UIFormTab { get; internal set; }
+        public IUIFormTab UIFormTab { get; internal set; }
 
         /// <summary>
         /// Gets and sets the minimum height for the panel
@@ -141,7 +141,7 @@ namespace Habanero.UI.Base
         /// panel - this is taken from the class definitions for the
         /// business object
         /// </summary>
-        public UIForm UIForm { get; internal set; }
+        public IUIForm UIForm { get; internal set; }
 
 
         /// <summary>

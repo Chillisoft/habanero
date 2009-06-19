@@ -73,7 +73,7 @@ namespace Habanero.BO
         /// Returns the business object's interface mapper
         /// </summary>
         /// <returns>Returns the interface mapper</returns>
-        public UIDef GetUIDef()
+        public IUIDef GetUIDef()
         {
             return GetUIDef("default");
         }
@@ -84,7 +84,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="uiDefName">The UIDefName</param>
         /// <returns>Returns the interface mapper</returns>
-        public UIDef GetUIDef(string uiDefName)
+        public IUIDef GetUIDef(string uiDefName)
         {
             return ((ClassDef) _businessObject.ClassDef).GetUIDef(uiDefName);
         }

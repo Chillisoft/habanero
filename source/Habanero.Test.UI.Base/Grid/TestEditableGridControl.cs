@@ -307,7 +307,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(0, gridControl.Grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
             const string uiDefName = "default";
-            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
+            IUIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
 
@@ -342,7 +342,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(0, gridControl.Grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
             const string uiDefName = "default";
-            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
+            IUIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
             Assert.AreEqual(1, col.Count);
@@ -713,7 +713,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(0, gridControl.Grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
             const string uiDefName = "default";
-            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
+            IUIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
 
@@ -738,7 +738,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(0, gridControl.Grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
             const string uiDefName = "default";
-            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
+            IUIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
 

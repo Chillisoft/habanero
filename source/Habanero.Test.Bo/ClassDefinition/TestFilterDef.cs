@@ -57,7 +57,7 @@ namespace Habanero.Test.BO.ClassDefinition
             FilterPropertyDef def = 
                 new FilterPropertyDef(propName, label, "BoolCheckBoxFilter", "Habanero.Test.UI.Base", FilterClauseOperator.OpEquals, null);
 
-            IList<FilterPropertyDef> defs = new List<FilterPropertyDef> {def};
+            IList<IFilterPropertyDef> defs = new List<IFilterPropertyDef> {def};
 
             
             //---------------Assert PreConditions---------------            

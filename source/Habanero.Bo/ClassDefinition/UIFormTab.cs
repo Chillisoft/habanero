@@ -26,11 +26,11 @@ namespace Habanero.BO.ClassDefinition
     /// Manages property definitions for a tab in a user interface editing 
     /// form, as specified in the class definitions xml file
     /// </summary>
-    public class UIFormTab : ICollection, IEquatable<UIFormTab>
+    public class UIFormTab : IEquatable<IUIFormTab>, IUIFormTab
     {
         private IList _list;
         private string _name;
-        private UIFormGrid _uiFormGrid;
+        private IUIFormGrid _uiFormGrid;
         //private UIDefName _name;
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Habanero.BO.ClassDefinition
         /// Adds a column definition to the collection of definitions
         /// </summary>
         /// <param name="column">The UIFormColumn object</param>
-        public void Add(UIFormColumn column)
+        public void Add(IUIFormColumn column)
         {
             column.UIFormTab = this;
             _list.Add(column);
@@ -64,7 +64,7 @@ namespace Habanero.BO.ClassDefinition
         /// Removes a column definition from the collection of definitions
         /// </summary>
         /// <param name="column">The UIFormColumn object</param>
-        public void Remove(UIFormColumn column)
+        public void Remove(IUIFormColumn column)
         {
             _list.Remove(column);
         }
@@ -73,7 +73,7 @@ namespace Habanero.BO.ClassDefinition
         /// Checks if a column definition is in the collection of definitions
         /// </summary>
         /// <param name="column">The UIFormColumn object</param>
-        public bool Contains(UIFormColumn column)
+        public bool Contains(IUIFormColumn column)
         {
             return _list.Contains(column);
         }
@@ -97,7 +97,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="index">The index position to access</param>
         /// <returns>Returns the property definition at the index position
         /// specified</returns>
-        public UIFormColumn this[int index]
+        public IUIFormColumn this[int index]
         {
             get { return (UIFormColumn)_list[index]; }
         }
@@ -147,7 +147,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Gets and sets the UIFormGrid definition
         /// </summary>
-        public UIFormGrid UIFormGrid
+        public IUIFormGrid UIFormGrid
         {
             set { _uiFormGrid = value; }
             get { return _uiFormGrid; }
@@ -156,7 +156,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Returns the <see cref="UIForm"/> that this <see cref="UIFormTab"/> is defined for.
         /// </summary>
-        public UIForm UIForm { get; internal set; }
+        public IUIForm UIForm { get; set; }
 
         /////<summary>
         /////Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
@@ -228,7 +228,7 @@ namespace Habanero.BO.ClassDefinition
         /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
         ///</summary>
         ///<returns>a new collection that is a shallow copy of this collection</returns>
-        public UIFormTab Clone()
+        public IUIFormTab Clone()
         {
             UIFormTab newUIFormTab = new UIFormTab();
             newUIFormTab.Name = this.Name;
@@ -248,12 +248,12 @@ namespace Habanero.BO.ClassDefinition
         ///</returns>
         ///
         ///<param name="uiFormTab">An object to compare with this object.</param>
-        public bool Equals(UIFormTab uiFormTab)
+        public bool Equals(IUIFormTab uiFormTab)
         {
             if (uiFormTab == null) return false;
 //            if (!Equals(_list, uiFormTab._list)) return false;
-            if (!Equals(_name, uiFormTab._name)) return false;
-            if (!Equals(_uiFormGrid, uiFormTab._uiFormGrid)) return false;
+            if (!Equals(_name, ((UIFormTab)uiFormTab)._name)) return false;
+            if (!Equals(_uiFormGrid, ((UIFormTab)uiFormTab)._uiFormGrid)) return false;
             if (this.Count != uiFormTab.Count) return false;
             foreach (UIFormColumn col in this)
             {
@@ -328,7 +328,7 @@ namespace Habanero.BO.ClassDefinition
             int maxRowsInColumns = 0;
             for (int colNum = 0; colNum < this.Count; colNum++)
             {
-                UIFormColumn column = this[colNum];
+                IUIFormColumn column = this[colNum];
 
                 int rowsInColumn = column.GetRowsRequired();
 

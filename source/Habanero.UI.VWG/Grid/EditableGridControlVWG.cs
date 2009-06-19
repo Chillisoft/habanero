@@ -123,7 +123,7 @@ namespace Habanero.UI.VWG
             _editableGridManager.Initialise(classDef, uiDefName);
         }
 
-        public void Initialise(IClassDef classDef, UIGrid gridDef, string uiDefName) {
+        public void Initialise(IClassDef classDef, IUIGrid gridDef, string uiDefName) {
             _editableGridManager.Initialise(classDef, gridDef, uiDefName);
         }
 

@@ -41,7 +41,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadPropertyCollection()
         {
-            UIForm col =
+            IUIForm col =
                 loader.LoadUIFormDef(
                     @"
 					<form width=""100"" height=""120"" title=""testheading"">
@@ -67,7 +67,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestFormWithFields()
         {
-            UIForm col =
+            IUIForm col =
                 loader.LoadUIFormDef(
                     @"
 					<form width=""100"" height=""120"" title=""testheading"">
@@ -89,7 +89,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestFormWithColumns()
         {
-            UIForm col =
+            IUIForm col =
                 loader.LoadUIFormDef(
                     @"
 					<form width=""100"" height=""120"" title=""testheading"">
@@ -116,7 +116,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestFormWithTabsAndNoColumns()
         {
-            UIForm col =
+            IUIForm col =
                 loader.LoadUIFormDef(
                     @"
 					<form width=""100"" height=""120"" title=""testheading"">
@@ -213,7 +213,7 @@ namespace Habanero.Test.BO.Loaders
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            UIForm col =
+            IUIForm col =
 loader.LoadUIFormDef(
 @"
 					<form width=""100"" height=""120"" title=""testheading"">

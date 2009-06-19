@@ -348,8 +348,8 @@ namespace Habanero.Test.UI.Base
         private static ClassDef GetCustomClassDef()
         {
             ClassDef classDef = ClassDef.Get<MyBO>();
-            UIGrid originalGridDef = classDef.UIDefCol["default"].UIGrid;
-            UIGrid extraGridDef = originalGridDef.Clone();
+            IUIGrid originalGridDef = classDef.UIDefCol["default"].UIGrid;
+            IUIGrid extraGridDef = originalGridDef.Clone();
             //UIGridColumn extraColumn = originalGridDef[0].Clone();
             //extraGridDef.Add(extraColumn);
             extraGridDef.Remove(extraGridDef[extraGridDef.Count - 1]);

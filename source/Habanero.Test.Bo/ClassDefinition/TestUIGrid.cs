@@ -29,7 +29,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestRemove()
         {
             UIGridColumn column = new UIGridColumn("heading", null, null, null, false,
-                100, UIGridColumn.PropAlignment.left, null);
+                100, PropAlignment.left, null);
             UIGrid uiGrid = new UIGrid();
             uiGrid.Add(column);
 
@@ -42,9 +42,9 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCopyTo()
         {
             UIGridColumn column1 = new UIGridColumn("heading", null, null, null, false,
-                100, UIGridColumn.PropAlignment.left, null);
+                100, PropAlignment.left, null);
             UIGridColumn column2 = new UIGridColumn("heading", null, null, null, false,
-                100, UIGridColumn.PropAlignment.left, null);
+                100, PropAlignment.left, null);
             UIGrid uiGrid = new UIGrid();
             uiGrid.Add(column1);
             uiGrid.Add(column2);
@@ -68,18 +68,18 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCloneUIGrid()
         {
-            UIGridColumn uiGridCol = new UIGridColumn("Head", "Prop", "control", "Assembly",true,100, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn uiGridCol = new UIGridColumn("Head", "Prop", "control", "Assembly",true,100, PropAlignment.centre, null);
             UIGrid uiGrid = new UIGrid();
             uiGrid.SortColumn = "Prop";
             uiGrid.Add(uiGridCol);
 
             //---------------Execute Test ----------------------
-            UIGrid clonedGrid = uiGrid.Clone();
+            IUIGrid clonedGrid = uiGrid.Clone();
 
             //---------------Test Result -----------------------
             Assert.IsTrue(uiGrid.Equals(clonedGrid));
-            Assert.IsTrue(uiGrid == clonedGrid);
-            Assert.IsFalse(uiGrid != clonedGrid);
+            Assert.IsTrue(uiGrid == (UIGrid) clonedGrid);
+            Assert.IsFalse(uiGrid != (UIGrid) clonedGrid);
             Assert.AreEqual(uiGrid[0], clonedGrid[0],
                               "Should be a deep copy and the columns should be equal but copied");
             Assert.AreNotSame(uiGrid[0], clonedGrid[0], "Should be a deep copy and the columns should be equal but copied (not same)");
@@ -209,7 +209,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private static UIGridColumn GetUiGridColumn(string columnProperty)
         {
-            return new UIGridColumn("", columnProperty, "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            return new UIGridColumn("", columnProperty, "", "", false, 0, PropAlignment.centre, null);
         }
 
         //[Test]
@@ -383,7 +383,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(2, uiGrid.Count);
             //---------------Execute Test ----------------------
-            UIGridColumn column = uiGrid[uiGridColumn2.PropertyName];
+            IUIGridColumn column = uiGrid[uiGridColumn2.PropertyName];
             //---------------Test Result -----------------------
             Assert.AreEqual(uiGridColumn2, column);
         }
@@ -401,7 +401,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(2, uiGrid.Count);
             //---------------Execute Test ----------------------
-            UIGridColumn column = uiGrid["nonexistent property"];
+            IUIGridColumn column = uiGrid["nonexistent property"];
             //---------------Test Result -----------------------
             Assert.IsNull(column);
         }

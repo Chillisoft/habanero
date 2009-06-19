@@ -43,7 +43,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestDefaults()
         {
             //---------------Execute Test ----------------------
-            UIFormGrid formGrid = _loader.LoadUIFormGrid(@"
+            IUIFormGrid formGrid = _loader.LoadUIFormGrid(@"
                 <formGrid relationship=""rel"" reverseRelationship=""correl"" type=""MyBO"" assembly=""Habanero.Test""/>");
             //---------------Verify Result -----------------------
             Assert.AreEqual("rel", formGrid.RelationshipName);
@@ -55,7 +55,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestGridType()
         {
             //---------------Execute Test ----------------------
-            UIFormGrid formGrid = _loader.LoadUIFormGrid(@"<formGrid relationship=""rel"" reverseRelationship=""correl"" type=""Habanero.UI.Win.EditableGridWin"" assembly=""Habanero.UI.Win"" />");
+            IUIFormGrid formGrid = _loader.LoadUIFormGrid(@"<formGrid relationship=""rel"" reverseRelationship=""correl"" type=""Habanero.UI.Win.EditableGridWin"" assembly=""Habanero.UI.Win"" />");
             //---------------Verify Result -----------------------
             Assert.AreEqual("EditableGridWin", formGrid.GridType.Name);
             Assert.AreEqual("Habanero.UI.Win", formGrid.GridType.Assembly.GetName().Name);
@@ -65,7 +65,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestGridTypeDefault()
         {
             //---------------Execute Test ----------------------
-            UIFormGrid formGrid = _loader.LoadUIFormGrid(@"<formGrid relationship=""rel"" reverseRelationship=""correl"" />");
+            IUIFormGrid formGrid = _loader.LoadUIFormGrid(@"<formGrid relationship=""rel"" reverseRelationship=""correl"" />");
             //---------------Verify Result -----------------------
             Assert.AreEqual("EditableGridWin", formGrid.GridType.Name);
             Assert.AreEqual("Habanero.UI.Win", formGrid.GridType.Assembly.GetName().Name);

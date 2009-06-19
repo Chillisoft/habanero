@@ -49,7 +49,7 @@ namespace Habanero.UI.Base
         /// <param name="classDef">The class definition of the business objects shown in the grid</param>
         /// <param name="gridDef">The grid definition to use to initialise</param>
         /// <param name="uiDefName">The name of the grid definition</param>
-        void Initialise(IClassDef classDef, UIGrid gridDef, string uiDefName);
+        void Initialise(IClassDef classDef, IUIGrid gridDef, string uiDefName);
 
         /// <summary>
         /// Gets and sets the name of the UI definition <see cref="UIDef"/> used to initialise the grid structure (the UI name is indicated

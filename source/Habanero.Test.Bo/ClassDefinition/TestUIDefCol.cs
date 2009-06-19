@@ -64,14 +64,14 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestDefaultUIDefMissingException()
         {
             UIDefCol col = new UIDefCol();
-            UIDef uiDef = col["default"];
+            IUIDef uiDef = col["default"];
         }
 
         [Test, ExpectedException(typeof(HabaneroApplicationException))]
         public void TestOtherUIDefMissingException()
         {
             UIDefCol col = new UIDefCol();
-            UIDef uiDef = col["otherdef"];
+            IUIDef uiDef = col["otherdef"];
         }
 
         [Test]

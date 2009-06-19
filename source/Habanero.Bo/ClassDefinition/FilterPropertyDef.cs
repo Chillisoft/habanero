@@ -29,7 +29,7 @@ namespace Habanero.BO.ClassDefinition
     /// The default filter type is the a text box that filters using a 'like' operator.
     /// To choose your own filter type specify the <see cref="FilterType"/> and the <see cref="FilterTypeAssembly"/>.
     /// </summary>
-    public class FilterPropertyDef
+    public class FilterPropertyDef : IFilterPropertyDef
     {
         /// <summary>
         /// Standard constructor

@@ -26,7 +26,7 @@ namespace Habanero.BO.ClassDefinition
     /// Manages a collection of property definitions for a user interface
     /// editing form, as specified in the class definitions xml file
     /// </summary>
-    public class UIForm : ICollection, IEquatable<UIForm>
+    public class UIForm : IEquatable<UIForm>, IUIForm
     {
         private readonly IList _list;
         private int _width;
@@ -45,7 +45,7 @@ namespace Habanero.BO.ClassDefinition
         /// Adds a tab to the form
         /// </summary>
         /// <param name="tab">A UIFormTab object</param>
-        public void Add(UIFormTab tab)
+        public void Add(IUIFormTab tab)
         {
             tab.UIForm = this;
             _list.Add(tab);
@@ -55,7 +55,7 @@ namespace Habanero.BO.ClassDefinition
         /// Removes a tab from the form
         /// </summary>
         /// <param name="tab">A UIFormTab object</param>
-        public void Remove(UIFormTab tab)
+        public void Remove(IUIFormTab tab)
         {
             _list.Remove(tab);
         }
@@ -64,7 +64,7 @@ namespace Habanero.BO.ClassDefinition
         /// Checks if the form contains the specified tab
         /// </summary>
         /// <param name="tab">A UIFormTab object</param>
-        public bool Contains(UIFormTab tab)
+        public bool Contains(IUIFormTab tab)
         {
             return _list.Contains(tab);
         }
@@ -76,7 +76,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="index">The index position to access</param>
         /// <returns>Returns the property definition at the index position
         /// specified</returns>
-        public UIFormTab this[int index]
+        public IUIFormTab this[int index]
         {
             get { return (UIFormTab)_list[index]; }
         }
@@ -157,7 +157,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// The UI Def that this UIForm is related to.
         ///</summary>
-        public UIDef UIDef { get; internal set; }
+        public IUIDef UIDef { get; set; }
 
         ///<summary>
         /// overloads the operator == 
@@ -198,13 +198,13 @@ namespace Habanero.BO.ClassDefinition
         /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
         ///</summary>
         ///<returns>a new collection that is a shallow copy of this collection</returns>
-        public UIForm Clone()
+        public IUIForm Clone()
         {
             UIForm newUIForm = new UIForm();
             newUIForm.Title = this.Title;
             newUIForm.Height = this.Height;
             newUIForm.Width = this.Width;
-            foreach (UIFormTab tab in this)
+            foreach (IUIFormTab tab in this)
             {
                 newUIForm.Add(tab.Clone());
             }
@@ -228,10 +228,10 @@ namespace Habanero.BO.ClassDefinition
             if (!Equals(_title, otherUIForm._title)) return false;
 
             if (this.Count != otherUIForm.Count) return false;
-            foreach (UIFormTab tab in this)
+            foreach (IUIFormTab tab in this)
             {
                 bool found = false;
-                foreach (UIFormTab otherTab in otherUIForm)
+                foreach (IUIFormTab otherTab in otherUIForm)
                 {
                     if (otherTab.Equals(tab))
                     {

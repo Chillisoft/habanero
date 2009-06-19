@@ -29,7 +29,7 @@ namespace Habanero.BO.ClassDefinition
     /// for the order would be a UIFormGrid in which you can edit the
     /// individual order items.
     /// </summary>
-    public class UIFormGrid
+    public class UIFormGrid : IUIFormGrid
     {
         private string _relationshipName;
         private Type _gridType;
@@ -55,7 +55,7 @@ namespace Habanero.BO.ClassDefinition
         public string RelationshipName
         {
             get { return _relationshipName; }
-            protected set { _relationshipName = value; }
+            set { _relationshipName = value; }
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Habanero.BO.ClassDefinition
         public Type GridType
         {
             get { return _gridType; }
-            protected set { _gridType = value; }
+            set { _gridType = value; }
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Habanero.BO.ClassDefinition
         public string CorrespondingRelationshipName
         {
             get { return _correspondingRelationshipName; }
-            protected set { _correspondingRelationshipName = value; }
+            set { _correspondingRelationshipName = value; }
         }
     }
 }

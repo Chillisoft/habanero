@@ -99,10 +99,10 @@ namespace Habanero.UI.VWG
             GroupControlCreator = _controlFactory.CreateTabControl;
             BOMapper mapper = new BOMapper(bo);
 
-            UIForm def;
+            IUIForm def;
             if (_uiDefName.Length > 0)
             {
-                UIDef uiMapper = mapper.GetUIDef(_uiDefName);
+                IUIDef uiMapper = mapper.GetUIDef(_uiDefName);
                 if (uiMapper == null)
                 {
                     throw new NullReferenceException("An error occurred while " +
@@ -115,7 +115,7 @@ namespace Habanero.UI.VWG
             }
             else
             {
-                UIDef uiMapper = mapper.GetUIDef();
+                IUIDef uiMapper = mapper.GetUIDef();
                 if (uiMapper == null)
                 {
                     throw new NullReferenceException("An error occurred while " +
@@ -169,7 +169,7 @@ namespace Habanero.UI.VWG
         /// Sets up the forms size based on the BOPanel and the Buttons.
         /// </summary>
         /// <param name="def"></param>
-        protected virtual void SetupFormSize(UIForm def)
+        protected virtual void SetupFormSize(IUIForm def)
         {
             int width = def.Width;
             int minWidth = _boPanel.Width +

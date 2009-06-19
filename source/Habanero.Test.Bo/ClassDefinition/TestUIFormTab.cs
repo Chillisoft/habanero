@@ -78,8 +78,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCloneUIFormTab()
         {
             //---------------Set up test pack-------------------
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -88,10 +88,10 @@ namespace Habanero.Test.BO.ClassDefinition
             uiFormTab.Add(uiFormColumn);
 
             //---------------Execute Test ----------------------
-            UIFormTab clonedFormTab = uiFormTab.Clone();
+            IUIFormTab clonedFormTab = uiFormTab.Clone();
 
             //---------------Test Result -----------------------
-            Assert.IsTrue(uiFormTab == clonedFormTab);
+            Assert.IsTrue(uiFormTab == (UIFormTab) clonedFormTab);
             Assert.IsTrue(uiFormTab.Equals(clonedFormTab));
             Assert.AreEqual(uiFormTab[0], clonedFormTab[0],
                               "Should be a deep copy and the columns should be equal but copied");
@@ -293,10 +293,10 @@ namespace Habanero.Test.BO.ClassDefinition
 
         public UIFormColumn CreateUIFormColumn_2FieldsWithRowSpan()
         {
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 2);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters, null, UIFormField.LayoutStyle.Label);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters, null, LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -309,7 +309,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 2);
             parameters.Add("colSpan", 2);
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, parameters, null, UIFormField.LayoutStyle.Label);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, parameters, null, LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             return uiFormColumn;
@@ -321,7 +321,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 2);
             parameters.Add("colSpan", 3);
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, parameters, null, UIFormField.LayoutStyle.Label);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, parameters, null, LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             return uiFormColumn;
@@ -335,8 +335,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public UIFormColumn CreateUIFormColumn_2Fields(string propName)
         {
             UIFormField field1 =
-                new UIFormField("label1", propName, "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+                new UIFormField("label1", propName, "control", null, null, null, true, null, null, null, LayoutStyle.Label);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -346,7 +346,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public UIFormColumn CreateUIFormColumn_1Field(string propName)
         {
             UIFormColumn uiFormColumn = new UIFormColumn();
-            uiFormColumn.Add(new UIFormField("label1", propName, "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label));
+            uiFormColumn.Add(new UIFormField("label1", propName, "control", null, null, null, true, null, null, null, LayoutStyle.Label));
             return uiFormColumn;
         }
 

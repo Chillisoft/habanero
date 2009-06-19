@@ -112,7 +112,7 @@ namespace Habanero.UI.VWG
             _gridInitialiser.InitialiseGrid(ClassDef, uiDefName);
         }
 
-        public void Initialise(IClassDef classDef, UIGrid gridDef, string uiDefName) {
+        public void Initialise(IClassDef classDef, IUIGrid gridDef, string uiDefName) {
             if (classDef == null) throw new ArgumentNullException("classDef");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
 

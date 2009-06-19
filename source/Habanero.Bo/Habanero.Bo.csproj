@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -111,6 +111,20 @@
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\FilterDef.cs" />
     <Compile Include="ClassDefinition\FilterPropertyDef.cs" />
+    <Compile Include="ClassDefinition\IFilterDef.cs" />
+    <Compile Include="ClassDefinition\IFilterPropertyDef.cs" />
+    <Compile Include="ClassDefinition\ITrigger.cs" />
+    <Compile Include="ClassDefinition\ITriggerCol.cs" />
+    <Compile Include="ClassDefinition\IUIDef.cs" />
+    <Compile Include="ClassDefinition\IUIForm.cs" />
+    <Compile Include="ClassDefinition\IUIFormColumn.cs" />
+    <Compile Include="ClassDefinition\IUIFormField.cs" />
+    <Compile Include="ClassDefinition\IUIFormGrid.cs" />
+    <Compile Include="ClassDefinition\IUIFormTab.cs" />
+    <Compile Include="ClassDefinition\IUIGrid.cs" />
+    <Compile Include="ClassDefinition\IUIGridColumn.cs" />
+    <Compile Include="ClassDefinition\LayoutStyle.cs" />
+    <Compile Include="ClassDefinition\PropAlignment.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />
     <Compile Include="ClassDefinition\Trigger.cs" />
     <Compile Include="ClassDefinition\UIDef.cs" />

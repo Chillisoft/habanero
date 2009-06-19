@@ -40,7 +40,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="propertyName">The name of the property.  A related property can
         /// be described by "RelationshipName.PropertyName".</param>
         /// <returns></returns>
-        public static IPropDef GetPropDefByPropName(ClassDef classDef, string propertyName)
+        public static IPropDef GetPropDefByPropName(IClassDef classDef, string propertyName)
         {
             if (classDef == null || propertyName.IndexOf("-") != -1)
             {

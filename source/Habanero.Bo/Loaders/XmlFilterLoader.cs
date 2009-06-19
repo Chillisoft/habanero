@@ -29,7 +29,7 @@ namespace Habanero.BO.Loaders
     ///</summary>
     public class XmlFilterLoader : XmlLoader
     {
-        private readonly IList<FilterPropertyDef> _propertyDefs = new List<FilterPropertyDef>();
+        private readonly IList<IFilterPropertyDef> _propertyDefs = new List<IFilterPropertyDef>();
         private FilterModes _filterMode;
         private int _columns;
         ///<summary>
@@ -51,7 +51,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns the object created</returns>
         protected override object Create()
         {
-            FilterDef filterDef = _defClassFactory.CreateFilterDef(_propertyDefs);
+            IFilterDef filterDef = _defClassFactory.CreateFilterDef(_propertyDefs);
             filterDef.Columns = _columns;
             filterDef.FilterMode = _filterMode;
             return filterDef;
@@ -86,7 +86,7 @@ namespace Habanero.BO.Loaders
                 FilterClauseOperator filterClauseOperator 
                     = (FilterClauseOperator) Enum.Parse(typeof (FilterClauseOperator), filterClauseOperatorStr);
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
-                FilterPropertyDef filterPropertyDef = 
+                IFilterPropertyDef filterPropertyDef = 
                     _defClassFactory.CreateFilterPropertyDef(propertyName, label, filterType, filterTypeAssembly, filterClauseOperator, parameters);
               
                 _reader.Read();
@@ -112,9 +112,9 @@ namespace Habanero.BO.Loaders
         ///</summary>
         ///<param name="xml"></param>
         ///<returns></returns>
-        public FilterDef LoadFilterDef(string xml)
+        public IFilterDef LoadFilterDef(string xml)
         {
-            return (FilterDef)base.Load(this.CreateXmlElement(xml));
+            return (IFilterDef)base.Load(this.CreateXmlElement(xml));
         }
     }
 }

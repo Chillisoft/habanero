@@ -33,7 +33,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="uiGrid">The UIGridDef</param>
         /// <returns>Returns a DataTable object</returns>
-        DataTable GetDataTable(UIGrid uiGrid);
+        DataTable GetDataTable(IUIGrid uiGrid);
 
         /// <summary>
         /// Finds an IBusinessObject given the ID.

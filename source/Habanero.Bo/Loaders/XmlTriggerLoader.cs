@@ -57,7 +57,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="xmlUITrigger">The xml string</param>
         /// <returns>Returns a UIFormProperty object</returns>
-        public Trigger LoadTrigger(string xmlUITrigger)
+        public ITrigger LoadTrigger(string xmlUITrigger)
         {
             return this.LoadTrigger(this.CreateXmlElement(xmlUITrigger));
         }
@@ -67,9 +67,9 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="uiTriggerElement">The xml element</param>
         /// <returns>Returns a UIFormProperty object</returns>
-        public Trigger LoadTrigger(XmlElement uiTriggerElement)
+        public ITrigger LoadTrigger(XmlElement uiTriggerElement)
         {
-            return (Trigger)Load(uiTriggerElement);
+            return (ITrigger)Load(uiTriggerElement);
         }
 
         /// <summary>

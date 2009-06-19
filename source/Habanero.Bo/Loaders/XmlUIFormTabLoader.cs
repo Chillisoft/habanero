@@ -29,7 +29,7 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlUIFormTabLoader : XmlLoader
     {
-        private UIFormTab _tab;
+        private IUIFormTab _tab;
 
         private string MixedContentMessage =
             "A 'tab' can have either a set of 'columnLayout' or 'field' nodes or a single 'formGrid' node, but not a mixture.";
@@ -56,7 +56,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="formTabElement">The xml string</param>
         /// <returns>Returns a UIFormTab object</returns>
-        public UIFormTab LoadUIFormTab(string formTabElement)
+        public IUIFormTab LoadUIFormTab(string formTabElement)
         {
             return this.LoadUIFormTab(this.CreateXmlElement(formTabElement));
         }
@@ -66,9 +66,9 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="formTabElement">The xml element</param>
         /// <returns>Returns a UIFormTab object</returns>
-        public UIFormTab LoadUIFormTab(XmlElement formTabElement)
+        public IUIFormTab LoadUIFormTab(XmlElement formTabElement)
         {
-            return (UIFormTab) this.Load(formTabElement);
+            return (IUIFormTab) this.Load(formTabElement);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Habanero.BO.Loaders
             //{
 
 
-                List<UIFormField> fields = new List<UIFormField>();
+                List<IUIFormField> fields = new List<IUIFormField>();
                 string contentType = "";
                 while (_reader.Name != "tab")
                 {
@@ -147,8 +147,8 @@ namespace Habanero.BO.Loaders
                 }
                 if (contentType == "field")
                 {
-                    UIFormColumn col = _defClassFactory.CreateUIFormColumn();
-                    fields.ForEach(delegate(UIFormField obj) { col.Add(obj); });
+                    IUIFormColumn col = _defClassFactory.CreateUIFormColumn();
+                    fields.ForEach(delegate(IUIFormField obj) { col.Add(obj); });
                     _tab.Add(col);
                 }
 

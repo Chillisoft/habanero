@@ -64,7 +64,7 @@ namespace Habanero.UI.Base
         /// <param name="classDef">The Classdef used to initialise the grid</param>
         /// <param name="uiGridDef">The UI Grid definition to use</param>
         ///         /// <param name="uiDefName">The name of the UI definition</param>
-        void InitialiseGrid(IClassDef classDef, UIGrid uiGridDef, string uiDefName);
+        void InitialiseGrid(IClassDef classDef, IUIGrid uiGridDef, string uiDefName);
 
         /// <summary>
         /// Gets the value indicating whether the grid has been initialised already

@@ -40,7 +40,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadColumn()
         {
-            UIFormTab col =
+            IUIFormTab col =
                 loader.LoadUIFormTab(
                     @"
 						<tab name=""testname"">
@@ -63,7 +63,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestTabWithFields()
         {
-            UIFormTab col =
+            IUIFormTab col =
                 loader.LoadUIFormTab(
                     @"
 						<tab name=""testname"">

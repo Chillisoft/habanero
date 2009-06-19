@@ -169,17 +169,17 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="uiForm"></param>
         ///<param name="uiGrid"></param>
         ///<returns></returns>
-        UIDef CreateUIDef(string name, UIForm uiForm, UIGrid uiGrid);
+        IUIDef CreateUIDef(string name, IUIForm uiForm, IUIGrid uiGrid);
 
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        UIFormColumn CreateUIFormColumn();
+        IUIFormColumn CreateUIFormColumn();
 
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        UIForm CreateUIFormDef();
+        IUIForm CreateUIFormDef();
 
         ///<summary>
         ///</summary>
@@ -187,7 +187,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="gridType"></param>
         ///<param name="correspondingRelationshipName"></param>
         ///<returns></returns>
-        UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName);
+        IUIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName);
 
         ///<summary>
         ///</summary>
@@ -203,12 +203,12 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="triggers"></param>
         ///<param name="layout"></param>
         ///<returns></returns>
-        UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, TriggerCol triggers, UIFormField.LayoutStyle layout);
+        IUIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, ITriggerCol triggers, LayoutStyle layout);
 
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        UIFormTab CreateUIFormTab();
+        IUIFormTab CreateUIFormTab();
 
         ///<summary>
         ///</summary>
@@ -218,12 +218,12 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="action"></param>
         ///<param name="value"></param>
         ///<returns></returns>
-        Trigger CreateTrigger(string triggeredBy, string target, string conditionValue, string action, string value);
+        ITrigger CreateTrigger(string triggeredBy, string target, string conditionValue, string action, string value);
 
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        UIGrid CreateUIGridDef();
+        IUIGrid CreateUIGridDef();
 
         ///<summary>
         ///</summary>
@@ -236,7 +236,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="alignment"></param>
         ///<param name="propertyAttributes"></param>
         ///<returns></returns>
-        UIGridColumn CreateUIGridProperty(string heading, string propertyName, String gridControlTypeName, String gridControlAssembly, bool editable, int width, UIGridColumn.PropAlignment alignment, Hashtable propertyAttributes);
+        IUIGridColumn CreateUIGridProperty(string heading, string propertyName, string gridControlTypeName, string gridControlAssembly, bool editable, int width, PropAlignment alignment, Hashtable propertyAttributes);
 
         ///<summary>
         ///</summary>
@@ -285,13 +285,13 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="filterClauseOperator"></param>
         ///<param name="parameters"></param>
         ///<returns></returns>
-        FilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, string filterTypeAssembly, FilterClauseOperator filterClauseOperator, Dictionary<string, string> parameters);
+        IFilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, string filterTypeAssembly, FilterClauseOperator filterClauseOperator, Dictionary<string, string> parameters);
 
         ///<summary>
         ///</summary>
         ///<param name="filterPropertyDefs"></param>
         ///<returns></returns>
-        FilterDef CreateFilterDef(IList<FilterPropertyDef> filterPropertyDefs);
+        IFilterDef CreateFilterDef(IList<IFilterPropertyDef> filterPropertyDefs);
 
         /// <summary>
         /// Creates a <see cref="PropRuleSingle"/>
