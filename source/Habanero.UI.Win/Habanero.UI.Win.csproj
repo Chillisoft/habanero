@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E761E05B-B9CC-4EAC-B940-C19E42D3819C}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -55,6 +55,7 @@
     <Compile Include="BusinessObjectPanelWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ButtonSizePolicyWin.cs" />
     <Compile Include="CollapsiblePanelGroupControlWin.cs">
       <SubType>Component</SubType>
     </Compile>

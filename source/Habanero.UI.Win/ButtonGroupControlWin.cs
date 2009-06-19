@@ -38,6 +38,7 @@ namespace Habanero.UI.Win
         {
             _controlFactory = controlFactory;
             _buttonGroupControlManager = new ButtonGroupControlManager(this, controlFactory);
+            ButtonSizePolicy = new ButtonSizePolicyWin(_controlFactory);
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace Habanero.UI.Win
         {
             IButton button = _buttonGroupControlManager.AddButton(buttonName);
             Controls.Add((Control)button);
-            RecalcButtonSizes();
+            ButtonSizePolicy.RecalcButtonSizes(_buttonGroupControlManager.LayoutManager.ManagedControl.Controls);
             return button;
         }
 
@@ -84,6 +85,8 @@ namespace Habanero.UI.Win
             if (form != null) form.AcceptButton = (Button)this[buttonName];
         }
 
+        public IButtonSizePolicy ButtonSizePolicy { get; set; }
+
         /// <summary>
         /// Adds a new button to the control with a specified name and
         /// with an attached event handler to carry out
@@ -109,35 +112,9 @@ namespace Habanero.UI.Win
         public IButton AddButton(string buttonName, string buttonText, EventHandler clickHandler)
         {
             IButton button = _buttonGroupControlManager.AddButton(buttonName, buttonText, clickHandler);
-            RecalcButtonSizes();
+            ButtonSizePolicy.RecalcButtonSizes(_buttonGroupControlManager.LayoutManager.ManagedControl.Controls);
             ((Button)button).UseMnemonic = true;
             return button;
         }
-
-        /// <summary>
-        /// A method called by AddButton() to recalculate the size of the
-        /// button
-        /// </summary>
-        protected void RecalcButtonSizes()
-        {
-            int maxButtonWidth = 0;
-            foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
-            {
-                ILabel lbl = _controlFactory.CreateLabel(btn.Text);
-                if (lbl.PreferredWidth + 10 > maxButtonWidth)
-                {
-                    maxButtonWidth = lbl.PreferredWidth + 10;
-                }
-            }
-            if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 20)
-            {
-                maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 20;
-            }
-            foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
-            {
-                btn.Width = maxButtonWidth;
-            }
-        }
-
     }
 }

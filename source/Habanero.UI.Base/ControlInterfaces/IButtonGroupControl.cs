@@ -69,5 +69,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="buttonName">The name of the button</param>
         void SetDefaultButton(string buttonName);
+
+        IButtonSizePolicy ButtonSizePolicy { get; set; }
     }
 }
