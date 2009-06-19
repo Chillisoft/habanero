@@ -388,13 +388,13 @@ namespace Habanero.UI.Base
             if (!String.IsNullOrEmpty(formField.Alignment)) SetInputControlAlignment(formField, inputControl);
             SetInputControlNumLines(formField, inputControl);
 
+            controlMapper.SetPropertyAttributes(formField.Parameters);
+
             AddDecimalPlacesToNumericUpDown(formField, inputControl);
 
             AddComboBoxItems(formField, inputControl);
 
             AddEmailFunctionalityToTextBox(formField, inputControl);
-
-            AddDateTimePickerParameters(formField, inputControl);
 
             AddMultiLineTextbox(formField, inputControl);
 
@@ -421,16 +421,6 @@ namespace Habanero.UI.Base
         {
             if (formField.RowSpan <= 1) return;
             if (inputControl is ITextBox) ((ITextBox) inputControl).Multiline = true;
-        }
-
-        private void AddDateTimePickerParameters(UIFormField formField, IControlHabanero inputControl)
-        {
-            if (formField.MapperTypeName == "DateTimePickerMapper")
-            {
-                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper
-                    ((IDateTimePicker) inputControl, formField.PropertyName, formField.Editable, ControlFactory);
-                dateTimePickerMapper.SetPropertyAttributes(formField.Parameters);
-            }
         }
 
         private static void AddDecimalPlacesToNumericUpDown(UIFormField formField, IControlHabanero inputControl)
@@ -527,6 +517,7 @@ namespace Habanero.UI.Base
         {
             ILabel labelControl = ControlFactory.CreateLabel(formField.GetLabel(), formField.IsCompulsory);
             labelControl.Name = formField.PropertyName;
+            labelControl.Enabled = formField.Editable;
             SetToolTip(formField, labelControl);
             panelInfo.LayoutManager.AddControl(labelControl, formField.RowSpan, 1);
             return labelControl;
