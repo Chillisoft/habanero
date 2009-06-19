@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ButtonSizePolicyWin.cs" />
     <Compile Include="ComboBoxAutoCompleteSourceWin.cs" />
     <Compile Include="ComboBoxAutoCompleteModeWin.cs" />
     <Compile Include="BOColTabControlWin.cs">

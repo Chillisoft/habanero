@@ -78,6 +78,8 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
+    <Compile Include="ButtonsControl\TestButtonSizePolicy.cs" />
+    <Compile Include="ButtonsControl\TestButtonSizePolicyUserDefined.cs" />
     <Compile Include="PanelBuilder\TestPanelBuilder.cs" />
     <Compile Include="TestButton.cs" />
     <Compile Include="TestCheckBox.cs" />

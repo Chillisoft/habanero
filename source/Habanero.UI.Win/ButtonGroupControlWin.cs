@@ -30,11 +30,13 @@ namespace Habanero.UI.Win
     {
         private readonly IControlFactory _controlFactory;
         private ButtonGroupControlManager _buttonGroupControlManager;
+        private IButtonSizePolicy _buttonSizePolicy;
 
         public ButtonGroupControlWin(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
             _buttonGroupControlManager = new ButtonGroupControlManager(this, controlFactory);
+            ButtonSizePolicy = new ButtonSizePolicyWin(_controlFactory);
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace Habanero.UI.Win
         {
             IButton button = _buttonGroupControlManager.AddButton(buttonName);
             Controls.Add((Control)button);
-            RecalcButtonSizes();
+            ButtonSizePolicy.RecalcButtonSizes(_buttonGroupControlManager.LayoutManager.ManagedControl.Controls);
             return button;
         }
 
@@ -59,7 +61,7 @@ namespace Habanero.UI.Win
         /// found</returns>
         public IButton this[string buttonName]
         {
-            get { return (IButton) this.Controls[buttonName]; }
+            get { return (IButton)this.Controls[buttonName]; }
         }
 
         /// <summary>
@@ -80,6 +82,18 @@ namespace Habanero.UI.Win
             this.FindForm().AcceptButton = (Button)this[buttonName];
         }
 
+        public IButtonSizePolicy ButtonSizePolicy
+        {
+            get
+            {
+                return _buttonSizePolicy;
+            }
+            set
+            {
+                _buttonSizePolicy = value;
+            }
+        }
+
         /// <summary>
         /// Adds a new button to the control with a specified name and
         /// with an attached event handler to carry out
@@ -90,8 +104,8 @@ namespace Habanero.UI.Win
         /// <returns>Returns the Button object created</returns>
         public IButton AddButton(string buttonName, EventHandler clickHandler)
         {
-             return AddButton(buttonName, buttonName, clickHandler);
-   
+            return AddButton(buttonName, buttonName, clickHandler);
+
         }
 
         /// <summary>
@@ -107,35 +121,9 @@ namespace Habanero.UI.Win
         {
 
             IButton button = _buttonGroupControlManager.AddButton(buttonName, buttonText, clickHandler);
-            RecalcButtonSizes();
+            ButtonSizePolicy.RecalcButtonSizes(_buttonGroupControlManager.LayoutManager.ManagedControl.Controls);
             ((Button)button).UseMnemonic = true;
             return button;
         }
-
-        /// <summary>
-        /// A method called by AddButton() to recalculate the size of the
-        /// button
-        /// </summary>
-        public void RecalcButtonSizes()
-        {
-            int maxButtonWidth = 0;
-            foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
-            {
-                ILabel lbl = _controlFactory.CreateLabel(btn.Text);
-                if (lbl.PreferredWidth + 10 > maxButtonWidth)
-                {
-                    maxButtonWidth = lbl.PreferredWidth + 10;
-                }
-            }
-            if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 16)
-            {
-                maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 16;
-            }
-            foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
-            {
-                btn.Width = maxButtonWidth;
-            }
-        }
-
     }
 }

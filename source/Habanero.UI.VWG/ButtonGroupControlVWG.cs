@@ -31,6 +31,7 @@ namespace Habanero.UI.VWG
     {
         private ButtonGroupControlManager _buttonGroupControlManager;
         private IControlFactory _controlFactory;
+        private IButtonSizePolicy _buttonSizePolicy;
 
         public ButtonGroupControlVWG(IControlFactory controlFactory)
         {
@@ -41,6 +42,9 @@ namespace Habanero.UI.VWG
             _controlFactory = controlFactory;
             //IButton sampleBtn = _controlFactory.CreateButton();
             //this.Height = sampleBtn.Height + 10;
+
+
+            ButtonSizePolicy = new ButtonSizePolicyVWG(_controlFactory);
         }
 
         /// <summary>
@@ -59,7 +63,7 @@ namespace Habanero.UI.VWG
             //return button;
 
             IButton button = _buttonGroupControlManager.AddButton(buttonName);
-            RecalcButtonSizes();
+            ButtonSizePolicy.RecalcButtonSizes(_buttonGroupControlManager.LayoutManager.ManagedControl.Controls);
             return button;
         }
 
@@ -72,7 +76,7 @@ namespace Habanero.UI.VWG
         /// found</returns>
         public IButton this[string buttonName]
         {
-            get { return (IButton) this.Controls[buttonName]; }
+            get { return (IButton)this.Controls[buttonName]; }
         }
 
         /// <summary>
@@ -91,6 +95,18 @@ namespace Habanero.UI.VWG
         public void SetDefaultButton(string buttonName)
         {
             ///not implemented in GIz
+        }
+
+        public IButtonSizePolicy ButtonSizePolicy
+        {
+            get
+            {
+                return _buttonSizePolicy;
+            }
+            set
+            {
+                _buttonSizePolicy = value;
+            }
         }
 
         /// <summary>
@@ -128,35 +144,8 @@ namespace Habanero.UI.VWG
             //button.Click += clickHandler;
             //return button;
             IButton button = _buttonGroupControlManager.AddButton(buttonName, buttonText, clickHandler);
-            RecalcButtonSizes();
+            ButtonSizePolicy.RecalcButtonSizes(_buttonGroupControlManager.LayoutManager.ManagedControl.Controls);
             return button;
         }
-
-        /// <summary>
-        /// A method called by AddButton() to recalculate the size of the
-        /// button
-        /// </summary>
-        public void RecalcButtonSizes()
-        {
-            int maxButtonWidth = 0;
-            foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
-            {
-                ILabel lbl = _controlFactory.CreateLabel(btn.Text);
-                if (lbl.PreferredWidth + 10 > maxButtonWidth)
-                {
-                    maxButtonWidth = lbl.PreferredWidth + 10;
-                }
-            }
-            //if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 16)
-            //{
-            //    maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 16;
-            //}
-            foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
-            {
-                btn.Width = maxButtonWidth;
-            }
-        }
     }
-
-
 }

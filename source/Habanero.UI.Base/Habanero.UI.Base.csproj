@@ -53,6 +53,7 @@
     <Compile Include="ControlInterfaces\Events.cs" />
     <Compile Include="ControlInterfaces\IBOColTabControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />
+    <Compile Include="ControlInterfaces\IButtonSizePolicy.cs" />
     <Compile Include="ControlInterfaces\IControlHabanero.cs" />
     <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
     <Compile Include="ControlInterfaces\IFileChooser.cs" />

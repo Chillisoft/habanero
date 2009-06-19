@@ -57,6 +57,7 @@
     <Compile Include="ButtonGroupControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ButtonSizePolicyVWG.cs" />
     <Compile Include="ButtonVWG.cs">
       <SubType>Component</SubType>
     </Compile>

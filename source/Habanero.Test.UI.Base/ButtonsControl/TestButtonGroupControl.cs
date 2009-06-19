@@ -17,11 +17,14 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using System.Drawing;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.UI.Base
 {
@@ -95,19 +98,7 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(btn.UseMnemonic);
             }
 
-            [Test]
-            public void TestButtonWidthOneSmallButton_WinOnly()
-            {
-                //---------------Set up test pack-------------------
 
-                IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
-                //---------------Execute Test ----------------------
-                IButton btnTest = buttonGroupControl.AddButton("A");
-                ////---------------Test Result -----------------------
-
-                Assert.AreEqual(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 16, btnTest.Width,
-                                "Button width is incorrect - when buttons are very small they should instead be 1 16th of screen width.");
-            }
             //}
 
             [Test]
@@ -340,39 +331,20 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(buttonGroupControl.Width - 5 - btnTest.Width, btnTest.Left,
                 "Button should be right aligned.");
         }
+        
+        //[Test]
+        //public void TestButtonGroupControlUsesButtonSizePolicy()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
+        //    IButtonSizePolicy buttonSizePolicy = MockRepository.GenerateStub<IButtonSizePolicy>();
 
-        [Test]
-        public void TestButtonWidth_ResizingAccordingToButtonText()
-        {
-            //---------------Set up test pack-------------------
+        //    //---------------Execute Test ----------------------
+        //    buttonGroupControl.ButtonSizePolicy = buttonSizePolicy;
+        //    buttonGroupControl.AddButton("");
 
-            IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
-            const string buttonText = "TestMustBeLongEnoughToBeGreaterThanTwelthOfScreen";
-            //---------------Execute Test ----------------------
-            IButton btnTest = buttonGroupControl.AddButton(buttonText);
-            ////---------------Test Result -----------------------
-
-            ILabel lbl = GetControlFactory().CreateLabel(buttonText);
-            Assert.AreEqual(lbl.PreferredWidth + 10, btnTest.Width, "Button width is incorrect.");
-        }
-
-
-        [Test]
-        public void TestButtonWidthTwoButtons()
-        {
-            //---------------Set up test pack-------------------
-
-            IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
-            const string buttonText = "TestMustBeLongEnoughToBeGreaterThanTwelthOfScreen";
-            //---------------Execute Test ----------------------
-            IButton btnTest1 = buttonGroupControl.AddButton("Test");
-            IButton btnTest2 = buttonGroupControl.AddButton(buttonText);
-            ////---------------Test Result -----------------------
-
-            ILabel lbl = GetControlFactory().CreateLabel(buttonText);
-            Assert.AreEqual(lbl.PreferredWidth + 10, btnTest1.Width, "Button width is incorrect.");
-
-            Assert.AreEqual(btnTest2.Width, btnTest1.Width, "Button width is incorrect.");
-        }
+        //    //---------------Test Result -----------------------
+        //    buttonSizePolicy.Expect(policy => policy.RecalcButtonSizes(buttonGroupControl.Controls));
+        //}
     }
 }
