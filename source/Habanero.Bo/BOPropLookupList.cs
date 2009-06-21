@@ -127,7 +127,10 @@ namespace Habanero.BO
                 returnValue = ((IBusinessObject) valueToParse).ID.GetAsValue();
                 return;
             }
-            if (!(_propDef.LookupList is BusinessObjectLookupList && this.Loading))
+            //The value will not be parsed from from a string value to a Guid Value 
+            // when the object is loading. This is due to the performance issues.
+            // This is particularly an issue for BusinessObjectLookupLists
+            if (!((_propDef.LookupList is BusinessObjectLookupList) && this.Loading))
             {
                 Dictionary<string, string> keyLookupList = _propDef.LookupList.GetIDValueLookupList();
                 if (this.PropertyType.IsInstanceOfType(valueToParse)
@@ -203,7 +206,7 @@ namespace Habanero.BO
         ///  and it does not try to parse a value to a lookup value for database and business objects 
         ///  lookup items.
         /// </summary>
-        protected virtual bool Loading { get; set; }
+        protected bool Loading { get; set; }
 
         internal IBusinessObject GetBusinessObjectForProp(ClassDef classDef)
         {
