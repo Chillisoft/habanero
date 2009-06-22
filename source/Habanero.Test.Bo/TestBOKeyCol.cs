@@ -26,13 +26,22 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBOKeyCol
     {
-        [Test, ExpectedException(typeof(InvalidKeyException))]
+        [Test]
         public void TestAddDuplicates()
         {
             BOKeyCol col = new BOKeyCol();
             BOKey boKey = new BOKey(new KeyDef());
             col.Add(boKey);
-            col.Add(boKey);
+            try
+            {
+                col.Add(boKey);
+                Assert.Fail("Expected to throw an InvalidKeyException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidKeyException ex)
+            {
+                StringAssert.Contains("MESSAGE", ex.Message);
+            }
         }
 
         [Test]
@@ -45,11 +54,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual(boKey, col["key"]);
         }
 
-        [Test, ExpectedException(typeof(InvalidKeyException))]
+#pragma warning disable 168
+        [Test]
         public void TestIndexerWithNonExistingKey()
         {
             BOKeyCol col = new BOKeyCol();
-            BOKey key = col["invalidkey"];
+            try
+            {
+                BOKey key = col["invalidkey"];
+
+                Assert.Fail("Expected to throw an InvalidKeyException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidKeyException ex)
+            {
+                StringAssert.Contains("MESSAGE", ex.Message);
+            }
         }
+#pragma warning restore 168
     }
 }

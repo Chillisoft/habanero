@@ -61,6 +61,14 @@ namespace Habanero.UI.Win
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
         public void RemoveCurrentHandlers(ILookupComboBoxMapper mapper)
         {
+            _mapper = mapper;
+            IControlHabanero control = mapper.Control;
+            if (control is IComboBox)
+            {
+                ComboBoxWin comboBoxWin = (ComboBoxWin)control;
+                comboBoxWin.SelectedIndexChanged -= SelectIndexChangedHandler;
+                _mapper.SelectedIndexChangedHandler = null;
+            }
         }
 
         /// <summary>

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -98,34 +99,70 @@ namespace Habanero.Test.BO
             Assert.AreSame(lProp, lBOKey1.SortedValues[0]);
         }
 #pragma warning disable 168
-        [Test, ExpectedException(typeof(InvalidPropertyNameException))]
+        [Test]
         public void TestIndexerPropertyNotFound()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
 
-            IBOProp prop = boKey["invalidpropname"];
+            try
+            {
+                IBOProp prop = boKey["invalidpropname"];
+                Assert.Fail("Expected to throw an InvalidPropertyNameException`");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains("MESSAGE", ex.Message);
+            }
 
         }
 
-        [Test, ExpectedException(typeof(IndexOutOfRangeException))]
+        [Test]
         public void TestIndexerIntegerOutOfRange()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
-            IBOProp prop = boKey[2];
+            try
+            {
+                IBOProp prop = boKey[2];
+                Assert.Fail("Expected to throw an IndexOutOfRangeException");
+            }
+                //---------------Test Result -----------------------
+            catch (IndexOutOfRangeException ex)
+            {
+                StringAssert.Contains("MESSAGE", ex.Message);
+            }
         }
 #pragma warning restore 168
-        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+        [Test]
         public void TestAddNullBOProp()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
-            boKey.Add(null);
+            try
+            {
+                boKey.Add(null);
+                Assert.Fail("Expected to throw an HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                StringAssert.Contains("MESSAGE", ex.Message);
+            }
         }
 
         [Test, ExpectedException(typeof(InvalidPropertyException))]
         public void TestAddDuplicateBOProp()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
-            boKey.Add(boKey["PropName"]);
+            try
+            {
+                boKey.Add(boKey["PropName"]);
+                Assert.Fail("Expected to throw an InvalidPropertyException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyException ex)
+            {
+                StringAssert.Contains("MESSAGE", ex.Message);
+            }
         }
 
         [Test]

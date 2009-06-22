@@ -32,9 +32,10 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Removes event handlers previously assigned to the ComboBox
         /// </summary>
-        /// <param name="mapper">The mapper for the lookup ComboBox</param>
+        /// <param name="mapper">The mapper for the lookup ComboBox</p  aram>
         public void RemoveCurrentHandlers(ILookupComboBoxMapper mapper)
         {
+            _mapper = mapper;
             _mapper = mapper;
             ComboBoxWin comboBoxWin = this.ComboBox(mapper);
             if (comboBoxWin != null)

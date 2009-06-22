@@ -1353,7 +1353,6 @@ namespace Habanero.UI.VWG
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
         public void RemoveCurrentHandlers(ILookupComboBoxMapper mapper)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -1362,7 +1361,6 @@ namespace Habanero.UI.VWG
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
         public void AddHandlers(ILookupComboBoxMapper mapper)
         {
-            throw new NotImplementedException();
         }
 
         #endregion
