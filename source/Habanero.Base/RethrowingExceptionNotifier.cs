@@ -37,7 +37,8 @@ namespace Habanero.Base
         /// <param name="title">The title</param>
         public void Notify(Exception ex, string furtherMessage, string title)
         {
-            throw new Exception("Rethrowing exception", ex);
+           // throw new Exception("Rethrowing exception", ex);
+            throw ex;
         }
 
         ///<summary>

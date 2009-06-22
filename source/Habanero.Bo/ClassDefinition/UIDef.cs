@@ -173,7 +173,7 @@ namespace Habanero.BO.ClassDefinition
         public IUIDef Clone()
         {
             IUIForm clonedForm = this.UIForm != null? this.UIForm.Clone(): null;
-            IUIGrid clonedGrid = this.UIGrid != null ? this.UIGrid.Clone() : null;
+            IUIGrid clonedGrid = this.UIGrid != null ? ((UIGrid)this.UIGrid).Clone() : null;
             UIDef newUIForm = new UIDef(this.Name, clonedForm, clonedGrid);
             return newUIForm;
         }

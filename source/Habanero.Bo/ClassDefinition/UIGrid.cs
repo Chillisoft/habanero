@@ -235,7 +235,7 @@ namespace Habanero.BO.ClassDefinition
         /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
         ///</summary>
         ///<returns>a new collection that is a shallow copy of this collection</returns>
-        public IUIGrid Clone()
+        public UIGrid Clone()
         {
             UIGrid newUIGrid = new UIGrid();
             newUIGrid.SortColumn = this.SortColumn;

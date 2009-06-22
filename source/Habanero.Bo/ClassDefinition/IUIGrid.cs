@@ -42,30 +42,6 @@ namespace Habanero.BO.ClassDefinition
         IUIGridColumn this[string propName] { get; }
 
         /// <summary>
-        /// Copies the elements of the collection to an Array, 
-        /// starting at a particular Array index
-        /// </summary>
-        /// <param name="array">The array to copy to</param>
-        /// <param name="index">The zero-based index position to start
-        /// copying from</param>
-        void CopyTo(Array array, int index);
-
-        /// <summary>
-        /// Returns the number of definitions held
-        /// </summary>
-        int Count { get; }
-
-        /// <summary>
-        /// Returns the synchronisation root
-        /// </summary>
-        object SyncRoot { get; }
-
-        /// <summary>
-        /// Indicates whether the definitions are synchronised
-        /// </summary>
-        bool IsSynchronized { get; }
-
-        /// <summary>
         /// The column on which rows are ordered initially.
         /// Indicate the direction by adding " asc" or " desc"
         /// after the column name (" asc" is assumed if left out).  If this
@@ -78,25 +54,6 @@ namespace Habanero.BO.ClassDefinition
         /// The definition of the filter that will be used for this grid.
         ///</summary>
         IFilterDef FilterDef { get; set; }
-
-        /// <summary>
-        /// Returns the definition list's enumerator
-        /// </summary>
-        /// <returns>Returns an IEnumerator-type object</returns>
-        IEnumerator GetEnumerator();
-
-        ///<summary>
-        /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
-        ///</summary>
-        ///<returns>a new collection that is a shallow copy of this collection</returns>
-        IUIGrid Clone();
-
-        /// <summary>
-        /// Determines whether this object is equal to obj.
-        /// </summary>
-        /// <param name="obj">The object being compared to</param>
-        /// <returns></returns>
-        bool Equals(IUIGrid obj);
 
     }
 }

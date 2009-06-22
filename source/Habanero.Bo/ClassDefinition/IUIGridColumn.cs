@@ -72,10 +72,5 @@ namespace Habanero.BO.ClassDefinition
         /// TODO this should return a string
         object GetParameterValue(string parameterName);
 
-        ///<summary>
-        /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
-        ///</summary>
-        ///<returns>a new collection that is a shallow copy of this collection</returns>
-        IUIGridColumn Clone();
     }
 }
