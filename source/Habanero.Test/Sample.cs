@@ -967,9 +967,9 @@ namespace Habanero.Test
             }
 
 
-            public IUIFormTab GetFormTabTwoFieldsWithNoAlignment()
+            public UIFormTab GetFormTabTwoFieldsWithNoAlignment()
             {
-                return GetSimpleUIFormDef_NoAlignment()[0];
+                return (UIFormTab) GetSimpleUIFormDef_NoAlignment()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_NoAlignment()

@@ -620,7 +620,8 @@ namespace Habanero.Test.UI.Base
             IUIFormTab singleFieldTab = interfaceMapper.GetFormTabTwoFieldsWithNoAlignment();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.IsTrue(String.IsNullOrEmpty(singleFieldTab[0][0].Alignment));
+            UIFormField formField = (UIFormField) singleFieldTab[0][0];
+            Assert.IsTrue(String.IsNullOrEmpty(formField.Alignment));
 
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
@@ -643,7 +644,8 @@ namespace Habanero.Test.UI.Base
             IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithRightAlignment();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.AreEqual("right", singleFieldTab[0][0].Alignment);
+            UIFormField formField = (UIFormField)singleFieldTab[0][0];
+            Assert.AreEqual("right", formField.Alignment);
 
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
@@ -663,7 +665,8 @@ namespace Habanero.Test.UI.Base
             IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithCenterAlignment();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.AreEqual("center", singleFieldTab[0][0].Alignment);
+            UIFormField formField = (UIFormField) singleFieldTab[0][0];
+            Assert.AreEqual("center", formField.Alignment);
 
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
@@ -684,7 +687,8 @@ namespace Habanero.Test.UI.Base
             bool errorThrown = false;
             string errMessage = "";
             //---------------Assert Precondition----------------
-            Assert.AreEqual("Top", singleFieldTab[0][0].Alignment);
+            UIFormField formField = (UIFormField)singleFieldTab[0][0];
+            Assert.AreEqual("Top", formField.Alignment);
             //---------------Execute Test ----------------------
 
             try
@@ -760,8 +764,9 @@ namespace Habanero.Test.UI.Base
             IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDecimalPlacesParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].DecimalPlaces));
-            Assert.AreEqual("3", singleFieldTab[0][0].DecimalPlaces);
+            UIFormField formField = (UIFormField) singleFieldTab[0][0];
+            Assert.IsFalse(String.IsNullOrEmpty(formField.DecimalPlaces));
+            Assert.AreEqual("3", formField.DecimalPlaces);
             Assert.AreEqual("NumericUpDownCurrencyMapper", singleFieldTab[0][0].MapperTypeName);
 
             //---------------Execute Test ----------------------
@@ -781,8 +786,9 @@ namespace Habanero.Test.UI.Base
             IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithOptionsParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].Options));
-            Assert.AreEqual("M|F", singleFieldTab[0][0].Options);
+            UIFormField formField = (UIFormField) singleFieldTab[0][0];
+            Assert.IsFalse(String.IsNullOrEmpty(formField.Options));
+            Assert.AreEqual("M|F", formField.Options);
             Assert.AreEqual("ListComboBoxMapper", singleFieldTab[0][0].MapperTypeName);
 
             //---------------Execute Test ----------------------
@@ -806,11 +812,13 @@ namespace Habanero.Test.UI.Base
             IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithIsEmailParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].IsEmail));
-            Assert.IsTrue(Convert.ToBoolean(singleFieldTab[0][0].IsEmail));
+            UIFormField formField = (UIFormField)singleFieldTab[0][0];
+            Assert.IsFalse(String.IsNullOrEmpty(formField.IsEmail));
+            Assert.IsTrue(Convert.ToBoolean(formField.IsEmail));
 
-            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][1].IsEmail));
-            Assert.IsFalse(Convert.ToBoolean(singleFieldTab[0][1].IsEmail));
+            UIFormField formField1 = (UIFormField) singleFieldTab[0][1];
+            Assert.IsFalse(String.IsNullOrEmpty(formField1.IsEmail));
+            Assert.IsFalse(Convert.ToBoolean(formField1.IsEmail));
 
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
@@ -829,8 +837,10 @@ namespace Habanero.Test.UI.Base
             IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDateFormatParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].DateFormat));
-            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][1].DateFormat));
+            UIFormField formField = (UIFormField) singleFieldTab[0][0];
+            Assert.IsFalse(String.IsNullOrEmpty(formField.DateFormat));
+            UIFormField formField1 = (UIFormField) singleFieldTab[0][1];
+            Assert.IsFalse(String.IsNullOrEmpty(formField1.DateFormat));
 
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
@@ -843,7 +853,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof (IDateTimePicker), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
             IDateTimePicker control2 = (IDateTimePicker) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
             Assert.AreEqual(DateTimePickerFormat.Custom, control2.Format);
-            Assert.AreEqual(singleFieldTab[0][1].DateFormat, control2.CustomFormat);
+            Assert.AreEqual(formField1.DateFormat, control2.CustomFormat);
         }
 
         [Test]
@@ -1506,10 +1516,10 @@ namespace Habanero.Test.UI.Base
             IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithAlignment_NumericUpDown();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.AreEqual("left", singleFieldTab[0][0].Alignment);
-            Assert.AreEqual("right", singleFieldTab[0][1].Alignment);
-            Assert.AreEqual("center", singleFieldTab[0][2].Alignment);
-            Assert.AreEqual("centre", singleFieldTab[0][3].Alignment);
+            Assert.AreEqual("left", ((UIFormField)singleFieldTab[0][0]).Alignment);
+            Assert.AreEqual("right", ((UIFormField)singleFieldTab[0][1]).Alignment);
+            Assert.AreEqual("center", ((UIFormField)singleFieldTab[0][2]).Alignment);
+            Assert.AreEqual("centre", ((UIFormField)singleFieldTab[0][3]).Alignment);
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
@@ -1552,7 +1562,7 @@ namespace Habanero.Test.UI.Base
             IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithNumericUpDown();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.AreEqual("right", singleFieldTab[0][0].Alignment);
+            Assert.AreEqual("right", ((UIFormField)singleFieldTab[0][0]).Alignment);
 
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;

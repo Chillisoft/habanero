@@ -44,7 +44,7 @@ namespace Habanero.UI.VWG
             //_layoutManager.Alignment = FlowLayoutManager.Alignments.Right;
             _controlFactory = controlFactory;
             //IButton sampleBtn = _controlFactory.CreateButton();
-            //this.Height = sampleBtn.Height + 10;
+            //this.Height = sampleBtn.Height + 10
 
 
             ButtonSizePolicy = new ButtonSizePolicyVWG(_controlFactory);
