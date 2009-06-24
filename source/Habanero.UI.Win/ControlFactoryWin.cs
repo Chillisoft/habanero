@@ -4,16 +4,16 @@
 // This file is part of the Habanero framework.
 // 
 //     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
+//     it under the terms of the GNU Lesser General public virtual License as published by
 //     the Free Software Foundation, either version 3 of the License, or
 //     (at your option) any later version.
 // 
 //     The Habanero framework is distributed in the hope that it will be useful,
 //     but WITHOUT ANY WARRANTY; without even the implied warranty of
 //     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
+//     GNU Lesser General public virtual License for more details.
 // 
-//     You should have received a copy of the GNU Lesser General Public License
+//     You should have received a copy of the GNU Lesser General public virtual License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ namespace Habanero.UI.Win
         //        /<summary>
         //        / Construct <see cref="ControlFactoryWin"/>
         //        /</summary>
-        //        public ControlFactoryWin()
+        //        public virtual ControlFactoryWin()
         //        {
         //            //_manager = new ControlFactoryManager(this);
         //        }
@@ -383,7 +383,7 @@ namespace Habanero.UI.Win
         }
 
         //TODO: Port
-//        public IListView CreateListView()
+//        public virtual IListView CreateListView()
 //        {
 //            throw new NotImplementedException();
 //        }
@@ -592,7 +592,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a strategy that customises behaviour of a CheckBox for the environment
         /// </summary>
-        public ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy()
+        public virtual ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy()
         {
             return new CheckBoxStrategyWin();
         }
@@ -600,7 +600,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a strategy that customises behaviour of a ComboBox for the environment
         /// </summary>
-        public IListComboBoxMapperStrategy CreateListComboBoxMapperStrategy()
+        public virtual IListComboBoxMapperStrategy CreateListComboBoxMapperStrategy()
         {
             return new ListComboBoxMapperStrategyWin();
         }
@@ -608,7 +608,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a strategy that customises behaviour of a lookup ComboBox for the environment
         /// </summary>
-        public ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
+        public virtual ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
         {
             return new LookupComboBoxDefaultMapperStrategyWin();
         }
@@ -616,7 +616,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a strategy that customises behaviour of key presses on a lookup ComboBox for the environment
         /// </summary>
-        public ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
+        public virtual ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
         {
             return new LookupComboBoxKeyPressMapperStrategyWin();
         }
@@ -624,7 +624,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a strategy that customises behaviour of a NumericUpDown for the environment
         /// </summary>
-        public INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy()
+        public virtual INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy()
         {
             return new NumericUpDownMapperStrategyWin();
         }
@@ -661,7 +661,7 @@ namespace Habanero.UI.Win
         ///<param name="buttons">One of the MessageBoxButtons values that specifies which buttons to display in the message box.</param>
         ///<param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
         ///<returns>The message box result.</returns>
-        public Base.DialogResult ShowMessageBox(string message, string title, Base.MessageBoxButtons buttons, Base.MessageBoxIcon icon)
+        public virtual Base.DialogResult ShowMessageBox(string message, string title, Base.MessageBoxButtons buttons, Base.MessageBoxIcon icon)
         {
             return (Base.DialogResult)MessageBox.Show(message, title, 
                 (System.Windows.Forms.MessageBoxButtons)buttons, (System.Windows.Forms.MessageBoxIcon)icon);
@@ -677,7 +677,7 @@ namespace Habanero.UI.Win
         ///<param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
         ///<param name="dialogCompletionDelegate">A delegate to be called when the MessageBox has been completed.</param>
         ///<returns>The message box result.</returns>
-        public DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon, DialogCompletionDelegate dialogCompletionDelegate)
+        public virtual DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon, DialogCompletionDelegate dialogCompletionDelegate)
         {
             System.Windows.Forms.MessageBoxButtons messageBoxButtons = (System.Windows.Forms.MessageBoxButtons)buttons;
             System.Windows.Forms.MessageBoxIcon messageBoxIcon = (System.Windows.Forms.MessageBoxIcon)icon;
@@ -691,7 +691,7 @@ namespace Habanero.UI.Win
         ///</summary>
         ///<param name="message">The text to display in the message box.</param>
         ///<returns>The message box result.</returns>
-        public Base.DialogResult ShowMessageBox(string message)
+        public virtual Base.DialogResult ShowMessageBox(string message)
         {
             Cursor.Current = Cursors.Default;
             return (Base.DialogResult)MessageBox.Show(message);
@@ -890,7 +890,7 @@ namespace Habanero.UI.Win
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         [Obsolete("Replaced by IBOGridAndEditorControl: Brett 03 Mar 2009")]
-        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
+        public virtual IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, "default");
         }
@@ -900,7 +900,7 @@ namespace Habanero.UI.Win
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         [Obsolete("Replaced by IBOGridAndEditorControl:: Brett 03 Mar 2009")]
-        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
+        public virtual IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, uiDefName);
         }
@@ -910,7 +910,7 @@ namespace Habanero.UI.Win
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         [Obsolete("Replaced by IBOGridAndEditorControl:: Brett 03 Mar 2009")]
-        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
+        public virtual IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, businessObjectControl);
         }
@@ -920,7 +920,7 @@ namespace Habanero.UI.Win
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         [Obsolete("Replaced by IBOGridAndEditorControl:: Brett 03 Mar 2009")]
-        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
+        public virtual IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
         {
             return new GridWithPanelControlWin<T>(this, businessObjectControl, uiDefName);
         }
@@ -998,7 +998,7 @@ namespace Habanero.UI.Win
         /// Creates a TextBox that provides filtering of characters depending on the property type.
         /// </summary>
         /// <param name="propertyType">Type property being edited.</param>
-        public ITextBox CreateTextBox(Type propertyType)
+        public virtual ITextBox CreateTextBox(Type propertyType)
         {
             return new TextBoxWin();
         }
@@ -1006,7 +1006,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a TextBox that provides filtering of characters depending on the property type.
         /// </summary>
-         public IPictureBox CreatePictureBox()
+         public virtual IPictureBox CreatePictureBox()
         {
             return new PictureBoxWin();
         }
@@ -1014,14 +1014,14 @@ namespace Habanero.UI.Win
         ///<summary>
         /// Creates a <see cref="IDateTimePickerMapperStrategy"/>
         ///</summary>
-        public IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy()
+        public virtual IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy()
         {
             return new DateTimePickerMapperStrategyWin();
         }
         ///<summary>
         /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        public IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
+        public virtual IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
         {
             return new BOGridAndEditorControlWin<TBusinessObject>(this, "default");
 
@@ -1030,7 +1030,7 @@ namespace Habanero.UI.Win
         ///<summary>
         /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        public IBOGridAndEditorControl CreateGridAndBOEditorControl(IClassDef classDef)
+        public virtual IBOGridAndEditorControl CreateGridAndBOEditorControl(IClassDef classDef)
         {
             return new BOGridAndEditorControlWin(this, classDef, "default");
         }
@@ -1038,13 +1038,13 @@ namespace Habanero.UI.Win
         ///<summary>
         /// Creates a <see cref="IBOGridAndEditorControl"/>
         ///</summary>
-        public IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
+        public virtual IBOGridAndEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBOEditorControl editorControlPanel) where TBusinessObject : class, IBusinessObject
         {
 
             return new BOGridAndEditorControlWin<TBusinessObject>(this, editorControlPanel);
         }
 
-//        public IBOGridAndEditorControl CreateGridAndBOEditorControl(IBOEditorControl boEditorPanel,IBusinessObject businessObject)
+//        public virtual IBOGridAndEditorControl CreateGridAndBOEditorControl(IBOEditorControl boEditorPanel,IBusinessObject businessObject)
 //        {
 //            return new BOGridAndEditorControlWin<IBusinessObject>(this, boEditorPanel,businessObject);
 //        }
@@ -1052,7 +1052,7 @@ namespace Habanero.UI.Win
         ///<summary>
         /// Creates a <see cref="ICollapsiblePanel"/>
         ///</summary>
-        public ICollapsiblePanel CreateCollapsiblePanel()
+        public virtual ICollapsiblePanel CreateCollapsiblePanel()
         {
             return new CollapsiblePanelWin(this);
         }
@@ -1060,7 +1060,7 @@ namespace Habanero.UI.Win
         ///<summary>
         /// Creates a <see cref="ICollapsiblePanel"/>
         ///</summary>
-        public ICollapsiblePanel CreateCollapsiblePanel(string name)
+        public virtual ICollapsiblePanel CreateCollapsiblePanel(string name)
         {
             CollapsiblePanelWin collapsiblePanel = new CollapsiblePanelWin(this) { Text = name, Name = name };
             collapsiblePanel.CollapseButton.Text = name;
@@ -1071,7 +1071,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a new TabPage
         /// </summary>
-        public ITabPage createTabPage(string name)
+        public virtual ITabPage createTabPage(string name)
         {
             throw new NotImplementedException();
         }
@@ -1082,7 +1082,7 @@ namespace Habanero.UI.Win
         /// Creates a <see cref="IButton"/> configured with the collapsible style
         ///</summary>
         ///<returns>a <see cref="IButton"/> </returns>
-        public IButton CreateButtonCollapsibleStyle()
+        public virtual IButton CreateButtonCollapsibleStyle()
         {
             ButtonWin button = (ButtonWin)CreateButton();
             ConfigureCollapsibleStyleButton(button);
@@ -1101,7 +1101,7 @@ namespace Habanero.UI.Win
         /// Creates a <see cref="ILabel"/> configured with the collapsible style
         ///</summary>
         ///<returns>a <see cref="ILabel"/> </returns>
-        public ILabel CreateLabelPinOffStyle()
+        public virtual ILabel CreateLabelPinOffStyle()
         {
             LabelWin label = (LabelWin)CreateLabel();
             ConfigurePinOffStyleLabel(label);
@@ -1111,7 +1111,7 @@ namespace Habanero.UI.Win
         ///<summary>
         /// Configures the <see cref="ILabel"/> with the pinoff style
         ///</summary>
-        public void ConfigurePinOffStyleLabel(ILabel label)
+        public virtual void ConfigurePinOffStyleLabel(ILabel label)
         {
             LabelWin labelWin = (LabelWin)label;
             labelWin.BackgroundImage = CollapsiblePanelResource.pinoff_withcolour;
@@ -1124,7 +1124,7 @@ namespace Habanero.UI.Win
         ///<summary>
         ///</summary>
         ///<param name="label"></param>
-        public void ConfigurePinOnStyleLabel(ILabel label)
+        public virtual void ConfigurePinOnStyleLabel(ILabel label)
         {
             LabelWin labelWin = (LabelWin)label;
             labelWin.BackgroundImage = CollapsiblePanelResource.pinon_withcolour;
@@ -1138,7 +1138,7 @@ namespace Habanero.UI.Win
         /// Craetes an <see cref="ICollapsiblePanelGroupControl"/>
         ///</summary>
         ///<returns></returns>
-        public ICollapsiblePanelGroupControl CreateCollapsiblePanelGroupControl()
+        public virtual ICollapsiblePanelGroupControl CreateCollapsiblePanelGroupControl()
         {
             return new CollapsiblePanelGroupControlWin();
         }
@@ -1147,7 +1147,7 @@ namespace Habanero.UI.Win
         /// Creates a <see cref="IGroupBoxGroupControl"/>
         ///</summary>
         ///<returns></returns>
-        public IGroupBoxGroupControl CreateGroupBoxGroupControl()
+        public virtual IGroupBoxGroupControl CreateGroupBoxGroupControl()
         {
             return new GroupBoxGroupControlWin(this);
         }
@@ -1157,7 +1157,7 @@ namespace Habanero.UI.Win
         /// Creates an <see cref="IBOComboBoxSelector"/>
         ///</summary>
         ///<returns></returns>
-        public IBOComboBoxSelector CreateComboBoxSelector()
+        public virtual IBOComboBoxSelector CreateComboBoxSelector()
         {
             ComboBoxSelectorWin comboBoxWin = new ComboBoxSelectorWin(this);
             //Note_: This is a workaround in windows to avoid this default from breaking all the tests 
@@ -1175,7 +1175,7 @@ namespace Habanero.UI.Win
         /// Creates an <see cref="IBOListBoxSelector"/>
         ///</summary>
         ///<returns></returns>
-        public IBOListBoxSelector CreateListBoxSelector()
+        public virtual IBOListBoxSelector CreateListBoxSelector()
         {
             return new ListBoxSelectorWin(this);
         }
@@ -1184,7 +1184,7 @@ namespace Habanero.UI.Win
         /// Creates an <see cref="IBOCollapsiblePanelSelector"/>
         ///</summary>
         ///<returns></returns>
-        public IBOCollapsiblePanelSelector CreateCollapsiblePanelSelector()
+        public virtual IBOCollapsiblePanelSelector CreateCollapsiblePanelSelector()
         {
             return new CollapsiblePanelSelectorWin(this);
         }
@@ -1193,7 +1193,7 @@ namespace Habanero.UI.Win
         /// Creates an <see cref="IMainMenuHabanero"/>
         /// </summary>
         /// <returns></returns>
-        public IMainMenuHabanero CreateMainMenu()
+        public virtual IMainMenuHabanero CreateMainMenu()
         {
             return new MainMenuWin();
         }
@@ -1203,7 +1203,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="name"></param>
         /// <returns>returns the Created MenuItem</returns>
-        public IMenuItem CreateMenuItem(string name)
+        public virtual IMenuItem CreateMenuItem(string name)
         {
             return new MenuItemWin(name);
         }
@@ -1213,7 +1213,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="item">the HabaneroMenu.Item that the IMenuItem is being created for</param>
         /// <returns>returns the Created MenuItem</returns>
-        public IMenuItem CreateMenuItem(HabaneroMenu.Item item)
+        public virtual IMenuItem CreateMenuItem(HabaneroMenu.Item item)
         {
             return new MenuItemWin(item);
         }
@@ -1223,7 +1223,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="habaneroMenu">the HabaneroMenu that the IMainMenuHabanero is being created for</param>
         /// <returns>returns the Created IMainMenuHabanero</returns>
-        public IMainMenuHabanero CreateMainMenu(HabaneroMenu habaneroMenu)
+        public virtual IMainMenuHabanero CreateMainMenu(HabaneroMenu habaneroMenu)
         {
             return new MainMenuWin(habaneroMenu);
         }
@@ -1232,7 +1232,7 @@ namespace Habanero.UI.Win
         /// Creates an <see cref="ISplitContainer"/>
         /// </summary>
         /// <returns>returns the created split container</returns>
-        public ISplitContainer CreateSplitContainer()
+        public virtual ISplitContainer CreateSplitContainer()
         {
             return new SplitContainerWin();
         }
@@ -1248,7 +1248,7 @@ namespace Habanero.UI.Win
         /// <typeparam name="T"></typeparam>
         /// <param name="uiDefName">The User Interface definition to use when creating the Control</param>
         /// <returns></returns>
-        public IBOPanelEditorControl CreateBOEditorControl<T>(string uiDefName) where T : class, IBusinessObject
+        public virtual IBOPanelEditorControl CreateBOEditorControl<T>(string uiDefName) where T : class, IBusinessObject
         {
             return new BOEditorControlWin<T>(this, uiDefName);
         }
@@ -1262,7 +1262,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IBOPanelEditorControl CreateBOEditorControl<T>() where T : class, IBusinessObject
+        public virtual IBOPanelEditorControl CreateBOEditorControl<T>() where T : class, IBusinessObject
         {
             return new BOEditorControlWin<T>(this, "default");
         }
@@ -1276,7 +1276,7 @@ namespace Habanero.UI.Win
         /// <param name="classDef"></param>
         /// <param name="uiDefName">The uiDef defined in the classDef that is to be used.</param>
         /// <returns></returns>
-        public IBOPanelEditorControl CreateBOEditorControl(IClassDef classDef, string uiDefName)
+        public virtual IBOPanelEditorControl CreateBOEditorControl(IClassDef classDef, string uiDefName)
         {
             return new BOEditorControlWin(this, classDef, uiDefName);
         }
@@ -1290,7 +1290,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="classDef"></param>
         /// <returns></returns>
-        public IBOPanelEditorControl CreateBOEditorControl(IClassDef classDef)
+        public virtual IBOPanelEditorControl CreateBOEditorControl(IClassDef classDef)
         {
             return new BOEditorControlWin(this, classDef, "default");
         }
@@ -1298,7 +1298,7 @@ namespace Habanero.UI.Win
         /// Creates a <see cref="MainTitleIconControlWin"/>
         /// </summary>
         /// <returns></returns>
-        public IMainTitleIconControl CreateMainTitleIconControl()
+        public virtual IMainTitleIconControl CreateMainTitleIconControl()
         {
             return new MainTitleIconControlWin(this);
         }

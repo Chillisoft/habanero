@@ -328,13 +328,13 @@ namespace Habanero.BO.ClassDefinition
             int maxRowsInColumns = 0;
             for (int colNum = 0; colNum < this.Count; colNum++)
             {
-                IUIFormColumn column = this[colNum];
+                UIFormColumn column = (UIFormColumn) this[colNum];
 
                 int rowsInColumn = column.GetRowsRequired();
 
                 for (int previousColNum = 0; previousColNum < colNum; previousColNum++)
                 {
-                    rowsInColumn += this[previousColNum].GetRowSpanForColumnToTheRight(colNum-previousColNum);
+                    rowsInColumn += ((UIFormColumn )this[previousColNum]).GetRowSpanForColumnToTheRight(colNum-previousColNum);
                 }
 
                     if (rowsInColumn > maxRowsInColumns)

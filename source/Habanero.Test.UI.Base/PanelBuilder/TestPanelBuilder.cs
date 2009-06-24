@@ -85,7 +85,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneField();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneField();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
 
@@ -106,7 +106,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneIntegerField();
+            UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneIntegerField();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
 
@@ -125,7 +125,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneIntegerField();
+            UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneIntegerField();
             IUIFormField formField = singleIntegerFieldTab[0][0];
             formField.Layout = LayoutStyle.GroupBox;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
@@ -149,7 +149,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneFieldWithMultiLineParameter();
+            UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneFieldWithMultiLineParameter();
             IUIFormField formField = singleIntegerFieldTab[0][0];
             formField.Layout = LayoutStyle.GroupBox;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
@@ -170,7 +170,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneField();
+            UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneField();
             IUIFormColumn column = singleIntegerFieldTab[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -201,7 +201,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleIntegerFieldTab = interfaceMapper.GetSimpleUIFormDef()[0];
+            UIFormTab singleIntegerFieldTab = (UIFormTab) interfaceMapper.GetSimpleUIFormDef()[0];
             IUIFormColumn column = singleIntegerFieldTab[0];
             IUIFormField formField = column[0];
             formField.Layout = LayoutStyle.GroupBox;
@@ -229,7 +229,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab twoFieldTab = interfaceMapper.GetFormTabTwoFields();
+            UIFormTab twoFieldTab = interfaceMapper.GetFormTabTwoFields();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
 
@@ -269,7 +269,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab twoFieldTab = interfaceMapper.GetFormTabTwoFields();
+            UIFormTab twoFieldTab = interfaceMapper.GetFormTabTwoFields();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             const int expectedFields = 2;
             //---------------Assert Precondition----------------
@@ -299,7 +299,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_1();
+            UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_1();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             const int expectedColumns = 2;
             const int expectedFieldsInEachColumn = 1;
@@ -318,7 +318,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_2();
+            UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_2();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             const int expectedColumns = 2;
             const int maxFieldsInAColumn = 2;
@@ -337,7 +337,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_2();
+            UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_2();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             IUIFormColumn formColumn = twoColumnTab[0];
             //---------------Assert Precondition----------------
@@ -378,7 +378,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab twoColumnTab = interfaceMapper.GetFormTabOneColumnOneRowWithWidth();
+            UIFormTab twoColumnTab = interfaceMapper.GetFormTabOneColumnOneRowWithWidth();
             IUIFormColumn column1 = twoColumnTab[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
@@ -404,7 +404,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
+            UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
             IUIFormColumn column1 = twoColumnTab[0];
             IUIFormColumn column2 = twoColumnTab[1];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
@@ -431,7 +431,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
+            UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
 
             IUIFormColumn column1 = twoColumnTab[0];
             IUIFormColumn column2 = twoColumnTab[1];
@@ -457,7 +457,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab threeColumnTab = interfaceMapper.GetFormTabThreeColumnsOneRowWithWidths();
+            UIFormTab threeColumnTab = interfaceMapper.GetFormTabThreeColumnsOneRowWithWidths();
 
             IUIFormColumn column1 = threeColumnTab[0];
             IUIFormColumn column2 = threeColumnTab[1];
@@ -483,7 +483,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneFieldNoColumnWidth();
+            UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneFieldNoColumnWidth();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
 
@@ -509,7 +509,7 @@ namespace Habanero.Test.UI.Base
         public virtual void Test_BuildPanelForTab_3Columns_1Column_RowSpan2()
         {
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabThreeColumnsOneColumnWithRowSpan();
+            UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabThreeColumnsOneColumnWithRowSpan();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Assert Precondition----------------
@@ -542,7 +542,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
-            IUIFormTab oneFieldRowColSpan = interfaceMapper.GetFormTabOneFieldHasRowAndColSpan();
+            UIFormTab oneFieldRowColSpan = interfaceMapper.GetFormTabOneFieldHasRowAndColSpan();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //-------------Assert Preconditions -------------
 
@@ -557,7 +557,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab formTab = interfaceMapper.GetFormTabOneColumnThreeRowsWithRowSpan();
+            UIFormTab formTab = interfaceMapper.GetFormTabOneColumnThreeRowsWithRowSpan();
 
             IUIFormColumn column1 = formTab[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
@@ -584,7 +584,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab formTab = interfaceMapper.GetFormTabTwoColumns_2_1_ColSpan();
+            UIFormTab formTab = interfaceMapper.GetFormTabTwoColumns_2_1_ColSpan();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
 
@@ -617,7 +617,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabTwoFieldsWithNoAlignment();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabTwoFieldsWithNoAlignment();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             UIFormField formField = (UIFormField) singleFieldTab[0][0];
@@ -641,7 +641,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithRightAlignment();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithRightAlignment();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             UIFormField formField = (UIFormField)singleFieldTab[0][0];
@@ -662,7 +662,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithCenterAlignment();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithCenterAlignment();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             UIFormField formField = (UIFormField) singleFieldTab[0][0];
@@ -682,7 +682,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithInvalidAlignment();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithInvalidAlignment();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             bool errorThrown = false;
             string errMessage = "";
@@ -713,7 +713,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithMultiLineParameter();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithMultiLineParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
@@ -733,7 +733,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithInvalidMultiLineParameter();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithInvalidMultiLineParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             bool errorThrown = false;
             string errMessage = "";
@@ -761,7 +761,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDecimalPlacesParameter();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDecimalPlacesParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             UIFormField formField = (UIFormField) singleFieldTab[0][0];
@@ -783,7 +783,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithOptionsParameter();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithOptionsParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             UIFormField formField = (UIFormField) singleFieldTab[0][0];
@@ -809,7 +809,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithIsEmailParameter();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithIsEmailParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             UIFormField formField = (UIFormField)singleFieldTab[0][0];
@@ -834,7 +834,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDateFormatParameter();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDateFormatParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             UIFormField formField = (UIFormField) singleFieldTab[0][0];
@@ -960,7 +960,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
-            IUIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //-------------Assert Preconditions -------------
 
@@ -984,7 +984,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-            IUIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             Sample sample = new Sample();
             //---------------Assert Precondition----------------
@@ -1016,7 +1016,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-            IUIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
@@ -1031,7 +1031,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-            IUIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Assert Precondition----------------
@@ -1049,7 +1049,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanelForTab_LayoutManagerIsSet()
         {
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-            IUIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
@@ -1066,7 +1066,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-            IUIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Assert Precondition----------------
@@ -1084,7 +1084,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-            IUIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["TwoColumns"].UIForm[0];
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["TwoColumns"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Assert Precondition----------------
@@ -1112,7 +1112,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-            IUIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["ThreeColumns"].UIForm[0];
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["ThreeColumns"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Assert Precondition----------------
@@ -1271,7 +1271,7 @@ namespace Habanero.Test.UI.Base
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
-            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(uiForm[0]);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) uiForm[0]);
             IPanel pnl = panelInfo.Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(pnl.Height, panelInfo.MinimumPanelHeight);
@@ -1513,7 +1513,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithAlignment_NumericUpDown();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithAlignment_NumericUpDown();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             Assert.AreEqual("left", ((UIFormField)singleFieldTab[0][0]).Alignment);
@@ -1559,7 +1559,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            IUIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithNumericUpDown();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithNumericUpDown();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
             Assert.AreEqual("right", ((UIFormField)singleFieldTab[0][0]).Alignment);

@@ -385,12 +385,12 @@ namespace Habanero.Test
 
             protected abstract void SetupTypeNameVariables();
 
-            public IUIForm GetSimpleUIFormDef()
+            public UIForm GetSimpleUIFormDef()
             {
                XmlUIFormLoader loader = new XmlUIFormLoader();
                return 
-                    loader.LoadUIFormDef(
-                        @"<form>
+                    (UIForm) loader.LoadUIFormDef(
+                                 @"<form>
 							<tab name=""Tab1"">
 								<columnLayout width=""150"">
 									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
@@ -886,84 +886,84 @@ namespace Habanero.Test
                 return def;
             }
 
-            public IUIFormTab GetFormTabOneField()
+            public UIFormTab GetFormTabOneField()
             {
-                return GetSimpleUIFormDef()[0];
+                return (UIFormTab) GetSimpleUIFormDef()[0];
             }
 
-            public IUIFormTab GetFormTabOneIntegerField()
+            public UIFormTab GetFormTabOneIntegerField()
             {
-                return GetSimpleUIFormDefInt()[0];
+                return (UIFormTab) GetSimpleUIFormDefInt()[0];
             }
 
-            public IUIFormTab GetFormTabTwoFields()
+            public UIFormTab GetFormTabTwoFields()
             {
-                return GetSimpleUIFormDefTwoRows()[0];
+                return (UIFormTab) GetSimpleUIFormDefTwoRows()[0];
             }
 
-            public IUIFormTab GetFormTabTwoColumns_1_1()
+            public UIFormTab GetFormTabTwoColumns_1_1()
             {
-                return GetSimpleUIFormDef1Row2Columns()[0];
+                return (UIFormTab) GetSimpleUIFormDef1Row2Columns()[0];
             }
 
-            public IUIFormTab GetFormTabTwoColumns_1_2()
+            public UIFormTab GetFormTabTwoColumns_1_2()
             {
-                return GetSimpleUIFormDef2Row2Columns1RowWithMoreControls()[0];
+                return (UIFormTab) GetSimpleUIFormDef2Row2Columns1RowWithMoreControls()[0];
             }
 
-            public IUIFormTab GetFormTabTwoColumnsOneRowWithWidths()
+            public UIFormTab GetFormTabTwoColumnsOneRowWithWidths()
             {
-                return GetSimpleUIFormDef1Row2Columns1Row()[0];
+                return (UIFormTab) GetSimpleUIFormDef1Row2Columns1Row()[0];
             }
 
-            public IUIFormTab GetFormTabOneColumnOneRowWithWidth()
+            public UIFormTab GetFormTabOneColumnOneRowWithWidth()
             {
-                return GetSimpleUIFormDef1Row1Column1Row()[0];
+                return (UIFormTab) GetSimpleUIFormDef1Row1Column1Row()[0];
             }
 
-            public IUIFormTab GetFormTabThreeColumnsOneRowWithWidths()
+            public UIFormTab GetFormTabThreeColumnsOneRowWithWidths()
             {
-                return GetSimpleUIFormDef1Row3Columns()[0];
-            }
-
-
-            public IUIFormTab GetFormTabOneFieldNoColumnWidth()
-            {
-                return GetSimpleUIFormDef_NoColumnWidth()[0];
-            }
-
-            public IUIFormTab GetFormTabThreeColumnsOneColumnWithRowSpan()
-            {
-                return GetSimpleUIFormDef_3Columns_1Column_2RowSpan()[0];
-            }
-
-            public IUIFormTab GetFormTabOneColumnThreeRowsWithRowSpan()
-            {
-                return GetSimpleUIFormDef_1Column3RowsWithRowSpan()[0];
+                return (UIFormTab) GetSimpleUIFormDef1Row3Columns()[0];
             }
 
 
-            public IUIFormTab GetFormTabTwoColumns_2_1_ColSpan()
+            public UIFormTab GetFormTabOneFieldNoColumnWidth()
             {
-                return GetSimpleUIFormDef_2Columns_2_1_ColSpan()[0];
+                return (UIFormTab) GetSimpleUIFormDef_NoColumnWidth()[0];
+            }
+
+            public UIFormTab GetFormTabThreeColumnsOneColumnWithRowSpan()
+            {
+                return (UIFormTab) GetSimpleUIFormDef_3Columns_1Column_2RowSpan()[0];
+            }
+
+            public UIFormTab GetFormTabOneColumnThreeRowsWithRowSpan()
+            {
+                return (UIFormTab) GetSimpleUIFormDef_1Column3RowsWithRowSpan()[0];
             }
 
 
-            public IUIFormTab GetFormTabTwoFields_OneHasCompulsoryProp()
+            public UIFormTab GetFormTabTwoColumns_2_1_ColSpan()
             {
-                return GetSimpleUIFormDefTwoRowsOneHasCompulsoryProp()[0];
+                return (UIFormTab) GetSimpleUIFormDef_2Columns_2_1_ColSpan()[0];
             }
 
-            public IUIFormTab GetFormTabOneField_ReadWriteParameter_ReadOnly()
+
+            public UIFormTab GetFormTabTwoFields_OneHasCompulsoryProp()
             {
-                return GetSimpleUIFormDefWithReadWriteRuleValueReadOnly()[0];
+                return (UIFormTab) GetSimpleUIFormDefTwoRowsOneHasCompulsoryProp()[0];
+            }
+
+            public UIFormTab GetFormTabOneField_ReadWriteParameter_ReadOnly()
+            {
+                return (UIFormTab) GetSimpleUIFormDefWithReadWriteRuleValueReadOnly()[0];
                 
             }
 
 
-            public IUIFormTab GetFormTabTwoFields_OneHasToolTip()
+            public UIFormTab GetFormTabTwoFields_OneHasToolTip()
             {
-                return GetSimpleUIFormOneFieldHasToolTip()[0];
+                return (UIFormTab) GetSimpleUIFormOneFieldHasToolTip()[0];
             }
 
 
@@ -987,9 +987,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldWithRightAlignment()
+            public UIFormTab GetFormTabOneFieldWithRightAlignment()
             {
-                return GetSimpleUIFormDef_RightAlignment()[0];
+                return (UIFormTab) GetSimpleUIFormDef_RightAlignment()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_RightAlignment()
@@ -1008,9 +1008,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldWithCenterAlignment()
+            public UIFormTab GetFormTabOneFieldWithCenterAlignment()
             {
-                return GetSimpleUIFormDef_CenterAlignment()[0];
+                return (UIFormTab) GetSimpleUIFormDef_CenterAlignment()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_CenterAlignment()
@@ -1029,9 +1029,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldWithInvalidAlignment()
+            public UIFormTab GetFormTabOneFieldWithInvalidAlignment()
             {
-                return GetSimpleUIFormDef_InvalidAlignment()[0];
+                return (UIFormTab) GetSimpleUIFormDef_InvalidAlignment()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_InvalidAlignment()
@@ -1050,9 +1050,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldsWithAlignment_NumericUpDown()
+            public UIFormTab GetFormTabOneFieldsWithAlignment_NumericUpDown()
             {
-                return GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()[0];
+                return (UIFormTab) GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()
@@ -1080,9 +1080,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldsWithNumericUpDown()
+            public UIFormTab GetFormTabOneFieldsWithNumericUpDown()
             {
-                return GetSimpleUIFormDef_WithNumericUpDown()[0];
+                return (UIFormTab) GetSimpleUIFormDef_WithNumericUpDown()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_WithNumericUpDown()
@@ -1102,9 +1102,9 @@ namespace Habanero.Test
             }
 
 
-            public IUIFormTab GetFormTabOneFieldWithMultiLineParameter()
+            public UIFormTab GetFormTabOneFieldWithMultiLineParameter()
             {
-                return GetSimpleUIFormDef_WithMultiLineParameter()[0];
+                return (UIFormTab) GetSimpleUIFormDef_WithMultiLineParameter()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_WithMultiLineParameter()
@@ -1123,9 +1123,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldWithInvalidMultiLineParameter()
+            public UIFormTab GetFormTabOneFieldWithInvalidMultiLineParameter()
             {
-                return GetSimpleUIFormDef_WithInvalidMultiLineParameter()[0];
+                return (UIFormTab) GetSimpleUIFormDef_WithInvalidMultiLineParameter()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_WithInvalidMultiLineParameter()
@@ -1145,9 +1145,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldWithDecimalPlacesParameter()
+            public UIFormTab GetFormTabOneFieldWithDecimalPlacesParameter()
             {
-                return GetSimpleUIFormDef_WithDecimalPlacesParameter()[0];
+                return (UIFormTab) GetSimpleUIFormDef_WithDecimalPlacesParameter()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_WithDecimalPlacesParameter()
@@ -1166,9 +1166,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldWithOptionsParameter()
+            public UIFormTab GetFormTabOneFieldWithOptionsParameter()
             {
-                return GetSimpleUIFormDef_WithOptionsParameter()[0];
+                return (UIFormTab) GetSimpleUIFormDef_WithOptionsParameter()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_WithOptionsParameter()
@@ -1187,9 +1187,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldWithIsEmailParameter()
+            public UIFormTab GetFormTabOneFieldWithIsEmailParameter()
             {
-                return GetSimpleUIFormDef_WithIsEmailParameter()[0];
+                return (UIFormTab) GetSimpleUIFormDef_WithIsEmailParameter()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_WithIsEmailParameter()
@@ -1211,9 +1211,9 @@ namespace Habanero.Test
 						</form>");
             }
 
-            public IUIFormTab GetFormTabOneFieldWithDateFormatParameter()
+            public UIFormTab GetFormTabOneFieldWithDateFormatParameter()
             {
-                return GetSimpleUIFormDef_WithDateFormatParameter()[0];
+                return (UIFormTab) GetSimpleUIFormDef_WithDateFormatParameter()[0];
             }
 
             private static IUIForm GetSimpleUIFormDef_WithDateFormatParameter()
@@ -1234,9 +1234,9 @@ namespace Habanero.Test
 							</tab>
 						</form>");
             }
-            public IUIFormTab GetFormTabOneFieldHasRowAndColSpan()
+            public UIFormTab GetFormTabOneFieldHasRowAndColSpan()
             {
-                return GetSimpleUIFormTabOneFieldRowAndColSpan()[0];
+                return (UIFormTab) GetSimpleUIFormTabOneFieldRowAndColSpan()[0];
             }
         }
 

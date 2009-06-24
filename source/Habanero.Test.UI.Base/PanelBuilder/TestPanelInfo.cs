@@ -159,7 +159,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
-            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(classDef.UIDefCol["default"].UIForm[0]);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) classDef.UIDefCol["default"].UIForm[0]);
             panelInfo.BusinessObject = new Sample();
             //---------------Assert Precondition----------------
             Assert.IsTrue(panelInfo.FieldInfos[0].InputControl.Enabled);
@@ -187,7 +187,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(classDef.UIDefCol["default"].UIForm[0]);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) classDef.UIDefCol["default"].UIForm[0]);
             Sample businessObject = new Sample();
 
             panelInfo.BusinessObject = businessObject;
@@ -219,7 +219,7 @@ namespace Habanero.Test.UI.Base
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
-            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(classDef.UIDefCol["default"].UIForm[0]);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) classDef.UIDefCol["default"].UIForm[0]);
 
             //--------------- Test Result -----------------------
             Assert.IsNotNull(panelInfo.UIFormTab);
@@ -242,7 +242,7 @@ namespace Habanero.Test.UI.Base
             ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(person.ClassDef.UIDefCol["default"].UIForm[0]);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) person.ClassDef.UIDefCol["default"].UIForm[0]);
             person.Surname = TestUtil.GetRandomString();
             panelInfo.BusinessObject = person;
             IControlMapper SurnameControlMapper = panelInfo.FieldInfos["Surname"].ControlMapper;
@@ -263,7 +263,7 @@ namespace Habanero.Test.UI.Base
             ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(person.ClassDef.UIDefCol["default"].UIForm[0]);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) person.ClassDef.UIDefCol["default"].UIForm[0]);
             panelInfo.BusinessObject = person;
             IControlMapper SurnameControlMapper = panelInfo.FieldInfos["Surname"].ControlMapper;
             panelInfo.UpdateErrorProvidersErrorMessages();

@@ -51,10 +51,5 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         IUIDef UIDef { get; set; }
 
-        ///<summary>
-        /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
-        ///</summary>
-        ///<returns>a new collection that is a shallow copy of this collection</returns>
-        IUIForm Clone();
     }
 }

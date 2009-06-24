@@ -206,7 +206,7 @@ namespace Habanero.BO.ClassDefinition
             newUIForm.Width = this.Width;
             foreach (IUIFormTab tab in this)
             {
-                newUIForm.Add(tab.Clone());
+                newUIForm.Add(((UIFormTab)tab).Clone());
             }
             return newUIForm;
         }

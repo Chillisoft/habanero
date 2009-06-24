@@ -86,7 +86,7 @@ namespace Habanero.BO.ClassDefinition
         /// specified</returns>
         public IUIFormField this[int index]
         {
-            get { return (UIFormField)_list[index]; }
+            get { return (IUIFormField) _list[index]; }
         }
 
 

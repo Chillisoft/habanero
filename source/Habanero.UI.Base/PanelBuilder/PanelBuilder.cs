@@ -153,7 +153,7 @@ namespace Habanero.UI.Base
         /// BusinessObject instance, the created panel, and all the controls,
         /// mappers, labels and error providers that were created.
         /// </returns>
-        public IPanelInfo BuildPanelForTab(IUIFormTab formTab)
+        public IPanelInfo BuildPanelForTab(UIFormTab formTab)
         {
             if (formTab == null) throw new ArgumentNullException("formTab");
             IPanel panel = ControlFactory.CreatePanel();
@@ -248,7 +248,7 @@ namespace Habanero.UI.Base
             return panelInfo;
         }
 
-        private GridLayoutManager SetupLayoutManager(IUIFormTab formTab, IPanel panel)
+        private GridLayoutManager SetupLayoutManager(UIFormTab formTab, IPanel panel)
         {
             GridLayoutManager layoutManager = new GridLayoutManager(panel, ControlFactory);
             int maxRowsInColumns = formTab.GetMaxRowsInColumns();
@@ -269,7 +269,7 @@ namespace Habanero.UI.Base
             return layoutManager;
         }
 
-        private void AddFieldsToLayoutManager(IUIFormTab formTab, IPanelInfo panelInfo)
+        private void AddFieldsToLayoutManager(UIFormTab formTab, IPanelInfo panelInfo)
         {
             int numberOfColumns = formTab.Count;
             int[] currentFieldPositionInColumns = new int[numberOfColumns];
