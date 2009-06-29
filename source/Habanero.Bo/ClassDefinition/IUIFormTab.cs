@@ -3,6 +3,9 @@ using System.Collections;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// Provides an interface for a Form tab - that is, a tab that contains one or more columns of fields on it.
+    /// </summary>
     public interface IUIFormTab : ICollection
     {
         /// <summary>

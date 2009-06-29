@@ -3,6 +3,10 @@ using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// Provides an inteface for a filter definition. See <see cref="FilterDef"/>.  Consists of a number of <see cref="IFilterPropertyDef"/> objects and
+    /// a mode (see <see cref="FilterModes"/>).
+    /// </summary>
     public interface IFilterDef
     {
         /// <summary>

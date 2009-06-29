@@ -24,6 +24,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders
 {
+    [Ignore("Triggers are not included in Habanero at the moment")]
     [TestFixture]
     public class TestXmlTriggerLoader
     {

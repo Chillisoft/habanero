@@ -54,11 +54,11 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         Hashtable Parameters { get; }
 
-        /// <summary>
-        /// Returns the collection of triggers managed by this
-        /// field
-        /// </summary>
-        ITriggerCol Triggers { get; }
+        ///// <summary>
+        ///// Returns the collection of triggers managed by this
+        ///// field
+        ///// </summary>
+        //ITriggerCol Triggers { get; }
 
         ///<summary>
         /// Is the field compulsory (i.e. must it be shown as compulsory on the form or not)

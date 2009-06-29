@@ -269,17 +269,6 @@ namespace Habanero.BO.ClassDefinition
 
         ///<summary>
         ///</summary>
-        ///<param name="relationshipName"></param>
-        ///<param name="gridType"></param>
-        ///<param name="correspondingRelationshipName"></param>
-        ///<returns></returns>
-        public IUIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName)
-		{
-			return new UIFormGrid(relationshipName, gridType, correspondingRelationshipName);
-		}
-
-        ///<summary>
-        ///</summary>
         ///<param name="label"></param>
         ///<param name="propertyName"></param>
         ///<param name="controlTypeName"></param>
@@ -292,10 +281,10 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="triggers"></param>
         ///<param name="layout"></param>
         ///<returns></returns>
-        public IUIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, ITriggerCol triggers, LayoutStyle layout)
+        public IUIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, LayoutStyle layout)
 		{
 			return new UIFormField(label, propertyName, controlTypeName, controlAssembly,
-                mapperTypeName, mapperAssembly, editable, toolTipText, propertyAttributes, triggers, layout);
+                mapperTypeName, mapperAssembly, editable, toolTipText, propertyAttributes, layout);
 		}
 
         ///<summary>
@@ -305,19 +294,6 @@ namespace Habanero.BO.ClassDefinition
 		{
 			return new UIFormTab();
 		}
-
-        ///<summary>
-        ///</summary>
-        ///<param name="triggeredBy"></param>
-        ///<param name="target"></param>
-        ///<param name="conditionValue"></param>
-        ///<param name="action"></param>
-        ///<param name="value"></param>
-        ///<returns></returns>
-        public ITrigger CreateTrigger(string triggeredBy, string target, string conditionValue, string action, string value)
-        {
-            return new Trigger(triggeredBy, target, conditionValue, action, value);
-        }
 
         ///<summary>
         ///</summary>

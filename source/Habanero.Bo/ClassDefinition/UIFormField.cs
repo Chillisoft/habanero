@@ -55,8 +55,8 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="triggers">The collection of triggers managed by the field</param>
         /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
         public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
-                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers, LayoutStyle layout)
-            : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers, layout)
+                           bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
+            : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, layout)
 		{}
 
         /// <summary>
@@ -73,15 +73,15 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="parameters">The property attributes</param>
         /// <param name="triggers">The collection of triggers managed by the field</param>
         /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
-        public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, ITriggerCol triggers, LayoutStyle layout)
+        public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
 			: this(label, propertyName, null, controlTypeName, controlAssembly,
-                    mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers, layout)
+                    mapperTypeName, mapperAssembly, editable, toolTipText, parameters, layout)
 		{}
 
         /// <summary>
         /// The master constructor for all of the possible arguments
         /// </summary>
-        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, ITriggerCol triggers, LayoutStyle layout)
+        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
         {
 			if (controlType != null)
         	{
@@ -101,7 +101,7 @@ namespace Habanero.BO.ClassDefinition
             _toolTipText = toolTipText;
             _parameters = parameters;
             //_controlType = controlType;
-            _triggers = triggers ?? new TriggerCol();
+            //_triggers = triggers ?? new TriggerCol();
             Layout = layout;
         }
 
@@ -201,14 +201,14 @@ namespace Habanero.BO.ClassDefinition
             get { return this._parameters; }
         }
 
-        /// <summary>
-        /// Returns the collection of triggers managed by this
-        /// field
-        /// </summary>
-        public ITriggerCol Triggers
-        {
-            get { return _triggers; }
-        }
+        ///// <summary>
+        ///// Returns the collection of triggers managed by this
+        ///// field
+        ///// </summary>
+        //public ITriggerCol Triggers
+        //{
+        //    get { return _triggers; }
+        //}
 
 		#endregion
 

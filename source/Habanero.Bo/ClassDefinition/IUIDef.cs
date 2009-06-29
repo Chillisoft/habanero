@@ -3,6 +3,9 @@ using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// Provides an interface for a UI definition (see <see cref="UIDef"/>).  This consists of a <see cref="IUIGrid"/> and <see cref="IUIForm"/> definition.
+    /// </summary>
     public interface IUIDef
     {
         /// <summary>

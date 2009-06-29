@@ -2,6 +2,9 @@ using System;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// An interface defining a 
+    /// </summary>
     public interface IUIFormGrid
     {
         /// <summary>

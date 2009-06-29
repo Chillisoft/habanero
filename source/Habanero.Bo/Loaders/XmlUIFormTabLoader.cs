@@ -130,15 +130,6 @@ namespace Habanero.BO.Loaders
                         XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
                         fields.Add(fieldLoader.LoadUIProperty(_reader.ReadOuterXml()));
 
-                    } else if (_reader.Name == "formGrid") {
-                         if (contentType.Length > 0)
-                         {
-                             throw new InvalidXmlDefinitionException(MixedContentMessage);
-                         }
-                        contentType = "formGrid";
-                        XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
-                        _tab.UIFormGrid = gridLoader.LoadUIFormGrid(_reader.ReadOuterXml());
-
                     }
                     else
                     {

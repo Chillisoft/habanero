@@ -88,7 +88,7 @@ namespace Habanero.BO.Loaders
         {
 			return _defClassFactory.CreateUIFormProperty(_label, _propertyName,
 				_controlTypeName, _controlAssembly, _mapperTypeName, _mapperTypeAssembly,
-                _editable, _toolTipText, _parameters, _triggers, _layout);
+                _editable, _toolTipText, _parameters,  _layout);
         }
 
         /// <summary>

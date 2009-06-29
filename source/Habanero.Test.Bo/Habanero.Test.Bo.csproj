@@ -235,7 +235,6 @@
     <Compile Include="Loaders\TestDtdsResource.cs" />
     <Compile Include="Loaders\TestXmlSuperClassLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormFieldLoader.cs" />
-    <Compile Include="Loaders\TestXmlUIFormGridLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormLoader.cs" />
     <Compile Include="Loaders\TestXmlUIGridColumnLoader.cs" />
     <Compile Include="Loaders\TestXmlUIGridLoader.cs" />

@@ -78,8 +78,10 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a Trigger object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateTrigger(_triggeredBy, _target,
-                _conditionValue, _action, _value);
+            //disabled for now.
+            //return _defClassFactory.CreateTrigger(_triggeredBy, _target,
+            //    _conditionValue, _action, _value);
+            return null;
         }
 
         /// <summary>

@@ -389,7 +389,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private UIFormField GetNewFormField()
         {
-            return new UIFormField("fdaf",TestUtil.GetRandomString() , "fdfsdaf", "fdfasd", "fdfasd","fdfasd",  false,"fdafads", new Hashtable(), new TriggerCol(), new LayoutStyle()  );
+            return new UIFormField("fdaf",TestUtil.GetRandomString() , "fdfsdaf", "fdfasd", "fdfasd","fdfasd",  false,"fdafads", new Hashtable(), new LayoutStyle()  );
         }
 
 
@@ -401,7 +401,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private UIFormField CreateUIFormField(string label, string propName, Hashtable parameters)
         {
-            return new UIFormField(label, propName, "control", null, null, null, true, null, parameters, null, LayoutStyle.Label);
+            return new UIFormField(label, propName, "control", null, null, null, true, null, parameters, LayoutStyle.Label);
         }
 
         private UIFormField CreateUIFormField(string label, string propName)

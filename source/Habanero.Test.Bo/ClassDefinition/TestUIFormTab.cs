@@ -78,8 +78,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCloneUIFormTab()
         {
             //---------------Set up test pack-------------------
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
+            UIFormField field1 = CreateUIFormField("label1", "prop1", null);
+            UIFormField field2 = CreateUIFormField("label2", "prop2", null); 
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -293,15 +293,17 @@ namespace Habanero.Test.BO.ClassDefinition
 
         public UIFormColumn CreateUIFormColumn_2FieldsWithRowSpan()
         {
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
+            UIFormField field1 = CreateUIFormField("label1", "prop1", null);
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 2);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters, null, LayoutStyle.Label);
+            UIFormField field2 = CreateUIFormField("label2", "prop2", parameters);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
             return uiFormColumn;
         }
+
+        private UIFormField CreateUIFormField(string label, string propName, Hashtable parameters) { return new UIFormField(label, propName, "control", null, null, null, true, null, parameters, LayoutStyle.Label); }
 
         public UIFormColumn CreateUIFormColumn_1FieldWith2RowAnd2ColSpan()
         {
@@ -309,7 +311,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 2);
             parameters.Add("colSpan", 2);
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, parameters, null, LayoutStyle.Label);
+            UIFormField field1 = CreateUIFormField("label1", "prop1", parameters);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             return uiFormColumn;
@@ -321,7 +323,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 2);
             parameters.Add("colSpan", 3);
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, parameters, null, LayoutStyle.Label);
+            UIFormField field1 = CreateUIFormField("label1", "prop1", parameters);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             return uiFormColumn;
@@ -335,8 +337,9 @@ namespace Habanero.Test.BO.ClassDefinition
         public UIFormColumn CreateUIFormColumn_2Fields(string propName)
         {
             UIFormField field1 =
-                new UIFormField("label1", propName, "control", null, null, null, true, null, null, null, LayoutStyle.Label);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, LayoutStyle.Label);
+                CreateUIFormField("label1", propName, null);
+
+            UIFormField field2 = CreateUIFormField("label2", "prop2", null);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -346,7 +349,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public UIFormColumn CreateUIFormColumn_1Field(string propName)
         {
             UIFormColumn uiFormColumn = new UIFormColumn();
-            uiFormColumn.Add(new UIFormField("label1", propName, "control", null, null, null, true, null, null, null, LayoutStyle.Label));
+            uiFormColumn.Add(CreateUIFormField("label1", propName, null));
             return uiFormColumn;
         }
 
