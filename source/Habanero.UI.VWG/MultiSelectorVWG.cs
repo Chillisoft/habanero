@@ -53,8 +53,8 @@ namespace Habanero.UI.VWG
             InitializeComponent();
             _gridLayoutManager = new GridLayoutManager(this, controlFactory);
             PanelVWG optionsPanel = new PanelVWG();
-            groupBox1.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
-            optionsPanel.Controls.Add(groupBox1);
+            _availableOptionsGroupBox.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
+            optionsPanel.Controls.Add(_availableOptionsGroupBox);
             PanelVWG buttonPanel = new PanelVWG();
             GridLayoutManager buttonPanelManager = new GridLayoutManager(buttonPanel, controlFactory);
             buttonPanelManager.SetGridSize(6, 1);
@@ -72,8 +72,8 @@ namespace Habanero.UI.VWG
             buttonPanelManager.FixRow(5, 25);
             buttonPanelManager.FixColumnBasedOnContents(0);
             PanelVWG selectionsPanel = new PanelVWG();
-            groupBox2.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
-            selectionsPanel.Controls.Add(groupBox2);
+            _selectionsGroupBox.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
+            selectionsPanel.Controls.Add(_selectionsGroupBox);
             _gridLayoutManager.SetGridSize(1, 3);
             _gridLayoutManager.FixColumn(1, 100);
             _gridLayoutManager.AddControl(optionsPanel);
@@ -101,6 +101,11 @@ namespace Habanero.UI.VWG
             get { return _availableOptionsListbox; }
         }
 
+        public IGroupBox AvailableOptionsGroupBox
+        {
+            get { return _availableOptionsGroupBox; }
+        }
+
         /// <summary>
         /// Gets the model that manages the options available or selected
         /// </summary>
@@ -126,6 +131,11 @@ namespace Habanero.UI.VWG
         public IListBox SelectedOptionsListBox
         {
             get { return _selectionsListbox; }
+        }
+
+        public IGroupBox SelectedOptionsGroupBox
+        {
+            get { return _selectionsGroupBox; }
         }
 
         /// <summary>

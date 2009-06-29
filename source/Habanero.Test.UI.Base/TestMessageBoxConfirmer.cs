@@ -8,6 +8,7 @@ using Habanero.UI.Win;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
+using Is=Rhino.Mocks.Constraints.Is;
 
 namespace Habanero.Test.UI.Base
 {

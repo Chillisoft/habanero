@@ -9,7 +9,9 @@ namespace Habanero.UI.Win
     ///<summary>
     /// A Control for Editing/Viewing an <see cref="IBusinessObject"/>.
     ///</summary>
+// ReSharper disable ClassWithVirtualMembersNeverInherited.Global
     public class BOEditorControlWin : UserControlWin, IBOPanelEditorControl
+
     {
         private readonly IPanelInfo _panelInfo;
 
@@ -169,7 +171,7 @@ namespace Habanero.UI.Win
         public BOEditorControlWin(IControlFactory controlFactory, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
-            if (uiDefName == null) throw new ArgumentNullException("uiDefName");
+            if (string.IsNullOrEmpty(uiDefName)) throw new ArgumentNullException("uiDefName");
             ClassDef classDef = ClassDef.Get<T>();
             _panelInfo = BOEditorControlUtils.CreatePanelInfo(controlFactory, classDef, uiDefName, this);
             SetEnableState();
@@ -293,6 +295,7 @@ namespace Habanero.UI.Win
         #endregion
     }
 
+    // ReSharper restore ClassWithVirtualMembersNeverInherited.Global
     /// <summary>
     /// A Utility Class used by <see cref="BOEditorControlWin"/> and <see cref="BOEditorControlWin{T}"/> providing common functionality.
     /// </summary>
@@ -307,14 +310,14 @@ namespace Habanero.UI.Win
             }
             catch (HabaneroDeveloperException ex)
             {
-                string developerMessage = "The 'BOEditorControlWin' could not be created since the the uiDef '"
+                string developerMessage = "The 'IBOEditorControl' could not be created since the the uiDef '"
                                           + uiDefName + "' does not exist in the classDef for '"
                                           + classDef.ClassNameFull + "'";
                 throw new HabaneroDeveloperException(developerMessage, developerMessage, ex);
             }
             if (uiForm == null)
             {
-                string developerMessage = "The 'BOEditorControlWin' could not be created since the the uiDef '"
+                string developerMessage = "The 'IBOEditorControl' could not be created since the the uiDef '"
                                           + uiDefName + "' in the classDef '" + classDef.ClassNameFull
                                           + "' does not have a UIForm defined";
                 throw new HabaneroDeveloperException(developerMessage, developerMessage);

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -103,7 +104,10 @@ namespace Habanero.Test.BO
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
 
-            IBOProp prop = boKey["invalidpropname"];
+
+                IBOProp prop = boKey["invalidpropname"];
+                Assert.Fail("Expected to throw an InvalidPropertyNameException`");
+
 
         }
 
@@ -111,21 +115,26 @@ namespace Habanero.Test.BO
         public void TestIndexerIntegerOutOfRange()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
-            IBOProp prop = boKey[2];
+                IBOProp prop = boKey[2];
+                Assert.Fail("Expected to throw an IndexOutOfRangeException");
+
         }
 #pragma warning restore 168
         [Test, ExpectedException(typeof(HabaneroArgumentException))]
         public void TestAddNullBOProp()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
-            boKey.Add(null);
+                boKey.Add(null);
+                Assert.Fail("Expected to throw an HabaneroArgumentException");
         }
 
         [Test, ExpectedException(typeof(InvalidPropertyException))]
         public void TestAddDuplicateBOProp()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
-            boKey.Add(boKey["PropName"]);
+                boKey.Add(boKey["PropName"]);
+                Assert.Fail("Expected to throw an InvalidPropertyException");
+
         }
 
         [Test]

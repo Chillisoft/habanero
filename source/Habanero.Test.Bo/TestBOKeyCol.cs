@@ -32,7 +32,8 @@ namespace Habanero.Test.BO
             BOKeyCol col = new BOKeyCol();
             BOKey boKey = new BOKey(new KeyDef());
             col.Add(boKey);
-            col.Add(boKey);
+                col.Add(boKey);
+                Assert.Fail("Expected to throw an InvalidKeyException");
         }
 
         [Test]
@@ -45,11 +46,15 @@ namespace Habanero.Test.BO
             Assert.AreEqual(boKey, col["key"]);
         }
 
+#pragma warning disable 168
         [Test, ExpectedException(typeof(InvalidKeyException))]
         public void TestIndexerWithNonExistingKey()
         {
             BOKeyCol col = new BOKeyCol();
-            BOKey key = col["invalidkey"];
+                BOKey key = col["invalidkey"];
+
+                Assert.Fail("Expected to throw an InvalidKeyException");
         }
+#pragma warning restore 168
     }
 }

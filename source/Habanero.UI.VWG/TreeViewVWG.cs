@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using Habanero.Util;
 using TreeViewAction=Habanero.UI.Base.TreeViewAction;
 using TreeViewCancelEventArgs = Gizmox.WebGUI.Forms.TreeViewCancelEventArgs;
 using TreeViewCancelEventHandler = Habanero.UI.Base.TreeViewCancelEventHandler;
@@ -495,7 +496,9 @@ namespace Habanero.UI.VWG
             /// <exception cref="T:System.NullReferenceException"><paramref name="value" /> is null reference in the <see cref="T:System.Collections.IList" />.</exception><filterpriority>2</filterpriority>
             void IList.Insert(int index, object value)
             {
-                ((IList)_nodes).Insert(index, value);
+                //This is a Hack since the RemoveAt is not correctly implemented in Visual Web Gui.
+               ArrayList list =  (ArrayList) ReflectionUtilities.GetPrivatePropertyValue(_nodes, "List");
+                list.Insert(index, value);
             }
 
             /// <summary>
@@ -516,7 +519,9 @@ namespace Habanero.UI.VWG
             /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.IList" /> is read-only.-or- The <see cref="T:System.Collections.IList" /> has a fixed size. </exception><filterpriority>2</filterpriority>
             public void RemoveAt(int index)
             {
-                ((IList)_nodes).RemoveAt(index);
+                //This is a Hack since the RemoveAt is not correctly implemented in Visual Web Gui.
+                ArrayList list = (ArrayList)ReflectionUtilities.GetPrivatePropertyValue(_nodes, "List");
+                list.RemoveAt(index);
             }
 
             /// <summary>
@@ -531,7 +536,12 @@ namespace Habanero.UI.VWG
             object IList.this[int index]
             {
                 get { return _nodes[index]; }
-                set { ((IList)_nodes)[index] = value; }
+                set
+                {
+                    //This is a Hack since the RemoveAt is not correctly implemented in Visual Web Gui.
+                    ArrayList list = (ArrayList)ReflectionUtilities.GetPrivatePropertyValue(_nodes, "List");
+                    list[index] = value;
+                }
             }
 
             /// <summary>

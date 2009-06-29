@@ -51,7 +51,7 @@ namespace Habanero.DB
         public DatabaseConnectionSqlServer(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
         {
-        } //		protected override IDbConnection GetNewConnection() {
+        }
 
         /// <summary>
         /// Gets the value of the last auto-incrementing number.  This called after doing an insert statement so that

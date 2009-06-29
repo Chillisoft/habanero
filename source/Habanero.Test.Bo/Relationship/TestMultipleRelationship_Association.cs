@@ -602,9 +602,8 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.AreEqual(1, tc.OriginalTransactions.Count);
 
-            Assert.IsInstanceOfType(typeof (TransactionalSingleRelationship_Added), tc.OriginalTransactions[0]);
-            Assert.AreSame
-                (relationship, ((TransactionalSingleRelationship_Added) tc.OriginalTransactions[0]).Relationship);
+            Assert.IsInstanceOfType(typeof(TransactionalSingleRelationship_Added), tc.OriginalTransactions[0]);
+            Assert.AreSame(relationship, ((TransactionalSingleRelationship_Added)tc.OriginalTransactions[0]).Relationship);    
         }
 
         private static MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship

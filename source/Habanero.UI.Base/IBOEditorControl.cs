@@ -25,8 +25,9 @@ using Habanero.BO.ClassDefinition;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Provides an interface for controls used in GridAndBOEditorControlWin, which calls
-    /// through to DisplayErrors when the BO is invalid and cannot be persisted.
+    /// Provides an interface for a control to edit an individual Business object,. 
+    /// The control that is using this control can obtain and display any errors that have occured for the Business object associated with this control.
+    /// The list of errors can be obtained via the Errors method.
     /// </summary>
     public interface IBOEditorControl : IBusinessObjectControl
     {

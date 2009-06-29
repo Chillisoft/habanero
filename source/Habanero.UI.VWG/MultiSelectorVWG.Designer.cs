@@ -49,9 +49,9 @@ namespace Habanero.UI.VWG
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new Gizmox.WebGUI.Forms.GroupBox();
+            this._availableOptionsGroupBox = new GroupBoxVWG();
             this._availableOptionsListbox = new ListBoxVWG();
-            this.groupBox2 = new Gizmox.WebGUI.Forms.GroupBox();
+            this._selectionsGroupBox = new GroupBoxVWG();
             this._selectionsListbox = new ListBoxVWG();
             this._btnSelect = new ButtonVWG();
             this._btnSelectAll = new ButtonVWG();
@@ -59,18 +59,18 @@ namespace Habanero.UI.VWG
             this._btnDeselect = new ButtonVWG();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // _availableOptionsGroupBox
             // 
-            this.groupBox1.Anchor = ((Gizmox.WebGUI.Forms.AnchorStyles)(((Gizmox.WebGUI.Forms.AnchorStyles.Top | Gizmox.WebGUI.Forms.AnchorStyles.Bottom)
+            this._availableOptionsGroupBox.Anchor = ((Gizmox.WebGUI.Forms.AnchorStyles)(((Gizmox.WebGUI.Forms.AnchorStyles.Top | Gizmox.WebGUI.Forms.AnchorStyles.Bottom)
                         | Gizmox.WebGUI.Forms.AnchorStyles.Left)));
-            this.groupBox1.Controls.Add(this._availableOptionsListbox);
-            this.groupBox1.DragTargets = new Gizmox.WebGUI.Forms.Component[0];
-            this.groupBox1.FlatStyle = Gizmox.WebGUI.Forms.FlatStyle.Flat;
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 369);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.Text = "Available AllOptions";
+            this._availableOptionsGroupBox.Controls.Add(this._availableOptionsListbox);
+            this._availableOptionsGroupBox.DragTargets = new Gizmox.WebGUI.Forms.Component[0];
+            this._availableOptionsGroupBox.FlatStyle = Gizmox.WebGUI.Forms.FlatStyle.Flat;
+            this._availableOptionsGroupBox.Location = new System.Drawing.Point(3, 3);
+            this._availableOptionsGroupBox.Name = "_availableOptionsGroupBox";
+            this._availableOptionsGroupBox.Size = new System.Drawing.Size(200, 369);
+            this._availableOptionsGroupBox.TabIndex = 0;
+            this._availableOptionsGroupBox.Text = "Available AllOptions";
             // 
             // _availableOptionsListbox
             // 
@@ -85,18 +85,18 @@ namespace Habanero.UI.VWG
             this._availableOptionsListbox.TabIndex = 0;
             this._availableOptionsListbox.DoubleClick += new System.EventHandler(this._availableOptionsListbox_DoubleClick);
             // 
-            // groupBox2
+            // _selectionsGroupBox
             // 
-            this.groupBox2.Anchor = ((Gizmox.WebGUI.Forms.AnchorStyles)(((Gizmox.WebGUI.Forms.AnchorStyles.Top | Gizmox.WebGUI.Forms.AnchorStyles.Bottom)
+            this._selectionsGroupBox.Anchor = ((Gizmox.WebGUI.Forms.AnchorStyles)(((Gizmox.WebGUI.Forms.AnchorStyles.Top | Gizmox.WebGUI.Forms.AnchorStyles.Bottom)
                         | Gizmox.WebGUI.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this._selectionsListbox);
-            this.groupBox2.DragTargets = new Gizmox.WebGUI.Forms.Component[0];
-            this.groupBox2.FlatStyle = Gizmox.WebGUI.Forms.FlatStyle.Flat;
-            this.groupBox2.Location = new System.Drawing.Point(290, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(200, 369);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.Text = "Selected AllOptions";
+            this._selectionsGroupBox.Controls.Add(this._selectionsListbox);
+            this._selectionsGroupBox.DragTargets = new Gizmox.WebGUI.Forms.Component[0];
+            this._selectionsGroupBox.FlatStyle = Gizmox.WebGUI.Forms.FlatStyle.Flat;
+            this._selectionsGroupBox.Location = new System.Drawing.Point(290, 3);
+            this._selectionsGroupBox.Name = "_selectionsGroupBox";
+            this._selectionsGroupBox.Size = new System.Drawing.Size(200, 369);
+            this._selectionsGroupBox.TabIndex = 1;
+            this._selectionsGroupBox.Text = "Selected AllOptions";
             // 
             // _selectionsListbox
             // 
@@ -156,8 +156,8 @@ namespace Habanero.UI.VWG
             //this.Controls.Add(this._btnDeselectAll);
             //this.Controls.Add(this._btnSelectAll);
             //this.Controls.Add(this._btnSelect);
-            //this.Controls.Add(this.groupBox2);
-            //this.Controls.Add(this.groupBox1);
+            //this.Controls.Add(this._selectionsGroupBox);
+            //this.Controls.Add(this._availableOptionsGroupBox);
             this.Size = new System.Drawing.Size(497, 381);
             this.Text = "MyMultiSelector";
             this.ResumeLayout(false);
@@ -166,9 +166,9 @@ namespace Habanero.UI.VWG
 
         #endregion
 
-        private global::Gizmox.WebGUI.Forms.GroupBox groupBox1;
+        private GroupBoxVWG _availableOptionsGroupBox;
         private ListBoxVWG _availableOptionsListbox;
-        private global::Gizmox.WebGUI.Forms.GroupBox groupBox2;
+        private GroupBoxVWG _selectionsGroupBox;
         private ListBoxVWG _selectionsListbox;
         private ButtonVWG _btnSelect;
         private ButtonVWG _btnSelectAll;

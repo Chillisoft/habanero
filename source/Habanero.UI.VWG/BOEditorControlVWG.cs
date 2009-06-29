@@ -322,14 +322,14 @@ namespace Habanero.UI.VWG
             }
             catch (HabaneroDeveloperException ex)
             {
-                string developerMessage = "The 'BOEditorControlVWG' could not be created since the the uiDef '"
+                string developerMessage = "The 'IBOEditorControl' could not be created since the the uiDef '"
                                           + uiDefName + "' does not exist in the classDef for '"
                                           + classDef.ClassNameFull + "'";
                 throw new HabaneroDeveloperException(developerMessage, developerMessage, ex);
             }
             if (uiForm == null)
             {
-                string developerMessage = "The 'BOEditorControlVWG' could not be created since the the uiDef '"
+                string developerMessage = "The 'IBOEditorControl' could not be created since the the uiDef '"
                                           + uiDefName + "' in the classDef '" + classDef.ClassNameFull
                                           + "' does not have a UIForm defined";
                 throw new HabaneroDeveloperException(developerMessage, developerMessage);
