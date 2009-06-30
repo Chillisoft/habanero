@@ -29,39 +29,14 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestConnectionStringFactory
     {
-		[Test]
-		public void TestGetFactory()
-		{
-			Assert.AreSame(typeof(ConnectionStringSqlServerFactory),
-						   ConnectionStringFactory.GetFactory(DatabaseConfig.SqlServer).GetType(),
-						   "GetFactory not creating correct type : SqlServer.");
-			Assert.AreSame(typeof(ConnectionStringOracleFactory),
-						   ConnectionStringFactory.GetFactory(DatabaseConfig.Oracle).GetType(),
-						   "GetFactory not creating correct type : Oracle.");
-			Assert.AreSame(typeof(ConnectionStringMySqlFactory),
-						   ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetType(),
-						   "GetFactory not creating correct type : MySql.");
-			Assert.AreSame(typeof(ConnectionStringAccessFactory),
-						   ConnectionStringFactory.GetFactory(DatabaseConfig.Access).GetType(),
-						   "GetFactory not creating correct type : Access.");
-            Assert.AreSame(typeof(ConnectionStringPostgreSqlFactory),
-                           ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetType(),
-                           "GetFactory not creating correct type : PostgreSql.");
-            Assert.AreSame(typeof(ConnectionStringSQLiteFactory),
-                           ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetType(),
-                           "GetFactory not creating correct type : SQLite.");
-            Assert.AreSame(typeof(ConnectionStringFirebirdFactory),
-                           ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetType(),
-                           "GetFactory not creating correct type : Firebird.");
-        }
-
+		
     	#region SqlServer
 
         [Test]
         public void TestSqlServer()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SqlServer).GetConnectionString("testserver", "testdb",
+                new ConnectionStringSqlServerFactory().GetConnectionString("testserver", "testdb",
                                                                                                  "testusername",
                                                                                                  "testpassword",
                                                                                                  "testport");
@@ -73,7 +48,7 @@ namespace Habanero.Test.DB
         public void TestSqlServerNoPassword()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SqlServer).GetConnectionString("testserver", "testdb",
+                new ConnectionStringSqlServerFactory().GetConnectionString("testserver", "testdb",
                                                                                                  "testusername", "",
                                                                                                  "testport");
             Assert.AreEqual("Server=testserver;Initial Catalog=testdb;User ID=testusername;", conn,
@@ -88,7 +63,7 @@ namespace Habanero.Test.DB
         public void TestOracle()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.Oracle).GetConnectionString("", "testdatasource",
+                new ConnectionStringOracleFactory().GetConnectionString("", "testdatasource",
                                                                                               "testuser", "testpassword",
                                                                                               "");
             Assert.AreEqual("Data Source=testdatasource;user ID=testuser;Password=testpassword;", conn,
@@ -99,7 +74,7 @@ namespace Habanero.Test.DB
         public void TestOracleNoPassword()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.Oracle).GetConnectionString("", "testdatasource",
+                new ConnectionStringOracleFactory().GetConnectionString("", "testdatasource",
                                                                                               "testuser", "", "");
             Assert.AreEqual("Data Source=testdatasource;user ID=testuser;", conn,
                             "ConnectionStringFactory not working for Oracle");
@@ -113,7 +88,7 @@ namespace Habanero.Test.DB
         public void TestMySql()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("testserver", "testdb",
+                new ConnectionStringMySqlFactory().GetConnectionString("testserver", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
             Assert.AreEqual(
@@ -125,7 +100,7 @@ namespace Habanero.Test.DB
         public void TestMySqlNoPassword()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("testserver", "testdb",
+                new ConnectionStringMySqlFactory().GetConnectionString("testserver", "testdb",
                                                                                              "testusername", "",
                                                                                              "testport");
             Assert.AreEqual("Username=testusername; Host=testserver; Port=testport; Database=testdb;", conn,
@@ -136,7 +111,7 @@ namespace Habanero.Test.DB
         public void TestMySqlNoServerName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("", "testdb",
+                new ConnectionStringMySqlFactory().GetConnectionString("", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
         }
@@ -145,7 +120,7 @@ namespace Habanero.Test.DB
         public void TestMySqlNoUserName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("sdf", "testdb", "",
+                new ConnectionStringMySqlFactory().GetConnectionString("sdf", "testdb", "",
                                                                                              "testpassword", "testport");
         }
 
@@ -153,7 +128,7 @@ namespace Habanero.Test.DB
         public void TestMySqlNoDatabaseName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("sdf", "", "sasdf",
+                new ConnectionStringMySqlFactory().GetConnectionString("sdf", "", "sasdf",
                                                                                              "testpassword", "testport");
         }
 
@@ -161,7 +136,7 @@ namespace Habanero.Test.DB
         public void TestMySqlNoPort()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("testserver", "testdb",
+                new ConnectionStringMySqlFactory().GetConnectionString("testserver", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "");
             Assert.AreEqual(
@@ -177,7 +152,7 @@ namespace Habanero.Test.DB
         public void TestAccess()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.Access).GetConnectionString("testserver", "testdb",
+                new ConnectionStringAccessFactory().GetConnectionString("testserver", "testdb",
                                                                                               "testusername",
                                                                                               "testpassword", "");
             Assert.AreEqual(
@@ -193,7 +168,7 @@ namespace Habanero.Test.DB
 		public void TestPostgreSql()
 		{
 			String conn =
-				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("testserver", "testdb",
+                new ConnectionStringPostgreSqlFactory().GetConnectionString("testserver", "testdb",
 																							 "testusername",
 																							 "testpassword", "testport");
 			Assert.AreEqual(
@@ -205,7 +180,7 @@ namespace Habanero.Test.DB
 		public void TestPostgreSqlNoPassword()
 		{
 			String conn =
-				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("testserver", "testdb",
+                new ConnectionStringPostgreSqlFactory().GetConnectionString("testserver", "testdb",
 																							 "testusername", "",
 																							 "testport");
 			Assert.AreEqual("Server=testserver;Port=testport;Database=testdb;Userid=testusername;", conn,
@@ -216,7 +191,7 @@ namespace Habanero.Test.DB
 		public void TestPostgreSqlNoServerName()
 		{
 			String conn =
-				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("", "testdb",
+                new ConnectionStringPostgreSqlFactory().GetConnectionString("", "testdb",
 																							 "testusername",
 																							 "testpassword", "testport");
 		}
@@ -225,7 +200,7 @@ namespace Habanero.Test.DB
 		public void TestPostgreSqlNoUserName()
 		{
 			String conn =
-				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("sdf", "testdb", "",
+                new ConnectionStringPostgreSqlFactory().GetConnectionString("sdf", "testdb", "",
 																							 "testpassword", "testport");
 		}
 
@@ -233,7 +208,7 @@ namespace Habanero.Test.DB
 		public void TestPostgreSqlNoDatabaseName()
 		{
 			String conn =
-				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("sdf", "", "sasdf",
+                new ConnectionStringPostgreSqlFactory().GetConnectionString("sdf", "", "sasdf",
 																							 "testpassword", "testport");
 		}
 
@@ -241,7 +216,7 @@ namespace Habanero.Test.DB
 		public void TestPostgreSqlNoPort()
 		{
 			String conn =
-				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("testserver", "testdb",
+                new ConnectionStringPostgreSqlFactory().GetConnectionString("testserver", "testdb",
 																							 "testusername",
 																							 "testpassword", "");
 			Assert.AreEqual(
@@ -257,7 +232,7 @@ namespace Habanero.Test.DB
         public void TestSQLite()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb",
+                new ConnectionStringSQLiteFactory().GetConnectionString("testserver", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
             Assert.AreEqual(
@@ -269,7 +244,7 @@ namespace Habanero.Test.DB
         public void TestSQLiteNoPassword()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb",
+                new ConnectionStringSQLiteFactory().GetConnectionString("testserver", "testdb",
                                                                                              "testusername", "",
                                                                                              "testport");
             Assert.AreEqual("Data Source=testdb;BinaryGUID=False", conn,
@@ -280,7 +255,7 @@ namespace Habanero.Test.DB
         public void TestSQLiteNoServerName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("", "testdb",
+                new ConnectionStringSQLiteFactory().GetConnectionString("", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
             Assert.AreEqual(
@@ -292,7 +267,7 @@ namespace Habanero.Test.DB
         public void TestSQLiteNoUserName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb", "",
+                new ConnectionStringSQLiteFactory().GetConnectionString("testserver", "testdb", "",
                                                                                              "testpassword", "testport");
             Assert.AreEqual(
                 "Data Source=testdb;Password=testpassword;BinaryGUID=False", conn,
@@ -303,7 +278,7 @@ namespace Habanero.Test.DB
         public void TestSQLiteNoDatabaseName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "", "testusername",
+                new ConnectionStringSQLiteFactory().GetConnectionString("testserver", "", "testusername",
                                                                                              "testpassword", "testport");
         }
 
@@ -311,7 +286,7 @@ namespace Habanero.Test.DB
         public void TestSQLiteNoPort()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb",
+                new ConnectionStringSQLiteFactory().GetConnectionString("testserver", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "");
             Assert.AreEqual(
@@ -327,7 +302,7 @@ namespace Habanero.Test.DB
         public void TestFirebird()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetConnectionString("testserver", "testdatasource",
+                new ConnectionStringFirebirdFactory().GetConnectionString("testserver", "testdatasource",
                                                                                                 "testuser", "testpassword",
                                                                                                 "");
             Assert.AreEqual("Server=testserver;User=testuser;Password=testpassword;Database=testdatasource;ServerType=0", conn,
@@ -338,7 +313,7 @@ namespace Habanero.Test.DB
         public void TestFirebirdEmbedded()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.FirebirdEmbedded).GetConnectionString("testserver", "testdatasource",
+                new ConnectionStringFirebirdEmbeddedFactory().GetConnectionString("testserver", "testdatasource",
                                                                                                 "testuser", "testpassword",
                                                                                                 "");
             Assert.AreEqual("User=testuser;Password=testpassword;Database=testdatasource;ServerType=1", conn,
@@ -349,7 +324,7 @@ namespace Habanero.Test.DB
         public void TestFirebirdNoServerName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetConnectionString("", "testdb",
+                new ConnectionStringFirebirdFactory().GetConnectionString("", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
         }
@@ -358,7 +333,7 @@ namespace Habanero.Test.DB
         public void TestFirebirdEmbeddedNoServerName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.FirebirdEmbedded).GetConnectionString("", "testdb",
+                new ConnectionStringFirebirdEmbeddedFactory().GetConnectionString("", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
         }
@@ -367,7 +342,7 @@ namespace Habanero.Test.DB
         public void TestFirebirdNoUserName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetConnectionString("sdf", "testdb", "",
+                new ConnectionStringFirebirdFactory().GetConnectionString("sdf", "testdb", "",
                                                                                              "testpassword", "testport");
         }
 
@@ -375,7 +350,7 @@ namespace Habanero.Test.DB
         public void TestFirebirdNoDatabaseName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetConnectionString("sdf", "", "sasdf",
+                new ConnectionStringFirebirdFactory().GetConnectionString("sdf", "", "sasdf",
                                                                                              "testpassword", "testport");
         }
 

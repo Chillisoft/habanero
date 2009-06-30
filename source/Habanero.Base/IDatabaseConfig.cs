@@ -59,14 +59,6 @@ namespace Habanero.Base
         string Port { get; set; }
 
         /// <summary>
-        /// Returns a connection string tailored for the database vendor,
-        /// after appending an alternate assembly name
-        /// </summary>
-        /// <param name="alternateAssemblyName">The alternate assembly name</param>
-        /// <returns>Returns a connection string</returns>
-        String GetConnectionString(string alternateAssemblyName);
-
-        /// <summary>
         /// Returns a connection string tailored for the database vendor
         /// </summary>
         /// <returns>Returns a connection string</returns>
@@ -85,15 +77,5 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns an IDatabaseConnection object</returns>
         IDatabaseConnection GetDatabaseConnection();
-
-        /// <summary>
-        /// Creates a database connection using the configuration settings
-        /// stored, along with the assembly name and full
-        /// class name provided
-        /// </summary>
-        /// <param name="assemblyName">The assembly name</param>
-        /// <param name="fullClassName">The full class name</param>
-        /// <returns>Returns an IDbConnection object</returns>
-        IDbConnection GetConnection(string assemblyName, string fullClassName);
     }
 }

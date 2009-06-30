@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Data;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -33,9 +34,15 @@ namespace Habanero.Test.DB
         [Test]
         public void TestCreateConnectionFireBird()
         {
+            //---------------Set up test pack-------------------
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Firebird, "test", "test", "test", "test", "1000");
-            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
-            Assert.AreEqual("FirebirdSql.Data.FirebirdClient", connection.TestConnection.GetType().Namespace);
+
+            //---------------Execute Test ----------------------
+            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDbConnection dbConnection = connection.GetConnection();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("FirebirdSql.Data.FirebirdClient", dbConnection.GetType().Namespace);
         }
 
         #endregion
@@ -45,9 +52,15 @@ namespace Habanero.Test.DB
         [Test]
         public void TestCreateConnectionMySql()
         {
+            //---------------Set up test pack-------------------
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.MySql, "test", "test", "test", "test", "1000");
-            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
-            Assert.AreEqual("MySql.Data.MySqlClient", connection.TestConnection.GetType().Namespace);
+
+            //---------------Execute Test ----------------------
+            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDbConnection dbConnection = connection.GetConnection();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("MySql.Data.MySqlClient", dbConnection.GetType().Namespace);
         }
 
         #endregion
@@ -57,9 +70,15 @@ namespace Habanero.Test.DB
         [Test]
         public void TestCreateConnectionSqlServer()
         {
+            //---------------Set up test pack-------------------
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000");
-            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
-            Assert.AreEqual("System.Data.SqlClient", connection.TestConnection.GetType().Namespace);
+
+            //---------------Execute Test ----------------------
+            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDbConnection dbConnection = connection.GetConnection();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("System.Data.SqlClient", dbConnection.GetType().Namespace);
         }
 
         #endregion
@@ -69,24 +88,17 @@ namespace Habanero.Test.DB
         [Test]
         public void TestCreateConnectionOracle()
         {
+            //---------------Set up test pack-------------------
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Oracle, "test", "test", "test", "test", "1000");
-            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
-            Assert.AreEqual("System.Data.OracleClient", connection.TestConnection.GetType().Namespace);
-            //Assert.AreEqual("Oracle.DataAccess.Client", connection.GetTestConnection().GetType().Namespace);
-        }
 
-        /*
-        [Test]
-        public void TestCreateConnectionOracleUsingMicrosoft()
-        {
-            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Oracle, "test", "test", "test", "test", "1000");
-            DatabaseConnectionFactory factory = new DatabaseConnectionFactory();
-            DatabaseConnection connection =
-                factory.CreateConnection(config, "System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
-            Assert.AreEqual("System.Data.OracleClient", connection.GetTestConnection().GetType().Namespace);
-        }
-        */
+            //---------------Execute Test ----------------------
+            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDbConnection dbConnection = connection.GetConnection();
 
+            //---------------Test Result -----------------------
+            Assert.AreEqual("System.Data.OracleClient", dbConnection.GetType().Namespace);
+        }
+        
         #endregion
 
         #region Access
@@ -94,9 +106,15 @@ namespace Habanero.Test.DB
         [Test]
         public void TestCreateConnectionAccess()
         {
+            //---------------Set up test pack-------------------
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000");
-            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
-            Assert.AreEqual("System.Data.OleDb", connection.TestConnection.GetType().Namespace);
+
+            //---------------Execute Test ----------------------
+            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDbConnection dbConnection = connection.GetConnection();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("System.Data.OleDb", dbConnection.GetType().Namespace);
         }
 
         #endregion
@@ -106,9 +124,15 @@ namespace Habanero.Test.DB
         [Test]
         public void TestCreateConnectionPostgreSql()
         {
+            //---------------Set up test pack-------------------
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.PostgreSql, "test", "test", "test", "test", "1000");
-            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
-            Assert.AreEqual("Npgsql", connection.TestConnection.GetType().Namespace);
+
+            //---------------Execute Test ----------------------
+            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDbConnection dbConnection = connection.GetConnection();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Npgsql", dbConnection.GetType().Namespace);
         }
 
         #endregion
@@ -118,12 +142,38 @@ namespace Habanero.Test.DB
         [Test, Ignore("Issue with SQLite 64-bit driver in Hudson")]
         public void TestCreateConnectionSQLite()
         {
+            //---------------Set up test pack-------------------
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SQLite, "test", "test", "test", "test", "1000");
-            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
-            Assert.AreEqual("System.Data.SQLite", connection.TestConnection.GetType().Namespace);
+
+            //---------------Execute Test ----------------------
+            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDbConnection dbConnection = connection.GetConnection();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("System.Data.SQLite", dbConnection.GetType().Namespace);
         }
 
         #endregion
 
+        #region all
+
+        [Test]
+        public void TestUsingCustomAssembly()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Oracle, "test", "test", "test", "test", "1000");
+            config.AssemblyName = "System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+            config.FullClassName = "System.Data.SqlClient.SqlConnection";
+
+            //---------------Execute Test ----------------------
+            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDbConnection dbConnection = connection.GetConnection();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("System.Data.SqlClient", dbConnection.GetType().Namespace);
+            Assert.AreEqual(config.AssemblyName, dbConnection.GetType().Assembly.FullName);
+            //---------------Tear Down -------------------------          
+        }
+        #endregion
     }
 }

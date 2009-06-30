@@ -7,6 +7,11 @@ using log4net;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// A controller used to map an <see cref="IBusinessObjectCollection"/> onto an <see cref="ITreeView"/>. Each <see cref="IBusinessObject"/>
+    /// is displayed as a node in the treeview, and the multiple relationships of the <see cref="IBusinessObject"/> are displayed as
+    /// subnodes.
+    /// </summary>
     public class TreeViewController // : ISelectorController
     {
         /// <summary>
@@ -65,7 +70,10 @@ namespace Habanero.UI.Base
             }
         }
 
-
+        /// <summary>
+        /// Constructs the TreeViewController. 
+        /// </summary>
+        /// <param name="treeView">The <see cref="ITreeView"/> to control/map to</param>
         public TreeViewController(ITreeView treeView)
         {
             _preventSelectionChanged = false;
@@ -79,6 +87,9 @@ namespace Habanero.UI.Base
             _levelsToDisplay = -1;
         }
 
+        /// <summary>
+        /// Destructor. Removes the event handlers that the controller sets up on the controlled treeview.
+        /// </summary>
         ~TreeViewController()
         {
             _treeView.AfterSelect -= TreeView_AfterSelect;

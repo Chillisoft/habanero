@@ -1,5 +1,8 @@
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// The interface for a <see cref="Trigger"/>. 
+    /// </summary>
     public interface ITrigger
     {
         /// <summary>

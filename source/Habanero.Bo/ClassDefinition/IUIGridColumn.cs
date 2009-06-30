@@ -4,6 +4,9 @@ using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// Interface describing a column of a grid.  This is implemented by <see cref="UIGridColumn"/>.
+    /// </summary>
     public interface IUIGridColumn
     {
         /// <summary>

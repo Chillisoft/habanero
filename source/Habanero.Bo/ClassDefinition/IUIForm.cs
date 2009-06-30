@@ -2,6 +2,10 @@ using System.Collections;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// An interface describing a form consisting of one or more <see cref="IUIFormTab"/> objects.  
+    /// Implemented by <see cref="UIForm"/>.
+    /// </summary>
     public interface IUIForm : ICollection
     {
         /// <summary>

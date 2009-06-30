@@ -106,7 +106,7 @@ namespace Habanero.Test.DB
         {
             DatabaseConfig config = new DatabaseConfig(settingsMySql);
             String connectString =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("b", "c", "d", "e", "f");
+                new ConnectionStringMySqlFactory().GetConnectionString("b", "c", "d", "e", "f");
             Assert.AreEqual(connectString, config.GetConnectionString(),
                             "ConnectionStringFactory not working for MySql using ConfigData");
         }
@@ -131,8 +131,7 @@ namespace Habanero.Test.DB
         public void TestConnectionStringEncryptedPassword()
         {
             encryptedConfig.SetPrivateKey(rsa.ToXmlString(true));
-            String connectString =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("a", "b", "c", password, "e");
+            String connectString = new ConnectionStringMySqlFactory().GetConnectionString("a", "b", "c", password, "e");
 
             Assert.AreEqual(connectString, encryptedConfig.GetConnectionString());
         }
@@ -144,6 +143,8 @@ namespace Habanero.Test.DB
             DatabaseConfig d2 = new DatabaseConfig(DatabaseConfig.MySql, "a", "b", "c", encryptedPassword, "e");
             Assert.AreEqual(d2.ToString(), encryptedConfig.ToString());
         }
+
+
 
     }
 }

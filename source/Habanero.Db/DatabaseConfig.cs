@@ -19,10 +19,12 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Security.Cryptography;
 using Habanero.Base;
+using Habanero.Util;
 
 namespace Habanero.DB
 {
@@ -76,6 +78,24 @@ namespace Habanero.DB
         /// Firebird embedded - the Firebird embedded data provider will be used
         /// </summary>
         public const string FirebirdEmbedded = "FIREBIRDEMBEDDED";
+
+        /// <summary>
+        /// We need to map the database vendor name to the right <see cref="ConnectionStringFactory"/> type.
+        /// </summary>
+	    private static readonly Dictionary<string, string> 
+            VendorToConnectionStringFactoryNameMap = 
+                new Dictionary<string, string>
+                       {
+                           {MySql, "MySql"},
+                           {DB4O, "DB4O"},
+                           {SqlServer, "SqlServer"},
+                           {Oracle, "Oracle"},
+                           {Access, "Access"},
+                           {PostgreSql, "PostgreSql"},
+                           {SQLite, "SQLite"},
+                           {Firebird, "Firebird"},
+                           {FirebirdEmbedded, "Firebird"}
+                       };
 
         private String _vendor;
         private String _server;
@@ -203,6 +223,48 @@ namespace Habanero.DB
             set { _port = value; }
         }
 
+        /// <summary>
+        /// The name of the Assembly to use - the assembly that contains the IDbConnection class for this database type.
+        /// This does not need to be specified normally, but if you want to use a custom data provider you will need to 
+        /// set this property before using the <see cref="IDatabaseConnectionFactory"/> to create the <see cref="IDatabaseConnection"/>.
+        /// This must be the full name of the assembly if you are to be sure to get the right assembly.  Alternately if the dll is
+        /// placed in the same folder as the application you can just specify the name of the file (without the .dll extension).
+        /// </summary>
+        public virtual string AssemblyName
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// The fully qualified name of the type to use when creating the IDbConnection.
+        /// This does not need to be specified normally, but if you want to use a custom data provider you will need to 
+        /// set this property before using the <see cref="IDatabaseConnectionFactory"/> to create the <see cref="IDatabaseConnection"/>.
+        /// This class must exist withing the assembly specified in the <see cref="AssemblyName"/> property, and be fully qualified
+        /// i.e. it must include the namespace.
+        /// </summary>
+        public virtual string FullClassName
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// The full assembly name of the assembly containing <see cref="ConnectionStringFactory"/> to use.
+        /// This does not need to be specified if you are using one of the standard Habanero database types.
+        /// </summary>
+        public virtual string ConnectionStringFactoryAssemblyName
+        {
+             get; set;
+        }
+
+        /// <summary>
+        /// The fully qualified class name of the <see cref="ConnectionStringFactory"/> to use.
+        /// This does not need to be specified if you are using one of the standard Habanero database types.
+        /// </summary>
+        public virtual string ConnectionStringFactoryClassName
+        {
+             get; set;
+        }
+        
         internal string DecryptedPassword
         {
             get { return _passwordCrypter.DecryptString(Password);  }
@@ -250,38 +312,32 @@ namespace Habanero.DB
 	        return new DatabaseConfig((IDictionary) ConfigurationManager.GetSection(configSectionName));
 	    }
 
-	    /// <summary>
-        /// Returns a connection string tailored for the database vendor,
-        /// after appending an alternate assembly name.  Rather use 
-        /// GetConnectionString() if no alternate assembly name is needed.
-        /// </summary>
-        /// <param name="alternateAssemblyName">The alternate assembly name</param>
-        /// <returns>Returns a connection string</returns>
-        public String GetConnectionString(string alternateAssemblyName)
-        {
-            ConnectionStringFactory factory =
-                ConnectionStringFactory.GetFactory(this.Vendor + "_" + alternateAssemblyName);
-            return factory.GetConnectionString(this.Server, this.Database, this.UserName, this.DecryptedPassword, this.Port);
-        }
-
         /// <summary>
         /// Returns a connection string tailored for the database vendor
         /// </summary>
         /// <returns>Returns a connection string</returns>
         public String GetConnectionString()
         {
-            ConnectionStringFactory factory = ConnectionStringFactory.GetFactory(this.Vendor);
+            string factoryClassName = this.ConnectionStringFactoryClassName;
+            string factoryAssembly = this.ConnectionStringFactoryAssemblyName;
+            if (String.IsNullOrEmpty(factoryClassName)) factoryClassName = "ConnectionString" + VendorToConnectionStringFactoryNameMap[this.Vendor.ToUpper()] + "Factory";
+            if (String.IsNullOrEmpty(factoryAssembly)) factoryAssembly = "Habanero.DB";
+
+            Type factoryType = TypeLoader.LoadType(factoryAssembly, factoryClassName);
+            ConnectionStringFactory factory = (ConnectionStringFactory) Activator.CreateInstance(factoryType);
             return factory.GetConnectionString(this.Server, this.Database, this.UserName, this.DecryptedPassword, this.Port);
         }
 
-        /// <summary>
+
+
+	    /// <summary>
         /// Creates a database connection using the configuration settings
         /// stored
         /// </summary>
         /// <returns>Returns an IDbConnection object</returns>
         public IDbConnection GetConnection()
         {
-            return DatabaseConnectionFactory.CreateConnection(this).GetConnection();
+            return new DatabaseConnectionFactory().CreateConnection(this).GetConnection();
         }
 
         /// <summary>
@@ -291,20 +347,7 @@ namespace Habanero.DB
         /// <returns>Returns an IDatabaseConnection object</returns>
         public IDatabaseConnection GetDatabaseConnection()
         {
-            return DatabaseConnectionFactory.CreateConnection(this);
-        }
-
-        /// <summary>
-        /// Creates a database connection using the configuration settings
-        /// stored, along with the assembly name and full
-        /// class name provided
-        /// </summary>
-        /// <param name="assemblyName">The assembly name</param>
-        /// <param name="fullClassName">The full class name</param>
-        /// <returns>Returns an IDbConnection object</returns>
-        public IDbConnection GetConnection(string assemblyName, string fullClassName)
-        {
-            return DatabaseConnectionFactory.CreateConnection(this, assemblyName, fullClassName).GetConnection();
+            return new DatabaseConnectionFactory().CreateConnection(this);
         }
 
         /// <summary>

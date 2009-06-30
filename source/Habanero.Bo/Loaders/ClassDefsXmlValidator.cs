@@ -6,8 +6,17 @@ using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.Loaders
 {
+    /// <summary>
+    /// Validates a classdefs xml string against the schema and returns an <see cref="XmlValidationResult"/> which contains
+    /// any validation errors.
+    /// </summary>
     public class ClassDefsXmlValidator
     {
+        /// <summary>
+        /// Validates the xml string against the classdefs schema.  
+        /// </summary>
+        /// <param name="xml">The classdefs xml to validate</param>
+        /// <returns>The result of the validation.  See <see cref="XmlValidationResult"/>.</returns>
         public XmlValidationResult ValidateClassDefsXml(string xml)
         {
             List<string> validationMessages = new List<string>();

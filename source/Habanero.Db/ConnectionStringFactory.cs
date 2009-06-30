@@ -66,42 +66,42 @@ namespace Habanero.DB
         protected abstract string CreateConnectionString(string server, string database, string userName,
                                                          string password, string port);
 
-        /// <summary>
-        /// Returns a connection string factory that is tailored to the
-        /// database vendor specified
-        /// </summary>
-        /// <param name="vendor">The database vendor - use the string
-        /// options provided under DatabaseConfig (eg. DatabaseConfig.MySql)</param>
-        /// <returns>Returns a ConnectionStringFactory object, or null
-        /// if the vendor string could not be matched up</returns>
-        public static ConnectionStringFactory GetFactory(string vendor)
-        {
-            if (vendor == null) throw new ArgumentNullException("vendor");
-            switch (vendor.ToUpper())
-            {
-                case DatabaseConfig.MySql:
-                    return new ConnectionStringMySqlFactory();
-                case DatabaseConfig.SqlServer:
-                    return new ConnectionStringSqlServerFactory();
-                case DatabaseConfig.Oracle:
-                    return new ConnectionStringOracleFactory();
-                case DatabaseConfig.Oracle + "_SYSTEM.DATA.ORACLECLIENT":
-                    return new ConnectionStringOracleFactory();
-				case DatabaseConfig.Access:
-					return new ConnectionStringAccessFactory();
-                case DatabaseConfig.PostgreSql:
-                    return new ConnectionStringPostgreSqlFactory();
-                case DatabaseConfig.SQLite:
-                    return new ConnectionStringSQLiteFactory();
-                case DatabaseConfig.Firebird:
-                    return new ConnectionStringFirebirdFactory(false);
-                case DatabaseConfig.FirebirdEmbedded:
-                    return new ConnectionStringFirebirdFactory(true);                
-                case DatabaseConfig.DB4O:
-                    return new ConnectionStringDB4OFactory();
-                default:
-                    return null;
-            }
-        }
+        ///// <summary>
+        ///// Returns a connection string factory that is tailored to the
+        ///// database vendor specified
+        ///// </summary>
+        ///// <param name="vendor">The database vendor - use the string
+        ///// options provided under DatabaseConfig (eg. DatabaseConfig.MySql)</param>
+        ///// <returns>Returns a ConnectionStringFactory object, or null
+        ///// if the vendor string could not be matched up</returns>
+        //public static ConnectionStringFactory GetFactory(string vendor)
+        //{
+        //    if (vendor == null) throw new ArgumentNullException("vendor");
+        //    switch (vendor.ToUpper())
+        //    {
+        //        case DatabaseConfig.MySql:
+        //            return new ConnectionStringMySqlFactory();
+        //        case DatabaseConfig.SqlServer:
+        //            return new ConnectionStringSqlServerFactory();
+        //        case DatabaseConfig.Oracle:
+        //            return new ConnectionStringOracleFactory();
+        //        case DatabaseConfig.Oracle + "_SYSTEM.DATA.ORACLECLIENT":
+        //            return new ConnectionStringOracleFactory();
+        //        case DatabaseConfig.Access:
+        //            return new ConnectionStringAccessFactory();
+        //        case DatabaseConfig.PostgreSql:
+        //            return new ConnectionStringPostgreSqlFactory();
+        //        case DatabaseConfig.SQLite:
+        //            return new ConnectionStringSQLiteFactory();
+        //        case DatabaseConfig.Firebird:
+        //            return new ConnectionStringFirebirdFactory(false);
+        //        case DatabaseConfig.FirebirdEmbedded:
+        //            return new ConnectionStringFirebirdFactory(true);                
+        //        case DatabaseConfig.DB4O:
+        //            return new ConnectionStringDB4OFactory();
+        //        default:
+        //            return null;
+        //    }
+        //}
     }
 }

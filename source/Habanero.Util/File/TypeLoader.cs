@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -62,7 +63,10 @@ namespace Habanero.Util
                 } else if (assemblyName == "System.Drawing")
                 {
                     classAssembly = typeof(Image).Assembly;
-                } else
+                } else if (assemblyName == "System.Data")
+                {
+                    classAssembly = typeof (DataSet).Assembly;
+                } else 
                 {
                     classAssembly = Assembly.Load(assemblyName);
                 }
@@ -71,8 +75,14 @@ namespace Habanero.Util
             {
                 try
                 {
-                    classAssembly = Assembly.LoadWithPartialName(assemblyName) ??
-                                    Assembly.LoadFrom(assemblyName + ".dll");
+                    try
+                    {
+                        classAssembly = Assembly.Load(assemblyName);
+                    }
+                    catch (Exception ex)
+                    {
+                        classAssembly = Assembly.LoadFrom(assemblyName + ".dll");
+                    }
                     if (classAssembly == null)
                     {
                         throw new FileNotFoundException("Thrown manually");

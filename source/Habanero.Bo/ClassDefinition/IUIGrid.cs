@@ -3,6 +3,10 @@ using System.Collections;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// An interface describing a grid.  An IUIGrid contains a collection of <see cref="IUIGridColumn"/> objects, a <see cref="IFilterDef"/>
+    /// and a sort column.  Implemented by <see cref="UIGrid"/>
+    /// </summary>
     public interface IUIGrid : ICollection
     {
         /// <summary>

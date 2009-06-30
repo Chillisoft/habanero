@@ -47,7 +47,7 @@ namespace Habanero.Test.DB
         public void SetupTestFixture()
         {
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000");
-            _connection = DatabaseConnectionFactory.CreateConnection(config);
+            _connection = new DatabaseConnectionFactory().CreateConnection(config);
             _testStatement = new SqlStatement(_connection);
             _rawStatement = "insert into tb1 (field1, field2, field3) values (@Param1, @Param2, @Param3)";
             _testStatement.Statement.Append(_rawStatement);

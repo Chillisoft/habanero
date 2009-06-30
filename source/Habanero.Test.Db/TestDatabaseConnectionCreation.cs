@@ -143,7 +143,7 @@ namespace Habanero.Test.DB
         public void Test_CreateDatabaseConnection_OracleMicrosoft()
         {
             DatabaseConnection conn = new DatabaseConnectionOracle
-                ("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
+                ("System.Data.OracleClient, Version=2.0.0.0, Culture=neutral,PublicKeyToken=b77a5c561934e089", "System.Data.OracleClient.OracleConnection");
             conn.ConnectionString =
                 new DatabaseConfig(DatabaseConfig.Oracle, "test", "test", "test", "test", "1000").GetConnectionString();
             Assert.AreEqual

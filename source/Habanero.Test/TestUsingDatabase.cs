@@ -58,7 +58,7 @@ namespace Habanero.Test
                 return;
             }
             DatabaseConnection.CurrentConnection =
-                new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
+                new DatabaseConnectionOracle("System.Data.OracleClient, Version=2.0.0.0, Culture=neutral,PublicKeyToken=b77a5c561934e089", "System.Data.OracleClient.OracleConnection");
             ConnectionStringOracleFactory oracleConnectionString = new ConnectionStringOracleFactory();
             string connStr = oracleConnectionString.GetConnectionString("core1", "XE", "system", "system", "1521");
             DatabaseConnection.CurrentConnection.ConnectionString = connStr;

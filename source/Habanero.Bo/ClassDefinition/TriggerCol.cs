@@ -26,7 +26,7 @@ namespace Habanero.BO.ClassDefinition
     /// Manages a collection of triggers assigned to a specific
     /// user interface control
     /// </summary>
-    public class TriggerCol : List<ITrigger>, IEnumerable<ITrigger>, ITriggerCol
+    public class TriggerCol : List<ITrigger>, IEnumerable<ITrigger>
     {
 //        private Dictionary<string, Trigger> _triggers;
 //

@@ -2,6 +2,9 @@ using System.Collections;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// An interface describing a column of fields on a form.  This is implemented by <see cref="UIFormColumn"/>.
+    /// </summary>
     public interface IUIFormColumn : ICollection
     {
         /// <summary>

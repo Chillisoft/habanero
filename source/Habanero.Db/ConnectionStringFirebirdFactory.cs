@@ -26,16 +26,6 @@ namespace Habanero.DB
     /// </summary>
     public class ConnectionStringFirebirdFactory : ConnectionStringFactory
     {
-        private readonly bool _isEmbeddedServer;
-
-        /// <summary>
-        /// Constructor to initialise a new factory
-        /// </summary>
-        public ConnectionStringFirebirdFactory(bool isEmbeddedServer)
-        {
-            _isEmbeddedServer = isEmbeddedServer;
-        }
-
         /// <summary>
         /// Checks that each of the arguments provided are valid
         /// </summary>
@@ -48,22 +38,11 @@ namespace Habanero.DB
         /// arguments provided are invalid</exception>
         protected override void CheckArguments(string server, string database, string userName, string password, string port)
         {
-            if (_isEmbeddedServer)
-            {
 
-                if (String.IsNullOrEmpty(database) || String.IsNullOrEmpty(userName) ||
-                    String.IsNullOrEmpty(password))
-                {
-                    throw new ArgumentException(
-                        "The database, password and userName of a connect string can never be empty.");
-                }
-            } else
-            {
                 if (String.IsNullOrEmpty(server) || String.IsNullOrEmpty(database) || String.IsNullOrEmpty(userName) || String.IsNullOrEmpty(password))
                 {
                     throw new ArgumentException("The server, database, password and userName of a connect string can never be empty.");
                 }
-            }
         }
 
         /// <summary>
@@ -77,14 +56,8 @@ namespace Habanero.DB
         /// <returns>Returns the connection string</returns>
         protected override string CreateConnectionString(string server, string database, string userName, string password, string port)
         {
-            string serverType = _isEmbeddedServer ? "1" : "0";
-            string serverNamePart = "";
-            if (!_isEmbeddedServer)
-            {
-                serverNamePart = string.Format("Server={0};", server);
-            }
-            return String.Format("{0}User={1};Password={2};Database={3};ServerType={4}", 
-                serverNamePart, userName, password, database, serverType);
+            return String.Format("Server={0};User={1};Password={2};Database={3};ServerType={4}",
+                server, userName, password, database, "0");
         }
     }
 }

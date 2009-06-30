@@ -38,7 +38,7 @@ namespace Habanero.BO.ClassDefinition
 		private string _controlTypeName;
 		private Type _controlType;
         private readonly Hashtable _parameters;
-        private readonly ITriggerCol _triggers;
+       // private readonly ITriggerCol _triggers;
         private readonly string _toolTipText;
 
         /// <summary>
@@ -52,7 +52,6 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="editable">Whether the control is editable or not</param>
         /// <param name="toolTipText">The tool tip text to be used.</param>
         /// <param name="parameters">The property attributes</param>
-        /// <param name="triggers">The collection of triggers managed by the field</param>
         /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
         public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
                            bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
@@ -71,7 +70,6 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="editable">Whether the control is editable or not</param>
         /// <param name="toolTipText">The tool tip text to be used.</param>
         /// <param name="parameters">The property attributes</param>
-        /// <param name="triggers">The collection of triggers managed by the field</param>
         /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
         public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
 			: this(label, propertyName, null, controlTypeName, controlAssembly,

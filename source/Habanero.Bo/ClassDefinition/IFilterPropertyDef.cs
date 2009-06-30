@@ -3,6 +3,10 @@ using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// Interface defining a filter property definition - i.e. a filter field, what property it is filtering on, 
+    /// what <see cref="FilterType"/> to use.  This is implemented by <see cref="FilterPropertyDef"/>.
+    /// </summary>
     public interface IFilterPropertyDef
     {
         /// <summary>

@@ -70,10 +70,14 @@ namespace Habanero.Util
         /// is a validation failure</exception>
         private void ValidateCurrentDocument()
         {
-            XmlValidatingReader validatingReader =
-                new XmlValidatingReader(new XmlTextReader(new StringReader(_xmlDocument.OuterXml)));
-            validatingReader.ValidationType = ValidationType.DTD;
-            validatingReader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
+             XmlReaderSettings settings = new XmlReaderSettings();
+            settings.ValidationType = ValidationType.DTD;
+            settings.ConformanceLevel = ConformanceLevel.Auto;
+            settings.ValidationEventHandler += ValidationHandler;
+            XmlReader validatingReader = XmlReader.Create(new XmlTextReader(new StringReader(_xmlDocument.OuterXml)), settings);
+               // new XmlValidatingReader(new XmlTextReader(new StringReader(_xmlDocument.OuterXml)));
+            //validatingReader.ValidationType = ValidationType.DTD;
+            //validatingReader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
             while (validatingReader.Read())
             {
                 ;
