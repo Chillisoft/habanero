@@ -165,7 +165,7 @@ namespace Habanero.DB
             set { _port = value; }
         }
 
-        internal string DecryptedPassword
+        public string DecryptedPassword
         {
             get { return _passwordCrypter.DecryptString(Password);  }
         }
