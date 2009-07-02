@@ -35,7 +35,7 @@ namespace Habanero.DB
         private readonly BusinessObject _bo;
         private StringBuilder _dbFieldList;
         private StringBuilder _dbValueList;
-        private ParameterNameGenerator _gen;
+        private IParameterNameGenerator _gen;
         private SqlStatement _insertSql;
         private SqlStatementCollection _statementCollection;
         private readonly IDatabaseConnection _connection;
@@ -200,8 +200,8 @@ namespace Habanero.DB
             statement.SupportsAutoIncrementingField = supportsAutoIncrementingField;
 
             _insertSql = statement;
-            
-            _gen = new ParameterNameGenerator(_connection.GetConnection());
+
+            _gen = _connection.CreateParameterNameGenerator();
             _firstField = true;
         }
 

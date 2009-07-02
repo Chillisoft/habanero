@@ -158,5 +158,11 @@ namespace Habanero.Base
         /// <param name="timeoutSeconds">The time-out period in seconds</param>
         void SetTimeoutPeriod(int timeoutSeconds);
 
+        /// <summary>
+        /// Creates an <see cref="IParameterNameGenerator"/> for this database connection.  This is used to create names for parameters
+        /// added to an <see cref="ISqlStatement"/> because each database uses a different naming convention for their parameters.
+        /// </summary>
+        /// <returns>The <see cref="IParameterNameGenerator"/> valid for this <see cref="IDatabaseConnection"/></returns>
+        IParameterNameGenerator CreateParameterNameGenerator();
     }
 }

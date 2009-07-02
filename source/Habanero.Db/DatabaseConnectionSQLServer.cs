@@ -19,6 +19,7 @@
 
 using System;
 using System.Data;
+using Habanero.Base;
 
 namespace Habanero.DB
 {
@@ -81,6 +82,12 @@ namespace Habanero.DB
         public override IsolationLevel IsolationLevel
         {
             get { return IsolationLevel.ReadUncommitted; }
+        }
+
+
+        public override IParameterNameGenerator CreateParameterNameGenerator()
+        {
+            return new ParameterNameGenerator("@");
         }
     }
 }

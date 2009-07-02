@@ -24,7 +24,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     /// <summary>
     /// This class tests an inheritance Hierarchy of three classes, with the

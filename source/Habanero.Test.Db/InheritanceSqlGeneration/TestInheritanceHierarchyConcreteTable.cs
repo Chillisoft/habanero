@@ -22,7 +22,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     [TestFixture]
     public class TestInheritanceHierarchyConcreteTable : TestInheritanceHierarchyBase

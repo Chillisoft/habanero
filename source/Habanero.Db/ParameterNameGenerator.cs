@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Data;
 using Habanero.Base;
 
@@ -25,53 +26,30 @@ namespace Habanero.DB
     /// <summary>
     /// Generates parameter names for parameterised sql statements
     /// </summary>
-    internal class ParameterNameGenerator : IParameterNameGenerator
+    public class ParameterNameGenerator : IParameterNameGenerator
     {
-        private readonly IDbConnection _connection;
         private int _number;
         private const string _parameterNameBase = "Param";
-        private readonly string _prefixCharacter;
+
+
+        public ParameterNameGenerator(string prefixCharacter)
+        {
+            PrefixCharacter = prefixCharacter;
+        }
 
         /// <summary>
-        /// Constructor to initialise a new generator
+        /// The prefix character used. For example, setting this to "?" will make parameters called "?Param0", "?Param1" etc.
         /// </summary>
-        /// <param name="connection">A database connection</param>
-        public ParameterNameGenerator(IDbConnection connection)
-        {
-            _connection = connection;
-            if (_connection == null) {
-                _prefixCharacter = "?";
-                return;
-            }
-            string connectionNamespace = _connection.GetType().Namespace;
-            switch (connectionNamespace)
-            {
-                case "System.Data.OracleClient":
-                    _prefixCharacter = ":";
-                    break;
-                case "Npgsql":
-                    _prefixCharacter = ":";
-                    break;
-                case "System.Data.SQLite":
-                    _prefixCharacter = ":";
-                    break;
-                case "MySql.Data.MySqlClient":
-                    _prefixCharacter = "?";
-                    break;
-                default:
-                    _prefixCharacter = connectionNamespace == "FirebirdSql.Data.FirebirdClient" ? "@" : "@";
-                    break;
-            }
-        }
+        public string PrefixCharacter { get; protected set; }
 
         /// <summary>
         /// Generates a parameter name with the current seed value and
         /// increments the seed
         /// </summary>
         /// <returns>Returns a string</returns>
-        public string GetNextParameterName()
+        public virtual string GetNextParameterName()
         {
-            return _prefixCharacter + _parameterNameBase + _number++;
+            return PrefixCharacter + _parameterNameBase + _number++;
         }
 
         /// <summary>

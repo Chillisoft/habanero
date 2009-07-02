@@ -37,7 +37,7 @@ namespace Habanero.DB
         private readonly IDatabaseConnection _connection;
         private readonly List<IDbDataParameter> _parameters;
         private readonly IDbCommand _sampleCommand;
-        private readonly ParameterNameGenerator _gen;
+        private readonly IParameterNameGenerator _gen;
         private readonly IDbConnection _idbConnection;
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Habanero.DB
                 if (_idbConnection != null)
                 {
                     _sampleCommand = _idbConnection.CreateCommand();
-                    _gen = new ParameterNameGenerator(_idbConnection);
+                    _gen = connection.CreateParameterNameGenerator();
                 }
                 else
                 {

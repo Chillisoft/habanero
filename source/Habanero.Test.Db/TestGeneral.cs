@@ -24,13 +24,13 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB
 {
     /// <summary>
-    /// Summary description for Tester.
+    /// Summary description for TestGeneral.
     /// </summary>
     [TestFixture]
-    public class Tester : TestUsingDatabase
+    public class TestGeneral : TestUsingDatabase
     {
         private IPrimaryKey deleteContactPersonID;
         private IPrimaryKey updateContactPersonID;

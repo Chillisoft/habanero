@@ -24,62 +24,61 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     /// <summary>
     /// Tests the default type of class table inheritance, where the child contains a
     /// foreign key to the parent ID that is not the child's ID field
     /// </summary>
     [TestFixture]
-    public class TestInheritanceClassTable : TestInheritanceBase
+    public class TestInheritanceClassTableNoID : TestInheritanceBase
     {
         public static void RunTest()
         {
-            TestInheritanceClassTable test = new TestInheritanceClassTable();
-            test.SetupTest();
+            TestInheritanceClassTableNoID test = new TestInheritanceClassTableNoID();
+            test.SetupTestWithoutPrimaryKey();
             test.TestSuperClassKey();
         }
 
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            SetupTest();
+            SetupTestWithoutPrimaryKey();
         }
 
         protected override void SetupInheritanceSpecifics()
         {
-            //Circle.GetClassDef().SuperClassDef =
-            //    new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
-            //Circle.GetClassDef().SuperClassDef.ID = "ShapeID";
-            Circle.GetClassDefWithClassTableInheritance();
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef =
+                new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef.ID = "";
         }
 
         protected override void SetStrID()
         {
-            strID = (string) DatabaseUtil.PrepareValue(objCircle.GetPropertyValue("CircleID"));
+            strID = (string) DatabaseUtil.PrepareValue(objCircle.GetPropertyValue("ShapeID"));
         }
 
         [Test]
         public void TestCircleIsUsingClassTableInheritance()
         {
-            Assert.AreEqual(ORMapping.ClassTableInheritance, Circle.GetClassDef().SuperClassDef.ORMapping);
+            Assert.AreEqual(ORMapping.ClassTableInheritance, CircleNoPrimaryKey.GetClassDef().SuperClassDef.ORMapping);
         }
 
         [Test]
         public void TestCircleIsNotDirty()
         {
-            Circle circle = new Circle();
+            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
             Assert.IsFalse(circle.Status.IsDirty);
         }
 
         [Test]
-        public void TestCircleHasCircleIDAsPrimaryKey()
+        public void TestCircleHasShapeIDAsPrimaryKey()
         {
             try
             {
-                Assert.IsTrue(objCircle.ID.Contains("CircleID"));
-                Assert.AreEqual(1, objCircle.ID.Count,
-                                "There should only be one item in the primary key (even when using class table inheritance).");
+                Assert.IsTrue(objCircle.ID.Contains("ShapeID"));
+                Assert.IsNull(objCircle.ClassDef.PrimaryKeyDef);
+                Assert.AreEqual(1, objCircle.ID.Count, "Should return the parent's primary key.");
             }
             catch (HabaneroArgumentException)
             {
@@ -90,9 +89,9 @@ namespace Habanero.Test.General
         [Test]
         public void TestCircleHasCorrectPropertyNames()
         {
+            //Merely testing that errros are not thrown
             objCircle.GetPropertyValue("ShapeName");
             objCircle.GetPropertyValue("Radius");
-            objCircle.GetPropertyValue("CircleID");
             objCircle.GetPropertyValue("ShapeID");
         }
 
@@ -108,48 +107,47 @@ namespace Habanero.Test.General
                             "Parameter ShapeID has incorrect value in first insert statement using class table inheritance");
             Assert.AreEqual("MyShape", itsInsertSql[0].Parameters[1].Value,
                             "Parameter ShapeName has incorrect value in first insert statement using class table inheritance");
-            Assert.AreEqual("INSERT INTO `circle_table` (`CircleID_field`, `Radius`, `ShapeID_field`) VALUES (?Param0, ?Param1, ?Param2)",
+            Assert.AreEqual("INSERT INTO `circle_table` (`Radius`, `ShapeID_field`) VALUES (?Param0, ?Param1)",
                             itsInsertSql[1].Statement.ToString(),
                             "Class Table inheritance: Second Sql statement is incorrect.");
-            Assert.AreEqual(strID, itsInsertSql[1].Parameters[0].Value,
+            Assert.AreEqual(strID, itsInsertSql[1].Parameters[1].Value,
                             "Parameter CircleID has incorrect value in second insert statement using class table inheritance.");
-            Assert.AreEqual(strID, itsInsertSql[1].Parameters[2].Value,
-                            "Parameter ShapeID has incorrect value in second insert statement using class table inheritance.");
-            Assert.AreEqual(10, itsInsertSql[1].Parameters[1].Value,
+            Assert.AreEqual(10, itsInsertSql[1].Parameters[0].Value,
                             "Parameter Radius has incorrect value in second insert statement using class table inheritance.");
         }
 
         [Test]
         public void TestSuperClassKey()
         {
-            BOKey msuperKey = BOPrimaryKey.GetSuperClassKey(Circle.GetClassDef(), objCircle);
+            BOKey msuperKey = BOPrimaryKey.GetSuperClassKey(CircleNoPrimaryKey.GetClassDef(), objCircle);
             Assert.IsTrue(msuperKey.Contains("ShapeID"), "Super class key should contain the ShapeID property");
             Assert.AreEqual(1, msuperKey.Count, "Super class key should only have one prop");
-            Assert.AreEqual(msuperKey["ShapeID"].Value, objCircle.ID["CircleID"].Value,
-                            "ShapeID and CircleID should be the same");
+            Assert.AreEqual(msuperKey["ShapeID"].Value, objCircle.ID["ShapeID"].Value,
+                            "ShapeID in parent and child should be the same");
         }
 
+        //Note_: doesn't update the ShapeID because it is an ObjectID and is part of the parent's PK
         [Test]
         public void TestCircleUpdateSql()
         {
             Assert.AreEqual(2, itsUpdateSql.Count,
                             "There should be 2 update sql statements when using class table inheritance");
-            Assert.AreEqual("UPDATE `Shape_table` SET `ShapeID_field` = ?Param0, `ShapeName` = ?Param1 WHERE `ShapeID_field` = ?Param2",
+            Assert.AreEqual("UPDATE `Shape_table` SET `ShapeName` = ?Param0 WHERE `ShapeID_field` = ?Param1",
                             itsUpdateSql[0].Statement.ToString(),
                             "Class table inheritance: first update sql statement is incorrect.");
-            Assert.AreEqual(strID, itsUpdateSql[0].Parameters[0].Value,
-                            "Parameter ShapeID has incorrect value in first update statement using class table inheritance");
-            Assert.AreEqual("MyShape", itsUpdateSql[0].Parameters[1].Value,
+            //Assert.AreEqual(strID, ((IDbDataParameter) _updateSql[0].Parameters[0]).Value,
+            //                "Parameter ShapeID has incorrect value in first update statement using class table inheritance");
+            Assert.AreEqual("MyShape", itsUpdateSql[0].Parameters[0].Value,
                             "Parameter ShapeName has incorrect value in first update statement using class table inheritance");
-            Assert.AreEqual(strID, itsUpdateSql[0].Parameters[2].Value,
+            Assert.AreEqual(strID, itsUpdateSql[0].Parameters[1].Value,
                             "Parameter ShapeID in where clause has incorrect value in first update statement using class table inheritance");
-            Assert.AreEqual("UPDATE `circle_table` SET `Radius` = ?Param0 WHERE `CircleID_field` = ?Param1",
+            Assert.AreEqual("UPDATE `circle_table` SET `Radius` = ?Param0 WHERE `ShapeID_field` = ?Param1",
                             itsUpdateSql[1].Statement.ToString(),
                             "Class table inheritance: second update sql statement is incorrect.");
             Assert.AreEqual(10, itsUpdateSql[1].Parameters[0].Value,
                             "Parameter Radius has incorrect value in second update statement using class table inheritance");
             Assert.AreEqual(strID, itsUpdateSql[1].Parameters[1].Value,
-                            "Parameter CircleID has incorrect value in second update statement using class table inheritance");
+                            "Parameter ShapeID has incorrect value in second update statement using class table inheritance");
         }
 
         [Test]
@@ -157,21 +155,20 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(2, itsDeleteSql.Count,
                             "There should be 2 delete sql statements when using class table inheritance.");
-            Assert.AreEqual("DELETE FROM `circle_table` WHERE `CircleID_field` = ?Param0", itsDeleteSql[0].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM `circle_table` WHERE `ShapeID_field` = ?Param0", itsDeleteSql[0].Statement.ToString(),
                             "Class table inheritance: first delete sql statement is incorrect.");
             Assert.AreEqual(strID, itsDeleteSql[0].Parameters[0].Value,
-                            "Parameter CircleID has incorrect value in first delete statement in where clause.");
+                            "Parameter ShapeID has incorrect value in first delete statement in where clause.");
             Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0", itsDeleteSql[1].Statement.ToString(),
                             "Class table inheritance: second delete sql statement is incorrect.");
             Assert.AreEqual(strID, itsDeleteSql[1].Parameters[0].Value,
                             "Parameter ShapeID has incorrect value in second delete statement in where clause.");
         }
-
         [Test]
         public void TestDatabaseReadWrite()
         {
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             // Test inserting & selecting
-
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";
             shape.Save();
@@ -180,11 +177,11 @@ namespace Habanero.Test.General
             shapes.LoadAll();
             Assert.AreEqual(1, shapes.Count);
 
-            BusinessObjectCollection<Circle> circles = new BusinessObjectCollection<Circle>();
+            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
             circles.LoadAll();
             Assert.AreEqual(0, circles.Count);
 
-            Circle circle = new Circle();
+            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
             circle.Radius = 5;
             circle.ShapeName = "Circle";
             circle.Save();
@@ -197,7 +194,7 @@ namespace Habanero.Test.General
             circles.LoadAll();
             Assert.AreEqual(1, circles.Count);
             Assert.AreEqual(circles[0].ShapeID, shapes[0].ShapeID);
-            Assert.IsNotNull(circles[0].CircleID);
+            Assert.IsFalse(circles[0].Props.Contains("CircleID"));
             Assert.AreEqual(5, circles[0].Radius);
             Assert.AreEqual("Circle", circles[0].ShapeName);
 
@@ -214,7 +211,7 @@ namespace Habanero.Test.General
             circles.LoadAll();
             Assert.AreEqual(10, circles[0].Radius);
             Assert.AreEqual("CircleChanged", circles[0].ShapeName);
-            
+
             // Test deleting
             shape.MarkForDelete();
             shape.Save();
@@ -230,27 +227,24 @@ namespace Habanero.Test.General
         [TestFixtureTearDown]
         public void TearDown()
         {
-            Criteria shapeCriteria = new Criteria(
-                new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShape"), 
-                Criteria.LogicalOp.Or,
-                new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShapeChanged"));
-            Shape shape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(shapeCriteria);
+            Criteria criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShape");
+            Criteria criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShapeChanged");
+            Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
+            Shape shape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(
+                criteria);
             if (shape != null)
             {
                 shape.MarkForDelete();
                 shape.Save();
             }
-
-            Criteria criteria = new Criteria(
-                new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "Circle"),
-                Criteria.LogicalOp.Or,
-                new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "CircleChanged"));
-            Circle circle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(criteria);
-            if (circle != null)
-            {
-                circle.MarkForDelete();
-                circle.Save();
-            }
+            criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "Circle");
+            criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "CircleChanged");
+            criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
+            CircleNoPrimaryKey circle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(
+                criteria);
+            if (circle == null) return;
+            circle.MarkForDelete();
+            circle.Save();
         }
     }
 }

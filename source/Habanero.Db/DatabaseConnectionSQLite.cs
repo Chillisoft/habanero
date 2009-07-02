@@ -88,5 +88,11 @@ namespace Habanero.DB
             return id;
         }
 
+
+        public override IParameterNameGenerator CreateParameterNameGenerator()
+        {
+            return new ParameterNameGenerator(":");
+        }
+
     }
 }

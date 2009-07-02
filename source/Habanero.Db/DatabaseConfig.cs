@@ -265,7 +265,11 @@ namespace Habanero.DB
              get; set;
         }
         
-        internal string DecryptedPassword
+        /// <summary>
+        /// Returns the decrypted password.  This will be the same as <see cref="Password"/> if the private key has not been
+        /// set (via <see cref="SetPrivateKey(string)"/> or <see cref="SetPrivateKey(System.Security.Cryptography.RSA)"/>.
+        /// </summary>
+        public string DecryptedPassword
         {
             get { return _passwordCrypter.DecryptString(Password);  }
         }

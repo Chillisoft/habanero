@@ -21,7 +21,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     public abstract class TestInheritanceBase : TestUsingDatabase
     {

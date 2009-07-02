@@ -22,7 +22,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     [TestFixture]
     public class TestInheritanceBasics
@@ -48,7 +48,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestSuperClassDefProperty()
         {
-        	Assert.AreSame(shapeClassDef, circleClassDef.SuperClassDef.SuperClassClassDef,
+            Assert.AreSame(shapeClassDef, circleClassDef.SuperClassDef.SuperClassClassDef,
                            "SuperClassDef.ClassDef property on ClassDef should return the SuperClass's ClassDef");
         }
 

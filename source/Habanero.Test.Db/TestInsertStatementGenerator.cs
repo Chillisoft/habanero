@@ -161,55 +161,16 @@ namespace Habanero.Test.BO.SqlGeneration
             Assert.AreEqual("FilledCircleNoPrimaryKey", sqlStatement.Parameters[0].Value);
         }
 
-        //[Test]
-        //public void TestIdAttributeWithMultiplePrimaryKey()
-        //{
-        //    ClassDef.ClassDefs.Clear();
-        //    ContactPersonCompositeKeyInheritor bo = new ContactPersonCompositeKeyInheritor();
-        //    InsertStatementGenerator gen =
-        //        new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection.GetConnection());
-        //    ISqlStatementCollection statementCol = gen.Generate();
-        //}
 
-        //private class ContactPersonCompositeKeyInheritor : ContactPersonCompositeKey
-        //{
-        //    protected override ClassDef ConstructClassDef()
-        //    {
-        //        return GetClassDef();
-        //    }
+        [Test]
+        public void TestInsertSql()
+        {
+            Shape shape = new Shape();
+            SqlStatementCollection insertSql = new InsertStatementGenerator(shape, DatabaseConnection.CurrentConnection).Generate();
+            Assert.AreEqual(1, insertSql.Count, "There should only be one insert statement.");
+            Assert.AreEqual("INSERT INTO `Shape_table` (`ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1)",
+                            insertSql[0].Statement.ToString(), "Insert Sql is being created incorrectly");
+        }
 
-        //    private static ClassDef GetClassDef()
-        //    {
-        //        if (!ClassDef.IsDefined(typeof(ContactPersonCompositeKey)))
-        //        {
-        //            return CreateClassDefWin();
-        //        }
-        //        else
-        //        {
-        //            return ClassDef.ClassDefs[typeof(ContactPersonCompositeKey)];
-        //        }
-        //    }
-
-        //    private static ClassDef CreateClassDef()
-        //    {
-        //        PropDefCol lPropDefCol = CreateBOPropDef();
-        //        SuperClassDef superClassDef = new SuperClassDef("Habanero.Test", "ContactPersonCompositeKey",
-        //            ORMapping.ClassTableInheritance, "PK1Prop1", null);
-
-        //        KeyDefCol keysCol = new KeyDefCol();
-        //        PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-        //        primaryKey.IsGuidObjectID = false;
-        //        primaryKey.Add(lPropDefCol["PK1Prop1"]);
-        //        primaryKey.Add(lPropDefCol["PK1Prop2"]);
-
-        //        RelationshipDefCol relDefs = CreateRelationshipDefCol(lPropDefCol);
-        //        ClassDef lClassDef =
-        //            new ClassDef(typeof(ContactPersonCompositeKey), primaryKey, lPropDefCol, keysCol, relDefs);
-        //        lClassDef.HasObjectID = false;
-        //        lClassDef.SuperClassDef = superClassDef;
-        //        ClassDef.ClassDefs.Add(lClassDef);
-        //        return lClassDef;
-        //    }
-        //}
     }
 }

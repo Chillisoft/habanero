@@ -18,14 +18,25 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
 namespace Habanero.DB
 {
+    public interface IDatabaseConnectionFactory {
+        /// <summary>   
+        /// Creates a new database connection with the configuration
+        /// provided
+        /// </summary>
+        /// <param name="config">The database access configuration</param>
+        /// <returns>Returns a new database connection</returns>
+        IDatabaseConnection CreateConnection(IDatabaseConfig config);
+    }
+
     /// <summary>
     /// Creates new database connections, tailored to the vendor specified
     /// in the database access configuration
     /// </summary>
-    public class DatabaseConnectionFactory
+    public class DatabaseConnectionFactory : IDatabaseConnectionFactory
     {
         /// <summary>   
         /// Creates a new database connection with the configuration
@@ -33,7 +44,7 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="config">The database access configuration</param>
         /// <returns>Returns a new database connection</returns>
-        public DatabaseConnection CreateConnection(DatabaseConfig config)
+        public IDatabaseConnection CreateConnection(IDatabaseConfig config)
         {
             if (config == null)
             {

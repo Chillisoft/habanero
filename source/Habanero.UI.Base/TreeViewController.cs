@@ -154,7 +154,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Returns whether the relationship should be shown in the tree view or not.</br>
+        /// Returns whether the relationship should be shown in the tree view or not.<br/>
         /// By default all Composition and Aggregation relationships will be shown in the 
         /// tree. This method can be overriden to only show the relationships that you want.
         /// </summary>

@@ -53,6 +53,10 @@ namespace Habanero.Test.DB
             {
                 _sqlFormatter = new SqlFormatter("","","", "");
             }
+
+            public override IParameterNameGenerator CreateParameterNameGenerator() {
+                return new ParameterNameGenerator("?");
+            }
         }
  
         [Test]
@@ -594,13 +598,15 @@ namespace Habanero.Test.DB
             classDef.PropDefcol.Add(newPropDef);
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
-            //---------------Assert PreConditions---------------            
+
             //---------------Execute Test ----------------------
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             ISqlStatement statement = query.CreateSqlStatement();
+
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
             StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statementString);
+            
             //---------------Tear Down -------------------------          
         }
 

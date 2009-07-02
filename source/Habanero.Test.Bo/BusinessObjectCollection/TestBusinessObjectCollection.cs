@@ -86,6 +86,10 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             {
                 return "TOP " + limit;
             }
+
+            public override IParameterNameGenerator CreateParameterNameGenerator() {
+                return new ParameterNameGenerator("?");
+            }
         }
 
         private static void AssertNotContains(ContactPersonTestBO cp1, List<ContactPersonTestBO> col)

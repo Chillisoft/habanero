@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1484CDE2-0A30-466F-9FEA-E79CE2751489}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -168,6 +168,18 @@
   <ItemGroup>
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceBase.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceBasics.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceClassTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceClassTableCopyID.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceClassTableNoID.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceConcreteTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchyBase.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchyClassTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchyConcreteTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchySingleClass.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchySingleTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceSingleTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -183,7 +195,14 @@
     <Compile Include="TestBusinessObjectLoader_RefreshCollectionDB.cs" />
     <Compile Include="TestBusinessObjectLookupListDB.cs" />
     <Compile Include="TestCriteriaDB.cs" />
-    <Compile Include="TestDatabaseConnection.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnection.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionAccess.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionFirebird.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionMySql.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionOracle.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionPostgreSql.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionSQLite.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionSqlServer.cs" />
     <Compile Include="TestDbMigrator.cs" />
     <Compile Include="TestConnectionStringFactory.cs">
       <SubType>Code</SubType>
@@ -191,16 +210,18 @@
     <Compile Include="TestDatabaseConfig.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestDatabaseConnectionCreation.cs">
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionCreation.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestDatabaseConnectionFactory.cs">
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestDatabaseUtil.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestDeleteStatementGenerator.cs" />
+    <Compile Include="TestGeneral.cs" />
+    <Compile Include="TestCompositeKeyBO.cs" />
     <Compile Include="TestInsertStatementGenerator.cs" />
     <Compile Include="TestMultipleRelationship_Aggregation_DB.cs" />
     <Compile Include="TestMultipleRelationship_Association_DB.cs" />

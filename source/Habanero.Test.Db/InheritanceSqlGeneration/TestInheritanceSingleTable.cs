@@ -24,7 +24,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     /// <summary>
     /// This is testing inheritance implemented using the single table patterns (See Martin Fowler. Patterns of Enterprise Application Architecture).
@@ -81,7 +81,7 @@ namespace Habanero.Test.General
             criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             BusinessObjectCollection<CircleNoPrimaryKey> circles 
                 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
-                <CircleNoPrimaryKey>(criteria, null);
+                    <CircleNoPrimaryKey>(criteria, null);
             foreach (CircleNoPrimaryKey circle in circles)
 
             {

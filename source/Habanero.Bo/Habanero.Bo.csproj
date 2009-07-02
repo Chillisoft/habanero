@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -167,7 +167,6 @@
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
     <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
-    <Compile Include="CriteriaManager\SQLCriteriaCreator.cs" />
     <Compile Include="DataAccessorInMemory.cs" />
     <Compile Include="DataStoreInMemory.cs" />
     <Compile Include="DeleteHelper.cs" />

@@ -23,7 +23,7 @@ using System.Reflection;
 using Habanero.Base.Exceptions;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.Base
 {
     /// <summary>
     /// This is an extensible exceptions tester.
@@ -42,11 +42,11 @@ namespace Habanero.Test.General
     {
         private ArrayList exceptions = new ArrayList();
         private string[,] namespaces = {
-                                          //Namespace, Assembly
-                                          {"Habanero.Base.Exceptions", "Habanero.Base"},
-                                          {"Habanero.BO", "Habanero.BO"},
-                                          {"Habanero.DB", "Habanero.DB"},
-                                          {"Habanero.Util", "Habanero.Util"}
+                                           //Namespace, Assembly
+                                           {"Habanero.Base.Exceptions", "Habanero.Base"},
+                                           {"Habanero.BO", "Habanero.BO"},
+                                           {"Habanero.DB", "Habanero.DB"},
+                                           {"Habanero.Util", "Habanero.Util"}
                                        };
 
 
@@ -62,7 +62,7 @@ namespace Habanero.Test.General
                     "CannotSaveException",
                     "UnknownTypeNameException",
                     "InvalidPropertyException",
-                     "InvalidPropertyNameException",
+                    "InvalidPropertyNameException",
                     "InvalidRelationshipAccessException"
                 };
 

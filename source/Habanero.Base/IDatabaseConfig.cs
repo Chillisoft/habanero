@@ -59,6 +59,36 @@ namespace Habanero.Base
         string Port { get; set; }
 
         /// <summary>
+        /// The name of the Assembly to use - the assembly that contains the IDbConnection class for this database type.
+        /// This does not need to be specified normally, but if you want to use a custom data provider you will need to 
+        /// set this property before using the <see cref="IDatabaseConnectionFactory"/> to create the <see cref="IDatabaseConnection"/>.
+        /// This must be the full name of the assembly if you are to be sure to get the right assembly.  Alternately if the dll is
+        /// placed in the same folder as the application you can just specify the name of the file (without the .dll extension).
+        /// </summary>
+        string AssemblyName { get; set; }
+
+        /// <summary>
+        /// The fully qualified name of the type to use when creating the IDbConnection.
+        /// This does not need to be specified normally, but if you want to use a custom data provider you will need to 
+        /// set this property before using the <see cref="IDatabaseConnectionFactory"/> to create the <see cref="IDatabaseConnection"/>.
+        /// This class must exist withing the assembly specified in the <see cref="AssemblyName"/> property, and be fully qualified
+        /// i.e. it must include the namespace.
+        /// </summary>
+        string FullClassName { get; set; }
+
+        /// <summary>
+        /// The full assembly name of the assembly containing <see cref="ConnectionStringFactory"/> to use.
+        /// This does not need to be specified if you are using one of the standard Habanero database types.
+        /// </summary>
+        string ConnectionStringFactoryAssemblyName { get; set; }
+
+        /// <summary>
+        /// The fully qualified class name of the <see cref="ConnectionStringFactory"/> to use.
+        /// This does not need to be specified if you are using one of the standard Habanero database types.
+        /// </summary>
+        string ConnectionStringFactoryClassName { get; set; }
+
+        /// <summary>
         /// Returns a connection string tailored for the database vendor
         /// </summary>
         /// <returns>Returns a connection string</returns>

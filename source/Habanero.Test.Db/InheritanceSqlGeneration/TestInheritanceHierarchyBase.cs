@@ -20,7 +20,7 @@
 using Habanero.BO;
 using Habanero.DB;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     public abstract class TestInheritanceHierarchyBase : TestUsingDatabase
     {

@@ -61,5 +61,11 @@ namespace Habanero.DB
         {
             get { return IsolationLevel.ReadCommitted; }
         }
+
+
+        public override IParameterNameGenerator CreateParameterNameGenerator()
+        {
+            return new ParameterNameGenerator(":");
+        }
     }
 }

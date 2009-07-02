@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Data;
 using System.Reflection;
 using Habanero.Base;
@@ -52,6 +53,12 @@ namespace Habanero.DB
             : base(assemblyName, className, connectString)
         {
             _sqlFormatter = new SqlFormatter("`", "`", "", "LIMIT");
+        }
+
+
+        public override IParameterNameGenerator CreateParameterNameGenerator()
+        {
+            return new ParameterNameGenerator("?");
         }
 
         /// <summary>

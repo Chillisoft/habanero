@@ -29,7 +29,7 @@ namespace Habanero.UI.Base
 {
     /// <summary>
     /// A Creator (<see cref="Delegate"/> that is used to create the Grouping control being used by the 
-    /// <see cref="PanelBuilder.BuildPanelForForm(UIForm,GroupControlCreator)"/> to create the Group control
+    /// <see cref="PanelBuilder.BuildPanelForForm(IUIForm,GroupControlCreator)"/> to create the Group control
     /// that is being used to Group the Controls within the an <see cref="ITabControl"/>, an <see cref="ICollapsiblePanelGroupControl"/>
     /// or a <see cref="IGroupBox"/>
     /// </summary>
@@ -56,7 +56,7 @@ namespace Habanero.UI.Base
     ///  <see cref="LayoutManager"/> (Currently Only the <see cref="GridLayoutManager"/> can be used).<br/>
     /// The <see cref="IPanel"/> Built by the PanelBuilder has all the controls required for a <see cref="IBusinessObject"/> 
     ///     to be viewed and edited in. The Controls to be used are defind in the <see cref="UIFormTab"/> or the
-    ///     <see cref="UIForm"/> depending on whether the <see cref="BuildPanelForForm(UIForm)"/> or <see cref="BuildPanelForTab"/>
+    ///     <see cref="UIForm"/> depending on whether the <see cref="BuildPanelForForm(IUIForm)"/> or <see cref="BuildPanelForTab"/>
     ///     method is used.
     /// <br/><br/>
     /// The PanelBuilder can create a panel for any environment based on

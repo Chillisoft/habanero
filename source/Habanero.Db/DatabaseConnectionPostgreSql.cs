@@ -52,6 +52,11 @@ namespace Habanero.DB
             _sqlFormatter = new SqlFormatter("\"", "\"", "", "limit");
         }
 
+
+        public override IParameterNameGenerator CreateParameterNameGenerator()
+        {
+            return new ParameterNameGenerator(":");
+        }
 	}
 }
 

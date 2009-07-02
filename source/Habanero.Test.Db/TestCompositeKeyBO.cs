@@ -24,13 +24,13 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB
 {
     /// <summary>
     /// Summary description for ContactPersonCompositeKeyTester.
     /// </summary>
     [TestFixture]
-    public class TesterContactPersonCompositeKey : TestUsingDatabase
+    public class TestCompositeKeyBO : TestUsingDatabase
     {
         #region Setup/Teardown
 
@@ -47,17 +47,6 @@ namespace Habanero.Test.General
         private ContactPersonCompositeKey mContactPDeleted;
         private IPrimaryKey updateContactPersonID;
 
-        //public static void RunTest()
-        //{
-        //    TesterContactPersonCompositeKey test = new TesterContactPersonCompositeKey();
-        //    test.TestFixtureSetup();
-        //    //			test.TestSaveContactPerson();
-        //    //			test.ModifyObjectsPrimaryKey();
-        //    test.TestUpdateExistingContactPerson();
-        //    //			test.RecoverNewObjectFromObjectManagerBeforeAndAfterPersist();
-        //    test.SaveNewObjectWithDuplicatePrimaryKey();
-        //}
-
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -72,13 +61,6 @@ namespace Habanero.Test.General
 
         private static void DeleteAllContactPersons()
         {
-            //string connectstring = @"data source=Core;database=WorkShopManagement;uid=sa;pwd=;";
-
-            //IDbConnection con = new SqlConnection(connectstring);
-            //con.Open();
-            //IDbCommand cmd = con.CreateCommand();
-            //cmd.CommandText = "DELETE FROM ContactPersonCompositeKey";
-            //cmd.ExecuteNonQuery();
             Database.ExecuteRawSql("DELETE FROM ContactPersonCompositeKey",
                                    DatabaseConnection.CurrentConnection.GetConnection());
         }

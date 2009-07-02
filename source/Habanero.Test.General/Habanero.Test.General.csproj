@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F30A2151-F894-44E4-8F71-492B8C245745}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -151,82 +151,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestDatabaseConnectionSpecificDatabase.cs" />
-    <Compile Include="TestInheritanceHierarchySingleClass.cs" />
-    <Compile Include="TestInheritanceClassTableNoID.cs" />
-    <Compile Include="TestInheritanceClassTableCopyID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\Common\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="TestBOSqlGeneration.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestBusinessObjectISQLParameterInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestCarDriverRelationship.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestCarOwnerRelationship.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestCarsDrivenRelationship.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestCarsOwnedRelationship.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestDatabaseConnection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestDeletion.cs" />
-    <Compile Include="Tester.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TesterBusinessObjCol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TesterContactPersonCompositeKey.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestExceptions.cs" />
-    <Compile Include="TestInheritanceBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestInheritanceBasics.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestInheritanceClassTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestInheritanceConcreteTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestInheritanceHierarchyBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestInheritanceHierarchyClassTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestInheritanceHierarchyConcreteTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestInheritanceHierarchySingleTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestInheritanceOverriding.cs" />
-    <Compile Include="TestInheritanceSingleTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestOneToOneRelationship.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestPersistingAttributeProps.cs" />
-    <Compile Include="TestPrimaryKey.cs" />
-    <Compile Include="TestShapeCircleRelationship.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />

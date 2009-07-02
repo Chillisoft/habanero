@@ -35,5 +35,10 @@ namespace Habanero.Base
         /// Sets the parameter count back to zero
         /// </summary>
         void Reset();
+
+        /// <summary>
+        /// The prefix character used. For example, setting this to "?" will make parameters called "?Param0", "?Param1" etc.
+        /// </summary>
+        string PrefixCharacter { get;  }
     }
 }

@@ -32,7 +32,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Removes event handlers previously assigned to the ComboBox
         /// </summary>
-        /// <param name="mapper">The mapper for the lookup ComboBox</p  aram>
+        /// <param name="mapper">The mapper for the lookup ComboBox</param>
         public void RemoveCurrentHandlers(ILookupComboBoxMapper mapper)
         {
             _mapper = mapper;

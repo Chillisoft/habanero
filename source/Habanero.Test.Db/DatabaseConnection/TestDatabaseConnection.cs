@@ -23,28 +23,98 @@ using Habanero.Base;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB
 {
-    /// <summary>
-    /// Summary description for TestDatabaseConnection.
-    /// </summary>
     [TestFixture]
     public class TestDatabaseConnection : TestUsingDatabase
     {
         [TestFixtureSetUp]
-        public void SetUpDBCon()
+        public void SetupTestFixture()
         {
             this.SetupDBConnection();
-            //DatabaseConnection.CurrentConnection.ConnectionString =
-            //@"data source=Core;database=WorkShopManagement;uid=sa;pwd=" + mPassWord;
         }
+        [Test]
+        public void TestAutoIncrementAfterInsert()
+        {
+
+            // MockRepository mockRepository = new MockRepository();
+            MockSupportsAutoIncrementingID mockSupportsAutoIncrementingID = new MockSupportsAutoIncrementingID();
+
+            InsertSqlStatement sql = new InsertSqlStatement(DatabaseConnection.CurrentConnection, "insert into testautoinc (testfield) values ('testing')");
+            sql.TableName = "testautoinc";
+            sql.SupportsAutoIncrementingField = mockSupportsAutoIncrementingID;
+
+            DatabaseConnection.CurrentConnection.ExecuteSql(sql);
+
+            int maxNum = 0;
+            using (IDataReader reader = DatabaseConnection.CurrentConnection.LoadDataReader("select max(testautoincid) from testautoinc"))
+            {
+                while (reader.Read())
+                {
+                    maxNum = reader.GetInt32(0);
+                }
+            }
+            Assert.AreEqual(maxNum, mockSupportsAutoIncrementingID.AutoValue);
+        }
+
+        [Test]
+        public void TestCreateParameterNameGenerator()
+        {
+            //---------------Set up test pack-------------------
+            IDatabaseConnection databaseConnection = new DatabaseConnectionMySql("", "");
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            IParameterNameGenerator generator = databaseConnection.CreateParameterNameGenerator();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(generator);
+            Assert.AreEqual("?Param0", generator.GetNextParameterName());
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestCreateParameterNameGenerator_Twice()
+        {
+            //---------------Set up test pack-------------------
+            IDatabaseConnection databaseConnection = new DatabaseConnectionMySql("", "");
+            databaseConnection.CreateParameterNameGenerator();
+
+            //---------------Execute Test ----------------------
+            IParameterNameGenerator generator = databaseConnection.CreateParameterNameGenerator();
+            
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(generator);
+            Assert.AreEqual("?Param0", generator.GetNextParameterName());
+            
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void Test_CreateSqlFormatter()
+        {
+            //---------------Set up test pack-------------------
+            IDatabaseConnection dbConn = new DatabaseConnection_Stub();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(sqlFormatter);
+            Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
+            Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
+            Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
+            Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
+            Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
+            Assert.AreEqual("]", dbConn.RightFieldDelimiter);
+        }
+
 
         [Test]
         public void Test_NoColumnName_DoesntError()
         {
             //---------------Set up test pack-------------------
             string sql = "Select FirstName + ', ' + Surname from contactpersoncompositekey";
-            SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection,sql);
+            SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection, sql);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -125,10 +195,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestExecuteSqlTransaction()
         {
-            //DatabaseConnection.CurrentConnection.ConnectionString =
-            //	@"data source=Core;database=WorkShopManagement;uid=sa;pwd=;";
             //Clean all data from table before starting
-
             Console.WriteLine("deleting from testtableread");
             string sql = "DELETE from TestTableRead";
             IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
@@ -216,48 +283,28 @@ namespace Habanero.Test.General
             Assert.AreEqual(strg, DatabaseUtil.PrepareValue(g), "PrepareValue is not preparing guids correctly.");
         }
 
-        [Test]
-        public void Test_CreateSqlFormatter()
+
+        private class DatabaseConnection_Stub : DatabaseConnection
         {
-            //---------------Set up test pack-------------------
-            IDatabaseConnection dbConn = new DatabaseConnection_Stub();
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(sqlFormatter);
-            Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
-            Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
-            Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
-            Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
-            Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
-            Assert.AreEqual("]", dbConn.RightFieldDelimiter);
-//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
-//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+            public override IParameterNameGenerator CreateParameterNameGenerator()
+            {
+                return new ParameterNameGenerator("?");
+            }
         }
 
-        [Test]
-        public void Test_NoColumnName_DoesntError_SqlServer()
+        private class MockSupportsAutoIncrementingID : ISupportsAutoIncrementingField
         {
-            //---------------Set up test pack-------------------
-            DatabaseConfig databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_trunk", "sa", "sa", null);
-            DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
-            //DatabaseConnection.CurrentConnection = new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection","server=localhost;database=habanero_test_trunk;user=sa;password=sa");
-            const string sql = "Select FirstName + ', ' + Surname from tbPersonTable";
-            SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection, sql);
-            //---------------Assert Precondition----------------
+            private long _autoValue = 0;
+            public void SetAutoIncrementingFieldValue(long value)
+            {
+                _autoValue = value;
+            }
 
-            //---------------Execute Test ----------------------
+            public long AutoValue
+            {
+                get { return _autoValue; }
+            }
+        }
 
-            DataTable dataTable = DatabaseConnection.CurrentConnection.LoadDataTable(sqlStatement, "", "");
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, dataTable.Columns.Count);
-            this.SetupDBConnection();
-        }
-        internal class DatabaseConnection_Stub : DatabaseConnection
-        {
-        }
     }
-
 }
-

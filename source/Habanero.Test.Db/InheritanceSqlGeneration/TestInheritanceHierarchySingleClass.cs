@@ -26,7 +26,7 @@ using Habanero.Test.BO;
 using NMock;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     /// <summary>
     /// Tests heirarchical inheritance where FilledCircle inherits from Circle using

@@ -12,8 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.BO", "Habaner
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.DB", "Habanero.Test.Db\Habanero.Test.DB.csproj", "{1484CDE2-0A30-466F-9FEA-E79CE2751489}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.General", "Habanero.Test.General\Habanero.Test.General.csproj", "{F30A2151-F894-44E4-8F71-492B8C245745}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.Base", "Habanero.UI.Base\Habanero.UI.Base.csproj", "{18828910-F528-48F5-B56D-7C1658D0987A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.UI.Base", "Habanero.Test.UI.Base\Habanero.Test.UI.Base.csproj", "{12A701DA-DAF5-4709-942E-17F1EFA381D8}"
@@ -84,14 +82,6 @@ Global
 		{1484CDE2-0A30-466F-9FEA-E79CE2751489}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1484CDE2-0A30-466F-9FEA-E79CE2751489}.Release|x86.ActiveCfg = Release|x86
 		{1484CDE2-0A30-466F-9FEA-E79CE2751489}.Release|x86.Build.0 = Release|x86
-		{F30A2151-F894-44E4-8F71-492B8C245745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F30A2151-F894-44E4-8F71-492B8C245745}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F30A2151-F894-44E4-8F71-492B8C245745}.Debug|x86.ActiveCfg = Debug|x86
-		{F30A2151-F894-44E4-8F71-492B8C245745}.Debug|x86.Build.0 = Debug|x86
-		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|x86.ActiveCfg = Release|x86
-		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|x86.Build.0 = Release|x86
 		{18828910-F528-48F5-B56D-7C1658D0987A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18828910-F528-48F5-B56D-7C1658D0987A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18828910-F528-48F5-B56D-7C1658D0987A}.Debug|x86.ActiveCfg = Debug|x86

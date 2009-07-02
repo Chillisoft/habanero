@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Data;
+using Habanero.Base;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -38,7 +39,7 @@ namespace Habanero.Test.DB
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Firebird, "test", "test", "test", "test", "1000");
 
             //---------------Execute Test ----------------------
-            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
             IDbConnection dbConnection = connection.GetConnection();
 
             //---------------Test Result -----------------------
@@ -56,7 +57,7 @@ namespace Habanero.Test.DB
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.MySql, "test", "test", "test", "test", "1000");
 
             //---------------Execute Test ----------------------
-            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
             IDbConnection dbConnection = connection.GetConnection();
 
             //---------------Test Result -----------------------
@@ -74,7 +75,7 @@ namespace Habanero.Test.DB
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000");
 
             //---------------Execute Test ----------------------
-            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
             IDbConnection dbConnection = connection.GetConnection();
 
             //---------------Test Result -----------------------
@@ -92,7 +93,7 @@ namespace Habanero.Test.DB
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Oracle, "test", "test", "test", "test", "1000");
 
             //---------------Execute Test ----------------------
-            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
             IDbConnection dbConnection = connection.GetConnection();
 
             //---------------Test Result -----------------------
@@ -110,7 +111,7 @@ namespace Habanero.Test.DB
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000");
 
             //---------------Execute Test ----------------------
-            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
             IDbConnection dbConnection = connection.GetConnection();
 
             //---------------Test Result -----------------------
@@ -128,7 +129,7 @@ namespace Habanero.Test.DB
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.PostgreSql, "test", "test", "test", "test", "1000");
 
             //---------------Execute Test ----------------------
-            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
             IDbConnection dbConnection = connection.GetConnection();
 
             //---------------Test Result -----------------------
@@ -146,7 +147,7 @@ namespace Habanero.Test.DB
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SQLite, "test", "test", "test", "test", "1000");
 
             //---------------Execute Test ----------------------
-            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
             IDbConnection dbConnection = connection.GetConnection();
 
             //---------------Test Result -----------------------
@@ -166,7 +167,7 @@ namespace Habanero.Test.DB
             config.FullClassName = "System.Data.SqlClient.SqlConnection";
 
             //---------------Execute Test ----------------------
-            DatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
             IDbConnection dbConnection = connection.GetConnection();
 
             //---------------Test Result -----------------------
