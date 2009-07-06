@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -333,10 +333,6 @@
     <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
       <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
       <Name>Habanero.Test</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
-      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
-      <Name>Habanero.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -44,6 +44,7 @@ namespace Habanero.Test.DB
         public void CreateTestPack()
         {
             SetupDBConnection();
+            new Engine();
             new Address();
             ContactPerson.DeleteAllContactPeople();
             new Car();

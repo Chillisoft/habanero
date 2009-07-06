@@ -282,10 +282,6 @@
       <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
       <Name>Habanero.BO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
-      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
-      <Name>Habanero.Util</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />

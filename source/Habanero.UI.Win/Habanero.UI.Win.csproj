@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E761E05B-B9CC-4EAC-B940-C19E42D3819C}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -318,10 +318,6 @@
     <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
       <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
       <Name>Habanero.UI.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
-      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
-      <Name>Habanero.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
