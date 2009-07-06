@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.Base
@@ -45,8 +46,8 @@ namespace Habanero.Test.Base
                                            //Namespace, Assembly
                                            {"Habanero.Base.Exceptions", "Habanero.Base"},
                                            {"Habanero.BO", "Habanero.BO"},
-                                           {"Habanero.DB", "Habanero.DB"},
-                                           {"Habanero.Util", "Habanero.Util"}
+                                           {"Habanero.DB", "Habanero.DB"}
+ 
                                        };
 
 
@@ -63,7 +64,8 @@ namespace Habanero.Test.Base
                     "UnknownTypeNameException",
                     "InvalidPropertyException",
                     "InvalidPropertyNameException",
-                    "InvalidRelationshipAccessException"
+                    "InvalidRelationshipAccessException",
+                    "ReflectionException"
                 };
 
             string[] boExceptions =
@@ -91,15 +93,9 @@ namespace Habanero.Test.Base
                     "DatabaseWriteException" //
                 };
 
-            string[] utilExceptions =
-                {
-                    "ReflectionException"
-                };
-
             exceptions.Add(baseExceptions);
             exceptions.Add(boExceptions);
             exceptions.Add(dbExceptions);
-            exceptions.Add(utilExceptions);
 
             if (exceptions.Count > namespaces.GetLength(0))
             {

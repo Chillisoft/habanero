@@ -47,7 +47,7 @@ namespace Habanero.Test.Util
                 (@"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
-					<property  name=""TestProp"" type=""LongText"" assembly=""Habanero.Util"" />
+					<property  name=""TestProp"" type=""Habanero.Util.LongText"" assembly=""Habanero.Base"" />
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>

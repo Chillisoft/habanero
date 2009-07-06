@@ -50,7 +50,7 @@ namespace Habanero.Test.Util
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
-					<property  name=""TestProp"" type=""ByteString"" assembly=""Habanero.Util"" />
+					<property  name=""TestProp"" type=""Habanero.Util.ByteString"" assembly=""Habanero.Base"" />
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
