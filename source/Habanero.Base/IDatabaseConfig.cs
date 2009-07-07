@@ -77,13 +77,13 @@ namespace Habanero.Base
         string FullClassName { get; set; }
 
         /// <summary>
-        /// The full assembly name of the assembly containing <see cref="ConnectionStringFactory"/> to use.
+        /// The full assembly name of the assembly containing <see cref="IConnectionStringFactory"/> to use.
         /// This does not need to be specified if you are using one of the standard Habanero database types.
         /// </summary>
         string ConnectionStringFactoryAssemblyName { get; set; }
 
         /// <summary>
-        /// The fully qualified class name of the <see cref="ConnectionStringFactory"/> to use.
+        /// The fully qualified class name of the <see cref="IConnectionStringFactory"/> to use.
         /// This does not need to be specified if you are using one of the standard Habanero database types.
         /// </summary>
         string ConnectionStringFactoryClassName { get; set; }

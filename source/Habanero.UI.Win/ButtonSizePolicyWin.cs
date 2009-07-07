@@ -3,15 +3,27 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// An implementation of <see cref="IButtonSizePolicy"/> that will size all the buttons equally based on the widest one.  It also maintains a minimum
+    /// button size equal to the screen resolution / 20.
+    /// </summary>
     public class ButtonSizePolicyWin : IButtonSizePolicy
     {
         private readonly IControlFactory _controlFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use.</param>
         public ButtonSizePolicyWin(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
         }
 
+        /// <summary>
+        /// Recalculates the button sizes of the given collection of buttons.
+        /// </summary>
+        /// <param name="buttonCollection"></param>
         public void RecalcButtonSizes(IControlCollection buttonCollection)
         {
             int maxButtonWidth = 0;

@@ -22,16 +22,6 @@ using Habanero.Base;
 
 namespace Habanero.DB
 {
-    public interface IDatabaseConnectionFactory {
-        /// <summary>   
-        /// Creates a new database connection with the configuration
-        /// provided
-        /// </summary>
-        /// <param name="config">The database access configuration</param>
-        /// <returns>Returns a new database connection</returns>
-        IDatabaseConnection CreateConnection(IDatabaseConfig config);
-    }
-
     /// <summary>
     /// Creates new database connections, tailored to the vendor specified
     /// in the database access configuration

@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="BOColTabControlManager.cs" />
     <Compile Include="BOSelectorAndBOEditorManager.cs" />
+    <Compile Include="ButtonSizePolicyUserDefined.cs" />
     <Compile Include="CollapsiblePanelGroupManager.cs" />
     <Compile Include="CollapsiblePanelManager.cs" />
     <Compile Include="CollapsiblePanelResource.Designer.cs">

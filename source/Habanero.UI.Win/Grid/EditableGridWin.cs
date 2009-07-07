@@ -43,7 +43,7 @@ namespace Habanero.UI.Win
     /// </summary>
     public class EditableGridWin : GridBaseWin, IEditableGrid
     {
-        protected static readonly ILog _log = LogManager.GetLogger("Habanero.UI.Win.EditableGridWin");
+        private static readonly ILog _log = LogManager.GetLogger("Habanero.UI.Win.EditableGridWin");
 
         private DeleteKeyBehaviours _deleteKeyBehaviour;
 

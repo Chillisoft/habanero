@@ -79,7 +79,7 @@ namespace Habanero.Util
                     {
                         classAssembly = Assembly.Load(assemblyName);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         classAssembly = Assembly.LoadFrom(assemblyName + ".dll");
                     }

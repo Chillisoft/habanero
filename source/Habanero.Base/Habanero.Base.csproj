@@ -123,6 +123,8 @@
     <Compile Include="BusinessObjectDTO.cs" />
     <Compile Include="Exceptions\ReflectionException.cs" />
     <Compile Include="IBusinessObjectRule.cs" />
+    <Compile Include="IConnectionStringFactory.cs" />
+    <Compile Include="IDatabaseConnectionFactory.cs" />
     <Compile Include="InvalidRelationshipNameException.cs" />
     <Compile Include="Criteria\Criteria.cs" />
     <Compile Include="Criteria\CriteriaExpression.cs" />

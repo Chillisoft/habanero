@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
 namespace Habanero.DB
 {
@@ -25,7 +26,7 @@ namespace Habanero.DB
     /// A super-class for a factory that produces connection strings for
     /// different database vendors
     /// </summary>
-    public abstract class ConnectionStringFactory
+    public abstract class ConnectionStringFactory : IConnectionStringFactory
     {
         /// <summary>
         /// Returns a connection string built from the arguments provided

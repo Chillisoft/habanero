@@ -32,6 +32,9 @@ namespace Habanero.DB
         private const string _parameterNameBase = "Param";
 
 
+        ///<summary>Constructor. You can specify the prefix character/string the name generator should use (this varies from DBMS to DBMS)
+        ///</summary>
+        ///<param name="prefixCharacter">The string to start each parameter name with</param>
         public ParameterNameGenerator(string prefixCharacter)
         {
             PrefixCharacter = prefixCharacter;

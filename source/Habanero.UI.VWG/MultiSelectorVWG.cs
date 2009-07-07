@@ -101,6 +101,9 @@ namespace Habanero.UI.VWG
             get { return _availableOptionsListbox; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IGroupBox"/> that contains the <see cref="AvailableOptionsListBox"/>.
+        /// </summary>
         public IGroupBox AvailableOptionsGroupBox
         {
             get { return _availableOptionsGroupBox; }
@@ -133,6 +136,9 @@ namespace Habanero.UI.VWG
             get { return _selectionsListbox; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IGroupBox"/> that contains the <see cref="SelectedOptionsListBox"/>.
+        /// </summary>
         public IGroupBox SelectedOptionsGroupBox
         {
             get { return _selectionsGroupBox; }

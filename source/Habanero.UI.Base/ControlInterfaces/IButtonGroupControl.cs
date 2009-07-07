@@ -70,6 +70,11 @@ namespace Habanero.UI.Base
         /// <param name="buttonName">The name of the button</param>
         void SetDefaultButton(string buttonName);
 
+        /// <summary>
+        /// Specifies the object that calculates button sizes for this <see cref="IButtonGroupControl"/>.  By default the buttons are all equally sized
+        /// based on the width of the text on the largest button.  To set your own button sizes set this to 
+        /// an instance of <see cref="ButtonSizePolicyUserDefined"/> class.
+        /// </summary>
         IButtonSizePolicy ButtonSizePolicy { get; set; }
     }
 }

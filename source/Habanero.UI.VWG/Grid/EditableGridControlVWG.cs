@@ -123,7 +123,15 @@ namespace Habanero.UI.VWG
             _editableGridManager.Initialise(classDef, uiDefName);
         }
 
-        public void Initialise(IClassDef classDef, IUIGrid gridDef, string uiDefName) {
+        /// <summary>
+        /// Initialises the grid structure using the given UI class definition
+        /// </summary>
+        /// <param name="classDef">The class definition of the business objects shown in the grid</param>
+        /// <param name="gridDef">The grid definition to use in setting up the structure</param>
+        /// <param name="uiDefName">The name of the grid definition.</param>
+        public void Initialise(IClassDef classDef, IUIGrid gridDef, string uiDefName)
+        {
+            if (gridDef == null) throw new ArgumentNullException("gridDef");
             _editableGridManager.Initialise(classDef, gridDef, uiDefName);
         }
 

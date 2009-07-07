@@ -92,6 +92,11 @@ namespace Habanero.UI.VWG
             //not implemented in VWG
         }
 
+        /// <summary>
+        /// Specifies the object that calculates button sizes for this <see cref="IButtonGroupControl"/>.  By default the buttons are all equally sized
+        /// based on the width of the text on the largest button.  To set your own button sizes set this to 
+        /// an instance of <see cref="ButtonSizePolicyUserDefined"/> class.
+        /// </summary>
         public IButtonSizePolicy ButtonSizePolicy { get; set; }
 
         /// <summary>

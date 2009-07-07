@@ -85,6 +85,9 @@ namespace Habanero.UI.Win
             if (form != null) form.AcceptButton = (Button)this[buttonName];
         }
 
+        /// <summary>
+        /// The <see cref="IButtonSizePolicy"/> to use when resizing the buttons. The default on will size all the buttons equally based on the widest one.
+        /// </summary>
         public IButtonSizePolicy ButtonSizePolicy { get; set; }
 
         /// <summary>

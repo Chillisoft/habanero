@@ -115,6 +115,12 @@ namespace Habanero.UI.Win
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
         }
 
+        /// <summary>
+        /// Initialises the grid structure with a given UI definition
+        ///  </summary>
+        /// <param name="classDef">The Classdef used to initialise the grid</param>
+        /// <param name="gridDef">The <see cref="IUIGrid"/> that specifies the grid </param>
+        /// <param name="uiDefName">The name of the <see cref="IUIGrid"/></param>
         public void Initialise(IClassDef classDef, IUIGrid gridDef, string uiDefName) {
             if (classDef == null) throw new ArgumentNullException("classDef");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");

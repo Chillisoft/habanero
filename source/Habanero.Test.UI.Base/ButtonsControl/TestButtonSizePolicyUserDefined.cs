@@ -33,11 +33,5 @@ namespace Habanero.Test.UI.Base.ButtonsControl
         }
     }
 
-    public class ButtonSizePolicyUserDefined : IButtonSizePolicy
-    {
-        public void RecalcButtonSizes(IControlCollection buttonCollection)
-        {
-           
-        }
-    }
+
 }

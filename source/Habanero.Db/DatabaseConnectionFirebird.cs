@@ -53,7 +53,12 @@ namespace Habanero.DB
         {
             _sqlFormatter = new SqlFormatter("", "", "FIRST", "");
         }
-        
+
+        /// <summary>
+        /// Creates an <see cref="IParameterNameGenerator"/> for this database connection.  This is used to create names for parameters
+        /// added to an <see cref="ISqlStatement"/> because each database uses a different naming convention for their parameters.
+        /// </summary>
+        /// <returns>The <see cref="IParameterNameGenerator"/> valid for this <see cref="IDatabaseConnection"/></returns>
         public override IParameterNameGenerator CreateParameterNameGenerator()
         {
             return new ParameterNameGenerator("@");

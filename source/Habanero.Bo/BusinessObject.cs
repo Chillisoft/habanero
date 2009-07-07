@@ -1563,12 +1563,13 @@ namespace Habanero.BO
             _boStatus.SetBOFlagValue(BOStatus.Statuses.isDirty, hasDirtyProps);
         }
 
-        [Obsolete("This is no longer used")]
+
         /// <summary>
         /// Is the <see cref="IBusinessObject"/> archived or not. This can be overriden by a
         /// specific business object to implement required behaviour.
         /// </summary>
         /// <returns></returns>
+        [Obsolete("This is no longer used")]
         protected internal virtual bool IsArchived()
         {
             return false;

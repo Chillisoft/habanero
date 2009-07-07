@@ -89,6 +89,12 @@ namespace Habanero.UI.Win
             _editableGridManager.Initialise(classDef, uiDefName);
         }
 
+        /// <summary>
+        /// Initialises the grid structure using the given UI class definition
+        /// </summary>
+        /// <param name="classDef">The class definition of the business objects shown in the grid</param>
+        /// <param name="gridDef">The grid definition to use</param>
+        /// <param name="uiDefName">The name of the grid definition.</param>
         public void Initialise(IClassDef classDef, IUIGrid gridDef, string uiDefName) {
             _editableGridManager.Initialise(classDef, gridDef, uiDefName);
         }

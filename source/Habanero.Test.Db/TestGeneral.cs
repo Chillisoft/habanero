@@ -32,13 +32,11 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestGeneral : TestUsingDatabase
     {
-        private IPrimaryKey deleteContactPersonID;
-        private IPrimaryKey updateContactPersonID;
-        private ContactPerson mContactPersonUpdateConcurrency;
-        private ContactPerson mContactPBeginEditsConcurrency;
-        private ContactPerson mCotanctPTestRefreshFromObjMan;
-        private ContactPerson mContactPDeleted;
-        private ContactPerson mContactPTestSave;
+        private IPrimaryKey _updateContactPersonId;
+        private ContactPerson _contactPersonUpdateConcurrency;
+        private ContactPerson _contactPBeginEditsConcurrency;
+        private ContactPerson _contactPTestRefreshFromObjMan;
+        private ContactPerson _contactPTestSave;
 
         [TestFixtureSetUp]
         public void CreateTestPack()
@@ -51,18 +49,18 @@ namespace Habanero.Test.DB
             createUpdatedContactPersonTestPack();
 
 
-            mContactPersonUpdateConcurrency = new ContactPerson();
-            mContactPersonUpdateConcurrency.Surname = "Update Concurrency";
-            mContactPersonUpdateConcurrency.Save();
+            _contactPersonUpdateConcurrency = new ContactPerson();
+            _contactPersonUpdateConcurrency.Surname = "Update Concurrency";
+            _contactPersonUpdateConcurrency.Save();
 
 
-            mContactPBeginEditsConcurrency = new ContactPerson();
-            mContactPBeginEditsConcurrency.Surname = "BeginEdits Concurrency";
-            mContactPBeginEditsConcurrency.Save();
+            _contactPBeginEditsConcurrency = new ContactPerson();
+            _contactPBeginEditsConcurrency.Surname = "BeginEdits Concurrency";
+            _contactPBeginEditsConcurrency.Save();
 
-            mCotanctPTestRefreshFromObjMan = new ContactPerson();
-            mCotanctPTestRefreshFromObjMan.Surname = "FirstSurname";
-            mCotanctPTestRefreshFromObjMan.Save();
+            _contactPTestRefreshFromObjMan = new ContactPerson();
+            _contactPTestRefreshFromObjMan.Surname = "FirstSurname";
+            _contactPTestRefreshFromObjMan.Save();
             new Engine();
             CreateDeletedPersonTestPack();
             CreateSaveContactPersonTestPack();
@@ -73,12 +71,12 @@ namespace Habanero.Test.DB
 
         private void CreateSaveContactPersonTestPack()
         {
-            mContactPTestSave = new ContactPerson();
-            mContactPTestSave.DateOfBirth = new DateTime(1980, 01, 22);
-            mContactPTestSave.FirstName = "Brad";
-            mContactPTestSave.Surname = "Vincent1";
+            _contactPTestSave = new ContactPerson();
+            _contactPTestSave.DateOfBirth = new DateTime(1980, 01, 22);
+            _contactPTestSave.FirstName = "Brad";
+            _contactPTestSave.Surname = "Vincent1";
 
-            mContactPTestSave.Save(); //save the object to the DB
+            _contactPTestSave.Save(); //save the object to the DB
         }
 
         private void CreateDeletedPersonTestPack()
@@ -91,8 +89,6 @@ namespace Habanero.Test.DB
             myContact.Save(); //save the object to the DB
             myContact.MarkForDelete();
             myContact.Save();
-
-            mContactPDeleted = myContact;
         }
 
         private void createUpdatedContactPersonTestPack()
@@ -102,7 +98,7 @@ namespace Habanero.Test.DB
             myContact.FirstName = "FirstName";
             myContact.Surname = "Surname";
             myContact.Save();
-            updateContactPersonID = myContact.ID;
+            _updateContactPersonId = myContact.ID;
         }
 
         [Test]
@@ -116,12 +112,12 @@ namespace Habanero.Test.DB
         {
             ContactPerson myContact = new ContactPerson();
 
-            Assert.IsFalse(myContact.IsValid());
+            Assert.IsFalse(myContact.Status.IsValid());
             myContact.Surname = "My Surname";
-            Assert.IsTrue(myContact.IsValid());
+            Assert.IsTrue(myContact.Status.IsValid());
             Assert.AreEqual("My Surname", myContact.Surname);
             myContact.CancelEdits();
-            Assert.IsFalse(myContact.IsValid());
+            Assert.IsFalse(myContact.Status.IsValid());
             Assert.IsTrue(myContact.Surname.Length == 0);
         }
 
@@ -302,11 +298,11 @@ namespace Habanero.Test.DB
         [Test]
         public void TestMultipleUpdates_NoConcurrencyErrors()
         {
-            mContactPersonUpdateConcurrency.Surname = "New Surname";
-            mContactPersonUpdateConcurrency.Save();
-            mContactPersonUpdateConcurrency.Surname = "New Surname 2";
-            mContactPersonUpdateConcurrency.Save();
-            mContactPersonUpdateConcurrency.Surname = "New Surname 3";
+            _contactPersonUpdateConcurrency.Surname = "New Surname";
+            _contactPersonUpdateConcurrency.Save();
+            _contactPersonUpdateConcurrency.Surname = "New Surname 2";
+            _contactPersonUpdateConcurrency.Save();
+            _contactPersonUpdateConcurrency.Surname = "New Surname 3";
         }
 
         [Test]
@@ -329,25 +325,25 @@ namespace Habanero.Test.DB
         [Test]
         public void TestSaveContactPerson()
         {
-            Assert.IsFalse(mContactPTestSave.Status.IsNew); // this object is saved and thus no longer
+            Assert.IsFalse(_contactPTestSave.Status.IsNew); // this object is saved and thus no longer
             // new
 
-            IPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
-            Assert.AreEqual(id, mContactPTestSave.ID);
+            IPrimaryKey id = _contactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
+            Assert.AreEqual(id, _contactPTestSave.ID);
 
             ContactPerson mySecondContactPerson =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
-            Assert.IsFalse(mContactPTestSave.Status.IsNew); // this object is recovered from the DB
+            Assert.IsFalse(_contactPTestSave.Status.IsNew); // this object is recovered from the DB
             // and is thus not new.
-            Assert.AreEqual(mContactPTestSave.ID.ToString(), mySecondContactPerson.ID.ToString());
-            Assert.AreEqual(mContactPTestSave.FirstName, mySecondContactPerson.FirstName);
-            Assert.AreEqual(mContactPTestSave.DateOfBirth, mySecondContactPerson.DateOfBirth);
+            Assert.AreEqual(_contactPTestSave.ID.ToString(), mySecondContactPerson.ID.ToString());
+            Assert.AreEqual(_contactPTestSave.FirstName, mySecondContactPerson.FirstName);
+            Assert.AreEqual(_contactPTestSave.DateOfBirth, mySecondContactPerson.DateOfBirth);
 
             //Add test to make certain that myContact person and contact person are not 
             // pointing at the same physical object
 
-            mContactPTestSave.FirstName = "Change FirstName";
-            Assert.IsFalse(mContactPTestSave.FirstName == mySecondContactPerson.FirstName);
+            _contactPTestSave.FirstName = "Change FirstName";
+            Assert.IsFalse(_contactPTestSave.FirstName == mySecondContactPerson.FirstName);
         }
 
         [Test]
@@ -363,7 +359,7 @@ namespace Habanero.Test.DB
         public void TestUpdateExistingContactPerson()
         {
             ContactPerson myContactPerson =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(_updateContactPersonId);
             myContactPerson.FirstName = "NewFirstName";
             myContactPerson.Save();
 
@@ -371,7 +367,7 @@ namespace Habanero.Test.DB
             BusinessObjectManager.Instance.ClearLoadedObjects();
             //Reload the person and make sure that the changes have been made.
             ContactPerson myNewContactPerson =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(_updateContactPersonId);
             Assert.AreEqual("NewFirstName", myNewContactPerson.FirstName,
                             "The firstName was not updated");
         }
