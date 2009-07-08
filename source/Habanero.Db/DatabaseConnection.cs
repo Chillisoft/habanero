@@ -68,7 +68,7 @@ namespace Habanero.DB
         private IList _connections;
         private static IDatabaseConnection _currentDatabaseConnection;
         private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
-        private int _timeoutPeriod = 30;
+        private int _timeoutPeriod = -1;
 
         /// <summary>
         /// The <see cref="SqlFormatter"/> that is used to format the Swl for the database type represented by this database connection
@@ -365,7 +365,7 @@ namespace Habanero.DB
             try
             {
                 con = GetOpenConnectionForReading();
-                IDbCommand cmd = con.CreateCommand();
+                IDbCommand cmd = CreateCommand(con);
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = selectSql;
                 cmd.Transaction = con.BeginTransaction(IsolationLevel);
@@ -398,7 +398,7 @@ namespace Habanero.DB
             try
             {
                 IDbConnection con = transaction.Connection;
-                IDbCommand cmd = con.CreateCommand();
+                IDbCommand cmd = CreateCommand(con);
                 cmd.Transaction = transaction;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = selectSql;
@@ -435,7 +435,7 @@ namespace Habanero.DB
             try
             {
                 con = GetOpenConnectionForReading();
-                IDbCommand cmd = con.CreateCommand();
+                IDbCommand cmd = CreateCommand(con);
                 selectSql.SetupCommand(cmd);
                 cmd.Transaction = con.BeginTransaction(IsolationLevel);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -523,20 +523,13 @@ namespace Habanero.DB
                         con.Open();
                     }
 
-                    cmd = con.CreateCommand();
+                    cmd = CreateCommand(con);
                     cmd.Transaction = transaction;
                 }
                 else
                 {
                     con = OpenConnection;
-                    cmd = con.CreateCommand();
-                }
-                try
-                {
-                    cmd.CommandTimeout = _timeoutPeriod;
-                }
-                catch (NotSupportedException)
-                {
+                    cmd = CreateCommand(con);
                 }
                 cmd.CommandText = sql;
                 return cmd.ExecuteNonQuery();
@@ -565,6 +558,20 @@ namespace Habanero.DB
                     }
                 }
             }
+        }
+
+        private IDbCommand CreateCommand(IDbConnection dbConnection)
+        {
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            try
+            {
+                if (_timeoutPeriod > 0) dbCommand.CommandTimeout = _timeoutPeriod;
+            }
+            catch (NotSupportedException ex)
+            {
+                log.Warn("Error setting command timeout period", ex);
+            }
+            return dbCommand;
         }
 
 
@@ -607,13 +614,13 @@ namespace Habanero.DB
                         con.Open();
                     }
 
-                    cmd = con.CreateCommand();
+                    cmd = CreateCommand(con);
                     cmd.Transaction = transaction;
                 }
                 else
                 {
                     con = OpenConnection;
-                    cmd = con.CreateCommand();
+                    cmd = CreateCommand(con);
                     transaction = con.BeginTransaction();
                     cmd.Transaction = transaction;
                 }
@@ -779,7 +786,7 @@ namespace Habanero.DB
             try
             {
                 con = GetOpenConnectionForReading();
-                IDbCommand cmd = con.CreateCommand();
+                IDbCommand cmd = CreateCommand(con);
                 selectSql.SetupCommand(cmd);
                 IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 

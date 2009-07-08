@@ -1,1 +1,0 @@
-todo: equals on query field and refactor ordercriteria field to used it
