@@ -321,7 +321,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="key.snk" />
+    <Content Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Wizard\MessageWizardStepWin.resx">

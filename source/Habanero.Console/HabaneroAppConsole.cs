@@ -20,11 +20,9 @@
 using System;
 using System.IO;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.Console;
 using Habanero.DB;
 
 namespace Habanero.Console

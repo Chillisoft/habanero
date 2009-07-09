@@ -19,7 +19,6 @@
 
 using System;
 using System.IO;
-using Db4objects.Db4o;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
