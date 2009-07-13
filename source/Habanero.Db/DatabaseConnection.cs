@@ -548,7 +548,8 @@ namespace Habanero.DB
                 {
                     con = OpenConnection;
                     cmd = con.CreateCommand();
-                } try
+                } 
+                try
                 {
                     cmd.CommandTimeout = _timeoutPeriod;
                 } catch (NotSupportedException  )
@@ -631,6 +632,13 @@ namespace Habanero.DB
                     cmd = con.CreateCommand();
                     transaction = con.BeginTransaction();
                     cmd.Transaction = transaction;
+                }
+                try
+                {
+                    cmd.CommandTimeout = _timeoutPeriod;
+                }
+                catch (NotSupportedException)
+                {
                 }
                 int totalRowsAffected = 0;
                 //log.Debug("ExecuteSql with sql statement collection: " + sql.ToString());
