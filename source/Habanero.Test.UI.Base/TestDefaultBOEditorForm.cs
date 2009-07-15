@@ -34,132 +34,32 @@ namespace Habanero.Test.UI.Base
     /// Summary description for TestDefaultBOEditorForm.
     /// </summary>
     [TestFixture]
-    public class TestDefaultBOEditorForm : TestUsingDatabase
+    public class TestDefaultBOEditorForm// : TestUsingDatabase
     {
+        private ClassDef _classDefMyBo;
+        private IBusinessObject _bo;
+        private IDefaultBOEditorForm _defaultBOEditorForm;
+
         protected virtual IControlFactory GetControlFactory()
         {
             ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-        //private IDatabaseConnection _conn;
+
+        protected virtual IDefaultBOEditorForm CreateDefaultBOEditorForm(IBusinessObject businessObject)
+        {
+            return GetControlFactory().CreateBOEditorForm((BusinessObject)businessObject);
+        }
+
+        protected virtual void ShowFormIfNecessary(IFormHabanero form)
+        {
+            form.Show();
+        }
 
         [TestFixture]
         public class TestDefaultBOEditorFormWin : TestDefaultBOEditorForm
         {
-            [Test]
-            public void TestLayout()
-            {
-                //---------------Test Result -----------------------
-                Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
-                IControlHabanero boCtl = _defaultBOEditorForm.Controls[0];
-                Assert.AreEqual(6, boCtl.Controls.Count);
-                IControlHabanero buttonControl = _defaultBOEditorForm.Controls[1];
-                Assert.IsTrue(buttonControl is Habanero.UI.Win.ButtonGroupControlWin);
-                Assert.AreEqual(2, buttonControl.Controls.Count);
-            }
-            
-            [Test]
-            public void TestSuccessfulEdit()
-            {
-                //---------------Set up test pack-------------------
-                _defaultBOEditorForm.Show();
-                _bo.SetPropertyValue("TestProp", "TestValue");
-                _bo.SetPropertyValue("TestProp2", "TestValue2");
-                PrepareMockForSave();
-                ///---------------Execute Test ----------------------
-                _defaultBOEditorForm.Buttons["OK"].PerformClick();
-                //---------------Test Result -----------------------
-                Assert.IsFalse(_defaultBOEditorForm.Visible);
-                Assert.AreEqual(DialogResult.OK, _defaultBOEditorForm.DialogResult);
-                Assert.AreEqual("TestValue", _bo.GetPropertyValue("TestProp"));
-                Assert.IsNull(_defaultBOEditorForm.PanelInfo.BusinessObject);
-                //TearDown--------------------------
-                _defaultBOEditorForm.Dispose();
-            }
-
-            [Test]
-            public void TestUnsuccessfulEdit()
-            {
-                //---------------Set up test pack-------------------
-                _defaultBOEditorForm.Show();
-                _bo.SetPropertyValue("TestProp", "TestValue");
-                _bo.SetPropertyValue("TestProp2", "TestValue2");
-                //---------------Execute Test ----------------------
-                _defaultBOEditorForm.Buttons["Cancel"].PerformClick();
-                //---------------Test Result -----------------------
-                Assert.IsFalse(_defaultBOEditorForm.Visible);
-                Assert.AreEqual(DialogResult.Cancel, _defaultBOEditorForm.DialogResult);
-                object propertyValue = _bo.GetPropertyValue("TestProp");
-                Assert.AreEqual(null, propertyValue, propertyValue != null ? propertyValue.ToString() : null);
-                _defaultBOEditorForm.Dispose();
-            }
-
-            [Test]
-            public void TestSuccessfulEditCallsDelegate()
-            {
-                //---------------Set up test pack-------------------
-                //IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject(_conn);
-                IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
-
-                bool delegateCalled = false;
-                bool cancelledValue = true;
-                IBusinessObject boInDelegate = null;
-                IDefaultBOEditorForm boEditorForm = GetControlFactory()
-                    .CreateBOEditorForm((BusinessObject)bo, "default", 
-                    delegate(IBusinessObject bo1, bool cancelled)
-                    {
-                        delegateCalled = true;
-                        cancelledValue = cancelled;
-                        boInDelegate = bo1;
-                    });
-                boEditorForm.Show();
-                bo.SetPropertyValue("TestProp", "TestValue");
-                bo.SetPropertyValue("TestProp2", "TestValue2");
-                PrepareMockForSave();
-                //--------------Assert PreConditions----------------            
-                Assert.IsFalse(delegateCalled);
-                //---------------Execute Test ----------------------
-                boEditorForm.Buttons["OK"].PerformClick();
-                //---------------Test Result -----------------------
-                Assert.IsTrue(delegateCalled);
-                Assert.IsFalse(cancelledValue);
-                Assert.AreSame(bo, boInDelegate);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void TestUnsuccessfulEditCallsDelegate()
-            {
-                //---------------Set up test pack-------------------
-                //IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject(_conn);
-                IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
-
-                bool delegateCalled = false;
-                bool cancelledValue = false;
-                IBusinessObject boInDelegate = null;
-                IDefaultBOEditorForm boEditorForm =
-                    GetControlFactory().CreateBOEditorForm((BusinessObject)bo, "default",
-                    delegate(IBusinessObject bo1, bool cancelled)
-                    {
-                        delegateCalled = true;
-                        cancelledValue = cancelled;
-                        boInDelegate = bo1;
-                    });
-                boEditorForm.Show();
-                bo.SetPropertyValue("TestProp", "TestValue");
-                bo.SetPropertyValue("TestProp2", "TestValue2");
-                PrepareMockForSave();
-                //--------------Assert PreConditions----------------            
-                Assert.IsFalse(delegateCalled);
-                //---------------Execute Test ----------------------
-                boEditorForm.Buttons["Cancel"].PerformClick();
-                //---------------Test Result -----------------------
-                Assert.IsTrue(delegateCalled);
-                Assert.IsTrue(cancelledValue);
-                Assert.AreSame(bo, boInDelegate);
-                //---------------Tear Down -------------------------          
-            }
 
         }
 
@@ -173,30 +73,23 @@ namespace Habanero.Test.UI.Base
                 return factory;
             }
 
-            //Create a duplicate for win
-            [Test]
-            public void TestLayout()
+            protected override void ShowFormIfNecessary(IFormHabanero form)
             {
-                //---------------Test Result -----------------------
-                Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
-                IControlHabanero boCtl = _defaultBOEditorForm.Controls[0];
-                Assert.AreEqual(6, boCtl.Controls.Count);
-                IControlHabanero buttonControl = _defaultBOEditorForm.Controls[1];
-                Assert.IsTrue(buttonControl is Habanero.UI.VWG.ButtonGroupControlVWG);
-                Assert.AreEqual(2, buttonControl.Controls.Count);
+                // Do not show the form for VWG
+            }
+
+            [Test]
+            [Ignore("This cannot be tested for VWG because you cannot show a form to close it")]
+            public override void Test_CloseForm_ShouldCallDelegateWithCorrectInformation()
+            {
             }
         }
-
-        private ClassDef _classDefMyBo;
-        private IBusinessObject _bo;
-        private IDefaultBOEditorForm _defaultBOEditorForm;
-        private Mock _databaseConnectionMockControl;
 
         [TestFixtureSetUp]
         public void SetupFixture()
         {
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
-            this.SetupDBConnection();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             if (GetControlFactory() is Habanero.UI.VWG.ControlFactoryVWG)
             {
@@ -211,14 +104,24 @@ namespace Habanero.Test.UI.Base
         [SetUp]
         public void SetupTest()
         {
-            _databaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
-
-            //_conn = (IDatabaseConnection) _databaseConnectionMockControl.MockInstance;
-            //_bo = _classDefMyBo.CreateNewBusinessObject(_conn);
             BusinessObjectManager.Instance.ClearLoadedObjects();
             _bo = _classDefMyBo.CreateNewBusinessObject();
-            _defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject) _bo);
+            _defaultBOEditorForm = CreateDefaultBOEditorForm(_bo);
         }
+
+        [Test]
+        public void Test_Layout()
+        {
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
+            IControlHabanero boCtl = _defaultBOEditorForm.Controls[0];
+            Assert.AreEqual(6, boCtl.Controls.Count);
+            IControlHabanero buttonControl = _defaultBOEditorForm.Controls[1];
+            Assert.IsInstanceOfType(typeof(IButtonGroupControl), buttonControl);
+            Assert.AreEqual(2, buttonControl.Controls.Count);
+            Assert.AreEqual(FormStartPosition.CenterScreen, _defaultBOEditorForm.StartPosition);
+        }
+
         [Test]
         public void Test_Construct_ShouldConstructWithDefaultConstructor()
         {
@@ -269,70 +172,151 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(defaultBOEditorForm.GroupControlCreator);
             Assert.AreSame(groupControl, defaultBOEditorForm.GroupControlCreator);
         }
-        #region Utility Methods
 
-        private void PrepareMockForSave()
+
+        [Test]
+        public void Test_ClickOK_ShouldCommitEdits()
         {
-            _databaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                DatabaseConnection.CurrentConnection.GetConnection());
-            _databaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                DatabaseConnection.CurrentConnection.GetConnection());
-            _databaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                DatabaseConnection.CurrentConnection.GetConnection());
-            _databaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+            //---------------Set up test pack-------------------
+            ShowFormIfNecessary(_defaultBOEditorForm);
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp", "TestValue");
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp2", "TestValue2");
+            IButton okButton = _defaultBOEditorForm.Buttons["OK"];
+            //--------------Assert PreConditions----------------
+            Assert.IsNotNull(okButton);
+            //---------------Execute Test ----------------------
+            okButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(_defaultBOEditorForm.Visible);
+            Assert.AreEqual(DialogResult.OK, _defaultBOEditorForm.DialogResult);
+            Assert.AreEqual("TestValue", _bo.GetPropertyValue("TestProp"));
+            Assert.AreEqual("TestValue2", _bo.GetPropertyValue("TestProp2"));
+            Assert.IsFalse(_bo.Status.IsDirty);
+            Assert.IsNull(_defaultBOEditorForm.PanelInfo.BusinessObject);
+            //TearDown--------------------------
+            //_defaultBOEditorForm.Dispose();
         }
 
-        #endregion //Utility Methods
+        [Test]
+        public void Test_ClickCancel_ShouldCancelEdits()
+        {
+            //---------------Set up test pack-------------------
+            ShowFormIfNecessary(_defaultBOEditorForm);
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp", "TestValue");
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp2", "TestValue2");
+            IButton cancelButton = _defaultBOEditorForm.Buttons["Cancel"];
+            //--------------Assert PreConditions----------------
+            Assert.IsNotNull(cancelButton);
+            //---------------Execute Test ----------------------
+            cancelButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(_defaultBOEditorForm.Visible);
+            Assert.AreEqual(DialogResult.Cancel, _defaultBOEditorForm.DialogResult);
+            Assert.AreEqual(null, _bo.GetPropertyValue("TestProp"));
+            Assert.AreEqual(null, _bo.GetPropertyValue("TestProp2"));
+            Assert.IsFalse(_bo.Status.IsDirty);
+            Assert.IsNull(_defaultBOEditorForm.PanelInfo.BusinessObject);
+            //TearDown--------------------------
+            //_defaultBOEditorForm.Dispose();
+        }
 
-        //[Test, Ignore("get object ref not set")]
-        //public void TestSuccessfulEdit()
-        //{
-        //    //Setup-------------------------------
-        //    _defaultBOEditorForm.Show();
-        //    _bo.SetPropertyValue("TestProp", "TestValue");
-        //    _bo.SetPropertyValue("TestProp2", "TestValue2");
-        //    PrepareMockForSave();
-        //    //Execute --------------------------
-        //    _defaultBOEditorForm.Buttons["OK"].PerformClick();
-        //    //Assert----------------------------
-        //    Assert.IsFalse(_defaultBOEditorForm.Visible);
-        //    //TODO_Port: Assert.AreEqual(DialogResult.OK, _defaultBOEditorForm.DialogResult);
-        //    Assert.AreEqual("TestValue", _bo.GetPropertyValue("TestProp"));
-        //    //TODO_Port: Assert.IsNull(_defaultBOEditorForm._panelInfo.ControlMappers.BusinessObject);
-        //    //TearDown--------------------------
-        //    _defaultBOEditorForm.Dispose();
-        //}
+        [Test]
+        public void Test_ClickOK_ShouldCallDelegateWithCorrectInformation()
+        {
+            //---------------Set up test pack-------------------
+            IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
 
-        //[Test, Ignore("get object ref not set")]
-        //public void TestUnsuccessfulEdit()
-        //{
-        //    _defaultBOEditorForm.Show();
-        //    _bo.SetPropertyValue("TestProp", "TestValue");
-        //    _bo.SetPropertyValue("TestProp2", "TestValue2");
-        //    _defaultBOEditorForm.Buttons["Cancel"].PerformClick();
-        //    Assert.IsFalse(_defaultBOEditorForm.Visible);
-        //    //Assert.AreEqual(DialogResult.Cancel, _defaultBOEditorForm.DialogResult);
-        //    object propertyValue = _bo.GetPropertyValue("TestProp");
-        //    Assert.AreEqual(null, propertyValue, propertyValue != null ? propertyValue.ToString() : null);
-        //    _defaultBOEditorForm.Dispose();
-        //}
+            bool delegateCalled = false;
+            bool cancelledValue = true;
+            IBusinessObject boInDelegate = null;
+            IDefaultBOEditorForm boEditorForm = GetControlFactory()
+                .CreateBOEditorForm((BusinessObject)bo, "default",
+                delegate(IBusinessObject bo1, bool cancelled)
+                {
+                    delegateCalled = true;
+                    cancelledValue = cancelled;
+                    boInDelegate = bo1;
+                });
+            ShowFormIfNecessary(boEditorForm);
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp", "TestValue");
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp2", "TestValue2");
+            IButton okButton = boEditorForm.Buttons["OK"];
+            //--------------Assert PreConditions----------------
+            Assert.IsNotNull(okButton);
+            Assert.IsFalse(delegateCalled);
+            //---------------Execute Test ----------------------
+            okButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(delegateCalled);
+            Assert.IsFalse(cancelledValue);
+            Assert.AreSame(bo, boInDelegate);
+        }
 
-        //[Test, Ignore("get reference not set")]
-        //public void TestSuccessFullEditCallsDelegate()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject(_conn);
-        //    bool delegateCalled = false;
-        //    IDefaultBOEditorForm boEditorForm =
-        //        GetControlFactory().CreateBOEditorForm((BusinessObject) bo, "default",
-        //            delegate { delegateCalled = true; });
-        //    //--------------Assert PreConditions----------------            
-        //    Assert.IsFalse(delegateCalled);
-        //    //---------------Execute Test ----------------------
-        //    boEditorForm.Buttons["OK"].PerformClick();
-        //    //---------------Test Result -----------------------
-        //    Assert.IsTrue(delegateCalled);
-        //    //---------------Tear Down -------------------------          
-        //}
+        [Test]
+        public void Test_ClickCancel_ShouldCallDelegateWithCorrectInformation()
+        {
+            //---------------Set up test pack-------------------
+            IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
+
+            bool delegateCalled = false;
+            bool cancelledValue = false;
+            IBusinessObject boInDelegate = null;
+            IDefaultBOEditorForm boEditorForm =
+                GetControlFactory().CreateBOEditorForm((BusinessObject)bo, "default",
+                delegate(IBusinessObject bo1, bool cancelled)
+                {
+                    delegateCalled = true;
+                    cancelledValue = cancelled;
+                    boInDelegate = bo1;
+                });
+            ShowFormIfNecessary(boEditorForm);
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp", "TestValue");
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp2", "TestValue2");
+            IButton cancelButton = boEditorForm.Buttons["Cancel"];
+            //--------------Assert PreConditions----------------
+            Assert.IsNotNull(cancelButton);
+            Assert.IsFalse(delegateCalled);
+            //---------------Execute Test ----------------------
+            cancelButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(delegateCalled);
+            Assert.IsTrue(cancelledValue);
+            Assert.AreSame(bo, boInDelegate);
+        }
+
+        [Test]
+        public virtual void Test_CloseForm_ShouldCallDelegateWithCorrectInformation()
+        {
+            //---------------Set up test pack-------------------
+            IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
+
+            bool delegateCalled = false;
+            bool cancelledValue = false;
+            IBusinessObject boInDelegate = null;
+            IDefaultBOEditorForm boEditorForm =
+                GetControlFactory().CreateBOEditorForm((BusinessObject)bo, "default",
+                delegate(IBusinessObject bo1, bool cancelled)
+                {
+                    delegateCalled = true;
+                    cancelledValue = cancelled;
+                    boInDelegate = bo1;
+                });
+            ShowFormIfNecessary(boEditorForm);
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp", "TestValue");
+            EditControlValueOnForm(_defaultBOEditorForm, "TestProp2", "TestValue2");
+            //--------------Assert PreConditions----------------
+            Assert.IsFalse(delegateCalled);
+            //---------------Execute Test ----------------------
+            boEditorForm.Close();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(delegateCalled);
+            Assert.IsTrue(cancelledValue);
+            Assert.AreSame(bo, boInDelegate);
+        }
+
+        private static void EditControlValueOnForm(IDefaultBOEditorForm defaultBOEditorForm, string propertyName, string value)
+        {
+            defaultBOEditorForm.PanelInfo.FieldInfos[propertyName].ControlMapper.Control.Text = value;
+        }
     }
 }

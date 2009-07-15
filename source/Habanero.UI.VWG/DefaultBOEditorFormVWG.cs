@@ -18,14 +18,14 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Gizmox.WebGUI.Forms;
+using System.ComponentModel;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using log4net;
-
+using FormStartPosition = Gizmox.WebGUI.Forms.FormStartPosition;
 
 namespace Habanero.UI.VWG
 {
@@ -139,32 +139,58 @@ namespace Habanero.UI.VWG
             _panelInfo.BusinessObject = _bo;
             _boPanel = _panelInfo.Panel;
             _buttons = _controlFactory.CreateButtonGroupControl();
-            _buttons.AddButton("&Cancel", CancelButtonHandler);
-            IButton okbutton = _buttons.AddButton("&OK", OKButtonHandler);
+            // These buttons used to be "&Cancel" and "&OK", but they are missing the "&" in win, so I took them out for VWG
+            //  Soriya had originally removed them from Win in revision 2854, but I'm not sure of the reason other than 
+            //  externally, when fetching the button from the button control, it would be fetched using the text only.
+            //  I would prefer to have the "&" in the control, but it may break existing code that uses the buttons on this form.
+            //  Also, it seems that VWG does not do anything with the "&"
+            _buttons.AddButton("Cancel", CancelButtonHandler);
+            IButton okbutton = _buttons.AddButton("OK", OKButtonHandler);
             okbutton.NotifyDefault(true);
             this.AcceptButton = (ButtonVWG)okbutton;
             this.Load += delegate { FocusOnFirstControl(); };
+            this.Closing += OnClosing;
 
-            Text = def.Title;
+            this.Text = def.Title;
             SetupFormSize(def);
             MinimizeBox = false;
             MaximizeBox = false;
             //this.ControlBox = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             CreateLayout();
             OnResize(new EventArgs());
         }
 
-        private void FocusOnFirstControl()
+        ///// <summary>
+        ///// Constructor as before, but sets the uiDefName to an empty string,
+        ///// which uses the ui definition without a specified name attribute
+        ///// </summary>
+        ///// <param name="bo">The business object to represent</param>
+        //public DefaultBOEditorFormVWG(BusinessObject bo)
+        //    : this(bo, "", null)
+        //{
+        //}
+
+        /// <summary>
+        /// Returns the BOPanel being used to edit the form.
+        /// </summary>
+        protected IPanel BoPanel
         {
-            //IControlHabanero controlToFocus = _panelInfo.FirstControlToFocus;
-            //MethodInfo focusMethod = controlToFocus.GetType().
-            //    GetMethod("Focus", BindingFlags.Instance | BindingFlags.Public);
-            //if (focusMethod != null)
-            //{
-            //    focusMethod.Invoke(controlToFocus, new object[] { });
-            //}
+            get { return _boPanel; }
         }
+
+        /// <summary>
+        /// Sets all the controls up in a layout manager. By default uses the border layout manager
+        /// with the editor control centre and the buttons south.
+        /// </summary>
+        protected virtual void CreateLayout()
+        {
+            BorderLayoutManager borderLayoutManager = new BorderLayoutManagerVWG(this, _controlFactory);
+            borderLayoutManager.AddControl(BoPanel, BorderLayoutManager.Position.Centre);
+            borderLayoutManager.AddControl(Buttons, BorderLayoutManager.Position.South);
+        }
+
         /// <summary>
         /// Sets up the forms size based on the BOPanel and the Buttons.
         /// </summary>
@@ -189,50 +215,37 @@ namespace Habanero.UI.VWG
             Width = width;
         }
 
-        ///// <summary>
-        ///// Constructor as before, but sets the uiDefName to an empty string,
-        ///// which uses the ui definition without a specified name attribute
-        ///// </summary>
-        ///// <param name="bo">The business object to represent</param>
-        //public DefaultBOEditorFormVWG(BusinessObject bo)
-        //    : this(bo, "", null)
-        //{
-        //}
-
-        /// <summary>
-        /// Returns the panel object being managed
-        /// </summary>
-        protected IPanel BoPanel
+        private void FocusOnFirstControl()
         {
-            get { return _boPanel; }
+            //IControlHabanero controlToFocus = _panelInfo.FirstControlToFocus;
+            //MethodInfo focusMethod = controlToFocus.GetType().
+            //    GetMethod("Focus", BindingFlags.Instance | BindingFlags.Public);
+            //if (focusMethod != null)
+            //{
+            //    focusMethod.Invoke(controlToFocus, new object[] { });
+            //}
         }
 
         /// <summary>
-        /// Sets up the layout of the panel and buttons
+        /// Creates a transaction Committer with the Business Object added.
         /// </summary>
-        protected virtual void CreateLayout()
+        /// <returns>Returns the transaction object</returns>
+        protected virtual TransactionCommitter CreateSaveTransaction()
         {
-            BorderLayoutManager borderLayoutManager = new BorderLayoutManagerVWG(this, _controlFactory);
-            borderLayoutManager.AddControl(BoPanel, BorderLayoutManager.Position.Centre);
-            borderLayoutManager.AddControl(Buttons, BorderLayoutManager.Position.South);
+            TransactionCommitter committer = (TransactionCommitter)BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(_bo);
+            return committer;
         }
 
-        /// <summary>
-        /// A handler to respond when the "Cancel" button has been pressed.
-        /// Any unsaved edits are cancelled and the dialog is closed.
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void CancelButtonHandler(object sender, EventArgs e)
+        private void SafeCloseForm()
         {
-            _panelInfo.BusinessObject = null;
-            _bo.CancelEdits();
-            //DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
-            DialogResult = Base.DialogResult.Cancel;
-            Close();
-            if (_action != null)
+            try
             {
-                _action(this._bo, true);
+                Close();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error Closing Form");
             }
         }
 
@@ -249,9 +262,7 @@ namespace Habanero.UI.VWG
                 _panelInfo.ApplyChangesToBusinessObject();
                 TransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
-
-                DialogResult = Base.DialogResult.OK;
-                Close();
+                DialogResult = DialogResult.OK;
                 if (_action != null)
                 {
                     _action(this._bo, false);
@@ -261,21 +272,59 @@ namespace Habanero.UI.VWG
             catch (Exception ex)
             {
                 log.Error(ExceptionUtilities.GetExceptionString(ex, 0, true));
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem saving for the following reason(s):",
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, 
+                    "There was a problem saving for the following reason(s):",
                                                           "Saving Problem");
             }
+            SafeCloseForm();
         }
 
         /// <summary>
-        /// Returns a transaction object, preparing the database connection and
-        /// specifying which object to update
+        /// A handler to respond when the "Cancel" button has been pressed.
+        /// Any unsaved edits are cancelled and the dialog is closed.
         /// </summary>
-        /// <returns>Returns the transaction object</returns>
-        protected virtual TransactionCommitter CreateSaveTransaction()
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private void CancelButtonHandler(object sender, EventArgs e)
         {
-            TransactionCommitter committer = (TransactionCommitter)BORegistry.DataAccessor.CreateTransactionCommitter();
-            committer.AddBusinessObject(_bo);
-            return committer;
+            if (CancelEditsToBusinessObject())
+            {
+                SafeCloseForm();
+            }
+        }
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            if (_panelInfo.BusinessObject != null)
+            {
+                if (!CancelEditsToBusinessObject())
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private bool CancelEditsToBusinessObject()
+        {
+            bool success = false;
+            try
+            {
+                _panelInfo.BusinessObject = null;
+                _bo.CancelEdits();
+                DialogResult = Base.DialogResult.Cancel;
+                if (_action != null)
+                {
+                    _action(this._bo, true);
+                }
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex,
+                    "There was a problem cancelling the edit for the following reason(s):",
+                    "Problem Cancelling");
+            }
+            return success;
         }
 
         /// <summary>
@@ -318,7 +367,7 @@ namespace Habanero.UI.VWG
         IFormHabanero IFormHabanero.MdiParent
         {
             get { throw new NotImplementedException(); }
-            set { this.MdiParent = (Form)value; }
+            set { this.MdiParent = (Gizmox.WebGUI.Forms.Form)value; }
         }
 
         /// <summary>
