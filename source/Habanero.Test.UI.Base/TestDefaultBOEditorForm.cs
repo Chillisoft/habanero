@@ -21,11 +21,9 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Console;
-using Habanero.DB;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
-using NMock;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -66,16 +64,41 @@ namespace Habanero.Test.UI.Base
         [TestFixture]
         public class TestDefaultBOEditorFormVWG : TestDefaultBOEditorForm
         {
+            //private static MyForm _myForm;
+            //private readonly Thread _thread;
+
+            //public TestDefaultBOEditorFormVWG()
+            //{
+            //    _thread = new Thread(() => Gizmox.WebGUI.Client.Application.Run(typeof (MyForm)));
+            //    _thread.Start();
+            //}
+
+            //~TestDefaultBOEditorFormVWG()
+            //{
+            //    _thread.Abort();
+            //}
+
+            //public class MyForm : FormVWG
+            //{
+            //    public MyForm()
+            //    {
+            //        _myForm = this;
+            //    }
+            //}
+
+            protected override void ShowFormIfNecessary(IFormHabanero form)
+            {
+                // Do not show the form for VWG
+                //Gizmox.WebGUI.Common.Interfaces.IForm formVWG = (FormVWG) form;
+                //formVWG.SetContext(_myForm.Context);
+                //form.Show();
+            }
+
             protected override IControlFactory GetControlFactory()
             {
                 ControlFactoryVWG factory = new Habanero.UI.VWG.ControlFactoryVWG();
                 GlobalUIRegistry.ControlFactory =factory;
                 return factory;
-            }
-
-            protected override void ShowFormIfNecessary(IFormHabanero form)
-            {
-                // Do not show the form for VWG
             }
 
             [Test]
@@ -320,3 +343,54 @@ namespace Habanero.Test.UI.Base
         }
     }
 }
+
+//namespace VWGFormsTestExample
+//{
+//    using Gizmox.WebGUI.Forms;
+//    using Gizmox.WebGUI.Common;
+//    using NUnit.Framework;
+//    using System.Threading;
+
+//    [TestFixture]
+//    public class TestFormVWG
+//    {
+//        private readonly Thread _thread;
+
+//        public TestFormVWG()
+//        {
+//            _thread = new Thread(() => Gizmox.WebGUI.Client.Application.Run(typeof(TempForm)));
+//            _thread.Start();
+//            while (Global.Context == null) Thread.Sleep(100);
+//        }
+
+//        ~TestFormVWG()
+//        {
+//            _thread.Abort();
+//        }
+
+//        public class TempForm : Form
+//        {
+//            public TempForm()
+//            {
+//                Global.Context = this.Context;
+//            }
+//        }
+
+//        [Test]
+//        public void Test_ShowForm()
+//        {
+//            //---------------Set up test pack-------------------
+//            Form form = new Form();
+//            bool isLoaded = false;
+//            form.Load += delegate { isLoaded = true; };
+//            //---------------Assert Precondition----------------
+//            Assert.IsFalse(isLoaded);
+//            Assert.IsNotNull(form.Context);
+//            Assert.IsNotNull(form.Context.Config); // Fails here
+//            //---------------Execute Test ----------------------
+//            form.Show();
+//            //---------------Test Result -----------------------
+//            Assert.IsTrue(isLoaded);
+//        }
+//    }
+//}

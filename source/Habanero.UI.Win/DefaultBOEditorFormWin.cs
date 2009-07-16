@@ -244,6 +244,7 @@ namespace Habanero.UI.Win
                     _action(this._bo, false);
                 }
                 _panelInfo.BusinessObject = null;
+                SafeCloseForm();
             }
             catch (Exception ex)
             {
@@ -252,7 +253,6 @@ namespace Habanero.UI.Win
                     "There was a problem saving for the following reason(s):",
                     "Saving Problem");
             }
-            SafeCloseForm();
         }
 
         /// <summary>

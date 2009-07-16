@@ -202,7 +202,8 @@
     <Compile Include="TestDateTimePicker.cs" />
     <Compile Include="TestDateTimePickerController.cs" />
     <Compile Include="TestDefaultBOCreator.cs" />
-    <Compile Include="TestDefaultBOEditorForm.cs" />
+    <Compile Include="TestDefaultBOEditorForm.cs">
+    </Compile>
     <Compile Include="Grid\TestEditableGrid.cs" />
     <Compile Include="TestFileChooser.cs" />
     <Compile Include="TestGlobalUIRegistry.cs" />
