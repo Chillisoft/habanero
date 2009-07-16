@@ -609,10 +609,10 @@ namespace Habanero.BO
         /// The method allows the Business object developer to add customised rules that determine
         /// the Deletable state of a business object, e.g. Invoices can never be deleted once created. 
         /// Objects cannot be deleted once they have reached certain stages e.g. a customer order after it is accepted.
-        /// These rules are applied to new object as well so if you want a new object 
+        /// These rules are applied to new objects too, so if you want a new object 
         /// to be deletable then you must include this.Status.IsNew in evaluating IsDeletable.
-        /// It also allows the Application developer to implement security controlling the 
-        ///   Deletability of a particular Business Object.
+        /// It also allows the application developer to implement security that controls the 
+        ///  deletion of a particular Business Object.
         ///</summary>
         public virtual bool IsDeletable(out string message)
         {
