@@ -122,8 +122,8 @@ namespace Habanero.Util
         ///<exception cref="Exception">This is a general exception that is thrown if there is an error in retrieving the value.</exception>
         public static object GetPropertyValue(object obj, string propertyName)
         {
-            if (obj == null) throw new HabaneroArgumentException("obj");
-            if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");
+            if (obj == null) throw new HabaneroArgumentException("obj", "The argument should not be null");
+            if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName", "The argument should not be null");
             Type type = obj.GetType();
             string className = type.Name;
             try
@@ -139,10 +139,12 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                log.Error(String.Format("Error retrieving virtual property '{0}' from object of type '{1}'" +
-                                        Environment.NewLine + "{2}", propertyName, className,
+                string message = String.Format("Error retrieving virtual property '{0}' from object of type '{1}'", 
+                    propertyName, className);
+                log.Error(String.Format("{0}" + Environment.NewLine + "{1}", message,
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
-                throw ex.InnerException;
+                //throw ex.InnerException;
+                throw new HabaneroApplicationException(message, ex.InnerException);
             }
         }
 

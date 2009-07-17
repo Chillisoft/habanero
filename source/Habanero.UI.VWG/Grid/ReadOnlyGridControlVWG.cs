@@ -423,25 +423,32 @@ namespace Habanero.UI.VWG
 
         private void _filterControl_OnFilter(object sender, EventArgs e)
         {
-            Grid.CurrentPage = 1;
-            if (FilterMode == FilterModes.Search)
+            try
             {
-                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
-                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
+                Grid.CurrentPage = 1;
+                if (FilterMode == FilterModes.Search)
                 {
-                    if (!string.IsNullOrEmpty(searchClause))
+                    string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+                    if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
                     {
-                        searchClause += " AND ";
+                        if (!string.IsNullOrEmpty(searchClause))
+                        {
+                            searchClause += " AND ";
+                        }
+                        searchClause += AdditionalSearchCriteria;
                     }
-                    searchClause += AdditionalSearchCriteria;
+                    IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
+                        GetBusinessObjectCollection(ClassDef, searchClause, OrderBy);
+                    SetBusinessObjectCollection(collection);
                 }
-                IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
-                    GetBusinessObjectCollection(ClassDef, searchClause, OrderBy);
-                SetBusinessObjectCollection(collection);
+                else
+                {
+                    Grid.ApplyFilter(_filterControl.GetFilterClause());
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Grid.ApplyFilter(_filterControl.GetFilterClause());
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error filtering");
             }
         }
 
