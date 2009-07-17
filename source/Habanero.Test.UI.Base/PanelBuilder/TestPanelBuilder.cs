@@ -954,7 +954,6 @@ namespace Habanero.Test.UI.Base
             StringAssert.Contains("Invalid alignment property value ", errMessage);
         }
 
-
         [Test]
         public void Test_BuildPanelForTab_CompulsoryFieldsAreBoldAndStarred()
         {
@@ -969,14 +968,39 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             IControlCollection controls = panel.Controls;
 
-            ILabel compulsoryLabel = (ILabel) controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO];
+            ILabel compulsoryLabel = (ILabel)controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO];
             Assert.AreEqual("CompulsorySampleText: *", compulsoryLabel.Text);
             Assert.IsTrue(compulsoryLabel.Font.Bold);
 
             ILabel nonCompulsoryLabel =
-                (ILabel) controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN];
+                (ILabel)controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN];
             Assert.AreEqual("SampleTextNotCompulsory:", nonCompulsoryLabel.Text);
             Assert.IsFalse(nonCompulsoryLabel.Font.Bold);
+        }
+
+        [Test]
+        public void Test_BuildPanelForTab_WithNonEditableField_ShouldDisableLabel()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneNotEditable();
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            
+            //-------------Assert Preconditions -------------
+            
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory).Panel;
+            //---------------Test Result -----------------------
+            IControlCollection controls = panel.Controls;
+
+            ILabel compulsoryLabel = (ILabel)controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO];
+            Assert.AreEqual("EditableFieldSampleText:", compulsoryLabel.Text);
+            Assert.IsTrue(compulsoryLabel.Enabled);
+
+            ILabel nonCompulsoryLabel =
+                (ILabel)controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN];
+            Assert.AreEqual("SampleTextNotEditableField:", nonCompulsoryLabel.Text);
+            Assert.IsFalse(nonCompulsoryLabel.Enabled);
         }
 
         [Test]

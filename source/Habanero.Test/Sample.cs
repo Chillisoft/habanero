@@ -93,8 +93,37 @@ namespace Habanero.Test
 					</ui>
 				</class>
 			");
-			ClassDef.ClassDefs.Add(itsClassDef);
-			return itsClassDef;
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef CreateClassDefWithTwoPropsOneNotEditable()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""Sample"" assembly=""Habanero.Test"">
+					<property  name=""SampleID"" type=""Guid"" />
+					<property  name=""SampleText"" />
+					<property  name=""SampleText2"" />
+					<primaryKey>
+						<prop name=""SampleID"" />
+					</primaryKey>
+					<ui>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""EditableFieldSampleText:"" property=""SampleText2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""SampleTextNotEditableField:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" editable=""false"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
         }
 
         public static ClassDef CreateClassDefWithTwoPropsOneWithToolTipText()

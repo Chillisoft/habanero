@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -80,5 +81,15 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns></returns>
         string GetErrorMessage();
+
+        /// <summary>
+        /// A form field can have attributes defined in the class definition.
+        /// These attributes are passed to the control mapper via a hashtable
+        /// so that the control mapper can adjust its behaviour accordingly.
+        /// </summary>
+        /// <param name="attributes">A hashtable of attributes, which consists
+        /// of name-value pairs, where name is the attribute name.  This is usually
+        /// set in the XML definitions for the class's user interface.</param>
+        void SetPropertyAttributes(Hashtable attributes);
     }
 }

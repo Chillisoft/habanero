@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -13,6 +14,7 @@ namespace Habanero.UI.Base
     /// in a combobox so that the user can select a business object for the purposes 
     /// of setting a related Business Object. 
     /// </summary>
+    //TODO Mark 19 Jun 2009: Shouldn't this inherit from ControlMapper?
     public class RelationshipComboBoxMapper : ILookupComboBoxMapper
     {
         /// <summary>
@@ -391,6 +393,19 @@ namespace Habanero.UI.Base
         public string GetErrorMessage()
         {
             throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// A form field can have attributes defined in the class definition.
+        /// These attributes are passed to the control mapper via a hashtable
+        /// so that the control mapper can adjust its behaviour accordingly.
+        /// </summary>
+        /// <param name="attributes">A hashtable of attributes, which consists
+        /// of name-value pairs, where name is the attribute name.  This is usually
+        /// set in the XML definitions for the class's user interface.</param>
+        public void SetPropertyAttributes(Hashtable attributes)
+        {
+            
         }
 
         /// <summary>

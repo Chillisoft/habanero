@@ -18,12 +18,15 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using log4net;
+using FormStartPosition=System.Windows.Forms.FormStartPosition;
 
 namespace Habanero.UI.Win
 {
@@ -121,17 +124,19 @@ namespace Habanero.UI.Win
             okbutton.NotifyDefault(true);
             this.AcceptButton = (ButtonWin)okbutton;
             this.Load += delegate { FocusOnFirstControl(); };
+            this.FormClosing += OnFormClosing; 
 
             this.Text = def.Title;
             SetupFormSize(def);
             MinimizeBox = false;
             MaximizeBox = false;
             //this.ControlBox = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             CreateLayout();
             OnResize(new EventArgs());
-
         }
+
         /// <summary>
         /// Constructs the <see cref="DefaultBOEditorFormWin"/> class  with 
         /// the specified <see cref="BusinessObject"/>, uiDefName and <see cref="IControlFactory"/>. 
@@ -143,6 +148,7 @@ namespace Habanero.UI.Win
             : this(bo, uiDefName, controlFactory, controlFactory.CreateTabControl)
         {
         }
+
         /// <summary>
         /// Returns the BOPanel being used to edit the form.
         /// </summary>
@@ -161,7 +167,11 @@ namespace Habanero.UI.Win
             borderLayoutManager.AddControl(Buttons, BorderLayoutManager.Position.South);
         }
 
-        private void SetupFormSize(IUIForm def)
+        /// <summary>
+        /// Sets up the forms size based on the BOPanel and the Buttons.
+        /// </summary>
+        /// <param name="def"></param>
+        protected virtual void SetupFormSize(IUIForm def)
         {
             int width = def.Width;
             int minWidth = _boPanel.Width +
@@ -192,6 +202,35 @@ namespace Habanero.UI.Win
             //}
         }
 
+        /// <summary>
+        /// Creates a transaction Committer with the Business Object added.
+        /// </summary>
+        /// <returns>Returns the transaction object</returns>
+        protected virtual TransactionCommitter CreateSaveTransaction()
+        {
+            TransactionCommitter committer = (TransactionCommitter)BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(_bo);
+            return committer;
+        }
+
+        private void SafeCloseForm()
+        {
+            try
+            {
+                Close();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error Closing Form");
+            }
+        }
+
+        /// <summary>
+        /// A handler to respond when the "OK" button has been pressed.
+        /// All changes are committed to the database and the dialog is closed.
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
         private void OKButtonHandler(object sender, EventArgs e)
         {
             try
@@ -199,42 +238,69 @@ namespace Habanero.UI.Win
                 _panelInfo.ApplyChangesToBusinessObject();
                 TransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
-                DialogResult = DialogResult.OK;
-                Close();
+                DialogResult = Base.DialogResult.OK;
                 if (_action != null)
                 {
                     _action(this._bo, false);
                 }
                 _panelInfo.BusinessObject = null;
+                SafeCloseForm();
             }
             catch (Exception ex)
             {
                 log.Error(ExceptionUtilities.GetExceptionString(ex, 0, true));
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem saving for the following reason(s):",
+                GlobalRegistry.UIExceptionNotifier.Notify(ex,
+                    "There was a problem saving for the following reason(s):",
                     "Saving Problem");
             }
         }
-        /// <summary>
-        /// Creates a transaction Committer with the Business Object added.
-        /// </summary>
-        /// <returns></returns>
-        protected virtual TransactionCommitter CreateSaveTransaction()
-        {
-            TransactionCommitter committer = (TransactionCommitter) BORegistry.DataAccessor.CreateTransactionCommitter();
-            committer.AddBusinessObject(_bo);
-            return committer;
-        }
 
+        /// <summary>
+        /// A handler to respond when the "Cancel" button has been pressed.
+        /// Any unsaved edits are cancelled and the dialog is closed.
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
         private void CancelButtonHandler(object sender, EventArgs e)
         {
-            _panelInfo.BusinessObject = null;
-            _bo.CancelEdits();
-            DialogResult = Base.DialogResult.Cancel;
-            Close();
-            if (_action != null)
+            if (CancelEditsToBusinessObject())
             {
-                _action(this._bo, true);
+                SafeCloseForm();
             }
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_panelInfo.BusinessObject != null)
+            {
+                if (!CancelEditsToBusinessObject())
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private bool CancelEditsToBusinessObject()
+        {
+            bool success = false;
+            try
+            {
+                _panelInfo.BusinessObject = null;
+                _bo.CancelEdits();
+                DialogResult = Base.DialogResult.Cancel;
+                if (_action != null)
+                {
+                    _action(this._bo, true);
+                }
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex,
+                    "There was a problem cancelling the edit for the following reason(s):",
+                    "Problem Cancelling");
+            }
+            return success;
         }
 
         /// <summary>
@@ -266,9 +332,7 @@ namespace Habanero.UI.Win
         /// <returns>True if the edit was a success, false if not</returns>
         bool IDefaultBOEditorForm.ShowDialog()
         {
-            {
-                return this.ShowDialog() == (System.Windows.Forms.DialogResult)Base.DialogResult.OK;
-            }
+            return this.ShowDialog() == (System.Windows.Forms.DialogResult)Base.DialogResult.OK;
         }
     }
 }

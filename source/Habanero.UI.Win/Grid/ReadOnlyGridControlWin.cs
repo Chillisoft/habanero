@@ -474,7 +474,7 @@ namespace Habanero.UI.Win
             }
             catch (Exception ex)
             {
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error filtering");
             }
         }
 
@@ -511,7 +511,7 @@ namespace Habanero.UI.Win
             }
             catch (Exception ex)
             {
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting", "Problem Deleting");
             }
         }
 
@@ -534,7 +534,7 @@ namespace Habanero.UI.Win
             }
             catch (Exception ex)
             {
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error trying to edit an item");
             }
         }
 
@@ -542,6 +542,7 @@ namespace Habanero.UI.Win
         {
             try
             {
+
                 if (Grid.BusinessObjectCollection == null)
                 {
                     throw new GridDeveloperException("You cannot call add since the grid has not been set up");
@@ -555,28 +556,27 @@ namespace Habanero.UI.Win
                 if (_businessObjectEditor != null && newBo != null)
                 {
                     _businessObjectEditor.EditObject(newBo, UiDefName,
-                                     delegate(IBusinessObject bo, bool cancelled)
-                                         {
-                                             IBusinessObjectCollection collection =
-                                                 this.Grid.BusinessObjectCollection;
-                                             if (cancelled)
-                                             {
-                                                 collection.Remove(bo);
-                                             }
-                                             else
-                                             {
-                                                 if (!collection.Contains(bo))
-                                                 {
-                                                     collection.Add(bo);
-                                                 }
-                                                 Grid.SelectedBusinessObject = bo;
-                                             }
-                                         });
+                        delegate(IBusinessObject bo, bool cancelled)
+                        {
+                            IBusinessObjectCollection collection = this.Grid.BusinessObjectCollection;
+                            if (cancelled)
+                            {
+                                collection.Remove(bo);
+                            }
+                            else
+                            {
+                                if (!collection.Contains(bo))
+                                {
+                                    collection.Add(bo);
+                                }
+                                Grid.SelectedBusinessObject = bo;
+                            }
+                        });
                 }
             }
             catch (Exception ex)
             {
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error trying to add an item");
             }
         }
 
