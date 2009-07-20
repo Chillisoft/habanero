@@ -31,7 +31,7 @@ namespace Habanero.DB
     /// either from the cache or from the database if the cache value has
     /// expired
     /// </summary>
-    public class DatabaseSettings : ISettings
+    public class DatabaseSettings : MarshalByRefObject, ISettings
     {
         private readonly Hashtable _cachedSettings;
         private string _tableName = "settings";

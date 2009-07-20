@@ -1,1 +1,1 @@
-"c:\program files\ncover\NCover.Console.exe" "c:\program files\nunit 2.4.7\bin\nunit-console.exe" habanero.nunit //a Habanero.Base;Habanero.BO;Habanero.DB;Habanero;Habanero.UI.Base;Habanero.UI.VWG;Habanero.UI.Win;Habanero.Util
+"c:\program files\ncover\NCover.Console.exe" "c:\program files\nunit 2.4.7\bin\nunit-console.exe" habanero.nunit //a Habanero.Base;Habanero.BO;Habanero.DB;Habanero;Habanero.UI.Base;Habanero.UI.VWG;Habanero.UI.Win
