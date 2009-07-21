@@ -93,10 +93,7 @@ namespace Habanero.UI.Base
             get { return _collection; }
             set
             {
-                if (_collection == value) return;
-
                 _collection = value;
-
                 _comboBox.Items.Clear();
                 _comboBox.Items.Add(new ComboPair("", null));
                 foreach (KeyValuePair<string, string> pair in LookupList)
