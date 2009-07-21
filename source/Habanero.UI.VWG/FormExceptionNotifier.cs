@@ -53,6 +53,12 @@ namespace Habanero.UI.VWG
         public void Notify(Exception ex, string furtherMessage, string title)
         {
             exceptionMessage = furtherMessage + Environment.NewLine + ex.Message;
+            if (Gizmox.WebGUI.Common.Global.Context == null)
+            {
+                // If the VWG Global Context has not been initialised yet, then no VWG forms can be displayed.
+                // As a result, then best action to take is to just rethrow this error and let the ASP error handler display it.
+                throw ex;
+            }
             if (ex is UserException || ex is BusinessObjectException)
             {
                 MessageBox.Show(furtherMessage + Environment.NewLine + ex.Message, title);
