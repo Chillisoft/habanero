@@ -27,7 +27,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Habanero.UI.Base.XML</DocumentationFile>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -64,6 +63,16 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOColTabControlManager.cs" />
@@ -175,8 +184,7 @@
     <Compile Include="Selectors\IBOListBoxSelector.cs" />
     <Compile Include="Selectors\ListBoxCollectionManager.cs" />
     <Compile Include="Selectors\ListViewCollectionManager.cs" />
-    <Compile Include="StaticDataEditorManager.cs">
-    </Compile>
+    <Compile Include="StaticDataEditorManager.cs" />
     <Compile Include="TreeViewController.cs" />
     <Compile Include="Util\CustomValidationEventArgs.cs" />
     <Compile Include="Util\GlobalUIRegistry.cs" />
@@ -269,16 +277,6 @@
     <Compile Include="..\Common\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Name>Habanero.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
-      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
-      <Name>Habanero.BO</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="key.snk" />
