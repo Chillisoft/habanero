@@ -48,7 +48,11 @@ namespace Habanero.Base
         /// </summary>
         public static IExceptionNotifier UIExceptionNotifier
         {
-            get { return _exceptionNotifier; }
+            get
+            {
+                if (_exceptionNotifier == null) return new RethrowingExceptionNotifier();
+                return _exceptionNotifier;
+            }
             set { _exceptionNotifier = value; }
         }
 
