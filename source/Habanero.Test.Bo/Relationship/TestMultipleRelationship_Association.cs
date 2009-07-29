@@ -109,7 +109,7 @@ namespace Habanero.Test.BO.Relationship
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
-
+            organisationTestBO.Save();
             //---------------Assert Precondition----------------
             Assert.IsFalse(relationship.IsDirty);
 
@@ -135,7 +135,7 @@ namespace Habanero.Test.BO.Relationship
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
-
+            organisationTestBO.Save();
             //---------------Assert Precondition----------------
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
 
@@ -158,7 +158,7 @@ namespace Habanero.Test.BO.Relationship
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
-
+            organisationTestBO.Save();
             //---------------Assert Precondition----------------
             Assert.IsFalse(relationship.IsDirty);
 
@@ -185,7 +185,7 @@ namespace Habanero.Test.BO.Relationship
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
-
+            organisationTestBO.Save();
             //---------------Assert Precondition----------------
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
 
@@ -210,7 +210,7 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
-
+            organisationTestBO.Save();
             //---------------Assert Precondition----------------
             Assert.IsFalse(relationship.IsDirty);
 
@@ -236,7 +236,7 @@ namespace Habanero.Test.BO.Relationship
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
-
+            organisationTestBO.Save();
             //---------------Assert Precondition----------------
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
 
@@ -313,6 +313,7 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
+            organisationTestBO.Save();
             cpCol.MarkForDelete(contactPerson);
 
             //---------------Execute Test ----------------------

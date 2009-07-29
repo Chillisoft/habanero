@@ -195,11 +195,15 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             GetAssociationRelationship(organisationTestBO, out cpCol);
+            //util.AssertOneObjectInCurrentPersistedCollection(cpCol);
+            util.AssertAllCollectionsHaveNoItems(cpCol);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
+            util.AssertOneObjectInCurrentAndCreatedCollection(cpCol);
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
+            util.AssertOneObjectInCurrentAndCreatedCollection(cpCol);
             contactPerson.Save();
-
+            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
             OrganisationTestBO alternateOrganisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
 
             //---------------Assert Precondition----------------

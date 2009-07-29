@@ -116,6 +116,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_Refresh_PreservesCreateBusObjectCollection()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO bo = new ContactPersonTestBO();
             RelatedBusinessObjectCollection<AddressTestBO> addresses = bo.Addresses;

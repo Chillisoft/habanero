@@ -1798,7 +1798,10 @@ namespace Habanero.BO
         /// <param name="newBO"></param>
         private void AddCreatedBusinessObject(TBusinessObject newBO)
         {
-            CreatedBusinessObjects.Add(newBO);
+            if (!this.CreatedBusinessObjects.Contains(newBO))
+            {
+                CreatedBusinessObjects.Add(newBO);
+            }
             if (this.Contains(newBO)) return;
 
             AddWithoutEvents(newBO);

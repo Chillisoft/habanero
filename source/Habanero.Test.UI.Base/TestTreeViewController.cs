@@ -312,6 +312,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
 
             organisation.ContactPeople.Add(contactPerson2);
+            Assert.AreEqual(2, relationshipNode.Nodes.Count);
             ITreeNode contactPerson2Node = relationshipNode.Nodes[1];
             contactPerson2Node.ExpandAll();
             ReflectionUtilities.ExecutePrivateMethod(treeViewController, "ExpandNode", contactPerson2Node);

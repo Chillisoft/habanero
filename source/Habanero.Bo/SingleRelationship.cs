@@ -206,6 +206,7 @@ namespace Habanero.BO
             if ((RelatedBoForeignKeyHasChanged() || _relatedBo == null))
             {
                 _relatedBo = GetRelatedBusinessObjectFromBusinessObjectManager();
+                AddToReverseRelationship(_relatedBo);
                 if (_relatedBo != null) return _relatedBo;
             }
             Criteria newKeyCriteria = _relKey.Criteria;

@@ -54,7 +54,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count, "One object should be in the persisted items");
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count, "zero objects should be in the created items");
         }
 
         public void AssertOneObjectInCurrentAndCreatedCollection(IBusinessObjectCollection cpCol)
