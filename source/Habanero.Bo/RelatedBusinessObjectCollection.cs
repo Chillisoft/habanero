@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -46,7 +45,6 @@ namespace Habanero.BO
         }
 
 
-
         //Relationship 
         //-- should this reference the reverse relationship if exists 
         //  (i.e. bidirectional navigatable relationship).
@@ -61,8 +59,11 @@ namespace Habanero.BO
         {
             if (!Loading)
             {
-                MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
-                if (def != null) def.CheckCanAddChild(bo);
+                if (!this._relationship.RelKey.Criteria.IsMatch(bo, false))
+                {
+                    MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
+                    if (def != null) def.CheckCanAddChild(bo);
+                }
             }
             if (!base.AddInternal(bo)) return false;
             if (this.Loading) return true;
@@ -119,6 +120,7 @@ namespace Habanero.BO
                 bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
             }
         }
+
         private void RemoveRelatedObject(TBusinessObject bo)
         {
             ISingleRelationship reverseRelationship = GetReverseRelationship(bo) as ISingleRelationship;

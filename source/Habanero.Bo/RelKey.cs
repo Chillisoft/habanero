@@ -144,12 +144,7 @@ namespace Habanero.BO
                 Criteria criteria = null;
                 foreach (RelProp relProp in this)
                 {
-                    if (criteria == null)
-                        criteria = relProp.Criteria;
-                    else
-                    {
-                        criteria = new Criteria(criteria, Criteria.LogicalOp.And, relProp.Criteria);
-                    }
+                    criteria = criteria == null ? relProp.Criteria : new Criteria(criteria, Criteria.LogicalOp.And, relProp.Criteria);
                 }
                 return criteria;
  
@@ -167,6 +162,41 @@ namespace Habanero.BO
                 //return null;
             }
         }
+//        /// <summary>
+//        /// Returns a copy of the key's Criteria (ie the search string matching this key). 
+//        /// </summary>
+//        /// <returns>Returns a Criteria object</returns>
+//        public Criteria RelatedCriteria
+//        {
+//            get
+//            {
+//                if (_relProps.Count == 0) return null;
+//                Criteria criteria = null;
+//                foreach (RelProp relProp in this)
+//                {
+//                    if (criteria == null)
+//                        criteria = relProp.Criteria;
+//                    else
+//                    {
+//                        criteria = new Criteria(criteria, Criteria.LogicalOp.And, relProp.Criteria);
+//                    }
+//                }
+//                return criteria;
+// 
+//                //if (_relProps.Count >= 1)
+//                //{
+//                //    IExpression exp = null;
+//                //    foreach (RelProp relProp in this)
+//                //    {
+//                //        exp = exp == null
+//                //            ? relProp.RelatedPropExpression()
+//                //            : new Expression(exp, new SqlOperator("AND"), relProp.RelatedPropExpression());
+//                //    }
+//                //    return exp;
+//                //}
+//                //return null;
+//            }
+//        }
 
 
         /// <summary>

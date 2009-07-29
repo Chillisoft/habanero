@@ -350,8 +350,12 @@ namespace Habanero.BO
 
             IRelationship reverseRelationship = GetReverseRelationship(relatedObject);
             if (reverseRelationship == null) return;
-
-            reverseRelationship.RelationshipDef.CheckCanAddChild(this.OwningBO);
+            //If related Object belongs to this relationship then you do not need to CheckCanAddChild.
+            if (!reverseRelationship.RelKey.Criteria.IsMatch(this.OwningBO, false))
+            {
+                reverseRelationship.RelationshipDef.CheckCanAddChild(this.OwningBO);
+            }
+            
             _relatedBo = relatedObject;
 
             AddToMultipleReverseRelationship(reverseRelationship);
