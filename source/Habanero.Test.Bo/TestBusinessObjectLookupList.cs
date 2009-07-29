@@ -334,6 +334,18 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_Constructor_WithLimitToList_Timeout()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            BusinessObjectLookupList source = new BusinessObjectLookupList(
+                "Habanero.Test.BO", "ContactPersonTestBO", "", "surname", 55000);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(55000, source.TimeOut);
+        }
+
+        [Test]
         public void Test_Constructor_WithLimitToList_AsFalse()
         {
             //---------------Set up test pack-------------------

@@ -36,10 +36,11 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="className"></param>
         ///<param name="criteria"></param>
         ///<param name="sort"></param>
+        ///<param name="timeout">the timeout period in milliseconds. This is the period that the lookup list will cached (i.e will not be reloaded from the database between successive calls)</param>
         ///<returns></returns>
-        public BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort)
+        public BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort, int timeout)
 		{
-			return new BusinessObjectLookupList(assemblyName, className, criteria, sort);
+			return new BusinessObjectLookupList(assemblyName, className, criteria, sort, timeout);
 		}
 
         ///<summary>

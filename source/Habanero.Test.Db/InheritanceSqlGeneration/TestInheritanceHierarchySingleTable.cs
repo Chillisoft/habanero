@@ -23,6 +23,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
@@ -155,8 +156,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         public void TestDatabaseReadWrite()
         {
             // Test inserting & selecting
-            Shape shape = new Shape();
-            shape.ShapeName = "MyShape";
+            Shape shape = new Shape {ShapeName = "MyShape"};
             shape.Save();
 
             BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
@@ -172,33 +172,40 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             filledCircles.LoadAll();
             Assert.AreEqual(0, filledCircles.Count);
 
-            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
-            circle.Radius = 5;
-            circle.ShapeName = "Circle";
+            CircleNoPrimaryKey circle = new CircleNoPrimaryKey {Radius = 5, ShapeName = "Circle"};
             circle.Save();
+
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             shapes.LoadAll("ShapeName");
             Assert.AreEqual(2, shapes.Count);
             Assert.AreEqual("Circle", shapes[0].ShapeName);
             Assert.AreEqual("MyShape", shapes[1].ShapeName);
 
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             circles.LoadAll();
             Assert.AreEqual(1, circles.Count);
             Assert.AreEqual(circles[0].ShapeID, shapes[0].ShapeID);
             Assert.AreEqual(5, circles[0].Radius);
             Assert.AreEqual("Circle", circles[0].ShapeName);
 
-            FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey();
-            filledCircle.Colour = 3;
-            filledCircle.Radius = 7;
-            filledCircle.ShapeName = "FilledCircle";
+            FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey
+                                                        {
+                                                            Colour = 3,
+                                                            Radius = 7,
+                                                            ShapeName = "FilledCircle"
+                                                        };
             filledCircle.Save();
 
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             shapes.LoadAll("ShapeName");
             Assert.AreEqual(3, shapes.Count);
             Assert.AreEqual("Circle", shapes[0].ShapeName);
             Assert.AreEqual("FilledCircle", shapes[1].ShapeName);
             Assert.AreEqual("MyShape", shapes[2].ShapeName);
+            Assert.That(shapes[0], Is.InstanceOfType(typeof(CircleNoPrimaryKey)));
+            Assert.That(shapes[1], Is.InstanceOfType(typeof(FilledCircleNoPrimaryKey)));
+            Assert.That(shapes[2], Is.InstanceOfType(typeof(Shape)));
 
             circles.LoadAll("ShapeName");
             Assert.AreEqual(2, circles.Count);

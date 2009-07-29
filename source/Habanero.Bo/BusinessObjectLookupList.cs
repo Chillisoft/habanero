@@ -142,6 +142,23 @@ namespace Habanero.BO
             : this(assemblyName, className, criteria, sort)
         {
             _limitToList = limitToList;
+        }      
+        
+        /// <summary>
+        /// Constructor to initialise a new lookup-list
+        /// </summary>
+        /// <param name="assemblyName">The assembly containing the class</param>
+        /// <param name="className">The class from which to load the values</param>
+        /// <param name="criteria">Sql criteria to apply on loading of the 
+        /// collection</param>
+        /// <param name="sort">The property to sort on.
+        /// The possible formats are: "property", "property asc",
+        /// "property desc" and "property des".</param>
+        ///<param name="timeout">the timeout period in milliseconds. This is the period that the lookup list will cached (i.e will not be reloaded from the database between successive calls)</param>
+        public BusinessObjectLookupList(string assemblyName, string className, string criteria, string sort, int timeout)
+            : this(assemblyName, className, criteria, sort)
+        {
+            _timeout = timeout;
         }
 
       

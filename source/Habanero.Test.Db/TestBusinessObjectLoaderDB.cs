@@ -42,7 +42,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void TestGetBusinessObjectByIDInt()
+        public void TestGetBusinessObjectByIDInt_ByCriteriaObject()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -55,11 +55,11 @@ namespace Habanero.Test.DB
 
             //---------------Test Result -----------------------
             Assert.AreSame(tai1, tai2);
-            Assert.AreEqual("testing", tai2.TestField);
+            Assert.AreEqual("testing 123", tai2.TestField);
         }
 
         [Test]
-        public void TestGetBusinessObjectByIDInt_CriteriaString()
+        public void TestGetBusinessObjectByIDInt_ByCriteriaString()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -73,7 +73,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.IsNotNull(tai1);
             Assert.AreSame(tai1, tai2);
-            Assert.AreEqual("testing", tai2.TestField);
+            Assert.AreEqual("testing 123", tai2.TestField);
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.IsNotNull(tai1);
             Assert.AreSame(tai1, tai2);
-            Assert.AreEqual("testing", tai2.TestField);
+            Assert.AreEqual("testing 123", tai2.TestField);
         }
 
         [Test]

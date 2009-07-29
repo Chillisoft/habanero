@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders
@@ -31,6 +33,7 @@ namespace Habanero.BO.Loaders
     	private string _assemblyName;
         private string _criteria;
         private string _sort;
+        private int _timeout;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -59,6 +62,13 @@ namespace Habanero.BO.Loaders
             //_type = TypeLoader.LoadType(assemblyName, className);
             _criteria = _reader.GetAttribute("criteria");
             _sort = _reader.GetAttribute("sort");
+            if (!Int32.TryParse(_reader.GetAttribute("timeout"), out _timeout) ||
+                _timeout < 0)
+            {
+                throw new InvalidXmlDefinitionException("In a 'businessObjectLookupList' " +
+                    "element, an invalid integer was assigned to the 'timeout' " +
+                    "attribute.  The value must be a positive integer or zero.");
+            }
         }
 
         /// <summary>
@@ -68,7 +78,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a BusinessObjectLookupList object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateBusinessObjectLookupList(_assemblyName, _className, _criteria, _sort);
+			return _defClassFactory.CreateBusinessObjectLookupList(_assemblyName, _className, _criteria, _sort, _timeout);
 		}
     }
 }
