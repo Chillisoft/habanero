@@ -192,7 +192,7 @@ namespace Habanero.Test.BO.Relationship
 
 
    [Test]
-        public void Test_IsDeletable_WhenSingleWhenDeleteAction_EQ_PreventDelete_WhenHasRelated_ShouldBeFalse()
+        public void Test_IsDeletable_WhenSingle_WhenDeleteAction_EQ_PreventDelete_WhenHasRelated_ShouldBeFalse()
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -309,7 +309,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        public void Test_MarkForDelete_WhenHasRelatedBO_WhenDeleteRelated_ShouldMarkForDeleteRelated()
+        public void Test_MarkForDelete_WhenMultiple_WhenDeleteRelated__WhenHasRelatedBO_ShouldMarkForDeleteRelated()
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -318,11 +318,11 @@ namespace Habanero.Test.BO.Relationship
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
-            ReflectionUtilities.SetPropertyValue(bo.Status,"IsDeleted", true);
+            ReflectionUtilities.SetPropertyValue(bo.Status, "IsDeleted", true);
             MyRelatedBo myRelatedBO = bo.MyMultipleRelationship.CreateBusinessObject();
             IRelationship relationship = bo.Relationships["MyMultipleRelationship"];
             ((RelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
-     
+
             //---------------Assert Precondition----------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsFalse(myRelatedBO.Status.IsDeleted);
@@ -336,7 +336,31 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        public void Test_MarkForDelete_WhenHasRelatedBO_WhenDerefenceRelated_ShouldDoNothing()
+        public void Test_MarkForDelete_WhenMultiple_WhenDeleteRelated_WhenNotHasRelatedBO_ShouldDoNothing()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.Save();
+            ReflectionUtilities.SetPropertyValue(bo.Status, "IsDeleted", true);
+            IRelationship relationship = bo.Relationships["MyMultipleRelationship"];
+            ((RelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+            Assert.AreEqual(0, bo.MyMultipleRelationship.Count);
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            relationship.MarkForDelete();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+        }
+
+        [Test]
+        public void Test_MarkForDelete_WhenMultiple_WhenDerefenceRelated_WhenHasRelatedBO_ShouldDoNothing()
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -363,7 +387,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        public void Test_MarkForDelete_WhenSingle_WhenHasRelatedBO_WhenDerefenceRelated_ShouldDoNothing()
+        public void Test_MarkForDelete_WhenMultiple_WhenDerefenceRelated_WhenNotHasRelatedBO_ShouldDoNothing()
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -373,12 +397,33 @@ namespace Habanero.Test.BO.Relationship
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
             ReflectionUtilities.SetPropertyValue(bo.Status,"IsDeleted", true);
-            ISingleRelationship relationship = (ISingleRelationship) bo.Relationships["MyRelationship"];
+            IRelationship relationship = bo.Relationships["MyMultipleRelationship"];
+            ((RelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+            Assert.AreEqual(0, bo.MyMultipleRelationship.Count);
+            Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            relationship.MarkForDelete();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+        }
+
+        [Test]
+        public void Test_MarkForDelete_WhenSingle_WhenDerefenceRelated_WhenHasRelatedBO_ShouldDoNothing()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.Save();
+            ReflectionUtilities.SetPropertyValue(bo.Status, "IsDeleted", true);
+            ISingleRelationship relationship = (ISingleRelationship)bo.Relationships["MyRelationship"];
             MyRelatedBo myRelatedBO = new MyRelatedBo();
             relationship.SetRelatedObject(myRelatedBO);
             SetDeleteRelatedAction(relationship, DeleteParentAction.DereferenceRelated);
-
-     
             //---------------Assert Precondition----------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsFalse(myRelatedBO.Status.IsDeleted);
@@ -392,7 +437,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        public void Test_MarkForDelete_WhenSingle_WhenHasRelatedBO_WhenDeleteRelated_ShouldDoNothing()
+        public void Test_MarkForDelete_WhenSingle_WhenDerefenceRelated_WhenNotHasRelatedBO_ShouldDoNothing()
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -401,13 +446,36 @@ namespace Habanero.Test.BO.Relationship
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
-            ReflectionUtilities.SetPropertyValue(bo.Status,"IsDeleted", true);
-            ISingleRelationship relationship = (ISingleRelationship) bo.Relationships["MyRelationship"];
+            ReflectionUtilities.SetPropertyValue(bo.Status, "IsDeleted", true);
+            ISingleRelationship relationship = (ISingleRelationship)bo.Relationships["MyRelationship"];
+            SetDeleteRelatedAction(relationship, DeleteParentAction.DereferenceRelated);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+            Assert.IsNull(relationship.GetRelatedObject());
+            Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            relationship.MarkForDelete();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+        }
+
+        [Test]
+        public void Test_MarkForDelete_WhenSingle_WhenDeleteRelated_WhenHasRelatedBO_ShouldDoNothing()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.Save();
+            ReflectionUtilities.SetPropertyValue(bo.Status, "IsDeleted", true);
+            ISingleRelationship relationship = (ISingleRelationship)bo.Relationships["MyRelationship"];
             MyRelatedBo myRelatedBO = new MyRelatedBo();
             relationship.SetRelatedObject(myRelatedBO);
             SetDeleteRelatedAction(relationship, DeleteParentAction.DeleteRelated);
 
-     
+
             //---------------Assert Precondition----------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsFalse(myRelatedBO.Status.IsDeleted);
@@ -418,6 +486,29 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsTrue(myRelatedBO.Status.IsDeleted);
+        }
+
+        [Test]
+        public void Test_MarkForDelete_WhenSingle_WhenDeleteRelated_WhenNotHasRelatedBO_ShouldDoNothing()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.Save();
+            ReflectionUtilities.SetPropertyValue(bo.Status, "IsDeleted", true);
+            ISingleRelationship relationship = (ISingleRelationship)bo.Relationships["MyRelationship"];
+            SetDeleteRelatedAction(relationship, DeleteParentAction.DeleteRelated);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+            Assert.IsNull(relationship.GetRelatedObject());
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            relationship.MarkForDelete();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(bo.Status.IsDeleted);
         }
 
         [Test]

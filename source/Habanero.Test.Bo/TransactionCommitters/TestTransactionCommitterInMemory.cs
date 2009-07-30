@@ -259,6 +259,56 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Test TearDown -----------------------
         }
 
+        [Test]
+        public void Test_DereferenceRelatedObjects_ForSingle_NonOwner_WhenHasNoRelatedBO()
+        {
+            //The Car has a single relationship to engine. The car->engine relationship is marked 
+            // as a dereference related relationship.
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            //---------------Set up test pack-------------------
+            Car car = new Car();
+            car.SetPropertyValue("CarRegNo", "NP32459");
+            car.Save();
+            car.MarkForDelete();
+            new Engine();
+
+            //---------------Assert Precondition----------------
+            SingleRelationshipDef relationshipDef = (SingleRelationshipDef)car.Relationships["Engine"].RelationshipDef;
+            Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
+            Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationshipDef.DeleteParentAction);
+            Assert.IsNull(car.GetEngine());
+            //---------------Execute Test ----------------------
+            car.Save();
+            //---------------Test Result -----------------------
+            Assert.IsNull(car.GetEngine());
+            Assert.IsTrue(car.Status.IsNew && car.Status.IsDeleted);
+        }
+
+        [Test]
+        public void Test_DereferenceRelatedObjects_ForSingle_IsOwner_WhenHasNoRelatedBO()
+        {
+            //The Car has a single relationship to engine. The car->engine relationship is marked 
+            // as a dereference related relationship.
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            //---------------Set up test pack-------------------
+            new Car();
+            Engine engine = new Engine();
+            engine.SetPropertyValue("EngineNo", "NO111");
+            engine.Save();
+            engine.MarkForDelete();
+            SingleRelationshipDef relationshipDef = (SingleRelationshipDef)engine.Relationships["Car"].RelationshipDef;
+            relationshipDef.DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(relationshipDef.OwningBOHasForeignKey);
+            Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationshipDef.DeleteParentAction);
+            Assert.IsNull(engine.GetCar());
+            //---------------Execute Test ----------------------
+            engine.Save();
+            //---------------Test Result -----------------------
+            Assert.IsNull(engine.GetCar());
+            Assert.IsTrue(engine.Status.IsNew && engine.Status.IsDeleted);
+        }
+
 
     }
 }

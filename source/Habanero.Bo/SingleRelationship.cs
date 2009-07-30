@@ -526,7 +526,8 @@ namespace Habanero.BO
         /// <param name="committer"></param>
         internal override void DereferenceChildren(TransactionCommitter committer)
         {
-            DereferenceChild(committer, GetRelatedObject());
+            TBusinessObject businessObject = GetRelatedObject();
+            if (businessObject != null) DereferenceChild(committer, businessObject);
         }
 
         /// <summary>
