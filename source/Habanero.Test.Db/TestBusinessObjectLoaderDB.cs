@@ -46,16 +46,17 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            TestAutoInc.LoadClassDefWithAutoIncrementingID();
-
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID bo = new BOWithIntID {IntID = TestUtil.GetRandomInt()};
+            bo.Save();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            Criteria criteria = new Criteria("IntID", Criteria.ComparisonOp.Equals, bo.IntID.ToString());
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("testautoincid", Criteria.ComparisonOp.Equals, "1");
-            TestAutoInc tai1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(criteria);
-            TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
-
+            BOWithIntID bo1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>(criteria);
             //---------------Test Result -----------------------
-            Assert.AreSame(tai1, tai2);
-            Assert.AreEqual("testing 123", tai2.TestField);
+            Assert.IsNotNull(bo1); 
+BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>(bo1.ID);
+            Assert.AreSame(bo1, bo2);
         }
 
         [Test]
@@ -63,17 +64,17 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            TestAutoInc.LoadClassDefWithAutoIncrementingID();
-
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID bo = new BOWithIntID { IntID = TestUtil.GetRandomInt() };
+            bo.Save();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Execute Test ----------------------
-            TestAutoInc tai1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>
-                ("testautoincid = 1");
-            TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
-
+            BOWithIntID bo1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>
+                (string.Format("IntID = {0}", bo.IntID));
             //---------------Test Result -----------------------
-            Assert.IsNotNull(tai1);
-            Assert.AreSame(tai1, tai2);
-            Assert.AreEqual("testing 123", tai2.TestField);
+            Assert.IsNotNull(bo1);
+            BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>(bo1.ID);
+            Assert.AreSame(bo1, bo2);
         }
 
         [Test]
@@ -81,18 +82,17 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = TestAutoInc.LoadClassDefWithAutoIncrementingID();
-
+            ClassDef classDef = BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID bo = new BOWithIntID { IntID = TestUtil.GetRandomInt() };
+            bo.Save();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Execute Test ----------------------
-            TestAutoInc tai1 =
-                (TestAutoInc)
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, "testautoincid = 1");
-            TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
-
+            BOWithIntID bo1 = (BOWithIntID) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
+                (classDef,  string.Format("IntID = {0}", bo.IntID));
             //---------------Test Result -----------------------
-            Assert.IsNotNull(tai1);
-            Assert.AreSame(tai1, tai2);
-            Assert.AreEqual("testing 123", tai2.TestField);
+            Assert.IsNotNull(bo1);
+            BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>(bo1.ID);
+            Assert.AreSame(bo1, bo2);
         }
 
         [Test]
