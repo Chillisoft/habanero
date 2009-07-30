@@ -161,10 +161,10 @@ namespace Habanero.BO
 
         private void SetupRelatedObject(TBusinessObject bo)
         {
-            ISingleRelationship reverseRelationship = GetReverseRelationship(bo) as ISingleRelationship;
+            SingleRelationshipBase reverseRelationship = GetReverseRelationship(bo) as SingleRelationshipBase;
             if (reverseRelationship != null)
             {
-                reverseRelationship.SetRelatedObject(this._relationship.OwningBO);
+                reverseRelationship.SetRelatedObjectFromMultiple(this._relationship.OwningBO);
             }
         }
 

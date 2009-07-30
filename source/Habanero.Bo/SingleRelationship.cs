@@ -63,6 +63,8 @@ namespace Habanero.BO
         /// Returns true if the Business object that owns this relationship has the foreign key and true otherwise.
         ///</summary>
         public abstract bool OwningBOHasForeignKey { get; set; }
+
+        internal abstract void SetRelatedObjectFromMultiple(IBusinessObject relatedObject);
     }
 
     /// <summary>
@@ -198,6 +200,11 @@ namespace Habanero.BO
         ///<returns>returns the related business object</returns>
         public virtual TBusinessObject GetRelatedObject()
         {
+            return GetRelatedObject(false);
+        }
+
+        private TBusinessObject GetRelatedObject(bool isInternalAdd)
+        {
             if (!HasRelatedObject())
             {
                 _relatedBo = null;
@@ -206,7 +213,7 @@ namespace Habanero.BO
             if ((RelatedBoForeignKeyHasChanged() || _relatedBo == null))
             {
                 _relatedBo = GetRelatedBusinessObjectFromBusinessObjectManager();
-                AddToReverseRelationship(_relatedBo);
+                AddToReverseRelationship(_relatedBo, isInternalAdd);
                 if (_relatedBo != null) return _relatedBo;
             }
             Criteria newKeyCriteria = _relKey.Criteria;
@@ -322,7 +329,17 @@ namespace Habanero.BO
         /// <param name="relatedObject">The object to relate to</param>
         public virtual void SetRelatedObject(TBusinessObject relatedObject)
         {
-            if (_relatedBo == null) GetRelatedObject();
+            SetRelatedObjectInternal(relatedObject, false);
+        }
+
+        internal override void SetRelatedObjectFromMultiple(IBusinessObject relatedObject)
+        {
+            SetRelatedObjectInternal((TBusinessObject)relatedObject, true);
+        }
+        
+        internal void SetRelatedObjectInternal(TBusinessObject relatedObject, bool isInternalAdd)
+        {
+            if (_relatedBo == null) GetRelatedObject(isInternalAdd);
             if (_relatedBo == relatedObject) return;
 
             if (relatedObject != null) RelationshipDef.CheckCanAddChild(relatedObject);
@@ -332,7 +349,7 @@ namespace Habanero.BO
 
             _relatedBo = relatedObject;
 
-            AddToReverseRelationship(relatedObject);
+            AddToReverseRelationship(relatedObject, isInternalAdd);
 
             UpdatedForeignKeyAndStoredRelationshipExpression();
 
@@ -344,7 +361,7 @@ namespace Habanero.BO
             if (Updated != null) this.Updated(this, new BOEventArgs<TBusinessObject>(_relatedBo));
         }
 
-        private void AddToReverseRelationship(TBusinessObject relatedObject)
+        private void AddToReverseRelationship(TBusinessObject relatedObject, bool isInternalAdd)
         {
             if (relatedObject == null) return;
 
@@ -358,7 +375,7 @@ namespace Habanero.BO
             
             _relatedBo = relatedObject;
 
-            AddToMultipleReverseRelationship(reverseRelationship);
+            AddToMultipleReverseRelationship(reverseRelationship, isInternalAdd);
             AddToSingleReverseRelationship(reverseRelationship);
         }
 
@@ -372,12 +389,14 @@ namespace Habanero.BO
             singleRelationship.SetRelatedObject(this.OwningBO);
         }
 
-        private void AddToMultipleReverseRelationship(IRelationship reverseRelationship)
+        private void AddToMultipleReverseRelationship(IRelationship reverseRelationship, bool isInternalAdd)
         {
             MultipleRelationshipBase multipleRelationship = reverseRelationship as MultipleRelationshipBase;
             if (multipleRelationship != null)
             {
-                multipleRelationship.GetLoadedBOColInternal().Add(this.OwningBO);
+                IBusinessObjectCollectionInternal colInternal = multipleRelationship.GetLoadedBOColInternal();
+                if (isInternalAdd) colInternal.AddInternal(this.OwningBO);
+                else colInternal.Add(this.OwningBO);
             }
         }
 

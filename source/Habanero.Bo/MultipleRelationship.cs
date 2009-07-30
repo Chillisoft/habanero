@@ -46,9 +46,7 @@ namespace Habanero.BO
         {
         }
 
-        internal abstract IBusinessObjectCollection GetLoadedBOColInternal();
-
-
+        internal abstract IBusinessObjectCollectionInternal GetLoadedBOColInternal();
     }
 
     /// <summary>
@@ -269,7 +267,7 @@ namespace Habanero.BO
         /// Returns the underlying collection without refreshing it.
         /// </summary>
         /// <returns></returns>
-        internal override IBusinessObjectCollection GetLoadedBOColInternal()
+        internal override IBusinessObjectCollectionInternal GetLoadedBOColInternal()
         {
             return _boCol;
         }

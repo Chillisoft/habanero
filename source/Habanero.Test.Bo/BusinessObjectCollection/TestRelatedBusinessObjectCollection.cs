@@ -64,20 +64,20 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         // A related collection will be dirty if it has any dirty objects.
         // A business object will be dirty if it has a dirty related collection.
         [Test]
-        public void TestCreateBusObject_AddedToTheCollection()
+        public void Test_CreateBusinessObject_AddedToTheCollection()
         {
-            //SetupTests
+            //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = new MyBO();
             IMultipleRelationship rel = bo.Relationships.GetMultiple("MyMultipleRelationship");
             RelatedBusinessObjectCollection<MyRelatedBo> col = new RelatedBusinessObjectCollection<MyRelatedBo>(rel);
+            //---------------Assert Precondition----------------
 
-            //Run tests
+            //---------------Execute Test ----------------------
             MyRelatedBo relatedBo = col.CreateBusinessObject();
-
-            //Test results
+            //---------------Test Result -----------------------
             Assert.AreEqual(bo.MyBoID, relatedBo.MyBoID, "The foreign key should eb set");
             Assert.IsTrue(relatedBo.Status.IsNew);
             Assert.AreEqual(1, col.CreatedBusinessObjects.Count, "The created BOs should be added");
@@ -85,6 +85,48 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(1, col.Count);
         }
 
+        [Test]
+        public void Test_CreateBusinessObject_OnlyFiresOneAddedEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = new MyBO();
+            IMultipleRelationship rel = bo.Relationships.GetMultiple("MyMultipleRelationship");
+            RelatedBusinessObjectCollection<MyRelatedBo> col = (RelatedBusinessObjectCollection<MyRelatedBo>)rel.BusinessObjectCollection;
+            int addedEventCount = 0;
+            col.BusinessObjectAdded += (sender, e) => addedEventCount++;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, addedEventCount);
+            //---------------Execute Test ----------------------
+            col.CreateBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, addedEventCount);
+        }
+
+        [Test]
+        public void Test_CreateBusinessObject_WithReverseRelationship_OnlyFiresOneAddedEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef myBOClassDef = MyBO.LoadClassDefWithRelationship();
+            ClassDef myRelatedBOClassDef = MyRelatedBo.LoadClassDef();
+            myBOClassDef.RelationshipDefCol["MyMultipleRelationship"].ReverseRelationshipName = "MyRelationship";
+            myRelatedBOClassDef.RelationshipDefCol["MyRelationship"].ReverseRelationshipName = "MyMultipleRelationship";
+            MyBO bo = new MyBO();
+            IMultipleRelationship rel = bo.Relationships.GetMultiple("MyMultipleRelationship");
+            RelatedBusinessObjectCollection<MyRelatedBo> col = (RelatedBusinessObjectCollection<MyRelatedBo>) rel.BusinessObjectCollection;
+            int addedEventCount = 0;
+            col.BusinessObjectAdded += (sender, e) => addedEventCount++;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, addedEventCount);
+            //---------------Execute Test ----------------------
+            col.CreateBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, addedEventCount);
+        }
+        
         [Test]
         public void Test_NewBusObject_Added()
         {

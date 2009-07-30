@@ -29,6 +29,10 @@ using Habanero.Util;
 
 namespace Habanero.BO
 {
+    internal interface  IBusinessObjectCollectionInternal : IBusinessObjectCollection
+    {
+        void AddInternal(IBusinessObject businessObject);
+    }
     //public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);
 
     /// <summary>
@@ -51,7 +55,7 @@ namespace Habanero.BO
     /// </summary>
     [Serializable]
     public class BusinessObjectCollection<TBusinessObject>
-        : List<TBusinessObject>, IBusinessObjectCollection, ISerializable
+        : List<TBusinessObject>, IBusinessObjectCollection, IBusinessObjectCollectionInternal, ISerializable
         where TBusinessObject : class, IBusinessObject, new()
     {
         private const string COUNT = "Count";
@@ -720,6 +724,11 @@ namespace Habanero.BO
         public void Refresh()
         {
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
+        }
+
+        void IBusinessObjectCollectionInternal.AddInternal(IBusinessObject businessObject)
+        {
+            this.AddInternal((TBusinessObject)businessObject);
         }
 
         #region Load Methods
