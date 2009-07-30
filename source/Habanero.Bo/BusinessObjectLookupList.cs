@@ -269,6 +269,14 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// This property is used by FireStarter to retrieve the sort string without having to load class defs.
+        /// </summary>
+        internal string SortString
+        {
+            get { return _sortString; }
+        }
+
+        /// <summary>
         /// Gets and sets the sort string used to sort the lookup
         /// list.  This string must contain the name of a property
         /// belonging to the business object used to construct the list.
