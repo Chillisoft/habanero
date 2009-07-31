@@ -339,11 +339,11 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Set up test pack-------------------
                 IComboBox cmbox = GetControlFactory().CreateComboBox();
                 const string propName = "SampleLookup2ID";
-                CustomAddLookupComboBoxMapper mapper = new CustomAddLookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                CustomAddLookupComboBoxMapperStub mapperStub = new CustomAddLookupComboBoxMapperStub(cmbox, propName, false, GetControlFactory());
                 Sample sample = new Sample();
 
                 //---------------Execute Test ----------------------
-                mapper.BusinessObject = sample;
+                mapperStub.BusinessObject = sample;
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(5, cmbox.Items.Count);
@@ -359,15 +359,15 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Set up test pack-------------------
                 IComboBox cmbox = GetControlFactory().CreateComboBox();
                 const string propName = "SampleLookup2ID";
-                CustomAddLookupComboBoxMapper mapper = new CustomAddLookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                CustomAddLookupComboBoxMapperStub mapperStub = new CustomAddLookupComboBoxMapperStub(cmbox, propName, false, GetControlFactory());
                 Sample sample = new Sample();
-                mapper.BusinessObject = sample;
+                mapperStub.BusinessObject = sample;
                 //---------------Assert Preconditions---------------
                 Assert.AreEqual(5, cmbox.Items.Count);
                 Assert.AreEqual("ExtraLookupItem", LastComboBoxItem(cmbox).ToString());
                 //---------------Execute Test ----------------------
                 cmbox.SelectedIndex = cmbox.Items.Count - 1;
-                mapper.ApplyChangesToBusinessObject();
+                mapperStub.ApplyChangesToBusinessObject();
                 //---------------Test Result -----------------------
                 object value = sample.GetPropertyValue(propName);
                 Assert.IsNotNull(value);
@@ -407,11 +407,11 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Set up test pack-------------------
                 IComboBox cmbox = GetControlFactory().CreateComboBox();
                 const string propName = "SampleLookup2ID";
-                CustomRemoveLookupComboBoxMapper mapper = new CustomRemoveLookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                CustomRemoveLookupComboBoxMapperStub mapperStub = new CustomRemoveLookupComboBoxMapperStub(cmbox, propName, false, GetControlFactory());
                 Sample sample = new Sample();
 
                 //---------------Execute Test ----------------------
-                mapper.BusinessObject = sample;
+                mapperStub.BusinessObject = sample;
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(3, cmbox.Items.Count);
@@ -560,7 +560,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
                 cmbox.SelectedItem = LOOKUP_ITEM_2;
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(LookupComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
+                Assert.IsInstanceOfType(typeof(ComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
             }
 
@@ -578,7 +578,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
                 cmbox.Text = "Test2";
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(LookupComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
+                Assert.IsInstanceOfType(typeof(ComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
             }
 
@@ -599,7 +599,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 cmbox.CallSendKeyBob();
 
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+                Assert.IsInstanceOfType(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
             }
 
@@ -620,7 +620,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 cmbox.SelectedItem = LOOKUP_ITEM_2;
 
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+                Assert.IsInstanceOfType(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_1), s.SampleLookupID);
                 //---------------Tear Down -------------------------
             }
@@ -634,9 +634,9 @@ namespace Habanero.Test.UI.Base.Mappers
             }
         }
 
-    internal class CustomAddLookupComboBoxMapper : LookupComboBoxMapper
+    internal class CustomAddLookupComboBoxMapperStub : LookupComboBoxMapper
     {
-        public CustomAddLookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
+        public CustomAddLookupComboBoxMapperStub(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
             : base(cbx, propName, isReadOnly, factory) {}
 
         protected override void CustomiseLookupList(Dictionary<string, string> col)
@@ -646,9 +646,9 @@ namespace Habanero.Test.UI.Base.Mappers
         }
     }
 
-    internal class CustomRemoveLookupComboBoxMapper : LookupComboBoxMapper
+    internal class CustomRemoveLookupComboBoxMapperStub : LookupComboBoxMapper
     {
-        public CustomRemoveLookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
+        public CustomRemoveLookupComboBoxMapperStub(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
             : base(cbx, propName, isReadOnly, factory) { }
 
         protected override void CustomiseLookupList(Dictionary<string, string> col)

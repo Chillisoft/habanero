@@ -14,8 +14,11 @@ namespace Habanero.UI.Base
     /// in a combobox so that the user can select a business object for the purposes 
     /// of setting a related Business Object. 
     /// </summary>
-    //TODO Mark 19 Jun 2009: Shouldn't this inherit from ControlMapper?
-    public class RelationshipComboBoxMapper : ILookupComboBoxMapper
+    //----------------------------------------------------------------------
+    // This does not inherit from Control mapper because the the control mapper is currently specific to mapping a property
+    // of the business object.
+    // whereas this mapper is actually mapping to a relationship not to a property. 
+    public class RelationshipComboBoxMapper : IComboBoxMapper
     {
         /// <summary>
         /// Uses for logging 
@@ -35,7 +38,7 @@ namespace Habanero.UI.Base
         /// </summary>
         protected IRelationshipDef _relationshipDef;
         private ISingleRelationship _singleRelationship;
-        private ILookupComboBoxMapperStrategy _mapperStrategy;
+        private IComboBoxMapperStrategy _mapperStrategy;
         private readonly ComboBoxCollectionSelector _comboBoxCollectionSelector;
 
         /// <summary>
@@ -276,9 +279,9 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Gets or sets the strategy assigned to this mapper <see cref="ILookupComboBoxMapperStrategy"/>
+        /// Gets or sets the strategy assigned to this mapper <see cref="IComboBoxMapperStrategy"/>
         /// </summary>
-        public ILookupComboBoxMapperStrategy MapperStrategy
+        public IComboBoxMapperStrategy MapperStrategy
         {
             get { return _mapperStrategy; }
             set

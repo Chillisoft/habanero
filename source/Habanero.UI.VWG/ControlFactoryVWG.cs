@@ -518,17 +518,17 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Creates a strategy that customises behaviour of a lookup ComboBox for the environment
         /// </summary>
-        public ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
+        public IComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
         {
-            return new LookupComboBoxMapperStrategyVWG();
+            return new ComboBoxDefaultMapperStrategyVWG();
         }
 
         /// <summary>
         /// Creates a strategy that customises behaviour of key presses on a lookup ComboBox for the environment
         /// </summary>
-        public ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
+        public IComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
         {
-            return new LookupComboBoxKeyPressMapperStrategyVWG();
+            return new ComboBoxKeyPressMapperStrategyVWG();
         }
 
         /// <summary>
@@ -1343,15 +1343,15 @@ namespace Habanero.UI.VWG
     /// Provides a set of behaviour strategies that can be applied to a lookup ComboBox
     /// depending on the environment
     /// </summary>
-    internal class LookupComboBoxKeyPressMapperStrategyVWG : ILookupComboBoxMapperStrategy
+    internal class ComboBoxKeyPressMapperStrategyVWG : IComboBoxMapperStrategy
     {
-        #region ILookupComboBoxMapperStrategy Members
+        #region IComboBoxMapperStrategy Members
 
         /// <summary>
         /// Removes event handlers previously assigned to the ComboBox
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void RemoveCurrentHandlers(ILookupComboBoxMapper mapper)
+        public void RemoveCurrentHandlers(IComboBoxMapper mapper)
         {
         }
 
@@ -1359,7 +1359,7 @@ namespace Habanero.UI.VWG
         /// Adds event handlers to the ComboBox that are suitable for the UI environment
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void AddHandlers(ILookupComboBoxMapper mapper)
+        public void AddHandlers(IComboBoxMapper mapper)
         {
         }
 
@@ -1370,15 +1370,15 @@ namespace Habanero.UI.VWG
     /// Provides a set of behaviour strategies that can be applied to a lookup ComboBox
     /// depending on the environment
     /// </summary>
-    internal class LookupComboBoxMapperStrategyVWG : ILookupComboBoxMapperStrategy
+    internal class ComboBoxDefaultMapperStrategyVWG : IComboBoxMapperStrategy
     {
-        #region ILookupComboBoxMapperStrategy Members
+        #region IComboBoxMapperStrategy Members
 
         /// <summary>
         /// Removes event handlers previously assigned to the ComboBox
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void RemoveCurrentHandlers(ILookupComboBoxMapper mapper)
+        public void RemoveCurrentHandlers(IComboBoxMapper mapper)
         {
         }
 
@@ -1386,13 +1386,13 @@ namespace Habanero.UI.VWG
         /// Adds event handlers to the ComboBox that are suitable for the UI environment
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        public void AddHandlers(ILookupComboBoxMapper mapper)
+        public void AddHandlers(IComboBoxMapper mapper)
         {
         }
 
         #endregion
 
-        public void AddItemSelectedEventHandler(ILookupComboBoxMapper mapper)
+        public void AddItemSelectedEventHandler(IComboBoxMapper mapper)
         {
         }
     }

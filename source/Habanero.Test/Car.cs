@@ -232,6 +232,7 @@ namespace Habanero.Test
             return CreateUnsavedCar(regno, null);
         }
 
+
         private static Car CreateUnsavedCar(string regno, ContactPerson owner)
         {
             Car car = new Car();

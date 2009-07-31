@@ -201,8 +201,8 @@
       <DependentUpon>ListBoxWin.cs</DependentUpon>
     </Compile>
     <Compile Include="ListComboBoxMapperStrategyWin.cs" />
-    <Compile Include="LookupComboBoxDefaultMapperStrategyWin.cs" />
-    <Compile Include="LookupComboBoxKeyPressMapperStrategyWin.cs" />
+    <Compile Include="ComboBoxDefaultMapperStrategyWin.cs" />
+    <Compile Include="ComboBoxKeyPressMapperStrategyWin.cs" />
     <Compile Include="MainEditorPanelWin.cs">
       <SubType>Component</SubType>
     </Compile>

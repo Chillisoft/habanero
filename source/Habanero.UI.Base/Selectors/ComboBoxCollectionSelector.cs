@@ -28,6 +28,7 @@ namespace Habanero.UI.Base
     /// This class provides mapping from a business object collection to a
     /// user interface ComboBox.  This mapper is used at code level when
     /// you are explicitly providing a business object collection.
+    /// This Class is typically used by the <see cref="IBOComboBoxSelector"/> control.
     /// </summary>
     public class ComboBoxCollectionSelector
     {
@@ -86,7 +87,6 @@ namespace Habanero.UI.Base
         /// top of the list</param>
 		public void SetCollection(IBusinessObjectCollection collection, bool includeBlank)
         {
-            //TODO Brett 26 Mar 2009: Register for Business Object updated event as well as prop updated.
             if (Collection != null)
             {
                 Collection.BusinessObjectAdded -= BusinessObjectAddedHandler;
@@ -106,11 +106,11 @@ namespace Habanero.UI.Base
             IBusinessObject businessObject = e.BusinessObject;
             int selectedIndex = this.Control.SelectedIndex;
             int indexOf = this.Control.Items.IndexOf(businessObject);
+            if (indexOf == -1) return;
             this.Control.Items.Remove(businessObject);
             this.Control.Items.Insert(indexOf, businessObject);
             this.Control.SelectedIndex = selectedIndex;
         }
-
 
         /// <summary>
         /// Event Occurs when a business object is selected

@@ -155,7 +155,7 @@ namespace Habanero.BO
             _invalidReason = "";
             //Brett 12 Jan 2009: Removed due to performance improvement during loading.
             // No bo loaded from the database will ever be placed in an invalid state
-//            _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
+            //_isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
 
             _currentValue = newValue;
             //Set up origional properties s.t. property can be backed up and restored.

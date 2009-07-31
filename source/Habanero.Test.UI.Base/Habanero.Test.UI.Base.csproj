@@ -103,6 +103,9 @@
     <Compile Include="ButtonsControl\TestButtonSizePolicy.cs" />
     <Compile Include="ButtonsControl\TestButtonSizePolicyUserDefined.cs" />
     <Compile Include="Controllers\TestBOColTabControlManager.cs" />
+    <Compile Include="Mappers\TestCollectionComboBoxMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TestCollapsibleMenu.cs" />
     <Compile Include="TestCollapsibleMenuBuilder.cs" />
     <Compile Include="Grid\TestDataGridViewColumnCollection.cs" />

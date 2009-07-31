@@ -608,17 +608,17 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a strategy that customises behaviour of a lookup ComboBox for the environment
         /// </summary>
-        public virtual ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
+        public virtual IComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
         {
-            return new LookupComboBoxDefaultMapperStrategyWin();
+            return new ComboBoxDefaultMapperStrategyWin();
         }
 
         /// <summary>
         /// Creates a strategy that customises behaviour of key presses on a lookup ComboBox for the environment
         /// </summary>
-        public virtual ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
+        public virtual IComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
         {
-            return new LookupComboBoxKeyPressMapperStrategyWin();
+            return new ComboBoxKeyPressMapperStrategyWin();
         }
 
         /// <summary>

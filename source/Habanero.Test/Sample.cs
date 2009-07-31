@@ -320,9 +320,9 @@ namespace Habanero.Test
 			set { this.SetPropertyValue("SampleDateNullable", value); }
         }
 
-        public Guid SampleLookupID
+        public Guid? SampleLookupID
         {
-            get { return (Guid) this.GetPropertyValue("SampleLookupID"); }
+            get { return (Guid?) this.GetPropertyValue("SampleLookupID"); }
             set { this.SetPropertyValue("SampleLookupID", value); }
         }
 

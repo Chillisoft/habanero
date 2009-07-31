@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -29,12 +27,10 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestPropertyLink
     {
-
         [SetUp]
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
-            
         }
 
         [Test]
@@ -58,7 +54,7 @@ namespace Habanero.Test.BO
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
             new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
-            bo.TestProp = TestUtil.GetRandomString();;
+            bo.TestProp = TestUtil.GetRandomString();
             string testValue = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             bo.TestProp = testValue;
@@ -91,7 +87,8 @@ namespace Habanero.Test.BO
             MyBO bo = new MyBO();
             string testValue = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
-            new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return String.IsNullOrEmpty(input) ? "" : input.ToUpper(); });
+            new PropertyLink<string, string>(bo, "TestProp", "TestProp2",
+                                             delegate(string input) { return String.IsNullOrEmpty(input) ? "" : input.ToUpper(); });
             bo.TestProp = testValue;
             //---------------Test Result -----------------------
             Assert.AreEqual(testValue, bo.TestProp);
@@ -105,7 +102,8 @@ namespace Habanero.Test.BO
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
             string testValue = TestUtil.GetRandomString();
-            PropertyLink<string, string> link = new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
+            PropertyLink<string, string> link = new PropertyLink<string, string>(bo, "TestProp", "TestProp2",
+                                                                                 delegate(string input) { return input; });
             bo.TestProp = testValue;
             //---------------Assert PreConditions---------------      
             Assert.AreEqual(testValue, bo.TestProp2);
@@ -113,7 +111,7 @@ namespace Habanero.Test.BO
             link.Disable();
             bo.TestProp = TestUtil.GetRandomString();
             //---------------Test Result -----------------------
-            Assert.AreEqual(testValue, bo.TestProp2);     
+            Assert.AreEqual(testValue, bo.TestProp2);
         }
 
         [Test]
@@ -124,7 +122,8 @@ namespace Habanero.Test.BO
             MyBO bo = new MyBO();
             string testValue = TestUtil.GetRandomString();
             string testValue2 = TestUtil.GetRandomString();
-            PropertyLink<string, string> link = new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
+            PropertyLink<string, string> link = new PropertyLink<string, string>(bo, "TestProp", "TestProp2",
+                                                                                 delegate(string input) { return input; });
             link.Disable();
             bo.TestProp = testValue;
             //---------------Assert PreConditions---------------      
@@ -134,7 +133,7 @@ namespace Habanero.Test.BO
             link.Enable();
             bo.TestProp = testValue2;
             //---------------Test Result -----------------------
-            Assert.AreEqual(testValue2, bo.TestProp2);     
+            Assert.AreEqual(testValue2, bo.TestProp2);
         }
 
         [Test]
@@ -146,14 +145,14 @@ namespace Habanero.Test.BO
             string testValue = TestUtil.GetRandomString();
             new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
             bo.TestProp = testValue;
-            bo.TestProp2 = TestUtil.GetRandomString(); ;
+            bo.TestProp2 = TestUtil.GetRandomString();
+            ;
             //---------------Execute Test ----------------------
             bo.TestProp = bo.TestProp2;
             bo.TestProp = testValue;
             //---------------Test Result -----------------------
-            Assert.AreEqual(testValue, bo.TestProp2);     
+            Assert.AreEqual(testValue, bo.TestProp2);
             //---------------Tear Down -------------------------          
         }
- 
     }
 }

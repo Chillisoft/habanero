@@ -524,12 +524,12 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Creates a strategy that customises behaviour of a lookup ComboBox for the environment
         /// </summary>
-        ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy();
+        IComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy();
 
         /// <summary>
         /// Creates a strategy that customises behaviour of key presses on a lookup ComboBox for the environment
         /// </summary>
-        ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy();
+        IComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy();
 
         /// <summary>
         /// Creates a strategy that customises behaviour of a NumericUpDown for the environment
@@ -853,19 +853,19 @@ namespace Habanero.UI.Base
     /// Provides a set of behaviour strategies that can be applied to a lookup ComboBox
     /// depending on the environment
     /// </summary>
-    public interface ILookupComboBoxMapperStrategy
+    public interface IComboBoxMapperStrategy
     {
         /// <summary>
         /// Adds event handlers to the ComboBox that are suitable for the UI environment
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        void AddHandlers(ILookupComboBoxMapper mapper);
+        void AddHandlers(IComboBoxMapper mapper);
 
         /// <summary>
         /// Removes event handlers previously assigned to the ComboBox
         /// </summary>
         /// <param name="mapper">The mapper for the lookup ComboBox</param>
-        void RemoveCurrentHandlers(ILookupComboBoxMapper mapper);
+        void RemoveCurrentHandlers(IComboBoxMapper mapper);
     }
 
     /// <summary>

@@ -28,7 +28,7 @@ namespace Habanero.UI.Base
     /// An interface for a mapper that <br/>
     /// Wraps/Decorates a ComboBox in order to display and capture a lookup property of the business object 
     /// </summary>
-    public interface ILookupComboBoxMapper:IControlMapper
+    public interface IComboBoxMapper : IControlMapper
     {
         /// <summary>
         /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
@@ -55,9 +55,9 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Wraps/Decorates a ComboBox in order to display and capture a lookup property of the business object 
     /// </summary>
-    public class LookupComboBoxMapper : ComboBoxMapper, ILookupComboBoxMapper
+    public class LookupComboBoxMapper : ComboBoxMapper, IComboBoxMapper
     {
-        private ILookupComboBoxMapperStrategy _mapperStrategy;
+        private IComboBoxMapperStrategy _mapperStrategy;
 
         /// <summary>
         /// Gets or sets the KeyPress event handler assigned to this mapper
@@ -88,7 +88,7 @@ namespace Habanero.UI.Base
         /// Gets and sets the lookup list used to populate the items in the
         /// ComboBox.  This method is typically called by SetupLookupList().
         /// </summary>
-        public override Dictionary<string, string> LookupList
+        public virtual Dictionary<string, string> LookupList
         {
             get { return _collection; }
             set
@@ -108,7 +108,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="lookupList"></param>
         [Obsolete("Use Lookuplist property")]
-        public override void SetupLookupList(Dictionary<string, string> lookupList)
+        public virtual void SetupLookupList(Dictionary<string, string> lookupList)
         {
             LookupList = lookupList;
         }
@@ -117,16 +117,18 @@ namespace Habanero.UI.Base
         /// Sets the lookuplist used to populate the items in the ComboBox.
         ///</summary>
         ///<param name="lookupList">The items used to populate the list</param>
-        [Obsolete("This method is to be replaced with the property LookupList. Please use the property as this method will be removed in a future version.")]
+        [Obsolete(
+            "This method is to be replaced with the property LookupList. Please use the property as this method will be removed in a future version."
+            )]
         public void SetLookupList(Dictionary<string, string> lookupList)
         {
             this.LookupList = lookupList;
         }
 
         /// <summary>
-        /// Gets or sets the strategy assigned to this mapper <see cref="ILookupComboBoxMapperStrategy"/>
+        /// Gets or sets the strategy assigned to this mapper <see cref="IComboBoxMapperStrategy"/>
         /// </summary>
-        public ILookupComboBoxMapperStrategy MapperStrategy
+        public IComboBoxMapperStrategy MapperStrategy
         {
             get { return _mapperStrategy; }
             set
@@ -136,7 +138,6 @@ namespace Habanero.UI.Base
                 _mapperStrategy.AddHandlers(this);
             }
         }
-
 
 
         //
@@ -151,6 +152,7 @@ namespace Habanero.UI.Base
         {
             this.InternalUpdateControlValueFromBo();
         }
+
         /// <summary>
         /// Updates the value on the control from the corresponding property
         /// on the represented <see cref="IControlMapper.BusinessObject"/>
@@ -272,7 +274,8 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="col">The look up list retrieved from the businessobject that will be customised</param>
         protected virtual void CustomiseLookupList(Dictionary<string, string> col)
-        {}
+        {
+        }
 
         /// <summary>
         /// Returns the property value of the business object being mapped
@@ -284,9 +287,9 @@ namespace Habanero.UI.Base
             {
                 return base.GetPropertyValue();
             }
-            return _businessObject == null 
-                ? null
-                : _businessObject.GetPropertyValueString(_propertyName);
+            return _businessObject == null
+                       ? null
+                       : _businessObject.GetPropertyValueString(_propertyName);
         }
 
 
@@ -304,18 +307,17 @@ namespace Habanero.UI.Base
         /// </summary>
         protected override void InitialiseWithAttributes()
         {
-            if (_attributes["rightClickEnabled"] != null)
+            if (_attributes["rightClickEnabled"] == null) return;
+
+            string rightClickEnabled = (string) _attributes["rightClickEnabled"];
+            if (rightClickEnabled != "true" && rightClickEnabled != "false")
             {
-                string rightClickEnabled = (string) _attributes["rightClickEnabled"];
-                if (rightClickEnabled != "true" && rightClickEnabled != "false")
-                {
-                    throw new InvalidXmlDefinitionException("An error " +
-                                                            "occurred while reading the 'rightClickEnabled' parameter " +
-                                                            "from the class definitions.  The 'value' " +
-                                                            "attribute must hold either 'true' or 'false'.");
-                }
-                //_allowRightClick = Convert.ToBoolean(rightClickEnabled);
+                throw new InvalidXmlDefinitionException("An error " +
+                                                        "occurred while reading the 'rightClickEnabled' parameter " +
+                                                        "from the class definitions.  The 'value' " +
+                                                        "attribute must hold either 'true' or 'false'.");
             }
+            //_allowRightClick = Convert.ToBoolean(rightClickEnabled);
         }
 
         /// <summary>
@@ -328,10 +330,9 @@ namespace Habanero.UI.Base
             object newValue = null;
             if (LookupList.ContainsKey(selectedOption))
             {
-
-                newValue = !string.IsNullOrEmpty(selectedOption) 
-                                  ? LookupList[selectedOption] 
-                                  : null;
+                newValue = !string.IsNullOrEmpty(selectedOption)
+                               ? LookupList[selectedOption]
+                               : null;
             }
             if (newValue != null)
             {

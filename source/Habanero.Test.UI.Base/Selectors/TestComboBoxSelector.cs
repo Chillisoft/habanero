@@ -156,5 +156,31 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(newPropValue + " - " + bo.MyBoID, newStringValue);
         }
 
+        [Test]
+        public void Test_BOPropUpdated_WhenBONotInComboBox_ShouldNotRaiseError_FixBug()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            IBusinessObjectCollection col;
+            IBOColSelectorControl boColSelector = GetSelectorWith_4_Rows(out col);
+            const string propName = "TestProp";
+            const int rowIndex = 1;
+            MyBO bo = (MyBO)col[rowIndex];
+            boColSelector.BusinessObjectCollection = col;
+            IBOComboBoxSelector selector = ((IBOComboBoxSelector)boColSelector);
+            string origStringValue = selector.GetItemText(bo);
+            selector.ComboBox.Items.Remove(bo);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(bo.ToString(), origStringValue);
+            Assert.AreEqual(4, selector.ComboBox.Items.Count);
+            //---------------Execute Test ----------------------
+            const string newPropValue = "NewValue";
+            bo.SetPropertyValue(propName, newPropValue);
+            bo.Save();
+            //---------------Test Result -----------------------
+            string newStringValue = selector.GetItemText(bo);
+            Assert.AreNotEqual(origStringValue, newStringValue);
+            Assert.AreEqual(newPropValue + " - " + bo.MyBoID, newStringValue);
+        }
     }
 }

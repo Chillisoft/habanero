@@ -60,7 +60,7 @@ namespace Habanero.UI.Base
         /// <param name="comboBox">The ComboBox object to which the property is mapped</param>
         /// <param name="propName">The property name</param>
 		/// <param name="isReadOnly">Whether this control is read only</param>
-        /// <param name="factory">The control factory to be used to create controls or strategies e.g. <see cref="ILookupComboBoxMapperStrategy"/></param>
+        /// <param name="factory">The control factory to be used to create controls or strategies e.g. <see cref="IComboBoxMapperStrategy"/></param>
         protected ComboBoxMapper(IComboBox comboBox, string propName, bool isReadOnly, IControlFactory factory)
             : base(comboBox, propName, isReadOnly, factory)
         {
@@ -167,18 +167,18 @@ namespace Habanero.UI.Base
         /// </summary>
         protected internal abstract void SetupComboBoxItems();
 
-        /// <summary>
-        /// Gets and sets the lookup list used to populate the items in the
-        /// ComboBox.  This method is typically called by SetupLookupList().
-        /// </summary>
-        public abstract Dictionary<string, string> LookupList { set; get;}
-        /// <summary>
-        /// Sets the <see cref="Dictionary{TKey,TValue}"/> that is being used to fill this 
-        /// combo box with values.
-        /// </summary>
-        /// <param name="lookupList"></param>
-        [Obsolete("Use Lookuplist property")]
-        public abstract void SetupLookupList(Dictionary<string, string> lookupList);
+//        /// <summary>
+//        /// Gets and sets the lookup list used to populate the items in the
+//        /// ComboBox.  This method is typically called by SetupLookupList().
+//        /// </summary>
+//        public abstract Dictionary<string, string> LookupList { set; get;}
+//        /// <summary>
+//        /// Sets the <see cref="Dictionary{TKey,TValue}"/> that is being used to fill this 
+//        /// combo box with values.
+//        /// </summary>
+//        /// <param name="lookupList"></param>
+//        [Obsolete("Use Lookuplist property")]
+//        public abstract void SetupLookupList(Dictionary<string, string> lookupList);
 
     }
 }

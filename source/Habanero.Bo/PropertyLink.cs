@@ -40,6 +40,8 @@ namespace Habanero.BO
         private readonly string _destPropName;
         private readonly Converter<TInput, TOutput> _transform;
         private TInput _previousSourceValue;
+        private readonly IBOProp _sourceProp;
+        private readonly IBOProp _destinationProp;
 
         /// <summary>
         /// Constructor for building the link between two properties.
@@ -52,10 +54,12 @@ namespace Habanero.BO
         {
             _owningBO = owningBO;
             _sourcePropName = sourcePropName;
+            _sourceProp = _owningBO.Props[_sourcePropName];
             _destPropName = destPropName;
+            _destinationProp = _owningBO.Props[_destPropName];
             _transform = transform;
             _previousSourceValue = GetSourcePropValue();
-           Enable();
+            Enable();
         }
 
         private void SourcePropUpdatedHandler(object sender, BOPropEventArgs e)
@@ -70,7 +74,7 @@ namespace Habanero.BO
                 string message = "An error occured in the Updating a property via the property Link " + ex.Message;
                 throw new HabaneroDeveloperException(message, message, ex);
             }
-            object destPropValue = _owningBO.Props[_destPropName].Value;
+            object destPropValue = _destinationProp.Value;
             object transformedValue = _transform(_previousSourceValue);
             if (destPropValue == null || destPropValue.Equals(transformedValue))
             {
@@ -81,7 +85,7 @@ namespace Habanero.BO
 
         private TInput GetSourcePropValue()
         {
-            return (TInput) _owningBO.GetPropertyValue(_sourcePropName);
+            return (TInput) _sourceProp.Value;
         }
 
         /// <summary>
@@ -91,7 +95,7 @@ namespace Habanero.BO
         /// </summary>
         public void Disable()
         {
-            _owningBO.Props[_sourcePropName].Updated -= SourcePropUpdatedHandler;
+            _sourceProp.Updated -= SourcePropUpdatedHandler;
         }
 
         /// <summary>
@@ -100,7 +104,7 @@ namespace Habanero.BO
         public void Enable()
         {
             _previousSourceValue = GetSourcePropValue();
-            _owningBO.Props[_sourcePropName].Updated += SourcePropUpdatedHandler;
+            _sourceProp.Updated += SourcePropUpdatedHandler;
         }
 
         /// <summary>
