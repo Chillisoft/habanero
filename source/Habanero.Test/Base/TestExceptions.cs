@@ -65,7 +65,8 @@ namespace Habanero.Test.Base
                     "InvalidPropertyException",
                     "InvalidPropertyNameException",
                     "InvalidRelationshipAccessException",
-                    "ReflectionException"
+                    "ReflectionException",
+                    "InvalidKeyException",
                 };
 
             string[] boExceptions =
@@ -76,7 +77,7 @@ namespace Habanero.Test.Base
                     
                     "RelationshipNotFoundException",
                     "BusinessObjectNotFoundException",
-                    "InvalidKeyException",
+
                     "BusObjectInAnInvalidStateException",
                     "BusObjectConcurrencyControlException", //
                     "BusObjOptimisticConcurrencyControlException", //

@@ -22,28 +22,28 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base
 {
     /// <summary>
     /// Maintains a collection of key definitions (KeyDef objects)
     /// </summary>
-    public class KeyDefCol : IEnumerable<KeyDef>
+    public class KeyDefCol : IEnumerable<IKeyDef>
     {
-        private readonly Dictionary<string, KeyDef> _keyDefs;
+        private readonly Dictionary<string, IKeyDef> _keyDefs;
 
         /// <summary>
         /// A basic constructor that sets up an empty collection
         /// </summary>
         public KeyDefCol() : base()
         {
-            _keyDefs = new Dictionary<string, KeyDef>();
+            _keyDefs = new Dictionary<string, IKeyDef>();
         }
 
         /// <summary>
         /// Adds a key definition to the collection
         /// </summary>
         /// <param name="keyDef"></param>
-        public void Add(KeyDef keyDef)
+        public void Add(IKeyDef keyDef)
         {
             if (Contains(keyDef))
             {
@@ -57,7 +57,7 @@ namespace Habanero.BO.ClassDefinition
         /// Removes a key definition from the collection
         /// </summary>
         /// <param name="keyDef">The Key Definition to remove</param>
-        protected void Remove(KeyDef keyDef)
+        protected void Remove(IKeyDef keyDef)
         {
             if (Contains(keyDef))
             {
@@ -71,7 +71,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="keyDef">The Key Definition to search for</param>
         /// <returns>Returns true if found, false if not</returns>
-        protected bool Contains(KeyDef keyDef)
+        protected bool Contains(IKeyDef keyDef)
         {
             return (_keyDefs.ContainsValue(keyDef));
         }
@@ -94,7 +94,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="keyName">The name of the key definition</param>
         /// <returns>Returns the definition matching the name
         /// provided or null if none are found</returns>
-        public KeyDef this[string keyName]
+        public IKeyDef this[string keyName]
         {
             get
             {
@@ -113,10 +113,10 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        protected internal KeyDef GetKeyDefAtIndex(int index)
+        public IKeyDef GetKeyDefAtIndex(int index)
         {
             int counter = 0;
-            foreach (KeyDef def in this)
+            foreach (IKeyDef def in this)
             {
                 if (counter == index)
                 {
@@ -137,7 +137,7 @@ namespace Habanero.BO.ClassDefinition
         public BOKeyCol CreateBOKeyCol(IBOPropCol lBOPropCol)
         {
             BOKeyCol lBOKeyCol = new BOKeyCol();
-            foreach (KeyDef lKeyDef in this)
+            foreach (IKeyDef lKeyDef in this)
             {
                 lBOKeyCol.Add(lKeyDef.CreateBOKey(lBOPropCol));
             }
@@ -157,7 +157,7 @@ namespace Habanero.BO.ClassDefinition
             get { return _keyDefs.Count; }
         }
 
-        #region IEnumerable<KeyDef> Members
+        #region IEnumerable<IKeyDef> Members
 
         ///<summary>
         ///Returns an enumerator that iterates through the collection.
@@ -167,7 +167,7 @@ namespace Habanero.BO.ClassDefinition
         ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
         ///</returns>
         ///<filterpriority>1</filterpriority>
-        IEnumerator<KeyDef> IEnumerable<KeyDef>.GetEnumerator()
+        IEnumerator<IKeyDef> IEnumerable<IKeyDef>.GetEnumerator()
         {
             return _keyDefs.Values.GetEnumerator();
         }

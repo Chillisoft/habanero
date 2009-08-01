@@ -51,7 +51,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="relationshipDefCol"></param>
         ///<param name="uiDefCol"></param>
         ///<returns></returns>
-        ClassDef CreateClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
+        IClassDef CreateClassDef(string assemblyName, string className, string displayName, IPrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, IRelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
 
         ///<summary>
         ///</summary>
@@ -137,7 +137,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="insertParentAction"><see cref="InsertParentAction"/></param>
         ///<param name="relationshipType"><see cref="RelationshipType"/></param>
         ///<returns></returns>
-        SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType);
+        IRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType);
 
         ///<summary>
         ///</summary>
@@ -152,7 +152,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="relationshipType"></param>
         ///<param name="timeout">The timout in milliseconds. The collection will not be automatically refreshed from the DB if the timeout has not expired</param>
         ///<returns></returns>
-        MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType, int timeout);
+        IRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType, int timeout);
 
         ///<summary>
         ///</summary>
@@ -223,7 +223,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        PropDefCol CreatePropDefCol();
+        IPropDefCol CreatePropDefCol();
 
 
         ///<summary>
@@ -239,19 +239,19 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        RelationshipDefCol CreateRelationshipDefCol();
+        IRelationshipDefCol CreateRelationshipDefCol();
 
         ///<summary>
         ///</summary>
         ///<param name="propDef"></param>
         ///<param name="relPropName"></param>
         ///<returns></returns>
-        RelPropDef CreateRelPropDef(IPropDef propDef, string relPropName);
+        IRelPropDef CreateRelPropDef(IPropDef propDef, string relPropName);
 
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        RelKeyDef CreateRelKeyDef();
+        IRelKeyDef CreateRelKeyDef();
 
         ///<summary>
         ///</summary>

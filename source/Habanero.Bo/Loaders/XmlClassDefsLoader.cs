@@ -199,7 +199,7 @@ namespace Habanero.BO.Loaders
         {
             foreach (ClassDef classDef in col)
             {
-                PrimaryKeyDef primaryKeyDef = classDef.PrimaryKeyDef;
+                PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDef.PrimaryKeyDef;
                 if (primaryKeyDef == null) continue;
                 if (!primaryKeyDef.IsGuidObjectID) continue;
                 IPropDef keyPropDef = primaryKeyDef[0];
@@ -272,7 +272,7 @@ namespace Habanero.BO.Loaders
             else
             {
                 allProps = new PropDefCol();
-                ClassDef currentClassDef = classDef;
+                IClassDef currentClassDef = classDef;
                 while (currentClassDef != null)
                 {
                     foreach (PropDef propDef in currentClassDef.PropDefcol)
@@ -287,9 +287,9 @@ namespace Habanero.BO.Loaders
             return allProps;
         }
 
-        private static ClassDef GetSuperClassClassDef(ClassDef currentClassDef, ClassDefCol col)
+        private static IClassDef GetSuperClassClassDef(IClassDef currentClassDef, ClassDefCol col)
         {
-            SuperClassDef superClassDef = currentClassDef.SuperClassDef;
+            ISuperClassDef superClassDef = currentClassDef.SuperClassDef;
             return superClassDef == null ? null : col[superClassDef.AssemblyName, superClassDef.ClassName];
         }
 
@@ -461,7 +461,7 @@ namespace Habanero.BO.Loaders
         {
             //For each Property in the Relationship Key check if it is defined as the primary key for the
             //class if it is then check the other properties else this is not a primaryKey
-            PrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, classDefCol);
+            IPrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, classDefCol);
             foreach (IRelPropDef relPropDef in relationshipDef.RelKeyDef)
             {
                 bool isInKeyDef = false;

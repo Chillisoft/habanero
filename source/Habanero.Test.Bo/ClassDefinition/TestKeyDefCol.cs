@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -78,12 +79,12 @@ namespace Habanero.Test.BO.ClassDefinition
         // Grants access to protected methods
         private class KeyDefColInheritor : KeyDefCol
         {
-            public void CallRemove(KeyDef keyDef)
+            public void CallRemove(IKeyDef keyDef)
             {
                 Remove(keyDef);
             }
 
-            public KeyDef GetThis(string keyName)
+            public IKeyDef GetThis(string keyName)
             {
                 return this[keyName];
             }

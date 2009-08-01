@@ -91,7 +91,7 @@ namespace Habanero.Test
         private static PropDefCol CreateBOPropDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
-            PropDef propDef =
+            IPropDef propDef =
                 new PropDef("EngineNo", typeof (String), PropReadWriteRule.ReadWrite, "ENGINE_NO", null);
             lPropDefCol.Add(propDef);
 

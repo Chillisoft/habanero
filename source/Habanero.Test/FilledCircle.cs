@@ -43,7 +43,7 @@ namespace Habanero.Test
         private new static ClassDef CreateClassDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
-            PropDef propDef =
+            IPropDef propDef =
                 new PropDef("Colour", typeof(int), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
             propDef = lPropDefCol.Add("FilledCircleID", typeof(Guid), PropReadWriteRule.WriteOnce, "FilledCircleID_field", null);

@@ -307,7 +307,7 @@ namespace Habanero.BO.ClassDefinition
         /// of a new object will be set to</param>
         /// <returns>Returns the new definition created, after it has
         /// been added to the collection</returns>
-        internal PropDef Add
+        internal IPropDef Add
             (string propName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
              object defaultValue)
         {
@@ -321,7 +321,7 @@ namespace Habanero.BO.ClassDefinition
         /// Creates and adds a new property definition as before, but 
         /// assumes the database field name is the same as the property name.
         /// </summary>
-        internal PropDef Add(string propName, Type propType, PropReadWriteRule propRWStatus, object defaultValue)
+        internal IPropDef Add(string propName, Type propType, PropReadWriteRule propRWStatus, object defaultValue)
         {
             CheckPropNotAlreadyAdded(propName);
             PropDef lPropDef = new PropDef(propName, propType, propRWStatus, defaultValue);

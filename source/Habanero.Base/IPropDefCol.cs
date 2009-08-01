@@ -63,6 +63,7 @@ namespace Habanero.Base
         /// <param name="propDef">The existing property definition</param>
         void Add(IPropDef propDef);
 
+
         ///<summary>
         /// Clones the propdefcol.  The new propdefcol has the same propdefs in it.
         ///</summary>
@@ -95,5 +96,12 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="propDef">The Property definition to remove</param>
         void Remove(IPropDef propDef);
+
+        /// <summary>
+        /// Adds all the property definitions from the given collection
+        /// into this one.
+        /// </summary>
+        /// <param name="propDefCol">The collection of property definitions</param>
+        void Add(IPropDefCol propDefCol);
     }
 }

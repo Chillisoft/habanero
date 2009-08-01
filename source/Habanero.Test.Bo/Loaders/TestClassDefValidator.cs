@@ -147,7 +147,7 @@ namespace Habanero.Test.BO.Loaders
             ClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
             Assert.IsNotNull(classDefInherited.SuperClassDef);
             Assert.AreEqual(1, classDefInherited.KeysCol.Count);
-            KeyDef keyDef = classDefInherited.KeysCol.GetKeyDefAtIndex(0);
+            IKeyDef keyDef = classDefInherited.KeysCol.GetKeyDefAtIndex(0);
             IPropDef keyDefPropDef = keyDef["TestClassName"];
             Assert.AreSame(propDef, keyDefPropDef, "The key's property should have been resolved to be the property of the superclass by the loader.");
         }

@@ -131,6 +131,7 @@
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\FilterDef.cs" />
     <Compile Include="ClassDefinition\FilterPropertyDef.cs" />
+    <Compile Include="ClassDefinition\PropDefCol.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />
     <Compile Include="ClassDefinition\Trigger.cs" />
     <Compile Include="ClassDefinition\UIDef.cs" />
@@ -178,9 +179,6 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="BOKey.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BOKeyCol.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BOMapper.cs">
@@ -234,22 +232,13 @@
     <Compile Include="ClassDefinition\KeyDef.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ClassDefinition\KeyDefCol.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ClassDefinition\MultipleRelationshipDef.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ClassDefinition\ORMapping.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassDefinition\PrimaryKeyDef.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassDefinition\PropDef.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ClassDefinition\PropDefCol.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassDefinition\RelationshipDef.cs">

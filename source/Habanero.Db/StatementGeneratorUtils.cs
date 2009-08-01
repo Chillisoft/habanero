@@ -35,10 +35,10 @@ namespace Habanero.DB
         /// <param name="sql">The sql statement used to generate and track
         /// parameters</param>
         /// <returns>Returns a string</returns>
-        public static string PersistedDatabaseWhereClause(BOKey key, ISqlStatement sql)
+        public static string PersistedDatabaseWhereClause(IBOKey key, ISqlStatement sql)
         {
             StringBuilder whereClause = new StringBuilder(key.Count * 30);
-            foreach (BOProp prop in key.SortedValues)
+            foreach (BOProp prop in ((BOKey)key).SortedValues)
             {
                 if (whereClause.Length > 0)
                 {

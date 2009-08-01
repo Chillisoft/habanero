@@ -482,7 +482,7 @@ namespace Habanero.Test.BO.Loaders
             IClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
             Assert.AreSame(parentDef, superClassDef);
             Assert.IsNull(def.PrimaryKeyDef);
-            PrimaryKeyDef primaryKeyDef = def.GetPrimaryKeyDef();
+            IPrimaryKeyDef primaryKeyDef = def.GetPrimaryKeyDef();
             Assert.IsNotNull(primaryKeyDef);
             Assert.AreSame(parentDef.PrimaryKeyDef, primaryKeyDef);
         }

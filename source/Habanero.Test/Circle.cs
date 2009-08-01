@@ -90,8 +90,9 @@ namespace Habanero.Test
         {
             ClassDef shapeClassDef = Shape.GetClassDef();
             ClassDef circleClassDef = GetClassDef();
-            circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.ClassTableInheritance);
-            circleClassDef.SuperClassDef.ID = "ShapeID";
+            SuperClassDef superClassDef = new SuperClassDef(shapeClassDef, ORMapping.ClassTableInheritance);
+            circleClassDef.SuperClassDef = superClassDef;
+            superClassDef.ID = "ShapeID";
             return circleClassDef;
         }
 

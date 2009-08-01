@@ -54,8 +54,8 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="relationshipDefCol"></param>
         ///<param name="uiDefCol"></param>
         ///<returns></returns>
-        public ClassDef CreateClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef,
-		                               PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol,
+        public IClassDef CreateClassDef(string assemblyName, string className, string displayName, IPrimaryKeyDef primaryKeyDef,
+                                       IPropDefCol propDefCol, KeyDefCol keyDefCol, IRelationshipDefCol relationshipDefCol,
 		                               UIDefCol uiDefCol)
 		{
 			return new ClassDef(assemblyName, className, displayName, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol);
@@ -189,8 +189,8 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="insertParentAction"><see cref="InsertParentAction"/></param>
         ///<param name="relationshipType"></param>
         ///<returns></returns>
-        public SingleRelationshipDef CreateSingleRelationshipDef
-            (string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType)
+        public IRelationshipDef CreateSingleRelationshipDef
+            (string relationshipName, string relatedAssemblyName, string relatedClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType)
 		{
 			return
 				new SingleRelationshipDef(relationshipName, relatedAssemblyName, relatedClassName, relKeyDef,
@@ -210,8 +210,8 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="relationshipType"></param>
         ///<param name="timeout">The timout in milliseconds. The collection will not be automatically refreshed from the DB if the timeout has not expired</param>
         ///<returns></returns>
-        public MultipleRelationshipDef CreateMultipleRelationshipDef
-            (string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType, int timeout)
+        public IRelationshipDef CreateMultipleRelationshipDef
+            (string relationshipName, string relatedAssemblyName, string relatedClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType, int timeout)
 		{
 			return
 				new MultipleRelationshipDef(relationshipName, relatedAssemblyName, relatedClassName, relKeyDef,
@@ -322,7 +322,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        public PropDefCol CreatePropDefCol()
+        public IPropDefCol CreatePropDefCol()
 		{
 			return new PropDefCol();
 		}
@@ -346,7 +346,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        public RelationshipDefCol CreateRelationshipDefCol()
+        public IRelationshipDefCol CreateRelationshipDefCol()
 		{
 			return new RelationshipDefCol();
 		}
@@ -356,7 +356,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="propDef"></param>
         ///<param name="relPropName"></param>
         ///<returns></returns>
-        public RelPropDef CreateRelPropDef(IPropDef propDef, string relPropName)
+        public IRelPropDef CreateRelPropDef(IPropDef propDef, string relPropName)
 		{
 			return new RelPropDef(propDef, relPropName);
 		}
@@ -364,7 +364,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        public RelKeyDef CreateRelKeyDef()
+        public IRelKeyDef CreateRelKeyDef()
 		{
 			return new RelKeyDef();
 		}

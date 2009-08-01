@@ -125,7 +125,7 @@ namespace Habanero.Base
         /// <summary>
         /// The table this classdef maps to, if applicable.
         /// </summary>
-        string TableName { get; }
+        string TableName { get; set; }
 
         /// <summary>
         /// The type of the business object that this class definition is for.
@@ -192,6 +192,21 @@ namespace Habanero.Base
         /// The collection of relationship definitions
         /// </summary>
         IRelationshipDefCol RelationshipDefCol { get; set; }
+
+        /// <summary>
+        /// Gets and sets the super-class of this class definition
+        /// </summary>
+        ISuperClassDef SuperClassDef { get; set; }
+
+        ///<summary>
+        /// The ClassID that identifies this Class in the case where the class is loaded from a database.
+        ///</summary>
+        Guid? ClassID { get; set; }
+
+        ///<summary>
+        /// The module name that identifies this class for the case of building a menu for the standard menu editor.
+        ///</summary>
+        string Module { get; set; }
 
         /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance

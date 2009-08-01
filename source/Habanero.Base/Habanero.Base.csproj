@@ -112,10 +112,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOEventArgs.cs" />
+    <Compile Include="BOKeyCol.cs" />
     <Compile Include="BOKeyEventArgs.cs" />
     <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOPropUpdatedEventArgs.cs" />
     <Compile Include="BusinessObjectDTO.cs" />
+    <Compile Include="Exceptions\InvalidKeyException.cs" />
     <Compile Include="Exceptions\ReflectionException.cs" />
     <Compile Include="IBusinessObjectRule.cs" />
     <Compile Include="IConnectionStringFactory.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="IRelProp.cs" />
     <Compile Include="ISelectQuery.cs" />
     <Compile Include="ISecurityController.cs" />
+    <Compile Include="ISuperClassDef.cs" />
     <Compile Include="ISupportsAutoIncrementingField.cs" />
     <Compile Include="ITransactional.cs" />
     <Compile Include="ITransactionalDB.cs" />
@@ -188,8 +191,10 @@
     <Compile Include="IUIFormTab.cs" />
     <Compile Include="IUIGrid.cs" />
     <Compile Include="IUIGridColumn.cs" />
+    <Compile Include="KeyDefCol.cs" />
     <Compile Include="LayoutStyle.cs" />
     <Compile Include="OrderCriteria.cs" />
+    <Compile Include="ORMapping.cs" />
     <Compile Include="PropAlignment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

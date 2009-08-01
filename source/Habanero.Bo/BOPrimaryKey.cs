@@ -127,15 +127,16 @@ namespace Habanero.BO
         /// <param name="subClassDef">The class definition to search on</param>
         /// <param name="subClassObj">The business object</param>
         /// <returns>Returns a BOKey object or null</returns>
-        public static BOKey GetSuperClassKey(ClassDef subClassDef, BusinessObject subClassObj)
+        public static IBOKey GetSuperClassKey(ClassDef subClassDef, BusinessObject subClassObj)
         {
-            while (subClassDef.SuperClassClassDef.PrimaryKeyDef == null)
+            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) subClassDef.SuperClassClassDef.PrimaryKeyDef;
+            while (primaryKeyDef == null)
             {
                 if (subClassDef.SuperClassClassDef == null) return null;
 
                 subClassDef = subClassDef.SuperClassClassDef;
             }
-            return subClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(subClassObj.Props);
+            return primaryKeyDef.CreateBOKey(subClassObj.Props);
         }
 
         /// <summary>
@@ -243,7 +244,7 @@ namespace Habanero.BO
         ///<returns>the BOPrimaryKey if this can be constructed else returns null</returns>
         public static BOPrimaryKey CreateWithValue(ClassDef classDef, object idValue)
         {
-            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
+            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDef.GetPrimaryKeyDef();
             if (primaryKeyDef.IsCompositeKey) return null;
 
             IBOPropCol boPropCol = classDef.CreateBOPropertyCol(true);

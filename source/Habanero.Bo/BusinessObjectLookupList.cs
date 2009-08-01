@@ -342,7 +342,8 @@ namespace Habanero.BO
                 return DisplayValueDictionary;
             }
             ClassDef classDef = LookupBoClassDef;
-            if (classDef.PrimaryKeyDef.Count > 1)
+            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDef.PrimaryKeyDef;
+            if (primaryKeyDef.Count > 1)
             {
                 throw new HabaneroDeveloperException
                     ("There is an application setup error. Please contact your system administrator",

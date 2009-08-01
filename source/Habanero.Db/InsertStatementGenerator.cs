@@ -244,17 +244,18 @@ namespace Habanero.DB
             }
             if (currentClassDef.SuperClassClassDef ==  null ||currentClassDef.SuperClassClassDef.PrimaryKeyDef == null) return;
 
-            string parentIDCopyFieldName = currentClassDef.SuperClassDef.ID;
-            PrimaryKeyDef parentID = currentClassDef.SuperClassClassDef.PrimaryKeyDef;
+            SuperClassDef superClassDef = (SuperClassDef) currentClassDef.SuperClassDef;
+            string parentIDCopyFieldName = superClassDef.ID;
+            PrimaryKeyDef superClassPrimaryKeyDef = (PrimaryKeyDef) currentClassDef.SuperClassClassDef.PrimaryKeyDef;
             if (string.IsNullOrEmpty(parentIDCopyFieldName) ||
-                parentID.KeyName == parentIDCopyFieldName)
+                superClassPrimaryKeyDef.KeyName == parentIDCopyFieldName)
             {
                 propsToInclude.Add(
-                    currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
+                    superClassPrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
             }
             else if (parentIDCopyFieldName != currentClassDef.PrimaryKeyDef.KeyName)
             {
-                if (parentID.Count > 1)
+                if (superClassPrimaryKeyDef.Count > 1)
                 {
                     throw new InvalidXmlDefinitionException("For a super class definition " +
                                                             "using class table inheritance, the ID attribute can only refer to a " +
@@ -262,7 +263,7 @@ namespace Habanero.DB
                                                             "allow composite primary keys where the child's copies have the same " +
                                                             "field name as the parent.");
                 }
-                IBOProp parentProp = parentID.CreateBOKey(_bo.Props).GetBOPropCol()[parentID.KeyName];
+                IBOProp parentProp = superClassPrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol()[superClassPrimaryKeyDef.KeyName];
                 PropDef profDef = new PropDef(parentIDCopyFieldName, parentProp.PropertyType, PropReadWriteRule.ReadWrite, null);
                 BOProp newProp = new BOProp(profDef) {Value = parentProp.Value};
                 propsToInclude.Add(newProp);

@@ -94,7 +94,7 @@ namespace Habanero.DB
             {
                 if (propsToInclude.Contains(prop.PropertyName))
                 {
-                    PrimaryKeyDef primaryKeyDef = _bo.ClassDef.GetPrimaryKeyDef() ?? (PrimaryKeyDef) _bo.ID.KeyDef;
+                    PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef)_bo.ClassDef.GetPrimaryKeyDef() ?? (PrimaryKeyDef)_bo.ID.KeyDef;
                     if (prop.IsDirty &&
                         ((primaryKeyDef.IsGuidObjectID && !primaryKeyDef.Contains(prop.PropertyName)) ||
                          !primaryKeyDef.IsGuidObjectID))

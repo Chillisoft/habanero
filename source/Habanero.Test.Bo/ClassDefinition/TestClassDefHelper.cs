@@ -92,7 +92,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
             Assert.IsNotNull(classDef.PrimaryKeyDef);
             //---------------Execute Test ----------------------
-            PrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, classDefCol);
+            IPrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, classDefCol);
             //---------------Test Result -----------------------
             Assert.IsNotNull(primaryKeyDef);
             Assert.AreSame(classDef.PrimaryKeyDef, primaryKeyDef);
@@ -124,7 +124,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNotNull(def.SuperClassDef);
             Assert.IsNull(def.PrimaryKeyDef);
             //---------------Execute Test ----------------------
-            PrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(def, classDefCol);
+            IPrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(def, classDefCol);
             //---------------Test Result -----------------------
             Assert.IsNotNull(primaryKeyDef);
             Assert.AreSame(parentDef.PrimaryKeyDef, primaryKeyDef);

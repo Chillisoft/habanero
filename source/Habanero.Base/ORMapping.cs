@@ -17,7 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base
 {
     /// <summary>
     /// An enumeration specifying the means used to preserve a class

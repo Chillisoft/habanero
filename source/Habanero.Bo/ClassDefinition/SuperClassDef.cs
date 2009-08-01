@@ -22,10 +22,12 @@ using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
+    
+
     /// <summary>
     /// Manages a super-class in the case where inheritance is being used.
     /// </summary>
-    public class SuperClassDef
+    public class SuperClassDef : ISuperClassDef
     {
         private ORMapping _orMapping;
         private IClassDef _superClassClassDef;
@@ -82,7 +84,7 @@ namespace Habanero.BO.ClassDefinition
         public ORMapping ORMapping
         {
             get { return _orMapping; }
-            protected set { _orMapping = value; }
+            set { _orMapping = value; }
         }
 
 
@@ -92,7 +94,7 @@ namespace Habanero.BO.ClassDefinition
         public string AssemblyName
         {
             get { return _assemblyName; }
-            protected set
+            set
             {
                 if (_assemblyName != value)
                 {
@@ -109,7 +111,7 @@ namespace Habanero.BO.ClassDefinition
         public string ClassName
         {
             get { return _className; }
-            protected set
+            set
             {
                 if (_className != value)
                     _superClassClassDef = null;
@@ -166,14 +168,14 @@ namespace Habanero.BO.ClassDefinition
         public IClassDef SuperClassClassDef
         {
             get { return MySuperClassDef; }
-            protected set { MySuperClassDef = value; }
+            set { MySuperClassDef = value; }
         }
 
         #endregion properties
 
         #region SuperClassDef Methods
 
-        private IClassDef MySuperClassDef
+        public IClassDef MySuperClassDef
         {
             get
             {

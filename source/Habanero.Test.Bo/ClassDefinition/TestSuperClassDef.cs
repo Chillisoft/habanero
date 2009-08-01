@@ -43,17 +43,10 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]
-        public void TestSetDiscriminatorForClassTableException()
-        {
-            SuperClassDef superClassDef =
-                new SuperClassDef("ass", "class", ORMapping.ClassTableInheritance, null, "disc");
-        }
-
-        [Test, ExpectedException(typeof(ArgumentException))]
         public void TestSetDiscriminatorForConcreteTableException()
         {
             SuperClassDef superClassDef =
-                new SuperClassDef("ass", "class", ORMapping.ClassTableInheritance, null, "disc");
+                new SuperClassDef("ass", "class", ORMapping.ConcreteTableInheritance, null, "disc");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]

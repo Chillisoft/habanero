@@ -31,7 +31,7 @@ namespace Habanero.BO.Loaders
     public class XmlKeyLoader : XmlLoader
     {
         private IKeyDef _keyDef;
-        private PropDefCol _propDefCol;
+        private IPropDefCol _propDefCol;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -57,7 +57,7 @@ namespace Habanero.BO.Loaders
         /// <param name="xmlKeyDef">The xml key definition string</param>
         /// <param name="propDefs">The collection of property definitions</param>
         /// <returns>Returns the key definition</returns>
-        public KeyDef LoadKey(string xmlKeyDef, PropDefCol propDefs)
+        public KeyDef LoadKey(string xmlKeyDef, IPropDefCol propDefs)
         {
             return LoadKey(this.CreateXmlElement(xmlKeyDef), propDefs);
         }
@@ -69,7 +69,7 @@ namespace Habanero.BO.Loaders
         /// <param name="keyElement">The xml key definition element</param>
         /// <param name="propDefs">The collection of property definitions</param>
         /// <returns>Returns the key definition</returns>
-        public KeyDef LoadKey(XmlElement keyElement, PropDefCol propDefs)
+        public KeyDef LoadKey(XmlElement keyElement, IPropDefCol propDefs)
         {
             _propDefCol = propDefs;
             return (KeyDef) Load(keyElement);

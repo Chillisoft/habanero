@@ -132,7 +132,7 @@ namespace Habanero.BO
         /// Adds a <see cref="IBOProp"/> to the key
         /// </summary>
         /// <param name="boProp">The BOProp to add</param>
-        internal virtual void Add(IBOProp boProp)
+        public virtual void Add(IBOProp boProp)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(boProp, "bOProp");
             if (_props.ContainsKey(boProp.PropertyName))
@@ -281,7 +281,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the key name
         /// </summary>
-        protected internal string KeyName
+        public string KeyName
         {
             get { return _keyDef.KeyName; }
         }

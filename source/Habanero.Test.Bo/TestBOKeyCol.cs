@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -30,7 +32,7 @@ namespace Habanero.Test.BO
         public void TestAddDuplicates()
         {
             BOKeyCol col = new BOKeyCol();
-            BOKey boKey = new BOKey(new KeyDef());
+            IBOKey boKey = new BOKey(new KeyDef());
             col.Add(boKey);
                 col.Add(boKey);
                 Assert.Fail("Expected to throw an InvalidKeyException");
@@ -51,7 +53,7 @@ namespace Habanero.Test.BO
         public void TestIndexerWithNonExistingKey()
         {
             BOKeyCol col = new BOKeyCol();
-                BOKey key = col["invalidkey"];
+                IBOKey key = col["invalidkey"];
 
                 Assert.Fail("Expected to throw an InvalidKeyException");
         }

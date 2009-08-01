@@ -55,7 +55,7 @@ namespace Habanero.BO
         /// Adds a property to the key
         /// </summary>
         /// <param name="BOProp">The property to add</param>
-        internal override void Add(IBOProp BOProp)
+        public override void Add(IBOProp BOProp)
         {
             if (Count > 0)
             {

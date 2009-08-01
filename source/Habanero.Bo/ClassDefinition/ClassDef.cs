@@ -92,12 +92,12 @@ namespace Habanero.BO.ClassDefinition
         private string _displayName = "";
         private KeyDefCol _keysCol;
 
-        private PrimaryKeyDef _primaryKeyDef;
+        private IPrimaryKeyDef _primaryKeyDef;
         private IPropDefCol _propDefCol;
-        private PropDefCol _propDefColIncludingInheritance;
-        private RelationshipDefCol _relationshipDefCol;
+        private IPropDefCol _propDefColIncludingInheritance;
+        private IRelationshipDefCol _relationshipDefCol;
 
-        private SuperClassDef _superClassDef;
+        private ISuperClassDef _superClassDef;
         private string _tableName = "";
         private UIDefCol _uiDefCol;
 
@@ -166,7 +166,7 @@ namespace Habanero.BO.ClassDefinition
         /// As before, but excludes the table name and UI def collection
         /// </summary>
         public ClassDef(Type classType,
-                        PrimaryKeyDef primaryKeyDef,
+                        IPrimaryKeyDef primaryKeyDef,
                         IPropDefCol propDefCol,
                         KeyDefCol keyDefCol,
                         IRelationshipDefCol relationshipDefCol)
@@ -180,7 +180,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// As before, but excludes the table name
         /// </summary>
-        public ClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol,
+        public ClassDef(string assemblyName, string className, IPrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol,
                         KeyDefCol keyDefCol,
                         IRelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(assemblyName, className, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
@@ -190,7 +190,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// As before, but excludes the table name
         /// </summary>
-        public ClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef,
+        public ClassDef(string assemblyName, string className, string displayName, IPrimaryKeyDef primaryKeyDef,
                         IPropDefCol propDefCol,
                         KeyDefCol keyDefCol, IRelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(
@@ -200,7 +200,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         private ClassDef(Type classType, string assemblyName, string className, string tableName, string displayName,
-                         PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol,
+                         IPrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol,
                          IRelationshipDefCol relationshipDefCol,
                          UIDefCol uiDefCol)
         {
@@ -286,7 +286,7 @@ namespace Habanero.BO.ClassDefinition
         /// This could be null if the primary key is inherited from the super class.
         /// To retrieve the primary key that is used for this class use the GetPrimaryKeyDef() method.
         /// </summary>
-        public PrimaryKeyDef PrimaryKeyDef
+        public IPrimaryKeyDef PrimaryKeyDef
         {
             get { return _primaryKeyDef; }
             protected set { _primaryKeyDef = value; }
@@ -584,10 +584,10 @@ namespace Habanero.BO.ClassDefinition
             {
                 return null;
             }
-            RelationshipCol relCol = _relationshipDefCol.CreateRelationshipCol(propCol, bo);
+            RelationshipCol relCol = ((RelationshipDefCol)_relationshipDefCol).CreateRelationshipCol(propCol, bo);
             if (SuperClassClassDef != null)
             {
-                var superClassClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
+                ClassDef superClassClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
                 relCol.Add(superClassClassDef.CreateRelationshipCol(propCol, bo));
             }
             return relCol;
@@ -603,7 +603,7 @@ namespace Habanero.BO.ClassDefinition
             BOKeyCol keyCol = _keysCol.CreateBOKeyCol(col);
             if (SuperClassClassDef != null)
             {
-                var superClassClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
+                ClassDef superClassClassDef = (ClassDef)SuperClassDef.SuperClassClassDef;
 
                 keyCol.Add(superClassClassDef.createBOKeyCol(col));
             }
@@ -637,7 +637,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Gets and sets the super-class of this class definition
         /// </summary>
-        public SuperClassDef SuperClassDef
+        public ISuperClassDef SuperClassDef
         {
             get { return _superClassDef; }
             set { _superClassDef = value; }
@@ -668,7 +668,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                var children = new ClassDefCol();
+                ClassDefCol children = new ClassDefCol();
                 foreach (ClassDef def in ClassDefs)
                 {
                     if (def._superClassDef != null && def._superClassDef.SuperClassClassDef == this)
@@ -687,7 +687,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                var children = new ClassDefCol();
+                ClassDefCol children = new ClassDefCol();
                 ClassDefCol immediateChildren = ImmediateChildren;
                 if (immediateChildren.Count == 0) return children;
 
@@ -933,9 +933,9 @@ namespace Habanero.BO.ClassDefinition
         /// the SuperClass structure to get the primary key definition if necessary
         ///</summary>
         ///<returns>The primary key for this class</returns>
-        public PrimaryKeyDef GetPrimaryKeyDef()
+        public IPrimaryKeyDef GetPrimaryKeyDef()
         {
-            PrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(this, ClassDefs);
+            IPrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(this, ClassDefs);
             return primaryKeyDef;
         }
 
@@ -1030,6 +1030,7 @@ namespace Habanero.BO.ClassDefinition
         /// The ClassID that identifies this Class in the case where the class is loaded from a database.
         ///</summary>
         public Guid? ClassID { get; set; }
+
         ///<summary>
         /// The module name that identifies this class for the case of building a menu for the standard menu editor.
         ///</summary>

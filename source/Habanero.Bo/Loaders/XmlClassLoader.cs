@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -36,8 +37,8 @@ namespace Habanero.BO.Loaders
         private string _displayName;
         private KeyDefCol _keyDefCol;
         private PrimaryKeyDef _primaryKeyDef;
-        private PropDefCol _propDefCol;
-        private RelationshipDefCol _relationshipDefCol;
+        private IPropDefCol _propDefCol;
+        private IRelationshipDefCol _relationshipDefCol;
         private SuperClassDef _superClassDef;
         private string _tableName;
         private UIDefCol _uiDefCol;
@@ -101,7 +102,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a class definition</returns>
         protected override object Create()
         {
-            ClassDef classDef = _defClassFactory.CreateClassDef(_assemblyName, _className, _displayName, _primaryKeyDef,
+            IClassDef classDef = _defClassFactory.CreateClassDef(_assemblyName, _className, _displayName, _primaryKeyDef,
                                                                 _propDefCol,
                                                                 _keyDefCol, _relationshipDefCol, _uiDefCol);
             if (_superClassDef != null)

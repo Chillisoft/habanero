@@ -81,9 +81,9 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="classDefCol">The <see cref="ClassDefCol"/> to use when searching the super classes for the <see cref="ClassDef.PrimaryKeyDef"/>.</param>
         ///<returns>Returns the <see cref="ClassDef.PrimaryKeyDef"/> for the specified <see cref="ClassDef"/>.</returns>
         ///<exception cref="InvalidXmlDefinitionException"></exception>
-        public static PrimaryKeyDef GetPrimaryKeyDef(ClassDef classDef, ClassDefCol classDefCol)
+        public static IPrimaryKeyDef GetPrimaryKeyDef(ClassDef classDef, ClassDefCol classDefCol)
         {
-            PrimaryKeyDef primaryKeyDef = classDef.PrimaryKeyDef;
+            IPrimaryKeyDef primaryKeyDef = classDef.PrimaryKeyDef;
             if (primaryKeyDef == null)
             {
                 ClassDef superClassClassDef = GetSuperClassClassDef(classDef.SuperClassDef, classDefCol);
@@ -102,7 +102,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="classDefCol">The <see cref="ClassDefCol"/> to use to search for the super class <see cref="ClassDef"/>.</param>
         ///<returns>Returns the <see cref="ClassDef"/> for the super class defined in the specified <see cref="SuperClassDef"/>.</returns>
         ///<exception cref="InvalidXmlDefinitionException"></exception>
-        public static ClassDef GetSuperClassClassDef(SuperClassDef superClassDef, ClassDefCol classDefCol)
+        public static ClassDef GetSuperClassClassDef(ISuperClassDef superClassDef, ClassDefCol classDefCol)
         {
             ClassDef superClassClassDef = null;
             string assemblyName = superClassDef.AssemblyName;

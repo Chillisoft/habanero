@@ -55,5 +55,34 @@ namespace Habanero.Base
         string Message { get; set; }
 
         void Add(IPropDef propDef);
+
+        /// <summary>
+        /// Provides an indexing facility for the collection of property
+        /// definitions that belong to the key, so that items
+        /// in the collection can be accessed like an array 
+        /// (e.g. collection["surname"])
+        /// </summary>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns the property stored under that property name</returns>
+        IPropDef this[string propName] { get; }
+
+        /// <summary>
+        /// Provides an indexing facility for the collection of property
+        /// definitions that belong to the key, so that items
+        /// in the collection can be accessed like an array. The order is
+        /// always the same, but not determinable
+        /// </summary>
+        /// <param name="index">The index of the property</param>
+        /// <returns>Returns the property stored under that index</returns>
+        IPropDef this[int index] { get; }
+
+        /// <summary>
+        /// Creates a new business object key (BOKey) using this key
+        /// definition and its property definitions
+        /// </summary>
+        /// <param name="lBOPropCol">The master property collection</param>
+        /// <returns>Returns a new BOKey object that mirrors this
+        /// key definition</returns>
+        IBOKey CreateBOKey(IBOPropCol lBOPropCol);
     }
 }

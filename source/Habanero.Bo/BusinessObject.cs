@@ -345,22 +345,24 @@ namespace Habanero.BO
         {
             ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
 
+            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDefToUseForPrimaryKey.PrimaryKeyDef;
             if ((classDefToUseForPrimaryKey.SuperClassDef == null)
                 || (classDefToUseForPrimaryKey.IsUsingConcreteTableInheritance())
                 || (_classDef.IsUsingClassTableInheritance()))
             {
-                if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
+                if (primaryKeyDef != null)
                 {
-                    _primaryKey = (BOPrimaryKey) classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                    _primaryKey = (BOPrimaryKey) primaryKeyDef.CreateBOKey(_boPropCol);
                 }
             }
             else
             {
-                if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
+                if (primaryKeyDef != null)
                 {
+                    PrimaryKeyDef def = (PrimaryKeyDef) classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef;
                     _primaryKey =
                         (BOPrimaryKey)
-                        classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                        def.CreateBOKey(_boPropCol);
                 }
             }
             if (_primaryKey == null)
@@ -486,7 +488,7 @@ namespace Habanero.BO
 
         private void SetupPrimaryKey()
         {
-            PrimaryKeyDef primaryKeyDef = ClassDef.GetPrimaryKeyDef();
+            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) ClassDef.GetPrimaryKeyDef();
             if (primaryKeyDef == null) return;
             _primaryKey = (BOPrimaryKey) primaryKeyDef.CreateBOKey(Props);
         }

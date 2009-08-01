@@ -31,7 +31,7 @@ namespace Habanero.BO.Loaders
     public class XmlPrimaryKeyLoader : XmlLoader
     {
         private IPrimaryKeyDef _primaryKeyDef;
-        private PropDefCol _propDefCol;
+        private IPropDefCol _propDefCol;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -58,7 +58,7 @@ namespace Habanero.BO.Loaders
         /// <param name="xmlPrimaryKeyDef">The xml string</param>
         /// <param name="propDefs">The property definition collection</param>
         /// <returns>Returns the primary key definition</returns>
-        internal PrimaryKeyDef LoadPrimaryKey(string xmlPrimaryKeyDef, PropDefCol propDefs)
+        internal PrimaryKeyDef LoadPrimaryKey(string xmlPrimaryKeyDef, IPropDefCol propDefs)
         {
             return LoadPrimaryKey(this.CreateXmlElement(xmlPrimaryKeyDef), propDefs);
         }
@@ -70,7 +70,7 @@ namespace Habanero.BO.Loaders
         /// <param name="primaryKeyElement">The xml element</param>
         /// <param name="propDefs">The property definition collection</param>
         /// <returns>Returns the primary key definition</returns>
-        internal PrimaryKeyDef LoadPrimaryKey(XmlElement primaryKeyElement, PropDefCol propDefs)
+        internal PrimaryKeyDef LoadPrimaryKey(XmlElement primaryKeyElement, IPropDefCol propDefs)
         {
             _propDefCol = propDefs;
             return (PrimaryKeyDef) Load(primaryKeyElement);

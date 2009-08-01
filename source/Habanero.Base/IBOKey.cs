@@ -67,6 +67,11 @@ namespace Habanero.Base
         bool HasAutoIncrementingProperty { get; }
 
         /// <summary>
+        /// Returns the key name
+        /// </summary>
+        string KeyName { get; }
+
+        /// <summary>
         /// Returns a string containing all the properties and their values,
         /// but using the values at last persistence rather than any dirty values
         /// </summary>
@@ -111,5 +116,11 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns a new BOProp collection</returns>
         IBOPropCol GetBOPropCol();
+
+        /// <summary>
+        /// Adds a <see cref="IBOProp"/> to the key
+        /// </summary>
+        /// <param name="boProp">The BOProp to add</param>
+        void Add(IBOProp boProp);
     }
 }

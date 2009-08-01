@@ -70,7 +70,7 @@ namespace Habanero.Test.BO
         public void TestBOKeyEqual()
         {
             //Set values for Key1
-            BOKey lBOKey1 = _keyDef1.CreateBOKey(_boPropCol1);
+            BOKey lBOKey1 = (BOKey) _keyDef1.CreateBOKey(_boPropCol1);
             IBOProp lProp = _boPropCol1["PropName"];
             lProp.Value = "Prop Value";
 
@@ -78,7 +78,7 @@ namespace Habanero.Test.BO
             lProp.Value = "Value 2";
 
             //Set values for Key2
-            BOKey lBOKey2 = _keyDef2.CreateBOKey(_boPropCol2);
+            BOKey lBOKey2 = (BOKey) _keyDef2.CreateBOKey(_boPropCol2);
             lProp = _boPropCol2["PropName"];
             lProp.Value = "Prop Value";
 
@@ -94,7 +94,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestSortedValues()
         {
-            BOKey lBOKey1 = _keyDef1.CreateBOKey(_boPropCol2);
+            BOKey lBOKey1 = (BOKey) _keyDef1.CreateBOKey(_boPropCol2);
             IBOProp lProp = _boPropCol2["PropName"];
             Assert.AreSame(lProp, lBOKey1.SortedValues[0]);
         }
@@ -102,7 +102,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(InvalidPropertyNameException))]
         public void TestIndexerPropertyNotFound()
         {
-            BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+            IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
 
 
                 IBOProp prop = boKey["invalidpropname"];
@@ -114,7 +114,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(IndexOutOfRangeException))]
         public void TestIndexerIntegerOutOfRange()
         {
-            BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+            IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
                 IBOProp prop = boKey[2];
                 Assert.Fail("Expected to throw an IndexOutOfRangeException");
 
@@ -123,7 +123,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(HabaneroArgumentException))]
         public void TestAddNullBOProp()
         {
-            BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+            IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
                 boKey.Add(null);
                 Assert.Fail("Expected to throw an HabaneroArgumentException");
         }
@@ -131,7 +131,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(InvalidPropertyException))]
         public void TestAddDuplicateBOProp()
         {
-            BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+            IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
                 boKey.Add(boKey["PropName"]);
                 Assert.Fail("Expected to throw an InvalidPropertyException");
 
@@ -140,7 +140,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestEquality()
         {
-            BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+            BOKey boKey = (BOKey) _keyDef1.CreateBOKey(_boPropCol1);
 
             // Test when property count is different
             KeyDef keyDef = new KeyDef();
@@ -155,16 +155,16 @@ namespace Habanero.Test.BO
             propCol.Add(propDef2.CreateBOProp(false));
             keyDef.Add(propDef1);
             keyDef.Add(propDef2);
-            otherKey = keyDef.CreateBOKey(propCol);
+            otherKey = (BOKey) keyDef.CreateBOKey(propCol);
             Assert.IsFalse(boKey == otherKey);
 
             // Same props but different values (with one null)
-            otherKey = _keyDef1.CreateBOKey(_boPropCol2);
+            otherKey = (BOKey) _keyDef1.CreateBOKey(_boPropCol2);
             otherKey["PropName"].Value = "blah";
             Assert.IsFalse(boKey == otherKey);
 
             // Same props but different values (neither are null)
-            otherKey = _keyDef1.CreateBOKey(_boPropCol2);
+            otherKey = (BOKey) _keyDef1.CreateBOKey(_boPropCol2);
             boKey["PropName"].Value = "diblah";
             Assert.IsFalse(boKey == otherKey);
             Assert.IsFalse(boKey.Equals(otherKey));
@@ -191,7 +191,7 @@ namespace Habanero.Test.BO
             KeyDef keyDef = new KeyDef();
             keyDef.Add(propDef1);
             keyDef.Add(propDef2);
-            BOKey boKey = keyDef.CreateBOKey(propCol);
+            IBOKey boKey = keyDef.CreateBOKey(propCol);
 
             Assert.AreEqual(propCol["PropName1"], boKey[0]);
             Assert.AreEqual(propCol["PropName2"], boKey[1]);
@@ -201,7 +201,7 @@ namespace Habanero.Test.BO
         public void Test_AsString_CurrentValue_New()
         {
             //--------------- Set up test pack ------------------
-            BOKey boKey = CreateBOKeyGuid();
+            IBOKey boKey = CreateBOKeyGuid();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -214,7 +214,7 @@ namespace Habanero.Test.BO
         public void Test_AsString_CurrentValue()
         {
             //--------------- Set up test pack ------------------
-            BOKey boKey = CreateBOKeyGuid();
+            IBOKey boKey = CreateBOKeyGuid();
             Guid guid = Guid.NewGuid();
             //--------------- Test Preconditions ----------------
 
@@ -229,7 +229,7 @@ namespace Habanero.Test.BO
         public void Test_AsString_CurrentValue_TwoProps()
         {
             //--------------- Set up test pack ------------------
-            BOKey boKey = CreateBOKeyGuidAndString();
+            IBOKey boKey = CreateBOKeyGuidAndString();
             Guid guid = Guid.NewGuid();
             string str = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
@@ -246,7 +246,7 @@ namespace Habanero.Test.BO
         public void Test_AsString_PreviousValue_New()
         {
             //--------------- Set up test pack ------------------
-            BOKey boKey = CreateBOKeyGuid();
+            IBOKey boKey = CreateBOKeyGuid();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -259,7 +259,7 @@ namespace Habanero.Test.BO
         public void Test_AsString_PreviousValue_FirstChange()
         {
             //--------------- Set up test pack ------------------
-            BOKey boKey = CreateBOKeyGuid();
+            IBOKey boKey = CreateBOKeyGuid();
             string expectedPreviousValue = boKey.AsString_CurrentValue();
             Guid guid = Guid.NewGuid();
             //--------------- Test Preconditions ----------------
@@ -275,7 +275,7 @@ namespace Habanero.Test.BO
         public void Test_AsString_PreviousValue_SecondChange()
         {
             //--------------- Set up test pack ------------------
-            BOKey boKey = CreateBOKeyGuid();
+            IBOKey boKey = CreateBOKeyGuid();
             boKey[0].Value = Guid.NewGuid();
             string expectedPreviousValue = boKey.AsString_CurrentValue();
             Guid guid = Guid.NewGuid();
@@ -293,7 +293,7 @@ namespace Habanero.Test.BO
         public void Test_AsString_PreviousValue_TwoPropKey()
         {
             //--------------- Set up test pack ------------------
-            BOKey boKey = CreateBOKeyGuidAndString();
+            IBOKey boKey = CreateBOKeyGuidAndString();
             string expectedPreviousValue = boKey.AsString_CurrentValue();
             Guid guid = Guid.NewGuid();
             string str = TestUtil.GetRandomString();
@@ -312,7 +312,7 @@ namespace Habanero.Test.BO
         public void Test_AsString_PreviousValue_SecondChange_TwoPropKey()
         {
             //--------------- Set up test pack ------------------
-            BOKey boKey = CreateBOKeyGuidAndString();
+            IBOKey boKey = CreateBOKeyGuidAndString();
             boKey[0].Value = Guid.NewGuid();
             boKey[1].Value = TestUtil.GetRandomString();
             string expectedPreviousValue = boKey.AsString_CurrentValue();
@@ -330,7 +330,7 @@ namespace Habanero.Test.BO
 
 
 
-        private static BOKey CreateBOKeyGuid()
+        private static IBOKey CreateBOKeyGuid()
         {
             PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null)
                                    {ClassDef = ContactPersonTestBO.LoadDefaultClassDef()};
@@ -340,7 +340,7 @@ namespace Habanero.Test.BO
             return keyDef.CreateBOKey(propCol);
         }
 
-        private static BOKey CreateBOKeyGuidAndString()
+        private static IBOKey CreateBOKeyGuidAndString()
         {
             PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null)
                                    {ClassDef = ContactPersonTestBO.LoadDefaultClassDef()};
@@ -364,7 +364,7 @@ namespace Habanero.Test.BO
             propCol.Add(propDef2.CreateBOProp(false));
 
             KeyDef keyDef = new KeyDef {propDef1, propDef2};
-            BOKey boKey = keyDef.CreateBOKey(propCol);
+            IBOKey boKey = keyDef.CreateBOKey(propCol);
 
             boKey.Updated += UpdatedEventHandler;
             propCol["PropName1"].Value = "new value";
@@ -385,7 +385,7 @@ namespace Habanero.Test.BO
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef1.CreateBOProp(false));
             KeyDef keyDef = new KeyDef {propDef1};
-            BOKey boKey = keyDef.CreateBOKey(propCol);
+            IBOKey boKey = keyDef.CreateBOKey(propCol);
 
             //---------------Assert PreConditions---------------            
             
@@ -407,7 +407,7 @@ namespace Habanero.Test.BO
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef1.CreateBOProp(false));
             KeyDef keyDef = new KeyDef {propDef1};
-            BOKey boKey = keyDef.CreateBOKey(propCol);
+            IBOKey boKey = keyDef.CreateBOKey(propCol);
 
             //---------------Assert PreConditions---------------            
 
@@ -433,7 +433,7 @@ namespace Habanero.Test.BO
             KeyDef keyDef = new KeyDef();
             keyDef.Add(propDef1);
             keyDef.Add(propDef2);
-            BOKey boKey = keyDef.CreateBOKey(propCol);
+            IBOKey boKey = keyDef.CreateBOKey(propCol);
 
             //---------------Assert PreConditions---------------            
 

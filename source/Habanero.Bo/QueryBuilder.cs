@@ -83,7 +83,7 @@ namespace Habanero.BO
             foreach (ClassDef thisClassDef in classDefsToSearch)
             {
                 if (!thisClassDef.IsUsingSingleTableInheritance()) continue;
-                SuperClassDef superClassDef = thisClassDef.SuperClassDef;
+                ISuperClassDef superClassDef = thisClassDef.SuperClassDef;
                 discriminator = superClassDef.Discriminator;
                 if (String.IsNullOrEmpty(discriminator)) continue;
                 if (!selectQuery.Fields.ContainsKey(discriminator))
@@ -221,10 +221,12 @@ namespace Habanero.BO
                 ClassDef superClassDef = currentClassDef.SuperClassClassDef;
                 Source baseSource = new Source(superClassDef.ClassNameExcludingTypeParameter, superClassDef.TableName);
                 Source.Join join = new Source.Join(rootSource, baseSource);
-                IPropDef basePrimaryKeyPropDef = superClassDef.PrimaryKeyDef[0];
-                if (currentClassDef.PrimaryKeyDef != null)
+                PrimaryKeyDef superClassPrimaryKeyDef = (PrimaryKeyDef) superClassDef.PrimaryKeyDef;
+                IPropDef basePrimaryKeyPropDef = superClassPrimaryKeyDef[0];
+                PrimaryKeyDef currentPrimaryKeyDef = (PrimaryKeyDef) currentClassDef.PrimaryKeyDef;
+                if (currentPrimaryKeyDef != null)
                 {
-                    IPropDef thisPrimaryKeyPropDef = currentClassDef.PrimaryKeyDef[0];
+                    IPropDef thisPrimaryKeyPropDef = currentPrimaryKeyDef[0];
                     join.JoinFields.Add(new Source.Join.JoinField(
                                             new QueryField(thisPrimaryKeyPropDef.PropertyName,
                                                            thisPrimaryKeyPropDef.DatabaseFieldName,

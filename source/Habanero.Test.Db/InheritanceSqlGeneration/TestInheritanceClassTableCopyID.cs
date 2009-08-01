@@ -49,9 +49,10 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
 
         protected override void SetupInheritanceSpecifics()
         {
+            SuperClassDef superClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
             Circle.GetClassDef().SuperClassDef =
-                new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
-            Circle.GetClassDef().SuperClassDef.ID = "CircleID";
+                superClassDef;
+            superClassDef.ID = "CircleID";
         }
 
         protected override void SetStrID()
@@ -120,7 +121,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestSuperClassKey()
         {
-            BOKey msuperKey = BOPrimaryKey.GetSuperClassKey(Circle.GetClassDef(), objCircle);
+            IBOKey msuperKey = BOPrimaryKey.GetSuperClassKey(Circle.GetClassDef(), objCircle);
             Assert.IsTrue(msuperKey.Contains("ShapeID"), "Super class key should contain the ShapeID property");
             Assert.AreEqual(1, msuperKey.Count, "Super class key should only have one prop");
             Assert.AreEqual(msuperKey["ShapeID"].Value, objCircle.ID["CircleID"].Value,

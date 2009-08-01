@@ -31,10 +31,10 @@ namespace Habanero.BO.Loaders
     public class XmlRelationshipLoader : XmlLoader
     {
         private readonly string _className;
-        private PropDefCol _propDefCol;
+        private IPropDefCol _propDefCol;
         private string _relatedAssemblyName;
         private string _relatedClassName;
-        private RelKeyDef _relKeyDef;
+        private IRelKeyDef _relKeyDef;
         private string _name;
         private string _type;
         private bool _keepReferenceToRelatedObject;
@@ -73,7 +73,7 @@ namespace Habanero.BO.Loaders
         /// <param name="xmlRelationshipDef">The xml string</param>
         /// <param name="propDefs">The property definition collection</param>
         /// <returns>Returns a relationship definition</returns>
-        public RelationshipDef LoadRelationship(string xmlRelationshipDef, PropDefCol propDefs)
+        public RelationshipDef LoadRelationship(string xmlRelationshipDef, IPropDefCol propDefs)
         {
             return LoadRelationship(this.CreateXmlElement(xmlRelationshipDef), propDefs);
         }
@@ -84,7 +84,7 @@ namespace Habanero.BO.Loaders
         /// <param name="relationshipElement">The xml element</param>
         /// <param name="propDefs">The property definition collection</param>
         /// <returns>Returns a relationship definition</returns>
-        public RelationshipDef LoadRelationship(XmlElement relationshipElement, PropDefCol propDefs)
+        public RelationshipDef LoadRelationship(XmlElement relationshipElement, IPropDefCol propDefs)
         {
             _propDefCol = propDefs;
             return (RelationshipDef) this.Load(relationshipElement);
@@ -105,7 +105,7 @@ namespace Habanero.BO.Loaders
         {
             if (_type == "single")
             {
-                SingleRelationshipDef relationshipDef = _defClassFactory.CreateSingleRelationshipDef
+                IRelationshipDef relationshipDef = _defClassFactory.CreateSingleRelationshipDef
                     (_name, _relatedAssemblyName, _relatedClassName, _relKeyDef, _keepReferenceToRelatedObject,
                      _deleteParentAction, _insertParentAction, _relationshipType);
                 relationshipDef.OwningBOHasForeignKey = _owningBOHasForeignKey;
@@ -115,7 +115,7 @@ namespace Habanero.BO.Loaders
             }
             if (_type == "multiple")
             {
-                MultipleRelationshipDef relationshipDef = _defClassFactory.CreateMultipleRelationshipDef
+                IRelationshipDef relationshipDef = _defClassFactory.CreateMultipleRelationshipDef
                     (_name, _relatedAssemblyName, _relatedClassName, _relKeyDef, _keepReferenceToRelatedObject, _orderBy,
                      _deleteParentAction, _insertParentAction, _relationshipType, _timeout);
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;

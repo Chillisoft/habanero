@@ -301,7 +301,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="lBOPropCol">The master property collection</param>
         /// <returns>Returns a new BOKey object that mirrors this
         /// key definition</returns>
-        public virtual BOKey CreateBOKey(IBOPropCol lBOPropCol)
+        public virtual IBOKey CreateBOKey(IBOPropCol lBOPropCol)
         {
             BOKey lBOKey = new BOKey(this);
             foreach (IPropDef lPropDef in _propDefs.Values)
