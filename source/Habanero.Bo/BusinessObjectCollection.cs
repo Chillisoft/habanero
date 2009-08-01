@@ -55,7 +55,7 @@ namespace Habanero.BO
     /// </summary>
     [Serializable]
     public class BusinessObjectCollection<TBusinessObject>
-        : List<TBusinessObject>, IBusinessObjectCollection, IBusinessObjectCollectionInternal, ISerializable
+        : List<TBusinessObject>, IBusinessObjectCollectionInternal, ISerializable
         where TBusinessObject : class, IBusinessObject, new()
     {
         private const string COUNT = "Count";
@@ -92,7 +92,6 @@ namespace Habanero.BO
         protected readonly List<TBusinessObject> _removedBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _addedBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _markedForDeleteBusinessObjects = new List<TBusinessObject>();
-        private readonly List<TBusinessObject> _mainCollection = new List<TBusinessObject>();
         private readonly EventHandler<BOEventArgs> _savedEventHandler;
         private readonly EventHandler<BOEventArgs> _deletedEventHandler;
         private readonly EventHandler<BOEventArgs> _restoredEventHandler;
