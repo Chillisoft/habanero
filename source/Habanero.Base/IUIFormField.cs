@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
+using Habanero.BO.ClassDefinition;
 
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base
 {
     ///<summary>
     /// interface for a ui form field

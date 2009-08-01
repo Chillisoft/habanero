@@ -131,24 +131,9 @@
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\FilterDef.cs" />
     <Compile Include="ClassDefinition\FilterPropertyDef.cs" />
-    <Compile Include="ClassDefinition\IFilterDef.cs" />
-    <Compile Include="ClassDefinition\IFilterPropertyDef.cs" />
-    <Compile Include="ClassDefinition\ITrigger.cs" />
-    <Compile Include="ClassDefinition\ITriggerCol.cs" />
-    <Compile Include="ClassDefinition\IUIDef.cs" />
-    <Compile Include="ClassDefinition\IUIForm.cs" />
-    <Compile Include="ClassDefinition\IUIFormColumn.cs" />
-    <Compile Include="ClassDefinition\IUIFormField.cs" />
-    <Compile Include="ClassDefinition\IUIFormGrid.cs" />
-    <Compile Include="ClassDefinition\IUIFormTab.cs" />
-    <Compile Include="ClassDefinition\IUIGrid.cs" />
-    <Compile Include="ClassDefinition\IUIGridColumn.cs" />
-    <Compile Include="ClassDefinition\LayoutStyle.cs" />
-    <Compile Include="ClassDefinition\PropAlignment.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />
     <Compile Include="ClassDefinition\Trigger.cs" />
     <Compile Include="ClassDefinition\UIDef.cs" />
-    <Compile Include="ClassDefinition\UIDefCol.cs" />
     <Compile Include="ClassDefinition\UIForm.cs" />
     <Compile Include="ClassDefinition\UIFormColumn.cs" />
     <Compile Include="ClassDefinition\UIFormField.cs" />
@@ -173,6 +158,7 @@
     <Compile Include="IBusinessObjectLoader.cs" />
     <Compile Include="IDataAccessor.cs" />
     <Compile Include="IDataSetProvider.cs" />
+    <Compile Include="ClassDefinition\IDefClassFactory.cs" />
     <Compile Include="Loaders\ClassDefsXmlValidator.cs" />
     <Compile Include="Loaders\ClassDefValidator.cs" />
     <Compile Include="Loaders\XmlFilterLoader.cs" />
@@ -245,7 +231,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassDefinition\DefClassFactory.cs" />
-    <Compile Include="ClassDefinition\IDefClassFactory.cs" />
     <Compile Include="ClassDefinition\KeyDef.cs">
       <SubType>Code</SubType>
     </Compile>

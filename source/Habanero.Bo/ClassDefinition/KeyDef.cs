@@ -80,7 +80,6 @@ namespace Habanero.BO.ClassDefinition
         /// an underscore.</param>
         public KeyDef(string keyName)
         {
-            KeyNameForDisplay = "";
             //if (string.IsNullOrEmpty(keyName)) throw new ArgumentNullException("keyName");
             _propDefs = new Dictionary<string, IPropDef>();
             KeyName = keyName;
@@ -113,11 +112,9 @@ namespace Habanero.BO.ClassDefinition
             set
             {
                 _keyName = value;
-                KeyNameForDisplay = value;
-                if (String.IsNullOrEmpty(_keyName))
+               if (String.IsNullOrEmpty(_keyName))
                 {
                     _keyName = "";
-                    KeyNameForDisplay = "";
                     _buildKeyName = true;
                 }
                 UpdateKeyNameBuildt();
@@ -146,10 +143,10 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-        /// <summary>
-        /// Returns just the key name as given by the user
-        /// </summary>
-        public string KeyNameForDisplay { get; set; }
+        ///// <summary>
+        ///// Returns just the key name as given by the user
+        ///// </summary>
+        //public string KeyNameForDisplay { get; set; }
 
         /// <summary>
         /// Gets and sets the message to show to the user if a key validation
@@ -313,23 +310,6 @@ namespace Habanero.BO.ClassDefinition
             }
             return lBOKey;
         }
-
-        #region IEnumerable<PropDef> Members
-
-        ///<summary>
-        ///Returns an enumerator that iterates through the collection.
-        ///</summary>
-        ///
-        ///<returns>
-        ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
-        ///</returns>
-        ///<filterpriority>1</filterpriority>
-        IEnumerator<IPropDef> IEnumerable<IPropDef>.GetEnumerator()
-        {
-            return _propDefs.Values.GetEnumerator();
-        }
-
-        #endregion
 
         #region IEnumerable Members
 

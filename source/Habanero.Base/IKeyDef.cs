@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -30,7 +31,7 @@ namespace Habanero.Base
     /// together in some way (e.g. for a composite alternate 
     /// key, the combination of properties is required to be unique).
     /// </summary>
-    public interface IKeyDef: IEnumerable<IPropDef>
+    public interface IKeyDef: IEnumerable
     {
         /// <summary>
         /// A method used by BOKey to determine whether to check for
@@ -48,14 +49,11 @@ namespace Habanero.Base
         string KeyName { get;  set; }
 
         /// <summary>
-        /// Returns just the key name as given by the user
-        /// </summary>
-        string KeyNameForDisplay { get;  set; }
-
-        /// <summary>
         /// Gets and sets the message to show to the user if a key validation
         /// fails.  A default message will be provided if this is nto set.
         /// </summary>
         string Message { get; set; }
+
+        void Add(IPropDef propDef);
     }
 }

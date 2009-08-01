@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
@@ -43,6 +44,21 @@ namespace Habanero.Base
         /// Returns the error message for if the rule fails.
         /// </summary>
         string Message { get; set; }
+
+        /// <summary>
+        /// Returns the list of parameters to the rule - individual pairs
+        /// of rule type and rule value that make up the composite rule
+        /// </summary>
+        Dictionary<string, object> Parameters { get; set; }
+
+        /// <summary>
+        /// Returns the list of available parameter names for the rule.
+        /// This method must be implemented by creating a list of the names
+        /// of each type of rule available for the class, such as "min" and
+        /// "max" for integers.
+        /// </summary>
+        /// <returns>A list of the parameters that this rule uses</returns>
+        List<string> AvailableParameters { get; }
 
         /// <summary>
         /// Indicates whether the property value is valid against the rules

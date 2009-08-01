@@ -51,7 +51,7 @@ namespace Habanero.BO
 		{
 			Name = name;
 			Message = message;
-			_parameters = FillParameters(AvailableParameters(), _parameters);
+			_parameters = FillParameters(AvailableParameters, _parameters);
 		}
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Habanero.BO
 			get { return _parameters; }
 			set
 			{
-				_parameters = FillParameters(AvailableParameters(), value);
+				_parameters = FillParameters(AvailableParameters, value);
 				SetupParameters();
 			}
     	}
@@ -89,31 +89,22 @@ namespace Habanero.BO
 		/// </summary>
 		protected internal abstract void SetupParameters();
 
-    	/// <summary>
-        /// Returns the list of available parameter names for the rule.
-        /// This method must be implemented by creating a list of the names
-        /// of each type of rule available for the class, such as "min" and
-        /// "max" for integers.
-    	/// </summary>
-    	/// <returns>A list of the parameters that this rule uses</returns>
-		protected internal abstract List<string> AvailableParameters();
-
-        /// <summary>
-        /// Returns the list of available parameter names for the rule
-        /// </summary>
-        /// <returns>Returns a string</returns>
-		protected internal virtual string AvailableParametersString()
-		{
-			string list = "";
-			string delimiter = "";
-			foreach (string availableParameter in AvailableParameters())
-			{
-				list += delimiter + "'" + availableParameter + "'";
-				delimiter = ", ";
-			}
-			list = "{" + list + "}";
-			return list;
-		}
+        ///// <summary>
+        ///// Returns the list of available parameter names for the rule
+        ///// </summary>
+        ///// <returns>Returns a string</returns>
+        //protected internal virtual string AvailableParametersString()
+        //{
+        //    string list = "";
+        //    string delimiter = "";
+        //    foreach (string availableParameter in AvailableParameters())
+        //    {
+        //        list += delimiter + "'" + availableParameter + "'";
+        //        delimiter = ", ";
+        //    }
+        //    list = "{" + list + "}";
+        //    return list;
+        //}
 
         /// <summary>
         /// Returns the rule name
@@ -157,5 +148,7 @@ namespace Habanero.BO
                                                 propValue, displayName, Name);
             return errorMessage;
         }
+
+        public abstract List<string> AvailableParameters { get; }
     }
 }

@@ -1,4 +1,4 @@
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base
 {
     /// <summary>
     /// An enumeration to specify a horizontal alignment in a grid

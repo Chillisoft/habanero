@@ -51,15 +51,6 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestLoadKeyWithName_KeyNameForDisplayNotEqualKeyName()
-        {
-            KeyDef def = _xmlKeyLoader.LoadKey(@"<key name=""Key 1""><prop name=""TestProp"" /></key>", _propDefCol);
-            Assert.AreEqual(1, def.Count);
-            Assert.AreEqual("Key 1_TestProp", def.KeyName);
-            Assert.AreEqual("Key 1", def.KeyNameForDisplay);
-        }
-
-        [Test]
         public void TestLoadKeyWithMultipleProps()
         {
             _propDefCol.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
@@ -68,7 +59,6 @@ namespace Habanero.Test.BO.Loaders
                     @"<key name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>", _propDefCol);
             Assert.AreEqual(2, def.Count);
             Assert.AreEqual("Key1_TestProp_TestProp2", def.KeyName);
-            Assert.AreEqual("Key1", def.KeyNameForDisplay);
         }
 
         [Test]

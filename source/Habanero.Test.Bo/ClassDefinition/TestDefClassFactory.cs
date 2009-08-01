@@ -32,7 +32,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            PropRuleDecimal rule = defClassFactory.CreatePropRuleDecimal("SomeName", "SomeMessage");
+            PropRuleDecimal rule = (PropRuleDecimal) defClassFactory.CreatePropRuleDecimal("SomeName", "SomeMessage");
             //---------------Test Result -----------------------
             Assert.AreEqual("SomeName", rule.Name);
             Assert.AreEqual("SomeMessage", rule.Message);
@@ -48,7 +48,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            PropRuleSingle rule = defClassFactory.CreatePropRuleSingle("SomeName", "SomeMessage");
+            PropRuleSingle rule = (PropRuleSingle) defClassFactory.CreatePropRuleSingle("SomeName", "SomeMessage");
             //---------------Test Result -----------------------
             Assert.AreEqual("SomeName", rule.Name);
             Assert.AreEqual("SomeMessage", rule.Message);
@@ -63,7 +63,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            PropRuleDouble rule = defClassFactory.CreatePropRuleDouble("SomeName", "SomeMessage");
+            PropRuleDouble rule = (PropRuleDouble) defClassFactory.CreatePropRuleDouble("SomeName", "SomeMessage");
             //---------------Test Result -----------------------
             Assert.AreEqual("SomeName", rule.Name);
             Assert.AreEqual("SomeMessage", rule.Message);

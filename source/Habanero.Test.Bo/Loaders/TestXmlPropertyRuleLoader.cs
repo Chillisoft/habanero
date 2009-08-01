@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.Loaders;
@@ -72,7 +73,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestRuleOfInteger()
         {
-            PropRuleBase rule =
+            IPropRule rule =
                 _loader.LoadRule(typeof (int).Name,
                     @"<rule name=""Test Rule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
             Assert.AreEqual("PropRuleInteger", rule.GetType().Name, "Incorrect rule type created.");
@@ -87,7 +88,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleIntegerNoValues()
         {
-            PropRuleBase rule =
+            IPropRule rule =
                 _loader.LoadRule(typeof (int).Name,
                     @"<rule name=""TestRule"" message=""Test Message""><add key=""max"" value=""1""/></rule>");
             Assert.AreEqual(int.MinValue, ((PropRuleInteger) rule).MinValue);
@@ -109,7 +110,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleString()
         {
-            PropRuleBase rule =
+            IPropRule rule =
                 _loader.LoadRule(typeof (string).Name,
                     @"<rule name=""TestString"" message=""String Test Message""><add key=""maxLength"" value=""100""/></rule>");
 
@@ -132,7 +133,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleStringAttributes()
         {
-            PropRuleBase rule = _loader.LoadRule(typeof (string).Name,
+            IPropRule rule = _loader.LoadRule(typeof (string).Name,
                 @"<rule name=""TestString"" message=""String Test Message"" >
                             <add key=""patternMatch"" value=""Test Pattern"" />
                             <add key=""minLength"" value=""5"" />          
@@ -149,7 +150,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDate()
         {
-            PropRuleBase rule = _loader.LoadRule(typeof (DateTime).Name,
+            IPropRule rule = _loader.LoadRule(typeof (DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""01 Feb 2004"" />
                             <add key=""max"" value=""09 Oct 2004"" />
@@ -166,7 +167,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDate_Today()
         {
-            PropRuleBase rule = _loader.LoadRule(typeof(DateTime).Name,
+            IPropRule rule = _loader.LoadRule(typeof(DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""Today"" />
                             <add key=""max"" value=""Today"" />
@@ -180,7 +181,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDate_MinValue_Today()
         {
-            PropRuleBase rule = _loader.LoadRule(typeof(DateTime).Name,
+            IPropRule rule = _loader.LoadRule(typeof(DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""Today"" />
                             <add key=""max"" value=""09 Oct 2004"" />
@@ -194,7 +195,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDate_MaxValue_Today()
         {
-            PropRuleBase rule = _loader.LoadRule(typeof(DateTime).Name,
+            IPropRule rule = _loader.LoadRule(typeof(DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""01 Feb 2004"" />
                             <add key=""max"" value=""Today"" />
@@ -208,7 +209,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDate_Now()
         {
-            PropRuleBase rule = _loader.LoadRule(typeof(DateTime).Name,
+            IPropRule rule = _loader.LoadRule(typeof(DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""Now"" />
                             <add key=""max"" value=""Now"" />
@@ -223,7 +224,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDecimal()
         {
-            PropRuleBase rule = _loader.LoadRule(typeof (Decimal).Name,
+            IPropRule rule = _loader.LoadRule(typeof (Decimal).Name,
                 @"<rule name=""TestDec"" >
                             <add key=""min"" value=""1.5"" />
                             <add key=""max"" value=""8.2"" />
@@ -238,7 +239,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDecimalNoValues()
         {
-            PropRuleBase rule =
+            IPropRule rule =
                 _loader.LoadRule(typeof (Decimal).Name, @"<rule name=""TestDec""><add key=""max"" value=""1""/></rule>");
             Assert.AreEqual(Decimal.MinValue, ((PropRuleDecimal) rule).MinValue);
             rule =
@@ -258,7 +259,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestCustomRuleClass()
         {
-            PropRuleBase rule = _loader.LoadRule("CustomProperty",
+            IPropRule rule = _loader.LoadRule("CustomProperty",
                 @"<rule name=""TestCustom"" class=""Habanero.Test.BO.Loaders.MyRule"" assembly=""Habanero.Test.BO"">
                             <add key=""bob"" value=""billy"" />
                         </rule>");
@@ -299,11 +300,14 @@ namespace Habanero.Test.BO.Loaders
             get { return _bob; }
         }
 
-        protected internal override List<string> AvailableParameters()
+        public override List<string> AvailableParameters
         {
-            List<string> parameters = new List<string>();
-            parameters.Add("bob");
-            return parameters;
+            get
+            {
+                List<string> parameters = new List<string>();
+                parameters.Add("bob");
+                return parameters;
+            }
         }
     }
 }

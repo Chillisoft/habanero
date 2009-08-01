@@ -38,7 +38,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="sort"></param>
         ///<param name="timeout">the timeout period in milliseconds. This is the period that the lookup list will cached (i.e will not be reloaded from the database between successive calls)</param>
         ///<returns></returns>
-        BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort, int timeout);
+        ILookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort, int timeout);
 
         ///<summary>
         ///</summary>
@@ -57,7 +57,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="displayValueDictionary"></param>
         ///<returns></returns>
-        SimpleLookupList CreateSimpleLookupList(Dictionary<string, string> displayValueDictionary);
+        ILookupList CreateSimpleLookupList(Dictionary<string, string> displayValueDictionary);
         
         ///<summary>
         ///</summary>
@@ -73,12 +73,12 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="keyName"></param>
         ///<returns></returns>
-        KeyDef CreateKeyDef(string keyName);
+        IKeyDef CreateKeyDef(string keyName);
 
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        PrimaryKeyDef CreatePrimaryKeyDef();
+        IPrimaryKeyDef CreatePrimaryKeyDef();
 
         ///<summary>
         ///</summary>
@@ -95,35 +95,35 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="description"></param>
         ///<param name="keepValuePrivate"></param>
         ///<returns></returns>
-        PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate);
+        IPropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate);
 
         ///<summary>
         ///</summary>
         ///<param name="name"></param>
         ///<param name="message"></param>
         ///<returns></returns>
-        PropRuleDate CreatePropRuleDate(string name, string message);
+        IPropRule CreatePropRuleDate(string name, string message);
 
         ///<summary>
         ///</summary>
         ///<param name="name"></param>
         ///<param name="message"></param>
         ///<returns></returns>
-        PropRuleDecimal CreatePropRuleDecimal(string name, string message);
+        IPropRule CreatePropRuleDecimal(string name, string message);
 
         ///<summary>
         ///</summary>
         ///<param name="name"></param>
         ///<param name="message"></param>
         ///<returns></returns>
-        PropRuleInteger CreatePropRuleInteger(string name, string message);
+        IPropRule CreatePropRuleInteger(string name, string message);
 
         ///<summary>
         ///</summary>
         ///<param name="name"></param>
         ///<param name="message"></param>
         ///<returns></returns>
-        PropRuleString CreatePropRuleString(string name, string message);
+        IPropRule CreatePropRuleString(string name, string message);
 
         ///<summary>
         /// Creates a Single Relationship Definitions <see cref="SingleRelationshipDef"/>
@@ -281,7 +281,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="name"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        PropRuleSingle CreatePropRuleSingle(string name, string message);
+        IPropRule CreatePropRuleSingle(string name, string message);
 
         /// <summary>
         /// Creates a <see cref="PropRuleDouble"/>
@@ -289,6 +289,6 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="name"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        PropRuleDouble CreatePropRuleDouble(string name, string message);
+        IPropRule CreatePropRuleDouble(string name, string message);
 	}
 }

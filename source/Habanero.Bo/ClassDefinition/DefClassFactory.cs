@@ -38,7 +38,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="sort"></param>
         ///<param name="timeout">the timeout period in milliseconds. This is the period that the lookup list will cached (i.e will not be reloaded from the database between successive calls)</param>
         ///<returns></returns>
-        public BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort, int timeout)
+        public ILookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort, int timeout)
 		{
 			return new BusinessObjectLookupList(assemblyName, className, criteria, sort, timeout);
 		}
@@ -82,7 +82,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="keyName"></param>
         ///<returns></returns>
-        public KeyDef CreateKeyDef(string keyName)
+        public IKeyDef CreateKeyDef(string keyName)
 		{
 			return new KeyDef(keyName);
 		}
@@ -90,7 +90,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         ///</summary>
         ///<returns></returns>
-        public PrimaryKeyDef CreatePrimaryKeyDef()
+        public IPrimaryKeyDef CreatePrimaryKeyDef()
 		{
 			return new PrimaryKeyDef();
 		}
@@ -110,7 +110,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="description"></param>
         ///<param name="keepValuePrivate"></param>
         ///<returns></returns>
-        public PropDef CreatePropDef(string propertyName, string assemblyName, string typeName,
+        public IPropDef CreatePropDef(string propertyName, string assemblyName, string typeName,
             PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString,
             bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate)
         {
@@ -122,7 +122,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="name"></param>
         ///<param name="message"></param>
         ///<returns></returns>
-        public PropRuleDate CreatePropRuleDate(string name, string message)
+        public IPropRule CreatePropRuleDate(string name, string message)
 		{
 			return new PropRuleDate(name, message, null);
 		}
@@ -132,7 +132,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="name"></param>
         ///<param name="message"></param>
         ///<returns></returns>
-        public PropRuleDecimal CreatePropRuleDecimal(string name, string message)
+        public IPropRule CreatePropRuleDecimal(string name, string message)
 		{
 			return new PropRuleDecimal(name, message, null);
 		}
@@ -142,7 +142,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="name"></param>
         ///<param name="message"></param>
         ///<returns></returns>
-        public PropRuleInteger CreatePropRuleInteger(string name, string message)
+        public IPropRule CreatePropRuleInteger(string name, string message)
 		{
 			return new PropRuleInteger(name, message, null);
 		}
@@ -152,7 +152,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="name"></param>
         ///<param name="message"></param>
         ///<returns></returns>
-        public PropRuleString CreatePropRuleString(string name, string message)
+        public IPropRule CreatePropRuleString(string name, string message)
 		{
 			return new PropRuleString(name, message, null);
 		}
@@ -162,7 +162,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="name"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public PropRuleSingle CreatePropRuleSingle(string name, string message)
+        public IPropRule CreatePropRuleSingle(string name, string message)
         {
             return new PropRuleSingle(name, message, null);
         }
@@ -173,7 +173,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="name"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public PropRuleDouble CreatePropRuleDouble(string name, string message)
+        public IPropRule CreatePropRuleDouble(string name, string message)
         {
             return new PropRuleDouble(name, message, null);
         }
@@ -223,7 +223,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="displayValueDictionary"></param>
         ///<returns></returns>
-        public SimpleLookupList CreateSimpleLookupList(Dictionary<string, string> displayValueDictionary)
+        public ILookupList CreateSimpleLookupList(Dictionary<string, string> displayValueDictionary)
 		{
 			return new SimpleLookupList(displayValueDictionary);
 		}

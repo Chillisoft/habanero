@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -40,7 +41,7 @@ namespace Habanero.Test.BO
         public void TestPropRuleDouble_MaxValue_ActualValueLT()
         {
             XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(Double).Name,
+            IPropRule rule = loader.LoadRule(typeof(Double).Name,
                                                 @"<rule name=""TestDouble""  >
                             <add key=""min"" value=""12.22"" />
                             <add key=""max"" value=""15.51"" />
@@ -63,7 +64,7 @@ namespace Habanero.Test.BO
         public void TestPropRuleDouble_MaxValue_ActualValueEquals()
         {
             XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(Double).Name,
+            IPropRule rule = loader.LoadRule(typeof(Double).Name,
                                                 @"<rule name=""TestDouble""  >
                             <add key=""min"" value=""12.22"" />
                             <add key=""max"" value=""15.51"" />
@@ -85,7 +86,7 @@ namespace Habanero.Test.BO
         public void TestPropRuleDouble_MaxValue_ActualValueGT()
         {
             XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(Double).Name,
+            IPropRule rule = loader.LoadRule(typeof(Double).Name,
                                                 @"<rule name=""TestDouble""  >
                             <add key=""min"" value=""12.22"" />
                             <add key=""max"" value=""15.51"" />

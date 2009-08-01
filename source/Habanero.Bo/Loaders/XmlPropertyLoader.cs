@@ -37,7 +37,7 @@ namespace Habanero.BO.Loaders
         private string _propertyName;
         private string _defaultValueString;
         private string _databaseFieldName;
-        private PropDef _propDef;
+        private IPropDef _propDef;
         private bool _compulsory;
         private bool _autoIncrementing;
         private int _length;

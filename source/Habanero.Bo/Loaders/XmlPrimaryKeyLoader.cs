@@ -19,6 +19,7 @@
 
 using System;
 using System.Xml;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -29,7 +30,7 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlPrimaryKeyLoader : XmlLoader
     {
-        private PrimaryKeyDef _primaryKeyDef;
+        private IPrimaryKeyDef _primaryKeyDef;
         private PropDefCol _propDefCol;
 
         /// <summary>

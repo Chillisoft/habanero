@@ -1,10 +1,11 @@
 using System;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base
 {
     /// <summary>
-    /// Provides an interface for a UI definition (see <see cref="UIDef"/>).  This consists of a <see cref="IUIGrid"/> and <see cref="IUIForm"/> definition.
+    /// Provides an interface for a UI definition.  This consists of a <see cref="IUIGrid"/> and <see cref="IUIForm"/> definition.
     /// </summary>
     public interface IUIDef
     {
@@ -54,5 +55,11 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="propertyName">The property name that you want the form field for</param>
         ///<returns>the form field or null</returns>
         IUIFormField GetFormField(string propertyName);
+
+        ///<summary>
+        /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
+        ///</summary>
+        ///<returns>a new collection that is a shallow copy of this collection</returns>
+        IUIDef Clone();
     }
 }

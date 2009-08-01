@@ -38,7 +38,7 @@ namespace Habanero.BO.ClassDefinition
     /// The Application developer should not usually deal with this class since it is usually created based on the class definition modelled
     ///   and stored in the ClassDef.Xml <see cref="XmlPrimaryKeyLoader"/>.
     /// </summary>
-    public class PrimaryKeyDef : KeyDef
+    public class PrimaryKeyDef : KeyDef, IPrimaryKeyDef
     {
         private bool mIsGUIDObjectID = true;
 

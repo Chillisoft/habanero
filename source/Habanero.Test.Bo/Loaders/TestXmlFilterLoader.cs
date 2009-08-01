@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
 

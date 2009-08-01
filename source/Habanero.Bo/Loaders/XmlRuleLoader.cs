@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
@@ -41,7 +42,7 @@ namespace Habanero.BO.Loaders
         private Dictionary<string, object> _ruleParameters;
         private string _class;
         private string _assembly;
-    	private PropRuleBase _propRule;
+    	private IPropRule _propRule;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -66,7 +67,7 @@ namespace Habanero.BO.Loaders
         /// <param name="propTypeName"></param>
         /// <param name="ruleXml">The xml string containing the rule</param>
         /// <returns>Returns the property rule object</returns>
-        public PropRuleBase LoadRule(string propTypeName, string ruleXml)
+        public IPropRule LoadRule(string propTypeName, string ruleXml)
         {
             _propTypeName = propTypeName;
             return this.LoadPropertyRule(this.CreateXmlElement(ruleXml));
@@ -122,7 +123,7 @@ namespace Habanero.BO.Loaders
                         "attribute was specified for a property rule that " +
                         "does not apply to the property rule. The specified " +
                         "'add' attribute was '" + keyAtt + "' but the allowed " +
-                        "attributes are " + _propRule.AvailableParametersString() + ".");
+                        "attributes are " + String.Join(", ", _propRule.AvailableParameters.ToArray()) + ".");
 				}
                 _ruleParameters[keyAtt] = valueAtt;
             	counter++;
@@ -169,7 +170,7 @@ namespace Habanero.BO.Loaders
         /// <param name="propertyRuleElement">The xml string containing the
         /// property rule</param>
         /// <param name="def">The property definition</param>
-        public void LoadRuleIntoProperty(string propertyRuleElement, PropDef def)
+        public void LoadRuleIntoProperty(string propertyRuleElement, IPropDef def)
         {
             def.AddPropRule( this.LoadRule(def.PropertyTypeName, propertyRuleElement));
         }
@@ -188,7 +189,7 @@ namespace Habanero.BO.Loaders
         /// Creates the Prop Rule for.
         /// </summary>
         /// <returns></returns>
-    	protected PropRuleBase CreatePropRule() {
+    	protected IPropRule CreatePropRule() {
             if (!string.IsNullOrEmpty(_class) && !string.IsNullOrEmpty(_assembly)) 
 			{
 				Type customPropRuleType = null;

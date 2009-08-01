@@ -17,7 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using Habanero.BO.ClassDefinition;
+using Habanero.Base;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
 

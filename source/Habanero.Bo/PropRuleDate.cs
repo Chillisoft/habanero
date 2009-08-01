@@ -194,11 +194,14 @@ namespace Habanero.BO
         /// Returns the list of available parameter names for the rule.
         /// </summary>
         /// <returns>A list of the parameters that this rule uses</returns>
-		protected internal override List<string> AvailableParameters()
-		{
-		    List<string> parameters = new List<string> {"min", "max"};
-            return parameters;
-		}
+        public override List<string> AvailableParameters
+        {
+            get
+            {
+                List<string> parameters = new List<string> { "min", "max" };
+                return parameters;
+            }
+        }
 
 
     	/// <summary>

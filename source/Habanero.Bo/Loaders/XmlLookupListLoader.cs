@@ -98,7 +98,7 @@ namespace Habanero.BO.Loaders
         /// <param name="def">The property definition to load into</param>
         /// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public static void LoadLookupListIntoProperty(string sourceElement, PropDef def, DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public static void LoadLookupListIntoProperty(string sourceElement, IPropDef def, DtdLoader dtdLoader, IDefClassFactory defClassFactory)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(sourceElement);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {

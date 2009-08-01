@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;

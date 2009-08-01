@@ -120,6 +120,8 @@
     <Compile Include="IBusinessObjectRule.cs" />
     <Compile Include="IConnectionStringFactory.cs" />
     <Compile Include="IDatabaseConnectionFactory.cs" />
+    <Compile Include="IFilterDef.cs" />
+    <Compile Include="IFilterPropertyDef.cs" />
     <Compile Include="InvalidRelationshipNameException.cs" />
     <Compile Include="Criteria\Criteria.cs" />
     <Compile Include="Criteria\CriteriaExpression.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="IConcurrencyControl.cs" />
     <Compile Include="IExpression.cs" />
     <Compile Include="IParameterSQLInfo.cs" />
+    <Compile Include="IPrimaryKeyDef.cs" />
     <Compile Include="IRelationshipDef.cs" />
     <Compile Include="IRelationshipDefCol.cs" />
     <Compile Include="IRelKeyDef.cs" />
@@ -175,7 +178,19 @@
     <Compile Include="ITransactionalDB.cs" />
     <Compile Include="ITransactionCommitter.cs" />
     <Compile Include="ITransactionLog.cs" />
+    <Compile Include="ITrigger.cs" />
+    <Compile Include="ITriggerCol.cs" />
+    <Compile Include="IUIDef.cs" />
+    <Compile Include="IUIForm.cs" />
+    <Compile Include="IUIFormColumn.cs" />
+    <Compile Include="IUIFormField.cs" />
+    <Compile Include="IUIFormGrid.cs" />
+    <Compile Include="IUIFormTab.cs" />
+    <Compile Include="IUIGrid.cs" />
+    <Compile Include="IUIGridColumn.cs" />
+    <Compile Include="LayoutStyle.cs" />
     <Compile Include="OrderCriteria.cs" />
+    <Compile Include="PropAlignment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -270,6 +285,7 @@
     <Compile Include="RSAPasswordCrypter.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="SqlFormatter.cs" />
+    <Compile Include="UIDefCol.cs" />
     <Compile Include="Util\ByteString.cs" />
     <Compile Include="Util\ConfigFileSettings.cs" />
     <Compile Include="Util\DateTimeUtilities.cs" />

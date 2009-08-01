@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
@@ -65,7 +66,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="def">The ui definition</param>
         /// <returns>Returns true if contained</returns>
-        public bool Contains(UIDef def)
+        public bool Contains(IUIDef def)
         {
             return Contains(def.Name);
         }
@@ -85,7 +86,7 @@ namespace Habanero.BO.ClassDefinition
         /// Removes the specified ui definition from the collection
         /// </summary>
         /// <param name="def">The ui definition to remove</param>
-        public void Remove(UIDef def)
+        public void Remove(IUIDef def)
         {
             _defs.Remove(def.Name);
         }
@@ -132,15 +133,15 @@ namespace Habanero.BO.ClassDefinition
             get { return _defs.Count; }
         }
 
-        private ClassDef _classDef;
+        private IClassDef _classDef;
 
         ///<summary>
         /// Returns the class definition for the UIDefCol.
         ///</summary>
-        public ClassDef ClassDef
+        public IClassDef ClassDef
         {
             get { return _classDef; }
-            internal set { _classDef = value;
+            set { _classDef = value;
                 foreach (KeyValuePair<string, IUIDef> def in _defs)
                 {
                     def.Value.ClassDef = value;
@@ -155,7 +156,7 @@ namespace Habanero.BO.ClassDefinition
         public UIDefCol Clone()
         {
             UIDefCol newUIDefCol = new UIDefCol();
-            foreach (UIDef def in this)
+            foreach (IUIDef def in this)
             {
                 newUIDefCol.Add(def.Clone());
             }
@@ -179,10 +180,10 @@ namespace Habanero.BO.ClassDefinition
             UIDefCol otherUIDefCol = obj as UIDefCol;
             if (otherUIDefCol == null) return false;
             if (this.Count != otherUIDefCol.Count) return false;
-            foreach (UIDef uiDef in this)
+            foreach (IUIDef uiDef in this)
             {
                 bool found = false;
-                foreach (UIDef otherUiDef in otherUIDefCol)
+                foreach (IUIDef otherUiDef in otherUIDefCol)
                 {
                     if (otherUiDef.Equals(uiDef))
                     {
@@ -204,7 +205,7 @@ namespace Habanero.BO.ClassDefinition
         public override int GetHashCode()
         {
             int hashCode = 0;
-            foreach (UIDef def in this)
+            foreach (IUIDef def in this)
             {
                 hashCode += def.GetHashCode();
             }

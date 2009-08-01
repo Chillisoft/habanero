@@ -252,7 +252,7 @@ namespace Habanero.BO.Loaders
                                   + "the '{1}' class, the propery '{2}' given in the "
                                   + "'name' attribute does not exist for the class or for any of it's superclasses. "
                                   + "Either add the property definition or check the spelling and "
-                                  + "capitalisation of the specified property.", keyDef.KeyNameForDisplay,
+                                  + "capitalisation of the specified property.", keyDef.KeyName,
                                   classDef.ClassName, propertyName));
                     }
                     IPropDef keyPropDef = allPropsForAClass[propertyName];

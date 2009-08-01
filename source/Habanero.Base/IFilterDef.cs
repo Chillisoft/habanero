@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.BO.ClassDefinition
+
+namespace Habanero.Base
 {
     /// <summary>
-    /// Provides an inteface for a filter definition. See <see cref="FilterDef"/>.  Consists of a number of <see cref="IFilterPropertyDef"/> objects and
+    /// Provides an inteface for a filter definition. See <see cref="IFilterDef"/>.  Consists of a number of <see cref="IFilterPropertyDef"/> objects and
     /// a mode (see <see cref="FilterModes"/>).
     /// </summary>
     public interface IFilterDef
     {
         /// <summary>
-        /// The list of <see cref="FilterPropertyDef"/>s which define each filter.
+        /// The list of <see cref="IFilterPropertyDef"/>s which define each filter.
         /// </summary>
         IList<IFilterPropertyDef> FilterPropertyDefs { get; set; }
 

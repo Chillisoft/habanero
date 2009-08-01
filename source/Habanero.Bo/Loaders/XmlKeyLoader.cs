@@ -30,7 +30,7 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlKeyLoader : XmlLoader
     {
-        private KeyDef _keyDef;
+        private IKeyDef _keyDef;
         private PropDefCol _propDefCol;
 
         /// <summary>
