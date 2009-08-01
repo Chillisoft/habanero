@@ -150,12 +150,11 @@ namespace Habanero.BO.ClassDefinition
             get { return _discriminator; }
             set
             {
-                if (!String.IsNullOrEmpty(value) && _orMapping != ORMapping.SingleTableInheritance)
+                if (!String.IsNullOrEmpty(value) && _orMapping == ORMapping.ConcreteTableInheritance)
                 {
                     throw new ArgumentException
                         ("A 'Discriminator' property has been specified "
-                         + "for a super-class definition where the OR-mapping type is other than "
-                         + "SingleTableInheritance.");
+                         + "for a super-class definition where the OR-mapping type is ConcreteTableInheritance");
                 }
                 _discriminator = value;
             }

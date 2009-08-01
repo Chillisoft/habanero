@@ -163,12 +163,14 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNull(def.Discriminator);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestClassTableInheritanceWithDiscriminatorException()
+        [Test]
+        public void TestClassTableInheritanceWithDiscriminatorIsValid()
         {
             SuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" discriminator=""abc"" />");
+            Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
+            Assert.AreEqual("abc", def.Discriminator);
         }
     }
 }

@@ -116,11 +116,10 @@ namespace Habanero.BO.Loaders
             }
 
             _discriminator = _reader.GetAttribute("discriminator");
-            if (!String.IsNullOrEmpty(_discriminator) && _orMapping != ORMapping.SingleTableInheritance)
+            if (!String.IsNullOrEmpty(_discriminator) && _orMapping == ORMapping.ConcreteTableInheritance)
             {
                 throw new InvalidXmlDefinitionException("In a superClass definition, a 'discriminator' " +
-                    "attribute has been specified for an OR-mapping type other than " +
-                    "SingleTableInheritance.");
+                    "attribute has been specified for OR-mapping type ConcreteTableInheritance");
             }
             else if (_discriminator == null && _orMapping == ORMapping.SingleTableInheritance)
             {
