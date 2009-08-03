@@ -19,6 +19,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base.Exceptions;
 
 
 namespace Habanero.Base
@@ -54,6 +55,15 @@ namespace Habanero.Base
         /// </summary>
         string Message { get; set; }
 
+        /// <summary>
+        /// Adds a property definition to the collection of definitions.
+        /// The object to be added cannot be null.  If a key name was not
+        /// originally provided at instantiation of the key definition, then
+        /// the new property definition's name will be appended to the key name.
+        /// </summary>
+        /// <param name="propDef">The PropDef object to add</param>
+        /// <exeption cref="HabaneroArgumentException">Will throw an exception
+        /// if the argument is null</exeption>
         void Add(IPropDef propDef);
 
         /// <summary>
@@ -76,6 +86,12 @@ namespace Habanero.Base
         /// <returns>Returns the property stored under that index</returns>
         IPropDef this[int index] { get; }
 
+        /// <summary>
+        /// Returns a count of the number of property definitions held
+        /// in this key definition
+        /// </summary>
+        int Count { get; }
+        
         /// <summary>
         /// Creates a new business object key (BOKey) using this key
         /// definition and its property definitions
