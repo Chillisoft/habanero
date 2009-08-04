@@ -118,6 +118,7 @@
     <Compile Include="ControlMappers\CollectionComboBoxMapper.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="ControlMappers\EditableGridControlMapper.cs" />
+    <Compile Include="ControlMappers\EnumComboBoxMapper.cs" />
     <Compile Include="ControlMappers\ExtendedComboBoxMapper.cs" />
     <Compile Include="ControlMappers\ListComboBoxMapper.cs" />
     <Compile Include="ControlMappers\RelationshipComboBoxMapper.cs" />

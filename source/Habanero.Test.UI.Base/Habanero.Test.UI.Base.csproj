@@ -106,6 +106,7 @@
     <Compile Include="Mappers\TestCollectionComboBoxMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mappers\TestEnumComboBoxMapper.cs" />
     <Compile Include="TestCollapsibleMenu.cs" />
     <Compile Include="TestCollapsibleMenuBuilder.cs" />
     <Compile Include="Grid\TestDataGridViewColumnCollection.cs" />
