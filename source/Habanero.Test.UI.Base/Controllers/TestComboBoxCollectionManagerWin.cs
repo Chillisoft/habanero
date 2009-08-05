@@ -196,6 +196,7 @@ namespace Habanero.Test.UI.Base.Controllers
             selectorManger.SetCollection(myBoCol, true);
             //---------------Test Result -----------------------
             Assert.AreSame(firstBo, selectorManger.SelectedBusinessObject);
+            Assert.AreEqual(4, cmbox.Items.Count);
         }
 
         [Test]

@@ -61,11 +61,8 @@ namespace Habanero.UI.Win
         {
             get
             {
-                if (_objectCollection.Count != base.Items.Count)
-                {
-                    _objectCollection = new ComboBoxObjectCollectionWin(base.Items);
-                }
-                return _objectCollection;
+                // The two collections get out of synch without a re-instantiation
+                return new ComboBoxObjectCollectionWin(base.Items);
             }
         }
 
