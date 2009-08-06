@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO;
@@ -40,6 +41,7 @@ namespace Habanero.DB
         private readonly IDatabaseConnection _databaseConnection;
         private IDbConnection _dbConnection;
         private IDbTransaction _dbTransaction;
+        private Dictionary<string, ITransactional> _transactionsExecutingToDataSource;
 
 
         ///<summary>
@@ -62,6 +64,7 @@ namespace Habanero.DB
         /// </summary>
         protected override void BeginDataSource()
         {
+            _transactionsExecutingToDataSource = new Dictionary<string, ITransactional>();
             IDatabaseConnection databaseConnection = GetDatabaseConnection();
             _dbConnection = databaseConnection.GetConnection();
             _dbConnection.Open();
@@ -119,7 +122,11 @@ namespace Habanero.DB
         /// </summary>
         protected override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
-            var transactionDB = (ITransactionalDB) transaction;
+            string transactionID = transaction.TransactionID();
+            if (_transactionsExecutingToDataSource.ContainsKey(transactionID)) return;
+            _transactionsExecutingToDataSource.Add(transactionID, transaction);
+
+            var transactionDB = (ITransactionalDB)transaction;
 
             if (transaction is TransactionalBusinessObjectDB)
             {

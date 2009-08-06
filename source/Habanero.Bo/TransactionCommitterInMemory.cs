@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -47,6 +48,7 @@ namespace Habanero.BO
     public class TransactionCommitterInMemory : TransactionCommitter
     {
         private readonly DataStoreInMemory _dataStoreInMemory;
+        private Dictionary<string, ITransactional> _transactionsExecutingToDataSource;
 
         ///<summary>
         /// Construct and transaction committer that works with the specified In memory data store.
@@ -62,7 +64,7 @@ namespace Habanero.BO
         /// </summary>
         protected override void BeginDataSource()
         {
-            
+            _transactionsExecutingToDataSource = new Dictionary<string, ITransactional>();
         }
 
         /// <summary>
@@ -105,6 +107,10 @@ namespace Habanero.BO
         /// <param name="transaction"></param>
         protected internal override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
+            string transactionID = transaction.TransactionID();
+            if (_transactionsExecutingToDataSource.ContainsKey(transactionID)) return;
+            _transactionsExecutingToDataSource.Add(transactionID, transaction);
+
             if (transaction is TransactionalBusinessObject)
             {
                 IBusinessObject businessObject = ((TransactionalBusinessObject) transaction).BusinessObject;
@@ -117,7 +123,6 @@ namespace Habanero.BO
                     DeleteRelatedChildren(businessObject);
                     DereferenceRelatedChildren(businessObject);
                     _dataStoreInMemory.Remove(businessObject);
-                    
                 }
             }
             base.ExecuteTransactionToDataSource(transaction);

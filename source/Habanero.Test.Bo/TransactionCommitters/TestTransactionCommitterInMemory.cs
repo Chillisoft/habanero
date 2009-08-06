@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.Structure;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -162,7 +163,7 @@ namespace Habanero.Test.BO.TransactionCommitters
                 StringAssert.Contains("Surname", ex.Message);
                 StringAssert.Contains("FirstName", ex.Message);
             }
-           
+
         }
 
         [Test]
@@ -186,7 +187,33 @@ namespace Habanero.Test.BO.TransactionCommitters
             AssertBOStateIsValidAfterDelete(address);
 
             AssertBusinessObjectNotInDataStore(contactPersonTestBO);
-            AssertBusinessObjectNotInDataStore( address);
+            AssertBusinessObjectNotInDataStore(address);
+        }
+
+        [Test]
+        public void TestDeleteRelated_WhenCircularDelete_ShouldResolve()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(dataStore);
+            Entity.LoadDefaultClassDef_WithCircularDeleteRelatedToSelf();
+            Entity entity1 = new Entity();
+            Entity entity2 = new Entity();
+            entity1.Relationships.SetRelatedObject("RelatedEntity", entity2);
+            entity2.Relationships.SetRelatedObject("RelatedEntity", entity1);
+            entity1.Save();
+            entity2.Save();
+            entity1.MarkForDelete();
+            TransactionCommitterInMemory committer = new TransactionCommitterInMemory(dataStore);
+            committer.AddBusinessObject(entity1);
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            AssertBOStateIsValidAfterDelete(entity1);
+            AssertBOStateIsValidAfterDelete(entity2);
+
+            AssertBusinessObjectNotInDataStore(entity1);
+            AssertBusinessObjectNotInDataStore(entity2);
         }
 
 

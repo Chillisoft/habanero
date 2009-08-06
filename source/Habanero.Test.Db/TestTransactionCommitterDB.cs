@@ -25,6 +25,7 @@ using Habanero.DB;
 using Habanero.Test.BO;
 using Habanero.Test.BO.ClassDefinition;
 using Habanero.Test.BO.TransactionCommitters;
+using Habanero.Test.Structure;
 using Habanero.Util;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -576,6 +577,29 @@ namespace Habanero.Test.DB
 
             AssertBusinessObjectNotInDatabase(contactPersonTestBO);
             AssertBusinessObjectNotInDatabase(address);
+        }
+
+        [Test]
+        public void TestDeleteRelated_WhenCircularDelete_ShouldResolve()
+        {
+            //---------------Set up test pack-------------------
+            Entity.LoadDefaultClassDef_WithCircularDeleteRelatedToSelf();
+            Entity entity1 = new Entity();
+            Entity entity2 = new Entity();
+            entity1.Relationships.SetRelatedObject("RelatedEntity", entity2);
+            entity2.Relationships.SetRelatedObject("RelatedEntity", entity1);
+            entity1.Save();
+            entity2.Save();
+            entity1.MarkForDelete();
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(entity1);
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            BOTestUtils.AssertBOStateIsValidAfterDelete(entity1);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(entity2);
+            AssertBusinessObjectNotInDatabase(entity1);
+            AssertBusinessObjectNotInDatabase(entity2);
         }
 
         [Test,

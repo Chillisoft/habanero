@@ -40,7 +40,7 @@ namespace Habanero.Test.Structure
         protected Entity(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            
+
         }
         public static ClassDef LoadDefaultClassDef()
         {
@@ -52,6 +52,32 @@ namespace Habanero.Test.Structure
 			    <primaryKey>
 			      <prop name=""EntityID"" />
 			    </primaryKey>
+			  </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadDefaultClassDef_WithCircularDeleteRelatedToSelf()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef = itsLoader.LoadClass(@"
+			  <class name=""Entity"" assembly=""Habanero.Test.Structure"" table=""table_Entity"">
+			    <property name=""EntityID"" type=""Guid"" databaseField=""field_Entity_ID"" compulsory=""true"" />
+			    <property name=""RelatedEntityID"" type=""Guid"" databaseField=""field_Entity_Type"" />
+                <primaryKey>
+			      <prop name=""EntityID"" />
+			    </primaryKey>
+				<relationship name=""RelatedEntity"" type=""single"" relatedClass=""Entity"" relatedAssembly=""Habanero.Test.Structure"" 
+                        owningBOHasForeignKey=""true"" reverseRelationship=""RelatedEntityReverse""
+                        deleteAction=""DeleteRelated"">
+					<relatedProperty property=""RelatedEntityID"" relatedProperty=""EntityID"" />
+				</relationship>
+				<relationship name=""RelatedEntityReverse"" type=""single"" relatedClass=""Entity"" relatedAssembly=""Habanero.Test.Structure"" 
+                        owningBOHasForeignKey=""false"" reverseRelationship=""RelatedEntity""
+                        deleteAction=""DoNothing"">
+					<relatedProperty property=""EntityID"" relatedProperty=""RelatedEntityID"" />
+				</relationship>
 			  </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
