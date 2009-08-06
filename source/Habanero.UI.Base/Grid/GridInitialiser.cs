@@ -231,7 +231,8 @@ namespace Habanero.UI.Base
                     //this._gridControl.Grid.Columns.Add(comboBoxCol);
 
                     IPropDef propDef = GetPropDef(classDef, gridColDef);
-                    ILookupList source = propDef.LookupList;
+                    ILookupList source = null;
+                    if (propDef != null) source = propDef.LookupList;
                     //(ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
                     if (source != null)
                     {

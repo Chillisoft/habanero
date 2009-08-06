@@ -53,6 +53,7 @@ namespace Habanero.Test.UI.Base
         protected abstract void AddControlToForm(IControlHabanero cntrl);
         protected abstract Type GetCustomGridColumnType();
         protected abstract Type GetDateTimeGridColumnType();
+        protected abstract Type GetComboBoxGridColumnType();
         protected abstract void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType);
 
 
@@ -78,6 +79,11 @@ namespace Habanero.Test.UI.Base
             protected override Type GetDateTimeGridColumnType()
             {
                 return typeof (Habanero.UI.Win.DataGridViewDateTimeColumn);
+            }
+
+            protected override Type GetComboBoxGridColumnType()
+            {
+                return typeof(System.Windows.Forms.DataGridViewComboBoxColumn);
             }
 
             protected override void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType)
@@ -111,6 +117,11 @@ namespace Habanero.Test.UI.Base
             {
                 throw new NotImplementedException("Not implemented for VWG");
                 //return typeof(Habanero.UI.VWG.DataGridViewDateTimeColumn);
+            }
+
+            protected override Type GetComboBoxGridColumnType()
+            {
+                return typeof(Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn);
             }
 
             protected override void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType)
@@ -478,15 +489,15 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
 
             initialiser.InitialiseGrid(classDef, uiGridDef, "test");
-                //---------------Test Result -----------------------
-                IDataGridViewColumn idColumn = grid.Grid.Columns[0];
-                AssertVerifyIDFieldSetUpCorrectly(idColumn);
+            //---------------Test Result -----------------------
+            IDataGridViewColumn idColumn = grid.Grid.Columns[0];
+            AssertVerifyIDFieldSetUpCorrectly(idColumn);
 
-                IDataGridViewColumn dataColumn1 = grid.Grid.Columns[1];
-                AssertThatDataColumnSetupCorrectly(classDef, columnDef1, dataColumn1);
+            IDataGridViewColumn dataColumn1 = grid.Grid.Columns[1];
+            AssertThatDataColumnSetupCorrectly(classDef, columnDef1, dataColumn1);
 
-                IDataGridViewColumn dataColumn2 = grid.Grid.Columns[2];
-                AssertThatDataColumnSetupCorrectly(classDef, columnDef2, dataColumn2);
+            IDataGridViewColumn dataColumn2 = grid.Grid.Columns[2];
+            AssertThatDataColumnSetupCorrectly(classDef, columnDef2, dataColumn2);
 
             //---------------Tear Down -------------------------          
         }
@@ -515,6 +526,57 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(uiDTColDef.Heading, column3.HeaderText);
             Assert.IsInstanceOfType(typeof(IDataGridViewColumn), column3);
             AssertGridColumnTypeAfterCast(column3, GetDateTimeGridColumnType());
+        }
+
+        [Test]
+        public virtual void TestInitGrid_LoadsDataGridViewComboBoxColumn()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
+            IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
+            IUIGridColumn uiComboColDef = uiGridDef[0];
+            uiComboColDef.GridControlTypeName = "DataGridViewComboBoxColumn";
+            AddControlToForm(grid);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, grid.Grid.Columns.Count);
+            IDataGridViewColumn column1 = grid.Grid.Columns[1];
+            Assert.AreEqual("RelatedID", column1.Name);
+            Assert.AreEqual(uiComboColDef.Heading, column1.HeaderText);
+            Assert.IsInstanceOfType(typeof(IDataGridViewComboBoxColumn), column1);
+            AssertGridColumnTypeAfterCast(column1, GetComboBoxGridColumnType());
+        }
+
+        [Test]
+        public virtual void TestInitGrid_LoadsDataGridViewComboBoxColumn_WhenPropDefMissing()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
+            IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
+            IUIGridColumn uiComboColDef = uiGridDef[0];
+            uiComboColDef.GridControlTypeName = "DataGridViewComboBoxColumn";
+            uiComboColDef.PropertyName = "OtherProp";
+            AddControlToForm(grid);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, grid.Grid.Columns.Count);
+            IDataGridViewColumn column1 = grid.Grid.Columns[1];
+            Assert.AreEqual("OtherProp", column1.Name);
+            Assert.AreEqual(uiComboColDef.Heading, column1.HeaderText);
+            Assert.IsInstanceOfType(typeof(IDataGridViewComboBoxColumn), column1);
+            AssertGridColumnTypeAfterCast(column1, GetComboBoxGridColumnType());
         }
 
         private IReadOnlyGridControl CreateReadOnlyGridControl()
