@@ -144,6 +144,7 @@
     <Compile Include="TestBOError.cs" />
     <Compile Include="TestBOObjectID.cs" />
     <Compile Include="TestBOPropInteger.cs" />
+    <Compile Include="TestBORelationshipMapper.cs" />
     <Compile Include="TestBOSerialisation.cs" />
     <Compile Include="TestBusinessObjectRules.cs" />
     <Compile Include="TestBusinessObjectSerialisationXML.cs" />

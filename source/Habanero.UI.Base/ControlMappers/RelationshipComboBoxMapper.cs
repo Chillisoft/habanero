@@ -238,7 +238,7 @@ namespace Habanero.UI.Base
             if (this.ClassDef != null) return;
 
             this.ClassDef = businessObject.ClassDef;
-            SetUpRelationship();
+            //SetUpRelationship();//This is being done by the line above
         }
 
         private void SetUpRelationship()
@@ -339,7 +339,7 @@ namespace Habanero.UI.Base
         /// </summary>
         protected virtual void InternalUpdateControlValueFromBo()
         {
-            object relatedBO = GetRelatedBusinessObject();
+            IBusinessObject relatedBO = GetRelatedBusinessObject();
             if (relatedBO != null)
             {
                 IComboBoxObjectCollection comboBoxObjectCollection = this.Control.Items;
@@ -363,7 +363,7 @@ namespace Habanero.UI.Base
         /// Returns the property value of the business object being mapped
         /// </summary>
         /// <returns>Returns the property value in appropriate object form</returns>
-        protected internal object GetRelatedBusinessObject()
+        protected internal IBusinessObject GetRelatedBusinessObject()
         {
             return _singleRelationship == null ? null : _singleRelationship.GetRelatedObject();
         }

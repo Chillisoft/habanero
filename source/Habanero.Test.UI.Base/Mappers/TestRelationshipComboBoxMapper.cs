@@ -64,7 +64,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_Constructor_ComboBoxNull_ShouldRaiseError()
+        public void Test_Constructor_WhenComboBoxNull_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
@@ -83,7 +83,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_Constructor_ControlFactoryNull_ShouldRaiseError()
+        public void Test_Constructor_WhenControlFactoryNull_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -103,7 +103,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_Constructor_relationshipNameNull_ShouldRaiseError()
+        public void Test_Constructor_WhenRelationshipNameNull_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -122,20 +122,20 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_Constructor_WhenRelationshipDoesNotExistInClassDef_ShouldRaiseError()
+        public void Test_BusinessObject_WhenSet_WhenRelationshipDoesNotExistInClassDef_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             const string relationshipName = "RelationshipDoesNotExist";
             RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
             //---------------Execute Test ----------------------
-            
+
             try
             {
                 mapper.BusinessObject = new ContactPersonTestBO();
-                Assert.Fail("expected Err");
+                Assert.Fail("expected HabaneroDeveloperException");
             }
-                //---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains
@@ -145,7 +145,53 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_Constructor_WhenRelationshipNotSingle_ShouldRaiseError()
+        public void Test_ClassDef_WhenSet_WhenRelationshipDoesNotExistInClassDef_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string relationshipName = "RelationshipDoesNotExist";
+            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                mapper.ClassDef = ClassDef.Get<ContactPersonTestBO>();
+                Assert.Fail("expected HabaneroDeveloperException");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains
+                    ("The relationship '" + relationshipName + "' does not exist on the ClassDef '"
+                     + _cpClassDef.ClassNameFull + "'", ex.Message);
+            }
+        }
+
+        [Test]
+        public void Test_ClassDef_WhenSet_WhenRelationshipExistsOnRelatedBo_ShouldNotRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string relationshipName = "RelationshipDoesNotExist";
+            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                mapper.ClassDef = ClassDef.Get<ContactPersonTestBO>();
+                Assert.Fail("expected HabaneroDeveloperException");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains
+                    ("The relationship '" + relationshipName + "' does not exist on the ClassDef '"
+                     + _cpClassDef.ClassNameFull + "'", ex.Message);
+            }
+        }
+
+        [Test]
+        public void Test_BusinessObject_WhenSet_WhenRelationshipNotSingle_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -155,9 +201,9 @@ namespace Habanero.Test.UI.Base.Mappers
             try
             {
                 mapper.BusinessObject = new OrganisationTestBO();
-                Assert.Fail("expected Err");
+                Assert.Fail("expected HabaneroDeveloperException");
             }
-                //---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains
@@ -169,13 +215,36 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_ControlShouldNotBeEnabled_WhenNoBusinessObjectSet()
+        public void Test_ClassDef_WhenSet_WhenRelationshipNotSingle_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string relationshipName = "ContactPeople";
+            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
+            //---------------Execute Test ----------------------
+            try
+            {
+                mapper.ClassDef = ClassDef.Get<OrganisationTestBO>();
+                Assert.Fail("expected HabaneroDeveloperException");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains
+                    ("The relationship '" + relationshipName + "' for the ClassDef '" + _orgClassDef.ClassNameFull
+                     +
+                     "' is not a single relationship. The 'RelationshipComboBoxMapper' can only be used for single relationships",
+                     ex.Message);
+            }
+        }
+
+        [Test]
+        public void Test_Constructor_ShouldHaveNoBusinessObjectSet_ShouldDisableControl()
         {
             //--------------- Set up test pack ------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             const string relationshipName = "Organisation";
             //--------------- Test Preconditions ----------------
-
             //--------------- Execute Test ----------------------
             RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
             //--------------- Test Result -----------------------
@@ -184,7 +253,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_SetBOCollection_WhenEmpty_ShouldSetItemsInComboBox()
+        public void Test_BusinessObjectCollection_WhenSetToEmpty_ShouldSetItemsInComboBox()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -200,7 +269,24 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_SetBOCollection_WhenOneItem_ShouldSetItemsInComboBox()
+        public void Test_BusinessObjectCollection_WhenSetToEmpty_WhenIncludeBlankItemFalse_ShouldNotIncludeBlankItem()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            BusinessObjectCollection<OrganisationTestBO> boCol;
+            RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
+            mapper.IncludeBlankItem = false;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(mapper.IncludeBlankItem);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObjectCollection = new BusinessObjectCollection<OrganisationTestBO>();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, cmbox.Items.Count, "Should not have blank item");
+            Assert.IsNull(cmbox.SelectedItem);
+        }
+
+        [Test]
+        public void Test_BusinessObjectCollection_WhenSetWithOneItem_ShouldSetItemsInComboBox()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -220,7 +306,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_ResetSetBOCollection_WhenHasOneItem_ShouldResetSetItemsInComboBox()
+        public void Test_BusinessObjectCollection_WithExistingCollectionSet_WhenSetToNewCollectionWithOneItem_ShouldResetItemsInComboBox()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -237,24 +323,24 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_SetBOCollection_WhenIncludeBlankITemFalse_DoesNotIncludeBlankItem()
+        public void Test_BusinessObject_WhenSet_WhenMappersClassDefIsNull_ShouldSetClassDefFromBo()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             BusinessObjectCollection<OrganisationTestBO> boCol;
             RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
-            mapper.IncludeBlankItem = false;
+            ContactPersonTestBO person = new ContactPersonTestBO();
             //---------------Assert Precondition----------------
-            Assert.IsFalse(mapper.IncludeBlankItem);
+            Assert.IsNull(mapper.ClassDef);
             //---------------Execute Test ----------------------
-            mapper.BusinessObjectCollection = new BusinessObjectCollection<OrganisationTestBO>();
+            mapper.BusinessObject = person;
             //---------------Test Result -----------------------
-            Assert.AreEqual(0, cmbox.Items.Count, "Should not have blank item");
-            Assert.IsNull(cmbox.SelectedItem);
+            Assert.AreSame(person.ClassDef, mapper.ClassDef);
+            Assert.AreSame(person, mapper.BusinessObject);
         }
 
         [Test]
-        public void Test_SetBusinessObj_ShouldSelectRelatedItemInComboBox()
+        public void Test_BusinessObject_WhenSet_ShouldSelectRelatedItemInComboBox()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -276,7 +362,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_SetBusinessObj_WithIncorrectType_ShouldRaiseError()
+        public void Test_BusinessObject_WhenSet_WithIncorrectType_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -292,7 +378,7 @@ namespace Habanero.Test.UI.Base.Mappers
             try
             {
                 mapper.BusinessObject = new OrganisationTestBO();
-                Assert.Fail("expected Err");
+                Assert.Fail("expected HabaneroDeveloperException");
             }
                 //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
@@ -306,7 +392,28 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_SetBusinessObjectCollection_WithIncorrectType_ShouldRaiseError()
+        public void Test_BusinessObject_WhenSet_WhenIsReadOnly_IsTrue_ShouldNotBeEditable()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = _controlFactory.CreateComboBox();
+            const string relationshipName = "Organisation";
+            BusinessObjectCollection<OrganisationTestBO> boCol = GetBoColWithOneItem();
+            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, true, GetControlFactory());
+            mapper.BusinessObjectCollection = boCol;
+            OrganisationTestBO organisationTestBO = boCol[0];
+            ContactPersonTestBO person = CreateCPWithRelatedOrganisation(organisationTestBO);
+            //---------------Assert Preconditions---------------
+            Assert.IsTrue(mapper.IsReadOnly);
+            Assert.IsTrue(person.Status.IsNew);
+            Assert.IsFalse(cmbox.Enabled);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = person;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(cmbox.Enabled);
+        }
+
+        [Test]
+        public void Test_BusinessObjectCollection_WhenSet_WithIncorrectType_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -320,7 +427,7 @@ namespace Habanero.Test.UI.Base.Mappers
             try
             {
                 mapper.BusinessObjectCollection = new BusinessObjectCollection<ContactPersonTestBO>();
-                Assert.Fail("expected Err");
+                Assert.Fail("expected HabaneroDeveloperException");
             }
                 //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
@@ -334,7 +441,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_SetBusinessObj_WhenCollectionHas2Items_ShouldSelectRelatedItemInComboBox()
+        public void Test_BusinessObject_WhenSet_WhenExistsInCollection_ShouldSelectRelatedItemInComboBox()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -356,9 +463,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void
-            Test_SetBusinessObj_WhenCollectionHas2ItemsAndRelatedBODoesNotExistInCollection_ShouldAddRelatedItemToComboBox
-            ()
+        public void Test_BusinessObject_WhenSet_WhenDoesNotExistInCollection_ShouldAddRelatedItemToComboBox()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -382,7 +487,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_SetBusinessObj_WithNullRelatedObject_WhenItemAlreadySelected_ShouldSelectNoItemInList()
+        public void Test_BusinessObject_WhenSetWithNullRelatedObject_WhenItemAlreadySelected_ShouldSelectNoItemInList()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -408,7 +513,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_GetRelatedObject_ShouldReturnBusinessObjectsRelatedObject()
+        public void Test_GetRelatedBusinessObject_ShouldReturnBusinessObjectsRelatedObject()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -422,13 +527,13 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(person, mapper.BusinessObject);
             Assert.IsNotNull(person.Organisation);
             //---------------Execute Test ----------------------
-            object businessObject = mapper.GetRelatedBusinessObject();
+            IBusinessObject businessObject = mapper.GetRelatedBusinessObject();
             //---------------Test Result -----------------------
             Assert.AreSame(person.Organisation, businessObject);
         }
 
         [Test]
-        public void Test_GetRelatedObject_BODoesNotHaveRelatedBO_ShouldReturnNull()
+        public void Test_GetRelatedBusinessObject_WhenBODoesNotHaveRelatedBO_ShouldReturnNull()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -441,13 +546,13 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(person, mapper.BusinessObject);
             Assert.IsNull(person.Organisation);
             //---------------Execute Test ----------------------
-            object businessObject = mapper.GetRelatedBusinessObject();
+            IBusinessObject businessObject = mapper.GetRelatedBusinessObject();
             //---------------Test Result -----------------------
             Assert.IsNull(businessObject);
         }
 
         [Test]
-        public void Test_GetRelatedObject_WhenNullBo_ShouldReturnNull()
+        public void Test_GetRelatedBusinessObject_WhenNullBo_ShouldReturnNull()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -457,7 +562,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(1, boCol.Count);
             Assert.IsNull(mapper.BusinessObject);
             //---------------Execute Test ----------------------
-            object relatedBO = mapper.GetRelatedBusinessObject();
+            IBusinessObject relatedBO = mapper.GetRelatedBusinessObject();
             //---------------Test Result -----------------------
             Assert.IsNull(relatedBO);
         }
@@ -471,17 +576,17 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public virtual void Test_AddBOToCol_UpdatesItems()
+        public virtual void Test_AddBOToCol_ShouldUpdateItems()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             BusinessObjectCollection<OrganisationTestBO> boCol;
             RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
+            OrganisationTestBO newBO = new OrganisationTestBO();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boCol.Count);
             Assert.AreEqual(2, mapper.Control.Items.Count);
             //---------------Execute Test ----------------------
-            OrganisationTestBO newBO = new OrganisationTestBO();
             boCol.Add(newBO);
             //---------------Test Result -----------------------
             Assert.AreEqual(2, boCol.Count);
@@ -489,7 +594,8 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public virtual void Test_AddBOToCol_NullOrEmptyToStringRaisesError()
+        //TODO Mark 07 Aug 2009: NNB Review this - I don't think that this is the action you want because it could have side effects when creating a new BO
+        public virtual void Test_AddBOToCol_WhenNullOrEmptyToString_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -504,11 +610,10 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(2, mapper.Control.Items.Count);
             Assert.IsNull(newBO.ToString());
             //---------------Execute Test ----------------------
-
             try
             {
                 boCol.Add(newBO);
-                Assert.Fail("expected Err");
+                Assert.Fail("expected HabaneroDeveloperException");
             }
            //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
@@ -521,7 +626,25 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public virtual void Test_WhenSetNull_DoesNotRaiseError()
+        public virtual void Test_RemoveBOFromCol_ShouldUpdateItems()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            BusinessObjectCollection<OrganisationTestBO> boCol;
+            RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
+            OrganisationTestBO bo = boCol[0];
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, boCol.Count);
+            Assert.AreEqual(2, mapper.Control.Items.Count);
+            //---------------Execute Test ----------------------
+            boCol.Remove(bo);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, boCol.Count);
+            Assert.AreEqual(1, mapper.Control.Items.Count);
+        }
+
+        [Test]
+        public virtual void Test_BusinessObjectCollection_WhenSetToNull_ShouldNotRaiseError_BUGFIX()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -538,26 +661,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public virtual void Test_RemoveBOToCol_UpdatesItems()
-        {
-            //---------------Set up test pack-------------------
-            IComboBox cmbox = GetControlFactory().CreateComboBox();
-            BusinessObjectCollection<OrganisationTestBO> boCol;
-            RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
-            OrganisationTestBO bo = boCol[0];
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(1, boCol.Count);
-            Assert.AreEqual(2, mapper.Control.Items.Count);
-
-            //---------------Execute Test ----------------------
-            boCol.Remove(bo);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(0, boCol.Count);
-            Assert.AreEqual(1, mapper.Control.Items.Count);
-        }
-
-        [Test]
-        public void TestSetBusinessObject_Null_DoesNotRaiseError_BUGFIX()
+        public void Test_BusinessObject_WhenSetToNull_ShouldNotRaiseError_BUGFIX()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -573,7 +677,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void TestSetBusinessObject_Null_SetBusinessObject_FillsList_BUGFIX()
+        public void Test_BusinessObject_WhenSetToBO_AfterSetToNull_ShouldFillList_BUGFIX()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -593,7 +697,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void TestSetBusinessObject_Null_NullLookupListSet_DoesNotRaiseError_BUGFIX()
+        public void Test_BusinessObject_WhenSetToNull_WhenNullCollectionIsSet_ShouldNotRaiseError_BUGFIX()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -612,8 +716,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_ApplyChangesToBusObj_WhenAnItemIsSelectedAndRelatedBONull_ShouldUpdatesTheBusinessObjectWithTheSelectedValue
-            ()
+        public void Test_ApplyChangesToBusinessObject_WhenAnItemIsSelectedAndRelatedBusnessObjectWasNull_ShouldUpdateBusinessObjectWithSelectedValue()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -633,7 +736,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_ApplyChangesToBusObj_WhenAnItemIsSelected_ShouldUpdatesTheBusinessObjectWithTheSelectedValue()
+        public void Test_ApplyChangesToBusinessObject_WhenNewItemIsSelected_ShouldUpdateBusinessObjectWithSelectedValue()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -655,7 +758,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_ApplyChangesToBusObj_WhenNoItemIsSelected_ShouldUpdatesTheBusinessObjectWithNull()
+        public void Test_ApplyChangesToBusinessObject_WhenNoItemIsSelected_ShouldUpdateBusinessObjectWithNull()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -677,7 +780,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_LookupList_AddItemToComboBox_SelectAdditionalItem_SetsBOPropValueToNull()
+        public void Test_ApplyChangesToBusinessObject_WhenInvalidItemInComboIsSelected_ShouldSetBOPropValueToNull()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -698,7 +801,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_WhenChangePropValue_WithNullCurrentValue_ShouldUpdateControlValue()
+        public void Test_UpdateControlValueFromBusinessObject_WhenSetNewValue_AfterNullCurrentValue_ShouldUpdateControlValue()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -722,7 +825,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_WhenChangePropValue_ShouldUpdateControlValue()
+        public void Test_UpdateControlValueFromBusinessObject_ShouldUpdateControlValue()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -748,7 +851,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public virtual void TestChangeComboBoxDoesntUpdateBusinessObject()
+        public virtual void Test_ChangeComboBoxSelected_ShouldNotUpdatePropValue_VWGOnly()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -765,8 +868,9 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreNotSame(newOrganisation, person.Organisation);
             Assert.AreSame(relatedBo, person.Organisation);
         }
+
         [Test]
-        public void Test_ControlIsEditable_WhenComposition_AndBusinessObjectNew_True()
+        public void Test_STATE_WhenComposition_AndBusinessObjectNew_ShouldBeEditable()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = _controlFactory.CreateComboBox();
@@ -786,7 +890,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsTrue(enabled);
         }
         [Test]
-        public void Test_ControlIsEditable_WhenComposition_AndBusinessObjectNotNew_False()
+        public void Test_STATE_WhenComposition_AndBusinessObjectNotNew_ShouldNotBeEditable()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = _controlFactory.CreateComboBox();
@@ -809,7 +913,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_ControlIsEditable_WhenComposition_AndBusinessObjectSaved_ShouldDisable()
+        public void Test_STATE_WhenComposition_AndBusinessObjectSaved_ShouldNotBeEditable()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = _controlFactory.CreateComboBox();
@@ -834,39 +938,37 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_WhenNotIsReadOnly_ControlShouldBeEditable()
+        public void Test_STATE_WhenIsReadOnly_IsFalse_ShouldBeEditable()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = _controlFactory.CreateComboBox();
             const string relationshipName = "Organisation";
             RelationshipComboBoxMapper mapper1 = new RelationshipComboBoxMapper(cmbox, relationshipName, false, GetControlFactory());
-            
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
             mapper1.BusinessObject = new ContactPersonTestBO();
-            //---------------Test Result -----------------------
+            //---------------Assert Precondition----------------
             Assert.IsFalse(mapper1.IsReadOnly);
-            Assert.IsTrue(mapper1.Control.Enabled);
+            //---------------Execute Test ----------------------
+            bool enabled = mapper1.Control.Enabled;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(enabled);
         }
         [Test]
-        public void Test_WhenIsReadOnly_ControlShouldNotBeEditable()
+        public void Test_STATE_WhenIsReadOnly_IsTrue_ShouldNotBeEditable()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = _controlFactory.CreateComboBox();
             const string relationshipName = "Organisation";
-            
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
             RelationshipComboBoxMapper mapper1 = new RelationshipComboBoxMapper(cmbox,  relationshipName, true, GetControlFactory());
-            //---------------Test Result -----------------------
+            //---------------Assert Precondition----------------
             Assert.IsTrue(mapper1.IsReadOnly);
-            Assert.IsFalse(mapper1.Control.Enabled);
+            //---------------Execute Test ----------------------
+            bool enabled = mapper1.Control.Enabled;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(enabled);
         }
 
         [Test]
-        public void Test_ControlIsEditable_WhenNotIsReadOnly_AndComposition_AndBusinessObjectSaved_ShouldDisable()
+        public void Test_STATE_WhenIsReadOnly_IsFalse_AndComposition_AndBusinessObjectSaved_ShouldDisable()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = _controlFactory.CreateComboBox();
@@ -891,28 +993,6 @@ namespace Habanero.Test.UI.Base.Mappers
             bool enabled = cmbox.Enabled;
             //---------------Test Result -----------------------
             Assert.IsFalse(person.Status.IsNew);
-            Assert.IsFalse(enabled);
-        }
-        [Test]
-        public void Test_ControlIsEditable_WhenIsReadOnly_SetBusinessObject_ShouldNotMakeEditable()
-        {
-            //---------------Set up test pack-------------------
-            IComboBox cmbox = _controlFactory.CreateComboBox();
-            const string relationshipName = "Organisation";
-            BusinessObjectCollection<OrganisationTestBO> boCol = GetBoColWithOneItem();
-            RelationshipComboBoxMapper mapper = new RelationshipComboBoxMapper(cmbox, relationshipName, true, GetControlFactory());
-            mapper.BusinessObjectCollection = boCol;
-            OrganisationTestBO organisationTestBO = boCol[0];
-            ContactPersonTestBO person = CreateCPWithRelatedOrganisation(organisationTestBO);
-
-            //---------------Assert Preconditions---------------
-            Assert.IsTrue(mapper.IsReadOnly);
-            Assert.IsTrue(person.Status.IsNew);
-            Assert.IsFalse(cmbox.Enabled);
-            //---------------Execute Test ----------------------
-            mapper.BusinessObject = person;
-            bool enabled = cmbox.Enabled;
-            //---------------Test Result -----------------------
             Assert.IsFalse(enabled);
         }
 
@@ -1123,10 +1203,9 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_EditItemFromCollection_UpdatesItemInCombo()
+        public void Test_WhenSetInvlidPropertyValue_ShouldUpdateItemInComboToBlank()
         {
             //---------------Set up test pack-------------------
-
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             BusinessObjectCollection<OrganisationTestBO> boCol;
             RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
@@ -1161,16 +1240,14 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(organisationTestBO, person.Organisation);
             Assert.AreSame(organisationTestBO, cmbox.SelectedItem);
             //---------------Execute Test ----------------------
-
             person.Organisation = newBO;
-
             //---------------Test Result -----------------------
             Assert.AreSame(newBO, person.Organisation);
             Assert.AreSame(newBO, cmbox.SelectedItem, "Value is not set after changing bo relationship");
         }
 
         [Test]
-        public void Test_SetBOToNull_MustDeregisterForEvents_WhenChangePropValue_ShouldNotUpdateControlValue()
+        public void Test_MustDeregisterForEvents_WhenSetBOToNull_ThenChangePropValue_ShouldNotUpdateControlValue()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -1186,14 +1263,13 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Execute Test ----------------------
             mapper.BusinessObject = null;
             person.Organisation = newBO;
-
             //---------------Test Result -----------------------
             Assert.AreSame(newBO, person.Organisation);
             Assert.AreSame(null, cmbox.SelectedItem, "Value is not set after changing bo relationship");
         }
 
         [Test]
-        public void Test_MustDeregisterForEvents_WhenSetBOToAnotherBo_AndChangePropValue_ShouldNotUpdateControlValue()
+        public void Test_MustDeregisterForEvents_WhenSetBOToAnotherBO_ThenChangePropValue_ShouldNotUpdateControlValue()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -1203,14 +1279,13 @@ namespace Habanero.Test.UI.Base.Mappers
             OrganisationTestBO organisationTestBO = boCol[0];
             ContactPersonTestBO person = CreateCPWithRelatedOrganisation(organisationTestBO);
             mapper.BusinessObject = person;
+            ContactPersonTestBO newCP = new ContactPersonTestBO();
             //---------------Assert precondition----------------
             Assert.AreSame(organisationTestBO, person.Organisation);
             Assert.AreSame(organisationTestBO, cmbox.SelectedItem);
             //---------------Execute Test ----------------------
-            ContactPersonTestBO newCP = new ContactPersonTestBO();
             mapper.BusinessObject = newCP;
             person.Organisation = newBO;
-
             //---------------Test Result -----------------------
             Assert.AreSame(newBO, person.Organisation);
             Assert.AreSame(null, newCP.Organisation);
@@ -1220,7 +1295,7 @@ namespace Habanero.Test.UI.Base.Mappers
         //TODO Brett 24 Mar 2009: Test Changing BO's removes event handlers.
 
         [Test]
-        public override void TestChangeComboBoxDoesntUpdateBusinessObject()
+        public override void Test_ChangeComboBoxSelected_ShouldNotUpdatePropValue_VWGOnly()
         {
             //For Windows the value should be changed.
             Assert.IsTrue
@@ -1229,7 +1304,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void TestChangeComboBoxUpdatesBusinessObject_WithoutCallingApplyChanges()
+        public void Test_ChangeComboBoxUpdatesBusinessObject_WithoutCallingApplyChanges()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -1246,7 +1321,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void TestKeyPressEventUpdatesBusinessObject_WithoutCallingApplyChanges()
+        public void Test_KeyPressEventUpdatesBusinessObject_WithoutCallingApplyChanges()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();

@@ -110,7 +110,7 @@
     <Compile Include="TestCollapsibleMenu.cs" />
     <Compile Include="TestCollapsibleMenuBuilder.cs" />
     <Compile Include="Grid\TestDataGridViewColumnCollection.cs" />
-    <Compile Include="Mappers\TestLookupComboBoxRelationshipMapper.cs" />
+    <Compile Include="Mappers\TestRelationshipComboBoxMapper.cs" />
     <Compile Include="TestBusinessObjectDeletor.cs" />
     <Compile Include="Controllers\TestListBoxCollectionManager.cs" />
     <Compile Include="Selectors\TestBOSelector.cs" />
