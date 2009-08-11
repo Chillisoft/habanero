@@ -345,7 +345,7 @@ namespace Habanero.Test.DB
             ClassDef.ClassDefs.Clear();
             AddressTestBO.LoadDefaultClassDef();
 
-            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
+            OrganisationTestBO.LoadDefaultClassDef_WithMultipleRelationshipToAddress();
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);

@@ -381,6 +381,30 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_ChangeRelatedBO_WhenSetToDifferentBo_HavingRelationshipOnRelatedBO_ShouldFireRelationshipChangedEvent()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            OrganisationTestBO oldOrganisationTestBO = new OrganisationTestBO();
+            contactPersonTestBO.Organisation = oldOrganisationTestBO;
+            const string innerRelationshipName = "ContactPeople";
+            const string relationshipName = "Organisation." + innerRelationshipName;
+            BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
+            boRelationshipMapper.BusinessObject = contactPersonTestBO;
+            OrganisationTestBO newOrganisationTestBO = new OrganisationTestBO();
+            bool eventFired = false;
+            boRelationshipMapper.RelationshipChanged += (sender, e) => eventFired = true;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(eventFired);
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.Organisation = newOrganisationTestBO;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(eventFired);
+        }
+
+        [Test]
         public void Test_ChangeRelatedBO_WhenSetToNull_HavingRelationshipOnRelatedBO_ShouldChangeRelationshipToNull()
         {
             //---------------Set up test pack-------------------
@@ -470,138 +494,5 @@ namespace Habanero.Test.BO
             }
         }
 
-        //TODO Mark 07 Aug 2009: Check if we need some tests on RelationshipChanged for Two/More levels of Relationships.
-
     }
-
-    /// <summary>
-    /// This is a mapper class that handles the mapping of a relationship name 
-    /// to a specific relationship for a specified <see cref="IBusinessObject"/>.
-    /// The relationship name can be specified as a path through single relationships on the <see cref="IBusinessObject"/>
-    /// and its' relationship tree.
-    /// <remarks>For Example:<br/>
-    /// For the ContactPerson BusinessObject when the relationshipName is "Organisation",
-    ///  the returned <see cref="IRelationship"/> will be the "Organisation" relationship on ContactPerson.<br/>
-    /// If the relationshipName was "Organisation.Address" then the Organisation relationship on the contact person will 
-    /// be traversed and monitored and return the corresponding "Address" <see cref="IRelationship"/> for the ContactPerson's current Organisation.</remarks>
-    /// </summary>
-    public class BORelationshipMapper
-    {
-        private IBusinessObject _businessObject;
-        private IRelationship _relationship;
-        private readonly BORelationshipMapper _childBoRelationshipMapper;
-        private readonly BORelationshipMapper _localBoRelationshipMapper;
-        private ISingleRelationship _childRelationship;
-        public event EventHandler RelationshipChanged;
-
-        public BORelationshipMapper(string relationshipName)
-        {
-            if (String.IsNullOrEmpty(relationshipName)) throw new ArgumentNullException("relationshipName");
-            RelationshipName = relationshipName;
-            if (RelationshipName.Contains("."))
-            {
-                string[] parts = RelationshipName.Split('.');
-                string localRelationshipName = parts[0];
-                _localBoRelationshipMapper = new BORelationshipMapper(localRelationshipName);
-                string remainingPath = String.Join(".", parts, 1, parts.Length - 1);
-                _childBoRelationshipMapper = new BORelationshipMapper(remainingPath);
-                _childBoRelationshipMapper.RelationshipChanged += (sender, e) => FireRelationshipChanged();
-            }
-        }
-
-        public string RelationshipName { get; private set; }
-
-        public IBusinessObject BusinessObject
-        {
-            get { return _businessObject; }
-            set
-            {
-                IBusinessObject businessObject = value;
-                IRelationship relationship = null;
-
-                if (_childBoRelationshipMapper != null)
-                {
-                    _localBoRelationshipMapper.BusinessObject = businessObject;
-                    UpdateChildRelationship();
-                    _businessObject = businessObject;
-                    return;
-                }
-                if (businessObject != null)
-                {
-                    if (businessObject.Relationships.Contains(RelationshipName))
-                        relationship = businessObject.Relationships[RelationshipName];
-                    else
-                    {
-                        IClassDef classDef = businessObject.ClassDef;
-                        throw new HabaneroDeveloperException("The relationship '" + RelationshipName + "' on '"
-                            + classDef.ClassName + "' cannot be found. Please contact your system administrator.", 
-                            "The relationship '" + RelationshipName + "' does not exist on the BusinessObject '"
-                            + classDef.ClassNameFull + "'.");
-                    }
-                }
-                _businessObject = businessObject;
-                Relationship = relationship;
-            }
-        }
-
-        private void UpdateChildRelationship()
-        {
-            DeRegisterForChildRelationshipEvents();
-            IRelationship childRelationship = _localBoRelationshipMapper.Relationship;
-            if (childRelationship != null && !(childRelationship is ISingleRelationship))
-            {
-                IClassDef classDef = childRelationship.OwningBO.ClassDef;
-                throw new HabaneroDeveloperException("The relationship '" + _localBoRelationshipMapper.RelationshipName + "' on '"
-                     + classDef.ClassName + "' is not a Single Relationship. Please contact your system administrator.",
-                            "The relationship '" + _localBoRelationshipMapper.RelationshipName + "' on the BusinessObject '"
-                     + classDef.ClassNameFull + "' is not a Single Relationship therefore cannot be traversed."); 
-            }
-            _childRelationship = (ISingleRelationship)childRelationship;
-            RegisterForChildRelationshipEvents(); 
-            UpdateChildRelationshipBO();
-        }
-
-        private void RegisterForChildRelationshipEvents()
-        {
-            if (_childRelationship != null)
-                _childRelationship.RelatedBusinessObjectChanged += ChildRelationship_OnRelatedBusinessObjectChanged;
-        }
-
-        private void DeRegisterForChildRelationshipEvents()
-        {
-            if (_childRelationship != null) _childRelationship.RelatedBusinessObjectChanged -= ChildRelationship_OnRelatedBusinessObjectChanged;
-        }
-
-        private void ChildRelationship_OnRelatedBusinessObjectChanged(object sender, EventArgs e)
-        {
-            UpdateChildRelationshipBO();
-        }
-
-        private void UpdateChildRelationshipBO()
-        {
-            IBusinessObject relatedObject = null;
-            if (_childRelationship != null) relatedObject = _childRelationship.GetRelatedObject();
-            _childBoRelationshipMapper.BusinessObject = relatedObject;
-        }
-
-        public IRelationship Relationship
-        {
-            get
-            {
-                if (_childBoRelationshipMapper != null) return _childBoRelationshipMapper.Relationship;
-                return _relationship;
-            }
-            private set
-            {
-                _relationship = value;
-                FireRelationshipChanged();
-            }
-        }
-
-        private void FireRelationshipChanged()
-        {
-            if (RelationshipChanged != null) RelationshipChanged(this, new EventArgs());
-        }
-    }
-
 }

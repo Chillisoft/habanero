@@ -231,7 +231,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadDefaultClassDef_WithRelationShipToAddress()
+        public static ClassDef LoadDefaultClassDef_WithMultipleRelationshipToAddress()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =

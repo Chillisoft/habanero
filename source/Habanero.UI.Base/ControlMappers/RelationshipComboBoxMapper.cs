@@ -40,6 +40,35 @@ namespace Habanero.UI.Base
         private ISingleRelationship _singleRelationship;
         private IComboBoxMapperStrategy _mapperStrategy;
         private readonly ComboBoxCollectionSelector _comboBoxCollectionSelector;
+        private readonly BORelationshipMapper _boRelationshipMapper;
+
+        /// <summary>
+        /// Constructs a <see cref="RelationshipComboBoxMapper"/> with the <paramref name="comboBox"/>
+        ///  <paramref name="relationshipName"/>
+        /// </summary>
+        /// <param name="comboBox">The combo box that is being mapped to</param>
+        /// <param name="relationshipName">The name of the relation that is being mapped to</param>
+        /// <param name="isReadOnly">Whether the Combo box can be used to edit from or whether it is only viewable</param>
+        /// <param name="controlFactory">A control factory that is used to create control mappers etc</param>
+        public RelationshipComboBoxMapper
+            (IComboBox comboBox, string relationshipName, bool isReadOnly, IControlFactory controlFactory)
+        {
+            if (comboBox == null) throw new ArgumentNullException("comboBox");
+            if (relationshipName == null) throw new ArgumentNullException("relationshipName");
+            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
+
+            IsReadOnly = isReadOnly;
+            ControlFactory = controlFactory;
+            Control = comboBox;
+            RelationshipName = relationshipName;
+            _boRelationshipMapper = new BORelationshipMapper(relationshipName);
+            _boRelationshipMapper.RelationshipChanged += (sender,e) => OnMappedRelationshipChanged();
+            this.IncludeBlankItem = true;
+            _mapperStrategy = ControlFactory.CreateLookupComboBoxDefaultMapperStrategy();
+            _mapperStrategy.AddHandlers(this);
+            UpdateIsEditable();
+            _comboBoxCollectionSelector = new ComboBoxCollectionSelector(comboBox, controlFactory, false);
+        }
 
         /// <summary>
         /// The Control <see cref="IComboBox"/> that is being mapped by this Mapper.
@@ -74,37 +103,13 @@ namespace Habanero.UI.Base
         public EventHandler SelectedIndexChangedHandler { get; set; }
 
         /// <summary>
-        /// Constructs a <see cref="RelationshipComboBoxMapper"/> with the <paramref name="comboBox"/>
-        ///  <paramref name="relationshipName"/>
-        /// </summary>
-        /// <param name="comboBox">The combo box that is being mapped to</param>
-        /// <param name="relationshipName">The name of the relation that is being mapped to</param>
-        /// <param name="isReadOnly">Whether the Combo box can be used to edit from or whether it is only viewable</param>
-        /// <param name="controlFactory">A control factory that is used to create control mappers etc</param>
-        public RelationshipComboBoxMapper
-            (IComboBox comboBox, string relationshipName, bool isReadOnly, IControlFactory controlFactory)
-        {
-            if (comboBox == null) throw new ArgumentNullException("comboBox");
-            if (relationshipName == null) throw new ArgumentNullException("relationshipName");
-            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
-
-            IsReadOnly = isReadOnly;
-            ControlFactory = controlFactory;
-            Control = comboBox;
-            RelationshipName = relationshipName;
-            this.IncludeBlankItem = true;
-            _mapperStrategy = ControlFactory.CreateLookupComboBoxDefaultMapperStrategy();
-            _mapperStrategy.AddHandlers(this);
-            UpdateIsEditable();
-            _comboBoxCollectionSelector = new ComboBoxCollectionSelector(comboBox, controlFactory, false);
-        }
-        /// <summary>
         /// Returns the name of the property being edited in the control
         /// </summary>
         public string PropertyName
         {
             get { return this.RelationshipName; }
         }
+
         ///<summary>
         /// Gets and Sets the Class Def of the Business object whose property
         /// this control maps.
@@ -115,9 +120,12 @@ namespace Habanero.UI.Base
             set
             {
                 _classDef = value;
-                SetUpRelationship();
+                //SetUpRelationship();
             }
         }
+
+        protected IClassDef RelatedObjectClassDef { get; set; }
+
         /// <summary>
         /// Gets and sets the Business Object Collection that is used to fill the combo box items.
         /// </summary>
@@ -131,18 +139,32 @@ namespace Habanero.UI.Base
             }
         }
 
-        private void CheckBusinessObjectCollectionCorrectType(IBusinessObjectCollection value)
+        private void CheckBusinessObjectCollectionCorrectType(IBusinessObjectCollection newBusinessObjectCollection)
         {
-            if (_relationshipDef == null) return;
 
-            if (value != null && _relationshipDef.RelatedObjectClassType != value.ClassDef.ClassType)
+            if (_singleRelationship == null) return;
+
+            IRelationshipDef relationshipDef = _singleRelationship.RelationshipDef;
+            if (newBusinessObjectCollection != null && 
+                relationshipDef.RelatedObjectClassType != newBusinessObjectCollection.ClassDef.ClassType)
             {
                 string errorMessage = string.Format
                     ("You cannot set the Business Object Collection to the '{0}' "
-                     + "since it is not of the appropriate type ('{1}') for this '{2}'", value.ClassDef.ClassNameFull,
-                     _relationshipDef.RelatedObjectClassName, this.GetType().FullName);
+                     + "since it is not of the appropriate type ('{1}') for this '{2}'",
+                     newBusinessObjectCollection.ClassDef.ClassNameFull,
+                     relationshipDef.RelatedObjectClassName, this.GetType().FullName);
                 throw new HabaneroDeveloperException(errorMessage, errorMessage);
             }
+            //if (_relationshipDef == null) return;
+
+            //if (newBusinessObjectCollection != null && _relationshipDef.RelatedObjectClassType != newBusinessObjectCollection.ClassDef.ClassType)
+            //{
+            //    string errorMessage = string.Format
+            //        ("You cannot set the Business Object Collection to the '{0}' "
+            //         + "since it is not of the appropriate type ('{1}') for this '{2}'", newBusinessObjectCollection.ClassDef.ClassNameFull,
+            //         _relationshipDef.RelatedObjectClassName, this.GetType().FullName);
+            //    throw new HabaneroDeveloperException(errorMessage, errorMessage);
+            //}
         }
 
         /// <summary>
@@ -156,7 +178,7 @@ namespace Habanero.UI.Base
 
             try
             {
-                _singleRelationship.SetRelatedObject(value);
+                if (_singleRelationship != null) _singleRelationship.SetRelatedObject(value);
             }
             catch (HabaneroIncorrectTypeException)
             {
@@ -215,22 +237,64 @@ namespace Habanero.UI.Base
                 SetupRelationshipForBO(value);
                 CheckBusinessObjectCorrectType(value);
 
-                RemoveCurrentBOHandlers();
+                _boRelationshipMapper.BusinessObject = value;
                 _businessObject = value;
-                _singleRelationship = _businessObject == null ? null : GetRelationship();
-                UpdateIsEditable();
-                LoadCollectionForBusinessObject();
-                UpdateControlValueFromBusinessObject();
-                AddCurrentBOHandlers();
+                UpdateLinkedRelationshipAndControl();
                 //                this.UpdateErrorProviderErrorMessage();
             }
         }
+
+        private void UpdateLinkedRelationshipAndControl()
+        {
+            RemoveCurrentBOHandlers();
+            SetupSingleRelationship(); //_businessObject == null ? null : GetRelationship();
+            UpdateIsEditable();
+            LoadCollectionForBusinessObject();
+            UpdateControlValueFromBusinessObject();
+            AddCurrentBOHandlers();
+        }
+
+        private void SetupSingleRelationship()
+        {
+            IRelationship relationship = _boRelationshipMapper.Relationship;
+            if (relationship == null) _singleRelationship = null;
+            else if (relationship is ISingleRelationship)
+            {
+                _singleRelationship = (ISingleRelationship) relationship;
+                RelatedObjectClassDef = _singleRelationship.RelatedObjectClassDef;
+            }
+            else
+            {
+                string standardMessage = string.Format("The relationship '{0}' on '{1}' is not a single relationship. ",
+                    RelationshipName, ClassDef.ClassNameFull);
+                throw new HabaneroDeveloperException(standardMessage + "Please contact your System Administrator.",
+                    standardMessage + "The 'RelationshipComboBoxMapper' can only be used for single relationships");
+            }
+        }
+
+        private void OnMappedRelationshipChanged()
+        {
+            UpdateLinkedRelationshipAndControl();
+        }
+
+        /// <summary>
+        /// Gets or sets the strategy assigned to this mapper <see cref="IComboBoxMapperStrategy"/>
+        /// </summary>
+        public IComboBoxMapperStrategy MapperStrategy
+        {
+            get { return _mapperStrategy; }
+            set
+            {
+                _mapperStrategy = value;
+                _mapperStrategy.RemoveCurrentHandlers(this);
+                _mapperStrategy.AddHandlers(this);
+            }
+        }
+
         /// <summary>
         /// Provides an overrideable method for Loading the collection of business objects
         /// </summary>
-        protected virtual void LoadCollectionForBusinessObject() { 
-        }
-
+        protected virtual void LoadCollectionForBusinessObject() { }
 
         private void SetupRelationshipForBO(IBusinessObject businessObject)
         {
@@ -271,37 +335,23 @@ namespace Habanero.UI.Base
             return _singleRelationship.RelationshipDef.RelationshipType == RelationshipType.Composition;
         }
 
-        private void RemoveCurrentBOHandlers()
-        {
-            if (_businessObject == null) return;
-            _singleRelationship.RelatedBusinessObjectChanged -= RelatedBusinessObjectChanged_Handler;
-            _businessObject.Saved -= _businessObject_OnSaved;
-        }
-
-        /// <summary>
-        /// Gets or sets the strategy assigned to this mapper <see cref="IComboBoxMapperStrategy"/>
-        /// </summary>
-        public IComboBoxMapperStrategy MapperStrategy
-        {
-            get { return _mapperStrategy; }
-            set
-            {
-                _mapperStrategy = value;
-                _mapperStrategy.RemoveCurrentHandlers(this);
-                _mapperStrategy.AddHandlers(this);
-            }
-        }
-
-
-
         private void AddCurrentBOHandlers()
         {
             if (_businessObject == null) return;
-            _singleRelationship.RelatedBusinessObjectChanged += RelatedBusinessObjectChanged_Handler;
-            _businessObject.Saved += _businessObject_OnSaved;
+            if (_singleRelationship != null)
+                _singleRelationship.RelatedBusinessObjectChanged += RelatedBusinessObjectChanged_Handler;
+            _businessObject.Saved += BusinessObject_OnSaved;
         }
 
-        private void _businessObject_OnSaved(object sender, BOEventArgs e)
+        private void RemoveCurrentBOHandlers()
+        {
+            if (_businessObject == null) return;
+            if (_singleRelationship != null)
+                _singleRelationship.RelatedBusinessObjectChanged -= RelatedBusinessObjectChanged_Handler;
+            _businessObject.Saved -= BusinessObject_OnSaved;
+        }
+
+        private void BusinessObject_OnSaved(object sender, BOEventArgs e)
         {
             UpdateIsEditable();
         }

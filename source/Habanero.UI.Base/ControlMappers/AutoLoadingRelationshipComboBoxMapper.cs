@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
@@ -29,7 +31,7 @@ namespace Habanero.UI.Base
             //{
                 
                 this.BusinessObjectCollection = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(
-                    _relationshipDef.RelatedObjectClassDef, "");
+                    RelatedObjectClassDef, "");
             //}       
         }
     }

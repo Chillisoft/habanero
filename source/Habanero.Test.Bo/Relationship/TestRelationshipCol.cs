@@ -399,7 +399,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             new AddressTestBO();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
+            OrganisationTestBO.LoadDefaultClassDef_WithMultipleRelationshipToAddress();
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
             MultipleRelationship<ContactPersonTestBO> contactPersonRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
@@ -425,7 +425,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             new AddressTestBO();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
+            OrganisationTestBO.LoadDefaultClassDef_WithMultipleRelationshipToAddress();
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
             MultipleRelationship<ContactPersonTestBO> contactPersonRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
@@ -449,7 +449,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             new AddressTestBO();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
+            OrganisationTestBO.LoadDefaultClassDef_WithMultipleRelationshipToAddress();
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationshipCol = new RelationshipCol(organisationTestBO);
             // Setup Mocks

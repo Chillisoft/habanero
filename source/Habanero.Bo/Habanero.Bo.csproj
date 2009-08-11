@@ -117,6 +117,7 @@
     <Compile Include="BOPropCol.cs" />
     <Compile Include="BOPropLookupList.cs" />
     <Compile Include="BORegistry.cs" />
+    <Compile Include="BORelationshipMapper.cs" />
     <Compile Include="BOStatus.cs" />
     <Compile Include="BusinessObjectLoaderBase.cs" />
     <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />

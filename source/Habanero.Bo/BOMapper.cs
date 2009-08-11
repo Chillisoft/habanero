@@ -34,7 +34,7 @@ namespace Habanero.BO
     /// </summary>
     public class BOMapper
     {
-//        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BoMapper");
+        //private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BoMapper");
         private readonly IBusinessObject _businessObject;
 
         /// <summary>
