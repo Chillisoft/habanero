@@ -162,7 +162,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="id"></param>
         ///<param name="discriminator"></param>
         ///<returns></returns>
-        SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping, string id, string discriminator);
+        ISuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping, string id, string discriminator);
 
         ///<summary>
         ///</summary>

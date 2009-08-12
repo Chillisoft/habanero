@@ -29,5 +29,14 @@ namespace Habanero.Base
         /// Returns the class definition for this super-class
         /// </summary>
         IClassDef SuperClassClassDef { get; set; }
+
+        /// <summary>
+        /// Returns the name of the property that identifies which field
+        /// in the child class (containing the super class definition)
+        /// contains a copy of the parent's ID.  An empty string implies
+        /// that the parent's ID is simply inherited and is used as the
+        /// child's ID.  This property applies only to ClassTableInheritance.
+        /// </summary>
+        string ID { get; set; }
     }
 }
