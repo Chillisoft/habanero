@@ -141,7 +141,7 @@ namespace Habanero.BO
         protected internal BusinessObject(IClassDef def)
         {
             Initialise(def);
-            AddToObjectManager();
+            FinaliseBusinessObjectSetup();
         }
 
         #region Serialisation of BusinessObject
@@ -180,7 +180,7 @@ namespace Habanero.BO
             }
             _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
             _boStatus.BusinessObject = this;
-            AddToObjectManager();
+            FinaliseBusinessObjectSetup();
         }
 
         /// <summary>
@@ -200,19 +200,50 @@ namespace Habanero.BO
 
         #endregion // Serialisation of BusinessObject
 
+
+
+        private void FinaliseBusinessObjectSetup()
+        {
+            SetupBOPropsWithThisBo();
+            AddToObjectManager();
+            RegisterForPropertyEvents();
+        }
+
         private void AddToObjectManager()
         {
             BusinessObjectManager.Instance.Add(this);
-            ID.Updated += (ID_OnUpdated);
+        }
+
+        private void SetupBOPropsWithThisBo()
+        {
+            foreach (IBOProp prop in _boPropCol)
+            {
+                ((BOProp)prop).BusinessObject = this;
+            }
+        }
+
+        private void FinaliseBusinessObjectTearDown()
+        {
+            RemoveFromObjectManager();
+            UnregisterForPropertyEvents();
+        }
+
+        private void RemoveFromObjectManager()
+        {
+            BusinessObjectManager.Instance.Remove(this);
+        }
+
+        private void RegisterForPropertyEvents()
+        {
+            ID.Updated += (sender, e) => FireIDUpdatedEvent();
             foreach (IBOProp boProp in Props)
             {
                 boProp.Updated += BOProp_OnUpdated;
             }
         }
 
-        private void RemoveFromObjectManager()
+        private void UnregisterForPropertyEvents()
         {
-            BusinessObjectManager.Instance.Remove(this);
             ID.Updated -= ((sender, e) => FireIDUpdatedEvent());
             foreach (IBOProp boProp in Props)
             {
@@ -220,21 +251,16 @@ namespace Habanero.BO
             }
         }
 
-        private void ID_OnUpdated(object sender, BOKeyEventArgs e)
-        {
-            FireIDUpdatedEvent();
-        }
-
         private void BOProp_OnUpdated(object sender, BOPropEventArgs e)
         {
-            if (e.Prop.IsDirty)
-            {
-                //if (!Status.IsEditing)
-                //{
-                //    BeginEdit();
-                //}
-                _boStatus.IsDirty = true;
-            }
+            //if (e.Prop.IsDirty)
+            //{
+            //    //if (!Status.IsEditing)
+            //    //{
+            //    //    BeginEdit();
+            //    //}
+            //    _boStatus.IsDirty = true;
+            //}
             FirePropertyUpdatedEvent(e.Prop);
         }
 
@@ -288,7 +314,7 @@ namespace Habanero.BO
                 if (ID != null)
                 {
                     //BusinessObjectManager.Instance.Remove(this);
-                    RemoveFromObjectManager();
+                    FinaliseBusinessObjectTearDown();
                 }
             }
             catch (Exception ex)
@@ -736,11 +762,11 @@ namespace Habanero.BO
             ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
             if (PropValueHasChanged(propValue, newPropValue1))
             {
-                if (!Status.IsEditing)
-                {
-                    BeginEdit();
-                }
-                _boStatus.IsDirty = true;
+                //if (!Status.IsEditing)
+                //{
+                //    BeginEdit();
+                //}
+                //_boStatus.IsDirty = true;
                 prop.Value = newPropValue1;
             }
         }
@@ -842,19 +868,9 @@ namespace Habanero.BO
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
         /// </summary>
-        //private bool _beginEditRunning = false;
-        private void BeginEdit()
+        internal void BeginEdit()
         {
-            //if (_beginEditRunning) return;
-            try
-            {
-                //_beginEditRunning = true;
-                BeginEdit(false);
-            }
-            finally
-            {
-               // _beginEditRunning = false;
-            }
+            BeginEdit(false);
         }
 
         /// <summary>
@@ -862,16 +878,26 @@ namespace Habanero.BO
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
         /// </summary>
+        private bool _beginEditRunning = false;
         private void BeginEdit(bool delete)
         {
-            string message;
-            if (!IsEditable(out message) && !delete)
+            if (_beginEditRunning) return;
+            try
             {
-                throw new BusObjEditableException(this, message);
+                _beginEditRunning = true;
+                string message;
+                if (!IsEditable(out message) && !delete)
+                {
+                    throw new BusObjEditableException(this, message);
+                }
+                CheckNotEditing();
+                CheckConcurrencyBeforeBeginEditing();
+                _boStatus.IsEditing = true;
             }
-            CheckNotEditing();
-            CheckConcurrencyBeforeBeginEditing();
-            _boStatus.IsEditing = true;
+            finally
+            {
+                _beginEditRunning = false;
+            }
         }
 
         /// <summary>
@@ -1595,7 +1621,11 @@ namespace Habanero.BO
 
             _boStatus.SetBOFlagValue(BOStatus.Statuses.isDirty, hasDirtyProps);
         }
-
+        
+        internal void SetDirty(bool dirty)
+        {
+            _boStatus.IsDirty = dirty;
+        }
 
         /// <summary>
         /// Is the <see cref="IBusinessObject"/> archived or not. This can be overriden by a

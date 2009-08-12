@@ -68,6 +68,8 @@ namespace Habanero.BO
         /// </summary>
         public event EventHandler<BOPropEventArgs> Updated;
 
+        private BusinessObject _businessObject;
+
         /// <summary>
         /// Constructor to initialise a new property
         /// </summary>
@@ -76,6 +78,7 @@ namespace Habanero.BO
         {
             if (propDef == null) throw new ArgumentNullException("propDef");
             _propDef = (PropDef) propDef;
+            UpdatesBusinessObjectStatus = true;
         }
 
         /// <summary>
@@ -88,6 +91,28 @@ namespace Habanero.BO
         {
             if (propDef == null) throw new ArgumentNullException("propDef");
             InitialiseProp(propValue, true);
+        }
+
+        ///<summary>
+        /// Indicates whether changes to this <see cref="BOProp"/> updates the BusinessObject's status.
+        ///</summary>
+        public bool UpdatesBusinessObjectStatus { get; set; }
+
+        ///<summary>
+        /// This is the <see cref="IBusinessObject"/> to which this <see cref="IBOProp"/> belongs.
+        ///</summary>
+        public IBusinessObject BusinessObject
+        {
+            get { return _businessObject; }
+            internal set
+            {
+                if (_businessObject != null && _businessObject != value)
+                {
+                    throw new HabaneroDeveloperException("A critical error has occurred. Please contact your System Administrator.",
+                        "Once a BOProp has been assigned to a BusinessObject it cannot be assigned to another BusinessObject.");
+                }
+                _businessObject = (BusinessObject) value;
+            }
         }
 
         ///<summary>
@@ -245,15 +270,23 @@ namespace Habanero.BO
                         throw new BOPropWriteException(_propDef, message);
                     }
                 }
-
+                if (UpdatesBusinessObjectStatus && _businessObject != null && !_businessObject.Status.IsEditing)
+                {
+                    _businessObject.BeginEdit();
+                }
                 _invalidReason = "";
                 _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
                 _valueBeforeLastEdit = _currentValue;
                 _currentValue = newValue;
                 _isDirty = !Equals(_persistedValue, newValue);
+                if (_isDirty && UpdatesBusinessObjectStatus && _businessObject != null)
+                {
+                    _businessObject.SetDirty(true);
+                }
                 FireBOPropValueUpdated();
             }
         }
+
         /// <summary>
         /// Raises an Erorr if the Incorrect type of property is being set to this BOProp.
         /// </summary>

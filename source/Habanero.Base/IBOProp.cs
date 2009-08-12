@@ -155,6 +155,11 @@ namespace Habanero.Base
         /// <returns>Returns the property value</returns>
         object PropertyValueToDisplay { get; }
 
+        ///<summary>
+        /// This is the <see cref="IBusinessObject"/> to which this <see cref="IBOProp"/> belongs.
+        ///</summary>
+        IBusinessObject BusinessObject { get; }
+
         /// <summary>
         /// Restores the property's original value as defined in PersistedValue.
         /// This is typically called when the edits to a <see cref="IBusinessObject"/> are cancelled.

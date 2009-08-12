@@ -19,9 +19,11 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
@@ -1062,8 +1064,7 @@ namespace Habanero.Test.BO
         public void Test_SetPropertyToNewValueAndThenToOrigValue_PropNotDirty()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("TestProp", "System", "String",
-                       PropReadWriteRule.ReadWrite, null, null, true, false);
+            PropDef propDef = CreateTestPropPropDef();
             IBOProp boProp = propDef.CreateBOProp(true);
             const string origValue = "OrigValue";
             boProp.InitialiseProp(origValue);
@@ -1077,6 +1078,72 @@ namespace Habanero.Test.BO
             Assert.AreEqual(origValue, boProp.PersistedPropertyValue);
             Assert.AreEqual(origValue, boProp.Value);
             Assert.IsFalse(boProp.IsDirty);
+        }
+
+        private static PropDef CreateTestPropPropDef()
+        {
+            return new PropDef("TestProp", "System", "String",
+                               PropReadWriteRule.ReadWrite, null, null, true, false);
+        }
+
+        [Test]
+        public void Test_BusinessObject_SetAndGet()
+        {
+            //---------------Set up test pack-------------------
+            IPropDef propDef = CreateTestPropPropDef();
+            BOProp boProp = new BOProp(propDef);
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            MyBO bo = new MyBO();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.BusinessObject);
+            //---------------Execute Test ----------------------
+            boProp.BusinessObject = bo;
+            //---------------Test Result -----------------------
+            Assert.AreSame(bo, boProp.BusinessObject);
+        }
+
+        [Test]
+        public void Test_BusinessObject_WhenSetAgain_ShouldThrowError()
+        {
+            //---------------Set up test pack-------------------
+            IPropDef propDef = CreateTestPropPropDef();
+            BOProp boProp = new BOProp(propDef);
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            MyBO bo = new MyBO();
+            boProp.BusinessObject = bo;
+            //---------------Assert Precondition----------------
+            Assert.AreSame(bo, boProp.BusinessObject);
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.BusinessObject = new MyBO();
+                Assert.Fail("Expected to throw a HabaneroDeveloperException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("Once a BOProp has been assigned to a BusinessObject it cannot be assigned to another BusinessObject.", ex.DeveloperMessage);
+            }
+        }
+
+        [Test]
+        public void Test_BusinessObject_WhenSetAgainToSameBo_ShouldNotThrowError()
+        {
+            //---------------Set up test pack-------------------
+            IPropDef propDef = CreateTestPropPropDef();
+            BOProp boProp = new BOProp(propDef);
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            MyBO bo = new MyBO();
+            boProp.BusinessObject = bo;
+            //---------------Assert Precondition----------------
+            Assert.AreSame(bo, boProp.BusinessObject);
+            //---------------Execute Test ----------------------
+            boProp.BusinessObject = bo;
+            //---------------Test Result -----------------------
+            Assert.AreSame(bo, boProp.BusinessObject);
         }
     }
 

@@ -58,11 +58,17 @@ namespace Habanero.DB.ConcurrencyControl
         {
             _busObj = busObj;
             _lockDurationInMinutes = lockDurationInMinutes;
-            _boPropDateLocked = boPropDateTimeLocked;
-            _boPropUserLocked = boPropUserLocked;
-            _boPropMachineLocked = boPropMachineLocked;
-            _boPropOperatingSystemUser = boPropOperatingSystemUser;
-            _boPropLocked = boPropLocked;
+            _boPropDateLocked = OrphanFromBOStatus(boPropDateTimeLocked);
+            _boPropUserLocked = OrphanFromBOStatus(boPropUserLocked);
+            _boPropMachineLocked = OrphanFromBOStatus(boPropMachineLocked);
+            _boPropOperatingSystemUser = OrphanFromBOStatus(boPropOperatingSystemUser);
+            _boPropLocked = OrphanFromBOStatus(boPropLocked);
+        }
+
+        private static IBOProp OrphanFromBOStatus(IBOProp prop)
+        {
+            ((BOProp)prop).UpdatesBusinessObjectStatus = false;
+            return prop;
         }
 
         /// <summary>
