@@ -44,6 +44,7 @@ namespace Habanero.Test.DB
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
             const string numberType = "tmp";
             BOSequenceNumberLocking.LoadNumberGenClassDef();
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
             INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);
             numGen.SetSequenceNumber(0);
             //get the next number for invoice number

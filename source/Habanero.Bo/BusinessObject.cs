@@ -203,18 +203,39 @@ namespace Habanero.BO
         private void AddToObjectManager()
         {
             BusinessObjectManager.Instance.Add(this);
-            ID.Updated += ((sender, e) => FireIDUpdatedEvent());
+            ID.Updated += (ID_OnUpdated);
             foreach (IBOProp boProp in Props)
             {
-                boProp.Updated += (sender, e) =>
-                                      {
-                                          if (e.Prop.IsDirty)
-                                          {
-                                              _boStatus.IsDirty = true;
-                                          }
-                                          FirePropertyUpdatedEvent(e.Prop);
-                                      };
+                boProp.Updated += BOProp_OnUpdated;
             }
+        }
+
+        private void RemoveFromObjectManager()
+        {
+            BusinessObjectManager.Instance.Remove(this);
+            ID.Updated -= ((sender, e) => FireIDUpdatedEvent());
+            foreach (IBOProp boProp in Props)
+            {
+                boProp.Updated -= BOProp_OnUpdated;
+            }
+        }
+
+        private void ID_OnUpdated(object sender, BOKeyEventArgs e)
+        {
+            FireIDUpdatedEvent();
+        }
+
+        private void BOProp_OnUpdated(object sender, BOPropEventArgs e)
+        {
+            if (e.Prop.IsDirty)
+            {
+                //if (!Status.IsEditing)
+                //{
+                //    BeginEdit();
+                //}
+                _boStatus.IsDirty = true;
+            }
+            FirePropertyUpdatedEvent(e.Prop);
         }
 
         private void InitialisePrimaryKeyPropertiesBasedOnParentClass(Guid myID)
@@ -266,7 +287,8 @@ namespace Habanero.BO
                 if (ClassDef == null) return;
                 if (ID != null)
                 {
-                    BusinessObjectManager.Instance.Remove(this);
+                    //BusinessObjectManager.Instance.Remove(this);
+                    RemoveFromObjectManager();
                 }
             }
             catch (Exception ex)
@@ -820,9 +842,19 @@ namespace Habanero.BO
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
         /// </summary>
+        //private bool _beginEditRunning = false;
         private void BeginEdit()
         {
-            BeginEdit(false);
+            //if (_beginEditRunning) return;
+            try
+            {
+                //_beginEditRunning = true;
+                BeginEdit(false);
+            }
+            finally
+            {
+               // _beginEditRunning = false;
+            }
         }
 
         /// <summary>

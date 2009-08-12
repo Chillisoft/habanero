@@ -143,9 +143,8 @@ namespace Habanero.Test.BO
             bo.SetPropertyValue("TestProp2", "s1");
             Assert.AreEqual("s1", bo.GetPropertyValueToDisplay("TestProp2"));
             Assert.AreEqual(new Guid("{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"), bo.GetPropertyValue("TestProp2"));
-        }
-
-
+        }        
+        
         [Test]
         public void Test_ChangeObjectID_FiresIDUpdatedEvent()
         {
@@ -578,6 +577,170 @@ namespace Habanero.Test.BO
             bo.CancelEdits();
             //---------------Test Result -----------------------
             Assert.AreEqual("Goodbye", bo.GetPropertyValueString("TestProp"));
+        }
+
+        [Test]
+        public void Test_UpdatePropValueDirectly_ShouldChangeIsEditingStatusToTrue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
+                Repeat.Times(2);
+            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
+            mock.ReplayAll();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            IBOProp prop = bo.Props["TestProp"];
+            const string newValue = "NewValue";
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(bo.Status.IsEditing);
+            //---------------Execute Test ----------------------
+            prop.Value = newValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newValue, prop.Value);
+            Assert.IsTrue(bo.Status.IsEditing);
+        }
+
+        [Test]
+        public void Test_UpdatePropValueDirectly_ShouldChangeIsDirtyStatusToTrue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
+                Repeat.Times(2);
+            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
+            mock.ReplayAll();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            IBOProp prop = bo.Props["TestProp"];
+            const string newValue = "NewValue";
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(bo.Status.IsDirty);
+            //---------------Execute Test ----------------------
+            prop.Value = newValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newValue, prop.Value);
+            Assert.IsTrue(bo.Status.IsDirty);
+        }
+
+        [Test]
+        public void Test_UpdatePropValueDirectly_ShouldFireProperyUpdatedEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
+                Repeat.Times(2);
+            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
+            mock.ReplayAll();
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bool propertyEventFired = false;
+            IBusinessObject eventBusinessObject = null;
+            IBOProp eventProp = null;
+            bo.PropertyUpdated +=
+                delegate(object sender, BOPropUpdatedEventArgs eventArgs)
+                {
+                    eventBusinessObject = eventArgs.BusinessObject;
+                    eventProp = eventArgs.Prop;
+                    propertyEventFired = true;
+                };
+            IBOProp prop = bo.Props["TestProp"];
+            const string newValue = "NewValue";
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(propertyEventFired);
+            Assert.IsNull(eventBusinessObject);
+            Assert.IsNull(eventProp);
+            //---------------Execute Test ----------------------
+            prop.Value = newValue;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(propertyEventFired);
+            Assert.AreSame(bo, eventBusinessObject);
+            Assert.AreSame(prop, eventProp);
+        }
+
+        [Test]
+        public void Test_UpdatePropValueDirectly_WhenValueUnchanged_ShouldNotChangeIsEditingStatusToTrue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
+                Repeat.Times(2);
+            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
+            mock.ReplayAll();
+            const string propValue = "PropValue";
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.TestProp = propValue;
+            bo.Save();
+            IBOProp prop = bo.Props["TestProp"];
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(bo.Status.IsEditing);
+            //---------------Execute Test ----------------------
+            prop.Value = propValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(propValue, prop.Value);
+            Assert.IsFalse(bo.Status.IsEditing);
+        }
+
+        [Test]
+        public void Test_UpdatePropValueDirectly_WhenValueUnchanged_ShouldNotChangeIsDirtyStatusToTrue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
+                Repeat.Times(2);
+            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
+            mock.ReplayAll();
+            const string propValue = "PropValue";
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.TestProp = propValue;
+            bo.Save();
+            IBOProp prop = bo.Props["TestProp"];
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(bo.Status.IsDirty);
+            //---------------Execute Test ----------------------
+            prop.Value = propValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(propValue, prop.Value);
+            Assert.IsFalse(bo.Status.IsDirty);
+        }
+
+        [Test]
+        public void Test_UpdatePropValueDirectly_WhenValueUnchanged_ShouldNotFireProperyUpdatedEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
+                Repeat.Times(2);
+            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
+            mock.ReplayAll();
+            const string propValue = "PropValue";
+            MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
+            bo.TestProp = propValue;
+            bo.Save();
+            bool propertyEventFired = false;
+            bo.PropertyUpdated += ((sender, eventArgs) => propertyEventFired = true);
+            IBOProp prop = bo.Props["TestProp"];
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(propertyEventFired);
+            //---------------Execute Test ----------------------
+            prop.Value = propValue;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(propertyEventFired);
         }
 
         [Test]
@@ -1267,7 +1430,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_UpdatePropValueFiresPropertyUpdatedEvent()
+        public void Test_UpdatePropValue_ShouldFirePropertyUpdatedEvent()
         {
             //---------------Set up test pack-------------------
             Engine engine1 = new Engine();
@@ -1294,7 +1457,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_UpdatePropValueDoesNotFireUpdatedEvent()
+        public void Test_UpdatePropValue_ShouldNotFireUpdatedEvent()
         {
             //---------------Set up test pack-------------------
             Engine engine1 = new Engine();

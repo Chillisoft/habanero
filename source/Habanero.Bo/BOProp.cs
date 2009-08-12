@@ -245,6 +245,7 @@ namespace Habanero.BO
                         throw new BOPropWriteException(_propDef, message);
                     }
                 }
+
                 _invalidReason = "";
                 _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
                 _valueBeforeLastEdit = _currentValue;

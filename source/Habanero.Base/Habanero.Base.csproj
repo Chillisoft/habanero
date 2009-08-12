@@ -117,6 +117,8 @@
     <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOPropUpdatedEventArgs.cs" />
     <Compile Include="BusinessObjectDTO.cs" />
+    <Compile Include="DelegatedExceptionNotifier.cs" />
+    <Compile Include="RecordingExceptionNotifier.cs" />
     <Compile Include="Exceptions\InvalidKeyException.cs" />
     <Compile Include="Exceptions\ReflectionException.cs" />
     <Compile Include="IBusinessObjectRule.cs" />

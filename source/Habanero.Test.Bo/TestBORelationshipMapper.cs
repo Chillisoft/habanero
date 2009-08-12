@@ -12,11 +12,13 @@ namespace Habanero.Test.BO
     {
 
         [SetUp]
-        public void TestFixtureSetup()
+        public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef();
         }
 
         [Test]
@@ -75,8 +77,6 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_GetAndSet()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string relationshipName = "Organisation";
             BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
@@ -85,15 +85,13 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             boRelationshipMapper.BusinessObject = contactPersonTestBO;
             //---------------Test Result -----------------------
-            Assert.AreSame(contactPersonTestBO,boRelationshipMapper.BusinessObject);
+            Assert.AreSame(contactPersonTestBO, boRelationshipMapper.BusinessObject);
         }
 
         [Test]
         public void Test_BusinessObject_WhenSetWithBOHavingSpecifiedRelationship_ShouldReturnCorrectRelationship()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string relationshipName = "Organisation";
             BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
@@ -103,16 +101,14 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             boRelationshipMapper.BusinessObject = contactPersonTestBO;
             //---------------Test Result -----------------------
-            Assert.AreSame(contactPersonTestBO,boRelationshipMapper.BusinessObject);
-            Assert.AreSame(contactPersonTestBO.Relationships[relationshipName],boRelationshipMapper.Relationship);
+            Assert.AreSame(contactPersonTestBO, boRelationshipMapper.BusinessObject);
+            Assert.AreSame(contactPersonTestBO.Relationships[relationshipName], boRelationshipMapper.Relationship);
         }        
         
         [Test]
         public void Test_BusinessObject_WhenSetToNull_ShouldReturnNullRelationship()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string relationshipName = "Organisation";
             BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
@@ -132,8 +128,6 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSetWithBONotHavingSpecifiedRelationship_ShouldThrowError()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string relationshipName = "SomeNonExistentRelationship";
             BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
@@ -163,8 +157,6 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSetWithBOHavingSpecifiedRelationship_ShouldFireRelationshipChangedEvent()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string relationshipName = "Organisation";
             BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
@@ -186,8 +178,6 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSetToNull_ShouldFireRelationshipChangedEvent()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string relationshipName = "Organisation";
             BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
@@ -210,8 +200,6 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSetWithBONotHavingSpecifiedRelationship_ShouldNotFireRelationshipChangedEvent()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string relationshipName = "SomeNonExistentRelationship";
             BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
@@ -240,8 +228,6 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSet_HavingRelationshipOnRelatedBO_ShouldReturnRelatedBOsRelationship()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Organisation = new OrganisationTestBO();
             const string innerRelationshipName = "ContactPeople";
@@ -261,20 +247,21 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSet_HavingRelationshipOnRelatedBO_AndRelatedBoIsNull_ShouldReturnNullRelationship()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string innerRelationshipName = "ContactPeople";
             const string relationshipName = "Organisation." + innerRelationshipName;
             BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
-            //---------------Assert Precondition----------------
-            Assert.IsNull(boRelationshipMapper.BusinessObject);
-            Assert.IsNull(boRelationshipMapper.Relationship);
-            Assert.IsNull(contactPersonTestBO.Organisation);
-            //---------------Execute Test ----------------------
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO{Organisation = new OrganisationTestBO()};
+            ContactPersonTestBO newContactPersonTestBO = new ContactPersonTestBO();
             boRelationshipMapper.BusinessObject = contactPersonTestBO;
-            //---------------Test Result -----------------------
+            //---------------Assert Precondition----------------
             Assert.AreSame(contactPersonTestBO, boRelationshipMapper.BusinessObject);
+            Assert.IsNotNull(boRelationshipMapper.Relationship);
+            Assert.IsNotNull(contactPersonTestBO.Organisation);
+            Assert.IsNull(newContactPersonTestBO.Organisation);
+            //---------------Execute Test ----------------------
+            boRelationshipMapper.BusinessObject = newContactPersonTestBO;
+            //---------------Test Result -----------------------
+            Assert.AreSame(newContactPersonTestBO, boRelationshipMapper.BusinessObject);
             Assert.IsNull(boRelationshipMapper.Relationship);
         }
 
@@ -282,16 +269,15 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSetToNull_HavingRelationshipOnRelatedBO_ShouldReturnNullRelationship()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string innerRelationshipName = "ContactPeople";
             const string relationshipName = "Organisation." + innerRelationshipName;
             BORelationshipMapper boRelationshipMapper = new BORelationshipMapper(relationshipName);
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO { Organisation = new OrganisationTestBO() };
+            boRelationshipMapper.BusinessObject = contactPersonTestBO;
             //---------------Assert Precondition----------------
-            Assert.IsNull(boRelationshipMapper.BusinessObject);
-            Assert.IsNull(boRelationshipMapper.Relationship);
-            Assert.IsNull(contactPersonTestBO.Organisation);
+            Assert.IsNotNull(boRelationshipMapper.BusinessObject);
+            Assert.IsNotNull(boRelationshipMapper.Relationship);
+            Assert.IsNotNull(contactPersonTestBO.Organisation);
             //---------------Execute Test ----------------------
             boRelationshipMapper.BusinessObject = null;
             //---------------Test Result -----------------------
@@ -303,8 +289,7 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSet_HavingNonExistingRelationshipOnRelatedBO_ShouldThrowError()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            ClassDef organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            ClassDef organisationClassDef = ClassDef.Get<OrganisationTestBO>();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Organisation = new OrganisationTestBO();
             const string innerRelationshipName = "NonExistingRelationship";
@@ -335,8 +320,6 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSet_HavingRelationshipOnRelatedBO_ShouldFireRelationshipChangeEvent()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Organisation = new OrganisationTestBO();
             const string innerRelationshipName = "ContactPeople";
@@ -360,8 +343,6 @@ namespace Habanero.Test.BO
         public void Test_ChangeRelatedBO_WhenSetToDifferentBo_HavingRelationshipOnRelatedBO_ShouldChangeRelationship()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             OrganisationTestBO oldOrganisationTestBO = new OrganisationTestBO();
             contactPersonTestBO.Organisation = oldOrganisationTestBO;
@@ -384,8 +365,6 @@ namespace Habanero.Test.BO
         public void Test_ChangeRelatedBO_WhenSetToDifferentBo_HavingRelationshipOnRelatedBO_ShouldFireRelationshipChangedEvent()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             OrganisationTestBO oldOrganisationTestBO = new OrganisationTestBO();
             contactPersonTestBO.Organisation = oldOrganisationTestBO;
@@ -408,8 +387,6 @@ namespace Habanero.Test.BO
         public void Test_ChangeRelatedBO_WhenSetToNull_HavingRelationshipOnRelatedBO_ShouldChangeRelationshipToNull()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             OrganisationTestBO oldOrganisationTestBO = new OrganisationTestBO();
             contactPersonTestBO.Organisation = oldOrganisationTestBO;
@@ -432,8 +409,7 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSet_HavingNonExistingChildRelationshipForRelatedBo_ShouldThrowError()
         {
             //---------------Set up test pack-------------------
-            ClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
+            ClassDef contactPersonClassDef = ClassDef.Get<ContactPersonTestBO>();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Organisation = new OrganisationTestBO();
             const string innerRelationshipName = "Addresses";
@@ -466,6 +442,7 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSet_HavingExistingNonSingleRelationshipOnRelatedBO_ShouldThrowError()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             AddressTestBO.LoadDefaultClassDef();
             ClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();

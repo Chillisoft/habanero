@@ -327,8 +327,8 @@ namespace Habanero.BO
                 {
                     if (IsReflectiveProperty(uiProperty)) continue;
 
-                    SetBOPropertyValue(changedBo, uiProperty.PropertyName, row);
-                    IBOProp prop = changedBo.Props[uiProperty.PropertyName];
+                    IBOProp prop;
+                    SetBOPropertyValue(changedBo, uiProperty.PropertyName, row, out prop);
                     row.SetColumnError(uiProperty.PropertyName, prop.InvalidReason);
                 }
                 row.RowError = changedBo.Status.IsValidMessage;
@@ -341,12 +341,16 @@ namespace Habanero.BO
             }
         }
 
-        private void SetBOPropertyValue(IBusinessObject bo, string propertyName, DataRow row)
+        private void SetBOPropertyValue(IBusinessObject bo, string propertyName, DataRow row, out IBOProp property)
         {
             try
             {
                 DeregisterForBOEvents();
-                bo.SetPropertyValue(propertyName, row[propertyName]);
+                BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
+                boPropertyMapper.BusinessObject = bo;
+                property = boPropertyMapper.Property;
+                property.Value = row[propertyName];
+                //bo.SetPropertyValue(propertyName, row[propertyName]);
             }
             finally
             {
@@ -441,7 +445,8 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        SetBOPropertyValue(newBo, uiProperty.PropertyName, row);
+                        IBOProp property;
+                        SetBOPropertyValue(newBo, uiProperty.PropertyName, row, out property);
                     }
                 }
                 string message;
@@ -459,7 +464,7 @@ namespace Habanero.BO
                 if (newBo.ID.ObjectID == Guid.Empty)
                 {
                     throw new HabaneroDeveloperException
-                        ("Serious error The objectID is Emnpty", "Serious error The objectID is Emnpty");
+                        ("Serious error The objectID is Empty", "Serious error The objectID is Empty");
                 }
                 _isBeingAdded = false;
             }
@@ -476,6 +481,7 @@ namespace Habanero.BO
 
         private static bool IsReflectiveProperty(UIGridColumn uiProperty)
         {
+            return uiProperty.PropertyName.IndexOf("-") >= 0;
             return uiProperty.PropertyName.IndexOf(".") >= 0 || uiProperty.PropertyName.IndexOf("-") >= 0;
         }
     }

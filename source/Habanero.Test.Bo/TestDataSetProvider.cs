@@ -18,7 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Data;
+using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -64,11 +66,12 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetupTest()
         {
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
             this.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
             new Address();
         }
-        
+
         public virtual void SetupTestData()
         {
             
@@ -775,6 +778,34 @@ namespace Habanero.Test.BO
             Assert.AreEqual(bo.DateProperty, value);
         }
 
+        [Test]
+        public void Test_GetDataTable_WhenMultipleLevelProp_ShouldLoadCorrectly()
+        {
+            //---------------Set up test pack-------------------
+            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+            ClassDef.ClassDefs.Clear();
+            AddressTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
+            BusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
+            AddressTestBO address = AddressTestBO.CreateUnsavedAddress(contactPersonTestBO);
+
+            UIGrid uiGrid = new UIGrid();
+            const string propertyName = "ContactPersonTestBO.FirstName";
+            uiGrid.Add(new UIGridColumn("Contact First Name", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(addresses);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, addresses.Count);
+            //---------------Execute Test ----------------------
+            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, table.Rows.Count);
+            Assert.AreEqual(contactPersonTestBO.FirstName, table.Rows[0][propertyName]);
+            recordingExceptionNotifier.RethrowRecordedException();
+        }
         private static UIGrid CreateUiGridWithColumn(ClassDef classDef, string columnName)
         {
             UIGrid uiGrid = new UIGrid();

@@ -143,6 +143,7 @@
     <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Composition.cs" />
     <Compile Include="TestBOError.cs" />
     <Compile Include="TestBOObjectID.cs" />
+    <Compile Include="TestBOPropertyMapper.cs" />
     <Compile Include="TestBOPropInteger.cs" />
     <Compile Include="TestBORelationshipMapper.cs" />
     <Compile Include="TestBOSerialisation.cs" />
@@ -272,7 +273,7 @@
     <Compile Include="Loaders\TestXmlUIFormColumnLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormTabLoader.cs" />
     <Compile Include="TestDataSetProvider.cs" />
-    <Compile Include="TestEditableDataProvider.cs" />
+    <Compile Include="TestEditableDataSetProvider.cs" />
     <Compile Include="TestReadOnlyDataSetProvider.cs" />
     <Compile Include="TestBoKey.cs" />
     <Compile Include="TestBoMapper.cs">

@@ -18,7 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Data;
+using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -27,10 +29,10 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     /// <summary>
-    /// Summary description for TestEditableDataProvider.
+    /// Summary description for TestEditableDataSetProvider.
     /// </summary>
     [TestFixture]
-    public class TestEditableDataProvider : TestDataSetProvider
+    public class TestEditableDataSetProvider : TestDataSetProvider
     {
         protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
@@ -494,8 +496,6 @@ namespace Habanero.Test.BO
 //                (1, boCollection.CreatedBusinessObjects.Count,
 //                 "Adding a row to the table should use the collection to create the object");
 
-
-
         [Test]
         public void Test_EditDataTableEditsBo()
         {
@@ -520,8 +520,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual(updatedvalue, table.Rows[0][columnName]);
             Assert.AreEqual(updatedvalue, bo1.GetPropertyValue(columnName));
         }
+
         [Test]
-        public void Test_EditDataTable_ToDBNUll_EditsBo()
+        public void Test_EditDataTable_ToDBNull_EditsBo()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col = null;
@@ -543,6 +544,77 @@ namespace Habanero.Test.BO
             Assert.AreEqual(bo1.ID.AsString_CurrentValue(), table.Rows[0][_dataTableIdColumnName]);
             Assert.AreEqual(DBNull.Value, table.Rows[0][columnName]);
             Assert.AreEqual(null, bo1.GetPropertyValue(columnName));
+        }
+
+        [Test]
+        public void Test_EditDataTable_WhenMultipleLevelProp_ShouldEditRelatedBO()
+        {
+            //---------------Set up test pack-------------------
+            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+            AddressTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            OrganisationTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<AddressTestBO> addresses = new BusinessObjectCollection<AddressTestBO>();
+            addresses.Add(new AddressTestBO { ContactPersonTestBO = new ContactPersonTestBO() });
+            addresses.Add(new AddressTestBO { ContactPersonTestBO = new ContactPersonTestBO() });
+            addresses.Add(new AddressTestBO { ContactPersonTestBO = new ContactPersonTestBO() });
+
+            OrganisationTestBO organisation = new OrganisationTestBO();
+
+            UIGrid uiGrid = new UIGrid();
+            const string propertyName = "ContactPersonTestBO.OrganisationID";
+            uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(addresses);
+            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+            Assert.AreEqual(3, table.Rows.Count);
+            Assert.AreEqual(DBNull.Value, table.Rows[0][propertyName]);
+            //---------------Execute Test ----------------------
+            table.Rows[0][propertyName] = organisation.OrganisationID;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(organisation.OrganisationID, table.Rows[0][propertyName]);
+            Assert.AreEqual(organisation.OrganisationID, addresses[0].ContactPersonTestBO.OrganisationID);
+            recordingExceptionNotifier.RethrowRecordedException();
+        }
+
+        [Test]
+        public void Test_AddRow_WhenMultipleLevelProp_ShouldAddBOWithRelatedPropSet()
+        {
+            //---------------Set up test pack-------------------
+            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+            ClassDef.ClassDefs.Clear();
+            AddressTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
+            BusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
+
+            OrganisationTestBO organisation = new OrganisationTestBO();
+
+            UIGrid uiGrid = new UIGrid();
+            const string propertyName = "ContactPersonTestBO.OrganisationID";
+            uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(addresses);
+            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+            Assert.AreEqual(0, table.Rows.Count);
+            Assert.AreEqual(0, addresses.Count);
+            //---------------Execute Test ----------------------
+            table.Rows.Add(new object[] { null, organisation.OrganisationID });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, table.Rows.Count);
+            Assert.AreEqual(1, addresses.Count);
+            Assert.AreEqual(organisation.OrganisationID.ToString(), table.Rows[0][propertyName]);
+            Assert.AreEqual(organisation.OrganisationID, contactPersonTestBO.OrganisationID);
+            recordingExceptionNotifier.RethrowRecordedException();
         }
 
         [Test]
