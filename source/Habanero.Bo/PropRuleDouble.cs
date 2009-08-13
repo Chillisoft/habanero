@@ -9,8 +9,16 @@ namespace Habanero.BO
     /// </summary>
     public class PropRuleDouble : PropRuleBase
     {
-        private Double _minValue = Double.MinValue;
-        private Double _maxValue = Double.MaxValue;
+        /// <summary>
+        /// Constructor to initialise a new rule
+        /// </summary>
+        /// <param name="ruleName">The rule name</param>
+        /// <param name="message">The rule failure message</param>
+        public PropRuleDouble(string ruleName, string message)
+            : base(ruleName, message)
+        {
+            InitialiseParameters(double.MinValue, double.MaxValue);
+        }
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -22,20 +30,13 @@ namespace Habanero.BO
         public PropRuleDouble(string ruleName, string message, Double minValue, Double maxValue)
             : base(ruleName, message)
         {
-            _minValue = minValue;
-            _maxValue = maxValue;
+            InitialiseParameters(minValue, maxValue);
         }
 
-        /// <summary>
-        /// Constructor to initialise a new rule
-        /// </summary>
-        /// <param name="name">The rule name</param>
-        /// <param name="message">This rule's failure message</param>
-        /// <param name="parameters">The parameters for this rule.</param>
-        public PropRuleDouble(string name, string message, Dictionary<string, object> parameters)
-            : base(name, message)
+        private void InitialiseParameters(double minValue, double maxValue)
         {
-            base.Parameters = parameters;
+            MinValue = minValue;
+            MaxValue = maxValue;
         }
 
         /// <summary>
@@ -46,7 +47,9 @@ namespace Habanero.BO
         {
             try
             {
-                foreach (string key in _parameters.Keys)
+                string[] keys = new string[_parameters.Keys.Count];
+                _parameters.Keys.CopyTo(keys, 0);
+                foreach (string key in keys)
                 {
                     object value = _parameters[key];
                     if (value == null) return;
@@ -57,10 +60,10 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "min":
-                            _minValue = Convert.ToDouble(value);
+                            MinValue = Convert.ToDouble(value);
                             break;
                         case "max":
-                            _maxValue = Convert.ToDouble(value);
+                            MaxValue = Convert.ToDouble(value);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException
@@ -88,19 +91,19 @@ namespace Habanero.BO
         /// <summary>
         /// Gets and sets the minimum value that the Double can be assigned
         /// </summary>
-        public Double MinValue
+        public double MinValue
         {
-            get { return _minValue; }
-            protected set { _minValue = value; }
+            get { return Convert.ToDouble(_parameters["min"]); }
+            protected set { _parameters["min"] = value; }
         }
 
         /// <summary>
         /// Gets and sets the maximum value that the Double can be assigned
         /// </summary>
-        public Double MaxValue
+        public double MaxValue
         {
-            get { return _maxValue; }
-            protected set { _maxValue = value; }
+            get { return Convert.ToDouble(_parameters["max"]); }
+            protected set { _parameters["max"] = value; }
         }
 
         /// <summary>
@@ -117,7 +120,7 @@ namespace Habanero.BO
             if (propValue is Double)
             {
                 Double DoublePropRule = (Double)propValue;
-                if (DoublePropRule < _minValue)
+                if (DoublePropRule < MinValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (!String.IsNullOrEmpty(Message))
@@ -126,11 +129,11 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        errorMessage += "The value cannot be less than " + _minValue + " .";
+                        errorMessage += "The value cannot be less than " + MinValue + " .";
                     }
                     valueValid = false;
                 }
-                if (DoublePropRule > _maxValue)
+                if (DoublePropRule > MaxValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (!String.IsNullOrEmpty(Message))
@@ -139,7 +142,7 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        errorMessage += "The value cannot be more than " + _maxValue + " .";
+                        errorMessage += "The value cannot be more than " + MaxValue + " .";
                     }
                     valueValid = false;
                 }

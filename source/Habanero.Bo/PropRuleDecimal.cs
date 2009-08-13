@@ -28,9 +28,6 @@ namespace Habanero.BO
     /// </summary>
     public class PropRuleDecimal : PropRuleBase
     {
-        private decimal _minValue = Decimal.MinValue;
-        private decimal _maxValue = Decimal.MaxValue;
-
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
@@ -41,8 +38,7 @@ namespace Habanero.BO
         public PropRuleDecimal(string ruleName, string message, decimal minValue, decimal maxValue)
             : base(ruleName, message)
         {
-            _minValue = minValue;
-            _maxValue = maxValue;
+            InitialiseParameters(minValue, maxValue);
         }
 
         /// <summary>
@@ -50,12 +46,17 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="name">The rule name</param>
         /// <param name="message">This rule's failure message</param>
-        /// <param name="parameters">The parameters for this rule.</param>
-        public PropRuleDecimal(string name, string message, Dictionary<string, object> parameters)
+        public PropRuleDecimal(string name, string message)
 			: base(name, message)
 		{
-			base.Parameters = parameters;
+            InitialiseParameters(Decimal.MinValue, Decimal.MaxValue);
 		}
+
+        private void InitialiseParameters(Decimal minValue, Decimal maxValue)
+        {
+            MinValue = minValue;
+            MaxValue = maxValue;
+        }
 
         /// <summary>
         /// Sets up the parameters to the rule, that is the individual pairs
@@ -65,7 +66,9 @@ namespace Habanero.BO
 		{
             try
             {
-                foreach (string key in _parameters.Keys)
+                string[] keys = new string[_parameters.Keys.Count];
+                _parameters.Keys.CopyTo(keys, 0);
+                foreach (string key in keys)
                 {
                     object value = _parameters[key];
                     if (value == null) return;
@@ -76,10 +79,10 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "min":
-                            _minValue = Convert.ToDecimal(value);
+                            MinValue = Convert.ToDecimal(value);
                             break;
                         case "max":
-                            _maxValue = Convert.ToDecimal(value);
+                            MaxValue = Convert.ToDecimal(value);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException
@@ -105,21 +108,21 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Gets and sets the minimum value that the decimal can be assigned
+        /// Gets and sets the minimum value that the Double can be assigned
         /// </summary>
-        public decimal MinValue
+        public Decimal MinValue
         {
-            get { return _minValue; }
-        	protected set { _minValue = value; }
+            get { return Convert.ToDecimal(_parameters["min"]); }
+            protected set { _parameters["min"] = value; }
         }
 
         /// <summary>
-        /// Gets and sets the maximum value that the decimal can be assigned
+        /// Gets and sets the maximum value that the Double can be assigned
         /// </summary>
-        public decimal MaxValue
+        public Decimal MaxValue
         {
-            get { return _maxValue; }
-        	protected set { _maxValue = value; }
+            get { return Convert.ToDecimal(_parameters["max"]); }
+            protected set { _parameters["max"] = value; }
         }
 
         /// <summary>
@@ -136,7 +139,7 @@ namespace Habanero.BO
             if (propValue is decimal)
             {
                 decimal decimalPropRule = (decimal)propValue;
-                if (decimalPropRule < _minValue)
+                if (decimalPropRule < MinValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (!String.IsNullOrEmpty(Message))
@@ -145,11 +148,11 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        errorMessage += "The value cannot be less than " + _minValue + " .";
+                        errorMessage += "The value cannot be less than " + MinValue + " .";
                     }
                     valueValid = false;
                 }
-                if (decimalPropRule > _maxValue)
+                if (decimalPropRule > MaxValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (!String.IsNullOrEmpty(Message))
@@ -158,7 +161,7 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        errorMessage += "The value cannot be more than " + _maxValue + " .";
+                        errorMessage += "The value cannot be more than " + MaxValue + " .";
                     }
                     valueValid = false;
                 }

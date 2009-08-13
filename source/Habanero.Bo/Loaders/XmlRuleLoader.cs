@@ -72,9 +72,9 @@ namespace Habanero.BO.Loaders
         /// <param name="ruleElement">The xml element containing the
         ///  rule</param>
         /// <returns>Returns the rule object</returns>
-        public PropRuleBase LoadPropertyRule(XmlElement ruleElement)
+        public IPropRule LoadPropertyRule(XmlElement ruleElement)
         {
-            return (PropRuleBase)this.Load(ruleElement);
+            return (IPropRule) this.Load(ruleElement);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Habanero.BO.Loaders
             _class = _reader.GetAttribute("class");
             _assembly = _reader.GetAttribute("assembly");
         	_propRule = CreatePropRule();
-			_ruleParameters = _propRule.Parameters;
+            _ruleParameters = _propRule.Parameters;
             _reader.Read();
             while (_reader.Name == "add")
             {
@@ -118,7 +118,7 @@ namespace Habanero.BO.Loaders
                         "'add' attribute was '" + keyAtt + "' but the allowed " +
                         "attributes are " + String.Join(", ", _propRule.AvailableParameters.ToArray()) + ".");
 				}
-                _ruleParameters[keyAtt] = valueAtt;
+                _propRule.SetParameter(keyAtt, valueAtt);
             	counter++;
                 ReadAndIgnoreEndTag();
             }
@@ -130,7 +130,7 @@ namespace Habanero.BO.Loaders
                     "element for each component of the rule, such as the " +
                     "minimum value for an integer.");
             }
-        	_propRule.Parameters = _ruleParameters;
+        	//_propRule.Parameters = _ruleParameters;
         }
 
         ///// <summary>

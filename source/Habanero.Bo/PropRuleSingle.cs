@@ -9,8 +9,8 @@ namespace Habanero.BO
     /// </summary>
     public class PropRuleSingle : PropRuleBase
     {
-        private Single _minValue = Single.MinValue;
-        private Single _maxValue = Single.MaxValue;
+        //private Single _minValue = Single.MinValue;
+        //private Single _maxValue = Single.MaxValue;
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -22,8 +22,7 @@ namespace Habanero.BO
         public PropRuleSingle(string ruleName, string message, Single minValue, Single maxValue)
             : base(ruleName, message)
         {
-            _minValue = minValue;
-            _maxValue = maxValue;
+           InitialiseParameters(minValue, maxValue);
         }
 
         /// <summary>
@@ -31,11 +30,16 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="name">The rule name</param>
         /// <param name="message">This rule's failure message</param>
-        /// <param name="parameters">The parameters for this rule.</param>
-        public PropRuleSingle(string name, string message, Dictionary<string, object> parameters)
+        public PropRuleSingle(string name, string message)
             : base(name, message)
         {
-            base.Parameters = parameters;
+            InitialiseParameters(Single.MinValue, Single.MaxValue);
+        }
+
+        private void InitialiseParameters(Single minValue, Single maxValue)
+        {
+            MinValue = minValue;
+            MaxValue = maxValue;
         }
 
         /// <summary>
@@ -46,7 +50,9 @@ namespace Habanero.BO
         {
             try
             {
-                foreach (string key in _parameters.Keys)
+                string[] keys = new string[_parameters.Keys.Count];
+                _parameters.Keys.CopyTo(keys, 0);
+                foreach (string key in keys)
                 {
                     object value = _parameters[key];
                     if (value == null) return;
@@ -57,10 +63,10 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "min":
-                            _minValue = Convert.ToSingle(value);
+                            MinValue = Convert.ToSingle(value);
                             break;
                         case "max":
-                            _maxValue = Convert.ToSingle(value);
+                            MaxValue = Convert.ToSingle(value);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException
@@ -86,21 +92,21 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Gets and sets the minimum value that the Single can be assigned
+        /// Gets and sets the minimum value that the Double can be assigned
         /// </summary>
         public Single MinValue
         {
-            get { return _minValue; }
-            protected set { _minValue = value; }
+            get { return Convert.ToSingle(_parameters["min"]); }
+            protected set { _parameters["min"] = value; }
         }
 
         /// <summary>
-        /// Gets and sets the maximum value that the Single can be assigned
+        /// Gets and sets the maximum value that the Double can be assigned
         /// </summary>
         public Single MaxValue
         {
-            get { return _maxValue; }
-            protected set { _maxValue = value; }
+            get { return Convert.ToSingle(_parameters["max"]); }
+            protected set { _parameters["max"] = value; }
         }
 
         /// <summary>
@@ -117,7 +123,7 @@ namespace Habanero.BO
             if (propValue is Single)
             {
                 Single SinglePropRule = (Single)propValue;
-                if (SinglePropRule < _minValue)
+                if (SinglePropRule < MinValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (!String.IsNullOrEmpty(Message))
@@ -126,11 +132,11 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        errorMessage += "The value cannot be less than " + _minValue + " .";
+                        errorMessage += "The value cannot be less than " + MinValue + " .";
                     }
                     valueValid = false;
                 }
-                if (SinglePropRule > _maxValue)
+                if (SinglePropRule > MaxValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (!String.IsNullOrEmpty(Message))
@@ -139,7 +145,7 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        errorMessage += "The value cannot be more than " + _maxValue + " .";
+                        errorMessage += "The value cannot be more than " + MaxValue + " .";
                     }
                     valueValid = false;
                 }

@@ -28,10 +28,6 @@ namespace Habanero.BO
     /// </summary>
     public class PropRuleDate : PropRuleBase
     {
-        private DateTime _minValue = DateTime.MinValue;
-		private DateTime _maxValue = DateTime.MaxValue;
-        private string _minValueExpression;
-        private string _maxValueExpression;
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
@@ -39,8 +35,9 @@ namespace Habanero.BO
         /// <param name="message">The rule failure message</param>
         public PropRuleDate(string ruleName,
                             string message) 
-			: this(ruleName, message, null, null)
+			: base(ruleName, message)
         {
+            InitialiseParameters(DateTime.MinValue, DateTime.MaxValue);
         }
 
         /// <summary>
@@ -52,26 +49,17 @@ namespace Habanero.BO
         /// <param name="maxValue">The maximum date that can be set</param>
         public PropRuleDate(string ruleName,
                             string message,
-                            DateTime? minValue,
-							DateTime? maxValue)
+                            DateTime minValue,
+							DateTime maxValue)
 			: base(ruleName, message)
         {
-			// if the nullable minvalue is null, then set it to DateTime.MinValue.
-			_minValue = minValue ?? DateTime.MinValue;
-			// if the nullable maxValue is null, then set it to DateTime.MaxValue.
-			_maxValue = maxValue ?? DateTime.MaxValue;
+            InitialiseParameters(minValue, maxValue);
         }
 
-        /// <summary>
-        /// Constructor to initialise a new rule
-        /// </summary>
-        /// <param name="name">The rule name</param>
-        /// <param name="message">This rule's failure message</param>
-        /// <param name="parameters">The parameters for this rule.</param>
-        public PropRuleDate(string name, string message, Dictionary<string, object> parameters)
-			: base(name, message)
+        private void InitialiseParameters(DateTime minValue, DateTime maxValue)
         {
-        	base.Parameters = parameters;
+            MinValue = minValue;
+            MaxValue = maxValue;
         }
 
         /// <summary>
@@ -82,7 +70,9 @@ namespace Habanero.BO
 		{
             try
             {
-                foreach (string key in _parameters.Keys)
+                string[] keys = new string[_parameters.Keys.Count];
+                _parameters.Keys.CopyTo(keys, 0);
+                foreach (string key in keys)
                 {
                     object value = Parameters[key];
                     if (value == null) continue;
@@ -95,21 +85,21 @@ namespace Habanero.BO
                         case "min":
                             if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
                             {
-                                _minValueExpression = Convert.ToString(value);
+                                MinValueExpression = Convert.ToString(value);
                             }
                             else
                             {
-                                _minValue = Convert.ToDateTime(value);
+                                MinValue = Convert.ToDateTime(value);
                             }
                             break;
                         case "max":
                             if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
                             {
-                                _maxValueExpression = Convert.ToString(value);
+                                MaxValueExpression = Convert.ToString(value);
                             }
                             else
                             {
-                                _maxValue = Convert.ToDateTime(value);
+                                MaxValue = Convert.ToDateTime(value);
                             }
                             break;
                         default:
@@ -211,31 +201,42 @@ namespace Habanero.BO
         {
             get
             {
-                return GetValue(_minValueExpression, _minValueExpression == "Now" ? DateTime.Now : _minValue);
+                if (_parameters["min"] is string)
+                {
+                    if ((string)_parameters["min"] == "Today") return DateTime.Today;
+                    if ((string)_parameters["min"] == "Now") return DateTime.Now;
+                }
+                return Convert.ToDateTime(_parameters["min"]);
             }
-			protected set { _minValue = value; }
+            protected set { _parameters["min"] = value; }
 		}
 
-       /// <summary>
+        /// <summary>
         /// Returns the maximum value the date can be
         /// </summary>
         public DateTime MaxValue
         {
             get
             {
-                return GetValue(_maxValueExpression, _maxValueExpression == "Now" ? DateTime.Now : _maxValue);
+                if (_parameters["max"] is string)
+                {
+                    if ((string)_parameters["max"] == "Today") return DateTime.Today;
+                    if ((string)_parameters["max"] == "Now") return DateTime.Now;
+                }
+                return Convert.ToDateTime(_parameters["max"]);
             }
-           protected set { _maxValue = value; }
+            protected set { _parameters["max"] = value; }
         }
 
-        private static DateTime GetValue(string valueExpression, DateTime value)
+        private string MaxValueExpression
         {
-            if (valueExpression == "Today")
-            {
-                return DateTime.Today;
-            }
-            return value;
+            set { _parameters["max"] = value; }
         }
+        private string MinValueExpression
+        {
+            set { _parameters["min"] = value; }
+        }
+
     }
 
 }

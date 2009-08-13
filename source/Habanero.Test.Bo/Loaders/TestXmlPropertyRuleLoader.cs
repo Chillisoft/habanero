@@ -82,13 +82,13 @@ namespace Habanero.Test.BO.Loaders
             IPropRule rule =
                 _loader.LoadRule(typeof (int).Name,
                     @"<rule name=""Test Rule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
-            Assert.AreEqual("PropRuleInteger", rule.GetType().Name, "Incorrect rule type created.");
+            Assert.IsInstanceOfType(typeof(IPropRule), rule);
             Assert.AreEqual("Test Rule", rule.Name, "Name name is not being read from xml correctly.");
             Assert.AreEqual("Test Message", rule.Message, "Message is not being read from xml correctly.");
             //Assert.AreSame(typeof(int), rule.PropertyType,
             //                   "A propRuleInteger should have int as its property type.");
-            Assert.AreEqual(2, ((PropRuleInteger) rule).MinValue);
-            Assert.AreEqual(10, ((PropRuleInteger) rule).MaxValue);
+            Assert.AreEqual("2", ((IPropRule)rule).Parameters["min"]);
+            Assert.AreEqual("10", ((IPropRule)rule).Parameters["max"]);
         }
 
         [Test]
@@ -97,11 +97,11 @@ namespace Habanero.Test.BO.Loaders
             IPropRule rule =
                 _loader.LoadRule(typeof (int).Name,
                     @"<rule name=""TestRule"" message=""Test Message""><add key=""max"" value=""1""/></rule>");
-            Assert.AreEqual(int.MinValue, ((PropRuleInteger) rule).MinValue);
+            Assert.AreEqual(int.MinValue, Convert.ToInt32(rule.Parameters["min"]));
             rule =
                 _loader.LoadRule(typeof (int).Name,
                     @"<rule name=""TestRule"" message=""Test Message""><add key=""min"" value=""1""/></rule>");
-            Assert.AreEqual(int.MaxValue, ((PropRuleInteger) rule).MaxValue);
+            Assert.AreEqual(int.MaxValue, Convert.ToInt32(rule.Parameters["max"]));
         }
 
         //[Test]
@@ -120,19 +120,18 @@ namespace Habanero.Test.BO.Loaders
                 _loader.LoadRule(typeof (string).Name,
                     @"<rule name=""TestString"" message=""String Test Message""><add key=""maxLength"" value=""100""/></rule>");
 
-            Assert.AreEqual("PropRuleString", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("TestString", rule.Name, "Rule name is not being read from xml correctly.");
             Assert.AreEqual("String Test Message", rule.Message, "Message is not being read from xml correctly");
             //Assert.AreSame(typeof(string), propRule.PropertyType,
             //               "A PropRuleString should have string as its property type.");
-            Assert.AreEqual("", ((PropRuleString) rule).PatternMatch,
+            Assert.IsTrue(string.IsNullOrEmpty((string) rule.Parameters["patternMatch"]),
                 "An empty string should be the default pattern match string according to the dtd.");
-            Assert.AreEqual(0, ((PropRuleString) rule).MinLength,
+            Assert.AreEqual(0, Convert.ToInt32(rule.Parameters["minLength"]),
                 "0 should be the default minlength according to the dtd.");
             rule =
                 _loader.LoadRule(typeof (string).Name,
                     @"<rule name=""TestString"" message=""String Test Message""><add key=""minLength"" value=""1""/></rule>");
-            Assert.AreEqual(-1, ((PropRuleString) rule).MaxLength,
+            Assert.AreEqual(-1, Convert.ToInt32(rule.Parameters["maxLength"]),
                 "-1 should be the default maxlength according to the dtd.");
         }
 
@@ -147,10 +146,9 @@ namespace Habanero.Test.BO.Loaders
                         </rule>                          
 ");
 
-            Assert.AreEqual("PropRuleString", rule.GetType().Name, "Incorrect property rule type created.");
-            Assert.AreEqual("Test Pattern", ((PropRuleString) rule).PatternMatch);
-            Assert.AreEqual(5, ((PropRuleString) rule).MinLength);
-            Assert.AreEqual(10, ((PropRuleString) rule).MaxLength);
+            Assert.AreEqual("Test Pattern", rule.Parameters["patternMatch"]);
+            Assert.AreEqual(5, Convert.ToInt32(rule.Parameters["minLength"]));
+            Assert.AreEqual(10, Convert.ToInt32(rule.Parameters["maxLength"]));
         }
 
         [Test]
@@ -162,12 +160,11 @@ namespace Habanero.Test.BO.Loaders
                             <add key=""max"" value=""09 Oct 2004"" />
                         </rule>                          
 ");
-            Assert.AreEqual("PropRuleDate", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("TestDate", rule.Name, "Rule name is not being read from xml correctly.");
             //Assert.AreSame(typeof(DateTime), rule.PropertyType,
             //               "A PropRuleDate should have DateTime as its property type.");
-            Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate) rule).MinValue);
-            Assert.AreEqual(new DateTime(2004, 10, 09), ((PropRuleDate) rule).MaxValue);
+            Assert.AreEqual(new DateTime(2004, 02, 01), Convert.ToDateTime(rule.Parameters["min"]));
+            Assert.AreEqual(new DateTime(2004, 10, 09), Convert.ToDateTime(rule.Parameters["max"]));
         }
 
         [Test]
@@ -179,10 +176,9 @@ namespace Habanero.Test.BO.Loaders
                             <add key=""max"" value=""Today"" />
                         </rule>                          
 ");
-            Assert.AreEqual("PropRuleDate", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("TestDate", rule.Name, "Rule name is not being read from xml correctly.");
-            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MinValue.Date);
-            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MaxValue.Date);
+            Assert.AreEqual("Today", rule.Parameters["min"]);
+            Assert.AreEqual("Today", rule.Parameters["max"]);
         }
         [Test]
         public void TestPropRuleDate_MinValue_Today()
@@ -193,10 +189,9 @@ namespace Habanero.Test.BO.Loaders
                             <add key=""max"" value=""09 Oct 2004"" />
                         </rule>                          
 ");
-            Assert.AreEqual("PropRuleDate", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("TestDate", rule.Name, "Rule name is not being read from xml correctly.");
-            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MinValue.Date);
-            Assert.AreEqual(new DateTime(2004, 10, 09), ((PropRuleDate)rule).MaxValue);
+            Assert.AreEqual("Today", rule.Parameters["min"]);
+            Assert.AreEqual(new DateTime(2004, 10, 09), Convert.ToDateTime(rule.Parameters["max"]));
         }
         [Test]
         public void TestPropRuleDate_MaxValue_Today()
@@ -207,10 +202,9 @@ namespace Habanero.Test.BO.Loaders
                             <add key=""max"" value=""Today"" />
                         </rule>                          
 ");
-            Assert.AreEqual("PropRuleDate", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("TestDate", rule.Name, "Rule name is not being read from xml correctly.");
-            Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
-            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MaxValue.Date);
+            Assert.AreEqual(new DateTime(2004, 02, 01), Convert.ToDateTime(rule.Parameters["min"]));
+            Assert.AreEqual("Today", rule.Parameters["max"]);
         }
         [Test]
         public void TestPropRuleDate_Now()
@@ -221,10 +215,9 @@ namespace Habanero.Test.BO.Loaders
                             <add key=""max"" value=""Now"" />
                         </rule>                          
 ");
-            Assert.AreEqual("PropRuleDate", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("TestDate", rule.Name, "Rule name is not being read from xml correctly.");
-            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MinValue.Date);
-            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MaxValue.Date);
+            Assert.AreEqual("Now", rule.Parameters["min"]);
+            Assert.AreEqual("Now", rule.Parameters["max"]);
         }
 
         [Test]
@@ -236,10 +229,9 @@ namespace Habanero.Test.BO.Loaders
                             <add key=""max"" value=""8.2"" />
                         </rule>                          
 ");
-            Assert.AreEqual("PropRuleDecimal", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("TestDec", rule.Name, "Rule name is not being read from xml correctly.");
-            Assert.AreEqual(1.5, ((PropRuleDecimal) rule).MinValue);
-            Assert.AreEqual(8.2, ((PropRuleDecimal) rule).MaxValue);
+            Assert.AreEqual(1.5, Convert.ToDecimal(rule.Parameters["min"]));
+            Assert.AreEqual(8.2, Convert.ToDecimal(rule.Parameters["max"]));
         }
 
         [Test]
@@ -247,10 +239,10 @@ namespace Habanero.Test.BO.Loaders
         {
             IPropRule rule =
                 _loader.LoadRule(typeof (Decimal).Name, @"<rule name=""TestDec""><add key=""max"" value=""1""/></rule>");
-            Assert.AreEqual(Decimal.MinValue, ((PropRuleDecimal) rule).MinValue);
+            Assert.AreEqual(Decimal.MinValue, Convert.ToDecimal(rule.Parameters["min"]));
             rule =
                 _loader.LoadRule(typeof (Decimal).Name, @"<rule name=""TestDec""><add key=""min"" value=""1""/></rule>");
-            Assert.AreEqual(Decimal.MaxValue, ((PropRuleDecimal) rule).MaxValue);
+            Assert.AreEqual(Decimal.MaxValue, Convert.ToDecimal(rule.Parameters["max"]));
         }
 
         [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
@@ -269,8 +261,7 @@ namespace Habanero.Test.BO.Loaders
                 @"<rule name=""TestCustom"" class=""Habanero.Test.BO.Loaders.MyRule"" assembly=""Habanero.Test.BO"">
                             <add key=""bob"" value=""billy"" />
                         </rule>");
-            Assert.AreEqual("MyRule", rule.GetType().Name, "Incorrect property rule type created.");
-            Assert.AreEqual("billy", ((MyRule) rule).Bob);
+            Assert.AreEqual("billy", rule.Parameters["bob"]);
         }
 
         [Test, ExpectedException(typeof (TypeLoadException))]
@@ -285,11 +276,10 @@ namespace Habanero.Test.BO.Loaders
 
     public class MyRule : PropRuleBase
     {
-        private string _bob;
-
-        public MyRule(string name, string message, Dictionary<string, object> parameters)
+        public MyRule(string name, string message)
             : base(name, message)
         {
+            Bob = "";
         }
 
         protected internal override void SetupParameters()
@@ -297,13 +287,14 @@ namespace Habanero.Test.BO.Loaders
             object value = Parameters["bob"];
             if (value != null)
             {
-                _bob = (string) value;
+                Bob = (string)value;
             }
         }
 
         public string Bob
         {
-            get { return _bob; }
+            get { return (string)_parameters["bob"]; }
+            set { _parameters["bob"] = value; }
         }
 
         public override List<string> AvailableParameters

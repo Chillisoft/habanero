@@ -51,6 +51,8 @@ namespace Habanero.Base
         /// </summary>
         Dictionary<string, object> Parameters { get; set; }
 
+        void SetParameter(string parameterName, object value);
+
         /// <summary>
         /// Returns the list of available parameter names for the rule.
         /// This method must be implemented by creating a list of the names

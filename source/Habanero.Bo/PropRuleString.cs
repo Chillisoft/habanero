@@ -31,40 +31,18 @@ namespace Habanero.BO
     /// </summary>
     public class PropRuleString : PropRuleBase
     {
-        private int _maxLength = -1;
-        private int _minLength;
-    	private string _patternMatch = ""; //regex pattern match
-        private string _patternMatchMessage = "";
+        #region Constructors
 
         ///// <summary>
         ///// Constructor to initialise a new rule
         ///// </summary>
         ///// <param name="ruleName">The rule name</param>
-        ///// <param name="isCompulsory">Whether a value is compulsory and
-        ///// null values are invalid</param>
-        ///// <param name="minLength">The minimum length required for the string</param>
-        ///// <param name="maxLength">The maximum length allowed for the string</param>
-        //public PropRuleString(string ruleName,
-        //                      int minLength,
-        //                      int maxLength) : base(ruleName, typeof (string))
-        //{
-        //    _maxLength = maxLength;
-        //    _minLength = minLength;
-        //}
-
-        #region Constructors
-
-        /// <summary>
-        /// Constructor to initialise a new rule
-        /// </summary>
-        /// <param name="ruleName">The rule name</param>
-        /// <param name="message">This rule's failure message</param>
-        /// <param name="parameters">The parameters for this rule.</param>
-        public PropRuleString(string ruleName, string message, Dictionary<string, object> parameters)
-            : base(ruleName, message)
-		{
-			base.Parameters = parameters;
-		}
+        ///// <param name="message">This rule's failure message</param>
+        ///// <param name="parameters">The parameters for this rule.</param>
+        public PropRuleString(string name, string message) : base(name, message)
+        {
+            InitialiseParameters(0, -1, "", "");
+        }
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -84,9 +62,7 @@ namespace Habanero.BO
                                 string patternMatch)
             : base(ruleName, message)
         {
-            _minLength = minLength;
-            _maxLength = maxLength;
-            _patternMatch = patternMatch ?? "";
+            InitialiseParameters(minLength, maxLength, "", patternMatch ?? "");
         }
 
         /// <summary>
@@ -107,10 +83,15 @@ namespace Habanero.BO
                                 string patternMatchMessage)
             : base(ruleName, message)
         {
-            _minLength = minLength;
-            _maxLength = maxLength;
-            _patternMatchMessage = patternMatchMessage;
-            _patternMatch = patternMatch ?? "";
+            InitialiseParameters(minLength, maxLength, patternMatchMessage, patternMatch);
+        }
+
+        private void InitialiseParameters(int minLength, int maxLength, string patternMatchMessage, string patternMatch)
+        {
+            MinLength = minLength;
+            MaxLength = maxLength;
+            PatternMatchMessage = patternMatchMessage;
+            PatternMatch = patternMatch ?? "";
         }
 
         #endregion //Constructors
@@ -123,7 +104,9 @@ namespace Habanero.BO
 		{
             try
             {
-                foreach (string key in _parameters.Keys)
+                string[] keys = new string[_parameters.Keys.Count];
+                _parameters.Keys.CopyTo(keys, 0);
+                foreach (string key in keys)
                 {
                     object value = _parameters[key];
                     if (value == null) continue;
@@ -134,16 +117,16 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "patternMatch":
-                            _patternMatch = Convert.ToString(value);
+                            PatternMatch = Convert.ToString(value);
                             break;
                         case "patternMatchMessage":
-                            _patternMatchMessage = Convert.ToString(value);
+                            PatternMatchMessage = Convert.ToString(value);
                             break;
                         case "minLength":
-                            _minLength = Convert.ToInt32(value);
+                            MinLength = Convert.ToInt32(value);
                             break;
                         case "maxLength":
-                            _maxLength = Convert.ToInt32(value);
+                            MaxLength = Convert.ToInt32(value);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException
@@ -224,16 +207,16 @@ namespace Habanero.BO
         protected bool CheckPatternMatchRule(string propName, Object propValue,
                                              ref string errorMessage)
         {
-            if (_patternMatch.Length == 0 || String.IsNullOrEmpty(Convert.ToString(propValue)))
+            if (PatternMatch.Length == 0 || String.IsNullOrEmpty(Convert.ToString(propValue)))
             {
                 return true;
             }
-            if (!Regex.IsMatch((string) propValue, _patternMatch))
+            if (!Regex.IsMatch((string) propValue, PatternMatch))
             {
                 errorMessage = GetBaseErrorMessage(propValue, propName);
-                if (!String.IsNullOrEmpty(_patternMatchMessage))
+                if (!String.IsNullOrEmpty(PatternMatchMessage))
                 {
-                    errorMessage += _patternMatchMessage;
+                    errorMessage += PatternMatchMessage;
                 }
                 else if (!String.IsNullOrEmpty(Message))
                 {
@@ -241,7 +224,7 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    errorMessage += "It does not fit the required format of '" + _patternMatch + "'.";
+                    errorMessage += "It does not fit the required format of '" + PatternMatch + "'.";
                 }
                 return false;
             }
@@ -261,7 +244,7 @@ namespace Habanero.BO
                                        ref string errorMessage)
         {
             //Check the appropriate length rules
-            if (_minLength > 0 && ((string) propValue).Length < _minLength)
+            if (MinLength > 0 && ((string) propValue).Length < MinLength)
             {
                 errorMessage = GetBaseErrorMessage(propValue, propName);
                 if (!String.IsNullOrEmpty(Message))
@@ -270,11 +253,11 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    errorMessage += "The length cannot be less than " + _minLength + " character(s).";
+                    errorMessage += "The length cannot be less than " + MinLength + " character(s).";
                 }
                 return false;
             }
-            if (_maxLength > 0 && ((string) propValue).Length > _maxLength)
+            if (MaxLength > 0 && ((string) propValue).Length > MaxLength)
             {
                 errorMessage = GetBaseErrorMessage(propValue, propName);
                 if (!String.IsNullOrEmpty(Message))
@@ -283,7 +266,7 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    errorMessage += "The length cannot be more than " + _maxLength + " character(s).";
+                    errorMessage += "The length cannot be more than " + MaxLength + " character(s).";
                 }
                 return false;
             }
@@ -297,8 +280,8 @@ namespace Habanero.BO
         /// </summary>
         public int MaxLength
         {
-			get { return _maxLength; }
-			protected set { _maxLength = value; }
+            get { return Convert.ToInt32(Parameters["maxLength"]); }
+			protected set { Parameters["maxLength"] = value; }
         }
 
         /// <summary>
@@ -306,8 +289,8 @@ namespace Habanero.BO
         /// </summary>
         public int MinLength
         {
-			get { return _minLength; }
-			protected set { _minLength = value; }
+            get { return Convert.ToInt32(Parameters["minLength"]); }
+            protected set { Parameters["minLength"] = value; }
         }
 
         /// <summary>
@@ -315,18 +298,17 @@ namespace Habanero.BO
         /// </summary>
         public string PatternMatch
         {
-            get { return _patternMatch; }
-            protected set { _patternMatch = value; }
+            get { return Convert.ToString(Parameters["patternMatch"]); }
+            protected set { Parameters["patternMatch"] = value; }
         }
-
-
+ 
         /// <summary>
         /// Returns the pattern match error message which is displayed if the pattern match fails.
         /// </summary>
         public string PatternMatchMessage
         {
-            get { return _patternMatchMessage; }
-            set { _patternMatchMessage = value; }
+            get { return Convert.ToString(Parameters["patternMatchMessage"]); }
+            protected set { Parameters["patternMatchMessage"] = value; }
         }
     }
 }

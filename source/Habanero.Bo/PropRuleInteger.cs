@@ -19,17 +19,20 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
+
+
     /// <summary>
     /// Checks integer values against property rules that test for validity
     /// </summary>
     public class PropRuleInteger : PropRuleBase
     {
-        private int _minValue = int.MinValue;
-        private int _maxValue = int.MaxValue;
+        //private int _minValue = int.MinValue;
+        //private int _maxValue = int.MaxValue;
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -40,8 +43,13 @@ namespace Habanero.BO
         /// <param name="max">The maximum value allowed for the integer</param>
         public PropRuleInteger(string name, string message, int min, int max) : base(name, message)
         {
-            _minValue = min;
-            _maxValue = max;
+            InitialiseParameters(min, max);
+        }
+
+        private void InitialiseParameters(int min, int max)
+        {
+            MinValue = min;
+            MaxValue = max;
         }
 
         /// <summary>
@@ -49,10 +57,9 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="name">The rule name</param>
         /// <param name="message">This rule's failure message</param>
-        /// <param name="parameters">The parameters for this rule.  Valid parameters are "min" and "max"</param>
-        public PropRuleInteger(string name, string message, Dictionary<string, object> parameters) : base(name, message)
+        public PropRuleInteger(string name, string message) : base(name, message)
         {
-            base.Parameters = parameters;
+            InitialiseParameters(int.MinValue, int.MaxValue);
         }
 
         /// <summary>
@@ -63,21 +70,19 @@ namespace Habanero.BO
         {
             try
             {
-                foreach (string key in _parameters.Keys)
+                string[] keys = new string[_parameters.Keys.Count];
+                _parameters.Keys.CopyTo(keys, 0);
+                foreach (string key in keys)
                 {
                     object value = _parameters[key];
-                    if (value == null) continue;
-                    if (value is string)
-                    {
-                        if (string.IsNullOrEmpty(Convert.ToString(value))) return;
-                    }
+
                     switch (key)
                     {
                         case "min":
-                            _minValue = Convert.ToInt32(value);
+                            MinValue = Convert.ToInt32(value);
                             break;
                         case "max":
-                            _maxValue = Convert.ToInt32(value);
+                            MaxValue = Convert.ToInt32(value);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException
@@ -107,8 +112,8 @@ namespace Habanero.BO
         /// </summary>
         public int MinValue
         {
-            get { return _minValue; }
-            protected set { _minValue = value; }
+            get { return Convert.ToInt32(Parameters["min"]); }
+            set { Parameters["min"] = value; }
         }
 
         /// <summary>
@@ -116,8 +121,14 @@ namespace Habanero.BO
         /// </summary>
         public int MaxValue
         {
-            get { return _maxValue; }
-            protected set { _maxValue = value; }
+            get
+            {
+                return Convert.ToInt32(Parameters["max"]);
+            }
+            set
+            {
+                Parameters["max"] = value;
+            }
         }
 
         /// <summary>
@@ -134,7 +145,7 @@ namespace Habanero.BO
             if (propValue is int)
             {
                 int intPropRule = (int) propValue;
-                if (intPropRule < _minValue)
+                if (intPropRule < MinValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (!String.IsNullOrEmpty(Message))
@@ -143,11 +154,11 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        errorMessage += "The value cannot be less than " + _minValue + ".";
+                        errorMessage += "The value cannot be less than " + MinValue + ".";
                     }
                     valueValid = false;
                 }
-                if (intPropRule > _maxValue)
+                if (intPropRule > MaxValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (!String.IsNullOrEmpty(Message))
@@ -156,7 +167,7 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        errorMessage += "The value cannot be more than " + _maxValue + ".";
+                        errorMessage += "The value cannot be more than " + MaxValue + ".";
                     }
                     valueValid = false;
                 }

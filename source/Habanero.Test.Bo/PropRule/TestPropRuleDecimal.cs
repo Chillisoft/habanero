@@ -17,7 +17,11 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -50,6 +54,79 @@ namespace Habanero.Test.BO
             errorMessage = "";
             Assert.IsFalse(rule.IsPropValueValid("Propname", -53444.33222m, ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
+        }
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
+
+        [Test]
+        public void TestPropRuleDecimal_MaxValue_ActualValueLT()
+        {
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,
+                                                @"<rule name=""TestDecimal""  >
+                            <add key=""min"" value=""12.22"" />
+                            <add key=""max"" value=""15.51"" />
+                        </rule>                          
+");
+            //-----------------Assert Preconditions ---------------------------
+            Assert.AreEqual(12.22d, ((PropRuleDecimal)rule).MinValue);
+            Assert.AreEqual(15.51d, ((PropRuleDecimal)rule).MaxValue);
+
+            //---------------Execute ------------------------------------------
+            string errorMessage = "";
+            bool isValid = rule.IsPropValueValid("Propname", 13.1d, ref errorMessage);
+
+            //--------------Verify Result -------------------------------------
+            Assert.IsTrue(isValid);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
+        }
+
+        [Test]
+        public void TestPropRuleDecimal_MaxValue_ActualValueEquals()
+        {
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,
+                                                @"<rule name=""TestDecimal""  >
+                            <add key=""min"" value=""12.22"" />
+                            <add key=""max"" value=""15.51"" />
+                        </rule>                          
+");
+            //-----------------Assert Preconditions ---------------------------
+            Assert.AreEqual(12.22d, ((PropRuleDecimal)rule).MinValue);
+            Assert.AreEqual(15.51d, ((PropRuleDecimal)rule).MaxValue);
+
+            //---------------Execute ------------------------------------------
+            string errorMessage = "";
+            bool isValid = rule.IsPropValueValid("Propname", 15.51d, ref errorMessage);
+
+            //--------------Verify Result -------------------------------------
+            Assert.IsTrue(isValid);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
+        }
+
+        [Test]
+        public void TestPropRuleDecimal_MaxValue_ActualValueGT()
+        {
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,
+                                                @"<rule name=""TestDecimal""  >
+                            <add key=""min"" value=""12.22"" />
+                            <add key=""max"" value=""15.51"" />
+                        </rule>                          
+");
+            //-----------------Assert Preconditions ---------------------------
+            Assert.AreEqual(12.22D, ((PropRuleDecimal)rule).MinValue);
+            Assert.AreEqual(15.51D, ((PropRuleDecimal)rule).MaxValue);
+
+            //---------------Execute ------------------------------------------
+            string errorMessage = "";
+            bool isValid = rule.IsPropValueValid("Propname", new Decimal(15.56), ref errorMessage);
+
+            //--------------Verify Result -------------------------------------
+            Assert.IsFalse(isValid);
+            Assert.IsFalse(string.IsNullOrEmpty(errorMessage));
         }
     }
 }

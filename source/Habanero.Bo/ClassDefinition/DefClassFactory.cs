@@ -124,7 +124,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public IPropRule CreatePropRuleDate(string name, string message)
 		{
-			return new PropRuleDate(name, message, null);
+			return new PropRuleDate(name, message);
 		}
 
         ///<summary>
@@ -134,7 +134,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public IPropRule CreatePropRuleDecimal(string name, string message)
 		{
-			return new PropRuleDecimal(name, message, null);
+			return new PropRuleDecimal(name, message);
 		}
 
         ///<summary>
@@ -144,7 +144,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public IPropRule CreatePropRuleInteger(string name, string message)
 		{
-			return new PropRuleInteger(name, message, null);
+			return new PropRuleInteger(name, message);
 		}
 
         ///<summary>
@@ -154,7 +154,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public IPropRule CreatePropRuleString(string name, string message)
 		{
-			return new PropRuleString(name, message, null);
+			return new PropRuleString(name, message);
 		}
         /// <summary>
         /// Creates a <see cref="PropRuleSingle"/>
@@ -164,7 +164,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         public IPropRule CreatePropRuleSingle(string name, string message)
         {
-            return new PropRuleSingle(name, message, null);
+            return new PropRuleSingle(name, message);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         public IPropRule CreatePropRuleDouble(string name, string message)
         {
-            return new PropRuleDouble(name, message, null);
+            return new PropRuleDouble(name, message);
         }
 
         ///<summary>

@@ -51,7 +51,8 @@ namespace Habanero.BO
 		{
 			Name = name;
 			Message = message;
-			_parameters = FillParameters(AvailableParameters, _parameters);
+            _parameters = new Dictionary<string, object>();
+			FillParameters(AvailableParameters, _parameters);
 		}
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace Habanero.BO
 			get { return _parameters; }
 			set
 			{
-				_parameters = FillParameters(AvailableParameters, value);
+				FillParameters(AvailableParameters, value);
 				SetupParameters();
 			}
     	}
@@ -116,25 +117,19 @@ namespace Habanero.BO
         /// </summary>
         public string Message { get; set; }
 
-        private static Dictionary<string, object> FillParameters(List<string> availableParams, Dictionary<string, object> currentCollection)
+        private void FillParameters(List<string> availableParams, Dictionary<string, object> currentCollection)
 		{
-			Dictionary<string, object> parameters = new Dictionary<string, object>();
 			if (currentCollection == null)
 			{
 				currentCollection = new Dictionary<string, object>();
 			}
-			if (availableParams == null) return new Dictionary<string, object>();
 			foreach (string availableParam in availableParams)
 			{
 				if (currentCollection.ContainsKey(availableParam))
 				{
-					parameters.Add(availableParam, currentCollection[availableParam]);
-				} else
-				{
-					parameters.Add(availableParam, null);
-				}
+					_parameters[availableParam] = currentCollection[availableParam];
+				} 
 			}
-			return parameters;
 		}
         /// <summary>
         /// Returns the base error message that can be used by sub classes of PropRuleBase.
@@ -150,5 +145,10 @@ namespace Habanero.BO
         }
 
         public abstract List<string> AvailableParameters { get; }
+
+        public void SetParameter(string parameterName, object value)
+        {
+            _parameters[parameterName] = value;
+        }
     }
 }
