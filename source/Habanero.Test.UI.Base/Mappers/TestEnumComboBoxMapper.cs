@@ -28,13 +28,52 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
+        public void Test_SetupComboBoxItems_BONotSet_ThrowsException()
+        {
+            //---------------Set up test pack-------------------
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME, false);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                enumComboBoxMapper.SetupComboBoxItems();
+                //---------------Test Result -----------------------
+                Assert.Fail("Expected to throw an InvalidOperationException");
+            } 
+            catch (InvalidOperationException ex)
+            {
+                StringAssert.Contains("The BusinessObject must be set on the EnumComboBoxMapper before calling SetupComboBoxItems", ex.Message);
+            }
+            //---------------Test Result -----------------------
+
+        }
+
+        [Test]
         public void Test_SetupComboBoxItems_PopulatesComboBoxWithEnum()
         {
             //---------------Set up test pack-------------------
-            EnumComboBoxMapper enumComboBoxMapper= CreateComboBox(ENUM_PROP_NAME);
-            ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
             //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME, true);
+            ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, comboBox.Items.Count);
+            Assert.AreEqual("", comboBox.Items[0].ToString());
+            Assert.AreEqual("Option 1", comboBox.Items[1].ToString());
+            Assert.AreEqual("Option 2", comboBox.Items[2].ToString());
+            Assert.AreEqual("Option 3", comboBox.Items[3].ToString());
+        }
+
+        [Test]
+        public void Test_SetupComboBoxItems_PopulatesComboBoxWithEnum_ClearsItemsOnRepopulation()
+        {
+            //---------------Set up test pack-------------------
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME, true);
+            ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(4, comboBox.Items.Count);
             //---------------Execute Test ----------------------
             enumComboBoxMapper.SetupComboBoxItems();
             //---------------Test Result -----------------------
@@ -49,12 +88,12 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_SetupComboBoxItems_PopulatesComboBoxWithSpacedEnum()
         {
             //---------------Set up test pack-------------------
-            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME_PASCAL);
-            ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
+            
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            enumComboBoxMapper.SetupComboBoxItems();
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME_PASCAL, true);
+            ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
             //---------------Test Result -----------------------
             Assert.AreEqual(5, comboBox.Items.Count);
             Assert.AreEqual("", comboBox.Items[0].ToString());
@@ -68,12 +107,11 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_SetupComboBoxItems_PopulatesComboBoxWithEmptyEnum_StillWorksFine()
         {
             //---------------Set up test pack-------------------
-            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME_EMPTY);
-            ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, Enum.GetNames(typeof (TestEnumEmpty)).Length);
+            Assert.AreEqual(0, Enum.GetNames(typeof(TestEnumEmpty)).Length);
             //---------------Execute Test ----------------------
-            enumComboBoxMapper.SetupComboBoxItems();
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME_EMPTY, true);
+            ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
             //---------------Test Result -----------------------
             Assert.AreEqual(1, comboBox.Items.Count);
             Assert.AreEqual("", comboBox.Items[0].ToString());
@@ -83,16 +121,16 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_SetupComboBoxItems_ExceptionThrownIfPropertyTypeNotEnum()
         {
             //---------------Set up test pack-------------------
-            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PKPROP_NAME);
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PKPROP_NAME, false);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
             try
             {
-                enumComboBoxMapper.SetupComboBoxItems();
+                enumComboBoxMapper.BusinessObject = new EnumBO();
                 //---------------Test Result -----------------------
                 Assert.Fail("Expected to throw an InvalidPropertyException");
-            } 
+            }
             catch (InvalidPropertyException ex)
             {
                 StringAssert.Contains("EnumComboBoxMapper can only be used for an enum property type", ex.Message);
@@ -103,9 +141,9 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_InternalUpdateControlValueFromBo_IfNull_SelectsBlank()
         {
             //---------------Set up test pack-------------------
-            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME);
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME, true);
             ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
-            EnumBO enumBO = (EnumBO) enumComboBoxMapper.BusinessObject;
+            EnumBO enumBO = (EnumBO)enumComboBoxMapper.BusinessObject;
             enumComboBoxMapper.SetupComboBoxItems();
             //---------------Assert Precondition----------------
             Assert.AreEqual(-1, comboBox.SelectedIndex);
@@ -119,7 +157,7 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_InternalUpdateControlValueFromBo_IfNotNull_SelectsNonBlank()
         {
             //---------------Set up test pack-------------------
-            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME);
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME, true);
             ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
             EnumBO enumBO = (EnumBO)enumComboBoxMapper.BusinessObject;
             enumComboBoxMapper.SetupComboBoxItems();
@@ -132,10 +170,22 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
+        public void Test_InternalUpdateControlValueFromBo_IfComboBoxNotSetup_CallSetUpComboBoxItems()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME, true);
+            ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, comboBox.Items.Count);
+        }
+
+        [Test]
         public void Test_ApplyChangesToBusinessObject_SelectBlank_SetsPropertyToNull()
         {
             //---------------Set up test pack-------------------
-            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME);
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME, true);
             ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
             EnumBO enumBO = (EnumBO)enumComboBoxMapper.BusinessObject;
             enumComboBoxMapper.SetupComboBoxItems();
@@ -153,7 +203,7 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_ApplyChangesToBusinessObject_SelectMinusOne_SetsPropertyToNull()
         {
             //---------------Set up test pack-------------------
-            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME);
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME, true);
             ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
             EnumBO enumBO = (EnumBO)enumComboBoxMapper.BusinessObject;
             enumComboBoxMapper.SetupComboBoxItems();
@@ -171,7 +221,7 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_ApplyChangesToBusinessObject_SelectNonBlank_SetsPropertyToNonNull()
         {
             //---------------Set up test pack-------------------
-            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME);
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME, true);
             ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
             EnumBO enumBO = (EnumBO)enumComboBoxMapper.BusinessObject;
             enumComboBoxMapper.SetupComboBoxItems();
@@ -186,13 +236,13 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(TestEnum.Option3, enumBO.EnumProp.Value);
         }
 
-        private static EnumComboBoxMapper CreateComboBox(string propertyName)
+        private static EnumComboBoxMapper CreateComboBox(string propertyName, bool setBO)
         {
             EnumBO bo = new EnumBO();
             ComboBoxWin comboBox = new ComboBoxWin();
             IControlFactory controlFactory = new ControlFactoryWin();
             EnumComboBoxMapper enumComboBoxMapper = new EnumComboBoxMapper(comboBox, propertyName, false, controlFactory);
-            enumComboBoxMapper.BusinessObject = bo;
+            if (setBO) enumComboBoxMapper.BusinessObject = bo;
             return enumComboBoxMapper;
         }
 
@@ -226,7 +276,7 @@ namespace Habanero.Test.UI.Base.Mappers
 
         public enum TestEnumEmpty
         {
-            
+
         }
 
         public enum TestEnumPascalCase

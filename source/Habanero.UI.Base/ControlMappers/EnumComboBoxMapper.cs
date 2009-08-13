@@ -49,7 +49,10 @@ namespace Habanero.UI.Base
         /// </summary>
         protected override void InternalUpdateControlValueFromBo()
         {
-            if (_comboBox.Items.Count == 0) return;
+            if (_comboBox.Items.Count == 0)
+            {
+                SetupComboBoxItems();
+            }
             
             object value = GetPropertyValue();
             if (value == null) _comboBox.SelectedIndex = 0;
@@ -65,6 +68,13 @@ namespace Habanero.UI.Base
         /// </summary>
         protected internal override void SetupComboBoxItems()
         {
+            if (_businessObject == null)
+            {
+                throw new InvalidOperationException("The BusinessObject must be set on the EnumComboBoxMapper before calling SetupComboBoxItems");
+            }
+
+            _comboBox.Items.Clear();
+
             IPropDef propDef = _businessObject.ClassDef.PropDefcol[_propertyName];
             if (!propDef.PropertyType.IsEnum)
             {
