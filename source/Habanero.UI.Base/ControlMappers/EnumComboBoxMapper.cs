@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.UI.Base
 {
@@ -37,7 +38,8 @@ namespace Habanero.UI.Base
             else
             {
                 IPropDef propDef = _businessObject.ClassDef.PropDefcol[_propertyName];
-                SetPropertyValue(Enum.Parse(propDef.PropertyType, _comboBox.SelectedItem.ToString()));
+                string selectedItem = (_comboBox.SelectedItem.ToString()).Replace(" ","");
+                SetPropertyValue(Enum.Parse(propDef.PropertyType, selectedItem));
             }
         }
 
@@ -51,7 +53,11 @@ namespace Habanero.UI.Base
             
             object value = GetPropertyValue();
             if (value == null) _comboBox.SelectedIndex = 0;
-            else _comboBox.SelectedItem = value.ToString();
+            else
+            {
+                string delimitedValue = StringUtilities.DelimitPascalCase(value.ToString(), " ");
+                _comboBox.SelectedItem = delimitedValue;
+            }
         }
 
         /// <summary>
@@ -70,7 +76,8 @@ namespace Habanero.UI.Base
             string[] names = Enum.GetNames(propDef.PropertyType);
             foreach (string name in names)
             {
-                _comboBox.Items.Add(name);
+                string spacedName= StringUtilities.DelimitPascalCase(name, " ");
+                _comboBox.Items.Add(spacedName);
             }
         }
 

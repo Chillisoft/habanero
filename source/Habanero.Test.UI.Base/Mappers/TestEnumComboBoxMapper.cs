@@ -17,6 +17,7 @@ namespace Habanero.Test.UI.Base.Mappers
     {
         private const string ENUM_PROP_NAME = "EnumProp";
         private const string ENUM_PROP_NAME_EMPTY = "EnumPropEmpty";
+        private const string ENUM_PROP_NAME_PASCAL = "EnumPropPascal";
         private const string ENUM_PKPROP_NAME = "EnumPropPK";
 
         [SetUp]
@@ -39,9 +40,28 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Test Result -----------------------
             Assert.AreEqual(4, comboBox.Items.Count);
             Assert.AreEqual("", comboBox.Items[0].ToString());
-            Assert.AreEqual(TestEnum.Option1.ToString(), comboBox.Items[1].ToString());
-            Assert.AreEqual(TestEnum.Option2.ToString(), comboBox.Items[2].ToString());
-            Assert.AreEqual(TestEnum.Option3.ToString(), comboBox.Items[3].ToString());
+            Assert.AreEqual("Option 1", comboBox.Items[1].ToString());
+            Assert.AreEqual("Option 2", comboBox.Items[2].ToString());
+            Assert.AreEqual("Option 3", comboBox.Items[3].ToString());
+        }
+
+        [Test]
+        public void Test_SetupComboBoxItems_PopulatesComboBoxWithSpacedEnum()
+        {
+            //---------------Set up test pack-------------------
+            EnumComboBoxMapper enumComboBoxMapper = CreateComboBox(ENUM_PROP_NAME_PASCAL);
+            ComboBoxWin comboBox = (ComboBoxWin)enumComboBoxMapper.Control;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            enumComboBoxMapper.SetupComboBoxItems();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, comboBox.Items.Count);
+            Assert.AreEqual("", comboBox.Items[0].ToString());
+            Assert.AreEqual("Simple", comboBox.Items[1].ToString());
+            Assert.AreEqual("Double Double", comboBox.Items[2].ToString());
+            Assert.AreEqual("Number 11", comboBox.Items[3].ToString());
+            Assert.AreEqual("Class ID", comboBox.Items[4].ToString());
         }
 
         [Test]
@@ -181,8 +201,9 @@ namespace Habanero.Test.UI.Base.Mappers
             PropDef propDefPK = new PropDef(ENUM_PKPROP_NAME, typeof(Guid), PropReadWriteRule.WriteNew, null);
             PropDef propDef = new PropDef(ENUM_PROP_NAME, typeof(TestEnum), PropReadWriteRule.ReadWrite, TestEnum.Option1);
             PropDef propDef2 = new PropDef(ENUM_PROP_NAME_EMPTY, typeof(TestEnumEmpty), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef3 = new PropDef(ENUM_PROP_NAME_PASCAL, typeof(TestEnumPascalCase), PropReadWriteRule.ReadWrite, null);
             PrimaryKeyDef primaryKeyDef = new PrimaryKeyDef { propDefPK };
-            PropDefCol propDefCol = new PropDefCol { propDefPK, propDef, propDef2 };
+            PropDefCol propDefCol = new PropDefCol { propDefPK, propDef, propDef2, propDef3 };
 
             UIFormField uiFormField = new UIFormField(TestUtil.GetRandomString(), propDef.PropertyName,
                 typeof(ComboBox), "EnumComboBoxMapper", "Habanero.UI.Base", true, null, null, LayoutStyle.Label);
@@ -206,6 +227,14 @@ namespace Habanero.Test.UI.Base.Mappers
         public enum TestEnumEmpty
         {
             
+        }
+
+        public enum TestEnumPascalCase
+        {
+            Simple,
+            DoubleDouble,
+            Number11,
+            ClassID
         }
 
         public class EnumBO : BusinessObject

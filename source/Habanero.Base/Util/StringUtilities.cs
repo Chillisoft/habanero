@@ -69,30 +69,46 @@ namespace Habanero.Util
             string formatted = "";
             int counter = 0;
             if (inputString == null) return null;
-            foreach (char c in inputString)
+            foreach (char currentChar in inputString)
             {
-                string str = c.ToString();
-                string prevStr = "";
+                char prevChar = new char();
                 if (counter > 0)
                 {
-                    prevStr = inputString.Substring(counter - 1, 1);
+                    prevChar = inputString[counter - 1];
                 }
-                int temp;
-
-                // The rules are, add space if:
-                //   - the letter is upper case
-                //   - this is not the first letter
-                //   - this is not a space
-                //   - there is already a space before this
-                //   - this is a number and there is no number just before
-                if (str == str.ToUpper() && counter > 0 && str != " " && prevStr != " "
-                    && !(Int32.TryParse(str, out temp) && Int32.TryParse(prevStr, out temp)))
+                char nextChar = new char();
+                if (counter < inputString.Length - 1)
                 {
-                    formatted += delimiter + str;
+                    nextChar = inputString[counter + 1];
+                }
+
+                bool isUpperCase = Char.IsUpper(currentChar);
+                bool previousLetterIsUpperCase = Char.IsUpper(prevChar);
+                bool nextLetterIsLowerCase = Char.IsLower(nextChar);
+                bool isNotASpace = !Char.IsWhiteSpace(currentChar);
+                bool previousLetterIsNotASpace = !Char.IsWhiteSpace(prevChar);
+                bool isInteger = Char.IsNumber(currentChar);
+                bool previousLetterIsInteger = Char.IsNumber(prevChar);
+                bool isNotTheFirstLetter = counter > 0;
+
+                bool addDelimiter = false;
+                if (isNotTheFirstLetter && (isUpperCase || isInteger))
+                {
+                    if (isNotASpace && previousLetterIsNotASpace &&
+                        (!isInteger ||(isInteger && !previousLetterIsInteger)) &&
+                        (nextLetterIsLowerCase || !previousLetterIsUpperCase))
+                    {
+                        addDelimiter = true;
+                    }
+                }
+
+                if (addDelimiter)
+                {
+                    formatted += delimiter + currentChar;
                 }
                 else
                 {
-                    formatted += str;
+                    formatted += currentChar;
                 }
                 counter++;
             }

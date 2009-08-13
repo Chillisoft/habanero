@@ -41,13 +41,13 @@ namespace Habanero.Test.Util
             Assert.AreEqual("Test String Again", output);
 
             output = StringUtilities.DelimitPascalCase("TESTString", " ");
-            Assert.AreEqual("T E S T String", output);
+            Assert.AreEqual("TEST String", output);
 
             output = StringUtilities.DelimitPascalCase("TestSTRING", " ");
-            Assert.AreEqual("Test S T R I N G", output);
+            Assert.AreEqual("Test STRING", output);
 
             output = StringUtilities.DelimitPascalCase("TESTSTRING ", " ");
-            Assert.AreEqual("T E S T S T R I N G ", output);
+            Assert.AreEqual("TESTSTRING ", output);
 
             output = StringUtilities.DelimitPascalCase("TestString", ",");
             Assert.AreEqual("Test,String", output);
@@ -72,6 +72,9 @@ namespace Habanero.Test.Util
 
             output = StringUtilities.DelimitPascalCase(null, " ");
             Assert.AreEqual(null, output);
+
+            output = StringUtilities.DelimitPascalCase(" smallTest123IDString ", " ");
+            Assert.AreEqual(" small Test 123 ID String ", output);
         }
 
         [Test]
