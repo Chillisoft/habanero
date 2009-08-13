@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
 
@@ -38,7 +39,12 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void Initialise()
         {
-            _loader = new XmlRuleLoader();
+            _loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+        }
+
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
         }
 
         [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]

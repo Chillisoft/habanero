@@ -40,8 +40,13 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlBusinessObjectLookupListLoader();
+            itsLoader = new XmlBusinessObjectLookupListLoader(new DtdLoader(), GetDefClassFactory());
             ClassDef.ClassDefs.Clear();
+        }
+
+                protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
         }
 
         //TODO - Mark 02 Feb 2009 : Add DTD validation tests, possibly?

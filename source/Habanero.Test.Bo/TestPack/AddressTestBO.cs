@@ -55,7 +55,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadDefaultClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"

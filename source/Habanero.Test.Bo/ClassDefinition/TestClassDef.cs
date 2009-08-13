@@ -131,7 +131,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCreateBusinessObject()
         {
             ClassDef.ClassDefs.Clear();
-            XmlClassLoader loader = new XmlClassLoader();
+            XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             _classDef =
                 loader.LoadClass(
                     @"
@@ -155,7 +155,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            XmlClassLoader loader = new XmlClassLoader();
+            XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef basicClassDef =
                 loader.LoadClass(
                     @"
@@ -199,7 +199,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            XmlClassLoader loader = new XmlClassLoader();
+            XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             _classDef =
                 loader.LoadClass(
                     @"
@@ -227,11 +227,12 @@ namespace Habanero.Test.BO.ClassDefinition
             XmlClassDefsLoader loader =
                 new XmlClassDefsLoader(
                     GetTestClassDefinition(""),
-                    new DtdLoader());
+                    new DtdLoader(), new DefClassFactory());
             ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(loader);
             Assert.AreEqual(2, ClassDef.ClassDefs.Count);
         }
+
 
         private static string GetTestClassDefinition(string suffix)
         {
@@ -258,12 +259,12 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestLoadRepeatedClassDefs()
         {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
+            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader(), new DefClassFactory());
             ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(loader);
             Assert.AreEqual(2, ClassDef.ClassDefs.Count);
             //Now load the same again.
-            loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
+            loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader(), new DefClassFactory());
             ClassDef.LoadClassDefs(loader);
             Assert.AreEqual(2, ClassDef.ClassDefs.Count);
         }
@@ -271,12 +272,12 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestLoadMultipleClassDefs()
         {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
+            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader(), new DefClassFactory());
             ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(loader);
             Assert.AreEqual(2, ClassDef.ClassDefs.Count);
             // Now load some more classes
-            loader = new XmlClassDefsLoader(GetTestClassDefinition("Other"), new DtdLoader());
+            loader = new XmlClassDefsLoader(GetTestClassDefinition("Other"), new DtdLoader(), new DefClassFactory());
             ClassDef.LoadClassDefs(loader);
             Assert.AreEqual(4, ClassDef.ClassDefs.Count);
         }
@@ -368,7 +369,7 @@ namespace Habanero.Test.BO.ClassDefinition
             {
                 discriminator = @"discriminator=""blah""";
             }
-            XmlClassLoader loader = new XmlClassLoader();
+            XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             parentClassDef = loader.LoadClass(
                 @"<class name=""Parent"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
@@ -850,7 +851,7 @@ namespace Habanero.Test.BO.ClassDefinition
     
         public static ClassDef LoadClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef def =
                 itsLoader.LoadClass(
                     @"

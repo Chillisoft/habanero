@@ -46,14 +46,6 @@ namespace Habanero.BO.Loaders
         private string _classIDString;
         private string _moduleName;
 
-
-        /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlClassLoader()
-        {
-        }
-
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>

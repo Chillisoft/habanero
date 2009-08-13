@@ -35,7 +35,7 @@ namespace Habanero.Test
 
         public static ClassDef LoadClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             _newClassDef = itsLoader.LoadClass(@"
 			<class name=""MultiPropBO"" assembly=""Habanero.Test"">
                 <property name=""MultiPropBOID"" type=""Guid"" />

@@ -55,12 +55,6 @@ namespace Habanero.BO.Loaders
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlUIGridColumnLoader()
-        {
-        }
 
         /// <summary>
         /// Loads a grid property definition from the xml string provided

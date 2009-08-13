@@ -60,14 +60,6 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlRelationshipLoader(string className)
-        {
-            _className = className;
-        }
-
-        /// <summary>
         /// Loads a relationship definition from the xml string provided
         /// </summary>
         /// <param name="xmlRelationshipDef">The xml string</param>

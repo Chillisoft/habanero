@@ -153,19 +153,6 @@ namespace Habanero.BO.ClassDefinition
         }
 
         ///<summary>
-        ///Returns an enumerator that iterates through the collection.
-        ///</summary>
-        ///
-        ///<returns>
-        ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
-        ///</returns>
-        ///<filterpriority>1</filterpriority>
-        IEnumerator<IPropDef> IEnumerable<IPropDef>.GetEnumerator()
-        {
-            return _propDefs.Values.GetEnumerator();
-        }
-
-        ///<summary>
         ///Returns an enumerator that iterates through a collection.
         ///</summary>
         ///

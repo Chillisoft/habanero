@@ -41,7 +41,7 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            _loader = new XmlSimpleLookupListLoader(new DtdLoader(), null );
+            _loader = new XmlSimpleLookupListLoader(new DtdLoader(), new DefClassFactory() );
             ClassDef.ClassDefs.Clear();
         }
 

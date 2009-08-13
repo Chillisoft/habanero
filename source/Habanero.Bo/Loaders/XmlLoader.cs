@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
@@ -55,22 +56,18 @@ namespace Habanero.BO.Loaders
 		/// <param name="defClassFactory">The factory for the definition classes</param>
 	    protected XmlLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 		{
-			_dtdLoader = dtdLoader;
-			if (defClassFactory != null)
-			{
-				_defClassFactory = defClassFactory;
-			} else
-			{
-				_defClassFactory = new DefClassFactory();
-			}
+	        if (dtdLoader == null) throw new ArgumentNullException("dtdLoader");
+            if (defClassFactory == null) throw new ArgumentNullException("defClassFactory");
+	        _dtdLoader = dtdLoader;
+	        _defClassFactory = defClassFactory;
 		}
 
-		/// <summary>
-		/// Constructor to initialise a new loader
-		/// </summary>
-		protected XmlLoader() : this(new DtdLoader(), null)
-		{
-		}
+        ///// <summary>
+        ///// Constructor to initialise a new loader
+        ///// </summary>
+        //protected XmlLoader() : this(new DtdLoader(), null)
+        //{
+        //}
 
 		/// <summary>
 		/// Loads the specified xml element

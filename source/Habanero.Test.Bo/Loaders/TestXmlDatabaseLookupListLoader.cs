@@ -38,9 +38,15 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            _loader = new XmlDatabaseLookupListLoader();
+            _loader = new XmlDatabaseLookupListLoader(new DtdLoader(), GetDefClassFactory());
             ClassDef.ClassDefs.Clear();
         }
+
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
+
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestDatabaseLookupListWithInvalidTimeout()

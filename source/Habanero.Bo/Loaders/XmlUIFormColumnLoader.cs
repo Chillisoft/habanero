@@ -42,13 +42,6 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlUIFormColumnLoader()
-        {
-        }
-
-        /// <summary>
         /// Loads a form column definition from the xml string provided
         /// </summary>
         /// <param name="formColumnElement">The xml string</param>

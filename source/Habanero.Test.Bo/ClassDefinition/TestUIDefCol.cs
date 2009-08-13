@@ -248,7 +248,7 @@ Assert.IsNull(uiDef.UIDefCol);
 
         public static ClassDef LoadClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef def =
                 itsLoader.LoadClass(
                     @"

@@ -61,11 +61,15 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlRelationshipLoader("TestClass");
+            itsLoader = new XmlRelationshipLoader(new DtdLoader(), GetDefClassFactory(), "TestClass");
             itsPropDefs = new PropDefCol();
             itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
         }
 
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
         [Test]
         public void TestLoadRelationship()
         {
@@ -247,7 +251,7 @@ namespace Habanero.Test.BO.Loaders
         {
             //---------------Set up test pack-------------------
             string className = TestUtil.GetRandomString();
-            XmlRelationshipLoader loader = new XmlRelationshipLoader(className);
+            XmlRelationshipLoader loader = new XmlRelationshipLoader(new DtdLoader(), GetDefClassFactory(), className);
             const string singleRelationshipStringComposition = @"
 					<relationship 
 						name=""TestRelationship"" 
@@ -487,7 +491,7 @@ namespace Habanero.Test.BO.Loaders
         public void Test_WithTypeParameter()
         {
             //---------------Set up test pack-------------------
-            XmlClassLoader loader = new XmlClassLoader();
+            XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), GetDefClassFactory());
             ClassDef personClassDef =
                 loader.LoadClass(
                     @"
@@ -531,7 +535,7 @@ namespace Habanero.Test.BO.Loaders
         public void Test_WithTimeout()
         {
             //---------------Set up test pack-------------------
-            XmlClassLoader loader = new XmlClassLoader();
+            XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), GetDefClassFactory());
             ClassDef personClassDef =
                 loader.LoadClass(
                     @"

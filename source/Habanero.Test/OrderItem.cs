@@ -49,7 +49,7 @@ namespace Habanero.Test
 
         public static ClassDef LoadDefaultClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef classDef = itsLoader.LoadClass(@"
 				<class name=""OrderItem"" assembly=""Habanero.Test"">
 					<property name=""OrderNumber"" type=""int"" compulsory=""true"" />

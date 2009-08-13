@@ -36,9 +36,12 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            loader = new XmlUIGridLoader();
+            loader = new XmlUIGridLoader(new DtdLoader(), GetDefClassFactory());
         }
-
+                protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
         [Test]
         public void TestLoadPropertyCollection()
         {

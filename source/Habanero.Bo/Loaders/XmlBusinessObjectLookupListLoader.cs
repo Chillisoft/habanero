@@ -46,13 +46,6 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlBusinessObjectLookupListLoader()
-        {
-        }
-
-        /// <summary>
         /// Loads the lookup list data from the reader
         /// </summary>
         protected override void LoadLookupListFromReader()

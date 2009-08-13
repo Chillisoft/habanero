@@ -177,7 +177,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ClassDef parametrizedClassDef =
-                new XmlClassLoader().LoadClass(
+                new XmlClassLoader(new DtdLoader(), new DefClassFactory()).LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"" typeParameter=""SuperHero"">
 					<property name=""ContactPersonID"" type=""Guid"" />
@@ -224,7 +224,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ClassDef parametrizedClassDef =
-                new XmlClassLoader().LoadClass(
+                new XmlClassLoader(new DtdLoader(), new DefClassFactory()).LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"" typeParameter=""SuperHero"">
 					<property name=""ContactPersonID"" type=""Guid"" />

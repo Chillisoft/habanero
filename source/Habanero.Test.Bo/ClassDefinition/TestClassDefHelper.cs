@@ -80,7 +80,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = new XmlClassLoader().LoadClass(
+            ClassDef classDef = new XmlClassLoader(new DtdLoader(), new DefClassFactory()).LoadClass(
                     @"	<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
@@ -103,14 +103,14 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef parentDef =  new XmlClassLoader().LoadClass(
+            ClassDef parentDef = new XmlClassLoader(new DtdLoader(), new DefClassFactory()).LoadClass(
                     @"	<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
 						</class>");
-            ClassDef def = new XmlClassLoader().LoadClass(
+            ClassDef def = new XmlClassLoader(new DtdLoader(), new DefClassFactory()).LoadClass(
                     @"
 				<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"">
 					<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" />

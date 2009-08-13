@@ -41,7 +41,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadClassDefs()
         {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             ClassDefCol classDefList =
                 loader.LoadClassDefs(
                     @"
@@ -65,10 +65,19 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
         }
 
+        private XmlClassDefsLoader CreateXmlClassDefsLoader()
+        {
+            return new XmlClassDefsLoader("", new DtdLoader(), GetDefClassFactory());
+        }
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
+
         [Test]
         public void TestLoadClassDefs_InheritedClassWithNoPrimaryKey()
         {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             ClassDefCol classDefList =
                 loader.LoadClassDefs(
                     @"
@@ -108,7 +117,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadClassDefs_InheritedClassWithNoPrimaryKey_WithRelationship()
         {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             ClassDefCol classDefList =
                 loader.LoadClassDefs(
                     @"
@@ -171,7 +180,7 @@ namespace Habanero.Test.BO.Loaders
 					</classes>
 			";
             //-------------Execute test ---------------------
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             ClassDefCol classDefList = loader.LoadClassDefs(xml);
             //-------------Test Result ----------------------
             Assert.AreEqual(2, classDefList.Count);
@@ -208,7 +217,7 @@ namespace Habanero.Test.BO.Loaders
 					</class>
 				</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //-------------Execute test ---------------------
             try
             {
@@ -245,7 +254,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             try
             {
@@ -291,7 +300,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             try
             {
@@ -329,7 +338,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             try
             {
@@ -373,7 +382,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             try
             {
@@ -414,7 +423,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -456,7 +465,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -498,7 +507,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -536,7 +545,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -575,7 +584,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -623,7 +632,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -669,7 +678,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -711,7 +720,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -756,7 +765,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -803,7 +812,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -835,7 +844,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            ClassDef.LoadClassDefs(new XmlClassDefsLoader(classDefsString,new DtdLoader()));
+            ClassDef.LoadClassDefs(new XmlClassDefsLoader(classDefsString,new DtdLoader(), GetDefClassFactory()));
             //--------------------Execute Test-------------------------
             const string secondClassDefStringToLoad = @"
                         <classes>
@@ -850,7 +859,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            ClassDef.LoadClassDefs(new XmlClassDefsLoader(secondClassDefStringToLoad, new DtdLoader()));
+            ClassDef.LoadClassDefs(new XmlClassDefsLoader(secondClassDefStringToLoad, new DtdLoader(), GetDefClassFactory()));
             ClassDefCol classDefList = ClassDef.ClassDefs;
             //---------------Test Result -----------------------
             Assert.AreEqual(2, classDefList.Count);
@@ -885,7 +894,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             try
             {
@@ -923,7 +932,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             try
             {
@@ -971,7 +980,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //--------------------Execute Test-------------------------
             loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
@@ -993,7 +1002,7 @@ namespace Habanero.Test.BO.Loaders
 					</class>
 				</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //-------------Execute test ---------------------
             ClassDefCol classDefs = loader.LoadClassDefs(xml);
             //---------------Test Result -----------------------
@@ -1020,7 +1029,7 @@ namespace Habanero.Test.BO.Loaders
 					</class>
 				</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //-------------Execute test ---------------------
             ClassDefCol classDefs = loader.LoadClassDefs(xml);
             //---------------Test Result -----------------------
@@ -1047,7 +1056,7 @@ namespace Habanero.Test.BO.Loaders
 					</class>
 				</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //-------------Execute test ---------------------
             try
             {
@@ -1075,7 +1084,7 @@ namespace Habanero.Test.BO.Loaders
 					</class>
 				</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //-------------Execute test ---------------------
             try
             {
@@ -1105,7 +1114,7 @@ namespace Habanero.Test.BO.Loaders
 					</class>
 				</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //-------------Execute test ---------------------
             try
             {
@@ -1138,7 +1147,7 @@ namespace Habanero.Test.BO.Loaders
 					</class>
 				</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //-------------Execute test ---------------------
             try
             {
@@ -1167,7 +1176,7 @@ namespace Habanero.Test.BO.Loaders
 					</class>
 				</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             //-------------Execute test ---------------------
             ClassDefCol classDefs = loader.LoadClassDefs(xml);
             //---------------Test Result -----------------------
@@ -1185,7 +1194,7 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(XmlException))]
         public void TestNoRootNodeException()
         {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             loader.LoadClassDefs(@"<invalidRootNode>");
         }
     }

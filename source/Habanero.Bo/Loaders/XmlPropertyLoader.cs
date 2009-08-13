@@ -56,13 +56,6 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlPropertyLoader()
-        {
-        }
-
-        /// <summary>
         /// Loads the property definition from the xml string provided
         /// </summary>
         /// <param name="xmlPropDef">The xml string</param>

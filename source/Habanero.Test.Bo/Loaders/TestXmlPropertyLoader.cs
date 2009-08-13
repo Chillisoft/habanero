@@ -39,8 +39,13 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            _loader = new XmlPropertyLoader();
+            _loader = new XmlPropertyLoader(new DtdLoader(), GetDefClassFactory());
             ClassDef.ClassDefs.Clear();
+        }
+
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
         }
 
         [Test]
@@ -326,10 +331,10 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLookupListLoaderConstructors()
         {
-            XmlBusinessObjectLookupListLoader bollLoader = new XmlBusinessObjectLookupListLoader();
+            XmlBusinessObjectLookupListLoader bollLoader = new XmlBusinessObjectLookupListLoader(new DtdLoader(), GetDefClassFactory());
             Assert.AreEqual(typeof(XmlBusinessObjectLookupListLoader), bollLoader.GetType());
 
-            XmlDatabaseLookupListLoader dllLoader = new XmlDatabaseLookupListLoader();
+            XmlDatabaseLookupListLoader dllLoader = new XmlDatabaseLookupListLoader(new DtdLoader(), GetDefClassFactory());
             Assert.AreEqual(typeof(XmlDatabaseLookupListLoader), dllLoader.GetType());
         }
     }

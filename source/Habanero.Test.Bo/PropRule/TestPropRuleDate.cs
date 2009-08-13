@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
 
@@ -65,10 +66,15 @@ namespace Habanero.Test.BO
             StringAssert.Contains("It is not a type of DateTime", errorMessage);
         }
 
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
+
         [Test]
         public void TestPropRuleDate_MaxValue_Today()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
             IPropRule rule = loader.LoadRule(typeof(DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""01 Feb 2004"" />
@@ -88,10 +94,12 @@ namespace Habanero.Test.BO
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
         }
 
+
+
         [Test]
         public void TestPropRuleDate_MaxValue_Today_ActualValueToday()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
             IPropRule rule = loader.LoadRule(typeof(DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""01 Feb 2004"" />
@@ -113,7 +121,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestPropRuleDate_MaxValue_Today_ActualValueGTToday()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
             IPropRule rule = loader.LoadRule(typeof(DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""01 Feb 2004"" />

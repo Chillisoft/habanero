@@ -37,30 +37,6 @@ namespace Habanero.BO.Loaders
         //private IList _classDefList;
         private readonly string _xmlClassDefs;
         
-
-        /// <summary>
-        /// Constructor to initialise a new loader. If you create the object
-        /// with this constructor, you will need to use methods
-        /// that provide the actual class definitions at a later stage.
-        /// </summary>
-        public XmlClassDefsLoader()
-        {
-        }
-
-        /// <summary>
-        /// Constructor to create a new list of class definitions from the
-        /// string provided, using the dtd path provided
-        /// </summary>
-        /// <param name="xmlClassDefs">The string containing all the
-        /// class definitions. If you are loading these from 
-        /// a file, you can use 
-        /// <code>new StreamReader("filename.xml").ReadToEnd()</code>
-        /// to create a continuous string.</param>
-        /// <param name="dtdLoader">The dtd loader</param>
-        public XmlClassDefsLoader(string xmlClassDefs, DtdLoader dtdLoader) : this(xmlClassDefs, dtdLoader, null)
-        {
-        }
-
         /// <summary>
         /// Constructor to create a new list of class definitions from the
         /// string provided, using the dtd path provided

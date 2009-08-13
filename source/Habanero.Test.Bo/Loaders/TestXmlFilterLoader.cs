@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
 
@@ -37,17 +38,16 @@ namespace Habanero.Test.BO.Loaders
             //---------------Set up test pack-------------------
        
             //---------------Execute Test ----------------------
-            XmlFilterLoader loader = new XmlFilterLoader();
+            XmlFilterLoader loader = new XmlFilterLoader(new DtdLoader(), GetDefClassFactory());
             //---------------Test Result -----------------------
             //---------------Tear Down -------------------------          
         }
-
 
         [Test]
         public void TestFilterDef()
         {
             //---------------Set up test pack-------------------
-            XmlFilterLoader loader = new XmlFilterLoader();
+            XmlFilterLoader loader = CreateXmlFilterLoader();
             string propName = TestUtil.GetRandomString();
             string label = TestUtil.GetRandomString();
             string filterDefXml = string.Format(
@@ -76,11 +76,22 @@ namespace Habanero.Test.BO.Loaders
             //---------------Tear Down -------------------------          
         }
 
+        private XmlFilterLoader CreateXmlFilterLoader()
+        {
+            return new XmlFilterLoader(new DtdLoader(), GetDefClassFactory());
+        }
+
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
+
+
         [Test]
         public void TestFilterDefWithParameters()
         {
             //---------------Set up test pack-------------------
-            XmlFilterLoader loader = new XmlFilterLoader();
+            XmlFilterLoader loader = CreateXmlFilterLoader();
             string paramName = TestUtil.GetRandomString();
             string paramValue = TestUtil.GetRandomString();
             string filterDefXml = string.Format(
@@ -110,7 +121,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestFilterDef_AlternateFormat()
         {
             //---------------Set up test pack-------------------
-            XmlFilterLoader loader = new XmlFilterLoader();
+            XmlFilterLoader loader = CreateXmlFilterLoader();
             const string filterDefXml = @"
                             <filter>
 			                    <filterProperty name=""name""  label=""label"" >
@@ -131,7 +142,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestFilterMode_Search()
         {
             //---------------Set up test pack-------------------
-            XmlFilterLoader loader = new XmlFilterLoader();
+            XmlFilterLoader loader = CreateXmlFilterLoader();
             string filterDefXml =
                 @"
                         <filter filterMode=""Search"">
@@ -152,7 +163,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestColumns()
         {
             //---------------Set up test pack-------------------
-            XmlFilterLoader loader = new XmlFilterLoader();
+            XmlFilterLoader loader = CreateXmlFilterLoader();
             string filterDefXml =
                 @"
                         <filter columns=""3"">
@@ -173,7 +184,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestFilterClauseOperator()
         {
             //---------------Set up test pack-------------------
-            XmlFilterLoader loader = new XmlFilterLoader();
+            XmlFilterLoader loader = CreateXmlFilterLoader();
             string filterDefXml =
                 @"
                         <filter>
@@ -194,7 +205,7 @@ namespace Habanero.Test.BO.Loaders
         public void Test_Invalid_NoProperties()
         {
             //---------------Set up test pack-------------------
-            XmlFilterLoader loader = new XmlFilterLoader();
+            XmlFilterLoader loader = CreateXmlFilterLoader();
             const string filterDefXml = @"<filter />";
 
             //---------------Execute Test ----------------------

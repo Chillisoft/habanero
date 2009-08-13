@@ -76,7 +76,7 @@ namespace Habanero.Test.BO
         {
             
             ClassDef.ClassDefs.Clear();
-            _loader = new XmlClassLoader();
+            _loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             _classDef = MyBO.LoadClassDefWithLookup();
             OrderItem.LoadDefaultClassDef();
 

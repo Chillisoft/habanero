@@ -44,7 +44,7 @@ namespace Habanero.Test.Structure
         }
         public static ClassDef LoadDefaultClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Entity"" assembly=""Habanero.Test.Structure"" table=""table_Entity"">
 			    <property name=""EntityID"" type=""Guid"" databaseField=""field_Entity_ID"" compulsory=""true"" />
@@ -60,7 +60,7 @@ namespace Habanero.Test.Structure
 
         public static ClassDef LoadDefaultClassDef_WithCircularDeleteRelatedToSelf()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Entity"" assembly=""Habanero.Test.Structure"" table=""table_Entity"">
 			    <property name=""EntityID"" type=""Guid"" databaseField=""field_Entity_ID"" compulsory=""true"" />

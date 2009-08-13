@@ -36,7 +36,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadDefaultClassDefWithTestOrganisationBOLookup()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -62,9 +62,14 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+        private static XmlClassLoader CreateXmlClassLoader()
+        {
+            return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+        }
+
         public static ClassDef LoadDefaultClassDefWithTestOrganisationBOLookup_DatabaseLookupList()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"

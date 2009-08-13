@@ -55,13 +55,6 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlRuleLoader()
-        {
-        }
-
-        /// <summary>
         /// Loads a property rule from the given xml string
         /// </summary>
         /// <param name="propTypeName"></param>

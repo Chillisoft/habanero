@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Habanero.Base
@@ -5,7 +6,7 @@ namespace Habanero.Base
     /// <summary>
     /// Manages a collection of relationship definitions
     /// </summary>
-    public interface IRelationshipDefCol : IEnumerable<IRelationshipDef>
+    public interface IRelationshipDefCol : IEnumerable
     {
         /// <summary>
         /// Add an existing relationship to the collection

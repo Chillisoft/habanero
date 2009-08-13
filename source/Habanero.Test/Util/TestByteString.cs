@@ -44,7 +44,7 @@ namespace Habanero.Test.Util
         public TestByteString()
         {
             ClassDef.ClassDefs.Clear();
-            XmlClassLoader loader = new XmlClassLoader();
+            XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             itsClassDef =
                 loader.LoadClass(
                     @"

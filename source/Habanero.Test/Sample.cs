@@ -70,7 +70,7 @@ namespace Habanero.Test
 
         public static ClassDef CreateClassDefWithTwoPropsOneCompulsory()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -99,7 +99,7 @@ namespace Habanero.Test
 
         public static ClassDef CreateClassDefWithTwoPropsOneNotEditable()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -128,7 +128,7 @@ namespace Habanero.Test
 
         public static ClassDef CreateClassDefWithTwoPropsOneWithToolTipText()
         {
-                        XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -157,7 +157,7 @@ namespace Habanero.Test
 
         public static ClassDef CreateClassDefWithTwoPropsOneInteger()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -416,7 +416,7 @@ namespace Habanero.Test
 
             public UIForm GetSimpleUIFormDef()
             {
-               XmlUIFormLoader loader = new XmlUIFormLoader();
+               XmlUIFormLoader loader = CreateXmlUIFormLoader();
                return 
                     (UIForm) loader.LoadUIFormDef(
                                  @"<form>
@@ -428,9 +428,14 @@ namespace Habanero.Test
 						</form>");
             }
 
+            private static XmlUIFormLoader CreateXmlUIFormLoader()
+            {
+                return new XmlUIFormLoader(new DtdLoader(), new DefClassFactory());
+            }
+
             private static IUIForm GetSimpleUIFormDefWithReadWriteRuleValueReadOnly()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -446,7 +451,7 @@ namespace Habanero.Test
 
             public IUIForm GetSimpleUIFormDef_NoColumnWidth()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -460,7 +465,7 @@ namespace Habanero.Test
 
             public IUIForm GetSimpleUIFormTabOneFieldRowAndColSpan()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -480,7 +485,7 @@ namespace Habanero.Test
 
             public IUIForm GetSimpleUIFormDefInt()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -494,7 +499,7 @@ namespace Habanero.Test
 
             public IUIForm GetSimpleUIFormDefTwoRows()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -509,7 +514,7 @@ namespace Habanero.Test
 
             public IUIForm GetSimpleUIFormDef1Row2Columns()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -526,7 +531,7 @@ namespace Habanero.Test
 
             public IUIForm GetSimpleUIFormDef2Row2Columns1RowWithMoreControls()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -543,7 +548,7 @@ namespace Habanero.Test
             }
             public IUIForm GetSimpleUIFormDef_1Column3RowsWithRowSpan()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -560,7 +565,7 @@ namespace Habanero.Test
             }
             public IUIForm GetSimpleUIFormDef1Row2Columns1Row()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -577,7 +582,7 @@ namespace Habanero.Test
 
             public IUIForm GetSimpleUIFormDef1Row1Column1Row()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -591,7 +596,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef1Row3Columns()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -611,7 +616,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDefTwoRowsOneHasCompulsoryProp()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -626,7 +631,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormOneFieldHasToolTip()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -641,7 +646,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_3Columns_1Column_2RowSpan()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                     loader.LoadUIFormDef(
                         @"<form>
@@ -665,7 +670,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_2Columns_2_1_ColSpan()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1003,7 +1008,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_NoAlignment()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1023,7 +1028,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_RightAlignment()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1044,7 +1049,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_CenterAlignment()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1065,7 +1070,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_InvalidAlignment()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1086,7 +1091,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1116,7 +1121,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_WithNumericUpDown()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1138,7 +1143,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_WithMultiLineParameter()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1160,7 +1165,7 @@ namespace Habanero.Test
             private static IUIForm GetSimpleUIFormDef_WithInvalidMultiLineParameter()
             {
                
-                   XmlUIFormLoader loader = new XmlUIFormLoader();
+                   XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1181,7 +1186,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_WithDecimalPlacesParameter()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1202,7 +1207,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_WithOptionsParameter()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1223,7 +1228,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_WithIsEmailParameter()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>
@@ -1247,7 +1252,7 @@ namespace Habanero.Test
 
             private static IUIForm GetSimpleUIFormDef_WithDateFormatParameter()
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
                      loader.LoadUIFormDef(
                          @"<form>

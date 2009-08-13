@@ -740,7 +740,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader()));
+            ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()));
 
             Habanero.Test.Structure.Person person = new Person();
             person.LastName = "bob";

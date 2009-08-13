@@ -43,12 +43,6 @@ namespace Habanero.BO.Loaders
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlUIFormLoader()
-        {
-        }
 
         /// <summary>
         /// Loads a form definition from the xml string provided

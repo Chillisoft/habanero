@@ -39,9 +39,15 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            _loader = new XmlClassLoader();
+            _loader = new XmlClassLoader(new DtdLoader(), GetDefClassFactory());
             ClassDef.ClassDefs.Clear();
         }
+
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
+
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException), ExpectedMessage = "An invalid node 'class1' was encountered when loading the class definitions.")]
         public void TestInvalidXmlFormatWrongRootElement()
@@ -268,7 +274,7 @@ namespace Habanero.Test.BO.Loaders
                             </primaryKey>
 						</class>
 					</classes>",
-                                 new DtdLoader()));
+                                 new DtdLoader(), GetDefClassFactory()));
             ClassDef def =
                 _loader.LoadClass(
                     @"
@@ -432,7 +438,7 @@ namespace Habanero.Test.BO.Loaders
                             </primaryKey>
 						</class>
 					</classes>",
-                                 new DtdLoader()));
+                                 new DtdLoader(), GetDefClassFactory()));
             ClassDef def =
                 _loader.LoadClass(
                     @"
@@ -466,7 +472,7 @@ namespace Habanero.Test.BO.Loaders
                             </primaryKey>
 						</class>
 					</classes>",
-                                new DtdLoader()));
+                                new DtdLoader(), GetDefClassFactory()));
             ClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
@@ -502,7 +508,7 @@ namespace Habanero.Test.BO.Loaders
                             </primaryKey>
 						</class>
 					</classes>",
-                                new DtdLoader()));
+                                new DtdLoader(), GetDefClassFactory()));
             IClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------

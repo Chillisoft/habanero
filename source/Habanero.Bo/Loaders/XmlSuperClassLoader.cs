@@ -48,13 +48,6 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlSuperClassLoader()
-        {
-        }
-
-        /// <summary>
         /// Loads super class information from the given xml string
         /// </summary>
         /// <param name="xmlSuperClassDesc">The xml string containing the

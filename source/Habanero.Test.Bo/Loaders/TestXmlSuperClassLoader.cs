@@ -37,7 +37,7 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlSuperClassLoader();
+            itsLoader = new XmlSuperClassLoader(new DtdLoader(), GetDefClassFactory());
             ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(
                 new XmlClassDefsLoader(
@@ -56,7 +56,12 @@ namespace Habanero.Test.BO.Loaders
                             </primaryKey>
 						</class>
 					</classes>",
-                    new DtdLoader()));
+                    new DtdLoader(), GetDefClassFactory()));
+        }
+
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
         }
 
         [Test]

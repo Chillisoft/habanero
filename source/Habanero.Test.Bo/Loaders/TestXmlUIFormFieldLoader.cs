@@ -38,7 +38,12 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            loader = new XmlUIFormFieldLoader();
+            loader = new XmlUIFormFieldLoader(new DtdLoader(), GetDefClassFactory());
+        }
+
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
         }
 
         [Test]
@@ -187,7 +192,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestLayoutStyle_Default()
         {
             //---------------Set up test pack-------------------
-            loader = new XmlUIFormFieldLoader();
+            loader = new XmlUIFormFieldLoader(new DtdLoader(), GetDefClassFactory());
             //---------------Execute Test ----------------------
             IUIFormField field = loader.LoadUIProperty(@"<field property=""prop"" />");
 
@@ -200,7 +205,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestLayoutStyle()
         {
             //---------------Set up test pack-------------------
-            loader = new XmlUIFormFieldLoader();
+            loader = new XmlUIFormFieldLoader(new DtdLoader(), GetDefClassFactory());
             //---------------Execute Test ----------------------
             IUIFormField field = loader.LoadUIProperty(@"<field property=""prop"" layout=""GroupBox"" />");
 
@@ -213,7 +218,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestLayoutStyle_Invalid()
         {
             //---------------Set up test pack-------------------
-            loader = new XmlUIFormFieldLoader();
+            loader = new XmlUIFormFieldLoader(new DtdLoader(), GetDefClassFactory());
             //---------------Execute Test ----------------------
             try
             {

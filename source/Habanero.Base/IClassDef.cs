@@ -208,6 +208,11 @@ namespace Habanero.Base
         ///</summary>
         string Module { get; set; }
 
+        ///<summary>
+        /// The display name for the class
+        ///</summary>
+        string DisplayName { get; set; }
+
         /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance
         /// any inheritance structure.

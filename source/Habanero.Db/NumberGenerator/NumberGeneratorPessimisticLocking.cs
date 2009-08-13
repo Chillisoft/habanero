@@ -130,7 +130,7 @@ namespace Habanero.DB
 
         internal static void LoadNumberGenClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"

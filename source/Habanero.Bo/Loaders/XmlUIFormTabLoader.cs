@@ -35,12 +35,6 @@ namespace Habanero.BO.Loaders
         private string MixedContentMessage =
             "A 'tab' can have either a set of 'columnLayout' or 'field' nodes or a single 'formGrid' node, but not a mixture.";
 
-        /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlUIFormTabLoader()
-        {
-        }
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path

@@ -30,12 +30,6 @@ namespace Habanero.BO.Loaders
     {
         private IUIGrid _uiGrid;
 
-        /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlUIGridLoader()
-        {
-        }
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path

@@ -193,7 +193,7 @@ namespace Habanero.BO
                 tableName = "NumberGenerator";
             }
             _tableName = tableName;
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             string classDef = "<class name=\"BOSequenceNumber\" assembly=\"Habanero.BO\" table=\"" + _tableName + "\">" +
                               "<property  name=\"SequenceNumber\" type=\"Int32\" />" +
                               "<property  name=\"NumberType\"/>" +

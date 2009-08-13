@@ -62,7 +62,7 @@ namespace Habanero.Test.BO.Loaders
 						</class>
 					</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), GetDefClassFactory());
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             ClassDefValidator defValidator = new ClassDefValidator();
             //--------------------Assert Preconditions-----------------
@@ -77,11 +77,15 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(areClassDefsValid);
         }
 
+                protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
 
         [Test]
         public void TestLoadClassDefs_InheritedClassWithNoPrimaryKey()
         {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), GetDefClassFactory());
             ClassDefCol classDefList =
                 loader.LoadClassDefs(
                     @"
@@ -136,7 +140,7 @@ namespace Habanero.Test.BO.Loaders
 					</classes>
 			";
             //-------------Execute test ---------------------
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), GetDefClassFactory());
             ClassDefCol classDefList = loader.LoadClassDefs(xml);
             //-------------Test Result ----------------------
             Assert.AreEqual(2, classDefList.Count);
@@ -173,7 +177,7 @@ namespace Habanero.Test.BO.Loaders
 					</class>
 				</classes>
 			";
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), GetDefClassFactory());
 
             //-------------Execute test ---------------------
             try
@@ -194,7 +198,7 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(XmlException))]
         public void TestNoRootNodeException()
         {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), GetDefClassFactory());
             loader.LoadClassDefs(@"<invalidRootNode>");
         }
     }

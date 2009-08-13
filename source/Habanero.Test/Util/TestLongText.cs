@@ -42,7 +42,7 @@ namespace Habanero.Test.Util
         public TestLongText()
         {
             ClassDef.ClassDefs.Clear();
-            XmlClassLoader loader = new XmlClassLoader();
+            XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             itsClassDef = loader.LoadClass
                 (@"
 				<class name=""MyBO"" assembly=""Habanero.Test"">

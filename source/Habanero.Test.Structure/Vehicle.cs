@@ -33,7 +33,7 @@ namespace Habanero.Test.Structure
     {
         public new static ClassDef LoadDefaultClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef = itsLoader.LoadClass( @"
 			  <class name=""Vehicle"" assembly=""Habanero.Test.Structure"" table=""table_Vehicle"">
 			    <property name=""VehicleID"" type=""Guid"" databaseField=""field_Vehicle_ID"" />
@@ -54,7 +54,7 @@ namespace Habanero.Test.Structure
 
         public static ClassDef LoadClassDef_WithClassTableInheritance()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Vehicle"" assembly=""Habanero.Test.Structure"" table=""table_class_Vehicle"">
 			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" />

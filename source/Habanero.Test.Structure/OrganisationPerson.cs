@@ -34,7 +34,7 @@ namespace Habanero.Test.Structure
     {
         public static ClassDef LoadDefaultClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""OrganisationPerson"" assembly=""Habanero.Test.Structure"" table=""table_OrganisationPerson"">
 			    <property name=""OrganisatiionID"" type=""Guid"" databaseField=""field_Organisatiion_ID"" />

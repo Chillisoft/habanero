@@ -34,12 +34,6 @@ namespace Habanero.BO.Loaders
 
         //private string _xmlUICollections;
 
-        /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlUILoader()
-        {
-        }
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path

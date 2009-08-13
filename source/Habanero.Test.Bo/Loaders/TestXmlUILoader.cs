@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
 
@@ -34,7 +35,12 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void Setup()
         {
-            itsLoader = new XmlUILoader();
+            itsLoader = new XmlUILoader(new DtdLoader(), GetDefClassFactory());
+        }
+
+                protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
         }
 
         [Test]

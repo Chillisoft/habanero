@@ -51,7 +51,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithIntID()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -68,7 +68,7 @@ namespace Habanero.Test.BO
         }
         public static ClassDef LoadClassDefWithIntID_RelationshipToSelf()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -96,7 +96,7 @@ namespace Habanero.Test.BO
         }
         public static ClassDef LoadClassDefWithIntID_DiscriminatorField()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -114,7 +114,7 @@ namespace Habanero.Test.BO
         }
         public static ClassDef LoadClassDefWithIntID_WithCompositeKey()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"

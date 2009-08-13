@@ -45,13 +45,6 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlPrimaryKeyLoader()
-        {
-        }
-
-        /// <summary>
         /// Loads a primary key definition from the xml string and property
         /// definition collection provided
         /// </summary>

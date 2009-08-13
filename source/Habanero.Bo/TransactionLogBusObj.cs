@@ -38,7 +38,7 @@ namespace Habanero.BO
             {
                 return ClassDef.ClassDefs[typeof(TransactionLogBusObj)];
             }
-            XmlClassLoader xmlClassLoader = new XmlClassLoader();
+            XmlClassLoader xmlClassLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             ClassDef classDef =
                 xmlClassLoader.LoadClass(
                     @"

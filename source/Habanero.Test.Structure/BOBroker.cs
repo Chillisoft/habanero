@@ -15,7 +15,7 @@ namespace Habanero.Test.Structure
 
         public static void LoadClassDefs()
         {
-            ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader()));
+            ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()));
         }
     }
 }

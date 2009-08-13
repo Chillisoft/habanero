@@ -45,13 +45,6 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
-        /// Constructor to initialise a loader
-        /// </summary>
-        public XmlDatabaseLookupListLoader()
-        {
-        }
-
-        /// <summary>
         /// Loads the lookup list data from the reader, using the sql string, time-out
         /// class name and assembly name specified in the reader
         /// </summary>

@@ -37,9 +37,6 @@ namespace Habanero.BO.Loaders
         ///<param name="dtdLoader"></param>
         ///<param name="defClassFactory"></param>
         public XmlFilterLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory) : base(dtdLoader, defClassFactory) { }
-        ///<summary>
-        ///</summary>
-        public XmlFilterLoader() { }
 
         /// <summary>
         /// Creates the object using the data that has been read in using

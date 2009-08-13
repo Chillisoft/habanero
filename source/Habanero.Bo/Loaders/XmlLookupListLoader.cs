@@ -50,13 +50,6 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        protected XmlLookupListLoader()
-        {
-        }
-
-        /// <summary>
         /// Loads a lookup list using the specified source element
         /// </summary>
         /// <param name="sourceElement">The source element as a string</param>

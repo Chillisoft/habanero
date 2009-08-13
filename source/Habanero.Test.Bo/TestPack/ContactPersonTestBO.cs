@@ -47,7 +47,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadDefaultClassDef_WOrganisationID()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -65,9 +65,15 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
+        private static XmlClassLoader CreateXmlClassLoader()
+        {
+            return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+        }
+
         public static ClassDef LoadDefaultClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -87,7 +93,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadDefaultClassDefWithEnum()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -108,7 +114,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadDefaultClassDefWithPersonTestBOSuperClass()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -129,7 +135,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadDefaultClassDefWithKeyOnSurname()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -151,7 +157,7 @@ namespace Habanero.Test.BO
         }
         public static ClassDef LoadDefaultClassDef_W_IntegerProperty()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -171,7 +177,7 @@ namespace Habanero.Test.BO
         }
         public static ClassDef LoadDefaultClassDefWithUIDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -200,7 +206,7 @@ namespace Habanero.Test.BO
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
-//            XmlClassLoader _loader = new XmlClassLoader();
+//            XmlClassLoader _loader = CreateXmlClassLoader();
 //            ClassDef _classDef =
 //                itsLoader.LoadClass(
 //                    @"
@@ -235,7 +241,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithSurnameAsPrimaryKey()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -253,7 +259,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithSurnameAsPrimaryKey_WriteNew()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -271,7 +277,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithCompositePrimaryKey()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -290,7 +296,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithCompositeAlternateKey()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -314,7 +320,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithCompositePrimaryKeyNameSurname()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -334,7 +340,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadFullClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -354,7 +360,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithAddressesRelationship_DeleteRelated()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -380,7 +386,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -398,7 +404,7 @@ namespace Habanero.Test.BO
 					</relationship>
 			    </class>
 			");
-            XmlClassLoader addressLoader = new XmlClassLoader();
+            XmlClassLoader addressLoader = CreateXmlClassLoader();
             ClassDef addressClassDef = addressLoader.LoadClass
                 (@"				
                 <class name=""AddressTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person_address"">
@@ -419,7 +425,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithAddressesRelationship_PreventDelete()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -445,7 +451,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithAddressTestBOsRelationship()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -469,7 +475,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithAddressesRelationship_PreventDelete_WithUIDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -507,7 +513,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithAddressesRelationship_DeleteDoNothing()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -537,7 +543,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -563,7 +569,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithImageProperty()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -584,7 +590,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadDefaultClassDefWithUIDef_ReadWriteRule()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -621,7 +627,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDef_NoOrganisationRelationship()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -662,7 +668,7 @@ namespace Habanero.Test.BO
 
 //        public static ClassDef LoadClassDef_NoOrganisationRelationshipDefined()
 //        {
-//            XmlClassLoader itsLoader = new XmlClassLoader();
+//            XmlClassLoader itsLoader = CreateXmlClassLoader();
 //            ClassDef itsClassDef =
 //                itsLoader.LoadClass(
 //                    @"
@@ -689,7 +695,7 @@ namespace Habanero.Test.BO
 //        }
         public static ClassDef LoadClassDefOrganisationTestBORelationship_MultipleReverse()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -720,7 +726,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefOrganisationTestBORelationship_SingleReverse()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -750,7 +756,7 @@ namespace Habanero.Test.BO
         }
         public static ClassDef LoadClassDefOrganisationTestBORelationship_SingleReverse_NoReverse()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -780,7 +786,7 @@ namespace Habanero.Test.BO
         }
         public static ClassDef LoadClassDefOrganisationTestBORelationship_SingleCompositeReverse()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -811,7 +817,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefOrganisationTestBOTwoRelationships()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
@@ -845,7 +851,7 @@ namespace Habanero.Test.BO
 
         public static ClassDef LoadClassDefWithOrganisationAndAddressRelationships()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"

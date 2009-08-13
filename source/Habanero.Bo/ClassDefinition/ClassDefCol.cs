@@ -37,7 +37,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Initialises an empty collection
         /// </summary>
-        protected internal ClassDefCol()
+        public ClassDefCol()
         {
             _classDefs = new Dictionary<string, ClassDef>();
         }

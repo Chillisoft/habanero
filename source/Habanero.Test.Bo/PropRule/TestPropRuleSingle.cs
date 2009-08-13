@@ -1,6 +1,7 @@
 using System;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
 
@@ -35,12 +36,16 @@ namespace Habanero.Test.BO
             Assert.IsFalse(rule.IsPropValueValid("Propname", -53444.33222f, ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
         }
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
+        }
 
 
         [Test]
         public void TestPropRuleSingle_MaxValue_ActualValueLT()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
             IPropRule rule = loader.LoadRule(typeof(Single).Name,
                 @"<rule name=""TestSingle""  >
                             <add key=""min"" value=""12.22"" />
@@ -63,7 +68,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestPropRuleSingle_MaxValue_ActualValueEquals()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
             IPropRule rule = loader.LoadRule(typeof(Single).Name,
                 @"<rule name=""TestSingle""  >
                             <add key=""min"" value=""12.22"" />
@@ -85,7 +90,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestPropRuleSingle_MaxValue_ActualValueGT()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
             IPropRule rule = loader.LoadRule(typeof(Single).Name,
                 @"<rule name=""TestSingle""  >
                             <add key=""min"" value=""12.22"" />

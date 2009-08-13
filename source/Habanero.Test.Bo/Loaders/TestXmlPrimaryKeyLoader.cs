@@ -37,9 +37,14 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlPrimaryKeyLoader();
+            itsLoader = new XmlPrimaryKeyLoader(new DtdLoader(), GetDefClassFactory());
             itsPropDefs = new PropDefCol();
             itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
+        }
+
+        protected virtual IDefClassFactory GetDefClassFactory()
+        {
+            return new DefClassFactory();
         }
 
         [Test]

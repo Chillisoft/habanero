@@ -45,13 +45,6 @@ namespace Habanero.BO.Loaders
         private LayoutStyle _layout;
 
         /// <summary>
-        /// Constructor to initialise a new loader
-        /// </summary>
-        public XmlUIFormFieldLoader()
-        {
-        }
-
-        /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
