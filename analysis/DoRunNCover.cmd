@@ -1,0 +1,1 @@
+"c:\program files\ncover\NCover.Console.exe" "c:\program files\nunit 2.4.7\bin\nunit-console-x86.exe" %NUNIT_TESTS% /xml=TestResult-%RUN_NAME%.xml //x Coverage-%RUN_NAME%.xml //l Coverage-%RUN_NAME%.log //a %COVER_DLL_NAMES%
