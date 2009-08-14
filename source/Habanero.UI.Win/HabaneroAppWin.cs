@@ -27,7 +27,7 @@ namespace Habanero.UI.Win
     /// <summary>
     /// Provides a template for a standard Habanero application, including
     /// standard fields and initialisations.  Specific details covered are:
-    /// <ul>f
+    /// <ul>
     /// <li>The class definitions that define how the data is represented
     /// and limited</li>
     /// <li>The database configuration, connection and settings</li>
@@ -58,7 +58,6 @@ namespace Habanero.UI.Win
         public HabaneroAppWin(string appName, string appVersion)
             : base(appName, appVersion)
         {
-            SetupControlFactory();
         }
 
         /// <summary>

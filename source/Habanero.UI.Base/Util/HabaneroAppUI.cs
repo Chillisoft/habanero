@@ -48,9 +48,8 @@ namespace Habanero.UI.Base
     /// </summary>
     public abstract class HabaneroAppUI : HabaneroApp
     {
-        private IDefClassFactory _defClassFactory;
         /// <summary>
-        /// The applications private key
+        /// The application's private key
         /// </summary>
         protected string _privateKey;
 
@@ -63,16 +62,14 @@ namespace Habanero.UI.Base
         protected HabaneroAppUI(string appName, string appVersion)
             : base(appName, appVersion)
         {
-            SetupUISettings();
-            SetupDateDisplaySettings();
+            SetupHabaneroAppUI();
         }
 
-        /// <summary>
-        /// Sets the definition class factory
-        /// </summary>
-        public IDefClassFactory DefClassFactory
+        private void SetupHabaneroAppUI()
         {
-            set { _defClassFactory = value; }
+            SetupUISettings();
+            SetupDateDisplaySettings();
+            SetupControlFactory();
         }
 
         /// <summary>
@@ -105,7 +102,7 @@ namespace Habanero.UI.Base
                 else
                     classDefsXml = ClassDefsXml;
 
-                return new XmlClassDefsLoader(classDefsXml, new DtdLoader(), _defClassFactory);
+                return new XmlClassDefsLoader(classDefsXml, new DtdLoader(), new DefClassFactory());
             }
             catch (Exception ex)
             {
@@ -129,7 +126,7 @@ namespace Habanero.UI.Base
         /// Sets up the class that stores the user interface
         /// settings
         /// </summary>
-        protected void SetupUISettings()
+        protected virtual void SetupUISettings()
         {
             GlobalUIRegistry.UISettings = new UISettings();
         }
@@ -138,7 +135,7 @@ namespace Habanero.UI.Base
         /// Sets up the class that stores the date display
         /// settings
         /// </summary>
-        protected void SetupDateDisplaySettings()
+        protected virtual void SetupDateDisplaySettings()
         {
             GlobalUIRegistry.DateDisplaySettings = new DateDisplaySettings();
         }

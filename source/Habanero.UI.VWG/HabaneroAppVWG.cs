@@ -58,8 +58,6 @@ namespace Habanero.UI.VWG
         public HabaneroAppVWG(string appName, string appVersion)
             : base(appName, appVersion)
         {
-            SetupControlFactory();
-
         }
 
         /// <summary>
@@ -92,7 +90,6 @@ namespace Habanero.UI.VWG
             DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
-
 
         /// <summary>
         /// Sets the database configuration object, which contains basic 

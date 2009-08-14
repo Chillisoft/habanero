@@ -48,7 +48,6 @@ namespace Habanero.Console
     /// </summary>
     public class HabaneroAppConsole : HabaneroApp
     {
-        private IDefClassFactory _defClassFactory;
         private DatabaseConfig _databaseConfig;
         private string _privateKey;
 
@@ -59,14 +58,6 @@ namespace Habanero.Console
         /// <param name="appName">The application name</param>
         /// <param name="appVersion">The application version</param>
         public HabaneroAppConsole(string appName, string appVersion) : base(appName, appVersion) { }
-
-        /// <summary>
-        /// Sets the definition class factory.
-        /// </summary>
-        public IDefClassFactory DefClassFactory
-        {
-            set { _defClassFactory = value; }
-        }
 
         /// <summary>
         /// Sets the database configuration object, which contains basic 
@@ -103,7 +94,7 @@ namespace Habanero.Console
                 else
                     classDefsXml = ClassDefsXml;
 
-                return new XmlClassDefsLoader(classDefsXml, new DtdLoader(), _defClassFactory);
+                return new XmlClassDefsLoader(classDefsXml, new DtdLoader(), new DefClassFactory());
             }
             catch (Exception ex)
             {

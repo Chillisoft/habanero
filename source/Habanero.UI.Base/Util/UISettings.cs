@@ -24,8 +24,6 @@ namespace Habanero.UI.Base
     /// </summary>
     public class UISettings : IUISettings
     {
-        private PermitComboBoxRightClickDelegate _permitComboBoxRightClick;
-
         /// <summary>
         /// Assign a method to this delegate that returns a boolean
         /// to indicate whether the user has permission to right-click
@@ -35,10 +33,6 @@ namespace Habanero.UI.Base
         /// but the individual XML class definition parameter settings for
         /// a field take precedence.
         /// </summary>
-        public PermitComboBoxRightClickDelegate PermitComboBoxRightClick
-        {
-            get { return _permitComboBoxRightClick; }
-            set { _permitComboBoxRightClick = value; }
-        }
+        public PermitComboBoxRightClickDelegate PermitComboBoxRightClick { get; set; }
     }
 }
