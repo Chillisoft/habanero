@@ -81,7 +81,7 @@ namespace Habanero.UI.Base
             ReadOnlyGridControl.Height = 300;
             ReadOnlyGridControl.Buttons.Visible = false;
             ReadOnlyGridControl.FilterControl.Visible = false;
-            ClassDef classDef = ClassDef.Get<TBusinessObject>();
+            IClassDef classDef = ClassDef.Get<TBusinessObject>();
             if (!string.IsNullOrEmpty(gridUiDefName)) ReadOnlyGridControl.Initialise(classDef, gridUiDefName);
 
             AddGridSelectionEvent();

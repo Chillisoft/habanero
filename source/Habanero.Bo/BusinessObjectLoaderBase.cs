@@ -181,7 +181,7 @@ namespace Habanero.BO
             where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
-            ClassDef classDef = ClassDef.ClassDefs[typeof (T)];
+            IClassDef classDef = ClassDef.ClassDefs[typeof (T)];
             Criteria criteria = GetCriteriaObject(classDef, criteriaString);
             OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
             return GetBusinessObjectCollection<T>(criteria, orderCriteriaObj);
@@ -251,7 +251,7 @@ namespace Habanero.BO
         /// <param name="numberOfRecordsToLoad"></param>
         /// <param name="totalNoOfRecords"></param>
         /// <returns></returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef, Criteria criteria, 
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, 
                 OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef);
@@ -307,7 +307,7 @@ namespace Habanero.BO
             where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
-            ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
+            IClassDef classDef = ClassDef.ClassDefs[typeof(T)];
             Criteria criteria = GetCriteriaObject(classDef, criteriaString);
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classDef, orderCriteriaString);
             return GetBusinessObjectCollection<T>(criteria, orderCriteria, firstRecordToLoad, numberOfRecordsToLoad, out totalNoOfRecords);
@@ -681,9 +681,9 @@ namespace Habanero.BO
         /// <see cref="BusObjDeleteConcurrencyControlException"/>
         ///  </returns>
         /// <exception cref="BusObjDeleteConcurrencyControlException"/>
-        public IBusinessObject GetBusinessObjectByValue(ClassDef classDef, object idValue)
+        public IBusinessObject GetBusinessObjectByValue(IClassDef classDef, object idValue)
         {
-            BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue(classDef, idValue);
+            BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue((ClassDef) classDef, idValue);
 
             return boPrimaryKey == null ? null : BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, boPrimaryKey);
         }
@@ -703,7 +703,7 @@ namespace Habanero.BO
         /// <exception cref="BusObjDeleteConcurrencyControlException"/>
         public IBusinessObject GetBusinessObjectByValue(Type type, object idValue)
         {
-            ClassDef classDef = ClassDef.ClassDefs[type];
+            IClassDef classDef = ClassDef.ClassDefs[type];
             return GetBusinessObjectByValue(classDef, idValue);
         }
         ///<summary>
@@ -722,7 +722,7 @@ namespace Habanero.BO
                         where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
-            ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
+            IClassDef classDef = ClassDef.ClassDefs[typeof(T)];
             return (T) GetBusinessObjectByValue(classDef, idValue);
         }
         /// <summary>

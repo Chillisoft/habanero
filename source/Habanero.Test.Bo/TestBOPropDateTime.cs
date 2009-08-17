@@ -93,8 +93,9 @@ namespace Habanero.Test.BO
         {
             BOProp boProp = new BOProp(_propDef);
             const string invalid = "Invalid";
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(DateTime), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(DateTime), propDef.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -215,8 +216,9 @@ namespace Habanero.Test.BO
             const string invalid = "Invalid";
             object originalPropValue = DateTime.MinValue.AddDays(1);
             boProp.Value = originalPropValue;
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(DateTime), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(DateTime), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             try

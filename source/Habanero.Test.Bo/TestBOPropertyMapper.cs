@@ -290,7 +290,7 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSet_HavingNonExistingPropertyOnRelatedBO_ShouldThrowError()
         {
             //---------------Set up test pack-------------------
-            ClassDef organisationClassDef = ClassDef.Get<OrganisationTestBO>();
+            IClassDef organisationClassDef = ClassDef.Get<OrganisationTestBO>();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Organisation = new OrganisationTestBO();
             const string innerPropertyName = "NonExistingProperty";
@@ -410,7 +410,7 @@ namespace Habanero.Test.BO
         public void Test_BusinessObject_WhenSet_HavingNonExistingChildRelationshipForRelatedBo_ShouldThrowError()
         {
             //---------------Set up test pack-------------------
-            ClassDef contactPersonClassDef = ClassDef.Get<ContactPersonTestBO>();
+            IClassDef contactPersonClassDef = ClassDef.Get<ContactPersonTestBO>();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Organisation = new OrganisationTestBO();
             const string outerRelationshipName = "NonExistingRelationship";
@@ -445,7 +445,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             AddressTestBO.LoadDefaultClassDef();
-            ClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            IClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string outerRelationshipName = "Addresses";
             const string innerPropertyName = "ContactPersonTestBO";

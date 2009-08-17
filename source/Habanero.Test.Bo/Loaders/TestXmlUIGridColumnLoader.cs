@@ -35,12 +35,15 @@ namespace Habanero.Test.BO.Loaders
         private XmlUIGridColumnLoader loader;
 
         [SetUp]
-        public void SetupTest()
-        {
+        public void SetupTest() {
+            Initialise();
+        }
+
+        protected void Initialise() {
             loader = new XmlUIGridColumnLoader(new DtdLoader(), GetDefClassFactory());
         }
 
-                protected virtual IDefClassFactory GetDefClassFactory()
+        protected virtual IDefClassFactory GetDefClassFactory()
         {
             return new DefClassFactory();
         }
@@ -75,9 +78,8 @@ namespace Habanero.Test.BO.Loaders
 
             //---------------Execute Test ----------------------
             //---------------Verify Result -----------------------
-            Assert.IsNull(uiProp.GridControlType);
-            Assert.IsNull(uiProp.GridControlTypeName); 
-            Assert.IsNull(uiProp.GridControlAssemblyName);
+            Assert.IsTrue(string.IsNullOrEmpty(uiProp.GridControlTypeName)); 
+           Assert.IsTrue(string.IsNullOrEmpty(uiProp.GridControlAssemblyName));
             //---------------Tear Down -------------------------  
 
         }
@@ -92,22 +94,9 @@ namespace Habanero.Test.BO.Loaders
         public void TestCustomColumnType()
         {
             IUIGridColumn uiProp =
-                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""MyBO"" assembly=""Habanero.Test"" />");
-            Assert.IsNull(uiProp.GridControlType);
-            Assert.AreEqual("MyBO",uiProp.GridControlTypeName);
-            Assert.AreEqual("Habanero.Test", uiProp.GridControlAssemblyName);
-        }
-
-        [Test]
-        public void TestAutomaticHeadingCreation()
-        {
-            IUIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" />");
-            Assert.AreEqual(null, uiProp.Heading);
-            Assert.AreEqual("testpropname", uiProp.GetHeading());
-
-            uiProp = loader.LoadUIProperty(@"<column property=""TestPropName"" />");
-            Assert.AreEqual(null, uiProp.Heading);
-            Assert.AreEqual("Test Prop Name", uiProp.GetHeading());
+                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""DataGridViewComboBoxColumn"" assembly=""System.Windows.Forms"" />");
+            Assert.AreEqual("DataGridViewComboBoxColumn", uiProp.GridControlTypeName);
+            Assert.AreEqual("System.Windows.Forms", uiProp.GridControlAssemblyName);
         }
 
         [Test]

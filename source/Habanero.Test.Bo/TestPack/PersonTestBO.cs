@@ -34,10 +34,10 @@ namespace Habanero.Test.BO
         private bool _afterLoadCalled;
 
 
-        public static ClassDef LoadDefaultClassDefWithTestOrganisationBOLookup()
+        public static IClassDef LoadDefaultClassDefWithTestOrganisationBOLookup()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""PersonTestBO"" assembly=""Habanero.Test.BO"" table=""person_test"">
@@ -67,10 +67,10 @@ namespace Habanero.Test.BO
             return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
         }
 
-        public static ClassDef LoadDefaultClassDefWithTestOrganisationBOLookup_DatabaseLookupList()
+        public static IClassDef LoadDefaultClassDefWithTestOrganisationBOLookup_DatabaseLookupList()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""PersonTestBO"" assembly=""Habanero.Test.BO"" table=""person_test"">

@@ -22,6 +22,7 @@
 // ------------------------------------------------------------------------------
 
 using System.Runtime.Serialization;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -43,10 +44,10 @@ namespace Habanero.Test.Structure
         }
 
 
-        public new static ClassDef LoadDefaultClassDef()
+        public new static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Person"" assembly=""Habanero.Test.Structure"" table=""table_Person"">
 			    <property name=""IDNumber"" databaseField=""field_ID_Number"" />
 			    <property name=""FirstName"" databaseField=""field_First_Name"" />
@@ -68,10 +69,10 @@ namespace Habanero.Test.Structure
             return itsClassDef;
         }
 
-        public new static ClassDef LoadClassDef_WithClassTableInheritance()
+        public new static IClassDef LoadClassDef_WithClassTableInheritance()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Person"" assembly=""Habanero.Test.Structure"" table=""table_class_Person"">
 			    <superClass class=""LegalEntity"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""IDNumber"" databaseField=""field_ID_Number"" />

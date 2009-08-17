@@ -44,7 +44,7 @@ namespace Habanero.Test
             _classDef = classDef;
         }
 
-        public static ClassDef GetClassDef()
+        public static IClassDef GetClassDef()
         {
             if (!ClassDef.IsDefined(typeof (Sample)))
             {
@@ -53,9 +53,9 @@ namespace Habanero.Test
             return ClassDef.ClassDefs[typeof (Sample)];
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
-            _classDef = GetClassDef();
+            _classDef = (ClassDef) GetClassDef();
             return _classDef;
         }
 
@@ -68,10 +68,10 @@ namespace Habanero.Test
             return lClassDef;
         }
 
-        public static ClassDef CreateClassDefWithTwoPropsOneCompulsory()
+        public static IClassDef CreateClassDefWithTwoPropsOneCompulsory()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""Sample"" assembly=""Habanero.Test"">
@@ -97,10 +97,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef CreateClassDefWithTwoPropsOneNotEditable()
+        public static IClassDef CreateClassDefWithTwoPropsOneNotEditable()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""Sample"" assembly=""Habanero.Test"">
@@ -126,10 +126,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef CreateClassDefWithTwoPropsOneWithToolTipText()
+        public static IClassDef CreateClassDefWithTwoPropsOneWithToolTipText()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""Sample"" assembly=""Habanero.Test"">
@@ -155,10 +155,10 @@ namespace Habanero.Test
 			return itsClassDef;
         }
 
-        public static ClassDef CreateClassDefWithTwoPropsOneInteger()
+        public static IClassDef CreateClassDefWithTwoPropsOneInteger()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""Sample"" assembly=""Habanero.Test"">

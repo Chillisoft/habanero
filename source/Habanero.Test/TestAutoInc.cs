@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -48,10 +49,10 @@ namespace Habanero.Test
             return TestField;
         }
 
-        public static ClassDef LoadClassDefWithIntID()
+        public static IClassDef LoadClassDefWithIntID()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""TestAutoInc"" assembly=""Habanero.Test"" table=""testautoinc"" >
@@ -66,10 +67,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithAutoIncrementingID()
+        public static IClassDef LoadClassDefWithAutoIncrementingID()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""TestAutoInc"" assembly=""Habanero.Test"" table=""testautoinc"" >

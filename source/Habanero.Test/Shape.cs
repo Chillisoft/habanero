@@ -27,7 +27,7 @@ namespace Habanero.Test
     public class Shape : BusinessObject
     {
 
-        public static ClassDef GetClassDef()
+        public static IClassDef GetClassDef()
         {
             if (ClassDef.IsDefined(typeof (Shape)))
             {
@@ -36,9 +36,9 @@ namespace Habanero.Test
             return CreateClassDef();
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
-            _classDef = GetClassDef();
+            _classDef = (ClassDef) GetClassDef();
             return _classDef;
         }
 

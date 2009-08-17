@@ -295,12 +295,12 @@ namespace Habanero.Test.BO.ClassDefinition
             return (MockBO) ClassDef.ClassDefs[typeof (MockBO)].CreateNewBusinessObject();
         }
 
-        protected static ClassDef GetClassDef()
+        protected static IClassDef GetClassDef()
         {
             return !ClassDef.IsDefined(typeof (MockBO)) ? CreateClassDef() : ClassDef.ClassDefs[typeof (MockBO)];
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return GetClassDef();
         }
@@ -367,12 +367,12 @@ namespace Habanero.Test.BO.ClassDefinition
         {
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return GetClassDef();
         }
 
-        protected static ClassDef GetClassDef()
+        protected static IClassDef GetClassDef()
         {
             return !ClassDef.IsDefined(typeof (MockBOWithCompulsoryField))
                        ? CreateClassDef()

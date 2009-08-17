@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -32,14 +33,14 @@ namespace Habanero.BO
         /// <summary>
         /// Load ClassDef for accessing the transacionLog table through Business Object.
         /// </summary>
-        public static ClassDef LoadClassDef()
+        public static IClassDef LoadClassDef()
         {
             if (ClassDef.ClassDefs.Contains(typeof(TransactionLogBusObj)))
             {
                 return ClassDef.ClassDefs[typeof(TransactionLogBusObj)];
             }
             XmlClassLoader xmlClassLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef classDef =
+            IClassDef classDef =
                 xmlClassLoader.LoadClass(
                     @"
                <class name=""TransactionLogBusObj"" assembly=""Habanero.BO"" table=""transactionlog"">

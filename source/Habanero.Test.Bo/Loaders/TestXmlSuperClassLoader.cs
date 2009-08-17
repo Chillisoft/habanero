@@ -37,10 +37,14 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlSuperClassLoader(new DtdLoader(), GetDefClassFactory());
+            Initialise();
             ClassDef.ClassDefs.Clear();
+
             ClassDef.LoadClassDefs(
-                new XmlClassDefsLoader(
+                new XmlClassDefsLoader(SuperClassClassDefXml, new DtdLoader(), GetDefClassFactory()));
+        }
+
+        protected string SuperClassClassDefXml = 
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
@@ -55,8 +59,11 @@ namespace Habanero.Test.BO.Loaders
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
 						</class>
-					</classes>",
-                    new DtdLoader(), GetDefClassFactory()));
+					</classes>";
+
+        protected void Initialise()
+        {
+            itsLoader = new XmlSuperClassLoader(new DtdLoader(), GetDefClassFactory());
         }
 
         protected virtual IDefClassFactory GetDefClassFactory()
@@ -67,14 +74,15 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestSimpleProperty()
         {
-            SuperClassDef def =
+            ISuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" />");
+            
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
-            //ClassDef parentDef = ClassDef.ClassDefs[typeof(TestClass)];
-            ClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
             IClassDef superClassDef = def.SuperClassClassDef;
-            Assert.AreSame(parentDef, superClassDef);
+
+            Assert.AreEqual("Habanero.Test.BO.Loaders", superClassDef.AssemblyName);
+            Assert.AreEqual("TestClass", superClassDef.ClassName);
             Assert.IsNull(def.Discriminator);
         }
 
@@ -88,7 +96,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestSingleTableInheritance()
         {
-            SuperClassDef def = itsLoader.LoadSuperClassDesc(
+            ISuperClassDef def = itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" discriminator=""propname"" />");
             Assert.AreEqual(ORMapping.SingleTableInheritance, def.ORMapping);
             Assert.AreEqual("propname", def.Discriminator);
@@ -98,7 +106,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestSingleTableInheritanceDiscriminatorWithSpaces()
         {
-            SuperClassDef def = itsLoader.LoadSuperClassDesc(
+            ISuperClassDef def = itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" discriminator=""prop name"" />");
             Assert.AreEqual("prop name", def.Discriminator);
         }
@@ -106,7 +114,6 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestSingleTableInheritanceException()
         {
-            SuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" />");
         }
@@ -114,7 +121,6 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestSingleTableInheritanceWithIDException()
         {
-            SuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" id="""" />");
         }
@@ -122,7 +128,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestConcreteTableInheritance()
         {
-            SuperClassDef def =
+            ISuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" />");
             Assert.AreEqual(ORMapping.ConcreteTableInheritance, def.ORMapping);
@@ -133,7 +139,6 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestConcreteTableInheritanceWithIDException()
         {
-            SuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" id=""prop"" />");
         }
@@ -141,7 +146,6 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestConcreteTableInheritanceWithDiscriminatorException()
         {
-            SuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" discriminator=""abc"" />");
         }
@@ -149,7 +153,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestClassTableInheritanceWithEmptyID()
         {
-            SuperClassDef def =
+            ISuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" id="""" />");
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
@@ -160,7 +164,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestClassTableInheritanceWithID()
         {
-            SuperClassDef def =
+            ISuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" id=""propname"" />");
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
@@ -171,7 +175,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestClassTableInheritanceWithDiscriminatorIsValid()
         {
-            SuperClassDef def =
+            ISuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" discriminator=""abc"" />");
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);

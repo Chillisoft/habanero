@@ -36,7 +36,7 @@ namespace Habanero.Test
         {
         }
 
-        protected internal static ClassDef GetClassDef()
+        protected internal static IClassDef GetClassDef()
         {
             if (!ClassDef.IsDefined(typeof (Engine)))
             {
@@ -48,7 +48,7 @@ namespace Habanero.Test
             }
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return GetClassDef();
         }
@@ -186,7 +186,7 @@ namespace Habanero.Test
             return engine;
         }
 
-        public static ClassDef LoadClassDef_IncludingCarAndOwner()
+        public static IClassDef LoadClassDef_IncludingCarAndOwner()
         {
 
             new Engine();

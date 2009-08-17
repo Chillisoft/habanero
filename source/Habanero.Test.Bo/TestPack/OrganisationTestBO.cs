@@ -28,10 +28,10 @@ namespace Habanero.Test.BO
 {
     public class OrganisationTestBO : BusinessObject
     {
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
@@ -62,10 +62,10 @@ namespace Habanero.Test.BO
             return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
         }
 
-        public static ClassDef LoadDefaultClassDef_NoRelationships()
+        public static IClassDef LoadDefaultClassDef_NoRelationships()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
@@ -79,10 +79,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadDefaultClassDef_WithTwoRelationshipsToContactPerson()
+        public static IClassDef LoadDefaultClassDef_WithTwoRelationshipsToContactPerson()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
@@ -103,10 +103,10 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
         
-        public static ClassDef LoadDefaultClassDef_WithSingleRelationship()
+        public static IClassDef LoadDefaultClassDef_WithSingleRelationship()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
@@ -126,10 +126,10 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
-        public static ClassDef LoadDefaultClassDef_WithContactPersonRelationship_NoReverseRelationship()
+        public static IClassDef LoadDefaultClassDef_WithContactPersonRelationship_NoReverseRelationship()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
@@ -147,10 +147,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadDefaultClassDef_WithNoContactPersonRelationship()
+        public static IClassDef LoadDefaultClassDef_WithNoContactPersonRelationship()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
@@ -165,10 +165,10 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
-        public static ClassDef LoadDefaultClassDef_PreventAddChild()
+        public static IClassDef LoadDefaultClassDef_PreventAddChild()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
@@ -189,10 +189,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadDefaultClassDef_NoReverseRelationship()
+        public static IClassDef LoadDefaultClassDef_NoReverseRelationship()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
@@ -213,10 +213,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadDefaultClassDef_SingleRel_NoReverseRelationship()
+        public static IClassDef LoadDefaultClassDef_SingleRel_NoReverseRelationship()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
@@ -237,10 +237,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadDefaultClassDef_WithMultipleRelationshipToAddress()
+        public static IClassDef LoadDefaultClassDef_WithMultipleRelationshipToAddress()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">

@@ -88,7 +88,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
         //private DataAccessorInMemory _dataAccessor;
         //private DataStoreInMemory _dataStore;
-        private ClassDef _cpDefaultClassDef;
+        private IClassDef _cpDefaultClassDef;
 
         #region SetupTearDown
 

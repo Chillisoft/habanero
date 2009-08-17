@@ -562,7 +562,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             //Clear all contact people from the DB
            // ContactPerson.DeleteAllContactPeople();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             CreateContactPersonInDB();
 
             //Create grid setup for search
@@ -586,7 +586,7 @@ namespace Habanero.Test.UI.Base
             //Clear all contact people from the DB
             BORegistry.DataAccessor = new DataAccessorInMemory();
             //ContactPerson.DeleteAllContactPeople();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             //Create data in the database with the 5 contact people two with Search in surname
             CreateContactPersonInDB();
             CreateContactPersonInDB();
@@ -649,7 +649,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IReadOnlyGridControl gridControl = GetControlFactory().CreateReadOnlyGridControl();
             MyBO.LoadDefaultClassDef();
-            ClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
+            IClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
             gridControl.Initialise(def);
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             //--------------Assert PreConditions----------------            
@@ -667,7 +667,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IReadOnlyGridControl gridControl = GetControlFactory().CreateReadOnlyGridControl();
             MyBO.LoadDefaultClassDef();
-            ClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
+            IClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
             gridControl.Initialise(def);
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             //--------------Assert PreConditions----------------            
@@ -751,7 +751,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_DefaultUIDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IUIDef uiDef = classDef.UIDefCol["default"];
             IUIGrid uiGridDef = uiDef.UIGrid;
@@ -804,7 +804,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_WithNonDefaultUIDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IUIDef uiDef = classDef.UIDefCol[alternateUIDefName];
@@ -827,7 +827,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_WithGridDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IUIDef uiDef = classDef.UIDefCol[alternateUIDefName];
@@ -850,7 +850,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             //---------------Assert Preconditions---------------
             IUIDef uiDef = classDef.UIDefCol["default"];
             IUIGrid uiGridDef = uiDef.UIGrid;
@@ -891,7 +891,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             IUIDef uiDef = classDef.UIDefCol["default"];
             IUIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
@@ -1003,7 +1003,7 @@ namespace Habanero.Test.UI.Base
             //does not cause it to be reinitialised.
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
@@ -1377,7 +1377,7 @@ namespace Habanero.Test.UI.Base
         public void TestEditButtonClickUsingAlternateUIDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             const string alternateUIDefName = "Alternate";
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(true);
@@ -1399,7 +1399,7 @@ namespace Habanero.Test.UI.Base
         public void TestAddButtonClickUsingAlternateUIDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             const string alternateUIDefName = "Alternate";
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
@@ -1495,7 +1495,7 @@ namespace Habanero.Test.UI.Base
         public void Test_SearchGrid_AppliesAdditionalSearchCriteria_NoFilterCriteria()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
 
             ContactPersonTestBO boExclude = new ContactPersonTestBO();
             boExclude.Surname = "Excude this one.";
@@ -1527,7 +1527,7 @@ namespace Habanero.Test.UI.Base
         public void Test_SearchGrid_AppliesAdditionalSearchCriteria()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
 
             ContactPersonTestBO boExclude = new ContactPersonTestBO();
             boExclude.Surname = "Excude this one.";
@@ -1581,7 +1581,7 @@ namespace Habanero.Test.UI.Base
         public void TestFilterControlNotVisibleIfNoFilterDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IReadOnlyGridControl gridControl = GetControlFactory().CreateReadOnlyGridControl();
 
             //---------------Assert PreConditions---------------            
@@ -1596,7 +1596,7 @@ namespace Habanero.Test.UI.Base
         public void TestFilterControlIsBuiltFromDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDefWithFilterDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDefWithFilterDef();
             IReadOnlyGridControl gridControl = GetControlFactory().CreateReadOnlyGridControl();
 
             //---------------Assert PreConditions---------------            
@@ -2018,9 +2018,9 @@ namespace Habanero.Test.UI.Base
 //            //---------------Tear Down -------------------------          
 //        }
 
-        private ClassDef LoadMyBoDefaultClassDef()
+        private IClassDef LoadMyBoDefaultClassDef()
         {
-            ClassDef classDef;
+            IClassDef classDef;
             if (GetControlFactory() is Habanero.UI.VWG.ControlFactoryVWG)
             {
                 classDef = MyBO.LoadDefaultClassDefVWG();

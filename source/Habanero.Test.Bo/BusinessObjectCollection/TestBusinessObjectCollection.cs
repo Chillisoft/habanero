@@ -378,7 +378,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_CreateBusinessObject_AlternateClassDef_NoConstructor()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = OrganisationTestBO.LoadDefaultClassDef();
+            ClassDef classDef = (ClassDef) OrganisationTestBO.LoadDefaultClassDef();
             ClassDef alternateClassDef = classDef.Clone();
             alternateClassDef.TypeParameter = TestUtil.GetRandomString();
             BusinessObjectCollection<OrganisationTestBO> orgCol = new BusinessObjectCollection<OrganisationTestBO>

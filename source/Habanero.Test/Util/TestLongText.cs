@@ -37,7 +37,7 @@ namespace Habanero.Test.Util
     [TestFixture]
     public class TestLongText : TestUsingDatabase
     {
-        private readonly ClassDef itsClassDef;
+        private readonly IClassDef itsClassDef;
 
         public TestLongText()
         {
@@ -112,7 +112,8 @@ namespace Habanero.Test.Util
         [Test]
         public void TestPropertyType()
         {
-            Assert.AreEqual(itsClassDef.PropDefcol["TestProp"].PropertyType, typeof (LongText));
+            PropDef propDef = (PropDef) itsClassDef.PropDefcol["TestProp"];
+            Assert.AreEqual(propDef.PropertyType, typeof (LongText));
         }
 
         [Test]

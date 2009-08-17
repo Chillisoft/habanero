@@ -72,10 +72,10 @@ namespace Habanero.Test
             CombinedParts = FirstPart + SecondPart;
         }
 
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""BeforeSaveBo"" assembly=""Habanero.Test"" >
@@ -145,10 +145,10 @@ namespace Habanero.Test
             }
 
         }
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""AfterSaveBO"" assembly=""Habanero.Test"" >

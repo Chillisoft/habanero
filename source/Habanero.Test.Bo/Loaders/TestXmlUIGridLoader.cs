@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -34,11 +35,15 @@ namespace Habanero.Test.BO.Loaders
         private XmlUIGridLoader loader;
 
         [SetUp]
-        public void SetupTest()
-        {
+        public void SetupTest() {
+            Initialise();
+        }
+
+        protected void Initialise() {
             loader = new XmlUIGridLoader(new DtdLoader(), GetDefClassFactory());
         }
-                protected virtual IDefClassFactory GetDefClassFactory()
+
+        protected virtual IDefClassFactory GetDefClassFactory()
         {
             return new DefClassFactory();
         }
@@ -55,7 +60,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(2, def.Count);
             Assert.AreEqual("testheading1", def[0].Heading);
             Assert.AreEqual("testheading2", def[1].Heading);
-            Assert.IsEmpty(def.SortColumn);
+            Assert.IsTrue(String.IsNullOrEmpty(def.SortColumn));
         }
 
         [Test]

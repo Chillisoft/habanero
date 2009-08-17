@@ -94,13 +94,14 @@ namespace Habanero.BO.Loaders
                     {
                         string name = _reader.GetAttribute("name");
                         string value = _reader.GetAttribute("value");
-                        filterPropertyDef.Parameters.Add(name, value);
+                        parameters.Add(name, value);
                         _reader.Read();
                     }
                      _reader.Read();
                 }
                 _propertyDefs.Add(filterPropertyDef);
                 if (!_reader.IsStartElement()) _reader.ReadEndElement();
+                filterPropertyDef.Parameters = parameters;
             }
             while (_reader.Name == "filter") _reader.Read();
         }

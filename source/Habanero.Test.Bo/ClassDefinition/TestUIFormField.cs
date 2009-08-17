@@ -22,6 +22,7 @@ using System.Collections;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -461,7 +462,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestIsCompulsory_False()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             //---------------Assert Precondition----------------
 
@@ -475,7 +476,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestIsCompulsory_True()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             //---------------Assert Precondition----------------
 
@@ -489,7 +490,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestIsCompulsory_VirtualProp()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IUIFormField field = classDef.UIDefCol["AlternateVirtualProp"].GetFormField("-MyTestProp-");
             //---------------Assert Precondition----------------
 
@@ -503,7 +504,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestLabelTextHasStarIfCompulsory()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             //---------------Assert Precondition----------------
 
@@ -518,7 +519,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestLabelTextHasStarIfCompulsory_Generated()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             field.Label = "";
             //---------------Assert Precondition----------------
@@ -527,8 +528,36 @@ namespace Habanero.Test.BO.ClassDefinition
             string labelText = field.GetLabel();
             //---------------Test Result -----------------------
             StringAssert.EndsWith(": *", labelText);
-
         }
+
+        [Test]
+        public void TestLabelText_UsesPropertyName()
+        {
+            XmlUIFormFieldLoader loader = new XmlUIFormFieldLoader(new DtdLoader(), new DefClassFactory());
+            UIFormField uiProp = (UIFormField) loader.LoadUIProperty(@"<field property=""testpropname"" />");
+            Assert.AreEqual(null, uiProp.Label);
+            Assert.AreEqual("testpropname:", uiProp.GetLabel());
+        }
+
+        [Test]
+        public void TestLabelText_UsesPropertyNameWithCamelCase()
+        {
+            XmlUIFormFieldLoader loader = new XmlUIFormFieldLoader(new DtdLoader(), new DefClassFactory());
+            UIFormField uiProp = (UIFormField) loader.LoadUIProperty(@"<field property=""TestPropName"" />");
+            Assert.AreEqual(null, uiProp.Label);
+            Assert.AreEqual("Test Prop Name:", uiProp.GetLabel());
+        }
+
+        [Test]
+        public void TestLabelText_UsesQuestionMark_WhenCheckBoxField()
+        {
+            XmlUIFormFieldLoader loader = new XmlUIFormFieldLoader(new DtdLoader(), new DefClassFactory());
+            UIFormField uiProp = (UIFormField) loader.LoadUIProperty(@"<field property=""TestPropName"" type=""CheckBox"" />");
+            Assert.AreEqual(null, uiProp.Label);
+            Assert.AreEqual("Test Prop Name?", uiProp.GetLabel());
+        }
+
+
 
         [Test]
         public void TestFormColumn()

@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -30,6 +31,9 @@ namespace Habanero.BO.Loaders
     ///</summary>
     public class ClassDefValidator
     {
+        private readonly XmlClassDefsLoader _loader;
+        public ClassDefValidator(XmlClassDefsLoader loader) { _loader = loader; }
+
         ///<summary>
         /// Validates a collection of Class Definitions.
         ///</summary>
@@ -50,20 +54,21 @@ namespace Habanero.BO.Loaders
             }
             return string.IsNullOrEmpty(errorMessage);
         }
-        private static void CheckRelationships(ClassDefCol classDefs)
+
+        private void CheckRelationships(ClassDefCol classDefs)
         {
-            Dictionary<ClassDef, PropDefCol> loadedFullPropertyLists = new Dictionary<ClassDef, PropDefCol>();
-            foreach (ClassDef classDef in classDefs)
+            Dictionary<IClassDef, IPropDefCol> loadedFullPropertyLists = new Dictionary<IClassDef, IPropDefCol>();
+            foreach (IClassDef classDef in classDefs)
             {
                 CheckRelationshipsForAClassDef(loadedFullPropertyLists, classDef, classDefs);
             }
         }
 
-        private static void CheckRelationshipsForAClassDef(IDictionary<ClassDef, PropDefCol> loadedFullPropertyLists, ClassDef classDef, ClassDefCol classDefs)
+        private void CheckRelationshipsForAClassDef(IDictionary<IClassDef, IPropDefCol> loadedFullPropertyLists, IClassDef classDef, ClassDefCol classDefs)
         {
             if (classDef == null) return;
 
-            PropDefCol allPropsForClassDef = XmlClassDefsLoader.GetAllClassDefProps(loadedFullPropertyLists, classDef, classDefs);
+            IPropDefCol allPropsForClassDef = _loader.GetAllClassDefProps(loadedFullPropertyLists, classDef, classDefs);
             foreach (RelationshipDef relationshipDef in classDef.RelationshipDefCol)
             {
                 // Check Relationship Properties

@@ -47,7 +47,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             try
             {
-                ClassDef classDef = col["ass", "class"];
+                IClassDef classDef = col["ass", "class"];
 
                 Assert.Fail("Expected error when trying to get a classdef that doesn't exist using the indexer");
             }
@@ -126,9 +126,9 @@ namespace Habanero.Test.BO.ClassDefinition
             col.Add(classDef2);
             col.Add(classDef3);
             //---------------Execute Test ----------------------
-            ClassDef foundClass1 = col.FindByClassName("class1");
-            ClassDef foundClass2 = col.FindByClassName("class2");
-            ClassDef foundClass3 = col.FindByClassName("class3");
+            IClassDef foundClass1 = col.FindByClassName("class1");
+            IClassDef foundClass2 = col.FindByClassName("class2");
+            IClassDef foundClass3 = col.FindByClassName("class3");
             //---------------Test Result -----------------------
             Assert.AreSame(classDef1, foundClass1);
             Assert.AreSame(classDef2, foundClass2);
@@ -147,7 +147,7 @@ namespace Habanero.Test.BO.ClassDefinition
             col.Add(classDef2);
             col.Add(classDef3);
             //---------------Execute Test ----------------------
-            ClassDef foundClass = col.FindByClassName("DoesNotExist");
+            IClassDef foundClass = col.FindByClassName("DoesNotExist");
             //---------------Test Result -----------------------
             Assert.IsNull(foundClass);
         }
@@ -158,7 +158,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             ClassDefCol col = new ClassDefCol();
             //---------------Execute Test ----------------------
-            ClassDef foundClass = col.FindByClassName("DoesNotExist");
+            IClassDef foundClass = col.FindByClassName("DoesNotExist");
             //---------------Test Result -----------------------
             Assert.IsNull(foundClass);
         }
@@ -174,7 +174,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
-            ClassDef returnedClassDef = col[typeof (MockBo)];
+            IClassDef returnedClassDef = col[typeof (MockBo)];
             //---------------Test Result -----------------------
             Assert.AreEqual(classDef, returnedClassDef);
         }

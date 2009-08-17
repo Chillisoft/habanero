@@ -61,7 +61,7 @@ namespace Habanero.Test.BO
             BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
             OrganisationPerson.LoadDefaultClassDef();
-            ClassDef classDef = Person.LoadDefaultClassDef();
+            IClassDef classDef = Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
@@ -108,7 +108,7 @@ namespace Habanero.Test.BO
             BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
             OrganisationPerson.LoadDefaultClassDef();
-            ClassDef personClassDef = Person.LoadDefaultClassDef();
+            IClassDef personClassDef = Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();

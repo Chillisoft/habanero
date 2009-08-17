@@ -54,7 +54,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestMissingRelationshipErrorMessageSingle()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
 
@@ -68,7 +68,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestMissingRelationshipErrorMessageMultiple()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
 
@@ -82,7 +82,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestInvalidRelationshipAccessSingle()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
 
@@ -96,7 +96,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestInvalidRelationshipAccessMultiple()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
 
@@ -108,7 +108,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestIndexer()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
 
@@ -124,7 +124,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetSingle_Generic()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             const string relationshipName = "MyRelationship";
@@ -142,7 +142,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetSingle_Generic_Fail()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             string relationshipName = "MyMultipleRelationship";
@@ -164,7 +164,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetMultiple_Generic()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             string relationshipName = "MyMultipleRelationship";
@@ -182,7 +182,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetMultiple_Generic_Fail()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             string relationshipName = "MyRelationship";
@@ -205,7 +205,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetSingle()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             string relationshipName = "MyRelationship";
@@ -223,7 +223,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetSingle_Fail()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             string relationshipName = "MyMultipleRelationship";
@@ -245,7 +245,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetMultiple()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             string relationshipName = "MyMultipleRelationship";
@@ -263,7 +263,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetMultiple_Fail()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             string relationshipName = "MyRelationship";
@@ -285,8 +285,8 @@ namespace Habanero.Test.BO.Relationship
         public void TestSetRelatedBusinessObject()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
-            ClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo)relatedClassDef.CreateNewBusinessObject();
 
@@ -304,8 +304,8 @@ namespace Habanero.Test.BO.Relationship
         public void TestSetRelatedBusinessObjectWithWrongRelationshipType()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
-            ClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo)relatedClassDef.CreateNewBusinessObject();
 

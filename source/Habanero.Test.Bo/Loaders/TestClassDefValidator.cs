@@ -64,7 +64,7 @@ namespace Habanero.Test.BO.Loaders
 			";
             XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), GetDefClassFactory());
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
-            ClassDefValidator defValidator = new ClassDefValidator();
+            ClassDefValidator defValidator = new ClassDefValidator(loader);
             //--------------------Assert Preconditions-----------------
             Assert.AreEqual(2, classDefList.Count);
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
@@ -111,8 +111,8 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass2"), "Class 'TestClass2' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClassInherited"), "Class 'TestClassInherited' should have been loaded.");
-            ClassDef classDefTestClass = classDefList["Habanero.Test.BO.Loaders", "TestClass"];
-            ClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
+            IClassDef classDefTestClass = classDefList["Habanero.Test.BO.Loaders", "TestClass"];
+            IClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
             Assert.IsNotNull(classDefTestClass);
             Assert.IsNotNull(classDefInherited.SuperClassDef);
             Assert.IsNull(classDefInherited.PrimaryKeyDef);
@@ -146,9 +146,9 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(2, classDefList.Count);
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClassInherited"), "Class 'TestClassInherited' should have been loaded.");
-            ClassDef classDefTestClass = classDefList["Habanero.Test.BO.Loaders", "TestClass"];
+            IClassDef classDefTestClass = classDefList["Habanero.Test.BO.Loaders", "TestClass"];
             IPropDef propDef = classDefTestClass.PropDefcol["TestClassName"];
-            ClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
+            IClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
             Assert.IsNotNull(classDefInherited.SuperClassDef);
             Assert.AreEqual(1, classDefInherited.KeysCol.Count);
             IKeyDef keyDef = classDefInherited.KeysCol.GetKeyDefAtIndex(0);

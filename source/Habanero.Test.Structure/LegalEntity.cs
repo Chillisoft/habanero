@@ -22,6 +22,7 @@
 // ------------------------------------------------------------------------------
 
 using System.Runtime.Serialization;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -42,10 +43,10 @@ namespace Habanero.Test.Structure
         {
             
         }
-        public new static ClassDef LoadDefaultClassDef()
+        public new static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""LegalEntity"" assembly=""Habanero.Test.Structure"" table=""table_LegalEntity"">
 			    <property name=""LegalEntityID"" type=""Guid"" databaseField=""field_Legal_Entity_ID"" />
 			    <property name=""LegalEntityType"" databaseField=""field_Legal_Entity_Type"" />
@@ -61,10 +62,10 @@ namespace Habanero.Test.Structure
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDef_WithClassTableInheritance()
+        public static IClassDef LoadClassDef_WithClassTableInheritance()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""LegalEntity"" assembly=""Habanero.Test.Structure"" table=""table_class_LegalEntity"">
 			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""LegalEntityID"" type=""Guid"" databaseField=""field_Legal_Entity_ID"" />

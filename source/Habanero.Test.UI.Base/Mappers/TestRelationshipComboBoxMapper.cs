@@ -15,8 +15,8 @@ namespace Habanero.Test.UI.Base.Mappers
     public class TestRelationshipComboBoxMapperVWG
     {
         protected IControlFactory _controlFactory;
-        private ClassDef _cpClassDef;
-        private ClassDef _orgClassDef;
+        private IClassDef _cpClassDef;
+        private IClassDef _orgClassDef;
 
         protected virtual IControlFactory GetControlFactory()
         {

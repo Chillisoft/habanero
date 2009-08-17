@@ -307,7 +307,7 @@ namespace Habanero.BO
         ///</summary>
         ///<param name="classDef"></param>
         ///<returns></returns>
-        public static ISelectQuery CreateSelectCountQuery(ClassDef classDef)
+        public static ISelectQuery CreateSelectCountQuery(IClassDef classDef)
         {
             return CreateSelectCountQuery(classDef, null);
 

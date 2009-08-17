@@ -49,9 +49,9 @@ namespace Habanero.Test.BO
         {
             return TestField;
         }
-        private ClassDef _classDefCircleNoPrimaryKey;
-        private ClassDef _classDefShape;
-        private ClassDef _classDefFilledCircleNoPrimaryKey;
+        private IClassDef _classDefCircleNoPrimaryKey;
+        private IClassDef _classDefShape;
+        private IClassDef _classDefFilledCircleNoPrimaryKey;
 
         protected void SetupInheritanceSpecifics()
         {
@@ -82,7 +82,7 @@ namespace Habanero.Test.BO
         public static ClassDef LoadClassDefWith_SingleTableInherit()
         {
             ClassDef itsClassDef = CreateClassDef();
-            ClassDef classDef_BOWithIntID = BOWithIntID.LoadClassDefWithIntID_DiscriminatorField();
+            IClassDef classDef_BOWithIntID = BOWithIntID.LoadClassDefWithIntID_DiscriminatorField();
             itsClassDef.SuperClassDef = new SuperClassDef(classDef_BOWithIntID, ORMapping.SingleTableInheritance)
                                             {Discriminator = "Type_field"};
             itsClassDef.TableName = "bowithintid";

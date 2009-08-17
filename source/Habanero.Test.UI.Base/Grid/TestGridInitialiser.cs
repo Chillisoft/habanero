@@ -221,7 +221,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitialiseGrid()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIDef uiDef = classDef.UIDefCol["default"];
@@ -248,7 +248,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_DefaultUIDef_VerifyColumnsSetupCorrectly()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIDef uiDef = classDef.UIDefCol["default"];
@@ -278,7 +278,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_UIDef_ZeroWidthColumn_HidesColumn()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_2Columns_1stHasZeroWidth();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_2Columns_1stHasZeroWidth();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIDef uiDef = classDef.UIDefCol["default"];
@@ -306,7 +306,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_UIDef_DateFormat_FormatsDateColumn()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
+            IClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIDef uiDef = classDef.UIDefCol["default"];
@@ -351,7 +351,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_LoadsCustomColumnType()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
+            IClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
             IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIDef uiDef = classDef.UIDefCol["default"];
@@ -378,7 +378,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_WithNonDefaultUIDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
@@ -403,7 +403,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             //---------------Assert Preconditions---------------
             IUIDef uiDef = classDef.UIDefCol["default"];
             IUIGrid uiGridDef = uiDef.UIGrid;
@@ -432,7 +432,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_WithInvalidUIDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
 
@@ -454,7 +454,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_With_NoGridDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             //---------------Execute Test ----------------------
@@ -476,7 +476,7 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_With_GridDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIGrid uiGridDef = classDef.UIDefCol["default"].UIGrid;
@@ -506,7 +506,7 @@ namespace Habanero.Test.UI.Base
         public virtual void TestInitGrid_LoadsDataGridViewDateTimeColumn()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
+            IClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
             IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIDef uiDef = classDef.UIDefCol["default"];
@@ -532,7 +532,7 @@ namespace Habanero.Test.UI.Base
         public virtual void TestInitGrid_LoadsDataGridViewComboBoxColumn()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
             IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIDef uiDef = classDef.UIDefCol["default"];
@@ -557,7 +557,7 @@ namespace Habanero.Test.UI.Base
         public virtual void TestInitGrid_LoadsDataGridViewComboBoxColumn_WhenPropDefMissing()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
             IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIDef uiDef = classDef.UIDefCol["default"];
@@ -584,7 +584,7 @@ namespace Habanero.Test.UI.Base
             return GetControlFactory().CreateReadOnlyGridControl();
         }
 
-        private static ClassDef LoadMyBoDefaultClassDef()
+        private static IClassDef LoadMyBoDefaultClassDef()
         {
             return MyBO.LoadDefaultClassDef();
         }
@@ -611,7 +611,7 @@ namespace Habanero.Test.UI.Base
             int expectedWidth = columnDef1.Width;
             if (expectedWidth == 0) expectedWidth = 5;
             Assert.AreEqual(expectedWidth, dataColumn1.Width);
-            IPropDef propDef = GetPropDef(classDef, columnDef1);
+            PropDef propDef = (PropDef) GetPropDef(classDef, columnDef1);
             Assert.AreEqual(propDef.PropertyType, dataColumn1.ValueType);
         }
 

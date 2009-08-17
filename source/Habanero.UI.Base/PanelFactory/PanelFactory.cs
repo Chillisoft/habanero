@@ -240,7 +240,7 @@ namespace Habanero.UI.Base
                 {
                     bool isCompulsory;
                     ClassDef classDef = _currentBusinessObject.ClassDef;
-                    IPropDef propDef = field.GetPropDefIfExists(classDef);
+                    PropDef propDef = (PropDef) field.GetPropDefIfExists(classDef);
                     if (propDef != null)
                     {
                         isCompulsory = propDef.Compulsory;

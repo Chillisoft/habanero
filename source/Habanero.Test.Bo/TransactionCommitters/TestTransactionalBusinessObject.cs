@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -56,7 +57,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             TransactionalBusinessObject transactionalBusinessObject = new TransactionalBusinessObject(bo);
             //---------------Assert Precondition----------------
@@ -75,7 +76,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
             TransactionalBusinessObject transactionalBusinessObject = new TransactionalBusinessObject(bo);
             

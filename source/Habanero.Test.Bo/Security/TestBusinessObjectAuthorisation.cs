@@ -587,10 +587,10 @@ namespace Habanero.Test.BO.Security
 
     internal class MyBoAuthenticationStub: BusinessObject
     {
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBoAuthenticationStub"" assembly=""Habanero.Test.BO"">
@@ -607,10 +607,10 @@ namespace Habanero.Test.BO.Security
             return itsClassDef;
         }
 
-        public static ClassDef LoadDefaultClassDef_ReadOnlyProp1()
+        public static IClassDef LoadDefaultClassDef_ReadOnlyProp1()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBoAuthenticationStub"" assembly=""Habanero.Test.BO"">

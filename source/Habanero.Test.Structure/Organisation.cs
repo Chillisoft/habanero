@@ -21,6 +21,7 @@
 // This partial class was auto-generated for use with the Habanero Architecture.
 // ------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -32,10 +33,10 @@ namespace Habanero.Test.Structure
     
     public partial class Organisation
     {
-        public new static ClassDef LoadDefaultClassDef()
+        public new static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Organisation"" assembly=""Habanero.Test.Structure"" table=""table_Organisation"">
 			    <property name=""Name"" databaseField=""field_Name"" />
 			    <property name=""DateFormed"" databaseField=""field_Date_Formed"" />
@@ -52,10 +53,10 @@ namespace Habanero.Test.Structure
             return itsClassDef;
         }
 
-        public new static ClassDef LoadClassDef_WithClassTableInheritance()
+        public new static IClassDef LoadClassDef_WithClassTableInheritance()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Organisation"" assembly=""Habanero.Test.Structure"" table=""table_class_Organisation"">
 			    <superClass class=""LegalEntity"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""Name"" databaseField=""field_Name"" />

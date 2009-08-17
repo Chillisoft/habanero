@@ -27,6 +27,8 @@ using Habanero.Util;
 
 namespace Habanero.BO
 {
+    
+
     /// <summary>
     /// Provides a lookup-list sourced from business object collections.
     /// A lookup-list is typically used to populate features like a ComboBox,
@@ -37,7 +39,7 @@ namespace Habanero.BO
     /// NB: this class does not provide criteria, so the entire collection
     /// will be loaded.
     /// </summary>
-    public class BusinessObjectLookupList : ILookupListWithClassDef
+    public class BusinessObjectLookupList : IBusinessObjectLookupList
     {
         private readonly bool _limitToList;
         private int _timeout;
@@ -209,7 +211,7 @@ namespace Habanero.BO
         public string AssemblyName
         {
             get { return _assemblyName; }
-            protected set
+            set
             {
                 if (_assemblyName != value)
                 {
@@ -226,7 +228,7 @@ namespace Habanero.BO
         public string ClassName
         {
             get { return _className; }
-            protected set
+            set
             {
                 if (_className != value)
                 {
@@ -271,10 +273,12 @@ namespace Habanero.BO
         /// <summary>
         /// This property is used by FireStarter to retrieve the sort string without having to load class defs.
         /// </summary>
-        internal string SortString
+        public string SortString
         {
             get { return _sortString; }
         }
+
+        public string CriteriaString { get { return _criteriaString; } }
 
         /// <summary>
         /// Gets and sets the sort string used to sort the lookup
@@ -287,7 +291,7 @@ namespace Habanero.BO
         {
             get { if(_orderCriteria == null && !string.IsNullOrEmpty(_sortString))
             {
-                ClassDef classDef = this.LookupBoClassDef;
+                IClassDef classDef = this.LookupBoClassDef;
                 _orderCriteria = QueryBuilder.CreateOrderCriteria(classDef, _sortString);
             }
                 return _orderCriteria;
@@ -341,7 +345,7 @@ namespace Habanero.BO
                 _lastCallTime = DateTime.Now;
                 return DisplayValueDictionary;
             }
-            ClassDef classDef = LookupBoClassDef;
+            IClassDef classDef = LookupBoClassDef;
             PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDef.PrimaryKeyDef;
             if (primaryKeyDef.Count > 1)
             {
@@ -365,7 +369,7 @@ namespace Habanero.BO
         ///<returns></returns>
         public virtual IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            ClassDef classDef = LookupBoClassDef;
+            IClassDef classDef = LookupBoClassDef;
             return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
                 (classDef, this.Criteria, this.OrderCriteria);
         }
@@ -373,7 +377,7 @@ namespace Habanero.BO
         ///<summary>
         /// Returns the class definition for the business object type that is the source of the list for this lookup
         ///</summary>
-        public ClassDef LookupBoClassDef
+        public IClassDef LookupBoClassDef
         {
             get { return ClassDef.ClassDefs[BoType]; }
         }
@@ -534,7 +538,7 @@ namespace Habanero.BO
         /// <returns>Returns an ICollection object</returns>
         public ICollection GetValueCollection()
         {
-            ClassDef classDef = LookupBoClassDef;
+            IClassDef classDef = LookupBoClassDef;
             IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
                 (classDef, "", "");
             return CreateValueList(col);

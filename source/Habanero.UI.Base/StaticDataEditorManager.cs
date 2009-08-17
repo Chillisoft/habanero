@@ -39,7 +39,7 @@ namespace Habanero.UI.Base
         private readonly IControlFactory _controlFactory;
         private readonly ITreeView _treeView;
         private readonly IEditableGridControl _gridControl;
-        private readonly Dictionary<string, ClassDef> _items;
+        private readonly Dictionary<string, IClassDef> _items;
         private ITreeNode _currentSectionNode;
 
         ///<summary>
@@ -51,7 +51,7 @@ namespace Habanero.UI.Base
         {
             _staticDataEditor = staticDataEditor;
             this._controlFactory = controlFactory;
-            _items = new Dictionary<string, ClassDef>();
+            _items = new Dictionary<string, IClassDef>();
             _treeView = _controlFactory.CreateTreeView("TreeView");
             _treeView.Width = 200;
             _gridControl = _controlFactory.CreateEditableGridControl();
@@ -107,7 +107,7 @@ namespace Habanero.UI.Base
         /// <param name="itemName">The name of the item as it appears to the user</param>
         /// <param name="classDef">The class definition holding a grid def used to
         /// construct the grid for that type</param>
-        public void AddItem(string itemName, ClassDef classDef)
+        public void AddItem(string itemName, IClassDef classDef)
         {
             ITreeNode treeNode = _controlFactory.CreateTreeNode(itemName);
             _currentSectionNode.Nodes.Add(treeNode);
@@ -120,7 +120,7 @@ namespace Habanero.UI.Base
         /// <param name="itemName">The name of the item to select</param>
         public void SelectItem(string itemName)
         {
-            ClassDef classDef;
+            IClassDef classDef;
             if (_items.ContainsKey(itemName)) classDef = _items[itemName];
             else
             {

@@ -492,7 +492,7 @@ namespace Habanero.Test.BO.Loaders
         {
             //---------------Set up test pack-------------------
             XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), GetDefClassFactory());
-            ClassDef personClassDef =
+            IClassDef personClassDef =
                 loader.LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"" typeParameter=""Human"">
@@ -536,7 +536,7 @@ namespace Habanero.Test.BO.Loaders
         {
             //---------------Set up test pack-------------------
             XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), GetDefClassFactory());
-            ClassDef personClassDef =
+            IClassDef personClassDef =
                 loader.LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">

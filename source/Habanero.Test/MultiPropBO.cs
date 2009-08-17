@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -26,14 +27,14 @@ namespace Habanero.Test
 {
     public class MultiPropBO : BusinessObject
     {
-        private static ClassDef _newClassDef;
+        private static IClassDef _newClassDef;
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return _newClassDef;
         }
 
-        public static ClassDef LoadClassDef()
+        public static IClassDef LoadClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             _newClassDef = itsLoader.LoadClass(@"

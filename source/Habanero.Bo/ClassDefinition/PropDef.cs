@@ -785,7 +785,7 @@ namespace Habanero.BO.ClassDefinition
                     }
                 }
             }
-            BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue(list.LookupBoClassDef, propValue);
+            BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue((ClassDef) list.LookupBoClassDef, propValue);
 
             if (boPrimaryKey != null)
             {
@@ -952,13 +952,14 @@ namespace Habanero.BO.ClassDefinition
                 object defaultValue;
                 if (MyPropertyType == typeof (DateTime) && _defaultValueString != null)
                 {
-                    switch (_defaultValueString.ToUpper())
-                    {
-                        case "TODAY":
-                            return DateTime.Today;
-                        case "NOW":
-                            return DateTime.Now;
-                    }
+                    return _defaultValueString;
+                    //switch (_defaultValueString.ToUpper())
+                    //{
+                    //    case "TODAY":
+                    //        return DateTime.Today;
+                    //    case "NOW":
+                    //        return DateTime.Now;
+                    //}
                 }
                 if (_defaultValue == null && _defaultValueString != null)
                 {

@@ -48,7 +48,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.Save();
@@ -77,7 +77,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -100,7 +100,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.Save();
@@ -124,7 +124,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.Save();
@@ -148,7 +148,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.Save();
@@ -172,7 +172,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.Save();
@@ -197,7 +197,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.Save();
@@ -220,7 +220,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.Save();
@@ -314,7 +314,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -341,7 +341,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -365,7 +365,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -392,7 +392,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -415,7 +415,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -442,7 +442,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -465,7 +465,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -494,7 +494,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -680,7 +680,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO.LoadDefaultClassDef_WithTwoRelationshipsToContactPerson();
-            ClassDef cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            IClassDef cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
 
             cpClassDef.RelationshipDefCol["Organisation"].ReverseRelationshipName = "OtherContactPeople";
 
@@ -704,7 +704,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO.LoadDefaultClassDef();
-            ClassDef cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            IClassDef cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
 
             string reverseRelationshipName = TestUtil.GetRandomString();
             cpClassDef.RelationshipDefCol["Organisation"].ReverseRelationshipName = reverseRelationshipName;

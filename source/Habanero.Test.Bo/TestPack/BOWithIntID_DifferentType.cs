@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -49,10 +50,10 @@ namespace Habanero.Test.BO
             return TestField;
         }
 
-        public static ClassDef LoadClassDefWithIntID()
+        public static IClassDef LoadClassDefWithIntID()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""BOWithIntID_DifferentType"" assembly=""Habanero.Test.BO"" table=""bowithintid"" >
@@ -66,10 +67,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefWithIntID_CompositeKey()
+        public static IClassDef LoadClassDefWithIntID_CompositeKey()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""BOWithIntID_DifferentType"" assembly=""Habanero.Test.BO"" table=""bowithintid"" >

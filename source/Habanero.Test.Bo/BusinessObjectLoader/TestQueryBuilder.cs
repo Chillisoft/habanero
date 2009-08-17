@@ -42,7 +42,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
+            IClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
             ISelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
             //---------------Test Result -----------------------
@@ -58,7 +58,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
+            IClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "bob");
             Criteria preparedCriteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "bob");
             QueryBuilder.PrepareCriteria(classdef, preparedCriteria);
@@ -75,7 +75,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
+            IClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
             ISelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
             //---------------Test Result -----------------------
@@ -88,7 +88,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
+            IClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
             ISelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
 
@@ -102,7 +102,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
-            ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
+            IClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classdef, "TestProp");
             //---------------Test Result -----------------------
@@ -120,7 +120,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
             const string propName = "NonExistantTestProp";
-            ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
+            IClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
             Exception exception = null;
             try
@@ -145,8 +145,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCreateOrderCriteria_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
-            ClassDef myRelatedBoClassDef = MyRelatedBo.LoadClassDefWithDifferentTableAndFieldNames();
-            ClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship(); 
+            IClassDef myRelatedBoClassDef = MyRelatedBo.LoadClassDefWithDifferentTableAndFieldNames();
+            IClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship(); 
 
             //---------------Execute Test ----------------------
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp");
@@ -169,7 +169,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCreateOrderCriteria_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             const string orderByString = "Car.Owner.Surname";
 
             //---------------Execute Test ----------------------
@@ -187,7 +187,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareCriteria()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             Criteria criteria = new Criteria("EngineNo", Criteria.ComparisonOp.Equals, 100);
 
             //---------------Execute Test ----------------------
@@ -206,7 +206,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareCriteria_ConvertsValue_IntToString()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             Criteria criteria = new Criteria("EngineNo", Criteria.ComparisonOp.Equals, 100);
 
             //---------------Execute Test ----------------------
@@ -220,7 +220,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareCriteria_ConvertsValue_StringToDateTime()
         {
             //---------------Set up test pack-------------------
-            ClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
+            IClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
             const string dateTimeString = "01 Jan 2000 01:30:45";
             DateTime dateTime = DateTime.Parse(dateTimeString);
             Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, dateTimeString);
@@ -237,7 +237,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareCriteria_ConvertsValue_StringTodayToDateTimeToday()
         {
             //---------------Set up test pack-------------------
-            ClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
+            IClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
             const string dateTimeString = "Today";
             DateTimeToday dateTimeToday = new DateTimeToday();
             Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, dateTimeString);
@@ -254,7 +254,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareCriteria_ConvertsValue_StringNowToDateTimeToday()
         {
             //---------------Set up test pack-------------------
-            ClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
+            IClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
             const string dateTimeString = "Now";
             Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, dateTimeString);
 
@@ -271,7 +271,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareCriteria_ConvertsValue_StringToGuid()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             string carid = Guid.NewGuid().ToString("B");
             Criteria criteria = new Criteria("CarID", Criteria.ComparisonOp.Equals, carid);
 
@@ -287,7 +287,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         [Test]
         public void TestPrepareCriteria_Null()
         {
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             const Criteria nullCriteria = null;
             //-------------Execute test ---------------------
             QueryBuilder.PrepareCriteria(engineClassDef, nullCriteria);
@@ -299,7 +299,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareCriteria_Composite()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             Criteria criteria1 = new Criteria("EngineNo", Criteria.ComparisonOp.Equals, 100);
             Guid carId = Guid.NewGuid();
             Criteria criteria2 = new Criteria("CarID", Criteria.ComparisonOp.Equals, carId);
@@ -328,7 +328,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareCriteria_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             const string carRegNoValue = "1234";
             Criteria criteria = new Criteria("Car.CarRegNo", Criteria.ComparisonOp.Equals, carRegNoValue);
             //-------------Execute test ---------------------
@@ -346,7 +346,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareCriteria_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             string surname = TestUtil.GetRandomString();
             Criteria criteria = new Criteria("Car.Owner.Surname", Criteria.ComparisonOp.Equals, surname);
             //-------------Execute test ---------------------
@@ -365,7 +365,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             Structure.Entity.LoadDefaultClassDef();
-            ClassDef classDef = Test.Structure.Part.LoadClassDef_WithClassTableInheritance();
+            IClassDef classDef = Test.Structure.Part.LoadClassDef_WithClassTableInheritance();
             string entityType = TestUtil.GetRandomString();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
@@ -384,7 +384,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareSource()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             Source source = null;
 
             //---------------Execute Test ----------------------
@@ -400,7 +400,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareSource_Inheritance_ClassTable()
         {
             //---------------Set up test pack-------------------
-            ClassDef circleClassDef = Circle.GetClassDefWithClassTableInheritance();
+            IClassDef circleClassDef = Circle.GetClassDefWithClassTableInheritance();
             Source source = null;
 
             //---------------Execute Test ----------------------
@@ -415,7 +415,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareSource_ExistingSource()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             Source originalSource = new Source("Engine", "Table_Engine");
             Source source = originalSource;
 
@@ -433,7 +433,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareSource_ExistingSource_CompletesEntityName()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             Source originalSource = new Source("Engine", null);
             Source source = originalSource;
 
@@ -451,7 +451,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareSource_ExistingSource_Relationship_DoesntExist()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             Source originalSource = new Source("NotExistingRelationship", null);
             Source source = originalSource;
 
@@ -476,7 +476,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareSource_ExistingSource_RelationshipName()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             Source originalSource = new Source("Car", null);
             Source source = originalSource;
 
@@ -511,7 +511,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareSource_ExistingSource_Relationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             Source carSource = Source.FromString("Car.Owner");
             Source source = carSource;
 
@@ -574,7 +574,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestPrepareDiscriminatorCriteria()
         {
             //---------------Set up test pack-------------------
-            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            IClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             SelectQuery selectQuery = (SelectQuery)QueryBuilder.CreateSelectQuery(circleClassDef);
             Criteria discCriteria = selectQuery.DiscriminatorCriteria;
             //---------------Execute Test ----------------------
@@ -591,7 +591,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             MyRelatedBo.LoadClassDefWithDifferentTableAndFieldNames();
-            ClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship_DifferentTableAndFieldNames();
+            IClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship_DifferentTableAndFieldNames();
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(myBoClassdef);
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp");
@@ -617,7 +617,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             MyRelatedBo.LoadClassDefWithDifferentTableAndFieldNames();
-            ClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship();
+            IClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship();
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(myBoClassdef);
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp, MyRelationship.MyRelatedTestProp2");
@@ -634,7 +634,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestSetOrderCriteria_AddsJoinToSource_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(engineClassDef);
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, "Car.Owner.Surname");
@@ -657,7 +657,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestSingleTableInheritance_Fields()
         {
             //---------------Set up test pack-------------------
-            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            IClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -675,7 +675,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestSingleTableInheritance_BaseHasDiscriminator()
         {
             //---------------Set up test pack-------------------
-            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            ClassDef circleClassDef = (ClassDef) CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             ClassDef shapeClassDef = circleClassDef.SuperClassClassDef;
             Criteria expectedShapeCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Is, "null");
             Criteria expectedCircleCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "CircleNoPrimaryKey");
@@ -698,7 +698,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestSingleTableInheritance_SubTypeHasDiscriminator()
         {
             //---------------Set up test pack-------------------
-            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            IClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             Criteria expected = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "CircleNoPrimaryKey");
             //---------------Assert Precondition----------------
 
@@ -718,7 +718,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef filledCircleClassDef = FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
+            ClassDef filledCircleClassDef = (ClassDef) FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
             ClassDef shapeClassDef = filledCircleClassDef.SuperClassClassDef.SuperClassClassDef;
             Criteria expectedShapeCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Is, "null");
             Criteria expectedCircleCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "CircleNoPrimaryKey");

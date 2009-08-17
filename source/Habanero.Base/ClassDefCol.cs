@@ -23,23 +23,23 @@ using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base
 {
     /// <summary>
     /// Manages a collection of class definitions.
     /// </summary>
-    public class ClassDefCol : IEnumerable<ClassDef>
+    public class ClassDefCol : IEnumerable<IClassDef>
     {
         private static ClassDefCol _classDefcol;
         private static bool _instanceFlag;
-        private readonly Dictionary<string, ClassDef> _classDefs;
+        private readonly Dictionary<string, IClassDef> _classDefs;
 
         /// <summary>
         /// Initialises an empty collection
         /// </summary>
         public ClassDefCol()
         {
-            _classDefs = new Dictionary<string, ClassDef>();
+            _classDefs = new Dictionary<string, IClassDef>();
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="key">The name of the class definition</param>
         /// <returns>Returns the class definition that matches the key
         /// or null if none is found</returns>
-        public ClassDef this[Type key]
+        public IClassDef this[Type key]
         {
             get
             {
@@ -95,7 +95,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="className">The name of the class</param>
         /// <returns>Returns the class definition that matches the key
         /// or null if none is found</returns>
-        public ClassDef this[string assemblyName, string className]
+        public IClassDef this[string assemblyName, string className]
         {
             get
             {
@@ -127,7 +127,7 @@ namespace Habanero.BO.ClassDefinition
 
         #region IEnumerable<ClassDef> Members
 
-        IEnumerator<ClassDef> IEnumerable<ClassDef>.GetEnumerator()
+        IEnumerator<IClassDef> IEnumerable<IClassDef>.GetEnumerator()
         {
             return _classDefs.Values.GetEnumerator();
         }
@@ -143,7 +143,7 @@ namespace Habanero.BO.ClassDefinition
         /// Adds a class definition to the collection
         /// </summary>
         /// <param name="value">The class definition to add</param>
-        public void Add(ClassDef value)
+        public void Add(IClassDef value)
         {
             string typeId = GetTypeId(value.AssemblyName, value.ClassName, true);
             if (_classDefs.ContainsKey(typeId))
@@ -189,7 +189,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="classDef">The class definition to look for.</param>
         /// <returns>Returns true if found, false if not</returns>
-        public bool Contains(ClassDef classDef)
+        public bool Contains(IClassDef classDef)
         {
             bool found;
             GetTypeIdForItem(classDef.AssemblyName, classDef.ClassName, out found);
@@ -213,7 +213,7 @@ namespace Habanero.BO.ClassDefinition
         /// Removes the specified class definition from the collection.
         /// </summary>
         /// <param name="classDef">The class definition to be removed</param>
-        public void Remove(ClassDef classDef)
+        public void Remove(IClassDef classDef)
         {
             bool found;
             string typeId = GetTypeIdForItem(classDef.AssemblyName, classDef.ClassName, out found);
@@ -236,11 +236,11 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="className">The name of the class to find</param>
         ///<returns>The class definition with the specified name, otherwise returns null.</returns>
-        public ClassDef FindByClassName(string className)
+        public IClassDef FindByClassName(string className)
         {
-            foreach (KeyValuePair<string, ClassDef> keyValuePair in _classDefs)
+            foreach (KeyValuePair<string, IClassDef> keyValuePair in _classDefs)
             {
-                ClassDef classDef = keyValuePair.Value;
+                IClassDef classDef = keyValuePair.Value;
                 if (classDef.ClassName == className)
                 {
                     return classDef;
@@ -264,7 +264,7 @@ namespace Habanero.BO.ClassDefinition
         /// new empty collection.
         /// </summary>
         /// <returns>A collection of class definitions</returns>
-        internal static ClassDefCol GetColClassDef()
+        public static ClassDefCol GetColClassDef()
         {
             if (_instanceFlag)
             {
@@ -279,7 +279,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="classDefCol">A loaded collection of class definitions to initialise the collection with</param>
         /// <returns>A collection of class definitions</returns>
-        internal static ClassDefCol LoadColClassDef(ClassDefCol classDefCol)
+        public static ClassDefCol LoadColClassDef(ClassDefCol classDefCol)
         {
             if (classDefCol == null)
             {
@@ -292,7 +292,7 @@ namespace Habanero.BO.ClassDefinition
             }
             else
             {
-                foreach (ClassDef classDef in classDefCol)
+                foreach (IClassDef classDef in classDefCol)
                 {
                     //ClassDef classDef = (ClassDef)entry.Value;
                     if (!_classDefcol.Contains(classDef))
@@ -394,13 +394,13 @@ namespace Habanero.BO.ClassDefinition
             return GetTypeId(assemblyName, className, includeNamespace);
         }
 
-        internal static string StripOutNameSpace(string className)
+        public static string StripOutNameSpace(string className)
         {
             string namespaceString;
             return StripOutNameSpace(className, out namespaceString);
         }
 
-        internal static string StripOutNameSpace(string className, out string namespaceString)
+        public static string StripOutNameSpace(string className, out string namespaceString)
         {
             if (className != null)
             {

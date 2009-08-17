@@ -33,11 +33,11 @@ namespace Habanero.Test.UI.Base
     public class TestBOGridAndEditorControlWin
     {
         private const string CUSTOM_UIDEF_NAME = "custom1";
-        private static ClassDef GetCustomClassDef()
+        private static IClassDef GetCustomClassDef()
         {
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDef_NoOrganisationRelationship();
-            ClassDef classDef = OrganisationTestBO.LoadDefaultClassDef();
+            IClassDef classDef = OrganisationTestBO.LoadDefaultClassDef();
             IUIGrid originalGridDef = classDef.UIDefCol["default"].UIGrid;
             UIGrid extraGridDef = ((UIGrid)originalGridDef).Clone();
             // UIGridColumn extraColumn = originalGridDef[0].Clone();
@@ -135,7 +135,7 @@ namespace Habanero.Test.UI.Base
         public void TestConstructor_NonGeneric()
         {
             //---------------Set up test pack-------------------
-            ClassDef def = GetCustomClassDef();
+            ClassDef def = (ClassDef) GetCustomClassDef();
             IBOEditorControl iboEditorControl = new TestComboBox.BusinessObjectControlStub();
             //---------------Assert Precondition----------------
             Assert.IsNotNull(def.GetUIDef(CUSTOM_UIDEF_NAME));
@@ -178,7 +178,7 @@ namespace Habanero.Test.UI.Base
         public void TestConstructor_NonGeneric_NullControlFactory_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
-            ClassDef def = GetCustomClassDef();
+            IClassDef def = GetCustomClassDef();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -200,7 +200,7 @@ namespace Habanero.Test.UI.Base
         public void TestConstructor_NonGeneric_NoFormDefDefinedForUIDef_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
-            ClassDef def = GetCustomClassDef();
+            IClassDef def = GetCustomClassDef();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -230,7 +230,7 @@ namespace Habanero.Test.UI.Base
         public void TestConstructor_NonGeneric_DefinedUIDefDoesNotExistForDef_ShouldRiaseError()
         {
             //---------------Set up test pack-------------------
-            ClassDef def = GetCustomClassDef();
+            IClassDef def = GetCustomClassDef();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -337,7 +337,7 @@ namespace Habanero.Test.UI.Base
         {
             //  ---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef = GetCustomClassDef();
+            IClassDef classDef = GetCustomClassDef();
             BusinessObjectCollection<OrganisationTestBO> organisationTestBOS = CreateSavedOrganisationTestBOSCollection
                 ();
             organisationTestBOS.ClassDef = classDef;
@@ -860,7 +860,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            IClassDef organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
             IRelationshipDef cpRelationship = organisationClassDef.RelationshipDefCol["ContactPeople"];
             cpRelationship.RelationshipType = RelationshipType.Composition;
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();

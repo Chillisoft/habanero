@@ -21,6 +21,7 @@
 // This partial class was auto-generated for use with the Habanero Architecture.
 // ------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -28,10 +29,10 @@ namespace Habanero.Test.Structure
 {
     public partial class Car
     {
-        public new static ClassDef LoadDefaultClassDef()
+        public new static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Car"" assembly=""Habanero.Test.Structure"" table=""table_Car"">
 			    <property name=""CarID"" type=""Guid"" databaseField=""field_Car_ID"" />
 			    <property name=""RegistrationNo"" databaseField=""field_Registration_No"" />
@@ -50,10 +51,10 @@ namespace Habanero.Test.Structure
             return itsClassDef;
         }
 
-        public new static ClassDef LoadClassDef_WithClassTableInheritance()
+        public new static IClassDef LoadClassDef_WithClassTableInheritance()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Car"" assembly=""Habanero.Test.Structure"" table=""table_class_Car"">
 			    <superClass class=""Vehicle"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""CarID"" type=""Guid"" databaseField=""field_Car_ID"" />

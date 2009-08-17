@@ -100,7 +100,7 @@ namespace Habanero.DB
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            ClassDef classDef = ClassDef.ClassDefs[typeof (T)];
+            IClassDef classDef = ClassDef.ClassDefs[typeof (T)];
             ISelectQuery selectQuery = GetSelectQuery(classDef, criteria);
             return GetBusinessObject<T>(selectQuery);
         }
@@ -618,7 +618,7 @@ namespace Habanero.DB
         /// <param name="bo"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        protected static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)
+        protected static IClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)
         {
             ClassDef classDef = (ClassDef) bo.ClassDef;
             ClassDefCol subClasses = classDef.AllChildren;
@@ -631,7 +631,7 @@ namespace Habanero.DB
 
                 if (String.IsNullOrEmpty(discriminatorValue)) continue;
 
-                ClassDef subClassDef = ClassDef.ClassDefs.FindByClassName(discriminatorValue);
+                IClassDef subClassDef = ClassDef.ClassDefs.FindByClassName(discriminatorValue);
 
                 if (subClassDef != null && subClassDef != bo.ClassDef) return subClassDef;
             }

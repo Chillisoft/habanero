@@ -31,7 +31,7 @@ namespace Habanero.BO.ClassDefinition
     ///</summary>
     public class BOPropGeneralDataMapper : BOPropDataMapper
     {
-        private readonly IPropDef _propDef;
+        private readonly PropDef _propDef;
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOPropGeneralDataMapper");
 
         ///<summary>
@@ -40,7 +40,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="propDef"></param>
         public BOPropGeneralDataMapper(IPropDef propDef)
         {
-            _propDef = propDef;
+            _propDef = (PropDef) propDef;
         }
 
         /// <summary>

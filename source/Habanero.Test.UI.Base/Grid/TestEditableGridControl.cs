@@ -168,7 +168,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
             MyBO.LoadDefaultClassDef();
-            ClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
+            IClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
             //---------------Execute Test ----------------------
             gridControl.Initialise(def);
             //---------------Test Result -----------------------
@@ -185,7 +185,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
             MyBO.LoadDefaultClassDef();
-            ClassDef def = ClassDef.ClassDefs[typeof(MyBO)];
+            IClassDef def = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -209,7 +209,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
             MyBO.LoadDefaultClassDef();
-            ClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
+            IClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
             gridControl.Initialise(def);
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             //--------------Assert PreConditions----------------            
@@ -231,7 +231,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
             MyBO.LoadDefaultClassDef();
-            ClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
+            IClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
             gridControl.Initialise(def);
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             //--------------Assert PreConditions----------------            
@@ -249,7 +249,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
             MyBO.LoadDefaultClassDef();
-            ClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
+            IClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
             grid.Initialise(def);
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             //--------------Assert PreConditions----------------            
@@ -272,7 +272,7 @@ namespace Habanero.Test.UI.Base
             IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
             AddControlToForm(grid);
             MyBO.LoadDefaultClassDef();
-            ClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
+            IClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
             grid.Initialise(def);
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             MyBO bo = new MyBO();
@@ -299,7 +299,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetupComboBoxFromClassDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
             GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
 
@@ -324,7 +324,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetupComboBoxFromClassDef_SetsItemsInComboBox()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            IClassDef classDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef();
             ContactPerson.DeleteAllContactPeople();
             OrganisationTestBO.ClearAllFromDB();
@@ -474,7 +474,7 @@ namespace Habanero.Test.UI.Base
             //does not cause it to be reinitialised.
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IClassDef classDef = LoadMyBoDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             const string alternateUIDefName = "Alternate";
             IEditableGridControl editableGridControl = CreateEditableGridControl();
@@ -705,7 +705,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetupColumnAsTextBoxType_FromClassDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1TextboxColumn();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_1TextboxColumn();
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
             GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
 
@@ -730,7 +730,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetupColumnAsCheckBoxType_FromClassDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
             GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
 
@@ -841,7 +841,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             //Clear all contact people from the DB
             ContactPerson.DeleteAllContactPeople();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             CreateContactPersonInDB();
 
             //Create grid setup for search
@@ -864,7 +864,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             //Clear all contact people from the DB
             ContactPerson.DeleteAllContactPeople();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             //Create data in the database with the 5 contact people two with Search in surname
             CreateContactPersonInDB();
             CreateContactPersonInDB();
@@ -912,7 +912,7 @@ namespace Habanero.Test.UI.Base
         public void TestFilterControlIsBuiltFromDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDefWithFilterDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDefWithFilterDef();
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
 
             //---------------Assert PreConditions---------------            
@@ -926,9 +926,9 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        private ClassDef LoadMyBoDefaultClassDef()
+        private IClassDef LoadMyBoDefaultClassDef()
         {
-            ClassDef classDef;
+            IClassDef classDef;
             if (GetControlFactory() is ControlFactoryVWG)
             {
                 classDef = MyBO.LoadDefaultClassDefVWG();
@@ -1081,7 +1081,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
                 MyBO.LoadClassDefWithBoolean();
-                ClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
+                IClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
                 //--------------Assert PreConditions----------------            
 
                 //---------------Execute Test ----------------------
@@ -1099,7 +1099,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
                 MyBO.LoadDefaultClassDef();
-                ClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
+                IClassDef def = ClassDef.ClassDefs[typeof (MyBO)];
                 //---------------Execute Test ----------------------
                 gridControl.Initialise(def);
                 //---------------Test Result -----------------------

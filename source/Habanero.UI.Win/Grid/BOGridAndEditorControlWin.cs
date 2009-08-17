@@ -553,7 +553,7 @@ namespace Habanero.UI.Win
             _readOnlyGridControl.Grid.RowHeadersWidth = 25;
             _readOnlyGridControl.Buttons.Visible = false;
             _readOnlyGridControl.FilterControl.Visible = false;
-            ClassDef classDef = ClassDef.Get<TBusinessObject>();
+            IClassDef classDef = ClassDef.Get<TBusinessObject>();
             if (!string.IsNullOrEmpty(gridUiDefName))
             {
                 _readOnlyGridControl.Initialise(classDef, gridUiDefName);

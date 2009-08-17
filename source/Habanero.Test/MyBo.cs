@@ -54,7 +54,7 @@ namespace Habanero.Test
             _myRuleList = new List<IBusinessObjectRule>();
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return _classDef;
         }
@@ -122,10 +122,10 @@ namespace Habanero.Test
             }
         }
 
-        public static ClassDef LoadClassDefs_OneProp()
+        public static IClassDef LoadClassDefs_OneProp()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -144,10 +144,10 @@ namespace Habanero.Test
             return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
         }
 
-        public static ClassDef LoadClassDefsNoUIDef()
+        public static IClassDef LoadClassDefsNoUIDef()
         {
                         XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -163,10 +163,10 @@ namespace Habanero.Test
             return itsClassDef;
         }        
         
-        public static ClassDef LoadClassDefsHasModuleName()
+        public static IClassDef LoadClassDefsHasModuleName()
         {
                         XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"" moduleName=""MyBOModule"">
@@ -181,10 +181,10 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefs_Integer_PrimaryKey()
+        public static IClassDef LoadClassDefs_Integer_PrimaryKey()
         {
                         XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -200,11 +200,11 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
 
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -265,11 +265,11 @@ namespace Habanero.Test
 			return itsClassDef;
         }
 
-        public static ClassDef LoadClassDef_NonGuidID()
+        public static IClassDef LoadClassDef_NonGuidID()
         {
 
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -330,10 +330,10 @@ namespace Habanero.Test
 			return itsClassDef;
         }
 
-        public static ClassDef LoadDefaultClassDefWithFilterDef()
+        public static IClassDef LoadDefaultClassDefWithFilterDef()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -369,10 +369,10 @@ namespace Habanero.Test
         }
 
 
-        public static ClassDef LoadDefaultClassDef_CompulsoryField_TestProp()
+        public static IClassDef LoadDefaultClassDef_CompulsoryField_TestProp()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -397,10 +397,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadDefaultClassDefWithDifferentTableAndFieldNames()
+        public static IClassDef LoadDefaultClassDefWithDifferentTableAndFieldNames()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"" table=""my_bo"" >
@@ -416,10 +416,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadDefaultClassDefVWG()
+        public static IClassDef LoadDefaultClassDefVWG()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -470,10 +470,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefVWG_NonGuidID()
+        public static IClassDef LoadClassDefVWG_NonGuidID()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -524,10 +524,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithNoLookup()
+        public static IClassDef LoadClassDefWithNoLookup()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -593,10 +593,10 @@ namespace Habanero.Test
 			return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithBoolean()
+        public static IClassDef LoadClassDefWithBoolean()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -629,10 +629,10 @@ namespace Habanero.Test
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
-        public static ClassDef LoadClassDefWith_Grid_1TextboxColumn()
+        public static IClassDef LoadClassDefWith_Grid_1TextboxColumn()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -654,10 +654,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWith_Grid_2Columns_1stHasZeroWidth()
+        public static IClassDef LoadClassDefWith_Grid_2Columns_1stHasZeroWidth()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -680,10 +680,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWith_Grid_1DateTimeColumn()
+        public static IClassDef LoadClassDefWith_Grid_1DateTimeColumn()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -704,10 +704,10 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefWith_Grid_1CheckBoxColumn()
+        public static IClassDef LoadClassDefWith_Grid_1CheckBoxColumn()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -728,10 +728,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWith_Grid_1ComboBoxColumn()
+        public static IClassDef LoadClassDefWith_Grid_1ComboBoxColumn()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -754,10 +754,10 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefWithDateTime()
+        public static IClassDef LoadClassDefWithDateTime()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -797,10 +797,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithDateTimeParameterFormat()
+        public static IClassDef LoadClassDefWithDateTimeParameterFormat()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -840,10 +840,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithLookup()
+        public static IClassDef LoadClassDefWithLookup()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -886,11 +886,11 @@ namespace Habanero.Test
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
-        public static ClassDef LoadClassDefWithUIAllDataTypes()
+        public static IClassDef LoadClassDefWithUIAllDataTypes()
         {
             
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -932,10 +932,10 @@ namespace Habanero.Test
 			return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithSimpleIntegerLookup()
+        public static IClassDef LoadClassDefWithSimpleIntegerLookup()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -977,10 +977,10 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefWithStringLookup()
+        public static IClassDef LoadClassDefWithStringLookup()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1017,14 +1017,14 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithBOLookup()
+        public static IClassDef LoadClassDefWithBOLookup()
         {
             return LoadClassDefWithBOLookup("");
         }
-        public static ClassDef LoadClassDefWithBOLookup(string boLookupCriteria)
+        public static IClassDef LoadClassDefWithBOLookup(string boLookupCriteria)
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1117,10 +1117,10 @@ namespace Habanero.Test
             }
             return result;
         }
-        public static ClassDef LoadClassDefWithTwoUITabs()
+        public static IClassDef LoadClassDefWithTwoUITabs()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1152,10 +1152,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithThreeUITabs()
+        public static IClassDef LoadClassDefWithThreeUITabs()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1191,10 +1191,10 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefWithThreeUITabs_UI_Define()
+        public static IClassDef LoadClassDefWithThreeUITabs_UI_Define()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1231,10 +1231,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithBOStringLookup()
+        public static IClassDef LoadClassDefWithBOStringLookup()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1268,10 +1268,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithStringRule()
+        public static IClassDef LoadClassDefWithStringRule()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1292,10 +1292,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithIntegerRule()
+        public static IClassDef LoadClassDefWithIntegerRule()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1317,10 +1317,10 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithRelationship()
+        public static IClassDef LoadClassDefWithRelationship()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1365,10 +1365,10 @@ namespace Habanero.Test
         }
 
 
-        public static ClassDef LoadClassDefWithRelationshipAndFormGrid()
+        public static IClassDef LoadClassDefWithRelationshipAndFormGrid()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1414,10 +1414,10 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefWithRelationship_DifferentTableAndFieldNames()
+        public static IClassDef LoadClassDefWithRelationship_DifferentTableAndFieldNames()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
                 <class name=""MyBO"" assembly=""Habanero.Test"" table=""my_bo"" >
@@ -1441,10 +1441,10 @@ namespace Habanero.Test
 
 
 
-        public static ClassDef LoadClassDefWithShape_SingleTableInheritance_Relationship()
+        public static IClassDef LoadClassDefWithShape_SingleTableInheritance_Relationship()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1470,10 +1470,10 @@ namespace Habanero.Test
         //}
 
 
-        public static ClassDef LoadWebGuiClassDef()
+        public static IClassDef LoadWebGuiClassDef()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1517,10 +1517,10 @@ namespace Habanero.Test
             return StringUtilities.GuidToUpper(this.MyBoID.Value);
         }
 
-        public static ClassDef GetLoadClassDefsUIDefNoFormDef()
+        public static IClassDef GetLoadClassDefsUIDefNoFormDef()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1543,10 +1543,10 @@ namespace Habanero.Test
         }
 
 
-        public static ClassDef LoadClassDefWithDecimalRule()
+        public static IClassDef LoadClassDefWithDecimalRule()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -1568,30 +1568,30 @@ namespace Habanero.Test
             return itsClassDef;    
         }
 
-        public static ClassDef LoadClassDefWithAssociationRelationship()
+        public static IClassDef LoadClassDefWithAssociationRelationship()
         {
-            ClassDef classDef = LoadClassDefWithRelationship();
+            IClassDef classDef = LoadClassDefWithRelationship();
             classDef.RelationshipDefCol["MyMultipleRelationship"].RelationshipType = RelationshipType.Association;
             return classDef;
         }
 
-        public static ClassDef LoadClassDefWithAggregationRelationship()
+        public static IClassDef LoadClassDefWithAggregationRelationship()
         {
-            ClassDef classDef = LoadClassDefWithRelationship();
+            IClassDef classDef = LoadClassDefWithRelationship();
             classDef.RelationshipDefCol["MyMultipleRelationship"].RelationshipType = RelationshipType.Aggregation;
             return classDef;
         }
 
-        public static ClassDef LoadClassDefWithCompositionRelationship()
+        public static IClassDef LoadClassDefWithCompositionRelationship()
         {
-            ClassDef classDef = LoadClassDefWithRelationship();
+            IClassDef classDef = LoadClassDefWithRelationship();
             classDef.RelationshipDefCol["MyMultipleRelationship"].RelationshipType = RelationshipType.Composition;
             return classDef;
         }
 
-        public static ClassDef LoadDefaultClassDefWithDefault(string testPropDefault)
+        public static IClassDef LoadDefaultClassDefWithDefault(string testPropDefault)
         {
-            ClassDef classDef = LoadDefaultClassDef();
+            IClassDef classDef = LoadDefaultClassDef();
             classDef.PropDefcol["TestProp"].DefaultValueString = testPropDefault;
             return classDef;
         }
@@ -1622,7 +1622,7 @@ namespace Habanero.Test
 
     public class MyRelatedBo : BusinessObject
     {
-        private static ClassDef itsClassDef;
+        private static IClassDef itsClassDef;
 
         public MyRelatedBo()
         {
@@ -1632,7 +1632,7 @@ namespace Habanero.Test
         {
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return itsClassDef;
         }
@@ -1650,7 +1650,7 @@ namespace Habanero.Test
             get { return (Guid?) this.GetPropertyValue("MyBoID"); }
         }
 
-        public static ClassDef LoadClassDef()
+        public static IClassDef LoadClassDef()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
             itsClassDef =
@@ -1677,7 +1677,7 @@ namespace Habanero.Test
             return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
         }
 
-        public static ClassDef LoadClassDefWithDifferentTableAndFieldNames()
+        public static IClassDef LoadClassDefWithDifferentTableAndFieldNames()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
             itsClassDef =
@@ -1700,7 +1700,7 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithRelationshipBackToMyBo()
+        public static IClassDef LoadClassDefWithRelationshipBackToMyBo()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
             itsClassDef =
@@ -1722,7 +1722,7 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithRelationshipBackToMyBoAndGridDef()
+        public static IClassDef LoadClassDefWithRelationshipBackToMyBoAndGridDef()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
             itsClassDef =
@@ -1749,7 +1749,7 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithSingleTableInheritance()
+        public static IClassDef LoadClassDefWithSingleTableInheritance()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
             itsClassDef =
@@ -1851,7 +1851,7 @@ namespace Habanero.Test
 
 //        public MyBoNotEditableDeletable() { }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return _classDef;
         }
@@ -1881,10 +1881,10 @@ namespace Habanero.Test
             }
         }
 
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBoNotEditableDeletable"" assembly=""Habanero.Test"">

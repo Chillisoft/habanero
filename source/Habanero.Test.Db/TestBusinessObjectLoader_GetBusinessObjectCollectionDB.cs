@@ -66,7 +66,7 @@ namespace Habanero.Test.DB
         public void TestAfterLoadCalled_GetCollection_NonGeneric_Reloaded()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
@@ -114,7 +114,7 @@ namespace Habanero.Test.DB
         public void TestAfterLoadCalled_GetCollection_NonGeneric_NotReloaded()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
 
             //---------------Assert Precondition----------------
@@ -155,7 +155,7 @@ namespace Habanero.Test.DB
         public void Test_GetBusinessObjectCollection_NonGeneric_LoadOfSubTypeDoesntLoadSuperTypedObjects()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            IClassDef classDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             Shape shape = Shape.CreateSavedShape();
             Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
 
@@ -190,7 +190,7 @@ namespace Habanero.Test.DB
         public void Test_GetBusinessObjectCollection_NonGeneric_LoadOfSubTypeDoesntLoadSuperTypedObjects_Fresh()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            IClassDef classDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             Shape shape = Shape.CreateSavedShape();
             Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
             BusinessObjectManager.Instance.ClearLoadedObjects();
@@ -234,7 +234,7 @@ namespace Habanero.Test.DB
             Criteria criteria = Criteria.FromPrimaryKey(circle.ID);
             BusinessObjectManager.Instance.ClearLoadedObjects();
 
-            ClassDef classDef = ClassDef.Get<Shape>();
+            IClassDef classDef = ClassDef.Get<Shape>();
             //---------------Execute Test ----------------------
             IBusinessObjectCollection loadedShapes =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
@@ -274,7 +274,7 @@ namespace Habanero.Test.DB
             CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
             Criteria criteria = Criteria.FromPrimaryKey(circle.ID);
 
-            ClassDef classDef = ClassDef.Get<Shape>();
+            IClassDef classDef = ClassDef.Get<Shape>();
             //---------------Execute Test ----------------------
             IBusinessObjectCollection loadedShapes =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
@@ -316,7 +316,7 @@ namespace Habanero.Test.DB
             FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
             BusinessObjectManager.Instance.ClearLoadedObjects();
 
-            ClassDef classDef = ClassDef.Get<Shape>();
+            IClassDef classDef = ClassDef.Get<Shape>();
             //---------------Execute Test ----------------------
             IBusinessObject loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, filledCircle.ID);
             //---------------Test Result -----------------------
@@ -353,7 +353,7 @@ namespace Habanero.Test.DB
             FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
             BusinessObjectManager.Instance.ClearLoadedObjects();
 
-            ClassDef classDef = ClassDef.Get<Shape>();
+            IClassDef classDef = ClassDef.Get<Shape>();
             //---------------Execute Test ----------------------
             IBusinessObject loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
                 (classDef, filledCircle.ID);

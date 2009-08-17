@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base.Exceptions;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.Base
 {
@@ -212,6 +213,28 @@ namespace Habanero.Base
         /// The display name for the class
         ///</summary>
         string DisplayName { get; set; }
+
+        /// <summary>
+        /// The primary key definition for this class definition.
+        /// This could be null if the primary key is inherited from the super class.
+        /// To retrieve the primary key that is used for this class use the GetPrimaryKeyDef() method.
+        /// </summary>
+        IPrimaryKeyDef PrimaryKeyDef { get; set; }
+
+        /// <summary>
+        /// The collection of key definitions
+        /// </summary>
+        KeyDefCol KeysCol { get; set; }
+
+        /// <summary>
+        /// The collection of user interface definitions
+        /// </summary>
+        UIDefCol UIDefCol { get; set; }
+
+        /// <summary>
+        /// Returns all children of this class based on the loaded inheritance hierachies
+        /// </summary>
+        ClassDefCol AllChildren { get; }
 
         /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance

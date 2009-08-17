@@ -29,7 +29,7 @@ namespace Habanero.BO.CriteriaManager
     ///</summary>
     public class PropDefParameterSQLInfo: IParameterSqlInfo
     {
-        private IPropDef _propDef;
+        private PropDef _propDef;
         private ClassDef _classDef;
         private readonly string _parameterName;
         private readonly string _tableName;
@@ -55,14 +55,14 @@ namespace Habanero.BO.CriteriaManager
         ///<param name="parameterName">The name of the parameter that this information is for.</param>
         ///<param name="propDef">The property definition to use for the SQL Parameter Information.</param>
         ///<param name="tableName">The table name to use for this field</param>
-        public PropDefParameterSQLInfo(string parameterName, IPropDef propDef, string tableName) : this(propDef, null, tableName, parameterName) { }
+        public PropDefParameterSQLInfo(string parameterName, PropDef propDef, string tableName) : this(propDef, null, tableName, parameterName) { }
 
         ///<summary>
         /// Create SQL Parameter Information from a Property Definition and it's Class Definition.
         ///</summary>
         ///<param name="propDef">The property definition to use for the SQL Parameter Information.</param>
         ///<param name="classDef">The class definition to use for the SQL Parameter Information.</param>
-        public PropDefParameterSQLInfo(IPropDef propDef, ClassDef classDef) : this(propDef, classDef, null, null) { }
+        public PropDefParameterSQLInfo(PropDef propDef, ClassDef classDef) : this(propDef, classDef, null, null) { }
 
         ///<summary>
         /// Create SQL Parameter Information from a Property Definition and it's Class Definition.
@@ -70,9 +70,9 @@ namespace Habanero.BO.CriteriaManager
         ///<param name="parameterName">The name of the parameter that this information is for.</param>
         ///<param name="propDef">The property definition to use for the SQL Parameter Information.</param>
         ///<param name="classDef">The class definition to use for the SQL Parameter Information.</param>
-        public PropDefParameterSQLInfo(string parameterName, IPropDef propDef, ClassDef classDef) : this(propDef, classDef, null, parameterName) { }
+        public PropDefParameterSQLInfo(string parameterName, PropDef propDef, ClassDef classDef) : this(propDef, classDef, null, parameterName) { }
 
-        private PropDefParameterSQLInfo(IPropDef propDef, ClassDef classDef, string tableName, string parameterName)
+        private PropDefParameterSQLInfo(PropDef propDef, ClassDef classDef, string tableName, string parameterName)
         {
             _propDef = propDef;
             _classDef = classDef;

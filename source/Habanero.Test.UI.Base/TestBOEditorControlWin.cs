@@ -22,11 +22,11 @@ namespace Habanero.Test.UI.Base
         private IControlFactory _controlFactory;
         private const string CUSTOM_UIDEF_NAME = "custom1";
 
-        protected static ClassDef GetCustomClassDef()
+        protected static IClassDef GetCustomClassDef()
         {
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDef_NoOrganisationRelationship();
-            ClassDef classDef = OrganisationTestBO.LoadDefaultClassDef();
+            IClassDef classDef = OrganisationTestBO.LoadDefaultClassDef();
             IUIGrid originalGridDef = classDef.UIDefCol["default"].UIGrid;
             UIGrid extraGridDef = ((UIGrid)originalGridDef).Clone();
             extraGridDef.Remove(extraGridDef[extraGridDef.Count - 1]);
@@ -50,7 +50,7 @@ namespace Habanero.Test.UI.Base
             return new ControlFactoryWin();
         }
 
-        protected virtual IBOPanelEditorControl CreateEditorControl(ClassDef classDef)
+        protected virtual IBOPanelEditorControl CreateEditorControl(IClassDef classDef)
         {
             return new BOEditorControlWin(classDef);
         }
@@ -83,7 +83,7 @@ namespace Habanero.Test.UI.Base
         public virtual void TestConstructor_NullControlFactory_ShouldRaiseError()
         {
             // ---------------Set up test pack-------------------
-            ClassDef def = GetCustomClassDef();
+            IClassDef def = GetCustomClassDef();
             // ---------------Assert Precondition----------------
             // ---------------Execute Test ----------------------
             try
@@ -103,7 +103,7 @@ namespace Habanero.Test.UI.Base
         public virtual void TestConstructor_NullUIDef_ShouldRaiseError()
         {
             // ---------------Set up test pack-------------------
-            ClassDef def = GetCustomClassDef();
+            IClassDef def = GetCustomClassDef();
             // ---------------Assert Precondition----------------
             // ---------------Execute Test ----------------------
             try
@@ -143,7 +143,7 @@ namespace Habanero.Test.UI.Base
         public virtual void TestConstructor_uiDefDoesNotHaveAUIForm_ShouldRaiseError()
         {
             // ---------------Set up test pack-------------------
-            ClassDef def = GetCustomClassDef();
+            IClassDef def = GetCustomClassDef();
 
             // ---------------Assert Precondition----------------
             // ---------------Execute Test ----------------------
@@ -168,7 +168,7 @@ namespace Habanero.Test.UI.Base
         public void TestConstructor_DefaultUIDef_NoControlFactory()
         {
             //---------------Set up test pack-------------------
-            ClassDef def = GetCustomClassDef();
+            IClassDef def = GetCustomClassDef();
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             //---------------Assert Precondition----------------
             Assert.IsNotNull(GlobalUIRegistry.ControlFactory);
@@ -517,7 +517,7 @@ namespace Habanero.Test.UI.Base
     {
 //        private const string CUSTOM_UIDEF_NAME = "custom1";
 
-        protected override IBOPanelEditorControl CreateEditorControl(ClassDef classDef)
+        protected override IBOPanelEditorControl CreateEditorControl(IClassDef classDef)
         {
             if (classDef != null && classDef.ClassName == "OrganisationTestBO")
             {
@@ -553,7 +553,7 @@ namespace Habanero.Test.UI.Base
             return new ControlFactoryVWG();
         }
 
-        protected override IBOPanelEditorControl CreateEditorControl(ClassDef classDef)
+        protected override IBOPanelEditorControl CreateEditorControl(IClassDef classDef)
         {
             return new BOEditorControlVWG(classDef);
         }
@@ -582,7 +582,7 @@ namespace Habanero.Test.UI.Base
     [TestFixture]
     public class TestBOEditorControlVWG_Generic : TestBOEditorControlVWG
     {
-        protected override IBOPanelEditorControl CreateEditorControl(ClassDef classDef)
+        protected override IBOPanelEditorControl CreateEditorControl(IClassDef classDef)
         {
             if (classDef.ClassName == "OrganisationTestBO")
             {

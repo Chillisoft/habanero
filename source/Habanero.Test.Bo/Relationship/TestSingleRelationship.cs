@@ -45,8 +45,8 @@ namespace Habanero.Test.BO.Relationship
         [Test]
         public void TestSetRelatedObject()
         {
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
-            ClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO) classDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo) relatedClassDef.CreateNewBusinessObject();
             bo1.Relationships.GetSingle("MyRelationship").SetRelatedObject(relatedBo1);

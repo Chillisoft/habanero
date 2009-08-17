@@ -22,6 +22,7 @@ using System.Collections;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -88,6 +89,24 @@ namespace Habanero.Test.BO.ClassDefinition
             UIGridColumn uiGridColumn;
             uiGridColumn = new UIGridColumn(null, "TestRel.TestProperty2", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left, null);
             Assert.AreEqual("Tested Property2", uiGridColumn.GetHeading(classDef));
+        }
+        
+        [Test]
+        public void TestAutomaticHeadingCreation()
+        {
+            XmlUIGridColumnLoader loader = new XmlUIGridColumnLoader(new DtdLoader(), new DefClassFactory());
+            IUIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" />");
+            Assert.AreEqual(null, uiProp.Heading);
+            Assert.AreEqual("testpropname", uiProp.GetHeading());
+        }
+       
+        [Test]
+        public void TestAutomaticHeadingCreation_UsingCamelCase()
+        {
+            XmlUIGridColumnLoader loader = new XmlUIGridColumnLoader(new DtdLoader(), new DefClassFactory());
+            IUIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""TestPropName"" />");
+            Assert.AreEqual(null, uiProp.Heading);
+            Assert.AreEqual("Test Prop Name", uiProp.GetHeading());
         }
 
         private static ClassDef CreateTestClassDef(string suffix)

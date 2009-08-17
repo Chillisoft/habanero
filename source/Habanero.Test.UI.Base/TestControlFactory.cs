@@ -1281,7 +1281,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IControlFactory factory = GetControlFactory();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -1294,7 +1294,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IControlFactory factory = GetControlFactory();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------

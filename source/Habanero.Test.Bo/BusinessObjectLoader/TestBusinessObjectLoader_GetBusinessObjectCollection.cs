@@ -344,7 +344,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_CollectionLoad_LoadedCollectionHasSuppliedClassDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef classDef = (ClassDef) ContactPersonTestBO.LoadDefaultClassDef();
             ClassDef changedClassDef = classDef.Clone();
             changedClassDef.TypeParameter = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
@@ -360,7 +360,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_CollectionLoad_LoadedCollectionHasSuppliedClassDef_WithOrder()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef classDef = (ClassDef) ContactPersonTestBO.LoadDefaultClassDef();
             ClassDef changedClassDef = classDef.Clone();
             changedClassDef.TypeParameter = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
@@ -376,7 +376,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_CollectionLoad_LoadedCollectionHasSuppliedClassDef_WithSelectQuery()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef classDef = (ClassDef) ContactPersonTestBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             ClassDef changedClassDef = classDef.Clone();
             changedClassDef.TypeParameter = TestUtil.GetRandomString();
@@ -462,7 +462,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ()
         {
             //---------------Set up test pack-------------------
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
@@ -1443,7 +1443,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestGetCollection_NonGeneric_LoadWithLimit_CriteriaObject_IncludesCriteriaMatchesWithinLimit()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
@@ -1474,7 +1474,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 3;
             const int firstRecord = 0;
             const int limit = totalRecords;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             OrderCriteria orderCriteria = new OrderCriteria();
             orderCriteria.Add("Surname");
@@ -1497,7 +1497,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 3;
             const int firstRecord = 0;
             const int limit = 2;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             OrderCriteria orderCriteria = new OrderCriteria();
             orderCriteria.Add("Surname");
@@ -1519,7 +1519,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 4;
             const int firstRecord = 0;
             const int limit = 6;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             OrderCriteria orderCriteria = new OrderCriteria();
             orderCriteria.Add("Surname");
@@ -1542,7 +1542,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 5;
             const int firstRecord = 0;
             const int limit = -1;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
            
             //---------------Assert Precondition----------------
@@ -1567,7 +1567,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 5;
             const int firstRecord = 0;
             const int limit = 0;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
 
             //---------------Assert Precondition----------------
@@ -1592,7 +1592,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 3;
             const int firstRecord = 1;
             const int limit = 2;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
 
             //---------------Assert Precondition----------------
@@ -1617,7 +1617,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 6;
             const int firstRecord = 2;
             const int limit = 2;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
 
             //---------------Assert Precondition----------------
@@ -1641,7 +1641,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 5;
             const int firstRecord = 3;
             const int limit = 4;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
 
             //---------------Assert Precondition----------------
@@ -1663,7 +1663,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 5;
             const int firstRecord = 3;
             const int limit = 4;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
             contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
@@ -1693,7 +1693,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 7;
             const int firstRecord = 3;
             const int limit = -1;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1715,7 +1715,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 7;
             const int firstRecord = 3;
             const int limit = 0;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1737,7 +1737,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 4;
             const int firstRecord = totalRecords - 1;
             const int limit = 1;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1759,7 +1759,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 5;
             const int firstRecord = totalRecords - 1;
             const int limit = 3;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1781,7 +1781,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 5;
             const int firstRecord = totalRecords - 1;
             const int limit = 3;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
             contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
@@ -1811,7 +1811,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 7;
             const int firstRecord = totalRecords - 1;
             const int limit = -1;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1833,7 +1833,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 7;
             const int firstRecord = totalRecords - 1;
             const int limit = 0;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1855,7 +1855,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 3;
             const int firstRecord = 5;
             const int limit = 2;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1877,7 +1877,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 4;
             const int firstRecord = 4;
             const int limit = -1;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1899,7 +1899,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 3;
             const int firstRecord = 4;
             const int limit = 0;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1921,7 +1921,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const int totalRecords = 3;
             const int firstRecord = -1;
             const int limit = 0;
-            ClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef def = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1995,7 +1995,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         [Test]
         public void Test_Refresh_LoadWithLimit_FromItem2_Next2Items()
         {
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp4 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
             ContactPersonTestBO.CreateSavedContactPerson("aaaa");
             ContactPersonTestBO.CreateSavedContactPerson("zzzz");
@@ -2050,7 +2050,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_GetBusinessObjectCollection_WithLimit_EqualNumberOfObjects()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "bbb");
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
@@ -2078,7 +2078,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_GetBusinessObjectCollection_WithLimit_LessObjects()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "bbb");
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
@@ -2128,7 +2128,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_GetBusinessObjectCollection_SelectQuery_WithLimit()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "bbb");
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
@@ -2156,7 +2156,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_GetBusinessObjectCollection_SelectQuery_WithLimit_Negative()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "bbb");
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
@@ -2184,7 +2184,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_GetBusinessObjectCollection_SelectQuery_WithLimit_Zero()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             ContactPersonTestBO.CreateSavedContactPerson(now, "bbb");
             ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
@@ -2266,7 +2266,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ContactPerson.DeleteAllContactPeople();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             //Create data in the database with the 5 contact people two with Search in surname
             CreateContactPersonInDB();
             CreateContactPersonInDB();
@@ -2293,7 +2293,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ContactPerson.DeleteAllContactPeople();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             //Create data in the database with the 5 contact people two with Search in surname
             CreateContactPersonInDB();
             CreateContactPersonInDB();
@@ -2319,7 +2319,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_GetBusinesssObjectCollection_Untyped_GtCriteriaString()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
             ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
             ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
             CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
@@ -2402,7 +2402,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_CriteriaSetUponLoadingCollection_Untyped()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, DateTime.Now);
 
             //---------------Execute Test ----------------------
@@ -2417,7 +2417,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_CriteriaSetUponLoadingCollection_Untyped_Date()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             now = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
@@ -2436,7 +2436,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_CriteriaStringSetUponLoadingCollection()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "searchSurname");
             const string stringCriteria = "Surname = searchSurname";
 
@@ -2452,7 +2452,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_CriteriaStringSetUponLoadingCollection_Untyped()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "searchSurname");
             const string stringCriteria = "Surname = searchSurname";
 

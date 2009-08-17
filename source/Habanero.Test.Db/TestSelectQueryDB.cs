@@ -89,7 +89,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_NoCriteria()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -106,7 +106,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_NoCriteria_WithClassID()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             classDef.ClassID = Guid.NewGuid();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             //---------------Assert PreConditions---------------            
@@ -143,7 +143,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithCriteria()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "test");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -163,7 +163,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithCriteria_WithClassID()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             classDef.ClassID = Guid.NewGuid();
             Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "test");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
@@ -187,7 +187,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithCriteria_DateTimeToday()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithDateTime();
+            IClassDef classDef = MyBO.LoadClassDefWithDateTime();
             Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, new DateTimeToday());
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -210,7 +210,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithCriteria_DateTimeNow()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithDateTime();
+            IClassDef classDef = MyBO.LoadClassDefWithDateTime();
             Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, new DateTimeNow());
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -235,7 +235,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithCriteria_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             Criteria criteria = CriteriaParser.CreateCriteria("MyRelationship.MyRelatedTestProp = 'test'");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
@@ -253,7 +253,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithOrderFields()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "MyBoID, TestProp");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -270,7 +270,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithOrderFields_WithoutBuilder()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = OrderCriteria.FromString("MyBoID, TestProp");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -287,7 +287,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithOrderFields_WithoutBuilder_DifferentFieldNames()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
+            IClassDef classDef = MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = OrderCriteria.FromString("MyBoID, TestProp");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -304,7 +304,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithEmptyOrderCriteria()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = new OrderCriteria();
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -321,7 +321,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithOrderFields_Descending()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "MyBoID DESC, TestProp DESC");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -338,7 +338,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithOrderFields_MixedOrder()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "MyBoID DESC, TestProp ASC");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -520,7 +520,7 @@ namespace Habanero.Test.DB
         public void TestClassTableInheritance_Join()
         {
             //---------------Set up test pack-------------------
-            ClassDef circleClassDef = Circle.GetClassDef();
+            IClassDef circleClassDef = Circle.GetClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(circleClassDef);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert Precondition----------------
@@ -535,7 +535,7 @@ namespace Habanero.Test.DB
         public void TestClassTableInheritanceHierarchy_Join()
         {
             //---------------Set up test pack-------------------
-            ClassDef filledCircleClassDef = FilledCircle.GetClassDefWithClassInheritanceHierarchy();
+            IClassDef filledCircleClassDef = FilledCircle.GetClassDefWithClassInheritanceHierarchy();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(filledCircleClassDef);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert Precondition----------------
@@ -552,7 +552,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             Structure.Entity.LoadDefaultClassDef();
-            ClassDef classDef = Structure.Part.LoadClassDef_WithClassTableInheritance();
+            IClassDef classDef = Structure.Part.LoadClassDef_WithClassTableInheritance();
             string entityType = TestUtil.GetRandomString();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
@@ -573,7 +573,7 @@ namespace Habanero.Test.DB
         public void TestSingleTableInheritance_DiscriminatorInWhere()
         {
             //---------------Set up test pack-------------------
-            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            IClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(circleClassDef);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Execute Test ----------------------
@@ -590,7 +590,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_NonPersistableProperty()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
 
             PropDef newPropDef =
                 new PropDef("NonPeristableProp", typeof (string), PropReadWriteRule.ReadOnly, null);
@@ -615,7 +615,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
-            ClassDef classDef = MyBO.LoadClassDefs_OneProp();
+            IClassDef classDef = MyBO.LoadClassDefs_OneProp();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 2;
             selectQuery.Limit = 4;
@@ -642,7 +642,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
@@ -669,7 +669,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
@@ -696,7 +696,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
-            ClassDef classDef = MyBO.LoadClassDefs_OneProp();
+            IClassDef classDef = MyBO.LoadClassDefs_OneProp();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 2;
             selectQuery.Limit = 4;
@@ -723,7 +723,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
@@ -750,7 +750,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
@@ -778,7 +778,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
-            ClassDef classDef = MyBO.LoadClassDefs_OneProp();
+            IClassDef classDef = MyBO.LoadClassDefs_OneProp();
             //-------------Assert Preconditions -------------
 
             //---------------Execute Test ----------------------
@@ -794,7 +794,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "test");
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //-------------Assert Preconditions -------------

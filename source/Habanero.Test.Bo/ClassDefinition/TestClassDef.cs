@@ -31,7 +31,7 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestClassDef
     {
-        private ClassDef _classDef;
+        private IClassDef _classDef;
 
         [SetUp]
         public void Setup()
@@ -156,7 +156,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef basicClassDef =
+            IClassDef basicClassDef =
                 loader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -167,7 +167,7 @@ namespace Habanero.Test.BO.ClassDefinition
 					</primaryKey>
 				</class>
 			");
-            ClassDef parametrizedClassDef =
+            IClassDef parametrizedClassDef =
                 loader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"" typeParameter=""Special"">
@@ -287,13 +287,13 @@ namespace Habanero.Test.BO.ClassDefinition
         {
              //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef parentClassDef;
-            ClassDef childClassDef;
-            ClassDef grandchildClassDef;
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
 
              //---------------Execute Test ----------------------
-            ClassDefCol children = parentClassDef.ImmediateChildren;
+            ClassDefCol children = ((ClassDef)parentClassDef).ImmediateChildren;
              //---------------Test Result -----------------------
             Assert.AreEqual(1, children.Count);
             Assert.IsTrue(children.Contains(childClassDef));
@@ -304,13 +304,13 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef parentClassDef;
-            ClassDef childClassDef;
-            ClassDef grandchildClassDef;
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
 
             //---------------Execute Test ----------------------
-            ClassDefCol children = parentClassDef.AllChildren;
+            ClassDefCol children = ((ClassDef)parentClassDef).AllChildren;
             //---------------Test Result -----------------------
             Assert.AreEqual(2, children.Count);
             Assert.IsTrue(children.Contains(childClassDef));
@@ -341,9 +341,9 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestPropDefColIncludingInheritance()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef parentClassDef;
-            ClassDef childClassDef;
-            ClassDef grandchildClassDef;
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
 
             Assert.AreEqual(1, parentClassDef.PropDefColIncludingInheritance.Count);
@@ -355,13 +355,13 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(1, grandchildClassDef.PropDefcol.Count);
         }
 
-        private static void LoadInheritedClassdefStructure(out ClassDef parentClassDef, out ClassDef childClassDef, out ClassDef grandchildClassDef)
+        private static void LoadInheritedClassdefStructure(out IClassDef parentClassDef, out IClassDef childClassDef, out IClassDef grandchildClassDef)
         {
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef, ORMapping.SingleTableInheritance);
         }
 
-        private static void LoadInheritedClassdefStructure(out ClassDef parentClassDef, out ClassDef childClassDef, 
-            out ClassDef grandchildClassDef, ORMapping orMappingType)
+        private static void LoadInheritedClassdefStructure(out IClassDef parentClassDef, out IClassDef childClassDef, 
+            out IClassDef grandchildClassDef, ORMapping orMappingType)
         {
             string inheritanceType = orMappingType.ToString();
             string discriminator = "";
@@ -459,9 +459,9 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef parentClassDef;
-            ClassDef childClassDef;
-            ClassDef grandchildClassDef;
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, 
                 out grandchildClassDef, ORMapping.SingleTableInheritance);
             //-------------Test Pre-conditions --------------
@@ -480,9 +480,9 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef parentClassDef;
-            ClassDef childClassDef;
-            ClassDef grandchildClassDef;
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef,
                 out grandchildClassDef, ORMapping.ClassTableInheritance);
             //-------------Test Pre-conditions --------------
@@ -501,9 +501,9 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef parentClassDef;
-            ClassDef childClassDef;
-            ClassDef grandchildClassDef;
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, 
                 out grandchildClassDef, ORMapping.ConcreteTableInheritance);
             //-------------Test Pre-conditions --------------
@@ -522,9 +522,9 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef parentClassDef;
-            ClassDef childClassDef;
-            ClassDef grandchildClassDef;
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
             IPropDef parentPropDef = parentClassDef.GetPropDef("MyBoID");
             IPropDef childPropDef = childClassDef.GetPropDef("Prop1");
@@ -545,9 +545,9 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef parentClassDef;
-            ClassDef childClassDef;
-            ClassDef grandchildClassDef;
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, 
                 out grandchildClassDef, ORMapping.ClassTableInheritance);
             IPropDef parentPropDef = parentClassDef.GetPropDef("MyBoID");
@@ -569,9 +569,9 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef parentClassDef;
-            ClassDef childClassDef;
-            ClassDef grandchildClassDef;
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, 
                 out grandchildClassDef, ORMapping.ConcreteTableInheritance);
             IPropDef parentPropDef = parentClassDef.GetPropDef("MyBoID");
@@ -707,7 +707,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCloningAClassDef()
         {
-            ClassDef originalClassDef = LoadClassDef();
+            ClassDef originalClassDef = (ClassDef) LoadClassDef();
             ClassDef newClassDef = originalClassDef.Clone();
             Assert.AreNotSame(newClassDef, originalClassDef);
             Assert.AreEqual(newClassDef, originalClassDef);
@@ -716,7 +716,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestClonePropertiesAreDifferentButEqual()
         {
-            ClassDef originalClassDef = LoadClassDef();
+            ClassDef originalClassDef = (ClassDef) LoadClassDef();
             ClassDef newClassDef = originalClassDef.Clone();
             Assert.AreNotSame(newClassDef.PropDefcol, originalClassDef.PropDefcol);
             Assert.AreEqual(newClassDef.PropDefcol, originalClassDef.PropDefcol);
@@ -725,7 +725,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestClonePropertiesAreDifferentNotEqual()
         {
-            ClassDef originalClassDef = LoadClassDef();
+            ClassDef originalClassDef = (ClassDef) LoadClassDef();
             ClassDef newClassDef = originalClassDef.Clone(true);
 
             Assert.AreNotSame(newClassDef.PropDefcol, originalClassDef.PropDefcol);
@@ -747,7 +747,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestTableNamesAreCloned()
         {
-            ClassDef originalClassDef = LoadClassDef();
+            ClassDef originalClassDef = (ClassDef) LoadClassDef();
             ClassDef newClassDef = originalClassDef.Clone();
             Assert.AreEqual(originalClassDef.TableName, newClassDef.TableName);
             Assert.AreEqual(originalClassDef.DisplayName, newClassDef.DisplayName);
@@ -757,7 +757,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestUIDefColIsCloned()
         {
             //---------------Set up test pack-------------------
-            ClassDef originalClassDef = LoadClassDef();
+            ClassDef originalClassDef = (ClassDef) LoadClassDef();
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
@@ -772,7 +772,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestEqualsNull()
         {
-            ClassDef classDef1 = LoadClassDef();
+            IClassDef classDef1 = LoadClassDef();
             const ClassDef classDef2 = null;
             Assert.AreNotEqual(classDef1, classDef2);    
         }
@@ -780,15 +780,15 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestEquals()
         {
-            ClassDef classDef1 = LoadClassDef();
-            ClassDef classDef2 = LoadClassDef();
+            IClassDef classDef1 = LoadClassDef();
+            IClassDef classDef2 = LoadClassDef();
             Assert.AreEqual(classDef1, classDef2);
         }
 
         [Test]
         public void TestEqualsDifferentType()
         {
-            ClassDef classDef1 = LoadClassDef();
+            IClassDef classDef1 = LoadClassDef();
             Assert.AreNotEqual(classDef1, "bob");
         }
 
@@ -798,8 +798,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestEquals_DifferentTypeParameter()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef1 = LoadClassDef();
-            ClassDef classDef2 = LoadClassDef();
+            IClassDef classDef1 = LoadClassDef();
+            IClassDef classDef2 = LoadClassDef();
             //---------------Assert Precondition----------------
             Assert.AreEqual(classDef1, classDef2);
 
@@ -818,17 +818,18 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             CircleNoPrimaryKey.GetClassDef().SuperClassDef =
     new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
-            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef =
+            ClassDef filledCircleClassDef = (ClassDef) FilledCircleNoPrimaryKey.GetClassDef();
+            filledCircleClassDef.SuperClassDef =
                 new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.SingleTableInheritance);
             CircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
-            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
+            filledCircleClassDef.SuperClassDef.Discriminator = "ShapeType";
 
             //---------------Execute Test ----------------------
 
-            IList<ClassDef> classDefs = FilledCircleNoPrimaryKey.GetClassDef().GetAllClassDefsInHierarchy();
+            IList<ClassDef> classDefs = filledCircleClassDef.GetAllClassDefsInHierarchy();
             //---------------Test Result -----------------------
             Assert.AreEqual(3, classDefs.Count);
-            Assert.AreSame(FilledCircleNoPrimaryKey.GetClassDef(), classDefs[0]);
+            Assert.AreSame(filledCircleClassDef, classDefs[0]);
             Assert.AreSame(CircleNoPrimaryKey.GetClassDef(), classDefs[1]);
             Assert.AreSame(Shape.GetClassDef(), classDefs[2]);
             //---------------Tear Down -------------------------
@@ -839,20 +840,21 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             CircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
-            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.SingleTableInheritance);
-            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
+            ClassDef filledCircleClassDef = (ClassDef) FilledCircleNoPrimaryKey.GetClassDef();
+            filledCircleClassDef.SuperClassDef = new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.SingleTableInheritance);
+            filledCircleClassDef.SuperClassDef.Discriminator = "ShapeType";
             //---------------Execute Test ----------------------
 
-            ClassDef baseClass = FilledCircleNoPrimaryKey.GetClassDef().GetBaseClassOfSingleTableHierarchy();
+            ClassDef baseClass = filledCircleClassDef.GetBaseClassOfSingleTableHierarchy();
             //---------------Test Result -----------------------
             Assert.AreSame(CircleNoPrimaryKey.GetClassDef(), baseClass);
             //---------------Tear Down -------------------------
         }
     
-        public static ClassDef LoadClassDef()
+        public static IClassDef LoadClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef def =
+            IClassDef def =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBoTableName"" displayName=""My Related BO Display Name"">
@@ -874,7 +876,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = LoadClassDef();
+            IClassDef classDef = LoadClassDef();
             const string dateTimeProp = "TestDateTime";
             const string intProp = "TestInt";
             const string booleanProp = "TestBoolean";
@@ -901,8 +903,8 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             const string dateTimeProp = "TestDateTime";
             PropDef propDef = new PropDef(dateTimeProp, typeof(DateTime), PropReadWriteRule.ReadWrite, null);
             relatedClassDef.PropDefcol.Add(propDef);
@@ -920,7 +922,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             //---------------Execute Test ----------------------
             IPropertyComparer<MyBO> propertyComparer = classDef.CreatePropertyComparer<MyBO>("TestProp");
             //---------------Test Result -----------------------
@@ -933,10 +935,10 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             
             //---------------Execute Test ----------------------
-            ClassDef gotClassDef = ClassDef.Get<MyBO>();
+            IClassDef gotClassDef = ClassDef.Get<MyBO>();
             //---------------Test Result -----------------------
 
             Assert.AreSame(classDef, gotClassDef);
@@ -970,8 +972,8 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
 
-            ClassDef myRelatedClassDef = MyRelatedBo.LoadClassDef();
-            ClassDef myBoClassDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef myRelatedClassDef = MyRelatedBo.LoadClassDef();
+            IClassDef myBoClassDef = MyBO.LoadClassDefWithRelationship();
             Source source = new Source("MyRelationship");
             const string myrelatedtestpropName = "MyRelatedTestProp";
             //---------------Execute Test ----------------------
@@ -986,7 +988,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
 
-            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             ClassDef contactPersonClassDef = new ContactPerson().ClassDef;
             Source source = Source.FromString("Car.Owner");
             const string surnamePropName = "Surname";
@@ -1002,7 +1004,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef myBoClassDef = MyBO.LoadDefaultClassDef();
+            IClassDef myBoClassDef = MyBO.LoadDefaultClassDef();
             Source source = new Source("MyRelationship");
             const string myrelatedtestpropName = "MyRelatedTestProp";
             //---------------Execute Test ----------------------
@@ -1014,7 +1016,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef myBoClassDef = MyBO.LoadDefaultClassDef();
+            IClassDef myBoClassDef = MyBO.LoadDefaultClassDef();
             Source source = new Source("MyRelationship");
             const string myrelatedtestpropName = "MyRelatedTestProp";
             //---------------Execute Test ----------------------
@@ -1030,7 +1032,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Execute Test ----------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             //---------------Test Result -----------------------
             Assert.AreSame(classDef, classDef.UIDefCol.ClassDef);
         }
@@ -1040,7 +1042,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             //---------------Execute Test ----------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             //---------------Test Result -----------------------
             Assert.IsNull(classDef.ClassID);
             //---------------Tear Down -------------------------          
@@ -1051,7 +1053,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             //---------------Execute Test ----------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             //---------------Test Result -----------------------
             Assert.IsNull(classDef.Module);
             //---------------Tear Down -------------------------          
@@ -1062,7 +1064,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             //---------------Execute Test ----------------------
-            ClassDef classDef = MyBO.LoadClassDefsHasModuleName();
+            IClassDef classDef = MyBO.LoadClassDefsHasModuleName();
             //---------------Test Result -----------------------
             Assert.AreEqual("MyBOModule",classDef.Module);
             //---------------Tear Down -------------------------          

@@ -273,7 +273,7 @@ namespace Habanero.BO
         /// <param name="numberOfRecordsToLoad"></param>
         /// <param name="records"></param>
         /// <returns></returns>
-        IBusinessObjectCollection GetBusinessObjectCollection(ClassDef def, Criteria criteria, 
+        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef def, Criteria criteria, 
                 OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int records);
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace Habanero.BO
         /// <see cref="BusObjDeleteConcurrencyControlException"/>
         ///  </returns>
         /// <exception cref="BusObjDeleteConcurrencyControlException"/>
-        IBusinessObject GetBusinessObjectByValue(ClassDef classDef, object idValue);
+        IBusinessObject GetBusinessObjectByValue(IClassDef classDef, object idValue);
 
         ///<summary>
         /// For a given value e.g. a Guid Identifier '{......}' this will 

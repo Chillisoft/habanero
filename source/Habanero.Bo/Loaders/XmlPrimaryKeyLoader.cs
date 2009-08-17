@@ -51,7 +51,7 @@ namespace Habanero.BO.Loaders
         /// <param name="xmlPrimaryKeyDef">The xml string</param>
         /// <param name="propDefs">The property definition collection</param>
         /// <returns>Returns the primary key definition</returns>
-        internal PrimaryKeyDef LoadPrimaryKey(string xmlPrimaryKeyDef, IPropDefCol propDefs)
+        internal IPrimaryKeyDef LoadPrimaryKey(string xmlPrimaryKeyDef, IPropDefCol propDefs)
         {
             return LoadPrimaryKey(this.CreateXmlElement(xmlPrimaryKeyDef), propDefs);
         }
@@ -63,10 +63,10 @@ namespace Habanero.BO.Loaders
         /// <param name="primaryKeyElement">The xml element</param>
         /// <param name="propDefs">The property definition collection</param>
         /// <returns>Returns the primary key definition</returns>
-        internal PrimaryKeyDef LoadPrimaryKey(XmlElement primaryKeyElement, IPropDefCol propDefs)
+        internal IPrimaryKeyDef LoadPrimaryKey(XmlElement primaryKeyElement, IPropDefCol propDefs)
         {
             _propDefCol = propDefs;
-            return (PrimaryKeyDef) Load(primaryKeyElement);
+            return (IPrimaryKeyDef) Load(primaryKeyElement);
         }
 
         /// <summary>

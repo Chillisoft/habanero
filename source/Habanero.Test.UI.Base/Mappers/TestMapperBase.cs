@@ -51,8 +51,8 @@ namespace Habanero.Test.UI.Base
             IRelationshipCol mockRelCol = mock.StrictMock<IRelationshipCol>();
 
             ClassDef.ClassDefs.Clear();
-            ClassDef itsClassDef = MyBO.LoadClassDefWithRelationship();
-            ClassDef itsRelatedClassDef = MyRelatedBo.LoadClassDef();
+            IClassDef itsClassDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             //itsMyBo = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
             itsMyBo = (MyBO)itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo = (MyRelatedBo)itsRelatedClassDef.CreateNewBusinessObject();

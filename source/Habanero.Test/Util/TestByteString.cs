@@ -36,7 +36,7 @@ namespace Habanero.Test.Util
     [TestFixture]
     public class TestByteString : TestUsingDatabase
     {
-        private readonly ClassDef itsClassDef;
+        private readonly IClassDef itsClassDef;
 
         //These unicode bytes spell 'test':   t - 116, e - 101, s - 115, t - 116
         private readonly byte[] itsByteArrSpelling_test = { 116, 0, 101, 0, 115, 0, 116, 0 };
@@ -149,7 +149,8 @@ namespace Habanero.Test.Util
         [Test]
         public void TestPropertyType()
         {
-            Assert.AreEqual(itsClassDef.PropDefcol["TestProp"].PropertyType, typeof(ByteString));
+            PropDef propDef = (PropDef) itsClassDef.PropDefcol["TestProp"];
+            Assert.AreEqual(propDef.PropertyType, typeof(ByteString));
         }
 
         [Test]

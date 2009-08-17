@@ -26,7 +26,7 @@ namespace Habanero.Test
     public class FilledCircleInheritsCircleNoPK : CircleNoPrimaryKey
     {
 
-        public new static ClassDef GetClassDef()
+        public new static IClassDef GetClassDef()
         {
             if (ClassDef.IsDefined(typeof (FilledCircleInheritsCircleNoPK)))
             {
@@ -35,9 +35,9 @@ namespace Habanero.Test
             return CreateClassDef();
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
-            _classDef = GetClassDef();
+            _classDef = (ClassDef) GetClassDef();
             return _classDef;
         }
 

@@ -422,7 +422,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestSuperClassKey()
         {
-            IBOKey msuperKey = BOPrimaryKey.GetSuperClassKey(FilledCircleInheritsCircleNoPK.GetClassDef(), _filledCircle);
+            IBOKey msuperKey = BOPrimaryKey.GetSuperClassKey((ClassDef) FilledCircleInheritsCircleNoPK.GetClassDef(), _filledCircle);
             Assert.IsFalse(msuperKey.Contains("CircleID"), "Super class key should not contain the CircleID property");
             Assert.IsTrue(msuperKey.Contains("ShapeID"), "Super class key should contain the ShapeID property");
             Assert.AreEqual(1, msuperKey.Count, "Super class key should only have one prop");

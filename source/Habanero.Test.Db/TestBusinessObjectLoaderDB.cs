@@ -82,7 +82,7 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef classDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID { IntID = TestUtil.GetRandomInt() };
             bo.Save();
             BusinessObjectManager.Instance.ClearLoadedObjects();
@@ -193,7 +193,7 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
         public void TestAfterLoadCalled_GetBusinessObject_Untyped()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
@@ -328,7 +328,7 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
 

@@ -267,7 +267,7 @@ namespace Habanero.BO
         ///<returns>the BOPrimaryKey if this can be constructed else returns null</returns>
         public static BOPrimaryKey CreateWithValue(Type type, object idValue)
         {
-            ClassDef classDef = ClassDef.ClassDefs[type];
+            ClassDef classDef = (ClassDef) ClassDef.ClassDefs[type];
             return CreateWithValue(classDef, idValue);
         }
 

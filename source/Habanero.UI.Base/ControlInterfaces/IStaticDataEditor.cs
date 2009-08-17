@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
@@ -44,7 +45,7 @@ namespace Habanero.UI.Base
         /// <param name="itemName">The name of the item as it appears to the user</param>
         /// <param name="classDef">The class definition holding a grid def used to
         /// construct the grid for that type</param>
-        void AddItem(string itemName, ClassDef classDef);
+        void AddItem(string itemName, IClassDef classDef);
 
         /// <summary>
         /// Selects an item with the given name in the treeview

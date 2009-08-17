@@ -41,22 +41,22 @@ namespace Habanero.Test.BO
         {
         }
 
-        protected static ClassDef GetClassDef()
+        protected static IClassDef GetClassDef()
         {
             return ClassDef.IsDefined(typeof (AddressTestBO))
                        ? ClassDef.ClassDefs[typeof (AddressTestBO)]
                        : LoadDefaultClassDef();
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return GetClassDef();
         }
 
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""AddressTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person_address"">

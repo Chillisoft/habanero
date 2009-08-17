@@ -838,7 +838,7 @@ namespace Habanero.Test.BO.ClassDefinition
             PropDef propDef = new PropDef("TestPropDef","System","String",PropReadWriteRule.ReadWrite, "TestPropDef","TestString",true,false);
             
             //---------------Execute Test ----------------------
-            IPropDef clonedPropDef = propDef.Clone();
+            PropDef clonedPropDef = (PropDef) propDef.Clone();
             //-----Test PreCondition--------------------------
             Assert.AreEqual(propDef.PropertyTypeAssemblyName, clonedPropDef.PropertyTypeAssemblyName);
             Assert.AreEqual(propDef.PropertyType, clonedPropDef.PropertyType);

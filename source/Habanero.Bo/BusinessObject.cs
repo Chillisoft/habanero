@@ -334,7 +334,7 @@ namespace Habanero.BO
             if (classDef == null)
             {
                 if (ClassDef.ClassDefs.Contains(GetType()))
-                    _classDef = ClassDef.ClassDefs[GetType()];
+                    _classDef = (ClassDef) ClassDef.ClassDefs[GetType()];
             }
             else _classDef = (ClassDef) classDef;
             ConstructFromClassDef(true);
@@ -377,7 +377,7 @@ namespace Habanero.BO
         /// <param name="newObject">Whether the object is new or not</param>
         protected virtual void ConstructFromClassDef(bool newObject)
         {
-            if (_classDef == null) _classDef = ConstructClassDef();
+            if (_classDef == null) _classDef = (ClassDef) ConstructClassDef();
 
             CheckClassDefNotNull();
 
@@ -433,7 +433,7 @@ namespace Habanero.BO
         /// Constructs a class definition
         /// </summary>
         /// <returns>Returns a class definition</returns>
-        protected virtual ClassDef ConstructClassDef()
+        protected virtual IClassDef ConstructClassDef()
         {
             return ClassDef.ClassDefs.Contains(GetType()) ? ClassDef.ClassDefs[GetType()] : null;
         }

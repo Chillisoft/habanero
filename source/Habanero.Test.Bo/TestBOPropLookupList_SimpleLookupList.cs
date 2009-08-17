@@ -588,7 +588,7 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOPropLookupList(_propDef_guid);
             const string invalid = "Invalid";
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), _propDef_guid.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -636,7 +636,7 @@ namespace Habanero.Test.BO
         {
             BOProp boProp = new BOPropLookupList(_propDef_guid);
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), _propDef_guid.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.InitialiseProp(_validLookupValue);
@@ -657,7 +657,7 @@ namespace Habanero.Test.BO
             object originalPropValue = _validGuid;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), _propDef_guid.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
@@ -683,7 +683,7 @@ namespace Habanero.Test.BO
             object originalPropValue = Guid.NewGuid();
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), _propDef_guid.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.Value = _validGuid.ToString();
@@ -699,7 +699,7 @@ namespace Habanero.Test.BO
             object originalPropValue = Guid.NewGuid();
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), _propDef_guid.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.Value = _validLookupValue;
@@ -866,7 +866,7 @@ namespace Habanero.Test.BO
             businessObject.SetPropertyValue(_propDef_guid.PropertyName, originalPropValue);
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), _propDef_guid.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsInstanceOfType(typeof(BOPropLookupList), boProp);
@@ -895,7 +895,7 @@ namespace Habanero.Test.BO
             object originalPropValue = Guid.NewGuid();
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), _propDef_guid.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             businessObject.SetPropertyValue(boProp.PropertyName, _validGuid.ToString());
@@ -912,7 +912,7 @@ namespace Habanero.Test.BO
             object originalPropValue = Guid.NewGuid();
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), _propDef_guid.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             businessObject.SetPropertyValue(boProp.PropertyName, _validLookupValue);

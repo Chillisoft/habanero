@@ -72,7 +72,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns the UI definition object</returns>
         public IUIDef LoadUIDef(XmlElement uiDefElement)
         {
-            return (UIDef) this.Load(uiDefElement);
+            return (IUIDef) this.Load(uiDefElement);
         }
 
         /// <summary>

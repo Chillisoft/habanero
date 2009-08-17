@@ -32,11 +32,15 @@ namespace Habanero.Test.BO.Loaders
         private XmlUIFormTabLoader loader;
 
         [SetUp]
-        public void SetupTest()
-        {
+        public void SetupTest() {
+            Initialise();
+        }
+
+        protected void Initialise() {
             loader = new XmlUIFormTabLoader(new DtdLoader(), GetDefClassFactory());
         }
-                protected virtual IDefClassFactory GetDefClassFactory()
+
+        protected virtual IDefClassFactory GetDefClassFactory()
         {
             return new DefClassFactory();
         }
@@ -82,22 +86,5 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("testlabel2", col[0][1].Label);
             Assert.AreEqual("testlabel3", col[0][2].Label);
         }
-
-
-//        [Test]
-//        public void TestLoadWithGrid()
-//        {
-//            UIFormTab col =
-//                loader.LoadUIFormTab(
-//                    @"
-//						<tab name=""testname"">
-//							<uiFormGrid relationshipName=""test"" correspondingRelationshipName=""testCor"" />
-//						</tab>");
-//            Assert.IsNotNull(col.UIFormGrid);
-//            Assert.AreEqual("test", col.UIFormGrid.RelationshipName);
-//            Assert.AreEqual("testCor", col.UIFormGrid.CorrespondingRelationshipName);
-//        }
-
-        //TODO: make sure that having both a grid and formproperties in the same tab causes errror.
     }
 }

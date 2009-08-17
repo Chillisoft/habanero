@@ -27,10 +27,10 @@ namespace Habanero.Test.UI.Base
         {
            // base.SetupFixture();
             ClassDef.ClassDefs.Clear();
-            ClassDef organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            IClassDef organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
             organisationClassDef.RelationshipDefCol["ContactPeople"].RelationshipType = RelationshipType.Composition;
             AddressTestBO.LoadDefaultClassDef();
-            ClassDef contactPersonTestBOClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            IClassDef contactPersonTestBOClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
             contactPersonTestBOClassDef.RelationshipDefCol["Addresses"].RelationshipType = RelationshipType.Composition;
             GetControlFactory();
         }

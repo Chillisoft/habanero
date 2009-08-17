@@ -192,12 +192,12 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             int value = TestUtil.GetRandomInt();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = value };
             object expectedID = bo.ID;
             
             //---------------Execute Test ----------------------
-            BOPrimaryKey key = BOPrimaryKey.CreateWithValue(autoIncClassDef, value);
+            BOPrimaryKey key = BOPrimaryKey.CreateWithValue((ClassDef) autoIncClassDef, value);
             //---------------Test Result -----------------------
 
             Assert.AreEqual(expectedID, key);
@@ -210,12 +210,12 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             string value = TestUtil.GetRandomString();
-            ClassDef classDef = ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();
+            IClassDef classDef = ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO {Surname = value};
             object expectedID = contactPersonTestBO.ID;
 
             //---------------Execute Test ----------------------
-            BOPrimaryKey key = BOPrimaryKey.CreateWithValue(classDef, value);
+            BOPrimaryKey key = BOPrimaryKey.CreateWithValue((ClassDef) classDef, value);
             //---------------Test Result -----------------------
 
             Assert.AreEqual(expectedID, key);

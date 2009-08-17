@@ -193,7 +193,7 @@ namespace Habanero.Test.Structure
                     {
                         throw new Exception("Related class not found:" + relationshipDef.RelatedObjectAssemblyName + "." + relationshipDef.RelatedObjectClassName);
                     }
-                    ClassDef relatedClassDef = classDefCol[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
+                    IClassDef relatedClassDef = classDefCol[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
 
                     string constraintName = SqlFormattingHelper.FormatFieldName(
                         classDef.TableName + "_" + relationshipDef.RelationshipName + "_FK", _databaseConnection);
@@ -220,7 +220,7 @@ namespace Habanero.Test.Structure
                     }
                     constraintSql += " (" + String.Join(",", props.ToArray()) + ")";
                     constraintSql += " REFERENCES ";
-                    ClassDef relatedBaseClassDef = relatedClassDef;
+                    IClassDef relatedBaseClassDef = relatedClassDef;
                     while (relatedBaseClassDef.SuperClassDef != null && relatedBaseClassDef.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
                     {
                         relatedBaseClassDef = (ClassDef)relatedBaseClassDef.SuperClassDef.SuperClassClassDef;

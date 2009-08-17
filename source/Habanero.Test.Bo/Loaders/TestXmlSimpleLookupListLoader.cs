@@ -41,17 +41,23 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            _loader = new XmlSimpleLookupListLoader(new DtdLoader(), new DefClassFactory() );
+            Initialise();
             ClassDef.ClassDefs.Clear();
         }
 
-        [Test]
+        protected void Initialise() {
+            _loader = new XmlSimpleLookupListLoader(new DtdLoader(), GetDefClassFactory() );
+        }
+
+            protected virtual IDefClassFactory GetDefClassFactory() { return new DefClassFactory(); }
+
+            [Test]
         public void TestSimpleLookupListOptions()
         {
             ILookupList lookupList =
                 _loader.LoadLookupList(
                     @"<simpleLookupList options=""option1|option2|option3"" />");
-            SimpleLookupList source = (SimpleLookupList)lookupList;
+            ISimpleLookupList source = (ISimpleLookupList)lookupList;
             Assert.AreEqual(3, source.GetLookupList().Count, "LookupList should have three keyvaluepairs");
         }
 
@@ -66,7 +72,7 @@ namespace Habanero.Test.BO.Loaders
 							<item display=""s2"" value=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
                         </simpleLookupList>
 					");
-            SimpleLookupList source = (SimpleLookupList)lookupList;
+            ISimpleLookupList source = (ISimpleLookupList)lookupList;
             Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
         }
 

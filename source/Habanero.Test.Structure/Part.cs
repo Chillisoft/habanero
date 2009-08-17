@@ -21,6 +21,7 @@
 // This partial class was auto-generated for use with the Habanero Architecture.
 // ------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -32,10 +33,10 @@ namespace Habanero.Test.Structure
     
     public partial class Part
     {
-        public new static ClassDef LoadDefaultClassDef()
+        public new static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Part"" assembly=""Habanero.Test.Structure"" table=""table_Part"">
 			    <property name=""PartID"" type=""Guid"" databaseField=""field_Part_ID"" compulsory=""true"" />
 			    <property name=""ModelNo"" databaseField=""field_Model_No"" />
@@ -49,10 +50,10 @@ namespace Habanero.Test.Structure
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDef_WithClassTableInheritance()
+        public static IClassDef LoadClassDef_WithClassTableInheritance()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Part"" assembly=""Habanero.Test.Structure"" table=""table_class_Part"">
 			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" id=""PartID"" />
 			    <property name=""PartID"" type=""Guid"" databaseField=""field_Part_ID"" compulsory=""true"" />

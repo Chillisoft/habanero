@@ -60,7 +60,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="xmlPropDef">The xml string</param>
         /// <returns>Returns a property definition</returns>
-        public PropDef LoadProperty(string xmlPropDef)
+        public IPropDef LoadProperty(string xmlPropDef)
         {
             if (xmlPropDef == null || xmlPropDef.Length == 0)
             {
@@ -78,9 +78,9 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="propertyElement">The xml property element</param>
         /// <returns>Returns a PropDef object</returns>
-        public PropDef LoadProperty(XmlElement propertyElement)
+        public IPropDef LoadProperty(XmlElement propertyElement)
         {
-            return (PropDef) Load(propertyElement);
+            return (IPropDef) Load(propertyElement);
         }
 
         /// <summary>
@@ -227,6 +227,10 @@ namespace Habanero.BO.Loaders
         private void LoadDatabaseFieldName()
         {
             _databaseFieldName = _reader.GetAttribute("databaseField");
+            if (String.IsNullOrEmpty(_databaseFieldName))
+                _databaseFieldName = _propertyName;
+            
+            
         }
 
         /// <summary>

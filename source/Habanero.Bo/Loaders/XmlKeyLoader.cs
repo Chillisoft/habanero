@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -50,7 +51,7 @@ namespace Habanero.BO.Loaders
         /// <param name="xmlKeyDef">The xml key definition string</param>
         /// <param name="propDefs">The collection of property definitions</param>
         /// <returns>Returns the key definition</returns>
-        public KeyDef LoadKey(string xmlKeyDef, IPropDefCol propDefs)
+        public IKeyDef LoadKey(string xmlKeyDef, IPropDefCol propDefs)
         {
             return LoadKey(this.CreateXmlElement(xmlKeyDef), propDefs);
         }
@@ -62,10 +63,10 @@ namespace Habanero.BO.Loaders
         /// <param name="keyElement">The xml key definition element</param>
         /// <param name="propDefs">The collection of property definitions</param>
         /// <returns>Returns the key definition</returns>
-        public KeyDef LoadKey(XmlElement keyElement, IPropDefCol propDefs)
+        public IKeyDef LoadKey(XmlElement keyElement, IPropDefCol propDefs)
         {
             _propDefCol = propDefs;
-            return (KeyDef) Load(keyElement);
+            return (IKeyDef) Load(keyElement);
         }
 
         /// <summary>
@@ -167,7 +168,7 @@ namespace Habanero.BO.Loaders
                 }
                 else
                 {
-                    PropDef tempKeyPropDef = new PropDef(propName, typeof(string), PropReadWriteRule.ReadWrite, null);
+                    IPropDef tempKeyPropDef = _defClassFactory.CreatePropDef(propName, "System", "String", PropReadWriteRule.ReadWrite, null, null, false, false, 255, null, null, false);
                     _keyDef.Add(tempKeyPropDef);
                     //This error was moved to the XmlClassDefsLoader.DoPostLoadChecks method so that it handles inherited properties
                     //throw new InvalidXmlDefinitionException(

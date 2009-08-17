@@ -389,16 +389,16 @@ namespace Habanero.Test.DB
         {
         }
 
-        private static ClassDef GetClassDef()
+        private static IClassDef GetClassDef()
         {
             return ClassDef.IsDefined(typeof (TransactionLogStub))
                        ? ClassDef.ClassDefs[typeof (TransactionLogStub)]
                        : CreateClassDef();
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
-            _classDef = GetClassDef();
+            _classDef = (ClassDef) GetClassDef();
             return _classDef;
         }
 

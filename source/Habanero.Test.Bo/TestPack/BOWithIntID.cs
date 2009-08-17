@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -49,10 +50,10 @@ namespace Habanero.Test.BO
             return TestField;
         }
 
-        public static ClassDef LoadClassDefWithIntID()
+        public static IClassDef LoadClassDefWithIntID()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""BOWithIntID"" assembly=""Habanero.Test.BO"" table=""bowithintid"" >
@@ -66,10 +67,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefWithIntID_RelationshipToSelf()
+        public static IClassDef LoadClassDefWithIntID_RelationshipToSelf()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""BOWithIntID"" assembly=""Habanero.Test.BO"" table=""bowithintid"" >
@@ -94,10 +95,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefWithIntID_DiscriminatorField()
+        public static IClassDef LoadClassDefWithIntID_DiscriminatorField()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""BOWithIntID"" assembly=""Habanero.Test.BO"" table=""bowithintid"" >
@@ -112,10 +113,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public static ClassDef LoadClassDefWithIntID_WithCompositeKey()
+        public static IClassDef LoadClassDefWithIntID_WithCompositeKey()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""BOWithIntID"" assembly=""Habanero.Test.BO"" table=""bowithintid"" >

@@ -207,10 +207,10 @@ namespace Habanero.Test.BO
             get { return _businessObjectUpdateLog; }
         }
 
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBusinessObjectUpdateLogBo"" assembly=""Habanero.Test.BO"" table=""My_Table"">

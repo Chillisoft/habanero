@@ -20,11 +20,6 @@ namespace Habanero.BO.ClassDefinition
         string PropertyName { get; set; }
 
         /// <summary>
-        /// Returns the grid control type
-        /// </summary>
-        Type GridControlType { get; set; }
-
-        /// <summary>
         /// Indicates whether the column is editable
         /// </summary>
         bool Editable { get; set; }

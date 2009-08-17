@@ -26,7 +26,7 @@ namespace Habanero.Test
     public class Circle : Shape
     {
 
-        public new static ClassDef GetClassDef()
+        public new static IClassDef GetClassDef()
         {
             if (ClassDef.IsDefined(typeof (Circle)))
             {
@@ -35,9 +35,9 @@ namespace Habanero.Test
             return CreateClassDef();
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
-            _classDef = GetClassDef();
+            _classDef = (ClassDef) GetClassDef();
             return _classDef;
         }
 
@@ -75,21 +75,21 @@ namespace Habanero.Test
             set { SetPropertyValue("Radius", value); }
         }
 
-        public static ClassDef GetClassDefWithConcreteTableInheritance()
+        public static IClassDef GetClassDefWithConcreteTableInheritance()
         {
 
-            ClassDef shapeClassDef = Shape.GetClassDef();
-            ClassDef circleClassDef = GetClassDef();
+            IClassDef shapeClassDef = Shape.GetClassDef();
+            IClassDef circleClassDef = GetClassDef();
             circleClassDef.TableName = "circle_concrete";
             circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.ConcreteTableInheritance);
             return circleClassDef;
 
         }
 
-        public static ClassDef GetClassDefWithClassTableInheritance()
+        public static IClassDef GetClassDefWithClassTableInheritance()
         {
-            ClassDef shapeClassDef = Shape.GetClassDef();
-            ClassDef circleClassDef = GetClassDef();
+            IClassDef shapeClassDef = Shape.GetClassDef();
+            IClassDef circleClassDef = GetClassDef();
             SuperClassDef superClassDef = new SuperClassDef(shapeClassDef, ORMapping.ClassTableInheritance);
             circleClassDef.SuperClassDef = superClassDef;
             superClassDef.ID = "ShapeID";

@@ -117,7 +117,12 @@
     <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOPropUpdatedEventArgs.cs" />
     <Compile Include="BusinessObjectDTO.cs" />
+    <Compile Include="ClassDefCol.cs" />
     <Compile Include="DelegatedExceptionNotifier.cs" />
+    <Compile Include="IBusinessObjectLookupList.cs" />
+    <Compile Include="IDatabaseLookupList.cs" />
+    <Compile Include="ILookupListWithClassDef.cs" />
+    <Compile Include="ISimpleLookupList.cs" />
     <Compile Include="RecordingExceptionNotifier.cs" />
     <Compile Include="Exceptions\InvalidKeyException.cs" />
     <Compile Include="Exceptions\ReflectionException.cs" />

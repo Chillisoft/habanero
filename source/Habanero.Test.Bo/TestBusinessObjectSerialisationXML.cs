@@ -191,7 +191,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             Structure.Car.LoadDefaultClassDef();
             OrganisationPerson.LoadDefaultClassDef();
-            ClassDef classDef = Person.LoadDefaultClassDef();
+            IClassDef classDef = Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             XmlSerializer xs = new XmlSerializer(typeof(Person));
             MemoryStream memoryStream = new MemoryStream();
@@ -229,7 +229,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             Structure.Car.LoadDefaultClassDef();
             OrganisationPerson.LoadDefaultClassDef();
-            ClassDef personClassDef = Person.LoadDefaultClassDef();
+            IClassDef personClassDef = Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             XmlSerializer xs = new XmlSerializer(typeof(Person));
             MemoryStream memoryStream = new MemoryStream();

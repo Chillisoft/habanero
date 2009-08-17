@@ -372,7 +372,7 @@ namespace Habanero.Test.DB
         {
             BOProp boProp = new BOPropLookupList(_propDef_int);
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.InitialiseProp(_validLookupValue);
@@ -393,7 +393,7 @@ namespace Habanero.Test.DB
             object originalPropValue = _validID;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -419,7 +419,7 @@ namespace Habanero.Test.DB
             object originalPropValue = _intKeyDoesNotExistInList;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.Value = _validLookupValue;
@@ -445,7 +445,7 @@ namespace Habanero.Test.DB
             businessObject.SetPropertyValue(_propDef_int.PropertyName, originalPropValue);
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsInstanceOfType(typeof(BOPropLookupList), boProp);
@@ -476,7 +476,7 @@ namespace Habanero.Test.DB
             object originalPropValue = _validID;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             businessObject.SetPropertyValue(boProp.PropertyName, _validID.ToString());
@@ -493,7 +493,7 @@ namespace Habanero.Test.DB
             object originalPropValue = _intKeyDoesNotExistInList;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             businessObject.SetPropertyValue(boProp.PropertyName, _validLookupValue);

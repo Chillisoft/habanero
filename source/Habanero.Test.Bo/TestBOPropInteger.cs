@@ -74,8 +74,9 @@ namespace Habanero.Test.BO
         {
             BOProp boProp = new BOProp(_propDef);
             const string invalid = "Invalid";
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Int32), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Int32), propDef.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -273,8 +274,9 @@ namespace Habanero.Test.BO
             const string invalid = "Invalid";
             object originalPropValue = TestUtil.GetRandomInt();
             boProp.Value = originalPropValue;
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Int32), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Int32), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             try

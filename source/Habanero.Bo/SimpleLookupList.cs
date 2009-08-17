@@ -24,6 +24,7 @@ using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
+
     /// <summary>
     /// A basic lookup-list content provider that stores a collection of
     /// string-Guid pairs as provided in the constructor.
@@ -31,7 +32,7 @@ namespace Habanero.BO
     /// where the string would be displayed, but the Guid would be the
     /// value stored (for reasons of data integrity).
     /// </summary>
-    public class SimpleLookupList : ILookupList
+    public class SimpleLookupList : ISimpleLookupList
     {
         /// <summary>
         /// Provides a key value pair where the persisted value can be returned for 

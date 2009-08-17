@@ -110,8 +110,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef myBOClassDef = MyBO.LoadClassDefWithRelationship();
-            ClassDef myRelatedBOClassDef = MyRelatedBo.LoadClassDef();
+            IClassDef myBOClassDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef myRelatedBOClassDef = MyRelatedBo.LoadClassDef();
             myBOClassDef.RelationshipDefCol["MyMultipleRelationship"].ReverseRelationshipName = "MyRelationship";
             myRelatedBOClassDef.RelationshipDefCol["MyRelationship"].ReverseRelationshipName = "MyMultipleRelationship";
             MyBO bo = new MyBO();

@@ -671,8 +671,9 @@ namespace Habanero.Test.BO
             MyBO.LoadDefaultClassDef();
             BOProp boProp = new BOPropLookupList(_propDefGuid);
             const string invalid = "Invalid";
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -713,8 +714,9 @@ namespace Habanero.Test.BO
             // a guid then the initiale prop will raise an error since the default value could not be converte to a guid.
             MyBO.LoadDefaultClassDef();
             BOProp boProp = new BOPropLookupList(_propDefGuid);
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -799,8 +801,9 @@ namespace Habanero.Test.BO
             const string invalid = "Invalid";
             object originalPropValue = _validBusinessObject.ID.GetAsGuid();
             boProp.Value = originalPropValue;
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
@@ -834,8 +837,9 @@ namespace Habanero.Test.BO
             ContactPersonTestBO invalidBOType = new ContactPersonTestBO {Surname = "Temp"};
             object originalPropValue = _validBusinessObject.ID.GetAsGuid();
             boProp.Value = originalPropValue;
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
@@ -870,7 +874,7 @@ namespace Habanero.Test.BO
             object originalPropValue = _validBusinessObject.ID.GetAsGuid();
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -900,7 +904,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO boWithNullToString = new ContactPersonTestBO();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
             boProp.Value = boWithNullToString;
@@ -923,7 +927,7 @@ namespace Habanero.Test.BO
             Circle inheritedBO = new Circle();
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
 
             //---------------Execute Test ----------------------
             boProp.Value = inheritedBO;
@@ -941,7 +945,7 @@ namespace Habanero.Test.BO
             Circle inheritedBO = new Circle();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Guid), propDef.PropertyType);
 
             //---------------Execute Test ----------------------
             boProp.Value = inheritedBO;
@@ -963,7 +967,8 @@ namespace Habanero.Test.BO
             object originalPropValue = Guid.NewGuid();
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            PropDef propDef = (PropDef) boProp.PropDef;
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.Value = null;
@@ -982,7 +987,8 @@ namespace Habanero.Test.BO
             object originalPropValue = Guid.NewGuid();
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            PropDef propDef = (PropDef) boProp.PropDef;
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.Value = _validLookupValue;
@@ -1166,9 +1172,10 @@ namespace Habanero.Test.BO
             const string invalid = "Invalid";
             object originalPropValue = _validBusinessObject.ID.GetAsGuid();
             businessObject.SetPropertyValue(_propDefGuid.PropertyName, originalPropValue);
+            PropDef propDef = (PropDef) boProp.PropDef;
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsInstanceOfType(typeof (BOPropLookupList), boProp);
@@ -1198,8 +1205,9 @@ namespace Habanero.Test.BO
             BOProp boProp = (BOProp) businessObject.Props[_propDefGuid.PropertyName];
             object originalPropValue = Guid.NewGuid();
             boProp.Value = originalPropValue;
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             businessObject.SetPropertyValue(boProp.PropertyName, _validBusinessObject.ID.GetAsValue().ToString());
@@ -1216,8 +1224,9 @@ namespace Habanero.Test.BO
             BOProp boProp = (BOProp) businessObject.Props[_propDefGuid.PropertyName];
             object originalPropValue = Guid.NewGuid();
             boProp.Value = originalPropValue;
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             businessObject.SetPropertyValue(boProp.PropertyName, _validLookupValue);
@@ -1234,8 +1243,9 @@ namespace Habanero.Test.BO
             BOProp boProp = (BOProp) businessObject.Props[_propDefGuid.PropertyName];
             object originalPropValue = Guid.NewGuid();
             boProp.Value = originalPropValue;
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             businessObject.SetPropertyValue
@@ -1280,8 +1290,9 @@ namespace Habanero.Test.BO
             string expectedPropValueToDisplay = bo1.ToString();
             object expctedID = bo1.MyBoID;
             bo1.Save();
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNull(boProp.Value);
             Assert.IsFalse(bo1.Status.IsNew);
             //---------------Execute Test ----------------------
@@ -1299,8 +1310,9 @@ namespace Habanero.Test.BO
             BOProp boProp = (BOProp) businessObject.Props[_propDefGuid.PropertyName];
             MyBO bo1 = new MyBO {TestProp = "PropValue"};
             object expctedID = bo1.MyBoID;
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNull(boProp.Value);
             Assert.IsTrue(bo1.Status.IsNew);
             //---------------Execute Test ----------------------

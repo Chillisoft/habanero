@@ -138,7 +138,7 @@ namespace Habanero.Test.BO
         public void TestSettingLookupValueSetsGuid()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithLookup();
+            IClassDef classDef = MyBO.LoadClassDefWithLookup();
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "s1");
             Assert.AreEqual("s1", bo.GetPropertyValueToDisplay("TestProp2"));
@@ -167,7 +167,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             IBOProp boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
@@ -189,7 +189,7 @@ namespace Habanero.Test.BO
             // which runs the validation code and sets the valid message and status on the BOProp.
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             IBOProp boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
@@ -206,7 +206,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             IBOProp boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
@@ -226,7 +226,7 @@ namespace Habanero.Test.BO
         {
             //--------------- Set up test pack ------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
             //--------------- Test Preconditions ----------------
 
@@ -244,7 +244,7 @@ namespace Habanero.Test.BO
         {
             //--------------- Set up test pack ------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             MyBO myBO = new MyBO();
             //--------------- Test Preconditions ----------------
 
@@ -264,7 +264,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "somevlaue");
             bo.Save();
@@ -394,7 +394,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             IBOProp boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
@@ -417,7 +417,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             MyBO myBO = (MyBO) classDef.CreateNewBusinessObject();
             myBO.TestProp = TestUtil.GetRandomString();
             myBO.Save();
@@ -443,7 +443,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             MyBO myBO = (MyBO) classDef.CreateNewBusinessObject();
             string origionalPropertyValue = myBO.TestProp = TestUtil.GetRandomString();
             myBO.Save();
@@ -466,7 +466,7 @@ namespace Habanero.Test.BO
         public void TestGetPropertyValueToDisplay()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithStringLookup();
+            IClassDef classDef = MyBO.LoadClassDefWithStringLookup();
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "Started");
             Assert.AreEqual("S", bo.GetPropertyValue("TestProp2"));
@@ -480,7 +480,7 @@ namespace Habanero.Test.BO
         {
             ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithBOLookup();
+            IClassDef classDef = MyBO.LoadClassDefWithBOLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
 
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
@@ -497,7 +497,7 @@ namespace Habanero.Test.BO
         {
             ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
+            IClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
 
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
@@ -515,7 +515,7 @@ namespace Habanero.Test.BO
         {
             ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
+            IClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
 
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
@@ -530,7 +530,7 @@ namespace Habanero.Test.BO
         public void TestBORuleString()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithStringRule();
+            IClassDef classDef = MyBO.LoadClassDefWithStringRule();
             Assert.IsTrue(classDef.PropDefcol.Contains("TestProp"), "TestProp must exist");
             IPropDef propDef = classDef.PropDefcol["TestProp"];
             Assert.GreaterOrEqual(1, propDef.PropRules.Count);
@@ -559,7 +559,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MockRepository mock = new MockRepository();
             IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
@@ -584,7 +584,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MockRepository mock = new MockRepository();
             IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
@@ -608,7 +608,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MockRepository mock = new MockRepository();
             IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
@@ -632,7 +632,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MockRepository mock = new MockRepository();
             IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
@@ -669,7 +669,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MockRepository mock = new MockRepository();
             IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
@@ -695,7 +695,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MockRepository mock = new MockRepository();
             IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
@@ -721,7 +721,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MockRepository mock = new MockRepository();
             IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
@@ -841,7 +841,7 @@ namespace Habanero.Test.BO
         public void TestSaveWithBeforeSaveImplemented()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = BeforeSaveBo.LoadDefaultClassDef();
+            IClassDef classDef = BeforeSaveBo.LoadDefaultClassDef();
             BeforeSaveBo bo = (BeforeSaveBo) classDef.CreateNewBusinessObject();
             bo.FirstPart = "foo";
             bo.SecondPart = "bar";
@@ -859,7 +859,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = AfterSaveBO.LoadDefaultClassDef();
+            IClassDef classDef = AfterSaveBO.LoadDefaultClassDef();
 
             AfterSaveBO bo = (AfterSaveBO) classDef.CreateNewBusinessObject();
             bo.FirstPart = "foo";
@@ -902,7 +902,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = AfterSaveBO.LoadDefaultClassDef();
+            IClassDef classDef = AfterSaveBO.LoadDefaultClassDef();
 
             AfterSaveBO bo = (AfterSaveBO) classDef.CreateNewBusinessObject();
             bo.FirstPart = "foo";
@@ -927,7 +927,7 @@ namespace Habanero.Test.BO
         public void TestCannotDelete_IsDeletable_False()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            IClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             IBusinessObject bo = classDef.CreateNewBusinessObject();
             bo.MarkForDelete();
         }
@@ -953,7 +953,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IBusinessObject bo = classDef.CreateNewBusinessObject();
             bool markForDeleteEventFired = false;
             bo.MarkedForDeletion += delegate { markForDeleteEventFired = true; };
@@ -976,7 +976,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.Save();
             bool markForDeleteEventFired = false;
@@ -1006,7 +1006,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -1039,7 +1039,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -1067,7 +1067,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -1096,7 +1096,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -1125,7 +1125,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
 //            bo.Save();
             bool markForDeleteEventFired = false;
@@ -1153,7 +1153,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.MarkForDelete();
             //---------------Assert Precondition----------------
@@ -1177,7 +1177,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.Save();
@@ -1200,7 +1200,7 @@ namespace Habanero.Test.BO
         public void TestCannotEdit_IsEditable_False()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            IClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.TestProp = "new";
         }
@@ -1226,7 +1226,7 @@ namespace Habanero.Test.BO
         {
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            IClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.Save();
             bo.Deletable = true;
@@ -1238,7 +1238,7 @@ namespace Habanero.Test.BO
         public void TestCanEdit_IsEditable_True()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            IClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.Editable = true;
             bo.TestProp = "new";
@@ -1248,7 +1248,7 @@ namespace Habanero.Test.BO
         public void TestCanEdit_IsDeletable_False()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            IClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.Editable = true;
             bo.Deletable = false;
@@ -1260,7 +1260,7 @@ namespace Habanero.Test.BO
         {
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            IClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.Save();
             bo.Editable = false;

@@ -958,7 +958,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanelForTab_CompulsoryFieldsAreBoldAndStarred()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
             UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //-------------Assert Preconditions -------------
@@ -982,7 +982,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanelForTab_WithNonEditableField_ShouldDisableLabel()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneNotEditable();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneNotEditable();
             UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             
@@ -1007,7 +1007,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanelForTab_PopulatesFieldInfoCollection()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             Sample sample = new Sample();
@@ -1039,7 +1039,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanelForTab_SetsClassDefForControlMappers()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -1054,7 +1054,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanelForTab_InputControlsHaveCorrectEnabledState()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
@@ -1072,7 +1072,7 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void Test_BuildPanelForTab_LayoutManagerIsSet()
         {
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
@@ -1089,7 +1089,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_TabOrder_Simple()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
@@ -1107,7 +1107,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_TabOrder_TwoColumns()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["TwoColumns"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
@@ -1135,7 +1135,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_TabOrder_ThreeColumns()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["ThreeColumns"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
@@ -1171,7 +1171,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildTabControl_TwoTabPagesOnTabControl()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -1190,7 +1190,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildTabControl_CorrectControlsOnTabPage()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -1215,7 +1215,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildTabControl_PanelInfos()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
@@ -1254,7 +1254,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanelForForm_ReturnsOnlyPanelForOneTab()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["default"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
@@ -1271,7 +1271,7 @@ namespace Habanero.Test.UI.Base
         public void Test_CreateOnePanelPerUIFormTab_2Panels()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWithTwoUITabs();
+            IClassDef classDef = MyBO.LoadClassDefWithTwoUITabs();
             IUIForm uiForm = classDef.UIDefCol["default"].UIForm;
             //--------------Assert PreConditions----------------            
             //---------------Execute Test ----------------------
@@ -1290,7 +1290,7 @@ namespace Habanero.Test.UI.Base
         public void Test_MinimumPanelHeight()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm uiForm = classDef.UIDefCol["default"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
@@ -1307,7 +1307,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuldUsingAlaternateFormBuilder_CollapsiblePanel()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -1333,7 +1333,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanelForForm_NullForm_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -1357,7 +1357,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanelForForm_NullCreateGroupControl_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -1380,7 +1380,7 @@ namespace Habanero.Test.UI.Base
         public void Test_Constructor_NullControlFactory_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, form.Count);
@@ -1401,7 +1401,7 @@ namespace Habanero.Test.UI.Base
         public void Test_Set_GroupControlCreator_Null_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -1446,7 +1446,7 @@ namespace Habanero.Test.UI.Base
         public void Test_ConstructsWithDefault_ControlCreator()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, form.Count);
@@ -1459,7 +1459,7 @@ namespace Habanero.Test.UI.Base
         public void Test_Set_GroupControlCreator_ToCollapsiblePanel()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             GroupControlCreator groupControlCreator = GetControlFactory().CreateCollapsiblePanelGroupControl;
@@ -1475,7 +1475,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuldUsingAlaternateFormBuilder()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------

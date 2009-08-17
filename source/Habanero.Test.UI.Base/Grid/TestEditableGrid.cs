@@ -208,7 +208,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetupColumnAsTextBoxType()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1TextboxColumn();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_1TextboxColumn();
             IBusinessObjectCollection colBOs = GetCol_BO_2Items(classDef);
             IEditableGrid grid = GetControlFactory().CreateEditableGrid();
             SetupGridColumnsForMyBo(grid);
@@ -231,7 +231,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetupColumnAsCheckBoxType()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
             IBusinessObjectCollection colBOs = GetCol_BO_1CheckboxItem(classDef);
             IEditableGrid grid = GetControlFactory().CreateEditableGrid();
             IDataGridViewColumn dataGridViewColumnSetup = GetControlFactory().CreateDataGridViewCheckBoxColumn();
@@ -258,7 +258,7 @@ namespace Habanero.Test.UI.Base
         public void Test_Set_BusinessObjectCollection_SetupColumnAsCheckBoxType()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
             IBusinessObjectCollection colBOs = GetCol_BO_1CheckboxItem(classDef);
             IEditableGrid grid = GetControlFactory().CreateEditableGrid();
             IDataGridViewColumn dataGridViewColumnSetup = GetControlFactory().CreateDataGridViewCheckBoxColumn();
@@ -283,7 +283,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetupComboBoxType()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
+            IClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
             IBusinessObjectCollection colBOs = GetCol_BO_1ComboBoxItem(classDef);
             IEditableGrid grid = GetControlFactory().CreateEditableGrid();
             IDataGridViewColumn dataGridViewColumnSetup = GetControlFactory().CreateDataGridViewComboBoxColumn();

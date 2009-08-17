@@ -201,7 +201,7 @@ namespace Habanero.BO
                               "<prop name=\"NumberType\" />" +
                               "</primaryKey>" +
                               "</class>";
-            ClassDef itsClassDef = itsLoader.LoadClass(classDef);
+            IClassDef itsClassDef = itsLoader.LoadClass(classDef);
             ClassDef.ClassDefs.Add(itsClassDef);
             return;
         }

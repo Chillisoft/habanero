@@ -288,10 +288,10 @@ namespace Habanero.Test.BO
             SetTransactionLog(new TransactionLogTable(this));
         }
 
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPersonTransactionLogging"" assembly=""Habanero.Test.BO"" table=""contact_person"">
@@ -332,10 +332,10 @@ namespace Habanero.Test.BO
             return;
         }
 
-        public static ClassDef LoadClassDef_SurnameAlternateKey()
+        public static IClassDef LoadClassDef_SurnameAlternateKey()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPersonTransactionLogging"" assembly=""Habanero.Test.BO"" table=""contact_person"">

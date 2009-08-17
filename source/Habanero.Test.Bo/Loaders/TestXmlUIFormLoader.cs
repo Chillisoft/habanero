@@ -33,12 +33,15 @@ namespace Habanero.Test.BO.Loaders
         private XmlUIFormLoader loader;
 
         [SetUp]
-        public void SetupTest()
-        {
+        public void SetupTest() {
+            Initialise();
+        }
+
+        protected void Initialise() {
             loader = new XmlUIFormLoader(new DtdLoader(), GetDefClassFactory());
         }
 
-                protected virtual IDefClassFactory GetDefClassFactory()
+        protected virtual IDefClassFactory GetDefClassFactory()
         {
             return new DefClassFactory();
         }

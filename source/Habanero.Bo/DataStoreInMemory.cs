@@ -22,6 +22,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml;
+using System.Xml.Serialization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -250,6 +252,35 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Saves all the objects from the data store to the file defined in fullFileName
+        /// </summary>
+        /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
+        public void SaveToXml(string fullFileName)
+        {
+
+            string directoryName = Path.GetDirectoryName(fullFileName);
+            FileUtilities.CreateDirectory(directoryName);
+           // XmlSerializer serializer = new XmlSerializer(typeof(BusinessObject));
+            // Serialize the all BO's in _objectsCollection
+
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.ConformanceLevel = ConformanceLevel.Auto;
+            using (FileStream fs = new FileStream(fullFileName, FileMode.Create))
+            {
+                XmlWriter writer = XmlWriter.Create(fs, settings);
+                //writer.WriteStartDocument();
+                foreach (var o in _objects)
+                {
+
+                    ((BusinessObject) o.Value).WriteXml(writer);
+                    //serializer.Serialize(fs, o.Value);                    
+                }
+                writer.Close();
+
+            }
+        }
+
         //TODO deerasha 22 May 2009: overload Load to support xml serialisation
         /// <summary>
         /// Loads all the objects to the data store from the file specified by fullFileName.
@@ -271,6 +302,30 @@ namespace Habanero.BO
                 {
                     string message = "The File " + fullFileName + " could not be deserialised because of the following error";
                     throw new Exception( message + ex.Message, ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loads all the objects to the data store from the file specified by fullFileName.
+        /// The file specified to be loaded must be a serialised xml file.
+        /// </summary>
+        /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.xml </param>
+        public void LoadFromXml(string fullFileName, Type typeToLoad)
+        {
+            if (!File.Exists(fullFileName)) return;
+            XmlSerializer xs = new XmlSerializer(typeToLoad);
+            using (Stream stream = new FileStream(fullFileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                try
+                {
+                    IBusinessObject bo = (IBusinessObject) xs.Deserialize(stream);
+                    this._objects.Add(bo.ID.GetAsGuid(), bo);
+                }
+                catch (Exception ex)
+                {
+                    string message = "The File " + fullFileName + " could not be deserialised because of the following error";
+                    throw new Exception(message + ex.Message, ex);
                 }
             }
         }

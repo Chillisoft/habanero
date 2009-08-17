@@ -191,7 +191,7 @@ namespace Habanero.BO
                 if (lookupList is BusinessObjectLookupList)
                 {
                     BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
-                    ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
+                    IClassDef classDef = businessObjectLookupList.LookupBoClassDef;
                     IBusinessObject businessObject = GetBusinessObjectForProp(classDef);
                     _displayValueWhenLookupListDisplayValueLastCalled = businessObject == null ? null : businessObject.ToString();
                     return _displayValueWhenLookupListDisplayValueLastCalled;
@@ -208,7 +208,7 @@ namespace Habanero.BO
         /// </summary>
         protected bool Loading { get; set; }
 
-        internal IBusinessObject GetBusinessObjectForProp(ClassDef classDef)
+        internal IBusinessObject GetBusinessObjectForProp(IClassDef classDef)
         {
             IBusinessObject businessObject = ((PropDef) this.PropDef).GetlookupBusinessObjectFromObjectManager(this.Value);
             if (businessObject != null) return businessObject;
@@ -250,7 +250,7 @@ namespace Habanero.BO
             if (propDef.LookupList is BusinessObjectLookupList)
             {
                 BusinessObjectLookupList businessObjectLookupList = propDef.LookupList as BusinessObjectLookupList;
-                ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
+                IClassDef classDef = businessObjectLookupList.LookupBoClassDef;
                 IBusinessObject businessObject = GetBusinessObjectForProp(classDef);
                 return businessObject;
             }

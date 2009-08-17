@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.Test.BO;
@@ -164,7 +165,7 @@ namespace Habanero.Test.UI.Base
         public void TestAddItem()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
@@ -217,7 +218,7 @@ namespace Habanero.Test.UI.Base
         public void TestAddItemToSecondSection()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
@@ -240,7 +241,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl) editor.Controls[0];
@@ -263,9 +264,9 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef2 = MyBO.LoadClassDefWithBoolean();
+            IClassDef classDef2 = MyBO.LoadClassDefWithBoolean();
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
@@ -289,7 +290,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
@@ -319,7 +320,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
@@ -343,7 +344,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
@@ -369,8 +370,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef1 = MyBO.LoadDefaultClassDef();
-            ClassDef classDef2 = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IClassDef classDef1 = MyBO.LoadDefaultClassDef();
+            IClassDef classDef2 = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
 
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
@@ -402,7 +403,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef1 = MyBO.LoadDefaultClassDef();
+            IClassDef classDef1 = MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
             myBO.Save();
             IFormHabanero frm;
@@ -432,7 +433,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef1 = MyBO.LoadDefaultClassDef();
+            IClassDef classDef1 = MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
             string originalValue = TestUtil.GetRandomString();
             myBO.TestProp = originalValue;

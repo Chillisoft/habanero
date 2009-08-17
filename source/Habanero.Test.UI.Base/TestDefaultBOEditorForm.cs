@@ -34,7 +34,7 @@ namespace Habanero.Test.UI.Base
     [TestFixture]
     public class TestDefaultBOEditorForm// : TestUsingDatabase
     {
-        private ClassDef _classDefMyBo;
+        private IClassDef _classDefMyBo;
         private IBusinessObject _bo;
         private IDefaultBOEditorForm _defaultBOEditorForm;
 

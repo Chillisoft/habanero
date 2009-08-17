@@ -55,12 +55,12 @@ namespace Habanero.Test
             CreateClassDef();
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return GetClassDef();
         }
 
-        private static ClassDef GetClassDef()
+        private static IClassDef GetClassDef()
         {
             if (ClassDef.IsDefined(typeof (ContactPersonCompositeKey)))
             {

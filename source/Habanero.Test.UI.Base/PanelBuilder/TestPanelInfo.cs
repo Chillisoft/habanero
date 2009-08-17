@@ -157,7 +157,7 @@ namespace Habanero.Test.UI.Base
         public void TestControlsEnabled()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
             IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) classDef.UIDefCol["default"].UIForm[0]);
             panelInfo.BusinessObject = new Sample();
@@ -185,7 +185,7 @@ namespace Habanero.Test.UI.Base
         public void TestClearErrorProviders()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) classDef.UIDefCol["default"].UIForm[0]);
             Sample businessObject = new Sample();
@@ -214,7 +214,7 @@ namespace Habanero.Test.UI.Base
         public void Test_UIFormTab()
         {
             //--------------- Set up test pack ------------------
-            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
             //--------------- Test Preconditions ----------------
 

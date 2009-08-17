@@ -22,6 +22,7 @@
 // ------------------------------------------------------------------------------
 
 using System.Runtime.Serialization;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -42,10 +43,10 @@ namespace Habanero.Test.Structure
         {
 
         }
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Entity"" assembly=""Habanero.Test.Structure"" table=""table_Entity"">
 			    <property name=""EntityID"" type=""Guid"" databaseField=""field_Entity_ID"" compulsory=""true"" />
 			    <property name=""EntityType"" databaseField=""field_Entity_Type"" />
@@ -58,10 +59,10 @@ namespace Habanero.Test.Structure
             return itsClassDef;
         }
 
-        public static ClassDef LoadDefaultClassDef_WithCircularDeleteRelatedToSelf()
+        public static IClassDef LoadDefaultClassDef_WithCircularDeleteRelatedToSelf()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""Entity"" assembly=""Habanero.Test.Structure"" table=""table_Entity"">
 			    <property name=""EntityID"" type=""Guid"" databaseField=""field_Entity_ID"" compulsory=""true"" />
 			    <property name=""RelatedEntityID"" type=""Guid"" databaseField=""field_Entity_Type"" />

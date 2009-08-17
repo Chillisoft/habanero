@@ -285,7 +285,7 @@ namespace Habanero.Test.UI.Base
             public void TestGridRowChange_DoesNotChangeWhenBOInvalid()
             {
                 //---------------Set up test pack-------------------
-                ClassDef classDef = ClassDef.Get<MyBO>();
+                IClassDef classDef = ClassDef.Get<MyBO>();
                 classDef.PropDefcol["TestProp"].Compulsory = true;
                 BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
                 IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_WithStrategy();
@@ -345,9 +345,9 @@ namespace Habanero.Test.UI.Base
 
         // Creates a new UI def by cloning an existing one and adding a cloned column
         //   (easier than creating a whole new BO for this test)
-        private static ClassDef GetCustomClassDef()
+        private static IClassDef GetCustomClassDef()
         {
-            ClassDef classDef = ClassDef.Get<MyBO>();
+            IClassDef classDef = ClassDef.Get<MyBO>();
             IUIGrid originalGridDef = classDef.UIDefCol["default"].UIGrid;
             UIGrid extraGridDef = ((UIGrid)originalGridDef).Clone();
             //UIGridColumn extraColumn = originalGridDef[0].Clone();
@@ -487,7 +487,7 @@ namespace Habanero.Test.UI.Base
         public void TestGridWithCustomClassDef()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = GetCustomClassDef();
+            IClassDef classDef = GetCustomClassDef();
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             myBOs.ClassDef = classDef;
             IBusinessObjectControl businessObjectControl = GetBusinessObjectControlStub();
@@ -1091,7 +1091,7 @@ namespace Habanero.Test.UI.Base
         public void Test_CannotClickNewButtonIfCurrentObjectInvalid()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ClassDef.Get<MyBO>();
+            IClassDef classDef = ClassDef.Get<MyBO>();
             classDef.PropDefcol["TestProp"].Compulsory = true;
 
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
@@ -1115,7 +1115,7 @@ namespace Habanero.Test.UI.Base
         public void Test_CannotChangeGridRowIfCurrentObjectInvalid()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ClassDef.Get<MyBO>();
+            IClassDef classDef = ClassDef.Get<MyBO>();
             classDef.PropDefcol["TestProp"].Compulsory = true;
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();

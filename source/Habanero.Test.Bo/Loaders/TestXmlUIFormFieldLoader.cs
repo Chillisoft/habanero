@@ -36,8 +36,11 @@ namespace Habanero.Test.BO.Loaders
 
 
         [SetUp]
-        public void SetupTest()
-        {
+        public void SetupTest() {
+            Initialise();
+        }
+
+        protected  void Initialise() {
             loader = new XmlUIFormFieldLoader(new DtdLoader(), GetDefClassFactory());
         }
 
@@ -51,13 +54,13 @@ namespace Habanero.Test.BO.Loaders
         {
             IUIFormField uiProp =
                 loader.LoadUIProperty(
-                    @"<field label=""testlabel"" property=""testpropname"" type=""Button"" assembly=""System.Windows.Forms"" mapperType=""testmappertypename"" mapperAssembly=""testmapperassembly"" editable=""false"" />");
+                    @"<field label=""testlabel"" property=""testpropname"" type=""TextBox"" assembly=""System.Windows.Forms"" mapperType=""TextBoxMapper"" mapperAssembly=""Habanero.UI.Base"" editable=""false"" />");
             Assert.AreEqual("testlabel", uiProp.Label);
             Assert.AreEqual("testpropname", uiProp.PropertyName);
-            Assert.AreEqual("Button", uiProp.ControlTypeName);
+            Assert.AreEqual("TextBox", uiProp.ControlTypeName);
 			Assert.AreEqual("System.Windows.Forms", uiProp.ControlAssemblyName);
-            Assert.AreEqual("testmappertypename", uiProp.MapperTypeName);
-            Assert.AreEqual("testmapperassembly", uiProp.MapperAssembly);
+            Assert.AreEqual("Habanero.UI.Base", uiProp.MapperAssembly);
+            Assert.AreEqual("TextBoxMapper", uiProp.MapperTypeName);
             Assert.AreEqual(false, uiProp.Editable);
         }
 
@@ -79,10 +82,10 @@ namespace Habanero.Test.BO.Loaders
         {
             IUIFormField uiProp =
                 loader.LoadUIProperty(@"<field label=""testlabel"" property=""testpropname"" />");
-            Assert.IsNull(uiProp.ControlTypeName);
-            Assert.IsNull(uiProp.ControlAssemblyName);
-            Assert.IsNull(uiProp.MapperTypeName);
-            Assert.IsNull(uiProp.MapperAssembly);
+            Assert.IsTrue(string.IsNullOrEmpty(uiProp.ControlTypeName));
+            Assert.IsTrue(string.IsNullOrEmpty(uiProp.ControlAssemblyName));
+            Assert.IsTrue(string.IsNullOrEmpty(uiProp.MapperTypeName));
+            Assert.IsTrue(string.IsNullOrEmpty(uiProp.MapperAssembly));
         }
 
         [Test]
@@ -101,22 +104,6 @@ namespace Habanero.Test.BO.Loaders
                     @"<field label=""testlabel"" property=""testpropname"" ><parameter name=""TestAtt"" value=""TestValue"" /><parameter name=""TestAtt2"" value=""TestValue2"" /></field>");
             Assert.AreEqual("TestValue", uiProp.GetParameterValue("TestAtt"));
             Assert.AreEqual("TestValue2", uiProp.GetParameterValue("TestAtt2"));
-        }
-
-        [Test]
-        public void TestAutomaticLabelCreation()
-        {
-            IUIFormField uiProp = loader.LoadUIProperty(@"<field property=""testpropname"" />");
-            Assert.AreEqual(null, uiProp.Label);
-            Assert.AreEqual("testpropname:", uiProp.GetLabel());
-
-            uiProp = loader.LoadUIProperty(@"<field property=""TestPropName"" />");
-            Assert.AreEqual(null, uiProp.Label);
-            Assert.AreEqual("Test Prop Name:", uiProp.GetLabel());
-
-			uiProp = loader.LoadUIProperty(@"<field property=""TestPropName"" type=""CheckBox"" />");
-            Assert.AreEqual(null, uiProp.Label);
-            Assert.AreEqual("Test Prop Name?", uiProp.GetLabel());
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]

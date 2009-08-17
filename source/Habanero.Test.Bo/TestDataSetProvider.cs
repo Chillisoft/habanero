@@ -38,7 +38,7 @@ namespace Habanero.Test.BO
     public class TestDataSetProvider : TestUsingDatabase
     {
         protected XmlClassLoader _loader;
-        protected ClassDef _classDef;
+        protected IClassDef _classDef;
         protected IBusinessObjectCollection _collection;
         protected DataTable itsTable;
         protected IBusinessObject itsBo1;
@@ -559,7 +559,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             //XmlClassLoader loader = new XmlClassLoader();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithLookup();
+            ClassDef classDef = (ClassDef) MyBO.LoadClassDefWithLookup();
             classDef.PropDefcol["TestProp"].Compulsory = true; 
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>(_classDef);
             IDataSetProvider dataSetProvider = CreateDataSetProvider(collection);
@@ -584,7 +584,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             //XmlClassLoader loader = new XmlClassLoader();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithLookup();
+            IClassDef classDef = MyBO.LoadClassDefWithLookup();
             classDef.PropDefcol["TestProp"].Compulsory = true; 
             BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>(_classDef);
             IDataSetProvider dataSetProvider = CreateDataSetProvider(collection);
@@ -717,7 +717,7 @@ namespace Habanero.Test.BO
 
             new Engine();//TO Load ClassDefs
             new Car();//TO Load ClassDefs
-            ClassDef classDef = MyContactPerson.LoadClassDef();
+            IClassDef classDef = MyContactPerson.LoadClassDef();
             const string columnName = "Father.DateOfBirth";
             UIGrid uiGrid = CreateUiGridWithColumn(classDef, columnName);
             
@@ -756,7 +756,7 @@ namespace Habanero.Test.BO
             new Engine();//TO Load ClassDefs
             new Car();//TO Load ClassDefs
 //            DateTime startDate = DateTime.Now;
-            ClassDef classDef = MyContactPerson.LoadClassDef();
+            IClassDef classDef = MyContactPerson.LoadClassDef();
             const string columnName = "-DateProperty-";
             UIGrid uiGrid = CreateUiGridWithColumn(classDef, columnName);
             BusinessObjectCollection<ContactPerson> contactPersons = new BusinessObjectCollection<ContactPerson>();
@@ -806,7 +806,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(contactPersonTestBO.FirstName, table.Rows[0][propertyName]);
             recordingExceptionNotifier.RethrowRecordedException();
         }
-        private static UIGrid CreateUiGridWithColumn(ClassDef classDef, string columnName)
+        private static UIGrid CreateUiGridWithColumn(IClassDef classDef, string columnName)
         {
             UIGrid uiGrid = new UIGrid();
             UIGridColumn dateTimeUiGridColumn = new UIGridColumn(columnName, columnName, null, null, false, 100, PropAlignment.right, null);
@@ -823,7 +823,7 @@ namespace Habanero.Test.BO
             private readonly DateTime _dateTime = DateTime.Now;
             private const string fatherRelationshipName = "Father";
 
-            public MyContactPerson() : base(LoadClassDef())
+            public MyContactPerson() : base((ClassDef) LoadClassDef())
             {
                 
             }
@@ -839,9 +839,9 @@ namespace Habanero.Test.BO
                 set { Relationships.SetRelatedObject(fatherRelationshipName, value); }
             }
 
-            public static ClassDef LoadClassDef()
+            public static IClassDef LoadClassDef()
             {
-                ClassDef classDef = GetClassDef();
+                IClassDef classDef = GetClassDef();
                 if (!classDef.RelationshipDefCol.Contains(fatherRelationshipName))
                 {
                     RelKeyDef relKeyDef = new RelKeyDef();

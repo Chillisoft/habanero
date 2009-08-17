@@ -32,14 +32,17 @@ namespace Habanero.Test.BO.Loaders
     public class TestXmlPrimaryKeyLoader
     {
         private XmlPrimaryKeyLoader itsLoader;
-        private PropDefCol itsPropDefs;
+        private IPropDefCol itsPropDefs;
 
         [SetUp]
-        public void SetupTest()
-        {
+        public void SetupTest() {
+            Initialise();
+        }
+
+        protected void Initialise() {
             itsLoader = new XmlPrimaryKeyLoader(new DtdLoader(), GetDefClassFactory());
-            itsPropDefs = new PropDefCol();
-            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
+            itsPropDefs = GetDefClassFactory().CreatePropDefCol();
+            itsPropDefs.Add(GetDefClassFactory().CreatePropDef("TestProp", "System", "String", PropReadWriteRule.ReadWrite, null, null, false, false, 255, null, null, false));
         }
 
         protected virtual IDefClassFactory GetDefClassFactory()
@@ -50,7 +53,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestSimplePrimaryKey()
         {
-            PrimaryKeyDef def =
+            IPrimaryKeyDef def =
                 itsLoader.LoadPrimaryKey(@"<primaryKey><prop name=""TestProp"" /></primaryKey>", itsPropDefs);
             Assert.AreEqual(1, def.Count, "Def should have one property in it.");
             Assert.AreEqual(true, def.IsGuidObjectID, "Def should by default be an objectID");
@@ -72,8 +75,8 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestCompositeKey()
         {
-            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
-            PrimaryKeyDef def =
+            itsPropDefs.Add(GetDefClassFactory().CreatePropDef("TestProp2", "System", "String", PropReadWriteRule.ReadWrite, null, null, false, false, 255, null, null, false));
+            IPrimaryKeyDef def =
                 itsLoader.LoadPrimaryKey(
                     @"<primaryKey isObjectID=""false""><prop name=""TestProp"" /><prop name=""TestProp2"" /></primaryKey>",
                     itsPropDefs);

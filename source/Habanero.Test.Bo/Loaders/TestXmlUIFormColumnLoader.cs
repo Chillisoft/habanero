@@ -33,8 +33,11 @@ namespace Habanero.Test.BO.Loaders
         private XmlUIFormColumnLoader loader;
 
         [SetUp]
-        public void SetupTest()
-        {
+        public void SetupTest() {
+            Initialise();
+        }
+
+        protected void Initialise() {
             loader = new XmlUIFormColumnLoader(new DtdLoader(), GetDefClassFactory());
         }
 

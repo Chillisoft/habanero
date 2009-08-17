@@ -29,14 +29,14 @@ namespace Habanero.Test
     public class FilledCircle : Circle
     {
 
-        public new static ClassDef GetClassDef()
+        public new static IClassDef GetClassDef()
         {
             return !ClassDef.IsDefined(typeof (FilledCircle)) ? CreateClassDef() : ClassDef.ClassDefs[typeof (FilledCircle)];
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
-            _classDef = GetClassDef();
+            _classDef = (ClassDef) GetClassDef();
             return _classDef;
         }
 
@@ -70,12 +70,12 @@ namespace Habanero.Test
             set { SetPropertyValue("Colour", value); }
         }
 
-        public static ClassDef GetClassDefWithClassInheritanceHierarchy()
+        public static IClassDef GetClassDefWithClassInheritanceHierarchy()
         {
-            ClassDef shapeClassDef = Shape.GetClassDef();
-            ClassDef circleClassDef = Circle.GetClassDef();
+            IClassDef shapeClassDef = Shape.GetClassDef();
+            IClassDef circleClassDef = Circle.GetClassDef();
             circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.ClassTableInheritance);
-            ClassDef filledCircleClassDef = GetClassDef();
+            IClassDef filledCircleClassDef = GetClassDef();
             filledCircleClassDef.SuperClassDef = new SuperClassDef(circleClassDef, ORMapping.ClassTableInheritance);
             return filledCircleClassDef;
         }
@@ -92,10 +92,10 @@ namespace Habanero.Test
 
         }
 
-        public static ClassDef GetClassDefWithConcreteInheritanceHierarchy()
+        public static IClassDef GetClassDefWithConcreteInheritanceHierarchy()
         {
-            ClassDef circleClassDef = Circle.GetClassDefWithConcreteTableInheritance();
-            ClassDef filledCircleClassDef = GetClassDef();
+            IClassDef circleClassDef = Circle.GetClassDefWithConcreteTableInheritance();
+            IClassDef filledCircleClassDef = GetClassDef();
             filledCircleClassDef.TableName = "filledcircle_concrete";
             filledCircleClassDef.SuperClassDef = new SuperClassDef(circleClassDef, ORMapping.ConcreteTableInheritance);
             return filledCircleClassDef;

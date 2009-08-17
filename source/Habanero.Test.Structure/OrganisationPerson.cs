@@ -21,6 +21,7 @@
 // This partial class was auto-generated for use with the Habanero Architecture.
 // ------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -32,10 +33,10 @@ namespace Habanero.Test.Structure
     
     public partial class OrganisationPerson
     {
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
 			  <class name=""OrganisationPerson"" assembly=""Habanero.Test.Structure"" table=""table_OrganisationPerson"">
 			    <property name=""OrganisatiionID"" type=""Guid"" databaseField=""field_Organisatiion_ID"" />
 			    <property name=""PersonID"" type=""Guid"" databaseField=""field_Person_ID"" />

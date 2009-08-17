@@ -451,10 +451,10 @@ namespace Habanero.Test.DB.ConcurrencyControl
             set { SetPropertyValue("DateTimeLocked", value); }
         }
 
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""Habanero.Test.DB.ConcurrencyControl.ContactPersonPessimisticLockingDB"" assembly=""Habanero.Test.DB"" table=""contact_person"">

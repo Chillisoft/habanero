@@ -172,7 +172,7 @@ namespace Habanero.UI.VWG
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
-            ClassDef classDef = ClassDef.Get<T>();
+            IClassDef classDef = ClassDef.Get<T>();
             _panelInfo = BOEditorControlUtils.CreatePanelInfo(controlFactory, classDef, uiDefName, this);
             SetEnableState();
         }

@@ -41,12 +41,12 @@ namespace Habanero.Test
         {
         }
 
-        protected static ClassDef GetClassDef()
+        protected static IClassDef GetClassDef()
         {
             return ClassDef.IsDefined(typeof (Address)) ? ClassDef.ClassDefs[typeof (Address)] : CreateClassDef();
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return GetClassDef();
         }

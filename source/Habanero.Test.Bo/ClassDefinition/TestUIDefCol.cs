@@ -202,7 +202,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCloneUIDefCol()
         {
             //---------------Set up test pack-------------------
-             ClassDef originalClassDef = LoadClassDef();           
+             IClassDef originalClassDef = LoadClassDef();           
             //---------------Execute Test ----------------------
             UIDefCol newUIDefCol = originalClassDef.UIDefCol.Clone();
             //---------------Test Result -----------------------
@@ -235,7 +235,7 @@ Assert.IsNull(uiDef.UIDefCol);
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             UIDefCol uiDefCol = new UIDefCol();
-            ClassDef classdef = MyBO.LoadDefaultClassDef();
+            IClassDef classdef = MyBO.LoadDefaultClassDef();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -246,10 +246,10 @@ Assert.IsNull(uiDef.UIDefCol);
         }
 
 
-        public static ClassDef LoadClassDef()
+        public static IClassDef LoadClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef def =
+            IClassDef def =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">

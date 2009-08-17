@@ -95,22 +95,6 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void TestKeyName_BuildFromProps()
-        {
-            //-------------Setup Test Pack ------------------
-            PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
-            PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
-            KeyDef keyDef = new KeyDef("");
-            //-------------Test Pre-conditions --------------
-            Assert.AreEqual("", keyDef.KeyName);
-            //-------------Execute test ---------------------
-            keyDef.Add(propDef1);
-            keyDef.Add(propDef2);
-            //-------------Test Result ----------------------
-            Assert.AreEqual("prop1_prop2", keyDef.KeyName);
-        }
-
-        [Test]
         public void TestKeyName_DontBuildFromProps()
         {
             //-------------Setup Test Pack ------------------
@@ -123,7 +107,23 @@ namespace Habanero.Test.BO.ClassDefinition
             keyDef.Add(propDef1);
             keyDef.Add(propDef2);
             //-------------Test Result ----------------------
-            Assert.AreEqual("bob_prop1_prop2", keyDef.KeyName);
+            Assert.AreEqual("bob", keyDef.KeyName);
+        }
+
+        [Test]
+        public void TestKeyName_BuildFromProps_WhenBlank()
+        {
+            //-------------Setup Test Pack ------------------
+            PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
+            KeyDef keyDef = new KeyDef("");
+            //-------------Test Pre-conditions --------------
+            Assert.AreEqual("", keyDef.KeyName);
+            //-------------Execute test ---------------------
+            keyDef.Add(propDef1);
+            keyDef.Add(propDef2);
+            //-------------Test Result ----------------------
+            Assert.AreEqual("prop1_prop2", keyDef.KeyName);
         }
 
         // Exposes protected methods for testing

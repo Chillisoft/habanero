@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -47,10 +48,10 @@ namespace Habanero.Test
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sqlDrop);
         }
 
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef classDef = itsLoader.LoadClass(@"
+            IClassDef classDef = itsLoader.LoadClass(@"
 				<class name=""OrderItem"" assembly=""Habanero.Test"">
 					<property name=""OrderNumber"" type=""int"" compulsory=""true"" />
 					<property name=""Product"" compulsory=""true"" />

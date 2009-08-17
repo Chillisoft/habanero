@@ -57,10 +57,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             BOWithIntID.DeleteAllBOWithIntID();
             ClassDef.ClassDefs.Clear();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo1 = new BOWithIntID {TestField = "PropValue", IntID = 55};
             bo1.Save();
-            IPrimaryKey id = BOPrimaryKey.CreateWithValue(autoIncClassDef, bo1.IntID);
+            IPrimaryKey id = BOPrimaryKey.CreateWithValue((ClassDef) autoIncClassDef, bo1.IntID);
             //---------------Assert Precondition----------------
             Assert.IsFalse(bo1.Status.IsNew);
             Assert.IsNotNull(bo1.IntID);
@@ -75,7 +75,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_GetBusinessObjectByValue()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID {TestField = "PropValue", IntID = 55};
             object expectedID = bo.IntID;
             bo.Save();
@@ -93,7 +93,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_GetBusinessObjectByValue_DoesNotExist()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID {TestField = "PropValue", IntID = 55};
             bo.Save();
             const int idDoesNotExist = 5425;
@@ -123,7 +123,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             BOWithIntID.DeleteAllBOWithIntID();
             ClassDef.ClassDefs.Clear();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo1 = new BOWithIntID {TestField = "PropValue", IntID = 55};
             bo1.Save();
             IPrimaryKey id = BOPrimaryKey.CreateWithValue(typeof (BOWithIntID), bo1.IntID);
@@ -248,7 +248,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestGetBusinessObjectWhenNotExists_NotLoadedViaKey_Untyped()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria
                 ("ContactPersonID", Criteria.ComparisonOp.Equals, Guid.NewGuid().ToString("N"));
 
@@ -326,7 +326,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestGetBusinessObject_PrimaryKey_Untyped()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -383,7 +383,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestGetBusinessObject_CriteriaObject_Untyped()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
 
@@ -399,7 +399,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestGetBusinessObject_String_Untyped()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -478,7 +478,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
 
             const string surname = "abc";
             const string firstName = "aa";
@@ -868,7 +868,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
             ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");

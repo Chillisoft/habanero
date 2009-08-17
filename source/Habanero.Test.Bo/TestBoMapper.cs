@@ -33,8 +33,8 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBoMapper : TestUsingDatabase
     {
-        private ClassDef itsClassDef;
-        private ClassDef itsRelatedClassDef;
+        private IClassDef itsClassDef;
+        private IClassDef itsRelatedClassDef;
 
         [TestFixtureSetUp]
         public void SetupTestFixture()
@@ -58,7 +58,7 @@ namespace Habanero.Test.BO
         {
             ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithBOLookup();
+            IClassDef classDef = MyBO.LoadClassDefWithBOLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
             ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
@@ -74,7 +74,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.DeleteAllContactPeople();
             ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadClassDefWithBOLookup("Surname <> abc");
+            IClassDef classDef = MyBO.LoadClassDefWithBOLookup("Surname <> abc");
             ContactPersonTestBO.LoadDefaultClassDef();
 
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");

@@ -36,10 +36,10 @@ namespace Habanero.BO.Loaders
         private string _className;
         private string _displayName;
         private KeyDefCol _keyDefCol;
-        private PrimaryKeyDef _primaryKeyDef;
+        private IPrimaryKeyDef _primaryKeyDef;
         private IPropDefCol _propDefCol;
         private IRelationshipDefCol _relationshipDefCol;
-        private SuperClassDef _superClassDef;
+        private ISuperClassDef _superClassDef;
         private string _tableName;
         private UIDefCol _uiDefCol;
         private string _typeParameter;
@@ -63,7 +63,7 @@ namespace Habanero.BO.Loaders
         /// You can use <code>new StreamReader("filename.xml").ReadToEnd()</code>
         /// to read a continuous string from a file.</param>
         /// <returns>Returns the class definition loaded</returns>
-        public ClassDef LoadClass(string xmlClassDef)
+        public IClassDef LoadClass(string xmlClassDef)
         {
             if (string.IsNullOrEmpty(xmlClassDef))
             {
@@ -83,9 +83,9 @@ namespace Habanero.BO.Loaders
         /// </summary>
         /// <param name="classElement">The xml class element</param>
         /// <returns>Returns the class definition loaded</returns>
-        public ClassDef LoadClass(XmlElement classElement)
+        public IClassDef LoadClass(XmlElement classElement)
         {
-            return (ClassDef) Load(classElement);
+            return (IClassDef) Load(classElement);
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace Habanero.BO.Loaders
             foreach (string propDefXml in xmlDefs)
             {
                 XmlPropertyLoader propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);
-                PropDef propDef = propLoader.LoadProperty(propDefXml);
+                IPropDef propDef = propLoader.LoadProperty(propDefXml);
                 _propDefCol.Add(propDef);
             }
         }

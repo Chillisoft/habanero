@@ -33,12 +33,10 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlDatabaseLookupListLoader
     {
-        private XmlDatabaseLookupListLoader _loader;
 
         [SetUp]
         public void SetupTest()
         {
-            _loader = new XmlDatabaseLookupListLoader(new DtdLoader(), GetDefClassFactory());
             ClassDef.ClassDefs.Clear();
         }
 
@@ -51,29 +49,30 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestDatabaseLookupListWithInvalidTimeout()
         {
-            _loader.LoadLookupList(
+            XmlDatabaseLookupListLoader loader = new XmlDatabaseLookupListLoader(new DtdLoader(), GetDefClassFactory());
+            loader.LoadLookupList(
                     @"<databaseLookupList sql=""Source"" timeout=""aaa"" />");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestDatabaseLookupListWithNegativeTimeout()
         {
-            _loader.LoadLookupList(
+            XmlDatabaseLookupListLoader  loader = new XmlDatabaseLookupListLoader(new DtdLoader(), GetDefClassFactory());
+            loader.LoadLookupList(
                     @"<databaseLookupList sql=""Source"" timeout=""-1"" />");
         }
 
         [Test]
         public void TestDatabaseLookupListWithClassDef()
         {
-            ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
-
+            XmlDatabaseLookupListLoader loader = new XmlDatabaseLookupListLoader(new DtdLoader(), GetDefClassFactory());
+            MyBO.LoadDefaultClassDef();
             ILookupList def =
-                _loader.LoadLookupList(
+                loader.LoadLookupList(
                     @"<databaseLookupList sql=""Source"" class=""MyBO"" assembly=""Habanero.Test"" />");
-            DatabaseLookupList source = (DatabaseLookupList)def;
-            Assert.IsNotNull(source.ClassDef);
-            Assert.AreEqual(classDef.ClassName, source.ClassDef.ClassName);
+            IDatabaseLookupList source = (IDatabaseLookupList)def;
+            Assert.AreEqual("MyBO", source.ClassName);
+            Assert.AreEqual("Habanero.Test", source.AssemblyName);
             Assert.AreEqual(10000, source.TimeOut);
         }
 

@@ -278,7 +278,7 @@ namespace Habanero.BO.ClassDefinition
         public KeyDefCol KeysCol
         {
             get { return _keysCol; }
-            protected set { _keysCol = value; }
+            set { _keysCol = value; }
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace Habanero.BO.ClassDefinition
         public IPrimaryKeyDef PrimaryKeyDef
         {
             get { return _primaryKeyDef; }
-            protected set { _primaryKeyDef = value; }
+            set { _primaryKeyDef = value; }
         }
 
         /// <summary>
@@ -311,7 +311,7 @@ namespace Habanero.BO.ClassDefinition
         public UIDefCol UIDefCol
         {
             get { return _uiDefCol; }
-            protected set { _uiDefCol = value; }
+            set { _uiDefCol = value; }
         }
 
         /// <summary>
@@ -669,9 +669,9 @@ namespace Habanero.BO.ClassDefinition
             get
             {
                 ClassDefCol children = new ClassDefCol();
-                foreach (ClassDef def in ClassDefs)
+                foreach (IClassDef def in ClassDefs)
                 {
-                    if (def._superClassDef != null && def._superClassDef.SuperClassClassDef == this)
+                    if (def.SuperClassDef != null && def.SuperClassDef.SuperClassClassDef == this)
                     {
                         children.Add(def);
                     }
@@ -691,10 +691,10 @@ namespace Habanero.BO.ClassDefinition
                 ClassDefCol immediateChildren = ImmediateChildren;
                 if (immediateChildren.Count == 0) return children;
 
-                foreach (ClassDef def in immediateChildren)
+                foreach (IClassDef def in immediateChildren)
                 {
                     children.Add(def);
-                    foreach (ClassDef child in def.AllChildren)
+                    foreach (IClassDef child in def.AllChildren)
                     {
                         children.Add(child);
                     }
@@ -1093,7 +1093,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 return typeof (object);
             }
-            IPropDef propDef = GetPropDef(propertyName, false);
+            PropDef propDef = (PropDef) GetPropDef(propertyName, false);
             if (propDef != null && propDef.LookupList is NullLookupList)
             {
                 return propDef.PropertyType;
@@ -1208,7 +1208,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public static ClassDef Get<T>() where T : class, IBusinessObject
         {
-            return ClassDefs[typeof (T)];
+            return (ClassDef) ClassDefs[typeof (T)];
         }
     }
 }

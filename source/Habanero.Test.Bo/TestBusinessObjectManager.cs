@@ -1462,7 +1462,7 @@ namespace Habanero.Test.BO
         public void Test_LoadObject_UpdateObjectMan_NonGenericLoad()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
@@ -1498,7 +1498,7 @@ namespace Habanero.Test.BO
         public void Test_LoadObject_ViaCollection_UpdatedObjectMan_NonGeneric()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();

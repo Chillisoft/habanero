@@ -47,10 +47,10 @@ namespace Habanero.Base
         /// </summary>
         string PropertyTypeName { get; set; }
 
-        /// <summary>
-        /// The type of the property, e.g. string
-        /// </summary>
-        Type PropertyType { get; set; }
+        ///// <summary>
+        ///// The type of the property, e.g. string
+        ///// </summary>
+        //Type PropertyType { get; set; }
 
         ///// <summary>
         ///// Gets and sets the property rule relevant to this definition

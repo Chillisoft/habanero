@@ -53,7 +53,7 @@ namespace Habanero.BO.Loaders
         /// <param name="xmlSuperClassDesc">The xml string containing the
         /// super class definition</param>
         /// <returns>Returns the property rule object</returns>
-        public SuperClassDef LoadSuperClassDesc(string xmlSuperClassDesc)
+        public ISuperClassDef LoadSuperClassDesc(string xmlSuperClassDesc)
         {
             return this.LoadSuperClassDesc(this.CreateXmlElement(xmlSuperClassDesc));
         }
@@ -64,9 +64,9 @@ namespace Habanero.BO.Loaders
         /// <param name="xmlSuperClassDesc">The xml element containing the
         /// super class definition</param>
         /// <returns>Returns the property rule object</returns>
-        public SuperClassDef LoadSuperClassDesc(XmlElement xmlSuperClassDesc)
+        public ISuperClassDef LoadSuperClassDesc(XmlElement xmlSuperClassDesc)
         {
-            return (SuperClassDef) this.Load(xmlSuperClassDesc);
+            return (ISuperClassDef) this.Load(xmlSuperClassDesc);
         }
 
         /// <summary>

@@ -78,7 +78,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestClonePropDefCol()
         {
-            ClassDef originalClassDef = LoadClassDef();
+            IClassDef originalClassDef = LoadClassDef();
             IPropDefCol newPropDefCol = originalClassDef.PropDefcol.Clone();
             Assert.AreNotSame(newPropDefCol, originalClassDef.PropDefcol);
             Assert.AreEqual(newPropDefCol, originalClassDef.PropDefcol);
@@ -110,10 +110,10 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreNotEqual(propDefCol1, "bob");
         }
 
-        public static ClassDef LoadClassDef()
+        public static IClassDef LoadClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef def =
+            IClassDef def =
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">

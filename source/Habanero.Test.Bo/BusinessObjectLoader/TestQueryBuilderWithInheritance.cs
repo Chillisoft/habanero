@@ -116,7 +116,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             Entity.LoadDefaultClassDef();
-            ClassDef classDef = Part.LoadClassDef_WithClassTableInheritance();
+            IClassDef classDef = Part.LoadClassDef_WithClassTableInheritance();
             Source source = null;
             //---------------Execute Test ----------------------
             QueryBuilder.PrepareSource(classDef, ref source);
@@ -146,7 +146,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             Entity.LoadDefaultClassDef();
             Part.LoadClassDef_WithClassTableInheritance();
-            ClassDef classDef = Structure.Engine.LoadClassDef_WithClassTableInheritance();
+            IClassDef classDef = Structure.Engine.LoadClassDef_WithClassTableInheritance();
             Source source = null;
             //---------------Execute Test ----------------------
             QueryBuilder.PrepareSource(classDef, ref source);

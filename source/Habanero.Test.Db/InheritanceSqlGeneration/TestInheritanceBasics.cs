@@ -27,9 +27,9 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
     [TestFixture]
     public class TestInheritanceBasics
     {
-        private ClassDef shapeClassDef;
-        private ClassDef circleClassDef;
-        private ClassDef circleNoPrimaryKeyClassDef;
+        private IClassDef shapeClassDef;
+        private IClassDef circleClassDef;
+        private IClassDef circleNoPrimaryKeyClassDef;
         private IBusinessObject objShape;
         private BusinessObject objCircle;
         private BusinessObject objCircleNoPrimaryKey;

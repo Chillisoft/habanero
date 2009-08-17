@@ -28,6 +28,8 @@ using Habanero.Util;
 
 namespace Habanero.DB
 {
+
+
     /// <summary>
     /// Provides a lookup-list sourced from a database using the
     /// sql statement provided.
@@ -37,7 +39,7 @@ namespace Habanero.DB
     /// The sql statement will need to load two fields in correct order:
     /// a Guid (such as the object ID or primary key) and a string.
     /// </summary>
-    public class DatabaseLookupList : ILookupListWithClassDef
+    public class DatabaseLookupList : ILookupListWithClassDef, IDatabaseLookupList
     {
         private string _statement;
         private Type _lookupObjectType;
@@ -99,7 +101,7 @@ namespace Habanero.DB
         public string AssemblyName
         {
             get { return _assemblyName; }
-            protected set
+            set
             {
                 if (_assemblyName != value)
                 {
@@ -116,7 +118,7 @@ namespace Habanero.DB
         public string ClassName
         {
             get { return _className; }
-            protected set
+            set
             {
                 if (_className != value)
                 {

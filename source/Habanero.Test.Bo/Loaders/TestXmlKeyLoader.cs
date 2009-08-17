@@ -32,14 +32,17 @@ namespace Habanero.Test.BO.Loaders
     public class TestXmlKeyLoader
     {
         private XmlKeyLoader _xmlKeyLoader;
-        private PropDefCol _propDefCol;
+        private IPropDefCol _propDefCol;
 
         [SetUp]
-        public void SetupTest()
-        {
+        public void SetupTest() {
+            Initialise();
+        }
+        
+        protected void Initialise() {
             _xmlKeyLoader = new XmlKeyLoader(new DtdLoader(), GetDefClassFactory());
-            _propDefCol = new PropDefCol();
-            _propDefCol.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
+            _propDefCol = GetDefClassFactory().CreatePropDefCol();
+            _propDefCol.Add(GetDefClassFactory().CreatePropDef("TestProp", "System", "String", PropReadWriteRule.ReadWrite, "TestProp", null, false, false, 255, null, null, false));
         }
 
         protected virtual IDefClassFactory GetDefClassFactory()
@@ -51,7 +54,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadSimpleKey()
         {
-            KeyDef def = _xmlKeyLoader.LoadKey(@"<key><prop name=""TestProp"" /></key>", _propDefCol);
+            IKeyDef def = _xmlKeyLoader.LoadKey(@"<key><prop name=""TestProp"" /></key>", _propDefCol);
             Assert.AreEqual(1, def.Count);
             Assert.IsFalse(def.IgnoreIfNull);
         }
@@ -59,18 +62,38 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadKeyWithMultipleProps()
         {
-            _propDefCol.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
-            KeyDef def =
+            _propDefCol.Add(GetDefClassFactory().CreatePropDef("TestProp2", "System", "String", PropReadWriteRule.ReadWrite, null, null, false, false, 255, null, null, false));
+            IKeyDef def =
                 _xmlKeyLoader.LoadKey(
                     @"<key name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>", _propDefCol);
             Assert.AreEqual(2, def.Count);
-            Assert.AreEqual("Key1_TestProp_TestProp2", def.KeyName);
+
+        }
+
+        [Test]
+        public virtual void TestLoadKeyWithMultipleProps_UsesKeyName()
+        {
+            _propDefCol.Add(GetDefClassFactory().CreatePropDef("TestProp2", "System", "String", PropReadWriteRule.ReadWrite, null, null, false, false, 255, null, null, false));
+            IKeyDef def =
+                _xmlKeyLoader.LoadKey(
+                    @"<key name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>", _propDefCol);
+            Assert.AreEqual("Key1", def.KeyName);
+        }
+
+        [Test]
+        public virtual void TestLoadKeyWithMultipleProps_WithNoKeyName_UsesPropertyNames()
+        {
+            _propDefCol.Add(GetDefClassFactory().CreatePropDef("TestProp2", "System", "String", PropReadWriteRule.ReadWrite, null, null, false, false, 255, null, null, false));
+            IKeyDef def =
+                _xmlKeyLoader.LoadKey(
+                    @"<key><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>", _propDefCol);
+            Assert.AreEqual("TestProp_TestProp2", def.KeyName);
         }
 
         [Test]
         public void TestLoadKeyWithIgnoreNulls()
         {
-            KeyDef def =
+            IKeyDef def =
                 _xmlKeyLoader.LoadKey(@"<key name=""Key1"" ignoreIfNull=""true""><prop name=""TestProp"" /></key>",
                                   _propDefCol);
             Assert.IsTrue(def.IgnoreIfNull);
@@ -114,7 +137,7 @@ namespace Habanero.Test.BO.Loaders
         {
             //This test was changed to not expect an exception anymore because the 
             // prop could come from an inherited class.
-            KeyDef keyDef = _xmlKeyLoader.LoadKey(@"
+            IKeyDef keyDef = _xmlKeyLoader.LoadKey(@"
                 <key name=""Key1"">
                     <prop name=""doesntexist"" />
                 </key>", _propDefCol);

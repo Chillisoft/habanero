@@ -40,11 +40,15 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlBusinessObjectLookupListLoader(new DtdLoader(), GetDefClassFactory());
+            Initialise();
             ClassDef.ClassDefs.Clear();
         }
 
-                protected virtual IDefClassFactory GetDefClassFactory()
+        protected void Initialise() {
+            itsLoader = new XmlBusinessObjectLookupListLoader(new DtdLoader(), GetDefClassFactory());
+        }
+
+        protected virtual IDefClassFactory GetDefClassFactory()
         {
             return new DefClassFactory();
         }
@@ -60,12 +64,11 @@ namespace Habanero.Test.BO.Loaders
             //---------------Execute Test ----------------------
             ILookupList lookupList = itsLoader.LoadLookupList(xml);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(BusinessObjectLookupList), lookupList);
-            BusinessObjectLookupList source = (BusinessObjectLookupList)lookupList;
+            Assert.IsInstanceOfType(typeof(IBusinessObjectLookupList), lookupList);
+            IBusinessObjectLookupList source = (IBusinessObjectLookupList)lookupList;
             //Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
             Assert.AreEqual("MyBO", source.ClassName);
             Assert.AreEqual("Habanero.Test", source.AssemblyName);
-            Assert.AreEqual(null, source.Criteria);
 
         }
 
@@ -78,23 +81,22 @@ namespace Habanero.Test.BO.Loaders
             //---------------Execute Test ----------------------
             ILookupList lookupList = itsLoader.LoadLookupList(xml);
             //---------------Test Result -----------------------
-            BusinessObjectLookupList source = (BusinessObjectLookupList)lookupList;
-            Assert.AreEqual("TestProp = 'Test'", source.Criteria.ToString());
+            IBusinessObjectLookupList source = (IBusinessObjectLookupList)lookupList;
+            Assert.AreEqual("TestProp=Test", source.CriteriaString);
         }
 
         [Test]
         public void TestBusinessObjectLookupListWithSort()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             const string xml = @"<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" sort=""TestProp asc"" />";
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             ILookupList lookupList = itsLoader.LoadLookupList(xml);
             //---------------Test Result -----------------------
-            BusinessObjectLookupList source = (BusinessObjectLookupList)lookupList;
-            Assert.AreEqual("MyBO.TestProp ASC", source.OrderCriteria.ToString());
+            IBusinessObjectLookupList source = (IBusinessObjectLookupList)lookupList;
+            Assert.AreEqual("TestProp asc", source.SortString);
         }
     }
 }

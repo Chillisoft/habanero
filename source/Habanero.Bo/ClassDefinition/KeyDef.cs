@@ -116,7 +116,9 @@ namespace Habanero.BO.ClassDefinition
                 {
                     _keyName = "";
                     _buildKeyName = true;
-                }
+                } else {
+                   _buildKeyName = false;
+                   }
                 UpdateKeyNameBuildt();
             }
         }

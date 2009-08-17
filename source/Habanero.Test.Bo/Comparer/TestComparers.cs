@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
@@ -29,7 +30,7 @@ namespace Habanero.Test.BO.Comparer
     public class TestComparers
     {
         private BusinessObjectCollection<MultiPropBO> _boCol;
-        private ClassDef _classDef;
+        private IClassDef _classDef;
 
         [TestFixtureSetUp]
         public void DefineBO()

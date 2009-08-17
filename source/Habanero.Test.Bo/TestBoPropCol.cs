@@ -143,7 +143,7 @@ namespace Habanero.Test.BO
         {
             //--------------- Set up test pack ------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             MyBO myBO = new MyBO();
             //--------------- Test Preconditions ----------------
 

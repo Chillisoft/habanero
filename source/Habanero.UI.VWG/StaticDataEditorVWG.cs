@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
@@ -59,7 +60,7 @@ namespace Habanero.UI.VWG
         /// <param name="itemName">The name of the item as it appears to the user</param>
         /// <param name="classDef">The class definition holding a grid def used to
         /// construct the grid for that type</param>
-        public void AddItem(string itemName, ClassDef classDef)
+        public void AddItem(string itemName, IClassDef classDef)
         {
             _staticDataEditorManager.AddItem(itemName, classDef);
         }

@@ -40,12 +40,12 @@ namespace Habanero.Test
         {
         }
 
-        protected internal static ClassDef GetClassDef()
+        protected internal static IClassDef GetClassDef()
         {
             return !ClassDef.IsDefined(typeof (Car)) ? CreateClassDef() : ClassDef.ClassDefs[typeof (Car)];
         }
 
-        protected override ClassDef ConstructClassDef()
+        protected override IClassDef ConstructClassDef()
         {
             return GetClassDef();
         }

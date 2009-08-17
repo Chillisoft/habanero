@@ -324,10 +324,10 @@ namespace Habanero.Test.BO
         //}
 
 
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPersonNumberGenerator"" assembly=""Habanero.Test.BO"" table=""contact_person"">

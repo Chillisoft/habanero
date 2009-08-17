@@ -575,10 +575,10 @@ namespace Habanero.Test.BO.Security
 
     internal class MyBo_PropAuthenticationStub : BusinessObject
     {
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory() );
-            ClassDef itsClassDef = itsLoader.LoadClass
+            IClassDef itsClassDef = itsLoader.LoadClass
                 (@"
 				<class name=""MyBoAuthenticationStub"" assembly=""Habanero.Test.BO"">
 					<property  name=""MyBoAuthenticationStubID"" type=""Guid""/>

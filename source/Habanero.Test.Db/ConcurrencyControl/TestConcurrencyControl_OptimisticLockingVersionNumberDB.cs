@@ -230,10 +230,10 @@ namespace Habanero.Test.DB.ConcurrencyControl
                                                                        propUserLastUpdated, propMachineLastUpdated,
                                                                        propVersionNumber));
         }
-        public static ClassDef LoadDefaultClassDef()
+        public static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            ClassDef itsClassDef =
+            IClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
 				<class name=""Habanero.Test.DB.ConcurrencyControl.ContactPersonOptimisticLockingVersionNumberDB"" assembly=""Habanero.Test.DB"" table=""contact_person"">

@@ -259,8 +259,9 @@ namespace Habanero.Test.BO
         {
             BOProp boProp = new BOProp(_propDef);
             const string invalid = "Invalid";
+            PropDef propDef = (PropDef) boProp.PropDef;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             try

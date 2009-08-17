@@ -311,7 +311,7 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOPropLookupList(_propDef_int);
             const string invalid = "Invalid";
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (int), _propDef_int.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -334,7 +334,7 @@ namespace Habanero.Test.BO
         {
             BOProp boProp = new BOPropLookupList(_propDef_int);
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (int), _propDef_int.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -359,7 +359,7 @@ namespace Habanero.Test.BO
             const int originalPropValue = 99;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.Value = _validLookupValue;
@@ -375,7 +375,7 @@ namespace Habanero.Test.BO
             const int originalPropValue = 99;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.Value = _validLookupValue;
@@ -394,7 +394,7 @@ namespace Habanero.Test.BO
             savedBoWithIntID.Save();
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             
             //---------------Execute Test ----------------------
             boProp.Value = savedBoWithIntID;
@@ -416,7 +416,7 @@ namespace Habanero.Test.BO
             savedBoWithIntID.IntID = TestUtil.GetRandomInt();
             savedBoWithIntID.TestField = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             //---------------Execute Test ----------------------
             boProp.Value = savedBoWithIntID;
             //---------------Test Result -----------------------
@@ -440,7 +440,7 @@ namespace Habanero.Test.BO
             int originalPropValue = _validIntID;
             businessObject.SetPropertyValue(_propDef_int.PropertyName, originalPropValue);
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsInstanceOfType(typeof (BOPropLookupList), boProp);
@@ -470,7 +470,7 @@ namespace Habanero.Test.BO
             const int originalPropValue = 99;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             businessObject.SetPropertyValue(boProp.PropertyName, _validBusinessObject.ToString());
@@ -488,7 +488,7 @@ namespace Habanero.Test.BO
             const int originalPropValue = 99;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (int), _propDef_int.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             businessObject.SetPropertyValue(boProp.PropertyName, _validLookupValue);
@@ -523,7 +523,7 @@ namespace Habanero.Test.BO
             object expctedID = bo1.IntID;
             bo1.Save();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof (int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof (int), _propDef_int.PropertyType);
             Assert.IsNull(boProp.Value);
             Assert.IsFalse(bo1.Status.IsNew);
             Assert.IsNotNull(bo1.IntID);
@@ -539,14 +539,14 @@ namespace Habanero.Test.BO
         public void Test_GetBusinessObjectForProp()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOPropLookupList boProp = (BOPropLookupList) businessObject.Props[_propDef_int.PropertyName];
             BOWithIntID bo1 = new BOWithIntID {TestField = "PropValue", IntID = 55};
             object expctedID = bo1.IntID;
             bo1.Save();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             Assert.IsNull(boProp.Value);
             Assert.IsFalse(bo1.Status.IsNew);
             Assert.IsNotNull(bo1.IntID);
@@ -567,14 +567,14 @@ namespace Habanero.Test.BO
             DatabaseConnection.CurrentConnection.GetConnection();
             BORegistry.DataAccessor = new DataAccessorDB();
             BOWithIntID.DeleteAllBOWithIntID();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOPropLookupList boProp = (BOPropLookupList) businessObject.Props[_propDef_int.PropertyName];
             BOWithIntID bo1 = new BOWithIntID {TestField = "PropValue", IntID = 55};
             object expectedID = bo1.IntID;
             bo1.Save();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(int), _propDef_int.PropertyType);
             Assert.IsNull(boProp.Value);
             Assert.IsFalse(bo1.Status.IsNew);
             Assert.IsNotNull(bo1.IntID);
@@ -589,7 +589,7 @@ namespace Habanero.Test.BO
         public void Test_InMemoryLoader_LoadWithIntID()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo1 = new BOWithIntID { TestField = "PropValue", IntID = 55 };
             bo1.Save();
             IPrimaryKey id = bo1.ID;
@@ -609,7 +609,7 @@ namespace Habanero.Test.BO
             //Assert.Fail("Not yet implemented");
             //Check Validation of lookup list does not make invalid
             ClassDef.ClassDefs.Clear();
-            ClassDef classDefWithIntID = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef classDefWithIntID = BOWithIntID.LoadClassDefWithIntID();
             BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
             BOWithIntID unSavedBoWithIntID = new BOWithIntID();
             unSavedBoWithIntID.IntID = TestUtil.GetRandomInt();
@@ -662,7 +662,7 @@ namespace Habanero.Test.BO
             //Assert.Fail("Not yet implemented");
             //Check Validation of lookup list does not make invalid
             ClassDef.ClassDefs.Clear();
-            ClassDef classDefWithIntID = BOWithIntID.LoadClassDefWithIntID();
+            IClassDef classDefWithIntID = BOWithIntID.LoadClassDefWithIntID();
             BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
             BOWithIntID unSavedBoWithIntID = new BOWithIntID {IntID = TestUtil.GetRandomInt(), TestField = TestUtil.GetRandomString()};
             unSavedBoWithIntID.Save();
