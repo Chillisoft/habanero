@@ -131,9 +131,17 @@ namespace Habanero.Console
         {
             if (DatabaseConnection.CurrentConnection != null) return;
             if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
-            if (_privateKey != null) _databaseConfig.SetPrivateKey(_privateKey);
-            DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
-            BORegistry.DataAccessor = new DataAccessorDB();
+            string vendor = _databaseConfig.Vendor;
+            if (string.IsNullOrEmpty(vendor) || vendor.ToLower().Contains("memory"))
+            {
+                BORegistry.DataAccessor = new DataAccessorInMemory();
+            }
+            else
+            {
+                if (_privateKey != null) _databaseConfig.SetPrivateKey(_privateKey);
+                DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
+                BORegistry.DataAccessor = new DataAccessorDB();
+            }
         }
 
         /// <summary>
