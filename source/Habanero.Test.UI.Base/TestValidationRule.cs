@@ -46,10 +46,8 @@ namespace Habanero.Test.UI.Base
         public void TestDataTypes()
         {
             //---------------Set up test pack-------------------
-            String myString = "Hello World";
-            int myInt = 9;
-
-
+            const string myString = "Hello World";
+            const int myInt = 9;
             //---------------Execute Test ----------------------
             bool result1 = ValidationUtil.CompareTypes(myString, ValidationDataType.String);
             bool result2 = ValidationUtil.CompareTypes(Convert.ToString(myInt), ValidationDataType.String);
@@ -65,9 +63,9 @@ namespace Habanero.Test.UI.Base
         public void TestCompareStrings()
         {
             //---------------Set up test pack-------------------
-            string firstString = "FirstString";
-            string sameAsFirstString = "FirstString";
-            string myString = "Hello World";
+            const string firstString = "FirstString";
+            const string sameAsFirstString = "FirstString";
+            const string myString = "Hello World";
             ValidationRule testRule = new ValidationRule();
             testRule.Operator = ValidationCompareOperator.Equal;
             testRule.DataType = ValidationDataType.String;
@@ -88,9 +86,9 @@ namespace Habanero.Test.UI.Base
         public void TestCompareIntegers()
         {
             //---------------Set up test pack-------------------
-            int firstInt = 10;
-            int sameAsFirstInt = 10;
-            int myInt = 80;
+            const int firstInt = 10;
+            const int sameAsFirstInt = 10;
+            const int myInt = 80;
             ValidationRule testRule = new ValidationRule();
             testRule.Operator = ValidationCompareOperator.Equal;
             testRule.DataType = ValidationDataType.Integer;
@@ -124,7 +122,7 @@ namespace Habanero.Test.UI.Base
         public void TestIsRequiredValdiation()
         {
             //---------------Set up test pack-------------------
-            string myString = "Hello";
+            const string myString = "Hello";
             ValidationRule testRule = new ValidationRule();
             testRule.IsRequired = true;
 

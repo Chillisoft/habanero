@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
 namespace Habanero.UI.Base
 {
@@ -82,10 +83,19 @@ namespace Habanero.UI.Base
             IButton button = this.AddButton(buttonName);
             button.Name = buttonName;
             button.Text = buttonText;
-            button.Click += clickHandler;
+            if (clickHandler != null) button.Click += (sender,e) =>
+            {
+                try
+                {
+                    clickHandler(sender, e);
+                }
+                catch (Exception ex)
+                {
+                    GlobalRegistry.UIExceptionNotifier.Notify(ex, "Error performing action", "Error");
+                }
+            };
+
             return button;
         }
-
-       
     }
 }

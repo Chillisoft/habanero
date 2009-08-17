@@ -19,6 +19,7 @@
 
 using System;
 using System.Drawing;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
@@ -34,6 +35,7 @@ namespace Habanero.Test.UI.Base
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
 
         [TestFixtureSetUp]
@@ -52,7 +54,7 @@ namespace Habanero.Test.UI.Base
         protected abstract void AddControlToForm(IControlHabanero cntrl);
 
         [TestFixture]
-        public class TestButtonControlWin : TestButtonGroupControl
+        public class TestButtonGroupControlWin : TestButtonGroupControl
         {
             protected override IControlFactory GetControlFactory()
             {
@@ -73,7 +75,7 @@ namespace Habanero.Test.UI.Base
             //    //    return readOnlyGridControlWin;
             //    //}
             [Test]
-            public void TestSetDefaultButton_WinOnly()
+            public void Test_SetDefaultButton_WinOnly()
             {
                 //---------------Set up test pack-------------------
                 IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
@@ -87,7 +89,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestUseMnemonic_WinOnly()
+            public void Test_UseMnemonic_WinOnly()
             {
                 //---------------Set up test pack-------------------
                 IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
@@ -98,11 +100,8 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(btn.UseMnemonic);
             }
 
-
-            //}
-
             [Test]
-            public void TestButtonIndexer_WithASpecialCharactersInTheName_Failing()
+            public void Test_ButtonIndexer_WithASpecialCharactersInTheName_Failing()
             {
                 //---------------Set up test pack-------------------
                 IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
@@ -115,7 +114,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestButtonControlVWG : TestButtonGroupControl
+        public class TestButtonGroupControlVWG : TestButtonGroupControl
         {
             protected override IControlFactory GetControlFactory()
             {
@@ -132,7 +131,7 @@ namespace Habanero.Test.UI.Base
             // we need to learn how to set this up and the change test assert
             // to commented out assert.
             [Test]
-            public void TestSetDefaultButton()
+            public void Test_SetDefaultButton()
             {
                 //---------------Set up test pack-------------------
                 IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
@@ -145,8 +144,9 @@ namespace Habanero.Test.UI.Base
                 Assert.AreSame(null, frm.AcceptButton);
                 //Assert.AreSame(btn, frm.AcceptButton);
             }
+
             [Test]
-            public void TestButtonIndexer_WithASpecialCharactersInTheName_Failing()
+            public void Test_ButtonIndexer_WithASpecialCharactersInTheName_Failing()
             {
                 //---------------Set up test pack-------------------
                 IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
@@ -172,55 +172,58 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestAddButton()
+        public void Test_AddButton_ShouldCreateButtonAndAddToControl()
         {
             //---------------Set up test pack-------------------
-            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-            //---------------Execute Test ----------------------
             const string buttonText = "Test";
+            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, buttons.Controls.Count);
+            //---------------Execute Test ----------------------
             IButton btnTest = buttons.AddButton(buttonText);
             ////---------------Test Result -----------------------
             Assert.IsNotNull(btnTest);
             Assert.AreEqual(buttonText, btnTest.Text);
-            Assert.AreEqual(1, buttons.Controls.Count);
             Assert.AreEqual(buttonText, btnTest.Name);
+            Assert.AreEqual(1, buttons.Controls.Count);
+            Assert.AreSame(btnTest, buttons.Controls[0]);
         }
 
         [Test]
-        public void TestAddButton_TextDifferentThanName()
+        public void Test_AddButton_WhenTextDifferentThanName_ShouldHaveCorrectTextAndName()
         {
             //---------------Set up test pack-------------------
-            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-            //---------------Execute Test ----------------------
             const string buttonText = "Test";
-            const string buttonname = "buttonName";
-            bool clicked = false;
-            IButton btnTest = buttons.AddButton(buttonname, buttonText, delegate { clicked = true; });
-
-            btnTest.PerformClick();
-
-            ////---------------Test Result -----------------------
+            const string buttonName = "buttonName";
+            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, buttons.Controls.Count);
+            //---------------Execute Test ----------------------
+            IButton btnTest = buttons.AddButton(buttonName, buttonText, null);
+            //---------------Test Result -----------------------
             Assert.IsNotNull(btnTest);
             Assert.AreEqual(buttonText, btnTest.Text);
+            Assert.AreEqual(buttonName, btnTest.Name);
             Assert.AreEqual(1, buttons.Controls.Count);
-            Assert.AreEqual(buttonname, btnTest.Name);
+        }
 
+        [Test]
+        public void Test_AddButton_ShouldLinkUpClickDelegate()
+        {
+            //---------------Set up test pack-------------------
+            const string buttonText = "Test";
+            const string buttonname = "buttonName";
+            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+            bool clicked = false;
+            //---------------Execute Test ----------------------
+            IButton btnTest = buttons.AddButton(buttonname, buttonText, delegate { clicked = true; });
+            ////---------------Test Result -----------------------
+            btnTest.PerformClick();
             Assert.IsTrue(clicked);
         }
 
         [Test]
-        public void TestButtonsIndexer()
-        {
-            //---------------Set up test pack-------------------
-            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-            //---------------Execute Test ----------------------
-            IButton btn = buttons.AddButton("Test");
-            //---------------Test Result -----------------------
-            Assert.AreSame(btn, buttons["Test"]);
-        }
-
-        [Test]
-        public void TestButtons_ControlsMethod()
+        public void Test_AddButtons_ShouldAddToControls()
         {
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
@@ -233,22 +236,62 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestAdd_2Buttons_ControlsMethod()
+        public void Test_AddButton_WithTwoButtons_ShouldHaveTwoControls()
         {
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
             AddControlToForm(buttons);
-            //---------------Execute Test ----------------------
             IButton btn = buttons.AddButton("Test");
+            //---------------Execute Test ----------------------
             buttons.AddButton("Test2");
-
             //---------------Test Result -----------------------
             Assert.AreEqual(2, buttons.Controls.Count);
             Assert.AreSame(btn, buttons.Controls[0]);
         }
 
         [Test]
-        public void TestButtonIndexer_WithASpecialCharactersInTheName()
+        public void Test_ButtonsIndexer_ShouldReturnButtonByName()
+        {
+            //---------------Set up test pack-------------------
+            const string buttonName = "Test";
+            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+            IButton btn = buttons.AddButton(buttonName);
+            //---------------Execute Test ----------------------
+            IButton returnedButton = buttons[buttonName];
+            //---------------Test Result -----------------------
+            Assert.AreSame(btn, returnedButton);
+        }
+
+        [Test]
+        public void Test_ButtonsIndexer_WhenManyButtons_ShouldReturnButtonByName()
+        {
+            //---------------Set up test pack-------------------
+            const string buttonName = "Test";
+            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+            buttons.AddButton(TestUtil.GetRandomString());
+            IButton btn = buttons.AddButton(buttonName);
+            buttons.AddButton(TestUtil.GetRandomString());
+            //---------------Execute Test ----------------------
+            IButton returnedButton = buttons[buttonName];
+            //---------------Test Result -----------------------
+            Assert.AreSame(btn, returnedButton);
+        }
+
+        [Test]
+        public void Test_ButtonsIndexer_WhenNotFound_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            const string buttonName = "Test";
+            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+            IButton btn = buttons.AddButton(buttonName);
+            //---------------Execute Test ----------------------
+            IButton returnedButton = buttons["NotFound"];
+            //---------------Test Result -----------------------
+            Assert.IsNull(returnedButton);
+        }
+
+        [Test]
+        public void Test_ButtonIndexer_WithSpecialCharactersInTheName_ShouldReturnCorrectButton()
         {
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
@@ -261,7 +304,8 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void TestHideButton()
+        // Note: Mark- This test seems pointless. Why do we need it?
+        public void Test_HideButton()
         {
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
@@ -274,12 +318,12 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestAddButton_CustomButtonEventHandler()
+        public void Test_AddButton_WithCustomButtonEventHandler()
         {
             //---------------Set up test pack-------------------
+            const string buttonName = "Test";
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
             //---------------Execute Test ----------------------
-            const string buttonName = "Test";
             IButton btnTest = buttons.AddButton(buttonName, delegate {  });
             //---------------Test Result -----------------------
             Assert.IsNotNull(btnTest);
@@ -289,21 +333,44 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestCustomButtonEventHandler()
+        public void Test_CustomButtonEventHandler()
         {
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-            bool clickEventFired = false;
-            IButton btn = buttons.AddButton("Test", delegate { clickEventFired = true; });
-
+            EventHandler eventHandler = MockRepository.GenerateStub<EventHandler>();
+            IButton btn = buttons.AddButton("Test", eventHandler);
             //---------------Execute Test ----------------------
             btn.PerformClick();
             //---------------Test Result -----------------------
-            Assert.IsTrue(clickEventFired, "The click event did not fire");
+            eventHandler.AssertWasCalled(handler => handler(Arg<object>.Is.Same(btn), Arg<EventArgs>.Is.NotNull));
         }
 
         [Test]
-        public void TestAddButton_RightAlignment()
+        public void Test_CustomButtonEventHandler_WhenExceptionThrown_ShouldBeCaughtByUIExceptionNotifier()
+        {
+            //---------------Set up test pack-------------------
+            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+            bool clickEventFired = false;
+            Exception exception = new Exception();
+            IButton btn = buttons.AddButton("Test", delegate
+            {
+                clickEventFired = true;
+                throw exception;
+            });
+            //---------------Execute Test ----------------------
+            btn.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(clickEventFired, "The click event should have fired");
+            Assert.AreEqual(1, recordingExceptionNotifier.Exceptions.Count);
+            Assert.AreSame(exception, recordingExceptionNotifier.Exceptions[0].Exception);
+            Assert.AreSame("Error performing action", recordingExceptionNotifier.Exceptions[0].FurtherMessage);
+            Assert.AreSame("Error", recordingExceptionNotifier.Exceptions[0].Title);
+        }
+
+        [Test]
+        public void Test_AddButton_ShouldBeRightAligned()
         {
             //---------------Set up test pack-------------------
 
@@ -318,7 +385,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestAddButton_RightAlignment_ButtonBiggerthanGroup()
+        public void Test_AddButton_WhenButtonBiggerthanGroup_ShouldBeRightAligned()
         {
             //---------------Set up test pack-------------------
 
@@ -333,18 +400,28 @@ namespace Habanero.Test.UI.Base
         }
         
         [Test]
-        public void TestButtonGroupControlUsesButtonSizePolicy()
+        public void Test_ButtonSizePolicy_GetAndSet()
         {
             //---------------Set up test pack-------------------
             IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
             IButtonSizePolicy buttonSizePolicy = MockRepository.GenerateStub<IButtonSizePolicy>();
-
             //---------------Execute Test ----------------------
             buttonGroupControl.ButtonSizePolicy = buttonSizePolicy;
-            buttonGroupControl.AddButton("");
-
             //---------------Test Result -----------------------
-            buttonSizePolicy.Expect(policy => policy.RecalcButtonSizes(buttonGroupControl.Controls));
+            Assert.AreSame(buttonSizePolicy, buttonGroupControl.ButtonSizePolicy);
+        }
+        
+        [Test]
+        public void Test_ButtonSizePolicy_ShouldBeUsedByButtonGroupControl()
+        {
+            //---------------Set up test pack-------------------
+            IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
+            IButtonSizePolicy buttonSizePolicy = MockRepository.GenerateStub<IButtonSizePolicy>();
+            buttonGroupControl.ButtonSizePolicy = buttonSizePolicy;
+            //---------------Execute Test ----------------------
+            buttonGroupControl.AddButton("");
+            //---------------Test Result -----------------------
+            buttonSizePolicy.AssertWasCalled(policy => policy.RecalcButtonSizes(Arg<IControlCollection>.Is.NotNull));
         }
     }
 }
