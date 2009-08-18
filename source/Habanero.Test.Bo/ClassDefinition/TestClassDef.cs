@@ -1070,5 +1070,22 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestAutoDisplayName()
+        {
+            XmlClassLoader classLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+            IClassDef def = classLoader.LoadClass(
+                    @"
+				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			");
+            Assert.AreEqual("Test Class", def.DisplayName);
+        }
+
+
     }
 }

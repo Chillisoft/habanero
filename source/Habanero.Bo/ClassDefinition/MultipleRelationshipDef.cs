@@ -29,12 +29,6 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class MultipleRelationshipDef : RelationshipDef
     {
-        /// <summary>
-        /// The timout in milliseconds. 
-        /// The collection of Business Objects will not be automatically refreshed 
-        /// from the DB if the timeout has not expired
-        /// </summary>
-        public int TimeOut { get; private set; }
         // protected int _minNoOfRelatedObjects;
        // protected int _maxNoOfRelatedObjects;
 
@@ -62,6 +56,7 @@ namespace Habanero.BO.ClassDefinition
             : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
+            _orderCriteriaString = orderBy;
             _orderCriteria = OrderCriteria.FromString( orderBy);
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             // _maxNoOfRelatedObjects = maxNoOfRelatedObjects;
@@ -91,7 +86,8 @@ namespace Habanero.BO.ClassDefinition
                     InsertParentAction.InsertRelationship, RelationshipType.Association)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
-    	    _orderCriteria = OrderCriteria.FromString(orderBy);
+            _orderCriteriaString = orderBy; 
+            _orderCriteria = OrderCriteria.FromString(orderBy);
 			//_minNoOfRelatedObjects = minNoOfRelatedObjects;
 			//_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
 
@@ -120,6 +116,7 @@ namespace Habanero.BO.ClassDefinition
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
             TimeOut = timeout;
+            _orderCriteriaString = orderBy; 
             _orderCriteria = OrderCriteria.FromString(orderBy);
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             //_maxNoOfRelatedObjects = maxNoOfRelatedObjects;

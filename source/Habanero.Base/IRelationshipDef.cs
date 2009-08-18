@@ -148,11 +148,6 @@ namespace Habanero.Base
         string RelatedObjectClassName { get; }
 
         /// <summary>
-        /// The class type of the related object
-        /// </summary>
-        Type RelatedObjectClassType { get; }
-
-        /// <summary>
         /// The related key definition. <see cref="RelKeyDef"/>
         /// </summary>
         IRelKeyDef RelKeyDef { get; }
@@ -182,6 +177,12 @@ namespace Habanero.Base
         OrderCriteria OrderCriteria { get; }
 
         ///<summary>
+        /// The order by clause that the related object will be sorted by.  This is the raw order criteria as loaded or set. Use <see cref="OrderCriteria"/>
+        /// to get the parsed criteria object.   In the case of a single relationship this will return a null string
+        ///</summary>
+        string OrderCriteriaString { get; }
+
+        ///<summary>
         /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
         /// <see cref="RelationshipType"/>
         ///</summary>
@@ -208,6 +209,13 @@ namespace Habanero.Base
         /// type parametrised (ie has multiple classdefs for one .net type)
         /// </summary>
         string RelatedObjectTypeParameter { get; set; }
+
+        /// <summary>
+        /// The timout in milliseconds. 
+        /// The collection of Business Objects will not be automatically refreshed 
+        /// from the DB if the timeout has not expired
+        /// </summary>
+        int TimeOut { get; set;  }
 
         /// <summary>
         /// Create and return a new Relationship based on the relationship definition.

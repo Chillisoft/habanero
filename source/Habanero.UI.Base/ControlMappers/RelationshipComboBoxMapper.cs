@@ -144,7 +144,7 @@ namespace Habanero.UI.Base
 
             if (_singleRelationship == null) return;
 
-            IRelationshipDef relationshipDef = _singleRelationship.RelationshipDef;
+            RelationshipDef relationshipDef = (RelationshipDef) _singleRelationship.RelationshipDef;
             if (newBusinessObjectCollection != null && 
                 relationshipDef.RelatedObjectClassType != newBusinessObjectCollection.ClassDef.ClassType)
             {

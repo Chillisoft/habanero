@@ -20,7 +20,6 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -33,7 +32,7 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlRelationshipLoader
     {
-        private const string singleRelationshipString = @"
+        private const string SingleRelationshipString = @"
 					<relationship 
 						name=""TestRelationship"" 
 						type=""single"" 
@@ -44,7 +43,7 @@ namespace Habanero.Test.BO.Loaders
 
 					</relationship>";
 
-        private const string multipleRelationshipString = @"
+        private const string MultipleRelationshipString = @"
 					<relationship 
 						name=""TestRelationship"" 
 						type=""multiple"" 
@@ -55,31 +54,32 @@ namespace Habanero.Test.BO.Loaders
 						<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
 
-        private XmlRelationshipLoader itsLoader;
-        private PropDefCol itsPropDefs;
+        private XmlRelationshipLoader _loader;
+        private IPropDefCol _propDefs;
 
         [SetUp]
-        public void SetupTest()
-        {
-            itsLoader = new XmlRelationshipLoader(new DtdLoader(), GetDefClassFactory(), "TestClass");
-            itsPropDefs = new PropDefCol();
-            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
+        public void SetupTest() {
+            Initialise();
+        }
+
+        protected void Initialise() {
+            _loader = new XmlRelationshipLoader(new DtdLoader(), GetDefClassFactory(), "TestClass");
+            _propDefs = GetDefClassFactory().CreatePropDefCol();
+            _propDefs.Add(GetDefClassFactory().CreatePropDef("TestProp", "System", "String", PropReadWriteRule.ReadWrite, null, null, false, false, 255, null, null, false));
         }
 
         protected virtual IDefClassFactory GetDefClassFactory()
         {
             return new DefClassFactory();
         }
+
         [Test]
         public void TestLoadRelationship()
         {
-            RelationshipDef relDef = itsLoader.LoadRelationship(singleRelationshipString, itsPropDefs);
-            Assert.AreEqual(typeof (SingleRelationshipDef), relDef.GetType(),
-                            "The relationship should be of type SingleRelationshipDef");
-            Assert.AreEqual(typeof (TestRelatedClass), relDef.RelatedObjectClassType,
-                            "The related classtype should be TestRelatedClass");
-            Assert.IsTrue(relDef.KeepReferenceToRelatedObject,
-                          "By default, the reference should be kept (according to the dtd)");
+            IRelationshipDef relDef = _loader.LoadRelationship(SingleRelationshipString, _propDefs);
+            Assert.AreEqual("Habanero.Test.BO.Loaders.TestRelatedClass", relDef.RelatedObjectClassName, "The related classtype should be TestRelatedClass");
+            Assert.AreEqual("Habanero.Test.BO", relDef.RelatedObjectAssemblyName, "The related classtype should be TestRelatedClass");
+            Assert.IsTrue(relDef.KeepReferenceToRelatedObject, "By default, the reference should be kept (according to the dtd)");
             Assert.AreEqual(1, relDef.RelKeyDef.Count, "There should be one RelPropDef in the RelKeyDef");
             Assert.IsNotNull(relDef.RelKeyDef["TestProp"],
                              "There should be a RelPropDef with name TestProp in the RelKeyDef");
@@ -90,80 +90,65 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadMultipleRelationship()
         {
-            RelationshipDef relDef = itsLoader.LoadRelationship(multipleRelationshipString, itsPropDefs);
-            Assert.AreEqual(typeof (MultipleRelationshipDef), relDef.GetType(),
-                            "The relationship should be of type MultipleRelationshipDef");
-            MultipleRelationshipDef multipleRelDef = (MultipleRelationshipDef) relDef;
-            Assert.AreEqual("TestOrder ASC", multipleRelDef.OrderCriteria.ToString());
-            //Assert.AreEqual(0, multipleRelDef.MinNoOfRelatedObjects);
-            //Assert.AreEqual(-1, multipleRelDef.MaxNoOfRelatedObjects);
-            Assert.AreEqual(DeleteParentAction.Prevent, multipleRelDef.DeleteParentAction,
+            IRelationshipDef relDef = _loader.LoadRelationship(MultipleRelationshipString, _propDefs);
+            Assert.AreEqual("TestOrder", relDef.OrderCriteriaString);
+            Assert.AreEqual(DeleteParentAction.Prevent, relDef.DeleteParentAction,
                             "Default delete action according to dtd is Prevent.");
         }
 
         [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
         public void TestInvalidRelationshipType()
         {
-            itsLoader.LoadRelationship(singleRelationshipString.Replace("single", "notsingle"), itsPropDefs);
-        }
-
-        [Test, ExpectedException(typeof (UnknownTypeNameException))]
-        public void TestWithUnknownRelatedType()
-        {
-            RelationshipDef relDef = itsLoader.LoadRelationship(
-                singleRelationshipString.Replace("TestRelatedClass", "NonExistantTestRelatedClass"), itsPropDefs);
-#pragma warning disable 168
-        	Type classType = relDef.RelatedObjectClassType;
-#pragma warning restore 168
+            _loader.LoadRelationship(SingleRelationshipString.Replace("single", "notsingle"), _propDefs);
         }
 
         [Test]
         public void TestWithTwoRelatedProps()
         {
-            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
-            string relationshipWithTwoProps = singleRelationshipString.Replace
+            _propDefs.Add(GetDefClassFactory().CreatePropDef("TestProp2", "System", "String", PropReadWriteRule.ReadWrite, null, null, false, false, 255, null, null, false));
+            string relationshipWithTwoProps = SingleRelationshipString.Replace
                 (@"<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />",
                  @"<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 				   <relatedProperty property=""TestProp2"" relatedProperty=""TestRelatedProp2"" />");
-            RelationshipDef relDef = itsLoader.LoadRelationship(relationshipWithTwoProps, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(relationshipWithTwoProps, _propDefs);
             Assert.AreEqual(2, relDef.RelKeyDef.Count, "There should be two relatedProperty in the relationship.");
         }
 
-        [Test]
-        public void TestSetKeepReference()
-        {
-            RelationshipDef relDef =
-                itsLoader.LoadRelationship(
-                singleRelationshipString.Replace(@"BO""", @"BO"" keepReference=""false"" "), itsPropDefs);
-            Assert.IsFalse(relDef.KeepReferenceToRelatedObject);
-        }
+        //[Test]
+        //public void TestSetKeepReference()
+        //{
+        //    IRelationshipDef relDef =
+        //        _loader.LoadRelationship(
+        //        SingleRelationshipString.Replace(@"BO""", @"BO"" keepReference=""false"" "), _propDefs);
+        //    Assert.IsFalse(relDef.KeepReferenceToRelatedObject);
+        //}
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestInvalidDeleteAction()
         {
-            itsLoader.LoadRelationship(
-                multipleRelationshipString.Replace(@"TestOrder""", @"TestOrder"" deleteAction=""invalid"" "),
-                itsPropDefs);
+            _loader.LoadRelationship(
+                MultipleRelationshipString.Replace(@"TestOrder""", @"TestOrder"" deleteAction=""invalid"" "),
+                _propDefs);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestNoOwnerProperty()
         {
-            itsLoader.LoadRelationship(@"
+            _loader.LoadRelationship(@"
 					<relationship name=""rel"" type=""multiple"" relatedClass=""ass"" relatedAssembly=""ass"">
 						<relatedProperty relatedProperty=""TestRelatedProp"" />
 					</relationship>",
-                itsPropDefs);
+                _propDefs);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestNoRelatedProperty()
         {
-            itsLoader.LoadRelationship(@"
+            _loader.LoadRelationship(@"
 					<relationship name=""rel"" type=""multiple"" relatedClass=""ass"" relatedAssembly=""ass"">
 						<relatedProperty property=""TestProp"" />
 					</relationship>",
-                itsPropDefs);
+                _propDefs);
         }
 
         [Test]
@@ -171,7 +156,7 @@ namespace Habanero.Test.BO.Loaders
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(multipleRelationshipString, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(MultipleRelationshipString, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(DeleteParentAction.Prevent, relDef.DeleteParentAction);
@@ -182,7 +167,7 @@ namespace Habanero.Test.BO.Loaders
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipString, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(SingleRelationshipString, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(DeleteParentAction.Prevent, relDef.DeleteParentAction);
@@ -195,7 +180,7 @@ namespace Habanero.Test.BO.Loaders
             
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipString, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(SingleRelationshipString, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
@@ -217,7 +202,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringComposition, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Composition, relDef.RelationshipType);
@@ -239,7 +224,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringComposition, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Composition, relDef.RelationshipType);
@@ -265,10 +250,7 @@ namespace Habanero.Test.BO.Loaders
             //---------------Execute Test ----------------------
             try
             {
-#pragma warning disable 168
-                SingleRelationshipDef relDef =
-#pragma warning restore 168
-                    (SingleRelationshipDef) loader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+                loader.LoadRelationship(singleRelationshipStringComposition, _propDefs);
                 Assert.Fail("An error should have been raised as there is no relationship type of Bob");
             //---------------Test Result -----------------------
             } catch (InvalidXmlDefinitionException ex)
@@ -286,7 +268,7 @@ namespace Habanero.Test.BO.Loaders
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipString, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(SingleRelationshipString, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.IsTrue(relDef.OwningBOHasForeignKey);
@@ -300,7 +282,7 @@ namespace Habanero.Test.BO.Loaders
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(multipleRelationshipString, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(MultipleRelationshipString, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.IsFalse(relDef.OwningBOHasForeignKey);
@@ -322,7 +304,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringComposition, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.IsFalse(relDef.OwningBOHasForeignKey);
@@ -345,7 +327,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringAssociation, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringAssociation, _propDefs);
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
             Assert.AreEqual(InsertParentAction.DoNothing,relDef.InsertParentAction);
@@ -366,7 +348,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringComposition, _propDefs);
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
             Assert.AreEqual(InsertParentAction.InsertRelationship, relDef.InsertParentAction);
@@ -386,7 +368,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringComposition, _propDefs);
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
             Assert.AreEqual(InsertParentAction.InsertRelationship, relDef.InsertParentAction);
@@ -407,7 +389,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringAssociation, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringAssociation, _propDefs);
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
             Assert.AreEqual(InsertParentAction.DoNothing,relDef.InsertParentAction);
@@ -429,7 +411,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringComposition, _propDefs);
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
             Assert.AreEqual(InsertParentAction.InsertRelationship, relDef.InsertParentAction);
@@ -449,7 +431,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringComposition, _propDefs);
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
             Assert.AreEqual(InsertParentAction.InsertRelationship, relDef.InsertParentAction);
@@ -459,7 +441,7 @@ namespace Habanero.Test.BO.Loaders
         public void Test_ReverseRelationshipDefault()
         {
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(multipleRelationshipString, itsPropDefs);
+            MultipleRelationshipDef relDef = (MultipleRelationshipDef)_loader.LoadRelationship(MultipleRelationshipString, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.IsTrue(string.IsNullOrEmpty(relDef.ReverseRelationshipName));
@@ -481,7 +463,7 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
             //---------------Execute Test ----------------------
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipStringComposition, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.AreEqual("MyReverseRelationship", relDef.ReverseRelationshipName);
@@ -522,8 +504,8 @@ namespace Habanero.Test.BO.Loaders
              Assert.IsTrue(ClassDef.ClassDefs.Contains("Habanero.Test.BO", "ContactPersonTestBO_Human"));
 
             //---------------Execute Test ----------------------
-            
-            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(relXml, itsPropDefs);
+
+             IRelationshipDef relDef = _loader.LoadRelationship(relXml, _propDefs);
             //---------------Test Result -----------------------
 
             Assert.AreSame(personClassDef, relDef.RelatedObjectClassDef);
@@ -565,7 +547,7 @@ namespace Habanero.Test.BO.Loaders
             //---------------Assert PreConditions---------------   
             //---------------Execute Test ----------------------
 
-            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(relXml, itsPropDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(relXml, _propDefs);
             //---------------Test Result -----------------------
 
             Assert.AreSame(personClassDef, relDef.RelatedObjectClassDef);

@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -227,6 +228,31 @@ namespace Habanero.Test.BO.ClassDefinition
             }
             //---------------Test Result -----------------------
         }
+
+
+        [Test, ExpectedException(typeof(UnknownTypeNameException))]
+        public void TestWithUnknownRelatedType()
+        {
+            DefClassFactory defClassFactory = new DefClassFactory();
+            XmlRelationshipLoader loader = new XmlRelationshipLoader(new DtdLoader(), defClassFactory, "TestClass");
+            IPropDefCol propDefs = defClassFactory.CreatePropDefCol();
+            propDefs.Add(defClassFactory.CreatePropDef("TestProp", "System", "String", PropReadWriteRule.ReadWrite, null, null, false, false, 255, null, null, false));
+
+            RelationshipDef relDef =
+                (RelationshipDef) loader.LoadRelationship(
+                                      @"<relationship 
+						name=""TestRelationship"" 
+						type=""single"" 
+						relatedClass=""Habanero.Test.BO.Loaders.NonExistantTestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO"" 
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+
+					</relationship>",
+                                      propDefs);
+            Type classType = relDef.RelatedObjectClassType;
+        }
+
 
         private class RelationshipDefInheritor : RelationshipDef
         {

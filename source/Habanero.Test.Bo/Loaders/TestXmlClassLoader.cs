@@ -155,21 +155,6 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreSame(def, def.PropDefcol["TestProp"].ClassDef);
             //---------------Tear Down -------------------------          
         }
-        [Test]
-        public void TestAutoDisplayName()
-        {
-            IClassDef def =
-                _loader.LoadClass(
-                    @"
-				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
-                    <property  name=""TestProp"" />
-                    <primaryKey>
-                        <prop name=""TestProp""/>
-                    </primaryKey>
-				</class>
-			");
-            Assert.AreEqual("Test Class", def.DisplayName);
-        }
 
         [Test]
         public void TestDisplayName()
@@ -582,7 +567,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassDefID_Null()
+        public virtual void TestClassDefID_Null()
         {
             //---------------Set up test pack-------------------
             string classDefXml =

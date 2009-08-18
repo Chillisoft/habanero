@@ -59,6 +59,7 @@ namespace Habanero.BO.ClassDefinition
         /// The OrderBy Criteria being used by this relationship.
         /// </summary>
         protected OrderCriteria _orderCriteria;
+        protected string _orderCriteriaString;
 
         #region Constructors
 
@@ -247,6 +248,16 @@ namespace Habanero.BO.ClassDefinition
         }
 
         ///<summary>
+        /// The order by clause that the related object will be sorted by.
+        /// In the case of a single relationship this will return a null string
+        ///</summary>
+        public string OrderCriteriaString
+        {
+            get { return _orderCriteriaString; }
+            protected set { _orderCriteriaString = value; }
+        }
+
+        ///<summary>
         /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
         /// <see cref="RelationshipType"/>
         ///</summary>
@@ -270,6 +281,13 @@ namespace Habanero.BO.ClassDefinition
         /// In most cases this will be the reverse of <see cref="OwningBOHasForeignKey"/>
         ///</summary>
         public bool? OwningBOHasPrimaryKey { get; set; }
+
+        /// <summary>
+        /// The timout in milliseconds. 
+        /// The collection of Business Objects will not be automatically refreshed 
+        /// from the DB if the timeout has not expired
+        /// </summary>
+        public int TimeOut { get; set;  }
 
         #endregion Type Initialisation
 

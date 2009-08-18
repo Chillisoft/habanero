@@ -1385,7 +1385,8 @@ namespace Habanero.BO
                 if (Relationships.Contains(relationshipName))
                 {
                     IRelationship relationship = Relationships[relationshipName];
-                    Type relatedObjectType = relationship.RelationshipDef.RelatedObjectClassType;
+                    RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
+                    Type relatedObjectType = relationshipDef.RelatedObjectClassType;
                     reader.MoveToContent();
                     reader.Read();
 

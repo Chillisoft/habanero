@@ -65,7 +65,7 @@ namespace Habanero.BO.Loaders
         /// <param name="xmlRelationshipDef">The xml string</param>
         /// <param name="propDefs">The property definition collection</param>
         /// <returns>Returns a relationship definition</returns>
-        public RelationshipDef LoadRelationship(string xmlRelationshipDef, IPropDefCol propDefs)
+        public IRelationshipDef LoadRelationship(string xmlRelationshipDef, IPropDefCol propDefs)
         {
             return LoadRelationship(this.CreateXmlElement(xmlRelationshipDef), propDefs);
         }
@@ -76,10 +76,10 @@ namespace Habanero.BO.Loaders
         /// <param name="relationshipElement">The xml element</param>
         /// <param name="propDefs">The property definition collection</param>
         /// <returns>Returns a relationship definition</returns>
-        public RelationshipDef LoadRelationship(XmlElement relationshipElement, IPropDefCol propDefs)
+        public IRelationshipDef LoadRelationship(XmlElement relationshipElement, IPropDefCol propDefs)
         {
             _propDefCol = propDefs;
-            return (RelationshipDef) this.Load(relationshipElement);
+            return (IRelationshipDef) this.Load(relationshipElement);
         }
 
         /// <summary>
