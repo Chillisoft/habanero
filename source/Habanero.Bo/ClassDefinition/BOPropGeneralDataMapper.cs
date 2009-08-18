@@ -67,7 +67,7 @@ namespace Habanero.BO.ClassDefinition
                     returnValue = null;
                     return false;
                 }
-                if (_propDef.PropertyType == typeof (Image))
+                if (_propDef.PropertyType == typeof(Image) && valueToParse is byte[])
                 {
                     returnValue = SerialisationUtilities.ByteArrayToObject((byte[]) valueToParse);
                 }

@@ -426,7 +426,7 @@ namespace Habanero.UI.Base
         private static void AddDecimalPlacesToNumericUpDown(UIFormField formField, IControlHabanero inputControl)
         {
             if (String.IsNullOrEmpty(formField.DecimalPlaces)) return;
-            if (inputControl is INumericUpDown
+            if (inputControl is INumericUpDown && !String.IsNullOrEmpty(formField.MapperTypeName) 
                 && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
             {
                 int decimalPlaces = Convert.ToInt32(formField.DecimalPlaces);

@@ -221,7 +221,7 @@ namespace Habanero.UI.Base
                 TabControl.SelectedIndexChanged += TabChangedHandler;
                 return;
             }
-            foreach (BusinessObject bo in _businessObjectCollection)
+            foreach (BusinessObject bo in _businessObjectCollection.Clone())
             {
                 AddTabPage(bo);
             }
