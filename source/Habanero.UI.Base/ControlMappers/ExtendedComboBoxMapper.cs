@@ -30,9 +30,9 @@ namespace Habanero.UI.Base
     ///</summary>
     public class ExtendedComboBoxMapper : ControlMapper //: LookupComboBoxMapper
     {
-        private readonly IExtendedComboBox _extendedComboBox;
+        protected IExtendedComboBox _extendedComboBox;
         //private IBusinessObject _relatedBusinessObject;
-        private readonly LookupComboBoxMapper _lookupComboBoxMapper;
+        protected LookupComboBoxMapper _lookupComboBoxMapper;
 
         ///<summary>
         /// Constructs the mapper for <see cref="IExtendedComboBox"/>.
@@ -50,7 +50,7 @@ namespace Habanero.UI.Base
                     PopupForm.Closed += delegate
                         {
                             IBOGridAndEditorControl iboGridAndEditorControl =
-                                (IBOGridAndEditorControl) PopupForm.Controls[0];
+                                GetIBOGridAndEditorControl();
                             IBusinessObject currentBusinessObject = iboGridAndEditorControl.CurrentBusinessObject;
                             if ((currentBusinessObject != null) && currentBusinessObject.IsValid())
                             {
@@ -66,7 +66,12 @@ namespace Habanero.UI.Base
                 };
         }
 
-        private void ReloadLookupValues()
+        protected virtual IBOGridAndEditorControl GetIBOGridAndEditorControl()
+        {
+            return (IBOGridAndEditorControl) PopupForm.Controls[0];
+        }
+
+        protected void ReloadLookupValues()
         {
             Type classType;
             GetLookupTypeClassDef(out classType);
@@ -89,7 +94,7 @@ namespace Habanero.UI.Base
         /// Shows the popup form that is displayed when the button is clicked.
         /// This popup form is used to edit the <see cref="BusinessObject"/>s that fill the combobox.
         ///</summary>
-        public void ShowPopupForm()
+        public virtual void ShowPopupForm()
         {
             Type classType;
             IClassDef lookupTypeClassDef = GetLookupTypeClassDef(out classType);
@@ -124,7 +129,7 @@ namespace Habanero.UI.Base
         ///<summary>
         /// Returns the Popup Form.
         ///</summary>
-        public IFormHabanero PopupForm { get; private set; }
+        public IFormHabanero PopupForm { get; protected set; }
 
         /// <summary>
         /// Updates the properties on the represented business object
