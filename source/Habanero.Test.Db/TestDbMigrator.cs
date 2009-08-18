@@ -116,9 +116,18 @@ namespace Habanero.Test.DB
         
 
 //        [Test, Ignore("This fails through the resharper tester."), ExpectedException(typeof(ArgumentNullException ))]
-        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+        [Test]
         public void TestGetCurrentVersionFailure() {
-            Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
+            try
+            {
+                itsDbMigrator.CurrentVersion();
+                Assert.Fail("Expected to throw an HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                Assert.AreEqual("SettingsStorer", ex.ParameterName);
+            }
         }
 
         [Test]
