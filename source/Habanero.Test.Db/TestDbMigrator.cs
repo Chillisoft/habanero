@@ -114,19 +114,24 @@ namespace Habanero.Test.DB
             itsSettingsMock.Verify();
         }
         
-
-//        [Test, Ignore("This fails through the resharper tester."), ExpectedException(typeof(ArgumentNullException ))]
         [Test]
         public void TestGetCurrentVersionFailure() {
+            //---------------Set up test pack-------------------
+            itsDbMigrator.SetSettingsStorer(null);
+            //---------------Execute Test ----------------------
             try
             {
                 itsDbMigrator.CurrentVersion();
                 Assert.Fail("Expected to throw an HabaneroArgumentException");
-            }
-                //---------------Test Result -----------------------
-            catch (HabaneroArgumentException ex)
+            //---------------Test Result -----------------------
+            } catch (HabaneroArgumentException ex)
             {
                 Assert.AreEqual("SettingsStorer", ex.ParameterName);
+            }
+            //---------------Tear Down -------------------------          
+            finally
+            {
+                itsDbMigrator.SetSettingsStorer(_itsSettings);
             }
         }
 
@@ -140,19 +145,15 @@ namespace Habanero.Test.DB
             itsSettingsMock.Verify();
         }        
         
-        
         [Test]
         public void TestMigrateTo() {
             itsDbMigrator.SetSettingsStorer(_itsSettings);
             itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
             itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
             itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "3" });
-            SqlStatementCollection sqlStatementCollection;
-            sqlStatementCollection = new SqlStatementCollection();
-            sqlStatementCollection.Add(new SqlStatement(itsConn, "migration2;"));
+            SqlStatementCollection sqlStatementCollection = new SqlStatementCollection {new SqlStatement(itsConn, "migration2;")};
             itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { sqlStatementCollection  });
-            sqlStatementCollection = new SqlStatementCollection();
-            sqlStatementCollection.Add(new SqlStatement(itsConn, "migration3;"));
+            sqlStatementCollection = new SqlStatementCollection {new SqlStatement(itsConn, "migration3;")};
             itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { sqlStatementCollection  });
           
             itsDbMigrator.MigrateTo(3);
