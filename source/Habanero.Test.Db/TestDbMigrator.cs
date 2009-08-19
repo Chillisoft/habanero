@@ -117,6 +117,8 @@ namespace Habanero.Test.DB
         [Test]
         public void TestGetCurrentVersionFailure() {
             //---------------Set up test pack-------------------
+            ISettings oldSettings = GlobalRegistry.Settings;
+            GlobalRegistry.Settings = null;
             itsDbMigrator.SetSettingsStorer(null);
             //---------------Execute Test ----------------------
             try
@@ -132,6 +134,7 @@ namespace Habanero.Test.DB
             finally
             {
                 itsDbMigrator.SetSettingsStorer(_itsSettings);
+                GlobalRegistry.Settings = oldSettings;
             }
         }
 
