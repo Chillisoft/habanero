@@ -140,6 +140,20 @@ namespace Habanero.Test.UI.Base
             }
         }
 
+        [Test]
+        public void Test_Refresh()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero control = GetControlFactory().CreatePanel();
+            LayoutManagerStub managerStub = new LayoutManagerStub(control);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(managerStub.IsRefreshed);
+            //---------------Execute Test ----------------------
+            managerStub.Refresh();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(managerStub.IsRefreshed);
+        }
+
         private class LayoutManagerStub : LayoutManager
         {
             private bool mRefreshed;

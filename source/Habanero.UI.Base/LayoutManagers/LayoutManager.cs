@@ -51,7 +51,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="managedControl">The control to manage</param>
         /// <param name="controlFactory">control factory used to create any child controls</param>
-        public LayoutManager(IControlHabanero managedControl, IControlFactory controlFactory)
+        protected LayoutManager(IControlHabanero managedControl, IControlFactory controlFactory)
         {
             if (managedControl == null)
             {
@@ -123,6 +123,14 @@ namespace Habanero.UI.Base
         /// Updates the layout and appearance of the managed controls
         /// </summary>
         protected abstract void RefreshControlPositions();
+
+        /// <summary>
+        /// Updates the layout and appearance of the managed controls
+        /// </summary>
+        public void Refresh()
+        {
+            RefreshControlPositions();
+        }
 
         /// <summary>
         /// Add a control to the layout

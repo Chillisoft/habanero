@@ -971,7 +971,9 @@ namespace Habanero.UI.Win
         /// </summary>
         public virtual IControlHabanero CreateControl()
         {
-            return new ControlWin();
+            IControlHabanero control = new ControlWin();
+            control.Size = new Size(100, 10);
+            return control;
         }
 
         /// <summary>

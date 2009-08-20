@@ -262,66 +262,80 @@ namespace Habanero.UI.Base
         /// </summary>
         protected override void RefreshControlPositions()
         {
-            _currentPos = new Point(BorderSize, BorderSize);
-            int lastColSpan = 0;
-            for (int i = 0; i < _controls.Count; i++)
+            try
             {
-                int currentRow = i/ColumnCount;
-                int currentCol = i%ColumnCount;
-                IControlHabanero ctl = this._controls[i];
+                ManagedControl.SuspendLayout();
+                _currentPos = new Point(BorderSize, BorderSize);
+                int lastColSpan = 0;
+                for (int i = 0; i < _controls.Count; i++)
+                {
+                    int currentRow = i/ColumnCount;
+                    int currentCol = i%ColumnCount;
+                    IControlHabanero ctl = this._controls[i];
 
-                if ((i > 0) && (currentCol == 0))
-                {
-                    _currentPos.X = BorderSize;
-                    _currentPos.Y += this._controls[i - 1].Height + GapSize;
-                }
-                ctl.Left = _currentPos.X;
-                ctl.Top = _currentPos.Y;
-                int width = 0;
-                ControlInfo ctlInfo = (ControlInfo) _controlInfoTable[ctl];
-                for (int cols = currentCol; cols < Math.Min(this.ColumnCount, currentCol + ctlInfo.ColumnSpan); cols++)
-                {
-                    if (IsFixedColumn(cols))
+                    if ((i > 0) && (currentCol == 0))
                     {
-                        width += _columnWidths[cols];
+                        _currentPos.X = BorderSize;
+                        _currentPos.Y += this._controls[i - 1].Height + GapSize;
+                    }
+                    int width = 0;
+                    ControlInfo ctlInfo = (ControlInfo) _controlInfoTable[ctl];
+                    for (int columnNumber = currentCol;
+                         columnNumber < Math.Min(this.ColumnCount, currentCol + ctlInfo.ColumnSpan);
+                         columnNumber++)
+                    {
+                        if (IsFixedColumn(columnNumber))
+                        {
+                            width += _columnWidths[columnNumber];
+                        }
+                        else
+                        {
+                            width += CalcColumnWidth();
+                        }
+                    }
+                    width += (this.GapSize*(ctlInfo.ColumnSpan - 1));
+
+                    int height = 0;
+
+                    for (int rows = currentRow; rows < Math.Min(RowCount, currentRow + ctlInfo.RowSpan); rows++)
+                    {
+                        if (IsFixedRow(currentRow))
+                        {
+                            height += _rowHeights[currentRow];
+                        }
+                        else
+                        {
+                            height += CalcRowHeight();
+                        }
+                    }
+
+                    height += (GapSize*(ctlInfo.RowSpan - 1));
+                    //height += GapSize;
+
+                    //ctl.Left = _currentPos.X;
+                    //ctl.Top = _currentPos.Y;
+                    //ctl.Width = width;
+                    //ctl.Height = height;
+                    ctl.Location = new Point(_currentPos.X, _currentPos.Y);
+                    ctl.Size = new Size(width, height);
+
+                    int posIncrement = 0;
+                    if (lastColSpan > 1)
+                    {
+                        //if (IsFixedColumn(currentCol)) posIncrement = _columnWidths[currentCol];
+                        lastColSpan--;
                     }
                     else
                     {
-                        width += CalcColumnWidth();
+                        posIncrement = ctl.Width + GapSize;
+                        lastColSpan = ctlInfo.ColumnSpan;
                     }
+                    _currentPos.X += posIncrement;
                 }
-                width += (this.GapSize*(ctlInfo.ColumnSpan - 1));
-                ctl.Width = width;
-
-                int height = 0;
-
-                for (int rows = currentRow; rows < Math.Min(RowCount, currentRow + ctlInfo.RowSpan); rows++)
-                {
-                    if (IsFixedRow(currentRow))
-                    {
-                        height += _rowHeights[currentRow];
-                    }
-                    else
-                    {
-                        height += CalcRowHeight();
-                    }
-                }
-
-                height += (GapSize*(ctlInfo.RowSpan - 1));
-                //height += GapSize;
-                ctl.Height = height;
-
-                int posIncrement = 0;
-                if (lastColSpan > 1)
-                {
-                    //if (IsFixedColumn(currentCol)) posIncrement = _columnWidths[currentCol];
-                    lastColSpan--;
-                } else
-                {
-                    posIncrement = ctl.Width + GapSize;
-                    lastColSpan = ctlInfo.ColumnSpan;
-                }
-                _currentPos.X += posIncrement;
+            }
+            finally
+            {
+                ManagedControl.ResumeLayout(true);
             }
         }
 

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Drawing;
 
 namespace Habanero.UI.Base
 {
@@ -69,25 +70,32 @@ namespace Habanero.UI.Base
             int currentLeft = BorderSize;
             int currentTop = BorderSize;
             int maxControlHeight = 0;
-            foreach (IControlHabanero control in this.ManagedControl.Controls)
+            try
             {
-  
-                if (currentColumn > ColumnCount)
+                this.ManagedControl.SuspendLayout();
+                foreach (IControlHabanero control in this.ManagedControl.Controls)
                 {
-                    currentColumn = 1;
-                    currentLeft = BorderSize;
-                    currentTop += maxControlHeight + GapSize;
-                    maxControlHeight = 0;
+
+                    if (currentColumn > ColumnCount)
+                    {
+                        currentColumn = 1;
+                        currentLeft = BorderSize;
+                        currentTop += maxControlHeight + GapSize;
+                        maxControlHeight = 0;
+                    }
+                    if (control.Height > maxControlHeight)
+                    {
+                        maxControlHeight = control.Height;
+                    }
+                    control.Location = new Point(currentLeft, currentTop);
+                    control.Width = columnWidth;
+                    currentLeft += columnWidth + GapSize;
+                    currentColumn++;
                 }
-                if (control.Height > maxControlHeight)
-                {
-                    maxControlHeight = control.Height;
-                }
-                control.Left = currentLeft;
-                control.Top = currentTop;
-                control.Width = columnWidth;
-                currentLeft += columnWidth + GapSize;
-                currentColumn++;
+            }
+            finally 
+            {
+                this.ManagedControl.ResumeLayout(true);
             }
         }
 

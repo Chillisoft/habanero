@@ -962,6 +962,18 @@ namespace Habanero.Test.UI.Base
               
         }
 
+        [Test]
+        public void Test_CreateControl()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IControlHabanero control = _factory.CreateControl();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(control);
+            Assert.AreEqual(100, control.Width);
+            Assert.AreEqual(10, control.Height);
+        }
 
 
         [Test, ExpectedException(typeof(UnknownTypeNameException))]
