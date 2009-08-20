@@ -106,6 +106,7 @@ namespace Habanero.UI.Base
             IBusinessObject businessObject = e.BusinessObject;
             int selectedIndex = this.Control.SelectedIndex;
             int indexOf = this.Control.Items.IndexOf(businessObject);
+            if (indexOf == -1) return;
             this.Control.Items.Remove(businessObject);
             this.Control.Items.Insert(indexOf, businessObject);
             this.Control.SelectedIndex = selectedIndex;
