@@ -22,6 +22,9 @@ using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// Used to implement custom type conversions specifically for DateTime objects.
+    /// </summary>
     public class BOPropDateTimeDataMapper : BOPropDataMapper
     {
         public override string ConvertValueToString(object value)
