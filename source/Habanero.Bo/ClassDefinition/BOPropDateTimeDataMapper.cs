@@ -22,7 +22,7 @@ using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
-    internal class BOPropDateTimeDataMapper : BOPropDataMapper
+    public class BOPropDateTimeDataMapper : BOPropDataMapper
     {
         public override string ConvertValueToString(object value)
         {
