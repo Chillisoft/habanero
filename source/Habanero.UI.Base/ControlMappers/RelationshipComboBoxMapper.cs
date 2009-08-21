@@ -176,7 +176,9 @@ namespace Habanero.UI.Base
 
         private static void CheckRelationshipDefined(IClassDef classDef, string relationshipName)
         {
-            if (classDef.RelationshipDefCol.Contains(relationshipName)) return;
+            ClassDef tempClassDef = (ClassDef) classDef;
+            IRelationshipDef relationshipDef = tempClassDef.GetRelationship(relationshipName);
+            if (relationshipDef != null) return;
             string message = "The relationship '" + relationshipName + "' does not exist on the ClassDef '"
                              + classDef.ClassNameFull + "'";
             throw new HabaneroDeveloperException(message, message);
@@ -241,7 +243,7 @@ namespace Habanero.UI.Base
         private void SetUpRelationship()
         {
             CheckRelationshipDefined(this.ClassDef, this.RelationshipName);
-            _relationshipDef = this.ClassDef.RelationshipDefCol[this.RelationshipName];
+            _relationshipDef = ((ClassDef)this.ClassDef).GetRelationship(this.RelationshipName);
             CheckRelationshipIsSingle(this.RelationshipName, _relationshipDef);
         }
 

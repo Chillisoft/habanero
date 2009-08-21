@@ -4,6 +4,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
+using Habanero.Test.Structure;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -971,6 +972,26 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsTrue(cmbox.Items.Contains(person1));
             Assert.IsTrue(cmbox.Items.Contains(person2));
 
+        }
+
+        [Test]
+        public void Test_MapperWorksWithInheritedRelationship()
+        {
+            Habanero.Test.Structure.Car.LoadClassDef_WithClassTableInheritance();
+            Habanero.Test.Structure.Vehicle.LoadDefaultClassDef();
+            Habanero.Test.Structure.LegalEntity.LoadDefaultClassDef();
+
+            IComboBox cmbox = _controlFactory.CreateComboBox();
+            IControlMapper controlMapper = ControlMapper.Create
+    ("AutoLoadingRelationshipComboBoxMapper", "Habanero.UI.Base", cmbox, "Owner", false,
+     GetControlFactory());
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            controlMapper.BusinessObject = new Structure.Car();
+            //---------------Test Result -----------------------
+            // this should not fail.
         }
 
 
