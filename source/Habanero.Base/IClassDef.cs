@@ -216,9 +216,9 @@ namespace Habanero.Base
 
         /// <summary>
         /// The primary key definition for this class definition.
-        /// This could be null if the primary key is inherited from the super class.
-        /// To retrieve the primary key that is used for this class use the GetPrimaryKeyDef() method.
-        /// </summary>
+        /// Retrieves the primary key definition for this class, traversing 
+        /// the SuperClass structure to get the primary key definition if necessary
+        ///  </summary>
         IPrimaryKeyDef PrimaryKeyDef { get; set; }
 
         /// <summary>

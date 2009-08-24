@@ -79,10 +79,8 @@ namespace Habanero.Test.BO.Loaders
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" />");
             
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
-            IClassDef superClassDef = def.SuperClassClassDef;
-
-            Assert.AreEqual("Habanero.Test.BO.Loaders", superClassDef.AssemblyName);
-            Assert.AreEqual("TestClass", superClassDef.ClassName);
+            Assert.AreEqual("Habanero.Test.BO.Loaders", def.AssemblyName);
+            Assert.AreEqual("TestClass", def.ClassName);
             Assert.IsNull(def.Discriminator);
         }
 
@@ -157,7 +155,7 @@ namespace Habanero.Test.BO.Loaders
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" id="""" />");
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
-            Assert.AreEqual("", def.ID);
+            Assert.IsTrue(string.IsNullOrEmpty(def.ID));
             Assert.IsNull(def.Discriminator);
         }
 

@@ -244,7 +244,7 @@ namespace Habanero.BO
         ///<returns>the BOPrimaryKey if this can be constructed else returns null</returns>
         public static BOPrimaryKey CreateWithValue(ClassDef classDef, object idValue)
         {
-            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDef.GetPrimaryKeyDef();
+            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDef.PrimaryKeyDef;
             if (primaryKeyDef.IsCompositeKey) return null;
 
             IBOPropCol boPropCol = classDef.CreateBOPropertyCol(true);

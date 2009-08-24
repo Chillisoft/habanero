@@ -116,7 +116,7 @@ namespace Habanero.Test.Structure
             }
             sqlStatement += "PRIMARY KEY (";
             List<string> fields = new List<string>();
-            foreach (PropDef propDef in classDef.GetPrimaryKeyDef())
+            foreach (PropDef propDef in classDef.PrimaryKeyDef)
             {
                 fields.Add(SqlFormattingHelper.FormatFieldName(propDef.DatabaseFieldName, _databaseConnection));
             }

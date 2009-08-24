@@ -77,7 +77,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             try
             {
                 Assert.IsTrue(objCircle.ID.Contains("ShapeID"));
-                Assert.IsNull(objCircle.ClassDef.PrimaryKeyDef);
+                Assert.IsNotNull(objCircle.ClassDef.PrimaryKeyDef);
                 Assert.AreEqual(1, objCircle.ID.Count, "Should return the parent's primary key.");
             }
             catch (HabaneroArgumentException)

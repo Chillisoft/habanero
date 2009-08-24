@@ -283,12 +283,31 @@ namespace Habanero.BO.ClassDefinition
 
         /// <summary>
         /// The primary key definition for this class definition.
-        /// This could be null if the primary key is inherited from the super class.
-        /// To retrieve the primary key that is used for this class use the GetPrimaryKeyDef() method.
-        /// </summary>
+        /// Retrieves the primary key definition for this class, traversing 
+        /// the SuperClass structure to get the primary key definition if necessary
+        ///  </summary>
         public IPrimaryKeyDef PrimaryKeyDef
         {
-            get { return _primaryKeyDef; }
+            get
+            {
+                if (_primaryKeyDef == null)
+                {
+                    try
+                    {
+                        ClassDef superClassClassDef = this.SuperClassClassDef;
+                        if (superClassClassDef != null)
+                        {
+                            return superClassClassDef.PrimaryKeyDef;
+                        }
+                    }
+                    catch (InvalidXmlDefinitionException)
+                    {
+                        // the super class def is not loaded yet, return null
+                        return null;
+                    }
+                }
+                return _primaryKeyDef;
+            }
             set { _primaryKeyDef = value; }
         }
 
@@ -526,9 +545,9 @@ namespace Habanero.BO.ClassDefinition
                         }
                         break;
                     case ORMapping.SingleTableInheritance:
-                        if (PrimaryKeyDef != null)
+                        if (_primaryKeyDef != null)
                         {
-                            foreach (PropDef def in PrimaryKeyDef)
+                            foreach (PropDef def in _primaryKeyDef)
                             {
                                 propCol.Remove(def.PropertyName);
                             }
@@ -926,17 +945,6 @@ namespace Habanero.BO.ClassDefinition
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
             return null;
-        }
-
-        ///<summary>
-        /// Retrieves the primary key definition for this class, traversing 
-        /// the SuperClass structure to get the primary key definition if necessary
-        ///</summary>
-        ///<returns>The primary key for this class</returns>
-        public IPrimaryKeyDef GetPrimaryKeyDef()
-        {
-            IPrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(this, ClassDefs);
-            return primaryKeyDef;
         }
 
         #endregion //Returning defs

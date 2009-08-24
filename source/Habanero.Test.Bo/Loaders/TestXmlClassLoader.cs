@@ -432,7 +432,7 @@ namespace Habanero.Test.BO.Loaders
             IClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            ClassDef def = (ClassDef) _loader.LoadClass(
+            IClassDef def = _loader.LoadClass(
                                           @"
 				<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"">
 					<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" />
@@ -443,10 +443,8 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNotNull(def.SuperClassDef);
             IClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
             Assert.AreSame(parentDef, superClassDef);
-            Assert.IsNull(def.PrimaryKeyDef);
-            IPrimaryKeyDef primaryKeyDef = def.GetPrimaryKeyDef();
-            Assert.IsNotNull(primaryKeyDef);
-            Assert.AreSame(parentDef.PrimaryKeyDef, primaryKeyDef);
+            Assert.IsNotNull(def.PrimaryKeyDef);
+            Assert.AreSame(parentDef.PrimaryKeyDef, def.PrimaryKeyDef);
         }
 
         [Test]

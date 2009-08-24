@@ -392,7 +392,6 @@ namespace Habanero.BO
         private void SetPrimaryKeyForInheritedClass()
         {
             ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
-
             PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDefToUseForPrimaryKey.PrimaryKeyDef;
             if ((classDefToUseForPrimaryKey.SuperClassDef == null)
                 || (classDefToUseForPrimaryKey.IsUsingConcreteTableInheritance())
@@ -536,7 +535,7 @@ namespace Habanero.BO
 
         private void SetupPrimaryKey()
         {
-            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) ClassDef.GetPrimaryKeyDef();
+            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef)ClassDef.PrimaryKeyDef;
             if (primaryKeyDef == null) return;
             _primaryKey = (BOPrimaryKey) primaryKeyDef.CreateBOKey(Props);
         }

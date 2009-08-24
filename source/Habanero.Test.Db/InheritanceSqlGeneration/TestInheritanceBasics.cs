@@ -94,7 +94,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestCircleNoPrimaryKeyInheritsID()
         {
-            Assert.IsNull(circleNoPrimaryKeyClassDef.PrimaryKeyDef);
+            Assert.IsNotNull(circleNoPrimaryKeyClassDef.PrimaryKeyDef);
             Assert.IsNotNull(shapeClassDef.PrimaryKeyDef);
 
             Shape parent = (Shape) objCircleNoPrimaryKey;
