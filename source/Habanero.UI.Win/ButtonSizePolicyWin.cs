@@ -30,9 +30,9 @@ namespace Habanero.UI.Win
             foreach (IButton btn in buttonCollection)
             {
                 ILabel lbl = _controlFactory.CreateLabel(btn.Text);
-                if (lbl.PreferredWidth + 10 > maxButtonWidth)
+                if (lbl.PreferredWidth + 15 > maxButtonWidth)
                 {
-                    maxButtonWidth = lbl.PreferredWidth + 10;
+                    maxButtonWidth = lbl.PreferredWidth + 15;
                 }
             }
             if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 20)

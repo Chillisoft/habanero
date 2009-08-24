@@ -21,17 +21,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 using System.Xml.Serialization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
 namespace Habanero.BO
 {
-
     ///<summary>
     /// This is an in-memory data store designed to be used primarily for testing.
     ///</summary>
@@ -53,6 +50,7 @@ namespace Habanero.BO
         public Dictionary<Guid, IBusinessObject> AllObjects
         {
             get { return _objects; }
+            set { _objects = value;  }
         }
 
         ///<summary>
@@ -240,22 +238,6 @@ namespace Habanero.BO
         /// Saves all the objects from the data store to the file defined in fullFileName
         /// </summary>
         /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
-        public void Save(string fullFileName)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            string directoryName = Path.GetDirectoryName(fullFileName);
-            FileUtilities.CreateDirectory(directoryName);
-            // Serialize the all BO's in _objectsCollection
-            using (FileStream fs = new FileStream(fullFileName, FileMode.Create))
-            {
-                formatter.Serialize(fs, this._objects);
-            }
-        }
-
-        /// <summary>
-        /// Saves all the objects from the data store to the file defined in fullFileName
-        /// </summary>
-        /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
         public void SaveToXml(string fullFileName)
         {
 
@@ -269,43 +251,21 @@ namespace Habanero.BO
             using (FileStream fs = new FileStream(fullFileName, FileMode.Create))
             {
                 XmlWriter writer = XmlWriter.Create(fs, settings);
-                //writer.WriteStartDocument();
+                writer.WriteStartDocument();
+                writer.WriteStartElement("BusinessObjects");
                 foreach (var o in _objects)
                 {
 
                     ((BusinessObject) o.Value).WriteXml(writer);
                     //serializer.Serialize(fs, o.Value);                    
                 }
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
                 writer.Close();
 
             }
         }
-
-        //TODO deerasha 22 May 2009: overload Load to support xml serialisation
-        /// <summary>
-        /// Loads all the objects to the data store from the file specified by fullFileName.
-        /// The file specified to be loaded must be a serialised binary file.
-        /// </summary>
-        /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
-        public void Load(string fullFileName)
-        {
-            if (!File.Exists(fullFileName)) return;
-
-            BinaryFormatter formatter = new BinaryFormatter();
-            using (Stream stream = new FileStream(fullFileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                try
-                {
-                    this._objects = (Dictionary<Guid, IBusinessObject>) formatter.Deserialize(stream);
-                }
-                catch (Exception ex)
-                {
-                    string message = "The File " + fullFileName + " could not be deserialised because of the following error";
-                    throw new Exception( message + ex.Message, ex);
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Loads all the objects to the data store from the file specified by fullFileName.
         /// The file specified to be loaded must be a serialised xml file.

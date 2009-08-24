@@ -156,6 +156,10 @@
     <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
     <Compile Include="DataAccessorInMemory.cs" />
     <Compile Include="DataStoreInMemory.cs" />
+    <Compile Include="DataStoreInMemoryBinaryReader.cs" />
+    <Compile Include="DataStoreInMemoryBinaryWriter.cs" />
+    <Compile Include="DataStoreInMemoryXmlReader.cs" />
+    <Compile Include="DataStoreInMemoryXmlWriter.cs" />
     <Compile Include="DeleteHelper.cs" />
     <Compile Include="ExceptionHelper.cs" />
     <Compile Include="IBusinessObjectLoader.cs" />

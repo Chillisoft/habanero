@@ -1385,16 +1385,16 @@ namespace Habanero.BO
                 if (Relationships.Contains(relationshipName))
                 {
                     IRelationship relationship = Relationships[relationshipName];
-                    RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
+                    RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
                     Type relatedObjectType = relationshipDef.RelatedObjectClassType;
                     reader.MoveToContent();
                     reader.Read();
 
                     if (relationship is ISingleRelationship)
                     {
-                        IBusinessObject relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
+                        IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
                         relatedObject.ReadXml(reader);
-                        ((ISingleRelationship) relationship).SetRelatedObject(relatedObject);
+                        ((ISingleRelationship)relationship).SetRelatedObject(relatedObject);
                     }
                     else if (relationship is IMultipleRelationship)
                     {
@@ -1441,9 +1441,9 @@ namespace Habanero.BO
 
         private static void ReadRelatedObject(XmlReader reader, IRelationship relationship, Type relatedObjectType)
         {
-            IBusinessObject relatedObject = (IBusinessObject) Activator.CreateInstance(relatedObjectType);
+            IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
             relatedObject.ReadXml(reader);
-            ((IMultipleRelationship) relationship).BusinessObjectCollection.Add(relatedObject);
+            ((IMultipleRelationship)relationship).BusinessObjectCollection.Add(relatedObject);
 
             string elementName = reader.Name;
             if (elementName == relatedObjectType.Name)
@@ -1460,7 +1460,7 @@ namespace Habanero.BO
         {
             if (relationship is ISingleRelationship)
             {
-                ISingleRelationship singleRelationship = (ISingleRelationship) relationship;
+                ISingleRelationship singleRelationship = (ISingleRelationship)relationship;
                 IBusinessObject relatedObject = singleRelationship.GetRelatedObject();
                 if (relatedObject != null)
                 {
@@ -1473,7 +1473,7 @@ namespace Habanero.BO
             }
             else if (relationship is IMultipleRelationship)
             {
-                IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
+                IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
                 IBusinessObjectCollection relatedObjects = multipleRelationship.BusinessObjectCollection;
                 if (relatedObjects.Count != 0)
                 {

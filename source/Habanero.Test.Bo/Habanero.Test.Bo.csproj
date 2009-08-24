@@ -150,6 +150,8 @@
     <Compile Include="TestBusinessObjectRules.cs" />
     <Compile Include="TestBusinessObjectSerialisationXML.cs" />
     <Compile Include="TestBOStatus.cs" />
+    <Compile Include="TestDataStoreInMemoryBinaryWriter.cs" />
+    <Compile Include="TestDataStoreInMemoryXmlWriter.cs" />
     <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />

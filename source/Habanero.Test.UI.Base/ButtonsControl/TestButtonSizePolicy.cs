@@ -47,7 +47,7 @@ namespace Habanero.Test.UI.Base.ButtonsControl
 
             ////---------------Test Result -----------------------
             ILabel lbl = GetControlFactory().CreateLabel(buttonText);
-            Assert.AreEqual(lbl.PreferredWidth + 10, btnTest.Width, "Button width is incorrect.");
+            Assert.AreEqual(lbl.PreferredWidth + 15, btnTest.Width, "Button width is incorrect.");
         }
 
 
@@ -68,7 +68,7 @@ namespace Habanero.Test.UI.Base.ButtonsControl
             ////---------------Test Result -----------------------
 
             ILabel lbl = GetControlFactory().CreateLabel(buttonText);
-            Assert.AreEqual(lbl.PreferredWidth + 10, btnTest1.Width, "Button width is incorrect.");
+            Assert.AreEqual(lbl.PreferredWidth + 15, btnTest1.Width, "Button width is incorrect.");
 
             Assert.AreEqual(btnTest2.Width, btnTest1.Width, "Button width is incorrect.");
         }
