@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using DockStyle=Habanero.UI.Base.DockStyle;
@@ -48,26 +49,11 @@ namespace Habanero.UI.VWG
         public IOKCancelPanel CreateOKCancelPanel(IControlHabanero nestedControl)
         {
             OKCancelPanelGiz mainPanel = new OKCancelPanelGiz(_controlFactory);
+            mainPanel.Width = nestedControl.Width;
+            mainPanel.Height = nestedControl.Height + mainPanel.ButtonGroupControl.Height;
             mainPanel.ContentPanel.Controls.Add(nestedControl);
             nestedControl.Dock = DockStyle.Fill;
             return mainPanel;
-
-            //IPanel mainPanel = _controlFactory.CreatePanel();
-
-            //// create content panel
-            //IPanel contentPanel = _controlFactory.CreatePanel();
-            //contentPanel.Dock = DockStyle.Fill;
-            //contentPanel.Controls.Add(nestedControl);
-            //nestedControl.Dock = DockStyle.Fill;
-            //mainPanel.Controls.Add(contentPanel);
-
-            //// create buttons
-            //IButtonGroupControl buttonGroupControl = _controlFactory.CreateButtonGroupControl();
-            //buttonGroupControl.Dock = DockStyle.Bottom;
-            //buttonGroupControl.AddButton("OK").NotifyDefault(true);
-            //buttonGroupControl.AddButton("Cancel");
-            //mainPanel.Controls.Add(buttonGroupControl);
-            //return mainPanel;
         }
 
         /// <summary>
@@ -78,12 +64,41 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the created form</returns>
         public IFormHabanero CreateOKCancelForm(IControlHabanero nestedControl, string formTitle)
         {
+            IOKCancelPanel mainPanel = CreateOKCancelPanel(nestedControl);
             IFormHabanero form = _controlFactory.CreateForm();
-            IPanel mainPanel = CreateOKCancelPanel(nestedControl);
+            form.Text = formTitle;
+            form.ClientSize = mainPanel.Size;
             mainPanel.Dock = DockStyle.Fill;
             form.Controls.Add(mainPanel);
-            form.Text = formTitle;
+            mainPanel.OKButton.Click += delegate
+            {
+                OkButton_ClickHandler(form);
+            };
+            mainPanel.CancelButton.Click += delegate
+            {
+                CancelButton_ClickHandler(form);
+            };
             return form;
+        }
+
+        ///<summary>
+        /// Handles the event of the Cancel Button being clicked.
+        ///</summary>
+        ///<param name="form"></param>
+        public void CancelButton_ClickHandler(IFormHabanero form)
+        {
+            form.DialogResult = Habanero.UI.Base.DialogResult.Cancel;
+            form.Close();
+        }
+
+        ///<summary>
+        /// Handles the event of the OKButton Being Clicked.
+        ///</summary>
+        ///<param name="form"></param>
+        public void OkButton_ClickHandler(IFormHabanero form)
+        {
+            form.DialogResult = Habanero.UI.Base.DialogResult.OK;
+            form.Close();
         }
 
         /// <summary>
@@ -95,6 +110,7 @@ namespace Habanero.UI.VWG
             private IButton _okButton;
             private IPanel _contentPanel;
             private IButton _cancelButton;
+            private IButtonGroupControl _buttonGroupControl;
 
             public OKCancelPanelGiz(IControlFactory controlFactory)
             {
@@ -116,14 +132,14 @@ namespace Habanero.UI.VWG
                 // create content panel
                 _contentPanel = _controlFactory.CreatePanel();
                 // create buttons
-                IButtonGroupControl buttonGroupControl = _controlFactory.CreateButtonGroupControl();
-                _okButton = buttonGroupControl.AddButton("OK");
+                _buttonGroupControl = _controlFactory.CreateButtonGroupControl();
+                _okButton = _buttonGroupControl.AddButton("OK");
                 _okButton.NotifyDefault(true);
-                _cancelButton = buttonGroupControl.AddButton("Cancel");
+                _cancelButton = _buttonGroupControl.AddButton("Cancel");
 
                 BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(this);
                 layoutManager.AddControl(_contentPanel, BorderLayoutManager.Position.Centre);
-                layoutManager.AddControl(buttonGroupControl, BorderLayoutManager.Position.South);
+                layoutManager.AddControl(_buttonGroupControl, BorderLayoutManager.Position.South);
             }
 
             /// <summary>
@@ -145,6 +161,14 @@ namespace Habanero.UI.VWG
             public IPanel ContentPanel
             {
                 get { return _contentPanel; }
+            }
+            
+            /// <summary>
+            /// Gets the button group control containing the buttons
+            /// </summary>
+            public IButtonGroupControl ButtonGroupControl
+            {
+                get { return _buttonGroupControl; }
             }
         }
     }

@@ -365,6 +365,13 @@ namespace Habanero.UI.Base
         Size Size { get; set; }
 
         /// <summary>
+        /// Gets or sets the client size the control
+        /// </summary>
+        /// <value>The System.Drawing.Size that represents the height
+        /// and width of the client area of the control in pixels</value>
+        Size ClientSize { get; set; }
+
+        /// <summary>
         /// Activates the control  
         /// </summary>
         void Select();

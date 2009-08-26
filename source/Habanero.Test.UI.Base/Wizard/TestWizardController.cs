@@ -473,6 +473,12 @@ WizardStepStub wizardStepStub = new WizardStepStub();
             set { throw new NotImplementedException(); }
         }
 
+        public Size ClientSize
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
         /// <summary>
         /// Activates the control.  
         /// </summary>

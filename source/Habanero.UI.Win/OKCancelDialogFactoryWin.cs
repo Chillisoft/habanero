@@ -48,8 +48,8 @@ namespace Habanero.UI.Win
         public IOKCancelPanel CreateOKCancelPanel(IControlHabanero nestedControl)
         {
             OKCancelPanelWin mainPanel = new OKCancelPanelWin(_controlFactory);
-            mainPanel.Width = nestedControl.Width  + 5;
-            mainPanel.Height = nestedControl.Height + mainPanel.ButtonGroupControl.Height + 5;
+            mainPanel.Width = nestedControl.Width;
+            mainPanel.Height = nestedControl.Height + mainPanel.ButtonGroupControl.Height;
             mainPanel.ContentPanel.Controls.Add(nestedControl);
             nestedControl.Dock = DockStyle.Fill;
             return mainPanel;
@@ -63,13 +63,12 @@ namespace Habanero.UI.Win
         /// <returns>Returns the created form</returns>
         public IFormHabanero CreateOKCancelForm(IControlHabanero nestedControl, string formTitle)
         {
+            IOKCancelPanel mainPanel = CreateOKCancelPanel(nestedControl);
             FormWin form = (FormWin) _controlFactory.CreateForm();
             form.Text = formTitle;
-            IOKCancelPanel mainPanel = CreateOKCancelPanel(nestedControl);
+            form.ClientSize = mainPanel.Size;
             mainPanel.Dock = DockStyle.Fill;
             form.Controls.Add((Control) mainPanel);
-            form.Height = mainPanel.Height + 5;
-            form.Width = mainPanel.Width + 5;
             form.AcceptButton = (IButtonControl) mainPanel.OKButton;
             mainPanel.OKButton.Click += delegate
                     {
@@ -86,9 +85,9 @@ namespace Habanero.UI.Win
         /// Handles the event of the Cancel Button being clicked.
         ///</summary>
         ///<param name="form"></param>
-        public void CancelButton_ClickHandler(FormWin form)
+        public void CancelButton_ClickHandler(IFormHabanero form)
         {
-            ((Form)form).DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            form.DialogResult = Habanero.UI.Base.DialogResult.Cancel;
             form.Close();
         }
 
@@ -96,9 +95,9 @@ namespace Habanero.UI.Win
         /// Handles the event of the OKButton Being Clicked.
         ///</summary>
         ///<param name="form"></param>
-        public void OkButton_ClickHandler(FormWin form)
+        public void OkButton_ClickHandler(IFormHabanero form)
         {
-            ((Form)form).DialogResult = System.Windows.Forms.DialogResult.OK;
+            form.DialogResult = Habanero.UI.Base.DialogResult.OK;
             form.Close();
         }
 
@@ -115,20 +114,6 @@ namespace Habanero.UI.Win
 
             public OKCancelPanelWin(IControlFactory controlFactory)
             {
-                //_controlFactory = controlFactory;
-                //// create content panel
-                //_contentPanel = _controlFactory.CreatePanel();
-                //_contentPanel.Dock = DockStyle.Fill;
-                //this.Controls.Add((Control) _contentPanel);
-
-                //// create buttons
-                //IButtonGroupControl buttonGroupControl = _controlFactory.CreateButtonGroupControl();
-                //buttonGroupControl.Dock = DockStyle.Bottom;
-                //_okButton = buttonGroupControl.AddButton("OK");
-                //_okButton.NotifyDefault(true);
-                //_cancelButton = buttonGroupControl.AddButton("Cancel");
-                //this.Controls.Add((Control) buttonGroupControl);
-
                 _controlFactory = controlFactory;
                 // create content panel
                 _contentPanel = _controlFactory.CreatePanel();

@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Drawing;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -30,6 +31,10 @@ namespace Habanero.Test.UI.Base
         //TODO: refactor - WIN and VWG are copied and pasted.
         protected abstract IControlFactory GetControlFactory();
 
+        private IOKCancelDialogFactory CreateOKCancelDialogFactory()
+        {
+            return GetControlFactory().CreateOKCancelDialogFactory();
+        }
 
         [TestFixture]
         public class TestOKCancelDialogVWG : TestOKCancelDialog
@@ -49,65 +54,61 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestCreateOKCancelForm()
+            public void Test_CreateOKCancelForm_ShouldSetupOKButtonAsAcceptButton()
             {
                 //---------------Set up test pack-------------------
-                IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
-                    //---------------Execute Test ----------------------
-                IFormHabanero dialogForm = okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
-
-                //---------------Test Result -----------------------
-                Assert.AreEqual(1, dialogForm.Controls.Count);
-                Assert.AreEqual(DockStyle.Fill, dialogForm.Controls[0].Dock);
-                //---------------Tear Down -------------------------
-            }
-
-            [Test]
-            public void TestOKButtonAcceptButton()
-            {
-                //---------------Set up test pack-------------------
-                IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
+                IOKCancelDialogFactory okCancelDialogFactory = CreateOKCancelDialogFactory();
                 //---------------Execute Test ----------------------
-                FormWin dialogForm = (FormWin) okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
+                FormWin dialogForm = (FormWin)okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
                 //---------------Test Result -----------------------
-                IButtonGroupControl buttons = (IButtonGroupControl) dialogForm.Controls[0].Controls[1];
+                IButtonGroupControl buttons = (IButtonGroupControl)dialogForm.Controls[0].Controls[1];
                 Assert.AreSame(buttons["OK"], dialogForm.AcceptButton);
-                //---------------Tear Down -------------------------
             }
 
             [Test]
-            public void TestDialogResultWhenOkClicked()
+            public void Test_DialogResult_WhenOkClicked_ShouldBeOK()
             {
                 //---------------Set up test pack-------------------
-                OKCancelDialogFactoryWin okCancelDialogFactory = (OKCancelDialogFactoryWin) GetControlFactory().CreateOKCancelDialogFactory();
-                FormWin dialogForm = (FormWin) okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
+                OKCancelDialogFactoryWin okCancelDialogFactory = (OKCancelDialogFactoryWin)CreateOKCancelDialogFactory();
+                FormWin dialogForm = (FormWin)okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
 
                 //---------------Execute Test ----------------------
                 okCancelDialogFactory.OkButton_ClickHandler(dialogForm);
                 //---------------Test Result -----------------------
                 Assert.AreEqual(dialogForm.DialogResult, Habanero.UI.Base.DialogResult.OK);
-                //---------------Tear Down -------------------------
             }
             [Test]
-            public void TestDialogResultWhenCancelClicked()
+            public void Test_DialogResult_WhenCancelClicked_ShouldBeCancel()
             {
                 //---------------Set up test pack-------------------
-                OKCancelDialogFactoryWin okCancelDialogFactory = (OKCancelDialogFactoryWin)GetControlFactory().CreateOKCancelDialogFactory();
+                OKCancelDialogFactoryWin okCancelDialogFactory = (OKCancelDialogFactoryWin)CreateOKCancelDialogFactory();
                 FormWin dialogForm = (FormWin)okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
 
                 //---------------Execute Test ----------------------
                 okCancelDialogFactory.CancelButton_ClickHandler(dialogForm);
                 //---------------Test Result -----------------------
                 Assert.AreEqual(dialogForm.DialogResult, Habanero.UI.Base.DialogResult.Cancel);
-                //---------------Tear Down -------------------------
             }
         }
 
         [Test]
-        public void TestLayout()
+        public void Test_CreateOKCancelForm_ShouldDockPanel()
         {
             //---------------Set up test pack-------------------
-            IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
+            IOKCancelDialogFactory okCancelDialogFactory = CreateOKCancelDialogFactory();
+            //---------------Execute Test ----------------------
+            IFormHabanero dialogForm = okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, dialogForm.Controls.Count);
+            Assert.AreEqual(DockStyle.Fill, dialogForm.Controls[0].Dock);
+        }
+
+        [Test]
+        public void Test_CreateOKCancelPanel_ShouldLayoutCorrectly()
+        {
+            //---------------Set up test pack-------------------
+            IOKCancelDialogFactory okCancelDialogFactory = CreateOKCancelDialogFactory();
             IPanel nestedControl = GetControlFactory().CreatePanel();
 
             //---------------Execute Test ----------------------
@@ -125,25 +126,59 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, buttons.Controls.Count);
             Assert.IsNotNull(buttons["OK"]);
             Assert.IsNotNull(buttons["Cancel"]);
-            //---------------Tear Down -------------------------
         }
 
         [Test]
-        public void TestNestedControl()
+        public void Test_CreateOKCancelPanel_ShouldNestControl()
         {
             //---------------Set up test pack-------------------
-            IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
+            IOKCancelDialogFactory okCancelDialogFactory = CreateOKCancelDialogFactory();
             IControlHabanero nestedControl = GetControlFactory().CreatePanel();
-
             //---------------Execute Test ----------------------
             IControlHabanero dialogControl = okCancelDialogFactory.CreateOKCancelPanel(nestedControl);
-            IPanel contentPanel = (IPanel) dialogControl.Controls[0];
-
             //---------------Test Result -----------------------
+            IPanel contentPanel = (IPanel)dialogControl.Controls[0];
             Assert.AreEqual(1, contentPanel.Controls.Count);
             Assert.AreSame(nestedControl, contentPanel.Controls[0]);
             Assert.AreEqual(DockStyle.Fill, nestedControl.Dock);
-            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void Test_CreateOKCancelPanel_ShouldNotChangeControlSize()
+        {
+            //---------------Set up test pack-------------------
+            IOKCancelDialogFactory okCancelDialogFactory = CreateOKCancelDialogFactory();
+            IControlHabanero nestedControl = GetControlFactory().CreatePanel();
+            int width = TestUtil.GetRandomInt(100, 500);
+            int height = TestUtil.GetRandomInt(100, 500);
+            nestedControl.Size = new Size(width, height);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(width, nestedControl.Width);
+            Assert.AreEqual(height, nestedControl.Height);
+            //---------------Execute Test ----------------------
+            IControlHabanero dialogControl = okCancelDialogFactory.CreateOKCancelPanel(nestedControl);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(width, nestedControl.Width, "Width should not have changed");
+            Assert.AreEqual(height, nestedControl.Height, "Height should not have changed");
+        }
+
+        [Test]
+        public void Test_CreateOKCancelForm_ShouldNotChangeControlSize()
+        {
+            //---------------Set up test pack-------------------
+            IOKCancelDialogFactory okCancelDialogFactory = CreateOKCancelDialogFactory();
+            IControlHabanero nestedControl = GetControlFactory().CreatePanel();
+            int width = TestUtil.GetRandomInt(100, 500);
+            int height = TestUtil.GetRandomInt(100, 500);
+            nestedControl.Size = new Size(width, height);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(width, nestedControl.Width);
+            Assert.AreEqual(height, nestedControl.Height);
+            //---------------Execute Test ----------------------
+            IControlHabanero dialogControl = okCancelDialogFactory.CreateOKCancelForm(nestedControl, "MyTestForm");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(width, nestedControl.Width, "Width should not have changed");
+            Assert.AreEqual(height, nestedControl.Height, "Height should not have changed");
         }
     }
 }
