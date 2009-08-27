@@ -125,10 +125,10 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            string dateRangeString = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
+            string dateRangeString = _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual("This Week", dateRangeString);
+            Assert.AreEqual("Week To Date", dateRangeString);
         }
 
         [Test]
@@ -138,13 +138,13 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             string expectedDateRangeString = "Another Week";
             //--------------Assert PreConditions----------------            
-            Assert.AreEqual("This Week", _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek));
+            Assert.AreEqual("Week To Date", _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate));
             Assert.IsFalse(_comboBox.Items.Contains(expectedDateRangeString));
             //---------------Execute Test ----------------------
-            _comboBox.SetDateRangeString(DateRangeOptions.ThisWeek, expectedDateRangeString);
+            _comboBox.SetDateRangeString(DateRangeOptions.WeekToDate, expectedDateRangeString);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedDateRangeString, _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek));
+            Assert.AreEqual(expectedDateRangeString, _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate));
             Assert.IsTrue(_comboBox.Items.Contains(expectedDateRangeString));
         }
 
@@ -156,7 +156,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
             Assert.IsTrue(_comboBox.Items.Contains("Previous Week"));
             //---------------Execute Test ----------------------
-            _comboBox.SetDateRangeString(DateRangeOptions.ThisWeek, "Previous Week");
+            _comboBox.SetDateRangeString(DateRangeOptions.WeekToDate, "Previous Week");
             //---------------Test Result -----------------------
         }
 
@@ -180,7 +180,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(_comboBox.OptionsToDisplay.Contains(DateRangeOptions.ThisHour));
             //---------------Execute Test ----------------------
-            _comboBox.SetDateRangeString(DateRangeOptions.ThisWeek, "This Hour");
+            _comboBox.SetDateRangeString(DateRangeOptions.WeekToDate, "This Hour");
             //---------------Test Result -----------------------
         }
 
@@ -663,7 +663,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate);
 
             //---------------Test Result -----------------------
             _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
@@ -681,7 +681,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate);
 
             //---------------Test Result -----------------------
             _comboBox.WeekStartOffset = -1;
@@ -701,7 +701,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate);
 
             //---------------Test Result -----------------------
             _comboBox.WeekStartOffset = 1;
@@ -721,7 +721,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate);
 
             //---------------Test Result -----------------------
             _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
@@ -741,7 +741,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate);
 
             //---------------Test Result -----------------------
             _comboBox.WeekStartOffset = 1;
@@ -763,7 +763,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate);
 
             //---------------Test Result -----------------------
             _comboBox.WeekStartOffset = -1;
@@ -976,7 +976,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisMonth);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.MonthToDate);
 
             //---------------Test Result -----------------------
             _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
@@ -994,7 +994,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisMonth);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.MonthToDate);
 
             //---------------Test Result -----------------------
             _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
@@ -1019,7 +1019,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisMonth);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.MonthToDate);
 
             //---------------Test Result -----------------------
             _comboBox.MonthStartOffset = 1;
@@ -1039,7 +1039,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisMonth);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.MonthToDate);
 
             //---------------Test Result -----------------------
             _comboBox.MonthStartOffset = 1;
@@ -1250,12 +1250,12 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisYear()
+        public void TestYearToDate()
         {
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.YearToDate);
             //---------------Test Result -----------------------
             _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
             Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
@@ -1267,12 +1267,12 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisYear_WithMidnightOffset()
+        public void TestYearToDate_WithMidnightOffset()
         {
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.YearToDate);
             //---------------Test Result -----------------------
             _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
             _comboBox.FixedNowDate = new DateTime(2007, 1, 1, 0, 0, 0, 0);
@@ -1291,12 +1291,12 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisYear_WithMonthOffset()
+        public void TestYearToDate_WithMonthOffset()
         {
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.YearToDate);
             //---------------Test Result -----------------------
             _comboBox.MonthStartOffset = 1;
             _comboBox.FixedNowDate = new DateTime(2007, 1, 3, 0, 0, 0, 0);
@@ -1310,12 +1310,12 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisYear_WithMonthOffset_MidnightOffset()
+        public void TestYearToDate_WithMonthOffset_MidnightOffset()
         {
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.YearToDate);
             //---------------Test Result -----------------------
             _comboBox.MonthStartOffset = 1;
             _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
@@ -1337,12 +1337,12 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisYear_WithYearOffset()
+        public void TestYearToDate_WithYearOffset()
         {
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.YearToDate);
             //---------------Test Result -----------------------
             _comboBox.YearStartOffset = 1;
             _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
@@ -1356,12 +1356,12 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisYear_YearOffset_MidnightOffset()
+        public void TestYearToDate_YearOffset_MidnightOffset()
         {
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.YearToDate);
             //---------------Test Result -----------------------
             _comboBox.YearStartOffset = 1;
             _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
@@ -1383,12 +1383,12 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisYear_WithYearOffset_MonthOffset()
+        public void TestYearToDate_WithYearOffset_MonthOffset()
         {
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.YearToDate);
             //---------------Test Result -----------------------
             _comboBox.YearStartOffset = 1;
             _comboBox.MonthStartOffset = 1;
@@ -1404,12 +1404,12 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisYear_YearOffsetMonthOffset_MidnightOffset()
+        public void TestYearToDate_YearOffsetMonthOffset_MidnightOffset()
         {
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.YearToDate);
             //---------------Test Result -----------------------
             _comboBox.YearStartOffset = 1;
             _comboBox.MonthStartOffset = 1;
@@ -1432,6 +1432,21 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(new DateTime(2006, 2, 1, 23, 0, 0, 0), _comboBox.StartDate);
             Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
         }
+
+
+        [Test]
+        public void TestThisYear()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.AddDateOption(DateRangeOptions.ThisYear);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2008, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
+        }
+
 
         [Test]
         public void TestLastYear()
@@ -1801,7 +1816,7 @@ namespace Habanero.Test.UI.Base
             _comboBox.IgnoreTime = true;
             _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.WeekToDate);
             //---------------Test Result -----------------------
 
             Assert.AreEqual(new DateTime(2007, 11, 12, 0, 0, 0, 0), _comboBox.StartDate);
@@ -1815,7 +1830,7 @@ namespace Habanero.Test.UI.Base
             _comboBox.IgnoreTime = true;
             _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisMonth);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.MonthToDate);
             //---------------Test Result -----------------------
 
             Assert.AreEqual(new DateTime(2007, 11, 1, 0, 0, 0, 0), _comboBox.StartDate);
@@ -1829,7 +1844,7 @@ namespace Habanero.Test.UI.Base
             _comboBox.IgnoreTime = true;
             _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
             //---------------Execute Test ----------------------
-            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.YearToDate);
             //---------------Test Result -----------------------
 
             Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);

@@ -58,13 +58,13 @@ namespace Habanero.UI.Base
             _optionsToDisplay = new List<DateRangeOptions>();
             _optionsToDisplay.Add(DateRangeOptions.Today);
             _optionsToDisplay.Add(DateRangeOptions.Yesterday);
-            _optionsToDisplay.Add(DateRangeOptions.ThisWeek);
+            _optionsToDisplay.Add(DateRangeOptions.WeekToDate);
             _optionsToDisplay.Add(DateRangeOptions.PreviousWeek);
             _optionsToDisplay.Add(DateRangeOptions.Previous7Days);
-            _optionsToDisplay.Add(DateRangeOptions.ThisMonth);
+            _optionsToDisplay.Add(DateRangeOptions.MonthToDate);
             _optionsToDisplay.Add(DateRangeOptions.PreviousMonth);
             _optionsToDisplay.Add(DateRangeOptions.Previous31Days);
-            _optionsToDisplay.Add(DateRangeOptions.ThisYear);
+            _optionsToDisplay.Add(DateRangeOptions.YearToDate);
             _optionsToDisplay.Add(DateRangeOptions.PreviousYear);
             _optionsToDisplay.Add(DateRangeOptions.Previous365Days);
 
@@ -461,7 +461,7 @@ namespace Habanero.UI.Base
                         _endDate = Now;
                         break;
                     }
-                case DateRangeOptions.ThisWeek:
+                case DateRangeOptions.WeekToDate:
                     {
                         _startDate = WeekStart(Now);
                         _endDate = Now;
@@ -479,7 +479,7 @@ namespace Habanero.UI.Base
                         _endDate = DayStart(Now);
                         break;
                     }
-                case DateRangeOptions.ThisMonth:
+                case DateRangeOptions.MonthToDate:
                     {
                         _startDate = MonthStart(Now);
                         _endDate = Now;
@@ -503,10 +503,16 @@ namespace Habanero.UI.Base
                         _endDate = DayStart(Now);
                         break;
                     }
-                case DateRangeOptions.ThisYear:
+                case DateRangeOptions.YearToDate:
                     {
                         _startDate = YearStart(Now);
                         _endDate = Now;
+                        break;
+                    }                
+                case DateRangeOptions.ThisYear:
+                    {
+                        _startDate = YearStart(Now);
+                        _endDate = YearStart(Now).AddYears(1);
                         break;
                     }
                 case DateRangeOptions.PreviousYear:

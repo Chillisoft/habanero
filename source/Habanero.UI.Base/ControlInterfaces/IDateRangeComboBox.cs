@@ -205,7 +205,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// The period from the first day of the week until now
         /// </summary>
-        ThisWeek,
+        WeekToDate,
         /// <summary>
         /// The period from the first day of the previous week
         /// until the last day of the previous week
@@ -218,7 +218,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// The period from the start of the month until now
         /// </summary>
-        ThisMonth,
+        MonthToDate,
         /// <summary>
         /// The period covering the previous month
         /// </summary>
@@ -233,6 +233,10 @@ namespace Habanero.UI.Base
         Previous31Days,
         /// <summary>
         /// The period covering the start of the year until now
+        /// </summary>
+        YearToDate,        
+        /// <summary>
+        /// The period covering the current year (Jan 1 to Dec 31)
         /// </summary>
         ThisYear,
         /// <summary>
