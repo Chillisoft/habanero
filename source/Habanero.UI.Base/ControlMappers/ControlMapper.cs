@@ -282,10 +282,21 @@ namespace Habanero.UI.Base
                 if (_businessObject != null)
                     if (CurrentBOProp() != null)
                     {
-                        CheckReadWriteRules();
+                        _isEditable = CheckReadWriteRules();
                     }
             }
-            if (_isEditable)
+            UpdateControlVisualState(_isEditable);
+            UpdateControlEnabledState(_isEditable);
+        }
+
+        protected virtual void UpdateControlEnabledState(bool editable)
+        {
+            _control.Enabled = editable;
+        }
+
+        protected virtual void UpdateControlVisualState(bool editable)
+        {
+            if (editable)
             {
                 _control.ForeColor = Color.Black;
                 if (_control is ICheckBox) _control.BackColor = SystemColors.Control;
@@ -296,15 +307,14 @@ namespace Habanero.UI.Base
                 _control.ForeColor = Color.Black;
                 _control.BackColor = Color.Beige;
             }
-            _control.Enabled = _isEditable;
         }
 
-        private void CheckReadWriteRules()
+        private bool CheckReadWriteRules()
         {
             IBOProp boProp = CurrentBOProp();
             string message;
-            _isEditable = boProp.IsEditable(out message);
             //Should Add the message to tool tip text
+            return boProp.IsEditable(out message);
 //            IPropDef propDef = boProp.PropDef;
 //            switch (propDef.ReadWriteRule)
 //            {
