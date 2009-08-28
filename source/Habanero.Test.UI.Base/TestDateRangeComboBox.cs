@@ -971,7 +971,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisMonth()
+        public void TestMonthToDate()
         {
             //---------------Set up test pack-------------------
 
@@ -989,7 +989,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisMonth_WithMidnightOffset()
+        public void TestMonthToDate_WithMidnightOffset()
         {
             //---------------Set up test pack-------------------
 
@@ -1014,7 +1014,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisMonth_WithMonthStartOffset()
+        public void TestMonthToDate_WithMonthStartOffset()
         {
             //---------------Set up test pack-------------------
 
@@ -1034,7 +1034,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestThisMonth_WithMonthStartOffset_MidnightOffset()
+        public void TestMonthToDate_WithMonthStartOffset_MidnightOffset()
         {
             //---------------Set up test pack-------------------
 
