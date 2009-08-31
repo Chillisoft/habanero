@@ -48,7 +48,7 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the created panel</returns>
         public IOKCancelPanel CreateOKCancelPanel(IControlHabanero nestedControl)
         {
-            OKCancelPanelGiz mainPanel = new OKCancelPanelGiz(_controlFactory);
+            OKCancelPanelVWG mainPanel = new OKCancelPanelVWG(_controlFactory);
             mainPanel.Width = nestedControl.Width;
             mainPanel.Height = nestedControl.Height + mainPanel.ButtonGroupControl.Height;
             mainPanel.ContentPanel.Controls.Add(nestedControl);
@@ -104,7 +104,7 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Represents a panel that contains an OK and Cancel button
         /// </summary>
-        private class OKCancelPanelGiz : PanelVWG, IOKCancelPanel
+        private class OKCancelPanelVWG : PanelVWG, IOKCancelPanel
         {
             private readonly IControlFactory _controlFactory;
             private IButton _okButton;
@@ -112,7 +112,7 @@ namespace Habanero.UI.VWG
             private IButton _cancelButton;
             private IButtonGroupControl _buttonGroupControl;
 
-            public OKCancelPanelGiz(IControlFactory controlFactory)
+            public OKCancelPanelVWG(IControlFactory controlFactory)
             {
                 //_controlFactory = controlFactory;
                 //// create content panel
@@ -133,9 +133,9 @@ namespace Habanero.UI.VWG
                 _contentPanel = _controlFactory.CreatePanel();
                 // create buttons
                 _buttonGroupControl = _controlFactory.CreateButtonGroupControl();
+                _cancelButton = _buttonGroupControl.AddButton("Cancel");
                 _okButton = _buttonGroupControl.AddButton("OK");
                 _okButton.NotifyDefault(true);
-                _cancelButton = _buttonGroupControl.AddButton("Cancel");
 
                 BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(this);
                 layoutManager.AddControl(_contentPanel, BorderLayoutManager.Position.Centre);

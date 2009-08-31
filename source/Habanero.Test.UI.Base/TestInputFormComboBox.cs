@@ -22,6 +22,7 @@ using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace Habanero.Test.UI.Base
 {
@@ -36,6 +37,13 @@ namespace Habanero.Test.UI.Base
             {
                 return new ControlFactoryVWG();
             }
+
+            [Ignore("Minimumsize doesn't work for VWG")]
+            public override void Test_CreateOKCancelForm_ShouldSetMinimumSize()
+            {
+                
+            }
+        
         }
 
 
@@ -49,18 +57,13 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSimpleConstructor()
+        public void Test_Construct()
         {
             //---------------Set up test pack-------------------
             const string message = "testMessage";
-            List<object> choices = new List<object>();
-            choices.Add("testItem1");
-            choices.Add("testItem2");
-            choices.Add("testItem3");
-
+            List<object> choices = new List<object> {"testItem1", "testItem2", "testItem3"};
             //---------------Execute Test ----------------------
             InputFormComboBox inputFormComboBox = new InputFormComboBox(GetControlFactory(), message, choices);
-
             //---------------Test Result -----------------------
             Assert.AreEqual(message, inputFormComboBox.Message);
             Assert.AreEqual(choices.Count,inputFormComboBox.ComboBox.Items.Count);
@@ -70,47 +73,163 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestLayout()
+        public void Test_Layout()
         {
             //---------------Set up test pack-------------------
-            const string message = "testMessage";
-            List<object> choices = new List<object>();
-            choices.Add("testItem1");
-            choices.Add("testItem2");
-            choices.Add("testItem3");
-
-            InputFormComboBox inputFormComboBox = new InputFormComboBox(GetControlFactory(), message, choices);
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems();
             //---------------Execute Test ----------------------
-            IPanel panel = inputFormComboBox.createControlPanel();
+            IPanel panel = inputFormComboBox.CreateControlPanel();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, panel.Controls.Count);
-            Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[0]);
-            Assert.IsInstanceOfType(typeof(IComboBox), panel.Controls[1]);
-            Assert.Greater(panel.Controls[0].Top, panel.Top);
-            Assert.IsFalse(panel.Controls[0].Font.Bold);
-            Assert.AreEqual(panel.Width, panel.Controls[1].Width + 30);
-            int width = GetControlFactory().CreateLabel(message, true).PreferredWidth + 20;
-            Assert.AreEqual(panel.Width, width);
+            ILabel label = AssertIsInstanceOf<ILabel>(panel.Controls[0]);
+            IComboBox comboBox = AssertIsInstanceOf<IComboBox>(panel.Controls[1]);
+            Assert.AreSame(inputFormComboBox.ComboBox, comboBox);
+            Assert.That(label.Top + label.Height, Is.LessThan(comboBox.Top));
+            Assert.That(comboBox.Top + comboBox.Height, Is.LessThanOrEqualTo(panel.Height));
+            Assert.IsFalse(label.Font.Bold);
+            Assert.AreEqual(panel.Width - 10, comboBox.Width, "Combo width should be panel width - border widths(5 pixels X 2)");
+            Assert.That(label.Width, Is.GreaterThan(label.PreferredWidth));
+            Assert.AreEqual(panel.Size, panel.MinimumSize);
         }
 
         [Test]
-        public void TestSelectedItem()
+        public void Test_Layout_WhenShortLabelAndCombo_ShouldMinimumWidthForWidth()
         {
             //---------------Set up test pack-------------------
-            const string message = "testMessage";
-            List<object> choices = new List<object>();
-            choices.Add("testItem1");
-            object testitem2 = "testItem2";
-            choices.Add(testitem2);
-            choices.Add("testItem3");
-            InputFormComboBox inputFormComboBox = new InputFormComboBox(GetControlFactory(), message, choices);
-            //---------------Assert pre conditions--------------
-            Assert.AreEqual(null, inputFormComboBox.SelectedItem);
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems("x");
             //---------------Execute Test ----------------------
-            inputFormComboBox.SelectedItem = testitem2;
+            IPanel panel = inputFormComboBox.CreateControlPanel();
             //---------------Test Result -----------------------
-            Assert.AreSame(testitem2, inputFormComboBox.SelectedItem);
-            //---------------Tear Down -------------------------
+            Assert.AreEqual(200, panel.Width);
+        }
+
+        [Test]
+        public void Test_Layout_WhenLongLabel_ShouldUseLabelPreferredWidthForWidth()
+        {
+            //---------------Set up test pack-------------------
+            const string message = "This is a very long message for testing the width of the form being determined by the message width.";
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems(message);
+            //---------------Execute Test ----------------------
+            IPanel panel = inputFormComboBox.CreateControlPanel();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, panel.Controls.Count);
+            ILabel label = AssertIsInstanceOf<ILabel>(panel.Controls[0]);
+            Assert.AreEqual(label.PreferredWidth + 20, panel.Width);
+        }
+
+        [Test]
+        public void Test_Layout_WhenLongComboBoxItem_ShouldUseComboPreferredWidthForWidth()
+        {
+            //---------------Set up test pack-------------------
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems();
+            const string longComboBoxItem = "This is a very long item for the purposes of testing the combo width";
+            inputFormComboBox.ComboBox.Items.Add(longComboBoxItem);
+            //---------------Execute Test ----------------------
+            IPanel panel = inputFormComboBox.CreateControlPanel();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, panel.Controls.Count);
+            int longComboBoxItemPreferredWidth = GetControlFactory().CreateLabel(longComboBoxItem).PreferredWidth;
+            Assert.AreEqual(longComboBoxItemPreferredWidth + 40, panel.Width);
+        }
+
+        [Test]
+        public void Test_SelectedItem_GetAndSet()
+        {
+            //---------------Set up test pack-------------------
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems();
+            int indexToSelect = TestUtil.GetRandomInt(0, 2);
+            string itemToSelect = inputFormComboBox.ComboBox.Items[indexToSelect].ToString();
+            //---------------Assert pre conditions--------------
+            Assert.IsNull(inputFormComboBox.SelectedItem);
+            //---------------Execute Test ----------------------
+            inputFormComboBox.SelectedItem = itemToSelect;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(itemToSelect, inputFormComboBox.SelectedItem);
+        }
+
+        [Test]
+        public void Test_SelectedItem_WhenSet_ShouldSetSelectedItemOnComboBox()
+        {
+            //---------------Set up test pack-------------------
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems();
+            int indexToSelect = TestUtil.GetRandomInt(0, 2);
+            string itemToSelect = inputFormComboBox.ComboBox.Items[indexToSelect].ToString();
+            //---------------Assert pre conditions--------------
+            Assert.IsNull(inputFormComboBox.SelectedItem);
+            Assert.IsNull(inputFormComboBox.ComboBox.SelectedItem);
+            Assert.AreEqual(-1, inputFormComboBox.ComboBox.SelectedIndex);
+            //---------------Execute Test ----------------------
+            inputFormComboBox.SelectedItem = itemToSelect;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(itemToSelect, inputFormComboBox.SelectedItem);
+            Assert.AreEqual(itemToSelect, inputFormComboBox.ComboBox.SelectedItem);
+            Assert.AreEqual(indexToSelect, inputFormComboBox.ComboBox.SelectedIndex);
+        }
+
+        [Test]
+        public virtual void Test_CreateOKCancelForm_ShouldSetMinimumSize()
+        {
+            //---------------Set up test pack-------------------
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IFormHabanero formHabanero = inputFormComboBox.CreateOKCancelForm();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(formHabanero.Size, formHabanero.MinimumSize);
+        }
+
+        [Test]
+        public virtual void Test_CreateOKCancelForm_ShouldSetFormBorderStyle()
+        {
+            //---------------Set up test pack-------------------
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IFormHabanero formHabanero = inputFormComboBox.CreateOKCancelForm();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(FormBorderStyle.FixedToolWindow, formHabanero.FormBorderStyle);
+        }
+
+        [Test]
+        public virtual void Test_CreateOKCancelForm_ShouldSetTitleToSelect()
+        {
+            //---------------Set up test pack-------------------
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IFormHabanero formHabanero = inputFormComboBox.CreateOKCancelForm();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Select", formHabanero.Text);
+        }
+
+        [Test]
+        [Ignore("This is for visual testing purposes")]
+        public void Test_Visually()
+        {
+            //---------------Set up test pack-------------------
+            InputFormComboBox inputFormComboBox = CreateInputFormComboBoxWithThreeItems();
+            inputFormComboBox.ComboBox.Items.Add("This is a very long item for the purposes of testing the combo width");
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            inputFormComboBox.ShowDialog();
+            //---------------Test Result -----------------------
+        }
+
+        private static T AssertIsInstanceOf<T>(object obj)
+        {
+            Assert.IsInstanceOfType(typeof(T), obj);
+            return (T)obj;
+        }
+
+        private InputFormComboBox CreateInputFormComboBoxWithThreeItems()
+        {
+            return CreateInputFormComboBoxWithThreeItems("testMessage");
+        }
+
+        private InputFormComboBox CreateInputFormComboBoxWithThreeItems(string message)
+        {
+            List<object> choices = new List<object> { "testItem1", "testItem2", "testItem3" };
+            return new InputFormComboBox(GetControlFactory(), message, choices);
         }
     }
 }

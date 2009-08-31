@@ -32,6 +32,25 @@ namespace Habanero.Test.UI.Base
         {
             return GetControlFactory().CreateForm();
         }
+
+        private IFormHabanero CreateForm()
+        {
+            IControlHabanero control = CreateControl();
+            return (IFormHabanero) control;
+        }
+
+        [Test]
+        public virtual void Test_FormBorderStyle()
+        {
+            //---------------Set up test pack-------------------
+            IFormHabanero formHabanero = CreateForm();
+            FormBorderStyle formBorderStyle = TestUtil.GetRandomEnum<FormBorderStyle>();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            formHabanero.FormBorderStyle = formBorderStyle;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(formBorderStyle, formHabanero.FormBorderStyle);
+        }
     }
 
     /// <summary>
@@ -43,6 +62,25 @@ namespace Habanero.Test.UI.Base
         protected override IControlHabanero CreateControl()
         {
             return GetControlFactory().CreateForm();
+        }
+
+        private IFormHabanero CreateForm()
+        {
+            IControlHabanero control = CreateControl();
+            return (IFormHabanero)control;
+        }
+
+        [Test]
+        public virtual void Test_FormBorderStyle()
+        {
+            //---------------Set up test pack-------------------
+            IFormHabanero formHabanero = CreateForm();
+            FormBorderStyle formBorderStyle = TestUtil.GetRandomEnum<FormBorderStyle>();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            formHabanero.FormBorderStyle = formBorderStyle;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(formBorderStyle, formHabanero.FormBorderStyle);
         }
     }
 

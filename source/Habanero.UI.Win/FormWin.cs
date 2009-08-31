@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 
@@ -72,7 +73,7 @@ namespace Habanero.UI.Win
         IFormHabanero IFormHabanero.MdiParent
         {
             get { throw new NotImplementedException(); }
-            set { this.MdiParent = (Form) value; }
+            set { this.MdiParent = (Form)value; }
         }
 
         /// <summary>
@@ -80,8 +81,8 @@ namespace Habanero.UI.Win
         /// </summary>
         Base.FormWindowState IFormHabanero.WindowState
         {
-            get { return (Base.FormWindowState) base.WindowState; }
-            set { base.WindowState = (System.Windows.Forms.FormWindowState) value; }
+            get { return (Base.FormWindowState)base.WindowState; }
+            set { base.WindowState = (System.Windows.Forms.FormWindowState)value; }
         }
 
         /// <summary>
@@ -121,6 +122,21 @@ namespace Habanero.UI.Win
         {
             get { return (Base.DialogResult)base.DialogResult; }
             set { base.DialogResult = (System.Windows.Forms.DialogResult)value; }
+        }
+
+        ///<summary>
+        /// Gets or sets the border style of the form.
+        ///</summary>
+        ///<returns>A <see cref="Base.FormBorderStyle" /> that represents the style of border to display for the form. 
+        /// The default is <see cref="Base.FormBorderStyle.Sizable" />.
+        ///</returns>
+        /// <exceptions>
+        /// <see cref="InvalidEnumArgumentException"/>: The value specified is outside the range of valid values.
+        /// </exceptions>
+        Base.FormBorderStyle IFormHabanero.FormBorderStyle
+        {
+            get { return (Base.FormBorderStyle)base.FormBorderStyle; }
+            set { base.FormBorderStyle = (System.Windows.Forms.FormBorderStyle)value; }
         }
     }
 }

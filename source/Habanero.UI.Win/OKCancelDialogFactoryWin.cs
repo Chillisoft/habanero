@@ -119,9 +119,9 @@ namespace Habanero.UI.Win
                 _contentPanel = _controlFactory.CreatePanel();
                 // create buttons
                 _buttonGroupControl = _controlFactory.CreateButtonGroupControl();
+                _cancelButton = ButtonGroupControl.AddButton("Cancel");
                 _okButton = ButtonGroupControl.AddButton("OK");
                 _okButton.NotifyDefault(true);
-                _cancelButton = ButtonGroupControl.AddButton("Cancel");
 
                 BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(this);
                 layoutManager.AddControl(_contentPanel, BorderLayoutManager.Position.Centre);

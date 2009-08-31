@@ -17,7 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Habanero.UI.Base
 {
@@ -82,29 +84,58 @@ namespace Habanero.UI.Base
         /// Creates the panel on the form
         /// </summary>
         /// <returns>Returns the panel created</returns>
-        public IPanel createControlPanel()
+        public IPanel CreateControlPanel()
         {
             IPanel panel = _controlFactory.CreatePanel();
             ILabel label = _controlFactory.CreateLabel(_message, false);
-            FlowLayoutManager flowLayoutManager = new FlowLayoutManager(panel, _controlFactory);
-            flowLayoutManager.AddControl(label);
-            flowLayoutManager.AddControl(_comboBox);
-            panel.Height = _comboBox.Height + label.Height;
-            panel.Width = _controlFactory.CreateLabel(_message, true).PreferredWidth + 20;
+            ColumnLayoutManager columnLayoutManager = new ColumnLayoutManager(panel, _controlFactory);
+            columnLayoutManager.AddControl(label);
+            columnLayoutManager.AddControl(_comboBox);
+            panel.Height = _comboBox.Height + label.Height + columnLayoutManager.BorderSize + columnLayoutManager.GapSize;
+            int preferredWidth = label.PreferredWidth + 20;
+            int preferredWidthFromCombo = GetLongestComboText() + 40;
+            if (preferredWidthFromCombo > preferredWidth) 
+                preferredWidth = preferredWidthFromCombo;
+            if (preferredWidth < 200) 
+                preferredWidth = 200;
+            panel.Width = preferredWidth;
             _comboBox.Width = panel.Width - 30;
+            panel.MinimumSize = panel.Size;
             return panel;
         }
 
-        //this is Currently untestable, the layout has been tested in the createControlPanel method.
+        private int GetLongestComboText()
+        {
+            int longestText = 0;
+            foreach (object item in ComboBox.Items)
+            {
+                int itemLength = _controlFactory.CreateLabel(Convert.ToString(item)).PreferredWidth;
+                if (itemLength > longestText)
+                {
+                    longestText = itemLength;
+                }
+            }
+            return longestText;
+        }
+
+        //this is Currently untestable, the layout has been tested in the CreateControlPanel method.
         /// <summary>
         /// Shows the form to the user
         /// </summary>
         public DialogResult ShowDialog()
         {
-            IPanel panel = createControlPanel();
-            IOKCancelDialogFactory okCancelDialogFactory = _controlFactory.CreateOKCancelDialogFactory();
-            IFormHabanero form = okCancelDialogFactory.CreateOKCancelForm(panel, "");
+            IFormHabanero form = CreateOKCancelForm();
             return form.ShowDialog();
+        }
+
+        internal IFormHabanero CreateOKCancelForm()
+        {
+            IPanel panel = CreateControlPanel();
+            IOKCancelDialogFactory okCancelDialogFactory = _controlFactory.CreateOKCancelDialogFactory();
+            IFormHabanero form = okCancelDialogFactory.CreateOKCancelForm(panel, "Select");
+            form.MinimumSize = form.Size;
+            form.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            return form;
         }
     }
 }

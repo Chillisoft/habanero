@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
 
 namespace Habanero.UI.Base
 {
@@ -107,6 +108,46 @@ namespace Habanero.UI.Base
     }
 
     /// <summary>
+    /// Specifies the border styles for a form.
+    /// </summary>
+    public enum FormBorderStyle
+    {
+        /// <summary>
+        /// A fixed, three-dimensional border.
+        /// </summary>
+        Fixed3D = 2,
+        /// <summary>
+        /// A thick, fixed dialog-style border.
+        /// </summary>
+        FixedDialog = 3,
+        /// <summary>
+        /// A fixed, single-line border.
+        /// </summary>
+        FixedSingle = 1,
+        /// <summary>
+        /// A tool window border that is not resizable. A tool window does not appear in the taskbar or 
+        /// in the window that appears when the user presses ALT+TAB. Although forms that 
+        /// specify <see cref="FixedToolWindow"/> typically are not shown in 
+        /// the taskbar, you must also ensure that the ShowInTaskbar
+        /// property is set to false, since its default value is true.
+        /// </summary>
+        FixedToolWindow = 5,
+        /// <summary>
+        /// No border.
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// A resizable border.
+        /// </summary>
+        Sizable = 4,
+        /// <summary>
+        /// A resizable tool window border. A tool window does not appear in the taskbar or 
+        /// in the window that appears when the user presses ALT+TAB.
+        /// </summary>
+        SizableToolWindow = 6
+    }
+
+    /// <summary>
     /// Represents a window or dialog box that makes up an application's user interface
     /// </summary>
     public interface IFormHabanero : IControlHabanero
@@ -187,5 +228,16 @@ namespace Habanero.UI.Base
 //        /// Gets or sets the MainMenu that is displayed in the form.
 //        /// </summary>
 //        IMainMenuHabanero Menu { set; get; }
+
+        ///<summary>
+        /// Gets or sets the border style of the form.
+        ///</summary>
+        ///<returns>A <see cref="Base.FormBorderStyle" /> that represents the style of border to display for the form. 
+        /// The default is <see cref="Base.FormBorderStyle.Sizable" />.
+        ///</returns>
+        /// <exceptions>
+        /// <see cref="InvalidEnumArgumentException"/>: The value specified is outside the range of valid values.
+        /// </exceptions>
+        FormBorderStyle FormBorderStyle { set; get; }
     }
 }

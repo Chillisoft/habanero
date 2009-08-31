@@ -22,6 +22,7 @@ using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using DockStyle=Habanero.UI.Base.DockStyle;
 
 namespace Habanero.Test.UI.Base
@@ -126,6 +127,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, buttons.Controls.Count);
             Assert.IsNotNull(buttons["OK"]);
             Assert.IsNotNull(buttons["Cancel"]);
+            Assert.That(buttons["OK"].Right, Is.LessThan(buttons["Cancel"].Left));
         }
 
         [Test]

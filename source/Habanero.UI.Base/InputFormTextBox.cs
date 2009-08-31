@@ -104,7 +104,7 @@ namespace Habanero.UI.Base
             return panel;
         }
 
-        //this is Currently untestable, the layout has been tested in the createControlPanel method. 
+        //this is Currently untestable, the layout has been tested in the CreateControlPanel method. 
         /// <summary>
         /// Shows the form to the user
         /// </summary>

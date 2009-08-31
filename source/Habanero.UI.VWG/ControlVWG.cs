@@ -61,17 +61,25 @@ namespace Habanero.UI.VWG
             set { base.Dock = DockStyleVWG.GetDockStyle(value); }
         }
 
-        #endregion
-
-
+        /// <summary>
+        /// Gets the distance, in pixels, between the bottom edge of the
+        /// control and the top edge of its container's client area
+        /// </summary>
         int IControlHabanero.Bottom
         {
             get { return this.Top + this.Height; }
         }
 
+        /// <summary>
+        /// Gets the distance, in pixels, between the right edge of the
+        /// control and the left edge of its container's client area
+        /// </summary>
         int IControlHabanero.Right
         {
             get { return this.Left + this.Width; }
         }
+
+        #endregion
+
     }
 }

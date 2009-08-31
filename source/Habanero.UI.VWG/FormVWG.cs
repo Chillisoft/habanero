@@ -18,12 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
-using FormStartPosition=Habanero.UI.Base.FormStartPosition;
-
 
 namespace Habanero.UI.VWG
 {
@@ -137,6 +134,21 @@ namespace Habanero.UI.VWG
 //        {
 //            get { return  base.Menu; }
 //            set { base.Menu = (MainMenu) value; }
-//        }
+        //        }
+
+        ///<summary>
+        /// Gets or sets the border style of the form.
+        ///</summary>
+        ///<returns>A <see cref="Base.FormBorderStyle" /> that represents the style of border to display for the form. 
+        /// The default is <see cref="Base.FormBorderStyle.Sizable" />.
+        ///</returns>
+        /// <exceptions>
+        /// <see cref="InvalidEnumArgumentException"/>: The value specified is outside the range of valid values.
+        /// </exceptions>
+        Base.FormBorderStyle IFormHabanero.FormBorderStyle
+        {
+            get { return (Base.FormBorderStyle)base.FormBorderStyle; }
+            set { base.FormBorderStyle = (Gizmox.WebGUI.Forms.FormBorderStyle)value; }
+        }
     }
 }
