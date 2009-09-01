@@ -396,7 +396,8 @@ namespace Habanero.UI.Base
             else
             {
                 IDataGridViewRow findRow = _gridBase.Rows[rowIndex];
-                return this._boCol.Find(GetRowObjectIDValue(findRow));
+                Guid value = GetRowObjectIDValue(findRow);
+                return _boCol == null ? null : this._boCol.Find(value);
             }
             return null;
         }

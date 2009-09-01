@@ -457,6 +457,22 @@ namespace Habanero.Test.UI.Base
             IBusinessObject bo = editableGrid.GetBusinessObjectAtRow(4);
             //---------------Test Result -----------------------
             Assert.IsNull(bo);
+        } 
+        [Test]
+        public void Test_GetBusinessObjectAtRow_WhenBOColNull_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+            AddControlToForm(editableGrid);
+            SetupGridColumnsForMyBo(editableGrid);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(editableGrid.BusinessObjectCollection);
+            //---------------Execute Test ----------------------
+            IBusinessObject bo = editableGrid.GetBusinessObjectAtRow(0);
+            //---------------Test Result -----------------------
+            Assert.IsNull(bo);
         }
 
         private void LoadMyBoDefaultClassDef()

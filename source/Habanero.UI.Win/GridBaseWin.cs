@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
@@ -101,11 +102,18 @@ namespace Habanero.UI.Win
         /// <param name="e">Attached arguments regarding the event</param>
         private void DoubleClickHandler(object sender, EventArgs e)
         {
-            System.Drawing.Point pt = this.PointToClient(Cursor.Position);
-            HitTestInfo hti = this.HitTest(pt.X, pt.Y);
-            if (hti.Type == DataGridViewHitTestType.Cell)
+            try
             {
-                FireRowDoubleClicked(SelectedBusinessObject);
+                Point pt = this.PointToClient(Cursor.Position);
+                HitTestInfo hti = this.HitTest(pt.X, pt.Y);
+                if (hti.Type == DataGridViewHitTestType.Cell)
+                {
+                    FireRowDoubleClicked(SelectedBusinessObject);
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 

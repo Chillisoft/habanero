@@ -32,9 +32,7 @@ namespace Habanero.UI.Base
     ///   in the <see cref="IBOColSelectorControl"/> then its values are displayed in the <see cref="IBusinessObjectControl"/>.<br/>
     /// </summary>
     public class BOSelectorAndEditorManager
-    {
-        
-
+    {        
         ///<summary>
         /// Constructor for the <see cref="BOSelectorAndEditorManager"/>
         ///</summary>
@@ -54,18 +52,24 @@ namespace Habanero.UI.Base
         {
             BOColSelector.BusinessObjectSelected += ((sender, e) => 
                     {
-                        BOEditor.BusinessObject = e.BusinessObject;
+                        try
+                        {
+                            BOEditor.BusinessObject = e.BusinessObject;
+                        }
+                        catch (Exception ex)
+                        {
+                            GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+                        }
                     });
         }
 
-
         ///<summary>
-        /// Returns hte <see cref="IBOColSelectorControl"/> that is being managed by this <see cref="BOSelectorAndEditorManager"/>
+        /// Returns the <see cref="IBOColSelectorControl"/> that is being managed by this <see cref="BOSelectorAndEditorManager"/>
         ///</summary>
         public IBOColSelectorControl BOColSelector { get; private set; }
 
         ///<summary>
-        /// Returns hte <see cref="IBusinessObjectControl"/> that is being managed by this <see cref="BOSelectorAndEditorManager"/>
+        /// Returns the <see cref="IBusinessObjectControl"/> that is being managed by this <see cref="BOSelectorAndEditorManager"/>
         ///</summary>
         public IBusinessObjectControl BOEditor { get; private set; }
   

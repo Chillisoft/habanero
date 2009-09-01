@@ -22,7 +22,6 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using System.Security.Policy;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 
@@ -31,7 +30,7 @@ namespace Habanero.Util
     /// <summary>
     /// Provides a loader of types for the specified assembly and class names
     /// </summary>
-    public class TypeLoader
+    public static class TypeLoader
     {
         /// <summary>
         /// Returns the type for the specified assembly and class name

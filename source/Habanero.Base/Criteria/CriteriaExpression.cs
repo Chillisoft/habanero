@@ -29,7 +29,7 @@ namespace Habanero.Base
     /// </summary>
     public class CriteriaExpression
     {
-        private static readonly String[] _defaultOperators = new String[]
+        private static readonly String[] _defaultOperators = new[]
             {
                 " OR ",
                 " AND ",
