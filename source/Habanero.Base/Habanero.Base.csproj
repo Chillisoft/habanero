@@ -300,6 +300,7 @@
     <Compile Include="UIDefCol.cs" />
     <Compile Include="Util\ByteString.cs" />
     <Compile Include="Util\ConfigFileSettings.cs" />
+    <Compile Include="Util\CrossThreadRunner.cs" />
     <Compile Include="Util\DateTimeUtilities.cs" />
     <Compile Include="Util\EmailSender.cs" />
     <Compile Include="Util\FileUtilities.cs" />
