@@ -32,8 +32,8 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlClassDefsLoader
     {
-        [TestFixtureSetUp]
-        public void SetupFixture()
+        [SetUp]
+        public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
         }
@@ -107,6 +107,7 @@ namespace Habanero.Test.BO.Loaders
             IClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
             Assert.IsNotNull(classDefTestClass);
             Assert.IsNotNull(classDefInherited.SuperClassDef);
+            //This is expecting a null PrimaryKeyDef because the global ClassDef.Classdefs col is not loaded yet.
             Assert.IsNull(classDefInherited.PrimaryKeyDef);
         }
 
@@ -847,8 +848,8 @@ namespace Habanero.Test.BO.Loaders
             ClassDef.LoadClassDefs(new XmlClassDefsLoader(classDefsString,new DtdLoader(), GetDefClassFactory()));
             //--------------------Execute Test-------------------------
             const string secondClassDefStringToLoad = @"
-                        <classes>
-                            <class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+                    <classes>
+                        <class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
