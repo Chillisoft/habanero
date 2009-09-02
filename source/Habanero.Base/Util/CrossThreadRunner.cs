@@ -54,6 +54,21 @@ namespace Habanero.Util
             Run(userDelegate, ApartmentState.MTA);
         }
 
+        /// <summary>
+        /// Run the specified funcion delegate in the MTA Thread and return the return value of the function.
+        /// </summary>
+        /// <param name="function">The function delegate to be run in the MTA Thread</param>
+        /// <returns>The return value of the function</returns>
+        public TReturn RunInMTA<TReturn>(Function<TReturn> function)
+        {
+            TReturn returnValue = default(TReturn);
+            RunInMTA(delegate
+            {
+                returnValue = function();
+            });
+            return returnValue;
+        }
+
         ///<summary>
         /// Run the specified delegate in the STA Thread.
         ///</summary>
@@ -61,6 +76,21 @@ namespace Habanero.Util
         public void RunInSTA(ThreadStart userDelegate)
         {
             Run(userDelegate, ApartmentState.STA);
+        }
+
+        /// <summary>
+        /// Run the specified funcion delegate in the STA Thread and return the return value of the function.
+        /// </summary>
+        /// <param name="function">The function delegate to be run in the STA Thread</param>
+        /// <returns>The return value of the function</returns>
+        public TReturn RunInSTA<TReturn>(Function<TReturn> function)
+        {
+            TReturn returnValue = default(TReturn);
+            RunInSTA(delegate
+            {
+                returnValue = function();
+            });
+            return returnValue;
         }
 
         private void Run(ThreadStart userDelegate, ApartmentState apartmentState)

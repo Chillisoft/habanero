@@ -122,7 +122,6 @@
     <Compile Include="ControlMappers\ExtendedComboBoxMapper.cs" />
     <Compile Include="ControlMappers\ListComboBoxMapper.cs" />
     <Compile Include="ControlMappers\RelationshipComboBoxMapper.cs" />
-    <Compile Include="Delegates.cs" />
     <Compile Include="Selectors\IBOSelectorControl.cs" />
     <Compile Include="GroupBoxGroupControlManager.cs" />
     <Compile Include="IBOEditorControl.cs" />

@@ -53,7 +53,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             MockRepository mockRepository = new MockRepository();
             IConfirmer confirmer = mockRepository.StrictMock<IConfirmer>();
-            Habanero.UI.Base.Function<IBusinessObject, string> customConfirmationMessageDelegate = t => "aaa";
+            Habanero.Util.Function<IBusinessObject, string> customConfirmationMessageDelegate = t => "aaa";
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------

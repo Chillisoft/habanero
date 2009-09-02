@@ -302,6 +302,7 @@
     <Compile Include="Util\ConfigFileSettings.cs" />
     <Compile Include="Util\CrossThreadRunner.cs" />
     <Compile Include="Util\DateTimeUtilities.cs" />
+    <Compile Include="Util\Delegates.cs" />
     <Compile Include="Util\EmailSender.cs" />
     <Compile Include="Util\FileUtilities.cs" />
     <Compile Include="Util\File\CSVFileReader.cs" />
