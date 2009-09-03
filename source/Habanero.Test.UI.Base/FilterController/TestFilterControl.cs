@@ -273,6 +273,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
         #endregion
 
+
         #region TestAddStringFilterTextBox
 
         [Test]
@@ -283,6 +284,22 @@ namespace Habanero.Test.UI.Base.FilterController
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
             //---------------Execute Test ----------------------
             ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
+            tb.Text = "";
+            //---------------Test Result -----------------------
+            Assert.AreEqual(nullClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+            Assert.AreEqual(1, filterControl.FilterControls.Count);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestAddMulitplePropStringFilterTextBox()
+        {
+            //---------------Set up test pack-------------------
+            IFilterClause nullClause = new DataViewNullFilterClause();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            //---------------Execute Test ----------------------
+            List<string> props = new List<string>{"TestColumn"};
+            ITextBox tb = filterControl.AddMultiplePropStringTextBox("Test:", props);
             tb.Text = "";
             //---------------Test Result -----------------------
             Assert.AreEqual(nullClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
@@ -405,6 +422,46 @@ namespace Habanero.Test.UI.Base.FilterController
             IFilterClauseFactory itsFilterClauseFactory = new DataViewFilterClauseFactory();
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
             ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn", FilterClauseOperator.OpEquals);
+
+            //---------------Execute Test ----------------------
+            tb.Text = "testvalue";
+            string filterClauseString = filterControl.GetFilterClause().GetFilterClauseString();
+
+            //---------------Test Result -----------------------
+            IFilterClause clause =
+                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "testvalue");
+            Assert.AreEqual(clause.GetFilterClauseString(), filterClauseString);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestGetMulitplePropTextBoxFilterClause()
+        {
+            //---------------Set up test pack-------------------
+            IFilterClauseFactory itsFilterClauseFactory = new DataViewFilterClauseFactory();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            ITextBox tb = filterControl.AddMultiplePropStringTextBox("Test:", new List<string>{"TestColumn"});
+
+            //---------------Execute Test ----------------------
+            tb.Text = "testvalue";
+            string filterClauseString = filterControl.GetFilterClause().GetFilterClauseString();
+
+            //---------------Test Result -----------------------
+            IFilterClause clause =
+                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
+            Assert.AreEqual(clause.GetFilterClauseString(), filterClauseString);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestGetMultiplePropTextBoxFilterClause_Equals()
+        {
+            //---------------Set up test pack-------------------
+            IFilterClauseFactory itsFilterClauseFactory = new DataViewFilterClauseFactory();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            ITextBox tb = filterControl.AddMultiplePropStringTextBox("Test:", new List<string> { "TestColumn" }, FilterClauseOperator.OpEquals);
 
             //---------------Execute Test ----------------------
             tb.Text = "testvalue";

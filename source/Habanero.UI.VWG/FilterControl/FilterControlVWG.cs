@@ -182,6 +182,34 @@ namespace Habanero.UI.VWG
         }
 
         /// <summary>
+        /// Adds a TextBox filter in which users can specify text that
+        /// multiplt string-value columns will be filtered on.  This uses a "like"
+        /// operator and accepts any strings that contain the provided clause.
+        /// </summary>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="propertyNames">The business object propertys on which to filter</param>
+        /// <returns>Returns the new TextBox added</returns>
+        public ITextBox AddMultiplePropStringTextBox(string labelText, List<string> propertyNames)
+        {
+            ICustomFilter filter = _filterControlManager.AddMultiplePropStringTextBox(labelText, propertyNames);
+            return (ITextBox)filter.Control;
+        }
+
+        /// <summary>
+        /// Adds a TextBox filter in which users can specify text that
+        /// multiple string-value columns will be filtered on.
+        /// </summary>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="propertyNames">The business object propertys on which to filter</param>
+        /// <param name="filterClauseOperator">The operator to use for the filter clause</param>
+        /// <returns>Returns the new TextBox added</returns>
+        public ITextBox AddMultiplePropStringTextBox(string labelText, List<string> propertyNames, FilterClauseOperator filterClauseOperator)
+        {
+            ICustomFilter filter = _filterControlManager.AddMultiplePropStringTextBox(labelText, propertyNames, filterClauseOperator);
+            return (ITextBox)filter.Control;
+        }
+
+        /// <summary>
         /// Adds a ComboBox filter control
         /// </summary>
         /// <param name="labelText">The label to appear before the control</param>

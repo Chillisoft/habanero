@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{12A701DA-DAF5-4709-942E-17F1EFA381D8}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -103,6 +103,7 @@
     <Compile Include="ButtonsControl\TestButtonSizePolicy.cs" />
     <Compile Include="ButtonsControl\TestButtonSizePolicyUserDefined.cs" />
     <Compile Include="Controllers\TestBOColTabControlManager.cs" />
+    <Compile Include="FilterController\TestMultiplePropStringTextBoxFilter.cs" />
     <Compile Include="Mappers\TestCollectionComboBoxMapper.cs">
       <SubType>Code</SubType>
     </Compile>

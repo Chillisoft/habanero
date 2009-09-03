@@ -100,6 +100,16 @@ namespace Habanero.UI.Base
             StringTextBoxFilter filter = new StringTextBoxFilter(_controlFactory, propertyName, FilterClauseOperator.OpLike);
             AddCustomFilter(labelText, filter);
             return filter;
+        }        
+        
+        /// <summary>
+        /// See <see cref="IFilterControl.AddStringFilterTextBox(string,string)"/>
+        /// </summary>
+        public ICustomFilter AddMultiplePropStringTextBox(string labelText, List<string> propertyNames)
+        {
+            MultiplePropStringTextBoxFilter filter = new MultiplePropStringTextBoxFilter(_controlFactory, propertyNames, FilterClauseOperator.OpLike);
+            AddCustomFilter(labelText, filter);
+            return filter;
         }
 
         private void AddControlToLayoutManager(IControlHabanero label, IControlHabanero entryControl)
@@ -120,6 +130,16 @@ namespace Habanero.UI.Base
         public ICustomFilter AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator)
         {
             StringTextBoxFilter filter = new StringTextBoxFilter(_controlFactory, propertyName, filterClauseOperator);
+            AddCustomFilter(labelText,  filter);
+            return filter;
+        }
+
+        /// <summary>
+        /// See <see cref="IFilterControl.AddStringFilterTextBox(string,string,FilterClauseOperator)"/>
+        /// </summary>
+        public ICustomFilter AddMultiplePropStringTextBox(string labelText, List<string> propertyNames, FilterClauseOperator filterClauseOperator)
+        {
+            MultiplePropStringTextBoxFilter filter = new MultiplePropStringTextBoxFilter(_controlFactory, propertyNames, filterClauseOperator);
             AddCustomFilter(labelText,  filter);
             return filter;
         }
