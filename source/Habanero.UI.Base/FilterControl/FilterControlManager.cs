@@ -237,6 +237,19 @@ namespace Habanero.UI.Base
 
             return filter;
         }
+
+        ///<summary>
+        /// Adds a static string filter <see cref="StringStaticFilter"/> to the Filter Control.
+        /// This allows the developer to set a filter that is always applied and is not modifyable or visible to the End user.
+        ///</summary>
+        ///<param name="propertyName"></param>
+        ///<param name="filterClauseOperator"></param>
+        ///<param name="filterValue"></param>
+        public void AddStaticStringFilterClause(string propertyName, FilterClauseOperator filterClauseOperator, string filterValue)
+        {
+            StringStaticFilter filter = new StringStaticFilter(propertyName, filterClauseOperator, filterValue);
+            _filterControls.Add(filter);
+        }
     }
 
     ///<summary>

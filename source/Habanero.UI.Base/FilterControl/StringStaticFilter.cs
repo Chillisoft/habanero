@@ -1,0 +1,65 @@
+using System;
+using Habanero.Base;
+
+namespace Habanero.UI.Base
+{
+    /// <summary>
+    /// This allows the developer to set a filter that is always applied and is not modifyable or visible to the End user.
+    /// For example this can be used to show only the Non Archived users.
+    /// </summary>
+    public class StringStaticFilter : ICustomFilter
+    {
+        private readonly string _propertyName;
+        private readonly FilterClauseOperator _filterClauseOperator;
+        private readonly string _constantvalue;
+
+        ///<summary>
+        /// Constructor for <see cref="StringStaticFilter"/>
+        ///</summary>
+        ///<param name="propertyName"></param>
+        ///<param name="filterClauseOperator"></param>
+        ///<param name="constantvalue">The Constant Value that is being used in this filter</param>
+        public StringStaticFilter(string propertyName, FilterClauseOperator filterClauseOperator, string constantvalue)
+        {
+            _propertyName = propertyName;
+            _filterClauseOperator = filterClauseOperator;
+            _constantvalue = constantvalue;
+        }
+
+        ///<summary>
+        /// The control that has been constructed by this Control Manager.
+        ///</summary>
+        public IControlHabanero Control { get { return null; } }
+
+        ///<summary>
+        /// Returns the filter clause for this control
+        ///</summary>
+        ///<param name="filterClauseFactory"></param>
+        ///<returns></returns>
+        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) {
+            return string.IsNullOrEmpty(_constantvalue)
+                       ? filterClauseFactory.CreateNullFilterClause()
+                       : filterClauseFactory.CreateStringFilterClause(_propertyName, _filterClauseOperator, _constantvalue);
+        }
+
+        ///<summary>
+        /// Clears the <see cref="IDateRangeComboBox"/> of its value
+        ///</summary>
+        public void Clear() { }
+
+        /// <summary>
+        /// Event handler that fires when the value in the Filter control changes
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        ///<summary>
+        /// The name of the property being filtered by.
+        ///</summary>
+        public string PropertyName { get { return _propertyName; } }
+
+        ///<summary>
+        /// Returns the operator <see cref="ICustomFilter.FilterClauseOperator"/> e.g.OpEquals to be used by for creating the Filter Clause.
+        ///</summary>
+        public FilterClauseOperator FilterClauseOperator { get { return _filterClauseOperator; } }
+    }
+}

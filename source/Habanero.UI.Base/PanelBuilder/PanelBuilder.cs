@@ -298,7 +298,7 @@ namespace Habanero.UI.Base
                             columnSpanTrackerForRow[i] = formField.ColSpan;
 
                         PanelInfo.FieldInfo fieldInfo = AddControlsForField(formField, panelInfo);
-                        fieldInfo.InputControl.TabIndex = currentRowNo + (currentColumnNo * maxRowsInColumns);
+                        fieldInfo.InputControl.TabIndex = currentColumnNo*maxRowsInColumns + currentRowNo;
                     }
                     else
                     {

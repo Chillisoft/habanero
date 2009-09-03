@@ -52,7 +52,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //runs every time any testmethod is complete
         }
 
-
+  
         [Test]
         public void TestSetLayoutManager()
         {
@@ -243,6 +243,24 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.IsTrue(((CustomFilterStub)customFilter)._valueChangedFired);
         }
 
+
+        [Test]
+        public void Test_AddStaticFilterClause()
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            //---------------Execute Test ----------------------
+            const string propertyName = "TestColumn2";
+            const string filtervalue = "FilterValue";
+            filterControl.AddStaticStringFilterClause(propertyName, FilterClauseOperator.OpGreaterThan, filtervalue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, filterControl.FilterControls.Count);
+            ICustomFilter control = filterControl.FilterControls[0];
+            Assert.AreEqual(propertyName, control.PropertyName);
+            Assert.AreEqual(FilterClauseOperator.OpGreaterThan, control.FilterClauseOperator);
+            IFilterClause filterClause = control.GetFilterClause(new DataViewFilterClauseFactory());
+            Assert.AreEqual(string.Format("{0} > '{1}'", propertyName, filtervalue), filterClause.GetFilterClauseString());
+        }
 
         private static IComboBox GetFilterComboBox_2Items(IFilterControl filterControl)
         {

@@ -402,8 +402,7 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the new DateRangeComboBox added</returns>
         public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
         {
-            ICustomFilter filter =  _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
-                includeEndDate);
+            ICustomFilter filter =  _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate, includeEndDate);
             return (IDateRangeComboBox) filter.Control;
         }
 
@@ -452,6 +451,18 @@ namespace Habanero.UI.VWG
         public void AddDefaultClearClickEvent()
         {
             throw new NotImplementedException();
+        }
+
+        ///<summary>
+        /// Adds a static string filter <see cref="StringStaticFilter"/> to the Filter Control.
+        /// This allows the developer to set a filter that is always applied and is not modifyable or visible to the End user.
+        ///</summary>
+        ///<param name="propertyName"></param>
+        ///<param name="filterClauseOperator"></param>
+        ///<param name="filterValue"></param>
+        public void AddStaticStringFilterClause(string propertyName, FilterClauseOperator filterClauseOperator, string filterValue)
+        {
+            _filterControlManager.AddStaticStringFilterClause(propertyName, filterClauseOperator, filterValue);
         }
 
         /// <summary>

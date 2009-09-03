@@ -501,6 +501,18 @@ namespace Habanero.UI.Win
             ClearButton.Click += Clear_Filter_Click;
         }
 
+        ///<summary>
+        /// Adds a static string filter <see cref="StringStaticFilter"/> to the Filter Control.
+        /// This allows the developer to set a filter that is always applied and is not modifyable or visible to the End user.
+        ///</summary>
+        ///<param name="propertyName"></param>
+        ///<param name="filterClauseOperator"></param>
+        ///<param name="filterValue"></param>
+        public void AddStaticStringFilterClause(string propertyName, FilterClauseOperator filterClauseOperator, string filterValue)
+        {
+            _filterControlManager.AddStaticStringFilterClause(propertyName, filterClauseOperator, filterValue);
+        }
+
 
         private void FireFilterEvent()
         {

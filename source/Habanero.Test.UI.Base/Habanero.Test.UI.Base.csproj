@@ -104,6 +104,7 @@
     <Compile Include="ButtonsControl\TestButtonSizePolicyUserDefined.cs" />
     <Compile Include="Controllers\TestBOColTabControlManager.cs" />
     <Compile Include="FilterController\TestMultiplePropStringTextBoxFilter.cs" />
+    <Compile Include="FilterController\TestStringStaticFilter.cs" />
     <Compile Include="Mappers\TestCollectionComboBoxMapper.cs">
       <SubType>Code</SubType>
     </Compile>

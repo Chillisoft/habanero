@@ -923,30 +923,40 @@ namespace Habanero.Test.BO
             Assert.AreEqual("deleted", bo.CombinedParts);
         }
 
-        [Test, ExpectedException(typeof (BusObjDeleteException))]
+        [Test]
         public void TestCannotDelete_IsDeletable_False()
         {
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             IBusinessObject bo = classDef.CreateNewBusinessObject();
-            bo.MarkForDelete();
-        }
-
-        [Test]
-        public void TestCannotDelete_IsDeletable_False_ExpectMessage()
-        {
             try
             {
-                TestCannotDelete_IsDeletable_False();
-                Assert.Fail();
+                bo.MarkForDelete();
+                Assert.Fail("Expected to throw an BusObjDeleteException");
             }
+                //---------------Test Result -----------------------
             catch (BusObjDeleteException ex)
             {
-                Assert.IsTrue
-                    (ex.Message.Contains
-                         ("You cannot delete the 'MyBoNotEditableDeletable', as the IsDeletable is set to false for the object"));
+                StringAssert.Contains(string.Format("You cannot delete the 'MyBoNotEditableDeletable', as the IsDeletable is set to false for the object. ObjectID: {0}, also identified as {0}", bo.ID.ToString()), ex.Message);
             }
+           // Assert.Throws<BusObjDeleteException>();
         }
+
+        //[Test]
+        //public void TestCannotDelete_IsDeletable_False_ExpectMessage()
+        //{
+        //    try
+        //    {
+        //        TestCannotDelete_IsDeletable_False();
+        //        Assert.Fail();
+        //    }
+        //    catch (BusObjDeleteException ex)
+        //    {
+        //        Assert.IsTrue
+        //            (ex.Message.Contains
+        //                 ("You cannot delete the 'MyBoNotEditableDeletable', as the IsDeletable is set to false for the object"));
+        //    }
+        //}
 
         [Test]
         public void Test_MarkForDelete_WhenNew_DoesNotThrowException()
@@ -1196,30 +1206,40 @@ namespace Habanero.Test.BO
              Assert.IsTrue(myRelatedBO.Status.IsDeleted);
         }
 
-        [Test, ExpectedException(typeof (BusObjEditableException))]
+        [Test]
         public void TestCannotEdit_IsEditable_False()
         {
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
-            bo.TestProp = "new";
-        }
-
-        [Test]
-        public void TestCannotEdit_IsEditable_False_ExpectMessage()
-        {
             try
             {
-                TestCannotEdit_IsEditable_False();
-                Assert.Fail();
+                bo.TestProp = "new";
+                Assert.Fail("Expected to throw an BusObjEditableException");
             }
+                //---------------Test Result -----------------------
             catch (BusObjEditableException ex)
             {
-                Assert.IsTrue
-                    (ex.Message.Contains
-                         ("You cannot Edit the 'MyBoNotEditableDeletable', as the IsEditable is set to false for the object"));
+                StringAssert.Contains(string.Format("You cannot Edit the 'MyBoNotEditableDeletable', as the IsEditable is set to false for the object. ObjectID: {0}, also identified as {0}", bo.ID.ToString()), ex.Message);
             }
+            //Assert.Throws<BusObjEditableException>(() => bo.TestProp = "new");
         }
+
+        //[Test]
+        //public void TestCannotEdit_IsEditable_False_ExpectMessage()
+        //{
+        //    try
+        //    {
+        //        TestCannotEdit_IsEditable_False();
+        //        Assert.Fail();
+        //    }
+        //    catch (BusObjEditableException ex)
+        //    {
+        //        Assert.IsTrue
+        //            (ex.Message.Contains
+        //                 ("You cannot Edit the 'MyBoNotEditableDeletable', as the IsEditable is set to false for the object"));
+        //    }
+        //}
 
         [Test]
         public void TestCanDelete_IsDeletable_True()

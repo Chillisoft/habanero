@@ -146,6 +146,12 @@ namespace Habanero.UI.VWG
             //  Also, it seems that VWG does not do anything with the "&"
             _buttons.AddButton("Cancel", CancelButtonHandler);
             IButton okbutton = _buttons.AddButton("OK", OKButtonHandler);
+            okbutton.TabStop = false;
+            //okbutton.TabIndex = 3;
+            //okbutton.TabStop = true;
+            //cancelButton.TabIndex = 4;
+            //cancelButton.TabStop = true;
+
             okbutton.NotifyDefault(true);
             this.AcceptButton = (ButtonVWG)okbutton;
             this.Load += delegate { FocusOnFirstControl(); };
