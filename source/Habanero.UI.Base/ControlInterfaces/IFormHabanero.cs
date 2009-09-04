@@ -158,6 +158,11 @@ namespace Habanero.UI.Base
         void Show();
 
         /// <summary>
+        /// Conceals the form from the user.
+        /// </summary>
+        void Hide();
+
+        /// <summary>
         /// Shows the form with the specified owner to the user.
         /// </summary>
         /// <param name="owner">Any object that implements System.Windows.Forms.IWin32Window and represents the top-level window that will own this form.</param>
