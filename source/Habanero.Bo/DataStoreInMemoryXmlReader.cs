@@ -37,6 +37,7 @@ namespace Habanero.BO
                     string propertyValue = reader.Value;
                     bo.SetPropertyValue(propertyName, propertyValue);
                 }
+                bo.Props.BackupPropertyValues();
                 objects.Add(bo.ID.GetAsGuid(), bo);
                 reader.Read();
             }
