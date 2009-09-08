@@ -420,7 +420,7 @@ namespace Habanero.UI.VWG
         public virtual IControlHabanero CreateControl(Type controlType)
         {
             IControlHabanero ctl;
-            if (controlType.IsSubclassOf(typeof (Control)))
+            if (controlType.IsSubclassOf(typeof (Gizmox.WebGUI.Forms.Control)))
             {
                 if (controlType == typeof (ComboBox)) return CreateComboBox();
                 if (controlType == typeof (CheckBox)) return CreateCheckBox();

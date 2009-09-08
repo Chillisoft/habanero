@@ -1,0 +1,353 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gizmox.WebGUI.Forms.Charts</name>
+    </assembly>
+    <members>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Axes.mstrPrefix">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Axes.mstrSuffix">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Axes.mstrTitle">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Axes.Prefix">
+            <summary>
+            Gets or sets the prefix.
+            </summary>
+            <value>The prefix.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Axes.Suffix">
+            <summary>
+            Gets or sets the suffix.
+            </summary>
+            <value>The suffix.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Axes.Title">
+            <summary>
+            Gets or sets the title.
+            </summary>
+            <value>The title.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.TitleBase.Text">
+            <summary>
+            Gets or sets the text associated with this control.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.TitleBase.AlignmentX">
+            <summary>
+            Gets or sets the alignment X.
+            </summary>
+            <value>The alignment X.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.TitleBase.AlignmentY">
+            <summary>
+            Gets or sets the alignment Y.
+            </summary>
+            <value>The alignment Y.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.TitleBase.FontSize">
+            <summary>
+            Gets or sets the size of the font.
+            </summary>
+            <value>The size of the font.</value>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Charts.Title.GetChartDataXML(System.Xml.XmlTextWriter)">
+            <summary>
+            Gets the chart data XML.
+            </summary>
+            <param name="objWriter">The obj writer.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Charts.DataSeries.GetChartDataXML(System.Xml.XmlTextWriter)">
+            <summary>
+            Gets the chart data XML.
+            </summary>
+            <param name="objWriter">The obj writer.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataSeries.RenderAs">
+            <summary>
+            Gets or sets the render as property(Data chart type).
+            
+            </summary>
+            <value>The render as.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataSeries.LabelEnabled">
+            <summary>
+            Gets or sets a value indicating whether the label is enabled.
+            </summary>
+            <value><c>true</c> if [label enabled]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataSeries.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataSeries.MarkerScale">
+            <summary>
+            Gets or sets the marker scale.
+            Should be between 0-1.0
+            </summary>
+            <value>The marker scale.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataSeries.ToolTipText">
+            <summary>
+            Gets or sets the tool tip text.
+            </summary>
+            <value>The tool tip text.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataSeries.Opacity">
+            <summary>
+            Gets or sets the opacity.
+            Should be between 0-1.0
+            </summary>
+            <value>The opacity.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Charts.DataPoint">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.DataPoint.mobjOwner">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Charts.DataPoint.SetOwner(Gizmox.WebGUI.Forms.Charts.DataSeries)">
+            <summary>
+            Sets the owner.
+            </summary>
+            <param name="objOwner">The owner.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Charts.DataPoint.GetChartDataXML(System.Xml.XmlTextWriter)">
+            <summary>
+            Gets the chart data XML.
+            </summary>
+            <param name="objWriter">The obj writer.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataPoint.AxisLabel">
+            <summary>
+            Gets or sets the axis label.
+            </summary>
+            <value>The axis label.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataPoint.Index">
+            <summary>
+            Gets or sets the index.
+            </summary>
+            <value>The index.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataPoint.XValue">
+            <summary>
+            Gets or sets the X value.
+            </summary>
+            <value>The X value.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataPoint.ZValue">
+            <summary>
+            Gets or sets the Z value.
+            </summary>
+            <value>The Z value.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.DataPoint.YValue">
+            <summary>
+            Gets or sets the Y value.
+            </summary>
+            <value>The Y value.</value>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Data.mobjSeries">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Data.mobjOwner">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Charts.Data.GetChartDataXML(System.Xml.XmlTextWriter)">
+            <summary>
+            Gets the chart data XML.
+            </summary>
+            <param name="objWriter">The obj writer.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Charts.ThemeTypes">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.ThemeTypes.Theme1">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.ThemeTypes.Theme2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.ThemeTypes.Theme3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Charts.AnimationTypes">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.AnimationTypes.Type1">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.AnimationTypes.Type2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.AnimationTypes.Type3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.AnimationTypes.Type4">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.AnimationTypes.Type5">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Charts.Chart">
+            <summary>
+            Summary description for Chart
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.mobjAxisXProperty">
+            <summary>
+            The AxisX property registration.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.AnimationEnabledProperty">
+            <summary>
+            The string property registration.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.mobjTitleProperty">
+            <summary>
+            The Title property registration.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.mobjAxisYProperty">
+            <summary>
+            The AxisY property registration.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.AnimationEnabledInitializedProperty">
+            <summary>
+            The AnimationTypes property registration.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.AnimationTypeProperty">
+            <summary>
+            The AnimationTypes property registration.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.mstrView3DProperty">
+            <summary>
+            The string property registration.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.menmThemeProperty">
+            <summary>
+            The ThemeTypes property registration.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.mstrColorSetProperty">
+            <summary>
+            The string property registration.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Charts.Chart.mobjDataProperty">
+            <summary>
+            The Data property registration.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.AnimationEnabled">
+            <summary>
+            Gets or sets a value indicating whether [animation enabled].
+            </summary>
+            <value><c>true</c> if [animation enabled]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.AnimationType">
+            <summary>
+            Gets or sets the type of the animation.
+            </summary>
+            <value>The type of the animation.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.AxisX">
+            <summary>
+            Gets or sets the axis X.
+            </summary>
+            <value>The axis X.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.AxisY">
+            <summary>
+            Gets or sets the axis Y.
+            </summary>
+            <value>The axis Y.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.ColorSet">
+            <summary>
+            Gets or sets the color set.
+            </summary>
+            <value>The color set.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.Data">
+            <summary>
+            Gets the data.
+            </summary>
+            <value>The data.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.Theme">
+            <summary>
+            Gets or sets the theme.
+            </summary>
+            <value>The theme.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.Title">
+            <summary>
+            Gets or sets the title.
+            </summary>
+            <value>The title.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.View3D">
+            <summary>
+            Gets or sets a value indicating whether view3 D is on.
+            </summary>
+            <value><c>true</c> if [view3 D]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Charts.Chart.AnimationEnabledInitialized">
+            <summary>
+            Gets or sets the type of the animation.
+            </summary>
+            <value>The type of the animation.</value>
+        </member>
+    </members>
+</doc>

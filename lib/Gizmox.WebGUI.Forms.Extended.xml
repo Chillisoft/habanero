@@ -1,0 +1,539 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gizmox.WebGUI.Forms.Extended</name>
+    </assembly>
+    <members>
+        <member name="T:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin">
+            <summary>
+            WorkspaceTabs Skin
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.CenterTopTabHoverStyle">
+            <summary>
+            Gets the center tab hover style.
+            </summary>
+            <value>The center tab hover style.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.CenterTopTabNormalStyle">
+            <summary>
+            Gets the center tab normal style.
+            </summary>
+            <value>The center tab normal style.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.CenterTopTabSelectedStyle">
+            <summary>
+            Gets the center tab selected style.
+            </summary>
+            <value>The center tab selected style.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.LeftTopTabHoverStyle">
+            <summary>
+            Gets the left tab hover style.
+            </summary>
+            <value>The left tab hover style.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.LeftTopTabNormalStyle">
+            <summary>
+            Gets the left tab normal style.
+            </summary>
+            <value>The left tab normal style.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.LeftTopTabSelectedStyle">
+            <summary>
+            Gets the left tab selected style.
+            </summary>
+            <value>The left tab selected style.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.RightTopTabHoverStyle">
+            <summary>
+            Gets the right tab hover style.
+            </summary>
+            <value>The right tab hover style.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.RightTopTabNormalStyle">
+            <summary>
+            Gets the right tab normal style.
+            </summary>
+            <value>The right tab normal style.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.RightTopTabSelectedStyle">
+            <summary>
+            Gets the right tab selected style.
+            </summary>
+            <value>The right tab selected style.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Skins.WorkspaceTabsSkin.TabsTopContainerStyle">
+            <summary>
+            Gets the tabs container style.
+            </summary>
+            <value>The tabs container style.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Editors.FCKEditor">
+            <summary>
+            Summary description for FCKEditor
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Editors.FCKEditor.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Editors.FCKEditor.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.Editors.FCKEditor"/> class.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Editors.FCKEditor.RenderAttributes(Gizmox.WebGUI.Common.Interfaces.IContext,Gizmox.WebGUI.Common.Interfaces.IAttributeWriter)">
+            <summary>
+            Renders the attributes.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Editors.FCKEditor.FireEvent(Gizmox.WebGUI.Common.Interfaces.IEvent)">
+            <summary>
+            Fires an event.
+            </summary>
+            <param name="objEvent">event.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Editors.FCKEditor.OnValueChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:ValueChanged"/> event.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Editors.FCKEditor.GetCriticalEvents">
+            <summary>
+            Gets the critical events.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Editors.FCKEditor.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Editors.FCKEditor.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Editors.FCKEditor.ValueChange">
+            <summary>
+            Occurs when the Value property changes.  
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Editors.FCKEditor.ValueChangeQueued">
+            <summary>
+            Occurs when the Value property changes (Queued).  
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.BasePath">
+            <summary>
+            <p>
+            	Sets or gets the virtual path to the editor's directory. It is
+            	relative to the current page.
+            </p>
+            <p>
+            	The default value is "/FCKeditor/".
+            </p>
+            <p>
+            	The base path can be also set in the Web.config file using the 
+            	appSettings section. Just set the "FCKeditor:BasePath" for that. 
+            	For example:
+            	<code>
+            	&lt;configuration&gt;
+            		&lt;appSettings&gt;
+            			&lt;add key="FCKeditor:BasePath" value="/scripts/FCKeditor/" /&gt;
+            		&lt;/appSettings&gt;
+            	&lt;/configuration&gt;
+            	</code>
+            </p>
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.ToolbarSet">
+            <summary>
+            Gets or sets the toolbar set.
+            </summary>
+            <value>The toolbar set.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.Value">
+            <summary>
+            Gets or sets the value.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.Config">
+            <summary>
+            Gets the config.
+            </summary>
+            <value>The config.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.CustomConfigurationsPath">
+            <summary>
+            Sets the custom configurations path.
+            </summary>
+            <value>The custom configurations path.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.EditorAreaCSS">
+            <summary>
+            Sets the editor area CSS.
+            </summary>
+            <value>The editor area CSS.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.BaseHref">
+            <summary>
+            Sets the base href.
+            </summary>
+            <value>The base href.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.SkinPath">
+            <summary>
+            Sets the skin path.
+            </summary>
+            <value>The skin path.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.PluginsPath">
+            <summary>
+            Sets the plugins path.
+            </summary>
+            <value>The plugins path.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.FullPage">
+            <summary>
+            Sets a value indicating whether [full page].
+            </summary>
+            <value><c>true</c> if [full page]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.Debug">
+            <summary>
+            Sets a value indicating whether this <see cref="T:Gizmox.WebGUI.Forms.Editors.FCKEditor"/> is debug.
+            </summary>
+            <value><c>true</c> if debug; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.AutoDetectLanguage">
+            <summary>
+            Sets a value indicating whether [auto detect language].
+            </summary>
+            <value><c>true</c> if [auto detect language]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.DefaultLanguage">
+            <summary>
+            Sets the default language.
+            </summary>
+            <value>The default language.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.ContentLangDirection">
+            <summary>
+            Sets the content lang direction.
+            </summary>
+            <value>The content lang direction.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.EnableXHTML">
+            <summary>
+            Sets a value indicating whether [enable XHTML].
+            </summary>
+            <value><c>true</c> if [enable XHTML]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.EnableSourceXHTML">
+            <summary>
+            Sets a value indicating whether [enable source XHTML].
+            </summary>
+            <value><c>true</c> if [enable source XHTML]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.FillEmptyBlocks">
+            <summary>
+            Sets a value indicating whether [fill empty blocks].
+            </summary>
+            <value><c>true</c> if [fill empty blocks]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.FormatSource">
+            <summary>
+            Sets a value indicating whether [format source].
+            </summary>
+            <value><c>true</c> if [format source]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.FormatOutput">
+            <summary>
+            Sets a value indicating whether [format output].
+            </summary>
+            <value><c>true</c> if [format output]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.FormatIndentator">
+            <summary>
+            Sets the format indentator.
+            </summary>
+            <value>The format indentator.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.GeckoUseSPAN">
+            <summary>
+            Sets a value indicating whether [gecko use SPAN].
+            </summary>
+            <value><c>true</c> if [gecko use SPAN]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.StartupFocus">
+            <summary>
+            Sets a value indicating whether [startup focus].
+            </summary>
+            <value><c>true</c> if [startup focus]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.ForcePasteAsPlainText">
+            <summary>
+            Sets a value indicating whether [force paste as plain text].
+            </summary>
+            <value>
+            	<c>true</c> if [force paste as plain text]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.ForceSimpleAmpersand">
+            <summary>
+            Sets a value indicating whether [force simple ampersand].
+            </summary>
+            <value>
+            	<c>true</c> if [force simple ampersand]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.TabSpaces">
+            <summary>
+            Sets the tab spaces.
+            </summary>
+            <value>The tab spaces.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.UseBROnCarriageReturn">
+            <summary>
+            Sets a value indicating whether [use BR on carriage return].
+            </summary>
+            <value>
+            	<c>true</c> if [use BR on carriage return]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.ToolbarStartExpanded">
+            <summary>
+            Sets a value indicating whether [toolbar start expanded].
+            </summary>
+            <value>
+            	<c>true</c> if [toolbar start expanded]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.ToolbarCanCollapse">
+            <summary>
+            Sets a value indicating whether [toolbar can collapse].
+            </summary>
+            <value><c>true</c> if [toolbar can collapse]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.FontColors">
+            <summary>
+            Sets the font colors.
+            </summary>
+            <value>The font colors.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.FontNames">
+            <summary>
+            Sets the font names.
+            </summary>
+            <value>The font names.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.FontSizes">
+            <summary>
+            Sets the font sizes.
+            </summary>
+            <value>The font sizes.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.FontFormats">
+            <summary>
+            Sets the font formats.
+            </summary>
+            <value>The font formats.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.StylesXmlPath">
+            <summary>
+            Sets the styles XML path.
+            </summary>
+            <value>The styles XML path.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.LinkBrowserURL">
+            <summary>
+            Sets the link browser URL.
+            </summary>
+            <value>The link browser URL.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKEditor.ImageBrowserURL">
+            <summary>
+            Sets the image browser URL.
+            </summary>
+            <value>The image browser URL.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.WatermarkTextBox">
+            <summary>
+            Summary description for WatermarkTextBox
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.WatermarkTextBox.MessageProperty">
+            <summary>
+            The string property registration.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.WatermarkTextBox.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.WatermarkTextBox"/> class.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.WatermarkTextBox.RenderAttributes(Gizmox.WebGUI.Common.Interfaces.IContext,Gizmox.WebGUI.Common.Interfaces.IAttributeWriter)">
+            <summary>
+            Renders the attributes.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.WatermarkTextBox.Message">
+            <summary>
+            Gets or sets the message.
+            </summary>
+            <value>The message.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Skins.WatermarkTextBoxSkin">
+            <summary>
+            WatermarkTextBox Skin
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.SurfacePanel">
+            <summary>
+            Summary description for SurfacePanel
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.SurfacePanel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.SurfacePanel"/> class.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Editors.Skins.FCKEditorSkin">
+            <summary>
+            FCKEditor Skin
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Editors.FCKeditorLanguageDirection">
+            <summary>
+            Defines constants that specify the content flow direction for text in FCKeditor
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Editors.FCKeditorLanguageDirection.LeftToRight">
+            <summary>
+            Indicates that content should flow from left to right.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Editors.FCKeditorLanguageDirection.RightToLeft">
+            <summary>
+            Indicates that content should flow from right to left.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.WorkspaceTabs">
+            <summary>
+            Manages a related set of tab pages.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.WorkspaceTabs.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.WorkspaceTabs"></see> class.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.WorkspaceTabs.CreateTabPageCollection">
+            <summary>
+            Creates the tab page collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.WorkspaceTabs.ClientUpdateHandler">
+            <summary>
+            Gets or sets the client update handler.
+            </summary>
+            <value>The client update handler.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.WorkspaceTabs.TabPages">
+            <summary>
+            Gets the collection of tab pages in this tab control.
+            </summary>
+            <returns>A <see cref="T:Gizmox.WebGUI.Forms.TabPageCollection"></see> that contains the <see cref="T:Gizmox.WebGUI.Forms.TabPage"></see> objects in this <see cref="T:Gizmox.WebGUI.Forms.TabControl"></see>.</returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.WorkspaceTab">
+            <summary>
+            Represents a single tab page in a <see cref="T:Gizmox.WebGUI.Forms.WorkspaceTabs"></see>.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.WorkspaceTab.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.WorkspaceTab"></see> class.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.WorkspaceTab.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.WorkspaceTab"></see> class and specifies the text for the tab.
+            </summary>
+            <param name="strText">The text for the tab. </param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.WorkspaceTabsCollection">
+            <summary>
+            Tab pages collection class
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.WorkspaceTabsCollection.#ctor(Gizmox.WebGUI.Forms.TabControl)">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Forms.TabPageCollection"/> instance.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.WorkspaceTabsCollection.Add(Gizmox.WebGUI.Forms.TabPage)">
+            <summary>
+            Adds the specified tab page.
+            </summary>
+            <param name="objTabPage">tab page.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.WorkspaceTabsCollection.Remove(Gizmox.WebGUI.Forms.TabPage)">
+            <summary>
+            Removes the specified tab page.
+            </summary>
+            <param name="objTabPage">tab page.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.WorkspaceTabsCollection.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:Gizmox.WebGUI.Forms.TabPage"/> with the specified int index.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Editors.FCKeditorConfigurations">
+            <summary>
+            Hold the FCK editor Configurations
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Editors.FCKeditorConfigurations.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.Editors.FCKeditorConfigurations"/> class.
+            </summary>
+            <param name="info">The info.</param>
+            <param name="context">The context.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Editors.FCKeditorConfigurations.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with the data needed to serialize the target object.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> to populate with data.</param>
+            <param name="context">The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext"/>) for this serialization.</param>
+            <exception cref="T:System.Security.SecurityException">
+            The caller does not have the required permission.
+            </exception>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Editors.FCKeditorConfigurations.Item(System.String)">
+            <summary>
+            Gets or sets the <see cref="T:System.String"/> with the specified configuration name.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Skins.SurfacePanelSkin">
+            <summary>
+            SurfacePanel Skin
+            </summary>
+        </member>
+    </members>
+</doc>

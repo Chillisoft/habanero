@@ -42,7 +42,7 @@ namespace Habanero.UI.VWG
         /// The event that is fired with the filter is ready so that another control e.g. a grid can be filtered.
         /// </summary>
         public event EventHandler Filter;
-        private readonly IGroupBox _gbox;
+        private IGroupBox _gbox;
         private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
         private readonly IPanel _controlPanel;
 
@@ -52,16 +52,16 @@ namespace Habanero.UI.VWG
         public FilterControlVWG(IControlFactory controlFactory)
         {
 
-            this.Height = 50;
+            this.Height = 300;
             _controlFactory = controlFactory;
-            _gbox = _controlFactory.CreateGroupBox();
-            _controlFactory.CreateBorderLayoutManager(this).AddControl(_gbox, BorderLayoutManager.Position.Centre);
-            _gbox.Text = "Filter the Grid";
+            FilterGroupBox = _controlFactory.CreateGroupBox();
+            _controlFactory.CreateBorderLayoutManager(this).AddControl(FilterGroupBox, BorderLayoutManager.Position.Centre);
+            FilterGroupBox.Text = "Filter the Grid";
 
-            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(_gbox);
+            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(FilterGroupBox);
             layoutManager.BorderSize = 20;
             IPanel filterButtonPanel = controlFactory.CreatePanel();
-            filterButtonPanel.Height = 50;
+            //filterButtonPanel.Height = 50;
             filterButtonPanel.Width = 110;
             CreateFilterButtons(filterButtonPanel);
 
@@ -128,8 +128,8 @@ namespace Habanero.UI.VWG
         /// </summary>
         public string HeaderText
         {
-            get { return _gbox.Text; }
-            set { _gbox.Text = value; }
+            get { return FilterGroupBox.Text; }
+            set { FilterGroupBox.Text = value; }
         }
 
         /// <summary>
@@ -304,12 +304,12 @@ namespace Habanero.UI.VWG
                 if (_filterMode == FilterModes.Filter)
                 {
                     _filterButton.Text = "Filter";
-                    _gbox.Text = "Filter the Grid";
+                    FilterGroupBox.Text = "Filter the Grid";
                 }
                 else
                 {
                     _filterButton.Text = "Search";
-                    _gbox.Text = "Search the Grid";
+                    FilterGroupBox.Text = "Search the Grid";
                 }
             }
         }
@@ -373,6 +373,12 @@ namespace Habanero.UI.VWG
         public IPanel FilterPanel
         {
             get { return _controlPanel; }
+        }
+
+        public IGroupBox FilterGroupBox
+        {
+            get { return _gbox; }
+            set { _gbox = value; }
         }
 
         /// <summary>

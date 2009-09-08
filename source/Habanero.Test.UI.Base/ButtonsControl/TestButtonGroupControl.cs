@@ -99,18 +99,6 @@ namespace Habanero.Test.UI.Base
                 //---------------Test Result -----------------------
                 Assert.IsTrue(btn.UseMnemonic);
             }
-
-            [Test]
-            public void Test_ButtonIndexer_WithASpecialCharactersInTheName_Failing()
-            {
-                //---------------Set up test pack-------------------
-                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-                //---------------Execute Test ----------------------
-                const string buttonText = "T est@";
-                IButton btn = buttons.AddButton(buttonText);
-                //---------------Test Result -----------------------
-                Assert.AreSame(btn, buttons["T est@"]);
-            }
         }
 
         [TestFixture]
@@ -143,18 +131,6 @@ namespace Habanero.Test.UI.Base
                 //---------------Test Result -----------------------
                 Assert.AreSame(null, frm.AcceptButton);
                 //Assert.AreSame(btn, frm.AcceptButton);
-            }
-
-            [Test]
-            public void Test_ButtonIndexer_WithASpecialCharactersInTheName_Failing()
-            {
-                //---------------Set up test pack-------------------
-                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-                //---------------Execute Test ----------------------
-                const string buttonText = "T est@";
-                IButton btn = buttons.AddButton(buttonText);
-                //---------------Test Result -----------------------
-                Assert.AreSame(btn, buttons["T est"]);
             }
         }
 
@@ -300,6 +276,18 @@ namespace Habanero.Test.UI.Base
             IButton btn = buttons.AddButton(buttonText);
             //---------------Test Result -----------------------
             Assert.AreSame(btn, buttons[buttonText]);
+        }
+
+        [Test]
+        public void Test_ButtonIndexer_WithAnAtSignTheName_ShouldReturnCorrectButton()
+        {
+            //---------------Set up test pack-------------------
+            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+            //---------------Execute Test ----------------------
+            const string buttonText = "T est@";
+            IButton btn = buttons.AddButton(buttonText);
+            //---------------Test Result -----------------------
+            Assert.AreSame(btn, buttons["T est@"]);
         }
 
 

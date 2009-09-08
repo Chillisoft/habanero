@@ -44,6 +44,42 @@ namespace Habanero.Test.UI.Base
         {
             return GetControlFactory().CreateTabPage("");
         }
+
+        [Test]
+        public override void TestConversion_DockStyle_None()
+        {
+            Assert.Ignore("DockStyle is always Fill for tabpages.");
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Bottom()
+        {
+            Assert.Ignore("DockStyle is always Fill for tabpages.");
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Top()
+        {
+            Assert.Ignore("DockStyle is always Fill for tabpages.");
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Left()
+        {
+            Assert.Ignore("DockStyle is always Fill for tabpages.");
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Right()
+        {
+            Assert.Ignore("DockStyle is always Fill for tabpages.");
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Fill()
+        {
+            Assert.Ignore("DockStyle is always Fill for tabpages.");
+        }
     }
 
     /// <summary>

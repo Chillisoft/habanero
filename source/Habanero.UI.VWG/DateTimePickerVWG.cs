@@ -100,7 +100,7 @@ namespace Habanero.UI.VWG
             set
             {
                 base.Checked = value;
-                if (_manager != null) _manager.OnValueChanged(new EventArgs());
+                //if (_manager != null) _manager.OnValueChanged(new EventArgs());
             }
         }
 
@@ -110,9 +110,10 @@ namespace Habanero.UI.VWG
         ///<param name="eventargs">An <see cref="T:System.EventArgs"></see> that contains the event data. </param>
         protected override void OnValueChanged(EventArgs eventargs)
         {
-            _manager.OnValueChanged(eventargs);
+            if (_manager != null) _manager.OnValueChanged(eventargs);
             base.OnValueChanged(eventargs);
         }
+
         /// <summary>
         /// Resize the manager
         /// </summary>

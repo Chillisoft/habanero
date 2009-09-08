@@ -1118,8 +1118,9 @@ namespace Habanero.Test.UI.Base
             IClassDef classDef = ClassDef.Get<MyBO>();
             classDef.PropDefcol["TestProp"].Compulsory = true;
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
-            IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
+            IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_WithStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
+            //gridWithPanelControl.ConfirmSaveDelegate
             MyBO firstBO = myBOs[0];
             firstBO.TestProp = null;
             MyBO secondBO = myBOs[1];
