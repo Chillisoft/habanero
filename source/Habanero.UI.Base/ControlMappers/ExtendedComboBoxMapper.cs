@@ -182,6 +182,7 @@ namespace Habanero.UI.Base
         public Dictionary<string, string> LookupList
         {
             get { return _lookupComboBoxMapper.LookupList; }
+            set { _lookupComboBoxMapper.LookupList = value; }
         }
     }
 }

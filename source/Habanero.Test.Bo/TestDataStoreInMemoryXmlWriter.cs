@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Habanero.Base;
@@ -48,6 +49,26 @@ namespace Habanero.Test.BO
             dataStore.Add(new Car());
             MemoryStream stream = new MemoryStream();
             DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(stream);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStore.Count);
+            Assert.AreEqual(0, stream.Length);
+            //---------------Execute Test ----------------------
+            writer.Write(dataStore);
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(0, stream.Length);
+        }
+
+        [Test]
+        public void Test_Write_WithXmlWriterSettings()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(new Car());
+            MemoryStream stream = new MemoryStream();
+            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+            xmlWriterSettings.ConformanceLevel = ConformanceLevel.Auto;
+            xmlWriterSettings.NewLineOnAttributes = true;
+            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(stream, xmlWriterSettings);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, stream.Length);

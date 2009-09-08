@@ -8,19 +8,21 @@ namespace Habanero.BO
     public class DataStoreInMemoryXmlWriter
     {
         private readonly Stream _stream;
+        private XmlWriterSettings _settings;
 
-        public DataStoreInMemoryXmlWriter(Stream stream)
+        public DataStoreInMemoryXmlWriter(Stream stream): this(stream, new XmlWriterSettings {ConformanceLevel = ConformanceLevel.Auto})
+        {
+        }
+
+        public DataStoreInMemoryXmlWriter(Stream stream, XmlWriterSettings xmlWriterSettings)
         {
             _stream = stream;
+            _settings = xmlWriterSettings;
         }
 
         public void Write(DataStoreInMemory dataStore)
         {
-
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.ConformanceLevel = ConformanceLevel.Auto;
-
-            XmlWriter writer = XmlWriter.Create(_stream, settings);
+            XmlWriter writer = XmlWriter.Create(_stream, _settings);
             writer.WriteStartDocument();
             writer.WriteStartElement("BusinessObjects");
             foreach (var o in dataStore.AllObjects)

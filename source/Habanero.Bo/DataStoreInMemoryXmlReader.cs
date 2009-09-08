@@ -20,6 +20,9 @@ namespace Habanero.BO
         {
             Dictionary<Guid, IBusinessObject> objects = new Dictionary<Guid, IBusinessObject>();
             XmlReaderSettings settings = new XmlReaderSettings();
+            settings.IgnoreComments = true;
+            settings.IgnoreProcessingInstructions = true;
+            settings.IgnoreWhitespace = true;
             XmlReader reader = XmlReader.Create(_stream, settings);
             reader.Read();
             reader.Read();
@@ -37,9 +40,13 @@ namespace Habanero.BO
                     string propertyValue = reader.Value;
                     bo.SetPropertyValue(propertyName, propertyValue);
                 }
-                bo.Props.BackupPropertyValues();
                 objects.Add(bo.ID.GetAsGuid(), bo);
                 reader.Read();
+            }
+
+            foreach (IBusinessObject businessObject in objects.Values)
+            {
+                businessObject.Props.BackupPropertyValues();
             }
 
             return objects;
