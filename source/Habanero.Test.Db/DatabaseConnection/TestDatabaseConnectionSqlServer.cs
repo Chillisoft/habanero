@@ -44,9 +44,9 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             IDatabaseConnection originalConnection = DatabaseConnection.CurrentConnection;
-            DatabaseConfig databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_trunk", "sa", "sa", null);
+            DatabaseConfig databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_branch_2_3_1", "sa", "sa", null);
             DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
-            //DatabaseConnection.CurrentConnection = new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection","server=localhost;database=habanero_test_trunk;user=sa;password=sa");
+            //DatabaseConnection.CurrentConnection = new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection","server=localhost;database=habanero_test_branch_2_3_1;user=sa;password=sa");
             const string sql = "Select FirstName + ', ' + Surname from tbPersonTable";
             SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection, sql);
 
