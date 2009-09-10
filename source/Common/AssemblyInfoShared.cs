@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
+// Copyright (C) 2009 Chillisoft Solutions
 // 
 // This file is part of the Habanero framework.
 // 
@@ -24,7 +24,7 @@ using System.Reflection;
 // associated with an assembly.
 [assembly: AssemblyCompany("Chillisoft")]
 [assembly: AssemblyProduct("Habanero")]
-[assembly: AssemblyCopyright("Copyright © Chillisoft 2008")]
+[assembly: AssemblyCopyright("Copyright © Chillisoft 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -37,5 +37,5 @@ using System.Reflection;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("2.3.0.0")]
-[assembly: AssemblyFileVersion("2.3.0.0")]
+[assembly: AssemblyVersion("2.3.1.0")]
+[assembly: AssemblyFileVersion("2.3.1.0")]
