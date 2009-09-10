@@ -81,6 +81,7 @@ namespace Habanero.Test.Base
         {
             HabaneroAppConsole app = new HabaneroAppConsole("testapp", "v1");
             app.LoadClassDefs = false;
+            app.DatabaseConfig = new DatabaseConfig("", "", "", "", "", "");
             app.Startup();
 
             //Assert.AreEqual(typeof(TestApplicationVersionUpgrader), app.ApplicationVersionUpgrader.GetType());
@@ -90,8 +91,8 @@ namespace Habanero.Test.Base
             //Assert.AreEqual("testfolder", app.ClassDefsPath);
             Assert.AreEqual(typeof(ConsoleExceptionNotifier), app.ExceptionNotifier.GetType());
             Assert.IsFalse(app.LoadClassDefs);
-            //Assert.AreEqual(typeof(DatabaseSettings), app.Settings.GetType());
-            Assert.IsNull(app.Settings);
+            Assert.AreEqual(typeof(DatabaseSettings), app.Settings.GetType());
+            //Assert.IsNull(app.Settings);
 
             //Assert.AreEqual(typeof(DatabaseConfig), app.DatabaseConfig.GetType());
             //Assert.AreEqual(app.DefClassFactory);

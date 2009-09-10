@@ -23,7 +23,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
     public abstract class TestFileChooser
     {
         private const string TEST_PATH="test/path/test";

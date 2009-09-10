@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -86,8 +88,42 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the Form class.
     /// </summary>
-    [TestFixture]
-    public class TestForm
+    public abstract class TestForm
     {
+        protected abstract IControlFactory GetFormFactory();
+
+        protected IFormHabanero CreateForm()
+        {
+            return GetFormFactory().CreateForm();
+        }
+
+        [TestFixture]
+        public class TestFormWin : TestForm
+        {
+            protected override IControlFactory GetFormFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestFormVWG : TestForm
+        {
+            protected override IControlFactory GetFormFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void Test_Create()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IFormHabanero form = CreateForm();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(form);
+        }
     }
 }

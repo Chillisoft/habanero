@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using Gizmox.WebGUI.Common.Interfaces;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -47,12 +48,46 @@ namespace Habanero.Test.UI.Base
         }
     }
 
+
     /// <summary>
     /// This test class tests the UserControl class.
     /// </summary>
-    [TestFixture]
-    public class TestUserControl
+    public abstract class TestUserControl
     {
-        
+        protected abstract IControlFactory GetControlFactory();
+
+        protected IUserControlHabanero CreateUserControl()
+        {
+            return GetControlFactory().CreateUserControl();
+        }
+
+        [TestFixture]
+        public class TestUserControlWin : TestUserControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestUserControlVWG : TestUserControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void Test_Create()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IUserControlHabanero userControl = CreateUserControl();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(userControl);
+        }
     }
 }

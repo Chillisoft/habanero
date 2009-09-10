@@ -17,7 +17,10 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Gizmox.WebGUI.Common.Interfaces;
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -49,9 +52,42 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the Control class.
     /// </summary>
-    [TestFixture]
-    public class TestControl
+    public abstract class TestControl
     {
-        
+        protected abstract IControlFactory GetControlFactory();
+
+        protected IControlHabanero CreateControl()
+        {
+            return GetControlFactory().CreateControl();
+        }
+
+        [TestFixture]
+        public class TestControlWin : TestControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestControlVWG : TestControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void Test_Create()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IControlHabanero control = CreateControl();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(control);
+        }
     }
 }

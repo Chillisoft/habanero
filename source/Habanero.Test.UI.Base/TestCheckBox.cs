@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -49,74 +51,42 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the CheckBox class.
     /// </summary>
-    [TestFixture]
-    public class TestCheckBox
+    public abstract class TestCheckBox
     {
-//
-//        [Test]
-//        public void TestMethod()
-//        {
-//            //---------------Set up test pack-------------------
-//            ClassDef.ClassDefs.Clear();
-//            BORegistry.DataAccessor = new DataAccessorInMemory();
-//            BusinessObjectGridForm businessObjectGridForm = new BusinessObjectGridForm(ContactPersonTestBO.LoadDefaultClassDefWithUIDef());
-//            //---------------Assert Precondition----------------
-//
-//            //---------------Execute Test ----------------------
-//            businessObjectGridForm.LoadCollection("", "", 100);
-//            businessObjectGridForm.GridControl.Buttons["Add"].PerformClick();
-//            //---------------Test Result -----------------------
-//
-//        }
-//        class BusinessObjectGridForm : UserControlWin, IFormControl
-//        {
-//            BorderLayoutManager _layoutManager;
-//            IBusinessObjectCollection collection;
-//            private IReadOnlyGridControl grid;
-//            protected static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
-//            {
-//                Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(BOType);
-//                return (IBusinessObjectCollection)Activator.CreateInstance(boColType);
-//            }
-//            public BusinessObjectGridForm(ClassDef classDef)
-//                : base()
-//            {
-//                ControlFactoryWin controlFactoryWin = new ControlFactoryWin();
-//                _layoutManager = controlFactoryWin.CreateBorderLayoutManager(this);
-//
-////                collection = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, "");
-//                collection = CreateCollectionOfType(classDef.ClassType);
-//                collection.ClassDef = classDef;
-//                grid = controlFactoryWin.CreateReadOnlyGridControl();
-//                GridControl.FilterControl.Visible = false;
-//
-//                _layoutManager.AddControl(GridControl, BorderLayoutManager.Position.Centre);
-//            }
-//
-//            public void SetForm(IFormHabanero form) { }
-//
-//            public BorderLayoutManager FormBorderLayoutManager
-//            {
-//                get { return _layoutManager; }
-//                set { _layoutManager = value; }
-//            }
-//
-//            public void LoadCollection(string searchCriteria, string orderByClause, int limit)
-//            {
-//                collection.LoadWithLimit(searchCriteria, orderByClause, limit);
-//                GridControl.SetBusinessObjectCollection(collection);
-//
-//            }
-//
-//            public IBusinessObjectCollection GridCollection
-//            {
-//                get { return collection; }
-//            }
-//
-//            public IReadOnlyGridControl GridControl
-//            {
-//                get { return grid; }
-//            }
-//        }
+        protected abstract IControlFactory GetControlFactory();
+
+        protected ICheckBox CreateCheckBox()
+        {
+            return GetControlFactory().CreateCheckBox();
+        }
+
+        [TestFixture]
+        public class TestCheckBoxWin : TestCheckBox
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestCheckBoxVWG : TestCheckBox
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void Test_Create()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            ICheckBox checkBox = CreateCheckBox();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(checkBox);
+        }
     }
 }

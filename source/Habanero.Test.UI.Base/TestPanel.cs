@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -44,13 +46,46 @@ namespace Habanero.Test.UI.Base
             return GetControlFactory().CreatePanel();
         }
     }
-
+    
     /// <summary>
     /// This test class tests the Panel class.
     /// </summary>
-    [TestFixture]
-    public class TestPanel
+    public abstract class TestPanel
     {
-        
+        protected abstract IControlFactory GetControlFactory();
+
+        protected IPanel CreatePanel()
+        {
+            return GetControlFactory().CreatePanel();
+        }
+
+        [TestFixture]
+        public class TestPanelWin : TestPanel
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestPanelVWG : TestPanel
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void Test_Create()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IPanel panel = CreatePanel();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(panel);
+        }
     }
 }

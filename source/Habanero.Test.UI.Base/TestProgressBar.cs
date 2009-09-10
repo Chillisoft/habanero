@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -48,8 +50,42 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the ProgressBar class.
     /// </summary>
-    [TestFixture]
-    public class TestProgressBar
+    public abstract class TestProgressBar
     {
+        protected abstract IControlFactory GetControlFactory();
+
+        protected IProgressBar CreateProgressBar()
+        {
+            return GetControlFactory().CreateProgressBar();
+        }
+
+        [TestFixture]
+        public class TestProgressBarWin : TestProgressBar
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestProgressBarVWG : TestProgressBar
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void Test_Create()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IProgressBar progressBar = CreateProgressBar();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(progressBar);
+        }
     }
 }

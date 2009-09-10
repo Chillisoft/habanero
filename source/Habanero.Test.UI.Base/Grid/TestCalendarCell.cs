@@ -18,54 +18,54 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel;
-using System.Drawing;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using NUnit.Framework;
+//using System.ComponentModel;
+//using System.Drawing;
+//using Habanero.UI.VWG;
+//using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
 
-    public abstract class TestCalendarCell //: TestBase
-    {
-        protected abstract IControlFactory GetControlFactory();
+    //public abstract class TestCalendarCell //: TestBase
+    //{
+    //    protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestCalendarCellWin : TestCalendarCell
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.Win.ControlFactoryWin();
-            }
-        }
+    //    [TestFixture]
+    //    public class TestCalendarCellWin : TestCalendarCell
+    //    {
+    //        protected override IControlFactory GetControlFactory()
+    //        {
+    //            return new Habanero.UI.Win.ControlFactoryWin();
+    //        }
+    //    }
 
-        [TestFixture]
-        public class TestCalendarCellVWG : TestCalendarCell
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
-            }
-        }
+    //    [TestFixture]
+    //    public class TestCalendarCellVWG : TestCalendarCell
+    //    {
+    //        protected override IControlFactory GetControlFactory()
+    //        {
+    //            return new Habanero.UI.VWG.ControlFactoryVWG();
+    //        }
+    //    }
 
 
-        [SetUp]
-        public void SetupTest()
-        {
-            //Runs every time that any testmethod is executed
-            //base.SetupTest();
-        }
+    //    [SetUp]
+    //    public void SetupTest()
+    //    {
+    //        //Runs every time that any testmethod is executed
+    //        //base.SetupTest();
+    //    }
 
     
 
-        [TearDown]
-        public void TearDownTest()
-        {
-            //runs every time any testmethod is complete
-            //base.TearDownTest();
-        }
-    }
+    //    [TearDown]
+    //    public void TearDownTest()
+    //    {
+    //        //runs every time any testmethod is complete
+    //        //base.TearDownTest();
+    //    }
+    //}
  
     public interface ICalendarCell
     {

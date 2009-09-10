@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -69,11 +71,46 @@ namespace Habanero.Test.UI.Base
         }
     }
 
+
     /// <summary>
     /// This test class tests the Splitter class.
     /// </summary>
-    [TestFixture]
-    public class TestSplitter
+    public abstract class TestSplitter
     {
+        protected abstract IControlFactory GetControlFactory();
+
+        protected ISplitter CreateSplitter()
+        {
+            return GetControlFactory().CreateSplitter();
+        }
+
+        [TestFixture]
+        public class TestSplitterWin : TestSplitter
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestSplitterVWG : TestSplitter
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void Test_Create()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            ISplitter splitter = CreateSplitter();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(splitter);
+        }
     }
 }

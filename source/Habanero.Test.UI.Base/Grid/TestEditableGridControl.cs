@@ -1038,7 +1038,6 @@ namespace Habanero.Test.UI.Base
                 return editableGridControlVWG;
             }
 
-            [Test]
             protected override IFormHabanero AddControlToForm(IControlHabanero cntrl)
             {
                 FormVWG form = (FormVWG) GetControlFactory().CreateForm();

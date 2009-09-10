@@ -29,7 +29,7 @@ namespace Habanero.Test.BO.Loaders
     /// <summary>
     /// Summary description for TestXmlClassDefsLoader.
     /// </summary>
-//    [TestFixture]
+    [TestFixture]
     public class TestClassDefValidator
     {
         [TestFixtureSetUp]
@@ -38,14 +38,14 @@ namespace Habanero.Test.BO.Loaders
             ClassDef.ClassDefs.Clear();
         }
 
-//        [Test]
+        [Test]
         public void Test_Valid_Relationship()
         {
             //----------------------Test Setup ----------------------
             const string classDefsString = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -54,7 +54,7 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
 							<property  name=""TestClassID"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
@@ -91,13 +91,13 @@ namespace Habanero.Test.BO.Loaders
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
 						</class>
 						<class name=""TestClass2"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClass2ID"" />
+							<property  name=""TestClass2ID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClass2ID""/>
                             </primaryKey>
@@ -125,7 +125,7 @@ namespace Habanero.Test.BO.Loaders
             const string xml = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
 							<property  name=""TestClassName"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>

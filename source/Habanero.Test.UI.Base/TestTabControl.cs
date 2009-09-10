@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -45,11 +47,46 @@ namespace Habanero.Test.UI.Base
         }
     }
 
+
     /// <summary>
     /// This test class tests the TabControl class.
     /// </summary>
-    [TestFixture]
-    public class TestTabControl
+    public abstract class TestTabControl
     {
+        protected abstract IControlFactory GetControlFactory();
+
+        protected ITabControl CreateTabControl()
+        {
+            return GetControlFactory().CreateTabControl();
+        }
+
+        [TestFixture]
+        public class TestTabControlWin : TestTabControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestTabControlVWG : TestTabControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void Test_Create()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            ITabControl tabControl = CreateTabControl();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(tabControl);
+        }
     }
 }

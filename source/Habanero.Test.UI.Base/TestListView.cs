@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -51,23 +52,23 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-//        [TestFixture]
-//        public class TestListBoxWin : TestListView
-//        {
-//            protected override IControlFactory GetControlFactory()
-//            {
-//                return new ControlFactoryWin();
-//            }
-//        }
+        //[TestFixture]
+        //public class TestListBoxWin : TestListView
+        //{
+        //    protected override IControlFactory GetControlFactory()
+        //    {
+        //        return new ControlFactoryWin();
+        //    }
+        //}
 
-        [TestFixture]
-        public class TestLisViewVWG : TestListView
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
+        //[TestFixture]
+        //public class TestLisViewVWG : TestListView
+        //{
+        //    protected override IControlFactory GetControlFactory()
+        //    {
+        //        return new ControlFactoryVWG();
+        //    }
+        //}
         //TODO: Port
 //        [Test]
 //        public void TestListViewConstructor()

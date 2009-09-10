@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -48,24 +50,42 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the GroupBox class.
     /// </summary>
-    [TestFixture]
-    public class TestGroupBoxVWG
+    public abstract class TestGroupBox
     {
-        protected virtual IControlFactory GetControlFactory()
+        protected abstract IControlFactory GetControlFactory();
+
+        protected IGroupBox CreateGroupBox()
         {
-            Habanero.UI.VWG.ControlFactoryVWG factory = new Habanero.UI.VWG.ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
+            return GetControlFactory().CreateGroupBox();
         }
-    }
-    [TestFixture]
-    public class TestGroupBoxWin
-    {
-        protected virtual IControlFactory GetControlFactory()
+
+        [TestFixture]
+        public class TestGroupBoxWin : TestGroupBox
         {
-            Habanero.UI.Win.ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestGroupBoxVWG : TestGroupBox
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void Test_Create()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IGroupBox groupBox = CreateGroupBox();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(groupBox);
         }
     }
 

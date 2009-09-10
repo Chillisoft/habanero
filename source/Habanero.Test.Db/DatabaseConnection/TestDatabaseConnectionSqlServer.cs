@@ -26,6 +26,20 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestDatabaseConnectionSqlServer
     {
+        private IDatabaseConnection _originalConnection;
+
+        [SetUp]
+        public void SetupTest()
+        {
+            _originalConnection = DatabaseConnection.CurrentConnection;
+        }
+
+        [TearDown]
+        public void TearDownTest()
+        {   
+            DatabaseConnection.CurrentConnection = _originalConnection;
+        }
+
         [Test]
         public void TestCreateParameterNameGenerator()
         {
@@ -35,29 +49,25 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             IParameterNameGenerator generator = databaseConnection.CreateParameterNameGenerator();
             //---------------Test Result -----------------------
-            Assert.AreEqual("@", generator.PrefixCharacter);
-            //---------------Tear Down -------------------------          
+            Assert.AreEqual("@", generator.PrefixCharacter);         
         }
         
         [Test]
         public void Test_NoColumnName_DoesntError_SqlServer()
         {
             //---------------Set up test pack-------------------
-            IDatabaseConnection originalConnection = DatabaseConnection.CurrentConnection;
             DatabaseConfig databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_branch_2_3_1", "sa", "sa", null);
             DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
             //DatabaseConnection.CurrentConnection = new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection","server=localhost;database=habanero_test_branch_2_3_1;user=sa;password=sa");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("DELETE FROM tbPersonTable;" +
+                                                               "INSERT INTO tbPersonTable ([PersonID],[FirstName],[Surname])" +
+                                                               "VALUES (NewID(),'TestFirstName','TestSurname');");
             const string sql = "Select FirstName + ', ' + Surname from tbPersonTable";
             SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection, sql);
-
             //---------------Execute Test ----------------------
             DataTable dataTable = DatabaseConnection.CurrentConnection.LoadDataTable(sqlStatement, "", "");
-
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dataTable.Columns.Count);
-
-            //---------------Tear Down -------------------------     
-            DatabaseConnection.CurrentConnection = originalConnection;
         }
     }
 }
