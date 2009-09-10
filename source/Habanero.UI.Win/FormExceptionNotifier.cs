@@ -1,22 +1,21 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2009 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
+// ---------------------------------------------------------------------------------
+//  Copyright (C) 2009 Chillisoft Solutions
+//  
+//  This file is part of the Habanero framework.
+//  
+//      Habanero is a free framework: you can redistribute it and/or modify
+//      it under the terms of the GNU Lesser General Public License as published by
+//      the Free Software Foundation, either version 3 of the License, or
+//      (at your option) any later version.
+//  
+//      The Habanero framework is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU Lesser General Public License for more details.
+//  
+//      You should have received a copy of the GNU Lesser General Public License
+//      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+// ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
 using System.Drawing;
@@ -111,14 +110,14 @@ namespace Habanero.UI.Win
                 //IButtonGroupControl buttonsDetail = _controlFactory.CreateButtonGroupControl();
                 buttonsOK.AddButton("&OK", new EventHandler(OKButtonClickHandler));
 
-                //_moreDetailButton = buttonsDetail.AddButton("&More Detail Â»", new EventHandler(MoreDetailClickHandler));
+                //_moreDetailButton = buttonsDetail.AddButton("&More Detail »", new EventHandler(MoreDetailClickHandler));
                 //buttonsOK.Height = BUTTONS_HEIGHT;
                 //buttonsDetail.Height = BUTTONS_HEIGHT;
                 //buttonsDetail.Width = _moreDetailButton.Width + 9;
 
                 IButtonGroupControl buttonsDetail = _controlFactory.CreateButtonGroupControl();
                 buttonsDetail.AddButton("Email Error", EmailErrorClickHandler);
-                _moreDetailButton = buttonsDetail.AddButton("More Detail Â»", MoreDetailClickHandler);
+                _moreDetailButton = buttonsDetail.AddButton("More Detail »", MoreDetailClickHandler);
                 buttonsDetail.Height = BUTTONS_HEIGHT;
                 buttonsDetail.Width = 2 * (_moreDetailButton.Width + 9);
 
@@ -270,13 +269,13 @@ namespace Habanero.UI.Win
                     Height = _summary.Height + BUTTONS_HEIGHT + 16 + FULL_DETAIL_HEIGHT;
                     Width = 750;
                     _fullDetail.Visible = true;
-                    _moreDetailButton.Text = "Â« &Less Detail";
+                    _moreDetailButton.Text = "« &Less Detail";
                 }
                 else
                 {
                     Height = _summary.Height + BUTTONS_HEIGHT + 16;
                     _fullDetail.Visible = false;
-                    _moreDetailButton.Text = "&More Detail Â»";
+                    _moreDetailButton.Text = "&More Detail »";
                 }
             }
 

@@ -27,13 +27,13 @@ using NUnit.Framework;
 namespace Habanero.Test.BO.BusinessObjectCollection
 {
     /// <summary>
-    /// â€¢	A typical example of an associative relationship is a Car and its Drivers (assuming a car can have many drivers but a driver may only drive one car). A Driver can exist independently of any Car and a Car can exist independently of a driver. The Driver may however be associated with one car and later associated with a different car. 
-    ///â€¢	The rules for whether a car that is associated with one or more drivers can be deleted or not is dependent upon the rules configured for the Drivers relationship (i.e. a carâ€™s drivers relationship could be marked prevent delete, dereference or do nothing). 
-    ///â€¢	An already persisted driver can be added to a car (In habanero a new driver can be added to a car).
-    ///â€¢	A driver can be removed from its related car. 
-    ///â€¢	A car can create a new driver via its Drivers Relationship (this is not a strict implementation of domain design but is allowed due to the convenience of this).
-    ///â€¢	A car is considered to be dirty only if it has added, created or removed dirty drivers. 
-    ///â€¢	If a car is persisted then it will only persist its driverâ€™s relationship and will not persist a related driver that is dirty.
+    /// •	A typical example of an associative relationship is a Car and its Drivers (assuming a car can have many drivers but a driver may only drive one car). A Driver can exist independently of any Car and a Car can exist independently of a driver. The Driver may however be associated with one car and later associated with a different car. 
+    ///•	The rules for whether a car that is associated with one or more drivers can be deleted or not is dependent upon the rules configured for the Drivers relationship (i.e. a car’s drivers relationship could be marked prevent delete, dereference or do nothing). 
+    ///•	An already persisted driver can be added to a car (In habanero a new driver can be added to a car).
+    ///•	A driver can be removed from its related car. 
+    ///•	A car can create a new driver via its Drivers Relationship (this is not a strict implementation of domain design but is allowed due to the convenience of this).
+    ///•	A car is considered to be dirty only if it has added, created or removed dirty drivers. 
+    ///•	If a car is persisted then it will only persist its driver’s relationship and will not persist a related driver that is dirty.
     /// </summary>
     [TestFixture]
     public class TestRelatedBOCol_Association
@@ -165,7 +165,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         [Test]
         public void Test_AddMethod_AddNewChild()
         {
-            //â€¢ (In habanero a new driver can be added to a car).
+            //• (In habanero a new driver can be added to a car).
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;

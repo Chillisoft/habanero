@@ -1,24 +1,21 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2009 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
-using System;
-
+// ---------------------------------------------------------------------------------
+//  Copyright (C) 2009 Chillisoft Solutions
+//  
+//  This file is part of the Habanero framework.
+//  
+//      Habanero is a free framework: you can redistribute it and/or modify
+//      it under the terms of the GNU Lesser General Public License as published by
+//      the Free Software Foundation, either version 3 of the License, or
+//      (at your option) any later version.
+//  
+//      The Habanero framework is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU Lesser General Public License for more details.
+//  
+//      You should have received a copy of the GNU Lesser General Public License
+//      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+// ---------------------------------------------------------------------------------
 namespace Habanero.Base
 {
     /// <summary>
@@ -69,36 +66,36 @@ namespace Habanero.Base
         ///   A related object being added will be referenced.
         ///   The owning business object is not considered to be dirty because its 
         ///     related business objects are dirty.
-        ///â€¢	A typical example of an associative relationship is a Manager and her Departments (assuming a Manager can manage many departments but a department may only have one manager). A Manager can exist independently of any Department and a Department can exist independently of a Manager. The Manager may however be associated with one Department and later associated with a different Department.
-        ///â€¢	Unlike a Car and its wheels the Department is not part of a Manager or visa versa.
-        ///â€¢	The rules for whether a manager that is associated with one or more departments can be deleted or not is dependent upon the rules configured for the Departments relationship (i.e. a Managerâ€™s Departments relationship could be marked prevent delete, dereference or do nothing). 
-        ///â€¢	An already persisted Department can be added to a the Managerâ€™s Departments relationship (In Habanero a new Department can be added to a Managerâ€™s Departments relationship).
-        ///â€¢	A driver can be removed from its related car. 
-        ///â€¢	A Manager can create a new Department via its Departments Relationship (this is not a strict implementation of domain design but is allowed due to the convenience of this).
-        ///â€¢	A Manager is considered to be dirty only if it has added, created, MarkedForDeletion or removed dirty Departments. 
-        ///â€¢	If a Manager is persisted then it will only persist its Departmentâ€™s relationship and will not persist a related Department that is dirty (I.e. if a department has been added to the Relationship then itâ€™s foreign key (ManagerID) will be updated. The department name could also have been edited. If the manager is saved then the foreign key (ManagerID) will be updated but the department name will not be updated).
+        ///•	A typical example of an associative relationship is a Manager and her Departments (assuming a Manager can manage many departments but a department may only have one manager). A Manager can exist independently of any Department and a Department can exist independently of a Manager. The Manager may however be associated with one Department and later associated with a different Department.
+        ///•	Unlike a Car and its wheels the Department is not part of a Manager or visa versa.
+        ///•	The rules for whether a manager that is associated with one or more departments can be deleted or not is dependent upon the rules configured for the Departments relationship (i.e. a Manager’s Departments relationship could be marked prevent delete, dereference or do nothing). 
+        ///•	An already persisted Department can be added to a the Manager’s Departments relationship (In Habanero a new Department can be added to a Manager’s Departments relationship).
+        ///•	A driver can be removed from its related car. 
+        ///•	A Manager can create a new Department via its Departments Relationship (this is not a strict implementation of domain design but is allowed due to the convenience of this).
+        ///•	A Manager is considered to be dirty only if it has added, created, MarkedForDeletion or removed dirty Departments. 
+        ///•	If a Manager is persisted then it will only persist its Department’s relationship and will not persist a related Department that is dirty (I.e. if a department has been added to the Relationship then it’s foreign key (ManagerID) will be updated. The department name could also have been edited. If the manager is saved then the foreign key (ManagerID) will be updated but the department name will not be updated).
         /// </summary>
         Association = 1,
 
         /// <summary>
-        /// â€¢	A typical example of an aggregation relationship is a Car and its Tyres. A Tyre is part of a Car. A Tyre can exist independently of its Car and a Tyre can only belong to a single Car at any point in time. The Tyre may however be transferred from one car to another. 
-        ///â€¢	The Car that has tyres cannot be deleted without it deleting or removing its tyres. The carâ€™s Tyres relationship would be marked as either prevent delete, dereference tyres, delete tyres or do nothing. 
-        ///â€¢	An already persisted tyre can be added to a car (In Habanero a new tyre can be added to a car). 
-        ///â€¢	A tyre can be removed from its car. 
-        ///â€¢	A car can create a new tyre via its Tyres Relationship (This is not a strict implementation of Domain modelling rules but is allowed due to the convenience of this method).
-        ///â€¢	A car is considered to be dirty if it has any dirty tyres. A dirty tyre would be any tyre that has had any edits and would include a newly created tyre, an added tyre, a removed tyre or a tyre that has been marked for deletion.
-        ///â€¢	If a car is persisted then it must persist all its tyres.
+        /// •	A typical example of an aggregation relationship is a Car and its Tyres. A Tyre is part of a Car. A Tyre can exist independently of its Car and a Tyre can only belong to a single Car at any point in time. The Tyre may however be transferred from one car to another. 
+        ///•	The Car that has tyres cannot be deleted without it deleting or removing its tyres. The car’s Tyres relationship would be marked as either prevent delete, dereference tyres, delete tyres or do nothing. 
+        ///•	An already persisted tyre can be added to a car (In Habanero a new tyre can be added to a car). 
+        ///•	A tyre can be removed from its car. 
+        ///•	A car can create a new tyre via its Tyres Relationship (This is not a strict implementation of Domain modelling rules but is allowed due to the convenience of this method).
+        ///•	A car is considered to be dirty if it has any dirty tyres. A dirty tyre would be any tyre that has had any edits and would include a newly created tyre, an added tyre, a removed tyre or a tyre that has been marked for deletion.
+        ///•	If a car is persisted then it must persist all its tyres.
         /// </summary>
         Aggregation = 2,
 
         /// <summary>
-        /// â€¢	A typical example of a composition relationship is an Invoice and its Invoice lines. An invoice is made up of its invoice lines. An Invoice Line is part of an Invoice. An invoice Line cannot exist independently of its invoice and an invoice line can only belong to a single invoice.
-        ///â€¢	An invoice that has invoice lines cannot be deleted without it deleting its invoice lines. The invoiceâ€™s InvoiceLines relationship would be marked as either prevent delete, delete invoice lines or do nothing.
-        ///â€¢	An already persisted invoice line cannot be added to an Invoice (In Habanero a new invoice line can be added to an invoice). 
-        ///â€¢	An Invoice line cannot be removed from its invoice.
-        ///â€¢	An invoice can create a new invoice line via its InvoiceLines Relationship.
-        ///â€¢	An invoice is considered to be dirty if it has any dirty invoice line. A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line and an invoice line that has been marked for deletion.
-        ///â€¢	If an invoice is persisted then it must persist all its invoice lines.
+        /// •	A typical example of a composition relationship is an Invoice and its Invoice lines. An invoice is made up of its invoice lines. An Invoice Line is part of an Invoice. An invoice Line cannot exist independently of its invoice and an invoice line can only belong to a single invoice.
+        ///•	An invoice that has invoice lines cannot be deleted without it deleting its invoice lines. The invoice’s InvoiceLines relationship would be marked as either prevent delete, delete invoice lines or do nothing.
+        ///•	An already persisted invoice line cannot be added to an Invoice (In Habanero a new invoice line can be added to an invoice). 
+        ///•	An Invoice line cannot be removed from its invoice.
+        ///•	An invoice can create a new invoice line via its InvoiceLines Relationship.
+        ///•	An invoice is considered to be dirty if it has any dirty invoice line. A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line and an invoice line that has been marked for deletion.
+        ///•	If an invoice is persisted then it must persist all its invoice lines.
         ///</summary>
         Composition = 3,
     }
