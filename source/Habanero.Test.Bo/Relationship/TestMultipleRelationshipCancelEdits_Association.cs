@@ -1,4 +1,4 @@
-ï»¿using Habanero.Base;
+using Habanero.Base;
 using NUnit.Framework;
 using Habanero.BO;
 
@@ -14,7 +14,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If edits to a car are cancelled then it must cancel edits to all its tyres.
+        /// • If edits to a car are cancelled then it must cancel edits to all its tyres.
         /// </summary>
         [Test]
         public virtual void Test_Acceptance_CancelEditParent_CancelsEditsForDirtyChildren()
@@ -81,7 +81,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on the relationship, then the dirty children should be cancelled
+        /// • If CancelEdit is called on the relationship, then the dirty children should be cancelled
         /// </summary>
         [Test]
         public virtual void Test_Acceptance_CancelEdit_CancelsEditsForDirtyChildren()
@@ -143,7 +143,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on the relationship, then 
+        /// • If CancelEdit is called on the relationship, then 
         /// a Dirty child will be cancelled.
         /// </summary>
         [Test]
@@ -178,7 +178,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on the relationship, then 
+        /// • If CancelEdit is called on the relationship, then 
         /// an Added child will be removed and cancelled.
         /// </summary>
         [Test]
@@ -213,7 +213,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on the relationship, then 
+        /// • If CancelEdit is called on the relationship, then 
         /// an Created child will be removed and cancelled.
         /// </summary>
         [Test]
@@ -248,7 +248,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on the relationship, then 
+        /// • If CancelEdit is called on the relationship, then 
         /// an Removed child will be added and cancelled.
         /// </summary>
         [Test]
@@ -283,7 +283,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on the relationship, then 
+        /// • If CancelEdit is called on the relationship, then 
         /// a Deleted child will be cancelled and the mark for delete will be undone.
         /// </summary>
         [Test]
@@ -320,7 +320,7 @@ namespace Habanero.Test.BO.Relationship
 
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on a Dirty child, then 
+        /// • If CancelEdit is called on a Dirty child, then 
         /// edits to the child will be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -359,7 +359,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on a Added child, then 
+        /// • If CancelEdit is called on a Added child, then 
         /// edits to the child will be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -398,7 +398,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on a Created child, then 
+        /// • If CancelEdit is called on a Created child, then 
         /// edits to the child will be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -436,7 +436,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on a Removed child, then 
+        /// • If CancelEdit is called on a Removed child, then 
         /// edits to the child will be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -474,7 +474,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on a Deleted child, then 
+        /// • If CancelEdit is called on a Deleted child, then 
         /// edits to the child will be cancelled, and the mark for delete will be undone.
         /// </summary>
         [Test]
@@ -516,7 +516,7 @@ namespace Habanero.Test.BO.Relationship
         //=========================================================================================================================
 
         /// <summary>
-        /// â€¢ If the child owns the edit and the child's edit is cancelled, then 
+        /// • If the child owns the edit and the child's edit is cancelled, then 
         /// the Added child will be removed and cancelled.
         /// </summary>
         [Test]
@@ -553,7 +553,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If the child owns the edit and the child's edit is cancelled, then 
+        /// • If the child owns the edit and the child's edit is cancelled, then 
         /// the Created child will be removed and cancelled.
         /// </summary>
         [Test]
@@ -590,7 +590,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If the child owns the edit and the child's edit is cancelled, then 
+        /// • If the child owns the edit and the child's edit is cancelled, then 
         /// the Removed child will be added and cancelled.
         /// </summary>
         [Test]
@@ -626,7 +626,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         ///// <summary>
-        ///// â€¢ If CancelEdit is called on a Dirty child, then 
+        ///// • If CancelEdit is called on a Dirty child, then 
         ///// edits to the child will be cancelled, and the relationship will be left as is.
         ///// </summary>
         //[Test]
@@ -665,7 +665,7 @@ namespace Habanero.Test.BO.Relationship
         //}
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on the parent when a child is Added through edits on the child, then 
+        /// • If CancelEdit is called on the parent when a child is Added through edits on the child, then 
         /// edits to the child will not be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
@@ -704,7 +704,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on the parent when a child is Created and associated through 
+        /// • If CancelEdit is called on the parent when a child is Created and associated through 
         /// edits on the child, then edits to the child will not be cancelled, and 
         /// the relationship will be left as is.
         /// </summary>
@@ -744,7 +744,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// â€¢ If CancelEdit is called on the parent when a child is Removed through 
+        /// • If CancelEdit is called on the parent when a child is Removed through 
         /// edits on the child, then edits to the child will not be cancelled, and 
         /// the relationship will be left as is.
         /// </summary>
@@ -784,7 +784,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         ///// <summary>
-        ///// â€¢ If CancelEdit is called on a Deleted child, then 
+        ///// • If CancelEdit is called on a Deleted child, then 
         ///// edits to the child will be cancelled, and the mark for delete will be undone.
         ///// </summary>
         //[Test]

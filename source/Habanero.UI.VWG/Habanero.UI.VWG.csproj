@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{04E4FF45-6C20-46EB-A9AD-2B04895F6218}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -195,9 +195,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ListViewVWG.cs" />
-    <Compile Include="ListViewVWG.designer.cs">
-      <DependentUpon>ListViewVWG.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainTitleIconControlVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -266,9 +263,6 @@
     </Compile>
     <Compile Include="Wizard\NullWizardStepVWG.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Wizard\NullWizardStepVWG.designer.cs">
-      <DependentUpon>NullWizardStepVWG.cs</DependentUpon>
     </Compile>
     <Compile Include="Wizard\WizardControlVWG.cs">
       <SubType>UserControl</SubType>

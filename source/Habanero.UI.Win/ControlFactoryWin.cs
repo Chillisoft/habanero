@@ -1,22 +1,21 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General public virtual License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General public virtual License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General public virtual License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
+// ---------------------------------------------------------------------------------
+//  Copyright (C) 2009 Chillisoft Solutions
+//  
+//  This file is part of the Habanero framework.
+//  
+//      Habanero is a free framework: you can redistribute it and/or modify
+//      it under the terms of the GNU Lesser General Public License as published by
+//      the Free Software Foundation, either version 3 of the License, or
+//      (at your option) any later version.
+//  
+//      The Habanero framework is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU Lesser General Public License for more details.
+//  
+//      You should have received a copy of the GNU Lesser General Public License
+//      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+// ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,7 +25,6 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.Util;
 using AutoCompleteMode=System.Windows.Forms.AutoCompleteMode;
@@ -669,7 +667,7 @@ namespace Habanero.UI.Win
         
         ///<summary>
         /// Displays a message box with specified text, caption, buttons, and icon.
-        /// Once the user is has responded, the provided delegate is called with an indication of the <see cref="DialogResult"/>.
+        /// Once the user is has responded, the provided delegate is called with an indication of the <see cref="Base.DialogResult"/>.
         ///</summary>
         ///<param name="message">The text to display in the message box.</param>
         ///<param name="title">The text to display in the title bar of the message box.</param>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;

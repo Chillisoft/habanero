@@ -1,22 +1,21 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
+// ---------------------------------------------------------------------------------
+//  Copyright (C) 2009 Chillisoft Solutions
+//  
+//  This file is part of the Habanero framework.
+//  
+//      Habanero is a free framework: you can redistribute it and/or modify
+//      it under the terms of the GNU Lesser General Public License as published by
+//      the Free Software Foundation, either version 3 of the License, or
+//      (at your option) any later version.
+//  
+//      The Habanero framework is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU Lesser General Public License for more details.
+//  
+//      You should have received a copy of the GNU Lesser General Public License
+//      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+// ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,7 +41,7 @@ namespace Habanero.UI.VWG
         /// The event that is fired with the filter is ready so that another control e.g. a grid can be filtered.
         /// </summary>
         public event EventHandler Filter;
-        private IGroupBox _gbox;
+        private readonly IGroupBox _gbox;
         private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
         private readonly IPanel _controlPanel;
 
@@ -52,16 +51,16 @@ namespace Habanero.UI.VWG
         public FilterControlVWG(IControlFactory controlFactory)
         {
 
-            this.Height = 300;
+            this.Height = 50;
             _controlFactory = controlFactory;
-            FilterGroupBox = _controlFactory.CreateGroupBox();
-            _controlFactory.CreateBorderLayoutManager(this).AddControl(FilterGroupBox, BorderLayoutManager.Position.Centre);
-            FilterGroupBox.Text = "Filter the Grid";
+            _gbox = _controlFactory.CreateGroupBox();
+            _controlFactory.CreateBorderLayoutManager(this).AddControl(_gbox, BorderLayoutManager.Position.Centre);
+            _gbox.Text = "Filter the Grid";
 
-            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(FilterGroupBox);
+            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(_gbox);
             layoutManager.BorderSize = 20;
             IPanel filterButtonPanel = controlFactory.CreatePanel();
-            //filterButtonPanel.Height = 50;
+            filterButtonPanel.Height = 50;
             filterButtonPanel.Width = 110;
             CreateFilterButtons(filterButtonPanel);
 
@@ -128,8 +127,8 @@ namespace Habanero.UI.VWG
         /// </summary>
         public string HeaderText
         {
-            get { return FilterGroupBox.Text; }
-            set { FilterGroupBox.Text = value; }
+            get { return _gbox.Text; }
+            set { _gbox.Text = value; }
         }
 
         /// <summary>
@@ -304,12 +303,12 @@ namespace Habanero.UI.VWG
                 if (_filterMode == FilterModes.Filter)
                 {
                     _filterButton.Text = "Filter";
-                    FilterGroupBox.Text = "Filter the Grid";
+                    _gbox.Text = "Filter the Grid";
                 }
                 else
                 {
                     _filterButton.Text = "Search";
-                    FilterGroupBox.Text = "Search the Grid";
+                    _gbox.Text = "Search the Grid";
                 }
             }
         }
@@ -341,14 +340,6 @@ namespace Habanero.UI.VWG
         }
 
         /// <summary>
-        /// Gets the collection of controls contained within the control
-        /// </summary>
-        IControlCollection IControlHabanero.Controls
-        {
-            get { return new ControlCollectionVWG(base.Controls); }
-        }
-
-        /// <summary>
         /// Clears all the values from the filter and calls <see cref="IFilterControl.ApplyFilter"/>
         /// </summary>
         public void ClearFilters()
@@ -373,12 +364,6 @@ namespace Habanero.UI.VWG
         public IPanel FilterPanel
         {
             get { return _controlPanel; }
-        }
-
-        public IGroupBox FilterGroupBox
-        {
-            get { return _gbox; }
-            set { _gbox = value; }
         }
 
         /// <summary>

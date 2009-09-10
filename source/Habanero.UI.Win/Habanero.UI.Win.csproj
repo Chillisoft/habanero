@@ -102,9 +102,6 @@
     <Compile Include="ComboBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ComboBoxWin.Designer.cs">
-      <DependentUpon>ComboBoxWin.cs</DependentUpon>
-    </Compile>
     <Compile Include="ButtonWin.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -197,9 +194,6 @@
     <Compile Include="ListBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ListBoxWin.Designer.cs">
-      <DependentUpon>ListBoxWin.cs</DependentUpon>
-    </Compile>
     <Compile Include="ListComboBoxMapperStrategyWin.cs" />
     <Compile Include="ComboBoxDefaultMapperStrategyWin.cs" />
     <Compile Include="ComboBoxKeyPressMapperStrategyWin.cs" />
@@ -288,9 +282,6 @@
     </Compile>
     <Compile Include="Wizard\NullWizardStepWin.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Wizard\NullWizardStepWin.designer.cs">
-      <DependentUpon>NullWizardStepWin.cs</DependentUpon>
     </Compile>
     <Compile Include="Wizard\WizardControlWin.cs">
       <SubType>UserControl</SubType>
