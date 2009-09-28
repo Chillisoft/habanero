@@ -176,7 +176,6 @@ namespace Habanero.BO.ClassDefinition
     	{
     		get
     		{
-
     		    return ClassDef.ClassDefs[RelatedObjectAssemblyName, RelatedObjectClassNameWithTypeParameter];
     		}
     	}

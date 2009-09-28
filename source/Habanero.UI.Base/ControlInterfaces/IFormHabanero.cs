@@ -149,7 +149,8 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a window or dialog box that makes up an application's user interface
     /// </summary>
-    public interface IFormHabanero : IControlHabanero
+    public interface 
+        IFormHabanero : IControlHabanero
     {
         /// <summary>
         /// Shows the form to the user

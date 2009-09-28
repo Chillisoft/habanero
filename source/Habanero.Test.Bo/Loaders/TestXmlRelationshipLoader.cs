@@ -59,6 +59,7 @@ namespace Habanero.Test.BO.Loaders
 
         [SetUp]
         public void SetupTest() {
+            ClassDef.ClassDefs.Clear();
             Initialise();
         }
 
@@ -89,11 +90,16 @@ namespace Habanero.Test.BO.Loaders
 
         [Test]
         public void TestLoadMultipleRelationship()
-        {
+        { 
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
             IRelationshipDef relDef = _loader.LoadRelationship(MultipleRelationshipString, _propDefs);
-            Assert.AreEqual("TestOrder", relDef.OrderCriteriaString);
+
+            //---------------Test Result -----------------------
             Assert.AreEqual(DeleteParentAction.Prevent, relDef.DeleteParentAction,
                             "Default delete action according to dtd is Prevent.");
+            Assert.AreEqual("TestOrder", relDef.OrderCriteriaString);
         }
 
         [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
@@ -501,14 +507,16 @@ namespace Habanero.Test.BO.Loaders
 						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 					</relationship>";
              //---------------Assert PreConditions---------------   
-             Assert.IsTrue(ClassDef.ClassDefs.Contains("Habanero.Test.BO", "ContactPersonTestBO_Human"));
+            // Assert.IsTrue(ClassDef.ClassDefs.Contains("Habanero.Test.BO", "ContactPersonTestBO_Human"));
 
             //---------------Execute Test ----------------------
 
              IRelationshipDef relDef = _loader.LoadRelationship(relXml, _propDefs);
             //---------------Test Result -----------------------
 
-            Assert.AreSame(personClassDef, relDef.RelatedObjectClassDef);
+            Assert.AreEqual(personClassDef.ClassNameExcludingTypeParameter, relDef.RelatedObjectClassName);
+            Assert.AreEqual(personClassDef.TypeParameter, relDef.RelatedObjectTypeParameter);
+            Assert.AreEqual(personClassDef.AssemblyName, relDef.RelatedObjectAssemblyName);
             //---------------Tear Down -------------------------          
         }
 
@@ -550,7 +558,8 @@ namespace Habanero.Test.BO.Loaders
             IRelationshipDef relDef = _loader.LoadRelationship(relXml, _propDefs);
             //---------------Test Result -----------------------
 
-            Assert.AreSame(personClassDef, relDef.RelatedObjectClassDef);
+            Assert.AreEqual(personClassDef.ClassName, relDef.RelatedObjectClassName);
+            Assert.AreEqual(personClassDef.AssemblyName, relDef.RelatedObjectAssemblyName);
             Assert.AreEqual(2000, relDef.TimeOut );
             //---------------Tear Down -------------------------          
         }
