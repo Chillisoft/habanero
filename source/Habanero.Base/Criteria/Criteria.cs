@@ -390,21 +390,22 @@ namespace Habanero.Base
 
         private static bool IsLikeMatch(IComparable boPropertyValue, IComparable compareToValue)
         {
+            if (compareToValue == null) return true;
             string compareValueStringWPct = compareToValue.ToString();
-            string compareValueString_WNoPct = compareValueStringWPct.TrimEnd('%').TrimStart('%');
+            string compareValueStringWNoPct = compareValueStringWPct.TrimEnd('%').TrimStart('%');
             if (!compareValueStringWPct.StartsWith("%") && !compareValueStringWPct.EndsWith("%"))
             {
-                return boPropertyValue.Equals(compareValueString_WNoPct);
+                return boPropertyValue.Equals(compareValueStringWNoPct);
             }
             if (!compareValueStringWPct.StartsWith("%"))
             {
-                return boPropertyValue.ToString().StartsWith(compareValueString_WNoPct);
+                return boPropertyValue.ToString().StartsWith(compareValueStringWNoPct);
             }
             if (!compareValueStringWPct.EndsWith("%"))
             {
-                return boPropertyValue.ToString().EndsWith(compareValueString_WNoPct);
+                return boPropertyValue.ToString().EndsWith(compareValueStringWNoPct);
             }
-            return boPropertyValue.ToString().Contains(compareValueString_WNoPct);
+            return boPropertyValue.ToString().Contains(compareValueStringWNoPct);
         }
 
         private bool IsNullMatch()

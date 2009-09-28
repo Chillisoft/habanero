@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.UI.Base
 {
@@ -107,6 +108,12 @@ namespace Habanero.UI.Base
         /// <returns>The first step.</returns>
         public virtual IWizardStep GetFirstStep()
         {
+            if (_wizardSteps.Count <= 0)
+            {
+                throw new HabaneroApplicationException(
+                    "There was an Error when trying to access the first step of the wizard Controller" 
+                    + this.GetType() + ". The wizard controller has not been set up with steps");
+            }
             return _wizardSteps[_currentStep = 0];
         }
 

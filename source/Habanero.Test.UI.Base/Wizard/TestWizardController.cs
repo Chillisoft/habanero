@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Drawing;
+using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -109,6 +110,33 @@ namespace Habanero.Test.UI.Base.Wizard
         {
             Assert.AreSame(_step1, _wizardController.GetFirstStep());
         }
+        [Test]
+        public void TestGetFirstStep_WhenNoFirstStepSetup()
+        {
+            
+        }
+
+        [Test]
+        public void Test_GetFirstStep_WhenNoFirstStepSetup()
+        {
+            //---------------Set up test pack-------------------
+            WizardController wizardController = new WizardController();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                wizardController.GetFirstStep();
+                Assert.Fail("Expected to throw an HabaneroApplicationException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroApplicationException ex)
+            {
+                StringAssert.Contains("There was an Error when trying to access the first step of the wizard Controller", ex.Message);
+                StringAssert.Contains("The wizard controller has not been set up with steps", ex.Message);
+            }
+            //---------------Test Result -----------------------
+        }
 
         [Test]
         public void TestIsLastStep()
@@ -182,10 +210,10 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.AreSame(null, _wizardController.GetCurrentStep());
         }
 
-        [Ignore(" Test not yet written")] //Brett 26 Feb 2009: I found this while cleaning up code had a not that needs to be implemented
         [Test]
         public void Test_WizardControllerCancelsWizardSteps_Win()
         {
+            Test_WizardControllerCancelsWizardSteps(new Habanero.UI.Win.ControlFactoryWin());
         }
 
         [Test]

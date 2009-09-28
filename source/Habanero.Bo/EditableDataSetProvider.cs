@@ -41,6 +41,7 @@ namespace Habanero.BO
         private Dictionary<DataRow, IBusinessObject> _deletedRows;
 
         private bool _isBeingAdded;
+        private bool _registeredForTableEvents = true;
 
 
         /// <summary>
@@ -68,6 +69,7 @@ namespace Habanero.BO
         {
             try
             {
+                _registeredForTableEvents = false;
                 _table.TableNewRow -= _newRowHandler;
                 _table.RowChanged -= _rowChangedHandler;
                 _table.RowDeleting -= _rowDeletedHandler;
@@ -88,6 +90,7 @@ namespace Habanero.BO
             _table.TableNewRow += _newRowHandler;
             _table.RowChanged += _rowChangedHandler;
             _table.RowDeleting += _rowDeletedHandler;
+            _registeredForTableEvents = true;
         }
 
         /// <summary>
@@ -186,48 +189,6 @@ namespace Habanero.BO
             return changedBo;
         }
 
-        /// <summary>
-        /// Handles the event of a row being changed
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void RowChangedHandler(object sender, DataRowChangeEventArgs e)
-        {
-            if (_isBeingAdded) return;
-
-            DataRow row = e.Row;
-            try
-            {
-//                DeregisterForBOEvents();
-                switch (e.Action)
-                {
-                    case DataRowAction.Add:
-                        RowAdded(e);
-                        break;
-                    case DataRowAction.Change:
-                        RowChanged(e);
-                        break;
-                    case DataRowAction.Commit:
-                        RowCommitted(e);
-                        break;
-                    case DataRowAction.Rollback:
-                        RowRollback(e);
-                        break;
-
-                }
-            }
-            catch (Exception ex)
-            {
-                string message = "There was a problem saving. : " + ex.Message;
-                row.RowError = message;
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
-            }
-//            finally
-//            {
-//                RegisterForBOEvents();
-//            }
-        }
-
 
         /// <summary>
         /// Restores a row to its previous state before changes were made
@@ -272,6 +233,49 @@ namespace Habanero.BO
                 row.RowError = message;
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
+        }
+
+        /// <summary>
+        /// Handles the event of a row being changed
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private void RowChangedHandler(object sender, DataRowChangeEventArgs e)
+        {
+            if (_isBeingAdded) return;
+            if( !_registeredForTableEvents) return;
+
+            DataRow row = e.Row;
+            try
+            {
+//                DeregisterForBOEvents();
+                switch (e.Action)
+                {
+                    case DataRowAction.Add:
+                        RowAdded(e);
+                        break;
+                    case DataRowAction.Change:
+                        RowChanged(e);
+                        break;
+                    case DataRowAction.Commit:
+                        RowCommitted(e);
+                        break;
+                    case DataRowAction.Rollback:
+                        RowRollback(e);
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = "There was a problem saving. : " + ex.Message;
+                row.RowError = message;
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
+//            finally
+//            {
+//                RegisterForBOEvents();
+//            }
         }
 
         /// <summary>

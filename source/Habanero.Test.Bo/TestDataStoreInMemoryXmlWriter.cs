@@ -113,6 +113,30 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, loadedDataStore.Count);
         }
+        [Test]
+        public void Test_Read_WhenPropHasBeenRemoved_ShouldReadWithoutProp()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef def = MyBO.LoadClassDefsNoUIDef();
+            DataStoreInMemory savedDataStore = new DataStoreInMemory();
+            savedDataStore.Add(new MyBO());
+            MemoryStream writeStream = new MemoryStream();
+            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
+            writer.Write(savedDataStore);
+            BusinessObjectManager.Instance = new BusinessObjectManager();
+            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
+            writeStream.Seek(0, SeekOrigin.Begin);
+            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
+            
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, savedDataStore.Count);
+            //---------------Execute Test ----------------------
+            def.PropDefcol.Remove(def.PropDefcol["TestProp2"]);
+            loadedDataStore.AllObjects = reader.Read();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, loadedDataStore.Count);
+        }
 
         [Test]
         public void Test_Read_ShouldLoadPropertiesCorrectly()

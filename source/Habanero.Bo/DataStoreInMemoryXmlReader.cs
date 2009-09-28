@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -56,7 +57,15 @@ namespace Habanero.BO
                     string propertyName = reader.Name;
                     if (reader.Name == "__tn" || reader.Name == "__an") continue;
                     string propertyValue = reader.Value;
-                    bo.SetPropertyValue(propertyName, propertyValue);
+                    try
+                    {
+                        bo.SetPropertyValue(propertyName, propertyValue);
+                    }
+                    catch (InvalidPropertyNameException)
+                    {
+                        //Do Nothing since the property no longer exists.
+                        continue;
+                    }
                 }
                 objects.Add(bo.ID.GetAsGuid(), bo);
                 reader.Read();
