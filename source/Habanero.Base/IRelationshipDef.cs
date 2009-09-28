@@ -215,6 +215,11 @@ namespace Habanero.Base
         int TimeOut { get; set;  }
 
         /// <summary>
+        /// The related class name including its type parameter (if any)
+        /// </summary>
+        string RelatedObjectClassNameWithTypeParameter { get; }
+
+        /// <summary>
         /// Create and return a new Relationship based on the relationship definition.
         /// </summary>
         /// <param name="owningBo">The business object that owns

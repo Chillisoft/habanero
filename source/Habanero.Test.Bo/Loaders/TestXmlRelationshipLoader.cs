@@ -447,7 +447,7 @@ namespace Habanero.Test.BO.Loaders
         public void Test_ReverseRelationshipDefault()
         {
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relDef = (MultipleRelationshipDef)_loader.LoadRelationship(MultipleRelationshipString, _propDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(MultipleRelationshipString, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.IsTrue(string.IsNullOrEmpty(relDef.ReverseRelationshipName));
@@ -476,7 +476,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void Test_WithTypeParameter()
+        public virtual void Test_WithTypeParameter()
         {
             //---------------Set up test pack-------------------
             XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), GetDefClassFactory());

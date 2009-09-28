@@ -180,7 +180,7 @@ namespace Habanero.BO.ClassDefinition
     		}
     	}
 
-        internal string RelatedObjectClassNameWithTypeParameter
+        public string RelatedObjectClassNameWithTypeParameter
         {
             get
             {

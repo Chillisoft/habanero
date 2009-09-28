@@ -169,16 +169,16 @@ namespace Habanero.BO.Loaders
         {
             foreach (IClassDef classDef in classDefCol)
             {
-                foreach (RelationshipDef relationshipDef in classDef.RelationshipDefCol)
+                foreach (IRelationshipDef relationshipDef in classDef.RelationshipDefCol)
                 {
                     if (relationshipDef is MultipleRelationshipDef)
                     {
                         relationshipDef.OwningBOHasForeignKey = true;
                     }
-                    else if (relationshipDef.OwningBOHasForeignKey)
+                    else if (relationshipDef is SingleRelationshipDef && relationshipDef.OwningBOHasForeignKey)
                     {
                         relationshipDef.OwningBOHasForeignKey = !OwningClassHasPrimaryKey(relationshipDef, classDef, classDefCol);
-                        relationshipDef.OwningBOHasPrimaryKey = OwningClassHasPrimaryKey(relationshipDef, classDef, classDefCol);
+                        ((SingleRelationshipDef)relationshipDef).OwningBOHasPrimaryKey = OwningClassHasPrimaryKey(relationshipDef, classDef, classDefCol);
                     }
                 }
             }
@@ -298,7 +298,7 @@ namespace Habanero.BO.Loaders
         {
             if (classDef == null) return;
             
-            foreach (RelationshipDef relationshipDef in classDef.RelationshipDefCol)
+            foreach (IRelationshipDef relationshipDef in classDef.RelationshipDefCol)
             {
                 IClassDef relatedObjectClassDef = GetRelatedObjectClassDef(classDefs, relationshipDef);
                 ValidateReverseRelationship(classDef, relationshipDef, relatedObjectClassDef);
@@ -306,7 +306,7 @@ namespace Habanero.BO.Loaders
             }
         }
 
-        private static IClassDef GetRelatedObjectClassDef(ClassDefCol classDefs, RelationshipDef relationshipDef)
+        private static IClassDef GetRelatedObjectClassDef(ClassDefCol classDefs, IRelationshipDef relationshipDef)
         {
             IClassDef relatedObjectClassDef;
             try
@@ -340,7 +340,7 @@ namespace Habanero.BO.Loaders
             IPropDefCol allPropsForRelatedClassDef = GetAllClassDefProps
                 (loadedFullPropertyLists, relatedObjectClassDef, classDefs);
             // Check Relationship Properties
-            foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+            foreach (IRelPropDef relPropDef in relationshipDef.RelKeyDef)
             {
                 string ownerPropertyName = relPropDef.OwnerPropertyName;
                 if (!allPropsForClassDef.Contains(ownerPropertyName))
@@ -374,7 +374,7 @@ namespace Habanero.BO.Loaders
         }
 
         private static void ValidateReverseRelationship
-            (IClassDef classDef, RelationshipDef relationshipDef, IClassDef relatedClassDef)
+            (IClassDef classDef, IRelationshipDef relationshipDef, IClassDef relatedClassDef)
         {
 
             if (!HasReverseRelationship(relationshipDef)) return;
