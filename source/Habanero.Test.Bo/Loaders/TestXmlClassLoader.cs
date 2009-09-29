@@ -24,6 +24,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.Test.Structure;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders
@@ -582,6 +583,30 @@ namespace Habanero.Test.BO.Loaders
             IClassDef def = _loader.LoadClass(classDefXml);
             //---------------Test Result -----------------------
             Assert.IsNull(def.ClassID);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_LoadClassDef_WithSingleTableInheritanceAndRelationshipOnBasePrimaryKey()
+        {
+            //---------------Set up test pack-------------------
+            Vehicle.LoadClassDef_WithSingleTableInheritance();
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+            const string classDefXml = @"
+			  <class name=""LegalEntity"" assembly=""Habanero.Test.Structure"" table=""table_class_LegalEntity"">
+			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" orMapping=""SingleTableInheritance"" discriminator=""EntityType"" />
+			    <property name=""LegalEntityType"" databaseField=""field_Legal_Entity_Type"" />
+			    <relationship name=""VehiclesOwned"" type=""multiple"" relatedClass=""Vehicle"" relatedAssembly=""Habanero.Test.Structure"">
+			      <relatedProperty property=""EntityID"" relatedProperty=""OwnerID"" />
+			    </relationship>
+			  </class>
+			";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            IClassDef itsClassDef = itsLoader.LoadClass(classDefXml);
+            //---------------Test Result -----------------------
+
             //---------------Tear Down -------------------------          
         }
     }

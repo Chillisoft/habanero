@@ -85,7 +85,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test, ExpectedException(typeof(HabaneroArgumentException))]
         public void TestAddNullException()
         {
-            RelPropDef relPropDef = new RelPropDef(null, "");
+            RelPropDef relPropDef = new RelPropDef((string)null, "");
         }
 
         [Test]
@@ -112,8 +112,8 @@ namespace Habanero.Test.BO.ClassDefinition
 
             public IPropDef GetSetOwnerProperty
             {
-                get { return OwnerProperty; }
-                set { OwnerProperty = value;}
+                get { return _ownerPropDef; }
+                set { _ownerPropDef = value; }
             }
 
             public void SetRelatedClassPropName(string name)

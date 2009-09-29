@@ -5,6 +5,10 @@
 // Please do not modify this class directly!
 // ------------------------------------------------------------------------------
 
+using Habanero.Base;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
+
 namespace Habanero.Test.Structure
 {
     using System;
@@ -77,5 +81,7 @@ namespace Habanero.Test.Structure
             }
         }
         #endregion
+
+   
     }
 }

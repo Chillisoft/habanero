@@ -241,10 +241,10 @@ namespace Habanero.BO.ClassDefinition
 
         ///<summary>
         ///</summary>
-        ///<param name="propDef"></param>
+        ///<param name="propName"></param>
         ///<param name="relPropName"></param>
         ///<returns></returns>
-        IRelPropDef CreateRelPropDef(IPropDef propDef, string relPropName);
+        IRelPropDef CreateRelPropDef(string propName, string relPropName);
 
         ///<summary>
         ///</summary>

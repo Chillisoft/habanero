@@ -46,12 +46,21 @@ namespace Habanero.Test.Structure
             return itsClassDef;
         }
 
-        public static IClassDef LoadClassDef_WithClassTableInheritance()
+        public static IClassDef LoadClassDef_WithClassTableInheritance() {
+            return LoadClassDef_WithInheritance(ORMapping.ClassTableInheritance);
+        }
+
+        public static IClassDef LoadClassDef_WithSingleTableInheritance()
+        {
+            return LoadClassDef_WithInheritance(ORMapping.SingleTableInheritance);
+        }
+
+        private static IClassDef LoadClassDef_WithInheritance(ORMapping orMapping)
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            IClassDef itsClassDef = itsLoader.LoadClass(@"
+            IClassDef itsClassDef = itsLoader.LoadClass(String.Format(@"
 			  <class name=""Vehicle"" assembly=""Habanero.Test.Structure"" table=""table_class_Vehicle"">
-			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" />
+			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" orMapping=""{0}"" {1} />
 			    <property name=""VehicleID"" type=""Guid"" databaseField=""field_Vehicle_ID"" />
 			    <property name=""VehicleType"" databaseField=""field_Vehicle_Type"" />
 			    <property name=""DateAssembled"" type=""DateTime"" databaseField=""field_Date_Assembled"" />
@@ -63,7 +72,7 @@ namespace Habanero.Test.Structure
 			      <relatedProperty property=""OwnerID"" relatedProperty=""LegalEntityID"" />
 			    </relationship>
 			  </class>
-			");
+			", Enum.GetName(typeof(ORMapping), orMapping), orMapping == ORMapping.SingleTableInheritance ? "discriminator=\"EntityType\"" : ""));
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }

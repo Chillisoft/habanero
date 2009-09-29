@@ -41,8 +41,9 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class RelPropDef : IRelPropDef
     {
-        private IPropDef _ownerPropDef;
+        protected IPropDef _ownerPropDef;
 		private string _relatedClassPropName;
+        private string _ownerPropDefName;
 
 		/// <summary>
         /// Constructor to create new RelPropDef object
@@ -59,25 +60,38 @@ namespace Habanero.BO.ClassDefinition
             _relatedClassPropName = relatedObjectPropName;
 		}
 
-    	///<summary>
-    	/// Gets or sets the property definition for the relationship owner
-    	///</summary>
-    	protected IPropDef OwnerProperty
-    	{
-			get { return _ownerPropDef; }
-			set
-			{
-				ArgumentValidationHelper.CheckArgumentNotNull(value, "value");
-				_ownerPropDef = value;
-			}
-    	}
+        /// <summary>
+        /// Constructor to create new RelPropDef object
+        /// </summary>
+        /// <param name="ownerClassPropDefName">The name of the prop on the owner object</param>
+        /// <param name="relatedObjectPropName">The property name of the 
+        /// related object</param>
+        public RelPropDef(string ownerClassPropDefName, string relatedObjectPropName)
+        {
+            ArgumentValidationHelper.CheckArgumentNotNull(ownerClassPropDefName, "ownerClassPropDefName");
+            _ownerPropDefName = ownerClassPropDefName;
+            _relatedClassPropName = relatedObjectPropName;
+        }
+
+        /////<summary>
+        ///// Gets or sets the property definition for the relationship owner
+        /////</summary>
+        //protected IPropDef OwnerProperty
+        //{
+        //    get { return _ownerPropDef; }
+        //    set
+        //    {
+        //        ArgumentValidationHelper.CheckArgumentNotNull(value, "value");
+        //        _ownerPropDef = value;
+        //    }
+        //}
 
 		/// <summary>
         /// Returns the property name for the relationship owner
         /// </summary>
         public string OwnerPropertyName
         {
-            get { return _ownerPropDef.PropertyName; }
+            get { return _ownerPropDef != null ? _ownerPropDef.PropertyName : _ownerPropDefName; }
         }
 
         /// <summary>

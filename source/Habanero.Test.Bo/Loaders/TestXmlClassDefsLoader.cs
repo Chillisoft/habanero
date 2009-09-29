@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.Test.Structure;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders
@@ -265,12 +266,8 @@ namespace Habanero.Test.BO.Loaders
                 //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)
             {
-                StringAssert.Contains("The Class Definition for TestClass -  could not be loaded ", ex.Message); 
-                StringAssert.Contains("The property 'PropDefDoesNonExist' defined "
-                          + "in the 'relatedProperty' element in its 'Property' " 
-                          + "attribute, which specifies the property in the class " 
-                          + "'TestClass' from which the relationship 'TestRelatedClass' will link is not defined in the " 
-                          + "class 'TestClass'.", ex.InnerException.Message);
+                StringAssert.Contains("In a 'relatedProperty' element for the 'TestRelatedClass' relationship of the 'TestClass' class, " + 
+                    "the property 'PropDefDoesNonExist' given in the 'property' attribute does not exist", ex.Message);
             }
         }
         [Test]
@@ -1198,6 +1195,8 @@ namespace Habanero.Test.BO.Loaders
             XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
             loader.LoadClassDefs(@"<invalidRootNode>");
         }
+
+      
     }
 
 

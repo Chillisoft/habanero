@@ -244,17 +244,17 @@ namespace Habanero.BO.Loaders
                          + "is missing the 'relatedProperty' attribute, which specifies the "
                          + "property in the related class to which the " + "relationship will link.");
                 }
-                if (!_propDefCol.Contains(propName))
-                {
-                    throw new InvalidXmlDefinitionException
-                        (string.Format
-                             ("The property '{0}' defined in the " + "'relatedProperty' element "
-                              + "in its 'Property' attribute, which specifies the "
-                              + "property in the class '{1}' from which the "
-                              + "relationship '{2}' will link is not defined in the class '{1}'.", propName, _className,
-                              _name));
-                }
-                _relKeyDef.Add(_defClassFactory.CreateRelPropDef(_propDefCol[propName], relPropName));
+                //if (!_propDefCol.Contains(propName))
+                //{
+                //    throw new InvalidXmlDefinitionException
+                //        (string.Format
+                //             ("The property '{0}' defined in the " + "'relatedProperty' element "
+                //              + "in its 'Property' attribute, which specifies the "
+                //              + "property in the class '{1}' from which the "
+                //              + "relationship '{2}' will link is not defined in the class '{1}'.", propName, _className,
+                //              _name));
+                //}
+                _relKeyDef.Add(_defClassFactory.CreateRelPropDef(propName, relPropName));
                 ReadAndIgnoreEndTag();
             }
         }

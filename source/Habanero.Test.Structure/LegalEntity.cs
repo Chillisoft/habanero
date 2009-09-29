@@ -72,6 +72,22 @@ namespace Habanero.Test.Structure
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        
+        public static IClassDef LoadClassDef_WithSingleTableInheritance()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+            IClassDef itsClassDef = itsLoader.LoadClass(@"
+			  <class name=""LegalEntity"" assembly=""Habanero.Test.Structure"" table=""table_class_LegalEntity"">
+			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" orMapping=""SingleTableInheritance"" discriminator=""EntityType"" />
+			    <property name=""LegalEntityType"" databaseField=""field_Legal_Entity_Type"" />
+			    <relationship name=""VehiclesOwned"" type=""multiple"" relatedClass=""Vehicle"" relatedAssembly=""Habanero.Test.Structure"">
+			      <relatedProperty property=""EntityID"" relatedProperty=""OwnerID"" />
+			    </relationship>
+			  </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
 
         public static LegalEntity CreateSavedLegalEntity()
         {
