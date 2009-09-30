@@ -149,11 +149,11 @@ namespace Habanero.Base
                 if (LogicalOperator == LogicalOp.Not)
                 {
                     rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter);
-                    return string.Format("{0} ({1})", LogicalOps[(int)LogicalOperator], rightCriteriaAsString);
+                    return string.Format("{0} ({1})", _logicalOps[(int)LogicalOperator], rightCriteriaAsString);
                 } 
                 string leftCriteriaAsString = new CriteriaDB(LeftCriteria).ToString(formatter, addParameter);
                 rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter);
-                return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int)LogicalOperator],
+                return string.Format("({0}) {1} ({2})", leftCriteriaAsString, _logicalOps[(int)LogicalOperator],
                                      rightCriteriaAsString);
             }
             string valueString;

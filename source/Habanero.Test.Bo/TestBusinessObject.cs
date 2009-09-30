@@ -875,6 +875,24 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual("foobar", bo.CombinedParts);
         }
+        [Test]
+        public void TestSave_ShouldReturnUnderlyingObject()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = Shape.CreateClassDef();
+
+            Shape bo = (Shape)classDef.CreateNewBusinessObject();
+
+            //--------------Assert PreConditions----------------     
+
+            //---------------Execute Test ----------------------
+            IBusinessObject savedBusinessObject = bo.Save();
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(bo, savedBusinessObject);
+        }
 
         //[Test]
         //public void TestSave_ToDifferentDb()

@@ -162,14 +162,14 @@ namespace Habanero.BO
         protected BusinessObjectCollection(SerializationInfo info, StreamingContext context)
         {
             int count = info.GetInt32(COUNT);
-            int created_count = info.GetInt32(CREATED_COUNT);
+            int createdCount = info.GetInt32(CREATED_COUNT);
             Type classType = Util.TypeLoader.LoadType(info.GetString(ASSEMBLY_NAME), info.GetString(CLASS_NAME));
             this.Initialise(ClassDefinition.ClassDef.ClassDefs[classType], null);
             for (int i = 0; i < count; i++)
             {
                 this.AddWithoutEvents((TBusinessObject) info.GetValue(BUSINESS_OBJECT + i, typeof (TBusinessObject)));
             }
-            for (int i = 0; i < created_count; i++)
+            for (int i = 0; i < createdCount; i++)
             {
                 this.AddCreatedBusinessObject
                     ((TBusinessObject) info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof (TBusinessObject)));

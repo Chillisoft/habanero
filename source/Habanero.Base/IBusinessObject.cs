@@ -103,7 +103,7 @@ namespace Habanero.Base
         /// <summary>
         /// Commits to the database any changes made to the object
         /// </summary>
-        void Save();
+        IBusinessObject Save();
 
         /// <summary>
         /// Cancel all edits made to the object since it was loaded from the 

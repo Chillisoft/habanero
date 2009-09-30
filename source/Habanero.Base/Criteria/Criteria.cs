@@ -24,9 +24,9 @@ namespace Habanero.Base
 {
     /// <summary>
     /// A criteria expression that can be used to build up a criteria tree. The IsMatch method can then be
-    /// used to check whether a <see cref="IBusinessObject"/> matches the criteria.
+    /// used to check whether an <see cref="IBusinessObject"/> matches the criteria.
     /// The Criteria object collaborates with the <see cref="ISelectQuery"/> to provide the application developer 
-    /// as well as the framework developer. For more details See <see cref="ISelectQuery"/>
+    /// as well as the framework developer with a mechanism to query the database. For more details See <see cref="ISelectQuery"/>
     /// </summary>
     public class Criteria
     {
@@ -117,12 +117,12 @@ namespace Habanero.Base
         /// <summary>
         /// An array of logical operations (e.g. AND, OR, NOT') that can be used when building <see cref="Criteria"/>
         /// </summary>
-        protected readonly string[] LogicalOps = {"AND", "OR", "NOT"};
+        protected readonly string[] _logicalOps = {"AND", "OR", "NOT"};
         /// <summary>
         /// An Arracy of Comparison Ops (e.g. '=', 'Like' that can be used when building <see cref="Criteria"/>
         /// This is used to convert the <see cref="ComparisonOp"/> value to a <see cref="ComparisonOperatorString"/>
         /// </summary>
-        protected readonly string[] ComparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT"};
+        protected readonly string[] _comparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT"};
         private readonly QueryField _field;
 
         /// <summary>
@@ -344,7 +344,6 @@ namespace Habanero.Base
                 }
             }
 
-            //todo: criterias with relationships
 
             object leftValue = dto.Props[_field.PropertyName.ToUpper()];
             string className = dto.ClassDefName;
@@ -474,12 +473,12 @@ namespace Habanero.Base
                 if (_logicalOp == LogicalOp.Not)
                 {
                     rightCriteriaAsString = RightCriteria.ToString();
-                    return string.Format("{0} ({1})", LogicalOps[(int)LogicalOperator], rightCriteriaAsString);
+                    return string.Format("{0} ({1})", _logicalOps[(int)LogicalOperator], rightCriteriaAsString);
                     
                 } 
                 string leftCriteriaAsString =  LeftCriteria.ToString();
                 rightCriteriaAsString = RightCriteria.ToString();
-                return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int)LogicalOperator],
+                return string.Format("({0}) {1} ({2})", leftCriteriaAsString, _logicalOps[(int)LogicalOperator],
                                      rightCriteriaAsString);
             }
             string sourceName = Convert.ToString(_field.Source);
@@ -641,8 +640,8 @@ namespace Habanero.Base
         protected string ComparisonOperatorString()
         {
             if (ComparisonOperator == ComparisonOp.Equals && FieldValue == null)
-                return ComparisonOps[(int) ComparisonOp.Is];
-            return ComparisonOps[(int)ComparisonOperator];
+                return _comparisonOps[(int) ComparisonOp.Is];
+            return _comparisonOps[(int)ComparisonOperator];
         }
 
         /// <summary>
@@ -656,7 +655,7 @@ namespace Habanero.Base
             if (criteria1 == null) return criteria2;
             return new Criteria(criteria1, LogicalOp.And, criteria2);
         }
-        static readonly Regex _guidFormat = new Regex(
+        static readonly Regex GuidFormat = new Regex(
             "^[A-Fa-f0-9]{32}$|" +
             "^({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?$|" +
             "^({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})$");
@@ -681,12 +680,12 @@ namespace Habanero.Base
         /// <exception cref="ArgumentNullException">
         ///        Thrown if <pararef name="s"/> is <see langword="null"/>.
         /// </exception>
-        public static bool GuidTryParse(string s, out Guid result)
+        private static bool GuidTryParse(string s, out Guid result)
         {
             if (s == null)
                 throw new ArgumentNullException("s");
 
-            Match match = _guidFormat.Match(s);
+            Match match = GuidFormat.Match(s);
 
             if (match.Success)
             {

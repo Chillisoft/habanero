@@ -992,11 +992,12 @@ namespace Habanero.BO
         /// <summary>
         /// Commits to the database any changes made to the object
         /// </summary>
-        public virtual void Save()
+        public virtual IBusinessObject Save()
         {
             ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
             committer.AddBusinessObject(this);
             committer.CommitTransaction();
+            return this;
         }
 
         /// <summary>
