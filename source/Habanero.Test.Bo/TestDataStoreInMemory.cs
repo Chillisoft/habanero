@@ -364,8 +364,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef();
             DataStoreInMemory dataStore = new DataStoreInMemory();
             DateTime now = DateTime.Now;
-            ContactPersonTestBO cp1 = new ContactPersonTestBO();
-            cp1.DateOfBirth = now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO {DateOfBirth = now};
             dataStore.Add(cp1);
             dataStore.Add(OrganisationTestBO.CreateSavedOrganisation());
             //---------------Execute Test ----------------------
@@ -374,6 +373,26 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             Assert.Contains(cp1, col);
+            Assert.IsNull(col.SelectQuery.Criteria);
+        }
+        [Test]
+        public void TestFindAll_ClassDef_WhenIsSubType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef =
+                new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType_field";
+
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            CircleNoPrimaryKey circleNoPrimaryKey = new CircleNoPrimaryKey ();
+            dataStore.Add(circleNoPrimaryKey);
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col = dataStore.FindAll(ClassDef.Get<Shape>(), null);
+            
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(circleNoPrimaryKey, col);
             Assert.IsNull(col.SelectQuery.Criteria);
         }
 
