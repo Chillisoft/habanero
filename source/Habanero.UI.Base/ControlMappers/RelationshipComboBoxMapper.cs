@@ -206,29 +206,29 @@ namespace Habanero.UI.Base
             UpdateErrorProviderErrorMessage();
         }
 
-        private void CheckRelationshipIsSingle(string relationshipName, IRelationshipDef relationshipDef)
-        {
-            if (this.ClassDef == null) return;
+//        private void CheckRelationshipIsSingle(string relationshipName, IRelationshipDef relationshipDef)
+//        {
+//            if (this.ClassDef == null) return;
+//
+//            if (IsSingleRelationship(relationshipDef)) return;
+//            string message = "The relationship '" + relationshipName + "' for the ClassDef '"
+//                             + this.ClassDef.ClassNameFull + "' is not a single relationship."
+//                             + " The 'RelationshipComboBoxMapper' can only be used for single relationships";
+//            throw new HabaneroDeveloperException(message, message);
+//        }
+//
+//        private static void CheckRelationshipDefined(IClassDef classDef, string relationshipName)
+//        {
+//            if (classDef.RelationshipDefCol.Contains(relationshipName)) return;
+//            string message = "The relationship '" + relationshipName + "' does not exist on the ClassDef '"
+//                             + classDef.ClassNameFull + "'";
+//            throw new HabaneroDeveloperException(message, message);
+//        }
 
-            if (IsSingleRelationship(relationshipDef)) return;
-            string message = "The relationship '" + relationshipName + "' for the ClassDef '"
-                             + this.ClassDef.ClassNameFull + "' is not a single relationship."
-                             + " The 'RelationshipComboBoxMapper' can only be used for single relationships";
-            throw new HabaneroDeveloperException(message, message);
-        }
-
-        private static void CheckRelationshipDefined(IClassDef classDef, string relationshipName)
-        {
-            if (classDef.RelationshipDefCol.Contains(relationshipName)) return;
-            string message = "The relationship '" + relationshipName + "' does not exist on the ClassDef '"
-                             + classDef.ClassNameFull + "'";
-            throw new HabaneroDeveloperException(message, message);
-        }
-
-        private static bool IsSingleRelationship(IRelationshipDef relationshipDef)
-        {
-            return typeof (SingleRelationshipDef).IsInstanceOfType(relationshipDef);
-        }
+//        private static bool IsSingleRelationship(IRelationshipDef relationshipDef)
+//        {
+//            return typeof (SingleRelationshipDef).IsInstanceOfType(relationshipDef);
+//        }
 
         /// <summary>
         /// Returns the control being mapped
@@ -310,7 +310,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Provides an overrideable method for Loading the collection of business objects
+        /// Provides an overrideable method for custom Loading the collection of business objects
         /// </summary>
         protected virtual void LoadCollectionForBusinessObject() { }
 
@@ -323,12 +323,12 @@ namespace Habanero.UI.Base
             //SetUpRelationship();//This is being done by the line above
         }
 
-        private void SetUpRelationship()
-        {
-            CheckRelationshipDefined(this.ClassDef, this.RelationshipName);
-            _relationshipDef = this.ClassDef.RelationshipDefCol[this.RelationshipName];
-            CheckRelationshipIsSingle(this.RelationshipName, _relationshipDef);
-        }
+//        private void SetUpRelationship()
+//        {
+//            CheckRelationshipDefined(this.ClassDef, this.RelationshipName);
+//            _relationshipDef = this.ClassDef.RelationshipDefCol[this.RelationshipName];
+//            CheckRelationshipIsSingle(this.RelationshipName, _relationshipDef);
+//        }
 
         private void UpdateIsEditable()
         {
@@ -436,18 +436,18 @@ namespace Habanero.UI.Base
             return _singleRelationship == null ? null : _singleRelationship.GetRelatedObject();
         }
 
-        private ISingleRelationship GetRelationship()
-        {
-            IRelationship relationship = _businessObject == null
-                                             ? null
-                                             : _businessObject.Relationships[this.RelationshipName];
-            ISingleRelationship singleRelationship = null;
-            if (relationship is ISingleRelationship)
-            {
-                singleRelationship = (ISingleRelationship) relationship;
-            }
-            return singleRelationship;
-        }
+//        private ISingleRelationship GetRelationship()
+//        {
+//            IRelationship relationship = _businessObject == null
+//                                             ? null
+//                                             : _businessObject.Relationships[this.RelationshipName];
+//            ISingleRelationship singleRelationship = null;
+//            if (relationship is ISingleRelationship)
+//            {
+//                singleRelationship = (ISingleRelationship) relationship;
+//            }
+//            return singleRelationship;
+//        }
 
         /// <summary>
         /// Sets the Error Provider Error with the appropriate value for the property e.g. if it is invalid then
