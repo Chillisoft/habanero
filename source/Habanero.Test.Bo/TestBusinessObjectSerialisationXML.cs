@@ -44,7 +44,7 @@ namespace Habanero.Test.BO
         public void SetUp()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()));
+            ClassDef.ClassDefs.Add(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()).LoadClassDefs());
             BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 

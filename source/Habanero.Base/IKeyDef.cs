@@ -97,5 +97,10 @@ namespace Habanero.Base
         /// <returns>Returns a new BOKey object that mirrors this
         /// key definition</returns>
         IBOKey CreateBOKey(IBOPropCol lBOPropCol);
+
+        /// <summary>
+        /// Clears all <see cref="IPropDef"/> objects.
+        /// </summary>
+        void Clear();
     }
 }

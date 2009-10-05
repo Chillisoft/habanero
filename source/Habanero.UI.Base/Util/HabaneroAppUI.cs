@@ -118,7 +118,7 @@ namespace Habanero.UI.Base
         /// </summary>
         protected override void SetupClassDefs()
         {
-            if (LoadClassDefs) ClassDef.LoadClassDefs(GetXmlClassDefsLoader());
+            if (LoadClassDefs) ClassDef.ClassDefs.Add(GetXmlClassDefsLoader().LoadClassDefs());
         }
 
         /// <summary>

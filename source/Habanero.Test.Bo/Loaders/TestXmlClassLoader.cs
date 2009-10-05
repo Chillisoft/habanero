@@ -219,7 +219,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestClassWithNoProps_WithSuperClass()
         {
-            ClassDef.LoadClassDefs(
+            ClassDef.ClassDefs.Add(
                 new XmlClassDefsLoader(
                     @"
 					<classes>
@@ -230,7 +230,7 @@ namespace Habanero.Test.BO.Loaders
                             </primaryKey>
 						</class>
 					</classes>",
-                                 new DtdLoader(), GetDefClassFactory()));
+                                 new DtdLoader(), GetDefClassFactory()).LoadClassDefs());
             IClassDef def =
                 _loader.LoadClass(
                     @"
@@ -245,7 +245,6 @@ namespace Habanero.Test.BO.Loaders
             
             IClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
             Assert.AreSame(parentDef, superClassDef);
-
         }
 
         [Test]
@@ -383,7 +382,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestClassWithSuperClass()
         {
-            ClassDef.LoadClassDefs(
+            ClassDef.ClassDefs.Add(
                 new XmlClassDefsLoader(
                     @"
 					<classes>
@@ -394,7 +393,7 @@ namespace Habanero.Test.BO.Loaders
                             </primaryKey>
 						</class>
 					</classes>",
-                                 new DtdLoader(), GetDefClassFactory()));
+                                 new DtdLoader(), GetDefClassFactory()).LoadClassDefs());
             IClassDef def =
                 _loader.LoadClass(
                     @"
@@ -419,7 +418,8 @@ namespace Habanero.Test.BO.Loaders
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Remove(typeof (TestClass));
             ClassDef.ClassDefs.Remove(typeof (TestRelatedClass));
-            ClassDef.LoadClassDefs(new XmlClassDefsLoader(
+            ClassDef.ClassDefs.Add(
+                new XmlClassDefsLoader(
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
@@ -429,7 +429,7 @@ namespace Habanero.Test.BO.Loaders
                             </primaryKey>
 						</class>
 					</classes>",
-                                new DtdLoader(), GetDefClassFactory()));
+                                new DtdLoader(), GetDefClassFactory()).LoadClassDefs());
             IClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
@@ -454,7 +454,8 @@ namespace Habanero.Test.BO.Loaders
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Remove(typeof(TestClass));
             ClassDef.ClassDefs.Remove(typeof(TestRelatedClass));
-            ClassDef.LoadClassDefs(new XmlClassDefsLoader(
+            ClassDef.ClassDefs.Add(
+                new XmlClassDefsLoader(
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
@@ -464,7 +465,7 @@ namespace Habanero.Test.BO.Loaders
                             </primaryKey>
 						</class>
 					</classes>",
-                                new DtdLoader(), GetDefClassFactory()));
+                                new DtdLoader(), GetDefClassFactory()).LoadClassDefs());
             IClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------

@@ -40,8 +40,8 @@ namespace Habanero.Test.BO.Loaders
             Initialise();
             ClassDef.ClassDefs.Clear();
 
-            ClassDef.LoadClassDefs(
-                new XmlClassDefsLoader(SuperClassClassDefXml, new DtdLoader(), GetDefClassFactory()));
+            ClassDef.ClassDefs.Add(
+                new XmlClassDefsLoader(SuperClassClassDefXml, new DtdLoader(), GetDefClassFactory()).LoadClassDefs());
         }
 
         protected string SuperClassClassDefXml = 

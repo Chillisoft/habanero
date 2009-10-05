@@ -131,6 +131,7 @@
     <Compile Include="ClassDefinition\BOPropIntDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropStringDataMapper.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
+    <Compile Include="ClassDefinition\ClassDefValidator.cs" />
     <Compile Include="ClassDefinition\FilterDef.cs" />
     <Compile Include="ClassDefinition\FilterPropertyDef.cs" />
     <Compile Include="ClassDefinition\PropDefCol.cs" />
@@ -167,7 +168,6 @@
     <Compile Include="IDataSetProvider.cs" />
     <Compile Include="ClassDefinition\IDefClassFactory.cs" />
     <Compile Include="Loaders\ClassDefsXmlValidator.cs" />
-    <Compile Include="Loaders\ClassDefValidator.cs" />
     <Compile Include="Loaders\XmlFilterLoader.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlValidationResult.cs" />

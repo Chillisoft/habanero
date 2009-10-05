@@ -224,15 +224,15 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestLoadClassDefs()
         {
-            XmlClassDefsLoader loader =
-                new XmlClassDefsLoader(
+            //---------------Set up test pack-------------------
+            XmlClassDefsLoader loader = new XmlClassDefsLoader(
                     GetTestClassDefinition(""),
                     new DtdLoader(), new DefClassFactory());
-            ClassDef.ClassDefs.Clear();
-            ClassDef.LoadClassDefs(loader);
-            Assert.AreEqual(2, ClassDef.ClassDefs.Count);
+            //---------------Execute Test ----------------------
+            ClassDefCol classDefs = loader.LoadClassDefs();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefs.Count);
         }
-
 
         private static string GetTestClassDefinition(string suffix)
         {
@@ -254,32 +254,6 @@ namespace Habanero.Test.BO.ClassDefinition
 					</classes>
 			", suffix);
             return classDefString;
-        }
-
-        [Test]
-        public void TestLoadRepeatedClassDefs()
-        {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader(), new DefClassFactory());
-            ClassDef.ClassDefs.Clear();
-            ClassDef.LoadClassDefs(loader);
-            Assert.AreEqual(2, ClassDef.ClassDefs.Count);
-            //Now load the same again.
-            loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader(), new DefClassFactory());
-            ClassDef.LoadClassDefs(loader);
-            Assert.AreEqual(2, ClassDef.ClassDefs.Count);
-        }
-
-        [Test]
-        public void TestLoadMultipleClassDefs()
-        {
-            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader(), new DefClassFactory());
-            ClassDef.ClassDefs.Clear();
-            ClassDef.LoadClassDefs(loader);
-            Assert.AreEqual(2, ClassDef.ClassDefs.Count);
-            // Now load some more classes
-            loader = new XmlClassDefsLoader(GetTestClassDefinition("Other"), new DtdLoader(), new DefClassFactory());
-            ClassDef.LoadClassDefs(loader);
-            Assert.AreEqual(4, ClassDef.ClassDefs.Count);
         }
 
         [Test]

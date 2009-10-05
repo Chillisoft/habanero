@@ -53,7 +53,7 @@ namespace Habanero.Test.Structure
         [Test, Ignore("Not Part of this project")]
         public void TestAll()
         {
-            ClassDef.LoadClassDefs(new XmlClassDefsLoader(new StreamReader("Classdefs.xml").ReadToEnd(), new DtdLoader(),new DefClassFactory()));
+            ClassDef.ClassDefs.Add(new XmlClassDefsLoader(new StreamReader("Classdefs.xml").ReadToEnd(), new DtdLoader(),new DefClassFactory()).LoadClassDefs());
             _setupDatabase.CreateDatabase(ClassDef.ClassDefs);
         }
 

@@ -175,6 +175,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public virtual void Test_Refresh_W_ParametrizedClassDef_Typed()
         {
             //---------------Set up test pack-------------------
+            SetupDataAccessor();
             ContactPersonTestBO.LoadDefaultClassDef();
             IClassDef parametrizedClassDef =
                 new XmlClassLoader(new DtdLoader(), new DefClassFactory()).LoadClass(
@@ -216,6 +217,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.IsTrue(col[0].Props.Contains("SuperPowerDescription"));
             Assert.IsTrue(col[1].Props.Contains("SuperPowerDescription"));
         }
+
 
 
         [Test]

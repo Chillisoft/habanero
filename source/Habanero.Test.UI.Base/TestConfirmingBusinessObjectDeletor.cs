@@ -170,7 +170,7 @@ namespace Habanero.Test.UI.Base
         {
             IBusinessObject boToDelete = mockRepository.StrictMock<IBusinessObject>();
             Expect.Call(boToDelete.MarkForDelete).Repeat.Once();
-            Expect.Call(boToDelete.Save()).Repeat.Once();
+            Expect.Call(boToDelete.Save()).Repeat.Once().Return( boToDelete);
             return boToDelete;
         }
 

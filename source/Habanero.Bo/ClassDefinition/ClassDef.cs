@@ -887,21 +887,6 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// Takes the class definitions loaded into the IClassDefsLoader
-        /// (eg. XmlClassDefsLoader)
-        /// object and copies them across to the static ClassDefCol object.
-        /// Checks to see that the definitions have not been loaded already,
-        /// and displays a warning message to the console if so.
-        /// </summary>
-        /// <param name="loader">An object of type IClassDefsLoader
-        /// or of its descendants</param>
-        public static void LoadClassDefs(IClassDefsLoader loader)
-        {
-            ClassDefCol classDefCol = loader.LoadClassDefs();
-            ClassDefCol.LoadColClassDef(classDefCol);
-        }
-
-        /// <summary>
         /// Searches the relationship definition collection and returns 
         /// the relationship definition found under the
         /// relationship with the name specified.
@@ -921,9 +906,6 @@ namespace Habanero.BO.ClassDefinition
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
             return null;
-            //            throw new InvalidRelationshipAccessException(String.Format(
-            //                "A relationship definition with the name of '{0}' was not found.",
-            //                relationshipName));
         }
 
         /// <summary>
@@ -990,8 +972,9 @@ namespace Habanero.BO.ClassDefinition
                     return false;
                 }
             }
+            if (this._className != otherClsDef._className) return false;
             return true;
-//            return Equals(obj._className, _className) && Equals(obj._classType, _classType) && Equals(obj._primaryKeyDef, _primaryKeyDef) && Equals(obj._propDefCol, _propDefCol) && Equals(obj.TypeParameter, TypeParameter);
+            //return Equals(otherClsDef._className, _className) && Equals(otherClsDef._classType, _classType) && Equals(otherClsDef._primaryKeyDef, _primaryKeyDef) && Equals(otherClsDef._propDefCol, _propDefCol) && Equals(otherClsDef.TypeParameter, TypeParameter);
         }
 
         ///<summary>

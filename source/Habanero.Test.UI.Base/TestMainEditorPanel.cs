@@ -41,7 +41,7 @@ namespace Habanero.Test.UI.Base
         public void SetupFixture()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef.LoadClassDefs(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()));
+            ClassDef.ClassDefs.Add(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()).LoadClassDefs());
             BORegistry.DataAccessor = new DataAccessorInMemory();
             GlobalUIRegistry.ControlFactory = CreateNewControlFactory();
         }

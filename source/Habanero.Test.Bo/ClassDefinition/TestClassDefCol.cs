@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -69,10 +70,11 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
         public void TestAddDuplicateException()
         {
-            ClassDef classDef = new ClassDef("ass", "class", null, null, null, null, null);
+            ClassDef classDef1 = new ClassDef("ass", "class", null, null, null, null, null);
+            ClassDef classDef2 = new ClassDef("ass", "class", null, null, null, null, null);
             ClassDefCol col = new ClassDefCol();
-            col.Add(classDef);
-            col.Add(classDef);
+            col.Add(classDef1);
+            col.Add(classDef2);
         }
 
         [Test]
@@ -177,6 +179,98 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef returnedClassDef = col[typeof (MockBo)];
             //---------------Test Result -----------------------
             Assert.AreEqual(classDef, returnedClassDef);
+        }
+
+
+        [Test]
+        public void Test_Add_WithSameClassDef_IgnoresAdd()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = new ClassDef
+               (typeof(MockBo), new PrimaryKeyDef(), new PropDefCol(), new KeyDefCol(), new RelationshipDefCol());
+            ClassDefCol classDefCol = new ClassDefCol();
+            classDefCol.Add(classDef);
+            //---------------Assert PreConditions---------------   
+            Assert.AreEqual(1, classDefCol.Count);
+            //---------------Execute Test ----------------------
+            classDefCol.Add(classDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, classDefCol.Count);
+        }
+
+
+        [Test]
+        public void Test_Add_WithCollection_ShouldAddEachItem()
+        {
+            //---------------Set up test pack-------------------
+            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader(), new DefClassFactory());
+            ClassDefCol classDefCol = new ClassDefCol();
+            ClassDefCol classDefs = loader.LoadClassDefs();
+            //---------------Assert PreConditions---------------   
+            Assert.AreEqual(2, classDefs.Count);
+            //---------------Execute Test ----------------------
+            classDefCol.Add(classDefs);
+             //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefCol.Count);
+        }
+
+        [Test]
+        public void Test_Add_WithDuplicateClassDefs_ShouldNotAddAgain()
+        {
+            //---------------Set up test pack-------------------
+            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader(), new DefClassFactory());
+            ClassDefCol classDefCol = new ClassDefCol();
+            ClassDefCol classDefs = loader.LoadClassDefs();
+            classDefCol.Add(classDefs);
+            //---------------Assert PreConditions---------------   
+            Assert.AreEqual(2, classDefs.Count);
+            Assert.AreEqual(2, classDefCol.Count);
+             //---------------Execute Test ----------------------
+            classDefCol.Add(classDefs);
+             //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefCol.Count);
+        }
+
+        [Test]
+        public void Test_Add_WithNewClassDefs_ShouldAddThem()
+        {
+            //---------------Set up test pack-------------------
+            XmlClassDefsLoader loader1 = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader(), new DefClassFactory());
+            ClassDefCol classDefCol = new ClassDefCol();
+            ClassDefCol classDefs1 = loader1.LoadClassDefs();
+            classDefCol.Add(classDefs1);
+
+            XmlClassDefsLoader loader2 = new XmlClassDefsLoader(GetTestClassDefinition("Other"), new DtdLoader(), new DefClassFactory());
+            ClassDefCol classDefs2 = loader2.LoadClassDefs();
+            //---------------Assert PreConditions---------------   
+            Assert.AreEqual(2, classDefCol.Count);
+            Assert.AreEqual(2, classDefs2.Count);
+            //---------------Execute Test ----------------------
+            classDefCol.Add(classDefs2);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, classDefCol.Count);
+        }
+
+        private static string GetTestClassDefinition(string suffix)
+        {
+            string classDefString = String.Format(
+                @"
+					<classes>
+						<class name=""TestClass{0}"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property name=""TestClass{0}ID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestClass{0}ID""/>
+                            </primaryKey>
+						</class>
+						<class name=""TestRelatedClass{0}"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property name=""TestRelatedClass{0}ID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClass{0}ID""/>
+                            </primaryKey>
+						</class>
+					</classes>
+			", suffix);
+            return classDefString;
         }
 
         private class MockBo : BusinessObject

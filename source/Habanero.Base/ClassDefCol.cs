@@ -144,6 +144,7 @@ namespace Habanero.Base
         /// <param name="value">The class definition to add</param>
         public void Add(IClassDef value)
         {
+            if (_classDefs.ContainsValue(value)) return;
             string typeId = GetTypeId(value.AssemblyName, value.ClassName, true);
             if (_classDefs.ContainsKey(typeId))
             {
@@ -155,6 +156,19 @@ namespace Habanero.Base
             _classDefs.Add(typeId, value);
         }
 
+
+        /// <summary>
+        /// Adds a class definition to the collection
+        /// </summary>
+        /// <param name="value">The class definition to add</param>
+        public void Add(ClassDefCol classDefCol)
+        {
+            foreach (IClassDef classDef in classDefCol)
+            {
+                Add(classDef);
+            }
+        }
+        
         /// <summary>
         /// Indicates whether the collection contains a class definition
         /// representing the passed type.

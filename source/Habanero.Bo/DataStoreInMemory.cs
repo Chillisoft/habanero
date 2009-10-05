@@ -217,6 +217,7 @@ namespace Habanero.BO
             foreach (IBusinessObject bo in _objects.Values)
             {
                 if (!classDef.ClassType.IsInstanceOfType(bo)) continue;
+                if (classDef.TypeParameter != bo.ClassDef.TypeParameter) continue;
                 if (criteria == null || criteria.IsMatch(bo)) col.Add(bo);
             }
             col.SelectQuery.Criteria = criteria;
