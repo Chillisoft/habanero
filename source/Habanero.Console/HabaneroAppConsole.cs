@@ -109,7 +109,12 @@ namespace Habanero.Console
         /// </summary>
         protected override void SetupClassDefs()
         {
-            if (LoadClassDefs) GetXmlClassDefsLoader().LoadClassDefs();
+            if (LoadClassDefs)
+            {
+                ClassDef.ClassDefs.Add(GetXmlClassDefsLoader().LoadClassDefs());
+                ClassDefValidator validator = new ClassDefValidator(new DefClassFactory());
+                validator.ValidateClassDefs(ClassDef.ClassDefs);
+            }
         }
 
         /// <summary>
