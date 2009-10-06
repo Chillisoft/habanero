@@ -28,6 +28,9 @@ using Habanero.Util;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// This is an interface used for loading BusinessObjects from the Database.
+    /// </summary>
     internal interface  IBusinessObjectCollectionInternal : IBusinessObjectCollection
     {
         void AddInternal(IBusinessObject businessObject);
@@ -136,7 +139,6 @@ namespace Habanero.BO
             this._savedEventHandler = SavedEventHandler;
             this._deletedEventHandler = DeletedEventHandler;
             this._restoredEventHandler = RestoredEventHandler;
-            //this._updateIDEventHandler = UpdateHashTable;
             this._markForDeleteEventHandler = MarkForDeleteEventHandler;
             this._updatedEventHandler = UpdatedEventHandler;
             this._boPropUpdatedEventHandler = BOPropUpdatedEventHandler;
@@ -412,7 +414,7 @@ namespace Habanero.BO
         }
 
         #endregion
-
+        // ReSharper disable VirtualMemberNeverOverriden.Global
         /// <summary>
         /// Adds a business object to the collection
         /// </summary>
@@ -427,7 +429,7 @@ namespace Habanero.BO
             }
             if (addSuccessful) this.FireBusinessObjectAdded(bo);
         }
-
+        // ReSharper restore VirtualMemberNeverOverriden.Global
         /// <summary>
         /// Adds a business object to the collection of business objects without raising any events.
         /// But still verifies the object does not exist in Created, removed etc collections
