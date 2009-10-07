@@ -122,8 +122,15 @@ namespace Habanero.UI.Win
 
         private void SaveClickHandler(object sender, EventArgs e)
         {
-            IBusinessObject currentBO = CurrentBusinessObject;
-            currentBO.Save();
+            try
+            {
+                IBusinessObject currentBO = CurrentBusinessObject;
+                currentBO.Save();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         ///<summary>
@@ -174,25 +181,32 @@ namespace Habanero.UI.Win
 
         private void GridSelectionChanged(object sender, EventArgs e)
         {
-            if (_newBO != null)
+            try
             {
-                if (_newBO.Status.IsDirty)
+                if (_newBO != null)
                 {
-                    if (_newBO.IsValid())
+                    if (_newBO.Status.IsDirty)
                     {
-                        _newBO.Save();
-                    }
-                    else
-                    {
-                        _newBO = null;
+                        if (_newBO.IsValid())
+                        {
+                            _newBO.Save();
+                        }
+                        else
+                        {
+                            _newBO = null;
+                        }
                     }
                 }
+                if (_lastSelectedBusinessObject == null || _readOnlyGridControl.SelectedBusinessObject != _lastSelectedBusinessObject)
+                {
+                    if (!CheckRowSelectionCanChange()) return;
+                    SavePreviousBusinessObject();
+                    SetSelectedBusinessObject();
+                }
             }
-            if (_lastSelectedBusinessObject == null || _readOnlyGridControl.SelectedBusinessObject != _lastSelectedBusinessObject)
+            catch (Exception ex)
             {
-                if (!CheckRowSelectionCanChange()) return;
-                SavePreviousBusinessObject();
-                SetSelectedBusinessObject();
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
@@ -228,7 +242,14 @@ namespace Habanero.UI.Win
 
         private void PropertyUpdated(object sender, BOPropUpdatedEventArgs eventArgs)
         {
-            _cancelButton.Enabled = true;
+            try
+            {
+                _cancelButton.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         private void SavePreviousBusinessObject()
@@ -241,20 +262,27 @@ namespace Habanero.UI.Win
 
         private void CancelButtonClicked(object sender, EventArgs e)
         {
-            IBusinessObject currentBO = CurrentBusinessObject ?? _newBO;
-            if (currentBO.Status.IsNew)
+            try
             {
-                _lastSelectedBusinessObject = null;
-                _readOnlyGridControl.Grid.BusinessObjectCollection.Remove(currentBO);
-                SelectLastRowInGrid();
-            }
-            else
-            {
-                currentBO.CancelEdits();
-            }
-            UpdateControlEnabledState();
+                IBusinessObject currentBO = CurrentBusinessObject ?? _newBO;
+                if (currentBO.Status.IsNew)
+                {
+                    _lastSelectedBusinessObject = null;
+                    _readOnlyGridControl.Grid.BusinessObjectCollection.Remove(currentBO);
+                    SelectLastRowInGrid();
+                }
+                else
+                {
+                    currentBO.CancelEdits();
+                }
+                UpdateControlEnabledState();
 
-            RefreshGrid();
+                RefreshGrid();
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         ///<summary>
@@ -317,42 +345,56 @@ namespace Habanero.UI.Win
         /// </summary>a
         private void NewButtonClicked(object sender, EventArgs e)
         {
-            _newBO = null;
-            IBusinessObject currentBO = CurrentBusinessObject;
-            if (currentBO != null)
+            try
             {
-                if (!currentBO.IsValid())
+                _newBO = null;
+                IBusinessObject currentBO = CurrentBusinessObject;
+                if (currentBO != null)
                 {
-                    bool errors = _iboEditorControl.HasErrors;
-                    return;
+                    if (!currentBO.IsValid())
+                    {
+                        bool errors = _iboEditorControl.HasErrors;
+                        return;
+                    }
+                    currentBO.Save();
                 }
-                currentBO.Save();
-            }
 
-            IBusinessObjectCollection collection = _readOnlyGridControl.Grid.BusinessObjectCollection;
-            _readOnlyGridControl.Grid.SelectionChanged -= GridSelectionChanged;
-            _newBO = collection.CreateBusinessObject();
-            // _readOnlyGridControl.Grid.GetBusinessObjectCollection().Add(businessObject);
-            _readOnlyGridControl.SelectedBusinessObject = _newBO;
-            CurrentBusinessObject = _newBO;
-            UpdateControlEnabledState();
-            //collection.Add(businessObject);
-            _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
-            GridSelectionChanged(null, null);
-            _iboEditorControl.Focus();
-            //_iboEditorControl.ClearErrors();
-            _cancelButton.Enabled = true;
+                IBusinessObjectCollection collection = _readOnlyGridControl.Grid.BusinessObjectCollection;
+                _readOnlyGridControl.Grid.SelectionChanged -= GridSelectionChanged;
+                _newBO = collection.CreateBusinessObject();
+                // _readOnlyGridControl.Grid.GetBusinessObjectCollection().Add(businessObject);
+                _readOnlyGridControl.SelectedBusinessObject = _newBO;
+                CurrentBusinessObject = _newBO;
+                UpdateControlEnabledState();
+                //collection.Add(businessObject);
+                _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
+                GridSelectionChanged(null, null);
+                _iboEditorControl.Focus();
+                //_iboEditorControl.ClearErrors();
+                _cancelButton.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
         }
 
         private void DeleteButtonClicked(object sender, EventArgs e)
         {
-            IBusinessObject businessObject = CurrentBusinessObject;
-            businessObject.MarkForDelete();
-            businessObject.Save();
-
-            if (CurrentBusinessObject == null && _readOnlyGridControl.Grid.Rows.Count > 0)
+            try
             {
-                SelectLastRowInGrid();
+                IBusinessObject businessObject = CurrentBusinessObject;
+                businessObject.MarkForDelete();
+                businessObject.Save();
+
+                if (CurrentBusinessObject == null && _readOnlyGridControl.Grid.Rows.Count > 0)
+                {
+                    SelectLastRowInGrid();
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
