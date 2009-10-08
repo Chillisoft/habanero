@@ -205,8 +205,11 @@ namespace Habanero.BO
                 _businessObjectAdded += addedHandler;
         }
             remove {
-                _businessObjectAdded -= _addedHandlers[value];
-                _addedHandlers.Remove(value);
+                if (_addedHandlers.ContainsKey(value))
+                {
+                    _businessObjectAdded -= _addedHandlers[value];
+                    _addedHandlers.Remove(value);
+                }
             }
         }
 
@@ -238,8 +241,11 @@ namespace Habanero.BO
             }
             remove
             {
-                _BusinessObjectRemoved -= _removedHandlers[value];
-                _removedHandlers.Remove(value);
+                if (_removedHandlers.ContainsKey(value))
+                {
+                    _BusinessObjectRemoved -= _removedHandlers[value];
+                    _removedHandlers.Remove(value);
+                }
             }
         }
         
@@ -273,8 +279,11 @@ namespace Habanero.BO
             }
             remove
             {
-                _businessObjectUpdated -= _updatedHandlers[value];
-                _updatedHandlers.Remove(value);
+                if (_updatedHandlers.ContainsKey(value))
+                {
+                    _businessObjectUpdated -= _updatedHandlers[value];
+                    _updatedHandlers.Remove(value);
+                }
             }
         }
         /// <summary>
@@ -345,8 +354,11 @@ namespace Habanero.BO
             }
             remove
             {
-                _BusinessObjectIDUpdated -= _idUpdatedHandlers[value];
-                _idUpdatedHandlers.Remove(value);
+                if (_idUpdatedHandlers.ContainsKey(value))
+                {
+                    _BusinessObjectIDUpdated -= _idUpdatedHandlers[value];
+                    _idUpdatedHandlers.Remove(value);
+                }
             }
         }
 
