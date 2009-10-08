@@ -506,7 +506,7 @@ namespace Habanero.BO
 
         private static void RestoreMarkForDeleteCollection(IBusinessObjectCollection collection)
         {
-            foreach (BusinessObject businessObject in collection.MarkedForDeleteBusinessObjects)
+            foreach (BusinessObject businessObject in Utilities.ToArray<BusinessObject>(collection.MarkedForDeleteBusinessObjects))
             {
                 collection.Remove(businessObject);
                 collection.RemovedBusinessObjects.Remove(businessObject);
@@ -521,7 +521,7 @@ namespace Habanero.BO
         /// <param name="collection"></param>
         private static void RestoreRemovedCollection(IBusinessObjectCollection collection)
         {
-            foreach (BusinessObject businessObject in collection.RemovedBusinessObjects)
+            foreach (BusinessObject businessObject in Utilities.ToArray<BusinessObject>(collection.RemovedBusinessObjects))
             {
                 collection.Remove(businessObject);
             }
@@ -534,11 +534,12 @@ namespace Habanero.BO
         /// <param name="collection"></param>
         private static void RestoreCreatedCollection(IBusinessObjectCollection collection)
         {
-            foreach (BusinessObject businessObject in collection.CreatedBusinessObjects)
+            foreach (BusinessObject businessObject in Utilities.ToArray<BusinessObject>(collection.CreatedBusinessObjects))
             {
                 collection.AddWithoutEvents(businessObject);
             }
         }
+
         /// <summary>
         /// Restores the created collection. I.e. moves the items that are in the created collection
         ///  back to the main collection. Remember the main collection shows all the items from the database

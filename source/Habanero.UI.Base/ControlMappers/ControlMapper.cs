@@ -428,17 +428,16 @@ namespace Habanero.UI.Base
                 try
                 {
                     controlMapper =
-                            (IControlMapper)
-                            Activator.CreateInstance(mapperType, new object[] {ctl, propertyName, isReadOnly});
+                            (IControlMapper) 
+                            Activator.CreateInstance (mapperType, new object[] {ctl, propertyName, isReadOnly, controlFactory});
                 } 
 
                 catch (MissingMethodException)
                 {
-                    //This is to deal with the fact that lookupcomboboxmapper has a slightly different constructor- perhaps all control mappers
-                    // should have a constructor that takes an IcontrolFactory ?
+                    //This is to cater for older versions of custom implemented control mappers that did not have the control factory parameter
                     controlMapper =
-                            (IControlMapper) 
-                            Activator.CreateInstance (mapperType, new object[] {ctl, propertyName, isReadOnly, controlFactory});
+                            (IControlMapper)
+                            Activator.CreateInstance(mapperType, new object[] {ctl, propertyName, isReadOnly});
                 }
             }
             else

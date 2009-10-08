@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
@@ -60,6 +62,22 @@ namespace Habanero.Util
                           + "defined in the relationship and class definitions for the classes " + "involved.", type),
                      ex);
             }
+        }
+
+        ///<summary>
+        /// Copies the elements of the <see cref="System.Collections.IList"/> to a new array of the specified type.
+        ///</summary>
+        ///<param name="list">The <see cref="System.Collections.IList"/> to be copied.</param>
+        ///<typeparam name="T">The type of the elemtnes of the array to be returned.</typeparam>
+        ///<returns>An array of type <see cref="T"/> containing copies of the elements of the <see cref="System.Collections.IList"/>.</returns>
+        public static T[] ToArray<T>(IList list)
+        {
+            List<T> bos = new List<T>();
+            foreach (T businessObject in list)
+            {
+                bos.Add(businessObject);
+            }
+            return bos.ToArray();
         }
     }
 }

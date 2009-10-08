@@ -204,7 +204,8 @@ namespace Habanero.BO
                 _addedHandlers[value] = addedHandler;
                 _businessObjectAdded += addedHandler;
         }
-            remove {
+            remove
+            {
                 if (_addedHandlers.ContainsKey(value))
                 {
                     _businessObjectAdded -= _addedHandlers[value];

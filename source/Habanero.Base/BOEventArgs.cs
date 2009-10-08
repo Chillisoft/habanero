@@ -49,7 +49,8 @@ namespace Habanero.Base
     /// <summary>
     /// Provides arguments to attach for an event involving business objects
     /// </summary>
-    public class BOEventArgs<TBusinessObject> : BOEventArgs where TBusinessObject : IBusinessObject
+    public class BOEventArgs<TBusinessObject> : BOEventArgs 
+        where TBusinessObject : IBusinessObject
     {
         private readonly TBusinessObject _bo;
 
