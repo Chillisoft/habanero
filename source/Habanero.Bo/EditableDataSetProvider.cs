@@ -332,7 +332,7 @@ namespace Habanero.BO
 
                     IBOProp prop;
                     SetBOPropertyValue(changedBo, uiProperty.PropertyName, row, out prop);
-                    row.SetColumnError(uiProperty.PropertyName, prop.InvalidReason);
+                    row.SetColumnError(uiProperty.PropertyName, prop != null ? prop.InvalidReason : "Property not found");
                 }
                 row.RowError = changedBo.Status.IsValidMessage;
             }
@@ -352,7 +352,7 @@ namespace Habanero.BO
                 BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
                 boPropertyMapper.BusinessObject = bo;
                 property = boPropertyMapper.Property;
-                property.Value = row[propertyName];
+                if (property != null) { property.Value = row[propertyName]; }
                 //bo.SetPropertyValue(propertyName, row[propertyName]);
             }
             finally
