@@ -193,6 +193,10 @@ namespace Habanero.BO
         private event EventHandler<BOEventArgs<TBusinessObject>> _businessObjectUpdated;
         private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectIDUpdated;
         private event EventHandler<BOPropUpdatedEventArgs<TBusinessObject>> _BusinessObjectPropertyUpdated;
+        /// <summary>
+        /// Event Fires whenever the Collection is Refreshed.
+        /// </summary>
+        public event EventHandler CollectionRefreshed; 
 
         /// <summary>
         /// Handles the event of a business object being added
@@ -390,6 +394,19 @@ namespace Habanero.BO
             }
         }
 
+        // ReSharper disable UnusedMember.Local
+        //This is used by the BusinessObjectLoader when it has finished loading the Collection
+        // ReSharper disable UnusedMember.Global
+        internal void FireRefreshedEvent()
+
+        {
+            if (CollectionRefreshed != null)
+            {
+                CollectionRefreshed(this, new EventArgs());
+            }
+        }
+        // ReSharper restore UnusedMember.Global 
+        // ReSharper restore UnusedMember.Local
         /// <summary>
         /// Calls the BusinessObjectRemoved() handler
         /// </summary>
@@ -501,7 +518,6 @@ namespace Habanero.BO
             businessObject.Saved += _savedEventHandler;
             businessObject.Deleted += _deletedEventHandler;
             businessObject.Restored += _restoredEventHandler;
-            //if (businessObject.ID != null) businessObject.IDUpdated += _updateIDEventHandler;
             businessObject.MarkedForDeletion += _markForDeleteEventHandler;
             businessObject.Updated += _updatedEventHandler;
             businessObject.PropertyUpdated += _boPropUpdatedEventHandler;
@@ -513,7 +529,6 @@ namespace Habanero.BO
             businessObject.Saved -= _savedEventHandler;
             businessObject.Restored -= _restoredEventHandler;
             businessObject.Deleted -= _deletedEventHandler;
-            //if (businessObject.ID != null) businessObject.IDUpdated -= _updateIDEventHandler;
             businessObject.MarkedForDeletion -= _markForDeleteEventHandler;
             businessObject.Updated -= _updatedEventHandler;
             businessObject.PropertyUpdated -= _boPropUpdatedEventHandler;
@@ -536,21 +551,6 @@ namespace Habanero.BO
             }
         }
 
-        ///// <summary>
-        ///// Updates the lookup table when a primary key property has
-        ///// changed
-        ///// </summary>
-        //private void UpdateHashTable(object sender, BOEventArgs e)
-        //{
-        //    string oldID = e.BusinessObject.ID.AsString_PreviousValue();
-        //    if (KeyObjectHashTable.Contains(oldID))
-        //    {
-        //        BusinessObject bo = (BusinessObject) KeyObjectHashTable[oldID];
-        //        KeyObjectHashTable.Remove(oldID);
-        //        KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
-        //    }
-        //}
-
         private void MarkForDeleteEventHandler(object sender, BOEventArgs e)
         {
             bool removeSuccessful;
@@ -570,7 +570,6 @@ namespace Habanero.BO
                 }
                 
                 base.Remove(bo);
-                //KeyObjectHashTable.Remove(bo.ID.AsString_CurrentValue());
 				KeyObjectHashTable.Remove(bo.ID.ObjectID);
                 removeSuccessful = !this.RemovedBusinessObjects.Remove(bo);
             }
@@ -981,6 +980,7 @@ namespace Habanero.BO
         ///</summary>
         /// Note_: This is used by reflection by the collection loader.
 // ReSharper disable UnusedPrivateMember
+// ReSharper disable UnusedMember.Global
         internal void ClearCurrentCollection()
         {
             foreach (TBusinessObject businessObject in this)
@@ -991,7 +991,7 @@ namespace Habanero.BO
             KeyObjectHashTable.Clear();
         }
 // ReSharper restore UnusedPrivateMember
-
+// ReSharper restore UnusedMember.Global
         /// <summary>
         /// Removes the specified business object from the collection. This is used when refreshing
         /// a collection so that any overriden behaviour (from overriding Remove) is not applied

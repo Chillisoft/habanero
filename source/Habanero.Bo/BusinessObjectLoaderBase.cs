@@ -444,9 +444,7 @@ namespace Habanero.BO
                 return;
             }
             collection.PersistedBusinessObjects.Add(loadedBo);
-           // ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
             collection.Add(loadedBo);
-           // ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
 
         /// <summary>
@@ -475,6 +473,7 @@ namespace Habanero.BO
 
             RestoreAddedCollection(collection, addedBoArray);
             collection.TimeLastLoaded = DateTime.Now;
+            ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
         }
         /// <summary>
         /// Restores the items in the <see cref="IBusinessObjectCollection.AddedBusinessObjects"/> collection

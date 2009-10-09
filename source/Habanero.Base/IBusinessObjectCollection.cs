@@ -63,7 +63,10 @@ namespace Habanero.Base
         /// Handles the event when a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
         /// </summary>
         event EventHandler<BOEventArgs> BusinessObjectIDUpdated;
-
+        /// <summary>
+        /// Event Fires whenever the Collection is Refreshed.
+        /// </summary>
+        event EventHandler CollectionRefreshed; 
         /// <summary>
         /// Returns the class definition of the collection
         /// </summary>
@@ -367,5 +370,6 @@ namespace Habanero.Base
         /// </summary>
         [ReflectionPermission(SecurityAction.Demand)]
         void Refresh();
+
     }
 }
