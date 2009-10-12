@@ -257,7 +257,6 @@ namespace Habanero.Test.DB
 
             IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
-            //Put a loop in to take up some time due to MSAccess 
             myContact.MarkForDelete();
             Assert.IsTrue(myContact.Status.IsDeleted);
             myContact.Save();

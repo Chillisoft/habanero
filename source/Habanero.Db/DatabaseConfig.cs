@@ -79,6 +79,11 @@ namespace Habanero.DB
         public const string FirebirdEmbedded = "FIREBIRDEMBEDDED";
 
         /// <summary>
+        /// MSAccess 2007 - accdb format
+        /// </summary>
+        public const string Access2007 = "ACCESS2007";
+
+        /// <summary>
         /// We need to map the database vendor name to the right <see cref="ConnectionStringFactory"/> type.
         /// </summary>
 	    private static readonly Dictionary<string, string> 
@@ -93,7 +98,8 @@ namespace Habanero.DB
                            {PostgreSql, "PostgreSql"},
                            {SQLite, "SQLite"},
                            {Firebird, "Firebird"},
-                           {FirebirdEmbedded, "Firebird"}
+                           {FirebirdEmbedded, "Firebird"},
+                           {Access2007, "Access2007"}
                        };
 
         private String _vendor;
@@ -330,8 +336,6 @@ namespace Habanero.DB
             ConnectionStringFactory factory = (ConnectionStringFactory) Activator.CreateInstance(factoryType);
             return factory.GetConnectionString(this.Server, this.Database, this.UserName, this.DecryptedPassword, this.Port);
         }
-
-
 
 	    /// <summary>
         /// Creates a database connection using the configuration settings

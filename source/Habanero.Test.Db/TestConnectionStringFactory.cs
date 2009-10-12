@@ -158,6 +158,17 @@ namespace Habanero.Test.DB
                 @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=testdb;User ID=testusername;password=testpassword", conn,
                 "ConnectionStringFactory not working for Access");
         }
+        [Test]
+        public void TestAccess2007()
+        {
+            String conn =
+                new ConnectionStringAccess2007Factory().GetConnectionString("testserver", "testdb",
+                                                                                              "testusername",
+                                                                                              "testpassword", "");
+            Assert.AreEqual(
+                @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=testdb;User ID=testusername;password=testpassword", conn,
+                "ConnectionStringFactory not working for Access2007");
+        }
 
     	#endregion //Access
 

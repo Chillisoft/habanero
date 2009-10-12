@@ -90,6 +90,13 @@ namespace Habanero.DB
                                                                                            config.GetConnectionString())
                     : new DatabaseConnectionFirebird(config.AssemblyName, config.FullClassName, config.GetConnectionString());
             }
+            if (string.Compare(config.Vendor, DatabaseConfig.Access2007, true) == 0)
+            {
+                return String.IsNullOrEmpty(config.AssemblyName)
+                    ? new DatabaseConnectionAccess2007("System.Data", "System.Data.OleDb.OleDbConnection",
+                                                                                           config.GetConnectionString())
+                    : new DatabaseConnectionAccess2007(config.AssemblyName, config.FullClassName, config.GetConnectionString());
+            }
             return null;
         } 
     }
