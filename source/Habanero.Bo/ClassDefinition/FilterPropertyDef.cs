@@ -16,8 +16,10 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -50,6 +52,29 @@ namespace Habanero.BO.ClassDefinition
             FilterClauseOperator = filterClauseOperator;
             Parameters = parameters;
             if (string.IsNullOrEmpty(FilterTypeAssembly)) FilterTypeAssembly = "Habanero.UI.Base";
+        }
+
+        /// <summary>
+        /// Constructor that creates a FilterPropertyDef class with a specified Filter control type using a type parameter.
+        /// </summary>
+        /// <param name="propertyName">See <see cref="PropertyName"/></param>
+        /// <param name="label">See <see cref="Label"/></param>
+        /// <param name="filterType"> The <see cref="Type"/> object that will determine the values of the <see cref="FilterType"/> and the <see cref="FilterTypeAssembly"/> properties.</param>
+        /// <param name="filterClauseOperator">See <see cref="FilterClauseOperator"/></param>
+        /// <param name="parameters">See <see cref="Parameters"/></param>
+        public FilterPropertyDef(string propertyName, string label, Type filterType,
+                                FilterClauseOperator filterClauseOperator,
+                                Dictionary<string, string> parameters)
+        {
+            PropertyName = propertyName;
+            Label = label;
+            string assemblyName;
+            string classNameFull;
+            TypeLoader.ClassTypeInfo(filterType, out assemblyName, out classNameFull);
+            FilterType = classNameFull;
+            FilterTypeAssembly = assemblyName;
+            FilterClauseOperator = filterClauseOperator;
+            Parameters = parameters;
         }
 
         /// <summary>

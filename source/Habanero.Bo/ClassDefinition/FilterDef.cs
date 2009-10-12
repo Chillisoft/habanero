@@ -38,6 +38,14 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// The default constructor for the <see cref="FilterDef"/> class.
+        /// </summary>
+        public FilterDef() : this(new List<IFilterPropertyDef>())
+        {
+            
+        }
+
+        /// <summary>
         /// The list of <see cref="FilterPropertyDef"/>s which define each filter.
         /// </summary>
         public IList<IFilterPropertyDef> FilterPropertyDefs { get; set; }
