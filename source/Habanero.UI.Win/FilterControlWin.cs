@@ -40,7 +40,7 @@ namespace Habanero.UI.Win
         private FilterModes _filterMode;
 
         /// <summary>
-        /// The event that is fired with the filter is ready so that another control e.g. a grid can be filtered.
+        /// The event that is fired when the filter is ready so that another control e.g. a grid can be filtered.
         /// </summary>
         public event EventHandler Filter;
 

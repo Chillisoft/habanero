@@ -1192,7 +1192,7 @@ namespace Habanero.BO.ClassDefinition
 
 
         ///<summary>
-        /// Returns the Class Defition for a <see cref="IBusinessObject"/> of type T.
+        /// Returns the Class Definition for a <see cref="IBusinessObject"/> of type T.
         ///</summary>
         ///<typeparam name="T"></typeparam>
         ///<returns></returns>
