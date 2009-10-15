@@ -975,18 +975,15 @@ namespace Habanero.BO
             get { return _transactionLog; }
         }
 
-        private IList<IBusinessObjectRule> BusinessObjectRules
+        internal IList<IBusinessObjectRule> GetBusinessObjectRules()
         {
-            get
+            //Lazy initialisation so as to prevent unneccessary objects being created during construction.
+            if (_boRules == null)
             {
-                //Lazy initialisation so as to prevent unneccessary objects being created during construction.
-                if (_boRules == null)
-                {
-                    _boRules = new List<IBusinessObjectRule>();
-                    LoadBusinessObjectRules(_boRules);
-                }
-                return _boRules;
+                _boRules = new List<IBusinessObjectRule>();
+                LoadBusinessObjectRules(_boRules);
             }
+            return _boRules;
         }
 
         /// <summary>
@@ -1307,14 +1304,14 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Checks the <see cref="BusinessObjectRules"/>. Calls through to <see cref="AreCustomRulesValid(out IList{IBOError})"/>
+        /// Checks the <see cref="GetBusinessObjectRules"/>. Calls through to <see cref="AreCustomRulesValid(out IList{IBOError})"/>
         /// </summary>
         /// <param name="errors">The errors</param>
         /// <returns>true if no custom rule errors are encountered.</returns>
         internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {
             AreCustomRulesValid(out errors);
-            foreach (IBusinessObjectRule rule in BusinessObjectRules)
+            foreach (IBusinessObjectRule rule in GetBusinessObjectRules())
             {
                 if (rule == null || !ErrorLevelIsError(rule) || rule.IsValid()) continue;
                 CreateBOError(rule, errors);
@@ -1323,14 +1320,14 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Checks the <see cref="BusinessObjectRules"/> for any rules that have warnings or suggestions.
+        /// Checks the <see cref="GetBusinessObjectRules"/> for any rules that have warnings or suggestions.
         /// </summary>
         /// <param name="errors">The warnings and suggestions</param>
-        /// <returns>true if no <see cref="BusinessObjectRules"/> errors are encountered.</returns>
+        /// <returns>true if no <see cref="GetBusinessObjectRules"/> errors are encountered.</returns>
         internal bool HasWarnings(out IList<IBOError> errors)
         {
             errors = new List<IBOError>();
-            foreach (IBusinessObjectRule rule in BusinessObjectRules)
+            foreach (IBusinessObjectRule rule in GetBusinessObjectRules())
             {
                 if (rule == null || ErrorLevelIsError(rule) || rule.IsValid()) continue;
                 CreateBOError(rule, errors);
@@ -1551,7 +1548,7 @@ namespace Habanero.BO
         #endregion //Concurrency
 
         ///<summary>
-        /// Callec by the transaction committer in the case where the transaction failed
+        /// Called by the transaction committer in the case where the transaction failed
         /// and was rolled back.
         ///</summary>
         protected internal virtual void UpdateAsTransactionRolledBack()
