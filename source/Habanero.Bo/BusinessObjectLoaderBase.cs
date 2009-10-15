@@ -749,7 +749,7 @@ namespace Habanero.BO
         /// Sets the Status for the Business Object to NotNew.
         /// </summary>
         /// <param name="bo"></param>
-        protected static void SetStatusAfterLoad(IBusinessObject bo)
+        protected internal static void SetStatusAfterLoad(IBusinessObject bo)
         {
             BusinessObject businessObject = (BusinessObject)bo;
             businessObject.SetStatus(BOStatus.Statuses.isNew, false);

@@ -59,7 +59,7 @@ namespace Habanero.BO
                     string propertyValue = reader.Value;
                     try
                     {
-                        bo.SetPropertyValue(propertyName, propertyValue);
+                        bo.Props[propertyName].InitialiseProp(propertyValue);
                     }
                     catch (InvalidPropertyNameException)
                     {
@@ -67,6 +67,7 @@ namespace Habanero.BO
                         continue;
                     }
                 }
+                BusinessObjectLoaderBase.SetStatusAfterLoad(bo);
                 objects.Add(bo.ID.GetAsGuid(), bo);
                 reader.Read();
             }

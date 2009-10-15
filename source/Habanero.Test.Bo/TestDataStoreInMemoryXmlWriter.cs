@@ -112,6 +112,7 @@ namespace Habanero.Test.BO
             loadedDataStore.AllObjects = reader.Read();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, loadedDataStore.Count);
+            
         }
         [Test]
         public void Test_Read_WhenPropHasBeenRemoved_ShouldReadWithoutProp()
@@ -205,6 +206,44 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, loadedDataStore.Count);
             Assert.IsNotNull(loadedDataStore.Find<MyBO>(bo1.ID));
             Assert.IsNotNull(loadedDataStore.Find<Car>(bo2.ID));
+        }
+
+        [Test]
+        public void Test_Read_ShouldLoadObjectsWithCorrectStatus()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefsNoUIDef();
+            DataStoreInMemory savedDataStore = new DataStoreInMemory();
+            MyBO savedBO = new MyBO();
+            TransactionCommitterInMemory transactionCommitter = new TransactionCommitterInMemory(savedDataStore);
+            transactionCommitter.AddBusinessObject(savedBO);
+            transactionCommitter.CommitTransaction();
+            MemoryStream writeStream = new MemoryStream();
+            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
+            writer.Write(savedDataStore);
+            BusinessObjectManager.Instance = new BusinessObjectManager();
+            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
+            writeStream.Seek(0, SeekOrigin.Begin);
+            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, savedDataStore.Count);
+            //---------------Execute Test ----------------------
+            loadedDataStore.AllObjects = reader.Read();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, loadedDataStore.Count);
+            IBusinessObject loadedBO;
+            bool success = loadedDataStore.AllObjects.TryGetValue(savedBO.MyBoID.Value, out loadedBO);
+            Assert.IsTrue(success);
+            Assert.IsNotNull(loadedBO);
+            Assert.IsInstanceOfType(typeof(MyBO), loadedBO);
+            MyBO loadedMyBO = (MyBO)loadedBO;
+            Assert.AreNotSame(savedBO, loadedMyBO);
+
+            Assert.IsFalse(loadedBO.Status.IsNew, "Should not be New");
+            Assert.IsFalse(loadedBO.Status.IsDeleted, "Should not be Deleted");
+            Assert.IsFalse(loadedBO.Status.IsDirty, "Should not be Dirty");
+            Assert.IsFalse(loadedBO.Status.IsEditing, "Should not be Editing");
         }
         
     }
