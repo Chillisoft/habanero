@@ -94,6 +94,25 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(0, col.Count);
         }
 
+        [Test]
+        public void Test_Remove_WithAssemblyAndClassName()
+        {
+            //---------------Set up test pack-------------------
+            ClassDefCol col = new ClassDefCol();
+            string assemblyName = "Assembly1";
+            string className = "Class1";
+            ClassDef classDef = new ClassDef(assemblyName, className, null, null, null, null, null, null);
+            col.Add(classDef);
+
+            //---------------Assert PreConditions---------------    
+            Assert.AreEqual(1, col.Count);
+            //---------------Execute Test ----------------------
+            col.Remove(assemblyName, className);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, col.Count);
+            //---------------Tear Down -------------------------          
+        }
+
         [Test, ExpectedException(typeof (HabaneroArgumentException))]
         public void TestLoadColClassDefException()
         {

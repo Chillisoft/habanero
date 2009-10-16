@@ -32,6 +32,7 @@ namespace Habanero.BO.Loaders
         private ORMapping _orMapping;
         private string _className;
     	private string _assemblyName;
+        private string _typeParameter;
         private string _discriminator;
         private string _id;
 
@@ -75,8 +76,9 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a SuperClassDef object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateSuperClassDef(_assemblyName, _className, _orMapping, _id, _discriminator);
-			//return new SuperClassDef(_assemblyName, _className, _orMapping);
+			ISuperClassDef superClassDef = _defClassFactory.CreateSuperClassDef(_assemblyName, _className, _orMapping, _id, _discriminator);
+            superClassDef.TypeParameter = _typeParameter;
+            return superClassDef;
 		}
 
         /// <summary>
@@ -87,6 +89,7 @@ namespace Habanero.BO.Loaders
             _reader.Read();
             _className = _reader.GetAttribute("class");
             _assemblyName = _reader.GetAttribute("assembly");
+            _typeParameter = _reader.GetAttribute("typeParameter");
 			string orMappingType = _reader.GetAttribute("orMapping");
 			try
             {

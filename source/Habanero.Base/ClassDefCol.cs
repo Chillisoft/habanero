@@ -234,6 +234,18 @@ namespace Habanero.Base
         }
 
         /// <summary>
+        /// Removes the specified class definition from the collection.
+        /// </summary>
+        /// <param name="assemblyName">The assembly name of the class definition to remove</param>
+        /// <param name="className">The name of the class definition to remove</param>
+        public void Remove(string assemblyName, string className)
+        {
+            bool found;
+            string typeId = GetTypeIdForItem(assemblyName, className, out found);
+            if (found) _classDefs.Remove(typeId);
+        }
+
+        /// <summary>
         /// Removes a flag that indicates that a collection exists.  After
         /// this flag is removed, calling LoadColClassDef will result in a
         /// new empty collection replacing the existing one.

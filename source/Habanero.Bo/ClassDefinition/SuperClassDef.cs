@@ -34,6 +34,7 @@ namespace Habanero.BO.ClassDefinition
         private string _assemblyName;
         private string _id;
         private string _discriminator;
+        private string _typeParameter;
 
         #region Constructors
 
@@ -115,6 +116,19 @@ namespace Habanero.BO.ClassDefinition
                 if (_className != value)
                     _superClassClassDef = null;
                 _className = value;
+            }
+        }
+
+        public string TypeParameter
+        {
+            get { return _typeParameter; }
+            set
+            {
+                if (_typeParameter != value)
+                {
+                    _superClassClassDef = null;
+                }
+                _typeParameter = value;
             }
         }
 

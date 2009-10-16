@@ -48,6 +48,30 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void Test_GetSuperClassClassDef_WithTypeParameter()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDefCol classDefCol = new ClassDefCol();
+            ClassDef classDef1 = new ClassDef("Habanero.Test.BO", "UnknownClass", null, null, null, null, null);
+            classDef1.TypeParameter = "TypeParam1";
+            classDefCol.Add(classDef1);
+            ClassDef classDef2 = new ClassDef("Habanero.Test.BO", "UnknownClass", null, null, null, null, null);
+            classDef2.TypeParameter = "TypeParam2";
+            classDefCol.Add(classDef2);
+            SuperClassDef superClassDef = new SuperClassDef(classDef2.AssemblyName, classDef2.ClassName, ORMapping.ClassTableInheritance, null, null);
+            superClassDef.TypeParameter = classDef2.TypeParameter;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, ClassDef.ClassDefs.Count);
+            Assert.AreEqual(2, classDefCol.Count);
+            //---------------Execute Test ----------------------
+            IClassDef def = ClassDefHelper.GetSuperClassClassDef(superClassDef, classDefCol);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(def);
+            Assert.AreSame(classDef2, def);
+        }
+
+        [Test]
         public void Test_GetSuperClassClassDef_NotFound()
         {
             //---------------Set up test pack-------------------

@@ -5,4 +5,5 @@
 		orMapping ( ClassTableInheritance | SingleTableInheritance | ConcreteTableInheritance ) "ClassTableInheritance"
     id CDATA #IMPLIED
     discriminator CDATA #IMPLIED
+    typeParameter NMTOKEN #IMPLIED
 >

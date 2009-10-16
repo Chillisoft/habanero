@@ -37,6 +37,11 @@ namespace Habanero.Base
         string ClassName { get; set; }
 
         /// <summary>
+        /// The type parameter of the SuperClass. See <see cref="IClassDef.TypeParameter"/>.
+        /// </summary>
+        string TypeParameter { get; set; }
+
+        /// <summary>
         /// Returns the name of the discriminator column used to determine which class is being
         /// referred to in a row of the database table.
         /// This property applies only to SingleTableInheritance.
@@ -56,5 +61,7 @@ namespace Habanero.Base
         /// child's ID.  This property applies only to ClassTableInheritance.
         /// </summary>
         string ID { get; set; }
+
+     
     }
 }

@@ -179,5 +179,20 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
             Assert.AreEqual("abc", def.Discriminator);
         }
+
+        [Test]
+        public void Test_TypeParameter()
+        {
+            //---------------Set up test pack-------------------
+            string superClassXml =
+                @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" typeParameter=""TypeParam1"" />";
+            
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISuperClassDef def = itsLoader.LoadSuperClassDesc(superClassXml);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("TypeParam1", def.TypeParameter);
+            //---------------Tear Down -------------------------          
+        }
     }
 }
