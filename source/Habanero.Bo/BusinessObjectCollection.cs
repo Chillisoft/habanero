@@ -929,12 +929,13 @@ namespace Habanero.BO
 
         public int Add(object value)
         {
-            throw new NotImplementedException();
+            this.Add((TBusinessObject) value);
+            return this.Count - 1;
         }
 
         public bool Contains(object value)
         {
-            throw new NotImplementedException();
+            return _boCol.Contains((TBusinessObject) value);
         }
 
         /// <summary>
@@ -2082,7 +2083,11 @@ namespace Habanero.BO
         /// <param name="match">he System.Predicate{TBusinessObject} delegate that defines the conditions of the element to remove</param>
         public void RemoveAll(System.Predicate<TBusinessObject> match)
         {
-            _boCol.RemoveAll(match);
+            List<TBusinessObject> businessObjects = _boCol.FindAll(match);
+            foreach (TBusinessObject businessObject in businessObjects)
+            {
+                this.Remove(businessObject);
+            }
         }
     }
 }

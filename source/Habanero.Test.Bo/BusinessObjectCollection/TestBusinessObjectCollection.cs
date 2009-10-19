@@ -1453,6 +1453,73 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(1, col.Count);
             Assert.IsTrue(col.Contains(cp3));
         }
+        [Test]
+        public void Test_Add_IListimplementedMethod_ShouldAddToBOCol()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("", "Surname");
+            col.Sort("Surname", true, true);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO newPerson = ContactPersonTestBO.CreateSavedContactPerson("fdasfasd", "FirstfafdsName");
+            col.Add((object) newPerson);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, col.Count);
+            Assert.IsTrue(col.Contains(newPerson));
+        }
+        [Test]
+        public void Test_Contains_IListimplementedMethod_WhenContains_ShouldBeTrue()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("", "Surname");
+            col.Sort("Surname", true, true);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            bool contains = col.Contains((object)cp3);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contains);
+        }
+        [Test]
+        public void Test_Contains_IListimplementedMethod_WhenNotContains_ShouldBFalse()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("", "Surname");
+            col.Sort("Surname", true, true);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO newPerson = ContactPersonTestBO.CreateSavedContactPerson("fdasfasd", "FirstfafdsName");
+            bool contains = col.Contains((object)newPerson);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contains);
+        }
+
         /// <summary>
         /// Asserts that the results for the collection are as expected
         /// </summary>
