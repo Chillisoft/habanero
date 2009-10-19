@@ -266,8 +266,6 @@ namespace Habanero.Base
         /// <param name="limit">The limit</param>
         void LoadWithLimit(string searchCriteria, string orderByClause, int limit);
 
-
-
         /// <summary>
         /// Allows the adding of business objects to the collection without
         /// this causing the added event to be fired.

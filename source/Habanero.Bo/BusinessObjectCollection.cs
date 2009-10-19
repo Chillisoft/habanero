@@ -31,10 +31,11 @@ namespace Habanero.BO
     /// <summary>
     /// This is an interface used for loading BusinessObjects from the Database.
     /// </summary>
-    internal interface  IBusinessObjectCollectionInternal : IBusinessObjectCollection
+    internal interface IBusinessObjectCollectionInternal : IBusinessObjectCollection
     {
         void AddInternal(IBusinessObject businessObject);
     }
+
     //public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);
 
     /// <summary>
@@ -57,7 +58,7 @@ namespace Habanero.BO
     /// </summary>
     [Serializable]
     public class BusinessObjectCollection<TBusinessObject>
-        : List<TBusinessObject>, IBusinessObjectCollectionInternal, ISerializable
+        : IList<TBusinessObject>, IBusinessObjectCollectionInternal, ISerializable
         where TBusinessObject : class, IBusinessObject, new()
     {
         private const string COUNT = "Count";
@@ -66,6 +67,7 @@ namespace Habanero.BO
         private const string CREATED_COUNT = "CreatedCount";
         private const string BUSINESS_OBJECT = "bo";
         private const string CREATED_BUSINESS_OBJECT = "createdbo";
+        private readonly List<TBusinessObject> boCol = new List<TBusinessObject>();
 
         #region StronglyTypedComparer
 
@@ -90,8 +92,10 @@ namespace Habanero.BO
         private IClassDef _boClassDef;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _persistedObjectsCollection = new List<TBusinessObject>();
+
         /// <summary> Collection of Business Objects Removed From this collection </summary>
         protected readonly List<TBusinessObject> _removedBusinessObjects = new List<TBusinessObject>();
+
         private readonly List<TBusinessObject> _addedBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _markedForDeleteBusinessObjects = new List<TBusinessObject>();
         private readonly EventHandler<BOEventArgs> _savedEventHandler;
@@ -127,7 +131,8 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="bo">The business object whose class definition
         /// is used to initialise the collection</param>
-        [Obsolete("Please initialise with a ClassDef instead.  This option will be removed in later versions of Habanero.")]
+        [Obsolete(
+            "Please initialise with a ClassDef instead.  This option will be removed in later versions of Habanero.")]
         public BusinessObjectCollection(TBusinessObject bo) : this(null, bo)
         {
         }
@@ -181,33 +186,47 @@ namespace Habanero.BO
 
         #region Events and event handlers
 
+        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>
+            _updatedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
 
-        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>> _updatedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
-        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>> _addedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
-        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>> _removedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
-        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>> _idUpdatedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
-        private readonly IDictionary<EventHandler<BOPropUpdatedEventArgs>, EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>> _propertyUpdatedHandlers = new Dictionary<EventHandler<BOPropUpdatedEventArgs>, EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>>();
+        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>
+            _addedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
+
+        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>
+            _removedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
+
+        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>
+            _idUpdatedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
+
+        private readonly
+            IDictionary<EventHandler<BOPropUpdatedEventArgs>, EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>>
+            _propertyUpdatedHandlers =
+                new Dictionary
+                    <EventHandler<BOPropUpdatedEventArgs>, EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>>();
 
         private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectRemoved;
         private event EventHandler<BOEventArgs<TBusinessObject>> _businessObjectAdded;
         private event EventHandler<BOEventArgs<TBusinessObject>> _businessObjectUpdated;
         private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectIDUpdated;
         private event EventHandler<BOPropUpdatedEventArgs<TBusinessObject>> _BusinessObjectPropertyUpdated;
+
         /// <summary>
         /// Event Fires whenever the Collection is Refreshed.
         /// </summary>
-        public event EventHandler CollectionRefreshed; 
+        public event EventHandler CollectionRefreshed;
 
         /// <summary>
         /// Handles the event of a business object being added
         /// </summary>
         event EventHandler<BOEventArgs> IBusinessObjectCollection.BusinessObjectAdded
         {
-            add {
-                EventHandler<BOEventArgs<TBusinessObject>> addedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
+            add
+            {
+                EventHandler<BOEventArgs<TBusinessObject>> addedHandler =
+                    new EventHandler<BOEventArgs<TBusinessObject>>(value);
                 _addedHandlers[value] = addedHandler;
                 _businessObjectAdded += addedHandler;
-        }
+            }
             remove
             {
                 if (_addedHandlers.ContainsKey(value))
@@ -223,14 +242,8 @@ namespace Habanero.BO
         /// </summary>
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectAdded
         {
-            add
-            {
-                _businessObjectAdded += value;
-            }
-            remove
-            {
-                _businessObjectAdded -=value;
-            }
+            add { _businessObjectAdded += value; }
+            remove { _businessObjectAdded -= value; }
         }
 
         /// <summary>
@@ -240,7 +253,8 @@ namespace Habanero.BO
         {
             add
             {
-                EventHandler<BOEventArgs<TBusinessObject>> removedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
+                EventHandler<BOEventArgs<TBusinessObject>> removedHandler =
+                    new EventHandler<BOEventArgs<TBusinessObject>>(value);
                 _removedHandlers[value] = removedHandler;
                 _BusinessObjectRemoved += removedHandler;
             }
@@ -253,20 +267,14 @@ namespace Habanero.BO
                 }
             }
         }
-        
+
         /// <summary>
         /// Handles the event of a business object being removed
         /// </summary>
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectRemoved
         {
-            add
-            {
-                _BusinessObjectRemoved += value;
-            }
-            remove
-            {
-                _BusinessObjectRemoved -= value;
-            }
+            add { _BusinessObjectRemoved += value; }
+            remove { _BusinessObjectRemoved -= value; }
         }
 
 
@@ -278,7 +286,8 @@ namespace Habanero.BO
         {
             add
             {
-                EventHandler<BOEventArgs<TBusinessObject>> updatedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
+                EventHandler<BOEventArgs<TBusinessObject>> updatedHandler =
+                    new EventHandler<BOEventArgs<TBusinessObject>>(value);
                 _updatedHandlers[value] = updatedHandler;
                 _businessObjectUpdated += updatedHandler;
             }
@@ -291,20 +300,15 @@ namespace Habanero.BO
                 }
             }
         }
+
         /// <summary>
         /// Handles the event of any business object in this collection being Updated(i.e the BO is saved, or edits are cancelled).
         /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.Updated"/> event.
         /// </summary>
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectUpdated
         {
-            add
-            {
-                _businessObjectUpdated += value;
-            }
-            remove
-            {
-                _businessObjectUpdated -= value;
-            }
+            add { _businessObjectUpdated += value; }
+            remove { _businessObjectUpdated -= value; }
         }
 
         /// <summary>
@@ -315,7 +319,8 @@ namespace Habanero.BO
         {
             add
             {
-                EventHandler<BOPropUpdatedEventArgs<TBusinessObject>> propertyUpdatedHandler = new EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>(value);
+                EventHandler<BOPropUpdatedEventArgs<TBusinessObject>> propertyUpdatedHandler =
+                    new EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>(value);
                 _propertyUpdatedHandlers[value] = propertyUpdatedHandler;
                 _BusinessObjectPropertyUpdated += propertyUpdatedHandler;
             }
@@ -335,14 +340,8 @@ namespace Habanero.BO
         /// </summary>
         public event EventHandler<BOPropUpdatedEventArgs<TBusinessObject>> BusinessObjectPropertyUpdated
         {
-            add
-            {
-                _BusinessObjectPropertyUpdated += value;
-            }
-            remove
-            {
-                _BusinessObjectPropertyUpdated -= value;
-            }
+            add { _BusinessObjectPropertyUpdated += value; }
+            remove { _BusinessObjectPropertyUpdated -= value; }
         }
 
 
@@ -353,7 +352,8 @@ namespace Habanero.BO
         {
             add
             {
-                EventHandler<BOEventArgs<TBusinessObject>> idUpdatedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
+                EventHandler<BOEventArgs<TBusinessObject>> idUpdatedHandler =
+                    new EventHandler<BOEventArgs<TBusinessObject>>(value);
                 _idUpdatedHandlers[value] = idUpdatedHandler;
                 _BusinessObjectIDUpdated += idUpdatedHandler;
             }
@@ -372,14 +372,8 @@ namespace Habanero.BO
         /// </summary>
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectIDUpdated
         {
-            add
-            {
-                _BusinessObjectIDUpdated += value;
-            }
-            remove
-            {
-                _BusinessObjectIDUpdated -= value;
-            }
+            add { _BusinessObjectIDUpdated += value; }
+            remove { _BusinessObjectIDUpdated -= value; }
         }
 
         /// <summary>
@@ -405,6 +399,7 @@ namespace Habanero.BO
                 CollectionRefreshed(this, new EventArgs());
             }
         }
+
         // ReSharper restore UnusedMember.Global 
         // ReSharper restore UnusedMember.Local
         /// <summary>
@@ -444,12 +439,13 @@ namespace Habanero.BO
         }
 
         #endregion
+
         // ReSharper disable VirtualMemberNeverOverriden.Global
         /// <summary>
         /// Adds a business object to the collection
         /// </summary>
         /// <param name="bo">The business object to add</param>
-        public new virtual void Add(TBusinessObject bo)
+        public virtual void Add(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
             bool addSuccessful;
@@ -459,6 +455,7 @@ namespace Habanero.BO
             }
             if (addSuccessful) this.FireBusinessObjectAdded(bo);
         }
+
         // ReSharper restore VirtualMemberNeverOverriden.Global
         /// <summary>
         /// Adds a business object to the collection of business objects without raising any events.
@@ -466,7 +463,8 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="bo"></param>
         /// <returns></returns>
-        protected virtual bool AddInternal(TBusinessObject bo) {
+        protected virtual bool AddInternal(TBusinessObject bo)
+        {
             if (this.Contains(bo)) return false;
             if (bo.Status.IsNew && !this.CreatedBusinessObjects.Contains(bo))
             {
@@ -508,7 +506,7 @@ namespace Habanero.BO
         {
             if (bo == null) throw new ArgumentNullException("bo");
             if (bo.ID != null) if (KeyObjectHashTable.Contains(bo.ID.ObjectID)) return;
-            base.Add(bo);
+            boCol.Add(bo);
             if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.ObjectID, bo);
             RegisterBOEvents(bo);
         }
@@ -568,9 +566,9 @@ namespace Habanero.BO
                 {
                     this.MarkedForDeleteBusinessObjects.Add(bo);
                 }
-                
-                base.Remove(bo);
-				KeyObjectHashTable.Remove(bo.ID.ObjectID);
+
+                boCol.Remove(bo);
+                KeyObjectHashTable.Remove(bo.ID.ObjectID);
                 removeSuccessful = !this.RemovedBusinessObjects.Remove(bo);
             }
             if (removeSuccessful) this.FireBusinessObjectRemoved(bo);
@@ -598,6 +596,7 @@ namespace Habanero.BO
             }
             if (fireEvent) FireBusinessObjectRemoved(bo);
         }
+
         /// <summary>
         /// Handles the event of a Business object being restored.
         /// </summary>
@@ -618,13 +617,14 @@ namespace Habanero.BO
                 }
                 else
                 {
-                   ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", true);
-                   addEventRequired =  this.AddInternal(bo);
-                   ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", false);
+                    ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", true);
+                    addEventRequired = this.AddInternal(bo);
+                    ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", false);
                 }
             }
             if (addEventRequired) FireBusinessObjectAdded(bo);
         }
+
         /// <summary>
         /// Handles the event of the Business object becoming invalid.
         /// </summary>
@@ -643,7 +643,7 @@ namespace Habanero.BO
                 if (!this.Contains(bo))
                 {
                     Criteria criteria = this.SelectQuery.Criteria;
-                    if ((criteria == null ) || (criteria.IsMatch(bo)))
+                    if ((criteria == null) || (criteria.IsMatch(bo)))
                     {
                         addEventRequired = AddInternal(bo);
                     }
@@ -665,7 +665,6 @@ namespace Habanero.BO
                 if (!this.Contains(businessObject)) return;
             }
             FireBusinessObjectUpdated(businessObject);
-
         }
 
         private void BOPropUpdatedEventHandler(object sender, BOPropUpdatedEventArgs propEventArgs)
@@ -674,7 +673,7 @@ namespace Habanero.BO
             lock (KeyObjectHashTable)
             {
                 businessObject = propEventArgs.BusinessObject as TBusinessObject;
-                
+
                 if (!this.Contains(businessObject)) return;
             }
             FireBusinessObjectPropertyUpdated(businessObject, propEventArgs.Prop);
@@ -705,7 +704,7 @@ namespace Habanero.BO
         /// <param name="col">The collection to copy from</param>
         public void Add(BusinessObjectCollection<TBusinessObject> col)
         {
-            Add((List<TBusinessObject>) col);
+            Add((IList<TBusinessObject>) col);
         }
 
         /// <summary>
@@ -740,7 +739,7 @@ namespace Habanero.BO
 
         void IBusinessObjectCollectionInternal.AddInternal(IBusinessObject businessObject)
         {
-            this.AddInternal((TBusinessObject)businessObject);
+            this.AddInternal((TBusinessObject) businessObject);
         }
 
         #region Load Methods
@@ -865,8 +864,8 @@ namespace Habanero.BO
         /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
         /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
         /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
-        public void LoadWithLimit(Criteria searchCriteria, OrderCriteria orderByClause, 
-            int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
+        public void LoadWithLimit(Criteria searchCriteria, OrderCriteria orderByClause,
+                                  int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             this.SelectQuery.Criteria = searchCriteria;
             this.SelectQuery.OrderCriteria = orderByClause;
@@ -913,8 +912,8 @@ namespace Habanero.BO
         /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
         /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
         /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
-        public void LoadWithLimit(string searchCriteria, string orderByClause, 
-            int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
+        public void LoadWithLimit(string searchCriteria, string orderByClause,
+                                  int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             Criteria criteria = null;
             if (searchCriteria.Length > 0)
@@ -928,15 +927,25 @@ namespace Habanero.BO
 
         #endregion
 
+        public int Add(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(object value)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Clears the collection
         /// </summary>
-        public new void Clear()
+        public void Clear()
         {
             lock (KeyObjectHashTable)
             {
                 DeRegisterBoEventsForAllBusinessObjects();
-                base.Clear();
+                boCol.Clear();
                 KeyObjectHashTable.Clear();
                 this.PersistedBusinessObjects.Clear();
                 this.CreatedBusinessObjects.Clear();
@@ -947,31 +956,153 @@ namespace Habanero.BO
             }
         }
 
+        public int IndexOf(object value)
+        {
+            return boCol.IndexOf((TBusinessObject) value);
+        }
+
+        public void Insert(int index, object value)
+        {
+            boCol.Insert(index, (TBusinessObject) value);
+        }
+
+        public void Remove(object value)
+        {
+            boCol.Remove((TBusinessObject) value);
+        }
+
+        public bool Contains(TBusinessObject item)
+        {
+            return boCol.Contains(item);
+        }
+
+        public void CopyTo(TBusinessObject[] array, int arrayIndex)
+        {
+            boCol.CopyTo(array, arrayIndex);
+        }
+
+
+        public int IndexOf(TBusinessObject item)
+        {
+            return boCol.IndexOf(item);
+        }
+
+        public void Insert(int index, TBusinessObject item)
+        {
+            boCol.Insert(index, item);
+        }
 
         /// <summary>
         /// Removes the business object at the index position specified
         /// </summary>
         /// <param name="index">The index position to remove from</param>
-        public new void RemoveAt(int index)
+        public void RemoveAt(int index)
         {
             lock (KeyObjectHashTable)
             {
                 TBusinessObject boToRemove = this[index];
                 Remove(boToRemove);
             }
+        }
 
+        object IList.this[int index]
+        {
+            get { return boCol[index]; }
+            set { boCol[index] = (TBusinessObject) value; }
+        }
+
+        public TBusinessObject this[int index]
+        {
+            get { return boCol[index]; }
+            set { boCol[index] = value; }
         }
 
         /// <summary>
         /// Removes the specified business object from the collection
         /// </summary>
         /// <param name="bo">The business object to remove</param>
-        public new virtual bool Remove(TBusinessObject bo)
+        public virtual bool Remove(TBusinessObject bo)
         {
             bool fireEvent;
             bool success = RemoveInternal(bo, out fireEvent);
             if (fireEvent) FireBusinessObjectRemoved(bo);
             return success;
+        }
+
+        /// <summary>
+        /// Copies the elements of the <see cref="T:System.Collections.ICollection"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+        /// </summary>
+        /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection"/>. The <see cref="T:System.Array"/> must have zero-based indexing. 
+        ///                 </param><param name="index">The zero-based index in <paramref name="array"/> at which copying begins. 
+        ///                 </param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null. 
+        ///                 </exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is less than zero. 
+        ///                 </exception><exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.
+        ///                     -or- 
+        ///                 <paramref name="index"/> is equal to or greater than the length of <paramref name="array"/>.
+        ///                     -or- 
+        ///                     The number of elements in the source <see cref="T:System.Collections.ICollection"/> is greater than the available space from <paramref name="index"/> to the end of the destination <paramref name="array"/>. 
+        ///                 </exception><exception cref="T:System.ArgumentException">The type of the source <see cref="T:System.Collections.ICollection"/> cannot be cast automatically to the type of the destination <paramref name="array"/>. 
+        ///                 </exception><filterpriority>2</filterpriority>
+        public void CopyTo(Array array, int index)
+        {
+            if (object.ReferenceEquals(array, null))
+            {
+                throw new ArgumentNullException(
+                    "array", "Null array reference"
+                    );
+            }
+
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "index","Index is out of range"
+                    );
+            }
+
+            if (array.Rank > 1)
+            {
+                throw new ArgumentException(
+                     "Array is multi-dimensional","array"
+                    );
+            }
+
+            foreach (TBusinessObject o in this)
+            {
+                array.SetValue(o, index);
+                index++;
+            }
+        }
+
+        public int Count
+        {
+            get { return boCol.Count; }
+        }
+
+        private readonly object _mSyncRoot = new object();
+
+        public object SyncRoot
+        {
+            get { return _mSyncRoot; }
+        }
+
+        public bool IsSynchronized
+        {
+            get { return false;}
+        }
+
+        int ICollection<TBusinessObject>.Count
+        {
+            get { return boCol.Count; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public bool IsFixedSize
+        {
+            get { return false; }
         }
 
         ///<summary>
@@ -987,9 +1118,10 @@ namespace Habanero.BO
             {
                 DeRegisterBOEvents(businessObject);
             }
-            base.Clear();
+            boCol.Clear();
             KeyObjectHashTable.Clear();
         }
+
 // ReSharper restore UnusedPrivateMember
 // ReSharper restore UnusedMember.Global
         /// <summary>
@@ -1003,7 +1135,7 @@ namespace Habanero.BO
         private bool RemoveInternal(TBusinessObject businessObject, out bool fireEvent)
         {
             fireEvent = false;
-            bool removed = base.Remove(businessObject);
+            bool removed = boCol.Remove(businessObject);
             KeyObjectHashTable.Remove(businessObject.ID.ObjectID);
 
             if (!_removedBusinessObjects.Contains(businessObject)
@@ -1127,7 +1259,7 @@ namespace Habanero.BO
         {
             if (KeyObjectHashTable.ContainsKey(key))
             {
-                TBusinessObject bo = (TBusinessObject)KeyObjectHashTable[key];
+                TBusinessObject bo = (TBusinessObject) KeyObjectHashTable[key];
                 return this.Contains(bo) ? bo : null;
             }
             return null;
@@ -1162,7 +1294,7 @@ namespace Habanero.BO
             //string formattedSearchItem = searchTerm.ToString();
             if (KeyObjectHashTable.ContainsKey(searchTerm))
             {
-                return (TBusinessObject)KeyObjectHashTable[searchTerm];
+                return (TBusinessObject) KeyObjectHashTable[searchTerm];
             }
             return null;
         }
@@ -1324,21 +1456,32 @@ namespace Habanero.BO
 
             if (!isAscending)
             {
-                Reverse();
+                boCol.Reverse();
             }
         }
+
+        ///<summary>
+        /// Sorts the Collection using the comparer delegate
+        ///</summary>
+        ///<param name="comparer">The Delegate used to sort</param>
+        public void Sort(IComparer<TBusinessObject> comparer)
+        {
+            boCol.Sort(comparer);
+        }
+
         /// <summary>
         /// Sorts the Collection by the Order Criteria Set up during the Loading of this collection.
         /// For <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/>'s this will be the 
         /// Order Criteria set up in the orderBy in the ClassDef.xml or the <see cref="ClassDef"/>
         /// </summary>
-        public new void Sort()
+        public void Sort()
         {
             if (this.SelectQuery.OrderCriteria.Fields.Count > 0)
             {
-                base.Sort(new StronglyTypedComperer<TBusinessObject>(this.SelectQuery.OrderCriteria));
+                boCol.Sort(new StronglyTypedComperer<TBusinessObject>(this.SelectQuery.OrderCriteria));
             }
         }
+
         /// <summary>
         /// Sorts the collection by the property specified. The second parameter
         /// indicates whether this property is a business object property or
@@ -1351,7 +1494,7 @@ namespace Habanero.BO
         void IBusinessObjectCollection.Sort(IComparer comparer)
         {
             if (comparer == null) throw new ArgumentNullException("comparer");
-            base.Sort(new StronglyTypedComperer<TBusinessObject>(comparer));
+            boCol.Sort(new StronglyTypedComperer<TBusinessObject>(comparer));
         }
 
 
@@ -1365,7 +1508,7 @@ namespace Habanero.BO
         /// <returns>Returns a sorted list</returns>
         public List<TBusinessObject> GetSortedList(string propertyName, bool isAscending)
         {
-            List<TBusinessObject> list = new List<TBusinessObject>(this.Count);
+            List<TBusinessObject> list = new List<TBusinessObject>(boCol.Count);
             foreach (TBusinessObject o in this)
             {
                 list.Add(o);
@@ -1403,7 +1546,7 @@ namespace Habanero.BO
         /// <returns>Returns an IList object</returns>
         public List<TBusinessObject> GetList()
         {
-            List<TBusinessObject> list = new List<TBusinessObject>(this.Count);
+            List<TBusinessObject> list = new List<TBusinessObject>(boCol.Count);
             foreach (TBusinessObject o in this)
             {
                 list.Add(o);
@@ -1421,6 +1564,7 @@ namespace Habanero.BO
 
             SaveAllInTransaction(committer);
         }
+
         /// <summary>
         /// Addsl all the Business objects to the <paramref name="transaction"/> including the 
         /// Business objects in the Added, Created, Removed and Marked for deleted collections.
@@ -1474,7 +1618,7 @@ namespace Habanero.BO
                     bo = this.CreatedBusinessObjects[0];
                     this.CreatedBusinessObjects.Remove(bo);
                     bo.CancelEdits();
-                    
+
                     this.RemoveInternal(bo, out fireEvent);
                     this.RemovedBusinessObjects.Remove(bo);
                     DeRegisterBOEvents(bo);
@@ -1503,7 +1647,7 @@ namespace Habanero.BO
                     bo = this.AddedBusinessObjects[0];
                     this.AddedBusinessObjects.Remove(bo);
                     bo.CancelEdits();
-                    removed = base.Remove(bo);
+                    removed = boCol.Remove(bo);
                     KeyObjectHashTable.Remove(bo.ID.ToString());
                     this.RemovedBusinessObjects.Remove(bo);
                 }
@@ -1568,8 +1712,8 @@ namespace Habanero.BO
         /// <returns>The element at the specified index.</returns>
         IBusinessObject IBusinessObjectCollection.this[int index]
         {
-            get { return base[index]; }
-            set { base[index] = (TBusinessObject) value; }
+            get { return boCol[index]; }
+            set { boCol[index] = (TBusinessObject) value; }
         }
 
         /// <summary>
@@ -1612,7 +1756,7 @@ namespace Habanero.BO
         {
             TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
             this.CopyTo(thisArray, arrayIndex);
-            int count = Count;
+            int count = boCol.Count;
             for (int index = 0; index < count; index++)
                 array[arrayIndex + index] = thisArray[arrayIndex + index];
         }
@@ -1749,12 +1893,15 @@ namespace Habanero.BO
         private Hashtable KeyObjectHashTable { get; set; }
 
 // ReSharper disable UnusedPrivateMember 
+        // ReSharper disable UnusedAutoPropertyAccessor.Global
         //This method is used by reflection only
         /// <summary>
         /// This property is set to true while loading the collection from the datastore so as to 
         /// prevent certain checks being done (e.g. Adding persisted business objects to a collection.
         /// </summary>
         protected bool Loading { get; set; }
+
+// ReSharper restore UnusedAutoPropertyAccessor.Global
 // ReSharper restore UnusedPrivateMember
 
         ///<summary>
@@ -1762,6 +1909,7 @@ namespace Habanero.BO
         /// It is set internally by the loader when the collection is being loaded.
         ///</summary>
         public int TotalCountAvailableForPaging { get; set; }
+
         #endregion
 
         /// <summary>
@@ -1781,6 +1929,7 @@ namespace Habanero.BO
             FireBusinessObjectAdded(newBO);
             return newBO;
         }
+
         /// <summary>
         /// Creates a new TBusinessObject for this BusinessObjectCollection.
         /// The new BusinessObject is not added in to the collection.
@@ -1845,7 +1994,7 @@ namespace Habanero.BO
             lock (KeyObjectHashTable)
             {
                 int count = 0;
-                info.AddValue(COUNT, Count);
+                info.AddValue(COUNT, boCol.Count);
                 info.AddValue(CREATED_COUNT, this.CreatedBusinessObjects.Count);
                 info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
                 info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
@@ -1885,6 +2034,35 @@ namespace Habanero.BO
         {
             TBusinessObject boToMark = this[index];
             MarkForDelete(boToMark);
+        }
+
+        public IEnumerator<TBusinessObject> GetEnumerator()
+        {
+            return boCol.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+//        ///<summary>
+//        /// The Number of items in the BusinessObjectCollection
+//        ///</summary>
+//        public int Count
+//        {
+//            get
+//            {
+//                return boCol.Count;
+//            }
+//        }
+        ///<summary>
+        /// Loops through each item in the Collection and Applies the Action
+        ///</summary>
+        ///<param name="action"></param>
+        public void ForEach(System.Action<TBusinessObject> action)
+        {
+            boCol.ForEach(action);
         }
     }
 }

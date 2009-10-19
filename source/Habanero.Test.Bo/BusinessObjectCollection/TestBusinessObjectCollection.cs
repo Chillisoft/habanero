@@ -92,12 +92,16 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             }
         }
 
-        private static void AssertNotContains(ContactPersonTestBO cp1, List<ContactPersonTestBO> col)
+        private static void AssertNotContains(ContactPersonTestBO cp1, IList<ContactPersonTestBO> col)
         {
-            col.ForEach(delegate(ContactPersonTestBO bo)
-                        {
-                            if (ReferenceEquals(bo, cp1)) Assert.Fail("Should not contain object");
-                        });
+            foreach (ContactPersonTestBO bo in col)
+            {
+                if (ReferenceEquals(bo, cp1)) Assert.Fail("Should not contain object");             
+            }
+//            col.ForEach(delegate(ContactPersonTestBO bo)
+//                        {
+//                            if (ReferenceEquals(bo, cp1)) Assert.Fail("Should not contain object");
+//                        });
         }
 
         //Load a collection from the database.
