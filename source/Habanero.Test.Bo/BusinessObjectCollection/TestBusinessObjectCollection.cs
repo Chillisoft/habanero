@@ -1356,7 +1356,81 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreSame(cp2, col[0], "Collection should b sorted by the Surname Property as per the origional collection.Load");
             Assert.AreSame(cp1, col[1]);
         }
+        
+        [Test]
+        public void Test_Find_ShouldReturnObject()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzzz", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            const string criteria = "FirstName = '" + firstName + "'";
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load(criteria, "Surname");
+            col.Sort("Surname", true, true);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp2, col[0], "Collection should be in Surname Asc Order");
+            Assert.AreSame(cp1, col[1], "Collection should be in Surname Asc Order");
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO foundCp = col.Find(bo => bo.Surname == "zzzz");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(foundCp);
+            Assert.AreSame(cp1, foundCp);
+        }
 
+        [Test]
+        public void Test_FindAll_ShouldReturnAllObject()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("", "Surname");
+            col.Sort("Surname", true, true);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            List<ContactPersonTestBO> foundCps = col.FindAll(bo => bo.FirstName == firstName);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(foundCps);
+            Assert.AreEqual(2, foundCps.Count);
+            Assert.IsTrue(foundCps.Contains(cp1));
+            Assert.IsTrue(foundCps.Contains(cp2));
+        }
+
+        [Test]
+        public void Test_Foreach_ShouldDoActionOnAllItems()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("", "Surname");
+            col.Sort("Surname", true, true);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            const string newName = "AAAA";
+            col.ForEach(bo => bo.FirstName = newName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newName, cp1.FirstName);
+            Assert.AreEqual(newName, cp2.FirstName);
+            Assert.AreEqual(newName, cp3.FirstName);
+        }
         /// <summary>
         /// Asserts that the results for the collection are as expected
         /// </summary>

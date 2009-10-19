@@ -67,7 +67,7 @@ namespace Habanero.BO
         private const string CREATED_COUNT = "CreatedCount";
         private const string BUSINESS_OBJECT = "bo";
         private const string CREATED_BUSINESS_OBJECT = "createdbo";
-        private readonly List<TBusinessObject> boCol = new List<TBusinessObject>();
+        private readonly List<TBusinessObject> _boCol = new List<TBusinessObject>();
 
         #region StronglyTypedComparer
 
@@ -506,7 +506,7 @@ namespace Habanero.BO
         {
             if (bo == null) throw new ArgumentNullException("bo");
             if (bo.ID != null) if (KeyObjectHashTable.Contains(bo.ID.ObjectID)) return;
-            boCol.Add(bo);
+            _boCol.Add(bo);
             if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.ObjectID, bo);
             RegisterBOEvents(bo);
         }
@@ -567,7 +567,7 @@ namespace Habanero.BO
                     this.MarkedForDeleteBusinessObjects.Add(bo);
                 }
 
-                boCol.Remove(bo);
+                _boCol.Remove(bo);
                 KeyObjectHashTable.Remove(bo.ID.ObjectID);
                 removeSuccessful = !this.RemovedBusinessObjects.Remove(bo);
             }
@@ -945,7 +945,7 @@ namespace Habanero.BO
             lock (KeyObjectHashTable)
             {
                 DeRegisterBoEventsForAllBusinessObjects();
-                boCol.Clear();
+                _boCol.Clear();
                 KeyObjectHashTable.Clear();
                 this.PersistedBusinessObjects.Clear();
                 this.CreatedBusinessObjects.Clear();
@@ -958,38 +958,38 @@ namespace Habanero.BO
 
         public int IndexOf(object value)
         {
-            return boCol.IndexOf((TBusinessObject) value);
+            return _boCol.IndexOf((TBusinessObject) value);
         }
 
         public void Insert(int index, object value)
         {
-            boCol.Insert(index, (TBusinessObject) value);
+            _boCol.Insert(index, (TBusinessObject) value);
         }
 
         public void Remove(object value)
         {
-            boCol.Remove((TBusinessObject) value);
+            _boCol.Remove((TBusinessObject) value);
         }
 
         public bool Contains(TBusinessObject item)
         {
-            return boCol.Contains(item);
+            return _boCol.Contains(item);
         }
 
         public void CopyTo(TBusinessObject[] array, int arrayIndex)
         {
-            boCol.CopyTo(array, arrayIndex);
+            _boCol.CopyTo(array, arrayIndex);
         }
 
 
         public int IndexOf(TBusinessObject item)
         {
-            return boCol.IndexOf(item);
+            return _boCol.IndexOf(item);
         }
 
         public void Insert(int index, TBusinessObject item)
         {
-            boCol.Insert(index, item);
+            _boCol.Insert(index, item);
         }
 
         /// <summary>
@@ -1007,14 +1007,14 @@ namespace Habanero.BO
 
         object IList.this[int index]
         {
-            get { return boCol[index]; }
-            set { boCol[index] = (TBusinessObject) value; }
+            get { return _boCol[index]; }
+            set { _boCol[index] = (TBusinessObject) value; }
         }
 
         public TBusinessObject this[int index]
         {
-            get { return boCol[index]; }
-            set { boCol[index] = value; }
+            get { return _boCol[index]; }
+            set { _boCol[index] = value; }
         }
 
         /// <summary>
@@ -1075,7 +1075,7 @@ namespace Habanero.BO
 
         public int Count
         {
-            get { return boCol.Count; }
+            get { return _boCol.Count; }
         }
 
         private readonly object _mSyncRoot = new object();
@@ -1092,7 +1092,7 @@ namespace Habanero.BO
 
         int ICollection<TBusinessObject>.Count
         {
-            get { return boCol.Count; }
+            get { return _boCol.Count; }
         }
 
         public bool IsReadOnly
@@ -1118,7 +1118,7 @@ namespace Habanero.BO
             {
                 DeRegisterBOEvents(businessObject);
             }
-            boCol.Clear();
+            _boCol.Clear();
             KeyObjectHashTable.Clear();
         }
 
@@ -1135,7 +1135,7 @@ namespace Habanero.BO
         private bool RemoveInternal(TBusinessObject businessObject, out bool fireEvent)
         {
             fireEvent = false;
-            bool removed = boCol.Remove(businessObject);
+            bool removed = _boCol.Remove(businessObject);
             KeyObjectHashTable.Remove(businessObject.ID.ObjectID);
 
             if (!_removedBusinessObjects.Contains(businessObject)
@@ -1456,7 +1456,7 @@ namespace Habanero.BO
 
             if (!isAscending)
             {
-                boCol.Reverse();
+                _boCol.Reverse();
             }
         }
 
@@ -1466,7 +1466,7 @@ namespace Habanero.BO
         ///<param name="comparer">The Delegate used to sort</param>
         public void Sort(IComparer<TBusinessObject> comparer)
         {
-            boCol.Sort(comparer);
+            _boCol.Sort(comparer);
         }
 
         /// <summary>
@@ -1478,7 +1478,7 @@ namespace Habanero.BO
         {
             if (this.SelectQuery.OrderCriteria.Fields.Count > 0)
             {
-                boCol.Sort(new StronglyTypedComperer<TBusinessObject>(this.SelectQuery.OrderCriteria));
+                _boCol.Sort(new StronglyTypedComperer<TBusinessObject>(this.SelectQuery.OrderCriteria));
             }
         }
 
@@ -1494,7 +1494,7 @@ namespace Habanero.BO
         void IBusinessObjectCollection.Sort(IComparer comparer)
         {
             if (comparer == null) throw new ArgumentNullException("comparer");
-            boCol.Sort(new StronglyTypedComperer<TBusinessObject>(comparer));
+            _boCol.Sort(new StronglyTypedComperer<TBusinessObject>(comparer));
         }
 
 
@@ -1508,7 +1508,7 @@ namespace Habanero.BO
         /// <returns>Returns a sorted list</returns>
         public List<TBusinessObject> GetSortedList(string propertyName, bool isAscending)
         {
-            List<TBusinessObject> list = new List<TBusinessObject>(boCol.Count);
+            List<TBusinessObject> list = new List<TBusinessObject>(_boCol.Count);
             foreach (TBusinessObject o in this)
             {
                 list.Add(o);
@@ -1546,7 +1546,7 @@ namespace Habanero.BO
         /// <returns>Returns an IList object</returns>
         public List<TBusinessObject> GetList()
         {
-            List<TBusinessObject> list = new List<TBusinessObject>(boCol.Count);
+            List<TBusinessObject> list = new List<TBusinessObject>(_boCol.Count);
             foreach (TBusinessObject o in this)
             {
                 list.Add(o);
@@ -1647,7 +1647,7 @@ namespace Habanero.BO
                     bo = this.AddedBusinessObjects[0];
                     this.AddedBusinessObjects.Remove(bo);
                     bo.CancelEdits();
-                    removed = boCol.Remove(bo);
+                    removed = _boCol.Remove(bo);
                     KeyObjectHashTable.Remove(bo.ID.ToString());
                     this.RemovedBusinessObjects.Remove(bo);
                 }
@@ -1712,8 +1712,8 @@ namespace Habanero.BO
         /// <returns>The element at the specified index.</returns>
         IBusinessObject IBusinessObjectCollection.this[int index]
         {
-            get { return boCol[index]; }
-            set { boCol[index] = (TBusinessObject) value; }
+            get { return _boCol[index]; }
+            set { _boCol[index] = (TBusinessObject) value; }
         }
 
         /// <summary>
@@ -1756,7 +1756,7 @@ namespace Habanero.BO
         {
             TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
             this.CopyTo(thisArray, arrayIndex);
-            int count = boCol.Count;
+            int count = _boCol.Count;
             for (int index = 0; index < count; index++)
                 array[arrayIndex + index] = thisArray[arrayIndex + index];
         }
@@ -1994,7 +1994,7 @@ namespace Habanero.BO
             lock (KeyObjectHashTable)
             {
                 int count = 0;
-                info.AddValue(COUNT, boCol.Count);
+                info.AddValue(COUNT, _boCol.Count);
                 info.AddValue(CREATED_COUNT, this.CreatedBusinessObjects.Count);
                 info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
                 info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
@@ -2038,7 +2038,7 @@ namespace Habanero.BO
 
         public IEnumerator<TBusinessObject> GetEnumerator()
         {
-            return boCol.GetEnumerator();
+            return _boCol.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -2046,23 +2046,36 @@ namespace Habanero.BO
             return GetEnumerator();
         }
 
-//        ///<summary>
-//        /// The Number of items in the BusinessObjectCollection
-//        ///</summary>
-//        public int Count
-//        {
-//            get
-//            {
-//                return boCol.Count;
-//            }
-//        }
+        ///<summary>
+        /// Searches for an element that matches the conditions defined by the specified predicate, 
+        /// and returns the first occurrence within the entire System.Collections.Generic.List{TBusinessObject}.
+        ///</summary>
+        ///<param name="match">The System.Predicate{TBusinessObject} delegate that defines the conditions of the element to search for.</param>
+        ///<returns>The first element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type TBusinessObject.</returns>
+        ///<exception>System.ArgumentNullException: match is null.</exception>
+        public TBusinessObject Find(System.Predicate<TBusinessObject> match)
+        {
+            return _boCol.Find(match);
+        }
+        ///<summary>
+        /// Searches for all elements that match the conditions defined by the specified predicate, 
+        /// and returns a List of all items found in the entire System.Collections.Generic.List{TBusinessObject}.
+        ///</summary>
+        ///<param name="match">The System.Predicate{TBusinessObject} delegate that defines the conditions of the element to search for.</param>
+        ///<returns>The Elements that match the conditions defined by the specified predicate.</returns>
+        ///<exception>System.ArgumentNullException: match is null.</exception>
+        public List<TBusinessObject> FindAll(System.Predicate<TBusinessObject> match)
+        {
+            return _boCol.FindAll(match);
+        }
         ///<summary>
         /// Loops through each item in the Collection and Applies the Action
         ///</summary>
         ///<param name="action"></param>
         public void ForEach(System.Action<TBusinessObject> action)
         {
-            boCol.ForEach(action);
+            _boCol.ForEach(action);
         }
+
     }
 }
