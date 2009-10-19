@@ -108,6 +108,7 @@ namespace Habanero.BO.ClassDefinition
             string className = superClassDef.ClassName;
             if (assemblyName != null && className != null)
             {
+                if (!string.IsNullOrEmpty(superClassDef.TypeParameter)) className = className + "_" + superClassDef.TypeParameter;
                 if (classDefCol.Contains(assemblyName, className))
                 {
                     superClassClassDef = (ClassDef) classDefCol[assemblyName, className];
