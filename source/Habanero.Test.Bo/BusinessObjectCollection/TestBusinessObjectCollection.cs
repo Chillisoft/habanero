@@ -1431,6 +1431,28 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(newName, cp2.FirstName);
             Assert.AreEqual(newName, cp3.FirstName);
         }
+        [Test]
+        public void Test_RemoveAll_ShouldRemoveMatchingItems()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("", "Surname");
+            col.Sort("Surname", true, true);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            col.RemoveAll(bo => bo.FirstName == firstName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.IsTrue(col.Contains(cp3));
+        }
         /// <summary>
         /// Asserts that the results for the collection are as expected
         /// </summary>

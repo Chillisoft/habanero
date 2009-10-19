@@ -2076,6 +2076,13 @@ namespace Habanero.BO
         {
             _boCol.ForEach(action);
         }
-
+        /// <summary>
+        ///  Removes all the items that Match the Predicate.
+        /// </summary>
+        /// <param name="match">he System.Predicate{TBusinessObject} delegate that defines the conditions of the element to remove</param>
+        public void RemoveAll(System.Predicate<TBusinessObject> match)
+        {
+            _boCol.RemoveAll(match);
+        }
     }
 }
