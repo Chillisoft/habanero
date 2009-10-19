@@ -115,7 +115,7 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef classDef2 = new ClassDef("Habanero.Test.BO", "UnknownClass", null, null, null, null, null);
             classDef2.TypeParameter = "TypeParam2";
             ClassDef.ClassDefs.Add(classDef2);
-            SuperClassDef superClassDef = new SuperClassDef(classDef2.AssemblyName, classDef2.ClassName, ORMapping.ClassTableInheritance, null, null);
+            SuperClassDef superClassDef = new SuperClassDef(classDef2.AssemblyName, classDef2.ClassNameExcludingTypeParameter, ORMapping.ClassTableInheritance, null, null);
             superClassDef.TypeParameter = classDef2.TypeParameter;
             //---------------Assert Precondition----------------
 
