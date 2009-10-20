@@ -85,7 +85,7 @@ namespace Habanero.UI.VWG
         /// Gets and sets the complete list of options available to go in
         /// either panel
         /// </summary>
-        public List<T> AllOptions
+        public IList<T> AllOptions
         {
             get { return _manager.AllOptions; }
             set { _manager.AllOptions = value; }
@@ -120,7 +120,7 @@ namespace Habanero.UI.VWG
         /// Gets or sets the list of items already selected (which is a subset of
         /// all available options).  This list typically appears on the right-hand side.
         ///</summary>
-        public List<T> SelectedOptions
+        public IList<T> SelectedOptions
         {
             get { return _manager.SelectedOptions; }
             set { _manager.SelectedOptions = value; }

@@ -30,8 +30,8 @@ namespace Habanero.UI.Base
     /// </summary>
     public class MultiSelectorModel<T>
     {
-        private List<T> _allOptions;
-        private List<T> _selectedOptions;
+        private IList<T> _allOptions;
+        private IList<T> _selectedOptions;
         /// <summary>
         /// Event raised when the available options have been changed
         /// </summary>
@@ -99,7 +99,7 @@ namespace Habanero.UI.Base
         /// Sets the list of options (left hand side list).
         /// Note_ that this creates a shallow copy of the List.
         /// </summary>
-        public List<T> AllOptions
+        public IList<T> AllOptions
         {
             get { return _allOptions; }
             set
@@ -138,13 +138,14 @@ namespace Habanero.UI.Base
         /// </summary>
         public ReadOnlyCollection<T> OptionsView
         {
-            get { return _allOptions.AsReadOnly(); }
+//            get { return _allOptions.AsReadOnly(); }
+            get { return new ReadOnlyCollection<T>(_allOptions); }
         }
-
+ 
         /// <summary>
         /// Sets the list of selected items (right hand side list).
         /// </summary>
-        public List<T> SelectedOptions
+        public IList<T> SelectedOptions
         {
             get { return _selectedOptions; }
             set
@@ -159,7 +160,7 @@ namespace Habanero.UI.Base
                 FireSelectionsChanged();
             }
         }
-
+        
         private void FireSelectionsChanged()
         {
             if (SelectionsChanged != null) SelectionsChanged(this, new EventArgs());
@@ -172,47 +173,88 @@ namespace Habanero.UI.Base
         {
             get
             {
-                return _selectedOptions == null ? null : _selectedOptions.AsReadOnly();
+//                return _selectedOptions == null ? null : _selectedOptions.AsReadOnly();
+                return new ReadOnlyCollection<T>(_selectedOptions);
             }
         }
 
 
-        private List<T> OriginalSelections { get; set; }
+        private IList<T> OriginalSelections { get; set; }
 
         /// <summary>
         /// Returns the list of available options, which is the set 
         /// of AllOptions minus the set of SelectedOptions
         /// </summary>
-        public List<T> AvailableOptions
+        public IList<T> AvailableOptions
         {
-            get { return _allOptions.FindAll(obj => !_selectedOptions.Contains(obj)); }
+            get
+            {
+                IList<T> availableOptions = new List<T>();
+                foreach (T item in _allOptions)
+                {
+                    if (!_selectedOptions.Contains(item))
+                    {
+                        availableOptions.Add(item);
+//                        yield return item;
+                    }
+                }
+                return availableOptions;
+//                return _allOptions.FindAll(obj => !_selectedOptions.Contains(obj));
+            }
         }
 
         /// <summary>
         /// Returns the list of added selections (items selected since 
         /// setting the selections)
         /// </summary>
-        public List<T> Added
+        public IList<T> Added
         {
-            get { return _selectedOptions.FindAll(obj => !OriginalSelections.Contains(obj)); }
+//            get { return _selectedOptions.FindAll(obj => !OriginalSelections.Contains(obj)); }
+            get {
+                IList<T> addedItems = new List<T>();
+                foreach (T item in _selectedOptions)
+                {
+                    if (!OriginalSelections.Contains(item))
+                    {
+                        addedItems.Add(item);
+                    }
+                }
+                return addedItems;
+            }
         }
 
         /// <summary>
         /// Returns the list of removed selections (items deselected 
         /// since setting the selections)
         /// </summary>
-        public List<T> Removed
+        public IList<T> Removed
         {
-            get { return OriginalSelections.FindAll(obj => !_selectedOptions.Contains(obj)); }
+//            get { return OriginalSelections.FindAll(obj => !_selectedOptions.Contains(obj)); }
+            get
+            {
+                IList<T> removedItems = new List<T>();
+                foreach (T item in OriginalSelections)
+                {
+                    if (!_selectedOptions.Contains(item))
+                    {
+                        removedItems.Add(item);
+                    }
+                }
+                return removedItems;
+            }
         }
 
         /// <summary>
         /// Selects multiple items at the same time.
         /// </summary>
         /// <param name="items">The list of items to select</param>
-        public void Select(List<T> items)
+        public void Select(IEnumerable<T> items)
         {
-            items.ForEach(Select);
+            foreach (T item in items)
+            {
+                Select(item);
+            }
+//            items.ForEach(Select);
         }
 
         /// <summary>
@@ -246,9 +288,13 @@ namespace Habanero.UI.Base
         /// Deselects a list of items at once
         /// </summary>
         /// <param name="items">The list of items to deselect</param>
-        public void Deselect(List<T> items)
+        public void Deselect(IList<T> items)
         {
-            items.ForEach(Deselect);
+            foreach (T item in items)
+            {
+                Deselect(item);
+            }
+//            items.ForEach(Deselect);
         }
 
         /// <summary>
@@ -312,9 +358,15 @@ namespace Habanero.UI.Base
             if (OptionRemoved != null) OptionRemoved(this, new ModelEventArgs<T>(item));
         }
 
-        private static List<T> ShallowCopy(List<T> list)
+        private static IList<T> ShallowCopy(IList<T> list)
         {
-            return list.FindAll(delegate { return true; });
+            IList<T> newList = new List<T>(list.Count);
+            foreach (T item in list)
+            {
+                newList.Add(item);
+            }
+            return newList;
+//            return list.FindAll(delegate { return true; });
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Habanero.UI.Base
         /// AvailableOptions will be calculated as the remaining options when
         /// SelectedOptions are taken from this list.
         /// </summary>
-        List<T> AllOptions { get; set; }
+        IList<T> AllOptions { get; set; }
 
         /// <summary>
         /// Gets the ListBox control that contains the available options that
@@ -84,7 +84,7 @@ namespace Habanero.UI.Base
         /// Gets or sets the list of items already selected (which is a subset of
         /// AllOptions).  This list typically appears on the right-hand side.
         ///</summary>
-        List<T> SelectedOptions { get; set; }
+        IList<T> SelectedOptions { get; set; }
 
         /// <summary>
         /// Gets the ListBox control that contains the options that have been

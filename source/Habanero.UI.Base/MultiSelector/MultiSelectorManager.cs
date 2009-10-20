@@ -96,7 +96,11 @@ namespace Habanero.UI.Base
         private void UpdateListBoxes()
         {
             AvailableOptionsListBox.Items.Clear();
-            _model.AvailableOptions.ForEach(obj => AvailableOptionsListBox.Items.Add(obj));
+            foreach (T item in _model.AvailableOptions)
+            {
+                AvailableOptionsListBox.Items.Add(item);
+            }
+//            _model.AvailableOptions.ForEach(obj => AvailableOptionsListBox.Items.Add(obj));
             SelectionsListBox.Items.Clear();
             foreach (T obj in _model.SelectionsView)
             {
@@ -107,7 +111,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IMultiSelector{T}.AllOptions"/>
         /// </summary>
-        public List<T> AllOptions
+        public IList<T> AllOptions
         {
             get { return _model.AllOptions; }
             set { _model.AllOptions = value; }
@@ -132,7 +136,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IMultiSelector{T}.SelectedOptions"/>
         /// </summary>
-        public List<T> SelectedOptions
+        public IList<T> SelectedOptions
         {
             get { return _model.SelectedOptions; }
             set { _model.SelectedOptions = value; }
