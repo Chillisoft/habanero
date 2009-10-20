@@ -22,6 +22,7 @@ using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -196,7 +197,14 @@ namespace Habanero.BO
         public virtual void ParsePropValue(object valueToParse, out object returnValue)
         {
             bool isParsed = this.PropDef.TryParsePropValue(valueToParse, out returnValue);
-            if (!isParsed)
+
+            if (isParsed)
+            {
+                if (returnValue is IResolvableToValue)
+                {
+                    returnValue = ((IResolvableToValue) returnValue).ResolveToValue();
+                }
+            } else 
             {
                 RaiseIncorrectTypeException(valueToParse);
             }

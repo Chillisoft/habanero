@@ -80,8 +80,8 @@ namespace Habanero.Test.UI.Base
             IPanel panel = inputFormComboBox.CreateControlPanel();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, panel.Controls.Count);
-            ILabel label = AssertIsInstanceOf<ILabel>(panel.Controls[0]);
-            IComboBox comboBox = AssertIsInstanceOf<IComboBox>(panel.Controls[1]);
+            ILabel label = TestUtil.AssertIsInstanceOf<ILabel>(panel.Controls[0]);
+            IComboBox comboBox = TestUtil.AssertIsInstanceOf<IComboBox>(panel.Controls[1]);
             Assert.AreSame(inputFormComboBox.ComboBox, comboBox);
             Assert.That(label.Top + label.Height, Is.LessThan(comboBox.Top));
             Assert.That(comboBox.Top + comboBox.Height, Is.LessThanOrEqualTo(panel.Height));
@@ -112,7 +112,7 @@ namespace Habanero.Test.UI.Base
             IPanel panel = inputFormComboBox.CreateControlPanel();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, panel.Controls.Count);
-            ILabel label = AssertIsInstanceOf<ILabel>(panel.Controls[0]);
+            ILabel label = TestUtil.AssertIsInstanceOf<ILabel>(panel.Controls[0]);
             Assert.AreEqual(label.PreferredWidth + 20, panel.Width);
         }
 
@@ -212,12 +212,6 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             inputFormComboBox.ShowDialog();
             //---------------Test Result -----------------------
-        }
-
-        private static T AssertIsInstanceOf<T>(object obj)
-        {
-            Assert.IsInstanceOfType(typeof(T), obj);
-            return (T)obj;
         }
 
         private InputFormComboBox CreateInputFormComboBoxWithThreeItems()

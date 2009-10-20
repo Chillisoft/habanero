@@ -576,7 +576,7 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void TestConvertValueToPropertyType_TodayStringToDateTimeNow()
+        public void TestConvertValueToPropertyType_NowStringToDateTimeNow()
         {
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("a", typeof (DateTime), PropReadWriteRule.ReadWrite, null);
@@ -594,7 +594,7 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void TestConvertValueToPropertyType_TodayStringToDateTimeNow_VariedCase()
+        public void TestConvertValueToPropertyType_NowStringToDateTimeNow_VariedCase()
         {
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("a", typeof (DateTime), PropReadWriteRule.ReadWrite, null);

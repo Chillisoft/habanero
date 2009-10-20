@@ -65,5 +65,15 @@ namespace Habanero.BO.ClassDefinition
 
             return valueToParse == null || valueToParse == DBNull.Value;
         }
+
+        ///<summary>
+        /// This returns the property value that should be displayed
+        ///</summary>
+        ///<param name="propValue"></param>
+        ///<returns></returns>
+        public virtual object GetDisplayPropValue(object propValue)
+        {
+            return propValue;
+        }
     }
 }

@@ -1086,6 +1086,11 @@ namespace Habanero.Test.BO
                                PropReadWriteRule.ReadWrite, null, null, true, false);
         }
 
+        private static PropDef CreateTestPropDateTimePropDef()
+        {
+            return new PropDef("TestProp", typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+        }
+
         [Test]
         public void Test_BusinessObject_SetAndGet()
         {
@@ -1141,9 +1146,81 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.AreSame(bo, boProp.BusinessObject);
             //---------------Execute Test ----------------------
-            boProp.BusinessObject = bo;
+            Exception exception = null;
+            try
+            {
+                boProp.BusinessObject = bo;
+            } catch(Exception ex)
+            {
+                exception = ex;
+            }
             //---------------Test Result -----------------------
+            Assert.IsNull(exception);
             Assert.AreSame(bo, boProp.BusinessObject);
+        }
+
+        [Test]
+        public void Test_PropertyValueToDisplay_WhenDateTimeToday_ShouldReturnResolvedValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropDateTimePropDef();
+            IBOProp boProp = propDef.CreateBOProp(true);
+            DateTimeToday dateTimeToday = new DateTimeToday();
+            boProp.Value = dateTimeToday;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object displayValue = boProp.PropertyValueToDisplay;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(displayValue);
+            Assert.AreNotSame(dateTimeToday, displayValue);
+        }
+
+        [Test]
+        public void Test_Value_WhenDateTimeToday_ShouldReturnResolvedValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropDateTimePropDef();
+            IBOProp boProp = propDef.CreateBOProp(true);
+            DateTimeToday dateTimeToday = new DateTimeToday();
+            boProp.Value = dateTimeToday;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object value = boProp.Value;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(value);
+            Assert.AreNotSame(dateTimeToday, value);
+        }
+
+        [Test]
+        public void Test_PropertyValueToDisplay_WhenDateTimeNow_ShouldReturnResolvedValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropDateTimePropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            DateTimeNow dateTimeNow = new DateTimeNow();
+            boProp.Value = dateTimeNow;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object displayValue = boProp.PropertyValueToDisplay;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(displayValue);
+            Assert.AreNotSame(dateTimeNow, displayValue);
+        }
+
+        [Test]
+        public void Test_Value_WhenDateTimeNow_ShouldReturnResolvedValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropDateTimePropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            DateTimeNow dateTimeNow = new DateTimeNow();
+            boProp.Value = dateTimeNow;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object value = boProp.Value;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(value);
+            Assert.AreNotSame(dateTimeNow, value);
         }
     }
 

@@ -218,5 +218,11 @@ namespace Habanero.Test
         {
             Thread.Sleep(timeout);
         }
+
+        public static T AssertIsInstanceOf<T>(object obj)
+        {
+            Assert.IsInstanceOfType(typeof(T), obj);
+            return (T)obj;
+        }
     }
 }

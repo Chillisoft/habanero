@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -83,7 +83,9 @@
     <Compile Include="Address.cs" />
     <Compile Include="ArchitectureTest.cs" />
     <Compile Include="Base\TestDateTimeNow.cs" />
+    <Compile Include="Base\TestDateTimeNowConverter.cs" />
     <Compile Include="Base\TestDateTimeToday.cs" />
+    <Compile Include="Base\TestDateTimeTodayConverter.cs" />
     <Compile Include="Base\TestDelegatedExceptionNotifier.cs" />
     <Compile Include="Base\TestRecordingExceptionNotifier.cs" />
     <Compile Include="Base\TestExceptions.cs" />

@@ -140,6 +140,62 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_PropDef_ParsePropValue_FromNowString()
+        {
+            //---------------Set up test pack-------------------
+            const string text = "now";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _propDef.TryParsePropValue(text, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            TestUtil.AssertIsInstanceOf<DateTimeNow>(parsedValue);
+        }
+
+        [Test]
+        public void Test_PropDef_ParsePropValue_FromDateTimeNowObject()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeNow dateTimeNow = new DateTimeNow();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _propDef.TryParsePropValue(dateTimeNow, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            Assert.AreSame(dateTimeNow, parsedValue);
+        }
+
+        [Test]
+        public void Test_PropDef_ParsePropValue_FromTodayString()
+        {
+            //---------------Set up test pack-------------------
+            const string text = "today";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _propDef.TryParsePropValue(text, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            TestUtil.AssertIsInstanceOf<DateTimeToday>(parsedValue);
+        }
+
+        [Test]
+        public void Test_PropDef_ParsePropValue_FromDateTimeTodayObject()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeToday dateTimeToday = new DateTimeToday();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _propDef.TryParsePropValue(dateTimeToday, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            Assert.AreEqual(dateTimeToday, parsedValue);
+        }
+
+        [Test]
         public void Test_PropDef_ConvertValueToString_Null()
         {
             //---------------Set up test pack-------------------
@@ -224,8 +280,8 @@ namespace Habanero.Test.BO
             bool parseSucceed = _dataMapper.TryParsePropValue(null, out parsedValue);
 
             //---------------Test Result -----------------------
-            Assert.IsNull(parsedValue);
             Assert.IsTrue(parseSucceed);
+            Assert.IsNull(parsedValue);
         }
 
         [Test]
@@ -241,8 +297,8 @@ namespace Habanero.Test.BO
             bool parseSucceed = _dataMapper.TryParsePropValue(expectedDateTime.ToString("d"), out parsedValue);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedDateTime, parsedValue);
             Assert.IsTrue(parseSucceed);
+            Assert.AreEqual(expectedDateTime, parsedValue);
         }
 
         [Test]
@@ -258,8 +314,8 @@ namespace Habanero.Test.BO
             bool parseSucceed = _dataMapper.TryParsePropValue(expectedDateTime, out parsedValue);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedDateTime, parsedValue);
             Assert.IsTrue(parseSucceed);
+            Assert.AreEqual(expectedDateTime, parsedValue);
         }
 
         [Test]
@@ -275,8 +331,8 @@ namespace Habanero.Test.BO
             bool parseSucceed = _dataMapper.TryParsePropValue(invalidString, out parsedValue);
 
             //---------------Test Result -----------------------
-            Assert.IsNull(parsedValue);
             Assert.IsFalse(parseSucceed);
+            Assert.IsNull(parsedValue);
         }
 
         [Test]
@@ -292,8 +348,64 @@ namespace Habanero.Test.BO
             bool parseSucceed = _dataMapper.TryParsePropValue(dbNullValue, out parsedValue);
 
             //---------------Test Result -----------------------
-            Assert.IsNull(parsedValue);
             Assert.IsTrue(parseSucceed);
+            Assert.IsNull(parsedValue);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_FromNowString()
+        {
+            //---------------Set up test pack-------------------
+            const string text = "now";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _dataMapper.TryParsePropValue(text, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            TestUtil.AssertIsInstanceOf<DateTimeNow>(parsedValue);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_FromDateTimeNowObject()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeNow dateTimeNow = new DateTimeNow();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _dataMapper.TryParsePropValue(dateTimeNow, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            Assert.AreSame(dateTimeNow, parsedValue);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_FromTodayString()
+        {
+            //---------------Set up test pack-------------------
+            const string text = "today";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _dataMapper.TryParsePropValue(text, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            TestUtil.AssertIsInstanceOf<DateTimeToday>(parsedValue);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_FromDateTimeTodayObject()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeToday dateTimeToday = new DateTimeToday();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _dataMapper.TryParsePropValue(dateTimeToday, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            Assert.AreEqual(dateTimeToday, parsedValue);
         }
 
         [Test]

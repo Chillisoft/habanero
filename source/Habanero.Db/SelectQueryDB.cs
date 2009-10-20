@@ -353,6 +353,7 @@ namespace Habanero.DB
                                                    {
                                                        string paramName = statement.ParameterNameGenerator.GetNextParameterName();
                                                        if (value == null) value = "NULL";
+                                                       //TODO Mark 20 Oct 2009: Convert these 'DateTime' things to use IResolvableToValue
                                                        if (value is DateTimeToday)
                                                        {
                                                            value = DateTimeToday.Value;

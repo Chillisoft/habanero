@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.ComponentModel;
+using Habanero.Base;
 
 namespace Habanero.Util
 {
@@ -56,6 +58,47 @@ namespace Habanero.Util
             {
                 return false;
             }
+        }
+
+        ///<summary>
+        /// Converts a value to the specified type using the <see cref="TypeConverter"/> associated with the source value.
+        ///</summary>
+        ///<param name="obj">The value to convert</param>
+        ///<typeparam name="TDestinationType">The type to convert the value to.</typeparam>
+        ///<returns>The converted value</returns>
+        public static TDestinationType ConvertTo<TDestinationType>(object obj)
+        {
+            return (TDestinationType)ConvertTo(typeof(TDestinationType), obj);
+        }
+
+        ///<summary>
+        /// Converts a value to the specified type using the <see cref="TypeConverter"/> associated with the source value.
+        ///</summary>
+        ///<param name="type">The type to convert the value to.</typeparam>
+        ///<param name="obj">The value to convert</param>
+        ///<returns>The converted value</returns>
+        public static object ConvertTo(Type type, object obj)
+        {
+            if (Utilities.IsNull(obj)) return null;
+            Type sourceType = obj.GetType();
+            bool isNullableType = false;
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                isNullableType = true;
+                type = Nullable.GetUnderlyingType(type);
+            }
+            object returnValue;
+            if (type == sourceType || sourceType.IsSubclassOf(type)) returnValue = obj;
+            else
+            {
+                TypeConverter typeConverter = TypeDescriptor.GetConverter(sourceType);
+                returnValue = typeConverter.ConvertTo(obj, type);
+            }
+            if (isNullableType)
+            {
+                returnValue = Activator.CreateInstance(typeof (Nullable<>).MakeGenericType(type), returnValue);
+            }
+            return returnValue;
         }
     }
 }

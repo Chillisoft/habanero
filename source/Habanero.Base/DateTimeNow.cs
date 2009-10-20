@@ -22,18 +22,18 @@ using System.ComponentModel;
 namespace Habanero.Base
 {
     ///<summary>
-    /// This is a wrapper class for DateTime.Today. This is used by search and filter criteria to build up a search Criteria object.
+    /// This is a wrapper class for DateTime.Now. This is used by search and filter criteria to build up a search Criteria object.
     /// For loading the appropriate objects from the collection.
     ///</summary>
-    [TypeConverter(typeof(DateTimeTodayConverter))]
-    public sealed class DateTimeToday : IComparable<DateTime>, IComparable, IResolvableToValue
+    [TypeConverter(typeof(DateTimeNowConverter))]
+    public sealed class DateTimeNow : IComparable<DateTime>, IComparable, IResolvableToValue
     {
         ///<summary>
         /// Returns the current Today value from the DateTime object.
         ///</summary>
         public static DateTime Value
         {
-            get { return DateTime.Today; }
+            get { return DateTime.Now; }
         }
 
         ///<summary>
@@ -46,22 +46,8 @@ namespace Habanero.Base
         ///<exception cref="T:System.ArgumentException">obj is not the same type as this instance. </exception><filterpriority>2</filterpriority>
         public int CompareTo(object obj)
         {
-            if (obj is DateTimeToday) return 0;
+            if (obj is DateTimeNow) return 0;
             return Value.CompareTo(obj);
-        }
-
-        object IResolvableToValue<object>.ResolveToValue()
-        {
-            return Value;
-        }
-
-        ///<summary>
-        /// Returns a ToString of the Value (Today).
-        ///</summary>
-        ///<returns></returns>
-        public override string ToString()
-        {
-            return Value.ToString();
         }
 
         ///<summary>
@@ -76,6 +62,15 @@ namespace Habanero.Base
             return Value.CompareTo(other);
         }
 
+        ///<summary>
+        /// Returns a ToString of the Value (Today).
+        ///</summary>
+        ///<returns></returns>
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
         /// <summary>
         /// Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
         /// </summary>
@@ -85,7 +80,7 @@ namespace Habanero.Base
         /// <param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
-            return obj is DateTimeToday;
+            return obj is DateTimeNow;
         }
 
         /// <summary>
@@ -100,7 +95,15 @@ namespace Habanero.Base
             return 0;
         }
 
-        
+        ///<summary>
+        /// Resolved the instance class to a value.
+        ///</summary>
+        ///<returns>The value that the instance class is resolved to.</returns>
+        object IResolvableToValue<object>.ResolveToValue()
+        {
+            return Value;
+        }
+
 
         //public static bool operator ==(DateTimeToday left, DateTimeToday right)
         //{
