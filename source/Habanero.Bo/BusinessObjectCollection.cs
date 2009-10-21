@@ -1555,6 +1555,8 @@ namespace Habanero.BO
             return list;
         }
 
+
+
         /// <summary>
         /// Commits to the database all the business objects that are either
         /// new or have been altered since the last committal
@@ -2088,6 +2090,15 @@ namespace Habanero.BO
             {
                 this.Remove(businessObject);
             }
+        }
+
+        ///<summary>
+        /// Copies the elements of the <see cref="BusinessObjectCollection{TBusinessObject}"/> to a new array.
+        ///</summary>
+        ///<returns>An array containing copies of the elements of the <see cref="BusinessObjectCollection{TBusinessObject}"/>.</returns>
+        public TBusinessObject[] ToArray()
+        {
+            return _boCol.ToArray();
         }
     }
 }

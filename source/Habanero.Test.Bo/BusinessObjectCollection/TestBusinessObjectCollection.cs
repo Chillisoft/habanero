@@ -1520,6 +1520,31 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsFalse(contains);
         }
 
+        [Test]
+        public void Test_ToArray_ShouldContainAllItems()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            const string firstName = "abab";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("", "Surname");
+            col.Sort("Surname", true, true);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO[] array = col.ToArray();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, array.Length);
+            Assert.Contains(cp1, array);
+            Assert.Contains(cp2, array);
+            Assert.Contains(cp3, array);
+        }
+
         /// <summary>
         /// Asserts that the results for the collection are as expected
         /// </summary>
