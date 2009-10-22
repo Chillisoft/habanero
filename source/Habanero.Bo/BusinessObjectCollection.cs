@@ -110,29 +110,28 @@ namespace Habanero.BO
 
         /// <summary>
         /// Default constructor. 
-        /// The classdef will be implied from TBusinessObject and the Current Database Connection will be used.
+        /// The <see cref="IClassDef"/> will be implied from <typeparamref name="TBusinessObject"/> and the Current Database Connection will be used.
         /// </summary>
         public BusinessObjectCollection() : this(null, null)
         {
         }
 
         /// <summary>
-        /// Use this constructor if you will only know TBusinessObject at run time - BusinessObject will be the generic type
-        /// and the objects in the collection will be determined from the classDef passed in.
+        /// Use this constructor if you will only know <typeparamref name="TBusinessObject"/> at run time - <see cref="BusinessObject"/> will be the generic type
+        /// and the objects in the collection will be determined from the <see cref="IClassDef"/> passed in.
         /// </summary>
-        /// <param name="classDef">The classdef of the objects to be contained in this collection</param>
+        /// <param name="classDef">The <see cref="IClassDef"/> of the objects to be contained in this collection</param>
         public BusinessObjectCollection(IClassDef classDef) : this(classDef, null)
         {
         }
 
         /// <summary>
-        /// Constructor to initialise a new collection with a
+        /// Constructor to initialize a new collection with a
         /// class definition provided by an existing business object
         /// </summary>
         /// <param name="bo">The business object whose class definition
-        /// is used to initialise the collection</param>
-        [Obsolete(
-            "Please initialise with a ClassDef instead.  This option will be removed in later versions of Habanero.")]
+        /// is used to initialize the collection</param>
+        [Obsolete("Please initialize with a ClassDef instead.  This option will be removed in later versions of Habanero.")]
         public BusinessObjectCollection(TBusinessObject bo) : this(null, bo)
         {
         }
@@ -162,7 +161,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Reconstitutes the collection from a stream that was serialised.
+        /// Reconstitutes the collection from a stream that was serialized.
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
@@ -279,7 +278,7 @@ namespace Habanero.BO
 
 
         /// <summary>
-        /// Handles the event of any business object in this collection being Updated(i.e the BO is saved, or edits are cancelled).
+        /// Handles the event of any business object in this collection being Updated(i.e the BO is saved, or edits are canceled).
         /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.Updated"/> event.
         /// </summary>
         event EventHandler<BOEventArgs> IBusinessObjectCollection.BusinessObjectUpdated
@@ -302,7 +301,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Handles the event of any business object in this collection being Updated(i.e the BO is saved, or edits are cancelled).
+        /// Handles the event of any business object in this collection being Updated(i.e the BO is saved, or edits are canceled).
         /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.Updated"/> event.
         /// </summary>
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectUpdated
@@ -346,7 +345,7 @@ namespace Habanero.BO
 
 
         /// <summary>
-        /// Handles the event when a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
+        /// Handles the event when a <c>BusinessObject</c> in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
         /// </summary>
         event EventHandler<BOEventArgs> IBusinessObjectCollection.BusinessObjectIDUpdated
         {
@@ -368,7 +367,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Handles the event when a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
+        /// Handles the event when a <c>BusinessObject</c> in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
         /// </summary>
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectIDUpdated
         {
@@ -377,7 +376,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Calls the BusinessObjectAdded() handler
+        /// Calls the <see cref="BusinessObjectAdded"/>() handler
         /// </summary>
         /// <param name="bo">The business object added</param>
         private void FireBusinessObjectAdded(TBusinessObject bo)
@@ -403,7 +402,7 @@ namespace Habanero.BO
         // ReSharper restore UnusedMember.Global 
         // ReSharper restore UnusedMember.Local
         /// <summary>
-        /// Calls the BusinessObjectRemoved() handler
+        /// Calls the <see cref="BusinessObjectRemoved"/>() handler
         /// </summary>
         /// <param name="bo">The business object removed</param>
         private void FireBusinessObjectRemoved(TBusinessObject bo)
@@ -445,6 +444,7 @@ namespace Habanero.BO
         /// Adds a business object to the collection
         /// </summary>
         /// <param name="bo">The business object to add</param>
+        /// <exception cref="ArgumentNullException"><c>bo</c> is null.</exception>
         public virtual void Add(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
@@ -461,8 +461,8 @@ namespace Habanero.BO
         /// Adds a business object to the collection of business objects without raising any events.
         /// But still verifies the object does not exist in Created, removed etc collections
         /// </summary>
-        /// <param name="bo"></param>
-        /// <returns></returns>
+        /// <param name="bo">The business object to be added to the collection</param>
+        /// <returns>a value indicating whether the object was added to the collection or not.</returns>
         protected virtual bool AddInternal(TBusinessObject bo)
         {
             if (this.Contains(bo)) return false;
@@ -755,7 +755,7 @@ namespace Habanero.BO
         /// <summary>
         /// Loads the entire collection for the type of object,
         /// loaded in the order specified. 
-        /// To load the collection in any order use the LoadAll() method.
+        /// To load the collection in any order use the <see cref="LoadAll()"/> method.
         /// </summary>
         /// <param name="orderByClause">The order-by clause</param>
         public void LoadAll(string orderByClause)
@@ -766,7 +766,7 @@ namespace Habanero.BO
         /// <summary>
         /// Loads business objects that match the search criteria provided,
         /// loaded in the order specified.  
-        /// Use empty quotes, (or the LoadAll method) to load the
+        /// Use empty quotes, (or the <see cref="LoadAll(string)"/> method) to load the
         /// entire collection for the type of object.
         /// </summary>
         /// <param name="searchCriteria">The search criteria</param>
@@ -835,10 +835,10 @@ namespace Habanero.BO
         /// <paramref name="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
         /// <paramref name="numberOfRecordsToLoad"/> will be set to 10. 
         /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <paramref name="orderByClause"/>).
-        /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
+        /// If there are fewer than 15 records in total, then the remaining records after record 6 will be returned. 
         /// </summary>
         /// <remarks>
-        /// As a design decision, we have elected for the <paramref name="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// As a design decision, we have elected for the <paramref name="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by <c>MySql</c> etc.
         /// Also, the <paramref name="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
         /// return all the remaining records from the specified <paramref name="firstRecordToLoad"/>.
         /// If you give '0' as the value for the <paramref name="numberOfRecordsToLoad"/> parameter, it will load zero records.
@@ -886,7 +886,7 @@ namespace Habanero.BO
         /// If there are fewer than 15 records in total, then the remaining records after record 6 will be returned. 
         /// </summary>
         /// <remarks>
-        /// As a design decision, we have elected for the <paramref name="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// As a design decision, we have elected for the <paramref name="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by <c>MySql</c> etc.
         /// Also, the <paramref name="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
         /// return all the remaining records from the specified <paramref name="firstRecordToLoad"/>.
         /// If you give '0' as the value for the <paramref name="numberOfRecordsToLoad"/> parameter, it will load zero records.
@@ -927,15 +927,36 @@ namespace Habanero.BO
 
         #endregion
 
-        public int Add(object value)
+        int IList.Add(object value)
         {
             this.Add((TBusinessObject) value);
             return this.Count - 1;
         }
 
-        public bool Contains(object value)
+        bool IList.Contains(object value)
         {
             return _boCol.Contains((TBusinessObject) value);
+        }
+
+        int IList.IndexOf(object value)
+        {
+            return _boCol.IndexOf((TBusinessObject) value);
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            _boCol.Insert(index, (TBusinessObject) value);
+        }
+
+        void IList.Remove(object value)
+        {
+            _boCol.Remove((TBusinessObject) value);
+        }
+
+        object IList.this[int index]
+        {
+            get { return _boCol[index]; }
+            set { _boCol[index] = (TBusinessObject)value; }
         }
 
         /// <summary>
@@ -957,37 +978,50 @@ namespace Habanero.BO
             }
         }
 
-        public int IndexOf(object value)
-        {
-            return _boCol.IndexOf((TBusinessObject) value);
-        }
-
-        public void Insert(int index, object value)
-        {
-            _boCol.Insert(index, (TBusinessObject) value);
-        }
-
-        public void Remove(object value)
-        {
-            _boCol.Remove((TBusinessObject) value);
-        }
-
+        ///<summary>
+        ///Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.
+        ///</summary>
+        ///<returns>
+        ///true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false.
+        ///</returns>
+        ///<param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
         public bool Contains(TBusinessObject item)
         {
             return _boCol.Contains(item);
         }
 
+        ///<summary>
+        ///Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
+        ///</summary>
+        ///<param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+        ///<param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+        ///<exception cref="T:System.ArgumentNullException"><paramref name="array" /> is null.</exception>
+        ///<exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex" /> is less than 0.</exception>
+        ///<exception cref="T:System.ArgumentException"><paramref name="array" /> is multidimensional.-or-<paramref name="arrayIndex" /> is equal to or greater than the length of <paramref name="array" />.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.-or-Type <typeparamref name="TBusinessObject"/> cannot be cast automatically to the type of the destination <paramref name="array" />.</exception>
         public void CopyTo(TBusinessObject[] array, int arrayIndex)
         {
             _boCol.CopyTo(array, arrayIndex);
         }
 
-
+        ///<summary>
+        ///Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1" />.
+        ///</summary>
+        ///<returns>
+        ///The index of <paramref name="item" /> if found in the list; otherwise, -1.
+        ///</returns>
+        ///<param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
         public int IndexOf(TBusinessObject item)
         {
             return _boCol.IndexOf(item);
         }
 
+        ///<summary>
+        ///Inserts an item to the <see cref="T:System.Collections.Generic.IList`1" /> at the specified index.
+        ///</summary>
+        ///<param name="index">The zero-based index at which <paramref name="item" /> should be inserted.</param>
+        ///<param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1" />.</param>
+        ///<exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.</exception>
+        ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1" /> is read-only.</exception>
         public void Insert(int index, TBusinessObject item)
         {
             _boCol.Insert(index, item);
@@ -1006,12 +1040,15 @@ namespace Habanero.BO
             }
         }
 
-        object IList.this[int index]
-        {
-            get { return _boCol[index]; }
-            set { _boCol[index] = (TBusinessObject) value; }
-        }
-
+        ///<summary>
+        ///Gets or sets the element at the specified index.
+        ///</summary>
+        ///<returns>
+        ///The element at the specified index.
+        ///</returns>
+        ///<param name="index">The zero-based index of the element to get or set.</param>
+        ///<exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.</exception>
+        ///<exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1" /> is read-only.</exception>
         public TBusinessObject this[int index]
         {
             get { return _boCol[index]; }
@@ -1031,21 +1068,27 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Copies the elements of the <see cref="T:System.Collections.ICollection"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+        /// Copies the elements of the <see cref="T:System.Collections.ICollection"/> to an
+        /// <see cref="T:System.Array"/>, starting at a particular 
+        /// <see cref="T:System.Array"/> index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection"/>. The <see cref="T:System.Array"/> must have zero-based indexing. 
-        ///                 </param><param name="index">The zero-based index in <paramref name="array"/> at which copying begins. 
-        ///                 </param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null. 
-        ///                 </exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is less than zero. 
-        ///                 </exception><exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.
-        ///                     -or- 
-        ///                 <paramref name="index"/> is equal to or greater than the length of <paramref name="array"/>.
-        ///                     -or- 
-        ///                     The number of elements in the source <see cref="T:System.Collections.ICollection"/> is greater than the available space from <paramref name="index"/> to the end of the destination <paramref name="array"/>. 
-        ///                 </exception><exception cref="T:System.ArgumentException">The type of the source <see cref="T:System.Collections.ICollection"/> cannot be cast automatically to the type of the destination <paramref name="array"/>. 
-        ///                 </exception><filterpriority>2</filterpriority>
+        /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the 
+        /// destination of the elements copied from <see cref="T:System.Collections.ICollection"/>. 
+        /// The <see cref="T:System.Array"/> must have zero-based indexing.</param>
+        /// <param name="index">The zero-based index in <paramref name="array"/> at which copying begins. </param>
+        /// <exception cref="System.ArgumentNullException"><paramref name="array"/> is null.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="index"/> is less than zero. </exception>
+        /// <exception cref="System.ArgumentException"><paramref name="array"/> is multidimensional. 
+        /// -or- <paramref name="index"/> is equal to or greater than the length of <paramref name="array"/>. 
+        /// -or-  The number of elements in the source <see cref="T:System.Collections.ICollection"/> is greater than 
+        /// the available space from <paramref name="index"/> to the end of the destination <paramref name="array"/>. </exception>
+        /// <exception cref="System.ArgumentException">The type of the source 
+        /// <see cref="T:System.Collections.ICollection"/> cannot be cast automatically to
+        /// the type of the destination <paramref name="array"/>. </exception>
+        /// <filterpriority>2</filterpriority>
         public void CopyTo(Array array, int index)
         {
+            _boCol.CopyTo(new TBusinessObject[0], index);
             if (object.ReferenceEquals(array, null))
             {
                 throw new ArgumentNullException(
@@ -1074,6 +1117,13 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        ///Gets the number of elements contained in the <see cref="T:System.Collections.ICollection" />.
+        ///</summary>
+        ///<returns>
+        ///The number of elements contained in the <see cref="T:System.Collections.ICollection" />.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public int Count
         {
             get { return _boCol.Count; }
@@ -1081,12 +1131,12 @@ namespace Habanero.BO
 
         private readonly object _mSyncRoot = new object();
 
-        public object SyncRoot
+        object ICollection.SyncRoot
         {
             get { return _mSyncRoot; }
         }
 
-        public bool IsSynchronized
+        bool ICollection.IsSynchronized
         {
             get { return false;}
         }
@@ -1096,12 +1146,12 @@ namespace Habanero.BO
             get { return _boCol.Count; }
         }
 
-        public bool IsReadOnly
+        bool ICollection<TBusinessObject>.IsReadOnly
         {
             get { return false; }
         }
 
-        public bool IsFixedSize
+        bool IList.IsFixedSize
         {
             get { return false; }
         }
@@ -1122,12 +1172,12 @@ namespace Habanero.BO
             _boCol.Clear();
             KeyObjectHashTable.Clear();
         }
-
 // ReSharper restore UnusedPrivateMember
 // ReSharper restore UnusedMember.Global
+
         /// <summary>
         /// Removes the specified business object from the collection. This is used when refreshing
-        /// a collection so that any overriden behaviour (from overriding Remove) is not applied
+        /// a collection so that any overridden behavior (from overriding Remove) is not applied
         /// when loading and refreshing.
         /// </summary>
         /// <param name="businessObject"></param>
@@ -1214,7 +1264,7 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid(out string errorMessage)
         {
-            errorMessage = "";
+            errorMessage = string.Empty;
             foreach (TBusinessObject child in this)
             {
                 if (!child.IsValid(out errorMessage))
@@ -1229,6 +1279,7 @@ namespace Habanero.BO
         ///<summary>
         /// The select query that is used to load this business object collection.
         ///</summary>
+        /// <exception cref="HabaneroDeveloperException">A collection's select query cannot be set to null</exception>
         public ISelectQuery SelectQuery
         {
             get { return _selectQuery; }
@@ -1237,8 +1288,8 @@ namespace Habanero.BO
                 if (value == null)
                 {
                     throw new HabaneroDeveloperException
-                        ("A collections select query cannot be set to null",
-                         "A collections select query cannot be set to null");
+                        ("A collection's select query cannot be set to null",
+                         "A collection's select query cannot be set to null");
                 }
                 _selectQuery = value;
             }
@@ -1284,9 +1335,9 @@ namespace Habanero.BO
 
         /// <summary>
         /// Finds a business object in the collection that contains the
-        /// specified Guid ID
+        /// specified <see cref="Guid"/> ID
         /// </summary>
-        /// <param name="searchTerm">The Guid to search for</param>
+        /// <param name="searchTerm">The <see cref="Guid"/> to search for</param>
         /// <returns>Returns the business object if found, or null if not
         /// found</returns>
         [Obsolete("Please use Find(Guid key) instead")]
@@ -1398,7 +1449,10 @@ namespace Habanero.BO
         /// <summary>
         /// Returns a new collection that is a copy of this collection
         /// </summary>
+        /// <typeparam name="DestType">The <c>BusinessObject</c> type for this collection's objects to be cast to. </typeparam>
         /// <returns>Returns the cloned copy</returns>
+        /// <exception cref="InvalidCastException">Cannot cast a collection of type <typeparamref name="TBusinessObject"/>
+        /// to a collection of type <typeparamref name="DestType"/>.</exception>
         public BusinessObjectCollection<DestType> Clone<DestType>() where DestType : BusinessObject, new()
         {
             BusinessObjectCollection<DestType> clonedCol = new BusinessObjectCollection<DestType>(_boClassDef);
@@ -1408,7 +1462,7 @@ namespace Habanero.BO
             {
                 throw new InvalidCastException
                     (String.Format
-                         ("Cannot cast a collection of type '{0}' to " + "a collection of type '{1}'.",
+                         ("Cannot cast a collection of type '{0}' to a collection of type '{1}'.",
                           typeof (TBusinessObject).Name, typeof (DestType).Name));
             }
             foreach (TBusinessObject businessObject in this)
@@ -1473,7 +1527,8 @@ namespace Habanero.BO
         /// <summary>
         /// Sorts the Collection by the Order Criteria Set up during the Loading of this collection.
         /// For <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/>'s this will be the 
-        /// Order Criteria set up in the orderBy in the ClassDef.xml or the <see cref="ClassDef"/>
+        /// Order Criteria set up in the orderBy in the <see cref="IClassDef"/> for 
+        /// the <typeparamref name="TBusinessObject"/> type (i.e. in the <c>ClassDef.xml</c>).
         /// </summary>
         public void Sort()
         {
@@ -1492,6 +1547,7 @@ namespace Habanero.BO
         /// and surname, and the argument would thus be set as false.
         /// </summary>
         /// <param name="comparer">The property name to sort on</param>
+        /// <exception cref="ArgumentNullException"><c>comparer</c> is null.</exception>
         void IBusinessObjectCollection.Sort(IComparer comparer)
         {
             if (comparer == null) throw new ArgumentNullException("comparer");
@@ -1542,9 +1598,9 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the business object collection as a List
+        /// Returns the business object collection as an <see cref="IList"/>.
         /// </summary>
-        /// <returns>Returns an IList object</returns>
+        /// <returns>Returns an <see cref="IList"/> object</returns>
         public List<TBusinessObject> GetList()
         {
             List<TBusinessObject> list = new List<TBusinessObject>(_boCol.Count);
@@ -1554,8 +1610,6 @@ namespace Habanero.BO
             }
             return list;
         }
-
-
 
         /// <summary>
         /// Commits to the database all the business objects that are either
@@ -1569,7 +1623,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Addsl all the Business objects to the <paramref name="transaction"/> including the 
+        /// Adds all the Business objects to the <paramref name="transaction"/> including the 
         /// Business objects in the Added, Created, Removed and Marked for deleted collections.
         /// And then commits the <paramref name="transaction"/> to the DataSource.
         /// </summary>
@@ -1662,14 +1716,14 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// The DateTime that the Collection was loaded.
+        /// The <see cref="DateTime"/> that the Collection was loaded.
         /// This is used to determine whether the Collection should be Reloaded when 
-        /// the MultipleRelationship get BusinessObjectCollection is called.
+        /// the MultipleRelationship's get <c>BusinessObjectCollection</c> is called.
         /// </summary>
         /// <summary>
-        /// The DateTime that the Collection was loaded.
+        /// The <see cref="DateTime"/> that the Collection was loaded.
         /// This is used to determine whether the Collection should be Reloaded when 
-        /// the MultipleRelationship get BusinessObjectCollection is called.
+        /// the MultipleRelationship's get <c>BusinessObjectCollection</c> is called.
         /// </summary>
         public DateTime? TimeLastLoaded { get; set; }
 
@@ -1748,12 +1802,12 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="array">The one-dimensional <see cref="T:System.Array"></see> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"></see>. The <see cref="T:System.Array"></see> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">arrayIndex is less than 0.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception>
         /// <exception cref="T:System.ArgumentNullException">Array is null.</exception>
-        /// <exception cref="T:System.ArgumentException">Array is multidimensional or arrayIndex
+        /// <exception cref="T:System.ArgumentException">Array is multidimensional or <paramref name="arrayIndex"/>
         /// is equal to or greater than the length of array.-or-The number of elements in
         /// the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is 
-        /// greater than the available space from arrayIndex to the end of the destination array, or 
+        /// greater than the available space from <paramref name="arrayIndex"/> to the end of the destination array, or 
         /// Type T cannot be cast automatically to the type of the destination array.</exception>
         void IBusinessObjectCollection.CopyTo(IBusinessObject[] array, int arrayIndex)
         {
@@ -1804,7 +1858,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// The list of business objects that have been created via this collection (@see CreateBusinessObject) and have not
+        /// The list of business objects that have been created via this collection (see <see cref="CreateBusinessObject"/>) and have not
         /// yet been persisted.
         /// </summary>
         public List<TBusinessObject> CreatedBusinessObjects
@@ -1839,8 +1893,8 @@ namespace Habanero.BO
         /// Returns a list of the business objects that are currently removed for the
         ///   collection but have not yet been persisted to the database.
         /// </summary>
-        /// Hack: This method was created returning a type IList to overcome problems with 
-        ///   BusinessObjectCollecion being a generic collection.
+        /// Hack: This method was created returning a type <see cref="IList"/> to overcome problems with 
+        ///   <see cref="BusinessObjectCollection{T}"/> being a generic collection.
         IList IBusinessObjectCollection.RemovedBusinessObjects
         {
             get { return this.RemovedBusinessObjects; }
@@ -1858,7 +1912,7 @@ namespace Habanero.BO
 
         /// <summary>
         /// Returns a list of the business objects that are currently marked for deletion for the
-        ///   collection but have not cessarily been persisted to the database.
+        ///   collection but have not necessarily been persisted to the database.
         /// </summary>
         IList IBusinessObjectCollection.MarkedForDeleteBusinessObjects
         {
@@ -1876,7 +1930,7 @@ namespace Habanero.BO
 
         /// <summary>
         /// Returns a list of the business objects that are currently added for the
-        ///   collection but have not cessarily been persisted to the database.
+        ///   collection but have not necessarily been persisted to the database.
         /// </summary>
         IList IBusinessObjectCollection.AddedBusinessObjects
         {
@@ -1884,7 +1938,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// The list of business objects that have been adde to this Business Object 
+        /// The list of business objects that have been added to this Business Object 
         /// collection (<see cref="BusinessObjectCollection{TBusinessObject}.Add(TBusinessObject)"/>) and have not
         /// yet been persisted.
         /// </summary>
@@ -1916,9 +1970,9 @@ namespace Habanero.BO
         #endregion
 
         /// <summary>
-        /// Creates a business object of type TBusinessObject
-        /// Adds this BO to the CreatedBusinessObjects list. When the object is saved it will
-        /// be added to the actual bo collection.
+        /// Creates a business object of type <typeparamref name="TBusinessObject"/>
+        /// Adds this BO to the <see cref="CreatedBusinessObjects"/> list. When the object is saved it will
+        /// be added to the actual Business Object collection.
         /// </summary>
         /// <returns></returns>
         public virtual TBusinessObject CreateBusinessObject()
@@ -1934,10 +1988,11 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Creates a new TBusinessObject for this BusinessObjectCollection.
-        /// The new BusinessObject is not added in to the collection.
+        /// Creates a new <typeparamref name="TBusinessObject"/> for this <c>BusinessObjectCollection</c>.
+        /// The new <typeparamref name="TBusinessObject"/> is not added into the collection.
         /// </summary>
-        /// <returns>A new TBusinessObject</returns>
+        /// <returns>A new <typeparamref name="TBusinessObject"/></returns>
+        /// <exception cref="HabaneroDeveloperException">A <c>BusinessObject</c> of type <typeparamref name="TBusinessObject"/> cannot be created.</exception>
         protected virtual TBusinessObject CreateNewBusinessObject()
         {
             TBusinessObject newBO;
@@ -1957,7 +2012,7 @@ namespace Habanero.BO
                 {
                     string className = typeof (TBusinessObject).FullName;
                     string msg = string.Format
-                        ("An attempt was made to create a {0} with a customised class def. Please add a constructor that takes a ClassDef as a parameter to the business object class of type {1}.",
+                        ("An attempt was made to create a {0} with a customized class def. Please add a constructor that takes a ClassDef as a parameter to the business object class of type {1}.",
                          className, className);
                     throw new HabaneroDeveloperException("There was a problem creating a " + className, msg, ex);
                 }
@@ -1966,8 +2021,9 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Adds a new bo to the collection.  If you call this you must call <see cref="FireBusinessObjectAdded"/> to raise the event (outside of the lock)
-        /// This should be called from inside a lock
+        /// Adds a new <c>BusinessObject</c> to the collection. If you call this you must
+        /// call <see cref="FireBusinessObjectAdded"/> to raise the event (outside of the
+        /// lock) This should be called from inside a lock
         /// </summary>
         /// <param name="newBO"></param>
         private void AddCreatedBusinessObject(TBusinessObject newBO)
@@ -1982,9 +2038,9 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Creates a business object of type TBusinessObject
-        /// Adds this BO to the CreatedBusinessObjects list. When the object is saved it will
-        /// be added to the actual bo collection.
+        /// Creates a business object of type <typeparamref name="TBusinessObject"/>
+        /// Adds this BO to the <see cref="CreatedBusinessObjects"/> list. When the object is saved it will
+        /// be added to the actual <see cref="BusinessObject"/> collection.
         /// </summary>
         /// <returns></returns>
         IBusinessObject IBusinessObjectCollection.CreateBusinessObject()
@@ -2039,6 +2095,13 @@ namespace Habanero.BO
             MarkForDelete(boToMark);
         }
 
+        ///<summary>
+        ///Returns an enumerator that iterates through the collection.
+        ///</summary>
+        ///<returns>
+        ///A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>1</filterpriority>
         public IEnumerator<TBusinessObject> GetEnumerator()
         {
             return _boCol.GetEnumerator();
@@ -2051,22 +2114,22 @@ namespace Habanero.BO
 
         ///<summary>
         /// Searches for an element that matches the conditions defined by the specified predicate, 
-        /// and returns the first occurrence within the entire System.Collections.Generic.List{TBusinessObject}.
+        /// and returns the first occurrence within the entire <see cref="System.Collections.Generic.List{TBusinessObject}"/>.
         ///</summary>
-        ///<param name="match">The System.Predicate{TBusinessObject} delegate that defines the conditions of the element to search for.</param>
+        ///<param name="match">The <see cref="System.Predicate{TBusinessObject}"/> delegate that defines the conditions of the element to search for.</param>
         ///<returns>The first element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type TBusinessObject.</returns>
-        ///<exception>System.ArgumentNullException: match is null.</exception>
+        /// <exception cref="System.ArgumentNullException">match is null.</exception>
         public TBusinessObject Find(System.Predicate<TBusinessObject> match)
         {
             return _boCol.Find(match);
         }
         ///<summary>
         /// Searches for all elements that match the conditions defined by the specified predicate, 
-        /// and returns a List of all items found in the entire System.Collections.Generic.List{TBusinessObject}.
+        /// and returns a List of all items found in the entire <see cref="System.Collections.Generic.List{TBusinessObject}"/>.
         ///</summary>
-        ///<param name="match">The System.Predicate{TBusinessObject} delegate that defines the conditions of the element to search for.</param>
+        ///<param name="match">The <see cref="System.Predicate{TBusinessObject}"/> delegate that defines the conditions of the element to search for.</param>
         ///<returns>The Elements that match the conditions defined by the specified predicate.</returns>
-        ///<exception>System.ArgumentNullException: match is null.</exception>
+        /// <exception cref="System.ArgumentNullException">match is null.</exception>
         public List<TBusinessObject> FindAll(System.Predicate<TBusinessObject> match)
         {
             return _boCol.FindAll(match);
@@ -2082,7 +2145,8 @@ namespace Habanero.BO
         /// <summary>
         ///  Removes all the items that Match the Predicate.
         /// </summary>
-        /// <param name="match">he System.Predicate{TBusinessObject} delegate that defines the conditions of the element to remove</param>
+        /// <param name="match">The <see cref="System.Predicate{TBusinessObject}"/>
+        /// delegate that defines the conditions of the element to remove</param>
         public void RemoveAll(System.Predicate<TBusinessObject> match)
         {
             List<TBusinessObject> businessObjects = _boCol.FindAll(match);
@@ -2093,12 +2157,56 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Copies the elements of the <see cref="BusinessObjectCollection{TBusinessObject}"/> to a new array.
+        /// Copies the elements of the 
+        /// <see cref="BusinessObjectCollection{TBusinessObject}"/> to a new array.
         ///</summary>
-        ///<returns>An array containing copies of the elements of the <see cref="BusinessObjectCollection{TBusinessObject}"/>.</returns>
+        ///<returns>An array containing copies of the elements of the 
+        ///<see cref="BusinessObjectCollection{TBusinessObject}"/>.</returns>
         public TBusinessObject[] ToArray()
         {
             return _boCol.ToArray();
+        }
+
+        ///<summary>
+        /// Converts the elements in the current 
+        /// <see cref="BusinessObjectCollection{TBusinessObject}"/> to another type, and
+        /// returns a list containing the converted elements.
+        ///</summary>
+        ///<param name="converter">A <see cref="System.Converter{TInput,TOutput}"/> delegate
+        ///that converts each element from one type to another type.</param>
+        ///<typeparam name="TOutput">The type of the elements of the target array.
+        ///</typeparam>
+        ///<returns>A <see cref="System.Collections.Generic.List{T}"/> of the target type
+        ///containing the converted elements from the current 
+        ///<see cref="BusinessObjectCollection{TBusinessObject}"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">converter is null.</exception>
+        public List<TOutput> ConvertAll<TOutput>(Converter<TBusinessObject, TOutput> converter)
+        {
+            return _boCol.ConvertAll(converter);
+        }
+       
+        ///<summary>
+        /// Determines whether the <see cref="BusinessObjectCollection{TBusinessObject}"/> contains elements that match the conditions defined by the specified predicate.
+        ///</summary>
+        ///<param name="match">The <see cref="System.Predicate{TBusinessObject}"/> delegate that defines the conditions of the elements to search for.</param>
+        ///<returns>
+        /// true if the <see cref="BusinessObjectCollection{TBusinessObject}"/> contains one or more elements that match the conditions defined by the specified predicate; otherwise, false.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">match is null.</exception>
+        public bool Exists(Predicate<TBusinessObject> match)
+        {
+            return _boCol.Exists(match);
+        }
+
+        ///<summary>
+        /// Adds the elements of the specified collection to the end of the <see cref="BusinessObjectCollection{TBusinessObject}"/>.
+        ///</summary>
+        ///<param name="collection">The collection whose elements should be added to the end of the <see cref="BusinessObjectCollection{TBusinessObject}"/>. 
+        /// The collection itself cannot be null, but it can contain elements that are null, if type <typeparamref name="TBusinessObject"/> is a reference type.</param>
+        /// <exception cref="System.ArgumentNullException">collection is null.</exception>
+        public void AddRange(IEnumerable<TBusinessObject> collection)
+        {
+            _boCol.AddRange(collection);
         }
     }
 }

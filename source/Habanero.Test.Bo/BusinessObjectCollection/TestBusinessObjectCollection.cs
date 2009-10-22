@@ -1386,16 +1386,11 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_FindAll_ShouldReturnAllObject()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            //            DateTime now = DateTime.Now;
-            const string firstName = "abab";
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
-            ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.Load("", "Surname");
-            col.Sort("Surname", true, true);
+            string firstName = TestUtil.GetRandomString();
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(firstName, out cp1, out cp2, out cp3);
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
@@ -1411,16 +1406,10 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_Foreach_ShouldDoActionOnAllItems()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            //            DateTime now = DateTime.Now;
-            const string firstName = "abab";
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.Load("", "Surname");
-            col.Sort("Surname", true, true);
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
@@ -1431,20 +1420,16 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(newName, cp2.FirstName);
             Assert.AreEqual(newName, cp3.FirstName);
         }
+
         [Test]
         public void Test_RemoveAll_ShouldRemoveMatchingItems()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            //            DateTime now = DateTime.Now;
-            const string firstName = "abab";
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.Load("", "Surname");
-            col.Sort("Surname", true, true);
+            string firstName = TestUtil.GetRandomString();
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(firstName, out cp1, out cp2, out cp3);
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
@@ -1453,69 +1438,54 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(1, col.Count);
             Assert.IsTrue(col.Contains(cp3));
         }
+
         [Test]
-        public void Test_Add_IListimplementedMethod_ShouldAddToBOCol()
+        public void Test_Add_IListImplementedMethod_ShouldAddToBOCol()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            //            DateTime now = DateTime.Now;
-            const string firstName = "abab";
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.Load("", "Surname");
-            col.Sort("Surname", true, true);
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
+            ContactPersonTestBO newPerson = ContactPersonTestBO.CreateSavedContactPerson("fdasfasd", "FirstfafdsName");
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
-            ContactPersonTestBO newPerson = ContactPersonTestBO.CreateSavedContactPerson("fdasfasd", "FirstfafdsName");
-            col.Add((object) newPerson);
+            ((IList)col).Add(newPerson);
             //---------------Test Result -----------------------
             Assert.AreEqual(4, col.Count);
             Assert.IsTrue(col.Contains(newPerson));
         }
+
         [Test]
-        public void Test_Contains_IListimplementedMethod_WhenContains_ShouldBeTrue()
+        public void Test_Contains_IListImplementedMethod_WhenContains_ShouldBeTrue()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            //            DateTime now = DateTime.Now;
-            const string firstName = "abab";
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.Load("", "Surname");
-            col.Sort("Surname", true, true);
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
-            bool contains = col.Contains((object)cp3);
+            bool contains = ((IList)col).Contains(cp3);
             //---------------Test Result -----------------------
             Assert.IsTrue(contains);
         }
+
         [Test]
-        public void Test_Contains_IListimplementedMethod_WhenNotContains_ShouldBFalse()
+        public void Test_Contains_IListImplementedMethod_WhenNotContains_ShouldBFalse()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            //            DateTime now = DateTime.Now;
-            const string firstName = "abab";
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.Load("", "Surname");
-            col.Sort("Surname", true, true);
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
+            ContactPersonTestBO newPerson = ContactPersonTestBO.CreateSavedContactPerson("fdasfasd", "FirstfafdsName");
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
-            ContactPersonTestBO newPerson = ContactPersonTestBO.CreateSavedContactPerson("fdasfasd", "FirstfafdsName");
-            bool contains = col.Contains((object)newPerson);
+            bool contains = ((IList)col).Contains(newPerson);
             //---------------Test Result -----------------------
             Assert.IsFalse(contains);
         }
@@ -1524,16 +1494,10 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_ToArray_ShouldContainAllItems()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            //            DateTime now = DateTime.Now;
-            const string firstName = "abab";
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.Load("", "Surname");
-            col.Sort("Surname", true, true);
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
@@ -1543,6 +1507,34 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.Contains(cp1, array);
             Assert.Contains(cp2, array);
             Assert.Contains(cp3, array);
+        }
+
+        [Test]
+        public void Test_ConvertAll_ShouldCallConversionDelegateForEachObject()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
+            List<ContactPersonTestBO> called = new List<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            List<string> converted = col.ConvertAll<string>(input =>
+            {
+                called.Add(input);
+                return input.ToString();
+            });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, converted.Count);
+            Assert.AreEqual(3, called.Count);
+            Assert.Contains(cp1, called);
+            Assert.Contains(cp2, called);
+            Assert.Contains(cp3, called);
+            Assert.Contains(cp1.ToString(), converted);
+            Assert.Contains(cp2.ToString(), converted);
+            Assert.Contains(cp3.ToString(), converted);
         }
 
         /// <summary>
@@ -1609,6 +1601,25 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             CreateSavedContactPerson();
             CreateSavedContactPerson();
+        }
+
+        private static BusinessObjectCollection<ContactPersonTestBO> CreateCollectionWithTestPack(out ContactPersonTestBO cp1, out ContactPersonTestBO cp2, out ContactPersonTestBO cp3)
+        {
+            return CreateCollectionWithTestPack("abab", out cp1, out cp2, out cp3);
+        }
+
+        private static BusinessObjectCollection<ContactPersonTestBO> CreateCollectionWithTestPack(string firstName, out ContactPersonTestBO cp1, out ContactPersonTestBO cp2, out ContactPersonTestBO cp3)
+        {
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //            DateTime now = DateTime.Now;
+            cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzaaaa", firstName);
+            cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
+            cp3 = ContactPersonTestBO.CreateSavedContactPerson("ZZZZZ", "FirstName");
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("", "Surname");
+            col.Sort("Surname", true, true);
+            return col;
         }
     }
 }
