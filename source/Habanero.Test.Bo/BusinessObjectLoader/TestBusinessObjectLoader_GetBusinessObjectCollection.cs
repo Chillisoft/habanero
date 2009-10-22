@@ -1440,7 +1440,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         #region GetCollection With Limit NonGeneric
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_CriteriaObject_IncludesCriteriaMatchesWithinLimit()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_CriteriaObject_IncludesCriteriaMatchesWithinLimit()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -1468,7 +1468,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitEqualsEnd()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitEqualsEnd()
             //NoRecords_StartRecords_ContainsAllRecords()
         {
             const int totalRecords = 3;
@@ -1491,7 +1491,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitBeforeEnd()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitBeforeEnd()
             //_NoRecords_StartRecords_First2Records()
         {
             const int totalRecords = 3;
@@ -1514,7 +1514,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitBeyondEnd()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitBeyondEnd()
         {
             const int totalRecords = 4;
             const int firstRecord = 0;
@@ -1537,7 +1537,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitNegative()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitNegative()
         {
             const int totalRecords = 5;
             const int firstRecord = 0;
@@ -1562,7 +1562,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitZero()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtStart_LimitZero()
         {
             const int totalRecords = 5;
             const int firstRecord = 0;
@@ -1586,7 +1586,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitEqualsEnd()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitEqualsEnd()
             //NoRecords_StartRecords_ContainsAllRecords()
         {
             const int totalRecords = 3;
@@ -1611,7 +1611,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitBeforeEnd()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitBeforeEnd()
             //_NoRecords_StartRecords_First2Records()
         {
             const int totalRecords = 6;
@@ -1636,7 +1636,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitBeyondEnd()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitBeyondEnd()
         {
             const int totalRecords = 5;
             const int firstRecord = 3;
@@ -1658,7 +1658,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitBeyondEnd_RefreshWithAdditionalBO()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitBeyondEnd_RefreshWithAdditionalBO()
         {
             const int totalRecords = 5;
             const int firstRecord = 3;
@@ -1688,7 +1688,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitNegative()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitNegative()
         {
             const int totalRecords = 7;
             const int firstRecord = 3;
@@ -1710,7 +1710,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitZero()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAfterStart_LimitZero()
         {
             const int totalRecords = 7;
             const int firstRecord = 3;
@@ -1732,7 +1732,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitEqualsEnd()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitEqualsEnd()
         {
             const int totalRecords = 4;
             const int firstRecord = totalRecords - 1;
@@ -1754,7 +1754,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitBeyondEnd()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitBeyondEnd()
         {
             const int totalRecords = 5;
             const int firstRecord = totalRecords - 1;
@@ -1776,7 +1776,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitBeyondEnd_RefreshWithAdditionalBO()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitBeyondEnd_RefreshWithAdditionalBO()
         {
             const int totalRecords = 5;
             const int firstRecord = totalRecords - 1;
@@ -1806,7 +1806,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitNegative()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitNegative()
         {
             const int totalRecords = 7;
             const int firstRecord = totalRecords - 1;
@@ -1828,7 +1828,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitZero()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAtEnd_LimitZero()
         {
             const int totalRecords = 7;
             const int firstRecord = totalRecords - 1;
@@ -1850,7 +1850,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterEnd_LimitBeyondEnd()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAfterEnd_LimitBeyondEnd()
         {
             const int totalRecords = 3;
             const int firstRecord = 5;
@@ -1872,7 +1872,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterEnd_LimitNegative()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAfterEnd_LimitNegative()
         {
             const int totalRecords = 4;
             const int firstRecord = 4;
@@ -1894,7 +1894,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstAfterEnd_LimitZero()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstAfterEnd_LimitZero()
         {
             const int totalRecords = 3;
             const int firstRecord = 4;
@@ -1916,7 +1916,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void TestGetCollection_NonGeneric_LoadWithLimit_FirstNegative_ThrowsError()
+        public void Test_GetCollection_NonGeneric_LoadWithLimit_FirstNegative_ThrowsError()
         {
             const int totalRecords = 3;
             const int firstRecord = -1;
@@ -3332,30 +3332,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreSame(cp3, col[0]);
             Assert.AreSame(cp1, col[1]);
             Assert.AreSame(cp2, col[2]);
-        }
-
-
-        [Test]
-        public void Test_SetColSelectQuery_null()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            try
-            {
-                col.SelectQuery = null;
-                Assert.Fail("expected Err");
-            }
-                //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
-            {
-                StringAssert.Contains("A collections select query cannot be set to null", ex.Message);
-                StringAssert.Contains("A collections select query cannot be set to null", ex.DeveloperMessage);
-            }
         }
 
         [Test]

@@ -23,7 +23,7 @@ using NUnit.Framework;
 namespace Habanero.Test.Util
 {
     [TestFixture]
-    public class TestTestDateTimeUtilities
+    public class TestDateTimeUtilities
         //:TestBase
     {
         [SetUp]
@@ -197,29 +197,55 @@ namespace Habanero.Test.Util
         }
 
         [Test]
-        public void Test_CloseToDateTimeNow_BeforeNow()
+        public void Test_CloseToDateTimeNow_WhenBeforeNow_WhenWithinRange_ShouldReturnTrue()
         {
             //---------------Set up test pack-------------------
+            int variant = TestUtil.GetRandomInt(10, 100);
+            DateTime testValue = DateTime.Now.AddSeconds(-variant);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
+            bool result = DateTimeUtilities.CloseToDateTimeNow(testValue, variant + 1);
             //---------------Test Result -----------------------
-            DateTime testValue = DateTime.Now.AddSeconds(-20);
-            Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(testValue, 50));
-            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 20)); //milliseconds should pass?
-            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 3));
+            Assert.IsTrue(result);
         }
 
         [Test]
-        public void Test_CloseToDateTimeNow_AfterNow()
+        public void Test_CloseToDateTimeNow_WhenAfterNow_WhenWithinRange_ShouldReturnTrue()
         {
             //---------------Set up test pack-------------------
+            int variant = TestUtil.GetRandomInt(10, 100);
+            DateTime testValue = DateTime.Now.AddSeconds(variant);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
+            bool result = DateTimeUtilities.CloseToDateTimeNow(testValue, variant + 1);
             //---------------Test Result -----------------------
-            DateTime testValue = DateTime.Now.AddSeconds(20);
-            Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(testValue, 50));
-            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 20)); //milliseconds should pass?
-            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 3));
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Test_CloseToDateTimeNow_WhenBeforeNow_WhenOutOfRange_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            int variant = TestUtil.GetRandomInt(10, 100);
+            DateTime testValue = DateTime.Now.AddSeconds(-variant);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool result = DateTimeUtilities.CloseToDateTimeNow(testValue, variant - 1);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Test_CloseToDateTimeNow_WhenAfterNow_WhenOutOfRange_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            int variant = TestUtil.GetRandomInt(10, 100);
+            DateTime testValue = DateTime.Now.AddSeconds(variant);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool result = DateTimeUtilities.CloseToDateTimeNow(testValue, variant - 1);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(result);
         }
     }
 }

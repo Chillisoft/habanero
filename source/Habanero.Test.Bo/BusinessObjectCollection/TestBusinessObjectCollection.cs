@@ -1356,6 +1356,30 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreSame(cp2, col[0], "Collection should b sorted by the Surname Property as per the origional collection.Load");
             Assert.AreSame(cp1, col[1]);
         }
+
+
+        [Test]
+        public void Test_SelectQuery_WhenSetToNull_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                col.SelectQuery = null;
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("A collection's select query cannot be set to null", ex.Message);
+                StringAssert.Contains("A collection's select query cannot be set to null", ex.DeveloperMessage);
+            }
+        }
         
         [Test]
         public void Test_Find_ShouldReturnObject()
