@@ -256,7 +256,7 @@ namespace Habanero.UI.Base
 
         ///<summary>
         /// Adds a static string filter <see cref="StringStaticFilter"/> to the Filter Control.
-        /// This allows the developer to set a filter that is always applied and is not modifyable or visible to the End user.
+        /// This allows the developer to set a filter that is always applied and is not modifiable by or visible to the end user.
         ///</summary>
         ///<param name="propertyName"></param>
         ///<param name="filterClauseOperator"></param>

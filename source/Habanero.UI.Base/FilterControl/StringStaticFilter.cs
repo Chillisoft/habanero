@@ -22,7 +22,7 @@ using Habanero.Base;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// This allows the developer to set a filter that is always applied and is not modifyable or visible to the End user.
+    /// This allows the developer to set a filter that is always applied and is not modifiable by or visible to the end user.
     /// For example this can be used to show only the Non Archived users.
     /// </summary>
     public class StringStaticFilter : ICustomFilter
