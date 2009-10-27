@@ -514,6 +514,7 @@ namespace Habanero.UI.Base
 
         private ILabel CreateAndAddLabel(IPanelInfo panelInfo, UIFormField formField)
         {
+//            IClassDef classDef = panelInfo.UIForm.UIDef.ClassDef;
             ILabel labelControl = ControlFactory.CreateLabel(formField.GetLabel(), formField.IsCompulsory);
             labelControl.Name = formField.PropertyName;
             labelControl.Enabled = formField.Editable;

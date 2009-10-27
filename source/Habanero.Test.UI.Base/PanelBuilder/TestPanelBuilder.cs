@@ -101,6 +101,28 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual("Text:", label.Text);
         }
 
+        [Ignore("This needs to be implemented and tested")] //TODO Brett 27 Oct 2009: Ignored Test - This needs to be implemented and tested
+        [Test]
+        public void Test_BuildPanelForTab_1Field_HasUOM()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneField();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD, panel.Controls.Count);
+            Assert.IsInstanceOfType(typeof (ILabel), panel.Controls[0]);
+            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[2]);
+
+            ILabel label = (ILabel) panel.Controls[0];
+            Assert.AreEqual("Text (UOM) :", label.Text);
+        }
+
         [Test]
         public void Test_BuildPanelForTab_1Field_Integer()
         {

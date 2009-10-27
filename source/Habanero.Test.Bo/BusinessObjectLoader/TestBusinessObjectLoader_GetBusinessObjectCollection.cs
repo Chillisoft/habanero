@@ -3335,6 +3335,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        public void Test_SetColSelectQuery_null()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                col.SelectQuery = null;
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("A collection's select query cannot be set to null", ex.Message);
+                StringAssert.Contains("A collection's select query cannot be set to null", ex.DeveloperMessage);
+            }
+        }
+
+        [Test]
         public void Test_GetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaObject()
         {
             //---------------Set up test pack-------------------

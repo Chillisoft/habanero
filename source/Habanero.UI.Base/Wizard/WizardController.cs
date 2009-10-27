@@ -136,7 +136,6 @@ namespace Habanero.UI.Base
             return (_currentStep == 0);
         }
 
-
         /// <summary>
         /// Method that is to be run when the Wizard is finished. This method should do all persistance that is required.
         /// </summary>

@@ -33,7 +33,7 @@ namespace Habanero.UI.Base
     /// which contains all the information relating to the panel, including the controls, the
     /// mappers, the business object and the panel control.
     /// </summary>
-    [Obsolete("Panelfactory and PanelFactoryInfo has been replaced by PanelBuild and PanelInfo.")]
+    [Obsolete("Panelfactory and PanelFactoryInfo has been replaced by PanelBuilder and PanelInfo.")]
     public class PanelFactory : IPanelFactory
     {
 //        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
