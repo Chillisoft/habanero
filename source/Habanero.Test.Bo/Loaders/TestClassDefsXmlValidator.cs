@@ -68,6 +68,59 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsFalse(validationResult.IsValid);
             //---------------Tear Down -------------------------          
         }
+
+        [Test]
+        public void TestValidateUIXml_Valid()
+        {
+            //---------------Set up test pack-------------------
+            string xml =
+                @"<ui name=""defTestName1"">
+					<grid>
+						<column heading=""testheading1"" property=""testpropname1""  />
+						<column heading=""testheading2"" property=""testpropname2""  />
+						<column heading=""testheading3"" property=""testpropname3""  />
+					</grid>
+					<form>
+						<tab name=""testtab"">
+							<columnLayout>
+								<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
+								<field label=""testlabel2"" property=""testpropname2"" type=""Button"" mapperType=""testmappertypename2"" />
+							</columnLayout>
+						</tab>
+					</form>
+				</ui> 
+";
+            ClassDefsXmlValidator validator = new ClassDefsXmlValidator();
+
+            //---------------Execute Test ----------------------
+            XmlValidationResult validationResult = validator.ValidateClassDefsXml(xml);
+
+            //---------------Test Result -----------------------
+
+            Assert.IsTrue(validationResult.IsValid);
+
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestValidateUIXml_Invalid()
+        {
+            //---------------Set up test pack-------------------
+            string xml =
+                @"<ui name=""defTestName1"">
+						<bob />
+					</ui> ";
+            ClassDefsXmlValidator validator = new ClassDefsXmlValidator();
+
+            //---------------Execute Test ----------------------
+            XmlValidationResult validationResult = validator.ValidateClassDefsXml(xml);
+
+            //---------------Test Result -----------------------
+
+            Assert.IsFalse(validationResult.IsValid);
+            //---------------Tear Down -------------------------          
+        }
     }
 
     
