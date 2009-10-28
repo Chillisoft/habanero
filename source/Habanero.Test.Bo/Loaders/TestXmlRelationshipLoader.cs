@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -562,6 +563,20 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(personClassDef.AssemblyName, relDef.RelatedObjectAssemblyName);
             Assert.AreEqual(2000, relDef.TimeOut );
             //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_OrderBy()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            IRelationshipDef relDef = _loader.LoadRelationship(MultipleRelationshipString, _propDefs);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("TestOrder", relDef.OrderCriteria.ToString().Substring(0, 9));
+            //---------------Tear Down -------------------------         
         }
 
     }

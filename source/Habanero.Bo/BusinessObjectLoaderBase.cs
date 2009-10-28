@@ -151,7 +151,7 @@ namespace Habanero.BO
             (IClassDef classDef, string criteriaString, string orderCriteria)
         {
             Criteria criteria = GetCriteriaObject(classDef, criteriaString);
-            OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
+            IOrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
             return GetBusinessObjectCollection(classDef, criteria, orderCriteriaObj);
         }
 
@@ -182,7 +182,7 @@ namespace Habanero.BO
             CheckNotTypedAsBusinessObject<T>();
             IClassDef classDef = ClassDef.ClassDefs[typeof (T)];
             Criteria criteria = GetCriteriaObject(classDef, criteriaString);
-            OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
+            IOrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
             return GetBusinessObjectCollection<T>(criteria, orderCriteriaObj);
         }
 
@@ -224,7 +224,7 @@ namespace Habanero.BO
         /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
         /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
         /// <returns>The loaded collection, limited in the specified way.</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria,
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, IOrderCriteria orderCriteria,
                 int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
             where T : class, IBusinessObject, new()
         {
@@ -250,8 +250,8 @@ namespace Habanero.BO
         /// <param name="numberOfRecordsToLoad"></param>
         /// <param name="totalNoOfRecords"></param>
         /// <returns></returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, 
-                OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria,
+                IOrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef);
             col.ClassDef = classDef;
@@ -308,7 +308,7 @@ namespace Habanero.BO
             CheckNotTypedAsBusinessObject<T>();
             IClassDef classDef = ClassDef.ClassDefs[typeof(T)];
             Criteria criteria = GetCriteriaObject(classDef, criteriaString);
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classDef, orderCriteriaString);
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classDef, orderCriteriaString);
             return GetBusinessObjectCollection<T>(criteria, orderCriteria, firstRecordToLoad, numberOfRecordsToLoad, out totalNoOfRecords);
         }
 
@@ -320,7 +320,7 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>
-            (Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new()
+            (Criteria criteria, IOrderCriteria orderCriteria) where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
@@ -338,7 +338,7 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
         public IBusinessObjectCollection GetBusinessObjectCollection
-            (IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria)
+            (IClassDef classDef, Criteria criteria, IOrderCriteria orderCriteria)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef);
             if (orderCriteria == null) orderCriteria = new OrderCriteria();
@@ -598,7 +598,7 @@ namespace Habanero.BO
             ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
 
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-            OrderCriteria preparedOrderCriteria =
+            IOrderCriteria preparedOrderCriteria =
                 QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
 
             BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(relationshipCriteria, preparedOrderCriteria);

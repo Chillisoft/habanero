@@ -46,7 +46,7 @@ namespace Habanero.Test.BO.ClassDefinition
             public MultipleRelationshipDefStub() : base("relName", typeof(MyRelatedBo),
                 new RelKeyDef(), true, "acolumn", DeleteParentAction.Prevent) {}
 
-            public void SetOrderBy(OrderCriteria orderCriteria)
+            public void SetOrderBy(IOrderCriteria orderCriteria)
             {
                 this.OrderCriteria = orderCriteria;
             }

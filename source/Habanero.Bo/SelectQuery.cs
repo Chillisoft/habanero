@@ -31,7 +31,7 @@ namespace Habanero.BO
     {
         private readonly Dictionary<string, QueryField> _fields = new Dictionary<string, QueryField>(5);
         private Criteria _criteria;
-        private OrderCriteria _orderCriteria = new OrderCriteria();
+        private IOrderCriteria _orderCriteria = new OrderCriteria();
 
         ///<summary>
         /// Creates a SelectQuery with no Criteria and no fields.  In order to use the SelectQuery at least on field must be added
@@ -101,7 +101,7 @@ namespace Habanero.BO
         /// <summary>
         /// The fields to use to order a collection of objects when loading them.
         /// </summary>
-        public OrderCriteria OrderCriteria
+        public IOrderCriteria OrderCriteria
         {
             get { return _orderCriteria; }
             set
@@ -111,7 +111,7 @@ namespace Habanero.BO
                     throw new HabaneroApplicationException
                         ("You cannot set an OrderCriteria for a SelectQuery if no Source has been set");
                 if (_orderCriteria == null) return;
-                foreach (OrderCriteria.Field field in _orderCriteria.Fields) this.Source.MergeWith(field.Source);
+                foreach (OrderCriteriaField field in _orderCriteria.Fields) this.Source.MergeWith(field.Source);
             }
         }
 

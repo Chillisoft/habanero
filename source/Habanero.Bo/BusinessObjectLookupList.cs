@@ -54,7 +54,7 @@ namespace Habanero.BO
         private Dictionary<string, string> _keyValueDictionary = new Dictionary<string, string>();
 
         private DateTime _lastCallTime;
-        private OrderCriteria _orderCriteria;
+        private IOrderCriteria _orderCriteria;
         private readonly string _criteriaString;
         private readonly string _sortString;
         ///<summary>
@@ -286,7 +286,7 @@ namespace Habanero.BO
         /// The possible formats are: "property", "property asc",
         /// "property desc" and "property des".
         /// </summary>
-        public OrderCriteria OrderCriteria
+        public IOrderCriteria OrderCriteria
         {
             get { if(_orderCriteria == null && !string.IsNullOrEmpty(_sortString))
             {

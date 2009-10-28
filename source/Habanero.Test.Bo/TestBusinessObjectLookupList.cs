@@ -368,10 +368,10 @@ namespace Habanero.Test.BO
                 "ContactPersonTestBO", "", "surname");
             //---------------Test Result -----------------------
             Assert.AreEqual(1, source.OrderCriteria.Fields.Count);
-            OrderCriteria.Field orderField = source.OrderCriteria.Fields[0];
-            Assert.AreEqual("surname", orderField.PropertyName);
-            Assert.AreEqual(OrderCriteria.SortDirection.Ascending, orderField.SortDirection);
-            Assert.AreEqual("ContactPersonTestBO", orderField.Source.Name);
+            IOrderCriteriaField orderOrderCriteriaField = source.OrderCriteria.Fields[0];
+            Assert.AreEqual("surname", orderOrderCriteriaField.PropertyName);
+            Assert.AreEqual(SortDirection.Ascending, orderOrderCriteriaField.SortDirection);
+            Assert.AreEqual("ContactPersonTestBO", orderOrderCriteriaField.Source.Name);
         }
 
         [Ignore("This should be looked at so that it validates the attributes as early as possible")]

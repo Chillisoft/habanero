@@ -166,7 +166,7 @@ namespace Habanero.BO
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new();
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, IOrderCriteria orderCriteria) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
@@ -215,7 +215,7 @@ namespace Habanero.BO
         /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
         /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
         /// <returns>The loaded collection, limited in the specified way.</returns>
-        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria,
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, IOrderCriteria orderCriteria,
                 int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
             where T : class, IBusinessObject, new();
 
@@ -272,8 +272,8 @@ namespace Habanero.BO
         /// <param name="numberOfRecordsToLoad"></param>
         /// <param name="records"></param>
         /// <returns></returns>
-        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef def, Criteria criteria, 
-                OrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int records);
+        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef def, Criteria criteria,
+                IOrderCriteria orderCriteria, int firstRecordToLoad, int numberOfRecordsToLoad, out int records);
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
@@ -282,7 +282,7 @@ namespace Habanero.BO
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria);
+        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, IOrderCriteria orderCriteria);
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)

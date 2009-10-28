@@ -55,7 +55,7 @@ namespace Habanero.Base
         /// The possible formats are: "property", "property asc",
         /// "property desc" and "property des".
         /// </summary>
-        OrderCriteria OrderCriteria
+        IOrderCriteria OrderCriteria
         {
             get; //set { _sort = FormatSortAttribute(value); }
         }

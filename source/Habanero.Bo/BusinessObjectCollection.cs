@@ -864,7 +864,7 @@ namespace Habanero.BO
         /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
         /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
         /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
-        public void LoadWithLimit(Criteria searchCriteria, OrderCriteria orderByClause,
+        public void LoadWithLimit(Criteria searchCriteria, IOrderCriteria orderByClause,
                                   int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             this.SelectQuery.Criteria = searchCriteria;
@@ -921,7 +921,7 @@ namespace Habanero.BO
                 criteria = CriteriaParser.CreateCriteria(searchCriteria);
                 QueryBuilder.PrepareCriteria(this.ClassDef, criteria);
             }
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
             LoadWithLimit(criteria, orderCriteria, firstRecordToLoad, numberOfRecordsToLoad, out totalNoOfRecords);
         }
 

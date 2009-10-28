@@ -22,32 +22,87 @@ using System.Collections.Generic;
 
 namespace Habanero.Base
 {
-    /// <summary>
-    /// Represents a set of order criteria used when loading collections of BusinessObjects.
-    /// </summary>
-    public class OrderCriteria : IComparer
-    {
-        private readonly List<Field> _fields = new List<Field>();
-
-        /// <summary>
-        /// Defines different sort direction options - the only ones being Ascending or Descending
-        /// </summary>
-        public enum SortDirection
-        {
-            /// <summary>
-            /// Sort in ascending order (lowest to highest, a to z)
-            /// </summary>
-            Ascending,
-            /// <summary>
-            /// Sort in descending order (highest to lowest, z to a)
-            /// </summary>
-            Descending
-        }
-
+    public interface IOrderCriteria : IComparer {
         /// <summary>
         /// The fields that will be ordered on. See <see cref="Field"/>
         /// </summary>
-        public List<Field> Fields
+        List<IOrderCriteriaField> Fields { get; }
+
+        /// <summary>
+        /// Add a field to the fields to be sorted on. This is a convenience method that will created a Field and add it
+        /// to the Fields list with the Ascending option.
+        /// </summary>
+        /// <param name="field">The name of the field to be sorted on</param>
+        /// <returns>This OrderCriteria, to allow chaining of adds (eg:  myOrderCriteria.Add("Name").Add("Age"))</returns>
+        IOrderCriteria Add(string field);
+
+        /// <summary>
+        /// Add a field to the fields to be sorted on. This is a convenience method that will created a Field and add it
+        /// to the Fields list. </summary>
+        /// <param name="field">The name of the field to be sorted on</param>
+        /// <param name="sortDirection">The sort direction of this field</param>
+        /// <returns>This OrderCriteria, to allow chaining of adds</returns>
+        IOrderCriteria Add(string field, SortDirection sortDirection);
+
+        /// <summary>
+        /// Adds a field to the fields to be sorted on.
+        /// </summary>
+        /// <param name="orderCriteriaField">The <see cref="OrderCriteriaField"/> to add to the OrderCriteria's field collection</param>
+        /// <returns>This OrderCriteria, to allow chaining of adds</returns>
+        IOrderCriteria Add(IOrderCriteriaField orderCriteriaField);
+
+        /// <summary>
+        /// Compares two BusinessObjects using the criteria set up in this OrderCriteria object.
+        /// </summary>
+        /// <typeparam name="T">The Type to be compared</typeparam>
+        /// <param name="bo1">The first object to be used in the comparison</param>
+        /// <param name="bo2">The second object to be used in the comparison</param>
+        /// <returns>a value less than 0 if bo1 is less than bo2, 0 if bo1 = bo2 and greater than 0 if b01 is greater than bo2
+        /// The value returned is negated if the SortDirection is Descending
+        /// </returns>
+        int Compare<T>(T bo1, T bo2) where T:IBusinessObject;
+
+        /// <summary>
+        /// Creates an OrderCriteria object by parsing a string in the correct format.
+        /// The format is:
+        /// <para>&lt;orderCriteria&gt; => &lt;emptystring&gt; | &lt;field&gt; [, &lt;field&gt;, ... ] <br/>
+        /// &lt;field&gt; => &lt;fieldName&gt; [ ASC | DESC ] </para>
+        /// For example: <code>Surname, Age DESC</code> or <code>Age ASC, Surname DESC</code>
+        /// </summary>
+        /// <param name="orderCriteriaString">The string in the correct format (see above)</param>
+        /// <returns>An OrderCriteria created from the string</returns>
+        IOrderCriteria FromString(string orderCriteriaString);
+
+    }
+
+    /// <summary>
+    /// Defines different sort direction options - the only ones being Ascending or Descending
+    /// </summary>
+    public enum SortDirection
+    {
+        /// <summary>
+        /// Sort in ascending order (lowest to highest, a to z)
+        /// </summary>
+        Ascending,
+        /// <summary>
+        /// Sort in descending order (highest to lowest, z to a)
+        /// </summary>
+        Descending
+    }
+
+    /// <summary>
+    /// Represents a set of order criteria used when loading collections of BusinessObjects.
+    /// </summary>
+    public class OrderCriteria :  IOrderCriteria
+    {
+        private readonly List<IOrderCriteriaField> _fields = new List<IOrderCriteriaField>();
+
+
+
+        /// <summary>
+        /// The fields that will be ordered on. See <see cref="OrderCriteriaField"/>
+        /// </summary>
+        public List<IOrderCriteriaField> Fields
         {
             get
             {
@@ -61,7 +116,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="field">The name of the field to be sorted on</param>
         /// <returns>This OrderCriteria, to allow chaining of adds (eg:  myOrderCriteria.Add("Name").Add("Age"))</returns>
-        public OrderCriteria Add(string field)
+        public IOrderCriteria Add(string field)
         {
             return Add(field, SortDirection.Ascending);
         }
@@ -72,20 +127,20 @@ namespace Habanero.Base
         /// <param name="field">The name of the field to be sorted on</param>
         /// <param name="sortDirection">The sort direction of this field</param>
         /// <returns>This OrderCriteria, to allow chaining of adds</returns>
-        public OrderCriteria Add(string field, SortDirection sortDirection)
+        public IOrderCriteria Add(string field, SortDirection sortDirection)
         {
-            _fields.Add(new Field(field, field, null, sortDirection));
+            _fields.Add(new OrderCriteriaField(field, field, null, sortDirection));
             return this;
         }
 
         /// <summary>
         /// Adds a field to the fields to be sorted on.
         /// </summary>
-        /// <param name="field">The <see cref="OrderCriteria.Field"/> to add to the OrderCriteria's field collection</param>
+        /// <param name="orderCriteriaField">The <see cref="OrderCriteriaField"/> to add to the OrderCriteria's field collection</param>
         /// <returns>This OrderCriteria, to allow chaining of adds</returns>
-        public OrderCriteria Add(Field field)
+        public IOrderCriteria Add(IOrderCriteriaField orderCriteriaField)
         {
-            _fields.Add(field);
+            _fields.Add(orderCriteriaField);
             return this;
         }
 
@@ -98,9 +153,9 @@ namespace Habanero.Base
         /// <returns>a value less than 0 if bo1 is less than bo2, 0 if bo1 = bo2 and greater than 0 if b01 is greater than bo2
         /// The value returned is negated if the SortDirection is Descending
         /// </returns>
-        public int Compare<T>(T bo1, T bo2) where T:IBusinessObject
+        public int Compare<T>(T bo1, T bo2) where T : IBusinessObject
         {
-            foreach (Field field in _fields)
+            foreach (OrderCriteriaField field in _fields)
             {
                 int compareResult = field.Compare(bo1, bo2);
                 if (compareResult != 0) return compareResult;
@@ -133,16 +188,16 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="orderCriteriaString">The string in the correct format (see above)</param>
         /// <returns>An OrderCriteria created from the string</returns>
-        public static OrderCriteria FromString(string orderCriteriaString)
+        public IOrderCriteria FromString(string orderCriteriaString)
         {
-            OrderCriteria orderCriteria = new OrderCriteria();
+            IOrderCriteria orderCriteria = new OrderCriteria();
             if (string.IsNullOrEmpty(orderCriteriaString)) return orderCriteria;
-            orderCriteriaString = orderCriteriaString.Trim(); 
+            orderCriteriaString = orderCriteriaString.Trim();
             if (string.IsNullOrEmpty(orderCriteriaString)) return orderCriteria;
             string[] orderFields = orderCriteriaString.Split(',');
             foreach (string field in orderFields)
             {
-                orderCriteria.Add(Field.FromString(field));
+                orderCriteria.Add(OrderCriteriaField.FromString(field));
 
             }
             return orderCriteria;
@@ -161,181 +216,6 @@ namespace Habanero.Base
             return ToString().GetHashCode();
         }
 
-        /// <summary>
-        /// Field represents one field in an OrderCriteria object.  Each Field has a name and SortDirection.
-        /// </summary>
-        public class Field : QueryField
-
-        {
-            private readonly SortDirection _sortDirection;
-            private IClassDef _classDef;
-            /// <summary>
-            /// This is used as a type object because IPropertyComparer inherits from the base generic type 
-            /// IComparer but you cannot set the use T at a field level.
-            /// We wanted to however cache this since it is taking a significant amount of time
-            /// in the loading.
-            /// </summary>
-            private object _comparer;
-
-            private string _fullNameExcludingPrimarySource;
-
-            /// <summary>
-            /// Creates a Field with the given name and SortDirection
-            /// </summary>
-            /// <param name="propertyName">The name of the property to sort on</param>
-            /// <param name="source">The source for the field i.e. the primary object that the field is defined from.</param>
-            /// <param name="sortDirection">The SortDirection option to use when sorting</param>
-            /// <param name="fieldName">The name of the field.</param>
-            public Field(string propertyName, string fieldName, Source source, SortDirection sortDirection)
-                : base(propertyName, fieldName, source)
-            {
-                _sortDirection = sortDirection;
-            }
-
-            /// <summary>
-            /// Creates a Field with the given name and SortDirection
-            /// </summary>
-            /// <param name="propertyName">The name of the property to sort on</param>
-            /// <param name="sortDirection">The SortDirection option to use when sorting</param>
-            public Field(string propertyName, SortDirection sortDirection)
-                : this(propertyName, propertyName, null, sortDirection)
-            {
-
-
-            }
-
-            /// <summary>
-            /// The SortDirection option to use when sorting
-            /// </summary>
-            public SortDirection SortDirection
-            {
-                get { return _sortDirection; }
-            }
-
-            /// <summary>
-            /// Returns the full name of the order criteria - ie "Source.Name"
-            /// </summary>
-            public string FullName
-            {
-                get
-                {
-                    return this.Source == null || String.IsNullOrEmpty(this.Source.ToString()) ? this.PropertyName : this.Source + "." + this.PropertyName;
-                }
-            }
-
-            private string FullNameExcludingPrimarySource
-            {
-                get
-                {
-                    if (this.Source == null || this.Source.ChildSource == null) return this.PropertyName;
-                    return this.Source.ChildSource + "." + this.PropertyName;
-                }
-            }
-
-
-            ///<summary>
-            ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
-            ///</summary>
-            ///
-            ///<returns>
-            ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
-            ///</returns>
-            ///
-            ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
-            public override bool Equals(object obj)
-            {
-                if (!(obj is Field)) return false;
-                Field objField = obj as Field;
-                return (this.PropertyName.Equals(objField.PropertyName) && _sortDirection.Equals(objField.SortDirection));
-            }
-
-
-            ///<summary>
-            ///Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
-            ///</summary>
-            ///
-            ///<returns>
-            ///A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
-            ///</returns>
-            ///<filterpriority>2</filterpriority>
-            public override string ToString()
-            {
-                string fieldAsString = "";
-                if (this.Source != null) fieldAsString += Source + ".";
-                return fieldAsString + string.Format("{0} {1}", PropertyName, (_sortDirection == SortDirection.Ascending ? "ASC" : "DESC"));
-            }
-
-            ///<summary>
-            ///Serves as a hash function for a particular type. <see cref="M:System.Object.GetHashCode"></see> is suitable for use in hashing algorithms and data structures like a hash table.
-            ///</summary>
-            ///
-            ///<returns>
-            ///A hash code for the current <see cref="T:System.Object"></see>.
-            ///</returns>
-            ///<filterpriority>2</filterpriority>
-            public override int GetHashCode()
-            {
-                return ToString().GetHashCode();
-            }
-
-            /// <summary>
-            /// Creates a Field object by parsing a string in the correct format.
-            /// The format is:
-            /// <para>&lt;field&gt; => &lt;fieldName&gt; [ ASC | DESC ] </para>
-            /// For example: <code>Age DESC</code> or <code>Surname DESC</code>
-            /// </summary>
-            /// <param name="fieldString">The string in the correct format (see above)</param>
-            /// <returns>A Field created from the string</returns>
-            public new static Field FromString(string fieldString)
-            {
-                string[] parts = fieldString.Trim().Split(' ');
-                if (parts.Length > 1)
-                {
-                    SortDirection sortDirection;
-                    if (parts[1].ToUpper().Equals("ASC")) sortDirection = SortDirection.Ascending;
-                    else if (parts[1].ToUpper().Equals("DESC")) sortDirection = SortDirection.Descending;
-                    else throw new ArgumentException(string.Format("'{0}' is an invalid sort order. Valid options are ASC and DESC", parts[1]));
-                    return CreateField(parts[0], sortDirection);
-                }
-                return CreateField(parts[0], SortDirection.Ascending);
-            }
-
-            /// <summary>
-            /// Compares two BusinessObjects using this field.
-            /// </summary>
-            /// <typeparam name="T">The Type of objects being compared. This must be a class that implements IBusinessObject</typeparam>
-            /// <param name="bo1">The first object to compare</param>
-            /// <param name="bo2">The object to compare the first with</param>
-            /// <returns>a value less than 0 if bo1 is less than bo2, 0 if bo1 = bo2 and greater than 0 if b01 is greater than bo2
-            /// The value returned is negated if the SortDirection is Descending</returns>
-            public int Compare<T>(T bo1, T bo2) where T : IBusinessObject
-            {
-                if (_comparer == null)
-                {
-                    _classDef = bo1.ClassDef;
-                    _fullNameExcludingPrimarySource = this.FullNameExcludingPrimarySource;
-                    _comparer = _classDef.CreatePropertyComparer<IBusinessObject>(_fullNameExcludingPrimarySource);
-                }
-                IPropertyComparer<IBusinessObject> comparer = (IPropertyComparer<IBusinessObject>)_comparer;
-                comparer.PropertyName = PropertyName;
-                comparer.Source = Source != null && Source.ChildSource != null ? Source.ChildSource :  null;
-                int compareResult = comparer.Compare(bo1, bo2);
-                if (compareResult != 0)
-                    return SortDirection == SortDirection.Ascending ? compareResult : -compareResult;
-                return 0;
-            }
-
-            private static Field CreateField(string sourceAndFieldName, SortDirection sortDirection)
-            {
-                //string source = null;
-                string[] parts = sourceAndFieldName.Trim().Split('.');
-                string fieldName = parts[parts.Length-1];
-                Source source = Source.FromString(String.Join(".", parts, 0, parts.Length - 1));
-                Field field = new Field(fieldName, fieldName, source, sortDirection);
-                return field;
-            }
-        }
-
         ///<summary>
         ///Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
         ///</summary>
@@ -347,9 +227,6 @@ namespace Habanero.Base
         ///<param name="y">The second object to compare. </param>
         ///<param name="x">The first object to compare. </param>
         ///<exception cref="T:System.ArgumentException">Neither x nor y implements the <see cref="T:System.IComparable"></see> interface.-or- x and y are of different types and neither one can handle comparisons with the other. </exception><filterpriority>2</filterpriority>
-        int IComparer.Compare(object x, object y)
-        {
-            return Compare((IBusinessObject) x, (IBusinessObject) y);
-        }
+        int IComparer.Compare(object x, object y) { return Compare((IBusinessObject)x, (IBusinessObject)y); }
     }
 }

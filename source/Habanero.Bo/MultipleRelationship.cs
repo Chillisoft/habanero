@@ -34,7 +34,7 @@ namespace Habanero.BO
         /// The criteria by which this relationship is ordered. I.e. by default all the
         /// related objects are loaded in this order.
         ///</summary>
-        OrderCriteria OrderCriteria { get; }
+        IOrderCriteria OrderCriteria { get; }
 
         ///<summary>
         /// The collection of business objects that is managed by this relationship.
@@ -294,7 +294,7 @@ namespace Habanero.BO
         /// Returns the <see cref="OrderCriteria"/> for this relationship (which determines how the 
         /// objects in the collection are ordered.
         ///</summary>
-        public OrderCriteria OrderCriteria
+        public IOrderCriteria OrderCriteria
         {
             get { return _relDef.OrderCriteria ?? new OrderCriteria(); }
         }

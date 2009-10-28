@@ -2056,7 +2056,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Surname");
+            IOrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria = orderCriteria.FromString("Surname");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.Criteria = criteria;
             selectQuery.OrderCriteria = orderCriteria;
@@ -2084,7 +2085,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Surname");
+            IOrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria = orderCriteria.FromString("Surname");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.Criteria = criteria;
             selectQuery.OrderCriteria = orderCriteria;
@@ -2134,7 +2136,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Surname");
+            IOrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria= orderCriteria.FromString("Surname");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.Criteria = criteria;
             selectQuery.OrderCriteria = orderCriteria;
@@ -2162,7 +2165,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cpLast = ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Surname");
+            IOrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria = orderCriteria.FromString("Surname");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.Criteria = criteria;
             selectQuery.OrderCriteria = orderCriteria;
@@ -2190,7 +2194,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO.CreateSavedContactPerson(now, "zzz");
             ContactPersonTestBO.CreateSavedContactPerson(now, "aaa");
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Surname");
+            IOrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria = orderCriteria.FromString("Surname");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.Criteria = criteria;
             selectQuery.OrderCriteria = orderCriteria;
@@ -2542,7 +2547,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "zzzz");
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaaa");
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
 
             //---------------Execute Test ----------------------
@@ -2565,7 +2570,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "zzzz");
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaaa");
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
@@ -2849,7 +2854,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Criteria collectionCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
             Criteria singleCritieria = new Criteria
                 ("ContactPersonID", Criteria.ComparisonOp.Equals, cp1.ContactPersonID);
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
             BusinessObjectManager.Instance.ClearLoadedObjects();
@@ -2874,7 +2879,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Criteria collectionCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
             Criteria singleCritieria = new Criteria
                 ("ContactPersonID", Criteria.ComparisonOp.Equals, cp1.ContactPersonID);
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
             BusinessObjectManager.Instance.ClearLoadedObjects();
@@ -2977,7 +2982,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Engine car1engine1 = Engine.CreateSavedEngine(car1, "20");
             Engine car1engine2 = Engine.CreateSavedEngine(car1, "10");
             Engine car2engine1 = Engine.CreateSavedEngine(car2, "50");
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria
                 (car1engine1.ClassDef, "Car.CarRegNo, EngineNo");
 
             //---------------Execute Test ----------------------
@@ -3007,7 +3012,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Engine car2engine1 = Engine.CreateSavedEngine(car2, "50");
 
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria
                 (car1engine1.ClassDef, "Car.Owner.Surname, EngineNo");
             BusinessObjectCollection<Engine> engines =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(null, orderCriteria);
@@ -3052,7 +3057,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Engine car1engine1 = Engine.CreateSavedEngine(car1, "20");
             Engine car1engine2 = Engine.CreateSavedEngine(car1, "10");
             Engine car2engine1 = Engine.CreateSavedEngine(car2, "50");
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria
                 (car1engine1.ClassDef, "Car.CarRegNo, EngineNo");
 
             //---------------Execute Test ----------------------
@@ -3303,7 +3308,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
 
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = new OrderCriteria().Add("Surname");
+            IOrderCriteria orderCriteria = new OrderCriteria().Add("Surname");
             BusinessObjectCollection<ContactPersonTestBO> col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
                     (null, orderCriteria);
@@ -3324,7 +3329,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             OrderCriteria orderCriteria = new OrderCriteria();
             //---------------Execute Test ----------------------
             orderCriteria.Add
-                (new OrderCriteria.Field("Surname", "Surname_field", null, OrderCriteria.SortDirection.Ascending));
+                (new OrderCriteriaField("Surname", "Surname_field", null, SortDirection.Ascending));
             BusinessObjectCollection<ContactPersonTestBO> col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
                     (null, orderCriteria);

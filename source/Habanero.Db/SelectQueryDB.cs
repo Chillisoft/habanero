@@ -74,7 +74,7 @@ namespace Habanero.DB
         /// <summary>
         /// The fields to use to order a collection of objects when loading them.
         /// </summary>
-        public OrderCriteria OrderCriteria
+        public IOrderCriteria OrderCriteria
         {
             get { return _selectQuery.OrderCriteria; }
             set { _selectQuery.OrderCriteria = value; }
@@ -194,11 +194,11 @@ namespace Habanero.DB
         {
             builder.Append(") AS " + DelimitTable("SecondSelect"));
             builder.Append(" ORDER BY ");
-            foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
+            foreach (OrderCriteriaField field in this.OrderCriteria.Fields)
             {
                 string orderByFieldName = GetOrderByFieldName(field);
                 builder.Append(DelimitField("SecondSelect", orderByFieldName));
-                if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
+                if (field.SortDirection == SortDirection.Ascending)
                 {
                     builder.Append(" ASC");
                 }
@@ -213,11 +213,11 @@ namespace Habanero.DB
         {
             builder.Append(") As " + DelimitTable("FirstSelect"));
             builder.Append(" ORDER BY ");
-            foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
+            foreach (OrderCriteriaField field in this.OrderCriteria.Fields)
             {
                 string orderByFieldName = GetOrderByFieldName(field);
                 builder.Append(DelimitField("FirstSelect", orderByFieldName));
-                if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
+                if (field.SortDirection == SortDirection.Ascending)
                 {
                     builder.Append(" DESC");
                 } else
@@ -228,14 +228,14 @@ namespace Habanero.DB
         }
 
 
-        private string GetOrderByFieldName(OrderCriteria.Field orderField)
+        private string GetOrderByFieldName(OrderCriteriaField orderOrderCriteriaField)
         {
-            if (Fields.ContainsKey(orderField.PropertyName))
+            if (Fields.ContainsKey(orderOrderCriteriaField.PropertyName))
             {
-                QueryField queryField = Fields[orderField.PropertyName];
+                QueryField queryField = Fields[orderOrderCriteriaField.PropertyName];
                 return queryField.FieldName;
             }
-            return orderField.FieldName;
+            return orderOrderCriteriaField.FieldName;
         }
 
         private void AppendNoOfRecordsClauseAtEnd(StringBuilder builder)
@@ -303,7 +303,7 @@ namespace Habanero.DB
 
             builder.Append(" ORDER BY ");
             StringBuilder orderByClause = new StringBuilder();
-            foreach (OrderCriteria.Field orderField in _selectQuery.OrderCriteria.Fields)
+            foreach (OrderCriteriaField orderField in _selectQuery.OrderCriteria.Fields)
             {
                 AppendOrderByField(orderByClause, orderField);
             }
@@ -311,24 +311,24 @@ namespace Habanero.DB
             builder.Append(orderByClause.ToString());
         }
 
-        private void AppendOrderByField(StringBuilder orderByClause, OrderCriteria.Field orderField)
+        private void AppendOrderByField(StringBuilder orderByClause, OrderCriteriaField orderOrderCriteriaField)
         {
-            string direction = orderField.SortDirection == OrderCriteria.SortDirection.Ascending ? "ASC" : "DESC";
+            string direction = orderOrderCriteriaField.SortDirection == SortDirection.Ascending ? "ASC" : "DESC";
 
             string tableAndFieldName;
-            if (orderField.Source != null)
+            if (orderOrderCriteriaField.Source != null)
             {
-                tableAndFieldName = DelimitField(orderField.Source.ChildSourceLeaf, orderField.FieldName);
+                tableAndFieldName = DelimitField(orderOrderCriteriaField.Source.ChildSourceLeaf, orderOrderCriteriaField.FieldName);
             }
             else
             {
-                if (Fields.ContainsKey(orderField.PropertyName))
+                if (Fields.ContainsKey(orderOrderCriteriaField.PropertyName))
                 {
-                    QueryField queryField = Fields[orderField.PropertyName];
+                    QueryField queryField = Fields[orderOrderCriteriaField.PropertyName];
                     tableAndFieldName = DelimitField(queryField.Source, queryField.FieldName);
                 } else
                 {
-                    tableAndFieldName = DelimitField(this.Source, orderField.FieldName);
+                    tableAndFieldName = DelimitField(this.Source, orderOrderCriteriaField.FieldName);
                 }
             }
             StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");

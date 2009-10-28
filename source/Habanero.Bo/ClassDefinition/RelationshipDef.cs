@@ -57,7 +57,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// The OrderBy Criteria being used by this relationship.
         /// </summary>
-        protected OrderCriteria _orderCriteria;
+        protected IOrderCriteria _orderCriteria;
         protected string _orderCriteriaString;
 
         #region Constructors
@@ -239,7 +239,7 @@ namespace Habanero.BO.ClassDefinition
         /// The order by clause that the related object will be sorted by.
         /// In the case of a single relationship this will return a null string
         ///</summary>
-        public OrderCriteria OrderCriteria
+        public IOrderCriteria OrderCriteria
         {
             get { return _orderCriteria; }
             protected set { _orderCriteria = value; }

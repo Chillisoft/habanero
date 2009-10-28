@@ -136,7 +136,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Source = new Source(TestUtil.GetRandomString());
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
+            IOrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
             selectQuery.OrderCriteria = orderCriteria;
             //---------------Test Result -----------------------
             Assert.AreSame(orderCriteria, selectQuery.OrderCriteria);
@@ -154,8 +154,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Source orderSource = new Source(sourceName);
             string expectedSourceName = TestUtil.GetRandomString();
             orderSource.JoinToSource(new Source(expectedSourceName));
-            OrderCriteria.Field orderField = new OrderCriteria.Field("testfield", "testfield", orderSource, OrderCriteria.SortDirection.Ascending);
-            OrderCriteria orderCriteria = new OrderCriteria().Add(orderField);
+            OrderCriteriaField orderOrderCriteriaField = new OrderCriteriaField("testfield", "testfield", orderSource, SortDirection.Ascending);
+            IOrderCriteria orderCriteria = new OrderCriteria().Add(orderOrderCriteriaField);
 
             //---------------Execute Test ----------------------
             selectQuery.OrderCriteria = orderCriteria;
@@ -172,7 +172,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
+            IOrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
             selectQuery.OrderCriteria = orderCriteria;
             //---------------Test Result -----------------------
             Assert.AreSame(orderCriteria, selectQuery.OrderCriteria);

@@ -271,7 +271,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
-            selectQuery.OrderCriteria = OrderCriteria.FromString("MyBoID, TestProp");
+            selectQuery.OrderCriteria = new OrderCriteria().FromString("MyBoID, TestProp");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -288,7 +288,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef classDef = MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
-            selectQuery.OrderCriteria = OrderCriteria.FromString("MyBoID, TestProp");
+            selectQuery.OrderCriteria = new OrderCriteria().FromString("MyBoID, TestProp");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -485,7 +485,7 @@ namespace Habanero.Test.DB
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
-            selectQuery.OrderCriteria = OrderCriteria.FromString(fieldName);
+            selectQuery.OrderCriteria = new OrderCriteria().FromString(fieldName);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Execute Test ----------------------
@@ -618,7 +618,7 @@ namespace Habanero.Test.DB
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 2;
             selectQuery.Limit = 4;
-            selectQuery.OrderCriteria = OrderCriteria.FromString("MyBOID");
+            selectQuery.OrderCriteria = new OrderCriteria().FromString("MyBOID");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "TOP", "");
             //---------------Assert Precondition----------------
@@ -645,7 +645,7 @@ namespace Habanero.Test.DB
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
-            selectQuery.OrderCriteria = OrderCriteria.FromString("Surname");
+            selectQuery.OrderCriteria = new OrderCriteria().FromString("Surname");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "TOP", "");
             //---------------Assert Precondition----------------
@@ -672,7 +672,7 @@ namespace Habanero.Test.DB
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
-            selectQuery.OrderCriteria = OrderCriteria.FromString("Surname");
+            selectQuery.OrderCriteria = new OrderCriteria().FromString("Surname");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
             //---------------Assert Precondition----------------
@@ -699,7 +699,7 @@ namespace Habanero.Test.DB
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 2;
             selectQuery.Limit = 4;
-            selectQuery.OrderCriteria = OrderCriteria.FromString("MyBOID");
+            selectQuery.OrderCriteria = new OrderCriteria().FromString("MyBOID");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Assert Precondition----------------
@@ -726,7 +726,7 @@ namespace Habanero.Test.DB
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
-            selectQuery.OrderCriteria = OrderCriteria.FromString("Surname");
+            selectQuery.OrderCriteria = new OrderCriteria().FromString("Surname");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Assert Precondition----------------
@@ -753,7 +753,7 @@ namespace Habanero.Test.DB
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
-            selectQuery.OrderCriteria = OrderCriteria.FromString("Surname");
+            selectQuery.OrderCriteria = new OrderCriteria().FromString("Surname");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Assert Precondition----------------

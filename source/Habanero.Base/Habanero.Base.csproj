@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D04BB138-C144-4406-9A41-17192E7D44BF}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -127,6 +127,7 @@
     <Compile Include="ILookupListWithClassDef.cs" />
     <Compile Include="IResolvableToValue.cs" />
     <Compile Include="ISimpleLookupList.cs" />
+    <Compile Include="OrderCriteriaField.cs" />
     <Compile Include="RecordingExceptionNotifier.cs" />
     <Compile Include="Exceptions\InvalidKeyException.cs" />
     <Compile Include="Exceptions\ReflectionException.cs" />

@@ -104,13 +104,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
             IClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classdef, "TestProp");
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classdef, "TestProp");
             //---------------Test Result -----------------------
-            OrderCriteria.Field field = orderCriteria.Fields[0];
-            Assert.AreEqual(classdef.ClassName, field.Source.Name);
-            Assert.AreEqual(classdef.GetTableName(), field.Source.EntityName);
-            Assert.AreEqual(classdef.GetPropDef("TestProp").DatabaseFieldName, field.FieldName);
-            Assert.AreEqual(0, field.Source.Joins.Count);
+            IOrderCriteriaField orderCriteriaField = orderCriteria.Fields[0];
+            Assert.AreEqual(classdef.ClassName, orderCriteriaField.Source.Name);
+            Assert.AreEqual(classdef.GetTableName(), orderCriteriaField.Source.EntityName);
+            Assert.AreEqual(classdef.GetPropDef("TestProp").DatabaseFieldName, orderCriteriaField.FieldName);
+            Assert.AreEqual(0, orderCriteriaField.Source.Joins.Count);
             //---------------Tear Down -------------------------
         }
 
@@ -149,14 +149,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             IClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship(); 
 
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp");
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp");
             //---------------Test Result -----------------------
-            OrderCriteria.Field field = orderCriteria.Fields[0];
-            Assert.AreEqual(myRelatedBoClassDef.GetPropDef("MyRelatedTestProp").DatabaseFieldName, field.FieldName);
-            Assert.AreEqual(myBoClassdef.ClassName, field.Source.Name);
-            Assert.AreEqual(myBoClassdef.GetTableName(), field.Source.EntityName);
-            Assert.AreEqual(1, field.Source.Joins.Count);
-            Source.Join relJoin = field.Source.Joins[0];
+            IOrderCriteriaField orderCriteriaField = orderCriteria.Fields[0];
+            Assert.AreEqual(myRelatedBoClassDef.GetPropDef("MyRelatedTestProp").DatabaseFieldName, orderCriteriaField.FieldName);
+            Assert.AreEqual(myBoClassdef.ClassName, orderCriteriaField.Source.Name);
+            Assert.AreEqual(myBoClassdef.GetTableName(), orderCriteriaField.Source.EntityName);
+            Assert.AreEqual(1, orderCriteriaField.Source.Joins.Count);
+            Source.Join relJoin = orderCriteriaField.Source.Joins[0];
             Assert.AreEqual("MyRelationship", relJoin.ToSource.Name);
             Assert.AreEqual(myRelatedBoClassDef.GetTableName(), relJoin.ToSource.EntityName);
             Assert.AreEqual(1, relJoin.JoinFields.Count);
@@ -173,13 +173,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const string orderByString = "Car.Owner.Surname";
 
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, orderByString);
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, orderByString);
             //---------------Test Result -----------------------
-            OrderCriteria.Field field = orderCriteria.Fields[0];
-            Assert.AreEqual("Surname", field.PropertyName);
-            Assert.AreEqual("Surname_field", field.FieldName);
-            Assert.AreEqual(1, field.Source.Joins.Count);
-            Assert.AreEqual("Engine.Car.Owner", field.Source.ToString());
+            IOrderCriteriaField orderCriteriaField = orderCriteria.Fields[0];
+            Assert.AreEqual("Surname", orderCriteriaField.PropertyName);
+            Assert.AreEqual("Surname_field", orderCriteriaField.FieldName);
+            Assert.AreEqual(1, orderCriteriaField.Source.Joins.Count);
+            Assert.AreEqual("Engine.Car.Owner", orderCriteriaField.Source.ToString());
             //---------------Tear Down -------------------------
         }
 
@@ -594,7 +594,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             IClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship_DifferentTableAndFieldNames();
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(myBoClassdef);
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp");
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp");
 
             //---------------Execute Test ----------------------
             selectQuery.OrderCriteria = orderCriteria;
@@ -620,7 +620,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             IClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship();
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(myBoClassdef);
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp, MyRelationship.MyRelatedTestProp2");
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp, MyRelationship.MyRelatedTestProp2");
 
             //---------------Execute Test ----------------------
             selectQuery.OrderCriteria = orderCriteria;
@@ -637,7 +637,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             IClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(engineClassDef);
-            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, "Car.Owner.Surname");
+            IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, "Car.Owner.Surname");
 
             //---------------Execute Test ----------------------
             selectQuery.OrderCriteria = orderCriteria;

@@ -171,7 +171,7 @@ namespace Habanero.Base
         /// The order by clause that the related object will be sorted by.
         /// In the case of a single relationship this will return a null string
         ///</summary>
-        OrderCriteria OrderCriteria { get; }
+        IOrderCriteria OrderCriteria { get; }
 
         ///<summary>
         /// The order by clause that the related object will be sorted by.  This is the raw order criteria as loaded or set. Use <see cref="OrderCriteria"/>

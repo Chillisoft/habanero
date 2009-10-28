@@ -113,12 +113,13 @@ namespace Habanero.BO
         ///<param name="classDef">The class definition to use for building the order criteria</param>
         ///<param name="orderByString">The orderby string to use for creating the <see cref="OrderCriteria"/>.</param>
         ///<returns>the newly created <see cref="OrderCriteria"/> object.</returns>
-        public static OrderCriteria CreateOrderCriteria(IClassDef classDef, string orderByString)
+        public static IOrderCriteria CreateOrderCriteria(IClassDef classDef, string orderByString)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
-            OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
+            IOrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria = orderCriteria.FromString(orderByString);
             //TODO Mark 20 Mar 2009: Souldn't the following code be stripped out into a PrepareOrderBy method that is called before loading? (Similar to PrepareCriteria)
-            foreach (OrderCriteria.Field field in orderCriteria.Fields)
+            foreach (OrderCriteriaField field in orderCriteria.Fields)
             {
                 Source source = field.Source;
                 IClassDef relatedClassDef;

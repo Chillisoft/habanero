@@ -48,7 +48,7 @@ namespace Habanero.Base
         /// <summary>
         /// The fields to use to order a collection of objects when loading them.
         /// </summary>
-        OrderCriteria OrderCriteria { get; set; }
+        IOrderCriteria OrderCriteria { get; set; }
 
         /// <summary>
         /// The number of objects to load

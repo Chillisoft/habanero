@@ -233,7 +233,7 @@ namespace Habanero.BO
         {
             ISelectQuery selectQuery = collection.SelectQuery;
             Criteria criteria = selectQuery.Criteria;
-            OrderCriteria orderCriteria = selectQuery.OrderCriteria;
+            IOrderCriteria orderCriteria = selectQuery.OrderCriteria;
 
             IClassDef classDef = collection.ClassDef;
             QueryBuilder.PrepareCriteria(classDef, criteria);

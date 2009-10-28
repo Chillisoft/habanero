@@ -58,7 +58,7 @@ namespace Habanero.BO
         {
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
 
-            OrderCriteria preparedOrderCriteria =
+            IOrderCriteria preparedOrderCriteria =
                 QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
 
             //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
