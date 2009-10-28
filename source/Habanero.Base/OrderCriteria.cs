@@ -22,9 +22,12 @@ using System.Collections.Generic;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Represents a set of order criteria used when loading collections of BusinessObjects.
+    /// </summary>
     public interface IOrderCriteria : IComparer {
         /// <summary>
-        /// The fields that will be ordered on. See <see cref="Field"/>
+        /// The fields that will be ordered on. See <see cref="IOrderCriteriaField"/>
         /// </summary>
         List<IOrderCriteriaField> Fields { get; }
 

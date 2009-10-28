@@ -19,13 +19,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader
