@@ -86,7 +86,7 @@ namespace Habanero.Base
                 SetupLogging();
 
                 log.Debug("---------------------------------------------------------------------");
-                log.Debug(AppName + "v" + AppVersion + " starting");
+                log.Debug(string.Format("{0} v{1} starting", AppName, AppVersion));
                 log.Debug("---------------------------------------------------------------------");
 
                 SetupDatabaseConnection();

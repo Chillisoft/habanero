@@ -53,9 +53,9 @@ namespace Habanero.UI.Win
                     maxButtonWidth = lbl.PreferredWidth + 15;
                 }
             }
-            if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 20)
+            if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 24)
             {
-                maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 20;
+                maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 24;
             }
             foreach (IButton btn in buttonCollection)
             {

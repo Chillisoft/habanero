@@ -27,7 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Habanero.Console.xml</DocumentationFile>    
+    <DocumentationFile>bin\Debug\Habanero.Console.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -67,6 +67,7 @@
     <Compile Include="ConsoleExceptionNotifier.cs" />
     <Compile Include="ConsoleProgressIndicator.cs" />
     <Compile Include="HabaneroAppConsole.cs" />
+    <Compile Include="HabaneroAppConsoleInMemory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\Common\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
