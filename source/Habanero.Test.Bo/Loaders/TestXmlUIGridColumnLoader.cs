@@ -89,7 +89,7 @@ namespace Habanero.Test.BO.Loaders
         {
             loader.LoadUIProperty(@"<column />");
         }
-       
+
         [Test]
         public void TestCustomColumnType()
         {
@@ -97,6 +97,15 @@ namespace Habanero.Test.BO.Loaders
                 loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""DataGridViewComboBoxColumn"" assembly=""System.Windows.Forms"" />");
             Assert.AreEqual("DataGridViewComboBoxColumn", uiProp.GridControlTypeName);
             Assert.AreEqual("System.Windows.Forms", uiProp.GridControlAssemblyName);
+        }
+
+        [Test]
+        public void Test_LoadUIProperty_WithCustomUnknownColumnType()
+        {
+            IUIGridColumn uiProp =
+                loader.LoadUIProperty(@"<column property=""testpropname"" type=""MyColumnType"" assembly=""MyAssembly"" />");
+            Assert.AreEqual("MyColumnType", uiProp.GridControlTypeName);
+            Assert.AreEqual("MyAssembly", uiProp.GridControlAssemblyName);
         }
 
         [Test]

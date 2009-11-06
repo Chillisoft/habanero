@@ -844,7 +844,7 @@ namespace Habanero.UI.Win
     /// Represents the formatting and style information applied to individual cells 
     /// within a DataGridView control.
     /// </summary>
-    internal class DataGridViewCellStyleWin : IDataGridViewCellStyle
+    public class DataGridViewCellStyleWin : IDataGridViewCellStyle
     {
         private readonly DataGridViewCellStyle _dataGridViewCellStyle;
 
@@ -895,7 +895,7 @@ namespace Habanero.UI.Win
     /// <summary>
     /// Represents an individual cell in a DataGridView control
     /// </summary>
-    internal class DataGridViewCellWin : IDataGridViewCell
+    public class DataGridViewCellWin : IDataGridViewCell
     {
         private readonly DataGridViewCell _cell;
 

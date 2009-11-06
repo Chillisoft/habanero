@@ -88,6 +88,14 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
+        public void TestPropertyWithCustomType()
+        {
+            IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" type=""MyType"" assembly=""MyAssembly"" />");
+            Assert.AreEqual("MyType", def.PropertyTypeName, "Property type should be same as that specified in xml");
+            Assert.AreEqual("MyAssembly", def.PropertyTypeAssemblyName, "Property type should be same as that specified in xml");
+        }
+
+        [Test]
         public void TestPropertyWithDescription()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" description=""Property for Testing"" />");

@@ -31,10 +31,8 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlUIFormFieldLoader
     {
-
         private XmlUIFormFieldLoader loader;
-
-
+        
         [SetUp]
         public void SetupTest() {
             Initialise();
@@ -58,10 +56,30 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("testlabel", uiProp.Label);
             Assert.AreEqual("testpropname", uiProp.PropertyName);
             Assert.AreEqual("TextBox", uiProp.ControlTypeName);
-			Assert.AreEqual("System.Windows.Forms", uiProp.ControlAssemblyName);
+            Assert.AreEqual("System.Windows.Forms", uiProp.ControlAssemblyName);
             Assert.AreEqual("Habanero.UI.Base", uiProp.MapperAssembly);
             Assert.AreEqual("TextBoxMapper", uiProp.MapperTypeName);
             Assert.AreEqual(false, uiProp.Editable);
+        }
+
+        [Test]
+        public void Test_LoadUIProperty_WithCustomControlType()
+        {
+            IUIFormField uiProp =
+                loader.LoadUIProperty(@"<field property=""testpropname"" type=""MyCustomType"" assembly=""MyCustomAssembly"" />");
+            Assert.AreEqual("testpropname", uiProp.PropertyName);
+            Assert.AreEqual("MyCustomType", uiProp.ControlTypeName);
+            Assert.AreEqual("MyCustomAssembly", uiProp.ControlAssemblyName);
+        }
+
+        [Test]
+        public void Test_LoadUIProperty_WithCustomMapperType()
+        {
+            IUIFormField uiProp =
+                loader.LoadUIProperty(@"<field property=""testpropname"" mapperType=""MyCustomType"" mapperAssembly=""MyCustomAssembly"" />");
+            Assert.AreEqual("testpropname", uiProp.PropertyName);
+            Assert.AreEqual("MyCustomType", uiProp.MapperTypeName);
+            Assert.AreEqual("MyCustomAssembly", uiProp.MapperAssembly);
         }
 
         [Test]

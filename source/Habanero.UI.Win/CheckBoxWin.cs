@@ -24,7 +24,7 @@ namespace Habanero.UI.Win
     /// <summary>
     /// Represents a CheckBox control
     /// </summary>
-    internal class CheckBoxWin : CheckBox, ICheckBox
+    public class CheckBoxWin : CheckBox, ICheckBox
     {
         /// <summary>
         /// Gets or sets the anchoring style.
