@@ -89,6 +89,8 @@ namespace Habanero.UI.Base
             {
                 _businessObjectCollection = value;
                 _comboBoxCollectionSelector.SetCollection(value, true);
+                UpdateControlValueFromBusinessObject();
+                ApplyChangesToBusinessObject();
             }
         }
 
@@ -132,7 +134,8 @@ namespace Habanero.UI.Base
         private void ClearComboBox()
         {
             _comboBox.SelectedIndex = -1;
-            _comboBox.Text = "";
+            _comboBox.SelectedItem = null;
+            _comboBox.Text = null;
         }
 
         private bool PropertyHasAValue()
@@ -156,7 +159,7 @@ namespace Habanero.UI.Base
                     bool found = false;
                     found = String.IsNullOrEmpty(OwningBoPropertyName)
                                 ? bo.ID.ToString().Equals(Convert.ToString(boPropertyValue))
-                                : bo.Props[OwningBoPropertyName].Value == boPropertyValue;
+                                : Object.Equals(bo.Props[OwningBoPropertyName].Value, boPropertyValue);
                     if (found)
                     {
                         _comboBox.SelectedItem = bo;
@@ -207,11 +210,13 @@ namespace Habanero.UI.Base
         /// </summary>
         public override void ApplyChangesToBusinessObject()
         {
-            //            if (_businessObject == null || _comboBox.SelectedIndex == -1) return;
             IBusinessObject selectedOption = _comboBox.SelectedItem as IBusinessObject;
-            if (selectedOption == null) return;
             //TODO Eric 30 Jul 2009: use the Property of the Business object.
-            object newValue = !string.IsNullOrEmpty(OwningBoPropertyName) ? selectedOption.Props[OwningBoPropertyName].Value: selectedOption.ID.GetAsGuid();
+            object newValue = null;
+            if (selectedOption != null)
+            {
+                newValue = !string.IsNullOrEmpty(OwningBoPropertyName) ? selectedOption.Props[OwningBoPropertyName].Value: selectedOption.ID.GetAsGuid();
+            }
             SetPropertyValue(newValue);
         }
     }

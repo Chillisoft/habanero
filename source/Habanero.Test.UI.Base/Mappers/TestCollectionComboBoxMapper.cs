@@ -67,7 +67,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void TestSetBusinessObj_ShouldSetTheSelectedItemToCorrectRelatedCar()
+        public void Test_SetBusinessObj_ShouldSetTheSelectedItemToCorrectRelatedCar()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -77,11 +77,12 @@ namespace Habanero.Test.UI.Base.Mappers
             Car car1;
             Car car2;
             mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
-            Sample s = new Sample {SampleLookupID = car1.CarID};
+            Sample s = new Sample { SampleLookupID = car1.CarID };
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, mapper.BusinessObjectCollection.Count);
             Assert.AreEqual(3, cmbox.Items.Count);
             Assert.IsNull(cmbox.SelectedItem);
+            Assert.IsNull(mapper.OwningBoPropertyName);
             //---------------Execute Test ----------------------
             mapper.BusinessObject = s;
             //---------------Test Result -----------------------
@@ -90,9 +91,135 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(s.SampleLookupID.ToString(), cmbox.SelectedValue.ToString(), "Combo Box Value is not set");
         }
 
+        [Test]
+        public void Test_SetBusinessObj_WhenSpecificPropUsed_ShouldSetTheSelectedItemToCorrectRelatedCar()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string propName = "SampleText";
+            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            mapper.OwningBoPropertyName = "CarRegNo";
+
+            Car car1;
+            Car car2;
+            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
+            string carRegNo = "MySelectedRegNo " + TestUtil.GetRandomString().Substring(0, 4);
+            car1.CarRegNo = carRegNo;
+            car2.CarRegNo = TestUtil.GetRandomString();
+            Sample sample = new Sample { SampleText = carRegNo };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, mapper.BusinessObjectCollection.Count);
+            Assert.AreEqual(3, cmbox.Items.Count);
+            Assert.IsNull(cmbox.SelectedItem);
+            Assert.AreEqual("CarRegNo", mapper.OwningBoPropertyName);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = sample;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(cmbox.SelectedItem);
+            Assert.AreEqual(car1, cmbox.SelectedItem, "Combo Box selected item is not set.");
+        }
+
+        [Test]
+        public void Test_BusinessObjectCollection_WhenSet_WithNewCollection_WhenItemAlreadySelected_AndAlsoInNewList_ShouldStillHaveTheSameItemSelected()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string propName = "SampleText";
+            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            mapper.OwningBoPropertyName = "CarRegNo";
+
+            Car car1;
+            Car car2;
+            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
+            string carRegNo = "MySelectedRegNo " + TestUtil.GetRandomString().Substring(0, 4);
+            car1.CarRegNo = carRegNo;
+            car2.CarRegNo = TestUtil.GetRandomString();
+            Sample sample = new Sample { SampleText = carRegNo };
+            BusinessObjectCollection<Car> newCol = new BusinessObjectCollection<Car>();
+            Car car3 = new Car() { CarRegNo = TestUtil.GetRandomString() };
+            newCol.Add(car1, car2, car3);
+            mapper.BusinessObject = sample;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, mapper.BusinessObjectCollection.Count);
+            Assert.AreEqual(3, cmbox.Items.Count);
+            Assert.AreEqual(car1, cmbox.SelectedItem, "Combo Box selected item should be set.");
+            Assert.AreEqual("CarRegNo", mapper.OwningBoPropertyName);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObjectCollection = newCol;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(cmbox.SelectedItem);
+            Assert.AreEqual(car1, cmbox.SelectedItem, "Combo Box selected item should still be set.");
+            Assert.AreSame(carRegNo, sample.SampleText);
+        }
+
+        [Test]
+        public void Test_BusinessObjectCollection_WhenSet_WithNewCollection_WhenItemAlreadySelected_AndNotInNewList_ShouldHaveNothingSelected()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string propName = "SampleText";
+            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            mapper.OwningBoPropertyName = "CarRegNo";
+
+            Car car1;
+            Car car2;
+            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
+            string carRegNo = "MySelectedRegNo " + TestUtil.GetRandomString().Substring(0, 4);
+            car1.CarRegNo = carRegNo;
+            car2.CarRegNo = TestUtil.GetRandomString();
+            Sample sample = new Sample { SampleText = carRegNo };
+            BusinessObjectCollection<Car> newCol = new BusinessObjectCollection<Car>();
+            Car car3 = new Car() { CarRegNo = TestUtil.GetRandomString() };
+            newCol.Add(car2, car3);
+            mapper.BusinessObject = sample;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, mapper.BusinessObjectCollection.Count);
+            Assert.AreEqual(3, cmbox.Items.Count);
+            Assert.AreEqual(car1, cmbox.SelectedItem, "Combo Box selected item should be set.");
+            Assert.AreEqual("CarRegNo", mapper.OwningBoPropertyName);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObjectCollection = newCol;
+            //---------------Test Result -----------------------
+            Assert.IsNull(cmbox.SelectedItem);
+            Assert.IsNull(sample.SampleText);
+        }
+
+        [Test]
+        public void Test_BusinessObjectCollection_WhenSet_WithNewCollection_WhenItemAlreadySelected_AndDifferentMatchInNewList_ShouldSelectNewMatch()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            const string propName = "SampleText";
+            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            mapper.OwningBoPropertyName = "CarRegNo";
+
+            Car car1;
+            Car car2;
+            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
+            string carRegNo = "MySelectedRegNo " + TestUtil.GetRandomString().Substring(0, 4);
+            car1.CarRegNo = carRegNo;
+            car2.CarRegNo = TestUtil.GetRandomString();
+            Sample sample = new Sample { SampleText = carRegNo };
+            BusinessObjectCollection<Car> newCol = new BusinessObjectCollection<Car>();
+            Car car3 = new Car() { CarRegNo = carRegNo };
+            newCol.Add(car2, car3);
+            mapper.BusinessObject = sample;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, mapper.BusinessObjectCollection.Count);
+            Assert.AreEqual(3, cmbox.Items.Count);
+            Assert.AreEqual(car1, cmbox.SelectedItem, "Combo Box selected item should be set.");
+            Assert.AreEqual("CarRegNo", mapper.OwningBoPropertyName);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObjectCollection = newCol;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(cmbox.SelectedItem);
+            Assert.AreEqual(car3, cmbox.SelectedItem, "Combo Box selected item should now be the new match.");
+            Assert.AreSame(carRegNo, sample.SampleText);
+        }
+
         //This test is specific for VWG where you do not want the BO updated on every event.
         [Test]
-        public virtual void TestChangeComboBoxDoesntUpdateBusinessObject()
+        public virtual void Test_ChangeComboBoxDoesntUpdateBusinessObject()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
@@ -352,7 +479,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public override void TestChangeComboBoxDoesntUpdateBusinessObject()
+        public override void Test_ChangeComboBoxDoesntUpdateBusinessObject()
         {
             //For Windows the value should is changed (see TestChangeComboBox_UpdatesBusinessObject).
         }
