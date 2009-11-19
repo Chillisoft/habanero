@@ -38,7 +38,7 @@ namespace Habanero.UI.Base
         /// <param name="formTitle">The title shown on the form</param>
         /// <returns>Returns the created form</returns>
         IFormHabanero CreateOKCancelForm(IControlHabanero nestedControl, string formTitle);
-    }
+    }   
 
     /// <summary>
     /// Represents a panel that contains an OK and Cancel button

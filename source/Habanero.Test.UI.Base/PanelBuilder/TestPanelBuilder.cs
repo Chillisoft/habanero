@@ -18,10 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.Structure;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -1272,6 +1274,7 @@ namespace Habanero.Test.UI.Base
                 StringAssert.Contains("uiForm", ex.ParamName);
             }
         }
+
         [Test]
         public void Test_BuildPanelForForm_ReturnsOnlyPanelForOneTab()
         {
@@ -1494,7 +1497,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(groupControlCreator, panelBuilder.GroupControlCreator);
         }
         [Test]
-        public void Test_BuldUsingAlaternateFormBuilder()
+        public void Test_BuldUsingAlternateFormBuilder()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
@@ -1518,8 +1521,8 @@ namespace Habanero.Test.UI.Base
             IPanel tabPage2Panel = (IPanel)tabPage2.Controls[0];
             Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage2Panel.Controls.Count);
             Assert.AreEqual(30, panelInfo.MinimumPanelHeight);
-            Assert.AreEqual(30, panelInfo.Panel.MinimumSize.Height);
-            Assert.AreEqual(200, panelInfo.Panel.MinimumSize.Width);
+            Assert.AreEqual(100, panelInfo.Panel.MinimumSize.Height);
+            Assert.AreEqual(100, panelInfo.Panel.MinimumSize.Width);
 
         }
 

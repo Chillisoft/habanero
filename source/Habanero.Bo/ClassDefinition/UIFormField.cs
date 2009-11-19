@@ -45,6 +45,15 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="label">The label</param>
         /// <param name="propertyName">The property name</param>
+        public UIFormField(string label, string propertyName)
+            : this(label, propertyName, null, null, null, null, true, null, new Hashtable(), LayoutStyle.Label )
+        { } 
+        
+        /// <summary>
+        /// Constructor to initialise a new definition
+        /// </summary>
+        /// <param name="label">The label</param>
+        /// <param name="propertyName">The property name</param>
         /// <param name="controlType">The control type</param>
         /// <param name="mapperTypeName">The mapper type name</param>
         /// <param name="mapperAssembly">The mapper assembly</param>
@@ -55,7 +64,7 @@ namespace Habanero.BO.ClassDefinition
         public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
                            bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
             : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, layout)
-		{}
+        { }
 
         /// <summary>
         /// Constructor to initialise a new definition

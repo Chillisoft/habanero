@@ -42,6 +42,18 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// Construct the UIForm with its tabs
+        /// </summary>
+        public UIForm(params UIFormTab[] uiFormTabs)
+            : this()
+        {
+            foreach (UIFormTab uiFormTab in uiFormTabs)
+            {
+                Add(uiFormTab);
+            }
+        }
+
+        /// <summary>
         /// Adds a tab to the form
         /// </summary>
         /// <param name="tab">A UIFormTab object</param>

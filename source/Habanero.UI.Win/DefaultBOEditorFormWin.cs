@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -43,8 +44,7 @@ namespace Habanero.UI.Win
         private readonly IPanel _boPanel;
         private readonly IButtonGroupControl _buttons;
         private readonly PostObjectEditDelegate _action;
-
-
+        
         /// <summary>
         /// Constructs the <see cref="DefaultBOEditorFormWin"/> class  with 
         /// the specified <see cref="BusinessObject"/>, uiDefName, <see cref="IControlFactory"/> and post edit action. 
@@ -59,7 +59,8 @@ namespace Habanero.UI.Win
         {
             _action = action;
         }
-                /// <summary>
+
+        /// <summary>
         /// Constructs the <see cref="DefaultBOEditorFormWin"/> class  with 
         /// the specified businessObject, uiDefName and post edit action. 
         /// </summary>
@@ -112,17 +113,20 @@ namespace Habanero.UI.Win
 
             PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
             //_panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol["default"].UIForm);
-            _panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol[uiDefName].UIForm, this.GroupControlCreator);
+            //_panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol[uiDefName].UIForm, this.GroupControlCreator);
+            _panelInfo = panelBuilder.BuildPanelForForm(def, this.GroupControlCreator);
 
             _panelInfo.BusinessObject = _bo;
             _boPanel = _panelInfo.Panel;
+
             _buttons = _controlFactory.CreateButtonGroupControl();
             _buttons.AddButton("Cancel", CancelButtonHandler);
             IButton okbutton = _buttons.AddButton("OK", OKButtonHandler);
+
             okbutton.NotifyDefault(true);
-            this.AcceptButton = (ButtonWin)okbutton;
+            this.AcceptButton = (ButtonWin) okbutton;
             this.Load += delegate { FocusOnFirstControl(); };
-            this.FormClosing += OnFormClosing; 
+            this.FormClosing += OnFormClosing;
 
             this.Text = def.Title;
             SetupFormSize(def);
@@ -154,6 +158,7 @@ namespace Habanero.UI.Win
         {
             get { return _boPanel; }
         }
+
         /// <summary>
         /// Sets all the controls up in a layout manager. By default uses the border layout manager
         /// with the editor control centre and the buttons south.
@@ -171,22 +176,12 @@ namespace Habanero.UI.Win
         /// <param name="def"></param>
         protected virtual void SetupFormSize(IUIForm def)
         {
-            int width = def.Width;
-            int minWidth = _boPanel.Width +
-                           Margin.Left + Margin.Right;
-            if (width < minWidth)
-            {
-                width = minWidth;
-            }
-            int height = def.Height;
-            int minHeight = _boPanel.Height + _buttons.Height +
-                            Margin.Top + Margin.Bottom;
-            if (height < minHeight)
-            {
-                height = minHeight;
-            }
-            Height = height;
-            Width = width;
+            _boPanel.Size = new Size(def.Width, def.Height);
+            int width = _boPanel.Width;
+            int height = _boPanel.Height + _buttons.Height;
+            
+            ClientSize = new Size(width, height);
+            MinimumSize = Size;
         }
 
         private void FocusOnFirstControl()

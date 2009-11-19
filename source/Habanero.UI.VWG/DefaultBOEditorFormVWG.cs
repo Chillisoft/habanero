@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -134,7 +135,9 @@ namespace Habanero.UI.VWG
 
             PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
             //_panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol["default"].UIForm);
-            _panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol[uiDefName].UIForm);
+            //_panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol[uiDefName].UIForm);
+            _panelInfo = panelBuilder.BuildPanelForForm(def);
+
             _panelInfo.BusinessObject = _bo;
             _boPanel = _panelInfo.Panel;
             _buttons = _controlFactory.CreateButtonGroupControl();
@@ -202,22 +205,12 @@ namespace Habanero.UI.VWG
         /// <param name="def"></param>
         protected virtual void SetupFormSize(IUIForm def)
         {
-            int width = def.Width;
-            int minWidth = _boPanel.Width +
-                           Margin.Left + Margin.Right;
-            if (width < minWidth)
-            {
-                width = minWidth;
-            }
-            int height = def.Height;
-            int minHeight = _boPanel.Height + _buttons.Height +
-                            Margin.Top + Margin.Bottom;
-            if (height < minHeight)
-            {
-                height = minHeight;
-            }
-            Height = height;
-            Width = width;
+            _boPanel.Size = new Size(def.Width, def.Height);
+            int width = _boPanel.Width;
+            int height = _boPanel.Height + _buttons.Height;
+
+            ClientSize = new Size(width, height);
+            MinimumSize = Size;
         }
 
         private void FocusOnFirstControl()

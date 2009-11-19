@@ -27,6 +27,23 @@ namespace Habanero.Test.BO.ClassDefinition
     public class TestUIFormTab
     {
         [Test]
+        public void Test_Construct_WithUIFormColumns()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn uiFormColumn1 = new UIFormColumn();
+            UIFormColumn uiFormColumn2 = new UIFormColumn();
+            UIFormColumn uiFormColumn3 = new UIFormColumn();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            UIFormTab uiFormTab = new UIFormTab(uiFormColumn1, uiFormColumn2, uiFormColumn3);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, uiFormTab.Count);
+            Assert.AreSame(uiFormColumn1, uiFormTab[0]);
+            Assert.AreSame(uiFormColumn2, uiFormTab[1]);
+            Assert.AreSame(uiFormColumn3, uiFormTab[2]);
+        }
+
+        [Test]
         public void TestRemove()
         {
             UIFormColumn column = new UIFormColumn();

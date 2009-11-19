@@ -71,7 +71,7 @@ namespace Habanero.Test.Structure
 			    <property name=""IDNumber"" databaseField=""field_ID_Number"" />
 			    <property name=""FirstName"" databaseField=""field_First_Name"" />
 			    <property name=""LastName"" databaseField=""field_Last_Name"" />
-			    <property name=""PersonID"" databaseField=""field_Person_ID"" compulsory=""true"" />
+			    <property name=""PersonID"" type=""System.Guid"" databaseField=""field_Person_ID"" compulsory=""true"" />
 			    <primaryKey>
 			      <prop name=""PersonID"" />
 			    </primaryKey>

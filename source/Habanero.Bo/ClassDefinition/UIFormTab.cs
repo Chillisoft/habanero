@@ -35,8 +35,21 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Constructor to initialise a new tab definition
         /// </summary>
-        public UIFormTab() : this("")
+        public UIFormTab()
+            : this("")
         {
+        }
+
+        /// <summary>
+        /// Construct the UIFormTab with its UIFormColumns
+        /// </summary>
+        public UIFormTab(params UIFormColumn[] uiFormColumns)
+            : this("")
+        {
+            foreach (UIFormColumn uiFormColumn in uiFormColumns)
+            {
+                Add(uiFormColumn);
+            }
         }
 
         /// <summary>

@@ -103,7 +103,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Represents a panel that contains an OK and Cancel button
         /// </summary>
-        private class OKCancelPanelWin : PanelWin, IOKCancelPanel
+        internal class OKCancelPanelWin : PanelWin, IOKCancelPanel
         {
             private readonly IControlFactory _controlFactory;
             private readonly IButton _okButton;

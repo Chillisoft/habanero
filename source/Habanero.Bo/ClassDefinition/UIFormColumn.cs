@@ -39,6 +39,18 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// Construct the UIFormColumn with its UIFormFields
+        /// </summary>
+        public UIFormColumn(params UIFormField[] uiFormFields)
+            : this()
+        {
+            foreach (UIFormField uiFormField in uiFormFields)
+            {
+                Add(uiFormField);
+            }
+        }
+
+        /// <summary>
         /// Constructor to initialise a new column definition with the
         /// specified width
         /// </summary>

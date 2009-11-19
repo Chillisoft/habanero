@@ -16,10 +16,12 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Drawing;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Console;
+using Habanero.Test.Structure;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -145,6 +147,34 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_Layout_ShouldSetupPanelSizeCorrectly()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            //---------------Test Result -----------------------
+            Size size = _defaultBOEditorForm.PanelInfo.Panel.Size;
+            IUIForm uiForm = _defaultBOEditorForm.PanelInfo.UIForm;
+            Assert.AreEqual(uiForm.Width, size.Width, "Should set width correctly");
+            Assert.AreEqual(uiForm.Height, size.Height, "Should set height correctly");
+        }
+
+        [Test]
+        public void Test_Layout_ShouldSetupFormSizeCorrectly()
+        {
+            //---------------Set up test pack-------------------
+            IUIForm uiForm = _defaultBOEditorForm.PanelInfo.UIForm;
+            IPanel panel = GetControlFactory().CreatePanel();
+            panel.Size = new Size(uiForm.Width, uiForm.Height);
+            IFormHabanero okCancelForm = GetControlFactory().CreateOKCancelDialogFactory().CreateOKCancelForm(panel, "Test");
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            //---------------Test Result -----------------------
+            Assert.AreEqual(okCancelForm.Width, _defaultBOEditorForm.Width, "Should set width correctly");
+            Assert.AreEqual(okCancelForm.Height, _defaultBOEditorForm.Height, "Should set height correctly");
+        }
+
+        [Test]
         public void Test_Construct_ShouldConstructWithDefaultConstructor()
         {
             //---------------Set up test pack-------------------
@@ -193,6 +223,28 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(defaultBOEditorForm.PanelInfo);
             Assert.IsNotNull(defaultBOEditorForm.GroupControlCreator);
             Assert.AreSame(groupControl, defaultBOEditorForm.GroupControlCreator);
+        }
+
+
+
+        [Test]
+        public void Test_Constructor_WhenUIDefIsInherited_ShouldUseInheritedUIDef()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Entity.LoadDefaultClassDef();
+            IClassDef subClassDef = LegalEntity.LoadClassDef_WithSingleTableInheritance();
+            IClassDef subSubClassDef = Vehicle.LoadClassDef_WithClassTableInheritance();
+            UIForm uiForm = new UIForm(new UIFormTab(new UIFormColumn(new UIFormField("My Form Field", "EntityType"))));
+            string uiDefName = "EntityUiDef";
+            classDef.UIDefCol.Add(new UIDef(uiDefName, uiForm, null));
+            IBusinessObject businessObject = subSubClassDef.CreateNewBusinessObject();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IDefaultBOEditorForm defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject)businessObject, uiDefName);
+            //---------------Test Result -----------------------
+            IPanelInfo panelInfo = defaultBOEditorForm.PanelInfo;
+            Assert.IsNotNull(panelInfo);
+            Assert.AreSame(uiForm, panelInfo.UIForm);
         }
 
 

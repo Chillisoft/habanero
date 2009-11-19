@@ -211,36 +211,44 @@ namespace Habanero.UI.Base
             if (uiForm == null) throw new ArgumentNullException("uiForm");
             if (groupControlCreator == null) throw new ArgumentNullException("groupControlCreator");
             PanelInfo panelInfo = new PanelInfo();
-            IPanel panel = ControlFactory.CreatePanel();
-            panelInfo.Panel = panel;
-            IGroupControl groupControl = groupControlCreator();
             // generic interface
-            IPanel childPanel = ControlFactory.CreatePanel();
             foreach (UIFormTab formTab in uiForm)
             {
                 IPanelInfo tabPagePanelInfo = BuildPanelForTab(formTab);
-                childPanel = tabPagePanelInfo.Panel;
-                groupControl.AddControl(childPanel, formTab.Name, childPanel.Height, childPanel.Width);
-
                 panelInfo.PanelInfos.Add(tabPagePanelInfo);
                 foreach (PanelInfo.FieldInfo fieldInfo in tabPagePanelInfo.FieldInfos)
                 {
                     panelInfo.FieldInfos.Add(fieldInfo);
                 }
-                if (panelInfo.MinimumPanelHeight < tabPagePanelInfo.MinimumPanelHeight)
+                if (tabPagePanelInfo.MinimumPanelHeight > panelInfo.MinimumPanelHeight)
                 {
                     panelInfo.MinimumPanelHeight = tabPagePanelInfo.MinimumPanelHeight;
-                    panelInfo.Panel.MinimumSize = tabPagePanelInfo.Panel.MinimumSize;
                 }
             }
-            groupControl.Dock = DockStyle.Fill;
-            if (uiForm.Count == 1)
+            
+            if (panelInfo.PanelInfos.Count == 0)
             {
-                panelInfo.Panel = childPanel;
+                panelInfo.Panel = ControlFactory.CreatePanel(); 
+            }
+            else if (panelInfo.PanelInfos.Count == 1)
+            {
+                panelInfo.Panel = panelInfo.PanelInfos[0].Panel;
             }
             else
             {
+                IGroupControl groupControl = groupControlCreator();
+                foreach (IPanelInfo childPanelInfo in panelInfo.PanelInfos)
+                {
+                    IUIFormTab uiFormTab = childPanelInfo.UIFormTab;
+                    IPanel childPanel = childPanelInfo.Panel;
+                    groupControl.AddControl(childPanel, uiFormTab.Name, childPanel.Height, childPanel.Width);
+                }
+
+                IPanel panel = ControlFactory.CreatePanel();
+                groupControl.Dock = DockStyle.Fill;
                 panel.Controls.Add(groupControl);
+                panel.MinimumSize = groupControl.Size;
+                panelInfo.Panel = panel;
             }
 
             panelInfo.UIForm = uiForm;
