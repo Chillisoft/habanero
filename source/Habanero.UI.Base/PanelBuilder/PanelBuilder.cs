@@ -225,14 +225,18 @@ namespace Habanero.UI.Base
                     panelInfo.MinimumPanelHeight = tabPagePanelInfo.MinimumPanelHeight;
                 }
             }
-            
+
+            IPanel mainPanel;
             if (panelInfo.PanelInfos.Count == 0)
             {
-                panelInfo.Panel = ControlFactory.CreatePanel(); 
+                mainPanel = ControlFactory.CreatePanel();
             }
             else if (panelInfo.PanelInfos.Count == 1)
             {
-                panelInfo.Panel = panelInfo.PanelInfos[0].Panel;
+                mainPanel = panelInfo.PanelInfos[0].Panel;
+                int lesserHeight = panelInfo.MinimumPanelHeight;
+                if (uiForm.Height < lesserHeight) lesserHeight = uiForm.Height;
+                mainPanel.MinimumSize = new Size(uiForm.Width, lesserHeight);
             }
             else
             {
@@ -248,9 +252,10 @@ namespace Habanero.UI.Base
                 groupControl.Dock = DockStyle.Fill;
                 panel.Controls.Add(groupControl);
                 panel.MinimumSize = groupControl.Size;
-                panelInfo.Panel = panel;
+                mainPanel = panel;
             }
-
+            panelInfo.Panel = mainPanel;
+            mainPanel.Size = new Size(uiForm.Width, uiForm.Height);
             panelInfo.UIForm = uiForm;
             return panelInfo;
         }

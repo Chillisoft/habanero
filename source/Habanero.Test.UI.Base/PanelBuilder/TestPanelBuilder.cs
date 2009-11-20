@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -28,6 +29,7 @@ using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace Habanero.Test.UI.Base
 {
@@ -1192,7 +1194,7 @@ namespace Habanero.Test.UI.Base
         //TODO: add tests that label and error provider get tabstop set to false
         
         [Test]
-        public void Test_BuildTabControl_TwoTabPagesOnTabControl()
+        public void Test_BuildPanelForForm_WithTwoTabPages_ShouldBuildTabControl()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
@@ -1211,7 +1213,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void Test_BuildTabControl_CorrectControlsOnTabPage()
+        public void Test_BuildPanelForForm_WithTwoTabPages_ShouldBuildTabControl_WithCorrectControlsOnTabPage()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
@@ -1236,7 +1238,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildTabControl_PanelInfos()
+        public void Test_BuildPanelForForm_WithTwoTabPages_ShouldHaveCorrectNumberOfFieldInfos()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
@@ -1293,6 +1295,129 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_BuildPanelForForm_WhenNoTabs_ShouldReturnPanelWithNoControls()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IUIForm form = new UIForm();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, form.Count);
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            IPanel panel = panelInfo.Panel;
+            Assert.AreEqual(0, panel.Controls.Count);
+        }
+
+        [Test]
+        public void Test_BuildPanelForForm_WhenNoTabs_ShouldReturnPanelSizedCorrectly()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IUIForm form = new UIForm();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, form.Count);
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            IPanel panel = panelInfo.Panel;
+            Assert.AreEqual(form.Height, panel.Height, "Height should be correct");
+            Assert.AreEqual(form.Width, panel.Width, "Width should be correct");
+        }
+
+        [Test]
+        public void Test_BuildPanelForForm_WhenNoTabs_ShouldReturnPanelWithCorrectMinimumSize()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IUIForm form = new UIForm();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, form.Count);
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            IPanel panel = panelInfo.Panel;
+            Assert.AreEqual(new Size(0, 0), panel.MinimumSize, "Minimum size should be correct");
+        }
+
+        [Test]
+        public void Test_BuildPanelForForm_WhenOnlyOneTab_ShouldReturnPanelSizedCorrectly()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IUIForm form = classDef.UIDefCol["default"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, form.Count);
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            IPanel panel = panelInfo.Panel;
+            Assert.AreEqual(form.Height, panel.Height, "Height should be correct");
+            Assert.AreEqual(form.Width, panel.Width, "Width should be correct");
+        }
+
+        [Test]
+        public void Test_BuildPanelForForm_WhenOnlyOneTab_WithMoreHeightThanControls_ShouldReturnPanelWithCorrectMinimumSize()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IUIForm form = classDef.UIDefCol["default"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, form.Count);
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, panelInfo.FieldInfos.Count);
+            PanelInfo.FieldInfo lastFieldInfo = panelInfo.FieldInfos[1];
+            Assert.That(panelInfo.MinimumPanelHeight, Is.LessThan(form.Height), "Test case is not set up correctly");
+            IPanel panel = panelInfo.Panel;
+            Assert.AreEqual(panelInfo.MinimumPanelHeight, panel.MinimumSize.Height, "Minimum height should be correct");
+            Assert.AreEqual(form.Width, panel.MinimumSize.Width, "Minimum width should be correct");
+        }
+
+        [Test]
+        public void Test_BuildPanelForForm_WhenOnlyOneTab_WithMoreControlsThanHeight_ShouldReturnPanelWithCorrectMinimumSize()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IUIForm form = classDef.UIDefCol["default"].UIForm;
+            form.Height = 20;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, form.Count);
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, panelInfo.FieldInfos.Count);
+            Assert.That(panelInfo.MinimumPanelHeight, Is.GreaterThan(form.Height), "Test case is not set up correctly");
+            IPanel panel = panelInfo.Panel;
+            Assert.AreEqual(form.Height, panel.MinimumSize.Height, "Minimum height should be correct");
+            Assert.AreEqual(form.Width, panel.MinimumSize.Width, "Minimum width should be correct");
+        }
+
+        [Test]
+        public void Test_BuildPanelForForm_WithTwoTabPages_ShouldReturnPanelSizedCorrectly()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IUIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, form.Count);
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            IPanel panel = panelInfo.Panel;
+            Assert.AreEqual(form.Height, panel.Height, "Height should be correct");
+            Assert.AreEqual(form.Width, panel.Width, "Width should be correct");
+        }
+
+        [Test]
         public void Test_CreateOnePanelPerUIFormTab_2Panels()
         {
             //---------------Set up test pack-------------------
@@ -1320,12 +1445,30 @@ namespace Habanero.Test.UI.Base
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
-            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) uiForm[0]);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab)uiForm[0]);
             IPanel pnl = panelInfo.Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(pnl.Height, panelInfo.MinimumPanelHeight);
             Assert.AreEqual(pnl.Width, panelInfo.Panel.MinimumSize.Width);
             Assert.AreEqual(pnl.Height, panelInfo.Panel.MinimumSize.Height);
+        }
+
+        [Test]
+        public void Test_MinimumPanelHeight_ShouldBeTheBottomOfTheLastControl()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            IUIForm uiForm = classDef.UIDefCol["default"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab)uiForm[0]);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, panelInfo.FieldInfos.Count);
+            PanelInfo.FieldInfo lastFieldInfo = panelInfo.FieldInfos[1];
+            int bottomOfLastInputControl = lastFieldInfo.InputControl.Top + lastFieldInfo.InputControl.Height;
+            bottomOfLastInputControl += panelInfo.LayoutManager.BorderSize;
+            Assert.AreEqual(bottomOfLastInputControl, panelInfo.MinimumPanelHeight);
         }
 
         [Test]
@@ -1522,7 +1665,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage2Panel.Controls.Count);
             Assert.AreEqual(30, panelInfo.MinimumPanelHeight);
             Assert.AreEqual(100, panelInfo.Panel.MinimumSize.Height);
-            Assert.AreEqual(100, panelInfo.Panel.MinimumSize.Width);
+            Assert.AreEqual(200, panelInfo.Panel.MinimumSize.Width);
 
         }
 
