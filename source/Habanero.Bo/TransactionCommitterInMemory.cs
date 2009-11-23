@@ -114,6 +114,12 @@ namespace Habanero.BO
                 if (!_dataStoreInMemory.AllObjects.ContainsKey(businessObject.ID.ObjectID))
                 {
                     _dataStoreInMemory.Add(businessObject);
+                    if (businessObject.Props.HasAutoIncrementingField)
+                    {
+                        SupportsAutoIncrementingFieldBO supportsAutoIncrementingFieldBO = new SupportsAutoIncrementingFieldBO(businessObject);
+                        long autoIncrementingNumber = _dataStoreInMemory.GetNextAutoIncrementingNumber(businessObject.ClassDef);
+                        supportsAutoIncrementingFieldBO.SetAutoIncrementingFieldValue(autoIncrementingNumber);
+                    }
                 }
                 else if (businessObject.Status.IsDeleted)
                 {

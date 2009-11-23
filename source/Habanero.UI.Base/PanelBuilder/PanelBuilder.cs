@@ -250,8 +250,8 @@ namespace Habanero.UI.Base
 
                 IPanel panel = ControlFactory.CreatePanel();
                 groupControl.Dock = DockStyle.Fill;
-                panel.Controls.Add(groupControl);
                 panel.MinimumSize = groupControl.Size;
+                panel.Controls.Add(groupControl);
                 mainPanel = panel;
             }
             panelInfo.Panel = mainPanel;

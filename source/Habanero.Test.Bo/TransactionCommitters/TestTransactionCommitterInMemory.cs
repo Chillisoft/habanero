@@ -23,6 +23,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.Structure;
 using Habanero.Util;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.TransactionCommitters
 {
@@ -33,9 +34,8 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-
-
         }
+
         [TearDown]
         public void TearDown()
         {
@@ -335,6 +335,84 @@ namespace Habanero.Test.BO.TransactionCommitters
             Assert.IsTrue(engine.Status.IsNew && engine.Status.IsDeleted);
         }
 
+
+        [Test]
+        public void Test_CommitTransaction_WithAutoIncrementBo_ShouldAutoIncrementAfterInsert()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID(); 
+            
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            ITransactionCommitter transactionCommitter = new TransactionCommitterInMemory(dataStore);
+
+            TestAutoInc bo = new TestAutoInc();
+            bo.SetPropertyValue("testfield", "testing 123");
+            transactionCommitter.AddBusinessObject(bo);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.TestAutoIncID.HasValue);
+            //---------------Execute Test ----------------------
+            transactionCommitter.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(bo.TestAutoIncID);
+            Assert.AreNotEqual(0, bo.TestAutoIncID);
+            Assert.IsFalse(bo.Status.IsDirty);
+        }
+
+        [Test]
+        public void Test_CommitTransaction_WithAutoIncrementBo_ShouldUseNumberGeneratorsInDatastore()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = TestAutoInc.LoadClassDefWithAutoIncrementingID();
+
+            DataStoreInMemory dataStore = MockRepository.GeneratePartialMock<DataStoreInMemory>();
+            dataStore.Replay();
+
+            int nextAutoIncNumber = TestUtil.GetRandomInt();
+
+            dataStore.Stub(t => t.GetNextAutoIncrementingNumber(classDef)).Return(nextAutoIncNumber);
+
+            ITransactionCommitter transactionCommitter = new TransactionCommitterInMemory(dataStore);
+            
+            TestAutoInc bo = new TestAutoInc();
+            bo.SetPropertyValue("testfield", "testing 123");
+            transactionCommitter.AddBusinessObject(bo);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.TestAutoIncID.HasValue);
+            Assert.AreSame(classDef, bo.ClassDef);
+            Assert.IsTrue(bo.Props.HasAutoIncrementingField);
+            //---------------Execute Test ----------------------
+            transactionCommitter.CommitTransaction();
+            //---------------Test Result -----------------------
+            dataStore.AssertWasCalled(memory => memory.GetNextAutoIncrementingNumber(classDef));
+            Assert.IsNotNull(bo.TestAutoIncID);
+            Assert.AreEqual(nextAutoIncNumber, bo.TestAutoIncID);
+            Assert.IsFalse(bo.Status.IsDirty);
+        }
+
+        [Test]
+        public void Test_CommitTransaction_NonAutoIncrementingBo_ShouldNotCall_GetNextAutoIncrementingNumber()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO cp = GetContactPerson();
+            ClassDef classDef = cp.ClassDef;
+
+            DataStoreInMemory dataStore = MockRepository.GeneratePartialMock<DataStoreInMemory>();
+            dataStore.Replay();
+            dataStore.Stub(t => t.GetNextAutoIncrementingNumber(classDef)).Return(1);
+            
+            ITransactionCommitter transactionCommitter = new TransactionCommitterInMemory(dataStore);
+            transactionCommitter.AddBusinessObject(cp);
+            //---------------Assert Precondition----------------
+            Assert.AreSame(classDef, cp.ClassDef);
+            Assert.IsFalse(cp.Props.HasAutoIncrementingField);
+            //---------------Execute Test ----------------------
+            transactionCommitter.CommitTransaction();
+            //---------------Test Result -----------------------
+            dataStore.AssertWasNotCalled(memory => memory.GetNextAutoIncrementingNumber(Arg<IClassDef>.Is.Anything));
+        }
 
     }
 }

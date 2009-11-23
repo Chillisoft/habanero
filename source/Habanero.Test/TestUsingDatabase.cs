@@ -49,7 +49,7 @@ namespace Habanero.Test
             BORegistry.DataAccessor = new DataAccessorDB();
         }
 
-        public void SetupDBOracleConnection()
+        public static void SetupDBOracleConnection()
         {
             if (DatabaseConnection.CurrentConnection != null &&
                 DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionOracle))
@@ -122,6 +122,7 @@ namespace Habanero.Test
         {
             Thread.Sleep(10000);
         }
+
         protected static void WaitForGC()
         {
             GC.Collect();

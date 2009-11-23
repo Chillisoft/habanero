@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System.Collections;
+using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -119,8 +120,11 @@ namespace Habanero.UI.VWG
                 throw new HabaneroDeveloperException(errMessage, errMessage);
             }
             ITabPage childControl = factory.CreateTabPage(headingText);
-            childControl.Width = minimumControlHeight;
-            childControl.Height = minimumControlHeight;
+            childControl.MinimumSize = new Size(0,0);
+            childControl.ClientSize = new Size(minimumControlWidth, minimumControlHeight);
+            childControl.MinimumSize = childControl.Size;
+            //childControl.Width = minimumControlHeight;
+            //childControl.Height = minimumControlHeight;
             contentControl.Dock = Base.DockStyle.Fill;
             childControl.Controls.Add(contentControl);
             this.TabPages.Add(childControl);

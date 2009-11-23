@@ -34,13 +34,13 @@ namespace Habanero.Base
         /// dispensed.
         /// </summary>
         /// <returns>Returns an integer</returns>
-        int NextNumber();
+        long NextNumber();
         /// <summary>
         /// Allows the developer to set the new Sequence number this can be used when initialy creating the numbers e.g. when 
         /// you want to ensure that the numbers are generated starting at 10000.
         /// </summary>
         /// <param name="newSequenceNumber"></param>
-        void SetSequenceNumber(int newSequenceNumber);
+        void SetSequenceNumber(long newSequenceNumber);
 
         /// <summary>
         /// Interface to add the number generator to a transaction via the transaction committer.

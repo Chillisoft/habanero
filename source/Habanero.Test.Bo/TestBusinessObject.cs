@@ -29,16 +29,36 @@ using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
+
+    [TestFixture]
+    public class TestBusinessObject_InMemory : TestBusinessObject
+    {
+        [TestFixtureSetUp]
+        public override void TestFixtureSetup()
+        {
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+        }
+
+        [SetUp]
+        public override void SetupTest()
+        {
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            ClassDef.ClassDefs.Clear();
+            new Address();
+        }
+    }
     /// <summary>
     /// Summary description for TestBusinessObject.
     /// </summary>
     [TestFixture]
-    public class TestBusinessObject : TestUsingDatabase
+    public class TestBusinessObject
     {
         [TestFixtureSetUp]
-        public void TestFixtureSetup()
+        public virtual void TestFixtureSetup()
         {
-            SetupDBConnection();
+            TestUsingDatabase.SetupDBDataAccessor();
         }
 
         [TearDown]
@@ -48,9 +68,9 @@ namespace Habanero.Test.BO
         }
 
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
-            SetupDBConnection();
+            TestUsingDatabase.SetupDBDataAccessor();
             BORegistry.DataAccessor = new DataAccessorDB();
             ClassDef.ClassDefs.Clear();
             new Address();
@@ -585,12 +605,6 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = MyBO.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
-                Repeat.Times(2);
-            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
-            mock.ReplayAll();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             IBOProp prop = bo.Props["TestProp"];
             const string newValue = "NewValue";
@@ -609,12 +623,6 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = MyBO.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
-                Repeat.Times(2);
-            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
-            mock.ReplayAll();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             IBOProp prop = bo.Props["TestProp"];
             const string newValue = "NewValue";
@@ -633,12 +641,6 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = MyBO.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
-                Repeat.Times(2);
-            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
-            mock.ReplayAll();
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bool propertyEventFired = false;
             IBusinessObject eventBusinessObject = null;
@@ -670,12 +672,6 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = MyBO.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
-                Repeat.Times(2);
-            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
-            mock.ReplayAll();
             const string propValue = "PropValue";
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.TestProp = propValue;
@@ -696,12 +692,6 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = MyBO.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
-                Repeat.Times(2);
-            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
-            mock.ReplayAll();
             const string propValue = "PropValue";
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.TestProp = propValue;
@@ -722,12 +712,6 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = MyBO.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
-                Repeat.Times(2);
-            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
-            mock.ReplayAll();
             const string propValue = "PropValue";
             MyBO bo = (MyBO)classDef.CreateNewBusinessObject();
             bo.TestProp = propValue;

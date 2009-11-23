@@ -56,7 +56,7 @@ namespace Habanero.DB
         /// <summary>
         /// Returns the next number in the sequence
         /// </summary>
-        public int NextNumber()
+        public long NextNumber()
         {
             BoSequenceNumber.SequenceNumber++;
             return BoSequenceNumber.SequenceNumber.Value;
@@ -88,7 +88,7 @@ namespace Habanero.DB
         /// <summary>
         /// Proactively sets the current sequence number and persists it
         /// </summary>
-        public void SetSequenceNumber(int newSequenceNumber)
+        public void SetSequenceNumber(long newSequenceNumber)
         {
             BoSequenceNumber.SequenceNumber = newSequenceNumber;
             BoSequenceNumber.Save();
@@ -134,7 +134,7 @@ namespace Habanero.DB
                 itsLoader.LoadClass(
                     @"
                <class name=""BOSequenceNumberLocking"" assembly=""Habanero.DB"" table=""NumberGenerator"">
-					<property  name=""SequenceNumber"" type=""Int32"" />
+					<property  name=""SequenceNumber"" type=""Int64"" />
                     <property  name=""NumberType""/>
 					<property  name=""DateTimeLocked"" type=""DateTime"" />
 					<property  name=""UserLocked"" />
@@ -162,9 +162,9 @@ namespace Habanero.DB
         /// <summary>
         /// Gets or sets the sequence number
         /// </summary>
-        public virtual Int32? SequenceNumber
+        public virtual long? SequenceNumber
         {
-            get { return ((Int32?)(base.GetPropertyValue("SequenceNumber"))); }
+            get { return ((long?)(base.GetPropertyValue("SequenceNumber"))); }
             set { base.SetPropertyValue("SequenceNumber", value); }
         }
     }

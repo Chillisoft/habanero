@@ -26,13 +26,13 @@ namespace Habanero.BO
     /// must be set as autoincrementing in the property definition.
     ///</summary>
     public class SupportsAutoIncrementingFieldBO : ISupportsAutoIncrementingField {
-        private readonly BusinessObject _bo;
+        private readonly IBusinessObject _bo;
 
         ///<summary>
         /// Constructs the autoincremeing fieldBO object with the appropriate business object.
         ///</summary>
         ///<param name="bo"></param>
-        public SupportsAutoIncrementingFieldBO(BusinessObject bo)
+        public SupportsAutoIncrementingFieldBO(IBusinessObject bo)
         {
             _bo = bo;
         }

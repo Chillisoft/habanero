@@ -98,7 +98,7 @@ namespace Habanero.Test.DB
             numGen.SetSequenceNumber(0);
 
             //get the next number for invoice number
-            int num = numGen.NextNumber();
+            long num = numGen.NextNumber();
             BOSequenceNumberLocking boSequenceNumber1 = numGen.BoSequenceNumber;
             Assert.AreEqual(1, num, "The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.

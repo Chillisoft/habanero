@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
@@ -505,6 +506,86 @@ namespace Habanero.Test.BO
 
             Assert.AreSame(boWithIntID, returnedBOWitID);
             Assert.AreSame(intID_DifferentType, returnedBOWitID_diffType);
+        }
+
+        [Test]
+        public void Test_GetNextAutoIncrementingNumber_WhenNoNumberGeneratorForClassDef_ShouldCreateNumberGenerator()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStoreInMemory = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(dataStoreInMemory);
+            IClassDef classDef = MockRepository.GenerateStub<IClassDef>();
+            IClassDef classDef2 = MockRepository.GenerateStub<IClassDef>();
+            INumberGenerator numberGenerator = MockRepository.GenerateStub<INumberGenerator>();
+            dataStoreInMemory.AutoIncrementNumberGenerators.Add(classDef, numberGenerator);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStoreInMemory.AutoIncrementNumberGenerators.Count);
+            Assert.AreSame(numberGenerator, dataStoreInMemory.AutoIncrementNumberGenerators[classDef]);
+            Assert.IsFalse(dataStoreInMemory.AutoIncrementNumberGenerators.ContainsKey(classDef2));
+            //---------------Execute Test ----------------------
+            long defaultNumber = dataStoreInMemory.GetNextAutoIncrementingNumber(classDef2);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2,dataStoreInMemory.AutoIncrementNumberGenerators.Count);
+            numberGenerator.AssertWasNotCalled(t => t.NextNumber());
+            Assert.AreEqual(1, defaultNumber);
+            INumberGenerator createdNumberGenerator = dataStoreInMemory.AutoIncrementNumberGenerators[classDef2];
+            Assert.IsNotNull(createdNumberGenerator);
+            TestUtil.AssertIsInstanceOf<NumberGenerator>(createdNumberGenerator);
+        }
+
+        [Test]
+        public void Test_GetNextAutoIncrementingNumber_ShouldUseNumberGenerator()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStoreInMemory = new DataStoreInMemory();
+            IClassDef classDef = MockRepository.GenerateStub<IClassDef>();
+            INumberGenerator numberGenerator = MockRepository.GenerateStub<INumberGenerator>();
+            long numberFromNumberGenerator = TestUtil.GetRandomInt();
+            numberGenerator.Stub(t => t.NextNumber()).Return(numberFromNumberGenerator);
+            dataStoreInMemory.AutoIncrementNumberGenerators.Add(classDef,numberGenerator);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStoreInMemory.AutoIncrementNumberGenerators.Count);
+            Assert.AreSame(numberGenerator, dataStoreInMemory.AutoIncrementNumberGenerators[classDef]);
+            //---------------Execute Test ----------------------
+            long autoIncrementingNumber = dataStoreInMemory.GetNextAutoIncrementingNumber(classDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(numberFromNumberGenerator, autoIncrementingNumber);
+            numberGenerator.AssertWasCalled(t => t.NextNumber());
+        }        
+        
+        [Test]
+        public void Test_GetNextAutoIncrementingNumber_ShouldUseNumberGeneratorForSpecificClassDef()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStoreInMemory = new DataStoreInMemory();
+            IClassDef classDef = MockRepository.GenerateStub<IClassDef>();
+            IClassDef classDef2 = MockRepository.GenerateStub<IClassDef>();
+            INumberGenerator numberGenerator = MockRepository.GenerateStub<INumberGenerator>();
+            INumberGenerator numberGenerator2 = MockRepository.GenerateStub<INumberGenerator>();
+            dataStoreInMemory.AutoIncrementNumberGenerators.Add(classDef, numberGenerator);
+            dataStoreInMemory.AutoIncrementNumberGenerators.Add(classDef2, numberGenerator2);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, dataStoreInMemory.AutoIncrementNumberGenerators.Count);
+            Assert.AreSame(numberGenerator, dataStoreInMemory.AutoIncrementNumberGenerators[classDef]);
+            Assert.AreSame(numberGenerator2, dataStoreInMemory.AutoIncrementNumberGenerators[classDef2]);
+            //---------------Execute Test ----------------------
+            long autoIncrementingNumber = dataStoreInMemory.GetNextAutoIncrementingNumber(classDef2);
+            //---------------Test Result -----------------------
+            numberGenerator2.AssertWasCalled(t => t.NextNumber());
+            numberGenerator.AssertWasNotCalled(t => t.NextNumber());
+        }
+
+        [Test]
+        public void Test_AutoIncrementNumberGenerators_IsNotNull()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DataStoreInMemory dataStoreInMemory = new DataStoreInMemory();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(dataStoreInMemory.AutoIncrementNumberGenerators);
         }
     }
 }

@@ -67,7 +67,7 @@ namespace Habanero.Test.BO
 
             //---------------Execute Test ----------------------
             //get the next number for invoice number
-            int nextNum = numGen.NextNumber();
+            long nextNum = numGen.NextNumber();
 
             //---------------Test Result -----------------------
             //test nextnumber should be one.
@@ -88,7 +88,7 @@ namespace Habanero.Test.BO
 
             //---------------Execute Test ----------------------
             //get the next number for invoice number
-            int nextNum = numGen.NextNumber();
+            long nextNum = numGen.NextNumber();
 
             //---------------Test Result -----------------------
             //test nextnumber should be one.
@@ -106,7 +106,7 @@ namespace Habanero.Test.BO
             INumberGenerator numGen = new NumberGenerator("tmp");
             //---------------Execute Test ----------------------
             //get the next number for invoice number
-            int sequenceNumber = numGen.NextNumber();
+            long sequenceNumber = numGen.NextNumber();
             //---------------Test Result -----------------------
             //test number should be one.
             Assert.AreEqual(1, sequenceNumber);
@@ -126,7 +126,7 @@ namespace Habanero.Test.BO
             numGen = new NumberGenerator("tmp");
             //---------------Execute Test ----------------------
             //get the next number for invoice number
-            int nextNumber = numGen.NextNumber();
+            long nextNumber = numGen.NextNumber();
             //---------------Test Result -----------------------
             //test number should be 101.
             Assert.AreEqual(seedNumber + 1, nextNumber);
@@ -149,7 +149,7 @@ namespace Habanero.Test.BO
 
             //---------------Execute Test ----------------------
             //Get second number
-            int nextNum = numGen.NextNumber();
+            long nextNum = numGen.NextNumber();
 
             //---------------Test Result -----------------------
             //test number should be 2.
@@ -221,7 +221,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             numGen.NextNumber();
             numGen = new NumberGenerator("tmp");
-            int nextNum = numGen.NextNumber();
+            long nextNum = numGen.NextNumber();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, nextNum);
             //---------------Tear Down   -----------------------
@@ -244,7 +244,7 @@ namespace Habanero.Test.BO
             numGen.NextNumber();
             numGen.Save();
             numGen = new NumberGenerator("tmp");
-            int nextNum = numGen.NextNumber();
+            long nextNum = numGen.NextNumber();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, nextNum);
             //---------------Tear Down   -----------------------
@@ -280,7 +280,7 @@ namespace Habanero.Test.BO
             INumberGenerator numGen = new NumberGenerator("tmp", tableName);
             //---------------Execute Test ----------------------
             //get the next number for invoice number
-            int sequenceNumber = numGen.NextNumber();
+            long sequenceNumber = numGen.NextNumber();
             //---------------Test Result -----------------------
             //test number should be one.
             Assert.AreEqual(1, sequenceNumber);
@@ -300,7 +300,7 @@ namespace Habanero.Test.BO
             numGen.NextNumber();
             numGen.Save();
             numGen = new NumberGenerator("tmp", "another_number_generator");
-            int nextNum = numGen.NextNumber();
+            long nextNum = numGen.NextNumber();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, nextNum);
 

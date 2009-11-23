@@ -68,7 +68,7 @@ namespace Habanero.BO
         /// dispensed.
         /// </summary>
         /// <returns>Returns an integer</returns>
-        public int NextNumber()
+        public long NextNumber()
         {
             _boSequenceNumber.SequenceNumber++;
             return _boSequenceNumber.SequenceNumber.Value;
@@ -79,7 +79,7 @@ namespace Habanero.BO
         /// you want to ensure that the numbers are generated starting at 10000.
         /// </summary>
         /// <param name="newSequenceNumber"></param>
-        public void SetSequenceNumber(int newSequenceNumber)
+        public void SetSequenceNumber(long newSequenceNumber)
         {
             _boSequenceNumber.SequenceNumber = newSequenceNumber;
             _boSequenceNumber.Save();
@@ -174,9 +174,9 @@ namespace Habanero.BO
         /// <summary>
         /// Gets or sets the sequence number
         /// </summary>
-        public virtual Int32? SequenceNumber
+        public virtual long? SequenceNumber
         {
-            get { return ((Int32?) (base.GetPropertyValue("SequenceNumber"))); }
+            get { return ((long?)(base.GetPropertyValue("SequenceNumber"))); }
             set { base.SetPropertyValue("SequenceNumber", value); }
         }
 
@@ -194,7 +194,7 @@ namespace Habanero.BO
             _tableName = tableName;
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             string classDef = "<class name=\"BOSequenceNumber\" assembly=\"Habanero.BO\" table=\"" + _tableName + "\">" +
-                              "<property  name=\"SequenceNumber\" type=\"Int32\" />" +
+                              "<property  name=\"SequenceNumber\" type=\"Int64\" />" +
                               "<property  name=\"NumberType\"/>" +
                               "<primaryKey isObjectID=\"false\">" +
                               "<prop name=\"NumberType\" />" +
