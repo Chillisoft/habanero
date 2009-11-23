@@ -1311,12 +1311,19 @@ namespace Habanero.BO
         internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {
             AreCustomRulesValid(out errors);
+            HasErrors(out errors);
+            return errors == null || errors.Count == 0;
+        }
+
+        private bool HasErrors(out IList<IBOError> errors)
+        {
+            errors = new List<IBOError>();
             foreach (IBusinessObjectRule rule in GetBusinessObjectRules())
             {
                 if (rule == null || !ErrorLevelIsError(rule) || rule.IsValid()) continue;
                 CreateBOError(rule, errors);
             }
-            return errors == null || errors.Count == 0;
+            return errors.Count != 0;
         }
 
         /// <summary>
@@ -1332,7 +1339,7 @@ namespace Habanero.BO
                 if (rule == null || ErrorLevelIsError(rule) || rule.IsValid()) continue;
                 CreateBOError(rule, errors);
             }
-            return errors.Count == 0;
+            return errors.Count != 0;
         }
 
         private static bool ErrorLevelIsError(IBusinessObjectRule rule)
@@ -1553,10 +1560,8 @@ namespace Habanero.BO
         ///</summary>
         protected internal virtual void UpdateAsTransactionRolledBack()
         {
-            if (!(_concurrencyControl == null))
-            {
-                _concurrencyControl.UpdateAsTransactionRolledBack();
-            }
+            if ((_concurrencyControl == null)) return;
+            _concurrencyControl.UpdateAsTransactionRolledBack();
         }
 
         /// <summary>

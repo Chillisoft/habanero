@@ -120,7 +120,7 @@ namespace Habanero.BO.Loaders
             do
             {
                 string propName = _reader.GetAttribute("name");
-                if (propName == null || propName.Length == 0)
+                if (string.IsNullOrEmpty(propName))
                 {
                     throw new InvalidXmlDefinitionException("The 'prop' element " +
                         "must have a 'name' attribute that provides the name of the " +
