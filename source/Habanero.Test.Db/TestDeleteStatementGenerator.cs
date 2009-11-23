@@ -21,7 +21,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.SqlGeneration
+namespace Habanero.Test.DB.SqlGeneration
 {
     [TestFixture]
     public class TestDeleteStatementGenerator: TestUsingDatabase

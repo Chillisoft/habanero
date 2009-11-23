@@ -182,7 +182,7 @@ namespace Habanero.UI.VWG
 
         /// <summary>
         /// Adds a TextBox filter in which users can specify text that
-        /// multiplt string-value columns will be filtered on.  This uses a "like"
+        /// multiple string-value columns will be filtered on.  This uses a "like"
         /// operator and accepts any strings that contain the provided clause.
         /// </summary>
         /// <param name="labelText">The label to appear before the control</param>

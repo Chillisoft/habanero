@@ -65,6 +65,7 @@ namespace Habanero.Test.BO
             bo.GetPropertyValueString("TestProp");
         }
 
+
         [Test]
         public void Test_Instantiate_SetsDefaults()
         {

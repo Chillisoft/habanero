@@ -38,8 +38,8 @@ namespace Habanero.BO
         private readonly string _tableName;
 
         ///<summary>
-        /// Creates a number generator of the specified type. If no record is currently in the database for that type.
-        /// Then this will create an entry in the table with the seed number of zero.
+        /// Creates a number generator of the specified type. If no record is currently in the database for that type,
+        /// then this will create an entry in the table with the seed number of zero.
         ///</summary>
         ///<param name="numberType">Type of number</param>
         public NumberGenerator(string numberType)

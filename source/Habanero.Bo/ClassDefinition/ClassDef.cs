@@ -289,22 +289,22 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (_primaryKeyDef == null)
-                {
-                    try
-                    {
-                        ClassDef superClassClassDef = this.SuperClassClassDef;
-                        if (superClassClassDef != null)
-                        {
-                            return superClassClassDef.PrimaryKeyDef;
-                        }
-                    }
-                    catch (InvalidXmlDefinitionException)
-                    {
-                        // the super class def is not loaded yet, return null
-                        return null;
-                    }
-                }
+                //if (_primaryKeyDef == null)
+                //{
+                //    try
+                //    {
+                //        ClassDef superClassClassDef = this.SuperClassClassDef;
+                //        if (superClassClassDef != null)
+                //        {
+                //            return superClassClassDef.PrimaryKeyDef;
+                //        }
+                //    }
+                //    catch (InvalidXmlDefinitionException)
+                //    {
+                //        // the super class def is not loaded yet, return null
+                //        return null;
+                //    }
+                //}
                 return _primaryKeyDef;
             }
             set { _primaryKeyDef = value; }

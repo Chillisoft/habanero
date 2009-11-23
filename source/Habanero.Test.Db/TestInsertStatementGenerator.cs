@@ -21,9 +21,10 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
+using Habanero.Test.BO.SqlGeneration;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.SqlGeneration
+namespace Habanero.Test.DB.SqlGeneration
 {
     [TestFixture]
     public class TestInsertStatementGenerator: TestUsingDatabase

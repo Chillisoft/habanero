@@ -444,8 +444,8 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNotNull(def.SuperClassDef);
             IClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
             Assert.AreSame(parentDef, superClassDef);
-            Assert.IsNotNull(def.PrimaryKeyDef);
-            Assert.AreSame(parentDef.PrimaryKeyDef, def.PrimaryKeyDef);
+            Assert.IsNull(def.PrimaryKeyDef);
+            Assert.AreSame(parentDef.PrimaryKeyDef, def.SuperClassDef.SuperClassClassDef.PrimaryKeyDef);
         }
 
         [Test]

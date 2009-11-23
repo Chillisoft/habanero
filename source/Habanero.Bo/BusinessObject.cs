@@ -420,7 +420,7 @@ namespace Habanero.BO
         internal ClassDef GetClassDefToUseForPrimaryKey()
         {
             ClassDef classDefToUseForPrimaryKey = _classDef;
-            while (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance())
+            while (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance() || classDefToUseForPrimaryKey.PrimaryKeyDef == null)
             {
                 classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
             }

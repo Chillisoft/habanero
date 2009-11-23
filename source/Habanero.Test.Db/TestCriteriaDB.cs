@@ -20,7 +20,7 @@ using System;
 using Habanero.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.DB
 {
     [TestFixture]
     public class TestCriteriaDB
