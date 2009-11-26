@@ -332,8 +332,9 @@ namespace Habanero.BO
             _boStatus = new BOStatus(this) {IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true};
             if (classDef == null)
             {
-                if (ClassDef.ClassDefs.Contains(GetType()))
-                    _classDef = (ClassDef) ClassDef.ClassDefs[GetType()];
+                try { _classDef = (ClassDef)ClassDef.ClassDefs[GetType()]; }
+                catch (Exception) {
+                    _classDef = null;  }
             }
             else _classDef = (ClassDef) classDef;
             ConstructFromClassDef(true);

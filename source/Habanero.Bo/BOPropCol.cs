@@ -52,14 +52,15 @@ namespace Habanero.BO
         public void Add(IBOProp boProp)
         {
             if (boProp == null) throw new ArgumentNullException("boProp");
-            if (Contains(boProp.PropertyName.ToUpper()))
+            string propNameUpper = boProp.PropertyName.ToUpper();
+            if (_boProps.ContainsKey(propNameUpper))
             {
                 throw new InvalidPropertyException(String.Format(
                                                        "The BOProp with the name '{0}' is being added to the " +
                                                        "prop collection, but already exists in the collection.",
                                                        boProp.PropertyName));
             }
-            _boProps.Add(boProp.PropertyName.ToUpper(), boProp);
+            _boProps.Add(propNameUpper, boProp);
         }
 
 

@@ -61,7 +61,7 @@ namespace Habanero.BO.ClassDefinition
         public virtual bool TryParsePropValue(object valueToParse, out object returnValue)
         {
             returnValue = null;
-            if (valueToParse != null && !(valueToParse is IBusinessObject) && valueToParse.ToString().Length == 0) return true;
+            if (valueToParse != null && valueToParse is string && ((string)valueToParse).Length == 0) return true;
 
             return valueToParse == null || valueToParse == DBNull.Value;
         }

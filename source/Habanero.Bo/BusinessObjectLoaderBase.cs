@@ -66,7 +66,7 @@ namespace Habanero.BO
             CheckNotTypedAsBusinessObject<T>();
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
             col.SelectQuery.Criteria = criteria;
-            Refresh(col);
+            Refresh<T>(col);
             return col;
         }
 
@@ -424,12 +424,12 @@ namespace Habanero.BO
         /// <param name="collection">The collection to add to</param>
         /// <param name="loadedBo">The bo to be added</param>
         protected static void AddBusinessObjectToCollection
-            (IBusinessObjectCollection collection, IBusinessObject loadedBo)
+            (IBusinessObjectCollection collection, IBusinessObject loadedBo, IList originalPersistedObjects)
         {
             if (collection == null) throw new ArgumentNullException("collection");
             if (loadedBo == null) throw new ArgumentNullException("loadedBo");
-            //If the origional collection had the new business object then
-            // use add internal this adds without any events being raised etc.
+            //If the origional collection had the loaded business object then
+            // use add internal. this adds without any events being raised etc.
             //else adds via the Add method (normal add) this raises events such that the 
             // user interface can be updated.
             if (collection.AddedBusinessObjects.Contains(loadedBo))
@@ -438,7 +438,7 @@ namespace Habanero.BO
                 collection.PersistedBusinessObjects.Add(loadedBo);
                 return;
             }
-            if (collection.PersistedBusinessObjects.Contains(loadedBo))
+            if (originalPersistedObjects.Contains(loadedBo))
             {
                 collection.AddWithoutEvents(loadedBo);
                 return;
@@ -618,15 +618,37 @@ namespace Habanero.BO
         /// <param name="loadedBOs">the collection of loaded BOs to add</param>
         protected static void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBOs)
         {
-            ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
-
-            // made internal or something and used via reflection.
-            // I (Brett) am not comfortable with it being on the Interface. 
-            foreach (IBusinessObject loadedBo in loadedBOs)
+            // if the collection is fresh (ie. being loaded for the first time
+            // then load without events.
+            if (collection.TimeLastLoaded == null)
             {
-                AddBusinessObjectToCollection(collection, loadedBo);
+                foreach (IBusinessObject loadedBo in loadedBOs)
+                {
+                    collection.AddWithoutEvents(loadedBo);
+                    collection.PersistedBusinessObjects.Add(loadedBo);
+                }
+                collection.TimeLastLoaded = DateTime.Now;
+            }  else {
+
+                // made internal or something and used via reflection.
+                // I (Brett) am not comfortable with it being on the Interface. 
+                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+
+                // store the original persisted collection and pass it through. This is to improve performance
+                // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
+                IList originalPersistedCollection = new List<IBusinessObject>();
+                foreach (var businessObject in collection.PersistedBusinessObjects)
+                {
+                    originalPersistedCollection.Add(businessObject);
+                }
+                foreach (IBusinessObject loadedBo in loadedBOs)
+                {
+                    AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
+                }
+                RestoreEditedLists(collection);
+                collection.TimeLastLoaded = DateTime.Now;
+                ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
             }
-            RestoreEditedLists(collection);
         }
 
         /// <summary>

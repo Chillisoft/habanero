@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -304,6 +306,14 @@ namespace Habanero.DB
             {
                 ISqlStatement statement = CreateStatementAdjustedForLimits(selectQuery, totalNoOfRecords);
                 ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+                // store the original persisted collection and pass it through. This is to improve performance
+                // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
+                IList originalPersistedCollection = new List<IBusinessObject>();
+                foreach (var businessObject in collection.PersistedBusinessObjects)
+                {
+                    originalPersistedCollection.Add(businessObject);
+                }
+                bool isFirstLoad = collection.TimeLastLoaded == null;
                 using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
                 {
                     while (dr.Read())
@@ -319,7 +329,15 @@ namespace Habanero.DB
                         // use add internal this adds without any events being raised etc.
                         //else adds via the Add method (normal add) this raises events such that the 
                         // user interface can be updated.
-                        AddBusinessObjectToCollection(collection, loadedBo);
+                        if (isFirstLoad)
+                        {
+                            collection.AddWithoutEvents(loadedBo);
+                            collection.PersistedBusinessObjects.Add(loadedBo);
+                        }
+                        else
+                        {
+                            AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
+                        }
                     }
                 }
             }
@@ -342,6 +360,8 @@ namespace Habanero.DB
             //   that returns another type of object that has these methods to eliminate all these 
             //   public accessors
             RestoreEditedLists(collection);
+            collection.TimeLastLoaded = DateTime.Now;
+            ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
         }
 
         private int GetTotalNoOfRecordsIfNeeded(IClassDef classDef, ISelectQuery selectQuery)
@@ -642,12 +662,12 @@ namespace Habanero.DB
             int i = 0;
             foreach (QueryField field in selectQuery.Fields.Values)
             {
-                if (bo.Props.Contains(field.PropertyName))
-                {
+                //if (bo.Props.Contains(field.PropertyName))
+                //{
                     IBOProp boProp = bo.Props[field.PropertyName];
                     //TODO:                   if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
                     boProp.InitialiseProp(dr[i]);
-                }
+                //}
                 i++;
             }
             SetStatusAfterLoad(bo);
