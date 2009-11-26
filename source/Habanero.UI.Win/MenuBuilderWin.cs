@@ -191,6 +191,8 @@ namespace Habanero.UI.Win
                     _createdForm.MdiParent = (IFormHabanero) _habaneroMenuItem.Form;
                     _createdForm.WindowState = Habanero.UI.Base.FormWindowState.Maximized;
                     _createdForm.Text = _habaneroMenuItem.Name;
+                    //Deerasha 2009/11/26: Line below prevents the std VS icon from appearing on form's upper right
+                    ((Form) _createdForm).ShowIcon = false;
                     _createdForm.Controls.Clear();
 
                     BorderLayoutManager layoutManager = _habaneroMenuItem.ControlFactory.CreateBorderLayoutManager
