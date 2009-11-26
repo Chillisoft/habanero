@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+
 namespace Habanero.Base
 {
     ///<summary>
@@ -23,6 +25,7 @@ namespace Habanero.Base
     /// Typically databases differ in the characters used to differentiate fields and tables e.g. [ and ] for ms sql and
     /// ` for MySQL.
     ///</summary>
+    [Serializable]
     public class SqlFormatter : ISqlFormatter
     {
         private readonly string _leftFieldDelimiter;

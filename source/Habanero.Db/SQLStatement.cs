@@ -29,6 +29,7 @@ namespace Habanero.DB
     /// <summary>
     /// Manages a sql statement
     /// </summary>
+    [Serializable]
     public class SqlStatement : ISqlStatement
     {
 

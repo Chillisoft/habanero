@@ -140,7 +140,9 @@ namespace Habanero.BO
         protected internal BusinessObject(IClassDef def)
         {
             Initialise(def);
-            FinaliseBusinessObjectSetup();
+            SetupBOPropsWithThisBo();
+            AddToObjectManager();
+            RegisterForPropertyEvents();
         }
 
         #region Serialisation of BusinessObject
@@ -155,11 +157,12 @@ namespace Habanero.BO
         protected BusinessObject(SerializationInfo info, StreamingContext context)
         {
             Initialise(ClassDef.ClassDefs[GetType()]);
-            foreach (IBOProp prop in _boPropCol)
+            foreach (BOProp prop in _boPropCol)
             {
                 try
                 {
                     prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
+                    prop._isDirty = (bool)info.GetValue(prop.PropertyName + "_IsDirty", typeof(Boolean));
                 }
                 catch (SerializationException ex)
                 {
@@ -179,7 +182,9 @@ namespace Habanero.BO
             }
             _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
             _boStatus.BusinessObject = this;
-            FinaliseBusinessObjectSetup();
+            SetupBOPropsWithThisBo();
+            ReplaceInObjectManager();
+            RegisterForPropertyEvents();
         }
 
         /// <summary>
@@ -193,24 +198,21 @@ namespace Habanero.BO
             foreach (IBOProp prop in _boPropCol)
             {
                 info.AddValue(prop.PropertyName, prop.Value);
+                info.AddValue(prop.PropertyName + "_IsDirty", prop.IsDirty);
             }
             info.AddValue("Status", Status);
         }
 
         #endregion // Serialisation of BusinessObject
 
-
-
-        private void FinaliseBusinessObjectSetup()
-        {
-            SetupBOPropsWithThisBo();
-            AddToObjectManager();
-            RegisterForPropertyEvents();
-        }
-
         private void AddToObjectManager()
         {
             BusinessObjectManager.Instance.Add(this);
+        }
+
+        private void ReplaceInObjectManager()
+        {
+            BusinessObjectManager.Instance.AddWithReplace(this);
         }
 
         private void SetupBOPropsWithThisBo()

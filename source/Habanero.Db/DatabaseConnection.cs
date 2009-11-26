@@ -59,7 +59,7 @@ namespace Habanero.DB
     /// A super-class to manage a database connection and execute sql commands
     /// </summary>
     /// "See registry (480) think typesafe as well."
-    public abstract class DatabaseConnection : IDatabaseConnection
+    public abstract class DatabaseConnection : MarshalByRefObject, IDatabaseConnection
     {
         private readonly string _assemblyName;
         private readonly string _className;

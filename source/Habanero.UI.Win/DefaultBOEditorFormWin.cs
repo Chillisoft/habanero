@@ -199,9 +199,9 @@ namespace Habanero.UI.Win
         /// Creates a transaction Committer with the Business Object added.
         /// </summary>
         /// <returns>Returns the transaction object</returns>
-        protected virtual TransactionCommitter CreateSaveTransaction()
+        protected virtual ITransactionCommitter CreateSaveTransaction()
         {
-            TransactionCommitter committer = (TransactionCommitter)BORegistry.DataAccessor.CreateTransactionCommitter();
+            ITransactionCommitter committer = (ITransactionCommitter)BORegistry.DataAccessor.CreateTransactionCommitter();
             committer.AddBusinessObject(_bo);
             return committer;
         }
@@ -229,7 +229,7 @@ namespace Habanero.UI.Win
             try
             {
                 _panelInfo.ApplyChangesToBusinessObject();
-                TransactionCommitter committer = CreateSaveTransaction();
+                ITransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
                 DialogResult = Base.DialogResult.OK;
                 if (_action != null)

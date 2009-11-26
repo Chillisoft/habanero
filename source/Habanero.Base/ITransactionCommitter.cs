@@ -16,6 +16,9 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+
 namespace Habanero.Base
 {
     /// <summary>
@@ -90,6 +93,6 @@ namespace Habanero.Base
         /// Commit the transactions to the datasource e.g. the database, file, memory DB
         ///</summary>
         ///<returns></returns>
-        void CommitTransaction();
+        List<Guid> CommitTransaction();
     }
 }

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -131,6 +131,7 @@
     <Compile Include="DatabaseConnectionSQLite.cs" />
     <Compile Include="DatabaseLookupList.cs" />
     <Compile Include="DeleteStatementGenerator.cs" />
+    <Compile Include="IDatabaseConnectionCreator.cs" />
     <Compile Include="InsertSqlStatement.cs" />
     <Compile Include="InsertStatementGenerator.cs" />
     <Compile Include="NumberGenerator\NumberGeneratorPessimisticLocking.cs" />

@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
@@ -34,6 +35,7 @@ namespace Habanero.DB
     /// is useful as a test of structure, but runs comparatively slowly to
     /// in-memory testing, which should be used for testing of the logic.
     /// </summary>
+    [Serializable]
     public class TransactionCommitterDB : TransactionCommitter
     {
         private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.TransactionCommitterDB");

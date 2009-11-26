@@ -42,7 +42,7 @@ namespace Habanero.BO
         /// <summary> The current value of the BOProp </summary>
         protected object _currentValue;
         /// <summary> Whether the prop has been edited since being created or loaded from the database </summary>
-        protected bool _isDirty;
+        protected internal bool _isDirty;
         /// <summary> Is the boProp valid </summary>
         protected bool _isValid = true;
         /// <summary> The propDef for the BOProp </summary>

@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 
 namespace Habanero.DB
@@ -23,6 +24,7 @@ namespace Habanero.DB
     /// <summary>
     /// Generates parameter names for parameterised sql statements
     /// </summary>
+    [Serializable]
     public class ParameterNameGenerator : IParameterNameGenerator
     {
         private int _number;

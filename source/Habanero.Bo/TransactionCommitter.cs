@@ -71,7 +71,8 @@ namespace Habanero.BO
     ///        committerDB.CommitTransaction();
     /// </example>
     /// </summary>
-    public abstract class TransactionCommitter : ITransactionCommitter
+    [Serializable]
+    public abstract class TransactionCommitter : MarshalByRefObject, ITransactionCommitter
     {
         /// <summary>
         /// A list of all the transactions that are added to the transaction committer by the application developer.
@@ -144,11 +145,12 @@ namespace Habanero.BO
         /// Commit the transactions to the datasource e.g. the database, file, memory DB
         ///</summary>
         ///<returns></returns>
-        public void CommitTransaction()
+        public List<Guid> CommitTransaction()
         {
             Begin();
             Execute();
             Commit();
+            return _executedTransactions.FindAll(transactional => transactional is TransactionalBusinessObject).ConvertAll(transactional => ((TransactionalBusinessObject)transactional).BusinessObject.ID.ObjectID);
         }
 
         /// <summary>
@@ -519,5 +521,28 @@ namespace Habanero.BO
         /// <param name="relationship"></param>
         /// <param name="businessObject"></param>
         protected internal abstract void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject) where T : class, IBusinessObject, new();
+    }
+
+    public class TransactionCommitterRemote : ITransactionCommitter
+    {
+        private readonly ITransactionCommitter _remoteTransactionCommitter;
+
+        public TransactionCommitterRemote(ITransactionCommitter remoteTransactionCommitter)
+        {
+            _remoteTransactionCommitter = remoteTransactionCommitter;
+        }
+
+        public void AddBusinessObject(IBusinessObject businessObject)
+        {
+            _remoteTransactionCommitter.AddBusinessObject(businessObject);
+        }
+        public void AddTransaction(ITransactional transaction) { _remoteTransactionCommitter.AddTransaction(transaction); }
+        List<Guid> ITransactionCommitter.CommitTransaction() {
+            List<Guid> executedTransactions = _remoteTransactionCommitter.CommitTransaction();
+            executedTransactions.ForEach(guid => ((BusinessObject)BusinessObjectManager.Instance[guid]).UpdateStateAsPersisted());
+            return executedTransactions;
+        }
+
+       
     }
 }

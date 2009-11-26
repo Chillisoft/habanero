@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -256,8 +257,9 @@ namespace Habanero.Test.BO.TransactionCommitters
             StubSuccessfullTransaction transactional2 = new StubSuccessfullTransaction();
             committer.AddTransaction(transactional2);
             //---------------Execute Test ----------------------
-            committer.CommitTransaction();
+            List<Guid> executedTransactions  = committer.CommitTransaction();
             //---------------Test Result -----------------------
+            Assert.AreEqual(2, executedTransactions.Count);
             Assert.IsTrue(transactional1.Committed);
             Assert.IsTrue(transactional2.Committed);
         }
@@ -278,7 +280,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Execute Test ----------------------
             try
             {
-                committerDB.CommitTransaction();
+                 committerDB.CommitTransaction();
             }
             catch (BusObjectInAnInvalidStateException ex)
                 //---------------Test Result -----------------------

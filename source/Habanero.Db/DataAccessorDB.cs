@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 using Habanero.BO;
 
@@ -24,7 +25,7 @@ namespace Habanero.DB
     ///<summary>
     /// A Data Accessor for Retrieving and committing data from a relational database.
     ///</summary>
-    public class DataAccessorDB : IDataAccessor
+    public class DataAccessorDB : MarshalByRefObject, IDataAccessor
     {
         private readonly IBusinessObjectLoader _businessObjectLoader;
 

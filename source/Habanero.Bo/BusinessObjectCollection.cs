@@ -65,8 +65,16 @@ namespace Habanero.BO
         private const string CLASS_NAME = "ClassName";
         private const string ASSEMBLY_NAME = "AssemblyName";
         private const string CREATED_COUNT = "CreatedCount";
+        private const string PERSISTED_COUNT = "PersistedCount";
+        private const string ADDED_COUNT = "AddedCount";
+        private const string REMOVED_COUNT = "RemovedCount";
+        private const string MARKEDFORDELETE_COUNT = "MarkedForDeleteCount";
         private const string BUSINESS_OBJECT = "bo";
         private const string CREATED_BUSINESS_OBJECT = "createdbo";
+        private const string PERSISTED_BUSINESS_OBJECT = "persistedbo";
+        private const string ADDED_BUSINESS_OBJECT = "addedbo";
+        private const string REMOVED_BUSINESS_OBJECT = "removedbo";
+        private const string MARKEDFORDELETE_BUSINESS_OBJECT = "markedfordeletebo";
         private readonly List<TBusinessObject> _boCol = new List<TBusinessObject>();
 
         #region StronglyTypedComparer
@@ -98,13 +106,13 @@ namespace Habanero.BO
 
         private readonly List<TBusinessObject> _addedBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _markedForDeleteBusinessObjects = new List<TBusinessObject>();
-        private readonly EventHandler<BOEventArgs> _savedEventHandler;
-        private readonly EventHandler<BOEventArgs> _deletedEventHandler;
-        private readonly EventHandler<BOEventArgs> _restoredEventHandler;
-        private readonly EventHandler<BOEventArgs> _markForDeleteEventHandler;
-        private readonly EventHandler<BOEventArgs> _updatedEventHandler;
-        private readonly EventHandler<BOPropUpdatedEventArgs> _boPropUpdatedEventHandler;
-        private readonly EventHandler<BOEventArgs> _boIDUpdatedEventHandler;
+        private EventHandler<BOEventArgs> _savedEventHandler;
+        private EventHandler<BOEventArgs> _deletedEventHandler;
+        private EventHandler<BOEventArgs> _restoredEventHandler;
+        private EventHandler<BOEventArgs> _markForDeleteEventHandler;
+        private EventHandler<BOEventArgs> _updatedEventHandler;
+        private EventHandler<BOPropUpdatedEventArgs> _boPropUpdatedEventHandler;
+        private EventHandler<BOEventArgs> _boIDUpdatedEventHandler;
 
         private ISelectQuery _selectQuery;
 
@@ -140,6 +148,10 @@ namespace Habanero.BO
         private BusinessObjectCollection(IClassDef classDef, TBusinessObject sampleBo)
         {
             Initialise(classDef, sampleBo);
+            SetupEventHandlers();
+        }
+
+        private void SetupEventHandlers() {
             this._savedEventHandler = SavedEventHandler;
             this._deletedEventHandler = DeletedEventHandler;
             this._restoredEventHandler = RestoredEventHandler;
@@ -168,20 +180,105 @@ namespace Habanero.BO
         protected BusinessObjectCollection(SerializationInfo info, StreamingContext context)
         {
             int count = info.GetInt32(COUNT);
-            int createdCount = info.GetInt32(CREATED_COUNT);
+            
+            
+            
             Type classType = Util.TypeLoader.LoadType(info.GetString(ASSEMBLY_NAME), info.GetString(CLASS_NAME));
             this.Initialise(ClassDefinition.ClassDef.ClassDefs[classType], null);
+            SetupEventHandlers();
             for (int i = 0; i < count; i++)
             {
-                this.AddWithoutEvents((TBusinessObject) info.GetValue(BUSINESS_OBJECT + i, typeof (TBusinessObject)));
+                TBusinessObject businessObject = (TBusinessObject) info.GetValue(BUSINESS_OBJECT + i, typeof (TBusinessObject));
+                this.AddWithoutEvents(businessObject);
+                RegisterBOEvents(businessObject);
             }
+            int removedCount = info.GetInt32(REMOVED_COUNT);
+            for (int i = 0; i < removedCount; i++)
+            {
+                TBusinessObject businessObject = (TBusinessObject)info.GetValue(REMOVED_BUSINESS_OBJECT + i, typeof(TBusinessObject));
+                this.RemovedBusinessObjects.Add(businessObject);
+                //RegisterBOEvents(businessObject);
+            }
+            int markedForDeleteCount = info.GetInt32(MARKEDFORDELETE_COUNT);
+            for (int i = 0; i < markedForDeleteCount; i++)
+            {
+                TBusinessObject businessObject = (TBusinessObject)info.GetValue(MARKEDFORDELETE_BUSINESS_OBJECT + i, typeof(TBusinessObject));
+                this.MarkedForDeleteBusinessObjects.Add(businessObject);
+                //RegisterBOEvents(businessObject);
+            }
+
+            int createdCount = info.GetInt32(CREATED_COUNT);
             for (int i = 0; i < createdCount; i++)
             {
-                this.AddCreatedBusinessObject
-                    ((TBusinessObject) info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof (TBusinessObject)));
+                Guid createdID = (Guid)info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof (Guid));
+                this.AddCreatedBusinessObject((TBusinessObject) BusinessObjectManager.Instance[createdID]);
             }
-            //_updateIDEventHandler = UpdateHashTable;
+            int persistedCount = info.GetInt32(PERSISTED_COUNT);
+            for (int i = 0; i < persistedCount; i++)
+            {
+                Guid persistedID = (Guid)info.GetValue(PERSISTED_BUSINESS_OBJECT + i, typeof (Guid));
+                this.AddToPersistedCollection((TBusinessObject)BusinessObjectManager.Instance[persistedID]);
+            }
+            int addedCount = info.GetInt32(ADDED_COUNT);
+            for (int i = 0; i < addedCount; i++)
+            {
+                Guid addedID = (Guid)info.GetValue(ADDED_BUSINESS_OBJECT + i, typeof(Guid));
+                this.AddedBusinessObjects.Add((TBusinessObject)BusinessObjectManager.Instance[addedID]);
+            }
         }
+
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            lock (KeyObjectHashTable)
+            {
+                info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
+                info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
+                info.AddValue(COUNT, _boCol.Count);
+                int count = 0;
+                foreach (TBusinessObject businessObject in this)
+                {
+                    info.AddValue(BUSINESS_OBJECT + count, businessObject);
+                    count++;
+                }
+                info.AddValue(REMOVED_COUNT, this.RemovedBusinessObjects.Count);
+                int removedCount = 0;
+                foreach (TBusinessObject removedBusinessObject in this.RemovedBusinessObjects)
+                {
+                    info.AddValue(REMOVED_BUSINESS_OBJECT + removedCount, removedBusinessObject);
+                    removedCount++;
+                }
+                info.AddValue(MARKEDFORDELETE_COUNT, this.MarkedForDeleteBusinessObjects.Count);
+                int markedForDeleteCount = 0;
+                foreach (TBusinessObject markedForDeleteBusinessObject in this.MarkedForDeleteBusinessObjects)
+                {
+                    info.AddValue(MARKEDFORDELETE_BUSINESS_OBJECT + markedForDeleteCount, markedForDeleteBusinessObject);
+                    markedForDeleteCount++;
+                }
+                info.AddValue(CREATED_COUNT, this.CreatedBusinessObjects.Count);
+                int createdCount = 0;
+                foreach (TBusinessObject createdBusinessObject in this.CreatedBusinessObjects)
+                {
+                    info.AddValue(CREATED_BUSINESS_OBJECT + createdCount, createdBusinessObject.ID.ObjectID);
+                    createdCount++;
+                }
+                info.AddValue(PERSISTED_COUNT, this.PersistedBusinessObjects.Count);
+                int persistedCount = 0;
+                foreach (TBusinessObject persistedBusinessObject in this.PersistedBusinessObjects)
+                {
+                    info.AddValue(PERSISTED_BUSINESS_OBJECT + persistedCount, persistedBusinessObject.ID.ObjectID);
+                    persistedCount++;
+                }
+                info.AddValue(ADDED_COUNT, this.AddedBusinessObjects.Count);
+                int addedCount = 0;
+                foreach (TBusinessObject addedBusinessObject in this.AddedBusinessObjects)
+                {
+                    info.AddValue(ADDED_BUSINESS_OBJECT + addedCount, addedBusinessObject.ID.ObjectID);
+                    addedCount++;
+                }
+            }
+        }
+
 
         #region Events and event handlers
 
@@ -2046,29 +2143,6 @@ namespace Habanero.BO
         IBusinessObject IBusinessObjectCollection.CreateBusinessObject()
         {
             return CreateBusinessObject();
-        }
-
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            lock (KeyObjectHashTable)
-            {
-                int count = 0;
-                info.AddValue(COUNT, _boCol.Count);
-                info.AddValue(CREATED_COUNT, this.CreatedBusinessObjects.Count);
-                info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
-                info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
-                foreach (TBusinessObject businessObject in this)
-                {
-                    info.AddValue(BUSINESS_OBJECT + count, businessObject);
-                    count++;
-                }
-                int createdCount = 0;
-                foreach (TBusinessObject createdBusinessObject in this.CreatedBusinessObjects)
-                {
-                    info.AddValue(CREATED_BUSINESS_OBJECT + createdCount, createdBusinessObject);
-                    createdCount++;
-                }
-            }
         }
 
         ///<summary>

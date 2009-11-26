@@ -31,7 +31,8 @@ namespace Habanero.BO
     /// handling most of the overload methods and just leaves the Refresh methods to be 
     /// implemented in order to complete the implementation of the BusinessObjectLoader.
     ///</summary>
-    public abstract class BusinessObjectLoaderBase
+    [Serializable]
+    public abstract class BusinessObjectLoaderBase: MarshalByRefObject
     {
         /// <summary>
         /// The log file used to log errors or events for this class

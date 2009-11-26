@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using log4net;
@@ -27,6 +28,7 @@ namespace Habanero.DB
     /// This class is used with allong with the Transaction Committer to implement transactional support
     /// for multiple business objects.
     ///</summary>
+    [Serializable]
     public class TransactionalBusinessObjectDB
         : TransactionalBusinessObject, ITransactionalDB
     {

@@ -41,6 +41,7 @@ namespace Habanero.DB
     /// the object manager first. If the object does not exist in the object manager then it must be loaded from the datastore and added
     /// to the object manager <see cref="BusinessObjectManager"/>
     ///</summary>
+    [Serializable]
     public class BusinessObjectLoaderDB : BusinessObjectLoaderBase, IBusinessObjectLoader
     {
         private readonly IDatabaseConnection _databaseConnection;

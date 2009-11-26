@@ -195,6 +195,37 @@ namespace Habanero.Test.BO
             AssertPersonsAreEqual(deserialisedPeople[2], originalPeople[2]);
         }
 
+
+        [Test]
+        public void TestSerialiseDeserialiseBusinessObjectCollection_EventsAreSetUp()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
+            Person.LoadDefaultClassDef();
+            BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
+            Person person1 = Person.CreateSavedPerson();
+            originalPeople.Add(person1);
+
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            bool eventFired = false;
+
+            //---------------Execute Test ----------------------
+            formatter.Serialize(memoryStream, originalPeople);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            BusinessObjectCollection<Person> deserialisedPeople = (BusinessObjectCollection<Person>)formatter.Deserialize(memoryStream);
+            deserialisedPeople.BusinessObjectPropertyUpdated += (sender, args) => eventFired = true;
+            deserialisedPeople[0].FirstName = "new firstname";
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(eventFired);
+   
+        }
+
         [Test]
         public void TestSerialiseDeserialiseBusinessObjectCollection_CreatedBusObjAreIncluded()
         {
@@ -212,6 +243,10 @@ namespace Habanero.Test.BO
             MemoryStream memoryStream = new MemoryStream();
             BusinessObjectManager.Instance.ClearLoadedObjects();
 
+            //---------------Assert PreConditions---------------       
+            Assert.AreEqual(2, originalPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(2, originalPeople.Count);
+
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPeople);
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -220,9 +255,259 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
             Assert.AreEqual(originalPeople.CreatedBusinessObjects.Count, deserialisedPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.PersistedBusinessObjects.Count, deserialisedPeople.PersistedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.AddedBusinessObjects.Count, deserialisedPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.RemovedBusinessObjects.Count, deserialisedPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.MarkedForDeleteBusinessObjects.Count, deserialisedPeople.MarkedForDeleteBusinessObjects.Count);
 
             AssertPersonsAreEqual(deserialisedPeople.CreatedBusinessObjects[0], originalPeople.CreatedBusinessObjects[0]);
             AssertPersonsAreEqual(deserialisedPeople.CreatedBusinessObjects[1], originalPeople.CreatedBusinessObjects[1]);
+        }
+
+        [Test]
+        public void TestSerialiseDeserialiseBusinessObjectCollection_PersistedAreIncluded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
+            Person.LoadDefaultClassDef();
+            BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
+            originalPeople.CreateBusinessObject();
+            originalPeople.CreateBusinessObject();
+            originalPeople.SaveAll();
+
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            
+            //---------------Assert PreConditions---------------       
+            Assert.AreEqual(2, originalPeople.PersistedBusinessObjects.Count);
+
+            //---------------Execute Test ----------------------
+            formatter.Serialize(memoryStream, originalPeople);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            BusinessObjectCollection<Person> deserialisedPeople = (BusinessObjectCollection<Person>)formatter.Deserialize(memoryStream);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
+            Assert.AreEqual(originalPeople.PersistedBusinessObjects.Count, deserialisedPeople.PersistedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.CreatedBusinessObjects.Count, deserialisedPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.AddedBusinessObjects.Count, deserialisedPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.RemovedBusinessObjects.Count, deserialisedPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.MarkedForDeleteBusinessObjects.Count, deserialisedPeople.MarkedForDeleteBusinessObjects.Count);
+
+            AssertPersonsAreEqual(deserialisedPeople.PersistedBusinessObjects[0], originalPeople.PersistedBusinessObjects[0]);
+            AssertPersonsAreEqual(deserialisedPeople.PersistedBusinessObjects[1], originalPeople.PersistedBusinessObjects[1]);
+
+
+        }
+
+        [Test]
+        public void TestSerialiseDeserialiseBusinessObjectCollection_AddedAreIncluded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
+            Person.LoadDefaultClassDef();
+            BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
+            originalPeople.CreateBusinessObject();
+            originalPeople.CreateBusinessObject();
+            originalPeople.SaveAll();
+
+            Person anotherPerson = new Person();
+            anotherPerson.Save();
+            originalPeople.Add(anotherPerson);
+
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            //---------------Assert PreConditions---------------       
+            Assert.AreEqual(1, originalPeople.AddedBusinessObjects.Count);
+
+            //---------------Execute Test ----------------------
+            formatter.Serialize(memoryStream, originalPeople);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            BusinessObjectCollection<Person> deserialisedPeople = (BusinessObjectCollection<Person>)formatter.Deserialize(memoryStream);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
+            Assert.AreEqual(originalPeople.PersistedBusinessObjects.Count, deserialisedPeople.PersistedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.CreatedBusinessObjects.Count, deserialisedPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.AddedBusinessObjects.Count, deserialisedPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.RemovedBusinessObjects.Count, deserialisedPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.MarkedForDeleteBusinessObjects.Count, deserialisedPeople.MarkedForDeleteBusinessObjects.Count);
+
+            AssertPersonsAreEqual(deserialisedPeople.AddedBusinessObjects[0], originalPeople.AddedBusinessObjects[0]);
+
+        }
+
+        [Test]
+        public void TestSerialiseDeserialiseBusinessObjectCollection_RemovedAreIncluded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
+            Person.LoadDefaultClassDef();
+            BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
+            Person personRemoved = originalPeople.CreateBusinessObject();
+            originalPeople.CreateBusinessObject();
+            originalPeople.SaveAll();
+
+            originalPeople.Remove(personRemoved);
+
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            //---------------Assert PreConditions---------------       
+            Assert.AreEqual(1, originalPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, originalPeople.Count);
+
+            //---------------Execute Test ----------------------
+            formatter.Serialize(memoryStream, originalPeople);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            BusinessObjectCollection<Person> deserialisedPeople = (BusinessObjectCollection<Person>)formatter.Deserialize(memoryStream);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
+            Assert.AreEqual(originalPeople.PersistedBusinessObjects.Count, deserialisedPeople.PersistedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.CreatedBusinessObjects.Count, deserialisedPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.AddedBusinessObjects.Count, deserialisedPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.RemovedBusinessObjects.Count, deserialisedPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.MarkedForDeleteBusinessObjects.Count, deserialisedPeople.MarkedForDeleteBusinessObjects.Count);
+
+            AssertPersonsAreEqual(deserialisedPeople.RemovedBusinessObjects[0], originalPeople.RemovedBusinessObjects[0]);
+
+        }
+
+        [Test]
+        public void TestSerialiseDeserialiseBusinessObjectCollection_MarkedForDeleteAreIncluded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
+            Person.LoadDefaultClassDef();
+            BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
+            Person personToDelete = originalPeople.CreateBusinessObject();
+            originalPeople.CreateBusinessObject();
+            originalPeople.SaveAll();
+
+            personToDelete.MarkForDelete();
+
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            //---------------Assert PreConditions---------------       
+            Assert.AreEqual(1, originalPeople.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, originalPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, originalPeople.Count);
+
+            //---------------Execute Test ----------------------
+            formatter.Serialize(memoryStream, originalPeople);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            BusinessObjectCollection<Person> deserialisedPeople = (BusinessObjectCollection<Person>)formatter.Deserialize(memoryStream);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
+            Assert.AreEqual(originalPeople.PersistedBusinessObjects.Count, deserialisedPeople.PersistedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.CreatedBusinessObjects.Count, deserialisedPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.AddedBusinessObjects.Count, deserialisedPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.RemovedBusinessObjects.Count, deserialisedPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.MarkedForDeleteBusinessObjects.Count, deserialisedPeople.MarkedForDeleteBusinessObjects.Count);
+
+            AssertPersonsAreEqual(deserialisedPeople.MarkedForDeleteBusinessObjects[0], originalPeople.MarkedForDeleteBusinessObjects[0]);
+
+        }
+
+        [Test]
+        public void TestSerialiseDeserialiseBusinessObjectCollection_HavingAllCollections()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
+            Person.LoadDefaultClassDef();
+            BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
+            Person persistedPerson = originalPeople.CreateBusinessObject();
+            Person deletedPerson = originalPeople.CreateBusinessObject();
+            Person removedPerson = originalPeople.CreateBusinessObject();
+            originalPeople.SaveAll();
+
+            originalPeople.Remove(removedPerson);
+            deletedPerson.MarkForDelete();
+            Person createdPerson = originalPeople.CreateBusinessObject();
+            Person addedPerson = new Person();
+            addedPerson.Save();
+            originalPeople.Add(addedPerson);
+
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            //---------------Assert PreConditions---------------       
+            Assert.AreEqual(1, originalPeople.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(1, originalPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, originalPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(3, originalPeople.PersistedBusinessObjects.Count);
+            Assert.AreEqual(1, originalPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(3, originalPeople.Count);
+
+            //---------------Execute Test ----------------------
+            formatter.Serialize(memoryStream, originalPeople);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            BusinessObjectCollection<Person> deserialisedPeople = (BusinessObjectCollection<Person>)formatter.Deserialize(memoryStream);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalPeople.Count, deserialisedPeople.Count);
+            Assert.AreEqual(originalPeople.PersistedBusinessObjects.Count, deserialisedPeople.PersistedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.CreatedBusinessObjects.Count, deserialisedPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.AddedBusinessObjects.Count, deserialisedPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.RemovedBusinessObjects.Count, deserialisedPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(originalPeople.MarkedForDeleteBusinessObjects.Count, deserialisedPeople.MarkedForDeleteBusinessObjects.Count);
+
+            AssertPersonsAreEqual(deserialisedPeople.MarkedForDeleteBusinessObjects[0], deletedPerson);
+            AssertPersonsAreEqual(deserialisedPeople.RemovedBusinessObjects[0], removedPerson);
+            AssertPersonsAreEqual(deserialisedPeople.AddedBusinessObjects[0], addedPerson);
+            AssertPersonsAreEqual(deserialisedPeople.PersistedBusinessObjects[0], persistedPerson);
+            AssertPersonsAreEqual(deserialisedPeople.CreatedBusinessObjects[0], createdPerson);
+
+        }
+
+
+        [Test]
+        public void TestSerialiseDeserialiseBOPropStatusIsIncluded()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
+            Person.LoadDefaultClassDef();
+            Person originalPerson = Person.CreateSavedPerson();
+           
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            originalPerson.FirstName = "Bob";
+
+            //---------------Assert PreConditions---------------   
+            Assert.IsTrue(originalPerson.Props["FirstName"].IsDirty);
+
+            //---------------Execute Test ----------------------
+           
+            formatter.Serialize(memoryStream, originalPerson);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            Person deserialisedPerson = (Person)formatter.Deserialize(memoryStream);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(deserialisedPerson.Props["FirstName"].IsDirty);
         }
     }
 }

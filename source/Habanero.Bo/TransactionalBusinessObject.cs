@@ -35,6 +35,7 @@ namespace Habanero.BO
     /// This class is used by the <see cref="TransactionCommitter"/>. The <see cref="TransactionCommitter"/> 
     ///   class contans all the required explanations of how these classes work together.
     ///</summary>
+    [Serializable]
     public class TransactionalBusinessObject : ITransactional
     {
         private readonly BusinessObject _businessObject;

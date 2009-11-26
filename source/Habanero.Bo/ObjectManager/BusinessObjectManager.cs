@@ -593,5 +593,13 @@ namespace Habanero.BO
                 return null;
             }
         }
+
+        public void AddWithReplace(BusinessObject businessObject) { 
+            if (this.Contains(businessObject.ID))
+            {
+                _loadedBusinessObjects.Remove(businessObject.ID.ObjectID);
+            }
+            this.Add(businessObject);
+        }
     }
 }
