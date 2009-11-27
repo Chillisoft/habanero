@@ -66,6 +66,12 @@ namespace Habanero.BO
             return new TransactionCommitterInMemory(_dataStore);
         }
 
-
+        ///<summary>
+        /// Returns the DataAccessorInMemory's internal data store.
+        ///</summary>
+        public DataStoreInMemory DataStoreInMemory
+        {
+            get { return _dataStore; }
+        }
     }
 }
