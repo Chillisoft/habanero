@@ -663,12 +663,15 @@ namespace Habanero.DB
             int i = 0;
             foreach (QueryField field in selectQuery.Fields.Values)
             {
-                //if (bo.Props.Contains(field.PropertyName))
-                //{
+                try
+                {
                     IBOProp boProp = bo.Props[field.PropertyName];
-                    //TODO:                   if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
                     boProp.InitialiseProp(dr[i]);
-                //}
+                } catch (InvalidPropertyNameException)
+                {
+                    // do nothing - this was to increase performance as catching this exception is quicker than always doing a
+                    // bo.Props.Contains(field.PropertyName) call.
+                }
                 i++;
             }
             SetStatusAfterLoad(bo);

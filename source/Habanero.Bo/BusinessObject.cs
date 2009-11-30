@@ -1280,9 +1280,9 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="errors">The errors</param>
         /// <returns>true if no custom rule errors are encountered.</returns>
-        protected virtual bool AreCustomRulesValid(out IList<IBOError> errors)
+        protected virtual bool AreCustomRulesValid(ref IList<IBOError> errors)
         {
-            errors = new List<IBOError>();
+            if (errors ==null) errors = new List<IBOError>();
 
             return errors.Count == 0;
         }
@@ -1313,14 +1313,15 @@ namespace Habanero.BO
         /// <returns>true if no custom rule errors are encountered.</returns>
         internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {
-            AreCustomRulesValid(out errors);
-            HasErrors(out errors);
+            errors = new List<IBOError>();
+            AreCustomRulesValid(ref errors);
+            HasErrors(ref errors);
             return errors == null || errors.Count == 0;
         }
 
-        private bool HasErrors(out IList<IBOError> errors)
+        private bool HasErrors(ref IList<IBOError> errors)
         {
-            errors = new List<IBOError>();
+            if (errors == null) errors = new List<IBOError>();
             foreach (IBusinessObjectRule rule in GetBusinessObjectRules())
             {
                 if (rule == null || !ErrorLevelIsError(rule) || rule.IsValid()) continue;

@@ -327,9 +327,8 @@ namespace Habanero.Test.BO
 
         private class BOWithCustomErrors_Errors : MockBO
         {
-            protected override bool AreCustomRulesValid(out IList<IBOError> errors)
+            protected override bool AreCustomRulesValid(ref IList<IBOError> errors)
             {
-                errors = new List<IBOError>();
                 errors.Add(new BOError("ERROR1", ErrorLevel.Error));
                 errors.Add(new BOError("ERROR2", ErrorLevel.Warning));
                 return false;
@@ -363,7 +362,7 @@ namespace Habanero.Test.BO
 
         private class BOWithCustomErrors_NullErrors : MockBO
         {
-            protected override bool AreCustomRulesValid(out IList<IBOError> errors)
+            protected override bool AreCustomRulesValid(ref IList<IBOError> errors)
             {
                 errors = null;
                 return true;
