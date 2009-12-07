@@ -183,7 +183,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="fieldString">The string in the correct format (see above)</param>
         /// <returns>A Field created from the string</returns>
-        public new static OrderCriteriaField FromString(string fieldString)
+        public static OrderCriteriaField FromString(string fieldString)
         {
             string[] parts = fieldString.Trim().Split(' ');
             if (parts.Length > 1)

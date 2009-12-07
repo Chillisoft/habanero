@@ -75,7 +75,7 @@ namespace Habanero.Test.Structure
 
         private static Part CreateUnsavedPart()
         {
-            return CreateUnsavedPart(TestUtil.GetRandomString());
+            return CreateUnsavedPart(Habanero.Test.TestUtil.GetRandomString());
         }
 
         private static Part CreateUnsavedPart(string modelNo)

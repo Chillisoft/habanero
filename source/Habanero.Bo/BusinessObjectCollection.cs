@@ -685,6 +685,7 @@ namespace Habanero.BO
                 bo = e.BusinessObject as TBusinessObject;
                 if (bo == null) return;
                 this.RemoveInternal(bo, out fireEvent);
+                this.CreatedBusinessObjects.Remove(bo);
                 this.PersistedBusinessObjects.Remove(bo);
                 this.RemovedBusinessObjects.Remove(bo);
                 this.MarkedForDeleteBusinessObjects.Remove(bo);

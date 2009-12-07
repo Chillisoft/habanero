@@ -1313,9 +1313,17 @@ namespace Habanero.BO
         /// <returns>true if no custom rule errors are encountered.</returns>
         internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {
+            IList<IBOError> customErrors = new List<IBOError>();
+            AreCustomRulesValid(ref customErrors);
             errors = new List<IBOError>();
-            AreCustomRulesValid(ref errors);
             HasErrors(ref errors);
+            if (customErrors != null)
+            {
+                foreach (IBOError e in customErrors)
+                {
+                    errors.Add(e);
+                }
+            }
             return errors == null || errors.Count == 0;
         }
 

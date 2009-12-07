@@ -37,7 +37,7 @@ namespace Habanero.BO
         /// <summary>
         /// The log file used to log errors or events for this class
         /// </summary>
-        protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObjectLoaderBase");
+//        protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObjectLoaderBase");
         private static Criteria GetCriteriaObject(IClassDef classDef, string criteriaString)
         {
             Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
