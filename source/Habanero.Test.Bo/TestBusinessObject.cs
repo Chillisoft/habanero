@@ -338,7 +338,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void Test_IsValid_CustomErors_ListOfErrors()
+        public void Test_IsValid_CustomErrors_ListOfErrors()
         {
             //--------------- Set up test pack ------------------
             ClassDef.ClassDefs.Clear();

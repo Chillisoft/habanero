@@ -170,13 +170,13 @@ namespace Habanero.UI.Base
             private readonly IControlHabanero _form;
 
             ///<summary>
-            /// Consructor for an <see cref="Item"/>
+            /// Constructor for an <see cref="Item"/>
             ///</summary>
             ///<param name="name"></param>
             public Item(string name) : this(name, null, null)
             {}
             /// <summary>
-            /// Construcotr for an <see cref="Item"/>
+            /// Constructor for an <see cref="Item"/>
             /// </summary>
             /// <param name="name"></param>
             /// <param name="form"></param>

@@ -28,7 +28,7 @@ namespace Habanero.Base
         /// </summary>
         Error,
         /// <summary>
-        /// Is this a warning e.g. the object can be saved but is not considered to be in a valid state untill it is repaired.
+        /// Is this a warning e.g. the object can be saved but is not considered to be in a valid state until it is repaired.
         /// </summary>
         Warning,
         /// <summary>
