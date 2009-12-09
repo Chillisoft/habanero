@@ -233,6 +233,9 @@ namespace Habanero.UI.Base
         {
             int width = cbx.Width;
 
+            IBusinessObject selectedBusinessObject = SelectedBusinessObject;
+            
+            cbx.SelectedIndex = -1;
             cbx.Items.Clear();
             int numBlankItems = 0;
             if (includeBlank)
@@ -257,7 +260,11 @@ namespace Habanero.UI.Base
                 }
                 cbx.Items.Add(businessObject);
             }
-            if (col.Count > 0 && AutoSelectFirstItem) cbx.SelectedIndex = numBlankItems;
+            if (PreserveSelectedItem)
+            {
+                SelectedBusinessObject = col.Contains(selectedBusinessObject) ? selectedBusinessObject : null;
+            }
+            else if (col.Count > 0 && AutoSelectFirstItem) cbx.SelectedIndex = numBlankItems;
             if(width == 0) width = 1;
             cbx.DropDownWidth = width > cbx.Width ? width : cbx.Width;
         }
@@ -270,5 +277,16 @@ namespace Habanero.UI.Base
         {
             SetCollection (null, false);
         }
+
+        ///<summary>
+        /// Gets or sets whether the current <see cref="IBOColSelectorControl.SelectedBusinessObject">SelectedBusinessObject</see> should be preserved in the selector when the 
+        /// <see cref="IBOColSelectorControl.BusinessObjectCollection">BusinessObjectCollection</see> 
+        /// is changed to a new collection which contains the current <see cref="IBOColSelectorControl.SelectedBusinessObject">SelectedBusinessObject</see>.
+        /// If the <see cref="IBOColSelectorControl.SelectedBusinessObject">SelectedBusinessObject</see> doesn't exist in the new collection then the
+        /// <see cref="IBOColSelectorControl.SelectedBusinessObject">SelectedBusinessObject</see> is set to null.
+        /// If the current <see cref="IBOColSelectorControl.SelectedBusinessObject">SelectedBusinessObject</see> is null then this will also be preserved.
+        /// This overrides the <see cref="IBOColSelectorControl.AutoSelectFirstItem">AutoSelectFirstItem</see> property.
+        ///</summary>
+        public bool PreserveSelectedItem { get; set; }
     }
 }

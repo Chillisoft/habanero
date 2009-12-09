@@ -327,6 +327,31 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
+        public void Test_BusinessObjectCollection_WhenSetToNewCollectionContainingSelectedItem_ShouldPreserveSelection()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            BusinessObjectCollection<OrganisationTestBO> boCol;
+            RelationshipComboBoxMapper mapper = GetMapperBoColHasOneItem(cmbox, out boCol);
+            ContactPersonTestBO person = new ContactPersonTestBO();
+            OrganisationTestBO selectedOrganisation = boCol[0];
+            person.Organisation = selectedOrganisation;
+            mapper.BusinessObject = person;
+            BusinessObjectCollection<OrganisationTestBO> newBoCol = new BusinessObjectCollection<OrganisationTestBO>();
+            newBoCol.Add(boCol);
+            //---------------Assert Precondition----------------
+            Assert.AreSame(person, mapper.BusinessObject);
+            Assert.AreSame(selectedOrganisation, person.Organisation);
+            Assert.AreSame(selectedOrganisation, cmbox.SelectedItem);
+            //---------------Execute Test ----------------------
+            mapper.BusinessObjectCollection = newBoCol;
+            //---------------Test Result -----------------------
+            Assert.AreSame(person, mapper.BusinessObject);
+            Assert.AreSame(selectedOrganisation, person.Organisation);
+            Assert.AreSame(selectedOrganisation, cmbox.SelectedItem);
+        }
+
+        [Test]
         public void Test_BusinessObject_WhenSet_WhenMappersClassDefIsNull_ShouldSetClassDefFromBo()
         {
             //---------------Set up test pack-------------------
@@ -1378,7 +1403,7 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
-        public void Test_WhenSetInvlidPropertyValue_ShouldUpdateItemInComboToBlank()
+        public void Test_WhenSetInvalidPropertyValue_ShouldUpdateItemInComboToBlank()
         {
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();

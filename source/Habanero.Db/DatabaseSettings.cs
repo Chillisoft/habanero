@@ -64,6 +64,17 @@ namespace Habanero.DB
             set { _tableName = value; }
         }
 
+        ///<summary>
+        /// Returns whether the setting exists or not.
+        ///</summary>
+        ///<param name="settingName">The name of the setting to look for.</param>
+        ///<returns>Returns whether the setting exists or not</returns>
+        public bool HasSetting(string settingName)
+        {
+            object value;
+            return RetrieveSettingValue(settingName, DateTime.Now, out value);
+        }
+
         /// <summary>
         /// Returns a specified setting as a string
         /// </summary>
@@ -157,16 +168,16 @@ namespace Habanero.DB
         private void SetValue(string settingName, string settingValue)
         {
             settingName = settingName.ToUpper();
-            bool hasCurrentValue;
-            try
-            {
-                Convert.ToString(GetValue(settingName, DateTime.Now));
-                hasCurrentValue = true;
-            }
-            catch (UserException)
-            {
-                hasCurrentValue = false;
-            }
+            bool hasCurrentValue = HasSetting(settingName);
+            //try
+            //{
+            //    Convert.ToString(GetValue(settingName, DateTime.Now));
+            //    hasCurrentValue = true;
+            //}
+            //catch (UserException)
+            //{
+            //    hasCurrentValue = false;
+            //}
             SqlStatement statement;
             if (hasCurrentValue)
             {
@@ -206,13 +217,28 @@ namespace Habanero.DB
         /// does not exist</exception>
         private object GetValue(string settingName, DateTime date)
         {
+            object value;
+            if (RetrieveSettingValue(settingName, date, out value))
+            {
+                return value;
+            } else
+            {
+                throw new UserException(String.Format("The setting '{0}' " +
+                        "does not exist in the '{1}' table in the database.",
+                        settingName, _tableName));
+            }
+        }
+
+        private bool RetrieveSettingValue(string settingName, DateTime date, out object value)
+        {
             settingName = settingName.ToUpper();
             Setting setting = (Setting) _cachedSettings[settingName];
             if (setting != null)
             {
                 if (!setting.IsExpired())
                 {
-                    return setting.Value;
+                    value = setting.Value;
+                    return true;
                 }
                 _cachedSettings.Remove(settingName);
             }
@@ -224,15 +250,14 @@ namespace Habanero.DB
 
                 if (reader.Read())
                 {
-                    object val = reader.GetValue(0);
-                    _cachedSettings.Add(settingName, new Setting(DateTime.Now, val));
-                    return val;
+                    value = reader.GetValue(0);
+                    _cachedSettings.Add(settingName, new Setting(DateTime.Now, value));
+                    return true;
                 }
                 else
                 {
-                    throw new UserException(String.Format("The setting '{0}' " +
-                        "does not exist in the '{1}' table in the database.",
-                        settingName, _tableName));
+                    value = null;
+                    return false;
                 }
             }
             finally

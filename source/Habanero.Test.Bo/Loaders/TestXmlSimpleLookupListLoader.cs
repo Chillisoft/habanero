@@ -29,8 +29,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders
 {
-   
-        /// <summary>
+
+    /// <summary>
     /// This test class tests the XmlBusinessObjectLookupListLoader.
     /// </summary>
     [TestFixture]
@@ -45,13 +45,14 @@ namespace Habanero.Test.BO.Loaders
             ClassDef.ClassDefs.Clear();
         }
 
-        protected void Initialise() {
-            _loader = new XmlSimpleLookupListLoader(new DtdLoader(), GetDefClassFactory() );
+        protected void Initialise()
+        {
+            _loader = new XmlSimpleLookupListLoader(new DtdLoader(), GetDefClassFactory());
         }
 
-            protected virtual IDefClassFactory GetDefClassFactory() { return new DefClassFactory(); }
+        protected virtual IDefClassFactory GetDefClassFactory() { return new DefClassFactory(); }
 
-            [Test]
+        [Test]
         public void TestSimpleLookupListOptions()
         {
             ILookupList lookupList =
@@ -59,6 +60,26 @@ namespace Habanero.Test.BO.Loaders
                     @"<simpleLookupList options=""option1|option2|option3"" />");
             ISimpleLookupList source = (ISimpleLookupList)lookupList;
             Assert.AreEqual(3, source.GetLookupList().Count, "LookupList should have three keyvaluepairs");
+        }
+
+        [Test]
+        public void TestSimpleLookupListItems()
+        {
+            ILookupList lookupList =
+                _loader.LoadLookupList(
+                    @"
+						<simpleLookupList>
+							<item display=""s1"" value=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
+							<item display=""s2"" value=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
+                        </simpleLookupList>
+					");
+            ISimpleLookupList source = (ISimpleLookupList)lookupList;
+            Dictionary<string, string> dictionary = source.GetLookupList();
+            Assert.AreEqual(2, dictionary.Count, "LookupList should have 2 keyvaluepairs");
+            Assert.IsTrue(dictionary.ContainsKey("s1"), "should contain the display value 's1' as a key");
+            Assert.AreEqual(new Guid("{C2887FB1-7F4F-4534-82AB-FED92F954783}").ToString("D"), dictionary["s1"]);
+            Assert.IsTrue(dictionary.ContainsKey("s2"), "should contain the display value 's2' as a key");
+            Assert.AreEqual(new Guid("{B89CC2C9-4CBB-4519-862D-82AB64796A58}").ToString("D"), dictionary["s2"]);
         }
 
         [Test]

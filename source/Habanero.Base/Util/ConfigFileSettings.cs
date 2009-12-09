@@ -48,6 +48,16 @@ namespace Habanero.Util
             _configuration = configuration;
         }
 
+        ///<summary>
+        /// Returns whether the setting exists or not.
+        ///</summary>
+        ///<param name="settingName">The name of the setting to look for.</param>
+        ///<returns>Returns whether the setting exists or not</returns>
+        public bool HasSetting(string settingName)
+        {
+            return GetSettingConfigurationElement(settingName) != null;
+        }
+
         /// <summary>
         /// Returns the configuration for the setting name provided
         /// </summary>
@@ -133,7 +143,7 @@ namespace Habanero.Util
 
         private string GetSettingValue(string settingName)
         {
-            KeyValueConfigurationElement configurationElement = _configuration.AppSettings.Settings[settingName];
+            KeyValueConfigurationElement configurationElement = GetSettingConfigurationElement(settingName);
             if (configurationElement == null)
                 throw new InvalidOperationException(
                     string.Format("The key '{0}' does not exist in the appSettings configuration section.", settingName));
@@ -142,7 +152,7 @@ namespace Habanero.Util
 
         private void SetSettingValue(string settingName, string settingValue)
         {
-            KeyValueConfigurationElement configurationElement = _configuration.AppSettings.Settings[settingName];
+            KeyValueConfigurationElement configurationElement = GetSettingConfigurationElement(settingName);
             if (configurationElement == null)
             {
                 _configuration.AppSettings.Settings.Add(settingName, settingValue);
@@ -152,6 +162,11 @@ namespace Habanero.Util
                 configurationElement.Value = settingValue;
             }
             _configuration.Save(ConfigurationSaveMode.Modified);
+        }
+
+        private KeyValueConfigurationElement GetSettingConfigurationElement(string settingName)
+        {
+            return _configuration.AppSettings.Settings[settingName];
         }
     }
 }

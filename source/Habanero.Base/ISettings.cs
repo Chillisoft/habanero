@@ -31,6 +31,13 @@ namespace Habanero.Base
     /// </summary>
     public interface ISettings
     {
+        ///<summary>
+        /// Returns whether the setting exists or not.
+        ///</summary>
+        ///<param name="settingName">The name of the setting to look for.</param>
+        ///<returns>Returns whether the setting exists or not</returns>
+        bool HasSetting(string settingName);
+
         /// <summary>
         /// Returns a specified setting as a string
         /// </summary>

@@ -86,6 +86,7 @@ namespace Habanero.UI.Base
             _mapperStrategy.AddHandlers(this);
             UpdateIsEditable();
             _comboBoxCollectionSelector = new ComboBoxCollectionSelector(comboBox, controlFactory, false);
+            _comboBoxCollectionSelector.PreserveSelectedItem = true;
         }
 
         /// <summary>
