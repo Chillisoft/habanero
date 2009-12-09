@@ -1002,6 +1002,36 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 (firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col, totalNoOfRecords);
         }
 
+
+        [Test]
+        public void Test_GetCollection_Generic_LoadWithLimit_FirstAtStart_LimitIsOne_CalledMultipleTimes()
+        //_NoRecords_StartRecords_First2Records()
+        {
+            const int totalRecords = 3;
+            const int firstRecord = 0;
+            const int limit = 1;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            OrderCriteria orderCriteria = new OrderCriteria();
+            orderCriteria.Add("Surname");
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            BusinessObjectCollection<ContactPersonTestBO> col1 =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+                    (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            BusinessObjectCollection<ContactPersonTestBO> col2 =
+    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
+        (null, orderCriteria, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col1, totalNoOfRecords);
+            AssertLimitedResultsCorrect(firstRecord, limit, totalRecords, limit, contactPersonTestBOs, col2, totalNoOfRecords);
+        }
+
+
+
         [Test]
         public void Test_GetCollection_Generic_LoadWithLimit_FirstAtStart_LimitBeyondEnd()
         {

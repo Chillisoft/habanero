@@ -32,7 +32,7 @@ namespace Habanero.Test.Util
         [SetUp]
         public void SetUpResources()
         {
-            _resourceManager = new ResourceManager("Habanero.Test.TestResources", typeof(TestJpgMetaData).Assembly);
+            _resourceManager = new ResourceManager("Habanero.Test.TestResources", typeof(TestSerialisationUtilities).Assembly);
         }
 
         [Test]

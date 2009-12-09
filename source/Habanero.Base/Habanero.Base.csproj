@@ -316,7 +316,6 @@
     <Compile Include="Util\File\TypeLoader.cs" />
     <Compile Include="Util\IdNumberUtilities.cs" />
     <Compile Include="Util\ImageThumbnailCreator.cs" />
-    <Compile Include="Util\JpgMetaData.cs" />
     <Compile Include="Util\LongText.cs" />
     <Compile Include="Util\ReflectionUtilities.cs" />
     <Compile Include="Util\SerialisationUtilities.cs" />

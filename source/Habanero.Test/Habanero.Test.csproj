@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -131,9 +131,6 @@
     <Compile Include="Util\TestConfigFileSettings.cs" />
     <Compile Include="Util\TestDateTimeUtilities.cs" />
     <Compile Include="Util\TestFileUtilities.cs" />
-    <Compile Include="Util\TestJpgMetaData.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Util\TestReflectionUtilities.cs" />
     <Compile Include="Util\File\CsvTestsSamples.cs" />
     <Compile Include="Util\File\TestCsvFileReader.cs" />
