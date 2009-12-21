@@ -1412,6 +1412,24 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Tear Down -------------------------          
         }
+        public enum PurchaseOrderStatus
+        {
+            Open,
+            Processed
+        }
+        [Test]
+        public void TestAddEnumFilterComboBox()
+        {
+            //---------------Set up test pack-------------------
+            IFilterClause nullClause = new DataViewNullFilterClause();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            //---------------Execute Test ----------------------
+            filterControl.AddEnumFilterComboBox("Test:", "TestColumn", typeof(PurchaseOrderStatus));
+            //---------------Test Result -----------------------
+            Assert.AreEqual(nullClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+
+            //---------------Tear Down -------------------------          
+        }
 
         [Test]
         public void TestGetComboBoxAddSelectedItems()

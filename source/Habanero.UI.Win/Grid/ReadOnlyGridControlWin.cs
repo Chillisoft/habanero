@@ -68,7 +68,7 @@ namespace Habanero.UI.Win
         {
             _controlFactory = controlFactory;
             _filterControl = _controlFactory.CreateFilterControl();
-            _grid = new ReadOnlyGridWin(); //TODO use control factory and test this
+            _grid = new ReadOnlyGridWin();
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();
             _gridInitialiser = new GridInitialiser(this, _controlFactory);
             InitialiseButtons();

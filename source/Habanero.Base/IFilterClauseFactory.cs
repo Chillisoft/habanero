@@ -73,5 +73,14 @@ namespace Habanero.Base
         /// Creates a new null filter clause, which does no filtering
         /// </summary>
         IFilterClause CreateNullFilterClause();
+
+        ///<summary>
+        /// Creates an Filter Clause for an enum data Type.
+        ///</summary>
+        ///<param name="columnName"></param>
+        ///<param name="clauseOperator"></param>
+        ///<param name="enumValue"></param>
+        ///<returns></returns>
+        IFilterClause CreateEnumFilterClause(string columnName, FilterClauseOperator clauseOperator, object enumValue);
     }
 }

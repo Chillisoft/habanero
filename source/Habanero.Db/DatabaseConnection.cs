@@ -451,7 +451,8 @@ namespace Habanero.DB
                      + ExceptionUtilities.GetExceptionString(ex, 10, true));
                 Console.Out.WriteLine("Sql: " + selectSql);
                 throw new DatabaseReadException
-                    ("There was an error reading the database. Please contact your system administrator.",
+                    ("There was an error reading the database. Please contact your system administrator." + Environment.NewLine +
+                     selectSql.ToString() + Environment.NewLine,
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
         }

@@ -88,6 +88,15 @@ namespace Habanero.UI.Base
         /// <returns>Returns the new ComboBox added</returns>
         IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options, bool strictMatch);
 
+
+        ///<summary>
+        /// Adds a Filter Combo box for filtering an enum data type.
+        ///</summary>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="propertyName">The business object property on which to filter</param>
+        ///<param name="enumType">The Type being showen in the ComboBox</param>
+        ///<returns></returns>
+        IComboBox AddEnumFilterComboBox(string labelText, string propertyName, Type enumType);
         /// <summary>
         /// Adds a CheckBox filter that displays only rows whose boolean value
         /// matches the on-off state of the CheckBox. The column of data must

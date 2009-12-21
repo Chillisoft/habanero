@@ -226,6 +226,14 @@ namespace Habanero.UI.VWG
             return comboBox;
         }
 
+        public IComboBox AddEnumFilterComboBox(string labelText, string propertyName, Type enumType)
+        {
+            ICustomFilter filter =
+    _filterControlManager.AddEnumFilterComboBox(labelText, propertyName, enumType);
+            filter.ValueChanged += (sender, e) => { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            return (IComboBox)filter.Control;
+        }
+
         /// <summary>
         /// Adds a CheckBox filter that displays only rows whose boolean value
         /// matches the on-off state of the CheckBox. The column of data must

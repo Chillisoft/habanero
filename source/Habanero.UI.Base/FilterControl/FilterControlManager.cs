@@ -157,6 +157,15 @@ namespace Habanero.UI.Base
             filter.Options = options;
             return filter;
         }
+        /// <summary>
+        /// See <see cref="IFilterControl.AddStringFilterComboBox"/>
+        /// </summary>
+        public ICustomFilter AddEnumFilterComboBox(string labelText, string columnName, Type enumType)
+        {
+            EnumComboBoxFilter filter = new EnumComboBoxFilter(_controlFactory, columnName, FilterClauseOperator.OpEquals, enumType);
+            AddCustomFilter(labelText, filter);
+            return filter;
+        }
 
         /// <summary>
         /// See <see cref="IFilterControl.AddBooleanFilterCheckBox"/>

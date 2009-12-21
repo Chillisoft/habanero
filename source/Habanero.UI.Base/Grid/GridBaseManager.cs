@@ -470,7 +470,18 @@ namespace Habanero.UI.Base
                 throw new GridBaseInitialiseException
                     ("You cannot apply filters as the collection for the grid has not been set");
             }
-            _dataTableDefaultView.RowFilter = filterClause != null ? filterClause.GetFilterClauseString() : null;
+            var filterClauseString = filterClause != null ? filterClause.GetFilterClauseString() : null;
+            try
+            {
+                _dataTableDefaultView.RowFilter = filterClauseString;
+            }
+            catch (Exception e)
+            {
+                throw new HabaneroApplicationException(
+                    e.Message + Environment.NewLine + "An Error Occured while trying to Filter the grid with filterClause '" +
+                    filterClauseString + "'", e);
+                
+            }
         }
 
         /// <summary>

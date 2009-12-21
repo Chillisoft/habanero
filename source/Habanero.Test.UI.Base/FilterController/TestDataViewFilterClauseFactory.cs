@@ -59,6 +59,25 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual("TestColumn = 12", filterClause.GetFilterClauseString("%", ""));
         }
+        public enum PurchaseOrderStatus
+        {
+            Processed
+        }
+        [Test]
+        public void Test_FilterClause_WithEnum()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IFilterClause filterClause =
+    itsFilterClauseFactory.CreateEnumFilterClause("TestColumn", FilterClauseOperator.OpEquals, PurchaseOrderStatus.Processed);
+
+            //---------------Test Result -----------------------
+            string expectedFilterClause = string.Format("TestColumn = '{0}'", PurchaseOrderStatus.Processed);
+            Assert.AreEqual(expectedFilterClause, filterClause.GetFilterClauseString("%", "'"));
+        }
         [Test]
         public void Test_Search_LikeWithString()
         {

@@ -83,7 +83,7 @@ namespace Habanero.Test.BO
 ");
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
-            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MaxValue.Date);
+            Assert.AreEqual(DateTime.Today.AddDays(1), ((PropRuleDate)rule).MaxValue.Date);
 
             //---------------Execute ------------------------------------------
             string errorMessage = "";
@@ -108,7 +108,7 @@ namespace Habanero.Test.BO
 ");
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
-            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MaxValue.Date);
+            Assert.AreEqual(DateTime.Today.AddDays(1), ((PropRuleDate)rule).MaxValue.Date);
 
             //---------------Execute ------------------------------------------
             string errorMessage = "";
@@ -130,11 +130,11 @@ namespace Habanero.Test.BO
 ");
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
-            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MaxValue.Date);
+            Assert.AreEqual(DateTime.Today.AddDays(1), ((PropRuleDate)rule).MaxValue.Date);
 
             //---------------Execute ------------------------------------------
             string errorMessage = "";
-            bool isValid = rule.IsPropValueValid("Propname", DateTime.Today.AddDays(1), ref errorMessage);
+            bool isValid = rule.IsPropValueValid("Propname", DateTime.Today.AddDays(2), ref errorMessage);
 
             //--------------Verify Result -------------------------------------
             Assert.IsFalse(isValid);

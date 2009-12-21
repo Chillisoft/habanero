@@ -27,6 +27,9 @@ namespace Habanero.BO
     /// </summary>
     public class PropRuleDate : PropRuleBase
     {
+        private const string TODAY_STRING = "Today";
+        private const string NOW_STRING = "Now";
+
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
@@ -82,8 +85,11 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "min":
-                            if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
+                            if (Convert.ToString(value) == TODAY_STRING || Convert.ToString(value) == NOW_STRING)
                             {
+                                //The expression is set and not converted immediately so that the Expression
+                                // is only evaluated when needed and not when the ClassDef is first loaded for this class.
+                                //This is essential for any application running over multiple days etc.
                                 MinValueExpression = Convert.ToString(value);
                             }
                             else
@@ -92,8 +98,11 @@ namespace Habanero.BO
                             }
                             break;
                         case "max":
-                            if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
+                            if (Convert.ToString(value) == TODAY_STRING || Convert.ToString(value) == NOW_STRING)
                             {
+                                //The expression is set and not converted immediately so that the Expression
+                                // is only evaluated when needed and not when the ClassDef is first loaded for this class.
+                                //This is essential for any application running over multiple days etc.
                                 MaxValueExpression = Convert.ToString(value);
                             }
                             else
@@ -136,33 +145,29 @@ namespace Habanero.BO
                                                           ref string errorMessage)
         {
             errorMessage = "";
-            if (!base.IsPropValueValid(displayName, propValue, ref errorMessage))
-            {
-                return false;
-            }
-            if (propValue == null)
-            {
-                return true;
-            }
+            if (!base.IsPropValueValid(displayName, propValue, ref errorMessage)) return false;
+            //It is not necessary to check compulsory rules since these are checked in the base class (see previous line)
+            if (propValue == null) return true;
+            if (!IsPropValueADate(displayName, propValue, out errorMessage)) return false;
+            if (!IsPropValueLtMinValue(displayName, propValue, out errorMessage)) return false;
+            if (!IsPropValueGtMaxValue(displayName, propValue, out errorMessage)) return false;
+            return true;
+        }
+
+        private bool IsPropValueADate(string displayName, object propValue, out string errorMessage)
+        {
+            errorMessage = "";
             if (!(propValue is DateTime))
             {
                 errorMessage = GetBaseErrorMessage(propValue, displayName)
-                        + "It is not a type of DateTime.";
+                               + "It is not a type of DateTime.";
                 return false;
             }
-            if ((DateTime) propValue < MinValue)
-            {
-                errorMessage = GetBaseErrorMessage(propValue, displayName);
-                if (!String.IsNullOrEmpty(Message))
-                {
-                    errorMessage += Message;
-                }
-                else
-                {
-                    errorMessage += "The date cannot be before " + MinValue + ".";
-                }
-                return false;
-            }
+            return true;
+        }
+
+        private bool IsPropValueGtMaxValue(string displayName, object propValue, out string errorMessage)
+        {
             if ((DateTime) propValue > MaxValue)
             {
                 errorMessage = GetBaseErrorMessage(propValue, displayName);
@@ -176,6 +181,26 @@ namespace Habanero.BO
                 }
                 return false;
             }
+            errorMessage = "";
+            return true;
+        }
+
+        private bool IsPropValueLtMinValue(string displayName, object propValue, out string errorMessage)
+        {
+            if ((DateTime) propValue < MinValue)
+            {
+                errorMessage = GetBaseErrorMessage(propValue, displayName);
+                if (!String.IsNullOrEmpty(Message))
+                {
+                    errorMessage += Message;
+                }
+                else
+                {
+                    errorMessage += "The date cannot be before " + MinValue + ".";
+                }
+                return false;
+            }
+            errorMessage = "";
             return true;
         }
 
@@ -202,8 +227,8 @@ namespace Habanero.BO
             {
                 if (_parameters["min"] is string)
                 {
-                    if ((string)_parameters["min"] == "Today") return DateTime.Today;
-                    if ((string)_parameters["min"] == "Now") return DateTime.Now;
+                    if ((string)_parameters["min"] == TODAY_STRING) return DateTime.Today.AddDays(-1);
+                    if ((string)_parameters["min"] == NOW_STRING) return DateTime.Now;
                 }
                 return Convert.ToDateTime(_parameters["min"]);
             }
@@ -219,8 +244,8 @@ namespace Habanero.BO
             {
                 if (_parameters["max"] is string)
                 {
-                    if ((string)_parameters["max"] == "Today") return DateTime.Today;
-                    if ((string)_parameters["max"] == "Now") return DateTime.Now;
+                    if ((string)_parameters["max"] == TODAY_STRING) return DateTime.Today.AddDays(1);
+                    if ((string)_parameters["max"] == NOW_STRING) return DateTime.Now;
                 }
                 return Convert.ToDateTime(_parameters["max"]);
             }

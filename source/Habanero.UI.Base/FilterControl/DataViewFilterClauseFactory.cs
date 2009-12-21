@@ -72,6 +72,11 @@ namespace Habanero.UI.Base
             return new DataViewDateFilterClause(filterColumn, clauseOperator, filterValue);
         }
 
+        public IFilterClause CreateEnumFilterClause(string columnName, FilterClauseOperator clauseOperator, object enumValue)
+        {
+            return new DataViewEnumFilterClause(columnName, clauseOperator, enumValue);
+        }
+
         /// <summary>
         /// Creates a new composite filter clause combining two given filter
         /// clauses the operator provided
