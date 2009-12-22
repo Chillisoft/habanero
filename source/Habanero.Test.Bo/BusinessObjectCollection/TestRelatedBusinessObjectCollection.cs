@@ -229,7 +229,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsTrue(address.Status.IsNew);
             Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
         }
-
+#pragma warning disable 168
         [Test]
         public void Test_CreateBusinessObject_ForeignKeySetUp_PropertyUpdatedEventNotFired()
         {
@@ -241,8 +241,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             RelatedBusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
             bool propetyUpdatedEventFired = false;
-            addresses.BusinessObjectPropertyUpdated += delegate(object sender, BOPropUpdatedEventArgs<AddressTestBO> e)
-            {
+            addresses.BusinessObjectPropertyUpdated += delegate {
                 propetyUpdatedEventFired = true;
             };
             //---------------Assert Precondition----------------
@@ -254,6 +253,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsFalse(propetyUpdatedEventFired);
             Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
         }
+#pragma warning restore 168
 
         [Test]
         public void Test_AddNewObject_AddsObjectToCollection_SetsUpForeignKey()

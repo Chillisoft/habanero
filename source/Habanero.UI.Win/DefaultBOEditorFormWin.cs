@@ -121,7 +121,7 @@ namespace Habanero.UI.Win
 
             _buttons = _controlFactory.CreateButtonGroupControl();
             _buttons.AddButton("Cancel", CancelButtonHandler);
-            IButton okbutton = _buttons.AddButton("OK", OKButtonHandler);
+            IButton okbutton = _buttons.AddButton("OK", OkButtonHandler);
 
             okbutton.NotifyDefault(true);
             this.AcceptButton = (ButtonWin) okbutton;
@@ -224,7 +224,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void OKButtonHandler(object sender, EventArgs e)
+        private void OkButtonHandler(object sender, EventArgs e)
         {
             try
             {

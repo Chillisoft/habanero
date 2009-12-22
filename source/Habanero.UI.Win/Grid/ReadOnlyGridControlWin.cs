@@ -444,10 +444,10 @@ namespace Habanero.UI.Win
 
         private void InitialiseFilterControl()
         {
-            _filterControl.Filter += _filterControl_OnFilter;
+            _filterControl.Filter += FilterControl_OnFilter;
         }
 
-        private void _filterControl_OnFilter(object sender, EventArgs e)
+        private void FilterControl_OnFilter(object sender, EventArgs e)
         {
             try
             {
@@ -525,9 +525,9 @@ namespace Habanero.UI.Win
                 IBusinessObject selectedBo = SelectedBusinessObject;
                 if (selectedBo != null)
                 {
-                    if (_businessObjectEditor != null)
+                    if (BusinessObjectEditor != null)
                     {
-                        _businessObjectEditor.EditObject(selectedBo, UiDefName, null);
+                        BusinessObjectEditor.EditObject(selectedBo, UiDefName, null);
                     }
                 }
             }
@@ -552,9 +552,9 @@ namespace Habanero.UI.Win
                         "You cannot call add as there is no business object creator set up for the grid");
                 }
                 IBusinessObject newBo = _businessObjectCreator.CreateBusinessObject();
-                if (_businessObjectEditor != null && newBo != null)
+                if (BusinessObjectEditor != null && newBo != null)
                 {
-                    _businessObjectEditor.EditObject(newBo, UiDefName,
+                    BusinessObjectEditor.EditObject(newBo, UiDefName,
                         delegate(IBusinessObject bo, bool cancelled)
                         {
                             IBusinessObjectCollection collection = this.Grid.BusinessObjectCollection;
@@ -580,9 +580,12 @@ namespace Habanero.UI.Win
         }
 
         #region Implementation of IBOSelectorAndEditor
-
+        //
+        
         ///<summary>
-        /// Gets and sets whether the user can add Business objects via this control
+        /// Gets and sets whether the user can add Business objects via this control.
+        /// Note_This method is implemented so as to support the interface but always returns False and the set always sets false.
+        ///   This is a readOnly Grid and it makes no sense.
         ///</summary>
         public bool AllowUsersToAddBO
         {
@@ -601,6 +604,8 @@ namespace Habanero.UI.Win
 
         /// <summary>
         /// Gets and sets whether the user can edit <see cref="IBusinessObject"/>s via this control
+        /// Note_This method is implemented so as to support the interface but always returns False and the set always sets false.
+        ///   This is a readOnly Grid and it makes no sense.
         /// </summary>
         public bool AllowUsersToEditBO
         {
@@ -611,6 +616,8 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets or sets a boolean value that determines whether to confirm
         /// deletion with the user when they have chosen to delete a row
+        /// Note_This method is implemented so as to support the interface but makes no sense in a readonly grid.
+        ///   This is a readOnly Grid and it makes no sense.
         /// </summary>
         public bool ConfirmDeletion
         {
@@ -622,6 +629,9 @@ namespace Habanero.UI.Win
         /// Gets or sets the delegate that checks whether the user wants to delete selected rows.
         /// If <see cref="IBOSelectorAndEditor.ConfirmDeletion"/> is true and no specific <see cref="IBOSelectorAndEditor.CheckUserConfirmsDeletionDelegate"/> is set then
         /// a default <see cref="CheckUserConfirmsDeletion"/> is used.
+        /// 
+        /// Note_This method is implemented so as to support the interface but makes no sense in a readonly grid.
+        ///   This is a readOnly Grid and it makes no sense.
         /// </summary>
         public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate
         {
