@@ -291,7 +291,16 @@ namespace Habanero.Util
                     throw new TargetInvocationException(new Exception(
                                                             String.Format("Virtual property set for '{0}' does not exist for object of type '{1}'.", propertyName, className)));
                 }
-                object newValue = Convert.ChangeType(value, propInfo.PropertyType);
+                Type propertyType = propInfo.PropertyType;
+                object newValue;
+                if (value != null)
+                {
+                    newValue = propertyType.IsAssignableFrom(value.GetType()) ? value : Convert.ChangeType(value, propertyType);
+                }
+                else
+                {
+                    newValue = Convert.ChangeType(value, propertyType);
+                }
                 propInfo.SetValue(obj, newValue, new object[] { });
             }
             catch (TargetInvocationException ex)

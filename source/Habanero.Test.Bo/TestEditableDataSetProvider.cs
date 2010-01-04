@@ -113,7 +113,7 @@ namespace Habanero.Test.BO
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, boCollection.Count);
             Assert.AreEqual(0, boCollection.PersistedBusinessObjects.Count, "Should be no created items to start");
-//            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
+            //            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
 
             //---------------Execute Test ----------------------
             itsTable.Rows.Add(new object[] { DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value });
@@ -123,9 +123,42 @@ namespace Habanero.Test.BO
             Assert.AreEqual
                 (1, boCollection.PersistedBusinessObjects.Count,
                  "Adding a row to the table should use the collection to create the object");
-//            Assert.AreEqual
-//                (1, boCollection.CreatedBusinessObjects.Count,
-//                 "Adding a row to the table should use the collection to create the object");
+            //            Assert.AreEqual
+            //                (1, boCollection.CreatedBusinessObjects.Count,
+            //                 "Adding a row to the table should use the collection to create the object");
+            Assert.AreEqual(1, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
+        }
+
+        [Test]
+        public void TestAddRowP_RowValueDBNull_VirtualProp_NUll_ShouldNotRaiseException_FIXBUG()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = MyBO.LoadClassDefWithUIAllDataTypes();
+            classDef.UIDefCol["default"].UIGrid.Add(new UIGridColumn("VirtualProp", "-TestProp-", typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+            BusinessObjectCollection<MyBO> boCollection = new BusinessObjectCollection<MyBO>();
+
+            _dataSetProvider = new EditableDataSetProvider(boCollection);
+            BOMapper mapper = new BOMapper(boCollection.ClassDef.CreateNewBusinessObject());
+            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(0, boCollection.Count);
+            Assert.AreEqual(0, boCollection.PersistedBusinessObjects.Count, "Should be no created items to start");
+            //            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
+
+            //---------------Execute Test ----------------------
+            itsTable.Rows.Add(new object[] { DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value });
+            //---------------Test Result -----------------------
+            Assert.IsFalse(itsTable.Rows[0].HasErrors);
+            //Behaviour has been changed to persist the business object
+            Assert.AreEqual
+                (1, boCollection.PersistedBusinessObjects.Count,
+                 "Adding a row to the table should use the collection to create the object");
+            //            Assert.AreEqual
+            //                (1, boCollection.CreatedBusinessObjects.Count,
+            //                 "Adding a row to the table should use the collection to create the object");
             Assert.AreEqual(1, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
         }
         [Test]
@@ -614,6 +647,73 @@ namespace Habanero.Test.BO
             Assert.AreEqual(organisation.OrganisationID.ToString(), table.Rows[0][propertyName]);
             Assert.AreEqual(organisation.OrganisationID, contactPersonTestBO.OrganisationID);
             recordingExceptionNotifier.RethrowRecordedException();
+        }
+
+        [Test]
+        public void Test_EditDataTable_WhenVirtualProp_ShouldEditRelatedVirtualProp()
+        {
+            //---------------Set up test pack-------------------
+            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+            AddressTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            OrganisationTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
+            contactPersonTestBOS.Add(new ContactPersonTestBO(), new ContactPersonTestBO(), new ContactPersonTestBO());
+
+            OrganisationTestBO organisation = new OrganisationTestBO();
+
+            UIGrid uiGrid = new UIGrid();
+            const string propertyName = "-Organisation-";
+            uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(contactPersonTestBOS);
+            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+            Assert.AreEqual(3, table.Rows.Count);
+            Assert.AreEqual(DBNull.Value, table.Rows[0][propertyName]);
+            Assert.AreEqual(null, contactPersonTestBOS[0].Organisation);
+            //---------------Execute Test ----------------------
+            table.Rows[0][propertyName] = organisation;
+            //---------------Test Result -----------------------
+            Assert.AreSame(organisation, table.Rows[0][propertyName]);
+            Assert.AreSame(organisation, contactPersonTestBOS[0].Organisation);
+            recordingExceptionNotifier.RethrowRecordedException();
+        }
+
+        [Test]
+        public void Test_AddRow_WhenVirtualProp_ShouldAddBOWithRelatedVirtualPropSet()
+        {
+            //---------------Set up test pack-------------------
+            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+            AddressTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            OrganisationTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
+
+            OrganisationTestBO organisation = new OrganisationTestBO();
+
+            UIGrid uiGrid = new UIGrid();
+            const string propertyName = "-Organisation-";
+            uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(contactPersonTestBOS);
+            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+            Assert.AreEqual(0, table.Rows.Count);
+            Assert.AreEqual(0, contactPersonTestBOS.Count);
+            //---------------Execute Test ----------------------
+            table.Rows.Add(new object[] { null, organisation });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, table.Rows.Count);
+            Assert.AreEqual(1, contactPersonTestBOS.Count);
+            Assert.AreSame(organisation, table.Rows[0][propertyName]);
+            Assert.AreSame(organisation, contactPersonTestBOS[0].Organisation);
         }
 
         [Test]

@@ -270,6 +270,7 @@ namespace Habanero.BO
             {
                 string message = "There was a problem saving. : " + ex.Message;
                 row.RowError = message;
+                
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
 //            finally
@@ -323,16 +324,15 @@ namespace Habanero.BO
             DataRow row = e.Row;
             try
             {
+                DeregisterForBOEvents();
+
+
                 Guid guidObjectID = GetRowID(row);
                 IBusinessObject changedBo = _collection.Find(guidObjectID);
                 if (changedBo == null || _isBeingAdded) return;
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
-                    if (IsReflectiveProperty(uiProperty)) continue;
-
-                    IBOProp prop;
-                    SetBOPropertyValue(changedBo, uiProperty.PropertyName, row, out prop);
-                    row.SetColumnError(uiProperty.PropertyName, prop != null ? prop.InvalidReason : "Property not found");
+                    ApplyRowCellValueToBOProperty(row, uiProperty, changedBo);
                 }
                 row.RowError = changedBo.Status.IsValidMessage;
             }
@@ -342,23 +342,55 @@ namespace Habanero.BO
                 row.RowError = message;
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
-        }
-
-        private void SetBOPropertyValue(IBusinessObject bo, string propertyName, DataRow row, out IBOProp property)
-        {
-            try
-            {
-                DeregisterForBOEvents();
-                BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
-                boPropertyMapper.BusinessObject = bo;
-                property = boPropertyMapper.Property;
-                if (property != null) { property.Value = row[propertyName]; }
-                //bo.SetPropertyValue(propertyName, row[propertyName]);
-            }
             finally
             {
                 RegisterForBOEvents();
             }
+        }
+
+        private void ApplyRowCellValueToBOProperty(DataRow row, UIGridColumn uiProperty, IBusinessObject changedBo)
+        {
+            string columnError = null;
+            string columnName = uiProperty.PropertyName;
+            if (IsReflectiveProperty(uiProperty))
+            {
+                SetVirtualBOPropertyValue(row, columnName, changedBo, out columnError);
+            }
+            else
+            {
+                IBOProp prop;
+                SetBOPropertyValue(changedBo, columnName, row, out prop);
+                columnError = prop != null ? prop.InvalidReason : "Property not found";
+            }
+            row.SetColumnError(columnName, columnError);
+        }
+
+        private static void SetVirtualBOPropertyValue(DataRow row, string columnName, IBusinessObject changedBo, out string columnError)
+        {
+            string propertyName = columnName.Replace("-", "");
+            try
+            {
+                ReflectionUtilities.SetPropertyValue(changedBo, propertyName, row[columnName]);
+                columnError = null;
+            }
+            catch (Exception ex)
+            {
+                columnError = ex.Message;
+                // set cell error here
+                throw;
+            }
+        }
+
+        private static void SetBOPropertyValue(IBusinessObject bo, string propertyName, DataRow row, out IBOProp property)
+        {
+            BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
+            boPropertyMapper.BusinessObject = bo;
+            property = boPropertyMapper.Property;
+            if (property != null)
+            {
+                property.Value = row[propertyName];
+            }
+            //bo.SetPropertyValue(propertyName, row[propertyName]);
         }
 
         private Guid GetRowID(DataRow row)
@@ -428,29 +460,36 @@ namespace Habanero.BO
                         RegisterForBOEvents();
                     }
                 }
-                // set all the values in the grid to the bo's current prop values (defaults)
-                // make sure the part entered to create the row is not changed.
                 DataRow row = e.Row;
-                row[IDColumnName] = newBo.ID.ObjectID;
-                foreach (UIGridColumn uiProperty in _uiGridProperties)
+                try
                 {
-                    if (IsReflectiveProperty(uiProperty)) continue;
-
-                    //If no value was typed into the grid then use the default value for the property if one exists.
-                    if (DBNull.Value.Equals(row[uiProperty.PropertyName]))
+                    DeregisterForBOEvents();
+                    // set all the values in the grid to the bo's current prop values (defaults)
+                    // make sure the part entered to create the row is not changed.
+                    row[IDColumnName] = newBo.ID.ObjectID;
+                    foreach (UIGridColumn uiProperty in _uiGridProperties)
                     {
-                        object propertyValueToDisplay = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
-                        if (propertyValueToDisplay != null)
+                        //If no value was typed into the grid then use the default value for the property if one exists.
+                        if (DBNull.Value.Equals(row[uiProperty.PropertyName]))
                         {
-                            _table.Columns[uiProperty.PropertyName].ReadOnly = false;
-                            row[uiProperty.PropertyName] = propertyValueToDisplay;
+                            BOMapper boMapper = new BOMapper(newBo);
+                            object propertyValueToDisplay = boMapper.GetPropertyValueToDisplay(uiProperty.PropertyName);
+                            //object propertyValueToDisplay = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
+                            if (propertyValueToDisplay != null)
+                            {
+                                _table.Columns[uiProperty.PropertyName].ReadOnly = false;
+                                row[uiProperty.PropertyName] = propertyValueToDisplay;
+                            }
+                        }
+                        else
+                        {
+                            ApplyRowCellValueToBOProperty(row, uiProperty, newBo);
                         }
                     }
-                    else
-                    {
-                        IBOProp property;
-                        SetBOPropertyValue(newBo, uiProperty.PropertyName, row, out property);
-                    }
+                }
+                finally
+                {
+                    RegisterForBOEvents();
                 }
                 string message;
                 if (newBo.Status.IsValid(out message))
@@ -485,7 +524,7 @@ namespace Habanero.BO
         private static bool IsReflectiveProperty(UIGridColumn uiProperty)
         {
             return uiProperty.PropertyName.IndexOf("-") >= 0;
-            return uiProperty.PropertyName.IndexOf(".") >= 0 || uiProperty.PropertyName.IndexOf("-") >= 0;
+            //return uiProperty.PropertyName.IndexOf(".") >= 0 || uiProperty.PropertyName.IndexOf("-") >= 0;
         }
     }
 }

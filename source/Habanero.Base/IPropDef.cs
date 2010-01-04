@@ -140,7 +140,10 @@ namespace Habanero.Base
         IPropertyComparer<T> GetPropertyComparer<T>() where T : IBusinessObject;
 
         ///<summary>
-        /// Cdfdasfkl;
+        /// Is this property persistable or not. This is used for special properties e.g. Dynamically inserted properties
+        /// as for Asset Management System (See Intermap Asset Management) or for any reflective/calculated field that 
+        /// you would like to store propdef information for e.g. rules, Units of measure etc.
+        /// This will prevent the property from being persisted in the usual manner.
         ///</summary>
         bool Persistable { get; set; }
 

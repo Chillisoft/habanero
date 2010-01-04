@@ -75,6 +75,94 @@ namespace Habanero.Test.Util
             Assert.AreEqual(testIntParam, classWithPrivateMethod.IntParamValue.Value);
         }
 
+        [Test]
+        public void Test_SetPropertyValue_WithObject()
+        {
+            //---------------Set up test pack-------------------
+            ClassWithProperties classWithProperties = new ClassWithProperties();
+            object newValue = new object();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(classWithProperties.ObjectProperty);
+            //---------------Execute Test ----------------------
+            ReflectionUtilities.SetPropertyValue(classWithProperties, "ObjectProperty", newValue);
+            //---------------Test Result -----------------------
+            Assert.AreSame(newValue, classWithProperties.ObjectProperty);
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_WithString()
+        {
+            //---------------Set up test pack-------------------
+            ClassWithProperties classWithProperties = new ClassWithProperties();
+            const string newValue = "MyString";
+            //---------------Assert Precondition----------------
+            Assert.IsNull(classWithProperties.StringProperty);
+            //---------------Execute Test ----------------------
+            ReflectionUtilities.SetPropertyValue(classWithProperties, "StringProperty", newValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newValue, classWithProperties.StringProperty);
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_WithInt()
+        {
+            //---------------Set up test pack-------------------
+            ClassWithProperties classWithProperties = new ClassWithProperties();
+            const int newValue = 345;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, classWithProperties.IntProperty);
+            //---------------Execute Test ----------------------
+            ReflectionUtilities.SetPropertyValue(classWithProperties, "IntProperty", newValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newValue, classWithProperties.IntProperty);
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_WithInterface()
+        {
+            //---------------Set up test pack-------------------
+            ClassWithProperties classWithProperties = new ClassWithProperties();
+            IMyInterface newValue = new MyInterfaceClass();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(classWithProperties.InterfaceProperty);
+            //---------------Execute Test ----------------------
+            ReflectionUtilities.SetPropertyValue(classWithProperties, "InterfaceProperty", newValue);
+            //---------------Test Result -----------------------
+            Assert.AreSame(newValue, classWithProperties.InterfaceProperty);
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_ToNull_WithInterface()
+        {
+            //---------------Set up test pack-------------------
+            ClassWithProperties classWithProperties = new ClassWithProperties();
+            IMyInterface oldValue = new MyInterfaceClass();
+            classWithProperties.InterfaceProperty = oldValue;
+            //---------------Assert Precondition----------------
+            Assert.AreSame(oldValue, classWithProperties.InterfaceProperty);
+            //---------------Execute Test ----------------------
+            ReflectionUtilities.SetPropertyValue(classWithProperties, "InterfaceProperty", null);
+            //---------------Test Result -----------------------
+            Assert.IsNull(classWithProperties.InterfaceProperty);
+        }
+
+        private class ClassWithProperties
+        {
+            public object ObjectProperty { get; set; }
+            public string StringProperty { get; set; }
+            public int IntProperty { get; set; }
+            public IMyInterface InterfaceProperty { get; set; }
+        }
+
+        internal interface IMyInterface
+        {
+        }
+
+        internal class MyInterfaceClass : IMyInterface
+        {
+        }
+
+
         private class ClassWithPrivateMethod
         {
 
@@ -115,4 +203,6 @@ namespace Habanero.Test.Util
             }
         }
     }
+
+    
 }
