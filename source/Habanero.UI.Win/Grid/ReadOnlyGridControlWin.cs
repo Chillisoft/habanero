@@ -51,6 +51,8 @@ namespace Habanero.UI.Win
         private IBusinessObjectEditor _businessObjectEditor;
         private ClassDef _classDef;
         private bool _doubleClickEditsBusinessObject;
+        private bool _allowUsersToEditBo = true;
+        private bool _allowUsersToAddBo = true;
 
         ///<summary>
         /// Constructs a new instance of a <see cref="ReadOnlyGridControlWin"/>.
@@ -589,8 +591,12 @@ namespace Habanero.UI.Win
         ///</summary>
         public bool AllowUsersToAddBO
         {
-            get { return false; }
-            set { this.Grid.AllowUserToAddRows = false; }
+            get { return _allowUsersToAddBo; }
+            set { 
+                this.Grid.AllowUserToAddRows = false;
+                _allowUsersToAddBo = value;
+                this.Buttons["Add"].Visible = value;
+            }
         }
 
         /// <summary>
@@ -599,7 +605,9 @@ namespace Habanero.UI.Win
         public bool AllowUsersToDeleteBO
         {
             get { return this.Grid.AllowUserToDeleteRows; }
-            set { this.Grid.AllowUserToDeleteRows = value; }
+            set { this.Grid.AllowUserToDeleteRows = value;
+                this.Buttons["Delete"].Visible = value;
+            }
         }
 
         /// <summary>
@@ -609,8 +617,13 @@ namespace Habanero.UI.Win
         /// </summary>
         public bool AllowUsersToEditBO
         {
-            get { return false; }
-            set { this.Grid.ReadOnly = true; }
+            get { return _allowUsersToEditBo; }
+            set 
+            { 
+                this.Grid.ReadOnly = true;
+                _allowUsersToEditBo = value;
+                this.Buttons["Edit"].Visible = value;
+            }
         }
 
         /// <summary>

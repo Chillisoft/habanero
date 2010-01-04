@@ -58,7 +58,8 @@ namespace Habanero.UI.Base
         bool IsFirstStep();
 
         /// <summary>
-        /// Method that is to be run when the Wizard is finished. This method should do all persistance that is required.
+        /// Method that is to be run when the Wizard is finished. This method should be overridden to do all persistance that is required.
+		/// 
         /// </summary>
         void Finish();
 

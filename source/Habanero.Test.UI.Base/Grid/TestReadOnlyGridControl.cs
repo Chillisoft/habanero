@@ -529,6 +529,108 @@ namespace Habanero.Test.UI.Base
                 //---------------Test Result -----------------------
                 Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
             }
+
+            [Ignore("This does not work in VWG")] //TODO Brett 04 Jan 2010: Ignored Test - This does not work in VWG
+            [Test]
+            public override void Test_AllowUsersToAddBo_WhenFalse_ShouldHideButton()
+            {
+                //---------------Set up test pack-------------------
+                IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+                IButton addButton = readOnlyGridControl.Buttons["Add"];
+                //---------------Assert Precondition----------------
+                Assert.IsTrue(readOnlyGridControl.AllowUsersToAddBO);
+                Assert.IsTrue(addButton.Visible);
+                //---------------Execute Test ----------------------
+                readOnlyGridControl.AllowUsersToAddBO = false;
+                //---------------Test Result -----------------------
+                Assert.IsFalse(readOnlyGridControl.AllowUsersToAddBO);
+                Assert.IsFalse(addButton.Visible);
+            }
+            [Ignore("This does not work in VWG")] //TODO Brett 04 Jan 2010: Ignored Test - This does not work in VWG
+            [Test]
+            public override void Test_AllowUsersToAddBo_WhenTrue_ShouldHideButton()
+            {
+                //---------------Set up test pack-------------------
+                IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+                IButton addButton = readOnlyGridControl.Buttons["Add"];
+                readOnlyGridControl.AllowUsersToAddBO = false;
+                //---------------Assert Precondition----------------
+                Assert.IsFalse(readOnlyGridControl.AllowUsersToAddBO);
+                Assert.IsFalse(addButton.Visible);
+                //---------------Execute Test ----------------------
+                readOnlyGridControl.AllowUsersToAddBO = true;
+                //---------------Test Result -----------------------
+                Assert.IsTrue(readOnlyGridControl.AllowUsersToAddBO);
+                Assert.IsTrue(addButton.Visible);
+            }
+            [Ignore("This does not work in VWG")] //TODO Brett 04 Jan 2010: Ignored Test - This does not work in VWG
+            [Test]
+            public override void Test_AllowUsersToEditBo_WhenFalse_ShouldHideButton()
+            {
+                //---------------Set up test pack-------------------
+                IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+                IButton editButton = readOnlyGridControl.Buttons["Edit"];
+                //---------------Assert Precondition----------------
+                Assert.IsTrue(readOnlyGridControl.AllowUsersToEditBO);
+                Assert.IsTrue(editButton.Visible);
+                //---------------Execute Test ----------------------
+                readOnlyGridControl.AllowUsersToEditBO = false;
+                //---------------Test Result -----------------------
+                Assert.IsFalse(readOnlyGridControl.AllowUsersToEditBO);
+                Assert.IsFalse(editButton.Visible);
+            }
+            [Ignore("This does not work in VWG")] //TODO Brett 04 Jan 2010: Ignored Test - This does not work in VWG
+            [Test]
+            public override void Test_AllowUsersToEditBo_WhenTrue_ShouldHideButton()
+            {
+                //---------------Set up test pack-------------------
+                IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+                IButton editButton = readOnlyGridControl.Buttons["Edit"];
+                readOnlyGridControl.AllowUsersToEditBO = false;
+                //---------------Assert Precondition----------------
+                Assert.IsFalse(readOnlyGridControl.AllowUsersToEditBO);
+                Assert.IsFalse(editButton.Visible);
+                //---------------Execute Test ----------------------
+                readOnlyGridControl.AllowUsersToEditBO = true;
+                //---------------Test Result -----------------------
+                Assert.IsTrue(readOnlyGridControl.AllowUsersToEditBO);
+                Assert.IsTrue(editButton.Visible);
+            }
+
+            [Ignore("This does not work in VWG")] //TODO Brett 04 Jan 2010: Ignored Test - This does not work in VWG
+            [Test]
+            public override void Test_AllowUsersToDeleteBo_WhenFalse_ShouldHideButton()
+            {
+                //---------------Set up test pack-------------------
+                IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+                IButton deleteBtn = readOnlyGridControl.Buttons["Delete"];
+                readOnlyGridControl.AllowUsersToDeleteBO = true;
+                //---------------Assert Precondition----------------
+                Assert.IsTrue(readOnlyGridControl.AllowUsersToDeleteBO);
+                Assert.IsTrue(deleteBtn.Visible);
+                //---------------Execute Test ----------------------
+                readOnlyGridControl.AllowUsersToDeleteBO = false;
+                //---------------Test Result -----------------------
+                Assert.IsFalse(readOnlyGridControl.AllowUsersToDeleteBO);
+                Assert.IsFalse(deleteBtn.Visible);
+            }
+            [Ignore("This does not work in VWG")] //TODO Brett 04 Jan 2010: Ignored Test - This does not work in VWG
+            [Test]
+            public override void Test_AllowUsersToDeleteBo_WhenTrue_ShouldHideButton()
+            {
+                //---------------Set up test pack-------------------
+                IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+                IButton button = readOnlyGridControl.Buttons["Delete"];
+
+                //---------------Assert Precondition----------------
+                Assert.IsFalse(readOnlyGridControl.AllowUsersToDeleteBO);
+                Assert.IsFalse(button.Visible);
+                //---------------Execute Test ----------------------
+                readOnlyGridControl.AllowUsersToDeleteBO = true;
+                //---------------Test Result -----------------------
+                Assert.IsTrue(readOnlyGridControl.AllowUsersToDeleteBO);
+                Assert.IsTrue(button.Visible);
+            }
         }
 
 
@@ -1939,10 +2041,104 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
         }
 
-        
-        
+
+        [Test]
+        public virtual void Test_AllowUsersToAddBo_WhenFalse_ShouldHideButton()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+            IButton addButton = readOnlyGridControl.Buttons["Add"];
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(readOnlyGridControl.AllowUsersToAddBO);
+            Assert.IsTrue(addButton.Visible);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.AllowUsersToAddBO = false;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(readOnlyGridControl.AllowUsersToAddBO);
+            Assert.IsFalse(addButton.Visible);
+        }
+        [Test]
+        public virtual void Test_AllowUsersToAddBo_WhenTrue_ShouldHideButton()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+            IButton addButton = readOnlyGridControl.Buttons["Add"];
+            readOnlyGridControl.AllowUsersToAddBO = false;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(readOnlyGridControl.AllowUsersToAddBO);
+            Assert.IsFalse(addButton.Visible);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.AllowUsersToAddBO = true;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(readOnlyGridControl.AllowUsersToAddBO);
+            Assert.IsTrue(addButton.Visible);
+        }
+
+        [Test]
+        public virtual void Test_AllowUsersToEditBo_WhenFalse_ShouldHideButton()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+            IButton editButton = readOnlyGridControl.Buttons["Edit"];
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(readOnlyGridControl.AllowUsersToEditBO);
+            Assert.IsTrue(editButton.Visible);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.AllowUsersToEditBO = false;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(readOnlyGridControl.AllowUsersToEditBO);
+            Assert.IsFalse(editButton.Visible);
+        }
+        [Test]
+        public virtual void Test_AllowUsersToEditBo_WhenTrue_ShouldHideButton()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+            IButton editButton = readOnlyGridControl.Buttons["Edit"];
+            readOnlyGridControl.AllowUsersToEditBO = false;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(readOnlyGridControl.AllowUsersToEditBO);
+            Assert.IsFalse(editButton.Visible);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.AllowUsersToEditBO = true;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(readOnlyGridControl.AllowUsersToEditBO);
+            Assert.IsTrue(editButton.Visible);
+        }
 
 
+        [Test]
+        public virtual void Test_AllowUsersToDeleteBo_WhenFalse_ShouldHideButton()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+            IButton deleteBtn = readOnlyGridControl.Buttons["Delete"];
+            readOnlyGridControl.AllowUsersToDeleteBO = true;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(readOnlyGridControl.AllowUsersToDeleteBO);
+            Assert.IsTrue(deleteBtn.Visible);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.AllowUsersToDeleteBO = false;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(readOnlyGridControl.AllowUsersToDeleteBO);
+            Assert.IsFalse(deleteBtn.Visible);
+        }
+        [Test]
+        public virtual void Test_AllowUsersToDeleteBo_WhenTrue_ShouldHideButton()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
+            IButton button = readOnlyGridControl.Buttons["Delete"];
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(readOnlyGridControl.AllowUsersToDeleteBO);
+            Assert.IsFalse(button.Visible);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.AllowUsersToDeleteBO = true;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(readOnlyGridControl.AllowUsersToDeleteBO);
+            Assert.IsTrue(button.Visible);
+        }
  //These cannot be tested in Giz since they are now raising messages to test in windows using NUnitForms
 //        [Test]
 //        public void TestClickAddWhenNoCollectionSet()

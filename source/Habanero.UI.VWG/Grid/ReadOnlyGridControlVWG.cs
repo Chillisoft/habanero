@@ -53,6 +53,8 @@ namespace Habanero.UI.VWG
         private IBusinessObjectCreator _businessObjectCreator;
         private IBusinessObjectDeletor _businessObjectDeletor;
         private IBusinessObjectEditor _businessObjectEditor;
+        private bool _allowUsersToAddBo = true;
+        private bool _allowUsersToEditBo = true;
 
         ///<summary>
         /// Constructs a new instance of a <see cref="ReadOnlyGridControlVWG"/>.
@@ -82,6 +84,8 @@ namespace Habanero.UI.VWG
             FilterMode = FilterModes.Filter;
             _grid.Name = "GridControl";
             this.Grid.BusinessObjectSelected += Grid_OnBusinessObjectSelected;
+            this.Buttons["Add"].Visible = _allowUsersToAddBo;
+            this.Buttons["Edit"].Visible = _allowUsersToEditBo;
         }
 
         #region IReadOnlyGridControl Members
@@ -423,10 +427,10 @@ namespace Habanero.UI.VWG
 
         private void InitialiseFilterControl()
         {
-            _filterControl.Filter += _filterControl_OnFilter;
+            _filterControl.Filter += FilterControl_OnFilter;
         }
 
-        private void _filterControl_OnFilter(object sender, EventArgs e)
+        private void FilterControl_OnFilter(object sender, EventArgs e)
         {
             try
             {
@@ -590,12 +594,19 @@ namespace Habanero.UI.VWG
         #region Implementation of IBOSelectorAndEditor
 
         ///<summary>
-        /// Gets and sets whether the user can add Business objects via this control
+        /// Gets and sets whether the user can add Business objects via this control.
+        /// Note_This method is implemented so as to support the interface but always returns False and the set always sets false.
+        ///   This is a readOnly Grid and it makes no sense.
         ///</summary>
         public bool AllowUsersToAddBO
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return _allowUsersToAddBo; }
+            set
+            {
+                this.Grid.AllowUserToAddRows = false;
+                _allowUsersToAddBo = value;
+                this.Buttons["Add"].Visible = value;
+            }
         }
 
         /// <summary>
@@ -603,19 +614,29 @@ namespace Habanero.UI.VWG
         /// </summary>
         public bool AllowUsersToDeleteBO
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return this.Grid.AllowUserToDeleteRows; }
+            set
+            {
+                this.Grid.AllowUserToDeleteRows = value;
+                this.Buttons["Delete"].Visible = value;
+            }
         }
 
         /// <summary>
         /// Gets and sets whether the user can edit <see cref="IBusinessObject"/>s via this control
+        /// Note_This method is implemented so as to support the interface but always returns False and the set always sets false.
+        ///   This is a readOnly Grid and it makes no sense.
         /// </summary>
         public bool AllowUsersToEditBO
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return _allowUsersToEditBo; }
+            set
+            {
+                this.Grid.ReadOnly = true;
+                _allowUsersToEditBo = value;
+                this.Buttons["Edit"].Visible = value;
+            }
         }
-
         /// <summary>
         /// Gets or sets a boolean value that determines whether to confirm
         /// deletion with the user when they have chosen to delete a row

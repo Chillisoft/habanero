@@ -137,7 +137,8 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Method that is to be run when the Wizard is finished. This method should do all persistance that is required.
+        /// Method that is to be run when the Wizard is finished. This method should be overridden to do all persistance that is required.
+		/// This raises the WizardFinished event which allows you to close forms or do anything else required.
         /// </summary>
         public virtual void Finish()
         {

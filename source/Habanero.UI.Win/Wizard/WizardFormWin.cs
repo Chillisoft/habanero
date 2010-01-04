@@ -20,7 +20,6 @@ using System;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
-using DialogResult=System.Windows.Forms.DialogResult;
 using FormStartPosition=System.Windows.Forms.FormStartPosition;
 
 namespace Habanero.UI.Win
@@ -67,7 +66,10 @@ namespace Habanero.UI.Win
             try
             {
                 //TODO: should follow pattern of checking dirty status and if dirty ask user
-                this._wizardController.CancelWizard();
+                if (DialogResult == Base.DialogResult.Cancel)
+                {
+                    this._wizardController.CancelWizard();
+                }
             }
             catch (Exception ex)
             {
@@ -187,7 +189,7 @@ namespace Habanero.UI.Win
             form.StartPosition = FormStartPosition.CenterParent;
             if (showDialog)
             {
-                return form.ShowDialog() == (DialogResult)Base.DialogResult.OK;
+                return form.ShowDialog() == (System.Windows.Forms.DialogResult)Base.DialogResult.OK;
             }
             form.Show();
             return true;
