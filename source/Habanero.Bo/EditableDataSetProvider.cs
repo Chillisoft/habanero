@@ -350,8 +350,9 @@ namespace Habanero.BO
 
         private void ApplyRowCellValueToBOProperty(DataRow row, UIGridColumn uiProperty, IBusinessObject changedBo)
         {
-            string columnError = null;
+            string columnError;
             string columnName = uiProperty.PropertyName;
+            if (!uiProperty.Editable) return;
             if (IsReflectiveProperty(uiProperty))
             {
                 SetVirtualBOPropertyValue(row, columnName, changedBo, out columnError);

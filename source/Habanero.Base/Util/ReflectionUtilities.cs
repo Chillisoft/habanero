@@ -305,10 +305,15 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                log.Error(String.Format("Error setting virtual property '{0}' for object of type '{1}'" +
-                                        Environment.NewLine + "{2}", propertyName, className,
-                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
-                throw ex.InnerException;
+                string message = String.Format("Error setting virtual property '{0}' for object of type '{1}'" , propertyName, className);
+                log.Error(String.Format(message + Environment.NewLine + "{2}",   ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                throw new HabaneroApplicationException(message, ex.InnerException);
+            }
+            catch (ArgumentException ex)
+            {
+                string message = String.Format("Error setting virtual property '{0}' for object of type '{1}'", propertyName, className);
+                log.Error(String.Format(message + Environment.NewLine + "{2}", ExceptionUtilities.GetExceptionString(ex, 8, true)));
+                throw new HabaneroApplicationException(message, ex);
             }
         }
         ///<summary>

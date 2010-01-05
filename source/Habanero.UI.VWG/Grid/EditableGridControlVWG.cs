@@ -34,6 +34,7 @@ namespace Habanero.UI.VWG
         private readonly IControlFactory _controlFactory;
         private readonly IEditableGrid _grid;
         private readonly EditableGridControlManager _editableGridManager;
+        private bool _allowUserToAddRows;
 
         ///<summary>
         /// Constructs a new instance of a <see cref="EditableGridControlVWG"/>.
@@ -63,7 +64,7 @@ namespace Habanero.UI.VWG
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             manager.AddControl(Buttons, BorderLayoutManager.Position.South);
             this.Grid.BusinessObjectSelected += Grid_OnBusinessObjectSelected;
-
+            this.AllowUsersToAddBO = true;
             //TODO copy rest from readonly version
         }
 
@@ -306,7 +307,7 @@ namespace Habanero.UI.VWG
 
             this.Buttons.Enabled = true;
             this.FilterControl.Enabled = true;
-            _grid.AllowUserToAddRows = true;
+            _grid.AllowUserToAddRows = _allowUserToAddRows;
         }
 
         ///<summary>
@@ -371,7 +372,8 @@ namespace Habanero.UI.VWG
         public bool AllowUsersToAddBO
         {
             get { return this.Grid.AllowUserToAddRows; }
-            set { this.Grid.AllowUserToAddRows = value; }
+            set { this.Grid.AllowUserToAddRows = value;
+                _allowUserToAddRows = value;}
         }
 
         /// <summary>

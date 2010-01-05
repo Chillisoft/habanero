@@ -36,6 +36,7 @@ namespace Habanero.UI.Win
         private readonly EditableGridControlManager _editableGridManager;
         private readonly IFilterControl _filterControl;
         private readonly IEditableGrid _grid;
+        private bool _allowUserToAddRows;
 
         ///<summary>
         /// Constructs a new instance of a <see cref="EditableGridControlWin"/>.
@@ -66,6 +67,7 @@ namespace Habanero.UI.Win
             layoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             layoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
             this.Grid.BusinessObjectSelected += Grid_OnBusinessObjectSelected;
+            this.AllowUsersToAddBO = true;
             //this.Grid.Rows[0].
         }
 
@@ -266,7 +268,7 @@ namespace Habanero.UI.Win
 
             Buttons.Enabled = true;
             FilterControl.Enabled = true;
-            _grid.AllowUserToAddRows = true;
+            _grid.AllowUserToAddRows = _allowUserToAddRows;
         }
 
         ///<summary>
@@ -369,7 +371,9 @@ namespace Habanero.UI.Win
         public bool AllowUsersToAddBO
         {
             get { return this.Grid.AllowUserToAddRows; }
-            set { this.Grid.AllowUserToAddRows = value; }
+            set { this.Grid.AllowUserToAddRows = value;
+                _allowUserToAddRows = value;
+            }
         }
 
         /// <summary>

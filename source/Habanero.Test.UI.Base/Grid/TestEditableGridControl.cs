@@ -436,13 +436,15 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IEditableGridControl editableGridControl = CreateEditableGridControl();
             AddControlToForm(editableGridControl);
+            editableGridControl.AllowUsersToAddBO = true;
             editableGridControl.SetBusinessObjectCollection(col);
+            Assert.IsTrue(editableGridControl.Grid.AllowUserToAddRows);
             editableGridControl.SetBusinessObjectCollection(null);
             //----------------Assert Preconditions --------------
-
             Assert.IsFalse(editableGridControl.Buttons.Enabled);
             Assert.IsFalse(editableGridControl.FilterControl.Enabled);
             Assert.AreEqual(0, editableGridControl.Grid.Rows.Count);
+            Assert.IsFalse(editableGridControl.Grid.AllowUserToAddRows);
             //---------------Execute Test ----------------------
             editableGridControl.SetBusinessObjectCollection(col);
             //---------------Verify Result ---------------------
@@ -534,6 +536,28 @@ namespace Habanero.Test.UI.Base
             ////---------------Test Result -----------------------
             Assert.AreEqual(col.Count + 1, editableGrid.Rows.Count, "The number of items in the grid plus the null item");
         }
+        [Test]
+        public void Test_SetBusinessObjectCollection_WhenAllowAddFalse_ShouldNotChangeAllowAdd()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+
+            AddControlToForm(editableGridControl);
+            IEditableGrid editableGrid = editableGridControl.Grid;
+            editableGrid.Columns.Add("TestProp", "TestProp");
+            editableGridControl.AllowUsersToAddBO = false;
+            //--------------Assert PreConditions----------------   
+            Assert.AreEqual(0, editableGrid.Rows.Count);
+            Assert.IsFalse(editableGrid.AllowUserToAddRows);
+            //---------------Execute Test ----------------------
+            editableGridControl.SetBusinessObjectCollection(col);
+            ////---------------Test Result -----------------------
+            Assert.IsFalse(editableGrid.AllowUserToAddRows);
+            Assert.IsFalse(editableGridControl.AllowUsersToAddBO);
+            Assert.AreEqual(col.Count, editableGrid.Rows.Count, "The number of items in the col");
+        }
 
         [Test]
         public void Test_AutoSelectsFirstItem()
@@ -544,7 +568,7 @@ namespace Habanero.Test.UI.Base
             IEditableGridControl editableGridControl = CreateEditableGridControl();
             AddControlToForm(editableGridControl);
             SetupGridColumnsForMyBo(editableGridControl.Grid);
-
+            editableGridControl.AllowUsersToAddBO = true;
             //-----------------Assert Preconditions-----------------------
             Assert.AreEqual(1, editableGridControl.Grid.Rows.Count, "The number of items in the grid plus the null item");
             //---------------Execute Test ----------------------
