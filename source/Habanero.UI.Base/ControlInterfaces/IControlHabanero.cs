@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.ComponentModel;
 using System.Drawing;
 
 namespace Habanero.UI.Base
@@ -317,8 +318,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets or sets the text associated with this control
         /// </summary>
-        [System.ComponentModel.DefaultValue("")]
-        [System.ComponentModel.Localizable(true)]
+        [Localizable(false),System.ComponentModel.DefaultValue("")]
         [System.ComponentModel.Bindable(true)]
         string Text { get; set; }
 

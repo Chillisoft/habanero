@@ -635,6 +635,7 @@ namespace Habanero.UI.VWG
                 this.Grid.ReadOnly = true;
                 _allowUsersToEditBo = value;
                 this.Buttons["Edit"].Visible = value;
+                this.DoubleClickEditsBusinessObject = value;
             }
         }
         /// <summary>

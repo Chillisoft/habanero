@@ -2083,11 +2083,13 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsTrue(readOnlyGridControl.AllowUsersToEditBO);
             Assert.IsTrue(editButton.Visible);
+            Assert.IsTrue(readOnlyGridControl.DoubleClickEditsBusinessObject);
             //---------------Execute Test ----------------------
             readOnlyGridControl.AllowUsersToEditBO = false;
             //---------------Test Result -----------------------
             Assert.IsFalse(readOnlyGridControl.AllowUsersToEditBO);
             Assert.IsFalse(editButton.Visible);
+            Assert.IsFalse(readOnlyGridControl.DoubleClickEditsBusinessObject);
         }
         [Test]
         public virtual void Test_AllowUsersToEditBo_WhenTrue_ShouldHideButton()
@@ -2099,11 +2101,13 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsFalse(readOnlyGridControl.AllowUsersToEditBO);
             Assert.IsFalse(editButton.Visible);
+            Assert.IsFalse(readOnlyGridControl.DoubleClickEditsBusinessObject);
             //---------------Execute Test ----------------------
             readOnlyGridControl.AllowUsersToEditBO = true;
             //---------------Test Result -----------------------
             Assert.IsTrue(readOnlyGridControl.AllowUsersToEditBO);
             Assert.IsTrue(editButton.Visible);
+            Assert.IsTrue(readOnlyGridControl.DoubleClickEditsBusinessObject);
         }
 
 
