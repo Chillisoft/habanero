@@ -2363,6 +2363,112 @@ namespace Habanero.Test.BO
         }
         #endregion
 
+        #region In
+        [Test]
+        public void TestIn()
+        {
+            //-------------Setup Test Pack ------------------
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            object[] values = new object[] {"100", "200", "300"};
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.In, values);
+
+            //-------------Test Result ----------------------
+            Assert.IsNotNull(criteria.Field);
+            Assert.AreEqual("MyField", criteria.Field.PropertyName);
+            Assert.IsNull(criteria.Field.Source);
+            Assert.AreEqual("MyField", criteria.Field.FieldName);
+            Assert.AreEqual(Criteria.ComparisonOp.In, criteria.ComparisonOperator);
+            Assert.IsTrue(criteria.CanBeParametrised());
+        }
+
+        [Test]
+        public void TestIsMatch_OneProp_In()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "Surname1";
+            cp.Save();
+            object[] values = new object[] { "Surname1", "Surname2" };
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, values);
+
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestNotIsMatch_OneProp_In()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "Surname3";
+            cp.Save();
+            object[] values = new object[] {"Surname1", "Surname2"};
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, values);
+
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it doesn't match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestIsMatch_OneProp_In_Null()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            object[] values = new object[] { null, "Surname2" };
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, values);
+
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestNotIsMatch_OneProp_In_Null()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "Surname3";
+            cp.Save();
+            object[] values = new object[] { null, "Surname2" };
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, values);
+
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it doesn't match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        #endregion
 
         [Test, Ignore("IN NOT IN not yet implemented")]
         public void TestOtherOperators()

@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
 
@@ -100,7 +102,11 @@ namespace Habanero.Base
             ///<summary>
             /// The IS Not operator used for IS NOT NULL
             ///</summary>
-            IsNot
+            IsNot,
+            /// <summary>
+            /// The In operator 
+            /// </summary>
+            In
         }
 
         #endregion
@@ -122,7 +128,7 @@ namespace Habanero.Base
         /// An Arracy of Comparison Ops (e.g. '=', 'Like' that can be used when building <see cref="Criteria"/>
         /// This is used to convert the <see cref="ComparisonOp"/> value to a <see cref="ComparisonOperatorString"/>
         /// </summary>
-        protected readonly string[] _comparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT"};
+        protected readonly string[] _comparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT", "IN"};
         private readonly QueryField _field;
 
         /// <summary>
@@ -166,6 +172,7 @@ namespace Habanero.Base
             _field = field;
             _comparisonOp = comparisonOp;
             _fieldValue = value;
+            if (_fieldValue is IEnumerable && !(_fieldValue is string)) _fieldValue = new CriteriaValues((IEnumerable)_fieldValue);
         }
 
         /// <summary>
@@ -292,9 +299,11 @@ namespace Habanero.Base
                         "Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", _field.PropertyName,
                         className));
             }
+            
             IComparable compareToValue = _fieldValue as IComparable;
             compareToValue = ConvertDateTimeStringToValue(compareToValue);
             compareToValue = ConvertGuidStringToValue(boPropertyValue, compareToValue);
+
             return IsNonNullMatch(boPropertyValue, compareToValue);
         }
 
@@ -381,6 +390,8 @@ namespace Habanero.Base
                     return boPropertyValue == null;//if boPropertyValue not null then always return false.
                 case ComparisonOp.IsNot:
                     return boPropertyValue != null;//if boPropertyValue null then always return false.
+                case ComparisonOp.In:
+                    return compareToValue.CompareTo(boPropertyValue) == 0;
                 default:
                     throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
                                                          , "The operator " + _comparisonOp + " is not supported by the application");
@@ -433,6 +444,8 @@ namespace Habanero.Base
                 case ComparisonOp.IsNot:
                     if (_fieldValue == null) return false;
                     return _fieldValue.ToString().ToUpper() != "NULL";
+                case ComparisonOp.In:
+                    return ((IComparable)_fieldValue).CompareTo(null) == 0;
                 default:
                     throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
                                                          , "The operator " + _comparisonOp + " is not supported by the application");
@@ -694,6 +707,38 @@ namespace Habanero.Base
             }
             result = Guid.Empty;
             return false;
+        }
+
+
+        public class CriteriaValues : IComparable
+        {
+            private readonly IEnumerable _values;
+
+            public CriteriaValues(IEnumerable values) {
+                _values = values;
+            }
+
+            #region Implementation of IComparable
+
+            public int CompareTo(object obj) {
+                foreach (var value in _values)
+                {
+                    if (value == obj || value != null && value.Equals(obj)) return 0;
+                }
+                return -1;
+            }
+
+            #endregion
+
+            public override string ToString()
+            {
+                List<string> stringValues = new List<string>();
+                foreach (var value in _values)
+                {
+                    stringValues.Add(value.ToString());
+                }
+                return "(" + String.Join(", ", stringValues.ToArray()) + ")";
+            }
         }
     }
 }
