@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController
@@ -30,7 +31,7 @@ namespace Habanero.Test.UI.Base.FilterController
     [TestFixture]
     public class TestFilterControlManager
     {
-        protected IControlFactory GetControlFactory()
+        protected virtual IControlFactory GetControlFactory()
         {
             return new ControlFactoryVWG();
         }
@@ -1263,7 +1264,7 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
         [Test]
-        public void TestAdd_TwoStringFilterTextBox_CheckBox__GetControl()
+        public void TestAdd_AddBooleanFilterCheckBox_CheckBox__GetControl()
         {
             //---------------Set up test pack-------------------
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
@@ -1273,11 +1274,10 @@ namespace Habanero.Test.UI.Base.FilterController
             ICheckBox tbReturned = (ICheckBox) filterControl.GetChildControl("TestColumn");
             //---------------Test Result -----------------------
             Assert.AreSame(tbExpected, tbReturned);
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
-        public void TestAdd_TwoStringFilterTextBox_CheckBox()
+        public void TestAdd_AddBooleanFilterCheckBox_CheckBox()
         {
             //---------------Set up test pack-------------------
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
@@ -1288,7 +1288,65 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Test Result -----------------------
             Assert.AreEqual(2, filterControl.FilterPanel.Controls.Count);
             Assert.AreSame(cb, filterControl.FilterPanel.Controls[1]);
-            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestAdd_AddBooleanFilterComboBox_GetControl()
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            IComboBox cbExpected = filterControl.AddBooleanFilterComboBox("Test:", "TestColumn", false);
+            filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(cbExpected);
+            //---------------Execute Test ----------------------
+            IComboBox cbReturned = (IComboBox)filterControl.GetChildControl("TestColumn");
+            //---------------Test Result -----------------------
+            Assert.AreSame(cbExpected, cbReturned);
+        }
+
+        [Test]
+        public void TestAdd_AddBooleanFilterComboBox_WhenDefaultFalse_ShouldSetFalse()
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+
+            //---------------Execute Test ----------------------
+            IComboBox cb = filterControl.AddBooleanFilterComboBox("Test:", "TestColumn", false);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, filterControl.FilterPanel.Controls.Count);
+            Assert.AreSame(cb, filterControl.FilterPanel.Controls[1]);
+            Assert.AreEqual("False", cb.SelectedItem);
+        }
+        [Test]
+        public void TestAdd_AddBooleanFilterComboBox_WhenDefaultTrue_shouldSetTrue()
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+
+            //---------------Execute Test ----------------------
+            IComboBox cb = filterControl.AddBooleanFilterComboBox("Test:", "TestColumn", true);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, filterControl.FilterPanel.Controls.Count);
+            Assert.AreSame(cb, filterControl.FilterPanel.Controls[1]);
+            Assert.AreEqual("True", cb.SelectedItem);
+        }
+
+        [Test]
+        public void TestAdd_AddBooleanFilterComboBox_WhenDefaultNull_shouldSetNull()
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+
+            //---------------Execute Test ----------------------
+            IComboBox cb = filterControl.AddBooleanFilterComboBox("Test:", "TestColumn", null);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, filterControl.FilterPanel.Controls.Count);
+            Assert.AreSame(cb, filterControl.FilterPanel.Controls[1]);
+            Assert.AreEqual("", cb.SelectedItem);
         }
 
         #endregion
@@ -1518,4 +1576,14 @@ namespace Habanero.Test.UI.Base.FilterController
 
         #endregion
     }
+
+        public class TestFilterControlManagerWin: TestFilterControlManager
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+
+            
+        }
 }

@@ -258,6 +258,23 @@ namespace Habanero.UI.Base
             StringStaticFilter filter = new StringStaticFilter(propertyName, filterClauseOperator, filterValue);
             _filterControls.Add(filter);
         }
+
+        ///<summary>
+        /// Adds a ComboBox to the FilterControl for filtering on a Boolean Property.
+        /// This allows the Developer to set a filter that allows the user to select true, false or nothing.
+        /// (this is similar to a tristate CheckBox but is usually easier for a user).
+        ///</summary>
+        ///<param name="labelText">The Filter Label</param>
+        ///<param name="propertyName">The property to filter on</param>
+        ///<param name="defaultValue"></param>
+        ///<returns>The custom filter that is created.</returns>
+        public ICustomFilter AddBooleanFilterComboBox(string labelText, string propertyName, bool? defaultValue)
+        {
+            ICollection options = new List<string> {"True", "False" };
+            ICustomFilter filterControl = this.AddStringFilterComboBox(labelText, propertyName, options, true);
+            ((IComboBox) filterControl.Control).SelectedItem = Convert.ToString(defaultValue);
+            return filterControl;
+        }
     }
 
     ///<summary>

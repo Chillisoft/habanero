@@ -50,14 +50,16 @@ namespace Habanero.UI.Base
         /// <param name="filterClauseOperator">The operator to use for the filter clause</param>
         /// <returns>Returns the new TextBox added</returns>
         ITextBox AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator);
-        
+
         /// <summary>
         /// Adds a TextBox filter in which users can specify text that
-        /// multiple string-value columns will be filtered on.  This uses a "like"
+        /// multiple string-value properties will be filtered on. This list of properties is declared
+        /// in propertyNames.  This uses a "like"
         /// operator and accepts any strings that contain the provided clause.
+        /// <seealso cref="AddMultiplePropStringTextBox(string, List{string}, FilterClauseOperator)" />
         /// </summary>
         /// <param name="labelText">The label to appear before the control</param>
-        /// <param name="propertyNames">The business object propertys on which to filter</param>
+        /// <param name="propertyNames">The business object properties on which to filter</param>
         /// <returns>Returns the new TextBox added</returns>
         ITextBox AddMultiplePropStringTextBox(string labelText, List<string> propertyNames);
 
@@ -97,6 +99,20 @@ namespace Habanero.UI.Base
         ///<param name="enumType">The Type being showen in the ComboBox</param>
         ///<returns></returns>
         IComboBox AddEnumFilterComboBox(string labelText, string propertyName, Type enumType);
+
+        /// <summary>
+        /// Adds a ComboBox filter that displays only rows whose boolean value
+        /// matches the true/false or null value in the ComboBox. The column (propertyName) of data must
+        /// have "true" or "false" as its values (boolean database fields are
+        /// usually converted to true/false string values by the Habanero
+        /// object manager).
+        /// </summary>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="propertyName">The business object property on which to filter</param>
+        /// <param name="defaultValue">Whether the CheckBox is checked</param>
+        /// <returns>Returns the new CheckBox added</returns>
+        IComboBox AddBooleanFilterComboBox(string labelText, string propertyName, bool? defaultValue);
+
         /// <summary>
         /// Adds a CheckBox filter that displays only rows whose boolean value
         /// matches the on-off state of the CheckBox. The column of data must

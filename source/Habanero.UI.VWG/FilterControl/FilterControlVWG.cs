@@ -230,7 +230,15 @@ namespace Habanero.UI.VWG
         {
             ICustomFilter filter =
     _filterControlManager.AddEnumFilterComboBox(labelText, propertyName, enumType);
-            filter.ValueChanged += (sender, e) => { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            //filter.ValueChanged += (sender, e) => { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            return (IComboBox)filter.Control;
+        }
+
+        public IComboBox AddBooleanFilterComboBox(string labelText, string propertyName, bool? defaultValue)
+        {
+            ICustomFilter filter =
+                _filterControlManager.AddBooleanFilterComboBox(labelText, propertyName, defaultValue);
+            //filter.ValueChanged += (sender, e) => { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
             return (IComboBox)filter.Control;
         }
 
