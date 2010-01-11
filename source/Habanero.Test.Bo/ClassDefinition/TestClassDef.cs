@@ -886,6 +886,22 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreEqual(typeof (Double), propertyType);
         }
+             
+        [Test]
+        public void TestGetPropertyType_WhenVirtualPropNullableDouble_ShouldReturnReflectedType()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithCurrencyParameterFormat_VirtualProp();
+            const string virutalProp = "-MyNullableVirtualDoubleProp-";
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            Type propertyType = classDef.GetPropertyType(virutalProp);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(typeof(Double), propertyType);
+        }
+
         [Test]
         public void TestGetPropertyType_WhenVirtualPropString_ShouldReturnReflectedType()
         {

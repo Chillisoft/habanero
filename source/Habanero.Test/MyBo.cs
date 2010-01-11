@@ -63,6 +63,10 @@ namespace Habanero.Test
         public Double MyVirtualDoubleProp
         {
             get { return 11.00d; }
+        }        
+        public Double? MyNullableVirtualDoubleProp
+        {
+            get { return 11.00d; }
         }
         public string MyName
         {

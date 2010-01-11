@@ -1082,13 +1082,7 @@ namespace Habanero.BO.ClassDefinition
             }
             if (propertyName.IndexOf("-") != -1)
             {
-                string trimmedPropName = propertyName.Trim('-');
-                PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(MyClassType, trimmedPropName);
-                if (propertyInfo == null || propertyInfo.PropertyType == null)
-                {
-                    return typeof (object);
-                }
-                return propertyInfo.PropertyType;
+                return GetReflectivePropertyType(propertyName);
 //                return typeof (object);
             }
             PropDef propDef = (PropDef) GetPropDef(propertyName, false);
@@ -1097,6 +1091,22 @@ namespace Habanero.BO.ClassDefinition
                 return propDef.PropertyType;
             }
             return typeof (object);
+        }
+
+        private Type GetReflectivePropertyType(string propertyName)
+        {
+            string trimmedPropName = propertyName.Trim('-');
+            PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(MyClassType, trimmedPropName);
+            if (propertyInfo == null || propertyInfo.PropertyType == null)
+            {
+                return typeof (object);
+            }
+            Type propertyType = propertyInfo.PropertyType;
+            if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                return Nullable.GetUnderlyingType(propertyType);
+            }
+            return propertyType;
         }
 
         ///<summary>
