@@ -42,6 +42,21 @@ namespace Habanero.UI.Base
         bool CanMoveBack();
 
         /// <summary>
+        /// Does any actions involved in this wizard step when you move on
+        /// to the next wizard step. E.g. Updates any Objects from 
+        /// User interface controls.
+        /// </summary>
+        void MoveOn();
+
+        /// <summary>
+        /// Undoes any actions that have been done by this wizard step.
+        /// Usually you would want this to do nothing since if the 
+        /// user does a previous and then next they would not expect to 
+        /// lose their 
+        /// </summary>
+        void MoveBack();
+
+        /// <summary>
         /// The text that you want displayed at the top of the wizard control when this step is active.
         /// </summary>
         string HeaderText { get; }

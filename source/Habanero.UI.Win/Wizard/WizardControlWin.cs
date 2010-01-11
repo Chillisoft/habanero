@@ -191,6 +191,8 @@ namespace Habanero.UI.Win
         {
             DoIfCanMoveOn(delegate
             {
+                IWizardStep currentStep = _wizardController.GetCurrentStep();
+                currentStep.MoveOn();
                 SetStep(_wizardController.GetNextStep());
                 if (_wizardController.IsLastStep())
                 {
@@ -206,6 +208,8 @@ namespace Habanero.UI.Win
         /// <exception cref="WizardStepException">If the wizard is on the first step this exception will be thrown.</exception>
         public void Previous()
         {
+            IWizardStep currentStep = _wizardController.GetCurrentStep();
+            currentStep.MoveBack();
             SetStep(_wizardController.GetPreviousStep());
             _nextButton.Text = "Next";
             SetPreviousButtonState();

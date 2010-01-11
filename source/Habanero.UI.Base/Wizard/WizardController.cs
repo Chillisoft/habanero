@@ -195,5 +195,20 @@ namespace Habanero.UI.Base
                 step.CancelStep();
             }
         }
+//        /// <summary>
+//        /// Calls the Current WizardStep's MoveOn Method.
+//        /// </summary>
+//        public virtual void CompleteCurrentStep()
+//        {
+//            _wizardSteps[_currentStep].MoveOn();
+//        }
+//
+//        /// <summary>
+//        /// Calls the Current WizardStep's MoveBack Method.
+//        /// </summary>
+//        public virtual void UndoCurrentStep()
+//        {
+//            _wizardSteps[_currentStep].MoveBack();
+//        }
     }
 }

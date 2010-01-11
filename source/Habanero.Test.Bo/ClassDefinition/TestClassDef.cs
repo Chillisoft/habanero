@@ -931,7 +931,6 @@ namespace Habanero.Test.BO.ClassDefinition
             Type dateTimePropertyType = classDef.GetPropertyType("MyRelationship." + dateTimeProp);
             //---------------Test Result -----------------------
             Assert.AreSame(typeof(DateTime), dateTimePropertyType);
-            //---------------Tear down -------------------------
         }
 
         #endregion //Test GetPropertyType

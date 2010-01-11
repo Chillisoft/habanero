@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.VWG
@@ -57,6 +58,16 @@ namespace Habanero.UI.VWG
         public bool CanMoveBack()
         {
             return true;
+        }
+
+        public void MoveOn()
+        {
+            //Do Nothing
+        }
+
+        public void MoveBack()
+        {
+            //Do Nothing.
         }
 
         /// <summary>

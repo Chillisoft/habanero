@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.VWG
@@ -25,13 +26,18 @@ namespace Habanero.UI.VWG
     /// Can be used as a placeholder step in a Wizard that changes depending on selections made
     /// by users.
     /// </summary>
-    public partial class NullWizardStepVWG : UserControlVWG, IWizardStep
+    public class NullWizardStepVWG : UserControlVWG, IWizardStep
     {
         /// <summary>
         /// Constructs the NullWizardStep
         /// </summary>
         public NullWizardStepVWG()
         {
+        }
+
+        public void MoveBack()
+        {
+            //Do Nothing
         }
 
         /// <summary>
@@ -67,6 +73,11 @@ namespace Habanero.UI.VWG
         public bool CanMoveBack()
         {
             return true;
+        }
+
+        public void MoveOn()
+        {
+            //Do Nothing
         }
 
         /// <summary>
