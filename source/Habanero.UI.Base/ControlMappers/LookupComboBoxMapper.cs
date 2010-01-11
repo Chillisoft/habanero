@@ -175,15 +175,15 @@ namespace Habanero.UI.Base
                 }
             }
         }
-
+        //Does the Business Object have a value for the mapped property.
         private bool PropertyHasAValue()
         {
             return !string.IsNullOrEmpty(Convert.ToString(GetPropertyValue()));
         }
 
         /// <summary>
-        /// Populates the ComboBox's list of items using the
-        /// strings provided by the colleciton
+        /// Sets the ComboBox's Selected Item based on the
+        /// Value from the Business Object.
         /// </summary>
         private void SetValueFromLookupList()
         {

@@ -39,10 +39,10 @@ namespace Habanero.UI.Base
         private IBusinessObjectCollection _businessObjectCollection;
         private readonly ComboBoxCollectionSelector _comboBoxCollectionSelector;
 
-        /// <summary>
-        /// Gets or sets the KeyPress event handler assigned to this mapper
-        /// </summary>
-        public EventHandler KeyPressHandler { get; set; }
+//        /// <summary>
+//        /// Gets or sets the KeyPress event handler assigned to this mapper
+//        /// </summary>
+//        public EventHandler KeyPressHandler { get; set; }
 
         /// <summary>
         /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
@@ -95,8 +95,10 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// This is the PropertyName on the selected Business Object, which should be used to get the value to be set to the
-        /// Property. See tests.
+        /// This is the PropertyName on the selected Business Object (I.e. the property of the 
+        /// Business Object that is contained in the LookupList). This is used to display values 
+        /// in the Lookup List and  to get the value to set to the Mapped Business Object.
+        /// See tests.
         /// </summary>
         public string OwningBoPropertyName { get; set; }
 

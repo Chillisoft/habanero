@@ -285,14 +285,24 @@ namespace Habanero.UI.Base
                 {
                     col.ValueType = propertyType;
                 }
-                SetupColumnWithDefParameters(col, gridColDef);
+                SetupColumnWithDefParameters(col, gridColDef, propertyType);
 //                this._gridControl.Grid.Columns.Add(col);
             }
         }
 
-        private static void SetupColumnWithDefParameters(IDataGridViewColumn col, UIGridColumn gridColDef)
+        private static void SetupColumnWithDefParameters(IDataGridViewColumn col, UIGridColumn gridColDef, Type propertyType)
         {
+            SetupDateTimeWithParameters(propertyType, gridColDef, col);
+        }
+
+        private static void SetupDateTimeWithParameters(Type propertyType, UIGridColumn gridColDef, IDataGridViewColumn col)
+        {
+            if (propertyType != typeof(DateTime)) return;
             string dateFormat = gridColDef.GetParameterValue("dateFormat") as string;
+            if (string.IsNullOrEmpty(dateFormat) && GlobalUIRegistry.DateDisplaySettings != null)
+            {
+                dateFormat = GlobalUIRegistry.DateDisplaySettings.GridDateFormat;
+            }
             if (dateFormat != null)
             {
                 col.DefaultCellStyle.Format = dateFormat;

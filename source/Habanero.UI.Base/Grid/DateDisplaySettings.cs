@@ -24,8 +24,6 @@ namespace Habanero.UI.Base
     /// </summary>
     public class DateDisplaySettings
     {
-        private string _gridDateFormat;
-
         /// <summary>
         /// Gets and sets the .Net style date format string that
         /// determines how a date is displayed in a grid.
@@ -36,10 +34,6 @@ namespace Habanero.UI.Base
         /// "d" which use the short date format of the culture
         /// on the user's machine.
         /// </summary>
-        public string GridDateFormat
-        {
-            get { return _gridDateFormat; }
-            set { _gridDateFormat = value; }
-        }
+        public string GridDateFormat { get; set; }
     }
 }

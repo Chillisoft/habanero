@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
@@ -157,6 +158,49 @@ namespace Habanero.Test.BO
             Assert.AreEqual(ErrorLevel.Error, errors[0].Level);
             Assert.AreSame(null, errors[0].BusinessObject);
         }
+//
+//        [Test]
+//        public void Test_SetBO_ShouldSetBOForAllBOProps()
+//        {
+            //---------------Set up test pack-------------------
+//            IBusinessObject bo = MockRepository.GenerateMock<IBusinessObject>();
+//            PropDef propDef = new PropDef("Prop3", typeof(string), PropReadWriteRule.ReadOnly, null);
+//            BOPropCol propCol = new BOPropCol();
+//            IBOProp boProp = propDef.CreateBOProp(false);
+//            propCol.Add(boProp);
+            //---------------Assert Precondition----------------
+//            Assert.AreEqual(1, propCol.Count);
+//            Assert.AreSame(boProp, propCol[boProp.PropertyName]);
+            //---------------Execute Test ----------------------
+//            propCol.BusinessObject = bo;
+            //---------------Test Result -----------------------
+//            Assert.AreSame(bo, propCol.BusinessObject);
+//            Assert.AreSame(bo, boProp.BusinessObject);
+//        }
+//        [Test]
+//        public void Test_SetBO_When2BOs_ShouldSetBOForAllBOProps()
+//        {
+            //---------------Set up test pack-------------------
+//            IBusinessObject bo = MockRepository.GenerateMock<IBusinessObject>();
+//            PropDef propDef = new PropDef("Prop3", typeof(string), PropReadWriteRule.ReadOnly, null);
+//            PropDef propDef2 = new PropDef("Prop4", typeof(string), PropReadWriteRule.ReadOnly, null);
+//            BOPropCol propCol = new BOPropCol();
+//            IBOProp boProp = propDef.CreateBOProp(false);
+//            propCol.Add(boProp);
+//            IBOProp boProp2 = propDef2.CreateBOProp(false);
+//            propCol.Add(boProp2);
+            //---------------Assert Precondition----------------
+//            Assert.AreEqual(2, propCol.Count);
+//            Assert.AreSame(boProp, propCol[boProp.PropertyName]);
+//            Assert.AreSame(boProp2, propCol[boProp2.PropertyName]);
+            //---------------Execute Test ----------------------
+//            propCol.BusinessObject = bo;
+            //---------------Test Result -----------------------
+//            Assert.AreSame(bo, propCol.BusinessObject);
+//            Assert.AreSame(bo, boProp.BusinessObject);
+//            Assert.AreSame(bo, boProp2.BusinessObject);
+//        }
+
     }
 
 }

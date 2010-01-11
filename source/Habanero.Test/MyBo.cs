@@ -839,6 +839,45 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
+        public static IClassDef LoadClassDefWithCurrencyParameterFormat()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            IClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  type=""Guid""/>
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+                    <property  name=""TestCurrencyNoFormat"" type=""Double"" />					
+                    <property  name=""TestCurrencyFormat"" type=""Double"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Currency"" property=""TestCurrencyNoFormat"" />
+							<column heading=""Test CurrencyFormat"" property=""TestCurrencyFormat"" >
+                                <parameter name=""currencyFormat"" value=""### ###.##"" />
+                            </column>
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+				
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static IClassDef LoadClassDefWithLookup()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();

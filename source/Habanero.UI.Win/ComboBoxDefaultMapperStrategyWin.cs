@@ -24,7 +24,9 @@ namespace Habanero.UI.Win
 {
     /// <summary>
     /// Provides a set of behaviour strategies that can be applied to a lookup ComboBox
-    /// depending on the environment
+    /// depending on the environment.
+    /// For Windows this provides the interaction where the Business Object is 
+    /// updates as soon as a new item is selected from the Combo Box.
     /// </summary>
     internal class ComboBoxDefaultMapperStrategyWin : IComboBoxMapperStrategy
     {

@@ -21,37 +21,21 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Maintains an application-wide store of UI-related settings
     /// </summary>
-    public class GlobalUIRegistry
+    public static class GlobalUIRegistry
     {
-        private static IUISettings _uiSettings;
-        private static DateDisplaySettings _dateDisplaySettings;
-        private static IControlFactory _controlFactory;
-
         /// <summary>
         /// Gets and sets the store of general user interface settings
         /// </summary>
-        public static IUISettings UISettings
-        {
-            get { return _uiSettings; }
-            set { _uiSettings = value; }
-        }
+        public static IUISettings UISettings { get; set; }
 
         /// <summary>
         /// Gets and sets the store of date display settings
         /// </summary>
-        public static DateDisplaySettings DateDisplaySettings
-        {
-            get { return _dateDisplaySettings; }
-            set { _dateDisplaySettings = value; }
-        }
+        public static DateDisplaySettings DateDisplaySettings { get; set; }
 
         /// <summary>
         /// Gets and sets the control factory to use in the application
         /// </summary>
-        public static IControlFactory ControlFactory
-        {
-            get { return _controlFactory; }
-            set { _controlFactory = value;}
-        }
+        public static IControlFactory ControlFactory { get; set; }
     }
 }

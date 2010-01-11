@@ -185,10 +185,7 @@ namespace Habanero.Test.UI.Base
                 StringAssert.Contains
                     ("You cannot call initialise with no classdef since the ID column has not been added to the grid",
                      ex.Message);
-            }
-            //---------------Test Result -----------------------
-
-            //---------------Tear Down -------------------------          
+            }       
         }
 
         [Test]
@@ -211,10 +208,7 @@ namespace Habanero.Test.UI.Base
             catch (GridBaseSetUpException ex)
             {
                 StringAssert.Contains("You cannot initialise the grid more than once", ex.Message);
-            }
-            //---------------Test Result -----------------------
-
-            //---------------Tear Down -------------------------          
+            }    
         }
 
         [Test]
@@ -253,12 +247,15 @@ namespace Habanero.Test.UI.Base
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             IUIDef uiDef = classDef.UIDefCol["default"];
             IUIGrid uiGridDef = uiDef.UIGrid;
+            GlobalUIRegistry.DateDisplaySettings = new DateDisplaySettings();
+            GlobalUIRegistry.DateDisplaySettings.GridDateFormat = "dd MMM yyyy";
             //---------------Assert Preconditions---------------
             Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
             IUIGridColumn columnDef1 = uiGridDef[0];
             Assert.AreEqual("TestProp", columnDef1.PropertyName);
             IUIGridColumn columnDef2 = uiGridDef[1];
             Assert.AreEqual("TestProp2", columnDef2.PropertyName);
+            Assert.IsNotNull(GlobalUIRegistry.DateDisplaySettings);
             //---------------Execute Test ----------------------
             initialiser.InitialiseGrid(classDef);
 
@@ -268,7 +265,7 @@ namespace Habanero.Test.UI.Base
 
             IDataGridViewColumn dataColumn1 = grid.Grid.Columns[1];
             AssertThatDataColumnSetupCorrectly(classDef, columnDef1, dataColumn1);
-
+            Assert.AreEqual("", dataColumn1.DefaultCellStyle.Format);
             IDataGridViewColumn dataColumn2 = grid.Grid.Columns[2];
             AssertThatDataColumnSetupCorrectly(classDef, columnDef2, dataColumn2);
             //---------------Tear Down -------------------------          
@@ -312,7 +309,8 @@ namespace Habanero.Test.UI.Base
             IUIDef uiDef = classDef.UIDefCol["default"];
             IUIGrid uiGridDef = uiDef.UIGrid;
             AddControlToForm(grid);
-
+            GlobalUIRegistry.DateDisplaySettings = new DateDisplaySettings();
+            GlobalUIRegistry.DateDisplaySettings.GridDateFormat = "dd MMM yyyy";
             //--------------Assert PreConditions----------------            
             const string formattedPropertyName = "TestDateTimeFormat";
             Assert.IsNotNull(uiGridDef[formattedPropertyName]);
@@ -342,6 +340,93 @@ namespace Habanero.Test.UI.Base
             IDataGridViewCell dataGridViewCell = grid.Grid.Rows[0].Cells[formattedPropertyName];
             //((DataGridViewCellVWG) dataGridViewCell).DataGridViewCell.HasStyle = false;
             Assert.AreSame(typeof (DateTime), dataGridViewCell.ValueType);
+            Assert.AreEqual(currentDateTime.ToString(expectedFormat), dataGridViewCell.FormattedValue);
+
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestInitGrid_UIDef_CurrencyFormat_ShouldFormatColumn()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithCurrencyParameterFormat();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
+            AddControlToForm(grid);
+
+            //--------------Assert PreConditions----------------            
+            const string formattedPropertyName = "TestCurrencyFormat";
+            Assert.IsNotNull(uiGridDef[formattedPropertyName]);
+            Assert.IsNotNull(uiGridDef[formattedPropertyName].GetParameterValue("currencyFormat"));
+
+            const string unformattedPropName = "TestCurrencyNoFormat";
+            Assert.IsNotNull(uiGridDef[unformattedPropName]);
+            Assert.IsNull(uiGridDef[unformattedPropName].GetParameterValue("currencyFormat"));
+
+            object currencyFormat = uiGridDef[formattedPropertyName].GetParameterValue("currencyFormat");
+            string currencyFormatParameter = currencyFormat.ToString();
+            const string expectedFormat = "### ###.##";
+            Assert.AreEqual(expectedFormat, currencyFormatParameter);
+
+            MyBO myBo = new MyBO();
+            const double currencyValue = 222222.55555d;
+            myBo.SetPropertyValue(formattedPropertyName, currencyValue);
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            col.Add(myBo);
+
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+            grid.BusinessObjectCollection = col;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.AreEqual(1, grid.Grid.Rows.Count);
+            IDataGridViewCell dataGridViewCell = grid.Grid.Rows[0].Cells[formattedPropertyName];
+            //((DataGridViewCellVWG) dataGridViewCell).DataGridViewCell.HasStyle = false;
+            Assert.AreSame(typeof(Double), dataGridViewCell.ValueType);
+            Assert.AreEqual(currencyValue.ToString(expectedFormat), dataGridViewCell.FormattedValue);      
+        }
+        [Test]
+        public void TestInitGrid_GlobalDateFormat_FormatsDateColumn()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
+            AddControlToForm(grid);
+            const string dateTimeNoFormatPropertyName = "TestDateTimeNoFormat";
+
+            const string expectedFormat = "dd.MMM.yyyy";
+            GlobalUIRegistry.DateDisplaySettings = new DateDisplaySettings();
+            GlobalUIRegistry.DateDisplaySettings.GridDateFormat = expectedFormat;
+            //--------------Assert PreConditions----------------            
+            IUIGridColumn dateTimeNoFormatGridColumn = uiGridDef[dateTimeNoFormatPropertyName];
+            Assert.IsNotNull(dateTimeNoFormatGridColumn);
+            Assert.IsNull(dateTimeNoFormatGridColumn.GetParameterValue("dateFormat"));
+            Assert.IsNotNull(GlobalUIRegistry.DateDisplaySettings);
+            Assert.AreEqual(expectedFormat, GlobalUIRegistry.DateDisplaySettings.GridDateFormat);
+
+            MyBO myBo = new MyBO();
+            DateTime currentDateTime = DateTime.Now;
+            myBo.SetPropertyValue(dateTimeNoFormatPropertyName, currentDateTime);
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            col.Add(myBo);
+
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+            grid.BusinessObjectCollection = col;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.AreEqual(1, grid.Grid.Rows.Count);
+            IDataGridViewCell dataGridViewCell = grid.Grid.Rows[0].Cells[dateTimeNoFormatPropertyName];
+            //((DataGridViewCellVWG) dataGridViewCell).DataGridViewCell.HasStyle = false;
+            Assert.AreSame(typeof(DateTime), dataGridViewCell.ValueType);
             Assert.AreEqual(currentDateTime.ToString(expectedFormat), dataGridViewCell.FormattedValue);
 
             //---------------Tear Down -------------------------          
