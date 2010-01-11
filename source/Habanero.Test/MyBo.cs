@@ -59,6 +59,11 @@ namespace Habanero.Test
         }
 
 // ReSharper disable UnusedMember.Global
+
+        public Double MyVirtualDoubleProp
+        {
+            get { return 11.00d; }
+        }
         public string MyName
         {
             get { return "MyNameIsMyBo"; }
@@ -860,6 +865,42 @@ namespace Habanero.Test
 							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
 							<column heading=""Test Currency"" property=""TestCurrencyNoFormat"" />
 							<column heading=""Test CurrencyFormat"" property=""TestCurrencyFormat"" >
+                                <parameter name=""currencyFormat"" value=""### ###.##"" />
+                            </column>
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+				
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+        public static IClassDef LoadClassDefWithCurrencyParameterFormat_VirtualProp()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            IClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  type=""Guid""/>
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test CurrencyFormat"" property=""-MyVirtualDoubleProp-"" >
                                 <parameter name=""currencyFormat"" value=""### ###.##"" />
                             </column>
 						</grid>
@@ -1898,6 +1939,7 @@ namespace Habanero.Test
         {
             get { return "MyBoNotEditableDeletable"; }
         }
+
 
         public Guid MyBoNotEditableID
         {

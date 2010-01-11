@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
@@ -1081,7 +1082,14 @@ namespace Habanero.BO.ClassDefinition
             }
             if (propertyName.IndexOf("-") != -1)
             {
-                return typeof (object);
+                string trimmedPropName = propertyName.Trim('-');
+                PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(MyClassType, trimmedPropName);
+                if (propertyInfo == null || propertyInfo.PropertyType == null)
+                {
+                    return typeof (object);
+                }
+                return propertyInfo.PropertyType;
+//                return typeof (object);
             }
             PropDef propDef = (PropDef) GetPropDef(propertyName, false);
             if (propDef != null && propDef.LookupList is NullLookupList)

@@ -873,6 +873,35 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestGetPropertyType_WhenVirtualPropDouble_ShouldReturnReflectedType()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithCurrencyParameterFormat_VirtualProp();
+            const string virutalProp = "-MyVirtualDoubleProp-";
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            Type propertyType = classDef.GetPropertyType(virutalProp);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(typeof (Double), propertyType);
+        }
+        [Test]
+        public void TestGetPropertyType_WhenVirtualPropString_ShouldReturnReflectedType()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithCurrencyParameterFormat_VirtualProp();
+            const string virutalProp = "-MyName-";
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            Type propertyType = classDef.GetPropertyType(virutalProp);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(typeof (string), propertyType);
+        }
+
+        [Test]
         public void TestGetPropertyType_RelatedProperty()
         {
             //---------------Set up test pack-------------------

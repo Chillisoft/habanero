@@ -350,6 +350,48 @@ namespace Habanero.Test.UI.Base
         public void TestInitGrid_UIDef_CurrencyFormat_ShouldFormatColumn()
         {
             //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithCurrencyParameterFormat_VirtualProp();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
+            AddControlToForm(grid);
+
+            //--------------Assert PreConditions----------------            
+            const string formattedPropertyName = "-MyVirtualDoubleProp-";
+            Assert.IsNotNull(uiGridDef[formattedPropertyName]);
+
+            object currencyFormat = uiGridDef[formattedPropertyName].GetParameterValue("currencyFormat");
+            Assert.IsNotNull(currencyFormat);
+
+            string currencyFormatParameter = currencyFormat.ToString();
+            const string expectedFormat = "### ###.##";
+            Assert.AreEqual(expectedFormat, currencyFormatParameter);
+
+            MyBO myBo = new MyBO();
+            double currencyValue = myBo.MyVirtualDoubleProp;
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            col.Add(myBo);
+
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+            grid.BusinessObjectCollection = col;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.AreEqual(1, grid.Grid.Rows.Count);
+            IDataGridViewCell dataGridViewCell = grid.Grid.Rows[0].Cells[formattedPropertyName];
+            //((DataGridViewCellVWG) dataGridViewCell).DataGridViewCell.HasStyle = false;
+            Assert.AreSame(typeof(Double), dataGridViewCell.ValueType);
+            Assert.AreEqual(currencyValue.ToString(expectedFormat), dataGridViewCell.FormattedValue);      
+        }
+
+
+
+        [Test]
+        public void TestInitGrid_UIDef_CurrencyFormat_WhenVirtualProp_ShouldFormatColumn()
+        {
+            //---------------Set up test pack-------------------
             IClassDef classDef = MyBO.LoadClassDefWithCurrencyParameterFormat();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
@@ -387,7 +429,7 @@ namespace Habanero.Test.UI.Base
             IDataGridViewCell dataGridViewCell = grid.Grid.Rows[0].Cells[formattedPropertyName];
             //((DataGridViewCellVWG) dataGridViewCell).DataGridViewCell.HasStyle = false;
             Assert.AreSame(typeof(Double), dataGridViewCell.ValueType);
-            Assert.AreEqual(currencyValue.ToString(expectedFormat), dataGridViewCell.FormattedValue);      
+            Assert.AreEqual(currencyValue.ToString(expectedFormat), dataGridViewCell.FormattedValue);
         }
         [Test]
         public void TestInitGrid_GlobalDateFormat_FormatsDateColumn()
