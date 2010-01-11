@@ -147,6 +147,7 @@
     <Compile Include="FilterControl\EnumComboBoxFilter.cs" />
     <Compile Include="FilterControl\MultiplePropStringTextBoxFilter.cs" />
     <Compile Include="FilterControl\StringStaticFilter.cs" />
+    <Compile Include="Grid\CurrencyDisplaySettings.cs" />
     <Compile Include="Selectors\IBOSelectorControl.cs" />
     <Compile Include="GroupBoxGroupControlManager.cs" />
     <Compile Include="IBOEditorControl.cs" />

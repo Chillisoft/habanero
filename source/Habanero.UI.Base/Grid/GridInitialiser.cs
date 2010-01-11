@@ -293,6 +293,17 @@ namespace Habanero.UI.Base
         private static void SetupColumnWithDefParameters(IDataGridViewColumn col, UIGridColumn gridColDef, Type propertyType)
         {
             SetupDateTimeWithParameters(propertyType, gridColDef, col);
+            SetupCurrencyWithParameters(propertyType, gridColDef ,col);
+        }
+
+        private static void SetupCurrencyWithParameters(Type propertyType, UIGridColumn gridColDef, IDataGridViewColumn column)
+        {
+            if (propertyType != typeof(Double)) return;
+            string currencyFormat = gridColDef.GetParameterValue("currencyFormat") as string;
+            if (currencyFormat != null)
+            {
+                column.DefaultCellStyle.Format = currencyFormat;
+            }
         }
 
         private static void SetupDateTimeWithParameters(Type propertyType, UIGridColumn gridColDef, IDataGridViewColumn col)

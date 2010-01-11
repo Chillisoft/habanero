@@ -34,6 +34,11 @@ namespace Habanero.UI.Base
         public static DateDisplaySettings DateDisplaySettings { get; set; }
 
         /// <summary>
+        /// Gets and sets the store of date display settings
+        /// </summary>
+        public static CurrencyDisplaySettings CurrencyDisplaySettings { get; set; }
+
+        /// <summary>
         /// Gets and sets the control factory to use in the application
         /// </summary>
         public static IControlFactory ControlFactory { get; set; }
