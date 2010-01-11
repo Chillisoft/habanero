@@ -87,11 +87,29 @@ namespace Habanero.Test.DB
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
 
             //-------------Execute test ---------------------
-            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "",""),
+            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "", ""),
                                                        Convert.ToString);
             //-------------Test Result ----------------------
 
             Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> IS NULL", surnameTable, surnameField), tostring);
+        }
+        
+        [Test]
+        public void TestToString_NotEqualsNullCriteria()
+        {
+            //-------------Setup Test Pack ------------------
+            const string surnameField = "Surname";
+            Criteria criteria = new Criteria(surnameField, Criteria.ComparisonOp.NotEquals, null);
+            const string surnameTable = "surname_table";
+            criteria.Field.Source = new Source(surnameTable);
+            CriteriaDB surnameCriteria = new CriteriaDB(criteria);
+
+            //-------------Execute test ---------------------
+            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "", ""),
+                                                       Convert.ToString);
+            //-------------Test Result ----------------------
+
+            Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> IS NOT NULL", surnameTable, surnameField), tostring);
         }
 
         [Test]

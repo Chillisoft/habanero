@@ -96,8 +96,10 @@ namespace Habanero.Test.DB
             IDatabaseConnection dbConn = new DatabaseConnection_Stub();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter) defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
@@ -272,14 +274,6 @@ namespace Habanero.Test.DB
             Assert.IsTrue(dr2.Read());
             Assert.IsFalse(dr2.Read());
             dr2.Close();
-        }
-
-        [Test]
-        public void TestPrepareValueWithGuid()
-        {
-            Guid g = Guid.NewGuid();
-            string strg = g.ToString("B").ToUpper();
-            Assert.AreEqual(strg, DatabaseUtil.PrepareValue(g), "PrepareValue is not preparing guids correctly.");
         }
 
 

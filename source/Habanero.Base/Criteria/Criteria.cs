@@ -644,6 +644,7 @@ namespace Habanero.Base
             if (ComparisonOperator == ComparisonOp.Is) return false;
             if (ComparisonOperator == ComparisonOp.IsNot) return false;
             if (ComparisonOperator == ComparisonOp.Equals && FieldValue == null) return false;
+            if (ComparisonOperator == ComparisonOp.NotEquals && FieldValue == null) return false;
             return true;
         }
         /// <summary>

@@ -16,7 +16,9 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using System.Data;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -40,7 +42,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
 
         protected override void SetStrID()
         {
-            strID = (string) DatabaseUtil.PrepareValue(objCircle.GetPropertyValue("CircleID"));
+            strID = ((Guid)objCircle.GetPropertyValue("CircleID")).ToString("B").ToUpper(CultureInfo.InvariantCulture);
         }
 
         [Test]

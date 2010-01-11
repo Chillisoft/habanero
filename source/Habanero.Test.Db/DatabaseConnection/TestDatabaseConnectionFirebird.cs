@@ -46,9 +46,10 @@ namespace Habanero.Test.DB
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            SqlFormatter formatter = databaseConnection.SqlFormatter;
-
+            ISqlFormatter defaultSqlFormatter = databaseConnection.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter formatter = (SqlFormatter)defaultSqlFormatter;
             Assert.AreEqual("", formatter.LeftFieldDelimiter);
             Assert.AreEqual("", formatter.RightFieldDelimiter);
             Assert.AreEqual("FIRST", formatter.LimitClauseAtBeginning);

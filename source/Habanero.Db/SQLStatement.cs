@@ -23,6 +23,7 @@ using System.Data.OleDb;
 using System.Text;
 using Habanero.Base;
 using Habanero.Util;
+using log4net;
 
 namespace Habanero.DB
 {
@@ -39,6 +40,7 @@ namespace Habanero.DB
         private readonly IDbCommand _sampleCommand;
         private readonly IParameterNameGenerator _gen;
         private readonly IDbConnection _idbConnection;
+        private static readonly ILog log = LogManager.GetLogger("Habanero.DB.SqlStatement");
 
         /// <summary>
         /// Constructor to initialise a new sql statement
@@ -55,6 +57,7 @@ namespace Habanero.DB
                 {
                     _sampleCommand = _idbConnection.CreateCommand();
                     _gen = connection.CreateParameterNameGenerator();
+                    if (_idbConnection.State == ConnectionState.Open) log.Info("The created Connection is Open");
                 }
                 else
                 {
@@ -67,6 +70,7 @@ namespace Habanero.DB
                 _gen = new ParameterNameGenerator(null);
             }
             _statement = new StringBuilder(100);
+            
         }
 
         /// <summary>
@@ -104,7 +108,8 @@ namespace Habanero.DB
             }
             IDbDataParameter newParameter = _sampleCommand.CreateParameter();
             newParameter.ParameterName = paramName;
-            object preparedValue = DatabaseUtil.PrepareValue(paramValue);
+            ISqlFormatter sqlFormatter = _connection.SqlFormatter;
+            object preparedValue = sqlFormatter.PrepareValue(paramValue);
             newParameter.Value = preparedValue;
             if (preparedValue is DateTime)
             {

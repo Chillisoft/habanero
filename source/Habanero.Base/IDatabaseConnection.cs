@@ -144,7 +144,7 @@ namespace Habanero.Base
         ///<summary>
         /// Creates a SQL formatter for the specified database.
         ///</summary>
-        SqlFormatter SqlFormatter { get; }
+        ISqlFormatter SqlFormatter { get; }
 
         /// <summary>
         /// Gets the IsolationLevel to use for this connection

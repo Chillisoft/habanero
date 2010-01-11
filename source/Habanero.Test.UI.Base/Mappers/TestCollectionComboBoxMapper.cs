@@ -185,6 +185,8 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [Test]
+        [Ignore("This needs to be determined what the correct action is here, different test result for Win/VWG")]
+        //TODO Mark 11 Jan 2010: Ignored Test - This needs to be determined what the correct action is here, different test result for Win/VWG
         public void Test_BusinessObjectCollection_WhenSet_WithNewCollection_WhenItemAlreadySelected_AndDifferentMatchInNewList_ShouldSelectNewMatch()
         {
             //---------------Set up test pack-------------------

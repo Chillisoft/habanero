@@ -128,7 +128,7 @@ namespace Habanero.Base
         /// Creates the Sql that corresponds to this join
         /// </summary>
         /// <param name="sqlFormatter">The formatter used to construct the appropriate Sql</param>
-        public string CreateSQL(SqlFormatter sqlFormatter)
+        public string CreateSQL(ISqlFormatter sqlFormatter)
         {
             //if (Joins.Count == 0) return sqlFormatter.DelimitTable(EntityName);
             return GetTableJoinString(this, sqlFormatter) +  GetJoinString(this, sqlFormatter);

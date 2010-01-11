@@ -17,6 +17,9 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Drawing;
+using System.Globalization;
+using Habanero.Util;
 
 namespace Habanero.Base
 {
@@ -92,6 +95,7 @@ namespace Habanero.Base
         {
             get { return _rightFieldDelimiter; }
         }
+
         /// <summary>
         /// Creates a limit clause from the limit provided, in the format of:
         /// "limit [limit]" (eg. "limit 3")
@@ -111,6 +115,41 @@ namespace Habanero.Base
         public string GetLimitClauseCriteriaForBegin(int limit)
         {
             return string.IsNullOrEmpty(LimitClauseAtBeginning) ? "" : LimitClauseAtBeginning + " " + limit;
+        }
+
+        /// <summary>
+        /// Prepares the value to be converted to a format appropriate for sql
+        /// </summary>
+        /// <param name="objValue">The value to prepare</param>
+        /// <returns>Returns the reformatted object</returns>
+        public virtual object PrepareValue(object objValue)
+        {
+            if (objValue is Guid)
+            {
+                if (Guid.Empty.Equals(objValue))
+                {
+                    return DBNull.Value;
+                }
+                return ((Guid)objValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
+            }
+            if (objValue is bool)
+            {
+                return (bool)objValue ? 1 : 0;
+            }
+            if (objValue is Image)
+            {
+                return SerialisationUtilities.ObjectToByteArray(objValue);
+            }
+            if (objValue is CustomProperty)
+            {
+                return ((CustomProperty)objValue).GetPersistValue();
+            }
+            if (objValue is TimeSpan)
+            {
+                TimeSpan time = (TimeSpan)objValue;
+                return new DateTime(1900, 1, 1, time.Hours, time.Minutes, time.Seconds, time.Milliseconds);
+            }
+            return objValue;
         }
     }
 }

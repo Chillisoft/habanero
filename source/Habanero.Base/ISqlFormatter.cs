@@ -38,5 +38,28 @@ namespace Habanero.Base
         ///<param name="tableName">The table name to delimited</param>
         ///<returns>The delimited table name</returns>
         string DelimitTable(string tableName);
+
+        /// <summary>
+        /// Prepares the value to be converted to a format appropriate for sql
+        /// </summary>
+        /// <param name="objValue">The value to prepare</param>
+        /// <returns>Returns the reformatted object</returns>
+        object PrepareValue(object objValue);
+
+        /// <summary>
+        /// Creates a limit clause from the limit provided, in the format of:
+        /// "limit [limit]" (eg. "limit 3")
+        /// </summary>
+        /// <param name="limit">The limit - the maximum number of rows that
+        /// can be affected by the action</param>
+        /// <returns>Returns a string</returns>
+        string GetLimitClauseCriteriaForEnd(int limit);
+
+        /// <summary>
+        /// Returns the beginning limit clause with the limit specified
+        /// </summary>
+        /// <param name="limit">The limit</param>
+        /// <returns>Returns a string</returns>
+        string GetLimitClauseCriteriaForBegin(int limit);
     }
 }

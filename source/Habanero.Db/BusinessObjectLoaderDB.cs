@@ -25,6 +25,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
+using log4net;
 
 namespace Habanero.DB
 {
@@ -45,6 +46,7 @@ namespace Habanero.DB
     public class BusinessObjectLoaderDB : BusinessObjectLoaderBase, IBusinessObjectLoader
     {
         private readonly IDatabaseConnection _databaseConnection;
+        private static readonly ILog log = LogManager.GetLogger("Habanero.DB.BusinessObjectLoaderDB");
 
         ///<summary>
         /// Creates a BusinessObjectLoaderDB. Because this is a loader the loads data from a Database, this constructor

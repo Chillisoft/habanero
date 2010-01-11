@@ -80,27 +80,28 @@ namespace Habanero.DB
                                  "select SettingValue from " + _tableName + " where SettingName = ");
             statement.AddParameterToStatement(_settingName);
             IDataReader reader = null;
+            bool hasNumber = false;
             try
             {
-                reader = DatabaseConnection.CurrentConnection.LoadDataReader(statement);
-                if (reader.Read())
+                using (reader = DatabaseConnection.CurrentConnection.LoadDataReader(statement))
                 {
-                    _number = Convert.ToInt32(reader.GetValue(0));
-                }
-                else
-                {
-                    _number = _seedValue;
-                    DatabaseConnection.CurrentConnection.ExecuteRawSql("insert into " + _tableName +
-                                                                         " (SettingName, SettingValue) values ('" +
-                                                                         _settingName + "', " + _seedValue + ")");
+                    if (reader.Read())
+                    {
+                        hasNumber = true;
+                        _number = Convert.ToInt32(reader.GetValue(0));
+                    }
                 }
             }
             finally
             {
-                if (reader != null && !reader.IsClosed)
-                {
-                    reader.Close();
-                }
+                if (reader != null && !reader.IsClosed) reader.Close();
+            }
+            if (!hasNumber)
+            {
+                _number = _seedValue;
+                DatabaseConnection.CurrentConnection.ExecuteRawSql(
+                    string.Format("insert into {0} (SettingName, SettingValue) values ('{1}', {2})",
+                                  _tableName, _settingName, _seedValue));
             }
         }
 

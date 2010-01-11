@@ -32,7 +32,7 @@ namespace Habanero.DB
     public class SelectQueryDB : ISelectQuery
     {
         private readonly ISelectQuery _selectQuery;
-        private SqlFormatter _sqlFormatter;
+        private ISqlFormatter _sqlFormatter;
 
         ///<summary>
         /// Creates a SelectQueryDB, wrapping an ISelectQuery (Decorator pattern)
@@ -141,7 +141,7 @@ namespace Habanero.DB
         /// from a database
         /// </summary>
         /// <returns>An ISqlStatement that can be executed against an IDatabaseConnection</returns>
-        public ISqlStatement CreateSqlStatement(SqlFormatter sqlFormatter)
+        public ISqlStatement CreateSqlStatement(ISqlFormatter sqlFormatter)
         {
             _sqlFormatter = sqlFormatter;
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);

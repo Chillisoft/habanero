@@ -63,6 +63,7 @@ namespace Habanero.UI.Base
             _mapperStrategy = factory.CreateLookupComboBoxDefaultMapperStrategy();
             _mapperStrategy.AddHandlers(this);
             _comboBoxCollectionSelector = new ComboBoxCollectionSelector(cbx, factory, false);
+            _comboBoxCollectionSelector.PreserveSelectedItem = true;
         }
 
         /// <summary>
@@ -158,10 +159,9 @@ namespace Habanero.UI.Base
                 {
                     if (bo == null) continue;
                     //TODO Eric 30 Jul 2009: use a properties value
-                    bool found = false;
-                    found = String.IsNullOrEmpty(OwningBoPropertyName)
-                                ? bo.ID.ToString().Equals(Convert.ToString(boPropertyValue))
-                                : Object.Equals(bo.Props[OwningBoPropertyName].Value, boPropertyValue);
+                    bool found = String.IsNullOrEmpty(OwningBoPropertyName)
+                                     ? bo.ID.ToString().Equals(Convert.ToString(boPropertyValue))
+                                     : Object.Equals(bo.Props[OwningBoPropertyName].Value, boPropertyValue);
                     if (found)
                     {
                         _comboBox.SelectedItem = bo;

@@ -85,8 +85,10 @@ namespace Habanero.Test.DB
                 ("System.Data", "System.Data.SqlClient.SqlConnection");
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
@@ -109,8 +111,10 @@ namespace Habanero.Test.DB
                 ("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
@@ -167,8 +171,10 @@ namespace Habanero.Test.DB
             IDatabaseConnection dbConn = new DatabaseConnectionOracle("System.Data", "System.Data.SqlClient.SqlConnection");
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("", sqlFormatter.RightFieldDelimiter);
@@ -191,8 +197,10 @@ namespace Habanero.Test.DB
                 ("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("", sqlFormatter.RightFieldDelimiter);
@@ -237,8 +245,10 @@ namespace Habanero.Test.DB
             IDatabaseConnection dbConn = new DatabaseConnectionAccess("System.Data", "System.Data.SqlClient.SqlConnection");
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatterForAccess), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
@@ -246,8 +256,8 @@ namespace Habanero.Test.DB
             Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
             Assert.AreEqual(sqlFormatter.LeftFieldDelimiter, dbConn.LeftFieldDelimiter);
             Assert.AreEqual(sqlFormatter.RightFieldDelimiter, dbConn.RightFieldDelimiter);
-//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
-//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+            //            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+            //            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
         }
 
         [Test]
@@ -255,14 +265,16 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             string connectionString =
-                new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000").GetConnectionString
+                new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000").GetConnectionString
                     ();
             IDatabaseConnection dbConn = new DatabaseConnectionAccess
                 ("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatterForAccess), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
@@ -270,8 +282,81 @@ namespace Habanero.Test.DB
             Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
             Assert.AreEqual(sqlFormatter.LeftFieldDelimiter, dbConn.LeftFieldDelimiter);
             Assert.AreEqual(sqlFormatter.RightFieldDelimiter, dbConn.RightFieldDelimiter);
-//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
-//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+            //            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+            //            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+        }
+        #endregion
+
+        #region Access 2007
+
+        [Test]
+        public void Test_CreateDatabaseConnection_Access2007()
+        {
+            DatabaseConnection conn =
+                new DatabaseConnectionAccess2007("System.Data", "System.Data.OleDb.OleDbConnection");
+            conn.ConnectionString =
+                new DatabaseConfig(DatabaseConfig.Access2007, "test", "test", "test", "test", "1000").GetConnectionString();
+            Assert.AreEqual
+                ("System.Data.OleDb", conn.TestConnection.GetType().Namespace,
+                 "Namespace of Access connection is wrong.");
+        }
+
+        [Test]
+        public void Test_IsolationLevel_Access2007()
+        {
+            //---------------Execute Test ----------------------
+            DatabaseConnection conn =
+                new DatabaseConnectionAccess2007("System.Data", "System.Data.OleDb.OleDbConnection");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(IsolationLevel.ReadUncommitted, conn.IsolationLevel);
+        }
+
+        [Test]
+        public void Test_CreateSqlFormatter_Access2007()
+        {
+            //---------------Set up test pack-------------------
+            IDatabaseConnection dbConn = new DatabaseConnectionAccess2007("System.Data", "System.Data.SqlClient.SqlConnection");
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatterForAccess), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
+            Assert.IsNotNull(sqlFormatter);
+            Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
+            Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
+            Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
+            Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
+            Assert.AreEqual(sqlFormatter.LeftFieldDelimiter, dbConn.LeftFieldDelimiter);
+            Assert.AreEqual(sqlFormatter.RightFieldDelimiter, dbConn.RightFieldDelimiter);
+            //            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+            //            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+        }
+
+        [Test]
+        public void Test_CreateSqlFormatter_AlternateConstructor_Access2007()
+        {
+            //---------------Set up test pack-------------------
+            string connectionString =
+                new DatabaseConfig(DatabaseConfig.Access2007, "test", "test", "test", "test", "1000").GetConnectionString
+                    ();
+            IDatabaseConnection dbConn = new DatabaseConnectionAccess
+                ("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatterForAccess), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
+            Assert.IsNotNull(sqlFormatter);
+            Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
+            Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
+            Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
+            Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
+            Assert.AreEqual(sqlFormatter.LeftFieldDelimiter, dbConn.LeftFieldDelimiter);
+            Assert.AreEqual(sqlFormatter.RightFieldDelimiter, dbConn.RightFieldDelimiter);
+            //            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+            //            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
         }
         #endregion
 
@@ -306,8 +391,10 @@ namespace Habanero.Test.DB
             IDatabaseConnection dbConn = new DatabaseConnectionPostgreSql("System.Data", "System.Data.SqlClient.SqlConnection");
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("\"", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("\"", sqlFormatter.RightFieldDelimiter);
@@ -329,8 +416,10 @@ namespace Habanero.Test.DB
                 ("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("\"", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("\"", sqlFormatter.RightFieldDelimiter);
@@ -374,8 +463,10 @@ namespace Habanero.Test.DB
             IDatabaseConnection dbConn = new DatabaseConnectionSQLite("System.Data", "System.Data.SqlClient.SqlConnection");
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("\"", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("\"", sqlFormatter.RightFieldDelimiter);
@@ -398,8 +489,10 @@ namespace Habanero.Test.DB
                 ("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("\"", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("\"", sqlFormatter.RightFieldDelimiter);
@@ -447,8 +540,10 @@ namespace Habanero.Test.DB
             IDatabaseConnection dbConn = new DatabaseConnectionFirebird("System.Data", "System.Data.SqlClient.SqlConnection");
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("", sqlFormatter.RightFieldDelimiter);
@@ -471,8 +566,10 @@ namespace Habanero.Test.DB
                 ("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);
             Assert.AreEqual("", sqlFormatter.RightFieldDelimiter);

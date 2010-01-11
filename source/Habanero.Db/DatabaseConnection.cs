@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using Habanero.Base;
@@ -64,7 +65,7 @@ namespace Habanero.DB
         private readonly string _assemblyName;
         private readonly string _className;
         private string _connectString;
-        private IList _connections;
+        private List<IDbConnection> _connections;
         private static IDatabaseConnection _currentDatabaseConnection;
         private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = -1;
@@ -79,7 +80,7 @@ namespace Habanero.DB
         /// </summary>
         protected DatabaseConnection()
         {
-            _connections = new ArrayList(5);
+            _connections = new List<IDbConnection>(5);
             _sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
         }
 
@@ -196,7 +197,7 @@ namespace Habanero.DB
                         log.Warn("Error closing and disposing connection", ex);
                     }
                 }
-                _connections = new ArrayList(5);
+                _connections = new List<IDbConnection>(5);
                 _connectString = value;
             }
         }
@@ -255,6 +256,8 @@ namespace Habanero.DB
         {
             try
             {
+                log.Info(string.Format("GetOpenConnectionForReading: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
+                
                 // looks for closed connections for reading because open 
                 // connections could have readers still associated with them.
                 foreach (IDbConnection dbConnection in _connections)
@@ -286,6 +289,7 @@ namespace Habanero.DB
         {
             try
             {
+                log.Info(string.Format("GetConnection: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
                 foreach (IDbConnection dbConnection in _connections)
                 {
                     if (dbConnection.State == ConnectionState.Closed)
@@ -360,7 +364,7 @@ namespace Habanero.DB
         public IDataReader LoadDataReader(string selectSql)
         {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
-            IDbConnection con;
+            IDbConnection con = null;
             try
             {
                 con = GetOpenConnectionForReading();
@@ -380,6 +384,10 @@ namespace Habanero.DB
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
             }
+            finally
+            {
+                if (con != null) log.Info(string.Format("LoadDataReader(string): Final Connection state: {0}", con.State));
+            }
         }
 
         /// <summary>
@@ -394,9 +402,10 @@ namespace Habanero.DB
         public IDataReader LoadDataReader(string selectSql, IDbTransaction transaction)
         {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
+            IDbConnection con = null;
             try
             {
-                IDbConnection con = transaction.Connection;
+                con = transaction.Connection;
                 IDbCommand cmd = CreateCommand(con);
                 cmd.Transaction = transaction;
                 cmd.CommandType = CommandType.Text;
@@ -412,6 +421,10 @@ namespace Habanero.DB
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
+            }
+            finally
+            {
+                if (con != null) log.Info(string.Format("LoadDataReader(string, IDbTransaction): Final Connection state: {0}", con.State));
             }
         }
 
@@ -430,7 +443,7 @@ namespace Habanero.DB
                 throw new DatabaseConnectionException
                     ("The sql statement object " + "that has been passed to LoadDataReader() is null.");
             }
-            IDbConnection con;
+            IDbConnection con = null;
             try
             {
                 con = GetOpenConnectionForReading();
@@ -454,6 +467,10 @@ namespace Habanero.DB
                     ("There was an error reading the database. Please contact your system administrator." + Environment.NewLine +
                      selectSql.ToString() + Environment.NewLine,
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
+            }
+            finally
+            {
+                if (con != null) log.Info(string.Format("LoadDataReader(ISqlStatement): Final Connection state: {0}", con.State));
             }
         }
 
@@ -705,7 +722,7 @@ namespace Habanero.DB
         ///<summary>
         /// Creates a SQL formatter for the specified database.
         ///</summary>
-        public SqlFormatter SqlFormatter
+        public ISqlFormatter SqlFormatter
         {
             get { return _sqlFormatter; }
         }
@@ -782,16 +799,18 @@ namespace Habanero.DB
             //  It could however be easily achieved since there is a physical instance of a database connection object
             //   per database type that inherit from this class e.g. DatabaseConnectionMySQL.
             if (selectSql == null) throw new ArgumentNullException("selectSql");
-            IDbConnection con;
+            IDbConnection con = null;
             try
             {
                 con = GetOpenConnectionForReading();
                 IDbCommand cmd = CreateCommand(con);
                 selectSql.SetupCommand(cmd);
-                IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                DataTable dt = GetDataTable(reader);
-                reader.Close();
+                DataTable dt;
+                using (IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                {
+                    dt = GetDataTable(reader);
+                    reader.Close();
+                }
                 return dt;
             }
             catch (Exception ex)
@@ -803,6 +822,10 @@ namespace Habanero.DB
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
+            }
+            finally
+            {
+                if (con != null) log.Info(string.Format("LoadDataTable(ISqlStatement, string, string): Final Connection state: {0}", con.State));
             }
         }
         /// <summary>

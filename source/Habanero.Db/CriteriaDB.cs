@@ -141,7 +141,7 @@ namespace Habanero.Base
         /// <param name="addParameter">The delegate to use to convert the value in object form to a value in string form. 
         /// See <see cref="AddParameterDelegate"/></param>
         /// <returns>The Criteria in string form.</returns>
-        public string ToString(SqlFormatter formatter, AddParameterDelegate addParameter)
+        public string ToString(ISqlFormatter formatter, AddParameterDelegate addParameter)
         {
             if (IsComposite())
             {
@@ -167,6 +167,7 @@ namespace Habanero.Base
                 {
                     valueString = "NULL";
                     if (this.ComparisonOperator == ComparisonOp.Equals) comparisonOperator = "IS";
+                    if (this.ComparisonOperator == ComparisonOp.NotEquals) comparisonOperator = "IS NOT";
                 }
                 else
                 {

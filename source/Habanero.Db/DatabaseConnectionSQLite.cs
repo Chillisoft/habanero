@@ -69,8 +69,7 @@ namespace Habanero.DB
             long id = 0;
             try
             {
-                using (
-                    IDataReader reader = LoadDataReader(String.Format("Select max(ROWID) from {0}", tableName), tran))
+                using (IDataReader reader = LoadDataReader(String.Format("Select max(ROWID) from {0}", tableName), tran))
                     //IDataReader reader =
                     //    LoadDataReader(String.Format("Select seq from SQLITE_SEQUENCE where Upper(name) = Upper('{0}')", tableName), tran))
                 {

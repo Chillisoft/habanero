@@ -141,5 +141,19 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual("", limitClauseForBegin);
         }
+
+        [Test]
+        public void Test_PrepareValue_WithGuid()
+        {
+            //---------------Set up test pack-------------------
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "");
+            Guid g = Guid.NewGuid();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object preparedValue = sqlFormatter.PrepareValue(g);
+            //---------------Test Result -----------------------
+            string strg = g.ToString("B").ToUpper();
+            Assert.AreEqual(strg, preparedValue, "PrepareValue is not preparing guids correctly.");
+        }
     }
 }
