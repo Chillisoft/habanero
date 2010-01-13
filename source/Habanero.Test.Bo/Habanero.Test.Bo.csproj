@@ -151,6 +151,8 @@
   <ItemGroup>
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Event.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Events.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderInMemory.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderMultiSource.cs" />
     <Compile Include="ClassDefinition\TestClassDefHelper.cs" />
     <Compile Include="ClassDefinition\TestDefClassFactory.cs" />
     <Compile Include="ClassDefinition\TestFilterDef.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="TestBusinessObjectRules.cs" />
     <Compile Include="TestBusinessObjectSerialisationXML.cs" />
     <Compile Include="TestBOStatus.cs" />
+    <Compile Include="TestDataAccessorMultiSource.cs" />
     <Compile Include="TestDataStoreInMemoryBinaryWriter.cs" />
     <Compile Include="TestDataStoreInMemoryXmlWriter.cs" />
     <Compile Include="TestNumberGenerator.cs" />
@@ -337,6 +340,7 @@
     <Compile Include="Relationship\TestMultipleRelationshipDef.cs" />
     <Compile Include="BOTestUtils.cs" />
     <Compile Include="TransactionCommitterStub.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterMultiSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="key.snk" />

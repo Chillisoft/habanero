@@ -10,7 +10,6 @@ namespace Habanero.Test.BO.CriteriaManager
     [TestFixture]
     public class TestCriteriaValues
     {
-
         [Test]
         public void Test_ToString_WithIntegers()
         {
@@ -38,7 +37,6 @@ namespace Habanero.Test.BO.CriteriaManager
             //-------------Test Result ----------------------
             Assert.AreEqual("(100, 200, 300)", valuesAsString);
         }
-
 
         [Test]
         public void Test_CompareTo_WhenInValues_ShouldReturnZero()
@@ -68,7 +66,6 @@ namespace Habanero.Test.BO.CriteriaManager
             Assert.AreNotEqual(0, result);
         }
     
-    
         [Test]
         public void Test_CompareTo_WhenNullInValues_ShouldReturnZero()
         {
@@ -82,7 +79,6 @@ namespace Habanero.Test.BO.CriteriaManager
             //-------------Test Result ----------------------
             Assert.AreEqual(0, result);
         }
-            
     
         [Test]
         public void Test_CompareTo_WhenNullInValuesAndLookingForValue_ShouldReturnZero()
@@ -97,7 +93,6 @@ namespace Habanero.Test.BO.CriteriaManager
             //-------------Test Result ----------------------
             Assert.AreEqual(0, result);
         }
-        
     
         [Test]
         public void Test_CompareTo_WhenNullNotInValues_ShouldReturnNotZero()
@@ -114,6 +109,7 @@ namespace Habanero.Test.BO.CriteriaManager
         }
 
         [Test]
+        [Ignore("Peter working on this")]
         public void Test_ConstructorRemovesQuotesAroundStrings()
         {
             //-------------Setup Test Pack ------------------

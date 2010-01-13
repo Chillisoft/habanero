@@ -68,7 +68,7 @@ namespace Habanero.Test.DB
         public void TestRaisesException_onError()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitter committerDB = new TransactionCommitterStubDB();
+            TransactionCommitter committerDB = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             StubFailingTransaction trn = new StubFailingTransaction();
             committerDB.AddTransaction(trn);
             committerDB.AddTransaction(new StubSuccessfullTransaction());
@@ -81,7 +81,7 @@ namespace Habanero.Test.DB
         public void TestUpdateBeforePersistCalled()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             bool updateBeforePersistCalled = false;
             MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(
                 delegate
@@ -101,7 +101,7 @@ namespace Habanero.Test.DB
         public void TestUpdateBeforePersistCalled_ForBoAddedInUpdateBeforePersist()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             bool updateBeforePersistCalled = false;
             bool updateBeforePersistCalledForInner = false;
             MockBOWithUpdateBeforePersistDelegate innerMockBo = new MockBOWithUpdateBeforePersistDelegate(
@@ -133,7 +133,7 @@ namespace Habanero.Test.DB
         public void TestRaisesException_onError_DoesNotCommit()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitter committer = new TransactionCommitterStubDB();
+            TransactionCommitter committer = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             StubDatabaseTransaction transactional1 = new StubDatabaseTransaction();
             committer.AddTransaction(transactional1);
             StubFailingTransaction transactional2 = new StubFailingTransaction();
@@ -163,7 +163,7 @@ namespace Habanero.Test.DB
                                                                  Surname = contactPersonCompositeKey.Surname,
                                                                  FirstName = contactPersonCompositeKey.FirstName
                                                              };
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(duplicateContactPerson);
             //---------------Execute Test ----------------------
             try
@@ -254,7 +254,7 @@ namespace Habanero.Test.DB
         private static ContactPersonTestBO GetSavedContactPersonCompositeKey()
         {
             ContactPersonTestBO contactPersonCompositeKey = GetUnsavedContactPersonCompositeKey();
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(contactPersonCompositeKey);
             committer.CommitTransaction();
             return contactPersonCompositeKey;
@@ -320,7 +320,7 @@ namespace Habanero.Test.DB
 
             org.MarkForDelete();
 
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(org);
             committer.CommitTransaction();
 
@@ -357,7 +357,7 @@ namespace Habanero.Test.DB
             address.Save();
             org.MarkForDelete();
 
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(org);
 
             //---------------Assert Precondition----------------
@@ -394,7 +394,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
             Guid oldID = contactPersonCompositeKey.ID.ObjectID;
             Assert.IsNotNull(BusinessObjectManager.Instance[oldID]);
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(contactPersonCompositeKey);
             contactPersonCompositeKey.FirstName = "newName";
             //---------------Execute Test ----------------------
@@ -417,7 +417,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
             //            string oldID = contactPersonCompositeKey.ID.AsString_CurrentValue();
             //            Assert.IsNotNull(BusinessObjectManager.Instance[oldID]);
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(contactPersonCompositeKey);
             string origFirstname = contactPersonCompositeKey.FirstName;
             contactPersonCompositeKey.FirstName = "Temp Firstname";
@@ -464,7 +464,7 @@ namespace Habanero.Test.DB
             contactPersonCompositeKey.ContactPersonID = Guid.NewGuid();
             contactPersonCompositeKey.Surname = "Somebody";
             contactPersonCompositeKey.FirstName = "Else";
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(contactPersonCompositeKey);
             //---------------Execute Test ----------------------
             committer.CommitTransaction();
@@ -478,7 +478,7 @@ namespace Habanero.Test.DB
         public void TestDatabaseTransaction_Failure()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             StubDatabaseTransaction transactional1 = new StubDatabaseTransaction();
             StubDatabaseFailureTransaction transactional2 = new StubDatabaseFailureTransaction();
             committerDB.AddTransaction(transactional1);
@@ -502,7 +502,7 @@ namespace Habanero.Test.DB
         public void TestDatabaseTransaction_Success()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             StubDatabaseTransaction transactional1 = new StubDatabaseTransaction();
             committerDB.AddTransaction(transactional1);
 
@@ -519,7 +519,7 @@ namespace Habanero.Test.DB
         public void TestDatabaseTransaction_SuccessTwoTransactions()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             StubDatabaseTransaction transactional1 = new StubDatabaseTransaction();
             StubDatabaseTransaction transactional2 = new StubDatabaseTransaction();
             committerDB.AddTransaction(transactional1);
@@ -540,7 +540,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
             contactPersonTestBO.MarkForDelete();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
 
             //---------------Execute Test ----------------------
@@ -564,7 +564,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
             contactPersonTestBO.MarkForDelete();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
 
             //---------------Execute Test ----------------------
@@ -590,7 +590,7 @@ namespace Habanero.Test.DB
             entity1.Save();
             entity2.Save();
             entity1.MarkForDelete();
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(entity1);
             //---------------Execute Test ----------------------
             committer.CommitTransaction();
@@ -612,7 +612,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
             contactPersonTestBO.MarkForDelete();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
             committerDB.AddTransaction(new StubDatabaseFailureTransaction());
 
@@ -646,7 +646,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
             contactPersonTestBO.MarkForDelete();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
             committerDB.AddTransaction(new StubDatabaseFailureTransaction());
 
@@ -712,7 +712,7 @@ namespace Habanero.Test.DB
         public void TestMultipleStatementsInOneITransactional()
         {
             //---------------Set up test pack-------------------
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             StubDatabaseTransactionMultiple transactional1 = new StubDatabaseTransactionMultiple();
             committerDB.AddTransaction(transactional1);
 
@@ -731,7 +731,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
             contactPersonTestBO.FirstName = Guid.NewGuid().ToString();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
@@ -744,9 +744,9 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             MockBO mockBo = CreateSavedMockBO();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             mockBo.MarkForDelete();
-            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo));
+            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo, committerDB.DatabaseConnection));
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
@@ -763,8 +763,8 @@ namespace Habanero.Test.DB
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             contactPersonTestBO.Surname = null;
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
-            committerDB.AddTransaction(new TransactionalBusinessObjectDB(contactPersonTestBO));
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
+            committerDB.AddTransaction(new TransactionalBusinessObjectDB(contactPersonTestBO, committerDB.DatabaseConnection));
 
             //---------------Execute Test ----------------------
             contactPersonTestBO.MarkForDelete();
@@ -779,8 +779,8 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             MockBO mockBo = new MockBO();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
-            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo));
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
+            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo, committerDB.DatabaseConnection));
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
@@ -802,8 +802,8 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
-            committerDB.AddTransaction(new TransactionalBusinessObjectDB(contactPersonTestBO));
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
+            committerDB.AddTransaction(new TransactionalBusinessObjectDB(contactPersonTestBO, committerDB.DatabaseConnection));
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
@@ -817,10 +817,10 @@ namespace Habanero.Test.DB
             TransactionCommitterInMemory inMemoryCommitter = new TransactionCommitterInMemory(new DataStoreInMemory());
             inMemoryCommitter.AddBusinessObject(mockBo);
             inMemoryCommitter.CommitTransaction();
-            
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             mockBo.MarkForDelete();
-            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo));
+            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo, committerDB.DatabaseConnection));
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
@@ -835,10 +835,10 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             MockBO mockBo = CreateSavedMockBO();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             Guid mockBOProp1 = Guid.NewGuid();
             mockBo.MockBOProp1 = mockBOProp1;
-            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo));
+            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo, committerDB.DatabaseConnection));
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
@@ -856,7 +856,7 @@ namespace Habanero.Test.DB
             MockBO mockBo = CreateSavedMockBO();
             Guid mockBOProp1 = Guid.NewGuid();
             mockBo.MockBOProp1 = mockBOProp1;
-            TransactionCommitter committerDB = new TransactionCommitterDB();
+            TransactionCommitter committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(mockBo);
 
             //---------------Execute Test ----------------------
@@ -873,9 +873,9 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             MockBO mockBo = CreateSavedMockBO();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             Guid? mockBOProp1 = mockBo.MockBOProp1;
-            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo));
+            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo, committerDB.DatabaseConnection));
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
@@ -896,7 +896,7 @@ namespace Habanero.Test.DB
 //            contactPersonTestBO.MarkForDelete();
             ReflectionUtilities.SetPropertyValue(contactPersonTestBO.Status, "IsDeleted", true);
 
-            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
@@ -949,7 +949,7 @@ namespace Habanero.Test.DB
             //Create object in DB
             MockBoWithRollBack mockBo = new MockBoWithRollBack();
             StubDatabaseFailureTransaction trnFail = new StubDatabaseFailureTransaction();
-            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             trnCommitter.AddBusinessObject(mockBo);
             trnCommitter.AddTransaction(trnFail);
             Assert.IsFalse(mockBo.RollBackExecuted);
@@ -979,7 +979,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             address.MarkForDelete();
             contactPersonTestBO.MarkForDelete();
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(address);
             committer.AddBusinessObject(contactPersonTestBO);
             committer.CommitTransaction();
@@ -999,7 +999,7 @@ namespace Habanero.Test.DB
             cp.Surname = Guid.NewGuid().ToString();
             cp.Save();
             cp.Surname = Guid.NewGuid().ToString();
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committer.AddBusinessObject(cp);
 
             //---------------Execute Test ----------------------
@@ -1036,7 +1036,7 @@ namespace Habanero.Test.DB
 
             BORegistry.DataAccessor = dataAccessor;
             mockRepos.ReplayAll();
-            TransactionCommitterDB transactionCommitterDB = new TransactionCommitterDB();
+            TransactionCommitterDB transactionCommitterDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             transactionCommitterDB.AddBusinessObject(bo);
 
             //---------------Execute Test ----------------------

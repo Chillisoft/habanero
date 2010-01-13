@@ -26,7 +26,9 @@ namespace Habanero.Test.DB
 {
     internal class TransactionCommitterStubDB : TransactionCommitterDB
     {
-
+        public TransactionCommitterStubDB(IDatabaseConnection databaseConnection) : base(databaseConnection)
+        {
+        }
 
         protected override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
@@ -44,7 +46,7 @@ namespace Habanero.Test.DB
         private bool _committed;
 
         internal StubDatabaseFailureTransaction()
-            : base(new MockBO())
+            : base(new MockBO(), null)
         {
             _committed = false;
         }
@@ -91,7 +93,7 @@ namespace Habanero.Test.DB
     internal class StubDatabaseTransactionMultiple : TransactionalBusinessObjectDB
     {
         public StubDatabaseTransactionMultiple()
-            : base(new MockBO())
+            : base(new MockBO(), null)
         {
         }
 
@@ -140,7 +142,7 @@ namespace Habanero.Test.DB
         private bool _committed;
 
         internal StubDatabaseTransaction()
-            : base(new MockBO())
+            : base(new MockBO(), null)
         {
         }
 
@@ -191,7 +193,7 @@ namespace Habanero.Test.DB
         private bool _committed;
 
         internal StubFailingTransaction()
-            : base(new MockBO())
+            : base(new MockBO(), null)
         {
             _committed = false;
         }

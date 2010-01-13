@@ -32,15 +32,18 @@ namespace Habanero.DB
     public class SelectQueryDB : ISelectQuery
     {
         private readonly ISelectQuery _selectQuery;
+        private readonly IDatabaseConnection _databaseConnection;
         private ISqlFormatter _sqlFormatter;
 
         ///<summary>
         /// Creates a SelectQueryDB, wrapping an ISelectQuery (Decorator pattern)
         ///</summary>
         ///<param name="selectQuery"></param>
-        public SelectQueryDB(ISelectQuery selectQuery)
+        ///<param name="databaseConnection"></param>
+        public SelectQueryDB(ISelectQuery selectQuery, IDatabaseConnection databaseConnection)
         {
             _selectQuery = selectQuery;
+            _databaseConnection = databaseConnection;
         }
 
         #region ISelectQuery Members
@@ -125,14 +128,12 @@ namespace Habanero.DB
         /// <returns>An ISqlStatement that can be executed against an IDatabaseConnection</returns>
         public ISqlStatement CreateSqlStatement()
         {
-            IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
-
-            if (databaseConnection == null)
+            if (_databaseConnection == null)
             {
                 throw new HabaneroDeveloperException("The Sql cannot be created because the database connection is not set up. Please contact your system administrator", "");
             }
 
-            return CreateSqlStatement(databaseConnection.SqlFormatter);
+            return CreateSqlStatement(_databaseConnection.SqlFormatter);
 //            return CreateSqlStatement(new SqlFormatter(databaseConnection.LeftFieldDelimiter, databaseConnection.RightFieldDelimiter, databaseConnection.GetLimitClauseForBeginning()));
         }
 
@@ -144,7 +145,7 @@ namespace Habanero.DB
         public ISqlStatement CreateSqlStatement(ISqlFormatter sqlFormatter)
         {
             _sqlFormatter = sqlFormatter;
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
+            SqlStatement statement = new SqlStatement(_databaseConnection);
             StringBuilder builder = statement.Statement;
             CheckRecordOffSetAndAppendFields(builder);
             AppendMainSelectClause(statement, builder);

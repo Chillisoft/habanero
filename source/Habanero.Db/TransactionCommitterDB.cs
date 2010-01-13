@@ -44,14 +44,6 @@ namespace Habanero.DB
         private IDbTransaction _dbTransaction;
         private Dictionary<string, ITransactional> _transactionsExecutingToDataSource;
 
-
-        ///<summary>
-        /// Constructs the TransactionCommitterDB
-        ///</summary>
-        public TransactionCommitterDB() : this(null)
-        {
-        }
-
         ///<summary>
         /// Constructs the TransactionCommitter for a specific database connection
         ///</summary>
@@ -74,21 +66,15 @@ namespace Habanero.DB
         protected override void BeginDataSource()
         {
             _transactionsExecutingToDataSource = new Dictionary<string, ITransactional>();
-            IDatabaseConnection databaseConnection = GetDatabaseConnection();
-            _dbConnection = databaseConnection.GetConnection();
+            _dbConnection = _databaseConnection.GetConnection();
             _dbConnection.Open();
-            _dbTransaction = _dbConnection.BeginTransaction(databaseConnection.IsolationLevel);
+            _dbTransaction = _dbConnection.BeginTransaction(_databaseConnection.IsolationLevel);
 //            IDbCommand command = _dbConnection.CreateCommand();
 //            command.Transaction = _dbTransaction;
 //            command.CommandText = "sp_MSForEachTable";
 //            command.CommandType = CommandType.StoredProcedure;
 //            command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? NOCHECK CONSTRAINT ALL"));
 //            command.ExecuteNonQuery();
-        }
-
-        private IDatabaseConnection GetDatabaseConnection()
-        {
-            return _databaseConnection ?? DB.DatabaseConnection.CurrentConnection;
         }
 
         /// <summary>
@@ -100,7 +86,7 @@ namespace Habanero.DB
         protected override TransactionalBusinessObject CreateTransactionalBusinessObject(
             IBusinessObject businessObject)
         {
-            return new TransactionalBusinessObjectDB(businessObject);
+            return new TransactionalBusinessObjectDB(businessObject, _databaseConnection);
         }
 
         /// <summary>
@@ -111,7 +97,7 @@ namespace Habanero.DB
         /// <param name="businessObject"></param>
         protected override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject)
         {
-            AddTransaction(new TransactionalSingleRelationship_Added_DB(relationship, businessObject));
+            AddTransaction(new TransactionalSingleRelationship_Added_DB(relationship, businessObject, _databaseConnection));
         }
 
         /// <summary>
@@ -122,7 +108,7 @@ namespace Habanero.DB
         /// <param name="businessObject"></param>
         protected override void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject)
         {
-            AddTransaction(new TransactionalSingleRelationship_Removed_DB(relationship, businessObject));
+            AddTransaction(new TransactionalSingleRelationship_Removed_DB(relationship, businessObject, _databaseConnection));
         }
 
         /// <summary>
@@ -149,7 +135,7 @@ namespace Habanero.DB
 
             ISqlStatementCollection sql = transactionDB.GetPersistSql();
             if (sql == null) return;
-            IDatabaseConnection databaseConnection = GetDatabaseConnection();
+            IDatabaseConnection databaseConnection = _databaseConnection;
             databaseConnection.ExecuteSql(sql, _dbTransaction);
             base.ExecuteTransactionToDataSource(transaction);
         }

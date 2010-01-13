@@ -73,7 +73,7 @@ namespace Habanero.UI.Win
         /// </summary>
         protected override void SetupSettings()
         {
-            if (Settings == null) Settings = new DatabaseSettings();
+            if (Settings == null) Settings = new DatabaseSettings(DatabaseConnection.CurrentConnection);
             GlobalRegistry.Settings = Settings;
         }
 

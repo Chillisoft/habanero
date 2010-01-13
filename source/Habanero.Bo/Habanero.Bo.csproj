@@ -145,6 +145,7 @@
     <Compile Include="BusinessObjectLoaderBase.cs" />
     <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="BusinessObjectLoaderInMemory.cs" />
+    <Compile Include="BusinessObjectLoaderMultiSource.cs" />
     <Compile Include="ClassDefinition\BOPropBoolDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropDateTimeDataMapper.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Comparer\TimeSpanComparer.cs" />
     <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
     <Compile Include="DataAccessorInMemory.cs" />
+    <Compile Include="DataAccessorMultiSource.cs" />
     <Compile Include="DataStoreInMemory.cs" />
     <Compile Include="DataStoreInMemoryBinaryReader.cs" />
     <Compile Include="DataStoreInMemoryBinaryWriter.cs" />
@@ -374,6 +376,8 @@
     <Compile Include="TransactionalSingleRelationship.cs" />
     <Compile Include="TransactionCommitter.cs" />
     <Compile Include="TransactionCommitterInMemory.cs" />
+    <Compile Include="TransactionCommitterMultiSource.cs" />
+    <Compile Include="TransactionCommitterRemote.cs" />
     <Compile Include="TransactionLogBusObj.cs" />
   </ItemGroup>
   <ItemGroup>

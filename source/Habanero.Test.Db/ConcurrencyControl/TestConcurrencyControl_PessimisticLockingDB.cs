@@ -85,7 +85,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
             ContactPersonPessimisticLockingDB.LoadDefaultClassDef();
             ContactPersonPessimisticLockingDB cp = new ContactPersonPessimisticLockingDB();
             cp.Surname = Guid.NewGuid().ToString();
-            TransactionCommitter tc = new TransactionCommitterDB();
+            TransactionCommitter tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             tc.CommitTransaction();
             return cp;

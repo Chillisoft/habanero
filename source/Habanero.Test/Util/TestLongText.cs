@@ -232,7 +232,7 @@ namespace Habanero.Test.Util
             stringBuilder.Append('*', 2500);
             string value = stringBuilder.ToString();
             bo.SetPropertyValue("TestProp", value);
-            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo).GetPersistSql();
+            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
             ISqlStatement sqlStatement = sqlCol[0];
             IList parameters = sqlStatement.Parameters;
             IDbDataParameter longTextParam = (IDbDataParameter) parameters[1];

@@ -32,6 +32,7 @@ namespace Habanero.DB
     /// </summary>
     public class DatabaseSettings : MarshalByRefObject, ISettings
     {
+        private readonly IDatabaseConnection _databaseConnection;
         private readonly Hashtable _cachedSettings;
         private string _tableName = "settings";
 
@@ -39,8 +40,9 @@ namespace Habanero.DB
         /// Constructor to initialise an empty store of settings, using the table
         /// name of "settings"
         /// </summary>
-        public DatabaseSettings()
+        public DatabaseSettings(IDatabaseConnection databaseConnection)
         {
+            _databaseConnection = databaseConnection;
             _cachedSettings = new Hashtable();
         }
 
@@ -49,7 +51,8 @@ namespace Habanero.DB
         /// the table name to use to store the settings
         /// </summary>
         /// <param name="tableName">The table name in which to store settings</param>
-        public DatabaseSettings(string tableName) : this()
+        public DatabaseSettings(string tableName, IDatabaseConnection databaseConnection)
+            : this(databaseConnection)
         {
             _tableName = tableName;
         }

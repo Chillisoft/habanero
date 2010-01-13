@@ -23,14 +23,18 @@ namespace Habanero.DB
 {
     internal class TransactionalSingleRelationship_Removed_DB : TransactionalSingleRelationship_Removed, ITransactionalDB
     {
-        public TransactionalSingleRelationship_Removed_DB(IRelationship singleRelationship, IBusinessObject relatedBO)
+        private readonly IDatabaseConnection _databaseConnection;
+
+        public TransactionalSingleRelationship_Removed_DB(IRelationship singleRelationship, IBusinessObject relatedBO, IDatabaseConnection databaseConnection)
             : base(singleRelationship, relatedBO)
-        { }
+        {
+            _databaseConnection = databaseConnection;
+        }
 
 
         public virtual ISqlStatementCollection GetPersistSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(RelatedBO, DatabaseConnection.CurrentConnection);
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(RelatedBO, _databaseConnection);
             return gen.GenerateForRelationship(Relationship, RelatedBO);
         }
     }

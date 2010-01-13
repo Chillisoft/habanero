@@ -184,7 +184,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
             Assert.AreEqual(versionNumber, contactPerson.VersionNumber);
             try
             {
-                TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+                TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
                 trnCommitter.AddBusinessObject(contactPerson);
                 trnCommitter.AddTransaction(new StubDatabaseFailureTransaction());
                 trnCommitter.CommitTransaction();

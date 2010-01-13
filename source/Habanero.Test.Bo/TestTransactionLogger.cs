@@ -89,7 +89,7 @@ namespace Habanero.Test.BO
             //Test that the transaction log 
             //---------------Set up test pack-------------------
             ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
-            TransactionCommitterDB tc = new TransactionCommitterDB();
+            TransactionCommitterDB tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             string dirtyXML = cp.DirtyXML;
             //---------------Execute Test ----------------------
@@ -120,10 +120,10 @@ namespace Habanero.Test.BO
             //Test that the transaction log 
             //---------------Set up test pack-------------------
             ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
-            TransactionCommitterDB tc = new TransactionCommitterDB();
+            TransactionCommitterDB tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             tc.CommitTransaction();
-            tc = new TransactionCommitterDB();
+            tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             cp.Surname = Guid.NewGuid().ToString();
             tc.AddBusinessObject(cp);
             //---------------Execute Test ----------------------
@@ -148,11 +148,11 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
-            TransactionCommitterDB tc = new TransactionCommitterDB();
+            TransactionCommitterDB tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             tc.CommitTransaction();
             cp.MarkForDelete();
-            tc = new TransactionCommitterDB();
+            tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp);
             //---------------Execute Test ----------------------
             tc.CommitTransaction();
@@ -199,7 +199,7 @@ namespace Habanero.Test.BO
             cp2.Surname = AltSurname;
 
             //---------------Execute Test ----------------------
-            TransactionCommitterDB tc = new TransactionCommitterDB();
+            TransactionCommitterDB tc = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             tc.AddBusinessObject(cp1);
             tc.AddBusinessObject(cp2);
             try

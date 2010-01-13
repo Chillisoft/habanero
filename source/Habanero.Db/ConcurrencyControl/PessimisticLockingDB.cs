@@ -162,7 +162,7 @@ namespace Habanero.DB.ConcurrencyControl
             BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB)BORegistry.DataAccessor.BusinessObjectLoader;
             ISelectQuery selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);
 
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, boLoaderDB.DatabaseConnection);
             return selectQueryDB.CreateSqlStatement();
         }
         private bool LockDurationValid(DateTime dateLocked)

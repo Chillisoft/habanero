@@ -23,13 +23,17 @@ namespace Habanero.DB
 {
     internal class TransactionalSingleRelationship_Added_DB : TransactionalSingleRelationship_Added, ITransactionalDB
     {
-        internal TransactionalSingleRelationship_Added_DB(IRelationship singleRelationship, IBusinessObject relatedBO)
+        private readonly IDatabaseConnection _databaseConnection;
+
+        internal TransactionalSingleRelationship_Added_DB(IRelationship singleRelationship, IBusinessObject relatedBO, IDatabaseConnection databaseConnection)
             : base(singleRelationship, relatedBO)
-        { }
+        {
+            _databaseConnection = databaseConnection;
+        }
 
         public virtual ISqlStatementCollection GetPersistSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(RelatedBO, DatabaseConnection.CurrentConnection);
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(RelatedBO, _databaseConnection);
             return gen.GenerateForRelationship(Relationship, RelatedBO);
         }
     }

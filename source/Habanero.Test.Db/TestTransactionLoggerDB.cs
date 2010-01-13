@@ -60,7 +60,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             //Create Mock Business object that implements a stub transaction log.
             ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
-            TransactionalBusinessObjectDB transactionalBODB = new TransactionalBusinessObjectDB(cp);
+            TransactionalBusinessObjectDB transactionalBODB = new TransactionalBusinessObjectDB(cp, DatabaseConnection.CurrentConnection);
 
             //---------------Assert Preconditions --------------
 
@@ -85,7 +85,7 @@ namespace Habanero.Test.DB
             TransactionCommitterStub tc = new TransactionCommitterStub();
             tc.AddBusinessObject(cp);
             tc.CommitTransaction();
-            TransactionalBusinessObjectDB transactionalBODB = new TransactionalBusinessObjectDB(cp);
+            TransactionalBusinessObjectDB transactionalBODB = new TransactionalBusinessObjectDB(cp, DatabaseConnection.CurrentConnection);
 
             //---------------Assert Preconditions --------------
 

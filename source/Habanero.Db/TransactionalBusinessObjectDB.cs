@@ -32,13 +32,16 @@ namespace Habanero.DB
     public class TransactionalBusinessObjectDB
         : TransactionalBusinessObject, ITransactionalDB
     {
+        private readonly IDatabaseConnection _databaseConnection;
         private static readonly ILog log = LogManager.GetLogger("Habanero.DB.TransactionalBusinessObjectDB");
         ///<summary>
         ///</summary>
         ///<param name="businessObject"></param>
-        public TransactionalBusinessObjectDB(IBusinessObject businessObject) : base(businessObject)
+        public TransactionalBusinessObjectDB(IBusinessObject businessObject, IDatabaseConnection databaseConnection) : base(businessObject)
         {
+            _databaseConnection = databaseConnection;
         }
+
         ///<summary>
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
@@ -74,7 +77,7 @@ namespace Habanero.DB
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetInsertSql()
         {
-            InsertStatementGenerator gen = new InsertStatementGenerator(BusinessObject, DatabaseConnection.CurrentConnection);
+            InsertStatementGenerator gen = new InsertStatementGenerator(BusinessObject, _databaseConnection);
             return gen.Generate();
         }
 
@@ -84,7 +87,7 @@ namespace Habanero.DB
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetDeleteSql()
         {
-            DeleteStatementGenerator generator = new DeleteStatementGenerator(BusinessObject, DatabaseConnection.CurrentConnection);
+            DeleteStatementGenerator generator = new DeleteStatementGenerator(BusinessObject, _databaseConnection);
             return generator.Generate();
         }
 
@@ -94,7 +97,7 @@ namespace Habanero.DB
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetUpdateSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(BusinessObject, DatabaseConnection.CurrentConnection);
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(BusinessObject, _databaseConnection);
             return gen.Generate();
         }
 

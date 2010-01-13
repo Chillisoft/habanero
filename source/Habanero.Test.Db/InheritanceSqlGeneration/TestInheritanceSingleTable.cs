@@ -64,7 +64,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [TestFixtureTearDown]
         public void TearDown()
         {
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             Criteria criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShape");
             Criteria criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShapeChanged");
             Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);

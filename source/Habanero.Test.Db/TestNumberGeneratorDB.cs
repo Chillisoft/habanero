@@ -138,7 +138,7 @@ namespace Habanero.Test.DB
             cp2.Surname = Guid.NewGuid().ToString();
             //---------------Execute Test ----------------------
             //Add the objects 
-            TransactionCommitterStubDB trnCommit = new TransactionCommitterStubDB();
+            TransactionCommitterStubDB trnCommit = new TransactionCommitterStubDB(DatabaseConnection.CurrentConnection);
             trnCommit.AddBusinessObject(cp);
             trnCommit.AddBusinessObject(cp2);
             trnCommit.CommitTransaction();

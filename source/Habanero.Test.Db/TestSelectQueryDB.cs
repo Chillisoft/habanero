@@ -62,7 +62,7 @@ namespace Habanero.Test.DB
         public void Test_Set_FirstRecordToLoad()
         {
             //---------------Set up test pack-------------------
-            ISelectQuery selectQuery = new SelectQueryDB(new SelectQuery());
+            ISelectQuery selectQuery = new SelectQueryDB(new SelectQuery(), DatabaseConnection.CurrentConnection);
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, selectQuery.FirstRecordToLoad);
             //---------------Execute Test ----------------------
@@ -75,7 +75,7 @@ namespace Habanero.Test.DB
         public void Test_SelectQueryDB_Set_FirstRecordToLoad()
         {
             //---------------Set up test pack-------------------
-            ISelectQuery selectQuery = new SelectQueryDB(new SelectQuery());
+            ISelectQuery selectQuery = new SelectQueryDB(new SelectQuery(), DatabaseConnection.CurrentConnection);
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, selectQuery.FirstRecordToLoad);
             //---------------Execute Test ----------------------
@@ -92,7 +92,7 @@ namespace Habanero.Test.DB
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
@@ -110,7 +110,7 @@ namespace Habanero.Test.DB
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
@@ -128,7 +128,7 @@ namespace Habanero.Test.DB
             selectQuery.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
             selectQuery.Source = new Source("bob");
             //---------------Execute Test ----------------------
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
 
             //---------------Test Result -----------------------
@@ -145,7 +145,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "test");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -166,7 +166,7 @@ namespace Habanero.Test.DB
             classDef.ClassID = Guid.NewGuid();
             Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "test");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -189,7 +189,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = MyBO.LoadClassDefWithDateTime();
             Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, new DateTimeToday());
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             DateTime dateTimeBefore = DateTime.Today;
@@ -212,7 +212,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = MyBO.LoadClassDefWithDateTime();
             Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, new DateTimeNow());
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             DateTime dateTimeBefore = DateTime.Today;
@@ -238,7 +238,7 @@ namespace Habanero.Test.DB
             MyRelatedBo.LoadClassDef();
             Criteria criteria = CriteriaParser.CreateCriteria("MyRelationship.MyRelatedTestProp = 'test'");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
@@ -255,7 +255,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "MyBoID, TestProp");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -272,7 +272,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = new OrderCriteria().FromString("MyBoID, TestProp");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -289,7 +289,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = new OrderCriteria().FromString("MyBoID, TestProp");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -306,7 +306,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = new OrderCriteria();
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -323,7 +323,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "MyBoID DESC, TestProp DESC");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -340,7 +340,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "MyBoID DESC, TestProp ASC");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -360,7 +360,7 @@ namespace Habanero.Test.DB
             ClassDef addressClassDef = new Address().ClassDef;
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(addressClassDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(addressClassDef, "ContactPerson.Surname");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
           
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -381,7 +381,7 @@ namespace Habanero.Test.DB
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(engineClassDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, "Car.Owner.Surname");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -402,7 +402,7 @@ namespace Habanero.Test.DB
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(car.ClassDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(car.ClassDef, "Driver.Surname");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
@@ -421,7 +421,7 @@ namespace Habanero.Test.DB
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "TOP ROWS", "");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -440,7 +440,7 @@ namespace Habanero.Test.DB
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
@@ -466,7 +466,7 @@ namespace Habanero.Test.DB
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -486,7 +486,7 @@ namespace Habanero.Test.DB
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
             selectQuery.OrderCriteria = new OrderCriteria().FromString(fieldName);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -506,7 +506,7 @@ namespace Habanero.Test.DB
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
@@ -521,7 +521,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef circleClassDef = Circle.GetClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(circleClassDef);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, selectQuery.Source.InheritanceJoins.Count);
             //---------------Execute Test ----------------------
@@ -536,7 +536,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef filledCircleClassDef = FilledCircle.GetClassDefWithClassInheritanceHierarchy();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(filledCircleClassDef);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -557,7 +557,7 @@ namespace Habanero.Test.DB
             Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
             QueryBuilder.PrepareCriteria(classDef, criteria);
             selectQuery.Criteria = criteria;
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
@@ -574,7 +574,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(circleClassDef);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
@@ -599,7 +599,7 @@ namespace Habanero.Test.DB
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
 
             //---------------Execute Test ----------------------
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             ISqlStatement statement = query.CreateSqlStatement();
 
             //---------------Test Result -----------------------
@@ -619,7 +619,7 @@ namespace Habanero.Test.DB
             selectQuery.FirstRecordToLoad = 2;
             selectQuery.Limit = 4;
             selectQuery.OrderCriteria = new OrderCriteria().FromString("MyBOID");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "TOP", "");
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, selectQuery.FirstRecordToLoad);
@@ -646,7 +646,7 @@ namespace Habanero.Test.DB
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
             selectQuery.OrderCriteria = new OrderCriteria().FromString("Surname");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "TOP", "");
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, selectQuery.FirstRecordToLoad);
@@ -673,7 +673,7 @@ namespace Habanero.Test.DB
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
             selectQuery.OrderCriteria = new OrderCriteria().FromString("Surname");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, selectQuery.FirstRecordToLoad);
@@ -700,7 +700,7 @@ namespace Habanero.Test.DB
             selectQuery.FirstRecordToLoad = 2;
             selectQuery.Limit = 4;
             selectQuery.OrderCriteria = new OrderCriteria().FromString("MyBOID");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, selectQuery.FirstRecordToLoad);
@@ -727,7 +727,7 @@ namespace Habanero.Test.DB
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
             selectQuery.OrderCriteria = new OrderCriteria().FromString("Surname");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, selectQuery.FirstRecordToLoad);
@@ -754,7 +754,7 @@ namespace Habanero.Test.DB
             selectQuery.FirstRecordToLoad = 3;
             selectQuery.Limit = 5;
             selectQuery.OrderCriteria = new OrderCriteria().FromString("Surname");
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, selectQuery.FirstRecordToLoad);
@@ -782,7 +782,7 @@ namespace Habanero.Test.DB
 
             //---------------Execute Test ----------------------
             ISelectQuery selectQuery = QueryBuilder.CreateSelectCountQuery(classDef);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             Assert.AreEqual("SELECT Count(*) FROM MyBO", statement.Statement.ToString());
@@ -800,7 +800,7 @@ namespace Habanero.Test.DB
 
             //---------------Execute Test ----------------------
             ISelectQuery selectQuery = QueryBuilder.CreateSelectCountQuery(classDef, criteria);
-            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
