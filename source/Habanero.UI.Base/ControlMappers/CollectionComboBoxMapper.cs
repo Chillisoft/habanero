@@ -158,10 +158,9 @@ namespace Habanero.UI.Base
                 foreach (IBusinessObject bo in this.BusinessObjectCollection)
                 {
                     if (bo == null) continue;
-                    //TODO Eric 30 Jul 2009: use a properties value
                     bool found = String.IsNullOrEmpty(OwningBoPropertyName)
                                      ? bo.ID.ToString().Equals(Convert.ToString(boPropertyValue))
-                                     : Object.Equals(bo.Props[OwningBoPropertyName].Value, boPropertyValue);
+                                     : Object.Equals(bo.GetPropertyValueString(OwningBoPropertyName), Convert.ToString(boPropertyValue));
                     if (found)
                     {
                         _comboBox.SelectedItem = bo;
@@ -185,7 +184,7 @@ namespace Habanero.UI.Base
             }
             return _businessObject == null
                        ? null
-                       : _businessObject.GetPropertyValueString(_propertyName);
+                       : _businessObject.GetPropertyValue(_propertyName);
         }
 
         /// <summary>

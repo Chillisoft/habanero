@@ -124,6 +124,23 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        public static IClassDef CreateClassDefWithAGuidProp()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+            IClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""Sample"" assembly=""Habanero.Test"">
+					<property  name=""SampleID"" type=""Guid"" />
+					<property  name=""GuidProp"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""SampleID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
 
         public static IClassDef CreateClassDefWithTwoPropsOneWithToolTipText()
         {

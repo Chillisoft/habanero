@@ -78,7 +78,7 @@ namespace Habanero.Test.BO
         public void TestSimpleExpression_In()
         {
             CriteriaExpression tree = new CriteriaExpression("Name in ('Peter', 'Mark')");
-            Assert.AreEqual(" IN", tree.Expression);
+            Assert.AreEqual(" IN ", tree.Expression);
             Assert.AreEqual("Name", tree.Left.Expression);
             Assert.AreEqual("('Peter', 'Mark')", tree.Right.Expression);
         }
@@ -87,7 +87,7 @@ namespace Habanero.Test.BO
         public void TestSimpleExpression_NotIn()
         {
             CriteriaExpression tree = new CriteriaExpression("Name not in ('Peter', 'Mark')");
-            Assert.AreEqual(" NOT IN", tree.Expression);
+            Assert.AreEqual(" NOT IN ", tree.Expression);
             Assert.AreEqual("Name", tree.Left.Expression);
             Assert.AreEqual("Peter', 'Mark", tree.Right.Expression);
         }
