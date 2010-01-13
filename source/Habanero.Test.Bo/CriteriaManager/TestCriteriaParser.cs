@@ -587,6 +587,23 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Peter working on this")]
+        public void Test_CreateCriteria_Simple_WithIn()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname in ('Bob')");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.In, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname IN ('Bob')", criteriaAsString);
+        }
+
+        [Test]
         public void Test_CreateCriteria_Simple_WithInvalid()
         {
             //---------------Set up test pack-------------------
@@ -603,7 +620,7 @@ namespace Habanero.Test.BO
                 //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
-                StringAssert.Contains("Invalid operator ", ex.DeveloperMessage);
+                StringAssert.Contains("is not a valid criteria string", ex.DeveloperMessage);
             }
         }
 

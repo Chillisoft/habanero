@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
@@ -69,6 +70,17 @@ namespace Habanero.Base
             string operatorString = criteriaExpression.Expression;
             object value = criteriaExpression.Right.Expression;
             Criteria.ComparisonOp comparisonOp = CreateComparisonOperator(operatorString);
+            if (comparisonOp == Criteria.ComparisonOp.In && value is string)
+            {
+                string inValuesString = value.ToString().TrimStart('(').TrimEnd(')');
+                string[] strings = inValuesString.Split(',');
+                string[] finalStrings = new string[strings.Length];
+                for (int i = 0; i < strings.Length; i++)
+                {
+                    finalStrings[i] = strings[0].Trim('\'');
+                }
+                value = new Criteria.CriteriaValues(finalStrings);
+            }
             return new Criteria(propName, comparisonOp, value);
         }
 
@@ -101,6 +113,8 @@ namespace Habanero.Base
                     return Criteria.ComparisonOp.Is;
                 case "IS NOT":
                     return Criteria.ComparisonOp.IsNot;
+                case "IN":
+                    return Criteria.ComparisonOp.In;
                 default:
                     throw new HabaneroDeveloperException("An error has occured in the application, please contact your system administrator.","Invalid operator used in a criteria string: "+operatorString);
             }

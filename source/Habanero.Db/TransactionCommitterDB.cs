@@ -61,6 +61,14 @@ namespace Habanero.DB
         }
 
         /// <summary>
+        /// The <see cref="IDatabaseConnection"/> this transaction committer uses
+        /// </summary>
+        public IDatabaseConnection DatabaseConnection
+        {
+            get { return _databaseConnection; }
+        }
+
+        /// <summary>
         /// Begins the transaction on the appropriate databasource.
         /// </summary>
         protected override void BeginDataSource()
@@ -80,7 +88,7 @@ namespace Habanero.DB
 
         private IDatabaseConnection GetDatabaseConnection()
         {
-            return _databaseConnection ?? DatabaseConnection.CurrentConnection;
+            return _databaseConnection ?? DB.DatabaseConnection.CurrentConnection;
         }
 
         /// <summary>

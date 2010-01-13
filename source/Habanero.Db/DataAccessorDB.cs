@@ -28,7 +28,7 @@ namespace Habanero.DB
     public class DataAccessorDB : MarshalByRefObject, IDataAccessor
     {
         private readonly IBusinessObjectLoader _businessObjectLoader;
-
+        private readonly IDatabaseConnection _databaseConnection;
 
         ///<summary>
         /// The constructor for relational database data accessor. Sets up the appropriate
@@ -36,8 +36,20 @@ namespace Habanero.DB
         ///</summary>
         public DataAccessorDB()
         {
-            _businessObjectLoader = new BusinessObjectLoaderDB(DatabaseConnection.CurrentConnection);
+            _databaseConnection = DatabaseConnection.CurrentConnection;
+            _businessObjectLoader = new BusinessObjectLoaderDB(_databaseConnection);
         }
+
+        ///<summary>
+        /// The constructor for relational database data accessor. Sets up the appropriate
+        /// Business object loader for the databse using the current connection string.
+        ///</summary>
+        public DataAccessorDB(IDatabaseConnection databaseConnection)
+        {
+            _databaseConnection = databaseConnection;
+            _businessObjectLoader = new BusinessObjectLoaderDB(databaseConnection);
+        }
+
 
         /// <summary>
         /// The <see cref="IDataAccessor.BusinessObjectLoader"/> to use to load BusinessObjects
@@ -54,7 +66,7 @@ namespace Habanero.DB
         /// <returns></returns>
         public ITransactionCommitter CreateTransactionCommitter()
         {
-            return new TransactionCommitterDB();
+            return new TransactionCommitterDB(_databaseConnection);
         }
 
   

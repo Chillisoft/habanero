@@ -59,6 +59,14 @@ namespace Habanero.DB
         }
 
         /// <summary>
+        /// The <see cref="IDatabaseConnection"/> this loader is using.
+        /// </summary>
+        public IDatabaseConnection DatabaseConnection
+        {
+            get { return _databaseConnection; }
+        }
+
+        /// <summary>
         /// Loads a business object of type T, using the Primary key given as the criteria
         /// </summary>
         /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>

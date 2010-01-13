@@ -2372,7 +2372,8 @@ namespace Habanero.Test.BO
 
             //-------------Execute test ---------------------
             object[] values = new object[] {"100", "200", "300"};
-            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.In, values);
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.In, criteriaValues);
 
             //-------------Test Result ----------------------
             Assert.IsNotNull(criteria.Field);
@@ -2393,10 +2394,10 @@ namespace Habanero.Test.BO
             cp.Surname = "Surname1";
             cp.Save();
             object[] values = new object[] { "Surname1", "Surname2" };
-
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, values);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, criteriaValues);
 
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
@@ -2414,17 +2415,16 @@ namespace Habanero.Test.BO
             cp.Surname = "Surname3";
             cp.Save();
             object[] values = new object[] {"Surname1", "Surname2"};
-
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, values);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, criteriaValues);
 
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it doesn't match the criteria given.");
             //---------------Tear Down -------------------------          
         }
-
 
         [Test]
         public void TestIsMatch_OneProp_In_Null()
@@ -2435,17 +2435,16 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = null;
             object[] values = new object[] { null, "Surname2" };
-
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, values);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, criteriaValues);
 
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
             //---------------Tear Down -------------------------          
         }
-
 
         [Test]
         public void TestNotIsMatch_OneProp_In_Null()
@@ -2457,12 +2456,13 @@ namespace Habanero.Test.BO
             cp.Surname = "Surname3";
             cp.Save();
             object[] values = new object[] { null, "Surname2" };
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, values);
-
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.In, criteriaValues);
             bool isMatch = criteria.IsMatch(cp);
+
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it doesn't match the criteria given.");
             //---------------Tear Down -------------------------          

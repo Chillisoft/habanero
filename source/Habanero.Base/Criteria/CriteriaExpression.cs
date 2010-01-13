@@ -41,8 +41,8 @@ namespace Habanero.Base
                 " IS",
                 " NOT LIKE",
                 " LIKE",
-                " NOT IN",
-                " IN"
+                " NOT IN ",
+                " IN ",
             };
 
         private CriteriaExpression _left;
@@ -138,8 +138,16 @@ namespace Habanero.Base
                     if (pos == -1 || IsPosInsideBrackets(expressionWithoutQuotes, pos)) continue;
                     _left = new CriteriaExpression(quotesRemovedExpression.Substring(0, pos)
                                                        .PutBackQuotedSections().ToString().Trim(), _operators);
-                    _right = new CriteriaExpression(quotesRemovedExpression.Substring(pos + op.Length)
-                                                       .PutBackQuotedSections().ToString().Trim(), _operators);
+                    if (op.Trim() == "IN")
+                    {
+                        _right = CriteriaExpression.CreateInExpression(quotesRemovedExpression.Substring(pos + op.Length)
+                                                           .PutBackQuotedSections().ToString().Trim());
+                    }
+                    else
+                    {
+                        _right = new CriteriaExpression(quotesRemovedExpression.Substring(pos + op.Length)
+                                                            .PutBackQuotedSections().ToString().Trim(), _operators);
+                    }
                     _expression = op;
                     break;
                 }
@@ -244,6 +252,13 @@ namespace Habanero.Base
         public bool IsLeaf()
         {
             return ((this.Left == null) && (this.Right == null));
+        }
+
+        public static CriteriaExpression CreateInExpression(string expression)
+        {
+            CriteriaExpression criteriaExpression = new CriteriaExpression("");
+            criteriaExpression._expression = expression;
+            return criteriaExpression;
         }
     }
 }

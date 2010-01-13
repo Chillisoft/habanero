@@ -80,7 +80,7 @@ namespace Habanero.Test.BO
             CriteriaExpression tree = new CriteriaExpression("Name in ('Peter', 'Mark')");
             Assert.AreEqual(" IN", tree.Expression);
             Assert.AreEqual("Name", tree.Left.Expression);
-            Assert.AreEqual("Peter', 'Mark", tree.Right.Expression);
+            Assert.AreEqual("('Peter', 'Mark')", tree.Right.Expression);
         }
 
         [Test]
@@ -220,6 +220,22 @@ namespace Habanero.Test.BO
             //Test complete
             Assert.AreEqual("((Name = 'Test' OR Field1 >= 1) AND (Field2 <= 2 OR Name = 'Test2'))", tree.CompleteExpression);
         }
+
+        [Test]
+        public void Test_CreateInExpression()
+        {
+            //---------------Set up test pack-------------------
+            string expression = "'Item1', 'Item2'";
+
+            //---------------Execute Test ----------------------
+            CriteriaExpression inExpression = CriteriaExpression.CreateInExpression(expression);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expression, inExpression.CompleteExpression);
+            Assert.IsNull(inExpression.Left);
+            Assert.IsNull(inExpression.Right);
+        }
+
 
     }
 
