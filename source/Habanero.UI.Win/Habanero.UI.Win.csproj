@@ -95,6 +95,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ButtonSizePolicyWin.cs" />
+    <Compile Include="CloseBOEditorDialogWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="CollapsiblePanelGroupControlWin.cs">
       <SubType>Component</SubType>
     </Compile>

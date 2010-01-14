@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{18828910-F528-48F5-B56D-7C1658D0987A}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -148,6 +148,8 @@
     <Compile Include="FilterControl\MultiplePropStringTextBoxFilter.cs" />
     <Compile Include="FilterControl\StringStaticFilter.cs" />
     <Compile Include="Grid\CurrencyDisplaySettings.cs" />
+    <Compile Include="ICanCloseBOEditorDialogue.cs" />
+    <Compile Include="ICloseBOEditorDialog.cs" />
     <Compile Include="Selectors\IBOSelectorControl.cs" />
     <Compile Include="GroupBoxGroupControlManager.cs" />
     <Compile Include="IBOEditorControl.cs" />
