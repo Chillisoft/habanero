@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
@@ -159,6 +161,25 @@ namespace Habanero.UI.VWG
         {
             _menuItemCollection.Add((MenuItem) menuItem);
         }
+
+        #region Implementation of IEnumerable
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _menuItemCollection.GetEnumerator();
+        }
+
+        #endregion
+
+        #region Implementation of IEnumerable<IMenuItem>
+
+        IEnumerator<IMenuItem> IEnumerable<IMenuItem>.GetEnumerator()
+        {
+            return ((IEnumerable<IMenuItem>)_menuItemCollection).GetEnumerator();
+        }
+
+        #endregion
+
     }
 
     internal class MenuItemVWG : MenuItem, IMenuItem

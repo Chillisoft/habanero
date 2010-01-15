@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using Gizmox.WebGUI.Forms;
@@ -105,6 +106,24 @@ namespace Habanero.UI.VWG
         public IMenuItem this[int index]
         {
             get { return _list[index]; }
+        }
+
+        #endregion
+
+        #region Implementation of IEnumerable
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+
+        #endregion
+
+        #region Implementation of IEnumerable<IMenuItem>
+
+        IEnumerator<IMenuItem> IEnumerable<IMenuItem>.GetEnumerator()
+        {
+            return _list.GetEnumerator();
         }
 
         #endregion
@@ -297,7 +316,12 @@ namespace Habanero.UI.VWG
                     }
                     control.Dock = Habanero.UI.Base.DockStyle.Fill;
 
-                    SplitContainer splitContainer = (SplitContainer) _habaneroMenuItem.Form.Controls[0];
+                    // support the menu control either being the top control of the form, or the first subcontrol of the top control
+                    SplitContainer splitContainer;
+                    if (_habaneroMenuItem.Form.Controls[0] is SplitContainer)
+                        splitContainer = (SplitContainer)_habaneroMenuItem.Form.Controls[0];
+                    else
+                        splitContainer = (SplitContainer)_habaneroMenuItem.Form.Controls[0].Controls[0];
                     SplitterPanel panel2 = splitContainer.Panel2;
                     MainEditorPanelVWG mainEditorPanel = (MainEditorPanelVWG) panel2.Controls[0];
                     mainEditorPanel.MainTitleIconControl.Title.Text = this.Text;

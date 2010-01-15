@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using Habanero.Base;
@@ -150,6 +152,25 @@ namespace Habanero.UI.Win
         {
             _menuItemCollection.Add((MenuItem) menuItem);
         }
+
+
+        #region Implementation of IEnumerable
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _menuItemCollection.GetEnumerator();
+        }
+
+        #endregion
+
+        #region Implementation of IEnumerable<IMenuItem>
+
+        IEnumerator<IMenuItem> IEnumerable<IMenuItem>.GetEnumerator()
+        {
+            return ((IEnumerable<IMenuItem>)_menuItemCollection).GetEnumerator();
+        }
+
+        #endregion
     }
 
     internal class MenuItemWin : MenuItem, IMenuItem

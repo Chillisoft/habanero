@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -507,6 +508,25 @@ namespace Habanero.UI.Win
         public IMenuItem this[int index]
         {
             get { return _list[index]; }
+        }
+
+        #endregion
+
+
+        #region Implementation of IEnumerable
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+
+        #endregion
+
+        #region Implementation of IEnumerable<IMenuItem>
+
+        IEnumerator<IMenuItem> IEnumerable<IMenuItem>.GetEnumerator()
+        {
+            return _list.GetEnumerator();
         }
 
         #endregion
