@@ -84,7 +84,7 @@ namespace Habanero.Util
         ///</summary>
         ///<param name="obj">The object for which the property value is being requested</param>
         ///<param name="propertyName">The name of the property being set</param>
-        public static string getEnumPropertyValue(object obj, string propertyName)
+        public static string GetEnumPropertyValue(object obj, string propertyName)
         {
             if (obj == null) throw new HabaneroArgumentException("obj");
             if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");
@@ -291,17 +291,8 @@ namespace Habanero.Util
                     throw new TargetInvocationException(new Exception(
                                                             String.Format("Virtual property set for '{0}' does not exist for object of type '{1}'.", propertyName, className)));
                 }
-                Type propertyType = propInfo.PropertyType;
-                object newValue;
-                if (value != null)
-                {
-                    newValue = propertyType.IsAssignableFrom(value.GetType()) ? value : Convert.ChangeType(value, propertyType);
-                }
-                else
-                {
-                    newValue = Convert.ChangeType(value, propertyType);
-                }
-                propInfo.SetValue(obj, newValue, new object[] { });
+                SetPropValue(obj, propInfo, value);
+
             }
             catch (TargetInvocationException ex)
             {
@@ -339,8 +330,7 @@ namespace Habanero.Util
                     throw new TargetInvocationException(new Exception(
                                                             String.Format("Private property set for '{0}' does not exist for object of type '{1}'.", propertyName, className)));
                 }
-                object newValue = Convert.ChangeType(value, propInfo.PropertyType);
-                propInfo.SetValue(obj, newValue, new object[] { });
+                SetPropValue(obj, propInfo, value);
             }
             catch (TargetInvocationException ex)
             {
@@ -350,6 +340,19 @@ namespace Habanero.Util
                 throw ex.InnerException;
             }
         }
+
+        private static void SetPropValue(object obj, PropertyInfo propInfo, object value)
+        {
+            Type propertyType = GetUndelyingPropertType(propInfo);
+            object newValue = value == null ? value : ConvertType(value, propertyType);
+            propInfo.SetValue(obj, newValue, new object[] { });
+        }
+
+        private static object ConvertType(object value, Type propertyType)
+        {
+            return propertyType.IsAssignableFrom(value.GetType()) ? value : Convert.ChangeType(value, propertyType);
+        }
+
         ///<summary>
         /// Sets the value of a property of an object using reflection
         ///</summary>
@@ -373,8 +376,7 @@ namespace Habanero.Util
                     throw new TargetInvocationException(new Exception(
                                                             String.Format("Virtual property set for '{0}' does not exist for object of type '{1}'.", propertyName, className)));
                 }
-                object newValue = Convert.ChangeType(value, propInfo.PropertyType);
-                propInfo.SetValue(obj, newValue, new object[] { });
+                SetPropValue(obj, propInfo, value);
             }
             catch (TargetInvocationException ex)
             {
@@ -456,6 +458,41 @@ namespace Habanero.Util
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw ex.InnerException;
             }
+        }
+        /// <summary>
+        /// Returnes the Prop Type for the Prop propName.
+        /// If the Prop is Nullable then it returns the underlying type.
+        /// (i.e bool? will return bool)
+        /// </summary>
+        /// <param name="classType"></param>
+        /// <param name="propName"></param>
+        /// <returns>The Property Type</returns>
+        public static Type GetUndelyingPropertType(Type classType, string propName)
+        {
+            PropertyInfo propertyInfo = GetPropertyInfo(classType, propName) 
+                        ?? GetPrivatePropertyInfo(classType, propName);
+            if (propertyInfo == null || propertyInfo.PropertyType == null)
+            {
+                return typeof(object);
+            }
+            return GetUndelyingPropertType(propertyInfo);
+        }
+        /// <summary>
+        /// Returnes the Prop Type for the PropertyInfo.
+        /// If the PropertyInfo is Nullable then it returns the underlying type. 
+        /// (i.e bool? will return bool)
+        /// </summary>
+        /// <param name="propertyInfo"></param>
+        /// <returns></returns>
+        public static Type GetUndelyingPropertType(PropertyInfo propertyInfo)
+        {
+            Type propertyType = propertyInfo.PropertyType;
+            return IsNullablePropType(propertyType) ? Nullable.GetUnderlyingType(propertyType) : propertyType;
+        }
+
+        private static bool IsNullablePropType(Type propertyType)
+        {
+            return propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
     }
 

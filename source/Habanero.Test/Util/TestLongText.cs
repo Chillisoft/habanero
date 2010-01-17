@@ -236,7 +236,7 @@ namespace Habanero.Test.Util
             ISqlStatement sqlStatement = sqlCol[0];
             IList parameters = sqlStatement.Parameters;
             IDbDataParameter longTextParam = (IDbDataParameter) parameters[1];
-            string oracleTypeEnumString = ReflectionUtilities.getEnumPropertyValue(longTextParam, "OracleType");
+            string oracleTypeEnumString = ReflectionUtilities.GetEnumPropertyValue(longTextParam, "OracleType");
             Assert.IsTrue(oracleTypeEnumString == "Clob");
         }
     }

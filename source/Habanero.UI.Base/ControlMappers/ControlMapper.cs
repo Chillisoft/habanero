@@ -38,12 +38,7 @@ namespace Habanero.UI.Base
         /// the <see cref="ILog"/> used to log any messages for this class or its children
         /// </summary>
         protected static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.ControlMapper");
-        private readonly IErrorProvider _errorProvider;
-        private readonly IControlFactory _factory;
-        /// <summary>
-        /// Is the property Read Only.
-        /// </summary>
-        protected readonly bool _isReadOnly;
+
         /// <summary>
         /// A Hash table of additional Attributes available for this Control Mapper e.g. for DateTimePickerMapper may have date format
         /// </summary>
@@ -52,21 +47,41 @@ namespace Habanero.UI.Base
         /// The Business Object being mapped
         /// </summary>
         protected IBusinessObject _businessObject;
-        /// <summary>
-        /// The Control being mapped to 
-        /// </summary>
-        protected IControlHabanero _control;
+
         /// <summary>
         /// Whether the control must allow editing or not.
         /// </summary>
-        protected bool _isEditable;
+        protected bool IsEditable { get; private set; }
+
+        private IBOProp BOProp { get; set; }
+
+
         /// <summary>
-        /// The Property Name being mapped
+        /// Gets the error provider for this control <see cref="IErrorProvider"/>
         /// </summary>
-        protected string _propertyName;
+        public IErrorProvider ErrorProvider { get; private set; }
 
-        private IBOProp _boProp;
+        ///<summary>
+        /// Returns the Control Factory that this Control Mapper is set up to use
+        ///</summary>
+        public IControlFactory ControlFactory { get; private set; }
 
+        ///<summary>
+        /// Returns the value of the IsReadonly field as set up in the Control Mappers's construtor.
+        ///</summary>
+        public bool IsReadOnly { get; set; }
+
+        #region IControlMapper Members
+
+        /// <summary>
+        /// Returns the control being mapped
+        /// </summary>
+        public IControlHabanero Control { get; protected set; }
+
+        /// <summary>
+        /// Returns the name of the property being edited in the control
+        /// </summary>
+        public string PropertyName { get; protected set; }
         ///<summary>
         /// Gets and Sets the Class Def of the Business object whose property
         /// this control maps.
@@ -86,59 +101,18 @@ namespace Habanero.UI.Base
         {
             if (ctl == null) throw new ArgumentNullException("ctl");
             if (factory == null) throw new ArgumentNullException("factory");
-            _control = ctl;
-            _propertyName = propName;
-            _isReadOnly = isReadOnly;
-            _factory = factory;
-            _errorProvider = _factory.CreateErrorProvider();
-            if (!_isReadOnly)
+            Control = ctl;
+            PropertyName = propName;
+            IsReadOnly = isReadOnly;
+            ControlFactory = factory;
+            ErrorProvider = ControlFactory.CreateErrorProvider();
+            if (!IsReadOnly)
             {
                 AddKeyPressHandlers();
             }
             UpdateIsEditable();
         }
 
-        /// <summary>
-        /// Gets the error provider for this control <see cref="IErrorProvider"/>
-        /// </summary>
-        public IErrorProvider ErrorProvider
-        {
-            get { return _errorProvider; }
-        }
-
-        ///<summary>
-        /// Returns the Control Factory that this Control Mapper is set up to use
-        ///</summary>
-        public IControlFactory ControlFactory
-        {
-            get { return _factory; }
-        }
-
-        ///<summary>
-        /// Returns the value of the IsReadonly field as set up in the Control Mappers's construtor.
-        ///</summary>
-        public bool IsReadOnly
-        {
-            get { return _isReadOnly; }
-        }
-
-        #region IControlMapper Members
-
-        /// <summary>
-        /// Returns the control being mapped
-        /// </summary>
-        public IControlHabanero Control
-        {
-            get { return _control; }
-        }
-
-        /// <summary>
-        /// Returns the name of the property being edited in the control
-        /// </summary>
-        public string PropertyName
-        {
-            get { return _propertyName; }
-        }
 
         /// <summary>
         /// Gets and sets the business object that has a property
@@ -158,13 +132,13 @@ namespace Habanero.UI.Base
                 _businessObject = value;
                 if (value != null) value.IsValid();//This forces the object to do validation so that the error provider is filled correctly.
 
-                if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
+                if (_businessObject != null && _businessObject.Props.Contains(PropertyName))
                 {
-                    _boProp = _businessObject.Props[_propertyName];
+                    BOProp = _businessObject.Props[PropertyName];
                 }
                 if (_businessObject == null)
                 {
-                    _boProp = null;
+                    BOProp = null;
                 }
                 OnBusinessObjectChanged();
                 UpdateIsEditable();
@@ -193,13 +167,13 @@ namespace Habanero.UI.Base
 
         private void AddKeyPressHandlers()
         {
-            IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
-            mapperStrategy.AddKeyPressEventHandler(_control);
+            IControlMapperStrategy mapperStrategy = ControlFactory.CreateControlMapperStrategy();
+            mapperStrategy.AddKeyPressEventHandler(Control);
         }
 
         private void RemoveCurrentBOPropHandlers()
         {
-            IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
+            IControlMapperStrategy mapperStrategy = ControlFactory.CreateControlMapperStrategy();
             mapperStrategy.RemoveCurrentBOPropHandlers(this, CurrentBOProp());
         }
 
@@ -213,13 +187,15 @@ namespace Habanero.UI.Base
         /// An overridable method to provide custom logic to carry out
         /// when the business object is changed
         /// </summary>
+        // ReSharper disable VirtualMemberNeverOverriden.Global
         protected virtual void OnBusinessObjectChanged()
         {
         }
+        // ReSharper restore VirtualMemberNeverOverriden.Global
 
         private void AddCurrentBOPropHandlers()
         {
-            IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
+            IControlMapperStrategy mapperStrategy = ControlFactory.CreateControlMapperStrategy();
             mapperStrategy.AddCurrentBOPropHandlers(this, CurrentBOProp());
         }
 
@@ -228,11 +204,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public IBOProp CurrentBOProp()
         {
-//            if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
-//            {
-//                return _businessObject.Props[_propertyName];
-//            }
-            return _boProp;
+            return BOProp;
         }
         /// <summary>
         /// is the property a virtual property i.e. is it loaded via reflection or via a relationship.
@@ -245,13 +217,13 @@ namespace Habanero.UI.Base
 
         private bool IsPropertyViaRelationship()
         {
-            return _propertyName.IndexOf(".") != -1;
+            return PropertyName.IndexOf(".") != -1;
         }
 
 
         private bool IsPropertyReflective()
         {
-            return _propertyName.IndexOf("-") != -1;
+            return PropertyName.IndexOf("-") != -1;
         }
 
         /// <summary>
@@ -265,45 +237,38 @@ namespace Habanero.UI.Base
             {
                 virtualPropertySetExists = DoesVirtualPropertyHaveSetter();
             }
-            _isEditable = !_isReadOnly && _businessObject != null
+            IsEditable = !IsReadOnly && _businessObject != null
                           && (CurrentBOProp() != null || virtualPropertySetExists);
 
-            //TODO: make this support single-table-inheritance.
-            //if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsGuidObjectID &&
-            //    _businessObject.ID.Contains(_propertyName) &&
-            //    !_businessObject.Status.IsNew)
-            //{
-            //    _isEditable = false;
-            //}
-            if (_isEditable && !virtualPropertySetExists)
+            if (IsEditable && !virtualPropertySetExists)
             {
                 if (_businessObject != null)
                     if (CurrentBOProp() != null)
                     {
-                        _isEditable = CheckReadWriteRules();
+                        IsEditable = CheckReadWriteRules();
                     }
             }
-            UpdateControlVisualState(_isEditable);
-            UpdateControlEnabledState(_isEditable);
+            UpdateControlVisualState(IsEditable);
+            UpdateControlEnabledState(IsEditable);
         }
 
         protected virtual void UpdateControlEnabledState(bool editable)
         {
-            _control.Enabled = editable;
+            Control.Enabled = editable;
         }
 
         protected virtual void UpdateControlVisualState(bool editable)
         {
             if (editable)
             {
-                _control.ForeColor = Color.Black;
-                if (_control is ICheckBox) _control.BackColor = SystemColors.Control;
-                else _control.BackColor = Color.White;
+                Control.ForeColor = Color.Black;
+                if (Control is ICheckBox) Control.BackColor = SystemColors.Control;
+                else Control.BackColor = Color.White;
             }
             else
             {
-                _control.ForeColor = Color.Black;
-                _control.BackColor = Color.Beige;
+                Control.ForeColor = Color.Black;
+                Control.BackColor = Color.Beige;
             }
         }
 
@@ -313,35 +278,11 @@ namespace Habanero.UI.Base
             string message;
             //Should Add the message to tool tip text
             return boProp.IsEditable(out message);
-//            IPropDef propDef = boProp.PropDef;
-//            switch (propDef.ReadWriteRule)
-//            {
-//                case PropReadWriteRule.ReadOnly:
-//                    _isEditable = false;
-//                    break;
-//                case PropReadWriteRule.WriteOnce:
-//                    object persistedPropertyValue = boProp.PersistedPropertyValue;
-//                    if (persistedPropertyValue is string)
-//                    {
-//                        _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
-//                    }
-//                    else
-//                    {
-//                        _isEditable = persistedPropertyValue == null;
-//                    }
-//                    break;
-//                case PropReadWriteRule.WriteNew:
-//                    _isEditable = _businessObject.Status.IsNew;
-//                    break;
-//                case PropReadWriteRule.WriteNotNew:
-//                    _isEditable = !_businessObject.Status.IsNew;
-//                    break;
-//            }
         }
 
         private bool DoesVirtualPropertyHaveSetter()
         {
-            string virtualPropName = _propertyName.Substring(1, _propertyName.Length - 2);
+            string virtualPropName = PropertyName.Substring(1, PropertyName.Length - 2);
             PropertyInfo propertyInfo =
                 ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
             bool virtualPropertySetExists = propertyInfo != null && propertyInfo.CanWrite;
@@ -458,7 +399,7 @@ namespace Habanero.UI.Base
             if (_businessObject != null)
             {
                 BOMapper boMapper = new BOMapper(_businessObject);
-                return boMapper.GetPropertyValueToDisplay(_propertyName);
+                return boMapper.GetPropertyValueToDisplay(PropertyName);
             }
             return null;
         }
@@ -475,11 +416,11 @@ namespace Habanero.UI.Base
 
             try
             {
-                boMapper.SetDisplayPropertyValue(_propertyName, value);
+                boMapper.SetDisplayPropertyValue(PropertyName, value);
             }
             catch (HabaneroIncorrectTypeException ex)
             {
-                this.ErrorProvider.SetError(_control, ex.Message);
+                this.ErrorProvider.SetError(Control, ex.Message);
                 return;
             }
             UpdateErrorProviderErrorMessage();
@@ -493,11 +434,11 @@ namespace Habanero.UI.Base
 
             if (CurrentBOProp() == null)
             {
-                ErrorProvider.SetError(_control, "");
+                ErrorProvider.SetError(Control, "");
                 return;
             }
 
-            ErrorProvider.SetError(_control, CurrentBOProp().InvalidReason);
+            ErrorProvider.SetError(Control, CurrentBOProp().InvalidReason);
         }
         /// <summary>
         /// Returns the Error Provider's Error message.
@@ -505,7 +446,7 @@ namespace Habanero.UI.Base
         /// <returns></returns>
         public virtual string GetErrorMessage()
         {
-            return ErrorProvider.GetError(_control);
+            return ErrorProvider.GetError(Control);
         }
         /// <summary>
         /// A form field can have attributes defined in the class definition.

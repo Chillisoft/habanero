@@ -250,8 +250,6 @@ namespace Habanero.UI.Base
         ///</summary>
         public class FieldInfo
         {
-            private readonly IControlHabanero _labelControl;
-            private readonly string _propertyName;
             private readonly IControlMapper _controlMapper;
 
             ///<summary>
@@ -262,26 +260,20 @@ namespace Habanero.UI.Base
             ///<param name="controlMapper">The control mapper that this field info is mapping</param>
             public FieldInfo(string propertyName, IControlHabanero labelControl, IControlMapper controlMapper)
             {
-                _propertyName = propertyName;
-                _labelControl = labelControl;
+                PropertyName = propertyName;
+                LabelControl = labelControl;
                 _controlMapper = controlMapper;
             }
 
             ///<summary>
             /// Returns the PropertyName of this <see cref="FieldInfo"/>
             ///</summary>
-            public string PropertyName
-            {
-                get { return _propertyName; }
-            }
+            public string PropertyName { get; private set; }
 
             ///<summary>
             /// Returns the Label Control for this <see cref="FieldInfo"/>
             ///</summary>
-            public IControlHabanero LabelControl
-            {
-                get { return _labelControl; }
-            }
+            public IControlHabanero LabelControl { get; private set; }
 
             ///<summary>
             /// Returns the Label Control for this <see cref="FieldInfo"/>
@@ -291,7 +283,7 @@ namespace Habanero.UI.Base
                 )]
             public ILabel Label
             {
-                get { return (ILabel) _labelControl; }
+                get { return (ILabel) LabelControl; }
             }
 
             ///<summary>

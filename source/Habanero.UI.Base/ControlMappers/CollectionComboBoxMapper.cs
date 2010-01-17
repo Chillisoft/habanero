@@ -184,7 +184,7 @@ namespace Habanero.UI.Base
             }
             return _businessObject == null
                        ? null
-                       : _businessObject.GetPropertyValue(_propertyName);
+                       : _businessObject.GetPropertyValue(PropertyName);
         }
 
         /// <summary>

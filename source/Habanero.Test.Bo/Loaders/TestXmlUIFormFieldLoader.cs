@@ -21,6 +21,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders
@@ -111,7 +112,26 @@ namespace Habanero.Test.BO.Loaders
         {
             IUIFormField uiProp =
                 loader.LoadUIProperty(@"<field property=""testpropname"" toolTipText=""My Tool Tip"" />");
+
             Assert.AreEqual("My Tool Tip", uiProp.ToolTipText);
+        }
+        [Test]
+        public void Test_Load_WhenShowAsCompulsorySet()
+        {
+            IUIFormField uiProp =
+                loader.LoadUIProperty(@"<field property=""testpropname"" showAsCompulsory=""true"" />");
+            bool? privatePropertyValue = (bool?) ReflectionUtilities.GetPrivatePropertyValue(uiProp, "ShowAsCompulsory");
+            Assert.IsTrue(privatePropertyValue.Value);
+            Assert.IsTrue(uiProp.IsCompulsory);
+        }
+        [Test]
+        public void Test_Load_WhenShowAsCompulsoryNotSet()
+        {
+            IUIFormField uiProp =
+                loader.LoadUIProperty(@"<field property=""testpropname"" />");
+            bool? privatePropertyValue = (bool?)ReflectionUtilities.GetPrivatePropertyValue(uiProp, "ShowAsCompulsory");
+            Assert.IsFalse(privatePropertyValue.GetValueOrDefault());
+            Assert.IsFalse(uiProp.IsCompulsory);
         }
 
         [Test]

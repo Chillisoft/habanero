@@ -70,7 +70,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public override void ApplyChangesToBusinessObject()
         {
-            if (!_isEditable) return;
+            if (!IsEditable) return;
 
             bool newValue = _checkBox.Checked;
             bool valueChanged = false;

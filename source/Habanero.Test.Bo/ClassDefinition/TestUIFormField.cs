@@ -23,6 +23,7 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -280,8 +281,8 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void Test_NotEquals()
         {
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), LayoutStyle.Label);
-            UIFormField uiFormField2 = new UIFormField("L", "L", "G", "", "", "", true, "", new Hashtable(), LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, null, "", new Hashtable(), LayoutStyle.Label);
+            UIFormField uiFormField2 = new UIFormField("L", "L", "G", "", "", "", true, null, "", new Hashtable(), LayoutStyle.Label);
             Assert.IsFalse(uiFormField1 == uiFormField2);
             Assert.IsTrue(uiFormField1 != uiFormField2);
             Assert.IsFalse(uiFormField1.Equals(uiFormField2));
@@ -290,8 +291,8 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void Test_NotEquals_LabelDiff()
         {
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), LayoutStyle.Label);
-            UIFormField uiFormField2 = new UIFormField("G", "L", "", "", "", "", true, "", new Hashtable(), LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, null, "", new Hashtable(), LayoutStyle.Label);
+            UIFormField uiFormField2 = new UIFormField("G", "L", "", "", "", "", true, null, "", new Hashtable(), LayoutStyle.Label);
             Assert.IsFalse(uiFormField1.Equals(uiFormField2));
             Assert.IsFalse(uiFormField1 == uiFormField2);
             //Assert.AreNotEqual(uiFormField1, uiFormField2);
@@ -308,7 +309,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestHasParameterValue_False()
         {
             //---------------Set up test pack-------------------
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, null, "", new Hashtable(), LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -325,7 +326,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
             const string parameterName = "bob";
             parameters.Add(parameterName, "I can like to have a value");
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, null, "", parameters, LayoutStyle.Label);
             
             //---------------Assert Precondition----------------
 
@@ -340,7 +341,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestRowSpan_NotSet()
         {
             //---------------Set up test pack-------------------
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, null, "", new Hashtable(), LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -355,7 +356,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable {{"rowSpan", 3}};
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, null, "", parameters, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -368,7 +369,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestColSpan_NotSet()
         {
             //---------------Set up test pack-------------------
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, null, "", new Hashtable(), LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -383,7 +384,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable {{"colSpan", 3}};
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, null, "", parameters, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -397,7 +398,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable {{"numLines", 3}};
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, LayoutStyle.Label);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, null, "", parameters, LayoutStyle.Label);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             int rowSpan = uiFormField1.RowSpan;
@@ -410,10 +411,10 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable {{"numLines", 3}, {"rowSpan", 2}};
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, LayoutStyle.Label);
+            UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, null, "", parameters, LayoutStyle.Label);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            int rowSpan = uiFormField1.RowSpan;
+            int rowSpan = uiFormField.RowSpan;
             //---------------Test Result -----------------------
             Assert.AreEqual(2, rowSpan);
         }
@@ -422,11 +423,11 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestAlignment_NotSet()
         {
             //---------------Set up test pack-------------------
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), LayoutStyle.Label);
+            UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, null, "", new Hashtable(), LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            string alignment = uiFormField1.Alignment;
+            string alignment = uiFormField.Alignment;
             //---------------Test Result -----------------------
             Assert.IsNull(alignment);
 
@@ -437,13 +438,130 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable {{"alignment", "right"}};
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, LayoutStyle.Label);
+            UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, null, "", parameters, LayoutStyle.Label);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            string alignment = uiFormField1.Alignment;
+            string alignment = uiFormField.Alignment;
             //---------------Test Result -----------------------
             Assert.AreEqual("right", alignment);
+        }
+
+        [Test]
+        public void Test_showAsCompulsory_WhenUseCompNull_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, null
+                    , "", null, LayoutStyle.Label);
+            //---------------Test Result -----------------------
+            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(uiFormField, "ShowAsCompulsory");
+            Assert.IsNull(showAsCompulsory);
+        }
+
+        [Test]
+        public void Test_showAsCompulsory_WhenUseCompFalse_ShouldBeFalse()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, false
+                    , "", null, LayoutStyle.Label);
+            //---------------Test Result -----------------------
+            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(uiFormField, "ShowAsCompulsory");
+            Assert.IsNotNull(showAsCompulsory);
+            Assert.IsFalse((bool) showAsCompulsory);
+        }
+
+        [Test]
+        public void Test_showAsCompulsory_WhenUseCompTrue_ShouldBeTrue()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, true
+                    , "", null, LayoutStyle.Label);
+            //---------------Test Result -----------------------
+            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(uiFormField, "ShowAsCompulsory");
+            Assert.IsNotNull(showAsCompulsory);
+            Assert.IsTrue((bool)showAsCompulsory);
+        }
+
+        [Test]
+        public void TestIsCompulsory_WhenBOPropFalse_AndShowAsCompTrue_ShouldBeTrue()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
+            const string propertyName = "TestProp";
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
+            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", true);
+            var propDef = classDef.PropDefcol[propertyName];
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propDef.Compulsory);
+            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            Assert.IsTrue((bool)showAsCompulsory);
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isCompulsory);
+        }
+        [Test]
+        public void TestIsCompulsory_WhenBOPropTrue_AndShowAsCompFalse_ShouldBeTrue()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
+            const string propertyName = "TestProp";
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
+            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", false);
+            var propDef = classDef.PropDefcol[propertyName];
+            propDef.Compulsory = true;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.Compulsory);
+            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            Assert.IsFalse((bool)showAsCompulsory);
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isCompulsory);
+        }
+        [Test]
+        public void TestIsCompulsory_WhenBOPropTrue_AndShowAsCompNull_ShouldBeTrue()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
+            const string propertyName = "TestProp";
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
+            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", null);
+            var propDef = classDef.PropDefcol[propertyName];
+            propDef.Compulsory = true;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.Compulsory);
+            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            Assert.IsNull(showAsCompulsory);
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isCompulsory);
+        }
+        [Test]
+        public void TestIsCompulsory_WhenBOPropfalse_AndShowAsCompNull_ShouldBeTrue()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
+            const string propertyName = "TestProp";
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
+            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", null);
+            var propDef = classDef.PropDefcol[propertyName];
+            propDef.Compulsory = true;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.Compulsory);
+            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            Assert.IsNull(showAsCompulsory);
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isCompulsory);
         }
 
         [Test]
@@ -451,9 +569,10 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = MyBO.LoadDefaultClassDef();
-            IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            const string propertyName = "TestProp";
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
             //---------------Assert Precondition----------------
-
+            Assert.IsFalse(classDef.PropDefcol[propertyName].Compulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;
             //---------------Test Result -----------------------
@@ -465,9 +584,10 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            IUIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            const string propertyName = "TestProp";
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
             //---------------Assert Precondition----------------
-
+            Assert.IsTrue(classDef.PropDefcol[propertyName].Compulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;
             //---------------Test Result -----------------------
@@ -582,14 +702,14 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(LayoutStyle.Label, uiFormField1.Layout);
         }
 
-        private static UIFormField CreateFormField() { return new UIFormField("L", "L", "", "", "", "", true, "", null, LayoutStyle.Label); }
-        private static UIFormField CreateFormField(string propName) { return new UIFormField("L", propName, "", "", "", "", true, "", null, LayoutStyle.Label); }
+        private static UIFormField CreateFormField() { return new UIFormField("L", "L", "", "", "", "", true, null, "", null, LayoutStyle.Label); }
+        private static UIFormField CreateFormField(string propName) { return new UIFormField("L", propName, "", "", "", "", true, null, "", null, LayoutStyle.Label); }
 
         // Grants access to protected fields
         private class UIFormFieldInheritorStub : UIFormField
         {
             public UIFormFieldInheritorStub()
-                : base("label", "prop", "control", null, null, null, true, null, null,  LayoutStyle.Label)
+                : base("label", "prop", "control", null, null, null, true, null, null, null, LayoutStyle.Label)
             {}
 
             public void SetLabel(string name)

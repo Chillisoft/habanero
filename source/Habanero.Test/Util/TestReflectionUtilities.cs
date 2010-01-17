@@ -146,13 +146,113 @@ namespace Habanero.Test.Util
             Assert.IsNull(classWithProperties.InterfaceProperty);
         }
 
+        [Test]
+        public void Test_SetPrivateProp_WherePropNullableBool()
+        {
+            //---------------Set up test pack-------------------
+            const string propertyName = "NullableBoolProp";
+            var classWithProperties = new ClassWithProperties();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName));
+            //---------------Execute Test ----------------------
+            ReflectionUtilities.SetPrivatePropertyValue(classWithProperties, propertyName, true);
+            //---------------Test Result -----------------------
+            bool propValue = (bool) ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
+            Assert.IsTrue(propValue);
+        }
+
+        [Test]
+        public void Test_SetPrivateProp_toNull_WherePropNullableBool()
+        {
+            //---------------Set up test pack-------------------
+            const string propertyName = "NullableBoolProp";
+            var classWithProperties = new ClassWithProperties();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName));
+            //---------------Execute Test ----------------------
+            ReflectionUtilities.SetPrivatePropertyValue(classWithProperties, propertyName, null);
+            //---------------Test Result -----------------------
+            bool? propValue = (bool?)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
+            Assert.IsNull(propValue);
+        }
+        [Test]
+        public void Test_SetPrivateProp_WherePropBool()
+        {
+            //---------------Set up test pack-------------------
+            const string propertyName = "BoolProp";
+            var classWithProperties = new ClassWithProperties();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse((bool)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName));
+            //---------------Execute Test ----------------------
+            ReflectionUtilities.SetPrivatePropertyValue(classWithProperties, propertyName, true);
+            //---------------Test Result -----------------------
+            bool propValue = (bool)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
+            Assert.IsTrue(propValue);
+        }
+        [Test]
+        public void Test_SetPrivatePropToNull_WherePropBool()
+        {
+            //---------------Set up test pack-------------------
+            const string propertyName = "BoolProp";
+            var classWithProperties = new ClassWithProperties();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse((bool)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName));
+            //---------------Execute Test ----------------------
+            ReflectionUtilities.SetPrivatePropertyValue(classWithProperties, propertyName, null);
+            //---------------Test Result -----------------------
+            bool propValue = (bool)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
+            Assert.IsFalse(propValue);
+        }
+        [Test]
+        public void Test_GetUnderlyingPropertyType_WhenPublicNullableBool_ShouldReturnBool()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Type propType = ReflectionUtilities.GetUndelyingPropertType(typeof(ClassWithProperties), "PublicNullableBoolProp");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(typeof(bool), propType);
+        }
+        [Test]
+        public void Test_GetUnderlyingPropertyType_WhenPrivateNullableBool_ShouldReturnBool()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Type propType = ReflectionUtilities.GetUndelyingPropertType(typeof (ClassWithProperties), "NullableBoolProp");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(typeof(bool), propType);
+        }
+        [Test]
+        public void Test_GetUnderlyingPropertyType_WhenPrivateBool_ShouldReturnBool()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Type propType = ReflectionUtilities.GetUndelyingPropertType(typeof(ClassWithProperties), "BoolProp");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(typeof(bool), propType);
+        }
+
+        // ReSharper disable UnusedMember.Local
         private class ClassWithProperties
         {
             public object ObjectProperty { get; set; }
             public string StringProperty { get; set; }
             public int IntProperty { get; set; }
             public IMyInterface InterfaceProperty { get; set; }
+
+            private bool? NullableBoolProp { get; set; }
+            public bool? PublicNullableBoolProp { get; set; }
+            private bool BoolProp { get; set; }
         }
+        // ReSharper restore UnusedMember.Local
 
         internal interface IMyInterface
         {

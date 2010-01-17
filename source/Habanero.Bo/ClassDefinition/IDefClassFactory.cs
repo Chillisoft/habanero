@@ -189,11 +189,12 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="mapperTypeName"></param>
         ///<param name="mapperAssembly"></param>
         ///<param name="editable"></param>
+        ///<param name="showAsCompulsory"></param>
         ///<param name="toolTipText"></param>
         ///<param name="propertyAttributes"></param>
         ///<param name="layout"></param>
         ///<returns></returns>
-        IUIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, LayoutStyle layout);
+        IUIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, bool? showAsCompulsory, string toolTipText, Hashtable propertyAttributes, LayoutStyle layout);
 
         ///<summary>
         ///</summary>

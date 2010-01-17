@@ -320,7 +320,7 @@ namespace Habanero.Test.BO.ClassDefinition
             return uiFormColumn;
         }
 
-        private UIFormField CreateUIFormField(string label, string propName, Hashtable parameters) { return new UIFormField(label, propName, "control", null, null, null, true, null, parameters, LayoutStyle.Label); }
+        private UIFormField CreateUIFormField(string label, string propName, Hashtable parameters) { return new UIFormField(label, propName, "control", null, null, null, true, null, null, parameters, LayoutStyle.Label); }
 
         public UIFormColumn CreateUIFormColumn_1FieldWith2RowAnd2ColSpan()
         {

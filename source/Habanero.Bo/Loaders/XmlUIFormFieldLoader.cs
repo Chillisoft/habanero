@@ -42,6 +42,7 @@ namespace Habanero.BO.Loaders
         private TriggerCol _triggers = new TriggerCol();
         private string _toolTipText;
         private LayoutStyle _layout;
+        private bool _showAsCompulsory;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -81,7 +82,7 @@ namespace Habanero.BO.Loaders
         {
 			return _defClassFactory.CreateUIFormProperty(_label, _propertyName,
 				_controlTypeName, _controlAssembly, _mapperTypeName, _mapperTypeAssembly,
-                _editable, _toolTipText, _parameters,  _layout);
+                _editable, _showAsCompulsory, _toolTipText, _parameters, _layout);
         }
 
         /// <summary>
@@ -96,6 +97,7 @@ namespace Habanero.BO.Loaders
             LoadMapperTypeName();
             LoadMapperTypeAssembly();
             LoadEditable();
+            LoadShowAsCompulsory();
             LoadToolTipText();
             LoadLayout();
             LoadParameters();
@@ -193,6 +195,23 @@ namespace Habanero.BO.Loaders
             catch (Exception ex)
             {
                 throw new InvalidXmlDefinitionException("The 'editable' attribute " +
+                    "in a 'field' element is invalid. The valid options " +
+                    "are 'true' and 'false'.", ex);
+            }
+        }
+        /// <summary>
+        /// Loads the "edtiable" attribute from the reader. This method is
+        /// called by LoadFromReader().
+        /// </summary>
+        private void LoadShowAsCompulsory()
+        {
+            try
+            {
+                _showAsCompulsory = Convert.ToBoolean(_reader.GetAttribute("showAsCompulsory"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("The 'showAsCompulsory' attribute " +
                     "in a 'field' element is invalid. The valid options " +
                     "are 'true' and 'false'.", ex);
             }

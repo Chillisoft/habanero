@@ -30,15 +30,10 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class UIFormField : IUIFormField
     {
-        private string _label;
-        private string _propertyName;
-        private readonly string _mapperAssembly;
         private string _controlAssembly;
 		private string _controlTypeName;
 		private Type _controlType;
-        private readonly Hashtable _parameters;
-       // private readonly ITriggerCol _triggers;
-        private readonly string _toolTipText;
+        // private readonly ITriggerCol _triggers;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -46,7 +41,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="label">The label</param>
         /// <param name="propertyName">The property name</param>
         public UIFormField(string label, string propertyName)
-            : this(label, propertyName, null, null, null, null, true, null, new Hashtable(), LayoutStyle.Label )
+            : this(label, propertyName, null, null, null, null, true, null, null, new Hashtable(), LayoutStyle.Label)
         { } 
         
         /// <summary>
@@ -63,7 +58,8 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
         public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
                            bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
-            : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, layout)
+            : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable
+            , null, toolTipText, parameters, layout)
         { }
 
         /// <summary>
@@ -71,23 +67,28 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="label">The label</param>
         /// <param name="propertyName">The property name</param>
-		/// <param name="controlTypeName">The control type name</param>
-		/// <param name="controlAssembly">The control assembly</param>
+        /// <param name="controlTypeName">The control type name</param>
+        /// <param name="controlAssembly">The control assembly</param>
         /// <param name="mapperTypeName">The mapper type name</param>
         /// <param name="mapperAssembly">The mapper assembly</param>
         /// <param name="editable">Whether the control is editable or not</param>
+        /// <param name="showAsComulsory"></param>
         /// <param name="toolTipText">The tool tip text to be used.</param>
         /// <param name="parameters">The property attributes</param>
         /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
-        public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
+        public UIFormField(string label, string propertyName, string controlTypeName
+            , string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable
+            , bool? showAsComulsory, string toolTipText, Hashtable parameters, LayoutStyle layout)
 			: this(label, propertyName, null, controlTypeName, controlAssembly,
-                    mapperTypeName, mapperAssembly, editable, toolTipText, parameters, layout)
+                    mapperTypeName, mapperAssembly, editable, showAsComulsory, toolTipText, parameters, layout)
 		{}
 
         /// <summary>
         /// The master constructor for all of the possible arguments
         /// </summary>
-        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
+        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName
+            , string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable
+            , bool? showAsCompulsory, string toolTipText, Hashtable parameters, LayoutStyle layout)
         {
 			if (controlType != null)
         	{
@@ -99,13 +100,14 @@ namespace Habanero.BO.ClassDefinition
         		_controlAssembly = controlAssembly;
         	}
             if (parameters == null) parameters = new Hashtable(0);
-            _label = label;
-            _propertyName = propertyName;
+            Label = label;
+            PropertyName = propertyName;
             MapperTypeName = mapperTypeName;
-            _mapperAssembly = mapperAssembly;
+            MapperAssembly = mapperAssembly;
             Editable = editable;
-            _toolTipText = toolTipText;
-            _parameters = parameters;
+            ToolTipText = toolTipText;
+            Parameters = parameters;
+            ShowAsCompulsory = showAsCompulsory;
             //_controlType = controlType;
             //_triggers = triggers ?? new TriggerCol();
             Layout = layout;
@@ -113,23 +115,15 @@ namespace Habanero.BO.ClassDefinition
 
 		#region Properties
 
-		/// <summary>
+        /// <summary>
         /// Returns the label
         /// </summary>
-		public string Label
-        {
-            get { return _label; }
-            set { _label = value; }
-        }
+        public string Label { get; set; }
 
         /// <summary>
         /// Returns the property name
         /// </summary>
-        public string PropertyName
-        {
-            get { return _propertyName; }
-            set { _propertyName = value; }
-        }
+        public string PropertyName { get; set; }
 
         /// <summary>
         /// Returns the mapper type name
@@ -137,14 +131,11 @@ namespace Habanero.BO.ClassDefinition
         public string MapperTypeName { get; set; }
 
         ///<summary>
-		/// Returns the mapper assembly
-		///</summary>
-		public string MapperAssembly
-		{
-			get { return _mapperAssembly; }
-		}
+        /// Returns the mapper assembly
+        ///</summary>
+        public string MapperAssembly { get; private set; }
 
-		/// <summary>
+        /// <summary>
 		/// The name of the property type assembly
 		/// </summary>
 		public string ControlAssemblyName
@@ -194,18 +185,12 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// Returns the text that will be shown in the Tool Tip for the control.
         ///</summary>
-        public string ToolTipText
-        {
-            get { return _toolTipText; }
-        }
+        public string ToolTipText { get; private set; }
 
         /// <summary>
         /// Returns the Hashtable containing the property attributes
         /// </summary>
-        public Hashtable Parameters
-        {
-            get { return this._parameters; }
-        }
+        public Hashtable Parameters { get; private set; }
 
         ///// <summary>
         ///// Returns the collection of triggers managed by this
@@ -248,9 +233,9 @@ namespace Habanero.BO.ClassDefinition
         /// <returns> The text that will be used for the tool tip for this control. </returns>
         public string GetToolTipText(IClassDef classDef)
         {
-            if (!String.IsNullOrEmpty(_toolTipText))
+            if (!String.IsNullOrEmpty(ToolTipText))
             {
-                return _toolTipText;
+                return ToolTipText;
             }
             string toolTipText = null;
             IPropDef propDef = GetPropDefIfExists(classDef);
@@ -281,9 +266,9 @@ namespace Habanero.BO.ClassDefinition
         ///<returns> The label for this form field </returns>
         public string GetLabel(IClassDef classDef)
         {
-            if (!String.IsNullOrEmpty(_label))
+            if (!String.IsNullOrEmpty(Label))
             {
-                return _label + GetIsCompulsoryIndicator();
+                return Label + GetIsCompulsoryIndicator();
             }
             string label = null;
             IPropDef propDef = GetPropDefIfExists(classDef);
@@ -293,7 +278,7 @@ namespace Habanero.BO.ClassDefinition
             }
             if (String.IsNullOrEmpty(label))
             {
-                label = StringUtilities.DelimitPascalCase(_propertyName, " ");
+                label = StringUtilities.DelimitPascalCase(PropertyName, " ");
             }
             return label + LabelSuffix + GetIsCompulsoryIndicator();
         }
@@ -383,7 +368,7 @@ namespace Habanero.BO.ClassDefinition
 		/// <returns>Returns the parameter value or null if not found</returns>
 		public object GetParameterValue(string parameterName)
         {
-            return HasParameterValue(parameterName) ? this._parameters[parameterName] : null;
+            return HasParameterValue(parameterName) ? this.Parameters[parameterName] : null;
         }
 
 
@@ -395,7 +380,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public bool HasParameterValue(string parameterName)
         {
-            return (this._parameters.ContainsKey(parameterName));
+            return (this.Parameters.ContainsKey(parameterName));
         }
 
         #region Type Initialisation
@@ -466,11 +451,14 @@ namespace Habanero.BO.ClassDefinition
         public bool IsCompulsory
         {
             get {
+                if (this.ShowAsCompulsory.GetValueOrDefault(false))
+                {
+                    return true;
+                }
                 IClassDef def = GetClassDef();
                 if (def == null) return false;
                 IPropDef propDef = this.GetPropDefIfExists(def);
-                if (propDef == null) return false;
-                return propDef.Compulsory;
+                return propDef != null && propDef.Compulsory;
             }
         }
 
@@ -524,6 +512,11 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public LayoutStyle Layout { get; set; }
 
+        /// <summary>
+        /// Must the Field Show Itself as Compulsory or not
+        /// </summary>
+        private bool? ShowAsCompulsory { get; set; }
+
         private IClassDef GetClassDef()
         {
             IUIFormColumn column = this.UIFormColumn;
@@ -531,8 +524,7 @@ namespace Habanero.BO.ClassDefinition
             IUIDef uiDef = column.UIFormTab.UIForm.UIDef;
             if (uiDef == null) return null;
             if (uiDef.ClassDef != null) return uiDef.ClassDef;
-            if (uiDef.UIDefCol == null) return null;
-            return uiDef.UIDefCol.ClassDef;
+            return uiDef.UIDefCol == null ? null : uiDef.UIDefCol.ClassDef;
         }
 
         #endregion Type Initialisation

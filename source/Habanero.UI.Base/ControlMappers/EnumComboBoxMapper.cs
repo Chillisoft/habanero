@@ -54,7 +54,7 @@ namespace Habanero.UI.Base
             if (_comboBox.SelectedIndex <= 0) SetPropertyValue(null);
             else
             {
-                PropDef propDef = (PropDef) _businessObject.ClassDef.PropDefcol[_propertyName];
+                PropDef propDef = (PropDef) _businessObject.ClassDef.PropDefcol[PropertyName];
                 string selectedItem = (_comboBox.SelectedItem.ToString()).Replace(" ","");
                 SetPropertyValue(Enum.Parse(propDef.PropertyType, selectedItem));
             }
@@ -92,7 +92,7 @@ namespace Habanero.UI.Base
 
             _comboBox.Items.Clear();
 
-            PropDef propDef = (PropDef) _businessObject.ClassDef.PropDefcol[_propertyName];
+            PropDef propDef = (PropDef) _businessObject.ClassDef.PropDefcol[PropertyName];
             if (!propDef.PropertyType.IsEnum)
             {
                 throw new InvalidPropertyException("EnumComboBoxMapper can only be used for an enum property type");

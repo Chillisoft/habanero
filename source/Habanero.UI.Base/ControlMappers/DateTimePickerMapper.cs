@@ -40,7 +40,7 @@ namespace Habanero.UI.Base
             : base(picker, propName, isReadOnly, factory)
         {
             _picker = picker;
-            _propertyName = propName;
+            PropertyName = propName;
             _dateTimePickerMapperStrategy = factory.CreateDateTimePickerMapperStrategy();
             _dateTimePickerMapperStrategy.AddUpdateBoPropOnValueChangedHandler(this);
         }

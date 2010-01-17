@@ -93,7 +93,7 @@ namespace Habanero.UI.Base
         {
             string value = _textBox.Text;
 
-            if (!_isEditable) return;
+            if (!IsEditable) return;
 
             try
             {
@@ -106,7 +106,7 @@ namespace Habanero.UI.Base
                                                              this._businessObject.ClassDef.ClassName + "' - '" +
                                                              this._businessObject +
                                                              "' could not be updated since the value '" + value +
-                                                             "' is not valid for the property '" + _propertyName + "'");
+                                                             "' is not valid for the property '" + PropertyName + "'");
             }
             _oldText = _textBox.Text;
         }

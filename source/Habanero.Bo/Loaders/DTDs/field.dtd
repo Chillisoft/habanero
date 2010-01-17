@@ -11,4 +11,5 @@
   editable ( true | false ) "true"
 	toolTipText CDATA #IMPLIED
   layout (Label | GroupBox) "Label"
+  showAsCompulsory (true | false) "false"
 >

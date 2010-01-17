@@ -236,7 +236,7 @@ namespace Habanero.UI.Base
                 return;
             }
             BOMapper mapper = new BOMapper(_businessObject);
-            Dictionary<string, string> col = mapper.GetLookupList(_propertyName);
+            Dictionary<string, string> col = mapper.GetLookupList(PropertyName);
             //if (!_isRightClickInitialised)
             //{
             //    //SetupRightClickBehaviour();
@@ -288,7 +288,7 @@ namespace Habanero.UI.Base
             }
             return _businessObject == null
                        ? null
-                       : _businessObject.GetPropertyValueString(_propertyName);
+                       : _businessObject.GetPropertyValueString(PropertyName);
         }
 
 

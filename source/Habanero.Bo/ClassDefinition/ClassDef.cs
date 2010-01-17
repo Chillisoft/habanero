@@ -1096,17 +1096,7 @@ namespace Habanero.BO.ClassDefinition
         private Type GetReflectivePropertyType(string propertyName)
         {
             string trimmedPropName = propertyName.Trim('-');
-            PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(MyClassType, trimmedPropName);
-            if (propertyInfo == null || propertyInfo.PropertyType == null)
-            {
-                return typeof (object);
-            }
-            Type propertyType = propertyInfo.PropertyType;
-            if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-            {
-                return Nullable.GetUnderlyingType(propertyType);
-            }
-            return propertyType;
+            return ReflectionUtilities.GetUndelyingPropertType(MyClassType, trimmedPropName);
         }
 
         ///<summary>

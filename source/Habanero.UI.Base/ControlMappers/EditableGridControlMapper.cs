@@ -56,9 +56,9 @@ namespace Habanero.UI.Base
         {
             if (_businessObject != null)
             {
-                IRelationship relationship = _businessObject.Relationships[_propertyName];
+                IRelationship relationship = _businessObject.Relationships[PropertyName];
                 _editableGrid.Initialise(relationship.RelatedObjectClassDef);
-                _editableGrid.BusinessObjectCollection =_businessObject.Relationships.GetRelatedCollection(_propertyName);
+                _editableGrid.BusinessObjectCollection =_businessObject.Relationships.GetRelatedCollection(PropertyName);
             } else
             {
                 _editableGrid.BusinessObjectCollection = null;
