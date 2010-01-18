@@ -189,7 +189,7 @@ namespace Habanero.Test.DB
             string criteriaAsString = surnameCriteria.ToString(new SqlFormatter("","","",""), value => value.ToString());
 
             //---------------Test Result -----------------------
-            string expectedString = string.Format("Surname IN ({0}, {1})", surnameValue1, surnameValue2);
+            string expectedString = string.Format("Surname IN ('{0}', '{1}')", surnameValue1, surnameValue2);
             StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
             //---------------Tear Down -------------------------          
         }

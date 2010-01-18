@@ -35,7 +35,7 @@ namespace Habanero.Test.BO.CriteriaManager
             string valuesAsString = criteriaValues.ToString();
 
             //-------------Test Result ----------------------
-            Assert.AreEqual("(100, 200, 300)", valuesAsString);
+            Assert.AreEqual("('100', '200', '300')", valuesAsString);
         }
 
         [Test]
@@ -109,7 +109,6 @@ namespace Habanero.Test.BO.CriteriaManager
         }
 
         [Test]
-        [Ignore("Peter working on this")]
         public void Test_ConstructorRemovesQuotesAroundStrings()
         {
             //-------------Setup Test Pack ------------------

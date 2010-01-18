@@ -587,7 +587,6 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        [Ignore("Peter working on this")]
         public void Test_CreateCriteria_Simple_WithIn()
         {
             //---------------Set up test pack-------------------
@@ -602,6 +601,56 @@ namespace Habanero.Test.BO
             Assert.AreEqual(Criteria.ComparisonOp.In, criteria.ComparisonOperator);
             StringAssert.AreEqualIgnoringCase("Surname IN ('Bob')", criteriaAsString);
         }
+
+        [Test]
+        public void Test_CreateCriteria_Simple_WithIn_MultipleValues()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname in ('Bob', 'Name2', 'Name3')");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.In, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname in ('Bob', 'Name2', 'Name3')", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_Simple_WithIn_MultipleValues_CommaInsideValue()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname in ('Bob, Bob2', 'Name2', 'Name3')");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.In, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname in ('Bob, Bob2', 'Name2', 'Name3')", criteriaAsString);
+        }
+
+
+        [Test]
+        public void Test_CreateCriteria_Simple_WithIn_MultipleValues_QuoteInsideValue()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname in ('Bob, \' Bob2', 'Name2', 'Name3')");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.In, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname in ('Bob, \' Bob2', 'Name2', 'Name3')", criteriaAsString);
+        }
+
 
         [Test]
         public void Test_CreateCriteria_Simple_WithInvalid()

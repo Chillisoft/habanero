@@ -514,8 +514,12 @@ namespace Habanero.Base
             else if (FieldValue is Guid)
             {
                 valueString = ((Guid)FieldValue).ToString("B");
-            } 
-            else 
+            }
+            else if (FieldValue is Criteria.CriteriaValues)
+            {
+                return FieldValue.ToString();
+            }
+            else
             {
                 valueString = FieldValue.ToString();
             }
@@ -711,12 +715,30 @@ namespace Habanero.Base
         }
 
 
-        public class CriteriaValues : IComparable
+        public class CriteriaValues : IComparable, IEnumerable
         {
-            private readonly IEnumerable _values;
+            private readonly List<object> _values;
 
             public CriteriaValues(IEnumerable values) {
-                _values = values;
+                _values = new List<object>();
+                foreach (var value in values)
+                {
+                    if (value is string)
+                    {
+                        string stringValue = (string)value ;
+                        _values.Add(stringValue.Trim('\''));
+                    }
+                    else
+                    {
+                        _values.Add(value);
+                    }
+                }
+            }
+
+            public int Count
+
+            {
+                get { return _values.Count; }
             }
 
             #region Implementation of IComparable
@@ -736,9 +758,15 @@ namespace Habanero.Base
                 List<string> stringValues = new List<string>();
                 foreach (var value in _values)
                 {
-                    stringValues.Add(value.ToString());
+                    if (value is string) stringValues.Add("'" + (string)value + "'");
+                    else stringValues.Add(value.ToString());
                 }
                 return "(" + String.Join(", ", stringValues.ToArray()) + ")";
+            }
+
+            public IEnumerator GetEnumerator()
+            {
+                return _values.GetEnumerator();
             }
         }
     }

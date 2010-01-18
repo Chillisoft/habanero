@@ -363,12 +363,33 @@ namespace Habanero.DB
                                                        {
                                                            value = DateTimeNow.Value;
                                                        }
-                                                       statement.AddParameter(paramName, value);
+                                                       if (value is Criteria.CriteriaValues)
+                                                       {
+                                                           string inClause = "(";
+
+                                                           Criteria.CriteriaValues values = (Criteria.CriteriaValues)value;
+                                                           int i = 0;
+                                                           foreach (var paramValue in values)
+                                                           {
+                                                               statement.AddParameter(paramName, paramValue);
+                                                               inClause += paramName;
+                                                               if (i < values.Count - 1)
+                                                               {
+                                                                   inClause += ", ";
+                                                                   paramName = statement.ParameterNameGenerator.GetNextParameterName();
+                                                               }
+                                                               i++;
+                                                           }
+                                                           inClause += ")";
+                                                           return inClause;
+                                                       } 
+                                                       statement.AddParameter(paramName, value); 
                                                        return paramName;
                                                    });
 
             builder.Append(whereClause);
         }
+
         private string DelimitField(Source source, string fieldName)
         {
             return source == null ? _sqlFormatter.DelimitField(fieldName) : DelimitField(source.EntityName, fieldName);

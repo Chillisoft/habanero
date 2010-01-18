@@ -73,12 +73,20 @@ namespace Habanero.Base
             if (comparisonOp == Criteria.ComparisonOp.In && value is string)
             {
                 string inValuesString = value.ToString().TrimStart('(').TrimEnd(')');
-                string[] strings = inValuesString.Split(',');
-                string[] finalStrings = new string[strings.Length];
-                for (int i = 0; i < strings.Length; i++)
-                {
-                    finalStrings[i] = strings[0].Trim('\'');
+                HabaneroStringBuilder valueStringBuilder = new HabaneroStringBuilder(inValuesString);
+                valueStringBuilder.RemoveQuotedSections();
+                List<string> finalStrings = new List<string>();
+                int commaIndex;
+                int lastIndex = 0;
+                commaIndex = valueStringBuilder.IndexOf(",");
+                while (commaIndex != -1) {
+                    HabaneroStringBuilder oneValueSubstring = valueStringBuilder.Substring(lastIndex, commaIndex-lastIndex);
+                    finalStrings.Add(oneValueSubstring.PutBackQuotedSections().ToString().Trim());
+                    lastIndex = commaIndex+1;
+                    commaIndex = valueStringBuilder.IndexOf(",", lastIndex);
                 }
+                HabaneroStringBuilder oneValueString = valueStringBuilder.Substring(lastIndex, valueStringBuilder.ToString().Length - lastIndex);
+                finalStrings.Add(oneValueString.PutBackQuotedSections().ToString().Trim());
                 value = new Criteria.CriteriaValues(finalStrings);
             }
             return new Criteria(propName, comparisonOp, value);
