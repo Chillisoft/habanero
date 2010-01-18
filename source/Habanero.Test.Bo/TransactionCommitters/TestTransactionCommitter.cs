@@ -311,6 +311,18 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
 
         [Test]
+        public void Test_AddNull_DoesNotFailInTransactionCommitter()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committerDB = new TransactionCommitterStub();
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
+            //---------------Execute Test ----------------------
+            committerDB.AddBusinessObject(null);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
+        }
+        [Test]
         public void Test_AddCreatedBO_DoesNotFailInTransactionCommitter()
         {
             //---------------Set up test pack-------------------

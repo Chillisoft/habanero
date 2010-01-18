@@ -114,6 +114,7 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public virtual void AddBusinessObject(IBusinessObject businessObject)
         {
+            if (businessObject == null) return;
             //Do not add objects that are new and deleted to the transaction committer.
             if (businessObject.Status.IsNew && businessObject.Status.IsDeleted)
             {
