@@ -168,7 +168,7 @@ namespace Habanero.UI.Win
         /// <param name="defaultDate">The initial date value</param>
         public virtual IDateTimePicker CreateDateTimePicker(DateTime defaultDate)
         {
-            DateTimePickerWin dateTimePickerWin = new DateTimePickerWin(this);
+            IDateTimePicker dateTimePickerWin = CreateDateTimePicker();
             dateTimePickerWin.Value = defaultDate;
             return dateTimePickerWin;
         }
