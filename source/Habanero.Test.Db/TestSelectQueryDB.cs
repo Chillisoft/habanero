@@ -184,8 +184,31 @@ namespace Habanero.Test.DB
             //---------------Tear Down -------------------------          
         }
 
-
-
+        [Test]
+        public void TestCreateSqlStatement_WithNotInCriteria()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
+            IEnumerable values = new object[] { "100", "200", "300" };
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
+            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.NotIn, criteriaValues);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("WHERE [MyBO].[TestProp] NOT IN (?Param0, ?Param1, ?Param2)", statementString);
+            Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
+            Assert.AreEqual("100", statement.Parameters[0].Value);
+            Assert.AreEqual("?Param1", statement.Parameters[1].ParameterName);
+            Assert.AreEqual("200", statement.Parameters[1].Value);
+            Assert.AreEqual("?Param2", statement.Parameters[2].ParameterName);
+            Assert.AreEqual("300", statement.Parameters[2].Value);
+            //---------------Tear Down -------------------------          
+        }
+        
         [Test]
         public void TestCreateSqlStatement_WithCriteria_WithClassID()
         {

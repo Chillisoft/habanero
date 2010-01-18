@@ -161,7 +161,7 @@ namespace Habanero.BO
                     IPropDef propDef = propParentClassDef.GetPropDef(field.PropertyName);
                     field.FieldName = propDef.DatabaseFieldName;
                     field.Source.ChildSourceLeaf.EntityName = propParentClassDef.GetTableName(propDef);
-                    if (criteria.CanBeParametrised() && criteria.ComparisonOperator != Criteria.ComparisonOp.In)
+                    if (criteria.CanBeParametrised() && (criteria.ComparisonOperator != Criteria.ComparisonOp.In && criteria.ComparisonOperator != Criteria.ComparisonOp.NotIn))
                     {
                         object returnedValue;
                         propDef.TryParsePropValue(criteria.FieldValue, out returnedValue );

@@ -70,7 +70,7 @@ namespace Habanero.Base
             string operatorString = criteriaExpression.Expression;
             object value = criteriaExpression.Right.Expression;
             Criteria.ComparisonOp comparisonOp = CreateComparisonOperator(operatorString);
-            if (comparisonOp == Criteria.ComparisonOp.In && value is string)
+            if ((comparisonOp == Criteria.ComparisonOp.In || comparisonOp == Criteria.ComparisonOp.NotIn) && value is string)
             {
                 string inValuesString = value.ToString().TrimStart('(').TrimEnd(')');
                 HabaneroStringBuilder valueStringBuilder = new HabaneroStringBuilder(inValuesString);
@@ -123,6 +123,8 @@ namespace Habanero.Base
                     return Criteria.ComparisonOp.IsNot;
                 case "IN":
                     return Criteria.ComparisonOp.In;
+                case "NOT IN":
+                    return Criteria.ComparisonOp.NotIn;
                 default:
                     throw new HabaneroDeveloperException("An error has occured in the application, please contact your system administrator.","Invalid operator used in a criteria string: "+operatorString);
             }
