@@ -180,6 +180,23 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.IsTrue(_wizardController.CanMoveOn(out message));
             _mock.VerifyAll();
         }
+
+        [Test]
+        public void Test_MoveOn_ShouldCallCurrentStepMoveOn()
+        {
+            //---------------Set up test pack-------------------
+            var wizardController = new WizardController();
+            var step1 = MockRepository.GenerateStub<IWizardStep>();
+            wizardController.AddStep(step1);
+            wizardController.GetFirstStep();
+            //---------------Assert Precondition----------------
+            Assert.AreSame(step1, wizardController.GetCurrentStep());
+            step1.AssertWasNotCalled(step => step.MoveOn());
+            //---------------Execute Test ----------------------
+            wizardController.MoveOn();
+            //---------------Test Result -----------------------
+            step1.AssertWasCalled(step => step.MoveOn());
+        }
 //        [Test]
 //        public void Test_CompleteCurrentStep_ShouldCallStepMoveOn()
 //        {

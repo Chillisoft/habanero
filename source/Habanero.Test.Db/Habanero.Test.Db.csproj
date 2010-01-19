@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1484CDE2-0A30-466F-9FEA-E79CE2751489}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -216,6 +216,7 @@
     <Compile Include="DatabaseConnection\TestDatabaseConnectionSQLite.cs" />
     <Compile Include="DatabaseConnection\TestDatabaseConnectionSqlServer.cs" />
     <Compile Include="TestDataAccessorDB.cs" />
+    <Compile Include="TestDataAccessorInMemory.cs" />
     <Compile Include="TestDbMigrator.cs" />
     <Compile Include="TestConnectionStringFactory.cs">
       <SubType>Code</SubType>

@@ -797,6 +797,8 @@ namespace Habanero.BO.ClassDefinition
 
         internal object GetNewValue(object value)
         {
+            if (value == null) return value;
+
             object newValue;
             try
             {

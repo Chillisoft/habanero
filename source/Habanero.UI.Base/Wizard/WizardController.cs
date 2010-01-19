@@ -162,7 +162,16 @@ namespace Habanero.UI.Base
         /// <returns>True if moving to the next step is allowed.</returns>
         public virtual bool CanMoveOn(out string message)
         {
-            return _wizardSteps[_currentStep].CanMoveOn(out message);
+            CheckWizardStep();
+            return GetCurrentStep().CanMoveOn(out message);
+        }
+
+        private void CheckWizardStep()
+        {
+            if (GetCurrentStep() == null) 
+            {
+                throw new WizardStepException("There is no current wizard step");
+            }
         }
 
 
@@ -210,5 +219,15 @@ namespace Habanero.UI.Base
 //        {
 //            _wizardSteps[_currentStep].MoveBack();
 //        }
+        /// <summary>
+        /// Does any actions involved in the current wizard step when you move on
+        /// to the next wizard step. E.g. Updates any Objects from 
+        /// User interface controls.
+        /// </summary>
+        public void MoveOn()
+        {
+            CheckWizardStep();
+            GetCurrentStep().MoveOn();
+        }
     }
 }
