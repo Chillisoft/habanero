@@ -164,7 +164,9 @@ namespace Habanero.BO
             }
         }
 
+        // ReSharper disable MemberCanBePrivate.Global
         internal void SetVirtualPropertyValue(string propertyName, object value)
+
         {
             if (_businessObject == null) return;
             string virtualPropName = propertyName.Substring(1, propertyName.Length - 2);
@@ -174,7 +176,7 @@ namespace Habanero.BO
                 ReflectionUtilities.SetPropertyValue(_businessObject, virtualPropName, value);
             }
         }
-
+        // ReSharper restore MemberCanBePrivate.Global
         /// <summary>
         /// Returns the class definition related to the specified database 
         /// lookup list for the specified property in the class definition
