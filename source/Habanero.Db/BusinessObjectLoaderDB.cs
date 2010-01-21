@@ -172,10 +172,15 @@ namespace Habanero.DB
                     correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
                     //Checks to see if there is a duplicate object meeting this criteria
                     if (dr.Read()) ThrowRetrieveDuplicateObjectException(statement, loadedBo);
-                    if (correctSubClassDef == null) return loadedBo;
+                   
                 }
             }
-            loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
+            if (correctSubClassDef != null) 
+            {
+                loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
+            }
+            SetStatusAfterLoad(loadedBo);
+            CallAfterLoad(loadedBo);
             return loadedBo;
         }
 
@@ -235,7 +240,6 @@ namespace Habanero.DB
                     {
                         ThrowRetrieveDuplicateObjectException(statement, loadedBo);
                     }
-                    if (correctSubClassDef == null) return loadedBo;
                 }
             }
             if (correctSubClassDef != null)
@@ -244,6 +248,8 @@ namespace Habanero.DB
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
             }
+            SetStatusAfterLoad(loadedBo);
+            CallAfterLoad(loadedBo);
             return loadedBo;
         }
 
@@ -324,13 +330,13 @@ namespace Habanero.DB
                 {
                     originalPersistedCollection.Add(businessObject);
                 }
+                IList loadedBos = new ArrayList();
                 bool isFirstLoad = collection.TimeLastLoaded == null;
                 using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
                 {
                     while (dr.Read())
                     {
                         T loadedBo = (T) LoadBOFromReader(collection.ClassDef, dr, selectQuery);
-
                         //Checks to see if the loaded object is the base of a single table inheritance structure
                         // and has a sub type
                         IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
@@ -349,7 +355,13 @@ namespace Habanero.DB
                         {
                             AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
                         }
+                        SetStatusAfterLoad(loadedBo);
+                        loadedBos.Add(loadedBo);
                     }
+                }
+                foreach (IBusinessObject loadedBo in loadedBos)
+                {
+                    CallAfterLoad(loadedBo);
                 }
             }
             else

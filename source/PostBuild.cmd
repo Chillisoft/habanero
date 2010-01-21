@@ -7,3 +7,4 @@ xcopy /D /Y %2*.pdb
 xcopy /D /Y %2*.config
 xcopy /D /Y %2*.exe
 xcopy /D /Y %2*.xml
+xcopy /D /Y %2*.db

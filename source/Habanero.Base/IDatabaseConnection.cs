@@ -163,5 +163,12 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>The <see cref="IParameterNameGenerator"/> valid for this <see cref="IDatabaseConnection"/></returns>
         IParameterNameGenerator CreateParameterNameGenerator();
+
+        /// <summary>
+        /// Creates a transaction on the given connection.
+        /// </summary>
+        /// <param name="openConnection"></param>
+        /// <returns></returns>
+        IDbTransaction BeginTransaction(IDbConnection openConnection);
     }
 }

@@ -97,5 +97,13 @@ namespace Habanero.DB
             return new ParameterNameGenerator(":");
         }
 
+        /// <summary>
+        /// SQLLite uses the Serializable IsolationLevel.
+        /// </summary>
+        public override IsolationLevel IsolationLevel
+        {
+            get { return System.Data.IsolationLevel.Serializable; }
+        }
+
     }
 }

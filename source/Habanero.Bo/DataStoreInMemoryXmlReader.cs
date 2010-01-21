@@ -68,6 +68,7 @@ namespace Habanero.BO
                     }
                 }
                 BusinessObjectLoaderBase.SetStatusAfterLoad(bo);
+                BusinessObjectLoaderBase.CallAfterLoad(bo);
                 objects.Add(bo.ID.GetAsGuid(), bo);
                 reader.Read();
             }

@@ -774,8 +774,19 @@ namespace Habanero.BO
         /// <param name="bo"></param>
         protected internal static void SetStatusAfterLoad(IBusinessObject bo)
         {
+            if (bo == null) return;
             BusinessObject businessObject = (BusinessObject)bo;
             businessObject.SetStatus(BOStatus.Statuses.isNew, false);
+        }       
+        
+        /// <summary>
+        /// Sets the Status for the Business Object to NotNew.
+        /// </summary>
+        /// <param name="bo"></param>
+        protected internal static void CallAfterLoad(IBusinessObject bo)
+        {
+            if (bo == null) return;
+            BusinessObject businessObject = (BusinessObject)bo;
             businessObject.AfterLoad();
         }
     }
