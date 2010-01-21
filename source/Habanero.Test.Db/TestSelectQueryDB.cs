@@ -438,8 +438,8 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            string expectedJoinSql = "LEFT JOIN [car_table] ON [Table_Engine].[CAR_ID] = [car_table].[CAR_ID]";
-            expectedJoinSql += " LEFT JOIN [contact_person] ON [car_table].[OWNER_ID] = [contact_person].[ContactPersonID]";
+            string expectedJoinSql = "LEFT JOIN [car_table] ON [Table_Engine].[CAR_ID] = [car_table].[CAR_ID])";
+            expectedJoinSql += " LEFT JOIN [contact_person] ON [car_table].[OWNER_ID] = [contact_person].[ContactPersonID])";
             StringAssert.Contains(expectedJoinSql, statementString);
             StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
         }
@@ -459,7 +459,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("JOIN [ContactPersonCompositeKey] ON [car_table].[Driver_FK1] = [ContactPersonCompositeKey].[PK1_Prop1] AND [car_table].[Driver_FK2] = [ContactPersonCompositeKey].[PK1_Prop2] ", statementString);
+            StringAssert.Contains("JOIN [ContactPersonCompositeKey] ON [car_table].[Driver_FK1] = [ContactPersonCompositeKey].[PK1_Prop1] AND [car_table].[Driver_FK2] = [ContactPersonCompositeKey].[PK1_Prop2]) ", statementString);
             StringAssert.EndsWith("ORDER BY [ContactPersonCompositeKey].[Surname] ASC", statementString);
         }
 
