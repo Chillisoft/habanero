@@ -210,7 +210,6 @@ namespace Habanero.Test.BO
             numGen.SetSequenceNumber(0);
         }
 
-
         [Test]
         public void TestGetSecondNumber_FromSeperateNumberGeneratorInstance()
         {
