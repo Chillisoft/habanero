@@ -95,5 +95,23 @@ namespace Habanero.UI.Base
         /// to their original state.
         /// </summary>
         void CancelWizard();
+        /// <summary>
+        /// Does any actions involved in the current wizard step when you move on
+        /// to the next wizard step. E.g. Updates any Objects from 
+        /// User interface controls. it does this by calling the current
+        /// <see cref="IWizardStep.MoveOn"/>
+        /// </summary>
+        void CompleteCurrentStep();
+        /// <summary>
+        /// Undoes any actions that have been done by the current 
+        /// step when you move back to the previous step.
+        /// It does this by calling the current <see cref="IWizardStep.MoveBack"/>
+        /// </summary>
+        void UndoCurrentStep();
+
+        /// <summary>
+        /// Checks if the Wizard Can proceed to the next step. Calls through to the <see cref="IWizardStep.CanMoveBack"/>
+        /// </summary>
+        bool CanMoveBack();
     }
 }

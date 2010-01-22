@@ -93,7 +93,6 @@ namespace Habanero.UI.Win
 
             _wizardStepPanel = _controlFactory.CreatePanel();
             
-  
             //IGroupBox headerLabelGroupBox = CreateHeaderLabel(controlFactory);
 
             BorderLayoutManagerWin borderLayoutManager = new BorderLayoutManagerWin(this, _controlFactory);
@@ -191,8 +190,9 @@ namespace Habanero.UI.Win
         {
             DoIfCanMoveOn(delegate
             {
-                IWizardStep currentStep = _wizardController.GetCurrentStep();
-                currentStep.MoveOn();
+//                IWizardStep currentStep = _wizardController.GetCurrentStep();
+//                currentStep.MoveOn();
+                _wizardController.CompleteCurrentStep();
                 SetStep(_wizardController.GetNextStep());
                 if (_wizardController.IsLastStep())
                 {
@@ -200,6 +200,26 @@ namespace Habanero.UI.Win
                 }
                 SetPreviousButtonState();
             });
+        }
+
+        private void uxNextButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_wizardController.IsLastStep())
+                {
+                    DoIfCanMoveOn(Finish);
+                }
+                else
+                {
+                    Next();
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "Cannot complete this wizard step due to an error:",
+                                                          "Wizard Step Error");
+            }
         }
 
         /// <summary>
@@ -267,26 +287,6 @@ namespace Habanero.UI.Win
             _wizardController.CancelWizard();
         }
 
-        private void uxNextButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (_wizardController.IsLastStep())
-                {
-                    DoIfCanMoveOn(delegate { Finish(); });
-                }
-                else
-                {
-                    Next();
-                }
-            }
-            catch (Exception ex)
-            {
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "Cannot complete this wizard step due to an error:",
-                                                          "Wizard Step Error");
-            }
-        }
-
         private void uxPreviousButton_Click(object sender, EventArgs e)
         {
             Previous();
@@ -297,7 +297,7 @@ namespace Habanero.UI.Win
             _previousButton.Enabled = !_wizardController.IsFirstStep();
             if (_previousButton.Enabled)
             {
-                _previousButton.Enabled = _wizardController.GetCurrentStep().CanMoveBack();
+                _previousButton.Enabled = _wizardController.CanMoveBack();
             }
         }
 

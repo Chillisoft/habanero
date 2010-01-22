@@ -32,6 +32,7 @@ namespace Habanero.Test.UI.Base.Wizard
         protected abstract IControlFactory GetControlFactory();
 
         protected abstract IWizardControllerStub CreateWizardControllerStub();
+        protected abstract IWizardStepStub CreateWizardStepStub();
 
         #region Testing Wizard Class Interfaces
 
@@ -170,6 +171,21 @@ namespace Habanero.Test.UI.Base.Wizard
                 this._cancelButtonEventFired = true;
             }
 
+            public void CompleteCurrentStep()
+            {
+                 GetCurrentStep().MoveOn();
+            }
+
+            public void UndoCurrentStep()
+            {
+                GetCurrentStep().MoveBack();
+            }
+
+            public bool CanMoveBack()
+            {
+                return this.GetCurrentStep().CanMoveBack();
+            }
+
             public void ForTestingAddWizardStep(IWizardStep step)
             {
                 _wizardSteps.Add(step);
@@ -220,7 +236,6 @@ namespace Habanero.Test.UI.Base.Wizard
 
                 public void MoveBack()
                 {
-
                     MoveBackWasCalled = true;
                 }
 
@@ -610,7 +625,57 @@ namespace Habanero.Test.UI.Base.Wizard
             //Assert Results --------------------------------------------
             Assert.AreSame(_controller.ControlForStep2, _wizardControl.CurrentControl);
         }
-
+//        [Test]
+//        public void Test_UndoCurrentStep_ShouldCallStepMoveBack()
+//        {
+            //---------------Set up test pack-------------------
+//            WizardController wizardController = new WizardController();
+//            var step1 = MockRepository.GenerateMock<IWizardStep>();
+//            wizardController.AddStep(step1);
+//            wizardController.GetFirstStep();
+            //---------------Assert Precondition----------------
+//            Assert.AreEqual(1, wizardController.StepCount);
+//            step1.AssertWasNotCalled(step => step.MoveBack());
+//            Assert.AreSame(step1, wizardController.GetCurrentStep());
+            //---------------Execute Test ----------------------
+//            wizardController.UndoCurrentStep();
+            //---------------Test Result -----------------------
+//            step1.AssertWasCalled(wizardStep => wizardStep.MoveBack());
+//        }
+        [Test]
+        public void Test_Previous_ShouldCallWizardControllerUndo()
+        {
+            //---------------Set up test pack-------------------
+            IWizardController controller = MockRepository.GenerateMock<IWizardController>();
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(controller);
+            string message;
+            controller.Stub(wizardController => wizardController.CanMoveOn(out message)).Return(true);
+            controller.Stub(controller1 => controller1.GetPreviousStep()).Return(CreateWizardStepStub());
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(controller.CanMoveOn(out message));
+            controller.AssertWasNotCalled(cntrler => cntrler.UndoCurrentStep());
+            //---------------Execute Test ----------------------
+            wizardControl.Previous();
+            //---------------Test Result -----------------------
+            controller.AssertWasCalled(cntrler => cntrler.UndoCurrentStep());
+        }
+        [Test]
+        public void Test_Next_ShouldCallWizardControllerNext()
+        {
+            //---------------Set up test pack-------------------
+            IWizardController controller = MockRepository.GenerateMock<IWizardController>();
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(controller);
+            string message;
+            controller.Stub(wizardController => wizardController.CanMoveOn(out message)).Return(true);
+            controller.Stub(controller1 => controller1.GetNextStep()).Return(CreateWizardStepStub());
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(controller.CanMoveOn(out message));
+            controller.AssertWasNotCalled(cntrler => cntrler.CompleteCurrentStep());
+            //---------------Execute Test ----------------------
+            wizardControl.Next();
+            //---------------Test Result -----------------------
+            controller.AssertWasCalled(cntrler => cntrler.CompleteCurrentStep());
+        }
         [Test]
         public void TestPrevious_WhenStep2_ShouldReturnStep1()
         {
@@ -799,7 +864,6 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.IsFalse(wizardControl.PreviousButton.Enabled);
         }
 
-        protected abstract IWizardStepStub CreateWizardStepStub();
 
         [Test]
         public void TestPreviousButtonDisabledIfCanMoveBackFalse_FromPreviousTep()
