@@ -1673,12 +1673,15 @@ namespace Habanero.Test.BO
 
         //Testloading objects when already other objects in object manager
         // ReSharper disable RedundantAssignment
+#pragma warning disable 168
         [Test]
         public void Test_LoadObjectWhenAlreadyObjectInObjectManager()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
-            new AddressTestBO();
+
+            AddressTestBO addressTestBo = new AddressTestBO();
+
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             AddressTestBO address;
@@ -1722,6 +1725,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(loadedAddress, boMan[addresssID]);
             Assert.AreSame(loadedAddress, boMan[addresssID.ObjectID]);
         }
+#pragma warning restore 168
 
         [Test]
         public void Test_ReturnSameObjectFromBusinessObjectLoader()
