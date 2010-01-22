@@ -125,7 +125,7 @@ namespace Habanero.UI.Win
             layoutManager.Alignment= FlowLayoutManager.Alignments.Right;
 
             _cancelButton = _controlFactory.CreateButton("Cancel");
-            _cancelButton.Click += this.uxCancelButton_Click;
+            _cancelButton.Click += this.CancelButton_Click;
             _cancelButton.Size = new Size(75, 38);
             _cancelButton.TabIndex = 0;
             layoutManager.AddControl(_cancelButton);
@@ -137,7 +137,7 @@ namespace Habanero.UI.Win
             layoutManager.AddControl(_nextButton);
 
             _previousButton = _controlFactory.CreateButton("Previous");
-            _previousButton.Click += this.uxPreviousButton_Click;
+            _previousButton.Click += this.PreviousButton_Click;
             _previousButton.Size = new Size(75, 38);
             _previousButton.TabIndex = 0;
             layoutManager.AddControl(_previousButton);
@@ -282,12 +282,12 @@ namespace Habanero.UI.Win
         }
 
 
-        private void uxCancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             _wizardController.CancelWizard();
         }
 
-        private void uxPreviousButton_Click(object sender, EventArgs e)
+        private void PreviousButton_Click(object sender, EventArgs e)
         {
             Previous();
         }
