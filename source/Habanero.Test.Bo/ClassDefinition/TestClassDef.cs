@@ -933,6 +933,24 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(typeof(DateTime), dateTimePropertyType);
         }
 
+        [Test]
+        public void Test_GetPropertyType_WhenInheritedClass_AndPropOnRelationshipDefinedInParentType_ShouldReturnCorrectType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef relatedClassDef = MyInheritedType.LoadInheritedTypeClassDef();
+            IClassDef classDef = MyBO.LoadClassDefWithDateTime();
+           
+            const string dateTimeProp = "TestDateTime";
+            PropDef propDef = new PropDef(dateTimeProp, typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            relatedClassDef.PropDefcol.Add(propDef);
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(classDef.GetPropDef(dateTimeProp, false));
+            //---------------Execute Test ----------------------
+            Type dateTimePropertyType = relatedClassDef.GetPropertyType("MyRelationship." + dateTimeProp);
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(DateTime), dateTimePropertyType);
+        }
         #endregion //Test GetPropertyType
 
         [Test]
