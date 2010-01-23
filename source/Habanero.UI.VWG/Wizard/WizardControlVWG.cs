@@ -166,8 +166,9 @@ namespace Habanero.UI.VWG
         /// <exception cref="WizardStepException">If the wizard is on the first step this exception will be thrown.</exception>
         public void Previous()
         {
-            _wizardController.UndoCurrentStep();
-            SetStep(_wizardController.GetPreviousStep());
+            var previousStep = _wizardController.GetPreviousStep();
+            _wizardController.UndoCompleteCurrentStep();
+            SetStep(previousStep);
             NextButton.Text = "Next";
             SetPreviousButtonState();
         }

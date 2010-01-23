@@ -297,6 +297,7 @@
     <Compile Include="Util\ValidationProvider.cs" />
     <Compile Include="Util\ValidationRule.cs" />
     <Compile Include="Util\ValidationUtil.cs" />
+    <Compile Include="Wizard\IMessageWizardStep.cs" />
     <Compile Include="Wizard\IWizardControl.cs" />
     <Compile Include="Wizard\IWizardController.cs" />
     <Compile Include="Wizard\IWizardForm.cs" />

@@ -267,8 +267,11 @@
     <Compile Include="Mappers\TestListComboBoxMapper.cs" />
     <Compile Include="TestStaticDataEditor.cs" />
     <Compile Include="TestValidationRule.cs" />
+    <Compile Include="Wizard\TestMessageWizardStep.cs" />
+    <Compile Include="Wizard\TestNullWizardStep.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />
     <Compile Include="Wizard\TestWizardController.cs" />
+    <Compile Include="Wizard\TestWizardStepWin.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="key.snk" />

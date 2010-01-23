@@ -224,12 +224,12 @@ namespace Habanero.Test.UI.Base.Wizard
             wizardController.GetFirstStep();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, wizardController.StepCount);
-            step1.AssertWasNotCalled(step => step.MoveBack());
+            step1.AssertWasNotCalled(step => step.UndoMoveOn());
             Assert.AreSame(step1, wizardController.GetCurrentStep());
             //---------------Execute Test ----------------------
-            wizardController.UndoCurrentStep();
+            wizardController.UndoCompleteCurrentStep();
             //---------------Test Result -----------------------
-            step1.AssertWasCalled(wizardStep => wizardStep.MoveBack());
+            step1.AssertWasCalled(wizardStep => wizardStep.UndoMoveOn());
         }
 
         [Test]

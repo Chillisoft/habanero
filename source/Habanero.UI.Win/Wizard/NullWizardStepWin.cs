@@ -26,68 +26,13 @@ namespace Habanero.UI.Win
     /// Can be used as a placeholder step in a Wizard that changes depending on selections made
     /// by users.
     /// </summary>
-    public class NullWizardStepWin : UserControlWin, IWizardStep
+    public class NullWizardStepWin : WizardStepWin
     {
         /// <summary>
         /// Constructs the NullWizardStep
         /// </summary>
         public NullWizardStepWin()
         {
-        }
-
-        public void MoveBack()
-        {
-            //Do Nothing
-        }
-
-        /// <summary>
-        /// The text that you want displayed at the top of the wizard control when this step is active.
-        /// </summary>
-        public string HeaderText
-        {
-            get { return ""; }
-        }
-
-        /// <summary>
-        /// Does nothing
-        /// </summary>
-        public void InitialiseStep()
-        {
-        }
-
-        /// <summary>
-        /// Always allows moving on.
-        /// </summary>
-        /// <param name="message">Will always be the empty string</param>
-        /// <returns>True</returns>
-        public bool CanMoveOn(out string message)
-        {
-            message = "";
-            return true;
-        }
-
-        /// <summary>
-        /// Verifies whether the user can move back from this step.
-        /// </summary>
-        /// <returns></returns>
-        public bool CanMoveBack()
-        {
-            return true;
-        }
-
-        public void MoveOn()
-        {
-            //Do Nothing
-        }
-
-        /// <summary>
-        /// Provides an interface for the developer to implement functionality to cancel any edits made as part of this
-        /// wizard step. The default wizard controller functionality is to call all wizard steps cancelStep methods when
-        /// its Cancel method is called.
-        /// </summary>
-        public void CancelStep()
-        {
-            
         }
     }
 }

@@ -1,21 +1,59 @@
-using Habanero.UI.Base;
+﻿using Habanero.UI.Base;
 
-namespace Habanero.UI.Win
+namespace Habanero.UI.VWG
 {
     /// <summary>
     /// A basic implementation of WizardStep that can be used for simply displaying a message.  
     /// Should a step be required that is a simple message for the user (such as at the end of a wizard), this step can be used
     /// </summary>
-    public partial class WizardStepWin : UserControlWin, IWizardStep
+    public class WizardStepVWG : UserControlVWG, IWizardStep
     {
         /// <summary>
-        /// Constructs the MessageWizardStep
+        /// Constructs the WizardStep
         /// </summary>
-        public WizardStepWin()
+        public WizardStepVWG()
         {
             InitializeComponent();
         }
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private readonly System.ComponentModel.IContainer components;
 
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // MessageWizardStep
+            // 
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "WizardStep";
+            this.Size = new System.Drawing.Size(322, 300);
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
         /// <summary>
         /// Initialises the step. Run when the step is reached.
         /// </summary>
@@ -79,7 +117,7 @@ namespace Habanero.UI.Win
         /// its Cancel method is called on the Wizard Controller (i.e. typically when Cancel Button is selected.
         /// </summary>
         public virtual void CancelStep()
-        {   
+        {
         }
     }
 }

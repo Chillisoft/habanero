@@ -42,7 +42,7 @@ namespace Habanero.Test.UI.Base.Wizard
             bool IsInitialised { get; }
             bool AllowMoveBack { get; set; }
             new string HeaderText { get; set; }
-            bool MoveBackWasCalled { get; set; }
+            bool UndoMoveOnWasCalled { get; set; }
             bool MoveOnWasCalled { get; set; }
         }
 
@@ -57,34 +57,21 @@ namespace Habanero.Test.UI.Base.Wizard
 
         internal class WizardControllerStub<T> : IWizardControllerStub where T : IWizardStepStub, new()
         {
-            private IWizardStepStub _controlForStep1 = new T();
-
-            private IWizardStepStub _controlForStep2 = new T();
-            private bool _finishCalled = false;
             private readonly List<IWizardStep> _wizardSteps;
-            private int _currentStep = -1;
-            private bool _cancelButtonEventFired = false;
 
-            public IWizardStepStub ControlForStep1
-            {
-                get { return _controlForStep1; }
-                set { _controlForStep1 = value; }
-            }
+            public IWizardStepStub ControlForStep1 { get; set; }
 
-            public IWizardStepStub ControlForStep2
-            {
-                get { return _controlForStep2; }
-                set { _controlForStep2 = value; }
-            }
+            public IWizardStepStub ControlForStep2 { get; set; }
 
-            public bool FinishCalled
-            {
-                get { return _finishCalled; }
-                set { _finishCalled = value; }
-            }
+            public bool FinishCalled { get; set; }
 
             public WizardControllerStub()
             {
+                CancelButtonEventFired = false;
+                CurrentStep = -1;
+                ControlForStep2 = new T();
+                ControlForStep1 = new T();
+                FinishCalled = false;
                 _wizardSteps = new List<IWizardStep>();
                 ControlForStep1.Name = "ControlForStep1";
                 ControlForStep2.Name = "ControlForStep2";
@@ -96,34 +83,33 @@ namespace Habanero.Test.UI.Base.Wizard
 
             public IWizardStep GetNextStep()
             {
-                if (_currentStep < _wizardSteps.Count - 1)
-                    return _wizardSteps[++_currentStep];
-                else
-                    throw new WizardStepException("Invalid Wizard Step: " + (_currentStep + 1));
+                if (CurrentStep < _wizardSteps.Count - 1)
+                    return _wizardSteps[++CurrentStep];
+                throw new WizardStepException("Invalid Wizard Step: " + (CurrentStep + 1));
             }
 
             public IWizardStep GetPreviousStep()
             {
-                if (_currentStep > 0)
-                    return _wizardSteps[--_currentStep];
-                else throw new WizardStepException("Invalid Wizard Step: " + (_currentStep - 1));
+                if (CurrentStep > 0)
+                    return _wizardSteps[--CurrentStep];
+                throw new WizardStepException("Invalid Wizard Step: " + (CurrentStep - 1));
             }
 
 
             public IWizardStep GetFirstStep()
             {
                 FinishCalled = false;
-                return _wizardSteps[_currentStep = 0];
+                return _wizardSteps[CurrentStep = 0];
             }
 
             public bool IsLastStep()
             {
-                return (_currentStep == _wizardSteps.Count - 1);
+                return (CurrentStep == _wizardSteps.Count - 1);
             }
 
             public bool IsFirstStep()
             {
-                return (_currentStep == 0);
+                return (CurrentStep == 0);
             }
 
             public void Finish()
@@ -135,7 +121,7 @@ namespace Habanero.Test.UI.Base.Wizard
 
             public bool CanMoveOn(out string message)
             {
-                return _wizardSteps[_currentStep].CanMoveOn(out message);
+                return _wizardSteps[CurrentStep].CanMoveOn(out message);
             }
 
             public int StepCount
@@ -146,19 +132,13 @@ namespace Habanero.Test.UI.Base.Wizard
             /// <summary>
             /// Gets or Sets the Current Step of the Wizard.
             /// </summary>
-            public int CurrentStep
-            {
-                get { return _currentStep; }
-            }
+            public int CurrentStep { get; private set; }
 
-            public bool CancelButtonEventFired
-            {
-                get { return _cancelButtonEventFired; }
-            }
+            public bool CancelButtonEventFired { get; private set; }
 
             public IWizardStep GetCurrentStep()
             {
-                return _wizardSteps[_currentStep];
+                return _wizardSteps[CurrentStep];
             }
 
             /// <summary>
@@ -168,7 +148,7 @@ namespace Habanero.Test.UI.Base.Wizard
             /// </summary>
             public void CancelWizard()
             {
-                this._cancelButtonEventFired = true;
+                this.CancelButtonEventFired = true;
             }
 
             public void CompleteCurrentStep()
@@ -176,9 +156,9 @@ namespace Habanero.Test.UI.Base.Wizard
                  GetCurrentStep().MoveOn();
             }
 
-            public void UndoCurrentStep()
+            public void UndoCompleteCurrentStep()
             {
-                GetCurrentStep().MoveBack();
+                GetCurrentStep().UndoMoveOn();
             }
 
             public bool CanMoveBack()
@@ -221,7 +201,7 @@ namespace Habanero.Test.UI.Base.Wizard
                 private bool _allowMoveBack = true;
                 private bool _isInitialised;
 
-                public bool MoveBackWasCalled { get; set; }
+                public bool UndoMoveOnWasCalled { get; set; }
                 public bool MoveOnWasCalled { get; set; }
                 public WizardStepStubWin() : this("")
                 {
@@ -230,13 +210,13 @@ namespace Habanero.Test.UI.Base.Wizard
                 public WizardStepStubWin(string headerText)
                 {
                     _headerText = headerText;
-                    MoveBackWasCalled = false;
+                    UndoMoveOnWasCalled = false;
                     MoveOnWasCalled = false;
                 }
 
-                public void MoveBack()
+                public void UndoMoveOn()
                 {
-                    MoveBackWasCalled = true;
+                    UndoMoveOnWasCalled = true;
                 }
 
                 public string HeaderText
@@ -349,10 +329,9 @@ namespace Habanero.Test.UI.Base.Wizard
             {
                 private bool _allowMoveOn = true;
 
-                private string _headerText;
                 private bool _allowMoveBack = true;
                 private bool _isInitialised;
-                public bool MoveBackWasCalled { get; set; }
+                public bool UndoMoveOnWasCalled { get; set; }
                 public bool MoveOnWasCalled { get; set; }
                 public WizardStepStubVWG()
                     : this("")
@@ -361,20 +340,16 @@ namespace Habanero.Test.UI.Base.Wizard
 
                 public WizardStepStubVWG(string headerText)
                 {
-                    _headerText = headerText;
-                    MoveBackWasCalled = false;
+                    HeaderText = headerText;
+                    UndoMoveOnWasCalled = false;
                     MoveOnWasCalled = false;
                 }
-                public void MoveBack()
+                public void UndoMoveOn()
                 {
-                    MoveBackWasCalled = true;
+                    UndoMoveOnWasCalled = true;
                 }
 
-                public string HeaderText
-                {
-                    get { return _headerText; }
-                    set { _headerText = value; }
-                }
+                public string HeaderText { get; set; }
 
                 /// <summary>
                 /// Provides an interface for the developer to implement functionality to cancel any edits made as part of this
@@ -618,7 +593,7 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.AreEqual(1, wizardControl.NextButton.TabIndex);
         }
         [Test]
-        public void TestNext_ShouldSetStep2()
+        public void Test_Next_ShouldSetStep2()
         {
             //Execute ---------------------------------------------------
             _wizardControl.Next();
@@ -635,12 +610,12 @@ namespace Habanero.Test.UI.Base.Wizard
 //            wizardController.GetFirstStep();
             //---------------Assert Precondition----------------
 //            Assert.AreEqual(1, wizardController.StepCount);
-//            step1.AssertWasNotCalled(step => step.MoveBack());
+//            step1.AssertWasNotCalled(step => step.UndoMoveOn());
 //            Assert.AreSame(step1, wizardController.GetCurrentStep());
             //---------------Execute Test ----------------------
-//            wizardController.UndoCurrentStep();
+//            wizardController.UndoCompleteCurrentStep();
             //---------------Test Result -----------------------
-//            step1.AssertWasCalled(wizardStep => wizardStep.MoveBack());
+//            step1.AssertWasCalled(wizardStep => wizardStep.UndoMoveOn());
 //        }
         [Test]
         public void Test_Previous_ShouldCallWizardControllerUndo()
@@ -653,11 +628,38 @@ namespace Habanero.Test.UI.Base.Wizard
             controller.Stub(controller1 => controller1.GetPreviousStep()).Return(CreateWizardStepStub());
             //---------------Assert Precondition----------------
             Assert.IsTrue(controller.CanMoveOn(out message));
-            controller.AssertWasNotCalled(cntrler => cntrler.UndoCurrentStep());
+            controller.AssertWasNotCalled(cntrler => cntrler.UndoCompleteCurrentStep());
             //---------------Execute Test ----------------------
             wizardControl.Previous();
             //---------------Test Result -----------------------
-            controller.AssertWasCalled(cntrler => cntrler.UndoCurrentStep());
+            controller.AssertWasCalled(cntrler => cntrler.UndoCompleteCurrentStep());
+        }
+
+        [Test]
+        public void Test_Previous_ShouldCallUndoMoveOnForPreviousStep()
+        {
+            //---------------Set up test pack-------------------
+            WizardController controller = new WizardController();
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(controller);
+            var step1 = CreateWizardStepStub();
+            controller.AddStep(step1);
+            var step2 = CreateWizardStepStub();
+            controller.AddStep(step2);
+            step1.AllowMoveOn = true;
+            step2.AllowMoveBack = true;
+            controller.GetFirstStep();
+            controller.GetNextStep();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(controller.CanMoveBack());
+            Assert.AreSame(step2, controller.GetCurrentStep());
+            Assert.IsFalse(step1.UndoMoveOnWasCalled);
+            Assert.IsFalse(step2.UndoMoveOnWasCalled);
+            //---------------Execute Test ----------------------
+            wizardControl.Previous();
+            //---------------Test Result -----------------------
+            Assert.AreSame(step1, controller.GetCurrentStep());
+            Assert.IsTrue(step1.UndoMoveOnWasCalled);
+            Assert.IsFalse(step2.UndoMoveOnWasCalled);
         }
         [Test]
         public void Test_Next_ShouldCallWizardControllerNext()
@@ -677,7 +679,7 @@ namespace Habanero.Test.UI.Base.Wizard
             controller.AssertWasCalled(cntrler => cntrler.CompleteCurrentStep());
         }
         [Test]
-        public void TestPrevious_WhenStep2_ShouldReturnStep1()
+        public void Test_Previous_WhenStep2_ShouldReturnStep1()
         {
             //Setup ----------------------------------------------------
             _wizardControl.Next();
@@ -688,7 +690,7 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test, ExpectedException(typeof(WizardStepException))]
-        public void TestNextWithNoNextStep()
+        public void Test_NextWithNoNextStep()
         {
             //Setup ----------------------------------------------------
             _wizardControl.Next();
@@ -697,7 +699,7 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test, ExpectedException(typeof(WizardStepException))]
-        public void TestPreviousWithNoNextStep()
+        public void Test_PreviousWithNoNextStep_ShouldRaiseError()
         {
             //Execute ---------------------------------------------------
             _wizardControl.Previous();
@@ -723,7 +725,7 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test]
-        public void TestNextButtonText_ShouldChangeWhenLastStep()
+        public void Test_NextButtonText_ShouldChangeWhenLastStep()
         {
             //Execute ---------------------------------------------------
             _wizardControl.Next();
@@ -736,13 +738,13 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test]
-        public void TestPreviousButtonDisabledAtStart()
+        public void Test_PreviousButtonDisabledAtStart()
         {
             Assert.IsFalse(_wizardControl.PreviousButton.Enabled);
         }
 
         [Test]
-        public void TestPreviousButtonEnabledAfterStart()
+        public void Test_PreviousButtonEnabledAfterStart()
         {
             //--------------setup-----------------
             this._controller.ControlForStep2.AllowMoveBack = true;
@@ -753,7 +755,7 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test]
-        public void TestPreviousButtonDisabled_ReturnToFirstStep()
+        public void Test_PreviousButtonDisabled_ReturnToFirstStep()
         {
             _wizardControl.Next();
             //Execute ---------------------------------------------------
@@ -783,7 +785,7 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test]
-        public void TestNextClick_WhenAtLastStep_ShouldCallFinish()
+        public void Test_NextClick_WhenAtLastStep_ShouldCallFinish()
         {
             //---------------Set up test pack-------------------
             _wizardControl.Next();
@@ -798,7 +800,7 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test]
-        public void TestNextClickAtLastStep_WhenCanMoveOnfalse_DoesNotFinish()
+        public void Test_NextClickAtLastStep_WhenCanMoveOnfalse_DoesNotFinish()
         {
             //---------------Set up test pack-------------------
             IWizardControllerStub controller = CreateWizardControllerStub();
@@ -832,7 +834,7 @@ namespace Habanero.Test.UI.Base.Wizard
 
         }
         [Test]
-        public void TestNextWhen_CanMoveOn_False_TestMessagPostedEventCalled()
+        public void Test_NextWhen_CanMoveOn_False_TestMessagPostedEventCalled()
         {
             //---------------Setup wizard Control -------------------------------
             _wizardControl.MessagePosted += delegate(string message) { _message = message; };
@@ -846,7 +848,7 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test]
-        public void TestPreviousButtonDisabledIfCanMoveBackFalse()
+        public void Test_PreviousButtonDisabledIfCanMoveBackFalse()
         {
             //---------------Set up test pack-------------------
             IWizardControllerStub wizardController = CreateWizardControllerStub();
@@ -866,7 +868,7 @@ namespace Habanero.Test.UI.Base.Wizard
 
 
         [Test]
-        public void TestPreviousButtonDisabledIfCanMoveBackFalse_FromPreviousTep()
+        public void Test_PreviousButtonDisabledIfCanMoveBackFalse_FromPreviousTep()
         {
             //TODO: setup with 3 steps set step 2 allow move back false
             //and go next next next previous and then ensure that canMoveBack false
@@ -911,7 +913,7 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test, Ignore("The test is visually working but the tests are not picking up a change in width : June 2008")]
-        public void TestNextPreviousIn_theCorrectOrder()
+        public void Test_NextPreviousIn_theCorrectOrder()
         {
             //---------------Set up test pack-------------------
             IWizardControllerStub wizardController = CreateWizardControllerStub();
@@ -924,24 +926,6 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.Less(wizardControl.NextButton.Left, wizardControl.PreviousButton.Left);
             //---------------Tear Down -------------------------          
         }
- //       [Test]
-//        public void TestPreviousButtonDisabledIfCanMoveBackFalse()
-//        {
-            //---------------Set up test pack-------------------
-//            IWizardControllerStub wizardController = CreateWizardControllerStub();
-//            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
-//            wizardController.ControlForStep2.AllowMoveBack = false;
-//            wizardControl.Start();
-//
-            //---------------Assert Preconditions ----------------------
-//            Assert.IsFalse(wizardController.ControlForStep2.CanMoveBack());
-            //---------------Execute Test ----------------------
-//            wizardControl.Next();
-            //---------------Assert result -----------------------
-//            Assert.AreSame(wizardControl.CurrentControl, wizardController.ControlForStep2);
-//            Assert.IsFalse(((IWizardStepStub)wizardControl.CurrentControl).AllowMoveBack);
-//            Assert.IsFalse(wizardControl.PreviousButton.Enabled);
-//        }
 
         [Test]
         public void Test_Next_ShouldCallMoveNext()
@@ -960,25 +944,6 @@ namespace Habanero.Test.UI.Base.Wizard
             wizardControl.Next();
             //---------------Test Result -----------------------
             Assert.IsTrue(step1.MoveOnWasCalled);
-        }
-        [Test]
-        public void Test_Previous_ShouldCallMoveBack()
-        {
-            //---------------Set up test pack-------------------
-            IWizardControllerStub controller = CreateWizardControllerStub();
-            var step2 = controller.ControlForStep2;
-            step2.AllowMoveBack = true;
-            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(controller);
-            controller.GetFirstStep();
-            controller.GetNextStep();
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(2, controller.StepCount);
-            Assert.IsFalse(step2.MoveBackWasCalled);
-            Assert.AreSame(step2, controller.GetCurrentStep());
-            //---------------Execute Test ----------------------
-            wizardControl.Previous();
-            //---------------Test Result -----------------------
-            Assert.IsTrue(step2.MoveBackWasCalled);
         }
     }
 }

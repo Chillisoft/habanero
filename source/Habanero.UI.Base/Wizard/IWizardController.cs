@@ -102,12 +102,13 @@ namespace Habanero.UI.Base
         /// <see cref="IWizardStep.MoveOn"/>
         /// </summary>
         void CompleteCurrentStep();
+
         /// <summary>
-        /// Undoes any actions that have been done by the current 
-        /// step when you move back to the previous step.
-        /// It does this by calling the current <see cref="IWizardStep.MoveBack"/>
+        /// Undoes any actions that have been done by the <see cref="CompleteCurrentStep"/> 
+        /// when you move back to it from a previous step.
+        /// It does this by calling the current <see cref="IWizardStep.UndoMoveOn"/>
         /// </summary>
-        void UndoCurrentStep();
+        void UndoCompleteCurrentStep();
 
         /// <summary>
         /// Checks if the Wizard Can proceed to the next step. Calls through to the <see cref="IWizardStep.CanMoveBack"/>

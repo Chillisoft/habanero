@@ -222,10 +222,10 @@ namespace Habanero.UI.Base
         /// step when you move back to the previous step.
         /// It does this by calling the wizard step moveback
         /// </summary>
-        public void UndoCurrentStep()
+        public void UndoCompleteCurrentStep()
         {
             CheckWizardStep();
-            GetCurrentStep().MoveBack();
+            GetCurrentStep().UndoMoveOn();
         }
 
         /// <summary>
