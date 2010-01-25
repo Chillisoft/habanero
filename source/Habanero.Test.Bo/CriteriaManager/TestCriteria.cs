@@ -2582,7 +2582,7 @@ namespace Habanero.Test.BO
         #endregion
 
 
-        [Test, Ignore("IN NOT IN not yet implemented")]
+        [Test, Ignore("some tests not yet implemented")]
         public void TestOtherOperators()
         {
             //---------------Set up test pack-------------------
@@ -2592,8 +2592,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             Assert.Fail("Todo");
             //Todo:  
-            //                " NOT IN",
-            //                " IN"
+            //                
             //
             //            Test using objects and enums TestCriteria
             //test parsing from strings. TestCriteriaParser

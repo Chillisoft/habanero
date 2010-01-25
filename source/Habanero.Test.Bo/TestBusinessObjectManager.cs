@@ -1690,7 +1690,6 @@ namespace Habanero.Test.BO
             IPrimaryKey addresssID = address.ID;
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(3, boMan.Count);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
@@ -1699,7 +1698,6 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addresses.Count);
-            Assert.AreEqual(3, boMan.Count);
 
             Assert.IsTrue(boMan.Contains(loadedCP));
             Assert.AreSame(loadedCP, boMan[contactPersonID]);

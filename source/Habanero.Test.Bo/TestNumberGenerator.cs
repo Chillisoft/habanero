@@ -214,6 +214,7 @@ namespace Habanero.Test.BO
         public void TestGetSecondNumber_FromSeperateNumberGeneratorInstance()
         {
             //---------------Clean Up --------------------------
+            BORegistry.DataAccessor = new DataAccessorDB();
             CleanupNumberGenerator();
             //---------------Set up test pack-------------------
             INumberGenerator numGen1 = new NumberGenerator("tmp");
@@ -237,6 +238,7 @@ namespace Habanero.Test.BO
         public void TestGetSecondNumber_FromSeperateNumberGeneratorInstance_AfterUpdate()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorDB();
             CleanupNumberGenerator();
             NumberGenerator numGen = new NumberGenerator("tmp");
             //---------------Execute Test ----------------------
@@ -253,6 +255,7 @@ namespace Habanero.Test.BO
         public void TestSetSequenceNumber()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorDB();
             BOSequenceNumber.LoadNumberGenClassDef();
             NumberGenerator numGen = new NumberGenerator("tmp");
             numGen.NextNumber();
@@ -271,6 +274,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             //Delete entry from database for the number type.
+            BORegistry.DataAccessor = new DataAccessorDB();
             string tableName = "another_number_generator";
             BOSequenceNumber.LoadNumberGenClassDef(tableName);
             DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From " + tableName);
@@ -291,6 +295,7 @@ namespace Habanero.Test.BO
         public void TestDifferentTableNameGetSecondNumber_FromSeperateNumberGeneratorInstance_AfterUpdate()
         {
             //---------------Clean Up --------------------------
+            BORegistry.DataAccessor = new DataAccessorDB();
             BOSequenceNumber.LoadNumberGenClassDef("another_number_generator");
             NumberGenerator numGen = new NumberGenerator("tmp", "another_number_generator");
             numGen.SetSequenceNumber(0);
