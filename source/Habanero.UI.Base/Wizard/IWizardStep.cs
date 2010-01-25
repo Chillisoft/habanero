@@ -52,9 +52,12 @@ namespace Habanero.UI.Base
         /// Undoes any actions that have been done by this wizard step.
         /// Usually you would want this to do nothing since if the 
         /// user does a previous and then next they would not expect to 
-        /// lose their 
+        /// lose their. But in some cases you may have created objects based on
+        /// the selection in this step and when you move back to this step you want to
+        /// these so that if the user changes his/her selection then new objects or different
+        /// objects are created.
         /// </summary>
-        void MoveBack();
+        void UndoMoveOn();
 
         /// <summary>
         /// The text that you want displayed at the top of the wizard control when this step is active.

@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -118,19 +119,27 @@ namespace Habanero.BO
             if (classDef == null) throw new ArgumentNullException("classDef");
             IOrderCriteria orderCriteria = new OrderCriteria();
             orderCriteria = orderCriteria.FromString(orderByString);
-            //TODO Mark 20 Mar 2009: Souldn't the following code be stripped out into a PrepareOrderBy method that is called before loading? (Similar to PrepareCriteria)
-            foreach (OrderCriteriaField field in orderCriteria.Fields)
+            try
             {
-                Source source = field.Source;
-                IClassDef relatedClassDef;
-                PrepareSource(classDef, ref source, out relatedClassDef);
-                field.Source = source;
+                //TODO Mark 20 Mar 2009: Souldn't the following code be stripped out into a PrepareOrderBy method that is called before loading? (Similar to PrepareCriteria)
+                foreach (OrderCriteriaField field in orderCriteria.Fields)
+                {
+                    Source source = field.Source;
+                    IClassDef relatedClassDef;
+                    PrepareSource(classDef, ref source, out relatedClassDef);
+                    field.Source = source;
 
-                IPropDef propDef = relatedClassDef.GetPropDef(field.PropertyName);
-                field.FieldName = propDef.DatabaseFieldName;
-                field.Source.ChildSourceLeaf.EntityName = relatedClassDef.GetTableName(propDef);
+                    IPropDef propDef = relatedClassDef.GetPropDef(field.PropertyName);
+                    field.FieldName = propDef.DatabaseFieldName;
+                    field.Source.ChildSourceLeaf.EntityName = relatedClassDef.GetTableName(propDef);
+                }
+                return orderCriteria;
             }
-            return orderCriteria;
+            catch (InvalidPropertyNameException ex)
+            {
+                throw new InvalidOrderCriteriaException("The orderByString '" + orderByString 
+                        + "' is not valid for the classDef '" + classDef.ClassNameFull);
+            }
         }
 
         ///<summary>
@@ -161,7 +170,7 @@ namespace Habanero.BO
                     IPropDef propDef = propParentClassDef.GetPropDef(field.PropertyName);
                     field.FieldName = propDef.DatabaseFieldName;
                     field.Source.ChildSourceLeaf.EntityName = propParentClassDef.GetTableName(propDef);
-                    if (criteria.CanBeParametrised() && criteria.ComparisonOperator != Criteria.ComparisonOp.In)
+                    if (criteria.CanBeParametrised() && (criteria.ComparisonOperator != Criteria.ComparisonOp.In && criteria.ComparisonOperator != Criteria.ComparisonOp.NotIn))
                     {
                         object returnedValue;
                         propDef.TryParsePropValue(criteria.FieldValue, out returnedValue );

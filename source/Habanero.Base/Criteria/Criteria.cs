@@ -106,7 +106,11 @@ namespace Habanero.Base
             /// <summary>
             /// The In operator 
             /// </summary>
-            In
+            In,
+            /// <summary>
+            /// The Not In operator
+            /// </summary>
+            NotIn
         }
 
         #endregion
@@ -128,7 +132,7 @@ namespace Habanero.Base
         /// An Arracy of Comparison Ops (e.g. '=', 'Like' that can be used when building <see cref="Criteria"/>
         /// This is used to convert the <see cref="ComparisonOp"/> value to a <see cref="ComparisonOperatorString"/>
         /// </summary>
-        protected readonly string[] _comparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT", "IN"};
+        protected readonly string[] _comparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT", "IN", "NOT IN"};
         private readonly QueryField _field;
 
         /// <summary>
@@ -392,6 +396,8 @@ namespace Habanero.Base
                     return boPropertyValue != null;//if boPropertyValue null then always return false.
                 case ComparisonOp.In:
                     return compareToValue.CompareTo(boPropertyValue) == 0;
+                case ComparisonOp.NotIn:
+                    return compareToValue.CompareTo(boPropertyValue) != 0;
                 default:
                     throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
                                                          , "The operator " + _comparisonOp + " is not supported by the application");
@@ -446,6 +452,8 @@ namespace Habanero.Base
                     return _fieldValue.ToString().ToUpper() != "NULL";
                 case ComparisonOp.In:
                     return ((IComparable)_fieldValue).CompareTo(null) == 0;
+                case ComparisonOp.NotIn:
+                    return ((IComparable)_fieldValue).CompareTo(null) != 0;
                 default:
                     throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
                                                          , "The operator " + _comparisonOp + " is not supported by the application");

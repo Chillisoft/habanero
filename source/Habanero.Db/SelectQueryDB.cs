@@ -349,45 +349,52 @@ namespace Habanero.DB
             builder.Append(" WHERE ");
             CriteriaDB criteriaDB = new CriteriaDB(fullCriteria);
             
-            string whereClause =
-                criteriaDB.ToString(_sqlFormatter, delegate(object value)
-                                                   {
-                                                       string paramName = statement.ParameterNameGenerator.GetNextParameterName();
-                                                       if (value == null) value = "NULL";
-                                                       //TODO Mark 20 Oct 2009: Convert these 'DateTime' things to use IResolvableToValue
-                                                       if (value is DateTimeToday)
-                                                       {
-                                                           value = DateTimeToday.Value;
-                                                       }
-                                                       if (value is DateTimeNow)
-                                                       {
-                                                           value = DateTimeNow.Value;
-                                                       }
-                                                       if (value is Criteria.CriteriaValues)
-                                                       {
-                                                           string inClause = "(";
-
-                                                           Criteria.CriteriaValues values = (Criteria.CriteriaValues)value;
-                                                           int i = 0;
-                                                           foreach (var paramValue in values)
-                                                           {
-                                                               statement.AddParameter(paramName, paramValue);
-                                                               inClause += paramName;
-                                                               if (i < values.Count - 1)
-                                                               {
-                                                                   inClause += ", ";
-                                                                   paramName = statement.ParameterNameGenerator.GetNextParameterName();
-                                                               }
-                                                               i++;
-                                                           }
-                                                           inClause += ")";
-                                                           return inClause;
-                                                       } 
-                                                       statement.AddParameter(paramName, value); 
-                                                       return paramName;
-                                                   });
+            string whereClause = criteriaDB.ToString(_sqlFormatter, value => AddParameter(value, statement));
 
             builder.Append(whereClause);
+        }
+
+        private string AddParameter(object value, SqlStatement statement)
+        {
+            if (value == null) value = "NULL";
+            //TODO Mark 20 Oct 2009: Convert these 'DateTime' things to use IResolvableToValue
+            if (value is DateTimeToday)
+            {
+                value = DateTimeToday.Value;
+            }
+            if (value is DateTimeNow)
+            {
+                value = DateTimeNow.Value;
+            }
+            if (value is Criteria.CriteriaValues)
+            {
+                return CreateInClause(statement, value);
+            }
+            string paramName = statement.ParameterNameGenerator.GetNextParameterName();
+            statement.AddParameter(paramName, value);
+            return paramName;
+
+        }
+
+        private string CreateInClause(SqlStatement statement, object value)
+        {
+            string paramName = statement.ParameterNameGenerator.GetNextParameterName();
+            string inClause = "(";
+            Criteria.CriteriaValues criteriaValues = (Criteria.CriteriaValues)value;
+            int i = 0;
+            foreach (var paramValue in criteriaValues)
+            {
+                statement.AddParameter(paramName, paramValue);
+                inClause += paramName;
+                if (i < criteriaValues.Count - 1)
+                {
+                    inClause += ", ";
+                    paramName = statement.ParameterNameGenerator.GetNextParameterName();
+                }
+                i++;
+            }
+            inClause += ")";
+            return inClause;
         }
 
         private string DelimitField(Source source, string fieldName)

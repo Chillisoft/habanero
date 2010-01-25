@@ -57,9 +57,19 @@ namespace Habanero.BO
         internal static void SetupCriteriaForRelationship(IMultipleRelationship relationship, IBusinessObjectCollection collection)
         {
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-
-            IOrderCriteria preparedOrderCriteria =
-                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
+            IOrderCriteria preparedOrderCriteria;
+            var orderCriteriaString = relationship.OrderCriteria.ToString();
+            try
+            {
+                preparedOrderCriteria =
+                    QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, orderCriteriaString);
+            }
+            catch (InvalidOrderCriteriaException ex)
+            {
+                throw new InvalidOrderCriteriaException("The Relationship '" + relationship.RelationshipName 
+                        + "' on the ClassDef '" + relationship.OwningBO.ClassDef.ClassNameFull 
+                        + "' has an Invalid OrderCriteria '" + orderCriteriaString);
+            }
 
             //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
             collection.SelectQuery.Criteria = relationshipCriteria;

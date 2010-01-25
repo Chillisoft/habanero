@@ -99,7 +99,7 @@ namespace Habanero.Test.DB
             string sql = sourceDB.CreateSQL();
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
-            string expectedSql = string.Format("{0} JOIN {1} ON {0}.{2} = {1}.{3}", source.EntityName, joinSource.EntityName,
+            string expectedSql = string.Format("({0} JOIN {1} ON {0}.{2} = {1}.{3})", source.EntityName, joinSource.EntityName,
                                                joinField.FromField.FieldName, joinField.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
@@ -159,7 +159,7 @@ namespace Habanero.Test.DB
             string sql = sourceDB.CreateSQL();
             //-------------Test Result ----------------------
 
-            string expectedSql = string.Format("{0} JOIN {1} ON {0}.{2} = {1}.{3} AND {0}.{4} = {1}.{5}", 
+            string expectedSql = string.Format("({0} JOIN {1} ON {0}.{2} = {1}.{3} AND {0}.{4} = {1}.{5})", 
                                                source.EntityName, joinSource.EntityName, 
                                                joinField1.FromField.FieldName, joinField1.ToField.FieldName,
                                                joinField2.FromField.FieldName, joinField2.ToField.FieldName);
@@ -183,7 +183,7 @@ namespace Habanero.Test.DB
             string sql = sourceDB.CreateSQL(myFormatter);
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
-            string expectedSql = string.Format("[{0}] JOIN [{1}] ON [{0}].[{2}] = [{1}].[{3}]", source.EntityName, joinSource.EntityName,
+            string expectedSql = string.Format("([{0}] JOIN [{1}] ON [{0}].[{2}] = [{1}].[{3}])", source.EntityName, joinSource.EntityName,
                                                joinField.FromField.FieldName, joinField.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
@@ -237,7 +237,7 @@ namespace Habanero.Test.DB
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
             Source.Join.JoinField joinField2 = join2.JoinFields[0];
-            string expectedSql = string.Format("{0} JOIN {1} ON {0}.{2} = {1}.{3} JOIN {4} ON {1}.{5} = {4}.{6}",
+            string expectedSql = string.Format("(({0} JOIN {1} ON {0}.{2} = {1}.{3}) JOIN {4} ON {1}.{5} = {4}.{6})",
                                                sourceDB.EntityName,
                                                joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
                                                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
@@ -262,7 +262,7 @@ namespace Habanero.Test.DB
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = source.Joins[0].JoinFields[0];
             Source.Join.JoinField joinField2 = source.Joins[1].JoinFields[0];
-            string expectedSql = string.Format("{0} JOIN {1} ON {0}.{2} = {1}.{3} JOIN {4} ON {0}.{5} = {4}.{6}",
+            string expectedSql = string.Format("(({0} JOIN {1} ON {0}.{2} = {1}.{3}) JOIN {4} ON {0}.{5} = {4}.{6})",
                                                sourceDB.EntityName,
                                                joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
                                                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
@@ -290,7 +290,7 @@ namespace Habanero.Test.DB
             Source.Join.JoinField joinField = join.JoinFields[0];
             Source.Join.JoinField joinFieldBranch1 = branchJoin1.JoinFields[0];
             Source.Join.JoinField joinFieldBranch2 = branchJoin2.JoinFields[0];
-            string expectedSql = string.Format("{0} JOIN {1} ON {0}.{4} = {1}.{5} JOIN {2} ON {1}.{6} = {2}.{7} JOIN {3} ON {1}.{8} = {3}.{9}",
+            string expectedSql = string.Format("((({0} JOIN {1} ON {0}.{4} = {1}.{5}) JOIN {2} ON {1}.{6} = {2}.{7}) JOIN {3} ON {1}.{8} = {3}.{9})",
                                                sourceDB.EntityName, joinSource.EntityName, branch1.EntityName, branch2.EntityName,
                                                joinField.FromField.FieldName, joinField.ToField.FieldName,
                                                joinFieldBranch1.FromField.FieldName, joinFieldBranch1.ToField.FieldName, 

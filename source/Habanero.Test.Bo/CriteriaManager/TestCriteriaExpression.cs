@@ -89,7 +89,7 @@ namespace Habanero.Test.BO
             CriteriaExpression tree = new CriteriaExpression("Name not in ('Peter', 'Mark')");
             Assert.AreEqual(" NOT IN ", tree.Expression);
             Assert.AreEqual("Name", tree.Left.Expression);
-            Assert.AreEqual("Peter', 'Mark", tree.Right.Expression);
+            Assert.AreEqual("('Peter', 'Mark')", tree.Right.Expression);
         }
 
         [Test]

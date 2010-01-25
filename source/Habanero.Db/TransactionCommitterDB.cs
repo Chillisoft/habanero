@@ -68,7 +68,7 @@ namespace Habanero.DB
             _transactionsExecutingToDataSource = new Dictionary<string, ITransactional>();
             _dbConnection = _databaseConnection.GetConnection();
             _dbConnection.Open();
-            _dbTransaction = _dbConnection.BeginTransaction(_databaseConnection.IsolationLevel);
+            _dbTransaction = _databaseConnection.BeginTransaction(_dbConnection);
 //            IDbCommand command = _dbConnection.CreateCommand();
 //            command.Transaction = _dbTransaction;
 //            command.CommandText = "sp_MSForEachTable";

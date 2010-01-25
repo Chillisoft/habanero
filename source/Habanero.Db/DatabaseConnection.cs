@@ -252,7 +252,7 @@ namespace Habanero.DB
         /// error opening a connection.
         /// </summary>
         /// <returns>Returns a new IDbConnection object</returns>
-        private IDbConnection GetOpenConnectionForReading()
+        internal IDbConnection GetOpenConnectionForReading()
         {
             try
             {
@@ -267,6 +267,7 @@ namespace Habanero.DB
                     return dbConnection;
                 }
                 IDbConnection newDbConnection = this.NewConnection;
+                newDbConnection.Open();
                 _connections.Add(newDbConnection);
                 return newDbConnection;
             }
@@ -371,7 +372,7 @@ namespace Habanero.DB
                 IDbCommand cmd = CreateCommand(con);
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = selectSql;
-                cmd.Transaction = con.BeginTransaction(IsolationLevel);
+                cmd.Transaction = BeginTransaction(con);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)
@@ -449,7 +450,7 @@ namespace Habanero.DB
                 con = GetOpenConnectionForReading();
                 IDbCommand cmd = CreateCommand(con);
                 selectSql.SetupCommand(cmd);
-                cmd.Transaction = con.BeginTransaction(IsolationLevel);
+                cmd.Transaction = BeginTransaction(con);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)
@@ -472,6 +473,19 @@ namespace Habanero.DB
             {
                 if (con != null) log.Info(string.Format("LoadDataReader(ISqlStatement): Final Connection state: {0}", con.State));
             }
+        }
+
+        /// <summary>
+        /// Creates a transaction using the <see cref="IsolationLevel"/> set as the IsolationLevel. If this doesn't work, creates
+        /// a transaction using the default IsolationLevel. Uses the connection passed in to create the transaction on - this should be
+        /// open (so use <see cref="GetOpenConnectionForReading"/> to get the connection first).  Override this method to 
+        /// do special transaction creation logic.
+        /// </summary>
+        /// <param name="openConnection"></param>
+        /// <returns></returns>
+        public virtual IDbTransaction BeginTransaction(IDbConnection openConnection)
+        {
+            return openConnection.BeginTransaction(IsolationLevel);
         }
 
         /// <summary>

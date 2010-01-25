@@ -147,6 +147,7 @@
     <Compile Include="IBusinessObjectLookupList.cs" />
     <Compile Include="IDatabaseLookupList.cs" />
     <Compile Include="ILookupListWithClassDef.cs" />
+    <Compile Include="InvalidOrderCriteriaException.cs" />
     <Compile Include="IResolvableToValue.cs" />
     <Compile Include="ISimpleLookupList.cs" />
     <Compile Include="OrderCriteriaField.cs" />

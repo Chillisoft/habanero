@@ -29,13 +29,9 @@ namespace Habanero.UI.Win
     /// </summary>
     public class WizardControlWin : UserControlWin, IWizardControl
     {
-        private IControlHabanero _currentControl;
-        private IButton _nextButton;
-        private IButton _previousButton;
         private IWizardController _wizardController;
         private readonly IControlFactory _controlFactory;
         private readonly IPanel _wizardStepPanel;
-        private IButton _cancelButton;
 
         /// <summary>
         /// Raised when the wizard is complete to notify the containing control or controlling object.
@@ -64,22 +60,6 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Gets the Cancel Button so that it can be programmatically interacted with.
-        /// </summary>
-        public IButton CancelButton
-        {
-            get { return _cancelButton; }
-        }
-
-        ///// <summary>
-        ///// The label that is displayed at the top of the wizard control for each step.
-        ///// </summary>
-        //public ILabel HeadingLabel
-        //{
-        //    get { return _headingLabel; }
-        //}
-
-        /// <summary>
         /// Initialises the WizardControl with the IWizardController.  No logic is performed other than storing the wizard controller.
         /// </summary>
         /// <param name="wizardController"></param>
@@ -93,82 +73,58 @@ namespace Habanero.UI.Win
 
             _wizardStepPanel = _controlFactory.CreatePanel();
             
-  
-            //IGroupBox headerLabelGroupBox = CreateHeaderLabel(controlFactory);
 
             BorderLayoutManagerWin borderLayoutManager = new BorderLayoutManagerWin(this, _controlFactory);
-            //borderLayoutManager.AddControl(headerLabelGroupBox, BorderLayoutManager.Position.North);
             borderLayoutManager.AddControl(_wizardStepPanel, BorderLayoutManager.Position.Centre);
             borderLayoutManager.AddControl(buttonPanel, BorderLayoutManager.Position.South);
-
-        }
-
-        //private IGroupBox CreateHeaderLabel(IControlFactory controlFactory)
-        //{
-        //    IGroupBox headerLabelGroupBox = controlFactory.CreateGroupBox();
-
-        //    _headingLabel = controlFactory.CreateLabel();
-        //    _headingLabel.Font = new Font(_headingLabel.Font, FontStyle.Bold);
-        //    _headingLabel.Height = 15;
-        //    _headingLabel.Visible = true;
-        //    headerLabelGroupBox.Height = 30;
-        //    FlowLayoutManager flowManager = new FlowLayoutManager(headerLabelGroupBox, controlFactory);
-        //    flowManager.Alignment = FlowLayoutManager.Alignments.Left;
-        //    flowManager.AddControl(_headingLabel);
-
-        //    return headerLabelGroupBox;
-        //}
-
-        private IPanel CreateButtonPanel()
-        {
-            IPanel buttonPanel = _controlFactory.CreatePanel();
-            FlowLayoutManager layoutManager = new FlowLayoutManager(buttonPanel, _controlFactory);
-            layoutManager.Alignment= FlowLayoutManager.Alignments.Right;
-
-            _cancelButton = _controlFactory.CreateButton("Cancel");
-            _cancelButton.Click += this.uxCancelButton_Click;
-            _cancelButton.Size = new Size(75, 38);
-            _cancelButton.TabIndex = 0;
-            layoutManager.AddControl(_cancelButton);
-
-            _nextButton = _controlFactory.CreateButton("Next");
-            _nextButton.Click += this.uxNextButton_Click;
-            _nextButton.Size = new Size(75, 38);
-            _nextButton.TabIndex = 1;
-            layoutManager.AddControl(_nextButton);
-
-            _previousButton = _controlFactory.CreateButton("Previous");
-            _previousButton.Click += this.uxPreviousButton_Click;
-            _previousButton.Size = new Size(75, 38);
-            _previousButton.TabIndex = 0;
-            layoutManager.AddControl(_previousButton);
-
-
-            return buttonPanel;
         }
 
         /// <summary>
         /// Gets the control that is currently displayed in the WizardControl (the current wizard step's control)
         /// </summary>
-        public IControlHabanero CurrentControl
-        {
-            get { return _currentControl; }
-        }
+        public IControlHabanero CurrentControl { get; private set; }
+
+        /// <summary>
+        /// Gets the Cancel Button so that it can be programmatically interacted with.
+        /// </summary>
+        public IButton CancelButton { get; private set; }
 
         /// <summary>
         /// Gets the Next Button so that it can be programmatically interacted with.
         /// </summary>
-        public IButton NextButton
-        {
-            get { return _nextButton; }
-        }
+        public IButton NextButton { get; private set; }
 
         /// <summary>
         /// Gets the Previous Button so that it can be programmatically interacted with.
         /// </summary>
-        public IButton PreviousButton
+        public IButton PreviousButton { get; private set; }
+
+        private IPanel CreateButtonPanel()
         {
-            get { return _previousButton; }
+            IPanel buttonPanel = _controlFactory.CreatePanel();
+            FlowLayoutManager layoutManager = new FlowLayoutManager(buttonPanel, _controlFactory)
+                                                  {Alignment = FlowLayoutManager.Alignments.Right};
+
+            CancelButton = _controlFactory.CreateButton("Cancel");
+            CancelButton.Click += this.CancelButton_Click;
+            CancelButton.Size = new Size(75, 38);
+            CancelButton.TabIndex = 0;
+            layoutManager.AddControl(CancelButton);
+
+            NextButton = _controlFactory.CreateButton("Next");
+            NextButton.Click += this.NextButton_Click;
+            NextButton.Size = new Size(75, 38);
+            NextButton.TabIndex = 1;
+            layoutManager.AddControl(NextButton);
+
+            PreviousButton = _controlFactory.CreateButton("Previous");
+            PreviousButton.Click += this.PreviousButton_Click;
+            PreviousButton.Size = new Size(75, 38);
+            PreviousButton.TabIndex = 0;
+            layoutManager.AddControl(PreviousButton);
+
+
+            return buttonPanel;
         }
 
         /// <summary>
@@ -191,15 +147,36 @@ namespace Habanero.UI.Win
         {
             DoIfCanMoveOn(delegate
             {
-                IWizardStep currentStep = _wizardController.GetCurrentStep();
-                currentStep.MoveOn();
+//                IWizardStep currentStep = _wizardController.GetCurrentStep();
+//                currentStep.MoveOn();
+                _wizardController.CompleteCurrentStep();
                 SetStep(_wizardController.GetNextStep());
                 if (_wizardController.IsLastStep())
                 {
-                    _nextButton.Text = "Finish";
+                    NextButton.Text = "Finish";
                 }
                 SetPreviousButtonState();
             });
+        }
+
+        private void NextButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_wizardController.IsLastStep())
+                {
+                    DoIfCanMoveOn(Finish);
+                }
+                else
+                {
+                    Next();
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "Cannot complete this wizard step due to an error:",
+                                                          "Wizard Step Error");
+            }
         }
 
         /// <summary>
@@ -208,10 +185,10 @@ namespace Habanero.UI.Win
         /// <exception cref="WizardStepException">If the wizard is on the first step this exception will be thrown.</exception>
         public void Previous()
         {
-            IWizardStep currentStep = _wizardController.GetCurrentStep();
-            currentStep.MoveBack();
-            SetStep(_wizardController.GetPreviousStep());
-            _nextButton.Text = "Next";
+            var previousStep = _wizardController.GetPreviousStep();
+            _wizardController.UndoCompleteCurrentStep();
+            SetStep(previousStep);
+            NextButton.Text = "Next";
             SetPreviousButtonState();
         }
 
@@ -229,7 +206,7 @@ namespace Habanero.UI.Win
             IControlHabanero stepControl = step;
             if (stepControl != null)
             {
-                _currentControl = stepControl;
+                CurrentControl = stepControl;
                 FireStepChanged(step);
                 _wizardStepPanel.Controls.Clear();
                 stepControl.Top = WizardControl.PADDING;
@@ -262,47 +239,28 @@ namespace Habanero.UI.Win
         }
 
 
-        private void uxCancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             _wizardController.CancelWizard();
         }
 
-        private void uxNextButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (_wizardController.IsLastStep())
-                {
-                    DoIfCanMoveOn(delegate { Finish(); });
-                }
-                else
-                {
-                    Next();
-                }
-            }
-            catch (Exception ex)
-            {
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "Cannot complete this wizard step due to an error:",
-                                                          "Wizard Step Error");
-            }
-        }
-
-        private void uxPreviousButton_Click(object sender, EventArgs e)
+        private void PreviousButton_Click(object sender, EventArgs e)
         {
             Previous();
         }
 
         private void SetPreviousButtonState()
         {
-            _previousButton.Enabled = !_wizardController.IsFirstStep();
-            if (_previousButton.Enabled)
+            PreviousButton.Enabled = !_wizardController.IsFirstStep();
+            if (PreviousButton.Enabled)
             {
-                _previousButton.Enabled = _wizardController.GetCurrentStep().CanMoveBack();
+                PreviousButton.Enabled = _wizardController.CanMoveBack();
             }
         }
 
         /// <summary>
-        /// Calls the finish method on the controller to being the completion process.  If this is successful the Finished event is fired.
+        /// Calls the finish method on the controller to being the completion process.  
+        /// If this is successful the Finished event is fired.
         /// </summary>
         public void Finish()
         {

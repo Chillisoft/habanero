@@ -26,6 +26,8 @@ namespace Habanero.UI.Base
     /// Controls the behaviour of a wizard, which guides users through a process one
     /// step at a time. Implementsts the <see cref="IWizardController"/>
     /// </summary>
+// ReSharper disable ClassWithVirtualMembersNeverInherited.Global
+    // ReSharper disable UnusedMember.Global
     public class WizardController : IWizardController
     {
         private List<IWizardStep> _wizardSteps;
@@ -52,6 +54,7 @@ namespace Habanero.UI.Base
             _wizardSteps.Add(step);
         }
 
+
         /// <summary>
         /// Gets or Sets the list of Wizard Steps in the Wizard.
         /// </summary>
@@ -61,7 +64,6 @@ namespace Habanero.UI.Base
             set { _wizardSteps = value; }
         }
 
-
         /// <summary>
         /// Gets or Sets the Current Step of the Wizard.
         /// </summary>
@@ -70,7 +72,6 @@ namespace Habanero.UI.Base
             get { return _currentStep; }
             protected set { _currentStep = value; }
         }
-
 
         /// <summary>
         /// Returns the next step in the Wizard and sets the current step to that step.
@@ -143,6 +144,8 @@ namespace Habanero.UI.Base
         public virtual void Finish()
         {
             if (!IsLastStep()) throw new WizardStepException("Invalid call to Finish(), not at last step");
+            var currentStep = GetCurrentStep();
+            if (currentStep != null) currentStep.MoveOn();
             FireWizardFinishedEvent();
         }
 
@@ -154,7 +157,6 @@ namespace Habanero.UI.Base
             }
         }
 
-
         /// <summary>
         /// Checks if the Wizard can proceed to the next step. Calls through to the CanMoveOn method of the current IWizardStep.
         /// </summary>
@@ -162,7 +164,16 @@ namespace Habanero.UI.Base
         /// <returns>True if moving to the next step is allowed.</returns>
         public virtual bool CanMoveOn(out string message)
         {
-            return _wizardSteps[_currentStep].CanMoveOn(out message);
+            CheckWizardStep();
+            return GetCurrentStep().CanMoveOn(out message);
+        }
+
+        private void CheckWizardStep()
+        {
+            if (GetCurrentStep() == null) 
+            {
+                throw new WizardStepException("There is no current wizard step");
+            }
         }
 
 
@@ -195,20 +206,37 @@ namespace Habanero.UI.Base
                 step.CancelStep();
             }
         }
-//        /// <summary>
-//        /// Calls the Current WizardStep's MoveOn Method.
-//        /// </summary>
-//        public virtual void CompleteCurrentStep()
-//        {
-//            _wizardSteps[_currentStep].MoveOn();
-//        }
-//
-//        /// <summary>
-//        /// Calls the Current WizardStep's MoveBack Method.
-//        /// </summary>
-//        public virtual void UndoCurrentStep()
-//        {
-//            _wizardSteps[_currentStep].MoveBack();
-//        }
+
+        /// <summary>
+        /// Does any actions involved in the current wizard step when you move on
+        /// to the next wizard step. E.g. Updates any Objects from 
+        /// User interface controls.
+        /// </summary>
+        public void CompleteCurrentStep()
+        {
+            CheckWizardStep();
+            GetCurrentStep().MoveOn();
+        }
+        /// <summary>
+        /// Undoes any actions that have been done by the current 
+        /// step when you move back to the previous step.
+        /// It does this by calling the wizard step moveback
+        /// </summary>
+        public void UndoCompleteCurrentStep()
+        {
+            CheckWizardStep();
+            GetCurrentStep().UndoMoveOn();
+        }
+
+        /// <summary>
+        /// Checks if the Wizard Can proceed to the next step. Calls through to the <see cref="IWizardStep.CanMoveBack"/>
+        /// </summary>
+        public bool CanMoveBack()
+        {
+            CheckWizardStep();
+            return this.GetCurrentStep().CanMoveBack();
+        }
     }
+    // ReSharper restore ClassWithVirtualMembersNeverInherited.Global
+    // ReSharper restore UnusedMember.Global
 }

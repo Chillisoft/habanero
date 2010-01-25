@@ -603,6 +603,22 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_CreateCriteria_Simple_WithNotIn()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname not in ('Bob')");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.NotIn, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname NOT IN ('Bob')", criteriaAsString);
+        }
+
+        [Test]
         public void Test_CreateCriteria_Simple_WithIn_MultipleValues()
         {
             //---------------Set up test pack-------------------
@@ -616,6 +632,22 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(Criteria.ComparisonOp.In, criteria.ComparisonOperator);
             StringAssert.AreEqualIgnoringCase("Surname in ('Bob', 'Name2', 'Name3')", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_Simple_WithNotIn_MultipleValues()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname not in ('Bob', 'Name2', 'Name3')");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.NotIn, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname not in ('Bob', 'Name2', 'Name3')", criteriaAsString);
         }
 
         [Test]
