@@ -33,7 +33,8 @@ namespace Habanero.Test.BO.Loaders
         private XmlUIFormLoader loader;
 
         [SetUp]
-        public void SetupTest() {
+        public virtual void SetupTest()
+        {
             Initialise();
         }
 

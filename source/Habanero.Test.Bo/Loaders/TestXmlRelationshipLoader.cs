@@ -59,7 +59,8 @@ namespace Habanero.Test.BO.Loaders
         private IPropDefCol _propDefs;
 
         [SetUp]
-        public void SetupTest() {
+        public virtual void SetupTest()
+        {
             ClassDef.ClassDefs.Clear();
             Initialise();
         }

@@ -35,7 +35,8 @@ namespace Habanero.Test.BO.Loaders
         private XmlUIFormFieldLoader loader;
         
         [SetUp]
-        public void SetupTest() {
+        public virtual void SetupTest()
+        {
             Initialise();
         }
 
@@ -116,19 +117,17 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("My Tool Tip", uiProp.ToolTipText);
         }
         [Test]
-        public void Test_Load_WhenShowAsCompulsorySet()
+        public virtual void Test_Load_WhenShowAsCompulsorySet()
         {
-            IUIFormField uiProp =
-                loader.LoadUIProperty(@"<field property=""testpropname"" showAsCompulsory=""true"" />");
+            IUIFormField uiProp = loader.LoadUIProperty(@"<field property=""testpropname"" showAsCompulsory=""true"" />");
             bool? privatePropertyValue = (bool?) ReflectionUtilities.GetPrivatePropertyValue(uiProp, "ShowAsCompulsory");
             Assert.IsTrue(privatePropertyValue.Value);
             Assert.IsTrue(uiProp.IsCompulsory);
         }
         [Test]
-        public void Test_Load_WhenShowAsCompulsoryNotSet()
+        public virtual void Test_Load_WhenShowAsCompulsoryNotSet()
         {
-            IUIFormField uiProp =
-                loader.LoadUIProperty(@"<field property=""testpropname"" />");
+            IUIFormField uiProp = loader.LoadUIProperty(@"<field property=""testpropname"" />");
             bool? privatePropertyValue = (bool?)ReflectionUtilities.GetPrivatePropertyValue(uiProp, "ShowAsCompulsory");
             Assert.IsFalse(privatePropertyValue.GetValueOrDefault());
             Assert.IsFalse(uiProp.IsCompulsory);

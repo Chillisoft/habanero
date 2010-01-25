@@ -35,7 +35,7 @@ namespace Habanero.Test.BO.Loaders
         private XmlSuperClassLoader itsLoader;
 
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             Initialise();
             ClassDef.ClassDefs.Clear();

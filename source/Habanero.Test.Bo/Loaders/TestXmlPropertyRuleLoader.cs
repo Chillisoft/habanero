@@ -37,7 +37,12 @@ namespace Habanero.Test.BO.Loaders
         private XmlRuleLoader _loader;
 
         [SetUp]
-        public void Initialise()
+        public virtual void SetupTest()
+        {
+            Initialise();
+        }
+
+        protected void Initialise()
         {
             _loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
         }

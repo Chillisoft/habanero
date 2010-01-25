@@ -37,7 +37,7 @@ namespace Habanero.Test.BO.Loaders
         private XmlPropertyLoader _loader;
 
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             Initialise();
             ClassDef.ClassDefs.Clear();

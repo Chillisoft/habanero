@@ -35,7 +35,8 @@ namespace Habanero.Test.BO.Loaders
         private XmlUIGridColumnLoader loader;
 
         [SetUp]
-        public void SetupTest() {
+        public virtual void SetupTest()
+        {
             Initialise();
         }
 

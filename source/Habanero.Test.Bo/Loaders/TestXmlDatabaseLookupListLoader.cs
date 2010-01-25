@@ -35,7 +35,7 @@ namespace Habanero.Test.BO.Loaders
     {
 
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
         }

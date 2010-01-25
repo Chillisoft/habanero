@@ -31,7 +31,7 @@ namespace Habanero.Test.BO.Loaders
         private XmlTriggerLoader loader;
 
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             loader = new XmlTriggerLoader(new DtdLoader(), GetDefClassFactory());
         }

@@ -38,7 +38,7 @@ namespace Habanero.Test.BO.Loaders
         private XmlBusinessObjectLookupListLoader itsLoader;
 
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             Initialise();
             ClassDef.ClassDefs.Clear();
