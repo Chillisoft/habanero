@@ -282,12 +282,6 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
             ContactPersonTestBO savedContactPerson = ContactPersonTestBO.CreateSavedContactPerson
                 (surname, firstName);
             ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
-
-            //---------------Assert Precondition----------------
-            //Object loaded in object manager
-            Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(savedContactPerson.ID));
-
             //---------------Execute Test ----------------------
             Criteria criteria1 = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
             Criteria criteria2 = new Criteria("FirstName", Criteria.ComparisonOp.Equals, firstName);
@@ -322,9 +316,6 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
             ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
 
             //---------------Assert Precondition----------------
-            //Object loaded in object manager
-            Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(savedContactPerson.ID));
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO cp =
@@ -358,9 +349,6 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
             ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
 
             //---------------Assert Precondition----------------
-            //Object loaded in object manager
-            Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(savedContactPerson.ID));
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO cp =

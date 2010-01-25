@@ -30,6 +30,28 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBOSerialisation
     {
+        private const string DataFileName = @"TestData\DataFile.dat";
+        
+        [TestFixtureSetUp]
+        public void SetupTestFixture()
+        {
+            string dataFileDirectoryName = Path.GetDirectoryName(DataFileName);
+            if (!Directory.Exists(dataFileDirectoryName))
+            {
+                Directory.CreateDirectory(dataFileDirectoryName);
+            }
+        }
+
+        [TestFixtureTearDown]
+        public void TearDownTestFixture()
+        {
+            string dataFileDirectoryName = Path.GetDirectoryName(DataFileName);
+            if (Directory.Exists(dataFileDirectoryName))
+            {
+                Directory.Delete(dataFileDirectoryName, true);
+            }
+        }
+
         //Any class that might be serialized must be marked with the SerializableAttribute. 
         //If a class needs to control its serialization process, it can implement the ISerializable interface. 
         //The Formatter calls the GetObjectData at serialization time and populates the supplied 
@@ -44,7 +66,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefs_OneProp();
             BusinessObject myBO = new MyBO();
-            const string dataFile = @"C:\DataFile.dat";
+            const string dataFile = DataFileName;
             File.Delete(dataFile);
             
             // Construct a BinaryFormatter and use it 
@@ -69,7 +91,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefs_OneProp();
             MyBO myBO = new MyBO();
-            const string dataFile = @"C:\DataFile.dat";
+            const string dataFile = DataFileName;
             File.Delete(dataFile);
 
             // Construct a BinaryFormatter and use it 
@@ -101,7 +123,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefs_OneProp();
             IBusinessObjectCollection myBOCol = GetMyBOColWithTwoBOs();
-            const string dataFile = @"C:\DataFile.dat";
+            const string dataFile = DataFileName;
             File.Delete(dataFile);
             
             // Construct a BinaryFormatter and use it 
@@ -127,7 +149,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefs_OneProp();
             IBusinessObjectCollection myBOCol = GetMyBOColWithTwoBOs();
-            const string dataFile = @"C:\DataFile.dat";
+            const string dataFile = DataFileName;
             File.Delete(dataFile);
 
             // Construct a BinaryFormatter and use it 
@@ -218,7 +240,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             TrySerialisable trySerial = new TrySerialisable();
-            const string dataFile = @"C:\DataFile.dat";
+            const string dataFile = DataFileName;
             // Construct a BinaryFormatter and use it 
             // to serialize the data to the stream.
             BinaryFormatter formatter = new BinaryFormatter();

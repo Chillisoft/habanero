@@ -133,11 +133,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 exception = ex;
             }
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(InvalidPropertyNameException), exception);
+            Assert.IsInstanceOfType(typeof(InvalidOrderCriteriaException), exception);
             if (exception != null)
                 StringAssert.Contains(String.Format(
-                                          "The property definition for the property '{0}' could not be " +
-                                          "found on a ClassDef of type '{1}'", propName, classdef.ClassNameFull), exception.Message);
+                                          "The orderByString '{0}' is not valid for the classDef '{1}", propName, classdef.ClassNameFull), exception.Message);
             //---------------Tear Down -------------------------
         }
 

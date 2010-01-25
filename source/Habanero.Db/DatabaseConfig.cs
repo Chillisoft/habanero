@@ -98,7 +98,7 @@ namespace Habanero.DB
                            {PostgreSql, "PostgreSql"},
                            {SQLite, "SQLite"},
                            {Firebird, "Firebird"},
-                           {FirebirdEmbedded, "Firebird"},
+                           {FirebirdEmbedded, "FirebirdEmbedded"},
                            {Access2007, "Access2007"}
                        };
 

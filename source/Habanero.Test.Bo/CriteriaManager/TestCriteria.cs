@@ -2470,7 +2470,119 @@ namespace Habanero.Test.BO
 
         #endregion
 
-        [Test, Ignore("IN NOT IN not yet implemented")]
+
+
+        #region Not In
+        [Test]
+        public void TestNotIn()
+        {
+            //-------------Setup Test Pack ------------------
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            object[] values = new object[] { "100", "200", "300" };
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.NotIn, criteriaValues);
+
+            //-------------Test Result ----------------------
+            Assert.IsNotNull(criteria.Field);
+            Assert.AreEqual("MyField", criteria.Field.PropertyName);
+            Assert.IsNull(criteria.Field.Source);
+            Assert.AreEqual("MyField", criteria.Field.FieldName);
+            Assert.AreEqual(Criteria.ComparisonOp.NotIn, criteria.ComparisonOperator);
+            Assert.IsTrue(criteria.CanBeParametrised());
+        }
+
+        [Test]
+        public void TestIsMatch_OneProp_NotIn()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "Surname3";
+            cp.Save();
+            object[] values = new object[] { "Surname1", "Surname2" };
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotIn, criteriaValues);
+
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestNotIsMatch_OneProp_NotIn()   
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "Surname1";
+            cp.Save();
+            object[] values = new object[] { "Surname1", "Surname2" };
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotIn, criteriaValues);
+
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it doesn't match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestIsMatch_OneProp_NotIn_Null()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "Surname1";
+            cp.Save();
+            object[] values = new object[] { null, "Surname2" };
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotIn, criteriaValues);
+
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestNotIsMatch_OneProp_NotIn_Null()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "Surname1";
+            cp.FirstName = null;
+            cp.Save();
+            object[] values = new object[] { null, "FirstName1" };
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("FirstName", Criteria.ComparisonOp.NotIn, criteriaValues);
+            bool isMatch = criteria.IsMatch(cp);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it doesn't match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        #endregion
+
+
+        [Test, Ignore("some tests not yet implemented")]
         public void TestOtherOperators()
         {
             //---------------Set up test pack-------------------
@@ -2480,8 +2592,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             Assert.Fail("Todo");
             //Todo:  
-            //                " NOT IN",
-            //                " IN"
+            //                
             //
             //            Test using objects and enums TestCriteria
             //test parsing from strings. TestCriteriaParser

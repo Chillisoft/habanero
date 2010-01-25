@@ -184,8 +184,31 @@ namespace Habanero.Test.DB
             //---------------Tear Down -------------------------          
         }
 
-
-
+        [Test]
+        public void TestCreateSqlStatement_WithNotInCriteria()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
+            IEnumerable values = new object[] { "100", "200", "300" };
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
+            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.NotIn, criteriaValues);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("WHERE [MyBO].[TestProp] NOT IN (?Param0, ?Param1, ?Param2)", statementString);
+            Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
+            Assert.AreEqual("100", statement.Parameters[0].Value);
+            Assert.AreEqual("?Param1", statement.Parameters[1].ParameterName);
+            Assert.AreEqual("200", statement.Parameters[1].Value);
+            Assert.AreEqual("?Param2", statement.Parameters[2].ParameterName);
+            Assert.AreEqual("300", statement.Parameters[2].Value);
+            //---------------Tear Down -------------------------          
+        }
+        
         [Test]
         public void TestCreateSqlStatement_WithCriteria_WithClassID()
         {
@@ -415,8 +438,8 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            string expectedJoinSql = "LEFT JOIN [car_table] ON [Table_Engine].[CAR_ID] = [car_table].[CAR_ID]";
-            expectedJoinSql += " LEFT JOIN [contact_person] ON [car_table].[OWNER_ID] = [contact_person].[ContactPersonID]";
+            string expectedJoinSql = "LEFT JOIN [car_table] ON [Table_Engine].[CAR_ID] = [car_table].[CAR_ID])";
+            expectedJoinSql += " LEFT JOIN [contact_person] ON [car_table].[OWNER_ID] = [contact_person].[ContactPersonID])";
             StringAssert.Contains(expectedJoinSql, statementString);
             StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
         }
@@ -436,7 +459,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("JOIN [ContactPersonCompositeKey] ON [car_table].[Driver_FK1] = [ContactPersonCompositeKey].[PK1_Prop1] AND [car_table].[Driver_FK2] = [ContactPersonCompositeKey].[PK1_Prop2] ", statementString);
+            StringAssert.Contains("JOIN [ContactPersonCompositeKey] ON [car_table].[Driver_FK1] = [ContactPersonCompositeKey].[PK1_Prop1] AND [car_table].[Driver_FK2] = [ContactPersonCompositeKey].[PK1_Prop2]) ", statementString);
             StringAssert.EndsWith("ORDER BY [ContactPersonCompositeKey].[Surname] ASC", statementString);
         }
 

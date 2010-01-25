@@ -122,7 +122,7 @@ namespace Habanero.UI.Base
             }
             else if (_gridControl.FilterControl.FilterControls.Count == 0) { _gridControl.FilterControl.Visible = false; }
 
-            SetUpGridColumns((ClassDef)classDef, uiGridDef);
+            SetUpGridColumns(classDef, uiGridDef);
             _gridControl.UiDefName = uiDefName;
             _gridControl.ClassDef = classDef;
 
@@ -166,7 +166,7 @@ namespace Habanero.UI.Base
             return gridDef;
         }
 
-        private void SetUpGridColumns(ClassDef classDef, IUIGrid gridDef)
+        private void SetUpGridColumns(IClassDef classDef, IUIGrid gridDef)
         {
             this._gridControl.Grid.Columns.Clear();
             CreateIDColumn();
@@ -185,14 +185,12 @@ namespace Habanero.UI.Base
 
         private string GetGridIDColumnName()
         {
-            if (_gridControl != null && _gridControl.Grid != null)
-            {
-                return _gridControl.Grid.IDColumnName;
-            }else
+            if (_gridControl == null || _gridControl.Grid == null)
             {
                 const string errorMessage = "There was an attempt to access the ID field for a grid when the grid is not yet initialised";
                 throw new HabaneroDeveloperException(errorMessage, errorMessage);
             }
+            return _gridControl.Grid.IDColumnName;
         }
 
         private IDataGridViewColumn CreateStandardColumn(string columnName, string columnHeader)
@@ -290,13 +288,13 @@ namespace Habanero.UI.Base
             }
         }
 
-        private static void SetupColumnWithDefParameters(IDataGridViewColumn col, UIGridColumn gridColDef, Type propertyType)
+        private static void SetupColumnWithDefParameters(IDataGridViewColumn col, IUIGridColumn gridColDef, Type propertyType)
         {
             SetupDateTimeWithParameters(propertyType, gridColDef, col);
             SetupCurrencyWithParameters(propertyType, gridColDef ,col);
         }
 
-        private static void SetupCurrencyWithParameters(Type propertyType, UIGridColumn gridColDef, IDataGridViewColumn column)
+        private static void SetupCurrencyWithParameters(Type propertyType, IUIGridColumn gridColDef, IDataGridViewColumn column)
         {
             if (propertyType != typeof(Double)) return;
             string currencyFormat = gridColDef.GetParameterValue("currencyFormat") as string;
@@ -306,7 +304,7 @@ namespace Habanero.UI.Base
             }
         }
 
-        private static void SetupDateTimeWithParameters(Type propertyType, UIGridColumn gridColDef, IDataGridViewColumn col)
+        private static void SetupDateTimeWithParameters(Type propertyType, IUIGridColumn gridColDef, IDataGridViewColumn col)
         {
             if (propertyType != typeof(DateTime)) return;
             string dateFormat = gridColDef.GetParameterValue("dateFormat") as string;
@@ -320,7 +318,7 @@ namespace Habanero.UI.Base
             }
         }
 
-        private static IPropDef GetPropDef(IClassDef classDef, UIGridColumn gridColumn)
+        private static IPropDef GetPropDef(IClassDef classDef, IUIGridColumn gridColumn)
         {
             IPropDef propDef = null;
             if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))

@@ -79,21 +79,31 @@ namespace Habanero.Base
             return CreateSQL(new SqlFormatter("", "", "", ""));
         }
 
-        private string GetJoinString(Source source, ISqlFormatter sqlFormatter)
+        /// <summary>
+        /// Creates the Sql that corresponds to this join
+        /// </summary>
+        /// <param name="sqlFormatter">The formatter used to construct the appropriate Sql</param>
+        public string CreateSQL(ISqlFormatter sqlFormatter)
         {
-            string joinString = "";
+            //if (Joins.Count == 0) return sqlFormatter.DelimitTable(EntityName);
+            string tableJoinString = GetTableJoinString(this, sqlFormatter);
+            return GetJoinString(sqlFormatter, this, tableJoinString);
+        }
+
+        private string GetJoinString(ISqlFormatter sqlFormatter, Source source, string joinString)
+        {
             foreach (Join join in source.Joins)
             {
-                joinString += " " + GetJoinString(join, sqlFormatter);
+                joinString = "(" + joinString + " " + GetJoinString(sqlFormatter, join) + ")";
                 if (join.ToSource.Joins.Count > 0)
                 {
-                    joinString += GetJoinString(join.ToSource, sqlFormatter);
+                    joinString = GetJoinString(sqlFormatter, join.ToSource, joinString);
                 }
             }
             return joinString;
         }
 
-        private string GetJoinString(Join join, ISqlFormatter sqlFormatter)
+        private string GetJoinString(ISqlFormatter sqlFormatter, Join join)
         {
             if (join.JoinFields.Count == 0)
             {
@@ -104,9 +114,9 @@ namespace Habanero.Base
             Join.JoinField joinField = join.JoinFields[0];
             string joinString = string.Format("{0} {1} ON {2}.{3} = {1}.{4}",
                                               join.GetJoinClause(),
-                     sqlFormatter.DelimitTable(join.ToSource.EntityName), 
+                     sqlFormatter.DelimitTable(join.ToSource.EntityName),
                      sqlFormatter.DelimitTable(join.FromSource.EntityName),
-                     sqlFormatter.DelimitField(joinField.FromField.FieldName), 
+                     sqlFormatter.DelimitField(joinField.FromField.FieldName),
                      sqlFormatter.DelimitField(joinField.ToField.FieldName));
 
             if (join.JoinFields.Count > 1)
@@ -114,24 +124,12 @@ namespace Habanero.Base
                 for (int i = 1; i < join.JoinFields.Count; i++)
                 {
                     joinField = join.JoinFields[i];
-                    joinString += string.Format(" AND {0}.{2} = {1}.{3}", 
-                        sqlFormatter.DelimitTable(join.FromSource.EntityName),  sqlFormatter.DelimitTable(join.ToSource.EntityName)    ,
+                    joinString += string.Format(" AND {0}.{2} = {1}.{3}",
+                        sqlFormatter.DelimitTable(join.FromSource.EntityName), sqlFormatter.DelimitTable(join.ToSource.EntityName),
                         sqlFormatter.DelimitField(joinField.FromField.FieldName), sqlFormatter.DelimitField(joinField.ToField.FieldName));
                 }
-                
             }
-            
             return joinString;
-        }
-
-        /// <summary>
-        /// Creates the Sql that corresponds to this join
-        /// </summary>
-        /// <param name="sqlFormatter">The formatter used to construct the appropriate Sql</param>
-        public string CreateSQL(ISqlFormatter sqlFormatter)
-        {
-            //if (Joins.Count == 0) return sqlFormatter.DelimitTable(EntityName);
-            return GetTableJoinString(this, sqlFormatter) +  GetJoinString(this, sqlFormatter);
         }
 
         private string GetTableJoinString(Source source, ISqlFormatter sqlFormatter)
@@ -145,7 +143,7 @@ namespace Habanero.Base
         {
             foreach (Join join in source.InheritanceJoins)
             {
-                joinString = "(" + joinString + " " + GetJoinString(join, sqlFormatter) + ")";
+                joinString = "(" + joinString + " " + GetJoinString(sqlFormatter, join) + ")";
                 if (join.ToSource.InheritanceJoins.Count > 0)
                 {
                     joinString = GetInheritanceJoinString(sqlFormatter, join.ToSource, joinString);

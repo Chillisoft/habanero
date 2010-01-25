@@ -162,12 +162,28 @@ namespace Habanero.Test.UI.Base.Wizard
             wizardController.AddStep(step1);
 
             wizardController.GetNextStep();
-
             //------------------------Execute----------------------------
             wizardController.Finish();
-
             //------------------------Verify Result ---------------------
             Assert.IsTrue(wizardFinishedFires);
+        }
+        [Test]
+        public void Test_Finish_ShouldCallCurrentStepMoveOn()
+        {
+            //-----------------------Setup TestPack----------------------
+            WizardController wizardController = new WizardController();
+
+            IWizardStep step1 = MockRepository.GenerateMock<IWizardStep>();
+            wizardController.AddStep(step1);
+
+            wizardController.GetFirstStep();
+            //------------------------Assert Precondition----------------
+            Assert.AreSame(step1, wizardController.GetCurrentStep());
+            step1.AssertWasNotCalled(step => step.MoveOn());
+            //------------------------Execute----------------------------
+            wizardController.Finish();
+            //------------------------Verify Result ---------------------
+            step1.AssertWasCalled(step => step.MoveOn());
         }
 
         [Test]
@@ -180,38 +196,83 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.IsTrue(_wizardController.CanMoveOn(out message));
             _mock.VerifyAll();
         }
-//        [Test]
-//        public void Test_CompleteCurrentStep_ShouldCallStepMoveOn()
-//        {
+
+        [Test]
+        public void Test_CompleteCurrentStep_ShouldCallStepMoveOn()
+        {
             //---------------Set up test pack-------------------
-//            WizardController wizardController = new WizardController();
-//            var step1 = MockRepository.GenerateMock<IWizardStep>();
-//            wizardController.AddStep(step1);
-//            wizardController.GetFirstStep();
+            WizardController wizardController = new WizardController();
+            var step1 = MockRepository.GenerateMock<IWizardStep>();
+            wizardController.AddStep(step1);
+            wizardController.GetFirstStep();
             //---------------Assert Precondition----------------
-//            Assert.AreEqual(1, wizardController.StepCount);
-//            step1.AssertWasNotCalled(step => step.MoveOn());
-            //---------------Execute Test ----------------------
-//            wizardController.CompleteCurrentStep();
+            Assert.AreEqual(1, wizardController.StepCount);
+            Assert.AreSame(step1, wizardController.GetCurrentStep());
+            step1.AssertWasNotCalled(step => step.MoveOn());
+            // ---------------Execute Test ----------------------
+            wizardController.CompleteCurrentStep();
             //---------------Test Result -----------------------
-//            step1.AssertWasCalled(wizardStep => wizardStep.MoveOn());
-//        }
-//        [Test]
-//        public void Test_UndoCurrentStep_ShouldCallStepMoveBack()
-//        {
+            step1.AssertWasCalled(wizardStep => wizardStep.MoveOn());
+        }
+        [Test]
+        public void Test_UndoCurrentStep_ShouldCallStepMoveBack()
+        {
             //---------------Set up test pack-------------------
-//            WizardController wizardController = new WizardController();
-//            var step1 = MockRepository.GenerateMock<IWizardStep>();
-//            wizardController.AddStep(step1);
-//            wizardController.GetFirstStep();
+            WizardController wizardController = new WizardController();
+            var step1 = MockRepository.GenerateMock<IWizardStep>();
+            wizardController.AddStep(step1);
+            wizardController.GetFirstStep();
             //---------------Assert Precondition----------------
-//            Assert.AreEqual(1, wizardController.StepCount);
-//            step1.AssertWasNotCalled(step => step.MoveBack());
+            Assert.AreEqual(1, wizardController.StepCount);
+            step1.AssertWasNotCalled(step => step.UndoMoveOn());
+            Assert.AreSame(step1, wizardController.GetCurrentStep());
             //---------------Execute Test ----------------------
-//            wizardController.UndoCurrentStep();
+            wizardController.UndoCompleteCurrentStep();
             //---------------Test Result -----------------------
-//            step1.AssertWasCalled(wizardStep => wizardStep.MoveBack());
-//        }
+            step1.AssertWasCalled(wizardStep => wizardStep.UndoMoveOn());
+        }
+
+        [Test]
+        public void Test_CanMoveBack_ShouldCallStepCanMoveBack()
+        {
+            //---------------Set up test pack-------------------
+            WizardController wizardController = new WizardController();
+            var step1 = MockRepository.GenerateMock<IWizardStep>();
+            wizardController.AddStep(step1);
+            wizardController.GetFirstStep();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, wizardController.StepCount);
+            step1.AssertWasNotCalled(step => step.CanMoveBack());
+            Assert.AreSame(step1, wizardController.GetCurrentStep());
+            //---------------Execute Test ----------------------
+            var canMoveBack = wizardController.CanMoveBack();
+            //---------------Test Result -----------------------
+            step1.AssertWasCalled(wizardStep => wizardStep.CanMoveBack());
+            Assert.AreEqual(step1.CanMoveBack(), canMoveBack);
+            Assert.IsFalse(canMoveBack);
+        }
+
+        [Test]
+        public void Test_CanMoveBack_WhenStepTrue_ShouldReturnTrue()
+        {
+            //---------------Set up test pack-------------------
+            WizardController wizardController = new WizardController();
+            var step1 = MockRepository.GenerateMock<IWizardStep>();
+            step1.Stub(wizardStep1 => wizardStep1.CanMoveBack()).Return(true);
+            wizardController.AddStep(step1);
+            wizardController.GetFirstStep();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, wizardController.StepCount);
+            step1.AssertWasNotCalled(step => step.CanMoveBack());
+            Assert.AreSame(step1, wizardController.GetCurrentStep());
+            //---------------Execute Test ----------------------
+            var canMoveBack = wizardController.CanMoveBack();
+            //---------------Test Result -----------------------
+            step1.AssertWasCalled(wizardStep => wizardStep.CanMoveBack());
+            Assert.AreEqual(step1.CanMoveBack(), canMoveBack);
+            Assert.IsTrue(canMoveBack);
+        }
+
         [Test]
         public void TestGetCurrentStep()
         {
@@ -252,6 +313,5 @@ namespace Habanero.Test.UI.Base.Wizard
             wzrdStep.AssertWasCalled(step => step.CancelStep());
 
         }
-
     }
 }

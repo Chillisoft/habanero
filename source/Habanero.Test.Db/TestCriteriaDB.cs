@@ -193,5 +193,24 @@ namespace Habanero.Test.DB
             StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
             //---------------Tear Down -------------------------          
         }
+
+        [Test]
+        public void TestToString_NotIn()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue1 = Guid.NewGuid().ToString("N");
+            string surnameValue2 = Guid.NewGuid().ToString("N");
+            const string surname = "Surname";
+            CriteriaDB surnameCriteria =
+                new CriteriaDB(new Criteria(surname, Criteria.ComparisonOp.NotIn, new object[] { surnameValue1, surnameValue2 }));
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            string criteriaAsString = surnameCriteria.ToString(new SqlFormatter("", "", "", ""), value => value.ToString());
+
+            //---------------Test Result -----------------------
+            string expectedString = string.Format("Surname NOT IN ('{0}', '{1}')", surnameValue1, surnameValue2);
+            StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
+            //---------------Tear Down -------------------------          
+        }
     }
 }

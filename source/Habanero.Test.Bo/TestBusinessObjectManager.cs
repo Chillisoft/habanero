@@ -1678,7 +1678,9 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
-            new AddressTestBO();
+
+            AddressTestBO addressTestBo = new AddressTestBO();
+
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             AddressTestBO address;
@@ -1686,21 +1688,8 @@ namespace Habanero.Test.BO
 
             IPrimaryKey contactPersonID = cp.ID;
             IPrimaryKey addresssID = address.ID;
-            cp = null;
-            address = null;
-
-            TestUtil.WaitForGC();
-            boMan.ClearLoadedObjects();
-
-            AddressTestBO addressOut1;
-            AddressTestBO addressOut2;
-            AddressTestBO addressOut3;
-            CreateSavedCP_WithOneAddresss(out addressOut1);
-            CreateSavedCP_WithOneAddresss(out addressOut2);
-            CreateSavedCP_WithOneAddresss(out addressOut3);
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(6, boMan.Count);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
@@ -1709,7 +1698,6 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addresses.Count);
-            Assert.AreEqual(8, boMan.Count);
 
             Assert.IsTrue(boMan.Contains(loadedCP));
             Assert.AreSame(loadedCP, boMan[contactPersonID]);

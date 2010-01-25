@@ -1702,7 +1702,20 @@ namespace Habanero.Test
             }
         }
     }
-
+    public class MyInheritedType: MyRelatedBo
+    {
+        public static IClassDef LoadInheritedTypeClassDef()
+        {
+            MyRelatedBo.LoadSuperClassDef();
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            var classDef = itsLoader.LoadClass(@"
+				  <class name=""MyInheritedType"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+                    <superClass class=""MyRelatedBo"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""Discriminator"" />
+			      </class>");
+            ClassDef.ClassDefs.Add(classDef);
+            return classDef;
+        }
+    }
     public class MyRelatedBo : BusinessObject
     {
         private static IClassDef itsClassDef;
@@ -1754,8 +1767,30 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        public static IClassDef LoadSuperClassDef()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" type=""Guid""/>
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" type=""Guid""/>
+					<property  name=""Discriminator""/>
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationship"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
 
-        private static XmlClassLoader CreateXmlClassLoader()
+        protected static XmlClassLoader CreateXmlClassLoader()
         {
             return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
         }

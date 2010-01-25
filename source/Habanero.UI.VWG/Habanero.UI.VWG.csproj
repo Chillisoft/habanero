@@ -294,6 +294,9 @@
     <Compile Include="Wizard\WizardFormVWG.designer.cs">
       <DependentUpon>WizardFormVWG.cs</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\WizardStepVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">

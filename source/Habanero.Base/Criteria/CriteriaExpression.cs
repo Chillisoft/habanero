@@ -138,7 +138,7 @@ namespace Habanero.Base
                     if (pos == -1 || IsPosInsideBrackets(expressionWithoutQuotes, pos)) continue;
                     _left = new CriteriaExpression(quotesRemovedExpression.Substring(0, pos)
                                                        .PutBackQuotedSections().ToString().Trim(), _operators);
-                    if (op.Trim() == "IN")
+                    if (op.Trim() == "IN" || op.Trim() == "NOT IN")
                     {
                         _right = CriteriaExpression.CreateInExpression(quotesRemovedExpression.Substring(pos + op.Length)
                                                            .PutBackQuotedSections().ToString().Trim());

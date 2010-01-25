@@ -981,6 +981,19 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "The error message should be null since limit to list is false");
             Assert.IsTrue(isItemInList);
         }
+
+        [Test]
+        public void Test_GetNewValue_WhenValueNull_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            PropDefStub propDef = new PropDefStub("PropName", typeof(int), PropReadWriteRule.ReadWrite, null, 99);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var newValue = propDef.GetNewValue(null);
+            //---------------Test Result -----------------------
+            Assert.IsNull(newValue);
+        }
         class PropDefStub : PropDef
         {
             public PropDefStub(string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName, object defaultValue) : base(propertyName, propType, propRWStatus, databaseFieldName, defaultValue)

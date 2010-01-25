@@ -180,6 +180,7 @@
     <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
     <Compile Include="DataAccessorInMemory.cs" />
     <Compile Include="DataAccessorMultiSource.cs" />
+    <Compile Include="DataAccessorRemote.cs" />
     <Compile Include="DataStoreInMemory.cs" />
     <Compile Include="DataStoreInMemoryBinaryReader.cs" />
     <Compile Include="DataStoreInMemoryBinaryWriter.cs" />

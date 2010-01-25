@@ -603,7 +603,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 return null;
             }
-            RelationshipCol relCol = ((RelationshipDefCol)_relationshipDefCol).CreateRelationshipCol(propCol, bo);
+            RelationshipCol relCol = ((RelationshipDefCol) _relationshipDefCol).CreateRelationshipCol(propCol, bo);
             if (SuperClassClassDef != null)
             {
                 ClassDef superClassClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
@@ -622,7 +622,7 @@ namespace Habanero.BO.ClassDefinition
             BOKeyCol keyCol = _keysCol.CreateBOKeyCol(col);
             if (SuperClassClassDef != null)
             {
-                ClassDef superClassClassDef = (ClassDef)SuperClassDef.SuperClassClassDef;
+                ClassDef superClassClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
 
                 keyCol.Add(superClassClassDef.createBOKeyCol(col));
             }
@@ -1054,16 +1054,14 @@ namespace Habanero.BO.ClassDefinition
                 var relatedPropertyTypes = new List<Type>();
                 relNames.ForEach(delegate(string relationship)
                                      {
-                                         if (RelationshipDefCol.Contains(relationship))
-                                         {
-                                             IRelationshipDef relationshipDef = RelationshipDefCol[relationship];
-                                             IClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
-                                             if (relatedObjectClassDef != null)
-                                             {
-                                                 Type propertyType = relatedObjectClassDef.GetPropertyType(propertyName);
-                                                 relatedPropertyTypes.Add(propertyType);
-                                             }
-                                         }
+                                         IRelationshipDef relationshipDef = GetRelationship(relationship);
+                                         if (relationshipDef == null) return;
+
+                                         IClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+                                         if (relatedObjectClassDef == null) return;
+
+                                         Type propertyType = relatedObjectClassDef.GetPropertyType(propertyName);
+                                         relatedPropertyTypes.Add(propertyType);
                                      });
                 Type currentPropertyType = null;
                 relatedPropertyTypes.ForEach(delegate(Type propertyType)
