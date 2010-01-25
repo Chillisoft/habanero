@@ -216,11 +216,11 @@ namespace Habanero.Test.BO
             //---------------Clean Up --------------------------
             CleanupNumberGenerator();
             //---------------Set up test pack-------------------
-            INumberGenerator numGen = new NumberGenerator("tmp");
+            INumberGenerator numGen1 = new NumberGenerator("tmp");
             //---------------Execute Test ----------------------
-            numGen.NextNumber();
-            numGen = new NumberGenerator("tmp");
-            long nextNum = numGen.NextNumber();
+            numGen1.NextNumber();
+            INumberGenerator numGen2 = new NumberGenerator("tmp");
+            long nextNum = numGen2.NextNumber();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, nextNum);
             //---------------Tear Down   -----------------------

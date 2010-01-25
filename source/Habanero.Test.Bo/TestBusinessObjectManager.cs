@@ -1673,7 +1673,6 @@ namespace Habanero.Test.BO
 
         //Testloading objects when already other objects in object manager
         // ReSharper disable RedundantAssignment
-#pragma warning disable 168
         [Test]
         public void Test_LoadObjectWhenAlreadyObjectInObjectManager()
         {
@@ -1689,21 +1688,9 @@ namespace Habanero.Test.BO
 
             IPrimaryKey contactPersonID = cp.ID;
             IPrimaryKey addresssID = address.ID;
-            cp = null;
-            address = null;
-
-            TestUtil.WaitForGC();
-            boMan.ClearLoadedObjects();
-
-            AddressTestBO addressOut1;
-            AddressTestBO addressOut2;
-            AddressTestBO addressOut3;
-            CreateSavedCP_WithOneAddresss(out addressOut1);
-            CreateSavedCP_WithOneAddresss(out addressOut2);
-            CreateSavedCP_WithOneAddresss(out addressOut3);
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(6, boMan.Count);
+            Assert.AreEqual(3, boMan.Count);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
@@ -1712,7 +1699,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addresses.Count);
-            Assert.AreEqual(8, boMan.Count);
+            Assert.AreEqual(3, boMan.Count);
 
             Assert.IsTrue(boMan.Contains(loadedCP));
             Assert.AreSame(loadedCP, boMan[contactPersonID]);
@@ -1725,7 +1712,6 @@ namespace Habanero.Test.BO
             Assert.AreSame(loadedAddress, boMan[addresssID]);
             Assert.AreSame(loadedAddress, boMan[addresssID.ObjectID]);
         }
-#pragma warning restore 168
 
         [Test]
         public void Test_ReturnSameObjectFromBusinessObjectLoader()
