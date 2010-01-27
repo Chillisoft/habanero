@@ -1039,7 +1039,7 @@ namespace Habanero.Test.BO
                 //---------------Test Result -----------------------
             catch (BusObjDeleteException ex)
             {
-                StringAssert.Contains("You cannot delete MyBO Identified By", ex.Message);
+                StringAssert.Contains("You cannot delete MyBO identified by", ex.Message);
                 StringAssert.Contains("since it is related to 1 Business Objects via the MyMultipleRelationship relationship", ex.Message);
             }
         }
@@ -1068,7 +1068,7 @@ namespace Habanero.Test.BO
             bool isDeletable = bo.IsDeletable(out message);
             //---------------Test Result -----------------------
             Assert.IsFalse(isDeletable);
-            StringAssert.Contains("You cannot delete MyBO Identified By", message);
+            StringAssert.Contains("You cannot delete MyBO identified by", message);
             StringAssert.Contains("since it is related to 1 Business Objects via the MyMultipleRelationship relationship", message);
         }
         [Test]
@@ -1097,7 +1097,7 @@ namespace Habanero.Test.BO
             bool isDeletable = bo.IsDeletable(out message);
             //---------------Test Result -----------------------
             Assert.IsFalse(isDeletable);
-            StringAssert.Contains("You cannot delete MyBO Identified By", message);
+            StringAssert.Contains("You cannot delete MyBO identified by", message);
             StringAssert.Contains("since it is related to a Business Object via the MyRelationship relationship", message);
         }
         [Test]
