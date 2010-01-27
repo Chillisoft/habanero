@@ -90,6 +90,7 @@ namespace Habanero.UI.Base
         IWizardStep GetCurrentStep();
 
         /// <summary>
+        /// This provides a method which is called when the wizard is cancelled. The wizard controller can 
         /// undo any changes that have occured up until that point so as to ensure that the objects are returned
         /// to their original state.
         /// </summary>
