@@ -4,11 +4,22 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// This is an <see cref="IBusinessObjectLoader"/> that allows you to 
+    /// Register the loader to use for various types.
+    /// This allows the developer to load different obejcts in their
+    /// application from different datasources e.g. Diff Databases.
+    ///</summary>
     public class BusinessObjectLoaderMultiSource : IBusinessObjectLoader
     {
         private readonly IBusinessObjectLoader _defaultBusinessObjectLoader;
-        private Dictionary<Type, IBusinessObjectLoader> _businessObjectLoaders;
+        private readonly Dictionary<Type, IBusinessObjectLoader> _businessObjectLoaders;
 
+        ///<summary>
+        /// Creates this Loader with a default loader.
+        /// This will be used in cases where there is not a specific loader registered.
+        ///</summary>
+        ///<param name="defaultBusinessObjectLoader"></param>
         public BusinessObjectLoaderMultiSource(IBusinessObjectLoader defaultBusinessObjectLoader)
         {
             _defaultBusinessObjectLoader = defaultBusinessObjectLoader;
@@ -16,6 +27,15 @@ namespace Habanero.BO
 
         }
 
+        ///<summary>
+        /// registered a specific Business Object loader with a specified Object Type.
+        /// When any object of this type is loaded in future it will be loaded with this.
+        /// Loader. This allows you to have business objects loaded from Different sources.
+        /// e.g. Different databases XML and Databases etc.
+        /// The a loader is not registered for a specific type then the default loader will be used.
+        ///</summary>
+        ///<param name="type"></param>
+        ///<param name="businessObjectLoader"></param>
         public void AddBusinessObjectLoader(Type type, IBusinessObjectLoader businessObjectLoader)
         {
             _businessObjectLoaders.Add(type, businessObjectLoader);
@@ -84,6 +104,12 @@ namespace Habanero.BO
             return _defaultBusinessObjectLoader.GetRelatedBusinessObject(relationship);
         }
 
+        /// <summary>
+        /// Loads a business object using the relationship given. The relationship will be converted into a
+        /// Criteria object that defines the relationship and this will be used to load the related object.
+        /// </summary>
+        /// <param name="relationship">The relationship to use to load the object</param>
+        /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
         public IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship)
         {
             if (_businessObjectLoaders.ContainsKey(relationship.RelatedObjectClassDef.ClassType))
