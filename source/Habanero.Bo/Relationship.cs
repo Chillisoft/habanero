@@ -64,7 +64,7 @@ namespace Habanero.BO
                 preparedOrderCriteria =
                     QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, orderCriteriaString);
             }
-            catch (InvalidOrderCriteriaException ex)
+            catch (InvalidOrderCriteriaException)
             {
                 throw new InvalidOrderCriteriaException("The Relationship '" + relationship.RelationshipName 
                         + "' on the ClassDef '" + relationship.OwningBO.ClassDef.ClassNameFull 

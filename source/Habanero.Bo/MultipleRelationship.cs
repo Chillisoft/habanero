@@ -403,7 +403,7 @@ namespace Habanero.BO
             int noRelatedObjects = collection.Count;
             if (noRelatedObjects <= 0) return true;
             message = string.Format(
-                    "You cannot delete {0} Identified By {1} or {2} since it is related to {3} Business Objects via the {4} relationship",
+                    "You cannot delete {0} identified by {1} or {2} since it is related to {3} Business Objects via the {4} relationship",
                     this._owningBo.ClassDef.ClassName, this._owningBo.ID.AsString_CurrentValue(), this._owningBo.ToString(),
                     noRelatedObjects,
                     this.RelationshipName);

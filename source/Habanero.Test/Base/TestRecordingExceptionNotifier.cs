@@ -119,7 +119,7 @@ namespace Habanero.Test.Base
                 exceptionNotifier.RethrowRecordedException();
             }
             //---------------Test Result -----------------------
-            catch (Exception ex)
+            catch (Exception)
             {
                 exceptionThrown = true;
                 throw;

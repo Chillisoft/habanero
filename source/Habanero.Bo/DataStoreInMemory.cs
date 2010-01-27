@@ -270,6 +270,7 @@ namespace Habanero.BO
         /// The file specified to be loaded must be a serialised xml file.
         /// </summary>
         /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.xml </param>
+        /// <param name="typeToLoad">The type to load that is the top of the heirarchy in the xml file</param>
         public void LoadFromXml(string fullFileName, Type typeToLoad)
         {
             if (!File.Exists(fullFileName)) return;

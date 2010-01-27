@@ -135,7 +135,7 @@ namespace Habanero.BO
                 }
                 return orderCriteria;
             }
-            catch (InvalidPropertyNameException ex)
+            catch (InvalidPropertyNameException)
             {
                 throw new InvalidOrderCriteriaException("The orderByString '" + orderByString 
                         + "' is not valid for the classDef '" + classDef.ClassNameFull);
