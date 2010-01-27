@@ -187,7 +187,7 @@ namespace Habanero.BO
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) 
+        public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, IOrderCriteria orderCriteria) 
             where T : class, IBusinessObject, new()
         {
             return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteria, orderCriteria);

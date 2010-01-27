@@ -229,6 +229,7 @@ namespace Habanero.BO
                 {
                     if ((string)_parameters["min"] == TODAY_STRING) return DateTime.Today.AddDays(-1);
                     if ((string)_parameters["min"] == NOW_STRING) return DateTime.Now;
+                    if (String.IsNullOrEmpty((string)_parameters["min"])) return DateTime.MinValue;
                 }
                 return Convert.ToDateTime(_parameters["min"]);
             }
@@ -246,6 +247,7 @@ namespace Habanero.BO
                 {
                     if ((string)_parameters["max"] == TODAY_STRING) return DateTime.Today.AddDays(1);
                     if ((string)_parameters["max"] == NOW_STRING) return DateTime.Now;
+                    if (String.IsNullOrEmpty((string)_parameters["max"])) return DateTime.MaxValue;
                 }
                 return Convert.ToDateTime(_parameters["max"]);
             }
