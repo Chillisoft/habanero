@@ -145,6 +145,12 @@ namespace Habanero.Util
                 }
                 catch (Exception ex)
                 {
+                    try
+                    {
+                        classType = LoadType(assemblyName, assemblyName + "." + className);
+                    } catch (Exception)
+                    {
+                    }
                     if (loadingTypeDesc.Length == 0)
                         loadingTypeDesc = "class";
                     if (loadingFor.Length > 0)
