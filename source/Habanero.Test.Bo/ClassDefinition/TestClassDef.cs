@@ -592,7 +592,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            ClassDefInheritor classDef = new ClassDefInheritor();
+            FakeClassDef classDef = new FakeClassDef();
 
             Assert.AreEqual("Habanero.BO", classDef.AssemblyName);
             classDef.SetAssemblyName("MyAssembly");
@@ -606,7 +606,7 @@ namespace Habanero.Test.BO.ClassDefinition
             classDef.SetClassNameFull("Habanero.BO.ClassDef");
             Assert.AreEqual("Habanero.BO.ClassDef", classDef.ClassNameFull);
 
-            classDef = new ClassDefInheritor();
+            classDef = new FakeClassDef();
             Assert.AreEqual(typeof(ClassDef), classDef.ClassType);
             classDef.SetClassType(typeof(PropDef));
             Assert.AreEqual(typeof(PropDef), classDef.ClassType);
@@ -632,9 +632,9 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         // This class serves to access protected methods
-        private class ClassDefInheritor : ClassDef
+        private class FakeClassDef : ClassDef
         {
-            public ClassDefInheritor() : base(typeof(ClassDef), null, null, null, null, null,null)
+            public FakeClassDef() : base(typeof(ClassDef), null, null, null, null, null,null)
             {}
 
             public void SetAssemblyName(string assemblyName)

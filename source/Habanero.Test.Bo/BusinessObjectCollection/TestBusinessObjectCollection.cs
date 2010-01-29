@@ -92,7 +92,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             }
         }
 
-        private static void AssertNotContains(ContactPersonTestBO cp1, IList<ContactPersonTestBO> col)
+        private static void AssertNotContains(ContactPersonTestBO cp1, IEnumerable<ContactPersonTestBO> col)
         {
             foreach (ContactPersonTestBO bo in col)
             {
@@ -300,7 +300,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, keyObjectHashTable.Count);
         }
 
-        public Hashtable GetKeyObjectHashTable(IBusinessObjectCollection cpCol)
+        public static Hashtable GetKeyObjectHashTable(IBusinessObjectCollection cpCol)
         {
             return (Hashtable) ReflectionUtilities.GetPrivatePropertyValue(cpCol, "KeyObjectHashTable");
         }
@@ -404,7 +404,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             MyBO bo1 = new MyBO();
             col.Add(bo1);
             col.Add(new MyBO());
-            Assert.AreSame(bo1, col.Find(bo1.MyBoID.Value));
+            Assert.AreSame(bo1, col.Find(bo1.MyBoID.GetValueOrDefault()));
         }
 
         [Test]
@@ -424,7 +424,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-
+            col.LoadAll();
+            Assert.AreEqual(0, col.Count);
             ContactPersonTestBO cp1 = CreateContactPersonTestBO();
             CreateContactPersonTestBO();
             CreateContactPersonTestBO();
@@ -1313,7 +1314,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreSame(cp2, col[0], "Collection should b sorted by the Surname Property as per the origional collection.Load");
             Assert.AreSame(cp1, col[1]);
         }
-
+        [Test]
         public void Test_CreateBusinessObject_ShouldAddToEndOfCollection()
         {
             //---------------Set up test pack-------------------
@@ -1545,7 +1546,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
-            List<string> converted = col.ConvertAll<string>(input =>
+            List<string> converted = col.ConvertAll(input =>
             {
                 called.Add(input);
                 return input.ToString();

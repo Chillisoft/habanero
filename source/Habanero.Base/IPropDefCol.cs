@@ -18,13 +18,14 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
     /// <summary>
     /// Provides a collection of property definitions.
     /// </summary>
-    public interface IPropDefCol : IEnumerable
+    public interface IPropDefCol : IEnumerable<IPropDef>
     {
         /// <summary>
         /// Provides an indexing facility for the collection so that items

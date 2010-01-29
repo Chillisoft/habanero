@@ -79,10 +79,10 @@ namespace Habanero.BO.ClassDefinition
     /// </futureEnhancements>
     public class ClassDef : IClassDef
     {
-        /// <summary>
-        /// The collection of classDefs used for the the Singleton.
-        /// </summary>
-        protected static ClassDefCol _classDefCol;
+//        /// <summary>
+//        /// The collection of classDefs used for the the Singleton.
+//        /// </summary>
+//        protected static ClassDefCol _classDefCol;
 
         private string _assemblyName;
         private string _cachedTableName;

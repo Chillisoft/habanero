@@ -203,9 +203,14 @@ namespace Habanero.BO.ClassDefinition
             return newPropDefCol;
         }
 
-        #endregion
+        #endregion 
 
         #region Equals
+
+        IEnumerator<IPropDef> IEnumerable<IPropDef>.GetEnumerator()
+        {
+            return this._propDefs.Values.GetEnumerator();
+        }
 
         ///<summary>
         ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
