@@ -42,8 +42,12 @@ namespace Habanero.BO.ClassDefinition
     public class RelPropDef : IRelPropDef
     {
         protected IPropDef _ownerPropDef;
-		private string _relatedClassPropName;
         private string _ownerPropDefName;
+
+        /// <summary>
+        /// The property name to be matched to in the related class
+        /// </summary>
+        public string RelatedClassPropName { get; protected set; }
 
 		/// <summary>
         /// Constructor to create new RelPropDef object
@@ -57,7 +61,7 @@ namespace Habanero.BO.ClassDefinition
         {
             ArgumentValidationHelper.CheckArgumentNotNull(ownerClassPropDef, "ownerClassPropDef");
             _ownerPropDef = ownerClassPropDef;
-            _relatedClassPropName = relatedObjectPropName;
+            RelatedClassPropName = relatedObjectPropName;
 		}
 
         /// <summary>
@@ -70,21 +74,8 @@ namespace Habanero.BO.ClassDefinition
         {
             ArgumentValidationHelper.CheckArgumentNotNull(ownerClassPropDefName, "ownerClassPropDefName");
             _ownerPropDefName = ownerClassPropDefName;
-            _relatedClassPropName = relatedObjectPropName;
+            RelatedClassPropName = relatedObjectPropName;
         }
-
-        /////<summary>
-        ///// Gets or sets the property definition for the relationship owner
-        /////</summary>
-        //protected IPropDef OwnerProperty
-        //{
-        //    get { return _ownerPropDef; }
-        //    set
-        //    {
-        //        ArgumentValidationHelper.CheckArgumentNotNull(value, "value");
-        //        _ownerPropDef = value;
-        //    }
-        //}
 
 		/// <summary>
         /// Returns the property name for the relationship owner
@@ -94,16 +85,8 @@ namespace Habanero.BO.ClassDefinition
             get { return _ownerPropDef != null ? _ownerPropDef.PropertyName : _ownerPropDefName; }
         }
 
-        /// <summary>
-        /// The property name to be matched to in the related class
-        /// </summary>
-        public string RelatedClassPropName
-        {
-			get { return _relatedClassPropName; }
-			protected set { _relatedClassPropName = value; }
-		}
 
-		/// <summary>
+        /// <summary>
         /// Creates a new RelProp object based on this property definition
         /// </summary>
         /// <param name="boPropCol">The collection of properties</param>

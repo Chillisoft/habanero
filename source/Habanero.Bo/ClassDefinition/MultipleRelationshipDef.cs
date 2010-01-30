@@ -55,9 +55,9 @@ namespace Habanero.BO.ClassDefinition
             : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
-            _orderCriteriaString = orderBy;
+            OrderCriteriaString = orderBy;
 
-            _orderCriteria = new OrderCriteria().FromString( orderBy);
+            OrderCriteria = new OrderCriteria().FromString( orderBy);
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             // _maxNoOfRelatedObjects = maxNoOfRelatedObjects;
 
@@ -86,8 +86,8 @@ namespace Habanero.BO.ClassDefinition
                     InsertParentAction.InsertRelationship, RelationshipType.Association)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
-            _orderCriteriaString = orderBy; 
-            _orderCriteria = new OrderCriteria().FromString(orderBy);
+            OrderCriteriaString = orderBy; 
+            OrderCriteria = new OrderCriteria().FromString(orderBy);
 			//_minNoOfRelatedObjects = minNoOfRelatedObjects;
 			//_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
 
@@ -116,9 +116,9 @@ namespace Habanero.BO.ClassDefinition
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
             TimeOut = timeout;
-            _orderCriteriaString = orderBy; 
+            OrderCriteriaString = orderBy; 
             OrderCriteria = new OrderCriteria();
-            _orderCriteria = OrderCriteria.FromString(orderBy);
+            OrderCriteria = OrderCriteria.FromString(orderBy);
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             //_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
 

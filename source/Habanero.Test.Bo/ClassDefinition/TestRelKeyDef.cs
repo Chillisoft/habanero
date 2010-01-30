@@ -53,6 +53,37 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void Test_Contains_WhenHas_ShouldReturnTrue()
+        {
+            //---------------Set up test pack-------------------
+            var relKeyDef = new RelKeyDef();
+            const string ownerClassPropDefName = "fdafads";
+            IRelPropDef relPropDef = new RelPropDef(ownerClassPropDefName, "fdafasd");
+            relKeyDef.Add(relPropDef);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, relKeyDef.Count);
+            //---------------Execute Test ----------------------
+            var contains = relKeyDef.Contains(ownerClassPropDefName);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contains);
+        }
+        [Test]
+        public void Test_Contains_WhenNotHas_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            var relKeyDef = new RelKeyDef();
+            const string ownerClassPropDefName = "fdafads";
+            IRelPropDef relPropDef = new RelPropDef(ownerClassPropDefName, "fdafasd");
+            relKeyDef.Add(relPropDef);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, relKeyDef.Count);
+            //---------------Execute Test ----------------------
+            var contains = relKeyDef.Contains("SomeOtherName");
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contains);
+        }
+
+        [Test]
         public void TestAddPropDef()
         {
             Assert.AreEqual(2, mRelKeyDef.Count);

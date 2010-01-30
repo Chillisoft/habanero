@@ -53,13 +53,6 @@ namespace Habanero.BO.ClassDefinition
         private string _relatedObjectAssemblyName;
         private string _relatedObjectClassName;
 
-
-        /// <summary>
-        /// The OrderBy Criteria being used by this relationship.
-        /// </summary>
-        protected IOrderCriteria _orderCriteria;
-        protected string _orderCriteriaString;
-
         #region Constructors
 
         /// <summary>
@@ -223,37 +216,23 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public DeleteParentAction DeleteParentAction { get; protected internal set; }
 
-        private InsertParentAction _insertParentAction;
-
         ///<summary>
         /// Provides the specific instruction when a new object is added to an association relationship.
         /// See <see cref="InsertParentAction"/> enumeration for more details
         ///</summary>
-        public virtual InsertParentAction InsertParentAction
-        {
-            get { return _insertParentAction; }
-            set { _insertParentAction = value; }
-        }
+        public virtual InsertParentAction InsertParentAction { get; set; }
 
         ///<summary>
         /// The order by clause that the related object will be sorted by.
         /// In the case of a single relationship this will return a null string
         ///</summary>
-        public IOrderCriteria OrderCriteria
-        {
-            get { return _orderCriteria; }
-            protected set { _orderCriteria = value; }
-        }
+        public IOrderCriteria OrderCriteria { get; protected set; }
 
         ///<summary>
         /// The order by clause that the related object will be sorted by.
         /// In the case of a single relationship this will return a null string
         ///</summary>
-        public string OrderCriteriaString
-        {
-            get { return _orderCriteriaString; }
-            protected set { _orderCriteriaString = value; }
-        }
+        public string OrderCriteriaString { get; protected set; }
 
         ///<summary>
         /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
@@ -265,9 +244,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns true where the owning business object has the foreign key for this relationship false otherwise.
         /// This is used to differentiate between the two sides of the relationship.
         ///</summary>
-        public abstract  bool OwningBOHasForeignKey { 
-            get; set;
-        }
+        public abstract  bool OwningBOHasForeignKey { get; set;}
 
         ///<summary>
         /// Returns the relationship name of the reverse relationship.

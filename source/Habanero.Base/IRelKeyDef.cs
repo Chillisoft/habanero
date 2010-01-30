@@ -70,5 +70,12 @@ namespace Habanero.Base
         /// <param name="lBoPropCol">The collection of properties</param>
         /// <returns>Returns the new RelKey object</returns>
         IRelKey CreateRelKey(IBOPropCol lBoPropCol);
+
+        /// <summary>
+        /// Returns true if a property with this name is part of this key.
+        /// </summary>
+        /// <param name="propName">The property name to search by</param>
+        /// <returns>Returns true if found, false if not</returns>
+        bool Contains(string propName);
     }
 }

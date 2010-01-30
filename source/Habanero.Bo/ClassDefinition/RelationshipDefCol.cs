@@ -146,7 +146,7 @@ namespace Habanero.BO.ClassDefinition
             }
 		}
 
-		#region IEnumerable<RelationshipDef> Members
+		#region IEnumerable<IRelationshipDef> Members
 
         ///<summary>
         ///Returns an enumerator that iterates through the collection.

@@ -17,13 +17,14 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
     /// <summary>
     /// Manages a collection of relationship definitions
     /// </summary>
-    public interface IRelationshipDefCol : IEnumerable
+    public interface IRelationshipDefCol : IEnumerable<IRelationshipDef>
     {
         /// <summary>
         /// Add an existing relationship to the collection
