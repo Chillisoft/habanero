@@ -24,6 +24,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
@@ -107,7 +108,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            RelationshipDefInheritor relDef = new RelationshipDefInheritor();
+            FakeRelationshipDef relDef = new FakeRelationshipDef();
             RelKeyDef relKeyDef = new RelKeyDef();
             PropDef propDef = new PropDef("prop", typeof (string), PropReadWriteRule.ReadWrite, null);
             relKeyDef.Add(new RelPropDef(propDef, ""));
@@ -276,10 +277,22 @@ namespace Habanero.Test.BO.ClassDefinition
             Type classType = relDef.RelatedObjectClassType;
         }
 
-
-        private class RelationshipDefInheritor : RelationshipDef
+        [Test]
+        public void Test_Test_SetClassDef_ShouldReturnClassDef()
         {
-            public RelationshipDefInheritor()
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MockRepository.GenerateMock<IClassDef>();
+            RelationshipDef relationshipDef = new FakeRelationshipDef();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(relationshipDef.OwningClassDef);
+            //---------------Execute Test ----------------------
+            relationshipDef.OwningClassDef = classDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, relationshipDef.OwningClassDef);
+        }
+        private class FakeRelationshipDef : RelationshipDef
+        {
+            public FakeRelationshipDef()
                 : base("rel", typeof (MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
             {
             }

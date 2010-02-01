@@ -217,6 +217,15 @@ namespace Habanero.BO.ClassDefinition
             _tableName = string.IsNullOrEmpty(tableName) ? _className : tableName;
             _primaryKeyDef = primaryKeyDef;
             _propDefCol = propDefCol;
+            SetClassDefOnChildClasses();
+            _keysCol = keyDefCol;
+            _relationshipDefCol = relationshipDefCol;
+            _uiDefCol = uiDefCol ?? new UIDefCol();
+            _uiDefCol.ClassDef = this;
+        }
+
+        private void SetClassDefOnChildClasses()
+        {
             if (_propDefCol != null)
             {
                 foreach (PropDef def in _propDefCol)
@@ -224,14 +233,16 @@ namespace Habanero.BO.ClassDefinition
                     def.ClassDef = this;
                 }
             }
-            _keysCol = keyDefCol;
-            _relationshipDefCol = (RelationshipDefCol) relationshipDefCol;
-            _uiDefCol = uiDefCol ?? new UIDefCol();
-            _uiDefCol.ClassDef = this;
+            if(_relationshipDefCol != null)
+            {
+                foreach (RelationshipDef relationshipDef in _relationshipDefCol)
+                {
+                    relationshipDef.OwningClassDef = this;
+                }
+            }
         }
 
         #endregion Constructors
-
         #region Properties
 
         ///<summary>

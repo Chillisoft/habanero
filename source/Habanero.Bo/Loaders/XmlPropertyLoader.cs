@@ -61,7 +61,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a property definition</returns>
         public IPropDef LoadProperty(string xmlPropDef)
         {
-            if (xmlPropDef == null || xmlPropDef.Length == 0)
+            if (string.IsNullOrEmpty(xmlPropDef))
             {
                 throw new InvalidXmlDefinitionException("An error has occurred while attempting to " +
                    "load a property definition, contained in a 'property' element. " +

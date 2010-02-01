@@ -474,13 +474,13 @@ namespace Habanero.BO
             get { return _classDef; }
             set { _classDef = value; }
         }
-
+//
         /// <summary>
         /// A property to store the business object's full classdef name.  this is used when persisting to an object database
         /// so that the object can be queried based on its classdef (without the necessity of persisting the entire classdef
         /// for each object).
         /// </summary>
-        public string ClassDefName { get; set; }
+//        public string ClassDefName { get; set; }
 
         /// <summary>
         /// Gets and sets the collection of relationships

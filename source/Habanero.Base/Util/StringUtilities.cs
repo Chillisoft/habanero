@@ -27,8 +27,177 @@ namespace Habanero.Util
     /// <summary>
     /// Provides a collection of utilities for strings
     /// </summary>
-    public class StringUtilities
+    public static class StringUtilities
     {
+        private static readonly NameValueCollection myPluralRules;
+        private static readonly string[] myUnaffectedPlural;
+        private static readonly NameValueCollection myIrregularPlural;
+        private static readonly NameValueCollection mySingularRules;
+        private static readonly string[] myUnaffectedSingular;
+        private static readonly NameValueCollection myIrregularSingular;
+        static StringUtilities()
+        {
+            myPluralRules = new NameValueCollection();
+            myPluralRules["(s)tatus$"] = "$1tatuses";
+            myPluralRules["^(ox)$"] = "$1en"; // ox
+            myPluralRules["([m|l])ouse$"] = "$1ice"; // mouse, louse
+            myPluralRules["(matr|vert|ind)ix|ex$"] = "$1ices"; // matrix, vertex, index
+            myPluralRules["(x|ch|ss|sh)$"] = "$1es"; // search, switch, fix, box, process, address
+            myPluralRules["([^aeiouy]|qu)y$"] = "$1ies"; // query, ability, agency
+            myPluralRules["(hive)$"] = "$1s"; // archive, hive
+            myPluralRules["(?:([^f])fe|([lr])f)$"] = "$1$2ves"; // half, safe, wife
+            myPluralRules["sis$"] = "ses"; // basis, diagnosis
+            myPluralRules["([ti])um$"] = "$1a"; // datum, medium
+            myPluralRules["(p)erson$"] = "$1eople"; // person, salesperson
+            myPluralRules["(m)an$"] = "$1en"; // man, woman, spokesman
+            myPluralRules["(c)hild$"] = "$1hildren"; // child
+            myPluralRules["(buffal|tomat)o$"] = "$1oes"; // buffalo, tomato, (potato ?)
+            myPluralRules["us$"] = "uses"; // us
+            myPluralRules["(alias)"] = "$1es"; // alias
+            myPluralRules["(octop|vir)us$"] = "$1i";
+            // (never use ?)octopus, virus - virus has no defined plural (according to Latin/dictionary.com), but viri is better than viruses/viruss
+            myPluralRules["(ax|cri|test)is$"] = "$1es"; // axis, crisis
+            myPluralRules["s$"] = "s"; // no change (compatibility)
+            myPluralRules["$"] = "s";
+
+            myUnaffectedPlural = new string[]
+                                     {
+                                         "^(.*[nrlm]ese)$", "^(.*deer)$", "^(.*fish)$", "^(.*measles)$", "^(.*ois)$",
+                                         "^(.*pox)$", "^(.*sheep)$", "^(Amoyese)$", "^(bison)$", "^(Borghese)$",
+                                         "^(bream)$", "^(breeches)$", "^(britches)$", "^(buffalo)$", "^(cantus)$",
+                                         "^(carp)$", "^(chassis)$", "^(clippers)$", "^(cod)$", "^(coitus)$", "^(Congoese)$"
+                                         , "^(contretemps)$", "^(corps)$", "^(debris)$", "^(diabetes)$", "^(djinn)$",
+                                         "^(eland)$", "^(elk)$", "^(equipment)$", "^(Faroese)$", "^(flounder)$",
+                                         "^(Foochowese)$", "^(gallows)$", "^(Genevese)$", "^(Genoese)$", "^(Gilbertese)$",
+                                         "^(graffiti)$", "^(headquarters)$", "^(herpes)$", "^(hijinks)$",
+                                         "^(Hottentotese)$", "^(information)$", "^(innings)$", "^(jackanapes)$",
+                                         "^(Kiplingese)$", "^(Kongoese)$", "^(Lucchese)$", "^(mackerel)$", "^(Maltese)$",
+                                         "^(mews)$", "^(moose)$", "^(mumps)$", "^(Nankingese)$", "^(news)$", "^(nexus)$",
+                                         "^(Niasese)$", "^(Pekingese)$", "^(Piedmontese)$", "^(pincers)$", "^(Pistoiese)$",
+                                         "^(pliers)$", "^(Portuguese)$", "^(proceedings)$", "^(rabies)$", "^(rice)$",
+                                         "^(rhinoceros)$", "^(salmon)$", "^(Sarawakese)$", "^(scissors)$",
+                                         "^(sea[- ]bass)$", "^(series)$", "^(Shavese)$", "^(shears)$", "^(siemens)$",
+                                         "^(species)$", "^(swine)$", "^(testes)$", "^(trousers)$", "^(trout)$", "^(tuna)$",
+                                         "^(Vermontese)$", "^(Wenchowese)$", "^(whiting)$", "^(wildebeest)$",
+                                         "^(Yengeese)$"
+                                     };
+
+            myIrregularPlural = new NameValueCollection();
+            myIrregularPlural[@"(.*)\b(atlas)$"] = "atlases";
+            myIrregularPlural[@"(.*)\b(beef)$"] = "beefs";
+            myIrregularPlural[@"(.*)\b(brother)$"] = "brothers";
+            myIrregularPlural[@"(.*)\b(child)$"] = "children";
+            myIrregularPlural[@"(.*)\b(corpus)$"] = "corpuses";
+            myIrregularPlural[@"(.*)\b(cow)$"] = "cows";
+            myIrregularPlural[@"(.*)\b(ganglion)$"] = "ganglions";
+            myIrregularPlural[@"(.*)\b(genie)$"] = "genies";
+            myIrregularPlural[@"(.*)\b(genus)$"] = "genera";
+            myIrregularPlural[@"(.*)\b(graffito)$"] = "graffiti";
+            myIrregularPlural[@"(.*)\b(hoof)$"] = "hoofs";
+            myIrregularPlural[@"(.*)\b(loaf)$"] = "loaves";
+            myIrregularPlural[@"(.*)\b(man)$"] = "men";
+            myIrregularPlural[@"(.*)\b(money)$"] = "monies";
+            myIrregularPlural[@"(.*)\b(mongoose)$"] = "mongooses";
+            myIrregularPlural[@"(.*)\b(move)$"] = "moves";
+            myIrregularPlural[@"(.*)\b(mythos)$"] = "mythoi";
+            myIrregularPlural[@"(.*)\b(numen)$"] = "numina";
+            myIrregularPlural[@"(.*)\b(occiput)$"] = "occiputs";
+            myIrregularPlural[@"(.*)\b(octopus)$"] = "octopuses";
+            myIrregularPlural[@"(.*)\b(opus)$"] = "opuses";
+            myIrregularPlural[@"(.*)\b(ox)$"] = "oxen";
+            myIrregularPlural[@"(.*)\b(penis)$"] = "penises";
+            myIrregularPlural[@"(.*)\b(person)$"] = "people";
+            myIrregularPlural[@"(.*)\b(sex)$"] = "sexes";
+            myIrregularPlural[@"(.*)\b(soliloquy)$"] = "soliloquies";
+            myIrregularPlural[@"(.*)\b(testis)$"] = "testes";
+            myIrregularPlural[@"(.*)\b(trilby)$"] = "trilbys";
+            myIrregularPlural[@"(.*)\b(turf)$"] = "turfs";
+
+            mySingularRules = new NameValueCollection();
+            mySingularRules["(s)tatuses$"] = "$1tatus";
+            mySingularRules["(matr)ices$"] = "$1ix";
+            mySingularRules["(vert|ind)ices$"] = "$1ex";
+            mySingularRules["^(ox)en"] = "$1";
+            mySingularRules["(alias)es$"] = "$1";
+            mySingularRules["([octop|vir])i$"] = "$1us";
+            mySingularRules["(cris|ax|test)es$"] = "$1is";
+            mySingularRules["(shoe)s$"] = "$1";
+            mySingularRules["(o)es$"] = "$1";
+            mySingularRules["uses$"] = "us";
+            mySingularRules["([m|l])ice$"] = "$1ouse";
+            mySingularRules["(x|ch|ss|sh)es$"] = "$1";
+            mySingularRules["(m)ovies$"] = "$1ovie";
+            mySingularRules["(s)eries$"] = "$1eries";
+            mySingularRules["([^aeiouy]|qu)ies$"] = "$1y";
+            mySingularRules["([lr])ves$"] = "$1f"; // ?
+            mySingularRules["(tive)s$"] = "$1";
+            mySingularRules["(hive)s$"] = "$1";
+            mySingularRules["(drive)s$"] = "$1";
+            mySingularRules["([^f])ves$"] = "$1fe";
+            mySingularRules["(^analy)ses$"] = "$1sis";
+            mySingularRules["((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$"] = "$1$2sis";
+            mySingularRules["([ti])a$"] = "$1um";
+            mySingularRules["(p)eople$"] = "$1erson";
+            mySingularRules["(m)en$"] = "$1an";
+            mySingularRules["(c)hildren$"] = "$1hild";
+            mySingularRules["(n)ews$"] = "$1ews";
+            mySingularRules["s$"] = "";
+
+            myUnaffectedSingular = new string[]
+                                       {
+                                           "^(.*[nrlm]ese)$", "^(.*deer)$", "^(.*fish)$", "^(.*measles)$", "^(.*ois)$",
+                                           "^(.*pox)$", "^(.*sheep)$", "^(.*us)$", "^(.*ss)$", "^(Amoyese)$", "^(bison)$",
+                                           "^(Borghese)$", "^(bream)$", "^(breeches)$", "^(britches)$", "^(buffalo)$",
+                                           "^(cantus)$", "^(carp)$", "^(chassis)$", "^(clippers)$", "^(cod)$", "^(coitus)$"
+                                           , "^(Congoese)$", "^(contretemps)$", "^(corps)$", "^(debris)$", "^(diabetes)$",
+                                           "^(djinn)$", "^(eland)$", "^(elk)$", "^(equipment)$", "^(Faroese)$",
+                                           "^(flounder)$", "^(Foochowese)$", "^(gallows)$", "^(Genevese)$", "^(Genoese)$",
+                                           "^(Gilbertese)$", "^(graffiti)$", "^(headquarters)$", "^(herpes)$",
+                                           "^(hijinks)$", "^(Hottentotese)$", "^(information)$", "^(innings)$",
+                                           "^(jackanapes)$", "^(Kiplingese)$", "^(Kongoese)$", "^(Lucchese)$",
+                                           "^(mackerel)$", "^(Maltese)$", "^(mews)$", "^(moose)$", "^(mumps)$",
+                                           "^(Nankingese)$", "^(news)$", "^(nexus)$", "^(Niasese)$", "^(Pekingese)$",
+                                           "^(Piedmontese)$", "^(pincers)$", "^(Pistoiese)$", "^(pliers)$",
+                                           "^(Portuguese)$", "^(proceedings)$", "^(rabies)$", "^(rice)$", "^(rhinoceros)$",
+                                           "^(salmon)$", "^(Sarawakese)$", "^(scissors)$", "^(sea[- ]bass)$", "^(series)$",
+                                           "^(Shavese)$", "^(shears)$", "^(siemens)$", "^(species)$", "^(swine)$",
+                                           "^(testes)$", "^(trousers)$", "^(trout)$", "^(tuna)$", "^(Vermontese)$",
+                                           "^(Wenchowese)$", "^(whiting)$", "^(wildebeest)$", "^(Yengeese)$"
+                                       };
+
+            myIrregularSingular = new NameValueCollection();
+            myIrregularSingular[@"(.*)\b(atlases)$"] = "atlas";
+            myIrregularSingular[@"(.*)\b(beefs)$"] = "beef";
+            myIrregularSingular[@"(.*)\b(brothers)$"] = "brother";
+            myIrregularSingular[@"(.*)\b(children)$"] = "child";
+            myIrregularSingular[@"(.*)\b(corpuses)$"] = "corpus";
+            myIrregularSingular[@"(.*)\b(cows)$"] = "cow";
+            myIrregularSingular[@"(.*)\b(ganglions)$"] = "ganglion";
+            myIrregularSingular[@"(.*)\b(genies)$"] = "genie";
+            myIrregularSingular[@"(.*)\b(genera)$"] = "genus";
+            myIrregularSingular[@"(.*)\b(graffiti)$"] = "graffito";
+            myIrregularSingular[@"(.*)\b(hoofs)$"] = "hoof";
+            myIrregularSingular[@"(.*)\b(loaves)$"] = "loaf";
+            myIrregularSingular[@"(.*)\b(men)$"] = "man";
+            myIrregularSingular[@"(.*)\b(monies)$"] = "money";
+            myIrregularSingular[@"(.*)\b(mongooses)$"] = "mongoose";
+            myIrregularSingular[@"(.*)\b(moves)$"] = "move";
+            myIrregularSingular[@"(.*)\b(mythoi)$"] = "mythos";
+            myIrregularSingular[@"(.*)\b(numina)$"] = "numen";
+            myIrregularSingular[@"(.*)\b(occiputs)$"] = "occiput";
+            myIrregularSingular[@"(.*)\b(octopuses)$"] = "octopus";
+            myIrregularSingular[@"(.*)\b(opuses)$"] = "opus";
+            myIrregularSingular[@"(.*)\b(oxen)$"] = "ox";
+            myIrregularSingular[@"(.*)\b(penises)$"] = "penis";
+            myIrregularSingular[@"(.*)\b(people)$"] = "person";
+            myIrregularSingular[@"(.*)\b(sexes)$"] = "sex";
+            myIrregularSingular[@"(.*)\b(soliloquies)$"] = "soliloquy";
+            myIrregularSingular[@"(.*)\b(testes)$"] = "testis";
+            myIrregularSingular[@"(.*)\b(trilbys)$"] = "trilby";
+            myIrregularSingular[@"(.*)\b(turfs)$"] = "turf";
+        }
+
+
         static readonly Regex _guidFormat = new Regex(
             "^[A-Fa-f0-9]{32}$|" + 
             "^({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?$|" +
@@ -113,13 +282,61 @@ namespace Habanero.Util
             }
             return formatted;
         }
+        public static string Singularize(string input)
+        {
+            if (input == String.Empty)
+                return input;
+            foreach (string rule in myUnaffectedSingular)
+            {
+                if (Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
+                    return input;
+            }
+            foreach (string rule in myIrregularSingular)
+            {
+                if (rule.Equals(input, StringComparison.InvariantCultureIgnoreCase))
+                    return myIrregularSingular[rule];
+            }
+            foreach (string rule in mySingularRules)
+            {
+                if (Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
+                    return Regex.Replace(input, rule, mySingularRules[rule], RegexOptions.IgnoreCase);
+            }
+            return input;
+        }
 
+        ///<summary>
+        /// Pluralises a noun using standard rule e.g. Name => Names
+        /// Pantry => Pantries.
+        ///</summary>
+        ///<param name="input"></param>
+        ///<returns></returns>
+        public static string Pluralize(string input)
+        {
+            if (input == String.Empty)
+                return input;
+            foreach (string rule in myUnaffectedPlural)
+            {
+                if (Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
+                    return input;
+            }
+            foreach (string rule in myIrregularPlural)
+            {
+                if (rule.Equals(input, StringComparison.InvariantCultureIgnoreCase))
+                    return myIrregularPlural[rule];
+            }
+            foreach (string rule in myPluralRules)
+            {
+                if (Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
+                    return Regex.Replace(input, rule, myPluralRules[rule], RegexOptions.IgnoreCase);
+            }
+            return String.Empty;
+        }
         /// <summary>
         /// Converts the string representation of a Guid to its Guid
         /// equivalent. A return value indicates whether the operation
         /// succeeded.
         /// </summary>
-        /// <param name="s">A string containing a Guid to convert.</param>
+        /// <param name="s">A string containing a Guid to convert.</param>OwningClassDef
         /// <param name="result">
         /// When this method returns, contains the Guid value equivalent to
         /// the Guid contained in <paramref name="s"/>, if the conversion
@@ -221,7 +438,7 @@ namespace Habanero.Util
         public static int CountOccurrences(string fullText, string searchText, int startIndex, int length)
         {
             string text = fullText.Substring(startIndex, length);
-            string[] parts = text.Split(new string[] {searchText}, StringSplitOptions.None);
+            string[] parts = text.Split(new[] {searchText}, StringSplitOptions.None);
             return parts.Length - 1;
         }
 
@@ -365,10 +582,10 @@ namespace Habanero.Util
             NameValueCollection nameValueCollection = new NameValueCollection();
             if (!string.IsNullOrEmpty(nameValuePairString))
             {
-                string[] pairs = nameValuePairString.Split(new char[] {'&'});
+                string[] pairs = nameValuePairString.Split(new[] {'&'});
                 foreach (string pair in pairs)
                 {
-                    string[] values = pair.Split(new char[] {'='});
+                    string[] values = pair.Split(new[] {'='});
                     nameValueCollection[values[0]] = values[1];
                 }
             }

@@ -153,8 +153,12 @@ namespace Habanero.BO.ClassDefinition
             }
 		}
 
-
 		#region IEnumerable Members
+
+        public IEnumerator<IRelPropDef> GetEnumerator()
+        {
+            return _relPropDefs.Values.GetEnumerator();
+        }
 
         ///<summary>
         ///Returns an enumerator that iterates through a collection.

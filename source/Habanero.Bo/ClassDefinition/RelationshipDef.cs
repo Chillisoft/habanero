@@ -114,6 +114,11 @@ namespace Habanero.BO.ClassDefinition
     	    RelationshipType = relationshipType;
 		}
 
+        ///<summary>
+        /// Gets and Sets the Class Def to the ClassDefinition that owns this Relationship Def.
+        ///</summary>
+        public IClassDef OwningClassDef { get; internal set; }
+
         #endregion Constructors
 
 		#region Properties

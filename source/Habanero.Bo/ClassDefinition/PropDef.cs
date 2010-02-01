@@ -52,7 +52,6 @@ namespace Habanero.BO.ClassDefinition
         private string _propertyName;
         private string _description;
         private Type _propType;
-        private PropReadWriteRule _propRWStatus;
 
         private string _propTypeAssemblyName;
         private string _propTypeName;
@@ -72,10 +71,7 @@ namespace Habanero.BO.ClassDefinition
 
         private ILookupList _lookupList = new NullLookupList();
 
-        private bool _autoIncrementing;
-        private int _length;
         private string _displayName;
-        private bool _keepValuePrivate;
         private bool _persistable = true;
         private ClassDef _classDef;
         private string _unitOfMeasure = "";
@@ -418,7 +414,7 @@ namespace Habanero.BO.ClassDefinition
                 _propTypeAssemblyName = assemblyName;
                 _propTypeName = typeName;
             }
-            _propRWStatus = propRWStatus;
+            ReadWriteRule = propRWStatus;
             _databaseFieldName = databaseFieldName ?? propertyName;
             if (defaultValue != null)
             {
@@ -429,15 +425,15 @@ namespace Habanero.BO.ClassDefinition
                 _defaultValueString = defaultValueString;
             }
             _compulsory = compulsory;
-            _autoIncrementing = autoIncrementing;
-            _length = length;
+            AutoIncrementing = autoIncrementing;
+            Length = length;
             _displayName = displayName;
             if (string.IsNullOrEmpty(_displayName))
             {
                 _displayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
             }
             _description = description;
-            _keepValuePrivate = keepValuePrivate;
+            KeepValuePrivate = keepValuePrivate;
         }
 
         #endregion
@@ -584,11 +580,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the rule for how the property can be accessed. 
         /// See the PropReadWriteRule enumeration for more detail.
         /// </summary>
-        public PropReadWriteRule ReadWriteRule
-        {
-            get { return _propRWStatus; }
-            set { _propRWStatus = value; }
-        }
+        public PropReadWriteRule ReadWriteRule { get; set; }
 
         /// <summary>
         /// Indicates whether this object has a LookupList object set
@@ -605,29 +597,19 @@ namespace Habanero.BO.ClassDefinition
         /// In this case when the BusinessObject is inserted the field will be filled
         /// from the database field.
         /// </summary>
-        public bool AutoIncrementing
-        {
-            get { return _autoIncrementing; }
-            set { _autoIncrementing = value; }
-        }
+        public bool AutoIncrementing { get; set; }
 
         /// <summary>
         /// Returns the maximum length for a string property
         /// </summary>
-        public int Length
-        {
-            get { return _length; }
-        }
+        public int Length { get; private set; }
 
         ///<summary>
         /// Returns whether this property should keep its value private where possible.
         /// This will usually be set to 'true' for password fields. This will then prevent
         /// the value being revealed in error messages and by default controls the user interface.
         ///</summary>
-        public bool KeepValuePrivate
-        {
-            get { return _keepValuePrivate; }
-        }
+        public bool KeepValuePrivate { get; private set; }
 
 
         ///<summary>
@@ -681,11 +663,11 @@ namespace Habanero.BO.ClassDefinition
             //TODO Brett 09 Jan 2009: I think this should be removed since it is one of the rules. I agree with the capability
             //   in firestarter to be able to easily set up a property rule that has a maximum length but it should not be a seperate
             //   property on prop def.
-            if (propValue is string && _length != Int32.MaxValue)
+            if (propValue is string && Length != Int32.MaxValue)
             {
-                if (((string) propValue).Length > _length)
+                if (((string) propValue).Length > Length)
                 {
-                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", displayNameFull, _length);
+                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", displayNameFull, Length);
                     return false;
                 }
             }
@@ -1136,13 +1118,13 @@ namespace Habanero.BO.ClassDefinition
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             return Equals(obj._propertyName, _propertyName) && Equals(obj._description, _description)
-                   && Equals(obj._propType, _propType) && Equals(obj._propRWStatus, _propRWStatus)
+                   && Equals(obj._propType, _propType) && Equals(obj.ReadWriteRule, ReadWriteRule)
                    && Equals(obj._propTypeAssemblyName, _propTypeAssemblyName)
                    && Equals(obj._defaultValue, _defaultValue) && Equals(obj._defaultValueString, _defaultValueString)
                    && obj._compulsory.Equals(_compulsory) && Equals(obj._databaseFieldName, _databaseFieldName)
-                   && Equals(obj._lookupList, _lookupList) && obj._autoIncrementing.Equals(_autoIncrementing)
-                   && obj._length == _length && Equals(obj._displayName, _displayName)
-                   && obj._keepValuePrivate.Equals(_keepValuePrivate) && obj._persistable.Equals(_persistable)
+                   && Equals(obj._lookupList, _lookupList) && obj.AutoIncrementing.Equals(AutoIncrementing)
+                   && obj.Length == Length && Equals(obj._displayName, _displayName)
+                   && obj.KeepValuePrivate.Equals(KeepValuePrivate) && obj._persistable.Equals(_persistable)
                    && Equals(obj._classDef, _classDef) && Equals(obj._unitOfMeasure, _unitOfMeasure);
         }
 
@@ -1161,17 +1143,17 @@ namespace Habanero.BO.ClassDefinition
                 int result = (_propertyName != null ? _propertyName.GetHashCode() : 0);
                 result = (result * 397) ^ (_description != null ? _description.GetHashCode() : 0);
                 result = (result * 397) ^ (_propType != null ? _propType.GetHashCode() : 0);
-                result = (result * 397) ^ _propRWStatus.GetHashCode();
+                result = (result * 397) ^ ReadWriteRule.GetHashCode();
                 result = (result * 397) ^ (_propTypeAssemblyName != null ? _propTypeAssemblyName.GetHashCode() : 0);
                 result = (result * 397) ^ (_defaultValue != null ? _defaultValue.GetHashCode() : 0);
                 result = (result * 397) ^ (_defaultValueString != null ? _defaultValueString.GetHashCode() : 0);
                 result = (result * 397) ^ _compulsory.GetHashCode();
                 result = (result * 397) ^ (_databaseFieldName != null ? _databaseFieldName.GetHashCode() : 0);
                 result = (result * 397) ^ (_lookupList != null ? _lookupList.GetHashCode() : 0);
-                result = (result * 397) ^ _autoIncrementing.GetHashCode();
-                result = (result * 397) ^ _length;
+                result = (result * 397) ^ AutoIncrementing.GetHashCode();
+                result = (result * 397) ^ Length;
                 result = (result * 397) ^ (_displayName != null ? _displayName.GetHashCode() : 0);
-                result = (result * 397) ^ _keepValuePrivate.GetHashCode();
+                result = (result * 397) ^ KeepValuePrivate.GetHashCode();
                 result = (result * 397) ^ _persistable.GetHashCode();
                 result = (result * 397) ^ (_classDef != null ? _classDef.GetHashCode() : 0);
                 result = (result * 397) ^ (_unitOfMeasure != null ? _unitOfMeasure.GetHashCode() : 0);

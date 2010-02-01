@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D04BB138-C144-4406-9A41-17192E7D44BF}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -144,6 +144,7 @@
     <Compile Include="DateTimeNowConverter.cs" />
     <Compile Include="DateTimeTodayConverter.cs" />
     <Compile Include="DelegatedExceptionNotifier.cs" />
+    <Compile Include="Exceptions\InvalidDefinitionException.cs" />
     <Compile Include="IBusinessObjectLookupList.cs" />
     <Compile Include="IDatabaseLookupList.cs" />
     <Compile Include="ILookupListWithClassDef.cs" />

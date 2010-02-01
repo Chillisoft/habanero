@@ -40,7 +40,7 @@ namespace Habanero.Base.Exceptions
         /// to display
         /// </summary>
         /// <param name="message">The error message</param>
-        public InvalidXmlDefinitionException(string message) : base(message, "")
+        public InvalidXmlDefinitionException(string message) : base(message, message)
         {
         }
 
@@ -50,7 +50,7 @@ namespace Habanero.Base.Exceptions
         /// </summary>
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
-        public InvalidXmlDefinitionException(string message, Exception inner) : base(message, "", inner)
+        public InvalidXmlDefinitionException(string message, Exception inner) : base(message, message, inner)
         {
         }
 

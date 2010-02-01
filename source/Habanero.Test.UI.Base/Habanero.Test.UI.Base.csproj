@@ -177,6 +177,7 @@
     <Compile Include="TestEnumerations.cs" />
     <Compile Include="TestForm.cs" />
     <Compile Include="TestGridWithPanelControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Selectors\BOGridAndEditorControl.cs" />
     <Compile Include="TestGroupBox.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="LayoutManager\TestColumnLayoutManager.cs" />
     <Compile Include="LayoutManager\TestGridLayoutManager.cs" />
     <Compile Include="Mappers\TestCollectionTabControlMapperVWG.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Mappers\TestControlMapperStrategyWin.cs" />
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />

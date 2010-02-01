@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
@@ -38,7 +39,7 @@ namespace Habanero.Base
     ///   two Business object defitions (<see cref="IClassDef"/>.
     ///   <see cref="IBusinessObject"/>.
     /// </summary>
-    public interface IRelKeyDef : IEnumerable
+    public interface IRelKeyDef : IEnumerable<IRelPropDef>
     {
         /// <summary>
         /// Provides an indexing facility for the property definitions
