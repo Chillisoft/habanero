@@ -182,7 +182,10 @@ namespace Habanero.BO
 
         internal static void LoadNumberGenClassDef()
         {
-            LoadNumberGenClassDef(null);
+            if (!ClassDef.ClassDefs.Contains(typeof(BOSequenceNumber)))
+            {
+                LoadNumberGenClassDef(null);
+            }
         }
 
         internal static void LoadNumberGenClassDef(string tableName)

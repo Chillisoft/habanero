@@ -124,6 +124,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(expecteID, value);
         }
+
         [Test]
         public void Test_GetAsValue_CompositeKey()
         {
@@ -142,6 +143,20 @@ namespace Habanero.Test.BO
             string valueString = (string) value;
             StringAssert.Contains("ContactPersonID=" + contactPersonID, valueString);
             StringAssert.Contains("Surname=" + surname, valueString);
+        }
+
+        [Test]
+        public void Test_GetAsGuid()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Guid id = contactPersonTestBO.ID.GetAsGuid();
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(Guid.Empty, id);
         }
 
         [Test]

@@ -37,6 +37,7 @@ namespace Habanero.BO
 
         public Dictionary<Guid, IBusinessObject> Read()
         {
+            BOSequenceNumber.LoadNumberGenClassDef();
             Dictionary<Guid, IBusinessObject> objects = new Dictionary<Guid, IBusinessObject>();
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.IgnoreComments = true;

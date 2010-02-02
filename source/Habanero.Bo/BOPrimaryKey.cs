@@ -99,10 +99,6 @@ namespace Habanero.BO
             _currentValue = AsString_CurrentValue();
             FireValueUpdated();
         }
-        //internal string NewObjectID()
-        //{
-        //    return  _objectID.ToString();
-        //}
 
         /// <summary>
         /// Indicates whether to check for duplicates.  This is true when the
@@ -144,6 +140,7 @@ namespace Habanero.BO
         /// <returns>Returns a Guid</returns>
         public virtual Guid GetAsGuid()
         {
+            if (_objectID != Guid.Empty) return _objectID;
             string objectId = this.GetObjectId();
             objectId = objectId.TrimEnd('\'','}');
             string guidString = objectId.Substring(objectId.Length - 36);
