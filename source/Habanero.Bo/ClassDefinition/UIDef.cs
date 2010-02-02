@@ -46,15 +46,7 @@ namespace Habanero.BO.ClassDefinition
             _uiForm = uiForm;
             if (_uiForm != null) _uiForm.UIDef = this;
             _uiGrid = uiGrid;
-        }
-
-        /// <summary>
-        /// Returns the form definition
-        /// </summary>
-        public IUIForm UIForm
-        {
-            get { return _uiForm; }
-            set { _uiForm = value; }
+            if (_uiGrid != null) _uiGrid.UIDef = this;
         }
 
         /// <summary>
@@ -67,12 +59,31 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// Returns the form definition
+        /// </summary>
+        public IUIForm UIForm
+        {
+            get { return _uiForm; }
+            set
+            {
+                if (_uiForm != null && _uiForm.UIDef == (IUIDef)this) _uiForm.UIDef = null;
+                _uiForm = value;
+                if (_uiForm != null) _uiForm.UIDef = this;
+            }
+        }
+
+        /// <summary>
         /// Returns the grid definition
         /// </summary>
         public IUIGrid UIGrid
         {
             get { return _uiGrid; }
-            set { _uiGrid = value; }
+            set
+            {
+                if (_uiGrid != null && _uiGrid.UIDef == (IUIDef)this) _uiGrid.UIDef = null;
+                _uiGrid = value;
+                if (_uiGrid != null) _uiGrid.UIDef = this;
+            }
         }
 
         ///<summary>

@@ -19,12 +19,44 @@
 
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
+using Habanero.Base;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
     [TestFixture]
     public class TestUIForm
     {
+        [Test]
+        public void Test_Construct_ShouldSetUIDefOnUIForm()
+        {
+            //---------------Set up test pack-------------------
+            UIForm uiForm = new UIForm();
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            UIDef uiDef = new UIDef("test", uiForm, null);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiDef, uiForm.UIDef);
+        }
+
+        [Test]
+        public void Test_Construct_ShouldSetUIDefOnUIGrid()
+        {
+            //---------------Set up test pack-------------------
+            UIGrid uiGrid = new UIGrid();
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            UIDef uiDef = new UIDef("test", null, uiGrid);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiDef, uiGrid.UIDef);
+        }
+
         [Test]
         public void Test_Construct_WithUIFormTabs()
         {
@@ -40,6 +72,96 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(uiFormTab1, uiForm[0]);
             Assert.AreSame(uiFormTab2, uiForm[1]);
             Assert.AreSame(uiFormTab3, uiForm[2]);
+        }
+
+        [Test]
+        public void Test_UIForm_WhenSet_ShouldSetUIDef()
+        {
+            //---------------Set up test pack-------------------
+            IUIForm uiForm = MockRepository.GenerateStub<IUIForm>();
+            UIDef uiDef = new UIDef("test", null, null);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiForm.UIDef);
+            //---------------Execute Test ----------------------
+            uiDef.UIForm = uiForm;
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiDef, uiForm.UIDef);
+        }
+
+        [Test]
+        public void Test_UIForm_WhenChanged_ShouldResetUIDefOnOld()
+        {
+            //---------------Set up test pack-------------------
+            IUIForm uiFormOld = MockRepository.GenerateStub<IUIForm>();
+            IUIForm uiFormNew = MockRepository.GenerateStub<IUIForm>();
+            UIDef uiDef = new UIDef("test", uiFormOld, null);
+            //---------------Assert Precondition----------------
+            Assert.AreSame(uiDef, uiFormOld.UIDef);
+            //---------------Execute Test ----------------------
+            uiDef.UIForm = uiFormNew;
+            //---------------Test Result -----------------------
+            Assert.IsNull(uiFormOld.UIDef);
+        }
+
+        [Test]
+        public void Test_UIForm_WhenChanged_ButOldDoesNotLink_ShouldNotResetUIDefOnOld()
+        {
+            //---------------Set up test pack-------------------
+            IUIForm uiFormOld = MockRepository.GenerateStub<IUIForm>();
+            IUIForm uiFormNew = MockRepository.GenerateStub<IUIForm>();
+            UIDef uiDef = new UIDef("test", uiFormOld, null);
+            uiFormOld.UIDef = MockRepository.GenerateStub<IUIDef>();
+            //---------------Assert Precondition----------------
+            Assert.AreNotSame(uiDef, uiFormOld.UIDef);
+            //---------------Execute Test ----------------------
+            uiDef.UIForm = uiFormNew;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(uiFormOld.UIDef);
+        }
+
+        [Test]
+        public void Test_UIGrid_WhenSet_ShouldSetUIDef()
+        {
+            //---------------Set up test pack-------------------
+            IUIGrid uiGrid = MockRepository.GenerateStub<IUIGrid>();
+            UIDef uiDef = new UIDef("test", null, null);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiGrid.UIDef);
+            //---------------Execute Test ----------------------
+            uiDef.UIGrid = uiGrid;
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiDef, uiGrid.UIDef);
+        }
+
+        [Test]
+        public void Test_UIGrid_WhenChanged_ShouldResetUIDefOnOld()
+        {
+            //---------------Set up test pack-------------------
+            IUIGrid uiGridOld = MockRepository.GenerateStub<IUIGrid>();
+            IUIGrid uiGridNew = MockRepository.GenerateStub<IUIGrid>();
+            UIDef uiDef = new UIDef("test", null, uiGridOld);
+            //---------------Assert Precondition----------------
+            Assert.AreSame(uiDef, uiGridOld.UIDef);
+            //---------------Execute Test ----------------------
+            uiDef.UIGrid = uiGridNew;
+            //---------------Test Result -----------------------
+            Assert.IsNull(uiGridOld.UIDef);
+        }
+
+        [Test]
+        public void WhenChanged_ButOldDoesNotLink_ShouldNotResetUIDefOnOld()
+        {
+            //---------------Set up test pack-------------------
+            IUIGrid uiGridOld = MockRepository.GenerateStub<IUIGrid>();
+            IUIGrid uiGridNew = MockRepository.GenerateStub<IUIGrid>();
+            UIDef uiDef = new UIDef("test", null, uiGridOld);
+            uiGridOld.UIDef = MockRepository.GenerateStub<IUIDef>();
+            //---------------Assert Precondition----------------
+            Assert.AreNotSame(uiDef, uiGridOld.UIDef);
+            //---------------Execute Test ----------------------
+            uiDef.UIGrid = uiGridNew;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(uiGridOld.UIDef);
         }
 
         [Test]
@@ -296,21 +418,6 @@ namespace Habanero.Test.BO.ClassDefinition
             form.Add(tab);
             //---------------Test Result -----------------------
             Assert.AreSame(form, tab.UIForm);
-        }
-
-        [Test]
-        public void TestUIDef()
-        {
-            //---------------Set up test pack-------------------
-            UIForm uiForm = new UIForm();
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            UIDef uiDef = new UIDef("test", uiForm, null);
-
-            //---------------Test Result -----------------------
-            Assert.AreSame(uiDef, uiForm.UIDef);
         }
 
         private UIFormTab CreateUIFormTab()

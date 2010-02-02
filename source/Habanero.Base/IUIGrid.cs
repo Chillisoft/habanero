@@ -77,5 +77,10 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         IFilterDef FilterDef { get; set; }
 
+        ///<summary>
+        /// The UI Def that this UIForm is related to.
+        ///</summary>
+        IUIDef UIDef { get; set; }
+
     }
 }

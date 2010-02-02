@@ -157,6 +157,10 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public IFilterDef FilterDef { get; set; }
 
+        ///<summary>
+        /// The UI Def that this UIForm is related to.
+        ///</summary>
+        public IUIDef UIDef { get; set; }
 
         ///<summary>
         ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
