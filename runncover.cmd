@@ -1,0 +1,1 @@
+"c:\program files\ncover\NCover.Console.exe" "c:\program files\nunit 2.4.7\bin\nunit-console-x86.exe" habanero.nunit //x Coverage.xml //l Coverage.log //a Habanero.Base;Habanero.BO;Habanero.Console;Habanero.DB;Habanero;Habanero.UI.Base;Habanero.UI.VWG;Habanero.UI.Win

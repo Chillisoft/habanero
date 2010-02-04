@@ -1,0 +1,5 @@
+<!ELEMENT parameter EMPTY>
+<!ATTLIST parameter
+	name NMTOKEN #REQUIRED
+	value CDATA #REQUIRED
+>
