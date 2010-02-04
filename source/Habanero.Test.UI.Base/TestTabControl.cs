@@ -21,29 +21,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// This test class tests the base inherited methods of the TabControl class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_TabControl : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateTabControl();
-        }
-    }
-
-    /// <summary>
-    /// This test class tests the base inherited methods of the TabControl class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_TabControl : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateTabControl();
-        }
-    }
 
     /// <summary>
     /// This test class tests the TabControl class.

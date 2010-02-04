@@ -1,4 +1,4 @@
-<NUnitProject>
+﻿<NUnitProject>
   <Settings activeconfig="Default" />
   <Config name="Default" binpathtype="Auto">
     <assembly path="bin\Habanero.Test.dll" />

@@ -136,33 +136,32 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Mappers\TestEnumComboBoxMapper.cs" />
-    <Compile Include="TestCloseBOEditorDialog.cs" />
     <Compile Include="TestCollapsibleMenu.cs" />
     <Compile Include="TestCollapsibleMenuBuilder.cs" />
     <Compile Include="Grid\TestDataGridViewColumnCollection.cs" />
     <Compile Include="Mappers\TestRelationshipComboBoxMapper.cs" />
     <Compile Include="TestBusinessObjectDeletor.cs" />
     <Compile Include="Controllers\TestListBoxCollectionManager.cs" />
-    <Compile Include="Selectors\TestBOSelector.cs" />
+    <Compile Include="Selectors\TestBOColSelector.cs" />
     <Compile Include="Selectors\TestBOSelectorAndEditorWin.cs" />
     <Compile Include="Selectors\TestBOTabControlSelector.cs" />
     <Compile Include="Selectors\TestCollapsiblePanelSelector.cs">
     </Compile>
     <Compile Include="Selectors\TestComboBoxSelector.cs" />
-    <Compile Include="Selectors\TestBOSelectorEditableGridControlWin.cs" />
-    <Compile Include="Selectors\TestEditableGridSelectorVWG.cs" />
+    <Compile Include="Selectors\TestBOSelectorEditableGridControl.cs" />
+    <Compile Include="Selectors\TestBOSelectorEditableGrid.cs" />
     <Compile Include="Selectors\TestGridSelector.cs" />
     <Compile Include="Selectors\TestListBoxSelector.cs" />
     <Compile Include="Selectors\TestReadOnlyGridControlSelector.cs" />
     <Compile Include="Selectors\TestBOSelectorAndBOEditorManager.cs" />
     <Compile Include="TestGroupBoxGroupControl.cs" />
-    <Compile Include="TestBOEditorControlWin.cs" />
+    <Compile Include="TestBOEditorControl.cs" />
     <Compile Include="TestCollapsiblePanel.cs" />
     <Compile Include="FilterController\TestFilterControlBuilder.cs" />
     <Compile Include="FilterController\TestFilterControlManager.cs" />
     <Compile Include="FilterController\TestStringTextBoxFilter.cs" />
     <Compile Include="Grid\TestDataGridView.cs" />
-    <Compile Include="Mappers\TestEditableGridMapper.cs" />
+    <Compile Include="Mappers\TestEditableGridControlMapper.cs" />
     <Compile Include="Mappers\TestExtendedLookupComboBoxMapper.cs" />
     <Compile Include="PanelBuilder\TestPanelBuilder.cs" />
     <Compile Include="PanelBuilder\TestPanelInfo.cs" />
@@ -179,7 +178,6 @@
     <Compile Include="TestGridWithPanelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Selectors\BOGridAndEditorControl.cs" />
     <Compile Include="TestGroupBox.cs" />
     <Compile Include="TestMainEditorPanel.cs" />
     <Compile Include="TestMainMenu.cs" />
@@ -199,7 +197,6 @@
     <Compile Include="Grid\TestDataGridViewNumericUpDownColumn.cs" />
     <Compile Include="TestBaseMethods.cs" />
     <Compile Include="TestControl.cs" />
-    <Compile Include="TestDialogResult.cs" />
     <Compile Include="TestHabaneroMenu.cs" />
     <Compile Include="TestInputFormComboBox.cs" />
     <Compile Include="TestInputFormDate.cs" />
@@ -223,10 +220,8 @@
     <Compile Include="Grid\TestReadOnlyGridControl.cs" />
     <Compile Include="LayoutManager\TestColumnLayoutManager.cs" />
     <Compile Include="LayoutManager\TestGridLayoutManager.cs" />
-    <Compile Include="Mappers\TestCollectionTabControlMapperVWG.cs">
-      <SubType>Component</SubType>
+    <Compile Include="Mappers\TestCollectionTabControlMapper.cs">
     </Compile>
-    <Compile Include="Mappers\TestControlMapperStrategyWin.cs" />
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
     <Compile Include="Mappers\TestControlMapper.cs">

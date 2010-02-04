@@ -8,62 +8,15 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// Currently Ignored
-    /// </summary>
-    /// 
-//    [Ignore(" To be implemented")] //TODO Brett 02 Mar 2009:
-    [TestFixture]
-    public class TestCollapsiblePanelSelectorVWG : TestCollapsiblePanelSelectorWin
+   
+
+    public abstract class TestCollapsiblePanelSelector : TestBOColSelector
     {
-        protected override IControlFactory GetControlFactory()
-        {
-            ControlFactoryVWG factory = new ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
 
         protected override IBOColSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateCollapsiblePanelSelector();
         }
-
-        [Test]
-        public override void Test_Constructor_nullControlFactory_RaisesError()
-        {
-            //---------------Set up test pack-------------------
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            try
-            {
-                new CollapsiblePanelSelectorVWG(null);
-                Assert.Fail("expected ArgumentNullException");
-            }
-                //---------------Test Result -----------------------
-            catch (ArgumentNullException ex)
-            {
-                StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("controlFactory", ex.ParamName);
-            }
-        }
-    }
-
-
-    /// <summary>
-    /// This test class tests the CollapsiblePanelSelector class.
-    /// </summary>
-    [TestFixture]
-    public class TestCollapsiblePanelSelectorWin : TestBOColSelector
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            ControlFactoryWin factory = new ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-
 
         protected override void SetSelectedIndex(IBOColSelectorControl colSelector, int index)
         {
@@ -85,16 +38,14 @@ namespace Habanero.Test.UI.Base
                 count++;
             }
             return -1;
-//            return groupControl. .SelectedIndex;
-////            return 0;
-        }
-
-        protected override IBOColSelectorControl CreateSelector()
-        {
-            return GetControlFactory().CreateCollapsiblePanelSelector();
         }
 
         protected override int NumberOfLeadingBlankRows()
+        {
+            return 0;
+        }
+
+        protected override int NumberOfTrailingBlankRows()
         {
             return 0;
         }
@@ -206,7 +157,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(ActualIndex(1), SelectedIndex(colSelector));
         }
 
-//        [Ignore(" Not Implemented : Brett 02 Mar 2009")] 
         [Test]
         public override void Test_Set_SelectedBusinessObject_Null_SetsItemNull()
         {
@@ -230,7 +180,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, SelectedIndex(colSelector), "This does not make sense with a collapsible panel similar to a boTabcontrol");
         }
 
-//        [Ignore(" Not Implemented : Brett 02 Mar 2009")]
         [Test]
         public override void Test_Set_SelectedBusinessObject_ItemNotInList_SetsItemNull()
         {
@@ -257,4 +206,5 @@ namespace Habanero.Test.UI.Base
                  "This does not make sense with a collapsible panel similar to a boTabcontrol");
         }
     }
+
 }

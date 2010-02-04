@@ -27,110 +27,16 @@ namespace Habanero.Test.UI.Base
 
     public abstract class TestFlowLayoutManager
     {
-        private const int _STD_ManagedControl_Width = 100;
+        protected const int _STD_ManagedControl_Width = 100;
         private const int _STD_CONTROL_HEIGHT = 10;
-        private const int _STD_CONTROL_WIDTH = 11;
+        protected const int _STD_CONTROL_WIDTH = 11;
         private const int _DEFAULT_BORDER = 5;//setupIn LayoutManager
-        private const int _STD_GAP = 4;
+        protected const int _STD_GAP = 4;
         private const int _STD_BORDER = 5;
         private const int _STD_ManagedControl_Height = 99;
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestFlowLayoutManagerWin : TestFlowLayoutManager
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-
-            //Note:this doesn't work in VWG in testing mode
-            [Test]
-            public void TestCentreAlignRowOneControl()
-            {
-                //---------------Set up test pack-------------------
-                IControlHabanero managedControl = CreateManagedControl();
-                FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-                IControlHabanero ctl = CreateStandardControl();
-                //---------------Execute Test ----------------------
-                manager.Alignment = FlowLayoutManager.Alignments.Centre;
-                manager.AddControl(ctl);
-                //---------------Test Result -----------------------
-                Assert.AreEqual((_STD_ManagedControl_Width - _STD_CONTROL_WIDTH) / 2, ctl.Left, "Control should be centre aligned.");
-            }
-
-            //Note:this doesn't work in VWG in testing mode
-            [Test]
-            public void TestCentreAlignRowTwoControls()
-            {
-                //---------------Set up test pack-------------------
-                IControlHabanero managedControl = CreateManagedControl();
-                FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-                IControlHabanero ctl1 = CreateStandardControl();
-                IControlHabanero ctl2 = CreateStandardControl();
-                //---------------Execute Test ----------------------
-                manager.Alignment = FlowLayoutManager.Alignments.Centre;
-                manager.AddControl(ctl1);
-                manager.AddControl(ctl2);
-                //---------------Test Result -----------------------
-                const int ctl1LeftPos = (_STD_ManagedControl_Width - _STD_CONTROL_WIDTH - _STD_GAP - _STD_CONTROL_WIDTH) / 2;
-                const int ctl2LeftPos = ctl1LeftPos + _STD_GAP + _STD_CONTROL_WIDTH;
-                Assert.AreEqual(ctl1LeftPos, ctl1.Left, "Control should be centre aligned.");
-                Assert.AreEqual(ctl2LeftPos, ctl2.Left, "Control should be centre aligned.");
-            }
-
-            //Note_:this doesn't work in VWG in testing mode
-            [Test]
-            public void TestCentreAlignRowTwoRows()
-            {
-                //---------------Set up test pack-------------------
-                IControlHabanero managedControl = CreateManagedControl();
-                FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-                const int controlWidth = 20;
-                const int managedControlWidth = 40;
-                IControlHabanero ctl = CreateControl(controlWidth, 10);
-                IControlHabanero ctl2 = CreateControl(controlWidth, 10);
-                //---------------Execute Test ----------------------
-                manager.Alignment = FlowLayoutManager.Alignments.Centre;
-                manager.ManagedControl.Width = managedControlWidth;
-                manager.AddControl(ctl);
-                manager.AddControl(ctl2);
-                //---------------Test Result -----------------------
-                Assert.AreEqual((managedControlWidth - controlWidth) / 2, ctl.Left, "Control should be centre aligned.");
-                Assert.AreEqual((managedControlWidth - controlWidth) / 2, ctl2.Left, "Control should be centre aligned.");
-                Assert.AreEqual(StdSecondRowTop(), ctl2.Top, "Control should be in second row.");
-            }
-
-            //Note:this doesn't work in VWG in testing mode
-            [Test]
-            public void TestCentreAlignRowWithInvisibleControls()
-            {
-                //---------------Set up test pack-------------------
-                IControlHabanero managedControl = CreateManagedControl();
-                FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-                const int controlWidth = 20;
-                const int managedControlWidth = 100;
-                IControlHabanero ctl = CreateControl(controlWidth, 10);
-                IControlHabanero ctl2 = CreateControl(controlWidth, 10);
-                //---------------Execute Test ----------------------
-                manager.Alignment = FlowLayoutManager.Alignments.Centre;
-                manager.ManagedControl.Width = managedControlWidth;
-                manager.AddControl(ctl);
-                ctl2.Visible = false;
-                manager.AddControl(ctl2);
-                //---------------Test Result -----------------------
-                Assert.AreEqual((managedControlWidth - controlWidth) / 2, ctl.Left, "Control should be centre aligned - other Control is invisible.");
-            }
-        }
-
-        [TestFixture]
-        public class TestFlowLayoutManagerVWG : TestFlowLayoutManager
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
+       
 
         [SetUp]
         public void SetupLayoutManager()
@@ -200,7 +106,7 @@ namespace Habanero.Test.UI.Base
         //    Assert.AreEqual(_STD_CONTROL_WIDTH, ctlToAdd.Width, "Added control's Width prop should be set.");
         //    Assert.AreEqual(_STD_CONTROL_HEIGHT, ctlToAdd.Height, "Added control's Height prop should be set.");
         //}
-        private IControlHabanero CreateStandardControl()
+        protected IControlHabanero CreateStandardControl()
         {
             return CreateControl(_STD_CONTROL_WIDTH, _STD_CONTROL_HEIGHT);
         }
@@ -668,7 +574,7 @@ namespace Habanero.Test.UI.Base
             return _STD_BORDER;
         }
 
-        private static int StdSecondRowTop()
+        protected static int StdSecondRowTop()
         {
             return _STD_BORDER + _STD_CONTROL_HEIGHT + _STD_GAP;
         }
@@ -698,14 +604,14 @@ namespace Habanero.Test.UI.Base
             return ctl;
         }
 
-        private static FlowLayoutManager CreateFlowLayoutManager(IControlHabanero managedControl)
+        protected static FlowLayoutManager CreateFlowLayoutManager(IControlHabanero managedControl)
         {
             FlowLayoutManager manager = new FlowLayoutManager(managedControl, null);
             manager.GapSize = _STD_GAP;
             return manager;
         }
 
-        private IControlHabanero CreateManagedControl()
+        protected IControlHabanero CreateManagedControl()
         {
             //IFormHabanero form = GetControlFactory().CreateForm();
             //form.Width = _STD_ManagedControl_Width;

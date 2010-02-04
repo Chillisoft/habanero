@@ -7,75 +7,11 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public class TestReadOnlyGridControlSelectorVWG : TestReadOnlyGridControlSelectorWin
+   
+
+
+    public abstract class TestReadOnlyGridControlSelector : TestBOColSelector
     {
-        //        private const string _gridIdColumnName = "HABANERO_OBJECTID";
-        protected override IControlFactory GetControlFactory()
-        {
-            ControlFactoryVWG factory = new ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-        protected override IBOColSelectorControl CreateSelector()
-        {
-            IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
-            Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-            frm.Controls.Add((Gizmox.WebGUI.Forms.Control)readOnlyGridControl);
-            return readOnlyGridControl;
-        }
-        //protected override IBOSelectorControl CreateSelector()
-        //{
-        //    TestGridBase.GridBaseVWGStub gridBase = new TestGridBase.GridBaseVWGStub();
-        //    Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-        //    frm.Controls.Add(gridBase);
-        //    SetupGridColumnsForMyBo(gridBase);
-        //    return gridBase;
-        //}
-        //        [Test]
-        //        public virtual void Test_Constructor_nullControlFactory_RaisesError()
-        //        {
-        //            //---------------Set up test pack-------------------
-        //
-        //            //---------------Assert Precondition----------------
-        //
-        //            //---------------Execute Test ----------------------
-        //            try
-        //            {
-        //                new GridSelectorVWG(null);
-        //                Assert.Fail("expected ArgumentNullException");
-        //            }
-        //            //---------------Test Result -----------------------
-        //            catch (ArgumentNullException ex)
-        //            {
-        //                StringAssert.Contains("Value cannot be null", ex.Message);
-        //                StringAssert.Contains("controlFactory", ex.ParamName);
-        //            }
-        //        }
-    }
-
-    /// <summary>
-    /// This test class tests the GridSelector class.
-    /// </summary>
-    [TestFixture]
-    public class TestReadOnlyGridControlSelectorWin : TestBOColSelector
-    {
-//        private const string _gridIdColumnName = "HABANERO_OBJECTID";
-
-        //[TestFixtureSetUp]
-        //private void TestFixtureSetUp()
-        //{
-        //    ClassDef.ClassDefs.Clear();
-        //    BORegistry.DataAccessor = new DataAccessorInMemory();
-        //    ContactPersonTestBO.LoadDefaultClassDef();
-        //}
-
-        protected override IControlFactory GetControlFactory()
-        {
-            ControlFactoryWin factory = new ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-
         protected override void SetSelectedIndex(IBOColSelectorControl colSelector, int index)
         {
             int count = 0;
@@ -107,15 +43,12 @@ namespace Habanero.Test.UI.Base
             return gridSelector.Rows.IndexOf(currentRow);
         }
 
-        protected override IBOColSelectorControl CreateSelector()
+        protected override int NumberOfLeadingBlankRows()
         {
-            IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
-            System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-            frm.Controls.Add((System.Windows.Forms.Control)readOnlyGridControl);
-            return readOnlyGridControl;
+            return 0;
         }
 
-        protected override int NumberOfLeadingBlankRows()
+        protected override int NumberOfTrailingBlankRows()
         {
             return 0;
         }
@@ -176,11 +109,12 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(myBO, colSelector.SelectedBusinessObject);
             Assert.AreEqual(ActualIndex(0), SelectedIndex(colSelector));
         }
+
         [Ignore(" Not Yet implemented")] //TODO  01 Mar 2009:
         [Test]
         public void TestEditItemFromCollectionUpdatesItemInSelector()
         {
         }
-
     }
+
 }

@@ -28,8 +28,8 @@ namespace Habanero.Test.UI.Base
 {
     public abstract class TestBorderLayoutManager
     {
-        private const int _STD_MANAGEDCONTROL_WIDTH = 100;
-        private const int _STD_MANAGEDCONTROL_HEIGHT = 100;// note: gizmox doesn't do the centre (fill) pos properly in testing (it sets the height to the width). THis is why the width and height are set the same here.
+        protected const int _STD_MANAGEDCONTROL_WIDTH = 100;
+        protected const int _STD_MANAGEDCONTROL_HEIGHT = 100;// note: gizmox doesn't do the centre (fill) pos properly in testing (it sets the height to the width). THis is why the width and height are set the same here.
         private const int _STD_CONTROL_HEIGHT = 10;
         private const int _STD_CONTROL_WIDTH = 11;
         private const int _DEFAULT_BORDER = 5;//setupIn LayoutManager
@@ -38,46 +38,6 @@ namespace Habanero.Test.UI.Base
 
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestBorderLayoutManagerWin : TestBorderLayoutManager
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-
-            [Test]
-            public void TestSplitter()
-            {
-                //---------------Set up test pack-------------------
-                IControlHabanero managedControl = GetControlFactory().CreateControl();
-                managedControl.Width = _STD_MANAGEDCONTROL_WIDTH;
-                managedControl.Height = _STD_MANAGEDCONTROL_HEIGHT;
-                IControlHabanero ctlEast = CreateControl(20, 20);
-                IControlHabanero ctlCentre = CreateControl(1, 1);
-                BorderLayoutManager manager = GetControlFactory().CreateBorderLayoutManager(managedControl);
-                //---------------Execute Test ----------------------
-                manager.AddControl(ctlEast, BorderLayoutManager.Position.East, true);
-                manager.AddControl(ctlCentre, BorderLayoutManager.Position.Centre);
-                //---------------Test Result -----------------------
-                Assert.AreEqual(managedControl.Controls.Count, 3, "There should be 3 controls because of the splitter.");
-                Assert.AreEqual(80, ctlEast.Left, "East positioned control doesn't change width when splitter is added.");
-                Assert.AreEqual(80 - 3, ctlCentre.Width,
-                                "Splitter is 3 wide, so centre control should be 3 less than it would be");
-            }
-        }
-
-        [TestFixture]
-        public class TestBorderLayoutManagerVWG : TestBorderLayoutManager
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-//            [Test,Ignore("Needs to be implemented.")]
-            [Test]
-            public void TestSplitterIsIgnoredForVWG() { }
-        }
 
         [SetUp]
         public void SetupLayoutManager()
@@ -231,8 +191,7 @@ namespace Habanero.Test.UI.Base
         }
 
 
-
-        private IControlHabanero CreateControl(int width, int height)
+        protected IControlHabanero CreateControl(int width, int height)
         {
             IControlHabanero ctl = GetControlFactory().CreatePanel();
             ctl.Height = height;

@@ -32,19 +32,13 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// Summary description for TestDefaultBOEditorForm.
     /// </summary>
-    [TestFixture]
-    public class TestDefaultBOEditorForm// : TestUsingDatabase
+    public abstract class TestDefaultBOEditorForm// : TestUsingDatabase
     {
         private IClassDef _classDefMyBo;
         private IBusinessObject _bo;
         private IDefaultBOEditorForm _defaultBOEditorForm;
 
-        protected virtual IControlFactory GetControlFactory()
-        {
-            ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
+        protected abstract IControlFactory GetControlFactory();
 
         protected virtual IDefaultBOEditorForm CreateDefaultBOEditorForm(IBusinessObject businessObject)
         {
@@ -56,58 +50,8 @@ namespace Habanero.Test.UI.Base
             form.Show();
         }
 
-        [TestFixture]
-        public class TestDefaultBOEditorFormWin : TestDefaultBOEditorForm
-        {
 
-        }
-
-        [TestFixture]
-        public class TestDefaultBOEditorFormVWG : TestDefaultBOEditorForm
-        {
-            //private static MyForm _myForm;
-            //private readonly Thread _thread;
-
-            //public TestDefaultBOEditorFormVWG()
-            //{
-            //    _thread = new Thread(() => Gizmox.WebGUI.Client.Application.Run(typeof (MyForm)));
-            //    _thread.Start();
-            //}
-
-            //~TestDefaultBOEditorFormVWG()
-            //{
-            //    _thread.Abort();
-            //}
-
-            //public class MyForm : FormVWG
-            //{
-            //    public MyForm()
-            //    {
-            //        _myForm = this;
-            //    }
-            //}
-
-            protected override void ShowFormIfNecessary(IFormHabanero form)
-            {
-                // Do not show the form for VWG
-                //Gizmox.WebGUI.Common.Interfaces.IForm formVWG = (FormVWG) form;
-                //formVWG.SetContext(_myForm.Context);
-                //form.Show();
-            }
-
-            protected override IControlFactory GetControlFactory()
-            {
-                ControlFactoryVWG factory = new Habanero.UI.VWG.ControlFactoryVWG();
-                GlobalUIRegistry.ControlFactory =factory;
-                return factory;
-            }
-
-            [Test]
-            [Ignore("This cannot be tested for VWG because you cannot show a form to close it")]
-            public override void Test_CloseForm_ShouldCallDelegateWithCorrectInformation()
-            {
-            }
-        }
+   
 
         [TestFixtureSetUp]
         public void SetupFixture()

@@ -29,23 +29,7 @@ namespace Habanero.Test.UI.Base
         private const string TEST_PATH="test/path/test";
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestFileChooserWin : TestFileChooser
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-        }
 
-        [TestFixture]
-        public class TestFileChooserVWG : TestFileChooser
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
 
         [Test]
         public void TestCreateControl()

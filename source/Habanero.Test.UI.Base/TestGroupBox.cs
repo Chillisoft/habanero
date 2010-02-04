@@ -21,52 +21,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// This test class tests the base inherited methods of the GroupBox class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_GroupBox : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateGroupBox();
-        }
-    }
 
-    /// <summary>
-    /// This test class tests the base inherited methods of the GroupBox class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_GroupBox : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateGroupBox();
-        }
-    }
-
-    /// <summary>
-    /// This test class tests the GroupBox class.
-    /// </summary>
-    [TestFixture]
-    public class TestGroupBoxVWG
-    {
-        protected virtual IControlFactory GetControlFactory()
-        {
-            Habanero.UI.VWG.ControlFactoryVWG factory = new Habanero.UI.VWG.ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-    }
-    [TestFixture]
-    public class TestGroupBoxWin
-    {
-        protected virtual IControlFactory GetControlFactory()
-        {
-            Habanero.UI.Win.ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-    }
 
 }

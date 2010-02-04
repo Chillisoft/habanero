@@ -108,7 +108,7 @@ namespace Habanero.UI.VWG
         ///<param name="eventargs">An <see cref="T:System.EventArgs"></see> that contains the event data. </param>
         protected override void OnValueChanged(EventArgs eventargs)
         {
-            _manager.OnValueChanged(eventargs);
+            if (_manager != null) _manager.OnValueChanged(eventargs);
             base.OnValueChanged(eventargs);
         }
         /// <summary>

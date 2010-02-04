@@ -26,7 +26,7 @@ namespace Habanero.UI.Win
     /// Provides a set of behaviour strategies that can be applied to a CheckBox
     /// depending on the environment
     /// </summary>
-    internal class CheckBoxStrategyWin : ICheckBoxMapperStrategy
+    public class CheckBoxStrategyWin : ICheckBoxMapperStrategy
     {
         /// <summary>
         /// Adds click event handler

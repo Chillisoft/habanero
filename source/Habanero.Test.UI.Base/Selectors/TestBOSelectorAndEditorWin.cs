@@ -18,21 +18,14 @@ namespace Habanero.Test.UI.Base
     /// You should also override this for the VWG implementation of each control
     /// override the <see cref="GetControlFactory"/> to return a VWG control Factory.
     /// </summary>
-    [TestFixture]
-    public class TestBOSelectorAndEditorWin
+    public abstract class TestBOSelectorAndEditor
     {
-        protected virtual IControlFactory GetControlFactory()
-        {
-            ControlFactoryWin factory = new ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
+        protected abstract IControlFactory GetControlFactory();
 
         protected virtual IBOSelectorAndEditor CreateSelector()
         {
             return GetControlFactory().CreateEditableGridControl();
         }
-
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
@@ -54,6 +47,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsFalse(colSelector.AllowUsersToAddBO);
         }
+
         [Test]
         public virtual void Test_AllowUsersToAddBO_True()
         {
@@ -67,6 +61,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(colSelector.AllowUsersToAddBO);
         }
+
         [Test]
         public virtual void Test_AllowUsersToEditBO_False()
         {
@@ -79,6 +74,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsFalse(colSelector.AllowUsersToEditBO);
         }
+
         [Test]
         public virtual void Test_AllowUsersToEditBO_True()
         {
@@ -92,6 +88,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(colSelector.AllowUsersToEditBO);
         }
+
         [Test]
         public virtual void Test_AllowUsersToDeleteBO_False()
         {
@@ -104,6 +101,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsFalse(colSelector.AllowUsersToDeleteBO);
         }
+
         [Test]
         public virtual void Test_AllowUsersToDeleteBO_True()
         {
@@ -130,6 +128,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsFalse(colSelector.ConfirmDeletion);
         }
+
         [Test]
         public void Test_Set_ConfirmDelete_True_SetsTrue()
         {
@@ -143,6 +142,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(colSelector.ConfirmDeletion);
         }
+
         [Test]
         public void Test_Set_CheckUserConfirmsDeletionDelegate_NewDelegate_SetsNewDelegate()
         {
@@ -156,22 +156,11 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(colSelector.CheckUserConfirmsDeletionDelegate);
         }
 
-        bool DummyDeletionDelegate()
+        private bool DummyDeletionDelegate()
         {
             return false;
         }
-
     }
-    [TestFixture]
-    public class TestBOSelectorAndEditorVWG : TestBOSelectorAndEditorWin
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            ControlFactoryVWG factory = new ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
 
 
-    }
 }

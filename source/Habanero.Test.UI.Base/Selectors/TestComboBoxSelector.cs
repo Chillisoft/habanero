@@ -9,79 +9,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-
-    /// <summary>
-    /// This test class tests the base inherited methods of the ComboBoxSelector class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_ComboBoxSelector : TestBaseMethods.TestBaseMethodsWin
+    public abstract class TestComboBoxSelector : TestBOColSelector
     {
-        [STAThread]
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateComboBoxSelector();
-        }
-    }
-
-    /// <summary>
-    /// This test class tests the base inherited methods of the ComboBoxSelector class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_ComboBoxSelector : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateComboBoxSelector();
-        }
-    }
-
-    public class TestComboBoxSelectorVWG : TestComboBoxSelectorWin
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            ControlFactoryVWG factory = new ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-        protected override IBOColSelectorControl CreateSelector()
-        {
-            return GetControlFactory().CreateComboBoxSelector();
-        }
-        [Test]
-        public virtual void Test_Constructor_nullControlFactory_RaisesError()
-        {
-            //---------------Set up test pack-------------------
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            try
-            {
-                new ComboBoxSelectorVWG(null);
-                Assert.Fail("expected ArgumentNullException");
-            }
-            //---------------Test Result -----------------------
-            catch (ArgumentNullException ex)
-            {
-                StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("controlFactory", ex.ParamName);
-            }
-        }
-    }
-    /// <summary>
-    /// This test class tests the ComboBoxSelector class.
-    /// </summary>
-    [TestFixture]
-    public class TestComboBoxSelectorWin : TestBOColSelector
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            ControlFactoryWin factory = new ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-
-
         protected override void SetSelectedIndex(IBOColSelectorControl colSelector, int index)
         {
             ((IBOComboBoxSelector)colSelector).ComboBox.SelectedIndex = index;
@@ -92,13 +21,19 @@ namespace Habanero.Test.UI.Base
             return ((IBOComboBoxSelector)colSelector).ComboBox.SelectedIndex;
         }
 
+        protected override int NumberOfLeadingBlankRows()
+        {
+            return 1;
+        }
+
+        protected override int NumberOfTrailingBlankRows()
+        {
+            return 0;
+        }
         protected override IBOColSelectorControl CreateSelector()
         {
             return GetControlFactory().CreateComboBoxSelector();
         }
-
-
-
         [Test]
         public void Test_Constructor_ComboBoxSet()
         {
@@ -291,4 +226,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(newPropValue + " - " + bo.MyBoID, newBoItemText);
         }
     }
+
+   
 }

@@ -25,48 +25,11 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
+    
     /// <summary>
-    /// This test class tests the base inherited methods of the CollapsiblePanel class.
+    /// This test class tests the CollapsiblePanel
     /// </summary>
-     [TestFixture]
-    public class TestBaseMethodsWin_CollapsiblePanel : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateCollapsiblePanel();
-        }
-    }
-
-    /// <summary>
-    /// This test class tests the base inherited methods of the CollapsiblePanel class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_CollapsiblePanel : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateCollapsiblePanel();
-        }
-    }
-
-
-    /// <summary>
-    /// This test class tests the CollapsiblePanel for Win.
-    /// </summary>
-    [TestFixture]
-    public class TestCollapsiblePanelWin : TestCollapsiblePanelVWG
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            GlobalUIRegistry.ControlFactory = new Habanero.UI.Win.ControlFactoryWin();
-            return GlobalUIRegistry.ControlFactory;
-        }
-    }
-    /// <summary>
-    /// This test class tests the CollapsiblePanel for VWG.
-    /// </summary>
-    [TestFixture]
-    public class TestCollapsiblePanelVWG 
+    public abstract class TestCollapsiblePanel
     {
         [SetUp]
         public virtual void SetupTest()
@@ -75,15 +38,9 @@ namespace Habanero.Test.UI.Base
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
 
         }
-        protected virtual IControlFactory GetControlFactory()
-        {
-            GlobalUIRegistry.ControlFactory = new Habanero.UI.VWG.ControlFactoryVWG();
-            return GlobalUIRegistry.ControlFactory;
-        }
-        protected virtual ICollapsiblePanel CreateControl()
-        {
-            return GetControlFactory().CreateCollapsiblePanel();
-        }
+
+        protected abstract IControlFactory GetControlFactory();
+        protected abstract ICollapsiblePanel CreateControl();
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -97,6 +54,7 @@ namespace Habanero.Test.UI.Base
         {
             //runs every time any testmethod is complete
         }
+
 
         [Test]
         public void Test_CreateCollapsiblePanel()
@@ -141,7 +99,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(panel.CollapseButton.Height, panel.Height);
             Assert.AreNotEqual(panel.ExpandedHeight, panel.Height);
             //---------------Execute Test ----------------------
-            
+
             panel.Collapsed = true;
             //---------------Test Result -----------------------
             Assert.IsTrue(panel.Collapsed);
@@ -363,5 +321,10 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(collapsiblePanel.Pinned);
             //---------------Tear down -------------------------
         }
+
     }
+
+
+  
+   
 }

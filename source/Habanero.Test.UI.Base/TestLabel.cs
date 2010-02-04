@@ -21,29 +21,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// This test class tests the base inherited methods of the Label class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_Label : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateLabel();
-        }
-    }
 
-    /// <summary>
-    /// This test class tests the base inherited methods of the Label class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_Label : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateLabel();
-        }
-    }
+
 
     /// <summary>
     /// This test class tests the Label class.
@@ -52,40 +31,8 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestLabelWin : TestLabel
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.Win.ControlFactoryWin();
-            }
-        }
 
-        [TestFixture]
-        public class TestLabelVWG : TestLabel
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
-            }
-
-            [Test]
-            public void TestPreferredSize()
-            {
-                //---------------Set up test pack-------------------
-                ILabel myLabel = GetControlFactory().CreateLabel();
-                string labelText = "sometext";
-                myLabel.Text = labelText;
-
-                //---------------Execute Test ----------------------
-                int preferredWidth = myLabel.PreferredWidth;
-                //---------------Test Result -----------------------
-
-                Assert.AreEqual(labelText.Length * 6, preferredWidth);
-                //---------------Tear Down -------------------------          
-            }
-        }
-
+      
         [Test]
         public void TestCreateLabel()
         {

@@ -10,9 +10,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-
-    [TestFixture]
-    public class TestCollapsibleMenuVWG
+    public abstract class TestCollapsibleMenu
     {
         [SetUp]
         public void SetupTest()
@@ -29,20 +27,9 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = CreateNewControlFactory();
         }
 
-        protected virtual IMainMenuHabanero CreateControl()
-        {
-            return new CollapsibleMenuVWG();
-        }
-
-        protected virtual IMainMenuHabanero CreateControl(HabaneroMenu menu)
-        {
-            return new CollapsibleMenuVWG(menu);
-        }
-
-        protected virtual IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryVWG();
-        }
+        protected abstract IMainMenuHabanero CreateControl();
+        protected abstract IMainMenuHabanero CreateControl(HabaneroMenu menu);
+        protected abstract IControlFactory CreateNewControlFactory();
 
         protected virtual IControlFactory GetControlFactory()
         {
@@ -50,7 +37,6 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
-
 
         [Test]
         public void Test_Construction()
@@ -126,29 +112,7 @@ namespace Habanero.Test.UI.Base
         }
     }
 
-    [TestFixture]
-    public class TestCollapsibleMenuWin : TestCollapsibleMenuVWG
-    {
-
-        protected override IMainMenuHabanero CreateControl()
-        {
-            return new CollapsibleMenuWin();
-        }
-
-        protected override IMainMenuHabanero CreateControl(HabaneroMenu menu)
-        {
-            return new CollapsibleMenuWin(menu);
-        }
-
-        protected override IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryWin();
-        }
-    }
-
-
-    [TestFixture]
-    public class TestCollapsibleMenuItemCollectionVWG
+    public abstract class TestCollapsibleMenuItemCollection
     {
         [SetUp]
         public void SetupTest()
@@ -165,16 +129,8 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = CreateNewControlFactory();
         }
 
-        protected virtual IMenuItemCollection CreateControl()
-        {
-            CollapsibleMenuVWG menu = new CollapsibleMenuVWG();
-            return new CollapsibleMenuItemCollectionVWG(menu);
-        }
-
-        protected virtual IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryVWG();
-        }
+        protected abstract IMenuItemCollection CreateControl();
+        protected abstract IControlFactory CreateNewControlFactory();
 
         protected virtual IControlFactory GetControlFactory()
         {
@@ -284,97 +240,7 @@ namespace Habanero.Test.UI.Base
         }
     }
 
-    [TestFixture]
-    public class TestCollapsibleMenuItemCollectionWin : TestCollapsibleMenuItemCollectionVWG
-    {
-
-        protected override IMenuItemCollection CreateControl()
-        {
-            CollapsibleMenuWin menu = new CollapsibleMenuWin();
-            return new CollapsibleMenuItemCollectionWin(menu);
-        }
-
-        protected override IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryWin();
-        }
-
-        [Test]
-        public override void Test_AddSubMenuItem_ShouldAddCollapsiblePanel()
-        {
-            //---------------Set up test pack-------------------
-            string name = TestUtil.GetRandomString();
-            CollapsibleMenuWin menu = new CollapsibleMenuWin();
-            CollapsibleMenuItemCollectionWin collapsibleMenuItemCollection = new CollapsibleMenuItemCollectionWin(menu);
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
-            IMenuItem menuLeafItem = new CollapsibleSubMenuItemWin(GetControlFactory(), item);
-            //---------------Assert Precondition----------------
-            Assert.AreSame(menu, collapsibleMenuItemCollection.OwnerMenuItem);
-            Assert.IsInstanceOfType(typeof(CollapsibleSubMenuItemWin), menuLeafItem);
-            Assert.AreEqual(0, collapsibleMenuItemCollection.Count);
-            //---------------Execute Test ----------------------
-            collapsibleMenuItemCollection.Add(menuLeafItem);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, collapsibleMenuItemCollection.Count);
-            Assert.AreEqual(1, menu.PanelsList.Count);
-            ICollapsiblePanel collapsiblePanel = menu.PanelsList[0];
-            Assert.AreEqual(name, collapsiblePanel.Text);
-        }
-
-        [Test]
-        public override void Test_AddLeafMenuItem_ShouldAddButtonToCollapsiblePanel()
-        {
-            //---------------Set up test pack-------------------
-            string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item ownerItem = new HabaneroMenu.Item(name);
-            CollapsibleSubMenuItemWin subMenuItem = new CollapsibleSubMenuItemWin(GetControlFactory(), ownerItem);
-            CollapsibleMenuItemCollectionWin collapsibleMenuItemCollection = new CollapsibleMenuItemCollectionWin
-                (subMenuItem);
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
-            CollapsibleMenuItemWin menuLeafItem = new CollapsibleMenuItemWin(GetControlFactory(), item);
-            //---------------Assert Precondition----------------
-            Assert.AreSame(subMenuItem, collapsibleMenuItemCollection.OwnerMenuItem);
-            Assert.IsInstanceOfType(typeof(CollapsibleMenuItemWin), menuLeafItem);
-            Assert.AreEqual(1, subMenuItem.Controls.Count, "CollapsiblePanel always has header button");
-            Assert.AreEqual(0, collapsibleMenuItemCollection.Count);
-            //---------------Execute Test ----------------------
-            collapsibleMenuItemCollection.Add(menuLeafItem);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, collapsibleMenuItemCollection.Count);
-            Assert.AreEqual(2, subMenuItem.Controls.Count, "Should have additional button control");
-            IControlHabanero contentControl = subMenuItem.ContentControl;
-            Assert.IsInstanceOfType(typeof(IPanel), contentControl);
-            Assert.AreEqual(1, contentControl.Controls.Count);
-            Assert.IsInstanceOfType(typeof(IButton), contentControl.Controls[0]);
-        }
-
-        [Test]
-        public override void Test_AddLeafMenuItem_ShouldIncreaseMinSizeOfCollapsiblePanel()
-        {
-            //---------------Set up test pack-------------------
-            string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item ownerItem = new HabaneroMenu.Item(name);
-            CollapsibleSubMenuItemWin subMenuItem = new CollapsibleSubMenuItemWin(GetControlFactory(), ownerItem);
-            CollapsibleMenuItemCollectionWin collapsibleMenuItemCollection = new CollapsibleMenuItemCollectionWin
-                (subMenuItem);
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
-            CollapsibleMenuItemWin menuLeafItem = new CollapsibleMenuItemWin(GetControlFactory(), item);
-            //---------------Assert Precondition----------------
-            Assert.AreSame(subMenuItem, collapsibleMenuItemCollection.OwnerMenuItem);
-            Assert.IsInstanceOfType(typeof(CollapsibleMenuItemWin), menuLeafItem);
-            Assert.AreEqual(subMenuItem.CollapseButton.Height, subMenuItem.MinimumSize.Height);
-            //---------------Execute Test ----------------------
-            collapsibleMenuItemCollection.Add(menuLeafItem);
-            //---------------Test Result -----------------------
-            int expectedHeight = subMenuItem.CollapseButton.Height + menuLeafItem.Height;
-            Assert.AreEqual(expectedHeight, subMenuItem.Height);
-            Assert.AreEqual
-                (expectedHeight, subMenuItem.ExpandedHeight, "this will be zero untill the first time this is collapsed");
-        }
-    }
-
-    [TestFixture]
-    public class TestCollapsibleMenuItemVWG
+    public abstract class TestCollapsibleMenuItem
     {
         [SetUp]
         public void SetupTest()
@@ -398,15 +264,8 @@ namespace Habanero.Test.UI.Base
             return factory;
         }
 
-        protected virtual IMenuItem CreateControl()
-        {
-            return new CollapsibleMenuItemVWG(TestUtil.GetRandomString());
-        }
-
-        protected virtual IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryVWG();
-        }
+        protected abstract IMenuItem CreateControl();
+        protected abstract IControlFactory CreateNewControlFactory();
 
         [Test]
         public void Test_ConstructMenuItem_ShouldSetName()
@@ -489,23 +348,8 @@ namespace Habanero.Test.UI.Base
         }
     }
 
-    [TestFixture]
-    public class TestCollapsibleMenuItemWin : TestCollapsibleMenuItemVWG
-    {
 
-        protected override IMenuItem CreateControl()
-        {
-            return new CollapsibleMenuItemWin(TestUtil.GetRandomString());
-        }
-
-        protected override IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryWin();
-        }
-    }
-
-    [TestFixture]
-    public class TestCollapsibleSubMenuItemVWG
+    public abstract class TestCollapsibleSubMenuItem
     {
         [SetUp]
         public void SetupTest()
@@ -522,23 +366,10 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = CreateNewControlFactory();
         }
 
-        protected virtual IMenuItem CreateControl()
-        {
-            return new CollapsibleSubMenuItemVWG(GetControlFactory(), TestUtil.GetRandomString());
-        }
-        protected virtual IMenuItem CreateControl(string name)
-        {
-            return new CollapsibleSubMenuItemVWG(GetControlFactory(), name);
-        }
-        protected virtual IMenuItem CreateControl(HabaneroMenu.Item item)
-        {
-            return new CollapsibleSubMenuItemVWG(GetControlFactory(), item);
-        }
-
-        protected virtual IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryVWG();
-        }
+        protected abstract IMenuItem CreateControl();
+        protected abstract IMenuItem CreateControl(string name);
+        protected abstract IMenuItem CreateControl(HabaneroMenu.Item item);
+        protected abstract IControlFactory CreateNewControlFactory();
 
         protected virtual IControlFactory GetControlFactory()
         {
@@ -657,25 +488,6 @@ namespace Habanero.Test.UI.Base
         }
     }
 
-    [TestFixture]
-    public class TestCollapsibleSubMenuItemWin : TestCollapsibleSubMenuItemVWG
-    {
 
-        protected override IMenuItem CreateControl()
-        {
-            return new CollapsibleMenuItemWin(TestUtil.GetRandomString());
-        }
-        protected override IMenuItem CreateControl(string name)
-        {
-            return new CollapsibleSubMenuItemWin(GetControlFactory(),  name);
-        }
-        protected override IMenuItem CreateControl(HabaneroMenu.Item item)
-        {
-            return new CollapsibleSubMenuItemWin(GetControlFactory(), item);
-        }
-        protected override IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryWin();
-        }
-    }
+
 }

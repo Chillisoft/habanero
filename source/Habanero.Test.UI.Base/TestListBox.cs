@@ -23,29 +23,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// This test class tests the base inherited methods of the ListBox class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_ListBox : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateListBox();
-        }
-    }
 
-    /// <summary>
-    /// This test class tests the base inherited methods of the ListBox class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_ListBox : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateListBox();
-        }
-    }
+
 
     /// <summary>
     /// This test class tests the ListBox class.
@@ -54,23 +33,8 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestListBoxWin : TestListBox
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-        }
 
-        [TestFixture]
-        public class TestListBoxVWG : TestListBox
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
+
 
         [Test]
         public void TestCreateListBox()

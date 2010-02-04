@@ -24,29 +24,7 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Base
 {
 
-    /// <summary>
-    /// This test class tests the base inherited methods of the Panel class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_PictureBox : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreatePictureBox();
-        }
-    }
-
-    /// <summary>
-    /// This test class tests the base inherited methods of the Panel class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_PictureBox : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreatePictureBox();
-        }
-    }
+ 
 
     /// <summary>
     /// This test class tests the Panel class.
@@ -63,36 +41,9 @@ namespace Habanero.Test.UI.Base
             return pictureBox;
         }
 
-        [TestFixture]
-        public class TestPictureBoxWin : TestPictureBox
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
+     
 
-            protected override string GetUnderlyingSizeModeToString(IPictureBox pictureBox)
-            {
-                System.Windows.Forms.PictureBox control = (System.Windows.Forms.PictureBox)pictureBox;
-                return control.SizeMode.ToString();
-            }
-        }
-
-        [TestFixture]
-        public class TestPictureBoxVWG : TestPictureBox
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-
-            protected override string GetUnderlyingSizeModeToString(IPictureBox pictureBox)
-            {
-                Gizmox.WebGUI.Forms.PictureBox control = (Gizmox.WebGUI.Forms.PictureBox)pictureBox;
-                return control.SizeMode.ToString();
-            }
-        }
-
+     
         [Test]
         public void Test_SizeMode()
         {
