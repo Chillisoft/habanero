@@ -3,7 +3,7 @@ using Habanero.Test.UI.Base;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Win
+namespace Habanero.Test.UI.Win.LayoutManager
 {
     [TestFixture]
     public class TestColumnLayoutManagerWin : TestColumnLayoutManager

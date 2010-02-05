@@ -1,29 +1,23 @@
 using System;
-using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
-    public class TestBOSelectorAndBOEditorManager
+    public abstract class TestBOSelectorAndBOEditorManager
     {
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
-            GlobalUIRegistry.ControlFactory = new ControlFactoryWin();
         }
 
-        public IControlFactory GetControlFactory()
-        {
-            return GlobalUIRegistry.ControlFactory;
-        }
+        protected abstract IControlFactory GetControlFactory();
 
         [Test]
         public void Test_Contructor()
@@ -31,7 +25,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IClassDef classDef = ClassDef.Get<MyBO>();
             IBOColSelectorControl boColSelector = GetControlFactory().CreateReadOnlyGridControl();
-            IBusinessObjectControl boEditor = new BOEditorControlWin(classDef);
+            IBusinessObjectControl boEditor = GetControlFactory().CreateBOEditorControl(classDef);
 
             //---------------Assert Precondition----------------
 
@@ -47,7 +41,7 @@ namespace Habanero.Test.UI.Base
         public void Test_Constructor_BOSelectorNull_ShouldRaiseError()
         {
             IClassDef classDef = ClassDef.Get<MyBO>();
-            IBusinessObjectControl boEditor = new BOEditorControlWin(classDef); 
+            IBusinessObjectControl boEditor = GetControlFactory().CreateBOEditorControl(classDef);
 
             //---------------Assert Precondition----------------
 
@@ -138,11 +132,12 @@ namespace Habanero.Test.UI.Base
         {
             IClassDef classDef = ClassDef.Get<MyBO>();
             boColSelector = GetControlFactory().CreateReadOnlyGridControl();
-            boEditor = new BOEditorControlWin(classDef);
+            boEditor = GetControlFactory().CreateBOEditorControl(classDef);
             new BOSelectorAndEditorManager(boColSelector, boEditor);
-            FormWin form = new FormWin();
-            form.Controls.Add((Control) boColSelector);
+            IFormHabanero form = GetControlFactory().CreateForm();
+            form.Controls.Add(boColSelector);
             return;
         }
     }
+
 }

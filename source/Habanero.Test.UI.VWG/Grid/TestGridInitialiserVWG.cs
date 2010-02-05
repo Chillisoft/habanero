@@ -1,4 +1,6 @@
 using System;
+using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 using Habanero.Test.UI.Base;
 using Habanero.UI.Base;
 using NUnit.Framework;
@@ -19,10 +21,6 @@ namespace Habanero.Test.UI.VWG.Grid
             frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
         }
 
-        protected override Type GetCustomGridColumnType()
-        {
-            return typeof(CustomDataGridViewColumnVWG);
-        }
 
         protected override Type GetDateTimeGridColumnType()
         {
@@ -47,5 +45,34 @@ namespace Habanero.Test.UI.VWG.Grid
         {
             base.TestInitGrid_LoadsDataGridViewDateTimeColumn();
         }
+
+
+        [Test]
+        public void TestInitGrid_LoadsCustomColumnType()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
+            IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            IUIDef uiDef = classDef.UIDefCol["default"];
+            IUIGrid uiGridDef = uiDef.UIGrid;
+
+            Type customColumnType = typeof(CustomDataGridViewColumnVWG);
+            uiGridDef[2].GridControlTypeName = customColumnType.Name; //"CustomDataGridViewColumn";
+            uiGridDef[2].GridControlAssemblyName = "Habanero.Test.UI.VWG";
+            AddControlToForm(grid);
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(6, grid.Grid.Columns.Count);
+            IDataGridViewColumn column3 = grid.Grid.Columns[3];
+            Assert.AreEqual("TestDateTime", column3.Name);
+            Assert.IsInstanceOfType(typeof(IDataGridViewColumn), column3);
+            AssertGridColumnTypeAfterCast(column3, customColumnType);
+        }
+    
     }
 }

@@ -20,16 +20,15 @@
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Mappers
 {
-    [TestFixture]
-    public class TestExtendedLookupComboBoxMapper
+    public abstract class TestExtendedLookupComboBoxMapper
     {
         [SetUp]
         public void Setup()
@@ -43,19 +42,14 @@ namespace Habanero.Test.UI.Base.Mappers
             TestUtil.WaitForGC();
         }
 
-        private static IControlFactory GetControlFactory()
-        {
-            ControlFactoryWin factory = new ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-
+        protected abstract IControlFactory GetControlFactory();
+        protected abstract IExtendedComboBox CreateExtendedComboBox();
         [Test]
         public void Test_Construct()
         {
             //--------------- Set up test pack ------------------
             IControlFactory controlFactory = GetControlFactory();
-            ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
+            IExtendedComboBox extendedComboBox = CreateExtendedComboBox();
             string propName = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
@@ -83,7 +77,7 @@ namespace Habanero.Test.UI.Base.Mappers
         {
             //--------------- Set up test pack ------------------
             IControlFactory controlFactory = GetControlFactory();
-            ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
+            IExtendedComboBox extendedComboBox = CreateExtendedComboBox();
             string propName = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
@@ -128,7 +122,7 @@ namespace Habanero.Test.UI.Base.Mappers
             OrganisationTestBO.CreateSavedOrganisation();
 
             IControlFactory controlFactory = GetControlFactory();
-            ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
+            IExtendedComboBox extendedComboBox = CreateExtendedComboBox();
             const string propName = "OrganisationID";
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
                 extendedComboBox, propName, true, controlFactory);
@@ -172,10 +166,10 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(null, mapper.BusinessObject);
         }
 
-        private static ExtendedComboBoxMapper CreateExtendedLookupComboBoxMapper(string propertyName)
+        private  ExtendedComboBoxMapper CreateExtendedLookupComboBoxMapper(string propertyName)
         {
             IControlFactory controlFactory = GetControlFactory();
-            ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
+            IExtendedComboBox extendedComboBox = CreateExtendedComboBox();
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
                 extendedComboBox, propertyName, true, controlFactory);
             return mapper;
@@ -231,7 +225,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //--------------- Set up test pack ------------------
             BusinessObjectCollection<OrganisationTestBO> organisationTestBOS = CreateSavedOrganisationTestBOSCollection();
             IControlFactory controlFactory = GetControlFactory();
-            ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
+            IExtendedComboBox extendedComboBox = CreateExtendedComboBox();
             const string propName = "OrganisationID";
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
                 extendedComboBox, propName, true, controlFactory);
@@ -251,8 +245,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(DockStyle.Fill, form.Controls[0].Dock);
 
             Assert.IsInstanceOfType(typeof(IBOGridAndEditorControl), form.Controls[0]);
-            Assert.IsInstanceOfType(typeof(BOGridAndEditorControlWin), form.Controls[0]);
-            BOGridAndEditorControlWin andBOGridAndEditorControlWin = (BOGridAndEditorControlWin)form.Controls[0];
+            IBOGridAndEditorControl andBOGridAndEditorControlWin = (IBOGridAndEditorControl)form.Controls[0];
             //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BOEditorControlWin.BusinessObject);
             Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);
             IBusinessObjectCollection collection = andBOGridAndEditorControlWin.GridControl.Grid.BusinessObjectCollection;
@@ -272,7 +265,7 @@ namespace Habanero.Test.UI.Base.Mappers
             
             
             IControlFactory controlFactory = GetControlFactory();
-            ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
+            IExtendedComboBox extendedComboBox = CreateExtendedComboBox();
             const string propName = "OrganisationID";
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
                 extendedComboBox, propName, true, controlFactory);
@@ -292,8 +285,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(DockStyle.Fill, form.Controls[0].Dock);
 
             Assert.IsInstanceOfType(typeof(IBOGridAndEditorControl), form.Controls[0]);
-            Assert.IsInstanceOfType(typeof(BOGridAndEditorControlWin), form.Controls[0]);
-            BOGridAndEditorControlWin andBOGridAndEditorControlWin = (BOGridAndEditorControlWin)form.Controls[0];
+            IBOGridAndEditorControl andBOGridAndEditorControlWin = (IBOGridAndEditorControl)form.Controls[0];
             //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BOEditorControlWin.BusinessObject);
             Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);
             IBusinessObjectCollection collection = andBOGridAndEditorControlWin.GridControl.Grid.BusinessObjectCollection;
@@ -302,32 +294,32 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);
         }
 
-        [Test]
-        public void Test_ShowGridAndBOEditorControlWinWithSuperClassDef_DatabaseLookupList()
-        {
-            //--------------- Set up test pack ------------------
-            ClassDef.ClassDefs.Clear();
-            OrganisationTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadDefaultClassDefWithPersonTestBOSuperClass();
-            PersonTestBO.LoadDefaultClassDefWithTestOrganisationBOLookup_DatabaseLookupList();
+        //[Test]
+        //public void Test_ShowGridAndBOEditorControlWinWithSuperClassDef_DatabaseLookupList()
+        //{
+        //    //--------------- Set up test pack ------------------
+        //    ClassDef.ClassDefs.Clear();
+        //    OrganisationTestBO.LoadDefaultClassDef();
+        //    ContactPersonTestBO.LoadDefaultClassDefWithPersonTestBOSuperClass();
+        //    PersonTestBO.LoadDefaultClassDefWithTestOrganisationBOLookup_DatabaseLookupList();
 
-            IControlFactory controlFactory = GetControlFactory();
-            ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-            const string propName = "OrganisationID";
-            ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
-                extendedComboBox, propName, true, controlFactory);
-            DatabaseConfig databaseConfig = TestUtil.GetDatabaseConfig();
-            DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
-            mapper.BusinessObject = new ContactPersonTestBO();
-           // mapper.RelatedBusinessObject = OrganisationTestBO.CreateSavedOrganisation();
-            //--------------- Test Preconditions ----------------
-            Assert.IsNull(mapper.PopupForm);
-            //--------------- Execute Test ----------------------
-            //extendedComboBox.Button.PerformClick();
-            mapper.ShowPopupForm();
-            //--------------- Test Result -----------------------
-            Assert.IsNotNull(mapper.PopupForm);
-        }
+        //    IControlFactory controlFactory = GetControlFactory();
+        //    IExtendedComboBox extendedComboBox = CreateExtendedComboBox();
+        //    const string propName = "OrganisationID";
+        //    ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
+        //        extendedComboBox, propName, true, controlFactory);
+        //    DatabaseConfig databaseConfig = TestUtil.GetDatabaseConfig();
+        //    DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
+        //    mapper.BusinessObject = new ContactPersonTestBO();
+        //   // mapper.RelatedBusinessObject = OrganisationTestBO.CreateSavedOrganisation();
+        //    //--------------- Test Preconditions ----------------
+        //    Assert.IsNull(mapper.PopupForm);
+        //    //--------------- Execute Test ----------------------
+        //    //extendedComboBox.Button.PerformClick();
+        //    mapper.ShowPopupForm();
+        //    //--------------- Test Result -----------------------
+        //    Assert.IsNotNull(mapper.PopupForm);
+        //}
 
         private static BusinessObjectCollection<OrganisationTestBO> CreateSavedOrganisationTestBOSCollection()
         {
@@ -340,4 +332,5 @@ namespace Habanero.Test.UI.Base.Mappers
             return organisationTestBOS;
         }
     }
+
 }

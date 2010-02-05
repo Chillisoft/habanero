@@ -73,22 +73,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gizmox.WebGUI.Common, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Gizmox.WebGUI.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Gizmox.WebGUI.Forms, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=c508b41386c60f1d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Gizmox.WebGUI.Forms.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data, Version=6.2.2.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\MySql.Data.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="nmock, Version=1.0.2735.26971, Culture=neutral, PublicKeyToken=824173e82b3e3b0d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -118,7 +105,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -138,10 +124,9 @@
     <Compile Include="Mappers\TestEnumComboBoxMapper.cs" />
     <Compile Include="TestCollapsibleMenu.cs" />
     <Compile Include="TestCollapsibleMenuBuilder.cs" />
-    <Compile Include="Grid\TestDataGridViewColumnCollection.cs" />
     <Compile Include="Mappers\TestRelationshipComboBoxMapper.cs" />
     <Compile Include="TestBusinessObjectDeletor.cs" />
-    <Compile Include="Controllers\TestListBoxCollectionManager.cs" />
+    <Compile Include="Controllers\TestListBoxCollectionManagerWin.cs" />
     <Compile Include="Selectors\TestBOColSelector.cs" />
     <Compile Include="Selectors\TestBOSelectorAndEditorWin.cs" />
     <Compile Include="Selectors\TestBOTabControlSelector.cs" />
@@ -154,6 +139,8 @@
     <Compile Include="Selectors\TestListBoxSelector.cs" />
     <Compile Include="Selectors\TestReadOnlyGridControlSelector.cs" />
     <Compile Include="Selectors\TestBOSelectorAndBOEditorManager.cs" />
+    <Compile Include="TestCollapsibleMenuItem.cs" />
+    <Compile Include="TestCollapsibleMenuItemCollection.cs" />
     <Compile Include="TestGroupBoxGroupControl.cs" />
     <Compile Include="TestBOEditorControl.cs" />
     <Compile Include="TestCollapsiblePanel.cs" />
@@ -171,12 +158,8 @@
     <Compile Include="TestComboBox.cs">
     </Compile>
     <Compile Include="TestConfirmingBusinessObjectDeletor.cs" />
-    <Compile Include="TestExtendedComboBox.cs" />
-    <Compile Include="TestEnumerationConverter.cs" />
-    <Compile Include="TestEnumerations.cs" />
     <Compile Include="TestForm.cs" />
     <Compile Include="TestGridWithPanelControl.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TestGroupBox.cs" />
     <Compile Include="TestMainEditorPanel.cs" />
@@ -204,7 +187,7 @@
     <Compile Include="TestOKCancelDialog.cs" />
     <Compile Include="TestPanel.cs" />
     <Compile Include="TestTextBox.cs" />
-    <Compile Include="Controllers\TestComboBoxCollectionManagerWin.cs" />
+    <Compile Include="Controllers\TestComboBoxCollectionSelectorWin.cs" />
     <Compile Include="FilterController\TestCompositeFilterClause.cs" />
     <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
     <Compile Include="FilterController\TestFilterControlDate.cs" />
@@ -268,7 +251,7 @@
     <Compile Include="Wizard\TestNullWizardStep.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />
     <Compile Include="Wizard\TestWizardController.cs" />
-    <Compile Include="Wizard\TestWizardStepWin.cs" />
+    <Compile Include="Wizard\TestWizardStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="key.snk" />
@@ -286,10 +269,6 @@
       <Project>{9B32C6E9-037A-4610-85CB-95C9A050CF7C}</Project>
       <Name>Habanero.Console</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
-      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
-      <Name>Habanero.DB</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Habanero.Test.Bo\Habanero.Test.BO.csproj">
       <Project>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</Project>
       <Name>Habanero.Test.BO</Name>
@@ -305,14 +284,6 @@
     <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
       <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
       <Name>Habanero.UI.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.UI.VWG\Habanero.UI.VWG.csproj">
-      <Project>{04E4FF45-6C20-46EB-A9AD-2B04895F6218}</Project>
-      <Name>Habanero.UI.VWG</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.UI.Win\Habanero.UI.Win.csproj">
-      <Project>{E761E05B-B9CC-4EAC-B940-C19E42D3819C}</Project>
-      <Name>Habanero.UI.Win</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

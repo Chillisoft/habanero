@@ -2,8 +2,8 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -63,27 +63,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(colSelector);
             Assert.IsInstanceOfType(typeof (IBOCollapsiblePanelSelector), colSelector);
             Assert.IsInstanceOfType(typeof (ICollapsiblePanelGroupControl), colSelector);
-        }
-
-        [Test]
-        public virtual void Test_Constructor_nullControlFactory_RaisesError()
-        {
-            //---------------Set up test pack-------------------
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            try
-            {
-                new CollapsiblePanelSelectorWin(null);
-                Assert.Fail("expected ArgumentNullException");
-            }
-                //---------------Test Result -----------------------
-            catch (ArgumentNullException ex)
-            {
-                StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("controlFactory", ex.ParamName);
-            }
         }
 
         [Ignore(" Not Yet implemented : Brett  01 Mar 2009:")]

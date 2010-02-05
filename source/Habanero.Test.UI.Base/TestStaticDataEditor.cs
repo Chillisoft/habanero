@@ -21,8 +21,8 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -49,72 +49,7 @@ namespace Habanero.Test.UI.Base
         protected abstract IControlFactory GetControlFactory();
         protected abstract void TearDownForm(IFormHabanero frm);
 
-        [TestFixture]
-        public class TestStaticDataEditorWin : TestStaticDataEditor
-        {
-            protected override IStaticDataEditor CreateEditorOnForm(out IFormHabanero frm)
-            {
-                frm = GetControlFactory().CreateForm();
-                IStaticDataEditor editor = GetControlFactory().CreateStaticDataEditor();
-                frm.Controls.Add(editor);
-                frm.Show();
-                return editor;
-            }
 
-            protected override IControlFactory GetControlFactory()
-            {
-                GlobalUIRegistry.ControlFactory = new ControlFactoryWin();
-                return GlobalUIRegistry.ControlFactory;
-            }
-
-            protected override void TearDownForm(IFormHabanero frm)
-            {
-                frm.Close();
-                frm.Dispose();
-            }
-        }
-
-        [TestFixture]
-        public class TestStaticDataEditorVWG : TestStaticDataEditor
-        {
-            protected override IStaticDataEditor CreateEditorOnForm(out IFormHabanero frm)
-            {
-                frm = GetControlFactory().CreateForm();
-                IStaticDataEditor editor = GetControlFactory().CreateStaticDataEditor();
-                frm.Controls.Add(editor);
-                //frm.Show();
-                return editor;
-            }
-
-            protected override IControlFactory GetControlFactory()
-            {
-                GlobalUIRegistry.ControlFactory = new ControlFactoryVWG();
-                return GlobalUIRegistry.ControlFactory;
-            }
-
-            protected override void TearDownForm(IFormHabanero frm)
-            {
-                
-            }
-
-            [Test, Ignore("Does not work because VWG form cannot be shown")]
-            public override void TestSelectSection()
-            {
-                base.TestSelectSection();
-            }
-
-            [Test, Ignore("Does not work because VWG form cannot be shown")]
-            public override void TestSaveChanges()
-            {
-                base.TestSaveChanges();
-            }
-
-            [Test, Ignore("Does not work because VWG form cannot be shown")]
-            public override void TestRejectChanges()
-            {
-                base.TestRejectChanges();
-            }
-        }
 
         [Test]
         public void TestLayoutOfEditor()

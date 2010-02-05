@@ -19,8 +19,8 @@
 using System;
 using System.Drawing;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 

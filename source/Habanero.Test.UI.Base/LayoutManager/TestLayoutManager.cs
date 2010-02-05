@@ -18,8 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -32,23 +32,7 @@ namespace Habanero.Test.UI.Base
 
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestLayoutManagerWin : TestLayoutManager
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-        }
 
-        [TestFixture]
-        public class TestLayoutManagerVWG : TestLayoutManager
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
         [SetUp]
         public void SetupLayoutManager()
         {

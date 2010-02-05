@@ -22,28 +22,21 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
-    public class TestTreeViewControllerWin
+    public abstract class TestTreeViewController
     {
-
-        protected virtual IControlFactory GetControlFactory()
-        {
-            IControlFactory controlFactory = new ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = controlFactory;
-            return controlFactory;
-        }
+        protected abstract IControlFactory GetControlFactory();
 
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-           // base.SetupFixture();
+            // base.SetupFixture();
             ClassDef.ClassDefs.Clear();
             IClassDef organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
             organisationClassDef.RelationshipDefCol["ContactPeople"].RelationshipType = RelationshipType.Composition;
@@ -404,8 +397,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(organisation, businessObject);
         }
 
-       
-
         [Test]
         public void Test_LoadSingleBO_NoChildren()
         {
@@ -532,8 +523,6 @@ namespace Habanero.Test.UI.Base
             contactPersonTestBO.Surname = TestUtil.GetRandomString();
             return contactPersonTestBO;
         }
-
-     
 
         /// <summary>
         /// Verifies that the item in the tree nodes collection identified by the index is matched to the the 
@@ -825,74 +814,6 @@ namespace Habanero.Test.UI.Base
             ITreeNode childNode = relationshipNode.Nodes[0];
             Assert.AreEqual(contactPerson.ToString(), childNode.Text);
         }
-
-        //[Test]
-        //[Ignore("Need to implement")] //TODO Brett 18 Mar 2009: Ignored Test - Need to implement
-        //public void Test_LoadBusinessObjectCollection_Expanded_ChildAdded()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    TreeViewWin treeView = new TreeViewWin();
-        //    TreeViewController treeViewController = new TreeViewController(treeView);
-        //    DBDatabase organisation = new DBDatabase { DatabaseName = "Database" + TestUtilsShared.GetRandomString() };
-        //    DBDatabase dbDatabase2 = new DBDatabase { DatabaseName = "Database(2)" + TestUtilsShared.GetRandomString() };
-        //    DBTable contactPerson = new DBTable("Table" + TestUtilsShared.GetRandomString());
-        //    organisation.ContactPeople.Add(contactPerson);
-        //    IBusinessObjectCollection dbDatabases = new BusinessObjectCollection<DBDatabase> { organisation };
-        //    treeViewController.LoadTreeView(dbDatabases, 2);
-        //    bool busObjectAddedEvent = false;
-        //    dbDatabases.BusinessObjectAdded += (sender, e) => busObjectAddedEvent = true;
-        //    //-------------Assert Preconditions -------------
-        //    Assert.AreEqual(1, dbDatabases.Count);
-        //    Assert.AreEqual(1, treeView.Nodes.Count);
-        //    ITreeNode databaseNode = treeView.Nodes[0];
-        //    Assert.AreEqual(organisation.ToString(), databaseNode.Text);
-        //    Assert.AreEqual(1, databaseNode.Nodes.Count);
-        //    ITreeNode relationshipNode = databaseNode.Nodes[0];
-        //    Assert.AreEqual("ContactPeople", relationshipNode.Text);
-        //    Assert.AreEqual(1, relationshipNode.Nodes.Count);
-        //    ITreeNode childNode = relationshipNode.Nodes[0];
-        //    Assert.AreEqual(contactPerson.ToString(), childNode.Text);
-        //    Assert.IsFalse(busObjectAddedEvent);
-        //    //---------------Execute Test ----------------------
-        //    dbDatabases.Add(dbDatabase2);
-        //    //---------------Test Result -----------------------
-        //    Assert.IsTrue(busObjectAddedEvent);
-        //    Assert.AreEqual(2, treeView.Nodes.Count);
-        //    ITreeNode databaseNode2 = treeView.Nodes[1];
-        //    Assert.AreEqual(dbDatabase2.ToString(), databaseNode2.Text);
-        //    Assert.AreEqual(1, databaseNode2.Nodes.Count);
-        //}
-
-        //[Test]
-        //[Ignore("//TODO Brett 18 Mar 2009: Woking on this")]
-        //public void Test_LoadBusinessObjectCollection_LevelsToDisplay()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    TreeViewWin treeView = new TreeViewWin();
-        //    TreeViewController treeViewController = new TreeViewController(treeView);
-        //    DBDatabase organisation = new DBDatabase { DatabaseName = TestUtilsShared.GetRandomString() };
-        //    DBTable contactPerson = new DBTable(TestUtilsShared.GetRandomString());
-        //    organisation.ContactPeople.Add(contactPerson);
-        //    DBColumn dbColumn = new DBColumn();
-        //    contactPerson.Addresses.Add(dbColumn);
-        //    IBusinessObjectCollection dbDatabases = new BusinessObjectCollection<DBDatabase> { organisation };
-        //    //-------------Assert Preconditions -------------
-        //    Assert.AreEqual(1, dbDatabases.Count);
-        //    Assert.AreEqual(0, treeView.Nodes.Count);
-        //    //---------------Execute Test ----------------------
-        //    treeViewController.LoadTreeView(dbDatabases, 3, 2);
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(1, treeView.Nodes.Count);
-        //    ITreeNode node = treeView.Nodes[0];
-        //    Assert.AreEqual(organisation.ToString(), node.Text);
-        //    Assert.AreEqual(1, node.Nodes.Count);
-        //    ITreeNode relationshipNode = node.Nodes[0];
-        //    Assert.AreEqual("ContactPeople", relationshipNode.Text);
-        //    Assert.AreEqual(1, relationshipNode.Nodes.Count);
-        //    ITreeNode childNode = relationshipNode.Nodes[0];
-        //    Assert.AreEqual(contactPerson.ToString(), childNode.Text);
-        //    Assert.AreEqual(0, childNode.Nodes.Count);
-        //}
 
         [Test]
         public void Test_LoadTreeView_WithRelationship()
@@ -1203,16 +1124,76 @@ namespace Habanero.Test.UI.Base
             ITreeNode childNode = relationshipNode.Nodes[0];
             Assert.AreEqual(contactPerson.ToString(), childNode.Text);
         }
+
+
+        //[Test]
+        //[Ignore("Need to implement")] //TODO Brett 18 Mar 2009: Ignored Test - Need to implement
+        //public void Test_LoadBusinessObjectCollection_Expanded_ChildAdded()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    TreeViewWin treeView = new TreeViewWin();
+        //    TreeViewController treeViewController = new TreeViewController(treeView);
+        //    DBDatabase organisation = new DBDatabase { DatabaseName = "Database" + TestUtilsShared.GetRandomString() };
+        //    DBDatabase dbDatabase2 = new DBDatabase { DatabaseName = "Database(2)" + TestUtilsShared.GetRandomString() };
+        //    DBTable contactPerson = new DBTable("Table" + TestUtilsShared.GetRandomString());
+        //    organisation.ContactPeople.Add(contactPerson);
+        //    IBusinessObjectCollection dbDatabases = new BusinessObjectCollection<DBDatabase> { organisation };
+        //    treeViewController.LoadTreeView(dbDatabases, 2);
+        //    bool busObjectAddedEvent = false;
+        //    dbDatabases.BusinessObjectAdded += (sender, e) => busObjectAddedEvent = true;
+        //    //-------------Assert Preconditions -------------
+        //    Assert.AreEqual(1, dbDatabases.Count);
+        //    Assert.AreEqual(1, treeView.Nodes.Count);
+        //    ITreeNode databaseNode = treeView.Nodes[0];
+        //    Assert.AreEqual(organisation.ToString(), databaseNode.Text);
+        //    Assert.AreEqual(1, databaseNode.Nodes.Count);
+        //    ITreeNode relationshipNode = databaseNode.Nodes[0];
+        //    Assert.AreEqual("ContactPeople", relationshipNode.Text);
+        //    Assert.AreEqual(1, relationshipNode.Nodes.Count);
+        //    ITreeNode childNode = relationshipNode.Nodes[0];
+        //    Assert.AreEqual(contactPerson.ToString(), childNode.Text);
+        //    Assert.IsFalse(busObjectAddedEvent);
+        //    //---------------Execute Test ----------------------
+        //    dbDatabases.Add(dbDatabase2);
+        //    //---------------Test Result -----------------------
+        //    Assert.IsTrue(busObjectAddedEvent);
+        //    Assert.AreEqual(2, treeView.Nodes.Count);
+        //    ITreeNode databaseNode2 = treeView.Nodes[1];
+        //    Assert.AreEqual(dbDatabase2.ToString(), databaseNode2.Text);
+        //    Assert.AreEqual(1, databaseNode2.Nodes.Count);
+        //}
+
+        //[Test]
+        //[Ignore("//TODO Brett 18 Mar 2009: Woking on this")]
+        //public void Test_LoadBusinessObjectCollection_LevelsToDisplay()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    TreeViewWin treeView = new TreeViewWin();
+        //    TreeViewController treeViewController = new TreeViewController(treeView);
+        //    DBDatabase organisation = new DBDatabase { DatabaseName = TestUtilsShared.GetRandomString() };
+        //    DBTable contactPerson = new DBTable(TestUtilsShared.GetRandomString());
+        //    organisation.ContactPeople.Add(contactPerson);
+        //    DBColumn dbColumn = new DBColumn();
+        //    contactPerson.Addresses.Add(dbColumn);
+        //    IBusinessObjectCollection dbDatabases = new BusinessObjectCollection<DBDatabase> { organisation };
+        //    //-------------Assert Preconditions -------------
+        //    Assert.AreEqual(1, dbDatabases.Count);
+        //    Assert.AreEqual(0, treeView.Nodes.Count);
+        //    //---------------Execute Test ----------------------
+        //    treeViewController.LoadTreeView(dbDatabases, 3, 2);
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(1, treeView.Nodes.Count);
+        //    ITreeNode node = treeView.Nodes[0];
+        //    Assert.AreEqual(organisation.ToString(), node.Text);
+        //    Assert.AreEqual(1, node.Nodes.Count);
+        //    ITreeNode relationshipNode = node.Nodes[0];
+        //    Assert.AreEqual("ContactPeople", relationshipNode.Text);
+        //    Assert.AreEqual(1, relationshipNode.Nodes.Count);
+        //    ITreeNode childNode = relationshipNode.Nodes[0];
+        //    Assert.AreEqual(contactPerson.ToString(), childNode.Text);
+        //    Assert.AreEqual(0, childNode.Nodes.Count);
+        //}
     }
 
-    public class TestTreeViewControllerVWG : TestTreeViewControllerWin
-    {
 
-        protected override IControlFactory GetControlFactory()
-        {
-            IControlFactory controlFactory = new ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = controlFactory;
-            return controlFactory;
-        }
-    }
 }

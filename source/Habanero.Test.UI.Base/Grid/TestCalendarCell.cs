@@ -21,7 +21,6 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base

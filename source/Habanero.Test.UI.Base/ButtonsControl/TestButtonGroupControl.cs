@@ -22,8 +22,6 @@ using System.Drawing;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 using Rhino.Mocks;
 

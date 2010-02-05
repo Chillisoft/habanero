@@ -1,4 +1,5 @@
 ﻿using Habanero.Test.UI.Base;
+using Habanero.Test.UI.Win.Grid;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
 using NUnit.Framework;
@@ -20,7 +21,7 @@ namespace Habanero.Test.UI.Win.Selectors
 
         protected override IBOColSelectorControl CreateSelector()
         {
-            TestGridBase.GridBaseWinStub gridBase = new TestGridBase.GridBaseWinStub();
+            GridBaseWinStub gridBase = new GridBaseWinStub();
             System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
             frm.Controls.Add(gridBase);
             SetupGridColumnsForMyBo(gridBase);

@@ -18,8 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System.Collections.Generic;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -29,31 +29,7 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestInputFormComboBoxVWG : TestInputFormComboBox
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
 
-            [Ignore("Minimumsize doesn't work for VWG")]
-            public override void Test_CreateOKCancelForm_ShouldSetMinimumSize()
-            {
-                
-            }
-        
-        }
-
-
-        [TestFixture]
-        public class TestInputFormComboBoxWin : TestInputFormComboBox
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-        }
 
         [Test]
         public void Test_Construct()

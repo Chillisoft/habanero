@@ -25,8 +25,6 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -1030,31 +1028,8 @@ namespace Habanero.Test.UI.Base
             gridBase.Columns.Add("TestProp", "TestProp");
         }
 
-        public class GridBaseVWGStub : GridBaseVWG
-        {
-            public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
-            {
-                ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);
-                dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = false;
-                return dataSetProvider;
-            }
-        }
 
-        public class GridBaseWinStub : GridBaseWin
-        {
-            /// <summary>
-            /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
-            /// return a read only datasetprovider, while an editable grid would return an editable one.
-            /// </summary>
-            /// <param name="col">The collection to create the datasetprovider for</param>
-            /// <returns></returns>
-            public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
-            {
-                ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);
-                dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = true;
-                return dataSetProvider;
-            }
-        }
+        
 
         #endregion
     }

@@ -17,17 +17,13 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// This test class tests the classes that implement IMainMenuHabanero.
-    /// </summary>
-    [TestFixture]
-    public class TestMainMenuVWG
+    public abstract class TestMainMenu
     {
         protected virtual IMainMenuHabanero CreateControl()
         {
@@ -39,12 +35,7 @@ namespace Habanero.Test.UI.Base
             return GetControlFactory().CreateMainMenu(menu);
         }
 
-        protected virtual IControlFactory GetControlFactory()
-        {
-            IControlFactory factory = new ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
+        protected abstract IControlFactory GetControlFactory();
 
         [Test]
         public void Test_ConstructMainMenu()
@@ -57,6 +48,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(mainMenu);
             Assert.IsNotNull(mainMenu.MenuItems);
         }
+
         [Test]
         public void Test_ConstructMainMenu_WithHabaneroMenu()
         {
@@ -70,6 +62,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(mainMenu.MenuItems);
             Assert.AreEqual(menu.Name, mainMenu.Name);
         }
+
         [Test]
         public void Test_MenuItems_ShouldAlwaysReturnTheSameInstance()
         {
@@ -84,6 +77,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreSame(expectedMenuItems, secondCallToMenuItems);
         }
+
         [Test]
         public void Test_ConstructMainMenu_WithHabaneroMenuNull_ShouldNotSetName()
         {
@@ -96,6 +90,7 @@ namespace Habanero.Test.UI.Base
             TestUtil.AssertStringEmpty(mainMenu.Name, "mainMenu.Name");
             Assert.IsNotNull(mainMenu.MenuItems);
         }
+
         [Test]
         public void Test_DockInForm()
         {
@@ -110,18 +105,5 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, formHabanero.Controls.Count);
         }
     }
-    /// <summary>
-    /// This test class tests the classes that implement IMainMenuHabanero.
-    /// </summary>
-    [TestFixture]
-    public class TestMainMenuWin : TestMainMenuVWG
-    {
 
-        protected override IControlFactory GetControlFactory()
-        {
-            IControlFactory factory = new ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-    }
 }

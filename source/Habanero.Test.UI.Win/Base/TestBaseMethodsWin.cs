@@ -6,11 +6,29 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Win.Base
 {
+    public abstract class TestBaseMethodsWin : TestBaseMethods
+    {
+        [STAThread]
+        protected override IControlFactory GetControlFactory()
+        {
+            ControlFactoryWin factory = new ControlFactoryWin();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
+
+        protected override string GetUnderlyingDockStyleToString(IControlHabanero controlHabanero)
+        {
+            System.Windows.Forms.Control control = (System.Windows.Forms.Control)controlHabanero;
+            return control.Dock.ToString();
+        }
+    }
+
+
     /// <summary>
     /// This test class tests the base inherited methods of the Button class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_Button : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_Button : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -22,7 +40,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the CheckBox class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_CheckBox : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_CheckBox : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -34,7 +52,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the CollapsiblePanel class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_CollapsiblePanel : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_CollapsiblePanel : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -46,7 +64,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the CollapsiblePanel class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_CollapsiblePanelGroupControl : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_CollapsiblePanelGroupControl : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -58,7 +76,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the ComboBox class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_ComboBox : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_ComboBox : TestBaseMethodsWin
     {
         [STAThread]
         protected override IControlHabanero CreateControl()
@@ -72,7 +90,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the ComboBoxSelector class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_ComboBoxSelector : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_ComboBoxSelector : TestBaseMethodsWin
     {
         [STAThread]
         protected override IControlHabanero CreateControl()
@@ -85,7 +103,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the Control class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_Control : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_Control : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -97,7 +115,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the DateTimePicker class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_DateTimePicker : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_DateTimePicker : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -109,7 +127,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the Form class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_Form : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_Form : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -140,7 +158,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the GroupBox class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_GroupBox : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_GroupBox : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -151,7 +169,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the GroupBoxGroupControl class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_GroupBoxGroupControl : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_GroupBoxGroupControl : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -162,7 +180,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the Label class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_Label : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_Label : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -173,7 +191,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the ListBox class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_ListBox : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_ListBox : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -185,7 +203,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the ListBoxSelector class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_ListBoxSelector : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_ListBoxSelector : TestBaseMethodsWin
     {
         [STAThread]
         protected override IControlHabanero CreateControl()
@@ -199,7 +217,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the MainTitleIconControl class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_MainTitleIconControl : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_MainTitleIconControl : TestBaseMethodsWin
     {
         private IControlFactory _factory;
 
@@ -228,7 +246,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the NumericUpDown class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_NumericUpDown : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_NumericUpDown : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -278,7 +296,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the Panel class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_Panel : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_Panel : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -290,7 +308,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the Panel class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_PictureBox : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_PictureBox : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -303,7 +321,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the ProgressBar class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_ProgressBar : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_ProgressBar : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -314,7 +332,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the RadioButton class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_RadioButton : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_RadioButton : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -325,7 +343,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the SplitContainer class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_SplitContainer : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_SplitContainer : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -336,7 +354,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the Splitter class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_Splitter : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_Splitter : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -359,7 +377,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the TabControl class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_TabControl : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_TabControl : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -370,7 +388,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the TabPage class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_TabPage : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_TabPage : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -381,7 +399,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the TextBox class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_TextBox : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_TextBox : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -392,7 +410,7 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the TreeView class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_TreeView : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_TreeView : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
@@ -403,12 +421,22 @@ namespace Habanero.Test.UI.Win.Base
     /// This test class tests the base inherited methods of the UserControl class.
     /// </summary>
     [TestFixture]
-    public class TestBaseMethodsWin_UserControl : TestBaseMethods.TestBaseMethodsWin
+    public class TestBaseMethodsWin_UserControl : TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
             return new UserControlWin();
         }
     }
-  
+    /// <summary>
+    /// This test class tests the base inherited methods of the DataGridView class.
+    /// </summary>
+    [TestFixture]
+    public class TestBaseMethodsWin_DataGridView : TestBaseMethodsWin
+    {
+        protected override IControlHabanero CreateControl()
+        {
+            return GetControlFactory().CreateDataGridView();
+        }
+    }
 }

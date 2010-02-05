@@ -42,11 +42,6 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Constructs a <see cref="MainTitleIconControlVWG"/>
         /// </summary>
-        public MainTitleIconControlVWG() : this(GlobalUIRegistry.ControlFactory)
-        { }
-        /// <summary>
-        /// Constructs a <see cref="MainTitleIconControlVWG"/>
-        /// </summary>
         public MainTitleIconControlVWG(IControlFactory controlFactory)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");

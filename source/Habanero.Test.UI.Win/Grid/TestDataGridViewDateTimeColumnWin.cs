@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Win.Grid
 {
-
     [TestFixture]
     public class TestDataGridViewDateTimeColumnWin : TestDataGridViewDateTimeColumn
     {

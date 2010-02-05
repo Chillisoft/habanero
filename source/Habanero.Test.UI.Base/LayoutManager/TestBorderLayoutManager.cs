@@ -18,10 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base

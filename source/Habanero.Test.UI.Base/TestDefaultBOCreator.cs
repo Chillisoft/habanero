@@ -26,12 +26,12 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Base
 {
     [TestFixture]
-    public class TestDefaultBOCreator : TestUsingDatabase
+    public class TestDefaultBOCreator 
     {
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            base.SetupDBConnection();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
         [Test]
         public void TestCreateBusinessObjectFromCollection()

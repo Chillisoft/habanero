@@ -3,8 +3,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -64,26 +62,6 @@ namespace Habanero.Test.UI.Base
             IBOColSelectorControl colSelector = CreateSelector();
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof (IEditableGridControl), colSelector);
-        }
-
-        [Test]
-        public virtual void Test_Constructor_nullControlFactory_RaisesError()
-        {
-            //---------------Set up test pack-------------------
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            try
-            {
-                new EditableGridControlWin(null);
-                Assert.Fail("expected ArgumentNullException");
-            }
-                //---------------Test Result -----------------------
-            catch (HabaneroArgumentException ex)
-            {
-                StringAssert.Contains("Cannot create an editable grid control if the control factory is null", ex.Message);
-            }
         }
 
         [Test]

@@ -53,6 +53,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -66,17 +67,60 @@
     <Compile Include="..\Common\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="Grid\TestDataGridViewVWG.cs" />
     <Compile Include="Grid\TestEditableGridControlVWG.cs" />
     <Compile Include="Grid\TestEditableGridVWG.cs" />
     <Compile Include="Grid\TestGridBaseVWG.cs" />
     <Compile Include="Grid\TestGridInitialiserVWG.cs" />
-    <Compile Include="HabaneroControls\TestFilterControlCheckBoxVWG.cs" />
+    <Compile Include="Grid\TestReadOnlyGridButtonControlVWG.cs" />
+    <Compile Include="Grid\TestReadOnlyGridControlVWG.cs" />
+    <Compile Include="Grid\TestReadOnlyGridVWG.cs" />
+    <Compile Include="HabaneroControls\BusinessObjectControlStubVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HabaneroControls\FilterControl\TestEnumComboBoxFilterVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlBuilderVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlDateVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlManagerVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestMultiplePropStringTextBoxFilterVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestStringStaticFilterVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestStringTextBoxFilterVWG.cs" />
+    <Compile Include="HabaneroControls\TestBOColTabControlManagerVWG.cs" />
+    <Compile Include="HabaneroControls\TestBOSelectorAndBOEditorManagerVWG.cs" />
+    <Compile Include="HabaneroControls\TestComboBoxCollectionSelectorVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlCheckBoxVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlVWG.cs" />
+    <Compile Include="HabaneroControls\TestGridWithPanelControlVWG.cs" />
+    <Compile Include="HabaneroControls\TestInputFormComboBoxVWG.cs" />
+    <Compile Include="HabaneroControls\TestInputFormDateVWG.cs" />
+    <Compile Include="HabaneroControls\TestInputFormTextBoxVWG.cs" />
+    <Compile Include="HabaneroControls\TestListBoxCollectionManagerVWG.cs" />
+    <Compile Include="HabaneroControls\TestMainEditorPanelVWG.cs" />
+    <Compile Include="HabaneroControls\TestMultiSelectorVWG.cs" />
+    <Compile Include="HabaneroControls\TestOKCancelDialogVWG.cs" />
+    <Compile Include="HabaneroControls\TestStaticDataEditorVWG.cs" />
+    <Compile Include="HabaneroControls\TestTreeViewControllerVWG.cs" />
     <Compile Include="LayoutManager\TestColumnLayoutManagerVWG.cs" />
     <Compile Include="LayoutManager\TestFlowLayoutManagerVWG.cs" />
+    <Compile Include="LayoutManager\TestGridLayoutManagerVWG.cs" />
+    <Compile Include="LayoutManager\TestLayoutManagerVWG.cs" />
+    <Compile Include="Mappers\TestCollectionComboBoxMapperVWG.cs" />
     <Compile Include="Mappers\TestCollectionTabControlMapperVWG.cs" />
     <Compile Include="Mappers\TestControlMapperCollectionVWG.cs" />
     <Compile Include="Mappers\TestControlMapperVWG.cs" />
+    <Compile Include="Mappers\TestDateTimePickerMapperVWG.cs" />
     <Compile Include="Mappers\TestEditableGridControlMapperVWG.cs" />
+    <Compile Include="Mappers\TestEnumComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestExtendedLookupComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestListComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestLookupComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestNumericUpDownCurrencyMapperVWG.cs" />
+    <Compile Include="Mappers\TestNumericUpDownIntegerMapperVWG.cs" />
+    <Compile Include="Mappers\TestRelationshipComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestTextBoxMapperVWG.cs" />
+    <Compile Include="Menu\TestMainMenuVWG.cs" />
+    <Compile Include="Menu\TestMenuBuilderVWG.cs" />
+    <Compile Include="PanelBuilder\TestPanelInfoVWG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Grid\TestDataGridViewColumnCollectionVWG.cs" />
     <Compile Include="Base\TestBaseMethodsVWG.cs" />
@@ -93,16 +137,17 @@
     <Compile Include="HabaneroControls\TestButtonGroupControlVWG.cs" />
     <Compile Include="StandardControls\TestButtonVWG.cs" />
     <Compile Include="HabaneroControls\TestFileChooserVWG.cs" />
+    <Compile Include="TestButtonSizePolicyUserDefinedVWG.cs" />
     <Compile Include="TestCalendarCellVWG.cs" />
     <Compile Include="Mappers\TestCheckBoxMapperVWG.cs" />
-    <Compile Include="CollapsibleMenu\TestCollapsibleMenuBuilderVWG.cs" />
-    <Compile Include="CollapsibleMenu\TestCollapsibleMenuItemCollectionVWG.cs" />
-    <Compile Include="CollapsibleMenu\TestCollapsibleMenuItemVWG.cs" />
-    <Compile Include="CollapsibleMenu\TestCollapsibleMenuVWG.cs" />
-    <Compile Include="CollapsibleMenu\TestCollapsiblePanelGroupControlVWG.cs" />
-    <Compile Include="CollapsibleMenu\TestCollapsiblePanelVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleMenuBuilderVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleMenuItemCollectionVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleMenuItemVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleMenuVWG.cs" />
+    <Compile Include="Menu\TestCollapsiblePanelGroupControlVWG.cs" />
+    <Compile Include="Menu\TestCollapsiblePanelVWG.cs" />
     <Compile Include="Selectors\TestComboBoxSelectorVWG.cs" />
-    <Compile Include="CollapsibleMenu\TestCollapsibleSubMenuItemVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleSubMenuItemVWG.cs" />
     <Compile Include="StandardControls\TestComboBoxVWG.cs" />
     <Compile Include="TestControlCollectionVWG.cs" />
     <Compile Include="TestControlFactoryVWG.cs" />
@@ -119,6 +164,14 @@
     <Compile Include="StandardControls\TestTextBoxVWG.cs" />
     <Compile Include="StandardControls\TestTreeViewVWG.cs" />
     <Compile Include="TestDialogResultVWG.cs" />
+    <Compile Include="PanelBuilder\TestPanelBuilderVWG.cs" />
+    <Compile Include="TestEnumerationConverter.cs" />
+    <Compile Include="TestEnumerationsVWG.cs" />
+    <Compile Include="Wizard\TestMessageWizardStepVWG.cs" />
+    <Compile Include="Wizard\TestNullWizardStepVWG.cs" />
+    <Compile Include="Wizard\TestWizardControllerVWG.cs" />
+    <Compile Include="Wizard\TestWizardControlVWG.cs" />
+    <Compile Include="Wizard\TestWizardStepVWG.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">

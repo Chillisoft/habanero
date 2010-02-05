@@ -26,27 +26,18 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.Structure;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
 namespace Habanero.Test.UI.Base
 {
-
-    [TestFixture]
-    public class TestPanelBuilderWin
+    public abstract class TestPanelBuilder
     {
         protected const int DEFAULT_CONTROLS_PER_FIELD = 3;
-        protected virtual IControlFactory GetControlFactory()
-        {
-            ControlFactoryWin factory = new ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-
-        protected virtual Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper() { return new Sample.SampleUserInterfaceMapperWin(); }
-
+        protected abstract IControlFactory GetControlFactory();
+        protected abstract Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper();
 
         [SetUp]
         public void SetupTest() { ClassDef.ClassDefs.Clear(); }
@@ -77,13 +68,14 @@ namespace Habanero.Test.UI.Base
                 panelBuilder.BuildPanelForTab(null);
                 Assert.Fail("expected ArgumentNullException");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
                 StringAssert.Contains("formTab", ex.ParamName);
             }
         }
+
         [Test]
         public void Test_BuildPanelForTab_1Field_String()
         {
@@ -144,7 +136,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[1]);
             Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[2]);
         }
-       
 
         [Test]
         public void Test_BuildPanelForTab_1Field_GroupBoxLayout_Integer()
@@ -168,7 +159,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, groupBox.Controls.Count);
             Assert.IsInstanceOfType(typeof(INumericUpDown), groupBox.Controls[0]);
         }
-
 
         [Test]
         public void Test_BuildPanelForTab_1Field_GroupBoxLayout_TextBox_Multiline()
@@ -221,7 +211,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(errorProviderPanel.Left - LayoutManager.DefaultGapSize, textbox.Left + textbox.Width);
         }
 
-
         [Test]
         public void Test_BuildPanelForTab_1Field_GroupBoxLayout_Layout()
         {
@@ -248,7 +237,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(LayoutManager.DefaultBorderSize, groupBox.Left);
             Assert.AreEqual(errorProviderPanel.Left - LayoutManager.DefaultGapSize, groupBox.Left + groupBox.Width);
         }
-
 
         [Test]
         public void Test_BuildPanelForTab_2Fields_Layout()
@@ -503,7 +491,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(column1.Width + column2.Width, column2LastControl.Left + column2LastControl.Width);
         }
 
-
         [Test]
         public void Test_BuildPanelForTab_ColumnWidths_DataColumnResizes()
         {
@@ -530,7 +517,7 @@ namespace Habanero.Test.UI.Base
 
             Assert.AreEqual(originalWidth + columnWidthAfter - columnWidthOrig, textbox.Width);
         }
-        // ReSharper disable AccessToStaticMemberViaDerivedType
+
         [Test]
         public virtual void Test_BuildPanelForTab_3Columns_1Column_RowSpan2()
         {
@@ -561,8 +548,7 @@ namespace Habanero.Test.UI.Base
                 textBoxCol1.Left + textBoxCol1.Width + PanelBuilder.ERROR_PROVIDER_WIDTH + GridLayoutManager.DefaultGapSize*2,
                 col2TextBox2Label.Left);
         }
-        // ReSharper restore AccessToStaticMemberViaDerivedType
-#pragma warning disable 168
+
         [Test]
         public void Test_BuildPanelForTab_RowSpanAndColumnSpan_DoesNotCauseError()
         {
@@ -578,6 +564,7 @@ namespace Habanero.Test.UI.Base
 
             IControlCollection controlCollection = panel.Controls;
         }
+
         [Test]
         public void Test_BuildPanelForTab_RowSpan()
         {
@@ -603,7 +590,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(row1InputControl.Height*2 + LayoutManager.DefaultGapSize, row2InputControl.Height);
 //            Assert.AreEqual(row2InputControl.Bottom+LayoutManager.DefaultGapSize,row3InputControl.Top);
         }
-#pragma warning restore 168
 
         [Test]
         public void Test_BuildPanelForTab_Parameter_ColumnSpan()
@@ -682,7 +668,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(HorizontalAlignment.Right, control.TextAlign);
         }
 
-
         [Test]
         public void Test_BuildPanelForTab_Parameter_Alignment_Center()
         {
@@ -702,7 +687,7 @@ namespace Habanero.Test.UI.Base
             ITextBox control = (ITextBox) panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Center, control.TextAlign);
         }
-#pragma warning disable 168
+
         [Test]
         public void Test_BuildPanelForTab_Parameter_Alignment_InvalidAlignment()
         {
@@ -732,7 +717,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(errorThrown, "The alignment value is invalid and a HabaneroDeveloperException should be thrown.");
             StringAssert.Contains("Invalid alignment property value ", errMessage);
         }
-#pragma warning restore 168
 
         [Test]
         public void Test_BuildPanelForTab_Parameter_MultiLine()
@@ -753,7 +737,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(64, control.Height);
             Assert.AreEqual(ScrollBars.Vertical, control.ScrollBars);
         }
-#pragma warning disable 168
+
         [Test]
         public void Test_BuildPanelForTab_Parameter_InvalidMultiLineValue()
         {
@@ -780,7 +764,6 @@ namespace Habanero.Test.UI.Base
                 "An error occurred while reading the 'numLines' parameter from the class definitions.  The 'value' attribute must be a valid integer.",
                 errMessage);
         }
-#pragma warning restore 168
 
         [Test]
         public void Test_BuildPanelForTab_Parameter_DecimalPlaces_NumericUpDownMoneyMapper()
@@ -828,7 +811,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual("M", control.Items[1].ToString());
             Assert.AreEqual("F", control.Items[2].ToString());
         }
-#pragma warning disable 168
 
         [Test, Ignore("Can not test the event on the TextBox")]
         public void Test_BuildPanelForTab_Parameter_isEmal()
@@ -853,7 +835,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
             ITextBox control = (ITextBox) panel.Controls[1];
         }
-#pragma warning restore 168
 
         [Test]
         public void Test_BuildPanelForTab_Parameter_DateFormat()
@@ -951,9 +932,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(alignmentValueUpperCase, alignmentValueLowerCase);
         }
 
-
-        //Throws a HabaneroDeveloperException 
-        //if an invalid alignment value is passed into the method.
         [Test]
         public void Test_BuildPanelForTab_GetAlignmentValueMethod_ThrowsADeveloperException()
         {
@@ -1060,7 +1038,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(propertyName, sampleTextControlMapper.PropertyName);
         }
 
-
         [Test]
         public void Test_BuildPanelForTab_SetsClassDefForControlMappers()
         {
@@ -1076,6 +1053,7 @@ namespace Habanero.Test.UI.Base
             IClassDef def = info.ControlMapper.ClassDef;
             Assert.AreSame(classDef, def);
         }
+
         [Test]
         public void Test_BuildPanelForTab_InputControlsHaveCorrectEnabledState()
         {
@@ -1191,8 +1169,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(5, fieldInfoC3R2.InputControl.TabIndex);
         }
 
-        //TODO: add tests that label and error provider get tabstop set to false
-        
         [Test]
         public void Test_BuildPanelForForm_WithTwoTabPages_ShouldBuildTabControl()
         {
@@ -1210,7 +1186,6 @@ namespace Habanero.Test.UI.Base
             ITabControl tabControl = (ITabControl) panelInfo.Panel.Controls[0];
             Assert.AreEqual(form.Count, tabControl.TabPages.Count);
         }
-
 
         [Test]
         public void Test_BuildPanelForForm_WithTwoTabPages_ShouldBuildTabControl_WithCorrectControlsOnTabPage()
@@ -1521,6 +1496,7 @@ namespace Habanero.Test.UI.Base
 
 
         }
+
         [Test]
         public void Test_BuildPanelForForm_NullCreateGroupControl_ShouldRaiseError()
         {
@@ -1558,13 +1534,14 @@ namespace Habanero.Test.UI.Base
                 new PanelBuilder(null);
                 Assert.Fail("expected ArgumentNullException");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
                 StringAssert.Contains("controlFactory", ex.ParamName);
             }
         }
+
         [Test]
         public void Test_Set_GroupControlCreator_Null_ShouldRaiseError()
         {
@@ -1587,28 +1564,6 @@ namespace Habanero.Test.UI.Base
                 StringAssert.Contains("value", ex.ParamName);
             }
         }
-//        [Test]
-//        public void Test_Set_IndividualControlCreator_Null_ShouldRaiseError()
-//        {
-//            //---------------Set up test pack-------------------
-//            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-//            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
-//            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-//            //---------------Assert Precondition----------------
-//            Assert.AreEqual(2, form.Count);
-//            //---------------Execute Test ----------------------
-//            try
-//            {
-//                panelBuilder.SetControlCreators(GetControlFactory().CreateTabControl, null);
-//                Assert.Fail("expected ArgumentNullException");
-//            }
-//                //---------------Test Result -----------------------
-//            catch (ArgumentNullException ex)
-//            {
-//                StringAssert.Contains("Value cannot be null", ex.Message);
-//                StringAssert.Contains("individualControlCreator", ex.ParamName);
-//            }
-//        }
 
         [Test]
         public void Test_ConstructsWithDefault_ControlCreator()
@@ -1623,6 +1578,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(panelBuilder.GroupControlCreator);
         }
+
         [Test]
         public void Test_Set_GroupControlCreator_ToCollapsiblePanel()
         {
@@ -1639,6 +1595,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(panelBuilder.GroupControlCreator);
             Assert.AreEqual(groupControlCreator, panelBuilder.GroupControlCreator);
         }
+
         [Test]
         public void Test_BuldUsingAlternateFormBuilder()
         {
@@ -1668,101 +1625,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(200, panelInfo.Panel.MinimumSize.Width);
 
         }
-
-        //[Test, Ignore("This doesn't work in code for some reason")]
-        //public void Test_BuildPanelForTab_SetToolTip()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneWithToolTipText();
-        //    UIFormTab twoFieldTabOneHasToolTip = classDef.UIDefCol["default"].UIForm[0];
-        //    PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-        //    //-------------Assert Preconditions -------------
-
-        //    //---------------Execute Test ----------------------
-        //    IPanel panel = panelBuilder.BuildPanel(twoFieldTabOneHasToolTip).Panel;
-        //    //---------------Test Result -----------------------
-        //    IControlCollection controls = panel.Controls;
-        //    ILabel labelWithToolTip =
-        //        (ILabel)controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO];
-        //    IControlHabanero controlHabanero =
-        //        controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
-        //    IToolTip toolTip = GetControlFactory().CreateToolTip();
-
-        //    Assert.AreEqual("Test tooltip text", toolTip.GetToolTip(controlHabanero));
-        //}
     }
 
-    [TestFixture]
-    public class TestPanelBuilderWinOnly
-    {
-        protected const int DEFAULT_CONTROLS_PER_FIELD = 3;
-        protected virtual IControlFactory GetControlFactory() { return new ControlFactoryWin(); }
 
-        protected virtual Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper() { return new Sample.SampleUserInterfaceMapperWin(); }
-
-        [Test]
-        public void Test_BuildPanelForTab_Parameter_SetNumericUpDownAlignment()
-        {
-            //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithAlignment_NumericUpDown();
-            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            //---------------Assert Precondition----------------
-            Assert.AreEqual("left", ((UIFormField)singleFieldTab[0][0]).Alignment);
-            Assert.AreEqual("right", ((UIFormField)singleFieldTab[0][1]).Alignment);
-            Assert.AreEqual("center", ((UIFormField)singleFieldTab[0][2]).Alignment);
-            Assert.AreEqual("centre", ((UIFormField)singleFieldTab[0][3]).Alignment);
-            //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
-            //---------------Test Result -----------------------
-
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[1]);
-            INumericUpDown control1 = (INumericUpDown) panel.Controls[1];
-            Assert.AreEqual(HorizontalAlignment.Left, control1.TextAlign);
-
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1]);
-            INumericUpDown control2 = (INumericUpDown) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
-            Assert.AreEqual(HorizontalAlignment.Right, control2.TextAlign);
-
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*2 + 1]);
-            INumericUpDown control3 = (INumericUpDown) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*2 + 1];
-            Assert.AreEqual(HorizontalAlignment.Center, control3.TextAlign);
-
-            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*3 + 1]);
-            INumericUpDown control4 = (INumericUpDown) panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*3 + 1];
-            Assert.AreEqual(HorizontalAlignment.Center, control4.TextAlign);
-        }
-    }
-
-    [TestFixture]
-    public class TestPanelBuilderVWG : TestPanelBuilderWin
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            ControlFactoryVWG factory = new ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-
-        protected override Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper() { return new Sample.SampleUserInterfaceMapperVWG(); }
-
-        [Test, Ignore("Gizmox does not support changing the TextAlign Property (Default value is Left) ")]
-        public void Test_BuildPanelForTab_Parameter_SetAlignment_NumericUpDown()
-        {
-            //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
-            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithNumericUpDown();
-            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            //---------------Assert Precondition----------------
-            Assert.AreEqual("right", ((UIFormField)singleFieldTab[0][0]).Alignment);
-
-            //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
-            //---------------Test Result -----------------------
-
-            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
-            ITextBox control = (ITextBox) panel.Controls[1];
-            Assert.AreEqual(HorizontalAlignment.Right, control.TextAlign);
-        }
-    }
 }

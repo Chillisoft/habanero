@@ -22,16 +22,14 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
-    public class TestPanelInfo
+    public abstract class TestPanelInfo
     {
-        private readonly IControlFactory _controlFactory = new ControlFactoryVWG();
-
         [SetUp]
         public void SetupTest()
         {
@@ -45,12 +43,14 @@ namespace Habanero.Test.UI.Base
             // are executed then it will still only be called once.
         }
 
+        protected abstract IControlFactory GetControlFactory();
+
         [Test]
         public void TestPanel()
         {
             //---------------Set up test pack-------------------
             IPanelInfo panelInfo = new PanelInfo();
-            IPanel panel = _controlFactory.CreatePanel();
+            IPanel panel = GetControlFactory().CreatePanel();
             //---------------Assert Precondition----------------
             Assert.IsNull(panelInfo.Panel);
             //---------------Execute Test ----------------------
@@ -89,10 +89,10 @@ namespace Habanero.Test.UI.Base
         public void TestFieldInfo_Constructor()
         {
             //---------------Set up test pack-------------------
-            ILabel label = _controlFactory.CreateLabel();
+            ILabel label = GetControlFactory().CreateLabel();
             string propertyName = TestUtil.GetRandomString();
-            ITextBox tb = _controlFactory.CreateTextBox();
-            IControlMapper controlMapper = new TextBoxMapper(tb, propertyName, false, _controlFactory);
+            ITextBox tb = GetControlFactory().CreateTextBox();
+            IControlMapper controlMapper = new TextBoxMapper(tb, propertyName, false, GetControlFactory());
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -126,39 +126,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestApplyChangesToBusinessObject()
-        {
-            //---------------Set up test pack-------------------
-            Sample.CreateClassDefWithTwoPropsOneInteger();
-            Sample sampleBO = new Sample();
-            const string startText = "startText";
-            const string endText = "endText";
-            sampleBO.SampleText = startText;
-            sampleBO.SampleInt = 1;
-
-            IPanelInfo panelInfo = new PanelInfo();
-            PanelInfo.FieldInfo sampleTextFieldInfo = CreateFieldInfo("SampleText");
-            PanelInfo.FieldInfo sampleIntFieldInfo = CreateFieldInfo("SampleInt");
-            panelInfo.FieldInfos.Add(sampleTextFieldInfo);
-            panelInfo.FieldInfos.Add(sampleIntFieldInfo);
-            panelInfo.BusinessObject = sampleBO;
-
-            sampleTextFieldInfo.InputControl.Text = endText;
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(startText, sampleBO.SampleText);
-            //---------------Execute Test ----------------------
-            panelInfo.ApplyChangesToBusinessObject();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(endText, sampleBO.SampleText);
-            Assert.AreEqual(1, sampleBO.SampleInt);
-        }
-
-        [Test]
         public void TestControlsEnabled()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-            PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) classDef.UIDefCol["default"].UIForm[0]);
             panelInfo.BusinessObject = new Sample();
             //---------------Assert Precondition----------------
@@ -205,17 +177,13 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(errorProvider.GetError(fieldInfo.InputControl).Length > 0);
         }
 
-        private IControlFactory GetControlFactory()
-        {
-            return _controlFactory;
-        }
 
         [Test]
         public void Test_UIFormTab()
         {
             //--------------- Set up test pack ------------------
             IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
-            PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -226,34 +194,13 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(panelInfo.UIFormTab.Name, panelInfo.PanelTabText);
         }
 
-        private PanelInfo.FieldInfo CreateFieldInfo(string propertyName)
+        protected PanelInfo.FieldInfo CreateFieldInfo(string propertyName)
         {
-            ILabel label = _controlFactory.CreateLabel();
-            ITextBox tb = _controlFactory.CreateTextBox();
-            IControlMapper controlMapper = new TextBoxMapper(tb, propertyName, false, _controlFactory);
-            _controlFactory.CreateErrorProvider();
+            ILabel label = GetControlFactory().CreateLabel();
+            ITextBox tb = GetControlFactory().CreateTextBox();
+            IControlMapper controlMapper = new TextBoxMapper(tb, propertyName, false, GetControlFactory());
+            GetControlFactory().CreateErrorProvider();
             return new PanelInfo.FieldInfo(propertyName, label, controlMapper);
-        }
-
-        [Test]
-        public void Test_UpdateErrorProviderError_WhenBOInvalid_ShouldSetErrorMessage()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
-            ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson("", "");
-            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) person.ClassDef.UIDefCol["default"].UIForm[0]);
-            person.Surname = TestUtil.GetRandomString();
-            panelInfo.BusinessObject = person;
-            IControlMapper SurnameControlMapper = panelInfo.FieldInfos["Surname"].ControlMapper;
-            person.Surname = "";
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(person.Status.IsValid());
-            Assert.AreEqual("", SurnameControlMapper.GetErrorMessage());
-            //---------------Execute Test ----------------------
-            panelInfo.UpdateErrorProvidersErrorMessages();
-            //---------------Test Result -----------------------
-            Assert.AreNotEqual("", SurnameControlMapper.GetErrorMessage());
         }
 
         [Test]
@@ -277,4 +224,6 @@ namespace Habanero.Test.UI.Base
         }
 
     }
+
+
 }

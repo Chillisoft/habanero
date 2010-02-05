@@ -3,7 +3,7 @@ using Habanero.UI.Base;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Win
+namespace Habanero.Test.UI.Win.LayoutManager
 {
     [TestFixture]
     public class TestBorderLayoutManagerWin : TestBorderLayoutManager

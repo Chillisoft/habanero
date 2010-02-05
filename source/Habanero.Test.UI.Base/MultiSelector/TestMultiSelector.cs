@@ -20,8 +20,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -33,245 +33,7 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestMultiSelectorWin : TestMultiSelector
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
 
-            //There are lots of different tests in giz and win because we do not want the event handling
-            //overhead of hitting the server all the time to enable and disable buttons.
-            [Test]
-            public void Test_Win_SelectButtonStateAtSet()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-
-                //---------------Execute Test ----------------------
-                _selector.AllOptions = CreateListWithTwoOptions();
-
-                //---------------Test Result -----------------------
-                Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Select).Enabled);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void Test_Win_SelectButtonStateUponSelection()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.AllOptions = CreateListWithTwoOptions();
-                //---------------Execute Test ----------------------
-
-                _selector.AvailableOptionsListBox.SelectedIndex = 0;
-
-                //---------------Test Result -----------------------
-                Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Select).Enabled);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void Test_Win_SelectButtonIsDisabledWhenItemIsDeselected()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.AllOptions = CreateListWithTwoOptions();
-                _selector.AvailableOptionsListBox.SelectedIndex = 0;
-                //---------------Execute Test ----------------------
-                _selector.AvailableOptionsListBox.SelectedIndex = -1;
-                //---------------Test Result -----------------------
-                Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Select).Enabled);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void Test_Win_DeselectButtonStateAtSet()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                List<TestT> options = CreateListWithTwoOptions();
-                _selector.AllOptions = options;
-                //---------------Execute Test ----------------------
-                _selector.SelectedOptions = options;
-
-                //---------------Test Result -----------------------
-                Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void Test_Win_DeselectButtonStateUponSelection()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                List<TestT> options = CreateListWithTwoOptions();
-                _selector.AllOptions = options;
-                _selector.SelectedOptions = options;
-                //---------------Execute Test ----------------------
-
-                _selector.SelectedOptionsListBox.SelectedIndex = 0;
-
-                //---------------Test Result -----------------------
-                Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void Test_Win_DeselectButtonIsDisabledWhenItemIsDeselected()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                List<TestT> options = CreateListWithTwoOptions();
-                _selector.AllOptions = options;
-                _selector.SelectedOptions = options;
-                _selector.SelectedOptionsListBox.SelectedIndex = 0;
-                //---------------Execute Test ----------------------
-                _selector.SelectedOptionsListBox.SelectedIndex = -1;
-                //---------------Test Result -----------------------
-                Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void Test_DoubleClickingHandlersAssigned()
-            {
-                //---------------Set up test pack-------------------
-                
-                //---------------Assert Precondition----------------
-
-                //---------------Execute Test ----------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                //---------------Test Result -----------------------
-                Assert.AreEqual(1, TestUtil.CountEventSubscribers(_selector.AvailableOptionsListBox, "DoubleClick"));
-                Assert.AreEqual(1, TestUtil.CountEventSubscribers(_selector.SelectedOptionsListBox, "DoubleClick"));
-
-                Assert.IsTrue(TestUtil.EventHasSubscriber(_selector.AvailableOptionsListBox, "DoubleClick", "DoSelect"));
-                Assert.IsTrue(TestUtil.EventHasSubscriber(_selector.SelectedOptionsListBox, "DoubleClick", "DoDeselect"));
-            }
-
-        }
-
-        [TestFixture]
-        public class TestMultiSelectorVWG : TestMultiSelector
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-            //There are lots of different tests in giz because we do not want the event handling
-            //overhead of hitting the server all the time to enable and disable buttons.
-            [Test]
-            public void TestVWG_SelectButtonStateAtSet()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-
-                //---------------Execute Test ----------------------
-                _selector.AllOptions = CreateListWithTwoOptions();
-
-                //---------------Test Result -----------------------
-                Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Select).Enabled);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void TestVWG_SelectButtonStateUponSelection()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.AllOptions = CreateListWithTwoOptions();
-                //---------------Execute Test ----------------------
-
-                _selector.AvailableOptionsListBox.SelectedIndex = 0;
-
-                //---------------Test Result -----------------------
-                Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Select).Enabled);
-            }
-
-            [Test]
-            public void TestVWG_SelectButtonIsEnabledWhenItemIsDeselected()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.AllOptions = CreateListWithTwoOptions();
-                _selector.AvailableOptionsListBox.SelectedIndex = 0;
-                //---------------Execute Test ----------------------
-                _selector.AvailableOptionsListBox.SelectedIndex = -1;
-                //---------------Test Result -----------------------
-                Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Select).Enabled);
-            }
-
-            [Test]
-            public void TestVWG_ClickSelectButtonWithNoItemSelected()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.AllOptions = CreateListWithTwoOptions();
-                _selector.AvailableOptionsListBox.SelectedIndex = -1;
-                //---------------Execute Test ----------------------
-                _selector.GetButton(MultiSelectorButton.Select).PerformClick();
-                //---------------Test Result -----------------------
-                AssertNoneSelected(_selector);
-            }
-
-
-            [Test]
-            public void TestVWG_DeselectButtonStateAtSet()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                List<TestT> options = CreateListWithTwoOptions();
-                _selector.AllOptions = options;
-                //---------------Execute Test ----------------------
-                _selector.SelectedOptions = options;
-                //---------------Test Result -----------------------
-                Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
-            }
-
-            [Test]
-            public void TestVWG_DeselectButtonStateUponSelection()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                List<TestT> options = CreateListWithTwoOptions();
-                _selector.AllOptions = options;
-                _selector.SelectedOptions = options;
-                //---------------Execute Test ----------------------
-                _selector.SelectedOptionsListBox.SelectedIndex = 0;
-                //---------------Test Result -----------------------
-                Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
-            }
-
-            [Test]
-            public void TestVWG_DeselectButtonIsDisabledWhenItemIsDeselected()
-            {
-                //---------------Set up test pack-------------------
-                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                List<TestT> options = CreateListWithTwoOptions();
-                _selector.AllOptions = options;
-                _selector.SelectedOptions = options;
-                _selector.SelectedOptionsListBox.SelectedIndex = 0;
-                //---------------Execute Test ----------------------
-                _selector.SelectedOptionsListBox.SelectedIndex = -1;
-                //---------------Test Result -----------------------
-                Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
-                //---------------Tear Down -------------------------          
-            }
-            //There is a bug in giz that does not allow you to programmattically select 
-            //multiple items in a list
-            [Test, Ignore("Problem selecting multiple items from code in gizmox")]
-            public override void TestSelectingMultipleItemsAtOnce_Click()
-            {
-            }
-            //There is a bug in giz that does not allow you to programmattically select 
-            //multiple items in a list
-            [Test, Ignore("Problem selecting multiple items from code in gizmox")]
-            public override void TestDeselectingMultipleItemsAtOnce_Click()
-            {
-            }
-        }
 
         #region Test AllOptions List
 
@@ -688,7 +450,7 @@ namespace Habanero.Test.UI.Base
 
         #region Custom asserts
 
-        private static void AssertNoneSelected(IMultiSelector<TestT> _selector)
+        protected static void AssertNoneSelected(IMultiSelector<TestT> _selector)
         {
             Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count);
             Assert.AreEqual(0, _selector.SelectedOptionsListBox.Items.Count);
@@ -704,7 +466,7 @@ namespace Habanero.Test.UI.Base
 
         #region helper methods
 
-        private static List<TestT> CreateListWithTwoOptions()
+        protected static List<TestT> CreateListWithTwoOptions()
         {
             List<TestT> options = new List<TestT>();
             options.Add(new TestT());
@@ -714,7 +476,7 @@ namespace Habanero.Test.UI.Base
 
         #endregion
 
-        private class TestT
+        protected internal class TestT
         {
         }
     }

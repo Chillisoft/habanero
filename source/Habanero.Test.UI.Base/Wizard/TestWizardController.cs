@@ -25,12 +25,13 @@ using Rhino.Mocks;
 
 namespace Habanero.Test.UI.Base.Wizard
 {
-    [TestFixture]
-    public class TestWizardController
+    public abstract class TestWizardController
     {
         private WizardController _wizardController;
         private readonly MockRepository _mock = new MockRepository();
         private IWizardStep _step1;
+
+        protected abstract IControlFactory GetControlFactory();
 
         [SetUp]
         public void SetupTest()
@@ -287,23 +288,12 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test]
-        public void Test_WizardControllerCancelsWizardSteps_Win()
-        {
-            Test_WizardControllerCancelsWizardSteps(new Habanero.UI.Win.ControlFactoryWin());
-        }
-
-        [Test]
-        public void Test_WizardControllerCancelsWizardSteps_VWG()
-        {
-            Test_WizardControllerCancelsWizardSteps(new Habanero.UI.VWG.ControlFactoryVWG());
-        }
-        [Test]
-        public void Test_WizardControllerCancelsWizardSteps(IControlFactory controlFactory)
+        public void Test_WizardControllerCancelsWizardSteps()
         {
             //---------------Set up test pack-------------------
             WizardController wizardController = new WizardController();
             IWizardStep wzrdStep = MockRepository.GenerateMock<IWizardStep>();
-            IWizardControl wizardControl = controlFactory.CreateWizardControl(wizardController);
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
             wizardController.AddStep(wzrdStep);
             //--------------Assert PreConditions----------------            
             wzrdStep.AssertWasNotCalled(step => step.CancelStep());
@@ -314,4 +304,5 @@ namespace Habanero.Test.UI.Base.Wizard
 
         }
     }
+
 }

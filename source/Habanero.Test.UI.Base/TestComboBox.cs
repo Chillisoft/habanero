@@ -21,8 +21,8 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 using AutoCompleteSource=Habanero.UI.Base.AutoCompleteSource;
 

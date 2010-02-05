@@ -20,8 +20,6 @@
 using System;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController
@@ -30,33 +28,7 @@ namespace Habanero.Test.UI.Base.FilterController
     {
 		protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestFilterControlDateWin : TestFilterControlDate
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-            //[Test]
-            //public void TestLabelAndDateTimePickerAreOnPanel()
-            //{
-            //    TestLabelAndDateTimePickerAreOnPanel(2);
-            //}
-        }
 
-        [TestFixture]
-        public class TestFilterControlDateVWG : TestFilterControlDate
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-            //[Test]
-            //public void TestLabelAndDateTimePickerAreOnPanel()
-            //{
-            //    TestLabelAndDateTimePickerAreOnPanel(3);
-            //}
-        }
         
         [SetUp]
         public void SetupTest()

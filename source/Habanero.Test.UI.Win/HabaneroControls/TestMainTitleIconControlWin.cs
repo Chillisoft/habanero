@@ -12,8 +12,8 @@ namespace Habanero.Test.UI.Win.HabaneroControls
     {
         protected virtual IMainTitleIconControl CreateControl()
         {
-            GetControlFactory();
-            return new MainTitleIconControlWin();
+            IControlFactory factory = GetControlFactory();
+            return new MainTitleIconControlWin(factory);
         }
         protected override IControlFactory GetControlFactory()
         {
@@ -37,18 +37,7 @@ namespace Habanero.Test.UI.Win.HabaneroControls
             Assert.AreSame(factory, outlookStyleMenu.ControlFactory);
         }
 
-        public override void Test_Construction_WithNoControlFactory_ShouldSetControlFactory_GlobalUIFactory()
-        {
-            //---------------Set up test pack-------------------
-            IControlFactory factory = GetControlFactory();
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            IMainTitleIconControl outlookStyleMenu = new MainTitleIconControlWin();
-            //---------------Test Result -----------------------
-            Assert.AreSame(factory, outlookStyleMenu.ControlFactory);
-        }
-
-        public override void Test_Construction_WithControlFactory_Null_ShouldRaiseError()
+        public void Test_Construction_WithControlFactory_Null_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
             //---------------Assert Precondition----------------
@@ -66,14 +55,14 @@ namespace Habanero.Test.UI.Win.HabaneroControls
             }
         }
         [Test]
-        public override void Test_CreateMainTitleIconControl()
+        public void Test_CreateMainTitleIconControl()
         {
             //---------------Set up test pack-------------------
 
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin();
+            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin(GetControlFactory());
             //---------------Test Result -----------------------
 
             Assert.AreEqual(1, titleIconControl.Controls.Count);
@@ -104,35 +93,35 @@ namespace Habanero.Test.UI.Win.HabaneroControls
 
 
 
-        protected override void AssertBackGroundImageIsSet(IMainTitleIconControl titleIconControl, string headerImage)
+        protected void AssertBackGroundImageIsSet(IMainTitleIconControl titleIconControl, string headerImage)
         {
             //TODO Brett 20 Apr 2009: Nubb to fix
             //Assert.AreEqual
             //    (headerImage, ((PanelWin)titleIconControl.Panel).BackgroundImage.ToString());
         }
 
-        protected override object GetBackGroundImage(IMainTitleIconControl titleIconControl)
+        protected object GetBackGroundImage(IMainTitleIconControl titleIconControl)
         {
             return ((LabelWin)titleIconControl.Icon).BackgroundImage;
         }
 
-        protected override void AssertBackGroundImagelayoutCentre(IMainTitleIconControl titleIconControl)
+        protected void AssertBackGroundImagelayoutCentre(IMainTitleIconControl titleIconControl)
         {
             Assert.AreEqual
                 (System.Windows.Forms.ImageLayout.Center, ((LabelWin)titleIconControl.Icon).BackgroundImageLayout);
         }
 
-        protected override void AssertBackGroundimageIsTile(IMainTitleIconControl titleIconControl)
+        protected void AssertBackGroundimageIsTile(IMainTitleIconControl titleIconControl)
         {
             Assert.AreEqual
                 (System.Windows.Forms.ImageLayout.Tile, ((PanelWin)titleIconControl.Panel).BackgroundImageLayout);
         }
 
         [Test]
-        public override void TestSetIcon()
+        public void TestSetIcon()
         {
             //---------------Set up test pack-------------------
-            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin();
+            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin(GetControlFactory());
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, titleIconControl.Controls.Count);
             Assert.AreEqual(2, titleIconControl.Panel.Controls.Count);
@@ -144,10 +133,10 @@ namespace Habanero.Test.UI.Win.HabaneroControls
         }
 
         [Test]
-        public override void TestSetValidIcon()
+        public void TestSetValidIcon()
         {
             //---------------Set up test pack-------------------
-            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin();
+            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin(GetControlFactory());
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, titleIconControl.Controls.Count);
             Assert.AreEqual(2, titleIconControl.Panel.Controls.Count);
@@ -158,10 +147,10 @@ namespace Habanero.Test.UI.Win.HabaneroControls
         }
 
         [Test]
-        public override void TestSetInvalidIcon()
+        public void TestSetInvalidIcon()
         {
             //---------------Set up test pack-------------------
-            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin();
+            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin(GetControlFactory());
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, titleIconControl.Controls.Count);
             Assert.AreEqual(2, titleIconControl.Panel.Controls.Count);
@@ -172,10 +161,10 @@ namespace Habanero.Test.UI.Win.HabaneroControls
         }
 
         [Test]
-        public override void TestRemoveIcon()
+        public void TestRemoveIcon()
         {
             //---------------Set up test pack-------------------
-            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin();
+            MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin(GetControlFactory());
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, titleIconControl.Controls.Count);
             Assert.AreEqual(2, titleIconControl.Panel.Controls.Count);

@@ -19,7 +19,7 @@ namespace Habanero.Test.UI.VWG.Selectors
         }
 
         [Test]
-        public override void Test_Constructor_nullControlFactory_RaisesError()
+        public void Test_Constructor_nullControlFactory_RaisesError()
         {
             //---------------Set up test pack-------------------
 
@@ -119,5 +119,6 @@ namespace Habanero.Test.UI.VWG.Selectors
             Assert.IsTrue(itemSelected);
         }
 
+      
     }
 }

@@ -143,6 +143,11 @@ namespace Habanero.UI.Win
             get { return _menuItemCollection.Count; }
         }
 
+        public IMenuItem OwnerMenuItem
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         public IMenuItem this[int index]
         {
             get { return (IMenuItem) _menuItemCollection[index]; }

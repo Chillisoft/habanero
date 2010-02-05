@@ -14,5 +14,10 @@ namespace Habanero.Test.UI.Win.HabaneroControls
             GlobalUIRegistry.ControlFactory = factory;
             return factory;
         }
+
+        protected override void LoadMyBOClassDef()
+        {
+            _classDefMyBo = MyBO.LoadClassDefWithNoLookup();
+        }
     }
 }

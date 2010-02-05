@@ -5,24 +5,17 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Mappers
 {
-    [TestFixture]
-    public class TestCollectionComboBoxMapperVWG
+    public abstract class TestCollectionComboBoxMapper
     {
         protected DataStoreInMemory _store;
+        protected abstract IControlFactory GetControlFactory();
 
-        protected virtual IControlFactory GetControlFactory()
-        {
-            ControlFactoryVWG factory = new ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-#pragma warning disable 168
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -30,12 +23,12 @@ namespace Habanero.Test.UI.Base.Mappers
             BORegistry.DataAccessor = new DataAccessorInMemory(_store);
             Dictionary<string, string> collection = Sample.BOLookupCollection;
         }
+
         [SetUp]
         public void TestSetup()
         {
             ClassDef.ClassDefs.Clear();
         }
-#pragma warning restore 168
 
         [Test]
         public void TestConstructor()
@@ -124,6 +117,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsNotNull(cmbox.SelectedItem);
             Assert.AreEqual(car1, cmbox.SelectedItem, "Combo Box selected item is not set.");
         }
+
         [Test]
         public void Test_SetBusinessObj_WhenSpecificGuidPropUsed_ShouldSetTheSelectedItemToCorrectRelatedCar()
         {
@@ -134,7 +128,7 @@ namespace Habanero.Test.UI.Base.Mappers
             const string sampleBOProp = "GuidProp";
             const string owningBoPropertyName = "CarId";
             CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, sampleBOProp, false, GetControlFactory()) 
-                { OwningBoPropertyName = owningBoPropertyName };
+                                                  { OwningBoPropertyName = owningBoPropertyName };
 
             Car car1;
             Car car2;
@@ -254,7 +248,6 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(carRegNo, sample.SampleText);
         }
 
-        //This test is specific for VWG where you do not want the BO updated on every event.
         [Test]
         public virtual void Test_ChangeComboBoxDoesntUpdateBusinessObject()
         {
@@ -280,7 +273,6 @@ namespace Habanero.Test.UI.Base.Mappers
             car2 = new Car();
             return new BusinessObjectCollection<Car> {car1, car2};
         }
-
 
         [Test]
         public void
@@ -344,7 +336,6 @@ namespace Habanero.Test.UI.Base.Mappers
             }
         }
 
-
         [Test]
         public void TestSetBusinessObject_Null_DoesNotRaiseError_BUGFIX()
         {
@@ -381,7 +372,6 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(0, cmbox.Items.Count, "Should have only the null item in it.");
         }
 
-
         [Test]
         public void TestApplyChangesToBusObj()
         {
@@ -401,7 +391,6 @@ namespace Habanero.Test.UI.Base.Mappers
             //            Assert.AreEqual((Guid) Sample.LookupCollection[LOOKUP_ITEM_2], s.SampleLookupID);
             Assert.AreEqual(car2.CarID, s.SampleLookupID);
         }
-
 
         [Test]
         public void Test_LookupList_AddItemToComboBox_SelectAdditionalItem_SetsBOPropValueToNull()
@@ -427,8 +416,6 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsNull(value);
         }
 
-        // If add item to BOCollection them must update combo box.
-
         [Test]
         public void Test_AddItemToCollection_ShouldAddItemToComboBox()
         {
@@ -450,243 +437,10 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(4, cmbox.Items.Count);
         }
 
-
         private static object LastComboBoxItem(IComboBox cmbox)
         {
             return cmbox.Items[cmbox.Items.Count - 1];
         }
     }
 
-    [TestFixture]
-    public class TestCollectionComboBoxMapperWin : TestCollectionComboBoxMapperVWG
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            ControlFactoryWin factory = new ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-
-        [Test]
-        public void TestChangePropValueUpdatesBusObj()
-        {
-            //---------------Set up test pack-------------------
-            IComboBox cmbox = GetControlFactory().CreateComboBox();
-            const string propName = "SampleLookupID";
-            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, true, GetControlFactory());
-            Car car1;
-            Car car2;
-            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
-            Sample s = new Sample {SampleLookupID = car1.CarID};
-            mapper.BusinessObject = s;
-            //---------------Test Preconditions-------------------
-            Assert.AreEqual(3, Sample.LookupCollection.Count);
-            Assert.IsNotNull(mapper.BusinessObjectCollection);
-            Assert.IsNotNull(cmbox.SelectedItem, "There should be a selected item to start with");
-            //---------------Execute Test ----------------------
-            s.SampleLookupID = car2.CarID;
-            mapper.UpdateControlValueFromBusinessObject();
-
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(cmbox.SelectedItem);
-            Assert.AreEqual(s.SampleLookupID.ToString(), cmbox.SelectedItem.ToString(),
-                            "Value is not set after changing bo prop Value");
-        }
-
-        [Test]
-        public void TestChangePropValueUpdatesBusObj_WithoutCallingUpdateControlValue()
-        {
-            //---------------Set up test pack-------------------
-            IComboBox cmbox = GetControlFactory().CreateComboBox();
-            const string propName = "SampleLookupID";
-            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory());
-            Car car1;
-            Car car2;
-            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
-            Sample s = new Sample {SampleLookupID = car1.CarID};
-            mapper.BusinessObject = s;
-            //---------------Execute Test ----------------------
-
-            s.SampleLookupID = car2.CarID;
-
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(cmbox.SelectedItem);
-            Assert.AreEqual(s.SampleLookupID.ToString(), cmbox.SelectedItem.ToString(),
-                            "Value is not set after changing bo prop Value");
-        }
-
-        [Test]
-        public override void Test_ChangeComboBoxDoesntUpdateBusinessObject()
-        {
-            //For Windows the value should is changed (see TestChangeComboBox_UpdatesBusinessObject).
-        }
-
-        [Test]
-        public void TestChangeComboBox_UpdatesBusinessObject()
-        {
-            //For Windows the value should be changed.
-            //---------------Set up test pack-------------------
-            IComboBox cmbox = GetControlFactory().CreateComboBox();
-            const string propName = "SampleLookupID";
-            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory());
-            Car car1;
-            Car car2;
-            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
-            Sample s = new Sample {SampleLookupID = car1.CarID};
-            mapper.BusinessObject = s;
-            //---------------Execute Test ----------------------
-            cmbox.SelectedItem = car2;
-            //---------------Test Result -----------------------
-            Assert.AreEqual(car2.CarID.ToString(), s.SampleLookupID.ToString(),
-                            "For Windows the value should be changed");
-        }
-
-//        private static Dictionary<string, string> GetLookupList()
-//        {
-//            Sample sample1 = new Sample();
-//            sample1.Save();
-//            Sample sample2 = new Sample();
-//            sample2.Save();
-//            Sample sample3 = new Sample();
-//            sample3.Save();
-//            return new Dictionary<string, string>
-//                        {
-//                            {"Test3", sample3.ID.GetAsValue().ToString()},
-//                            {"Test2", sample2.ID.GetAsValue().ToString()},
-//                            {"Test1", sample1.ID.GetAsValue().ToString()}
-//                        };
-//        }
-//
-//
-        [Test]
-        public void TestKeyPressEventUpdatesBusinessObject_WithoutCallingApplyChanges()
-        {
-            //---------------Set up test pack-------------------
-            ComboBoxWinStub cmbox = new ComboBoxWinStub();
-            const string propName = "SampleLookupID";
-            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory());
-            Car car1;
-            Car car2;
-            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
-            Sample s = new Sample {SampleLookupID = car1.CarID};
-            mapper.BusinessObject = s;
-            //---------------Execute Test ----------------------
-            cmbox.Text = car2.ToString();
-            //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (ComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
-            Assert.AreEqual(car2.CarID, s.SampleLookupID);
-        }
-
-        [Test]
-        public void Test_KeyPressStrategy_UpdatesBusinessObject_WhenEnterKeyPressed()
-        {
-            //---------------Set up test pack-------------------
-            ComboBoxWinStub cmbox = new ComboBoxWinStub();
-            const string propName = "SampleLookupID";
-            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory())
-                                                  {
-                                                      MapperStrategy =
-                                                          GetControlFactory().CreateLookupKeyPressMapperStrategy()
-                                                  };
-            Car car1;
-            Car car2;
-            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
-            Sample s = new Sample {SampleLookupID = car1.CarID};
-            mapper.BusinessObject = s;
-            //---------------Execute Test ----------------------
-            cmbox.Text = car2.ToString();
-            cmbox.CallSendKeyBob();
-            //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
-            Assert.AreEqual(car2.CarID, s.SampleLookupID);
-        }
-
-
-        [Test]
-        public void Test_KeyPressStrategy_DoesNotUpdateBusinessObject_SelectedIndexChanged()
-        {
-            //---------------Set up test pack-------------------
-            ComboBoxWinStub cmbox = new ComboBoxWinStub();
-            const string propName = "SampleLookupID";
-            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory());
-            mapper.MapperStrategy = GetControlFactory().CreateLookupKeyPressMapperStrategy();
-            Car car1;
-            Car car2;
-            mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
-            Sample s = new Sample {SampleLookupID = car1.CarID};
-            mapper.BusinessObject = s;
-            //---------------Execute Test ----------------------
-            cmbox.SelectedItem = car2;
-
-            //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
-            Assert.AreEqual(car1.CarID, s.SampleLookupID);
-        }
-
-        [Test]
-        public void Test_WhenUseToStringSet_ShouldUseBoToString()
-        {
-            //---------------Set up test pack-------------------
-            IComboBox cmbox = GetControlFactory().CreateComboBox();
-            const string propName = "SampleText";
-            CollectionComboBoxMapper mapper = new CollectionComboBoxMapper(cmbox, propName, false, GetControlFactory());
-            Car car1; Car car2;
-            IBusinessObjectCollection collection =
-                mapper.BusinessObjectCollection = GetCollectionWithTwoCars(out car1, out car2);
-            car1.CarRegNo = "MyCarRegNo";
-            Sample sample = new Sample { SampleLookupID = car1.CarID };
-            mapper.BusinessObjectCollection = collection;
-            mapper.BusinessObject = sample;
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(3, cmbox.Items.Count);
-            //---------------Execute Test ----------------------
-            mapper.OwningBoPropertyName = "CarRegNo";
-            cmbox.SelectedItem = car1;
-            //---------------Test Result -----------------------
-            Assert.AreEqual(car1.CarRegNo, sample.SampleText);
-        }
-
-        private class ComboBoxWinStub : ComboBoxWin
-        {
-            public void CallSendKeyBob()
-            {
-                this.OnKeyPress(new System.Windows.Forms.KeyPressEventArgs((char) 13));
-            }
-        }
-    }
-
-//    internal class CustomAddCollectionComboBoxMapperStub : CollectionComboBoxMapper
-//    {
-//        public CustomAddCollectionComboBoxMapperStub(IComboBox cbx, string propName, bool isReadOnly,
-//                                                     IControlFactory factory)
-//            : base(cbx, propName, isReadOnly, factory)
-//        {
-//        }
-//
-//        protected override void CustomiseLookupList(Dictionary<string, string> col)
-//        {
-//            Sample additionalBO = new Sample {SampleText = "ExtraLookupItem"};
-//            col.Add(additionalBO.SampleText, additionalBO.ToString());
-//        }
-//    }
-//
-//    internal class CustomRemoveCollectionComboBoxMapperStub : CollectionComboBoxMapper
-//    {
-//        public CustomRemoveCollectionComboBoxMapperStub(IComboBox cbx, string propName, bool isReadOnly,
-//                                                        IControlFactory factory)
-//            : base(cbx, propName, isReadOnly, factory)
-//        {
-//        }
-//
-//        protected override void CustomiseLookupList(Dictionary<string, string> col)
-//        {
-//            string lastKey = "";
-//            foreach (string key in col.Keys)
-//            {
-//                lastKey = key;
-//            }
-//
-//            col.Remove(lastKey);
-//        }
-//    }
 }

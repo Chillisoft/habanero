@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -26,11 +25,6 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
 using NUnit.Framework;
-using Control=Gizmox.WebGUI.Forms.Control;
-using DataGridView=Gizmox.WebGUI.Forms.DataGridView;
-using DataGridViewEditMode=Gizmox.WebGUI.Forms.DataGridViewEditMode;
-using DataGridViewSelectionMode=Gizmox.WebGUI.Forms.DataGridViewSelectionMode;
-using Form=Gizmox.WebGUI.Forms.Form;
 
 namespace Habanero.Test.UI.Base
 {

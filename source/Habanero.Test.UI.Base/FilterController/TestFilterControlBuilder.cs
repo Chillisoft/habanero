@@ -24,29 +24,13 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController
 {
-    [TestFixture]
-    public class TestFilterControlBuilderVWG : TestFilterControlBuilder
+    public abstract class TestFilterControlBuilder
     {
-        protected override IControlFactory GetControlFactory()
-        {
-            return new ControlFactoryVWG();
-        }
-    }
-
-    [TestFixture]
-    public class TestFilterControlBuilder
-    {
-        protected virtual IControlFactory GetControlFactory()
-        {
-            return new ControlFactoryWin();
-        }
-
+        protected abstract IControlFactory GetControlFactory();
 
         [Test]
         public void Test_BuildFilterControl_Simple()
@@ -79,7 +63,6 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.IsInstanceOfType(typeof(ITextBox), textBox);
             Assert.GreaterOrEqual(textBox.Left, label.Left + label.Width);
         }
-
 
         [Test]
         public void Test_ResizeControl_ShouldPlaceTextBoxInCorrectPosition()
@@ -129,7 +112,6 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual(FilterClauseOperator.OpLike, filterControl.FilterControls[1].FilterClauseOperator);
         }
 
-
         [Test]
         public void Test_BuildFilterControl_TwoProperties_DifferentTypes()
         {
@@ -147,7 +129,6 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.IsInstanceOfType(typeof (BoolCheckBoxFilter), filterControl.FilterControls[1]);
             Assert.IsInstanceOfType(typeof (ICheckBox), filterControl.FilterControls[1].Control);
         }
-
 
         [Test]
         public void Test_BuildFilterControl_AlreadyConstructedFilterControl()
@@ -279,7 +260,6 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual(op, customFilter.FilterClauseOperator);
         }
 
-
         [Test]
         public void Test_BuildCustomFilter_SetParametersViaReflection()
         {
@@ -409,13 +389,11 @@ namespace Habanero.Test.UI.Base.FilterController
                 (TestUtil.GetRandomString(), filterType, filterTypeAssembly, FilterClauseOperator.OpEquals);
         }
 
-
         private static FilterDef CreateFilterDef_2Properties(string propName1, string propName2)
         {
             const string filterType = "StringTextBoxFilter";
             return CreateFilterDef_2Properties(propName1, filterType, propName2, filterType);
         }
-
 
         private static FilterDef CreateFilterDef_2PropertiesWithType(string filterType1, string filterType2)
         {

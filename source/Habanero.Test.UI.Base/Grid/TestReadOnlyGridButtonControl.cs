@@ -50,34 +50,7 @@ namespace Habanero.Test.UI.Base
         protected abstract IControlFactory GetControlFactory();
         //protected abstract IGridBase CreateReadOnlyGridControl();
 
-        [TestFixture]
-        public class TestReadOnlyGridButtonControlWin : TestReadOnlyGridButtonControl
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.Win.ControlFactoryWin();
-            }
-
-            protected override void AddControlToForm(IControlHabanero cntrl)
-            {
-
-            }
-
-        }
-        [TestFixture]
-        public class TestReadOnlyGridButtonControlVWG : TestReadOnlyGridButtonControl
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
-            }
-
-            protected override void AddControlToForm(IControlHabanero cntrl)
-            {
-                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-                frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
-            }
-        }
+ 
 
         public void TestCreateReadOnlyGridButtonControl()
         {

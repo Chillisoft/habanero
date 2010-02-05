@@ -51,7 +51,6 @@ namespace Habanero.Test.UI.Base
 
         protected abstract IControlFactory GetControlFactory();
         protected abstract void AddControlToForm(IControlHabanero cntrl);
-        protected abstract Type GetCustomGridColumnType();
         protected abstract Type GetDateTimeGridColumnType();
         protected abstract Type GetComboBoxGridColumnType();
         protected abstract void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType);
@@ -395,32 +394,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
-        public void TestInitGrid_LoadsCustomColumnType()
-        {
-            //---------------Set up test pack-------------------
-            IClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
-            IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            IUIDef uiDef = classDef.UIDefCol["default"];
-            IUIGrid uiGridDef = uiDef.UIGrid;
-
-            Type customColumnType = GetCustomGridColumnType();
-            uiGridDef[2].GridControlTypeName = customColumnType.Name; //"CustomDataGridViewColumn";
-            uiGridDef[2].GridControlAssemblyName = "Habanero.Test.UI.Base";
-            AddControlToForm(grid);
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            initialiser.InitialiseGrid(classDef);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(6, grid.Grid.Columns.Count);
-            IDataGridViewColumn column3 = grid.Grid.Columns[3];
-            Assert.AreEqual("TestDateTime", column3.Name);
-            Assert.IsInstanceOfType(typeof(IDataGridViewColumn), column3);
-            AssertGridColumnTypeAfterCast(column3, customColumnType);
-        }
 
         [Test]
         public void TestInitGrid_WithNonDefaultUIDef()
@@ -674,17 +647,4 @@ namespace Habanero.Test.UI.Base
         }
     }
 
-    /// <summary>
-    /// Created for testing purposes
-    /// </summary>
-    public class CustomDataGridViewColumnWin : System.Windows.Forms.DataGridViewTextBoxColumn
-    {
-    }
-
-    /// <summary>
-    /// Created for testing purposes
-    /// </summary>
-    public class CustomDataGridViewColumnVWG : Gizmox.WebGUI.Forms.DataGridViewTextBoxColumn
-    {
-    }
 }

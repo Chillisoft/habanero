@@ -17,9 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
+
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 

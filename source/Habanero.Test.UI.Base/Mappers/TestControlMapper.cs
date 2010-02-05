@@ -19,12 +19,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -1036,14 +1035,15 @@ namespace Habanero.Test.UI.Base
 
     public class ControlMapperStub : ControlMapper
     {
-        private MethodInvoker _onUpdateControlValueFromBusinessObject;
+        public delegate void VoidMethod();
+        private VoidMethod _onUpdateControlValueFromBusinessObject;
 
         public ControlMapperStub(IControlHabanero ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {
         }
 
-        public MethodInvoker OnUpdateControlValueFromBusinessObject
+        public VoidMethod OnUpdateControlValueFromBusinessObject
         {
             get { return _onUpdateControlValueFromBusinessObject; }
             set { _onUpdateControlValueFromBusinessObject = value; }

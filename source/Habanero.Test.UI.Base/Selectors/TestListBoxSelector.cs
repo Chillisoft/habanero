@@ -2,8 +2,8 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -47,27 +47,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(selector.ListBox);
             Assert.IsInstanceOfType(typeof(IListBox), selector.ListBox);
-        }
-
-        [Test]
-        public virtual void Test_Constructor_nullControlFactory_RaisesError()
-        {
-            //---------------Set up test pack-------------------
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            try
-            {
-                new ListBoxSelectorWin(null);
-                Assert.Fail("expected ArgumentNullException");
-            }
-                //---------------Test Result -----------------------
-            catch (ArgumentNullException ex)
-            {
-                StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("controlFactory", ex.ParamName);
-            }
         }
 
         [Ignore(" Not Yet implemented")] //TODO  01 Mar 2009:

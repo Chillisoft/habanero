@@ -42,11 +42,6 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Constructs a <see cref="MainTitleIconControlWin"/>
         /// </summary>
-        public MainTitleIconControlWin() : this(GlobalUIRegistry.ControlFactory)
-        { }
-        /// <summary>
-        /// Constructs a <see cref="MainTitleIconControlWin"/>
-        /// </summary>
         public MainTitleIconControlWin(IControlFactory controlFactory)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");

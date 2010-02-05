@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using Habanero.UI.Base;
 using Habanero.UI.Base.Wizard;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Wizard
 {
-    [TestFixture]
-    public class TestMessageWizardStepWin
+    public abstract class TestMessageWizardStep
     {
         [SetUp]
         public void SetupTest()
@@ -33,10 +32,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //base.TearDownTest();
         }
 
-        protected virtual IMessageWizardStep CreateWizardStep()
-        {
-            return new MessageWizardStepWin();
-        }
+        protected abstract IMessageWizardStep CreateWizardStep();
 
         [Test]
         public void Test_InitialiseStep_DoesnotThrowError()
@@ -63,6 +59,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //---------------Test Result -----------------------
             Assert.IsTrue(true, "Should not do anything");
         }
+
         [Test]
         public void Test_CancelStep_DoesnotThrowError()
         {
@@ -75,6 +72,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //---------------Test Result -----------------------
             Assert.IsTrue(true, "Should not do anything");
         }
+
         [Test]
         public void Test_CancelMoveOn_DoesnotThrowError()
         {
@@ -87,6 +85,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //---------------Test Result -----------------------
             Assert.IsTrue(true, "Should not do anything");
         }
+
         [Test]
         public void Test_HeaderText_DoesnotThrowError()
         {
@@ -141,12 +140,4 @@ namespace Habanero.Test.UI.Base.Wizard
         }
     }
 
-    [TestFixture]
-    public class TestMessageWizardStepVwg : TestMessageWizardStepWin
-    {
-        protected override IMessageWizardStep CreateWizardStep()
-        {
-            return new MessageWizardStepVWG();
-        }
-    }
 }

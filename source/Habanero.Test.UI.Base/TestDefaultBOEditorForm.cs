@@ -23,8 +23,6 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Console;
 using Habanero.Test.Structure;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -34,7 +32,7 @@ namespace Habanero.Test.UI.Base
     /// </summary>
     public abstract class TestDefaultBOEditorForm// : TestUsingDatabase
     {
-        private IClassDef _classDefMyBo;
+        protected IClassDef _classDefMyBo;
         private IBusinessObject _bo;
         private IDefaultBOEditorForm _defaultBOEditorForm;
 
@@ -59,15 +57,10 @@ namespace Habanero.Test.UI.Base
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
-            if (GetControlFactory() is Habanero.UI.VWG.ControlFactoryVWG)
-            {
-                _classDefMyBo = MyBO.LoadDefaultClassDefVWG();
-            }
-            else
-            {
-                _classDefMyBo = MyBO.LoadClassDefWithNoLookup();
-            }
+            LoadMyBOClassDef();
         }
+
+        protected abstract void LoadMyBOClassDef();
 
         [SetUp]
         public void SetupTest()

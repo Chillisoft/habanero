@@ -152,6 +152,11 @@ namespace Habanero.UI.VWG
             get { return _menuItemCollection.Count; }
         }
 
+        public IMenuItem OwnerMenuItem
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         public IMenuItem this[int index]
         {
             get { return (MenuItemVWG) (_menuItemCollection[index]); }

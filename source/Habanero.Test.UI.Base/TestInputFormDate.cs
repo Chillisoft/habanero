@@ -18,8 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -28,24 +28,8 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestInputFormDateVWG : TestInputFormDate
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
 
 
-        [TestFixture]
-        public class TestInputFormDateWin : TestInputFormDate
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-        }
 
         [Test]
         public void TestSimpleConstructor()

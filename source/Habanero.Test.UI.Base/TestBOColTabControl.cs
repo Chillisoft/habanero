@@ -22,8 +22,8 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -533,35 +533,7 @@ namespace Habanero.Test.UI.Base
         }
 
 
-        public class BusinessObjectControlVWGStub : ControlVWG, IBusinessObjectControl
-        {
-            private IBusinessObject _bo;
-
-            /// <summary>
-            /// Specifies the business object being represented
-            /// </summary>
-            /// <param name="value">The business object</param>
-            public IBusinessObject BusinessObject
-            {
-                get { return _bo; }
-                set { _bo = value; }
-            }
-        }
-
-        public class BusinessObjectControlWinStub : ControlWin, IBusinessObjectControl
-        {
-            private IBusinessObject _bo;
-
-            /// <summary>
-            /// Specifies the business object being represented
-            /// </summary>
-            /// <param name="value">The business object</param>
-            public IBusinessObject BusinessObject
-            {
-                get { return _bo; }
-                set { _bo = value; }
-            }
-        }
+       
 
     }
 

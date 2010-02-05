@@ -26,5 +26,10 @@ namespace Habanero.Test.UI.VWG.HabaneroControls
         public override void Test_CloseForm_ShouldCallDelegateWithCorrectInformation()
         {
         }
+
+        protected override void LoadMyBOClassDef()
+        {
+            _classDefMyBo = MyBO.LoadDefaultClassDefVWG();
+        }
     }
 }

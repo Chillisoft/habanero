@@ -1,3 +1,4 @@
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.Test.BO;
 using Habanero.Test.UI.Base;
@@ -10,6 +11,15 @@ namespace Habanero.Test.UI.VWG.Grid
     [TestFixture]
     public class TestGridBaseVWG : TestGridBase
     {
+        public class GridBaseVWGStub : GridBaseVWG
+        {
+            public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
+            {
+                ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);
+                dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = false;
+                return dataSetProvider;
+            }
+        }
         protected override IControlFactory GetControlFactory()
         {
             return new ControlFactoryVWG();

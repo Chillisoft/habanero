@@ -1,4 +1,5 @@
 ﻿using Habanero.Test.UI.Base;
+using Habanero.Test.UI.VWG.Grid;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using NUnit.Framework;
@@ -19,7 +20,7 @@ namespace Habanero.Test.UI.VWG.Selectors
         }
         protected override IBOColSelectorControl CreateSelector()
         {
-            TestGridBase.GridBaseVWGStub gridBase = new TestGridBase.GridBaseVWGStub();
+            TestGridBaseVWG.GridBaseVWGStub gridBase = new TestGridBaseVWG.GridBaseVWGStub();
             Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
             frm.Controls.Add(gridBase);
             SetupGridColumnsForMyBo(gridBase);

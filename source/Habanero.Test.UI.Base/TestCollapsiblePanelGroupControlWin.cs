@@ -5,7 +5,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.Test.Structure;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -17,7 +17,6 @@ namespace Habanero.Test.UI.Base
         {
             ClassDef.ClassDefs.Clear();
             ClassDef.ClassDefs.Add(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()).LoadClassDefs());
-            GlobalUIRegistry.ControlFactory = new ControlFactoryWin();
         }
 
         [SetUp]

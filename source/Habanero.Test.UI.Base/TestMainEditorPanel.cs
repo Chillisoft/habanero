@@ -23,14 +23,17 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.Test.Structure;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
-    public class TestMainEditorPanelVWG
+    public abstract class TestMainEditorPanel
     {
+        protected abstract IMainEditorPanel CreateControl(IControlFactory controlFactory);
+        protected abstract IControlFactory CreateNewControlFactory();
+
         [SetUp]
         public void SetupTest()
         {
@@ -46,26 +49,9 @@ namespace Habanero.Test.UI.Base
             GlobalUIRegistry.ControlFactory = CreateNewControlFactory();
         }
 
-        protected virtual IControlFactory GetControlFactory()
-        {
-            IControlFactory factory = CreateNewControlFactory();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-
         protected virtual IMainEditorPanel CreateControl()
         {
             return CreateControl(GetControlFactory());
-        }
-
-        protected virtual IMainEditorPanel CreateControl(IControlFactory controlFactory)
-        {
-            return new MainEditorPanelVWG(controlFactory);
-        }
-
-        protected virtual IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryVWG();
         }
 
         [Test]
@@ -119,19 +105,14 @@ namespace Habanero.Test.UI.Base
                 (mainEditorPanel.Height - mainEditorPanel.MainTitleIconControl.Height,
                  mainEditorPanel.EditorPanel.Height);
         }
-    }
 
-    [TestFixture]
-    public class TestMainEditorPanelWin : TestMainEditorPanelVWG
-    {
-        protected override IMainEditorPanel CreateControl(IControlFactory controlFactory)
+        protected virtual IControlFactory GetControlFactory()
         {
-            return new MainEditorPanelVWG(controlFactory);
-        }
-
-        protected override IControlFactory CreateNewControlFactory()
-        {
-            return new ControlFactoryVWG();
+            IControlFactory factory = CreateNewControlFactory();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
         }
     }
+
+
 }

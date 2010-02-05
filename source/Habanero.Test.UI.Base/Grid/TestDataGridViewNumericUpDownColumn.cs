@@ -20,7 +20,7 @@
 using System;
 using Habanero.UI;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base

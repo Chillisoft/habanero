@@ -60,9 +60,6 @@ namespace Habanero.Test.UI.Base
         protected abstract IControlFactory GetControlFactory();
 
         protected abstract int GetBoldTextExtraWidth();
-
-        protected abstract Type GetCustomGridColumnType();
-
         protected abstract Type GetMasterGridColumnType();
 
         protected abstract Type GetMasterTextBoxGridColumnType();
@@ -633,54 +630,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------
         }
 
-        [Test]
-        public void TestCreateDataGridViewColumn_SpecifyNameAndAssembly()
-        {
-            //---------------Set up test pack-------------------
-            Type columnType = GetCustomGridColumnType();
-            string typeName = columnType.Name;  //"CustomDataGridViewColumn";
-            const string assemblyName = "Habanero.Test.UI.Base";
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(columnType.IsSubclassOf(GetMasterGridColumnType()));
-            //---------------Execute Test ----------------------
-            IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn(typeName, assemblyName);
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(GetHabaneroMasterGridColumnType(), column);
-            AssertGridColumnTypeAfterCast(column, columnType);
-        }
-
-        [Test]
-        public void TestCreateDataGridViewColumn_DefaultAssembly()
-        {
-            //---------------Set up test pack-------------------
-            const string typeName = "DataGridViewCheckBoxColumn";
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(typeName.Contains("DataGridViewCheckBoxColumn"));
-            //---------------Execute Test ----------------------
-            object column = GetControlFactory().CreateDataGridViewColumn(typeName, null);
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(typeof(IDataGridViewCheckBoxColumn), column);
-
-            string correctAssembly = GetControlFactory().CreateDataGridViewCheckBoxColumn().GetType().AssemblyQualifiedName;
-            Assert.AreEqual(correctAssembly, column.GetType().AssemblyQualifiedName);
-        }
-
-        [Test]
-        public void TestCreateDataGridViewColumn_SpecifyType()
-        {
-            //---------------Set up test pack-------------------
-            Type columnType = GetCustomGridColumnType();
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(columnType.IsSubclassOf(GetMasterGridColumnType()));
-            //---------------Execute Test ----------------------
-            IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn(columnType);
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(GetHabaneroMasterGridColumnType(), column);
-            AssertGridColumnTypeAfterCast(column, columnType);
-        }
 
         [Test]
         public void TestCreateDataGridViewColumn_NullTypeNameAssumesDefault()

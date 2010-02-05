@@ -16,9 +16,9 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
@@ -51,9 +51,13 @@ namespace Habanero.Test.UI.Base
         public void Test_Constructor()
         {
             //---------------Set up test pack-------------------
-            IControlFactory controlFactory = new ControlFactoryWin();
+            const string message = "Confirmer message";
+            const DialogResult dialogResultToReturn = DialogResult.Yes;
             string title = TestUtil.GetRandomString();
             MessageBoxIcon messageBoxIcon = MessageBoxIcon.None;
+            MockRepository mockRepository = new MockRepository();
+            IControlFactory controlFactory = SetupControlFactoryMockWithExpectation(mockRepository, message, title, messageBoxIcon, dialogResultToReturn);
+
             //-------------Assert Preconditions -------------
 
             //---------------Execute Test ----------------------
@@ -121,10 +125,10 @@ namespace Habanero.Test.UI.Base
             bool delegateWasCalled = false;
             bool confirmedParamInDelegate = false;
             ConfirmationDelegate confirmationDelegate = delegate(bool confirmed)
-            {
-                delegateWasCalled = true;
-                confirmedParamInDelegate = confirmed;
-            };
+                                                            {
+                                                                delegateWasCalled = true;
+                                                                confirmedParamInDelegate = confirmed;
+                                                            };
 
             MockRepository mockRepository = new MockRepository();
             IControlFactory controlFactory = SetupControlFactoryMockWithExpectationWithDelegate(
@@ -156,10 +160,10 @@ namespace Habanero.Test.UI.Base
             bool delegateWasCalled = false;
             bool confirmedParamInDelegate = true;
             ConfirmationDelegate confirmationDelegate = delegate(bool confirmed)
-            {
-                delegateWasCalled = true;
-                confirmedParamInDelegate = confirmed;
-            };
+                                                            {
+                                                                delegateWasCalled = true;
+                                                                confirmedParamInDelegate = confirmed;
+                                                            };
 
             MockRepository mockRepository = new MockRepository();
             IControlFactory controlFactory = SetupControlFactoryMockWithExpectationWithDelegate(
@@ -179,7 +183,8 @@ namespace Habanero.Test.UI.Base
             mockRepository.VerifyAll();
         }
 
-        private static IControlFactory SetupControlFactoryMockWithExpectation(MockRepository mockRepository, string message, string title, MessageBoxIcon messageBoxIcon, DialogResult dialogResultToReturn)
+
+        private IControlFactory SetupControlFactoryMockWithExpectation(MockRepository mockRepository, string message, string title, MessageBoxIcon messageBoxIcon, DialogResult dialogResultToReturn)
         {
             IControlFactory controlFactory = mockRepository.StrictMock<IControlFactory>();
             controlFactory.Expect(
@@ -188,16 +193,16 @@ namespace Habanero.Test.UI.Base
             return controlFactory;
         }
 
-        private static IControlFactory SetupControlFactoryMockWithExpectationWithDelegate(
-            MockRepository mockRepository, string message, string title, 
-            MessageBoxIcon messageBoxIcon, DialogResult dialogResultToReturn, 
+        private IControlFactory SetupControlFactoryMockWithExpectationWithDelegate(
+            MockRepository mockRepository, string message, string title,
+            MessageBoxIcon messageBoxIcon, DialogResult dialogResultToReturn,
             ConfirmationDelegate confirmationDelegate)
         {
             IControlFactory controlFactory = mockRepository.StrictMock<IControlFactory>();
             controlFactory.Expect(
                 factory => factory.ShowMessageBox(null, null, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Asterisk, null))
                 .Return(dialogResultToReturn).Constraints(
-                  Is.Equal(message), Is.Equal(title), Is.Equal(MessageBoxButtons.YesNo), 
+                  Is.Equal(message), Is.Equal(title), Is.Equal(MessageBoxButtons.YesNo),
                   Is.Equal(messageBoxIcon), Is.Anything())
                 .WhenCalled(invocation => confirmationDelegate(dialogResultToReturn == DialogResult.Yes));
             return controlFactory;

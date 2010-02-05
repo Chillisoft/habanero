@@ -1,4 +1,5 @@
 ﻿using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.Test.UI.Base;
 using Habanero.UI.Base;
@@ -54,5 +55,22 @@ namespace Habanero.Test.UI.VWG.HabaneroControls
             Assert.AreNotSame(firstBo, boColTabControl.BusinessObjectControl.BusinessObject);
             Assert.AreEqual(thirdBO, boColTabControl.BusinessObjectControl.BusinessObject);
         }
+
+
+        public class BusinessObjectControlVWGStub : ControlVWG, IBusinessObjectControl
+        {
+            private IBusinessObject _bo;
+
+            /// <summary>
+            /// Specifies the business object being represented
+            /// </summary>
+            /// <param name="value">The business object</param>
+            public IBusinessObject BusinessObject
+            {
+                get { return _bo; }
+                set { _bo = value; }
+            }
+        }
+
     }
 }

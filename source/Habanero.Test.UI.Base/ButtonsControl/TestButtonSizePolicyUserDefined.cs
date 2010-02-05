@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.ButtonsControl
 {
-    [TestFixture]
-    public class TestButtonSizePolicyUserDefined
+    public abstract class TestButtonSizePolicyUserDefined
     {
+        protected abstract IControlFactory GetControlFactory();
 
         [Test]
         public void TestButtonWidthPolicy_UserDefined()
         {
             //---------------Set up test pack-------------------
-            IButtonGroupControl buttonGroupControl = new ControlFactoryWin().CreateButtonGroupControl();
+            IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
             Size buttonSize = new Size(20, 50);
             //---------------Assert Precondition----------------
 
@@ -31,6 +31,7 @@ namespace Habanero.Test.UI.Base.ButtonsControl
             Assert.AreEqual(buttonSize, btnTest1.Size);
 
         }
+
     }
 
 

@@ -2,6 +2,7 @@
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.Test.UI.Base;
+using Habanero.Test.UI.VWG.HabaneroControls;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using NUnit.Framework;
@@ -26,10 +27,10 @@ namespace Habanero.Test.UI.VWG.Selectors
         }
         protected override IBusinessObjectControl GetBusinessObjectControlStub()
         {
-            return new TestBOColTabControl.BusinessObjectControlVWGStub();
+            return new TestBOColTabControlVWG.BusinessObjectControlVWGStub();
         }
         [Test]
-        public override void Test_Constructor_nullControlFactory_RaisesError()
+        public void Test_Constructor_nullControlFactory_RaisesError()
         {
             //---------------Set up test pack-------------------
 
@@ -129,5 +130,6 @@ namespace Habanero.Test.UI.VWG.Selectors
             Assert.IsNull(colSelector.SelectedBusinessObject);
             Assert.AreEqual(-1, SelectedIndex(colSelector));
         }
+
     }
 }

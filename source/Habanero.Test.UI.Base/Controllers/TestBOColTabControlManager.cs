@@ -8,28 +8,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Controllers
 {
-    [TestFixture]
-    public class TestBOColTabControlManagerVWG:TestBOColTabControlManager
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            return new Habanero.UI.VWG.ControlFactoryVWG();
-        }
-        protected override IBusinessObjectControl GetBusinessObjectControl()
-        {
-            return new BusinessObjectControlStubVWG();
-        }
-        protected override IBusinessObjectControl BusinessObjectControlCreator()
-        {
-            return new BusinessObjectControlStubVWG();
-        }
-        protected override Type TypeOfBusienssObjectControl()
-        {
-            return typeof(BusinessObjectControlStubVWG);
-        }
-    }
-    [TestFixture]
-    public class TestBOColTabControlManager
+    public abstract class TestBOColTabControlManager
     {
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
@@ -38,15 +17,15 @@ namespace Habanero.Test.UI.Base.Controllers
             MyBO.LoadDefaultClassDef();
             BORegistry.DataAccessor = new DataAccessorInMemory();
         }
-        protected virtual IControlFactory GetControlFactory()
+
+        protected abstract IControlFactory GetControlFactory();
+        protected abstract IBusinessObjectControl GetBusinessObjectControl();
+
+        protected IBusinessObjectControl BusinessObjectControlCreator()
         {
-            return new Habanero.UI.Win.ControlFactoryWin();
+            return GetBusinessObjectControl();
         }
 
-        protected virtual IBusinessObjectControl GetBusinessObjectControl()
-        {
-            return new BusinessObjectControlStubWin();
-        }
 
         [Test]
         public void Test_Create_tabControlNull_ExpectException()
@@ -252,6 +231,7 @@ namespace Habanero.Test.UI.Base.Controllers
             //---------------Test Result -----------------------
             Assert.AreEqual(selectedBO, selectorManger.CurrentBusinessObject);
         }
+
         [Test]
         public void Test_Set_SelectedBusinessObject_BOColNull_ShouldRaiseError()
         {
@@ -278,6 +258,7 @@ namespace Habanero.Test.UI.Base.Controllers
                 StringAssert.Contains(expectedMessage, ex.Message);
             }
         }
+
         [Test]
         public void Test_Set_SelectedBusinessObject()
         {
@@ -330,10 +311,10 @@ namespace Habanero.Test.UI.Base.Controllers
             bool pageAddedEventFired = false;
             TabPageEventArgs ex = null;
             selectorManger.TabPageAdded += (sender,e) =>
-                                           {
-                                               pageAddedEventFired = true;
-                                               ex = e;
-                                           };
+                                               {
+                                                   pageAddedEventFired = true;
+                                                   ex = e;
+                                               };
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, selectorManger.TabControl.TabPages.Count);
             Assert.IsFalse(pageAddedEventFired);
@@ -367,10 +348,10 @@ namespace Habanero.Test.UI.Base.Controllers
             bool pageRemovedEventFired = false;
             TabPageEventArgs ex = null;
             selectorManger.TabPageRemoved += (sender, e) =>
-            {
-                pageRemovedEventFired = true;
-                ex = e;
-            };
+                                                 {
+                                                     pageRemovedEventFired = true;
+                                                     ex = e;
+                                                 };
             ITabPage tabPage = selectorManger.TabControl.TabPages[0];
             IControlHabanero boControlToBeRemoved = tabPage.Controls[0];
             //---------------Assert Precondition----------------
@@ -428,26 +409,13 @@ namespace Habanero.Test.UI.Base.Controllers
             ITabPage page = selectorManger.TabControl.TabPages[0];
             Assert.AreEqual(1, page.Controls.Count);
             IControlHabanero boControl = page.Controls[0];
-            Assert.IsInstanceOfType(TypeOfBusienssObjectControl(), boControl);
+            Assert.IsInstanceOfType(TypeOfBusinessObjectControl(), boControl);
             IBusinessObjectControl businessObjectControl = (IBusinessObjectControl) boControl;
             Assert.AreSame(expectedBO, businessObjectControl.BusinessObject);
             Assert.AreSame(boControl, selectorManger.BusinessObjectControl);
         }
 
-        protected virtual Type TypeOfBusienssObjectControl()
-        {
-            return typeof(BusinessObjectControlStubWin);
-        }
-
-        private BOColTabControlManager GetSelectorManger(out BusinessObjectControlCreatorDelegate creator)
-        {
-            IControlFactory controlFactory = GetControlFactory();
-            ITabControl tabControl = controlFactory.CreateTabControl();
-            BOColTabControlManager selectorManger = new BOColTabControlManager(tabControl, controlFactory);
-            creator = BusinessObjectControlCreator;
-            selectorManger.BusinessObjectControlCreator = creator;
-            return selectorManger;
-        }
+        protected abstract Type TypeOfBusinessObjectControl();
 
         [Test]
         public void Test_WhenChangeTabIndex_ShouldNotRecreateTheBOControl()
@@ -477,18 +445,6 @@ namespace Habanero.Test.UI.Base.Controllers
             Assert.AreSame(secondBOControl, selectorManger.BusinessObjectControl);
         }
 
-        protected virtual IBusinessObjectControl BusinessObjectControlCreator()
-        {
-            return new BusinessObjectControlStubWin();
-        }
-
-        private BOColTabControlManager CreateBOTabControlManager(ITabControl tabControl)
-        {
-            IControlFactory controlFactory = GetControlFactory();
-            BOColTabControlManager selectorManger = new BOColTabControlManager(tabControl, controlFactory);
-            selectorManger.BusinessObjectControl = GetBusinessObjectControl();
-            return selectorManger;
-        }
 
         [Test]
         public void TestBusinessObejctRemovedFromCollection()
@@ -504,6 +460,7 @@ namespace Habanero.Test.UI.Base.Controllers
             //---------------Test Result -----------------------
             Assert.AreEqual(2, selectorManger.TabControl.TabPages.Count);
         }
+
         [Test]
         public virtual void Test_SelectedBusinessObject_Null_DoesNothing()
         {
@@ -524,6 +481,7 @@ namespace Habanero.Test.UI.Base.Controllers
             //---------------Test Result -----------------------
             Assert.IsNotNull(selectedBusinessObject);
         }
+
         [Test]
         public void Test_Selector_Clear_ClearsItems()
         {
@@ -544,5 +502,24 @@ namespace Habanero.Test.UI.Base.Controllers
             Assert.AreEqual(0, selectorManger.NoOfItems);
         }
 
+        protected virtual BOColTabControlManager CreateBOTabControlManager(ITabControl tabControl)
+        {
+            IControlFactory controlFactory = GetControlFactory();
+            BOColTabControlManager selectorManger = new BOColTabControlManager(tabControl, controlFactory);
+            selectorManger.BusinessObjectControl = GetBusinessObjectControl();
+            return selectorManger;
+        }
+
+        protected virtual BOColTabControlManager GetSelectorManger(out BusinessObjectControlCreatorDelegate creator)
+        {
+            IControlFactory controlFactory = GetControlFactory();
+            ITabControl tabControl = controlFactory.CreateTabControl();
+            BOColTabControlManager selectorManger = new BOColTabControlManager(tabControl, controlFactory);
+            creator = BusinessObjectControlCreator;
+            selectorManger.BusinessObjectControlCreator = creator;
+            return selectorManger;
+        }
     }
+
+
 }
