@@ -77,8 +77,6 @@ namespace Habanero.Test.BO
             TestUtil.WaitForGC();
         }
 
-        
-
         [TestFixtureTearDown]
         public void TearDown()
         {
@@ -108,8 +106,6 @@ namespace Habanero.Test.BO
             Dictionary<string, string> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreSame(col2, col);
         }
-
-
 
         [Test]
         public void TestCriteria()
@@ -146,7 +142,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, col.Count);
             Assert.IsTrue(col.ContainsValue(GuidToString(contactPerson1.ID.GetAsGuid())));
         }
-
 
         [Test]
         public void TestTodayDateStringCriteria_Equals()

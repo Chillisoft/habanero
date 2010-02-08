@@ -220,7 +220,7 @@ namespace Habanero.Base
         string RelatedObjectClassNameWithTypeParameter { get; }
 
         ///<summary>
-        /// Gets and Sets the Class Def to the ClassDefinition that owns this Relationship Def.
+        /// Gets the Class Def to the ClassDefinition that owns this Relationship Def.
         ///</summary>
         IClassDef OwningClassDef { get; }
 

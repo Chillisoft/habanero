@@ -35,6 +35,17 @@ namespace Habanero.Test.Util
             Assert.IsTrue(simpleClass.MethodCalled);
         }
 
+        [Test]
+        public void TestExecuteMethod_WithReturnValue()
+        {
+            SimpleClass simpleClass = new SimpleClass();
+            Assert.IsFalse(simpleClass.MethodCalled);
+
+            var returnValue = ReflectionUtilities.ExecuteMethod(simpleClass, "MyMethodWithReturn");
+            Assert.IsTrue(simpleClass.MethodCalled);
+            Assert.IsTrue(Convert.ToBoolean(returnValue));
+        }
+
         [Test, ExpectedException(typeof(Exception))]
         public void TestExecuteMethodDoesntExist()
         {
@@ -73,6 +84,43 @@ namespace Habanero.Test.Util
             Assert.AreEqual(testStringParam, classWithPrivateMethod.StringParamValue);
             Assert.IsTrue(classWithPrivateMethod.IntParamValue.HasValue);
             Assert.AreEqual(testIntParam, classWithPrivateMethod.IntParamValue.Value);
+        }
+
+
+
+        [Test]
+        public void Test_ExecutePrivateMethod_WithNoArgumentsWithReturn_ShouldReturnValue()
+        {
+            //--------------- Set up test pack ------------------
+            ClassWithPrivateMethod classWithPrivateMethod = new ClassWithPrivateMethod();
+            //--------------- Test Preconditions ----------------
+            Assert.IsFalse(classWithPrivateMethod.PrivateMethodCalled);
+            //--------------- Execute Test ----------------------
+            var returnValue = ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod, "MyPrivateMethodWithReturn");
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(classWithPrivateMethod.PrivateMethodCalled);
+            Assert.AreEqual("SomeString", returnValue);
+        }
+
+        [Test]
+        public void Test_ExecutePrivateMethod_WithArgumentsWithReturn_ShouldReturnValue()
+        {
+            //--------------- Set up test pack ------------------
+            ClassWithPrivateMethod classWithPrivateMethod = new ClassWithPrivateMethod();
+            string testStringParam = TestUtil.GetRandomString();
+            int testIntParam = TestUtil.GetRandomInt();
+            //--------------- Test Preconditions ----------------
+            Assert.IsFalse(classWithPrivateMethod.PrivateMethodCalled);
+            Assert.IsNull(classWithPrivateMethod.StringParamValue);
+            Assert.IsFalse(classWithPrivateMethod.IntParamValue.HasValue);
+            //--------------- Execute Test ----------------------
+            var returnValue = ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod, "MyPrivateMethodWithParamsWithReturn", testStringParam, testIntParam);
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(classWithPrivateMethod.PrivateMethodCalled);
+            Assert.AreEqual(testStringParam, classWithPrivateMethod.StringParamValue);
+            Assert.IsTrue(classWithPrivateMethod.IntParamValue.HasValue);
+            Assert.AreEqual(testIntParam, classWithPrivateMethod.IntParamValue.Value);
+            Assert.AreEqual(testStringParam, returnValue);
         }
 
         [Test]
@@ -270,7 +318,19 @@ namespace Habanero.Test.Util
             {
                 PrivateMethodCalled = true;
             }
+            private string MyPrivateMethodWithReturn()
+            {
+                PrivateMethodCalled = true;
+                return "SomeString";
+            }
 
+            private string MyPrivateMethodWithParamsWithReturn(string stringParam, int intParam)
+            {
+                PrivateMethodCalled = true;
+                StringParamValue = stringParam;
+                IntParamValue = intParam;
+                return stringParam;
+            }
             private void MyPrivateMethodWithParams(string stringParam, int intParam)
             {
                 PrivateMethodCalled = true;
@@ -295,6 +355,12 @@ namespace Habanero.Test.Util
             public void MyMethod()
             {
                 _methodCalled = true;
+            }
+
+            public bool MyMethodWithReturn()
+            {
+                _methodCalled = true;
+                return true;
             }
 
             public bool MethodCalled

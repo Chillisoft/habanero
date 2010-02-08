@@ -391,7 +391,7 @@ namespace Habanero.Util
         /// </summary>
         /// <param name="obj">The object owning the method</param>
         /// <param name="methodName">The name of the method</param>
-        public static void ExecuteMethod(object obj, string methodName)
+        public static object ExecuteMethod(object obj, string methodName)
         {
             if (obj == null) throw new HabaneroArgumentException("obj");
             if (String.IsNullOrEmpty(methodName)) throw new HabaneroArgumentException("methodName");
@@ -407,7 +407,7 @@ namespace Habanero.Util
                                           "Virtual method call for '{0}' does not exist for object of type '{1}'.",
                                           methodName, className)));
                 }
-                methodInfo.Invoke(obj, new object[] {});
+                return methodInfo.Invoke(obj, new object[] {});
             }
             catch (TargetInvocationException ex)
             {
@@ -422,9 +422,9 @@ namespace Habanero.Util
         /// </summary>
         /// <param name="obj">The object owning the method</param>
         /// <param name="methodName">The name of the method</param>
-        public static void ExecutePrivateMethod(object obj, string methodName)
+        public static object ExecutePrivateMethod(object obj, string methodName)
         {
-            ExecutePrivateMethod(obj, methodName, new object[]{});
+            return ExecutePrivateMethod(obj, methodName, new object[]{});
         }
 
         /// <summary>
@@ -433,7 +433,7 @@ namespace Habanero.Util
         /// <param name="obj">The object owning the method</param>
         /// <param name="methodName">The name of the method</param>
         /// <param name="arguments">The arguments for the private method</param>
-        public static void ExecutePrivateMethod(object obj, string methodName, params object[] arguments)
+        public static object ExecutePrivateMethod(object obj, string methodName, params object[] arguments)
         {
             if (obj == null) throw new HabaneroArgumentException("obj");
             if (String.IsNullOrEmpty(methodName)) throw new HabaneroArgumentException("methodName");
@@ -449,7 +449,7 @@ namespace Habanero.Util
                                           "Virtual method call for '{0}' does not exist for object of type '{1}'.",
                                           methodName, className)));
                 }
-                methodInfo.Invoke(obj, arguments);
+                return methodInfo.Invoke(obj, arguments);
             }
             catch (TargetInvocationException ex)
             {
