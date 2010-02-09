@@ -434,7 +434,7 @@ namespace Habanero.UI.VWG
         {
             try
             {
-                Grid.CurrentPage = 1;
+                //Grid.CurrentPage = 1;
                 if (FilterMode == FilterModes.Search)
                 {
                     string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");

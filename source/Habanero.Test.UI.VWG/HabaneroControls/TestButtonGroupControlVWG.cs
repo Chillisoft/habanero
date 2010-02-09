@@ -46,7 +46,8 @@ namespace Habanero.Test.UI.VWG.HabaneroControls
             const string buttonText = "T est@";
             IButton btn = buttons.AddButton(buttonText);
             //---------------Test Result -----------------------
-            Assert.AreSame(btn, buttons["T est"]);
+            IButton actualButton = buttons["T est"];
+            Assert.AreSame(btn, actualButton);
         }
     }
 }

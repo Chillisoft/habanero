@@ -279,7 +279,12 @@ namespace Habanero.UI.Base
                     {
                         try
                         {
-                            _gridBase.FirstDisplayedScrollingRowIndex = _gridBase.Rows.IndexOf(_gridBase.CurrentRow);
+                            int count = 0;
+                            if (_gridBase.RowCount <= count)
+                            {
+                                _gridBase.FirstDisplayedScrollingRowIndex = _gridBase.Rows.IndexOf(_gridBase.CurrentRow);
+                                count++;
+                            }
                             gridRows[rowNum].Selected = true; //Getting turned off for some reason
                         }
                         catch (InvalidOperationException)

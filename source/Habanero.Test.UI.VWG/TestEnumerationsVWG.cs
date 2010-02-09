@@ -15,11 +15,11 @@ namespace Habanero.Test.UI.VWG
             //---------------Execute Test ----------------------
             //---------------Test Result -----------------------
             Assert.AreEqual(Convert.ToInt32(Gizmox.WebGUI.Forms.HorizontalAlignment.Center),
-                            Convert.ToInt32(Habanero.UI.Base.HorizontalAlignment.Left));
-            Assert.AreEqual(Convert.ToInt32(Gizmox.WebGUI.Forms.HorizontalAlignment.Right),
                             Convert.ToInt32(Habanero.UI.Base.HorizontalAlignment.Center));
-            Assert.AreEqual(Convert.ToInt32(Gizmox.WebGUI.Forms.HorizontalAlignment.Left),
+            Assert.AreEqual(Convert.ToInt32(Gizmox.WebGUI.Forms.HorizontalAlignment.Right),
                             Convert.ToInt32(Habanero.UI.Base.HorizontalAlignment.Right));
+            Assert.AreEqual(Convert.ToInt32(Gizmox.WebGUI.Forms.HorizontalAlignment.Left),
+                            Convert.ToInt32(Habanero.UI.Base.HorizontalAlignment.Left));
         }
     }
 }

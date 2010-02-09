@@ -32,6 +32,7 @@ namespace Habanero.UI.VWG
         {
             switch (dockStyle)
             {
+                case Gizmox.WebGUI.Forms.DockStyle.None: return Base.DockStyle.None;
                 case Gizmox.WebGUI.Forms.DockStyle.Bottom: return Base.DockStyle.Bottom;
                 case Gizmox.WebGUI.Forms.DockStyle.Left: return Base.DockStyle.Left;
                 case Gizmox.WebGUI.Forms.DockStyle.Right: return Base.DockStyle.Right;
@@ -50,6 +51,7 @@ namespace Habanero.UI.VWG
         {
             switch (dockStyle)
             {
+                case Base.DockStyle.None: return Gizmox.WebGUI.Forms.DockStyle.None;
                 case Base.DockStyle.Bottom: return Gizmox.WebGUI.Forms.DockStyle.Bottom;
                 case Base.DockStyle.Top: return Gizmox.WebGUI.Forms.DockStyle.Top;
                 case Base.DockStyle.Left: return Gizmox.WebGUI.Forms.DockStyle.Left;
