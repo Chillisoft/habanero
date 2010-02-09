@@ -833,6 +833,7 @@ namespace Habanero.Test.UI.Base
             MyBO firstBO = myBOs[0];
             firstBO.TestProp = null;
             MyBO secondBO = myBOs[1];
+            gridWithPanelControl.ConfirmSaveDelegate = () => DialogResult.OK;
             //---------------Assert Precondition----------------
             Assert.IsTrue(firstBO.Status.IsDirty);
             Assert.IsFalse(firstBO.Status.IsNew);

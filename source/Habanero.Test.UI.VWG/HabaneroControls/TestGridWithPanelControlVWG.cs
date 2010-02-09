@@ -204,12 +204,10 @@ namespace Habanero.Test.UI.VWG.HabaneroControls
             MyBO firstBO = myBOs[0];
             MyBO secondBO = myBOs[1];
 
-            PanelInfo.FieldInfo testPropFieldInfo = ((IBusinessObjectPanel)gridWithPanelControl.BusinessObjectControl).PanelInfo.FieldInfos["TestProp"];
-            testPropFieldInfo.ControlMapper.Control.Text = "";
+            firstBO.TestProp = "";
             //---------------Assert Precondition----------------
-            //Assert.IsTrue(firstBO.Status.IsDirty);
             Assert.IsFalse(firstBO.Status.IsNew);
-            //Assert.IsFalse(firstBO.IsValid());
+            Assert.IsFalse(firstBO.Status.IsValid());
             Assert.AreEqual(0, gridWithPanelControl.ReadOnlyGridControl.Grid.SelectedRows[0].Index);
             Assert.AreSame(firstBO, gridWithPanelControl.ReadOnlyGridControl.Grid.SelectedBusinessObject);
             //---------------Execute Test ----------------------

@@ -56,6 +56,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IOKCancelDialogFactory okCancelDialogFactory = CreateOKCancelDialogFactory();
             IPanel nestedControl = GetControlFactory().CreatePanel();
+            nestedControl.Width = 200;
 
             //---------------Execute Test ----------------------
             IControlHabanero dialogControl = okCancelDialogFactory.CreateOKCancelPanel(nestedControl);
@@ -72,7 +73,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, buttons.Controls.Count);
             Assert.IsNotNull(buttons["OK"]);
             Assert.IsNotNull(buttons["Cancel"]);
-            Assert.That(buttons["OK"].Right, Is.GreaterThan(buttons["Cancel"].Left));
+            Assert.That(buttons["OK"].Right, Is.LessThan(buttons["Cancel"].Left));
         }
 
         [Test]

@@ -178,6 +178,7 @@ namespace Habanero.UI.Base
                 gridBase.SelectionChanged -= _gridBase_OnSelectionChangedHandler;
                 _fireBusinessObjectSelectedEvent = false;
                 gridBase.DataSource = table;
+                if (!AutoSelectFirstItem) gridBase.SelectedBusinessObject = null;
             }
             finally
             {
@@ -274,25 +275,29 @@ namespace Habanero.UI.Base
                 //TODO: neither of these works in VWG (and they're needed)
                 if (boFoundAndHighlighted && rowNum >= 0 && rowNum < gridRows.Count)
                 {
-                    _gridBase.CurrentCell = _gridBase.Rows[rowNum].Cells[1];
-                    if (_gridBase.CurrentRow != null && !_gridBase.CurrentRow.Displayed)
+                    if (_gridBase != null)
                     {
-                        try
+                        IDataGridViewRow row = _gridBase.Rows[rowNum];
+                        if (row != null)
                         {
-                            int count = 0;
-                            if (_gridBase.RowCount <= count)
-                            {
-                                _gridBase.FirstDisplayedScrollingRowIndex = _gridBase.Rows.IndexOf(_gridBase.CurrentRow);
-                                count++;
-                            }
-                            gridRows[rowNum].Selected = true; //Getting turned off for some reason
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            //Do nothing - designed to catch error "No room is available to display rows"
-                            //  when grid height is insufficient
+                            IDataGridViewCell cell = row.Cells[1];
+                            if (cell != null && cell.RowIndex >= 0) _gridBase.CurrentCell = cell;
                         }
                     }
+                    if (_gridBase != null)
+                        if (_gridBase.CurrentRow != null && !_gridBase.CurrentRow.Displayed)
+                        {
+                            try
+                            {
+                                _gridBase.FirstDisplayedScrollingRowIndex = _gridBase.Rows.IndexOf(_gridBase.CurrentRow);
+                                gridRows[rowNum].Selected = true; //Getting turned off for some reason
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                //Do nothing - designed to catch error "No room is available to display rows"
+                                //  when grid height is insufficient
+                            }
+                        }
                 }
             }
         }

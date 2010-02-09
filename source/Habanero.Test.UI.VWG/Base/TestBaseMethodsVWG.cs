@@ -393,6 +393,84 @@ namespace Habanero.Test.UI.VWG.Base
         {
             return GetControlFactory().CreateTabPage("");
         }
+
+        [Test]
+        public override void TestConversion_DockStyle_None()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero control = CreateControl();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.Dock = DockStyle.None;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DockStyle.Fill, control.Dock, "A Tabpage's DockStyle can only be Fill");
+            AssertDockStylesSame(control);
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Bottom()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero control = CreateControl();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.Dock = DockStyle.Bottom;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DockStyle.Fill, control.Dock, "A Tabpage's DockStyle can only be Fill");
+            AssertDockStylesSame(control);
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Top()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero control = CreateControl();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.Dock = DockStyle.Top;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DockStyle.Fill, control.Dock, "A Tabpage's DockStyle can only be Fill");
+            AssertDockStylesSame(control);
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Left()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero control = CreateControl();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.Dock = DockStyle.Left;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DockStyle.Fill, control.Dock, "A Tabpage's DockStyle can only be Fill");
+            AssertDockStylesSame(control);
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Right()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero control = CreateControl();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.Dock = DockStyle.Right;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DockStyle.Fill, control.Dock, "A Tabpage's DockStyle can only be Fill");
+            AssertDockStylesSame(control);
+        }
+
+        [Test]
+        public override void TestConversion_DockStyle_Fill()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero control = CreateControl();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.Dock = DockStyle.Fill;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DockStyle.Fill, control.Dock);
+            AssertDockStylesSame(control);
+        }
     }
     /// <summary>
     /// This test class tests the base inherited methods of the TextBox class.

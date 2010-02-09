@@ -171,7 +171,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNull(selector.SelectedBusinessObject);
             Assert.IsNull(selector.SelectedValue);
             Assert.IsNull(selector.SelectedItem);
-            Assert.AreEqual("", selector.Text);
+            Assert.IsTrue(String.IsNullOrEmpty(selector.Text));
             Assert.AreEqual(-1, selector.SelectedIndex);
         }
 

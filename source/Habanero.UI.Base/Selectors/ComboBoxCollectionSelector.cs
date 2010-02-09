@@ -176,6 +176,7 @@ namespace Habanero.UI.Base
             set
             {
                 Control.SelectedItem = ContainsValue(value) ? value : null;
+                if (Control.SelectedItem == null) Control.Text = null;
             }
         }
 
@@ -236,6 +237,7 @@ namespace Habanero.UI.Base
             IBusinessObject selectedBusinessObject = SelectedBusinessObject;
             
             cbx.SelectedIndex = -1;
+            cbx.Text = null;
             cbx.Items.Clear();
             int numBlankItems = 0;
             if (includeBlank)

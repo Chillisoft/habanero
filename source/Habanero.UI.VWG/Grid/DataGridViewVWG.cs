@@ -196,7 +196,24 @@ namespace Habanero.UI.VWG
         public new IDataGridViewCell CurrentCell
         {
             get { return base.CurrentCell == null ? null : new DataGridViewCellVWG(base.CurrentCell); }
-            set { base.CurrentCell = value == null ? null : ((DataGridViewCellVWG) value).DataGridViewCell; }
+            set
+
+            {
+                //base.CurrentCell = value == null ? null : ((DataGridViewCellVWG) value).DataGridViewCell;
+                if (value == null)
+                {
+                    base.CurrentCell = null;
+                } else
+                {
+                    try
+                    {
+                        base.CurrentCell = ((DataGridViewCellVWG) value).DataGridViewCell;
+                    } catch (ArgumentOutOfRangeException ex)
+                    {
+                        Console.Out.WriteLine(ex.Message);
+                    }
+                }
+            }
         }
 
         /// <summary>

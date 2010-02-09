@@ -2,7 +2,7 @@ using Habanero.Test.UI.Base;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Win.Mappers
+namespace Habanero.Test.UI.VWG.Mappers
 {
     [TestFixture]
     public class TestControlMapperVWG : TestControlMapper

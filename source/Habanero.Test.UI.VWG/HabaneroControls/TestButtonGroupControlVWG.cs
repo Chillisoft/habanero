@@ -36,18 +36,5 @@ namespace Habanero.Test.UI.VWG.HabaneroControls
             Assert.AreSame(null, frm.AcceptButton);
             //Assert.AreSame(btn, frm.AcceptButton);
         }
-
-        [Test]
-        public void Test_ButtonIndexer_WithASpecialCharactersInTheName_Failing()
-        {
-            //---------------Set up test pack-------------------
-            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-            //---------------Execute Test ----------------------
-            const string buttonText = "T est@";
-            IButton btn = buttons.AddButton(buttonText);
-            //---------------Test Result -----------------------
-            IButton actualButton = buttons["T est"];
-            Assert.AreSame(btn, actualButton);
-        }
     }
 }

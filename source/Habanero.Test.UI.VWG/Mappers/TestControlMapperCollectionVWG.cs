@@ -2,7 +2,7 @@ using Habanero.Test.UI.Base;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Win.Mappers
+namespace Habanero.Test.UI.VWG.Mappers
 {
     [TestFixture]
     public class TestControlMapperCollectionVWG : TestControlMapperCollection
@@ -23,7 +23,7 @@ namespace Habanero.Test.UI.Win.Mappers
             myBO.TestProp = START_VALUE_1;
             myBO.SetPropertyValue(TEST_PROP_2, START_VALUE_2);
 
-            PanelBuilder factory = new PanelBuilder(GetControlFactory());
+            Habanero.UI.Base.PanelBuilder factory = new Habanero.UI.Base.PanelBuilder(GetControlFactory());
             IPanelInfo panelInfo = factory.BuildPanelForForm(myBO.ClassDef.UIDefCol["default"].UIForm);
             panelInfo.BusinessObject = myBO;
             //---------------Execute Test ----------------------

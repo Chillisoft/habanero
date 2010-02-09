@@ -98,7 +98,7 @@ namespace Habanero.UI.VWG
             set
             {
                 base.Checked = value;
-                if (_manager != null) _manager.OnValueChanged(new EventArgs());
+               // if (_manager != null) _manager.OnValueChanged(new EventArgs());
             }
         }
 

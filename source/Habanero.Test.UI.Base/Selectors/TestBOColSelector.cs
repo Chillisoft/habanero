@@ -427,7 +427,7 @@ namespace Habanero.Test.UI.Base
             colSelector.BusinessObjectCollection = collection;
             //---------------Test Result -----------------------
             Assert.AreEqual(ActualNumberOfRows(collection.Count), colSelector.NoOfItems, "The blank item");
-            Assert.IsNull( colSelector.SelectedBusinessObject);
+            Assert.IsNull(colSelector.SelectedBusinessObject);
         }
 
         [Test]

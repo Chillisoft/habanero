@@ -36,8 +36,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(dockStyle.ToString(), dockStyleToString);
         }
 
-    
-
         [Test]
         public virtual void TestConversion_DockStyle_None()
         {
