@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 
@@ -160,8 +161,8 @@ namespace Habanero.Base
         /// <summary>
         /// Adds a class definition to the collection
         /// </summary>
-        /// <param name="value">The class definition to add</param>
-        public void Add(ClassDefCol classDefCol)
+        /// <param name="classDefCol">The class definitions to add</param>
+        public void Add(IEnumerable<IClassDef> classDefCol)
         {
             foreach (IClassDef classDef in classDefCol)
             {
@@ -263,15 +264,7 @@ namespace Habanero.Base
         ///<returns>The class definition with the specified name, otherwise returns null.</returns>
         public IClassDef FindByClassName(string className)
         {
-            foreach (KeyValuePair<string, IClassDef> keyValuePair in _classDefs)
-            {
-                IClassDef classDef = keyValuePair.Value;
-                if (classDef.ClassName == className)
-                {
-                    return classDef;
-                }
-            }
-            return null;
+            return _classDefs.Values.FirstOrDefault(classDef => classDef.ClassName == className);
         }
 
         #region Singleton ClassDefCol
@@ -291,11 +284,7 @@ namespace Habanero.Base
         /// <returns>A collection of class definitions</returns>
         public static ClassDefCol GetColClassDef()
         {
-            if (_instanceFlag)
-            {
-                return _classDefcol;
-            }
-            return LoadColClassDef(new ClassDefCol());
+            return _instanceFlag ? _classDefcol : LoadColClassDef(new ClassDefCol());
         }
 
         /// <summary>
@@ -388,7 +377,7 @@ namespace Habanero.Base
         ///<param name="className">The class's name</param>
         ///<returns>A string representing the Class Type.</returns>
         ///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
-        internal static string GetTypeId(string assemblyName, string className, bool includeNamespace)
+        private static string GetTypeId(string assemblyName, string className, bool includeNamespace)
         {
             string namespaceString;
             className = StripOutNameSpace(className, out namespaceString);
@@ -419,12 +408,23 @@ namespace Habanero.Base
             return GetTypeId(assemblyName, className, includeNamespace);
         }
 
+        ///<summary>
+        /// Strips the namespace out of the className and returns stripped classname
+        ///</summary>
+        ///<param name="className">The classname including its namespace that will be stripped of</param>
+        ///<returns>the classname without its namespace</returns>
         public static string StripOutNameSpace(string className)
         {
             string namespaceString;
             return StripOutNameSpace(className, out namespaceString);
         }
 
+        ///<summary>
+        /// Strips the namespace out of the className and returns stripped classname
+        ///</summary>
+        ///<param name="className">The classname including its namespace that will be stripped of</param>
+        ///<param name="namespaceString">returns the namespace that was stripped of</param>
+        ///<returns>the classname without its namespace</returns>
         public static string StripOutNameSpace(string className, out string namespaceString)
         {
             if (className != null)
