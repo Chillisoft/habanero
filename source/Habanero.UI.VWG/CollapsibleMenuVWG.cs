@@ -176,9 +176,9 @@ namespace Habanero.UI.VWG
             layoutManager.AddControl(_splitContainer, BorderLayoutManager.Position.Centre);
             SplitContainer splitContainer1 = (SplitContainer) _splitContainer;
 //            splitContainer1.IsSplitterFixed = true;
-            splitContainer1.Size = new System.Drawing.Size(400, 450);
-            splitContainer1.SplitterDistance = 250;
-            splitContainer1.Panel1MinSize = 250;
+            splitContainer1.Size = new System.Drawing.Size(180, 450);
+            splitContainer1.SplitterDistance = 180;
+            splitContainer1.Panel1MinSize = 180;
             splitContainer1.Orientation = Gizmox.WebGUI.Forms.Orientation.Vertical;
             this.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
             splitContainer1.Panel1.Controls.Add(this);

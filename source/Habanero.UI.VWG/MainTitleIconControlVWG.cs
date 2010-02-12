@@ -62,6 +62,7 @@ namespace Habanero.UI.VWG
             _icon.Size = new Size(20, 20);
 
             _title = _controlFactory.CreateLabel();
+            _title.Font = new Font("Verdana", 10);
             _title.Dock = Habanero.UI.Base.DockStyle.Fill;
             _title.BackColor = Color.Transparent;
             _title.TextAlign = ContentAlignment.MiddleLeft;
