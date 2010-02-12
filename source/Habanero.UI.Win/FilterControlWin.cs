@@ -34,7 +34,7 @@ namespace Habanero.UI.Win
         private readonly IPanel _controlPanel;
         private readonly IPanel _filterButtonPanel;
         private readonly FilterControlManager _filterControlManager;
-        private readonly IControlHabanero _gbox;
+        private readonly IGroupBox _groupBox;
         private IButton _clearButton;
         private IButton _filterButton;
         private FilterModes _filterMode;
@@ -52,11 +52,11 @@ namespace Habanero.UI.Win
         {
             Height = 50;
             _controlFactory = controlFactory;
-            _gbox = _controlFactory.CreateGroupBox();
-//            _gbox = _controlFactory.CreatePanel();
-            _controlFactory.CreateBorderLayoutManager(this).AddControl(_gbox, BorderLayoutManager.Position.Centre);
-            _gbox.Text = "Filter the Grid";
-            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(_gbox);
+            _groupBox = _controlFactory.CreateGroupBox();
+//            _groupBox = _controlFactory.CreatePanel();
+            _controlFactory.CreateBorderLayoutManager(this).AddControl(_groupBox, BorderLayoutManager.Position.Centre);
+            _groupBox.Text = "Filter the Grid";
+            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(_groupBox);
             layoutManager.BorderSize = 20;
             _filterButtonPanel = controlFactory.CreatePanel();
             _filterButtonPanel.Height = 50;
@@ -254,8 +254,8 @@ namespace Habanero.UI.Win
         /// </summary>
         public string HeaderText
         {
-            get { return _gbox.Text; }
-            set { _gbox.Text = value; }
+            get { return _groupBox.Text; }
+            set { _groupBox.Text = value; }
         }
 
         /// <summary>
@@ -273,6 +273,11 @@ namespace Habanero.UI.Win
         public IButton FilterButton
         {
             get { return _filterButton; }
+        }
+
+        public IGroupBox FilterGroupBox
+        {
+            get { return _groupBox; }
         }
 
         /// <summary>
@@ -298,12 +303,12 @@ namespace Habanero.UI.Win
                 if (_filterMode == FilterModes.Filter)
                 {
                     _filterButton.Text = "Filter";
-                    _gbox.Text = "Filter the Grid";
+                    _groupBox.Text = "Filter the Grid";
                 }
                 else
                 {
                     _filterButton.Text = "Search";
-                    _gbox.Text = "Search the Grid";
+                    _groupBox.Text = "Search the Grid";
                 }
             }
         }

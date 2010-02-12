@@ -37,7 +37,6 @@ namespace Habanero.Test.UI.VWG.HabaneroControls
             Assert.AreEqual("Filter the Grid", ctl.HeaderText);
             //---------------Execute Test ----------------------
             ctl.HeaderText = "Filter Assets";
-
             //---------------Test Result -----------------------
             Assert.AreEqual("Filter Assets", ctl.HeaderText);
 
@@ -71,6 +70,23 @@ namespace Habanero.Test.UI.VWG.HabaneroControls
             ctl.FilterMode = FilterModes.Search;
             //---------------Test Result -----------------------
             Assert.AreEqual("Search", ctl.FilterButton.Text);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_SetFilterGroupBoxSetsText()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = GetControlFactory();
+            IFilterControl ctl = factory.CreateFilterControl();
+            string groupBoxHeaderText = TestUtil.GetRandomString();
+            //---------------Assert Preconditions --------------
+            Assert.AreEqual("Filter the Grid", ctl.FilterGroupBox.Text);
+            //---------------Execute Test ----------------------
+            ctl.HeaderText = groupBoxHeaderText;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(ctl.HeaderText, ctl.FilterGroupBox.Text);
+            Assert.AreEqual(groupBoxHeaderText, ctl.FilterGroupBox.Text);
             //---------------Tear Down -------------------------          
         }
 

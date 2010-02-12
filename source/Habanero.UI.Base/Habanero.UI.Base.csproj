@@ -324,11 +324,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\headergradient.png" />
+    <Content Include="Resources\headergradient-blue.png" />
+    <Content Include="Resources\headergradient.png">
+    </Content>
+    <Content Include="Resources\nav_icon-yellowarrow.png" />
     <Content Include="Resources\nbItemBullet.gif" />
     <Content Include="Resources\nav_icon.png" />
     <Content Include="Resources\pinoff_withcolour.png" />
     <Content Include="Resources\pinon_withcolour.png" />
+    <Content Include="Resources\smBack-white.gif" />
     <Content Include="Resources\smBack.gif" />
   </ItemGroup>
   <ItemGroup>

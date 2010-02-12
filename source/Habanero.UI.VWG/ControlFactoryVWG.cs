@@ -656,7 +656,7 @@ namespace Habanero.UI.VWG
         ///<summary>
         /// Creates a <see cref="ICollapsiblePanel"/>
         ///</summary>
-        public ICollapsiblePanel CreateCollapsiblePanel(string name)
+        public virtual ICollapsiblePanel CreateCollapsiblePanel(string name)
         {
             CollapsiblePanelVWG collapsiblePanel = new CollapsiblePanelVWG(this) {Text = name, Name = name};
             collapsiblePanel.CollapseButton.Text = name;

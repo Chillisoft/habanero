@@ -170,6 +170,11 @@ namespace Habanero.UI.Base
         IButton FilterButton { get; }
 
         /// <summary>
+        /// Returns the filter group box that contains the filter controls
+        /// </summary>
+        IGroupBox FilterGroupBox { get; }
+
+        /// <summary>
         /// Returns the clear button that when clicked clears the filter
         /// </summary>
         IButton ClearButton { get; }

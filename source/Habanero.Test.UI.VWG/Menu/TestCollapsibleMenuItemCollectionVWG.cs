@@ -82,6 +82,7 @@ namespace Habanero.Test.UI.VWG.Menu
             Assert.IsInstanceOfType(typeof(IPanel), contentControl);
             Assert.AreEqual(1, contentControl.Controls.Count);
             Assert.IsInstanceOfType(typeof(IButton), contentControl.Controls[0]);
+            Assert.AreEqual(menuLeafItem.Dock, DockStyleVWG.GetDockStyle(DockStyle.Top));
         }
         [Test]
         public virtual void Test_AddLeafMenuItem_ShouldIncreaseMinSizeOfCollapsiblePanel()

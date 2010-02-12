@@ -261,10 +261,12 @@ namespace Habanero.UI.VWG
             {
                 this.Text = _habaneroMenuItem.Name;
                 this.FlatStyle = FlatStyle.Flat;
-                this.BackgroundImage = "Images.smBack.gif";
+                this.BackgroundImage = "Images.smBack-white.gif";
                 this.Image = "Images.nbItemBullet.gif";
                 this.TextImageRelation = TextImageRelation.ImageBeforeText;
                 this.TextAlign = ContentAlignment.MiddleLeft;
+                this.Font = new Font("Verdana", 9);
+                this.Dock = DockStyleVWG.GetDockStyle(DockStyle.Top);
                 this.Click += ChangeButtonIcon;
             }
             MenuItems = new CollapsibleMenuItemCollectionVWG(this);
@@ -391,7 +393,8 @@ namespace Habanero.UI.VWG
             this.CollapseButton.Text = name;
             this.Dock = DockStyleVWG.GetDockStyle(DockStyle.Top);
             this.CollapseButton.ForeColor = Color.White;
-            ((ButtonVWG) this.CollapseButton).BackgroundImage = "Images.headergradient.png";
+            this.CollapseButton.Font = new Font("Verdana", 10);
+            ((ButtonVWG)this.CollapseButton).BackgroundImage = "Images.headergradient.png";
             ((ButtonVWG) this.CollapseButton).FlatStyle = FlatStyle.Flat;
             this.Collapsed = true;
             this.CollapseButton.Click += delegate { if (this.Collapsed) this.Collapsed = false; };

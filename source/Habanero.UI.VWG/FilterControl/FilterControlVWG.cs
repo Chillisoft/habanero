@@ -41,7 +41,8 @@ namespace Habanero.UI.VWG
         /// The event that is fired with the filter is ready so that another control e.g. a grid can be filtered.
         /// </summary>
         public event EventHandler Filter;
-        private readonly IGroupBox _gbox;
+        private readonly IGroupBox _groupBox;
+
         private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
         private readonly IPanel _controlPanel;
 
@@ -53,11 +54,11 @@ namespace Habanero.UI.VWG
 
             this.Height = 50;
             _controlFactory = controlFactory;
-            _gbox = _controlFactory.CreateGroupBox();
-            _controlFactory.CreateBorderLayoutManager(this).AddControl(_gbox, BorderLayoutManager.Position.Centre);
-            _gbox.Text = "Filter the Grid";
+            _groupBox = _controlFactory.CreateGroupBox();
+            _controlFactory.CreateBorderLayoutManager(this).AddControl(_groupBox, BorderLayoutManager.Position.Centre);
+            _groupBox.Text = "Filter the Grid";
 
-            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(_gbox);
+            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(_groupBox);
             layoutManager.BorderSize = 20;
             IPanel filterButtonPanel = controlFactory.CreatePanel();
             filterButtonPanel.Height = 50;
@@ -127,8 +128,8 @@ namespace Habanero.UI.VWG
         /// </summary>
         public string HeaderText
         {
-            get { return _gbox.Text; }
-            set { _gbox.Text = value; }
+            get { return _groupBox.Text; }
+            set { _groupBox.Text = value; }
         }
 
         /// <summary>
@@ -307,6 +308,14 @@ namespace Habanero.UI.VWG
         }
 
         /// <summary>
+        /// Returns the filter group box that contains the filter controls.
+        /// </summary>
+        public IGroupBox FilterGroupBox
+        {
+            get { return _groupBox; }
+        }
+
+        /// <summary>
         /// Gets and sets the FilterMode <see cref="FilterModes"/>, which determines the
         /// behaviour of the filter control
         /// </summary>
@@ -319,12 +328,12 @@ namespace Habanero.UI.VWG
                 if (_filterMode == FilterModes.Filter)
                 {
                     _filterButton.Text = "Filter";
-                    _gbox.Text = "Filter the Grid";
+                    FilterGroupBox.Text = "Filter the Grid";
                 }
                 else
                 {
                     _filterButton.Text = "Search";
-                    _gbox.Text = "Search the Grid";
+                    FilterGroupBox.Text = "Search the Grid";
                 }
             }
         }
