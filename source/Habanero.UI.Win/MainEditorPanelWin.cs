@@ -387,6 +387,18 @@ namespace Habanero.UI.Win
         /// <param name="form">The form to set up with the menu</param>
         public void DockInForm(IControlHabanero form)
         {
+            int menuWidth = 250;
+            DockInForm(form, menuWidth);
+        }
+
+        /// <summary>
+        ///This method sets up the form so that the menu is displayed and the form is able to 
+        ///display the controls loaded when the menu item is clicked.
+        /// </summary>
+        /// <param name="form">The form to set up with the menu</param>
+        /// <param name="menuWidth">The width of the menu - configurable to so that each application can set its menu width</param>
+        public void DockInForm(IControlHabanero form, int menuWidth)
+        {
             if (form == null) throw new ArgumentNullException("form");
             _splitContainer = this.ControlFactory.CreateSplitContainer();
             _splitContainer.Name = "SplitContainer";
@@ -395,8 +407,8 @@ namespace Habanero.UI.Win
             SplitContainer splitContainer1 = (SplitContainer)_splitContainer;
             //            splitContainer1.IsSplitterFixed = true;
             splitContainer1.Size = new System.Drawing.Size(400, 450);
-            splitContainer1.SplitterDistance = 250;
-            splitContainer1.Panel1MinSize = 250;
+            splitContainer1.SplitterDistance = menuWidth;
+            splitContainer1.Panel1MinSize = menuWidth;
             splitContainer1.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.Dock = System.Windows.Forms.DockStyle.Fill;
             splitContainer1.Panel1.Controls.Add(this);

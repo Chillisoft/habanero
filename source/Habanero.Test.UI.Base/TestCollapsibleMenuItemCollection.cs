@@ -54,7 +54,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null, name);
             IMenuItem menuItem = CreateMenuItem(item);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------

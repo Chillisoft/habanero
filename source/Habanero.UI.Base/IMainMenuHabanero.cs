@@ -37,6 +37,14 @@ namespace Habanero.UI.Base
         void DockInForm(IControlHabanero form);
 
         /// <summary>
+        ///This method sets up the form so that the menu is displayed and the form is able to 
+        ///display the controls loaded when the menu item is clicked.
+        /// </summary>
+        /// <param name="form">The form to set up with the menu</param>
+        /// <param name="menuWidth">The width of the menu - configurable to so that each application can set its menu width</param>
+        void DockInForm(IControlHabanero form, int menuWidth);
+
+        /// <summary>
         /// Gets and Sets the name of the MainMenu
         /// </summary>
         /// <returns>A string representing the name.</returns>

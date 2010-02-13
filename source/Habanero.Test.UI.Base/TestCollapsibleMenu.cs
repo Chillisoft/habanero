@@ -160,7 +160,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null, name);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             IMenuItem collapsibleMenuItem = CreateControl( item);
@@ -188,7 +188,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null, name);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             IMenuItem collapsibleMenuItem = CreateControl( item);
@@ -204,7 +204,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null, name);
             IMenuItem collapsibleMenuItem = CreateControl( item);
             IMenuItemCollection expectedMenuItems = collapsibleMenuItem.MenuItems;
             //---------------Assert Precondition----------------
@@ -221,7 +221,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null, name);
             IMenuItem collapsibleMenuItem = CreateControl( item);
             ICollapsiblePanel subMenuAsCollapsiblePanel = (ICollapsiblePanel) collapsibleMenuItem;
             //---------------Assert Precondition----------------
@@ -237,7 +237,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null,name);
             IMenuItem collapsibleMenuItem = CreateControl( item);
             ICollapsiblePanel subMenuAsCollapsiblePanel = (ICollapsiblePanel) collapsibleMenuItem;
             //---------------Assert Precondition----------------

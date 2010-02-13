@@ -98,7 +98,7 @@ namespace Habanero.Test.UI.Base
         public void Test_CreateMenuItem_FromHabaneroMenuItem()
         {
             //---------------Set up test pack-------------------
-            HabaneroMenu.Item item = new HabaneroMenu.Item(TestUtil.GetRandomString());          
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null, TestUtil.GetRandomString());          
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             IMenuItem mmenu = _factory.CreateMenuItem(item);

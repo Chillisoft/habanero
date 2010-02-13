@@ -52,13 +52,11 @@ namespace Habanero.UI.Base
         /// The default UI definition will be used, that is a 'ui' element 
         /// without a 'name' attribute.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         IBusinessObjectCollection BusinessObjectCollection { get; set; }
 
         /// <summary>
         /// Gets and sets the currently selected business object in the grid
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         IBusinessObject SelectedBusinessObject { get; set; }
 //
 //        /// <summary>
@@ -71,7 +69,6 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Event Occurs when a business object is selected
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         event EventHandler<BOEventArgs> BusinessObjectSelected;
 
 //        /// <summary>
@@ -88,7 +85,6 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Clears the business object collection and the rows in the data table
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         void Clear();
 
         /// <summary>Gets the number of rows displayed in the <see cref="IBOColSelectorControl"></see>.</summary>

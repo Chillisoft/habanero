@@ -511,7 +511,7 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Represents a row in a DataGridView control
         /// </summary>
-        private class DataGridViewRowVWG : IDataGridViewRow
+        public class DataGridViewRowVWG : IDataGridViewRow
         {
             private readonly DataGridViewRow _dataGridViewRow;
 
@@ -607,6 +607,8 @@ namespace Habanero.UI.VWG
                 get { return _dataGridViewRow.ReadOnly; }
                 set { _dataGridViewRow.ReadOnly = value; }
             }
+
+
         }
 
         /// <summary>

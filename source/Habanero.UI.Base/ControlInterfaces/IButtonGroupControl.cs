@@ -75,5 +75,10 @@ namespace Habanero.UI.Base
         /// an instance of <see cref="ButtonSizePolicyUserDefined"/> class.
         /// </summary>
         IButtonSizePolicy ButtonSizePolicy { get; set; }
+
+        /// <summary>
+        /// Returns the <see cref="FlowLayoutManager"/> used to layout the buttons. You can use this, for example, to adjust the alignment of the buttons (left or right).
+        /// </summary>
+        FlowLayoutManager LayoutManager { get; }
     }
 }

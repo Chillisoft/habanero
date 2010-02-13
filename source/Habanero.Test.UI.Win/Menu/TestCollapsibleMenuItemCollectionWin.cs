@@ -43,7 +43,7 @@ namespace Habanero.Test.UI.Win.Menu
             string name = TestUtil.GetRandomString();
             CollapsibleMenuWin menu = new CollapsibleMenuWin();
             CollapsibleMenuItemCollectionWin collapsibleMenuItemCollection = new CollapsibleMenuItemCollectionWin(menu);
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null, name);
             IMenuItem menuLeafItem = new CollapsibleSubMenuItemWin(GetControlFactory(), item);
             //---------------Assert Precondition----------------
             Assert.AreSame(menu, collapsibleMenuItemCollection.OwnerMenuItem);
@@ -63,11 +63,11 @@ namespace Habanero.Test.UI.Win.Menu
         {
             //---------------Set up test pack-------------------
             string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item ownerItem = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item ownerItem = new HabaneroMenu.Item(null, name);
             CollapsibleSubMenuItemWin subMenuItem = new CollapsibleSubMenuItemWin(GetControlFactory(), ownerItem);
             CollapsibleMenuItemCollectionWin collapsibleMenuItemCollection = new CollapsibleMenuItemCollectionWin
                 (subMenuItem);
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null, name);
             CollapsibleMenuItemWin menuLeafItem = new CollapsibleMenuItemWin(GetControlFactory(), item);
             //---------------Assert Precondition----------------
             Assert.AreSame(subMenuItem, collapsibleMenuItemCollection.OwnerMenuItem);
@@ -90,11 +90,11 @@ namespace Habanero.Test.UI.Win.Menu
         {
             //---------------Set up test pack-------------------
             string name = TestUtil.GetRandomString();
-            HabaneroMenu.Item ownerItem = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item ownerItem = new HabaneroMenu.Item(null, name);
             CollapsibleSubMenuItemWin subMenuItem = new CollapsibleSubMenuItemWin(GetControlFactory(), ownerItem);
             CollapsibleMenuItemCollectionWin collapsibleMenuItemCollection = new CollapsibleMenuItemCollectionWin
                 (subMenuItem);
-            HabaneroMenu.Item item = new HabaneroMenu.Item(name);
+            HabaneroMenu.Item item = new HabaneroMenu.Item(null, name);
             CollapsibleMenuItemWin menuLeafItem = new CollapsibleMenuItemWin(GetControlFactory(), item);
             //---------------Assert Precondition----------------
             Assert.AreSame(subMenuItem, collapsibleMenuItemCollection.OwnerMenuItem);

@@ -90,6 +90,11 @@ namespace Habanero.UI.VWG
         /// </summary>
         public IButtonSizePolicy ButtonSizePolicy { get; set; }
 
+        public FlowLayoutManager LayoutManager
+        {
+            get { return _buttonGroupControlManager.LayoutManager; }
+        }
+
         /// <summary>
         /// Adds a new button to the control with a specified name and
         /// with an attached event handler to carry out

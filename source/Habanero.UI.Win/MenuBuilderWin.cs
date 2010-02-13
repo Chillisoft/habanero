@@ -124,6 +124,17 @@ namespace Habanero.UI.Win
             ((IFormHabanero)form).IsMdiContainer = true;
             formWin.Menu = this;
         }
+
+        /// <summary>
+        /// Not implemented as it is not supported to set a width for
+        /// this style of menu.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="menuWidth"></param>
+        public void DockInForm(IControlHabanero form, int menuWidth)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     /// <summary>

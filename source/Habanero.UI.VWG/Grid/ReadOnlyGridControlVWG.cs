@@ -432,6 +432,11 @@ namespace Habanero.UI.VWG
 
         private void FilterControl_OnFilter(object sender, EventArgs e)
         {
+            RefreshFilter();
+        }
+
+        public void RefreshFilter()
+        {
             try
             {
                 //Grid.CurrentPage = 1;

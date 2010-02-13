@@ -136,6 +136,17 @@ namespace Habanero.UI.VWG
             Form formVWG = (Form) form;
             formVWG.Menu = this;
         }
+
+        /// <summary>
+        /// Not supported for the standard menu builder as it is not applicable to 
+        /// set a width.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="menuWidth"></param>
+        public void DockInForm(IControlHabanero form, int menuWidth)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     internal class MenuItemCollectionVWG : IMenuItemCollection

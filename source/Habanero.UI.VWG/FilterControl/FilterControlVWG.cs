@@ -44,7 +44,7 @@ namespace Habanero.UI.VWG
         private readonly IGroupBox _groupBox;
 
         private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
-        private readonly IPanel _controlPanel;
+        private readonly IPanel _filterPanel;
 
         ///<summary>
         ///</summary>
@@ -67,11 +67,11 @@ namespace Habanero.UI.VWG
 
             layoutManager.AddControl(filterButtonPanel, BorderLayoutManager.Position.West);
 
-            _controlPanel = controlFactory.CreatePanel();
-            _controlPanel.Width = this.Width;
+            _filterPanel = controlFactory.CreatePanel();
+            _filterPanel.Width = this.Width;
 
-            layoutManager.AddControl(_controlPanel, BorderLayoutManager.Position.Centre);
-            _filterControlManager = new FilterControlManager(controlFactory, new FlowLayoutManager(_controlPanel, controlFactory));
+            layoutManager.AddControl(_filterPanel, BorderLayoutManager.Position.Centre);
+            _filterControlManager = new FilterControlManager(controlFactory, new FlowLayoutManager(_filterPanel, controlFactory));
         }
 
         //public int CountOfFilterControls()
@@ -388,7 +388,7 @@ namespace Habanero.UI.VWG
         /// </summary>
         public IPanel FilterPanel
         {
-            get { return _controlPanel; }
+            get { return _filterPanel; }
         }
 
         /// <summary>
@@ -446,7 +446,7 @@ namespace Habanero.UI.VWG
             Debug.Assert(this.Controls.Count > 0);
              _filterControlManager.AddCustomFilter(labelText, customFilter);
              Debug.Assert(this.Controls.Count > 0);
-             Debug.Assert(this._controlPanel.Controls.Count != 0);
+             Debug.Assert(this._filterPanel.Controls.Count != 0);
         }
 
         /// <summary>

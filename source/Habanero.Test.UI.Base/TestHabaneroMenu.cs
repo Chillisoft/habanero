@@ -74,7 +74,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             FormControlStub formControlStub = new FormControlStub();
-            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(TestUtil.GetRandomString());
+            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(null, TestUtil.GetRandomString());
             //---------------Assert PreConditions---------------            
             Assert.IsNull(menuItem.FormControlCreator);
             //---------------Execute Test ----------------------
@@ -92,7 +92,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetControlManagerCreator()
         {
             //---------------Set up test pack-------------------
-            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(TestUtil.GetRandomString());
+            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(null, TestUtil.GetRandomString());
             //---------------Assert PreConditions---------------            
             Assert.IsNull(menuItem.ControlManagerCreator);
             //---------------Execute Test ----------------------
