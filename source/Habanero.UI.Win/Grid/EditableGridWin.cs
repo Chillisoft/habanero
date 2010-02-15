@@ -64,7 +64,7 @@ namespace Habanero.UI.Win
             this.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             ComboBoxClickOnce = true;
             UserDeletingRow += ConfirmRowDeletion;
-            CheckUserConfirmsDeletionDelegate += CheckUserWantsToDelete;
+            CheckUserConfirmsDeletionDelegate = CheckUserWantsToDelete;
             this.UserDeletedRow+=((sender, e) => ResetBOCollection());
             CellClick += CellClickHandler;
         }

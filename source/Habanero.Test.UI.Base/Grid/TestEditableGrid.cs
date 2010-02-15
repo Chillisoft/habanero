@@ -1035,7 +1035,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof (DBNull), editableGrid.Rows[1].Cells[0].Value);
             Assert.AreEqual("c", editableGrid.Rows[2].Cells[0].Value);
         }
-
+        
         [Test]
         public void TestDeleteKeyBehaviours_MessageBoxDelegateAssignedByDefault()
         {

@@ -326,6 +326,10 @@ namespace Habanero.UI.Win
             bool selectedBusinessObjectNotNull = (selectedBusinessObject != null);
             if (selectedBusinessObjectNotNull)
             {
+                string message;
+                bool isEditable = selectedBusinessObject.IsEditable(out message);
+                this.IBOEditorControl.Enabled = isEditable;
+                _saveButton.Enabled = isEditable;
                 _cancelButton.Enabled = selectedBusinessObject.Status.IsDirty;
                 _deleteButton.Enabled = !selectedBusinessObject.Status.IsNew;
             }
@@ -335,7 +339,7 @@ namespace Habanero.UI.Win
                 _deleteButton.Enabled = false;
                 _cancelButton.Enabled = false;
             }
-            _iboEditorControl.Enabled = selectedBusinessObjectNotNull;
+            //_iboEditorControl.Enabled = selectedBusinessObjectNotNull;
         }
 
         /// <summary>
@@ -726,6 +730,10 @@ namespace Habanero.UI.Win
             bool selectedBusinessObjectNotNull = (selectedBusinessObject != null);
             if (selectedBusinessObjectNotNull)
             {
+                string message;
+                bool isEditable = selectedBusinessObject.IsEditable(out message);
+                this.IBOEditorControl.Enabled = isEditable;
+                _saveButton.Enabled = isEditable;
                 _cancelButton.Enabled = selectedBusinessObject.Status.IsDirty;
                 _deleteButton.Enabled = !selectedBusinessObject.Status.IsNew;
             }
@@ -735,7 +743,7 @@ namespace Habanero.UI.Win
                 _deleteButton.Enabled = false;
                 _cancelButton.Enabled = false;
             }
-            this.IBOEditorControl.Enabled = selectedBusinessObjectNotNull;
+            //this.IBOEditorControl.Enabled = selectedBusinessObjectNotNull;
         }
 
         /// <summary>

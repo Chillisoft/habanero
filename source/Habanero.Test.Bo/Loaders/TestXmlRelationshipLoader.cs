@@ -17,10 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -266,17 +264,16 @@ namespace Habanero.Test.BO.Loaders
                 StringAssert.Contains(string.Format("'TestRelationship' on class '{0}'", className), ex.Message);
                 StringAssert.Contains("invalid value ('Bob')", ex.Message);
             } 
-
         }
 
         [Test]
         public void Test_OwningBOHasForeignKey_Default_Single()
         {
             //---------------Set up test pack-------------------
-
+            const string singleRelationshipString = SingleRelationshipString;
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            IRelationshipDef relDef = _loader.LoadRelationship(SingleRelationshipString, _propDefs);
+            IRelationshipDef relDef = _loader.LoadRelationship(singleRelationshipString, _propDefs);
 
             //---------------Test Result -----------------------
             Assert.IsTrue(relDef.OwningBOHasForeignKey);
