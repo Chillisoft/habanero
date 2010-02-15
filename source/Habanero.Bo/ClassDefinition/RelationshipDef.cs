@@ -92,7 +92,7 @@ namespace Habanero.BO.ClassDefinition
             : this(relationshipName, null, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, insertParentAction, relationshipType)
 		{
 		}
-
+        // ReSharper disable DoNotCallOverridableMethodsInConstructor
         private RelationshipDef(string relationshipName, Type relatedObjectClassType, string relatedObjectAssemblyName, string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(relKeyDef, "relKeyDef");
@@ -113,6 +113,7 @@ namespace Habanero.BO.ClassDefinition
     	    this.InsertParentAction = insertParentAction;
     	    RelationshipType = relationshipType;
 		}
+        // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
         ///<summary>
         /// Gets and Sets the Class Def to the ClassDefinition that owns this Relationship Def.
@@ -320,5 +321,20 @@ namespace Habanero.BO.ClassDefinition
                              + " relationship is set up as a composition relationship (RemoveChildAction.Prevent)" ;
             throw new HabaneroDeveloperException(message, message);
         }
+
+        ///<summary>
+        /// Returns true if this is a Multiple Relationship and the Reverse is a single relationship
+        ///</summary>
+        public abstract bool IsOneToMany { get; }
+
+        ///<summary>
+        /// Returns true if this is a Single Relationship and the Reverse is a Multiple relationship
+        ///</summary>
+        public abstract bool IsManyToOne { get; }
+
+        ///<summary>
+        /// Returns true if this is a Single Relationship and the Reverse is a Single relationship
+        ///</summary>
+        public abstract bool IsOneToOne { get; }
     }
 }

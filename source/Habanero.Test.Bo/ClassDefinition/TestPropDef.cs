@@ -24,6 +24,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -122,6 +123,39 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreEqual(newUOM, propDef.UnitOfMeasure);
         }
+        [Test]
+        public void Test_PropertyType_WhenTypeNullable_ShouldRetTypeToUnderlyingType()
+        {
+            //---------------Set up test pack-------------------
+            Type propType = typeof (Guid?);
+            IPropDef propDef = new PropDef("PropName", propType, PropReadWriteRule.ReadOnly, null);
+            //---------------Assert Precondition----------------
+            Assert.IsNotEmpty(propDef.PropertyTypeName);
+            Assert.IsNotNull(propDef.PropertyType);
+            Assert.IsTrue(ReflectionUtilities.IsNullableType(propType));
+            Assert.AreSame(typeof(Guid), ReflectionUtilities.GetNullableUnderlyingType(propType));
+            //---------------Execute Test ----------------------
+            Type propertyType = propDef.PropertyType;
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(Guid), propertyType);
+        }
+        [Test]
+        public void Test_PropertyType_WhenTypeNotNullable_ShouldRetType()
+        {
+            //---------------Set up test pack-------------------
+            Type propType = typeof (Guid);
+            IPropDef propDef = new PropDef("PropName", propType, PropReadWriteRule.ReadOnly, null);
+            //---------------Assert Precondition----------------
+            Assert.IsNotEmpty(propDef.PropertyTypeName);
+            Assert.IsNotNull(propDef.PropertyType);
+            Assert.IsFalse(ReflectionUtilities.IsNullableType(propType));
+            Assert.AreSame(typeof(Guid), ReflectionUtilities.GetNullableUnderlyingType(propType));
+            //---------------Execute Test ----------------------
+            Type propertyType = propDef.PropertyType;
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(Guid), propertyType);
+        }
+
 
         [Test]
         public void Test_AddPropRule()

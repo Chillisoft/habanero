@@ -16,9 +16,11 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Loaders;
+using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -39,7 +41,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class PrimaryKeyDef : KeyDef, IPrimaryKeyDef
     {
-        private bool mIsGUIDObjectID = true;
+        private bool _isGuidObjectID = true;
 
         /// <summary>
         /// Constructor to create a new primary key definition
@@ -57,7 +59,7 @@ namespace Habanero.BO.ClassDefinition
         /// property definition is being added</exception>
         public override void Add(IPropDef propDef)
         {
-            if (Count > 0 && mIsGUIDObjectID)
+            if (Count > 0 && _isGuidObjectID)
             {
                 throw new InvalidPropertyException("You cannot have more than one " +
                     "property for a primary key that represents an object's Guid ID");
@@ -73,8 +75,8 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public bool IsGuidObjectID
         {
-            get { return mIsGUIDObjectID; }
-            set { mIsGUIDObjectID = value; }
+            get { return _isGuidObjectID; }
+            set { _isGuidObjectID = value; }
         }
 
         /// <summary>
@@ -109,7 +111,7 @@ namespace Habanero.BO.ClassDefinition
         /// key definition</returns>
         public override IBOKey CreateBOKey(IBOPropCol lBOPropCol)
         {
-		    BOPrimaryKey lBOKey = mIsGUIDObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
+		    BOPrimaryKey lBOKey = _isGuidObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
             foreach (PropDef lPropDef in this)
             {
                 lBOKey.Add(lBOPropCol[lPropDef.PropertyName]);
@@ -123,6 +125,16 @@ namespace Habanero.BO.ClassDefinition
         public bool IsCompositeKey
         {
             get { return this.Count > 1; }
+        }
+
+        public override string ToString()
+        {
+            string toStringValue = "";
+            foreach (PropDef lPropDef in this)
+            {
+                toStringValue =StringUtilities.AppendMessage(toStringValue, lPropDef.PropertyName, "_");
+            }
+            return toStringValue;
         }
     }
 }

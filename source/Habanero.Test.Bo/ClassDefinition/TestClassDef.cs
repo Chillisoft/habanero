@@ -299,13 +299,10 @@ namespace Habanero.Test.BO.ClassDefinition
             PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
             PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
 
-            PropDefCol col1 = new PropDefCol();
-            col1.Add(propDef1);
-            col1.Add(propDef2);
+            PropDefCol col1 = new PropDefCol {propDef1, propDef2};
             Assert.AreEqual(2, col1.Count);
 
-            PropDefCol col2 = new PropDefCol();
-            col2.Add(col1);
+            PropDefCol col2 = new PropDefCol {col1};
             Assert.AreEqual(2, col2.Count);
             Assert.IsTrue(col2.Contains("prop1"));
             Assert.IsTrue(col2.Contains("prop2"));
@@ -667,7 +664,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 KeysCol = col;
             }
 
-            public void SetPrimaryKeyDef(PrimaryKeyDef pkDef)
+            public void SetPrimaryKeyDef(IPrimaryKeyDef pkDef)
             {
                 PrimaryKeyDef = pkDef;
             }

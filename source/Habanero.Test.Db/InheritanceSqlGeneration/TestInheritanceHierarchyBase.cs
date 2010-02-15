@@ -88,7 +88,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
         }
-
+/*
         public void SetupTestForFilledCircleNoPrimaryKeyInheritsCircle()
         {
             this.SetupDBConnection();
@@ -104,7 +104,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
                 new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-        }
+        }*/
 
         protected static Shape CreateSavedShape()
         {

@@ -26,8 +26,10 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class SingleRelationshipDef : RelationshipDef
     {
-        #region Constructors
+        private bool _setAsOneToOne;
 
+        #region Constructors
+        // ReSharper disable DoNotCallOverridableMethodsInConstructor
         /// <summary>
         /// Constructor to create a new single relationship definition
         /// </summary>
@@ -46,6 +48,7 @@ namespace Habanero.BO.ClassDefinition
         {
             OwningBOHasForeignKey = true;
         }
+        // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
         /// <summary>
         /// Constructor to create a new single relationship definition
@@ -66,7 +69,7 @@ namespace Habanero.BO.ClassDefinition
                 keepReferenceToRelatedObject, deleteParentAction, InsertParentAction.InsertRelationship, RelationshipType.Association)
         {
         }
-
+        // ReSharper disable DoNotCallOverridableMethodsInConstructor
         ///<summary>
         /// Constructs a single Relationship
         ///</summary>
@@ -85,6 +88,7 @@ namespace Habanero.BO.ClassDefinition
         {
             OwningBOHasForeignKey = true;
         }
+        // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
         #endregion Constructors
 
@@ -107,6 +111,29 @@ namespace Habanero.BO.ClassDefinition
         {
             Type relationshipBOType = typeof(SingleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
             return (ISingleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);
+        }
+
+        public override bool IsOneToMany
+        {
+            get { return false; }
+        }
+
+        public override bool IsManyToOne
+        {
+            get { return !_setAsOneToOne; }
+        }
+
+        public override bool IsOneToOne
+        {
+            get { return _setAsOneToOne; }
+        }
+        /// <summary>
+        /// Sets this SingleRelationshipDef as a One To One.
+        /// This overrides the default of it being set to ManyToOne
+        /// </summary>
+        public void SetAsOneToOne()
+        {
+            _setAsOneToOne = true;
         }
     }
 }

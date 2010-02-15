@@ -34,14 +34,8 @@ namespace Habanero.Base
     /// </summary>
     public abstract class HabaneroApp
     {
-        private readonly string _appName;
-        private readonly string _appVersion;
-        private static ILog log;
+        private static ILog _log;
         private IApplicationVersionUpgrader _applicationVersionUpgrader;
-        private string _classDefsFileName = "ClassDefs.xml";
-        private IExceptionNotifier _exceptionNotifier;
-        private ISettings _settings;
-        private bool _loadClassDefs = true;
         private string _classDefsXml;
 
         //private ISynchronisationController _synchronisationController;
@@ -54,8 +48,10 @@ namespace Habanero.Base
         /// <param name="appVersion">The application version</param>
         public HabaneroApp(string appName, string appVersion)
         {
-            _appName = appName;
-            _appVersion = appVersion;
+            ClassDefsFileName = "ClassDefs.xml";
+            LoadClassDefs = true;
+            AppName = appName;
+            AppVersion = appVersion;
         }
 
         /// <summary>
@@ -85,9 +81,9 @@ namespace Habanero.Base
                 SetupApplicationNameAndVersion();
                 SetupLogging();
 
-                log.Debug("---------------------------------------------------------------------");
-                log.Debug(string.Format("{0} v{1} starting", AppName, AppVersion));
-                log.Debug("---------------------------------------------------------------------");
+                _log.Debug("---------------------------------------------------------------------");
+                _log.Debug(string.Format("{0} v{1} starting", AppName, AppVersion));
+                _log.Debug("---------------------------------------------------------------------");
 
                 SetupDatabaseConnection();
                 SetupSettings();
@@ -96,9 +92,9 @@ namespace Habanero.Base
             }
             catch (Exception ex) {
                 string errorMessage = "There was a problem starting the application.";
-                if (log != null && log.Logger.IsEnabledFor(Level.Error))
+                if (_log != null && _log.Logger.IsEnabledFor(Level.Error))
                 {
-                    log.Error("---------------------------------------------" +
+                    _log.Error("---------------------------------------------" +
                               Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true));
                     errorMessage += " Please look at the log file for details of the problem.";
                 }
@@ -126,13 +122,13 @@ namespace Habanero.Base
                                        "Habanero tutorial for example usage or see official " +
                                        "documentation on configuration files if the error is not resolved.", ex);
             }
-            log = LogManager.GetLogger("HabaneroApp");
+            _log = LogManager.GetLogger("HabaneroApp");
         }
 
         private void SetupApplicationNameAndVersion()
         {
-            GlobalRegistry.ApplicationName = _appName;
-            GlobalRegistry.ApplicationVersion = _appVersion;
+            GlobalRegistry.ApplicationName = AppName;
+            GlobalRegistry.ApplicationVersion = AppVersion;
         }
 
         /// <summary>
@@ -190,45 +186,27 @@ namespace Habanero.Base
         /// instantiation of DatabaseSettings (the default) or 
         /// ConfigFileSettings, although the later is read-only.
         /// </summary>
-        public ISettings Settings
-        {
-            get { return _settings; }
-            set { _settings = value; }
-        }
+        public ISettings Settings { get; set; }
 
         /// <summary>
         /// Gets and sets the value indicating whether to load the class definitions
         /// </summary>
-        public bool LoadClassDefs
-        {
-            get { return _loadClassDefs; }
-            set { _loadClassDefs = value; }
-        }
+        public bool LoadClassDefs { get; set; }
 
         /// <summary>
         /// Gets the name of the application
         /// </summary>
-        public string AppName
-        {
-            get { return _appName; }
-        }
+        public string AppName { get; private set; }
 
         /// <summary>
         /// Gets the version of the application
         /// </summary>
-        public string AppVersion
-        {
-            get { return _appVersion; }
-        }
+        public string AppVersion { get; private set; }
 
         /// <summary>
         /// Gets and sets the class definition file name. See <see cref="IClassDef"/>.
         /// </summary>
-        public string ClassDefsFileName
-        {
-            get { return _classDefsFileName; }
-            set { _classDefsFileName = value; }
-        }
+        public string ClassDefsFileName { get; set; }
 
         /// <summary>
         /// Gets and sets the class definition Xml. You can load the xml any way and set it here.
@@ -243,11 +221,7 @@ namespace Habanero.Base
         /// Gets and sets the exception notifier, which is used to inform the
         /// user of exceptions encountered.
         /// </summary>
-        public IExceptionNotifier ExceptionNotifier
-        {
-            get { return _exceptionNotifier; }
-            set { _exceptionNotifier = value; }
-        }
+        public IExceptionNotifier ExceptionNotifier { get; set; }
     }
 
 }

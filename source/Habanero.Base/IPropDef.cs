@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 
 namespace Habanero.Base
@@ -45,10 +46,10 @@ namespace Habanero.Base
         /// </summary>
         string PropertyTypeName { get; set; }
 
-        ///// <summary>
-        ///// The type of the property, e.g. string
-        ///// </summary>
-        //Type PropertyType { get; set; }
+        /// <summary>
+        /// The type of the property, e.g. string
+        /// </summary>
+        Type PropertyType { get; }
 
         ///// <summary>
         ///// Gets and sets the property rule relevant to this definition

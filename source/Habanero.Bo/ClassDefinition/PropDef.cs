@@ -407,7 +407,7 @@ namespace Habanero.BO.ClassDefinition
             _propertyName = propertyName;
             if (propType != null)
             {
-                MyPropertyType = propType;
+                MyPropertyType = ReflectionUtilities.GetNullableUnderlyingType(propType);
             }
             else
             {

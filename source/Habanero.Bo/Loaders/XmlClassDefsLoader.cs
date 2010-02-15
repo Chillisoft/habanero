@@ -101,12 +101,10 @@ namespace Habanero.BO.Loaders
         /// parameterised constructor.
         /// </summary>
         /// <returns>Returns a ClassDefCol containing the definitions</returns>
-        public ClassDefCol LoadClassDefs() ///// <returns>Returns an IList object containing the definitions</returns>
-            //public IList LoadClassDefs()
+        public ClassDefCol LoadClassDefs()
         {
             return LoadClassDefs(_xmlClassDefs);
         }
-
 
         /// <summary>
         /// As with LoadClassDefs(string), but uses the root element as a

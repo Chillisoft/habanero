@@ -58,12 +58,12 @@ namespace Habanero.Test.BO.TransactionCommitters
 
         private static MockBO CreateSavedMockBO()
         {
-            MockBO mockBo = new MockBO();
-            mockBo.Save();
-            return mockBo;
+            MockBO fakeBO = new MockBO();
+            fakeBO.Save();
+            return fakeBO;
         }
 
-        internal class MockBOWithCustomRule : MockBO
+        internal class FakeBOWithCustomRule : MockBO
         {
             /// <summary>
             /// Override this method in subclasses of BusinessObject to check custom rules for that
@@ -92,11 +92,11 @@ namespace Habanero.Test.BO.TransactionCommitters
             }
         }
 
-        private class MockBOWithBeforeSaveUpdatesCompulsoryField : MockBO
+        private class FakeBOWithBeforeSaveUpdatesCompulsoryField : MockBO
         {
             private bool _updateBeforePersistingExecuted;
 
-            public MockBOWithBeforeSaveUpdatesCompulsoryField()
+            public FakeBOWithBeforeSaveUpdatesCompulsoryField()
             {
                 _updateBeforePersistingExecuted = false;
             }
@@ -131,7 +131,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             }
         }
 
-        private class MockBOWithUpdateBeforePersisting : MockBO
+        private class FakeBOWithUpdateBeforePersisting : MockBO
         {
             /// <summary>
             /// Steps to carry out before the Save() command is run. You can add objects to the current
@@ -146,7 +146,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             }
         }
 
-        private class MockBOWithUpdateBeforePersisting_Level2 : MockBO
+        private class FakeBOWithUpdateBeforePersistingLevel2 : MockBO
         {
             /// <summary>
             /// Steps to carry out before the Save() command is run. You can add objects to the current
@@ -157,7 +157,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             /// be committed in the same transaction as this one.</param>
             protected internal override void UpdateObjectBeforePersisting(ITransactionCommitter transactionCommitter)
             {
-                transactionCommitter.AddBusinessObject(new MockBOWithUpdateBeforePersisting());
+                transactionCommitter.AddBusinessObject(new FakeBOWithUpdateBeforePersisting());
             }
         }
 
@@ -186,9 +186,9 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //---------------Set up test pack-------------------
 
-            MockBOWithUpdateBeforePersisting_Level2 mockBo = new MockBOWithUpdateBeforePersisting_Level2();
+            FakeBOWithUpdateBeforePersistingLevel2 fakeBO = new FakeBOWithUpdateBeforePersistingLevel2();
             TransactionCommitterStub committer = new TransactionCommitterStub();
-            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(fakeBO);
             //---------------Execute Test ----------------------
 
             committer.AddTransaction(trnBusObj);
@@ -204,9 +204,9 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //---------------Set up test pack-------------------
 
-            MockBOWithUpdateBeforePersisting mockBo = new MockBOWithUpdateBeforePersisting();
+            FakeBOWithUpdateBeforePersisting fakeBO = new FakeBOWithUpdateBeforePersisting();
             TransactionCommitterStub committer = new TransactionCommitterStub();
-            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(fakeBO);
             committer.AddTransaction(trnBusObj);
             //---------------Execute Test ----------------------
 
@@ -221,9 +221,9 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //---------------Set up test pack-------------------
 
-            MockBOWithUpdateBeforePersisting_Level2 mockBo = new MockBOWithUpdateBeforePersisting_Level2();
+            FakeBOWithUpdateBeforePersistingLevel2 fakeBO = new FakeBOWithUpdateBeforePersistingLevel2();
             TransactionCommitterStub committer = new TransactionCommitterStub();
-            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(fakeBO);
             committer.AddTransaction(trnBusObj);
             //---------------Execute Test ----------------------
 
@@ -268,9 +268,9 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void TestMessageTwoPersistSimpleBO_Failing()
         {
             //---------------Set up test pack-------------------
-            MockBOWithCustomRule mockBO = new MockBOWithCustomRule();
+            FakeBOWithCustomRule fakeBO = new FakeBOWithCustomRule();
             TransactionCommitter committerDB = new TransactionCommitterStub();
-            committerDB.AddBusinessObject(mockBO);
+            committerDB.AddBusinessObject(fakeBO);
 
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
@@ -294,9 +294,9 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void TestPersistSimpleBO_FailingCustomRules()
         {
             //---------------Set up test pack-------------------
-            MockBOWithCustomRule mockBO = new MockBOWithCustomRule();
+            FakeBOWithCustomRule fakeBO = new FakeBOWithCustomRule();
             TransactionCommitter committerDB = new TransactionCommitterStub();
-            committerDB.AddBusinessObject(mockBO);
+            committerDB.AddBusinessObject(fakeBO);
 
             //---------------Execute Test ----------------------
             try
@@ -326,42 +326,42 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void Test_AddCreatedBO_DoesNotFailInTransactionCommitter()
         {
             //---------------Set up test pack-------------------
-            MockBO mockBo = new MockBO();
+            MockBO fakeBO = new MockBO();
             Guid mockBOProp1 = Guid.NewGuid();
-            mockBo.MockBOProp1 = mockBOProp1;
-            mockBo.MarkForDelete();
+            fakeBO.MockBOProp1 = mockBOProp1;
+            fakeBO.MarkForDelete();
             TransactionCommitter committerDB = new TransactionCommitterStub();
             //---------------Assert Preconditions---------------
-            Assert.IsTrue(mockBo.Status.IsNew);
-            Assert.IsTrue(mockBo.Status.IsDeleted);
+            Assert.IsTrue(fakeBO.Status.IsNew);
+            Assert.IsTrue(fakeBO.Status.IsDeleted);
             Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
             //---------------Execute Test ----------------------
-            committerDB.AddBusinessObject(mockBo);
+            committerDB.AddBusinessObject(fakeBO);
             //---------------Test Result -----------------------
-            Assert.IsTrue(mockBo.Status.IsNew);
-            Assert.IsTrue(mockBo.Status.IsDeleted);
+            Assert.IsTrue(fakeBO.Status.IsNew);
+            Assert.IsTrue(fakeBO.Status.IsDeleted);
             Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
         }
         [Test]
         public void TestPersistSimpleCreatedBO_DoesNotFailInTransactionCommitter()
         {
             //---------------Set up test pack-------------------
-            MockBO mockBo = new MockBO();
+            MockBO fakeBO = new MockBO();
             Guid mockBOProp1 = Guid.NewGuid();
-            mockBo.MockBOProp1 = mockBOProp1;
+            fakeBO.MockBOProp1 = mockBOProp1;
             
             TransactionCommitter committerDB = new TransactionCommitterStub();
-            committerDB.AddBusinessObject(mockBo);
-            mockBo.MarkForDelete();
+            committerDB.AddBusinessObject(fakeBO);
+            fakeBO.MarkForDelete();
             //---------------Assert Preconditions---------------
             Assert.AreEqual(1, committerDB.OriginalTransactions.Count);
-            Assert.IsTrue(mockBo.Status.IsNew);
-            Assert.IsTrue(mockBo.Status.IsDeleted);
+            Assert.IsTrue(fakeBO.Status.IsNew);
+            Assert.IsTrue(fakeBO.Status.IsDeleted);
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
             //---------------Test Result -----------------------
-            Assert.IsTrue(mockBo.Status.IsNew);
-            Assert.IsTrue(mockBo.Status.IsDeleted);
+            Assert.IsTrue(fakeBO.Status.IsNew);
+            Assert.IsTrue(fakeBO.Status.IsDeleted);
         }
 
         [Test]
@@ -389,17 +389,17 @@ namespace Habanero.Test.BO.TransactionCommitters
         public void TestPersistSimpleBO_Update_NotUsingTransactionalBusinessObject()
         {
             //---------------Set up test pack-------------------
-            MockBO mockBo = CreateSavedMockBO();
+            MockBO fakeBO = CreateSavedMockBO();
             Guid mockBOProp1 = Guid.NewGuid();
-            mockBo.MockBOProp1 = mockBOProp1;
+            fakeBO.MockBOProp1 = mockBOProp1;
             TransactionCommitter committerDB = new TransactionCommitterStub();
-            committerDB.AddBusinessObject(mockBo);
+            committerDB.AddBusinessObject(fakeBO);
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
 
             //---------------Test Result -----------------------
-            TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
+            TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(fakeBO);
         }
       
 
@@ -410,9 +410,9 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //---------------Set up test pack-------------------
 
-            MockBOWithBeforeSaveUpdatesCompulsoryField mockBo = new MockBOWithBeforeSaveUpdatesCompulsoryField();
+            FakeBOWithBeforeSaveUpdatesCompulsoryField fakeBO = new FakeBOWithBeforeSaveUpdatesCompulsoryField();
             TransactionCommitterStub committer = new TransactionCommitterStub();
-            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(fakeBO);
             committer.AddTransaction(trnBusObj);
             //---------------Execute Test ----------------------
             committer.CommitTransaction();

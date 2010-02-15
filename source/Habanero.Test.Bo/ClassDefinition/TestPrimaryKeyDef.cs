@@ -52,7 +52,7 @@ namespace Habanero.Test.BO.ClassDefinition
             new PrimaryKeyDef {IgnoreIfNull = true};
         }
 
-
+        [Test]
         public void Test_CreatePrimaryKey_TwoPropDefs()
         {
             //---------------Set up test pack-------------------
@@ -84,5 +84,39 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsFalse(isCompositeKey);
 
         }
+        [Test]
+        public void Test_ToString_ShouldReturnPropName()
+        {
+            //---------------Set up test pack-------------------
+            const string propertyName = "prop1";
+            PropDef propDef1 = new PropDef(propertyName, typeof(String), PropReadWriteRule.ReadWrite, null);
+            PrimaryKeyDef keyDef = new PrimaryKeyDef { IsGuidObjectID = false };
+            keyDef.Add(propDef1);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, keyDef.Count);
+            //---------------Execute Test ----------------------
+            var toString = keyDef.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(propertyName, toString);
+
+        }
+        [Test]
+        public void Test_ToString_WhenComposite_ShouldReturnConcatenatedPropNames()
+        {
+            //---------------Set up test pack-------------------
+            string propertyName = TestUtil.GetRandomString();
+            string propName2 = TestUtil.GetRandomString();
+            PrimaryKeyDef keyDef = new PrimaryKeyDef { IsGuidObjectID = false };
+            keyDef.Add(new PropDef(propertyName, typeof(String), PropReadWriteRule.ReadWrite, null));
+            keyDef.Add(new PropDef(propName2, typeof(String), PropReadWriteRule.ReadWrite, null));
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, keyDef.Count);
+            //---------------Execute Test ----------------------
+            var toString = keyDef.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(propertyName +"_" + propName2, toString);
+
+        }
+        
     }
 }

@@ -1,28 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
 {
+    ///<summary>
+    /// This class validates all Class Definitions once they have been loaded.
+    /// It can be used to validate Class Definitions regardless of how they are 
+    /// loaded (i.e. whether they are loaded via a DB, XML or Reflection (AutoMapping)
+    ///</summary>
     public class ClassDefValidator
     {
         private readonly IDefClassFactory _defClassFactory;
 
+        ///<summary>
+        /// Constructs a Class Def Validator with a <see cref="IDefClassFactory"/>
+        ///</summary>
+        ///<param name="defClassFactory"></param>
         public ClassDefValidator(IDefClassFactory defClassFactory) {
             _defClassFactory = defClassFactory;
         }
 
+        ///<summary>
+        /// Validates the ClassDefinitions contained in classDefCol
+        ///</summary>
+        ///<param name="classDefCol"></param>
         public void ValidateClassDefs(ClassDefCol classDefCol)
         {
             UpdateOwningBOHasForeignKey(classDefCol);
             CheckRelationships(classDefCol);
             UpdateKeyDefinitionsWithBoProp(classDefCol);
             UpdatePrimaryKeys(classDefCol);
-            //TODO Brett 02 Feb 2009: check valid business object lookup definition i.e. is property valid and is sort direction valid
-            //TODO Brett 02 Feb 2009: Validation for relationships that reversed relationship and forward relationship for
-            //  a bo are not both set to OwnerHasForeignKey
+            //TODO Brett 02 Feb 2010 check valid business object lookup definition i.e. is property valid and is sort direction valid
+
         }
 
         private static void UpdateOwningBOHasForeignKey(ClassDefCol classDefCol)
@@ -53,7 +64,7 @@ namespace Habanero.BO.ClassDefinition
                 if (primaryKeyDef == null) continue;
                 if (!primaryKeyDef.IsGuidObjectID) continue;
                 IPropDef keyPropDef = primaryKeyDef[0];
-                if (primaryKeyDef.IsGuidObjectID && (keyPropDef.PropertyTypeName != "Guid" || keyPropDef.PropertyTypeAssemblyName != "System"))
+                if (primaryKeyDef.IsGuidObjectID && (keyPropDef.PropertyType != typeof(Guid)))
                 {
                     throw new InvalidXmlDefinitionException("In the class called '" + classDef.ClassNameFull +
                         "', the primary key is set as IsObjectID but the property '" + keyPropDef.PropertyName +
@@ -252,7 +263,7 @@ namespace Habanero.BO.ClassDefinition
                           relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull));
             }
 
-            IRelationshipDef reverseRelationshipDef = (IRelationshipDef)relatedClassDef.RelationshipDefCol[reverseRelationshipName];
+            IRelationshipDef reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
             CheckReverseRelationshipRelKeyDefProps(relationshipDef, relatedClassDef, reverseRelationshipName, reverseRelationshipDef, classDef);
             //            if (!reverseRelationshipDef.OwningBOHasForeignKey) return;
             //

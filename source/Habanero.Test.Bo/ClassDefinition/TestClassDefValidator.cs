@@ -856,6 +856,55 @@ namespace Habanero.Test.BO.ClassDefinition
             }
         }
 
+        [Ignore(" Cardinality does not match foreign and primary key set up.")] //TODO Brett 23 Feb 2009:
+        [Test]
+        public void Test_Valid_Relationship_1_M_Relationships_PrimaryAndForeignKeyDoesNotMatchRelationshipCardinality()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestClass"" type=""multiple"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" 
+                                            reverseRelationship=""TestRelatedClass"" owningBOHasForeignKey=""true"" >
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" 
+                                            reverseRelationship=""TestClass"" owningBOHasForeignKey=""true"" >
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
+
+            Assert.Fail("wRITE TEST THSI should throw validation error");
+
+            IClassDef classDef = classDefList.FindByClassName("TestClass");
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
+            IRelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+
+            Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
+            Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
+        }
         private XmlClassDefsLoader CreateXmlClassDefsLoader()
         {
             return new XmlClassDefsLoader("", new DtdLoader(), GetDefClassFactory());

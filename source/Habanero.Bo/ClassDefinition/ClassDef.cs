@@ -97,7 +97,6 @@ namespace Habanero.BO.ClassDefinition
         private IPropDefCol _propDefColIncludingInheritance;
         private IRelationshipDefCol _relationshipDefCol;
 
-        private ISuperClassDef _superClassDef;
         private string _tableName = "";
         private UIDefCol _uiDefCol;
 
@@ -113,11 +112,11 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="keyDefCol">The collection of key definitions</param>
         /// <param name="relationshipDefCol">The collection of relationship definitions</param>
         internal ClassDef(Type classType,
-                          PrimaryKeyDef primaryKeyDef,
+                          IPrimaryKeyDef primaryKeyDef,
                           string tableName,
                           IPropDefCol propDefCol,
                           KeyDefCol keyDefCol,
-                          RelationshipDefCol relationshipDefCol)
+                          IRelationshipDefCol relationshipDefCol)
             : this(classType, primaryKeyDef, tableName, propDefCol, keyDefCol, relationshipDefCol, null)
         {
         }
@@ -133,7 +132,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="relationshipDefCol">The collection of relationship definitions</param>
         /// <param name="uiDefCol">The collection of user interface definitions</param>
         internal ClassDef(Type classType,
-                          PrimaryKeyDef primaryKeyDef,
+                          IPrimaryKeyDef primaryKeyDef,
                           string tableName,
                           IPropDefCol propDefCol,
                           KeyDefCol keyDefCol,
@@ -150,7 +149,7 @@ namespace Habanero.BO.ClassDefinition
         /// As before, but excludes the table name
         /// </summary>
         public ClassDef(Type classType,
-                        PrimaryKeyDef primaryKeyDef,
+                        IPrimaryKeyDef primaryKeyDef,
                         IPropDefCol propDefCol,
                         KeyDefCol keyDefCol,
                         IRelationshipDefCol relationshipDefCol,
@@ -445,8 +444,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (_propDefColIncludingInheritance == null)
                 {
-                    _propDefColIncludingInheritance = new PropDefCol();
-                    _propDefColIncludingInheritance.Add(PropDefcol);
+                    _propDefColIncludingInheritance = new PropDefCol {PropDefcol};
 
                     ClassDef currentClassDef = this;
                     while (currentClassDef.SuperClassClassDef != null)
@@ -465,7 +463,7 @@ namespace Habanero.BO.ClassDefinition
         public IRelationshipDefCol RelationshipDefCol
         {
             get { return _relationshipDefCol; }
-            set { _relationshipDefCol = (RelationshipDefCol) value; }
+            set { _relationshipDefCol = value; }
         }
 
         ///// <summary>
@@ -628,14 +626,14 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="col">The collection of properties</param>
         /// <returns>Returns the new key collection</returns>
-        public BOKeyCol createBOKeyCol(IBOPropCol col)
+        public BOKeyCol CreateBOKeyCol(IBOPropCol col)
         {
             BOKeyCol keyCol = _keysCol.CreateBOKeyCol(col);
             if (SuperClassClassDef != null)
             {
                 ClassDef superClassClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
 
-                keyCol.Add(superClassClassDef.createBOKeyCol(col));
+                keyCol.Add(superClassClassDef.CreateBOKeyCol(col));
             }
             return keyCol;
         }
@@ -667,11 +665,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Gets and sets the super-class of this class definition
         /// </summary>
-        public ISuperClassDef SuperClassDef
-        {
-            get { return _superClassDef; }
-            set { _superClassDef = value; }
-        }
+        public ISuperClassDef SuperClassDef { get; set; }
 
         /// <summary>
         /// Returns the class definition of the super-class, or null
@@ -1060,7 +1054,7 @@ namespace Habanero.BO.ClassDefinition
                 //  go through each alternative and check if there is a related object and return the first one
                 // else get the related object
 
-                string[] parts = relationshipName.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
+                string[] parts = relationshipName.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
                 var relNames = new List<string>(parts);
                 var relatedPropertyTypes = new List<Type>();
                 relNames.ForEach(delegate(string relationship)

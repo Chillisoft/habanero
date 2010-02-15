@@ -180,6 +180,21 @@ namespace Habanero.BO.ClassDefinition
             Type relationshipBOType = typeof(MultipleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
             return (IMultipleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol, this.TimeOut);
 		}
+
+        public override bool IsOneToMany
+        {
+            get { return true; }
+        }
+
+        public override bool IsManyToOne
+        {
+            get { return false; }
+        }
+
+        public override bool IsOneToOne
+        {
+            get { return false; }
+        }
     }
 
     

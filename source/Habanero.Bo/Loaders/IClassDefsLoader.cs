@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 
 namespace Habanero.BO.Loaders
@@ -26,10 +27,18 @@ namespace Habanero.BO.Loaders
 	/// </summary>
 	public interface IClassDefsLoader
 	{
+        
 		/// <summary>
+		/// Loads class definitions from the xmlPassed into the Loader.
+		/// </summary>
+        /// <returns>Returns an ClassDefCol containing the definitions</returns>
+        [Obsolete("Please use parameterless LoadClassDefs() and pass the xml in via the constructor or another paramter")]
+		ClassDefCol LoadClassDefs(string classDefsXml);
+
+        /// <summary>
 		/// Loads class definitions from loader source data
 		/// </summary>
-		/// <returns>Returns an ClassDefCol containing the definitions</returns>
-		ClassDefCol LoadClassDefs(string classDefsXml);
+        /// <returns>Returns an ClassDefCol containing the definitions</returns>
+		ClassDefCol LoadClassDefs();
 	}
 }

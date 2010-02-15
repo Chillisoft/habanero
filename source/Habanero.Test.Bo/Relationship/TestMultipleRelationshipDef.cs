@@ -34,7 +34,7 @@ namespace Habanero.Test.BO.Relationship
         private RelationshipDef _multipleRelationshipDef;
         private RelKeyDef _RelKeyDef;
         private IPropDefCol _propDefCol;
-        private MockBO _mockBo;
+        private MockBO _fakeBO;
         private SingleRelationshipDef _singleRelationshipDef;
 
         [TestFixtureSetUp]
@@ -46,8 +46,8 @@ namespace Habanero.Test.BO.Relationship
         public void init()
         {
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            _mockBo = new MockBO();
-            _propDefCol = _mockBo.PropDefCol;
+            _fakeBO = new MockBO();
+            _propDefCol = _fakeBO.PropDefCol;
 
             _RelKeyDef = new RelKeyDef();
             IPropDef propDef = _propDefCol["MockBOID"];
@@ -85,10 +85,10 @@ namespace Habanero.Test.BO.Relationship
         public void TestCreateRelationship()
         {
             IMultipleRelationship rel =
-                (IMultipleRelationship)_multipleRelationshipDef.CreateRelationship(_mockBo, _mockBo.PropCol);
+                (IMultipleRelationship)_multipleRelationshipDef.CreateRelationship(_fakeBO, _fakeBO.PropCol);
             Assert.AreEqual(_multipleRelationshipDef.RelationshipName, rel.RelationshipName);
 
-            Assert.IsTrue(_mockBo.GetPropertyValue("MockBOProp1") == null);
+            Assert.IsTrue(_fakeBO.GetPropertyValue("MockBOProp1") == null);
 
             Assert.AreEqual(0, rel.BusinessObjectCollection.Count );
         }
@@ -97,7 +97,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestCreateSingleRelationship()
         {
             ISingleRelationship rel =
-                (ISingleRelationship)_singleRelationshipDef.CreateRelationship(_mockBo, _mockBo.Props);
+                (ISingleRelationship)_singleRelationshipDef.CreateRelationship(_fakeBO, _fakeBO.Props);
 
             //-------------Execute Test ------------------------
             bool hasRelatedObject = rel.HasRelatedObject();

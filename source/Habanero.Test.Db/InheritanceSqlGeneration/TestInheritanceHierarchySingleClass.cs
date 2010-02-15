@@ -46,7 +46,8 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         {
             BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
             shapes.LoadAll();
-            foreach (Shape shape in shapes)
+            Shape[] shapesClone = shapes.ToArray();
+            foreach (Shape shape in shapesClone)
             {
                 shape.MarkForDelete();
             }
@@ -263,9 +264,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             Assert.AreEqual("FilledCircle", shapes[1].ShapeName);
             Assert.AreEqual("MyShape", shapes[2].ShapeName);
 
-            Shape circleShape = shapes[0];
             Shape filledCircleShape = shapes[1];
-            Shape myShape = shapes[2];
 
             Assert.AreEqual(2, circles.Count);
             Assert.AreEqual("FilledCircle", circles[1].ShapeName);
@@ -285,8 +284,8 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         public void TestLoadCreatedShapes_ShapeAndCircleOnly()
         {
             //-------------Setup Test Pack ------------------
-            Shape shape = CreateSavedShape();
-            CircleNoPrimaryKey circle = CreateSavedCircle();
+            CreateSavedShape();
+            CreateSavedCircle();
 
             //-------------Execute test ---------------------
             BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
@@ -314,7 +313,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         public void TestLoadCreatedShapes_ShapeOnly()
         {
             //-------------Setup Test Pack ------------------
-            Shape shape = CreateSavedShape();
+            CreateSavedShape();
 
             //-------------Execute test ---------------------
             BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
@@ -447,6 +446,94 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
                 new UpdateStatementGenerator(myCircle, DatabaseConnection.CurrentConnection).Generate();
             Assert.AreEqual(1, myUpdateSql.Count);
             connectionControl.Verify();
+        }
+
+
+/*        [Test]
+        public void Test_SubTypeCreatedWithSuperTypeID_WhenNotDefinedOnSubType()
+        {
+            //---------------Set up test pack-------------------
+            FakeSuperClass superClass = new FakeSuperClass();
+            
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            FakeSubClass subClass = new FakeSubClass();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(subClass.ID);
+            IBOProp boProp = subClass.ID[0];
+            Assert.AreEqual("FakeSuperClassID", boProp.PropertyName);
+        }
+
+
+        [Test]
+        public void Test_CreatePK_WhenNotDefinedOnSubType_CreatesPK()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = FakeSubClass.GetClassDef();
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IBusinessObject newBusinessObject = classDef.CreateNewBusinessObject();
+            //---------------Test Result -----------------------
+        }*/
+    }
+    public class FakeSuperClass:BusinessObject
+    {
+        protected override IClassDef ConstructClassDef()
+        {
+            _classDef = (ClassDef)GetClassDef();
+            return _classDef;
+        }
+        private  static ClassDef CreateClassDef()
+        {
+            PropDefCol lPropDefCol = new PropDefCol();
+            IPropDef propDef = new PropDef("FakeSuperClassID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
+            lPropDefCol.Add(propDef);
+            PrimaryKeyDef primaryKey = new PrimaryKeyDef {IsGuidObjectID = true};
+            primaryKey.Add(lPropDefCol["FakeSuperClassID"]);
+            KeyDefCol keysCol = new KeyDefCol();
+            RelationshipDefCol relDefCol = new RelationshipDefCol();
+            ClassDef lClassDef = new ClassDef(typeof(FakeSuperClass), primaryKey, lPropDefCol, keysCol, relDefCol, null);
+            ClassDef.ClassDefs.Add(lClassDef);
+            return lClassDef;
+        }
+        public static IClassDef GetClassDef()
+        {
+            if (ClassDef.IsDefined(typeof(FakeSuperClass)))
+            {
+                return ClassDef.ClassDefs[typeof(FakeSuperClass)];
+            }
+            return CreateClassDef();
+        }
+    }
+    public class FakeSubClass:BusinessObject
+    {
+        protected override IClassDef ConstructClassDef()
+        {
+            _classDef = (ClassDef)GetClassDef();
+            return _classDef;
+        }
+        public static IClassDef GetClassDef()
+        {
+            if (ClassDef.IsDefined(typeof(FakeSubClass)))
+            {
+                return ClassDef.ClassDefs[typeof(FakeSubClass)];
+            }
+            return CreateClassDef();
+        }
+        private static ClassDef CreateClassDef()
+        {
+            PropDefCol lPropDefCol = new PropDefCol();
+            KeyDefCol keysCol = new KeyDefCol();
+            RelationshipDefCol relDefCol = new RelationshipDefCol();
+            //ClassDef lClassDef = new ClassDef(typeof(FilledCircleInheritsCircleNoPK), primaryKey, lPropDefCol, keysCol, relDefCol);
+            ClassDef lClassDef = new ClassDef(typeof(FakeSubClass), null, lPropDefCol, keysCol, relDefCol, null);
+            lClassDef.SuperClassDef = new SuperClassDef(FakeSuperClass.GetClassDef(), ORMapping.SingleTableInheritance);
+            ClassDef.ClassDefs.Add(lClassDef);
+            return lClassDef;
         }
     }
 }

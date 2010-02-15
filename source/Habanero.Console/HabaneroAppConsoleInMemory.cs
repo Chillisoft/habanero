@@ -30,8 +30,6 @@ namespace Habanero.Console
     /// </summary>
     public class HabaneroAppConsoleInMemory : HabaneroApp
     {
-        private DataStoreInMemory _dataStoreInMemory;
-
         /// <summary>
         /// Constructor to initialise a new application with basic application
         /// information.  Use the Startup() method to launch the application.
@@ -94,8 +92,8 @@ namespace Habanero.Console
         /// </summary>
         protected override void SetupDatabaseConnection()
         {
-            _dataStoreInMemory = new DataStoreInMemory();
-            BORegistry.DataAccessor = new DataAccessorInMemory(_dataStoreInMemory);
+            DataStoreInMemory = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(DataStoreInMemory);
         }
 
         /// <summary>
@@ -112,9 +110,6 @@ namespace Habanero.Console
         ///<summary>
         /// The <see cref="DataStoreInMemory"/> created by this class for use in your application.
         ///</summary>
-        public DataStoreInMemory DataStoreInMemory { get
-        {
-            return _dataStoreInMemory;
-        }}
+        public DataStoreInMemory DataStoreInMemory { get; private set; }
     }
 }

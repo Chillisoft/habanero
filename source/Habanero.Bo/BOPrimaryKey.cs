@@ -124,12 +124,13 @@ namespace Habanero.BO
         /// <returns>Returns a BOKey object or null</returns>
         public static IBOKey GetSuperClassKey(ClassDef subClassDef, BusinessObject subClassObj)
         {
-            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) subClassDef.SuperClassClassDef.PrimaryKeyDef;
+            IPrimaryKeyDef primaryKeyDef = subClassDef.SuperClassClassDef.PrimaryKeyDef;
             while (primaryKeyDef == null)
             {
                 if (subClassDef.SuperClassClassDef == null) return null;
 
                 subClassDef = subClassDef.SuperClassClassDef;
+                primaryKeyDef = subClassDef.PrimaryKeyDef;
             }
             return primaryKeyDef.CreateBOKey(subClassObj.Props);
         }

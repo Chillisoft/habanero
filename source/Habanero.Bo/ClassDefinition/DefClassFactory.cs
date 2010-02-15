@@ -20,12 +20,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.BO.Loaders;
 
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// A factory that produces instances of business object related classes.
-    /// This class is used by xml loaders that read from the class definitions.
+    /// This class is used by <see cref="IClassDefsLoader"/> that read from the class definitions.
     /// </summary>
 	public class DefClassFactory : IDefClassFactory
 	{

@@ -97,6 +97,19 @@ namespace Habanero.Test.Base
             //Assert.AreEqual(app.DefClassFactory);
         }
 
+        [Test]
+        public void Test_HabaneroAppConsoleInMemory_Startup_ShouldCreateDataStoreInMemory()
+        {
+            //---------------Set up test pack-------------------
+            HabaneroAppConsoleInMemory app = new HabaneroAppConsoleInMemory("someApp", "SomeVersion");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            app.Startup();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(app.DataStoreInMemory);
+        }
+
         private class TestApplicationVersionUpgrader : IApplicationVersionUpgrader
         {
             public void Upgrade()

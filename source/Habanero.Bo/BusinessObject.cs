@@ -384,7 +384,7 @@ namespace Habanero.BO
             CheckClassDefNotNull();
 
             _boPropCol = _classDef.CreateBOPropertyCol(newObject);
-            _keysCol = _classDef.createBOKeyCol(_boPropCol);
+            _keysCol = _classDef.CreateBOKeyCol(_boPropCol);
 
             SetPrimaryKeyForInheritedClass();
 

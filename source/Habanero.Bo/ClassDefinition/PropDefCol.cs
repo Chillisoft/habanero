@@ -115,6 +115,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns true if found, false if not</returns>
         public bool Contains(string propertyName)
         {
+            if (propertyName == null) return false;
             return (_propDefs.ContainsKey(propertyName.ToUpper()));
         }
 

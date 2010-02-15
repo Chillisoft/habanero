@@ -487,12 +487,30 @@ namespace Habanero.Util
         public static Type GetUndelyingPropertType(PropertyInfo propertyInfo)
         {
             Type propertyType = propertyInfo.PropertyType;
-            return IsNullablePropType(propertyType) ? Nullable.GetUnderlyingType(propertyType) : propertyType;
+            return GetNullableUnderlyingType(propertyType);
         }
 
-        private static bool IsNullablePropType(Type propertyType)
+        ///<summary>
+        /// Returns the Underlying type if <paramref name="type"/> is Nullable
+        /// Else returns the Type
+        /// i.e. Guid? returns Guid
+        ///  and Guid returns Guid
+        ///</summary>
+        ///<param name="type"></param>
+        ///<returns></returns>
+        public static Type GetNullableUnderlyingType(Type type)
         {
-            return propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
+            return IsNullableType(type) ? Nullable.GetUnderlyingType(type) : type;
+        }
+
+        ///<summary>
+        /// Returns true if the Type is Nullable e.g. Guid? or int?
+        ///</summary>
+        ///<param name="type"></param>
+        ///<returns></returns>
+        public static bool IsNullableType(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
     }
 

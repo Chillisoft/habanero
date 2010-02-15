@@ -244,6 +244,21 @@ namespace Habanero.Base
         ///</summary>
         ///<param name="bo"></param>
         void CheckCanRemoveChild(IBusinessObject bo);
+
+        ///<summary>
+        /// Returns true if this is a Multiple Relationship and the Reverse is a single relationship
+        ///</summary>
+        bool IsOneToMany { get; }
+
+        ///<summary>
+        /// Returns true if this is a Single Relationship and the Reverse is a Multiple relationship
+        ///</summary>
+        bool IsManyToOne { get; }
+
+        ///<summary>
+        /// Returns true if this is a Single Relationship and the Reverse is a Single relationship
+        ///</summary>
+        bool IsOneToOne { get; }
     }
 
 }

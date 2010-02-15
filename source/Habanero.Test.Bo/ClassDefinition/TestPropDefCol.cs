@@ -127,5 +127,22 @@ namespace Habanero.Test.BO.ClassDefinition
 			");
             return def;
         }
+
+        [Test]
+        public void Test_Contains_WhenPropNameNull_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            PropDefCol propDefCol1 = new PropDefCol();
+            PropDef def = new PropDef("bob", typeof(string), PropReadWriteRule.ReadOnly, null);
+            propDefCol1.Add(def);
+            string propertyName = null;
+            //---------------Assert Precondition----------------
+            Assert.Greater(propDefCol1.Count, 0);
+            Assert.IsNull(propertyName);
+            //---------------Execute Test ----------------------
+            bool contains = propDefCol1.Contains(propertyName);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contains);
+        }
     }
 }
