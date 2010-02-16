@@ -267,7 +267,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void Test_OwningBOHasForeignKey_Default_Single()
+        public virtual void Test_OwningBOHasForeignKey_Default_Single()
         {
             //---------------Set up test pack-------------------
             const string singleRelationshipString = SingleRelationshipString;
