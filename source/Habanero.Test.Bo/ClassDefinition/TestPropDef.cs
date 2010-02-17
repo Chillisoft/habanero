@@ -537,7 +537,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed);
-            Assert.IsInstanceOfType(typeof (DateTimeNow), convertedDateTimeValue);
+            Assert.IsInstanceOf(typeof (DateTimeNow), convertedDateTimeValue);
             Assert.AreSame(dateTimeToday, convertedDateTimeValue);
         }
 
@@ -554,7 +554,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed);
-            Assert.IsInstanceOfType(typeof (DateTimeToday), convertedDateTimeValue);
+            Assert.IsInstanceOf(typeof (DateTimeToday), convertedDateTimeValue);
             Assert.AreSame(dateTimeToday, convertedDateTimeValue);
         }
 
@@ -571,7 +571,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed);
-            Assert.IsInstanceOfType(typeof (String), convertedIntValue);
+            Assert.IsInstanceOf(typeof (String), convertedIntValue);
             Assert.AreEqual(valueToParse.ToString(), convertedIntValue);
         }
 
@@ -589,7 +589,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed);
-            Assert.IsInstanceOfType(typeof (DateTime), convertedDateTimeValue);
+            Assert.IsInstanceOf(typeof (DateTime), convertedDateTimeValue);
             Assert.AreEqual(dateTime, convertedDateTimeValue);
         }
 
@@ -605,7 +605,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed);
-            Assert.IsInstanceOfType(typeof (Guid), convertedGuid);
+            Assert.IsInstanceOf(typeof (Guid), convertedGuid);
             Assert.AreEqual(new Guid(guidString), convertedGuid);
         }
 
@@ -623,7 +623,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed);
-            Assert.IsInstanceOfType(typeof (DateTimeNow), convertedDateTimeValue);
+            Assert.IsInstanceOf(typeof (DateTimeNow), convertedDateTimeValue);
             Assert.AreEqual(dateTimeToday.ToString(), convertedDateTimeValue.ToString());
         }
 
@@ -641,7 +641,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed); 
-            Assert.IsInstanceOfType(typeof(DateTimeNow), convertedDateTimeValue);
+            Assert.IsInstanceOf(typeof(DateTimeNow), convertedDateTimeValue);
             Assert.AreEqual(dateTimeToday.ToString(), convertedDateTimeValue.ToString());
         }
 
@@ -659,7 +659,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed); 
-            Assert.IsInstanceOfType(typeof(DateTimeToday), convertedDateTimeValue);
+            Assert.IsInstanceOf(typeof(DateTimeToday), convertedDateTimeValue);
             Assert.AreEqual(dateTimeToday, convertedDateTimeValue);
         }
 
@@ -677,7 +677,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed);
-            Assert.IsInstanceOfType(typeof(DateTimeToday), convertedDateTimeValue);
+            Assert.IsInstanceOf(typeof(DateTimeToday), convertedDateTimeValue);
             Assert.AreEqual(dateTimeToday, convertedDateTimeValue);
         }
 
@@ -938,7 +938,7 @@ namespace Habanero.Test.BO.ClassDefinition
             IBOProp prop = propDef.CreateBOProp(false);
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof(BOProp), prop);
+            Assert.IsInstanceOf(typeof(BOProp), prop);
 
         }
 
@@ -958,7 +958,7 @@ namespace Habanero.Test.BO.ClassDefinition
             IBOProp prop = propDef.CreateBOProp(false);
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof(BOPropLookupList), prop);
+            Assert.IsInstanceOf(typeof(BOPropLookupList), prop);
 
         }  
         [Test]
@@ -975,7 +975,7 @@ namespace Habanero.Test.BO.ClassDefinition
             IBOProp prop = propDef.CreateBOProp(true);
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof(BOProp), prop);
+            Assert.IsInstanceOf(typeof(BOProp), prop);
         }
 
 
@@ -992,7 +992,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             IBOProp prop = propDef.CreateBOProp(true);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(BOPropLookupList), prop);
+            Assert.IsInstanceOf(typeof(BOPropLookupList), prop);
         }
 
         [Test]

@@ -758,7 +758,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             gridControl.Grid.BusinessObjectCollection = col;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (ReadOnlyDataSetProvider), gridControl.Grid.DataSetProvider);
+            Assert.IsInstanceOf(typeof (ReadOnlyDataSetProvider), gridControl.Grid.DataSetProvider);
             //---------------Tear Down -------------------------          
         }
 

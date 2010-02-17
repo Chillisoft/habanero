@@ -116,7 +116,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IBOColSelectorControl colSelector = CreateSelector();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IGridBase), colSelector);
+            Assert.IsInstanceOf(typeof(IGridBase), colSelector);
         }
 
         [Ignore(" Not sure how to impolement this in grids.")] //TODO  01 Mar 2009:

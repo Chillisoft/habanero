@@ -19,8 +19,8 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             IDataAccessor dataAccessor = new DataAccessorMultiSource(new DataAccessorInMemory());
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(BusinessObjectLoaderMultiSource), dataAccessor.BusinessObjectLoader);
-            Assert.IsInstanceOfType(typeof(TransactionCommitterMultiSource), dataAccessor.CreateTransactionCommitter());
+            Assert.IsInstanceOf(typeof(BusinessObjectLoaderMultiSource), dataAccessor.BusinessObjectLoader);
+            Assert.IsInstanceOf(typeof(TransactionCommitterMultiSource), dataAccessor.CreateTransactionCommitter());
             //---------------Tear down -------------------------
         }
 

@@ -21,7 +21,6 @@ using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace Habanero.Test.UI.Base
 {

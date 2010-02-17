@@ -239,7 +239,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             gridControl.Grid.BusinessObjectCollection  = col;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (EditableDataSetProvider), gridControl.Grid.DataSetProvider);
+            Assert.IsInstanceOf(typeof (EditableDataSetProvider), gridControl.Grid.DataSetProvider);
             //---------------Tear Down -------------------------          
         }
 
@@ -1019,21 +1019,21 @@ namespace Habanero.Test.UI.Base
             protected override void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG) dataGridViewColumn;
-                Assert.IsInstanceOfType
+                Assert.IsInstanceOf
                     (typeof (Gizmox.WebGUI.Forms.DataGridViewTextBoxColumn), dataGridViewColumnVWG.DataGridViewColumn);
             }
 
             protected override void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG) dataGridViewColumn;
-                Assert.IsInstanceOfType
+                Assert.IsInstanceOf
                     (typeof (Gizmox.WebGUI.Forms.DataGridViewCheckBoxColumn), dataGridViewColumnVWG.DataGridViewColumn);
             }
 
             protected override void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG) dataGridViewColumn;
-                Assert.IsInstanceOfType
+                Assert.IsInstanceOf
                     (typeof (Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn), dataGridViewColumnVWG.DataGridViewColumn);
             }
 
@@ -1049,9 +1049,9 @@ namespace Habanero.Test.UI.Base
             {
                 Form formVWG = (Form)form;
                 Assert.AreEqual(3, formVWG.Controls[0].Controls.Count);
-                Assert.IsInstanceOfType(typeof (IFilterControl), formVWG.Controls[0].Controls[1]);
-                Assert.IsInstanceOfType(typeof (IEditableGrid), formVWG.Controls[0].Controls[0]);
-                Assert.IsInstanceOfType(typeof (IButtonGroupControl), formVWG.Controls[0].Controls[2]);
+                Assert.IsInstanceOf(typeof (IFilterControl), formVWG.Controls[0].Controls[1]);
+                Assert.IsInstanceOf(typeof (IEditableGrid), formVWG.Controls[0].Controls[0]);
+                Assert.IsInstanceOf(typeof (IButtonGroupControl), formVWG.Controls[0].Controls[2]);
             }
 
             protected override IEditableGridControl CreateEditableGridControl()
@@ -1113,7 +1113,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Test Result -----------------------
                 IDataGridViewColumn column = gridControl.Grid.Columns["TestBoolean"];
                 Assert.IsNotNull(column);
-                Assert.IsInstanceOfType(typeof (DataGridViewCheckBoxColumnVWG), column);
+                Assert.IsInstanceOf(typeof (DataGridViewCheckBoxColumnVWG), column);
                 //---------------Tear Down -------------------------          
             }
 
@@ -1203,21 +1203,21 @@ namespace Habanero.Test.UI.Base
             protected override void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnWin dataGridViewColumnWin = (DataGridViewColumnWin) dataGridViewColumn;
-                Assert.IsInstanceOfType
+                Assert.IsInstanceOf
                     (typeof (DataGridViewTextBoxColumn), dataGridViewColumnWin.DataGridViewColumn);
             }
 
             protected override void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnWin dataGridViewColumnWin = (DataGridViewColumnWin) dataGridViewColumn;
-                Assert.IsInstanceOfType
+                Assert.IsInstanceOf
                     (typeof (DataGridViewCheckBoxColumn), dataGridViewColumnWin.DataGridViewColumn);
             }
 
             protected override void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnWin dataGridViewColumnWin = (DataGridViewColumnWin) dataGridViewColumn;
-                Assert.IsInstanceOfType
+                Assert.IsInstanceOf
                     (typeof (DataGridViewComboBoxColumn), dataGridViewColumnWin.DataGridViewColumn);
             }
 
@@ -1231,9 +1231,9 @@ namespace Habanero.Test.UI.Base
             protected override void AssertMainControlsOnForm(IFormHabanero form)
             {
                 Assert.AreEqual(3, form.Controls[0].Controls.Count);
-                Assert.IsInstanceOfType(typeof (IFilterControl), form.Controls[0].Controls[1]);
-                Assert.IsInstanceOfType(typeof (IEditableGrid), form.Controls[0].Controls[0]);
-                Assert.IsInstanceOfType(typeof (IButtonGroupControl), form.Controls[0].Controls[2]);
+                Assert.IsInstanceOf(typeof (IFilterControl), form.Controls[0].Controls[1]);
+                Assert.IsInstanceOf(typeof (IEditableGrid), form.Controls[0].Controls[0]);
+                Assert.IsInstanceOf(typeof (IButtonGroupControl), form.Controls[0].Controls[2]);
             }
 
             protected override IEditableGridControl CreateEditableGridControl()

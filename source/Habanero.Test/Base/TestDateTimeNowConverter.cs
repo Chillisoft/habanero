@@ -34,7 +34,7 @@ namespace Habanero.Test.Base
             //---------------Execute Test ----------------------
             DateTimeNowConverter dateTimeNowConverter = new DateTimeNowConverter();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (TypeConverter), dateTimeNowConverter);
+            Assert.IsInstanceOf(typeof (TypeConverter), dateTimeNowConverter);
         }
 
         [Test]

@@ -26,10 +26,10 @@ namespace Habanero.Test.UI.Base.FilterController
             EnumComboBoxFilter filter = new EnumComboBoxFilter(GetControlFactory(), propertyName, filterClauseOperator, typeof(PurchaseOrderStatus));
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IComboBox), filter.Control);
+            Assert.IsInstanceOf(typeof(IComboBox), filter.Control);
             Assert.AreEqual(propertyName, filter.PropertyName);
             Assert.AreEqual(filterClauseOperator, filter.FilterClauseOperator);
-            Assert.IsInstanceOfType(typeof(DataViewNullFilterClause), filter.GetFilterClause(new DataViewFilterClauseFactory()));
+            Assert.IsInstanceOf(typeof(DataViewNullFilterClause), filter.GetFilterClause(new DataViewFilterClauseFactory()));
         }
         [Test]
         public void TestConstructor_ShouldSetUpComboBoxItems()
@@ -42,7 +42,7 @@ namespace Habanero.Test.UI.Base.FilterController
             EnumComboBoxFilter filter = new EnumComboBoxFilter(GetControlFactory(), propertyName, filterClauseOperator, typeof(PurchaseOrderStatus));
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IComboBox), filter.Control);
+            Assert.IsInstanceOf(typeof(IComboBox), filter.Control);
             IComboBox comboBox = (IComboBox) filter.Control;
             Assert.AreEqual(3, comboBox.Items.Count, "Two Items and Blank");
        }

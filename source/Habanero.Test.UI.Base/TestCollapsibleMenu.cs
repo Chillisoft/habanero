@@ -60,13 +60,13 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             CollapsibleMenuVWG collapsibleMenu = new CollapsibleMenuVWG();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (IControlHabanero), collapsibleMenu);
-            Assert.IsInstanceOfType(typeof (IMainMenuHabanero), collapsibleMenu);
-            Assert.IsInstanceOfType(typeof (IPanel), collapsibleMenu);
+            Assert.IsInstanceOf(typeof (IControlHabanero), collapsibleMenu);
+            Assert.IsInstanceOf(typeof (IMainMenuHabanero), collapsibleMenu);
+            Assert.IsInstanceOf(typeof (IPanel), collapsibleMenu);
             Assert.AreEqual(0, collapsibleMenu.Controls.Count);
             Assert.IsNotNull(collapsibleMenu.MenuItems);
             TestUtil.AssertStringEmpty(collapsibleMenu.Name, "collapsibleMenu.Name");
-            Assert.IsInstanceOfType(typeof (ICollapsiblePanelGroupControl), collapsibleMenu);
+            Assert.IsInstanceOf(typeof (ICollapsiblePanelGroupControl), collapsibleMenu);
         }
 
         [Test]
@@ -221,7 +221,7 @@ namespace Habanero.Test.UI.Base
             IMenuItem menuLeafItem = new CollapsibleSubMenuItemVWG(GetControlFactory(), item);
             //---------------Assert Precondition----------------
             Assert.AreSame(menu, collapsibleMenuItemCollection.OwnerMenuItem);
-            Assert.IsInstanceOfType(typeof (CollapsibleSubMenuItemVWG), menuLeafItem);
+            Assert.IsInstanceOf(typeof (CollapsibleSubMenuItemVWG), menuLeafItem);
             Assert.AreEqual(0, collapsibleMenuItemCollection.Count);
             //---------------Execute Test ----------------------
             collapsibleMenuItemCollection.Add(menuLeafItem);
@@ -245,7 +245,7 @@ namespace Habanero.Test.UI.Base
             CollapsibleMenuItemVWG menuLeafItem = new CollapsibleMenuItemVWG(GetControlFactory(), item);
             //---------------Assert Precondition----------------
             Assert.AreSame(subMenuItem, collapsibleMenuItemCollection.OwnerMenuItem);
-            Assert.IsInstanceOfType(typeof (CollapsibleMenuItemVWG), menuLeafItem);
+            Assert.IsInstanceOf(typeof (CollapsibleMenuItemVWG), menuLeafItem);
             Assert.AreEqual(1, subMenuItem.Controls.Count, "CollapsiblePanel always has header button");
             Assert.AreEqual(0, collapsibleMenuItemCollection.Count);
             //---------------Execute Test ----------------------
@@ -254,9 +254,9 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, collapsibleMenuItemCollection.Count);
             Assert.AreEqual(2, subMenuItem.Controls.Count, "Should have additional button control");
             IControlHabanero contentControl = subMenuItem.ContentControl;
-            Assert.IsInstanceOfType(typeof (IPanel), contentControl);
+            Assert.IsInstanceOf(typeof (IPanel), contentControl);
             Assert.AreEqual(1, contentControl.Controls.Count);
-            Assert.IsInstanceOfType(typeof (IButton), contentControl.Controls[0]);
+            Assert.IsInstanceOf(typeof (IButton), contentControl.Controls[0]);
         }
 
         [Test]
@@ -272,7 +272,7 @@ namespace Habanero.Test.UI.Base
             CollapsibleMenuItemVWG menuLeafItem = new CollapsibleMenuItemVWG(GetControlFactory(), item);
             //---------------Assert Precondition----------------
             Assert.AreSame(subMenuItem, collapsibleMenuItemCollection.OwnerMenuItem);
-            Assert.IsInstanceOfType(typeof (CollapsibleMenuItemVWG), menuLeafItem);
+            Assert.IsInstanceOf(typeof (CollapsibleMenuItemVWG), menuLeafItem);
             Assert.AreEqual(subMenuItem.CollapseButton.Height, subMenuItem.MinimumSize.Height);
             //---------------Execute Test ----------------------
             collapsibleMenuItemCollection.Add(menuLeafItem);
@@ -310,7 +310,7 @@ namespace Habanero.Test.UI.Base
             IMenuItem menuLeafItem = new CollapsibleSubMenuItemWin(GetControlFactory(), item);
             //---------------Assert Precondition----------------
             Assert.AreSame(menu, collapsibleMenuItemCollection.OwnerMenuItem);
-            Assert.IsInstanceOfType(typeof(CollapsibleSubMenuItemWin), menuLeafItem);
+            Assert.IsInstanceOf(typeof(CollapsibleSubMenuItemWin), menuLeafItem);
             Assert.AreEqual(0, collapsibleMenuItemCollection.Count);
             //---------------Execute Test ----------------------
             collapsibleMenuItemCollection.Add(menuLeafItem);
@@ -334,7 +334,7 @@ namespace Habanero.Test.UI.Base
             CollapsibleMenuItemWin menuLeafItem = new CollapsibleMenuItemWin(GetControlFactory(), item);
             //---------------Assert Precondition----------------
             Assert.AreSame(subMenuItem, collapsibleMenuItemCollection.OwnerMenuItem);
-            Assert.IsInstanceOfType(typeof(CollapsibleMenuItemWin), menuLeafItem);
+            Assert.IsInstanceOf(typeof(CollapsibleMenuItemWin), menuLeafItem);
             Assert.AreEqual(1, subMenuItem.Controls.Count, "CollapsiblePanel always has header button");
             Assert.AreEqual(0, collapsibleMenuItemCollection.Count);
             //---------------Execute Test ----------------------
@@ -343,9 +343,9 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, collapsibleMenuItemCollection.Count);
             Assert.AreEqual(2, subMenuItem.Controls.Count, "Should have additional button control");
             IControlHabanero contentControl = subMenuItem.ContentControl;
-            Assert.IsInstanceOfType(typeof(IPanel), contentControl);
+            Assert.IsInstanceOf(typeof(IPanel), contentControl);
             Assert.AreEqual(1, contentControl.Controls.Count);
-            Assert.IsInstanceOfType(typeof(IButton), contentControl.Controls[0]);
+            Assert.IsInstanceOf(typeof(IButton), contentControl.Controls[0]);
         }
 
         [Test]
@@ -361,7 +361,7 @@ namespace Habanero.Test.UI.Base
             CollapsibleMenuItemWin menuLeafItem = new CollapsibleMenuItemWin(GetControlFactory(), item);
             //---------------Assert Precondition----------------
             Assert.AreSame(subMenuItem, collapsibleMenuItemCollection.OwnerMenuItem);
-            Assert.IsInstanceOfType(typeof(CollapsibleMenuItemWin), menuLeafItem);
+            Assert.IsInstanceOf(typeof(CollapsibleMenuItemWin), menuLeafItem);
             Assert.AreEqual(subMenuItem.CollapseButton.Height, subMenuItem.MinimumSize.Height);
             //---------------Execute Test ----------------------
             collapsibleMenuItemCollection.Add(menuLeafItem);
@@ -419,7 +419,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(name, collapsibleMenuItem.Text);
             Assert.IsNotNull(collapsibleMenuItem.MenuItems);
-            Assert.IsInstanceOfType(typeof (IButton), collapsibleMenuItem);
+            Assert.IsInstanceOf(typeof (IButton), collapsibleMenuItem);
         }
 
         [Test]
@@ -558,7 +558,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(name, collapsibleMenuItem.Text);
             Assert.IsNotNull(collapsibleMenuItem.MenuItems);
-            Assert.IsInstanceOfType(typeof (ICollapsiblePanel), collapsibleMenuItem);
+            Assert.IsInstanceOf(typeof (ICollapsiblePanel), collapsibleMenuItem);
             ICollapsiblePanel cp = (ICollapsiblePanel) collapsibleMenuItem ;
             Assert.AreEqual(name, cp.CollapseButton.Text);
         }

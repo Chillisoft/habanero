@@ -60,7 +60,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 decimal newValue = 555.45m;
                 numUpDown.Value = newValue;
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof (NumericUpDownMapperStrategyWin), mapper.MapperStrategy);
+                Assert.IsInstanceOf(typeof (NumericUpDownMapperStrategyWin), mapper.MapperStrategy);
                 Assert.AreEqual(newValue, s.SampleMoney);
                 //---------------Tear down -------------------------
             }

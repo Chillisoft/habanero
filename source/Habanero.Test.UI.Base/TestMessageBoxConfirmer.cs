@@ -22,6 +22,7 @@ using Habanero.UI.Win;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
+using Is = Rhino.Mocks.Constraints.Is;
 
 namespace Habanero.Test.UI.Base
 {
@@ -59,7 +60,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             MessageBoxConfirmer messageBoxConfirmer = new MessageBoxConfirmer(controlFactory, title, messageBoxIcon);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IConfirmer), messageBoxConfirmer);
+            Assert.IsInstanceOf(typeof(IConfirmer), messageBoxConfirmer);
             Assert.AreSame(controlFactory, messageBoxConfirmer.ControlFactory);
             Assert.AreEqual(title, messageBoxConfirmer.Title);
             Assert.AreEqual(messageBoxIcon, messageBoxConfirmer.MessageBoxIcon);

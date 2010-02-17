@@ -133,7 +133,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 exception = ex;
             }
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(InvalidOrderCriteriaException), exception);
+            Assert.IsInstanceOf(typeof(InvalidOrderCriteriaException), exception);
             if (exception != null)
                 StringAssert.Contains(String.Format(
                                           "The orderByString '{0}' is not valid for the classDef '{1}", propName, classdef.ClassNameFull), exception.Message);
@@ -212,7 +212,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             QueryBuilder.PrepareCriteria(engineClassDef, criteria);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(String), criteria.FieldValue);
+            Assert.IsInstanceOf(typeof(String), criteria.FieldValue);
         }
 
         [Test]
@@ -228,7 +228,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             QueryBuilder.PrepareCriteria(myBoClassDef, criteria);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(DateTime), criteria.FieldValue);
+            Assert.IsInstanceOf(typeof(DateTime), criteria.FieldValue);
             Assert.AreEqual(dateTime, criteria.FieldValue);
         }
 
@@ -245,7 +245,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             QueryBuilder.PrepareCriteria(myBoClassDef, criteria);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(DateTimeToday), criteria.FieldValue);
+            Assert.IsInstanceOf(typeof(DateTimeToday), criteria.FieldValue);
             Assert.AreEqual(dateTimeToday, criteria.FieldValue);
         }
 
@@ -261,7 +261,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             QueryBuilder.PrepareCriteria(myBoClassDef, criteria);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(DateTimeNow), criteria.FieldValue);
+            Assert.IsInstanceOf(typeof(DateTimeNow), criteria.FieldValue);
             DateTime dateTimeFieldValue = Convert.ToDateTime(criteria.FieldValue.ToString());
             Assert.Greater(dateTimeFieldValue, DateTimeToday.Value);
             Assert.Less(dateTimeFieldValue, DateTimeToday.Value.AddDays(1));
@@ -278,7 +278,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             QueryBuilder.PrepareCriteria(engineClassDef, criteria);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(Guid), criteria.FieldValue);
+            Assert.IsInstanceOf(typeof(Guid), criteria.FieldValue);
             Assert.AreEqual(carid, new Guid(criteria.FieldValue.ToString()).ToString("B"));
         }
 
@@ -467,7 +467,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(typeof(RelationshipNotFoundException), exception);
+            Assert.IsInstanceOf(typeof(RelationshipNotFoundException), exception);
             Assert.AreEqual("'Engine' does not have a relationship called 'NotExistingRelationship'.", exception.Message);
         }
 

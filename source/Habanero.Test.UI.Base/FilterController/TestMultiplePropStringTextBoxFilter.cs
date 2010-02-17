@@ -25,10 +25,10 @@ namespace Habanero.Test.UI.Base.FilterController
             props.ForEach(s => name = s + "/" + name);
             propertyName = name.Remove(name.Length - 1);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ITextBox), filter.Control);
+            Assert.IsInstanceOf(typeof(ITextBox), filter.Control);
             Assert.AreEqual(propertyName, filter.PropertyName);
             Assert.AreEqual(filterClauseOperator, filter.FilterClauseOperator);
-            Assert.IsInstanceOfType(typeof(DataViewNullFilterClause), filter.GetFilterClause(new DataViewFilterClauseFactory()));
+            Assert.IsInstanceOf(typeof(DataViewNullFilterClause), filter.GetFilterClause(new DataViewFilterClauseFactory()));
         }
 
         [Test]

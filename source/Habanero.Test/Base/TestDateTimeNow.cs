@@ -246,7 +246,7 @@ namespace Habanero.Test.Base
             //---------------Execute Test ----------------------
             TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(DateTimeNow));
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(DateTimeNowConverter), typeConverter);
+            Assert.IsInstanceOf(typeof(DateTimeNowConverter), typeConverter);
         }
     }
 }

@@ -251,7 +251,7 @@ namespace Habanero.Test.DB
             StringAssert.EndsWith("WHERE [MyBO].[TestDateTime] = ?Param0", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             object value = statement.Parameters[0].Value;
-            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.IsInstanceOf(typeof(DateTime), value);
             DateTime dateTimeValue = (DateTime) value;
             Assert.GreaterOrEqual(dateTimeBefore, dateTimeValue);
             Assert.LessOrEqual(dateTimeAfter, dateTimeValue);
@@ -274,7 +274,7 @@ namespace Habanero.Test.DB
             StringAssert.EndsWith("WHERE [MyBO].[TestDateTime] = ?Param0", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             object value = statement.Parameters[0].Value;
-            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.IsInstanceOf(typeof(DateTime), value);
             DateTime dateTimeValue = (DateTime)value;
             Assert.GreaterOrEqual(dateTimeValue, dateTimeBefore);
             Assert.LessOrEqual(dateTimeValue, dateTimeAfter);

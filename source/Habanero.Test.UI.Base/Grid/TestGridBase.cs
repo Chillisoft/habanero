@@ -457,7 +457,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Execute Test ----------------------
                 IDataGridViewColumn col = gridBase.Columns[0];
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), col);
+                Assert.IsInstanceOf(typeof(IDataGridViewImageColumn), col);
                 //---------------Tear Down -------------------------          
             }
             [Test]
@@ -474,7 +474,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Execute Test ----------------------
                 IDataGridViewColumn col = gridBase.Columns[columnName];
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), col);
+                Assert.IsInstanceOf(typeof(IDataGridViewImageColumn), col);
                 //---------------Tear Down -------------------------          
             }
         }

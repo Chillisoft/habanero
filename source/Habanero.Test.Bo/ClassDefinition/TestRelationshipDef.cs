@@ -311,7 +311,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             IRelationshipDef relationshipDef = new FakeMultipleRelationshipDef();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(MultipleRelationshipDef), relationshipDef);
+            Assert.IsInstanceOf(typeof(MultipleRelationshipDef), relationshipDef);
             //---------------Execute Test ----------------------
             bool isOneToMany = relationshipDef.IsOneToMany;
             //---------------Test Result -----------------------
@@ -323,7 +323,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             IRelationshipDef relationshipDef = new FakeSingleRelationshipDef();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SingleRelationshipDef), relationshipDef);
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
             //---------------Execute Test ----------------------
             bool isOneToMany = relationshipDef.IsOneToMany;
             //---------------Test Result -----------------------
@@ -335,7 +335,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             IRelationshipDef relationshipDef = new FakeMultipleRelationshipDef();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(MultipleRelationshipDef), relationshipDef);
+            Assert.IsInstanceOf(typeof(MultipleRelationshipDef), relationshipDef);
             //---------------Execute Test ----------------------
             bool isOneToMany = relationshipDef.IsManyToOne;
             //---------------Test Result -----------------------
@@ -347,7 +347,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             IRelationshipDef relationshipDef = new FakeSingleRelationshipDef();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SingleRelationshipDef), relationshipDef);
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
             //---------------Execute Test ----------------------
             bool isOneToMany = relationshipDef.IsManyToOne;
             //---------------Test Result -----------------------
@@ -359,7 +359,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             IRelationshipDef relationshipDef = new FakeMultipleRelationshipDef();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(MultipleRelationshipDef), relationshipDef);
+            Assert.IsInstanceOf(typeof(MultipleRelationshipDef), relationshipDef);
             //---------------Execute Test ----------------------
             bool isOneToOne = relationshipDef.IsOneToOne;
             //---------------Test Result -----------------------
@@ -371,7 +371,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             IRelationshipDef relationshipDef = new FakeSingleRelationshipDef();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SingleRelationshipDef), relationshipDef);
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
             //---------------Execute Test ----------------------
             bool isOneToOne = relationshipDef.IsOneToOne;
             //---------------Test Result -----------------------
@@ -385,7 +385,7 @@ namespace Habanero.Test.BO.ClassDefinition
             singleRelationshipDef.SetAsOneToOne();
             IRelationshipDef relationshipDef = singleRelationshipDef;
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SingleRelationshipDef), relationshipDef);
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
             //---------------Execute Test ----------------------
             bool isOneToOne = relationshipDef.IsOneToOne;
             //---------------Test Result -----------------------
@@ -399,7 +399,7 @@ namespace Habanero.Test.BO.ClassDefinition
             singleRelationshipDef.SetAsOneToOne();
             IRelationshipDef relationshipDef = singleRelationshipDef;
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SingleRelationshipDef), relationshipDef);
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
             //---------------Execute Test ----------------------
             bool isManyToOne = relationshipDef.IsManyToOne;
             //---------------Test Result -----------------------

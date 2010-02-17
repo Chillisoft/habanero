@@ -87,7 +87,7 @@ namespace Habanero.Test.BO.Loaders
             IPropRule rule =
                 _loader.LoadRule(typeof (int).Name,
                     @"<rule name=""Test Rule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
-            Assert.IsInstanceOfType(typeof(IPropRule), rule);
+            Assert.IsInstanceOf(typeof(IPropRule), rule);
             Assert.AreEqual("Test Rule", rule.Name, "Name name is not being read from xml correctly.");
             Assert.AreEqual("Test Message", rule.Message, "Message is not being read from xml correctly.");
             //Assert.AreSame(typeof(int), rule.PropertyType,

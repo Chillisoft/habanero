@@ -141,7 +141,7 @@ namespace Habanero.Test.UI.Base
             IControlHabanero boCtl = _defaultBOEditorForm.Controls[0];
             Assert.AreEqual(6, boCtl.Controls.Count);
             IControlHabanero buttonControl = _defaultBOEditorForm.Controls[1];
-            Assert.IsInstanceOfType(typeof(IButtonGroupControl), buttonControl);
+            Assert.IsInstanceOf(typeof(IButtonGroupControl), buttonControl);
             Assert.AreEqual(2, buttonControl.Controls.Count);
             Assert.AreEqual(FormStartPosition.CenterScreen, _defaultBOEditorForm.StartPosition);
         }

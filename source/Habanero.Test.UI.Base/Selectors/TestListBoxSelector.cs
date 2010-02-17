@@ -193,7 +193,7 @@ namespace Habanero.Test.UI.Base
             IBOListBoxSelector selector = (IBOListBoxSelector) CreateSelector();
             //---------------Test Result -----------------------
             Assert.IsNotNull(selector.ListBox);
-            Assert.IsInstanceOfType(typeof(IListBox), selector.ListBox);
+            Assert.IsInstanceOf(typeof(IListBox), selector.ListBox);
         }
         [Test]
         public virtual void Test_Constructor_nullControlFactory_RaisesError()

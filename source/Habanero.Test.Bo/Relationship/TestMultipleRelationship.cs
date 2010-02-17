@@ -95,7 +95,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsNotNull(collection.SelectQuery.Criteria.Field.Source);
             Assert.AreEqual("ContactPersonTestBO", collection.SelectQuery.Criteria.Field.Source.Name);
             Assert.AreEqual(organisation.OrganisationID.Value, collection.SelectQuery.Criteria.FieldValue);
-            Assert.IsInstanceOfType(typeof(ContactPersonTestBO), collection.CreateBusinessObject());
+            Assert.IsInstanceOf(typeof(ContactPersonTestBO), collection.CreateBusinessObject());
         }        
 
         [Test]

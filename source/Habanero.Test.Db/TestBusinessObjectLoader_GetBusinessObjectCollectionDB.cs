@@ -100,7 +100,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO loadedCP = (ContactPersonTestBO)col[0];
             Assert.AreNotSame(cp, loadedCP);
             Assert.IsTrue(loadedCP.AfterLoadCalled);
-            Assert.IsInstanceOfType(typeof(BusinessObjectCollection<ContactPersonTestBO>), col);
+            Assert.IsInstanceOf(typeof(BusinessObjectCollection<ContactPersonTestBO>), col);
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO loadedCP = (ContactPersonTestBO)col[0];
             Assert.AreSame(cp, loadedCP);
             Assert.IsTrue(loadedCP.AfterLoadCalled);
-            Assert.IsInstanceOfType(typeof(BusinessObjectCollection<ContactPersonTestBO>), col);
+            Assert.IsInstanceOf(typeof(BusinessObjectCollection<ContactPersonTestBO>), col);
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace Habanero.Test.DB
 
             //---------------Test Result -----------------------
             Assert.AreEqual(0, loadedCircles.Count);
-            Assert.IsInstanceOfType(typeof(BusinessObjectCollection<CircleNoPrimaryKey>), loadedCircles);
+            Assert.IsInstanceOf(typeof(BusinessObjectCollection<CircleNoPrimaryKey>), loadedCircles);
         }
 
         [Test]
@@ -219,7 +219,7 @@ namespace Habanero.Test.DB
 
             //---------------Test Result -----------------------
             Assert.AreEqual(0, loadedCircles.Count);
-            Assert.IsInstanceOfType(typeof(BusinessObjectCollection<CircleNoPrimaryKey>), loadedCircles);
+            Assert.IsInstanceOf(typeof(BusinessObjectCollection<CircleNoPrimaryKey>), loadedCircles);
         }
 
         #region Test that the load returns the correct sub type
@@ -240,7 +240,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.AreEqual(1, loadedShapes.Count);
             Shape loadedShape = loadedShapes[0];
-            Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(CircleNoPrimaryKey), loadedShape);
         }
 
         [Test]
@@ -259,10 +259,10 @@ namespace Habanero.Test.DB
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, loadedShapes.Count);
-            Assert.IsInstanceOfType(typeof(Shape), loadedShapes[0]);
+            Assert.IsInstanceOf(typeof(Shape), loadedShapes[0]);
             Shape loadedShape = (Shape)loadedShapes[0];
-            Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
-            Assert.IsInstanceOfType(typeof(BusinessObjectCollection<Shape>), loadedShapes);
+            Assert.IsInstanceOf(typeof(CircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(BusinessObjectCollection<Shape>), loadedShapes);
         }
 
         [Test]
@@ -280,7 +280,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.AreEqual(1, loadedShapes.Count);
             Shape loadedShape = loadedShapes[0];
-            Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(CircleNoPrimaryKey), loadedShape);
             Assert.AreSame(circle, loadedShape);
         }
 
@@ -299,10 +299,10 @@ namespace Habanero.Test.DB
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, loadedShapes.Count);
-            Assert.IsInstanceOfType(typeof(Shape), loadedShapes[0]);
+            Assert.IsInstanceOf(typeof(Shape), loadedShapes[0]);
             Shape loadedShape = (Shape)loadedShapes[0];
-            Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
-            Assert.IsInstanceOfType(typeof(BusinessObjectCollection<Shape>), loadedShapes);
+            Assert.IsInstanceOf(typeof(CircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(BusinessObjectCollection<Shape>), loadedShapes);
             Assert.AreSame(circle, loadedShape);
         }
 
@@ -320,7 +320,7 @@ namespace Habanero.Test.DB
             Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>
                 (filledCircle.ID);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(FilledCircleNoPrimaryKey), loadedShape);
             //---------------Tear Down -------------------------          
         }
 
@@ -338,8 +338,8 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             IBusinessObject loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, filledCircle.ID);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(Shape), loadedShape);
-            Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(Shape), loadedShape);
+            Assert.IsInstanceOf(typeof(FilledCircleNoPrimaryKey), loadedShape);
             //---------------Tear Down -------------------------          
         }
 
@@ -357,7 +357,7 @@ namespace Habanero.Test.DB
             Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>
                 (filledCircle.ID);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(FilledCircleNoPrimaryKey), loadedShape);
             //---------------Tear Down -------------------------          
         }
 
@@ -376,8 +376,8 @@ namespace Habanero.Test.DB
             IBusinessObject loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
                 (classDef, filledCircle.ID);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(Shape), loadedShape);
-            Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+            Assert.IsInstanceOf(typeof(Shape), loadedShape);
+            Assert.IsInstanceOf(typeof(FilledCircleNoPrimaryKey), loadedShape);
             //---------------Tear Down -------------------------          
         }
 

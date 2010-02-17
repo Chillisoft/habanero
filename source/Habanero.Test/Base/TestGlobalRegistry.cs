@@ -99,7 +99,7 @@ namespace Habanero.Test.Base
             //---------------Execute Test ----------------------
             GlobalRegistry.UIExceptionNotifier = null;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(RethrowingExceptionNotifier), GlobalRegistry.UIExceptionNotifier);
+            Assert.IsInstanceOf(typeof(RethrowingExceptionNotifier), GlobalRegistry.UIExceptionNotifier);
         }
 
         [Test]

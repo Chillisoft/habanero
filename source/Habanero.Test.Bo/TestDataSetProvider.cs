@@ -670,7 +670,7 @@ namespace Habanero.Test.BO
             DataTable dataTable = dataSetProvider.GetDataTable(bo.ClassDef.GetUIDef("default").UIGrid);
             //---------------Test Result -----------------------
             Assert.AreSame(typeof(DateTime), dataTable.Columns[dateTimeProp].DataType);
-            Assert.IsInstanceOfType(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
+            Assert.IsInstanceOf(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
             //---------------Tear Down -------------------------          
         }
 
@@ -697,7 +697,7 @@ namespace Habanero.Test.BO
             DataTable dataTable = dataSetProvider.GetDataTable(bo.ClassDef.GetUIDef("default").UIGrid);
             //---------------Test Result -----------------------
             Assert.AreSame(typeof(DateTime), dataTable.Columns[dateTimeProp].DataType);
-            Assert.IsInstanceOfType(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
+            Assert.IsInstanceOf(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
             //---------------Tear Down -------------------------          
         }
 
@@ -742,7 +742,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, dataTable.Rows.Count);
             DataRow dataRow = dataTable.Rows[0];
             object value = dataRow[columnName];
-            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.IsInstanceOf(typeof(DateTime), value);
             Assert.AreEqual(myFather.DateOfBirth, value);
         }
 
@@ -773,7 +773,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, dataTable.Rows.Count);
             DataRow dataRow = dataTable.Rows[0];
             object value = dataRow[columnName];
-            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.IsInstanceOf(typeof(DateTime), value);
             Assert.AreEqual(bo.DateProperty, value);
         }
 

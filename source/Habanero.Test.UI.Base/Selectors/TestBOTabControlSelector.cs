@@ -189,8 +189,8 @@ namespace Habanero.Test.UI.Base
             IBOColSelectorControl colSelector = CreateSelector();
             //---------------Test Result -----------------------
             Assert.IsNotNull(colSelector);
-            Assert.IsInstanceOfType(typeof (IBOColTabControl), colSelector);
-//            Assert.IsInstanceOfType(typeof (IBOColTabControl), selector);
+            Assert.IsInstanceOf(typeof (IBOColTabControl), colSelector);
+//            Assert.IsInstanceOf(typeof (IBOColTabControl), selector);
         }
 
         [Test]

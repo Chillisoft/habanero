@@ -48,7 +48,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = databaseConnection.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter formatter = (SqlFormatter)defaultSqlFormatter;
             Assert.AreEqual("", formatter.LeftFieldDelimiter);
             Assert.AreEqual("", formatter.RightFieldDelimiter);

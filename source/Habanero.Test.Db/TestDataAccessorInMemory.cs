@@ -17,7 +17,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             DataAccessorInMemory dataAccessorInMemory = new DataAccessorInMemory();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(BusinessObjectLoaderInMemory), dataAccessorInMemory.BusinessObjectLoader);
+            Assert.IsInstanceOf(typeof(BusinessObjectLoaderInMemory), dataAccessorInMemory.BusinessObjectLoader);
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             DataAccessorInMemory dataAccessorInMemory = new DataAccessorInMemory();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(TransactionCommitterInMemory), dataAccessorInMemory.CreateTransactionCommitter());
+            Assert.IsInstanceOf(typeof(TransactionCommitterInMemory), dataAccessorInMemory.CreateTransactionCommitter());
             //---------------Tear down -------------------------
         }
 

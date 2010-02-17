@@ -3494,7 +3494,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Exception should have been thrown");
-            Assert.IsInstanceOfType
+            Assert.IsInstanceOf
                 (typeof (HabaneroDeveloperException), exception, "Should be a HabaneroDeveloperException.");
             HabaneroDeveloperException developerException = (HabaneroDeveloperException) exception;
             Assert.AreEqual(developerException.Message, ExceptionHelper._habaneroDeveloperExceptionUserMessage);

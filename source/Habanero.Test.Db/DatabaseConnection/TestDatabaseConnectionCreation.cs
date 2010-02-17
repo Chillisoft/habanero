@@ -87,7 +87,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
@@ -113,7 +113,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
@@ -173,7 +173,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);
@@ -199,7 +199,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);
@@ -247,7 +247,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatterForAccess), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatterForAccess), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
@@ -273,7 +273,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatterForAccess), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatterForAccess), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
@@ -320,7 +320,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatterForAccess), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatterForAccess), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
@@ -346,7 +346,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatterForAccess), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatterForAccess), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
@@ -393,7 +393,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("\"", sqlFormatter.LeftFieldDelimiter);
@@ -418,7 +418,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("\"", sqlFormatter.LeftFieldDelimiter);
@@ -474,7 +474,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);
@@ -500,7 +500,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SqlFormatter), defaultSqlFormatter);
+            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
             Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);

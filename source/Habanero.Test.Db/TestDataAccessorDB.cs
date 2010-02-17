@@ -19,7 +19,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             DataAccessorDB dataAccessorDb = new DataAccessorDB();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(BusinessObjectLoaderDB), dataAccessorDb.BusinessObjectLoader);
+            Assert.IsInstanceOf(typeof(BusinessObjectLoaderDB), dataAccessorDb.BusinessObjectLoader);
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             DataAccessorDB dataAccessorDb = new DataAccessorDB();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(TransactionCommitterDB), dataAccessorDb.CreateTransactionCommitter());
+            Assert.IsInstanceOf(typeof(TransactionCommitterDB), dataAccessorDb.CreateTransactionCommitter());
             //---------------Tear down -------------------------
         }
 

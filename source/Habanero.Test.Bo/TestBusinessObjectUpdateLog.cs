@@ -72,7 +72,7 @@ namespace Habanero.Test.BO
             //-------------Test Result ----------------------
             IBusinessObjectUpdateLog businessObjectUpdateLog = myBusinessObjectUpdateLogBo.BusinessObjectUpdateLog;
             Assert.IsNotNull(businessObjectUpdateLog);
-            Assert.IsInstanceOfType(typeof(BusinessObjectUpdateLogStub), businessObjectUpdateLog);
+            Assert.IsInstanceOf(typeof(BusinessObjectUpdateLogStub), businessObjectUpdateLog);
         }
 
         [Test]

@@ -127,8 +127,8 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
 
             Assert.AreEqual(2, editor.Controls.Count);
-            Assert.IsInstanceOfType(typeof (IEditableGridControl), editor.Controls[0]);
-            Assert.IsInstanceOfType(typeof (ITreeView), editor.Controls[1]);
+            Assert.IsInstanceOf(typeof (IEditableGridControl), editor.Controls[0]);
+            Assert.IsInstanceOf(typeof (ITreeView), editor.Controls[1]);
             IEditableGridControl editableGridControl = (IEditableGridControl) editor.Controls[0];
             Assert.AreEqual(DockStyle.Fill, editor.Controls[0].Dock);
             Assert.AreEqual(DockStyle.Left, editor.Controls[1].Dock);

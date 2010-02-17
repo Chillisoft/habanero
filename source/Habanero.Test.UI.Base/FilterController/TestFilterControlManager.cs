@@ -186,7 +186,7 @@ namespace Habanero.Test.UI.Base.FilterController
 //            IControlHabanero controlHabanero = filterControl.GetChildControl("test");
 //            Assert.AreEqual(customFilter.Control, controlHabanero);
 //            Assert.IsNotNull(controlHabanero);
-//            Assert.IsInstanceOfType(typeof(ITextBox),controlHabanero);
+//            Assert.IsInstanceOf(typeof(ITextBox),controlHabanero);
 //            //---------------Tear Down -------------------------
 //        }
 //
@@ -571,7 +571,7 @@ namespace Habanero.Test.UI.Base.FilterController
 //                //            IControlHabanero control = factory.CreatePanel();
 //                IFilterControl ctl = factory.CreateFilterControl();
 //                //---------------Test Result -----------------------
-//                Assert.IsInstanceOfType(typeof (FlowLayoutManager), ctl.LayoutManager);
+//                Assert.IsInstanceOf(typeof (FlowLayoutManager), ctl.LayoutManager);
 //            }
 //
 //            [Test]
@@ -1137,7 +1137,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IControlHabanero controlHabanero = filterControl.GetChildControl("test");
             Assert.AreEqual(customFilter.Control, controlHabanero);
             Assert.IsNotNull(controlHabanero);
-            Assert.IsInstanceOfType(typeof (ITextBox), controlHabanero);
+            Assert.IsInstanceOf(typeof (ITextBox), controlHabanero);
             //---------------Tear Down -------------------------
         }
 

@@ -39,7 +39,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             DefaultBODeletor businessObjectDeletor = new DefaultBODeletor();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IBusinessObjectDeletor), businessObjectDeletor);
+            Assert.IsInstanceOf(typeof(IBusinessObjectDeletor), businessObjectDeletor);
         }
 
         [Test]

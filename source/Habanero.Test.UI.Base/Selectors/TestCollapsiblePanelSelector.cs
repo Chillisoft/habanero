@@ -110,8 +110,8 @@ namespace Habanero.Test.UI.Base
             IBOColSelectorControl colSelector = CreateSelector();
             //---------------Test Result -----------------------
             Assert.IsNotNull(colSelector);
-            Assert.IsInstanceOfType(typeof (IBOCollapsiblePanelSelector), colSelector);
-            Assert.IsInstanceOfType(typeof (ICollapsiblePanelGroupControl), colSelector);
+            Assert.IsInstanceOf(typeof (IBOCollapsiblePanelSelector), colSelector);
+            Assert.IsInstanceOf(typeof (ICollapsiblePanelGroupControl), colSelector);
         }
 
         [Test]

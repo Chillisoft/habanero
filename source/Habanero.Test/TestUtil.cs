@@ -221,7 +221,7 @@ namespace Habanero.Test
 
         public static T AssertIsInstanceOf<T>(object obj)
         {
-            Assert.IsInstanceOfType(typeof(T), obj);
+            Assert.IsInstanceOf(typeof(T), obj);
             return (T)obj;
         }
     }

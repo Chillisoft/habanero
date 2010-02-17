@@ -573,10 +573,10 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dateTimePicker.Controls.Count);
-            Assert.IsInstanceOfType(typeof(ILabel), dateTimePicker.Controls[0]);
+            Assert.IsInstanceOf(typeof(ILabel), dateTimePicker.Controls[0]);
             //IPanel pnl = (IPanel)dateTimePicker.Controls[0];
             //Assert.AreEqual(1, pnl.Controls.Count);
-            //Assert.IsInstanceOfType(typeof(ILabel), pnl.Controls[0]);
+            //Assert.IsInstanceOf(typeof(ILabel), pnl.Controls[0]);
             //ILabel lbl = (ILabel)pnl.Controls[0];
             //Assert.AreEqual("", lbl.Text);
             //---------------Tear Down -------------------------          

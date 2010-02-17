@@ -169,7 +169,7 @@ namespace Habanero.Test.BO
             bool success = loadedDataStore.AllObjects.TryGetValue(savedBO.MyBoID.Value, out loadedBO);
             Assert.IsTrue(success);
             Assert.IsNotNull(loadedBO);
-            Assert.IsInstanceOfType(typeof(MyBO), loadedBO);
+            Assert.IsInstanceOf(typeof(MyBO), loadedBO);
             MyBO loadedMyBO = (MyBO) loadedBO;
             Assert.AreNotSame(savedBO, loadedMyBO);
             Assert.AreEqual(savedBO.MyBoID, loadedMyBO.MyBoID);
@@ -236,7 +236,7 @@ namespace Habanero.Test.BO
             bool success = loadedDataStore.AllObjects.TryGetValue(savedBO.MyBoID.Value, out loadedBO);
             Assert.IsTrue(success);
             Assert.IsNotNull(loadedBO);
-            Assert.IsInstanceOfType(typeof(MyBO), loadedBO);
+            Assert.IsInstanceOf(typeof(MyBO), loadedBO);
             MyBO loadedMyBO = (MyBO)loadedBO;
             Assert.AreNotSame(savedBO, loadedMyBO);
 

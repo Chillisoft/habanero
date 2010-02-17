@@ -58,7 +58,7 @@ namespace Habanero.Test.Util
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Error Expected");
-            Assert.IsInstanceOfType(typeof(ArgumentNullException), exception);
+            Assert.IsInstanceOf(typeof(ArgumentNullException), exception);
             ArgumentNullException argumentNullException = (ArgumentNullException) exception;
             Assert.AreEqual("configuration", argumentNullException.ParamName);
         }
@@ -86,7 +86,7 @@ namespace Habanero.Test.Util
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Error Expected");
-            Assert.IsInstanceOfType(typeof(InvalidOperationException), exception);
+            Assert.IsInstanceOf(typeof(InvalidOperationException), exception);
             Assert.AreEqual(string.Format("The key '{0}' does not exist in the appSettings configuration section.", settingName), exception.Message);
         }
 
@@ -127,7 +127,7 @@ namespace Habanero.Test.Util
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Error Expected");
-            Assert.IsInstanceOfType(typeof(NotSupportedException), exception);
+            Assert.IsInstanceOf(typeof(NotSupportedException), exception);
             Assert.AreEqual("ConfigFileSettings does not support date ranging settings.", exception.Message);
         }
 
@@ -191,7 +191,7 @@ namespace Habanero.Test.Util
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Error Expected");
-            Assert.IsInstanceOfType(typeof(InvalidOperationException), exception);
+            Assert.IsInstanceOf(typeof(InvalidOperationException), exception);
             Assert.AreEqual(string.Format("The key '{0}' does not exist in the appSettings configuration section.", settingName), exception.Message);
         }
 
@@ -238,7 +238,7 @@ namespace Habanero.Test.Util
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Error Expected");
-            Assert.IsInstanceOfType(typeof(NotSupportedException), exception);
+            Assert.IsInstanceOf(typeof(NotSupportedException), exception);
             Assert.AreEqual("ConfigFileSettings does not support date ranging settings.", exception.Message);
         }
 
@@ -302,7 +302,7 @@ namespace Habanero.Test.Util
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exception, "Error Expected");
-            Assert.IsInstanceOfType(typeof(InvalidOperationException), exception);
+            Assert.IsInstanceOf(typeof(InvalidOperationException), exception);
             Assert.AreEqual(string.Format("The key '{0}' does not exist in the appSettings configuration section.", settingName), exception.Message);
         }
 

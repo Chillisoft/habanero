@@ -43,7 +43,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IBusinessObjectDeletor), confirmingBusinessObjectDeletor);
+            Assert.IsInstanceOf(typeof(IBusinessObjectDeletor), confirmingBusinessObjectDeletor);
             Assert.AreSame(confirmer, confirmingBusinessObjectDeletor.Confirmer);
         }
 
@@ -59,7 +59,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             ConfirmingBusinessObjectDeletor confirmingBusinessObjectDeletor = new ConfirmingBusinessObjectDeletor(confirmer, customConfirmationMessageDelegate);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IBusinessObjectDeletor), confirmingBusinessObjectDeletor);
+            Assert.IsInstanceOf(typeof(IBusinessObjectDeletor), confirmingBusinessObjectDeletor);
             Assert.AreSame(confirmer, confirmingBusinessObjectDeletor.Confirmer);
             Assert.AreSame(customConfirmationMessageDelegate, confirmingBusinessObjectDeletor.CustomConfirmationMessageDelegate);
         }

@@ -23,7 +23,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.IsNull(filter.Control);
             Assert.AreEqual(propertyName, filter.PropertyName);
             Assert.AreEqual(filterClauseOperator, filter.FilterClauseOperator);
-            Assert.IsInstanceOfType(typeof(DataViewNullFilterClause), filter.GetFilterClause(new DataViewFilterClauseFactory()));
+            Assert.IsInstanceOf(typeof(DataViewNullFilterClause), filter.GetFilterClause(new DataViewFilterClauseFactory()));
         }        
         [Test]
         public void TestConstructor_WhenFilterValueSet_ShouldReturnStringFilterClause()
@@ -41,7 +41,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual(filterClauseOperator, filter.FilterClauseOperator);
 
             IFilterClause filterClause = filter.GetFilterClause(new DataViewFilterClauseFactory());
-            Assert.IsInstanceOfType(typeof(DataViewStringFilterClause), filterClause);
+            Assert.IsInstanceOf(typeof(DataViewStringFilterClause), filterClause);
            // Assert.That(filterClause, Is.InstanceOf<DataViewStringFilterClause>());
         }
 

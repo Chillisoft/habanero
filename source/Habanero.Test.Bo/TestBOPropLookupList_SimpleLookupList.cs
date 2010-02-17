@@ -81,7 +81,7 @@ namespace Habanero.Test.BO
             SimpleLookupList simpleLookupList = new SimpleLookupList(null);
 
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(NullLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(NullLookupList), propDef.LookupList);
             //---------------Execute Test ----------------------
             propDef.LookupList = simpleLookupList;
             //---------------Test Result -----------------------
@@ -136,12 +136,12 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             SimpleLookupList simpleLookupList = new SimpleLookupList(_collection);
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(NullLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(NullLookupList), propDef.LookupList);
             Assert.AreEqual(_collection.Count, simpleLookupList.GetLookupList().Count);
             //---------------Execute Test ----------------------
             propDef.LookupList = simpleLookupList;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             Assert.AreEqual(_collection.Count, simpleLookupList.GetLookupList().Count);
             Assert.AreEqual(_collection.Count, simpleLookupList.GetIDValueLookupList().Count);
@@ -155,7 +155,7 @@ namespace Habanero.Test.BO
             propDef.LookupList = simpleLookupList;
             Dictionary<string, string> list = simpleLookupList.GetLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedKey;
@@ -180,7 +180,7 @@ namespace Habanero.Test.BO
             propDef.LookupList = simpleLookupList;
             Dictionary<string, string> list = simpleLookupList.GetLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedKey;
@@ -199,7 +199,7 @@ namespace Habanero.Test.BO
             propDef.LookupList = simpleLookupList;
             Dictionary<string, string> list = simpleLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
@@ -217,7 +217,7 @@ namespace Habanero.Test.BO
             propDef.LookupList = simpleLookupList;
             Dictionary<string, string> list = simpleLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
@@ -417,7 +417,7 @@ namespace Habanero.Test.BO
             propDef.LookupList = simpleLookupList;
             Dictionary<string, string> list = simpleLookupList.GetLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedKey;
@@ -436,7 +436,7 @@ namespace Habanero.Test.BO
             PropDef propDef = GetPropDef_Int(validInt, out simpleLookupList);
             Dictionary<string, string> list = simpleLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
@@ -869,7 +869,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(typeof(Guid), _propDef_guid.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
-            Assert.IsInstanceOfType(typeof(BOPropLookupList), boProp);
+            Assert.IsInstanceOf(typeof(BOPropLookupList), boProp);
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
             try

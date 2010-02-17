@@ -213,7 +213,7 @@ namespace Habanero.Test.DB
             }
             //-------------Test Result ----------------------
             Assert.IsNotNull(exception, "An error was expected when creating SQL with joins that have no fields");
-            Assert.IsInstanceOfType(typeof(HabaneroDeveloperException), exception);
+            Assert.IsInstanceOf(typeof(HabaneroDeveloperException), exception);
             string expectedMessage = string.Format("SQL cannot be created for the source '{0}' because it has a join to '{1}' without join fields", 
                                                    sourceDB.Name, join.ToSource.Name);
             StringAssert.Contains(expectedMessage, exception.Message);

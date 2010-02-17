@@ -1549,7 +1549,7 @@ namespace Habanero.Test.BO
             contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime);
             //---------------Test Result -----------------------
             object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
-            Assert.IsInstanceOfType(typeof (DateTime), value);
+            Assert.IsInstanceOf(typeof (DateTime), value);
             Assert.AreEqual(newDateTime, value);
         }
 
@@ -1565,7 +1565,7 @@ namespace Habanero.Test.BO
             contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime.ToString());
             //---------------Test Result -----------------------
             object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
-            Assert.IsInstanceOfType(typeof (DateTime), value);
+            Assert.IsInstanceOf(typeof (DateTime), value);
             Assert.AreEqual(newDateTime, value);
         }
 
@@ -1612,7 +1612,7 @@ namespace Habanero.Test.BO
             contactPersonTestBO.SetPropertyValue("ContactType", "Business");
             //---------------Test Result -----------------------
             object value = contactPersonTestBO.GetPropertyValue("ContactType");
-            Assert.IsInstanceOfType(typeof (ContactPersonTestBO.ContactType), value);
+            Assert.IsInstanceOf(typeof (ContactPersonTestBO.ContactType), value);
             Assert.AreEqual(ContactPersonTestBO.ContactType.Business, value);
         }
 
@@ -1642,7 +1642,7 @@ namespace Habanero.Test.BO
                 exception.Message);
 
 //            object value = contactPersonTestBO.GetPropertyValue("ContactType");
-//            Assert.IsInstanceOfType(typeof (string), value);
+//            Assert.IsInstanceOf(typeof (string), value);
 //            Assert.AreEqual(newValue, value);
 //            IBOProp prop = contactPersonTestBO.Props["ContactType"];
 //            Assert.IsFalse(prop.IsValid);

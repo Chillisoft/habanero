@@ -942,7 +942,7 @@ namespace Habanero.Test.BO
         //    BOProp boProp = propDef.CreateBOProp(true);
 
         //    //-------------Test Result ----------------------
-        //    Assert.IsInstanceOfType(typeof(MyCustomProperty), boProp.Value);
+        //    Assert.IsInstanceOf(typeof(MyCustomProperty), boProp.Value);
         //    MyCustomProperty myCustomProperty = (MyCustomProperty)boProp.Value;
         //    Assert.AreEqual(intialValue, myCustomProperty.GetPersistValue());
         //}
@@ -961,7 +961,7 @@ namespace Habanero.Test.BO
         //    BOProp boProp = propDef.CreateBOProp(true);
 
         //    //-------------Test Result ----------------------
-        //    Assert.IsInstanceOfType(typeof(MyCustomProperty), boProp.Value);
+        //    Assert.IsInstanceOf(typeof(MyCustomProperty), boProp.Value);
         //    MyCustomProperty myCustomProperty = (MyCustomProperty)boProp.Value;
         //    Assert.AreEqual(intialValue, myCustomProperty.GetPersistValue());
         //}
@@ -997,7 +997,7 @@ namespace Habanero.Test.BO
 
         //    //-------------Test Pre-conditions --------------
         //    Assert.IsFalse(boProp.IsDirty);
-        //    Assert.IsInstanceOfType(typeof(MyCustomProperty), boProp.Value);
+        //    Assert.IsInstanceOf(typeof(MyCustomProperty), boProp.Value);
         //    MyCustomProperty myCustomProperty = (MyCustomProperty)boProp.Value;
         //    Assert.AreEqual(testvalue, myCustomProperty.GetPersistValue());
 

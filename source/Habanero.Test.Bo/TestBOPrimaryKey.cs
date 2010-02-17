@@ -215,7 +215,7 @@ namespace Habanero.Test.BO
             BOPrimaryKey key = BOPrimaryKey.CreateWithValue((ClassDef) autoIncClassDef, value);
             //---------------Test Result -----------------------
 
-            Assert.AreEqual(expectedID, key);
+            Assert.AreEqual(expectedID.ToString(), key.ToString());
             //---------------Tear Down -------------------------          
         }
 
@@ -233,7 +233,7 @@ namespace Habanero.Test.BO
             BOPrimaryKey key = BOPrimaryKey.CreateWithValue((ClassDef) classDef, value);
             //---------------Test Result -----------------------
 
-            Assert.AreEqual(expectedID, key);
+            Assert.AreEqual(expectedID.ToString(), key.ToString());
             //---------------Tear Down -------------------------          
         }
 
@@ -251,7 +251,7 @@ namespace Habanero.Test.BO
             BOPrimaryKey key = BOPrimaryKey.CreateWithValue(typeof(BOWithIntID), value);
             //---------------Test Result -----------------------
 
-            Assert.AreEqual(expectedID, key);
+            Assert.AreEqual(expectedID.ToString(), key.ToString());
             //---------------Tear Down -------------------------          
         }
 

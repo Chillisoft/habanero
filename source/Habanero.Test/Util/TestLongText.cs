@@ -35,13 +35,13 @@ namespace Habanero.Test.Util
     [TestFixture]
     public class TestLongText : TestUsingDatabase
     {
-        private readonly IClassDef itsClassDef;
+        private readonly IClassDef _itsClassDef;
 
         public TestLongText()
         {
             ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            itsClassDef = loader.LoadClass
+            _itsClassDef = loader.LoadClass
                 (@"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
@@ -51,7 +51,7 @@ namespace Habanero.Test.Util
 					</primaryKey>
 				</class>
 			");
-            ClassDef.ClassDefs.Add(itsClassDef);
+            ClassDef.ClassDefs.Add(_itsClassDef);
             base.SetupDBConnection();
         }
 
@@ -110,7 +110,7 @@ namespace Habanero.Test.Util
         [Test]
         public void TestPropertyType()
         {
-            PropDef propDef = (PropDef) itsClassDef.PropDefcol["TestProp"];
+            PropDef propDef = (PropDef) _itsClassDef.PropDefcol["TestProp"];
             Assert.AreEqual(propDef.PropertyType, typeof (LongText));
         }
 
@@ -191,7 +191,7 @@ namespace Habanero.Test.Util
             generalDataMapper.TryParsePropValue(test, out returnValue);
             //---------------Test Result -----------------------
             Assert.IsNotNull(returnValue);
-            Assert.IsInstanceOfType(typeof(LongText), returnValue);
+            Assert.IsInstanceOf(typeof(LongText), returnValue);
             LongText longText = (LongText) returnValue;
             Assert.AreSame(test, longText.Value);
         }
@@ -200,7 +200,7 @@ namespace Habanero.Test.Util
         public void TestPropertyValue()
         {
             //---------------Set up test pack-------------------
-            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            IBusinessObject bo = _itsClassDef.CreateNewBusinessObject();
             LongText longText = new LongText("test");
             //---------------Assert Precondition----------------
 
@@ -210,14 +210,14 @@ namespace Habanero.Test.Util
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(actualValue);
-            Assert.IsInstanceOfType(typeof (LongText), actualValue);
+            Assert.IsInstanceOf(typeof (LongText), actualValue);
             Assert.AreSame(longText, actualValue);
         }
 
         [Test]
         public void TestSetPropertyValueWithString()
         {
-            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            IBusinessObject bo = _itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             Assert.AreSame(typeof (LongText), bo.GetPropertyValue("TestProp").GetType());
             Assert.AreEqual("test", bo.GetPropertyValue("TestProp").ToString());
@@ -227,7 +227,7 @@ namespace Habanero.Test.Util
         public void TestPersistSqlParameterType()
         {
             TestUsingDatabase.SetupDBOracleConnection();
-            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            IBusinessObject bo = _itsClassDef.CreateNewBusinessObject();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append('*', 2500);
             string value = stringBuilder.ToString();

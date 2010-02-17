@@ -34,7 +34,7 @@ namespace Habanero.Test.Base
             RecordingExceptionNotifier exceptionNotifier = new RecordingExceptionNotifier();
             //---------------Test Result -----------------------
             Assert.AreEqual(0, exceptionNotifier.Exceptions.Count);
-            Assert.IsInstanceOfType(typeof(IExceptionNotifier), exceptionNotifier);
+            Assert.IsInstanceOf(typeof(IExceptionNotifier), exceptionNotifier);
         }
 
         [Test]

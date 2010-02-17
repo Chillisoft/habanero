@@ -49,7 +49,7 @@ namespace Habanero.Test.BO
             memoryStream.Seek(0, SeekOrigin.Begin);
             Object deserialisedPerson = formatter.Deserialize(memoryStream);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(Person),deserialisedPerson);
+            Assert.IsInstanceOf(typeof(Person),deserialisedPerson);
         }
 
         [Test]

@@ -186,7 +186,7 @@ namespace Habanero.Test.BO
             BusinessObjectLookupList businessObjectLookupList = new BusinessObjectLookupListStub
                 (typeof (MyBO), _collection);
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (NullLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (NullLookupList), propDef.LookupList);
             //---------------Execute Test ----------------------
             propDef.LookupList = businessObjectLookupList;
             //---------------Test Result -----------------------
@@ -249,12 +249,12 @@ namespace Habanero.Test.BO
             BusinessObjectLookupList businessObjectLookupList = new BusinessObjectLookupListStub
                 (typeof (MyBO), _collection) {PropDef = _propDefGuid};
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (NullLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (NullLookupList), propDef.LookupList);
             Assert.AreEqual(_collection.Count, businessObjectLookupList.GetLookupList().Count);
             //---------------Execute Test ----------------------
             propDef.LookupList = businessObjectLookupList;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (BusinessObjectLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (BusinessObjectLookupList), propDef.LookupList);
             Assert.AreSame(propDef, businessObjectLookupList.PropDef);
             Assert.AreEqual(_collection.Count, businessObjectLookupList.GetLookupList().Count);
             Assert.AreEqual(_collection.Count, businessObjectLookupList.GetIDValueLookupList().Count);
@@ -270,7 +270,7 @@ namespace Habanero.Test.BO
                 (typeof(MyBO), _collection) { PropDef = _propDefGuid };
             propDef.LookupList = businessObjectLookupList;
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(BusinessObjectLookupListStub), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(BusinessObjectLookupListStub), propDef.LookupList);
             Assert.AreNotEqual(0,_collection.Count);
             Assert.IsNull(businessObjectLookupList.DisplayValueDictionary);
             //---------------Execute Test ----------------------
@@ -290,7 +290,7 @@ namespace Habanero.Test.BO
             propDef.LookupList = businessObjectLookupList;
             BOPropLookupList_Stub prop = new BOPropLookupList_Stub(propDef);
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof(BusinessObjectLookupListStub), propDef.LookupList);
+            Assert.IsInstanceOf(typeof(BusinessObjectLookupListStub), propDef.LookupList);
             Assert.AreNotEqual(0, _collection.Count);
             Assert.IsNull(businessObjectLookupList.DisplayValueDictionary);
             //---------------Execute Test ----------------------
@@ -309,7 +309,7 @@ namespace Habanero.Test.BO
 //                (typeof(MyBO), _collection) { PropDef = _propDefGuid };
 //            propDef.LookupList = businessObjectLookupList;
 //            //---------------Assert Precondition----------------
-//            Assert.IsInstanceOfType(typeof(BusinessObjectLookupListStub), propDef.LookupList);
+//            Assert.IsInstanceOf(typeof(BusinessObjectLookupListStub), propDef.LookupList);
 //            Assert.AreNotEqual(0, _collection.Count);
 //            Assert.IsNull(businessObjectLookupList.DisplayValueDictionary);
 //            //---------------Execute Test ----------------------
@@ -332,7 +332,7 @@ namespace Habanero.Test.BO
             propDef.LookupList = businessObjectLookupList;
             Dictionary<string, string> list = businessObjectLookupList.GetLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (BusinessObjectLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (BusinessObjectLookupList), propDef.LookupList);
             Assert.AreSame(propDef, businessObjectLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedKey;
@@ -353,7 +353,7 @@ namespace Habanero.Test.BO
             propDef.LookupList = businessObjectLookupList;
             Dictionary<string, string> list = businessObjectLookupList.GetLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (BusinessObjectLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (BusinessObjectLookupList), propDef.LookupList);
             Assert.AreSame(propDef, businessObjectLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedKey;
@@ -374,7 +374,7 @@ namespace Habanero.Test.BO
             propDef.LookupList = businessObjectLookupList;
             Dictionary<string, string> list = businessObjectLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (BusinessObjectLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (BusinessObjectLookupList), propDef.LookupList);
             Assert.AreSame(propDef, businessObjectLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
@@ -392,7 +392,7 @@ namespace Habanero.Test.BO
             BusinessObjectLookupList businessObjectLookupList = (BusinessObjectLookupList) propDef.LookupList;
             Dictionary<string, string> list = businessObjectLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (BusinessObjectLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (BusinessObjectLookupList), propDef.LookupList);
             Assert.AreSame(propDef, businessObjectLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
@@ -462,7 +462,7 @@ namespace Habanero.Test.BO
             boProp.InitialiseProp(_validBusinessObject);
             //---------------Test Result -----------------------
             Assert.AreEqual(_validBusinessObject.MyBoID, boProp.Value);
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
         }
 
         [Test]
@@ -527,7 +527,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             boProp.InitialiseProp(guid);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (string), boProp.Value);
+            Assert.IsInstanceOf(typeof (string), boProp.Value);
             Assert.AreEqual(guid.ToString("B").ToUpperInvariant(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
@@ -546,7 +546,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             boProp.InitialiseProp(_validLookupValue);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (string), boProp.Value);
+            Assert.IsInstanceOf(typeof (string), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.Value);
 //            Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
@@ -562,7 +562,7 @@ namespace Habanero.Test.BO
                 (typeof (MyBO), _collection);
             propDef.LookupList = businessObjectLookupListStub;
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOfType(typeof (BusinessObjectLookupList), propDef.LookupList);
+            Assert.IsInstanceOf(typeof (BusinessObjectLookupList), propDef.LookupList);
             //---------------Execute Test ----------------------
             try
             {
@@ -621,7 +621,7 @@ namespace Habanero.Test.BO
             boProp.InitialiseProp(_validBusinessObject.ID.GetAsValue());
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
@@ -638,7 +638,7 @@ namespace Habanero.Test.BO
             boProp.InitialiseProp(_validBusinessObject);
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
@@ -654,7 +654,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             boProp.InitialiseProp(_validBusinessObject.ID.GetAsValue().ToString());
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
             Assert.IsTrue(string.IsNullOrEmpty(boProp.IsValidMessage));
@@ -755,7 +755,7 @@ namespace Habanero.Test.BO
             boProp.InitialiseProp(_validBusinessObjectNotInList.ID.GetAsValue());
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObjectNotInList.ID.GetAsValue(), boProp.Value);
             //            string errorMessage = String.Format("'{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName, boProp.Value);
             //            StringAssert.Contains(errorMessage, boProp.InvalidReason);
@@ -777,7 +777,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             boProp.InitialiseProp(_validBusinessObjectNotInList.ID.GetAsValue().ToString());
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObjectNotInList.ID.GetAsValue(), boProp.Value);
 //            string errorMessage = String.Format("'{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName, boProp.Value);
 //            StringAssert.Contains(errorMessage, boProp.InvalidReason);
@@ -1010,7 +1010,7 @@ namespace Habanero.Test.BO
             boProp.Value = guid;
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsInstanceOfType(typeof(Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof(Guid), boProp.Value);
             Assert.AreEqual(guid, boProp.Value);
             string expectedErrorMessage = String.Format
                 ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
@@ -1032,7 +1032,7 @@ namespace Habanero.Test.BO
             boProp.Value = _validBusinessObjectNotInList.ID.GetAsValue();
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObjectNotInList.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual("", boProp.InvalidReason);
             Assert.IsTrue(boProp.IsValid);
@@ -1055,7 +1055,7 @@ namespace Habanero.Test.BO
             boProp.Value = _validBusinessObjectNotInList.ID.GetAsValue().ToString();
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsInstanceOfType(typeof(Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof(Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObjectNotInList.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual("", boProp.InvalidReason);
             Assert.IsTrue(boProp.IsValid);
@@ -1080,7 +1080,7 @@ namespace Habanero.Test.BO
             boProp.Value = newMyBO.ID.GetAsValue();
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsInstanceOfType(typeof(Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof(Guid), boProp.Value);
             Assert.AreEqual(newMyBO.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual("", boProp.InvalidReason);
             Assert.IsTrue(boProp.IsValid);
@@ -1102,7 +1102,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             boProp.Value = _validBusinessObject.ID.GetAsValue().ToString();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual("", boProp.InvalidReason);
             Assert.IsTrue(boProp.IsValid);
@@ -1124,7 +1124,7 @@ namespace Habanero.Test.BO
             boProp.Value = newContactPersonTestBO.ID.GetAsValue();
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsInstanceOfType(typeof(Guid), boProp.Value);
+            Assert.IsInstanceOf(typeof(Guid), boProp.Value);
             Assert.AreEqual(newContactPersonTestBO.ID.GetAsValue(), boProp.Value);
             string expectedErrorMessage = String.Format
                 ("{0}' is not valid. The Business object '{1}' returned for this ID is not a type of 'Habanero.Test.MyBO'.",
@@ -1178,7 +1178,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
-            Assert.IsInstanceOfType(typeof (BOPropLookupList), boProp);
+            Assert.IsInstanceOf(typeof (BOPropLookupList), boProp);
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
             try

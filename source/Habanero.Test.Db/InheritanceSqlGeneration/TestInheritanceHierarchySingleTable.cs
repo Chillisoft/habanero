@@ -24,7 +24,6 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
@@ -204,9 +203,9 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             Assert.AreEqual("Circle", shapes[0].ShapeName);
             Assert.AreEqual("FilledCircle", shapes[1].ShapeName);
             Assert.AreEqual("MyShape", shapes[2].ShapeName);
-            Assert.That(shapes[0], Is.InstanceOfType(typeof(CircleNoPrimaryKey)));
-            Assert.That(shapes[1], Is.InstanceOfType(typeof(FilledCircleNoPrimaryKey)));
-            Assert.That(shapes[2], Is.InstanceOfType(typeof(Shape)));
+            Assert.That(shapes[0], Is.InstanceOf(typeof(CircleNoPrimaryKey)));
+            Assert.That(shapes[1], Is.InstanceOf(typeof(FilledCircleNoPrimaryKey)));
+            Assert.That(shapes[2], Is.InstanceOf(typeof(Shape)));
 
             circles.LoadAll("ShapeName");
             Assert.AreEqual(2, circles.Count);

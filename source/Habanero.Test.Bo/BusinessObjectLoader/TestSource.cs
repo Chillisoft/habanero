@@ -228,7 +228,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             } catch (Exception ex) { exception = ex; }
             //-------------Test Result ----------------------
             Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(typeof(HabaneroDeveloperException), exception);
+            Assert.IsInstanceOf(typeof(HabaneroDeveloperException), exception);
             StringAssert.Contains("A source cannot merge with another source if they do not have the same base source.", exception.Message);
         }
 

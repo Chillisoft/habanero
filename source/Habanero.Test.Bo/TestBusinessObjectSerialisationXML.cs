@@ -70,7 +70,7 @@ namespace Habanero.Test.BO
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exceptionThrown);
-            Assert.IsInstanceOfType(typeof(InvalidOperationException),exceptionThrown);
+            Assert.IsInstanceOf(typeof(InvalidOperationException),exceptionThrown);
             Assert.AreEqual("There is an error in XML document (2, 91).", exceptionThrown.Message);
             Assert.IsTrue(exceptionThrown.InnerException.Message.Contains("Unexpected end of file"));
         }
@@ -97,7 +97,7 @@ namespace Habanero.Test.BO
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exceptionThrown);
-            Assert.IsInstanceOfType(typeof(InvalidOperationException), exceptionThrown);
+            Assert.IsInstanceOf(typeof(InvalidOperationException), exceptionThrown);
             Assert.AreEqual("There is an error in XML document (2, 46).", exceptionThrown.Message);
             Assert.IsTrue(exceptionThrown.InnerException.Message.Contains("was not expected."));
         }
@@ -125,7 +125,7 @@ namespace Habanero.Test.BO
             }
             //---------------Test Result -----------------------
             Assert.IsNotNull(exceptionThrown);
-            Assert.IsInstanceOfType(typeof(InvalidOperationException), exceptionThrown);
+            Assert.IsInstanceOf(typeof(InvalidOperationException), exceptionThrown);
             Assert.AreEqual("There is an error in XML document (3, 66).", exceptionThrown.Message);
             Assert.IsTrue(exceptionThrown.InnerException.Message.Contains("The given property name 'Age' does not exist"));
         }
@@ -161,9 +161,9 @@ namespace Habanero.Test.BO
 
             Assert.IsNotNull(exceptionThrown);
             
-            Assert.IsInstanceOfType(typeof(InvalidOperationException), exceptionThrown);
+            Assert.IsInstanceOf(typeof(InvalidOperationException), exceptionThrown);
             Assert.AreEqual("There is an error in XML document (3, 50).", exceptionThrown.Message);
-            Assert.IsInstanceOfType(typeof(InvalidRelationshipNameException),exceptionThrown.InnerException);
+            Assert.IsInstanceOf(typeof(InvalidRelationshipNameException),exceptionThrown.InnerException);
             Assert.IsTrue(exceptionThrown.InnerException.Message.Contains("The relationship 'NonRecognisedRelationship' does not exist on the class 'OrganisationTestBO'."));
         }
 
@@ -198,7 +198,7 @@ namespace Habanero.Test.BO
             memoryStream.Seek(0, SeekOrigin.Begin);
             Object deserialisedPerson = xs.Deserialize(memoryStream);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(Person), deserialisedPerson);
+            Assert.IsInstanceOf(typeof(Person), deserialisedPerson);
         }
 
         [Test]
@@ -503,7 +503,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_SerialiseXml_Composition_MultipleRelationship()
+        public void Test_SerialiseXml_Composition_MultipleRelationship_ShouldSerialiseBothChildren()
         {
             //---------------Set up test pack-------------------
             LoadClassDefs_MultipleRelationship(RelationshipType.Composition);
@@ -532,7 +532,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("ContactPeople", contactPersonsNode.Name);
 
             Assert.AreEqual(2, contactPersonsNode.ChildNodes.Count);
-            Assert.AreNotEqual(contactPersonsNode.ChildNodes[0],contactPersonsNode.ChildNodes[1]);
+            Assert.AreNotEqual(contactPersonsNode.ChildNodes[0].OuterXml,contactPersonsNode.ChildNodes[1].OuterXml);
         }
 
 
@@ -766,7 +766,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_SerialiseXml_Aggregation_MultipleRelationship()
+        public void Test_SerialiseXml_Aggregation_MultipleRelationship_ShouldSerialiseBothChildObjects()
         {
             //---------------Set up test pack-------------------
             LoadClassDefs_MultipleRelationship(RelationshipType.Aggregation);
@@ -795,7 +795,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("ContactPeople", contactPersonsNode.Name);
 
             Assert.AreEqual(2, contactPersonsNode.ChildNodes.Count);
-            Assert.AreNotEqual(contactPersonsNode.ChildNodes[0], contactPersonsNode.ChildNodes[1]);
+            Assert.AreNotEqual(contactPersonsNode.ChildNodes[0].OuterXml, contactPersonsNode.ChildNodes[1].OuterXml);
         }
        
         [Test]

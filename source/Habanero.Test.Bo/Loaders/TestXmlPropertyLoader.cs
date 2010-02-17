@@ -288,7 +288,7 @@ namespace Habanero.Test.BO.Loaders
             IPropDef def =
                 _loader.LoadProperty(
                     @"<property  name=""TestProp""><databaseLookupList sql=""Source"" timeout=""100"" class=""MyBO"" assembly=""Habanero.Test"" /></property>");
-            Assert.IsInstanceOfType(typeof (IDatabaseLookupList), def.LookupList,
+            Assert.IsInstanceOf(typeof (IDatabaseLookupList), def.LookupList,
                            "LookupList should be of type IDatabaseLookupList but is of type " +
                            def.LookupList.GetType().Name);
             IDatabaseLookupList source = (IDatabaseLookupList) def.LookupList;
@@ -312,7 +312,7 @@ namespace Habanero.Test.BO.Loaders
 							<item display=""s2"" value=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
 						</simpleLookupList>
 					</property>");
-            Assert.IsInstanceOfType(typeof (ISimpleLookupList), def.LookupList,
+            Assert.IsInstanceOf(typeof (ISimpleLookupList), def.LookupList,
                            "LookupList should be of type SimpleLookupList");
             ISimpleLookupList source = (ISimpleLookupList) def.LookupList;
             Assert.AreEqual(2, source.GetLookupList().Count, "LookupList should have two keyvaluepairs");
@@ -327,7 +327,7 @@ namespace Habanero.Test.BO.Loaders
 						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" />
 					</property>");
             Assert.IsNotNull(def.LookupList);
-            Assert.IsInstanceOfType(typeof(IBusinessObjectLookupList), def.LookupList);
+            Assert.IsInstanceOf(typeof(IBusinessObjectLookupList), def.LookupList);
             IBusinessObjectLookupList source = (IBusinessObjectLookupList)def.LookupList;
             Assert.AreEqual("MyBO", source.ClassName);
             Assert.AreEqual("Habanero.Test", source.AssemblyName);

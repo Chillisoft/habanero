@@ -37,7 +37,7 @@ namespace Habanero.Test.Base
             //---------------Execute Test ----------------------
             DelegatedExceptionNotifier delegatedExceptionNotifier = new DelegatedExceptionNotifier(notifyDelegate);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IExceptionNotifier), delegatedExceptionNotifier);
+            Assert.IsInstanceOf(typeof(IExceptionNotifier), delegatedExceptionNotifier);
         }
 
         [Test]

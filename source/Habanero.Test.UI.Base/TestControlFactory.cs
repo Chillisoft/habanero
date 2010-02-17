@@ -457,7 +457,7 @@ namespace Habanero.Test.UI.Base
                     CreateDataGridViewColumn("DataGridViewImageColumn", null);
                 //---------------Test Result -----------------------
                 Assert.IsNotNull(dataGridViewColumn);
-                Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), dataGridViewColumn);
+                Assert.IsInstanceOf(typeof(IDataGridViewImageColumn), dataGridViewColumn);
                 Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
             }
             [Test, Ignore("Not implemented for VWG")]
@@ -704,7 +704,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IControlHabanero control = _factory.CreateControl("NumericUpDown", null);
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(INumericUpDown), control);
+            Assert.IsInstanceOf(typeof(INumericUpDown), control);
         }
 
         [Test]
@@ -1049,7 +1049,7 @@ namespace Habanero.Test.UI.Base
             IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn(typeName, assemblyName);
             //---------------Test Result -----------------------
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(GetHabaneroMasterGridColumnType(), column);
+            Assert.IsInstanceOf(GetHabaneroMasterGridColumnType(), column);
             AssertGridColumnTypeAfterCast(column, columnType);
         }
 
@@ -1064,7 +1064,7 @@ namespace Habanero.Test.UI.Base
             object column = GetControlFactory().CreateDataGridViewColumn(typeName, null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(typeof(IDataGridViewCheckBoxColumn), column);
+            Assert.IsInstanceOf(typeof(IDataGridViewCheckBoxColumn), column);
 
             string correctAssembly = GetControlFactory().CreateDataGridViewCheckBoxColumn().GetType().AssemblyQualifiedName;
             Assert.AreEqual(correctAssembly, column.GetType().AssemblyQualifiedName);
@@ -1081,7 +1081,7 @@ namespace Habanero.Test.UI.Base
             IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn(columnType);
             //---------------Test Result -----------------------
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(GetHabaneroMasterGridColumnType(), column);
+            Assert.IsInstanceOf(GetHabaneroMasterGridColumnType(), column);
             AssertGridColumnTypeAfterCast(column, columnType);
         }
 
@@ -1150,7 +1150,7 @@ namespace Habanero.Test.UI.Base
                 CreateDataGridViewColumn("DataGridViewNumericUpDownColumn", null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(dataGridViewColumn);
-            Assert.IsInstanceOfType(typeof(IDataGridViewNumericUpDownColumn), dataGridViewColumn);
+            Assert.IsInstanceOf(typeof(IDataGridViewNumericUpDownColumn), dataGridViewColumn);
             Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
         }
 
@@ -1166,7 +1166,7 @@ namespace Habanero.Test.UI.Base
                 CreateDataGridViewColumn("DataGridViewDateTimeColumn", null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(dataGridViewColumn);
-            Assert.IsInstanceOfType(typeof(IDataGridViewDateTimeColumn), dataGridViewColumn);
+            Assert.IsInstanceOf(typeof(IDataGridViewDateTimeColumn), dataGridViewColumn);
             Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
         }
 
@@ -1182,7 +1182,7 @@ namespace Habanero.Test.UI.Base
                 CreateDataGridViewColumn("DataGridViewCheckBoxColumn", null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(dataGridViewColumn);
-            Assert.IsInstanceOfType(typeof(IDataGridViewCheckBoxColumn), dataGridViewColumn);
+            Assert.IsInstanceOf(typeof(IDataGridViewCheckBoxColumn), dataGridViewColumn);
             Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
         }
 
@@ -1198,7 +1198,7 @@ namespace Habanero.Test.UI.Base
                 CreateDataGridViewColumn("DataGridViewComboBoxColumn", null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(dataGridViewColumn);
-            Assert.IsInstanceOfType(typeof(IDataGridViewComboBoxColumn), dataGridViewColumn);
+            Assert.IsInstanceOf(typeof(IDataGridViewComboBoxColumn), dataGridViewColumn);
             Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
         }
 
