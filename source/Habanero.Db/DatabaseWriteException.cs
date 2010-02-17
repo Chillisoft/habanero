@@ -132,7 +132,7 @@ namespace Habanero.DB
         {
             base.GetObjectData(info, context);
             info.AddValue("sqlStatement", _sqlStatement);
-            info.AddValue("developerMessage",_developerMessage);
+            info.AddValue("developerMessage",DeveloperMessage);
             info.AddValue("connectString",_connectString);
         }
     }

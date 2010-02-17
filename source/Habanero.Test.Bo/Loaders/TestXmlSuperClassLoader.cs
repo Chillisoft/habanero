@@ -44,7 +44,7 @@ namespace Habanero.Test.BO.Loaders
                 new XmlClassDefsLoader(SuperClassClassDefXml, new DtdLoader(), GetDefClassFactory()).LoadClassDefs());
         }
 
-        protected string SuperClassClassDefXml = 
+        protected const string SuperClassClassDefXml = 
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >

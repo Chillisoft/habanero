@@ -168,12 +168,14 @@ namespace Habanero.UI.Base
         private void AddKeyPressHandlers()
         {
             IControlMapperStrategy mapperStrategy = ControlFactory.CreateControlMapperStrategy();
+            if (mapperStrategy == null) return;
             mapperStrategy.AddKeyPressEventHandler(Control);
         }
 
         private void RemoveCurrentBOPropHandlers()
         {
             IControlMapperStrategy mapperStrategy = ControlFactory.CreateControlMapperStrategy();
+            if (mapperStrategy == null) return;
             mapperStrategy.RemoveCurrentBOPropHandlers(this, CurrentBOProp());
         }
 

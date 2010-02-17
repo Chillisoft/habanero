@@ -117,11 +117,11 @@ namespace Habanero.BO.Loaders
                 throw new InvalidXmlDefinitionException("In a superClass definition, a 'discriminator' " +
                     "attribute has been specified for OR-mapping type ConcreteTableInheritance");
             }
-            else if (_discriminator == null && _orMapping == ORMapping.SingleTableInheritance)
+            if (String.IsNullOrEmpty(_discriminator) && _orMapping == ORMapping.SingleTableInheritance)
             {
                 throw new InvalidXmlDefinitionException("In a superClass definition, a 'discriminator' " +
-                    "attribute is missing where the SingleTableInheritance OR-mapping type has been " +
-                    "specified.");
+                                                        "attribute is missing where the SingleTableInheritance OR-mapping type has been " +
+                                                        "specified.");
             }
         }
     }

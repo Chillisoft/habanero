@@ -80,6 +80,7 @@ namespace Habanero.UI.Base
         {
             _comboBox = cbx;
             _mapperStrategy = factory.CreateLookupComboBoxDefaultMapperStrategy();
+            if (_mapperStrategy == null) return;
             _mapperStrategy.AddHandlers(this);
         }
 
@@ -133,6 +134,7 @@ namespace Habanero.UI.Base
             set
             {
                 _mapperStrategy = value;
+                if (_mapperStrategy == null) return;
                 _mapperStrategy.RemoveCurrentHandlers(this);
                 _mapperStrategy.AddHandlers(this);
             }
@@ -194,11 +196,7 @@ namespace Habanero.UI.Base
                 {
                     if (pair.Value == null) continue;
 
-                    bool found = false;
-                    if (pair.Value != null)
-                    {
-                        found = pair.Value.Equals(Convert.ToString(boPropertyValue));
-                    }
+                    bool found = pair.Value.Equals(Convert.ToString(boPropertyValue));
                     if (!found) continue;
                     _comboBox.SelectedItem = pair.Key;
                     break;

@@ -26,7 +26,8 @@ namespace Habanero.Base.Exceptions
     /// the architecture or a method in the architecture incorrectly e.g. if a method is called with invalid 
     /// paramaters.
     /// </summary>    
-[Serializable]
+    [Serializable]
+    [CoverageExclude]
     public class HabaneroDeveloperException:Exception
     {
     /// <summary>
@@ -38,6 +39,15 @@ namespace Habanero.Base.Exceptions
         /// Constructor to initialise the exception
         /// </summary>
         public HabaneroDeveloperException()
+        {
+        }
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display
+        /// </summary>
+        /// <param name="userMessage">The error message</param>
+        public HabaneroDeveloperException(string userMessage)
+            : this(userMessage, userMessage)
         {
         }
        /// <summary>
