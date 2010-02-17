@@ -29,7 +29,7 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Base.Mappers
 {
     [TestFixture]
-    public class TestExtendedLookupComboBoxMapper
+    public class TestExtendedComboBoxMapper
     {
         [SetUp]
         public void Setup()
@@ -229,7 +229,7 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_ShowGridAndBOEditorControlWinOnClick()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectCollection<OrganisationTestBO> organisationTestBOS = CreateSavedOrganisationTestBOSCollection();
+            BusinessObjectCollection<OrganisationTestBO> organisationTestBOs = CreateSavedOrganisationTestBOsCollection();
             IControlFactory controlFactory = GetControlFactory();
             ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
             const string propName = "OrganisationID";
@@ -257,8 +257,8 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);
             IBusinessObjectCollection collection = andBOGridAndEditorControlWin.GridControl.Grid.BusinessObjectCollection;
             Assert.IsNotNull(collection);
-            Assert.AreEqual(organisationTestBOS.Count, collection.Count);
-            Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);
+            Assert.AreEqual(organisationTestBOs.Count, collection.Count);
+            Assert.AreEqual(organisationTestBOs.Count, mapper.LookupList.Count);
         }
 
         [Test]
@@ -268,14 +268,14 @@ namespace Habanero.Test.UI.Base.Mappers
             ClassDef.ClassDefs.Clear();
             PersonTestBO.LoadDefaultClassDefWithTestOrganisationBOLookup();
             ContactPersonTestBO.LoadDefaultClassDefWithPersonTestBOSuperClass();
-            BusinessObjectCollection<OrganisationTestBO> organisationTestBOS = CreateSavedOrganisationTestBOSCollection();
+            BusinessObjectCollection<OrganisationTestBO> organisationTestBOs = CreateSavedOrganisationTestBOsCollection();
             
             
             IControlFactory controlFactory = GetControlFactory();
             ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
             const string propName = "OrganisationID";
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
-                extendedComboBox, propName, true, controlFactory);
+                    extendedComboBox, propName, true, controlFactory);
             mapper.BusinessObject = new ContactPersonTestBO();
            // mapper.RelatedBusinessObject = OrganisationTestBO.CreateSavedOrganisation();
             //--------------- Test Preconditions ----------------
@@ -298,8 +298,8 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);
             IBusinessObjectCollection collection = andBOGridAndEditorControlWin.GridControl.Grid.BusinessObjectCollection;
             Assert.IsNotNull(collection);
-            Assert.AreEqual(organisationTestBOS.Count, collection.Count);
-            Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);
+            Assert.AreEqual(organisationTestBOs.Count, collection.Count);
+            Assert.AreEqual(organisationTestBOs.Count, mapper.LookupList.Count);
         }
 
         [Test]
@@ -329,15 +329,17 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsNotNull(mapper.PopupForm);
         }
 
-        private static BusinessObjectCollection<OrganisationTestBO> CreateSavedOrganisationTestBOSCollection()
+        private static BusinessObjectCollection<OrganisationTestBO> CreateSavedOrganisationTestBOsCollection()
         {
             OrganisationTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<OrganisationTestBO> organisationTestBOS = new BusinessObjectCollection<OrganisationTestBO>();
-            organisationTestBOS.Add(OrganisationTestBO.CreateSavedOrganisation());
-            organisationTestBOS.Add(OrganisationTestBO.CreateSavedOrganisation());
-            organisationTestBOS.Add(OrganisationTestBO.CreateSavedOrganisation());
-            organisationTestBOS.Add(OrganisationTestBO.CreateSavedOrganisation());
-            return organisationTestBOS;
+            BusinessObjectCollection<OrganisationTestBO> organisationTestBOs = new BusinessObjectCollection<OrganisationTestBO>
+                   {
+                       OrganisationTestBO.CreateSavedOrganisation(),
+                       OrganisationTestBO.CreateSavedOrganisation(),
+                       OrganisationTestBO.CreateSavedOrganisation(),
+                       OrganisationTestBO.CreateSavedOrganisation()
+                   };
+            return organisationTestBOs;
         }
     }
 }

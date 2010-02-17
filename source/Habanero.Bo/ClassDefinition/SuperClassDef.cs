@@ -201,7 +201,6 @@ namespace Habanero.BO.ClassDefinition
             }
             set
             {
-                //TODO error: What happens if it is null?
                 _superClassClassDef = value;
                 if (_superClassClassDef != null)
                 {

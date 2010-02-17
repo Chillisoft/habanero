@@ -45,7 +45,7 @@ namespace Habanero.Test.DB
             new Address();
             ContactPerson.DeleteAllContactPeople();
             new Car();
-            createUpdatedContactPersonTestPack();
+            CreateUpdatedContactPersonTestPack();
 
 
             _contactPersonUpdateConcurrency = new ContactPerson();
@@ -78,7 +78,7 @@ namespace Habanero.Test.DB
             _contactPTestSave.Save(); //save the object to the DB
         }
 
-        private void CreateDeletedPersonTestPack()
+        private static void CreateDeletedPersonTestPack()
         {
             ContactPerson myContact = new ContactPerson();
             myContact.DateOfBirth = new DateTime(1980, 01, 22);
@@ -90,7 +90,7 @@ namespace Habanero.Test.DB
             myContact.Save();
         }
 
-        private void createUpdatedContactPersonTestPack()
+        private void CreateUpdatedContactPersonTestPack()
         {
             ContactPerson myContact = new ContactPerson();
             myContact.DateOfBirth = new DateTime(1969, 01, 29);
