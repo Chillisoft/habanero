@@ -206,7 +206,7 @@ namespace Habanero.BO.ClassDefinition
                 if (_superClassClassDef != null)
                 {
                     _assemblyName = _superClassClassDef.AssemblyName;
-                    _className = _superClassClassDef.ClassNameFull;
+                    _className = _superClassClassDef.ClassName;
                 }
                 else
                 {

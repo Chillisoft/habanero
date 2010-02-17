@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
@@ -31,7 +32,7 @@ namespace Habanero.Test.BO.Comparer
     {
         private BusinessObjectCollection<MultiPropBO> _boCol;
         private IClassDef _classDef;
-        private ReflectedPropertyComparer<MultiPropBO> comparer;
+        private ReflectedPropertyComparer<MultiPropBO> _comparer;
 
         [TestFixtureSetUp]
         public void DefineBO()
@@ -53,8 +54,8 @@ namespace Habanero.Test.BO.Comparer
         [Test]
         public void TestBothNull()
         {
-            comparer = new ReflectedPropertyComparer<MultiPropBO>("IntProp");
-            _boCol.Sort(comparer);
+            _comparer = new ReflectedPropertyComparer<MultiPropBO>("IntProp");
+            _boCol.Sort(_comparer);
             Assert.IsNull(_boCol[0].IntProp);
             Assert.IsNull(_boCol[1].IntProp);
         }
@@ -62,9 +63,9 @@ namespace Habanero.Test.BO.Comparer
         [Test]
         public void TestLeftNull()
         {
-            comparer = new ReflectedPropertyComparer<MultiPropBO>("IntProp");
+            _comparer = new ReflectedPropertyComparer<MultiPropBO>("IntProp");
             _boCol[0].IntProp = 1;
-            _boCol.Sort(comparer);
+            _boCol.Sort(_comparer);
             Assert.IsNull(_boCol[0].IntProp);
             Assert.IsNotNull(_boCol[1].IntProp);
         }
@@ -72,9 +73,9 @@ namespace Habanero.Test.BO.Comparer
         [Test]
         public void TestRightNull()
         {
-            comparer = new ReflectedPropertyComparer<MultiPropBO>("IntProp");
+            _comparer = new ReflectedPropertyComparer<MultiPropBO>("IntProp");
             _boCol[1].IntProp = 1;
-            _boCol.Sort(comparer);
+            _boCol.Sort(_comparer);
             Assert.IsNull(_boCol[0].IntProp);
             Assert.IsNotNull(_boCol[1].IntProp);
         }
@@ -82,41 +83,80 @@ namespace Habanero.Test.BO.Comparer
         [Test]
         public void TestString()
         {
-            comparer = new ReflectedPropertyComparer<MultiPropBO>("StringProp");
+            _comparer = new ReflectedPropertyComparer<MultiPropBO>("StringProp");
             _boCol[0].StringProp = "b";
             _boCol[1].StringProp = "a";
-            _boCol.Sort(comparer);
+            _boCol.Sort(_comparer);
             Assert.IsTrue(string.Compare(_boCol[0].StringProp, _boCol[1].StringProp) < 0);
         }
 
         [Test]
         public void TestInt()
         {
-            comparer = new ReflectedPropertyComparer<MultiPropBO>("IntProp");
+            _comparer = new ReflectedPropertyComparer<MultiPropBO>("IntProp");
             _boCol[0].IntProp = 2;
             _boCol[1].IntProp = 1;
-            _boCol.Sort(comparer);
+            _boCol.Sort(_comparer);
             Assert.IsTrue(_boCol[0].IntProp < _boCol[1].IntProp);
         }
 
         [Test]
         public void TestDouble()
         {
-            comparer = new ReflectedPropertyComparer<MultiPropBO>("DoubleProp");
+            _comparer = new ReflectedPropertyComparer<MultiPropBO>("DoubleProp");
             _boCol[0].DoubleProp = 2.1;
             _boCol[1].DoubleProp = 2.0;
-            _boCol.Sort(comparer);
+            _boCol.Sort(_comparer);
             Assert.IsTrue(_boCol[0].DoubleProp < _boCol[1].DoubleProp);
         }
 
         [Test]
         public void TestDateTime()
         {
-            comparer = new ReflectedPropertyComparer<MultiPropBO>("DateTimeProp");
+            _comparer = new ReflectedPropertyComparer<MultiPropBO>("DateTimeProp");
             _boCol[0].DateTimeProp = new DateTime?(new DateTime(2006, 1, 2));
             _boCol[1].DateTimeProp = new DateTime?(new DateTime(2005, 1, 2));
-            _boCol.Sort(comparer);
+            _boCol.Sort(_comparer);
             Assert.IsTrue(_boCol[0].DateTimeProp < _boCol[1].DateTimeProp);
+        }
+
+        [Test]
+        public void Test_Construct_WithNullpropertyName_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new ReflectedPropertyComparer<MultiPropBO>(null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("propertyName", ex.ParamName);
+            }
+        }
+        [Test]
+        public void Test_Construct_WithPropertyName_WhenDoesNotExist_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new ReflectedPropertyComparer<MultiPropBO>("NonExistantProp");
+                Assert.Fail("expected HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                StringAssert.Contains("propertyName", ex.ParameterName);
+                StringAssert.Contains("could not be found on the Business Object", ex.Message);
+            }
         }
 
         // Couldn't get coverage on last two lines - keep getting InvalidOperationException

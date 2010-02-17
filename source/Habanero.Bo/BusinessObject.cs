@@ -1307,7 +1307,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Checks the <see cref="GetBusinessObjectRules"/>. Calls through to <see cref="AreCustomRulesValid(out IList{IBOError})"/>
+        /// Checks the <see cref="GetBusinessObjectRules"/>. Calls through to <see cref="AreCustomRulesValid(ref List{IBOError})"/>
         /// </summary>
         /// <param name="errors">The errors</param>
         /// <returns>true if no custom rule errors are encountered.</returns>

@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.Comparer
 {
@@ -28,7 +29,6 @@ namespace Habanero.BO.Comparer
 	/// </summary>
 	public class ReflectedPropertyComparer<T> : IComparer<T>
 	{
-		private readonly string _propertyName;
 		private readonly PropertyInfo _propInfo;
 
 		/// <summary>
@@ -37,8 +37,13 @@ namespace Habanero.BO.Comparer
 		/// <param name="propertyName">The property name to compare on</param>
 		public ReflectedPropertyComparer(string propertyName)
 		{
-			_propertyName = propertyName;
-			_propInfo = typeof(T).GetProperty(_propertyName, BindingFlags.Public | BindingFlags.Instance);
+		    if (propertyName == null) throw new ArgumentNullException("propertyName");
+            _propInfo = typeof(T).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+            if (_propInfo == null)
+            {
+                var errorMessage = string.Format("The property '{0}' could not be found on the Business Object {1}", propertyName, typeof(T));
+                throw new HabaneroArgumentException("propertyName", errorMessage);
+            }
 		}
 
 	    ///<summary>

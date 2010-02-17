@@ -145,6 +145,11 @@ namespace Habanero.BO
 
         public abstract List<string> AvailableParameters { get; }
 
+        ///<summary>
+        /// Set a value for any named parameter
+        ///</summary>
+        ///<param name="parameterName"></param>
+        ///<param name="value"></param>
         public void SetParameter(string parameterName, object value)
         {
             _parameters[parameterName] = value;

@@ -140,7 +140,7 @@ namespace Habanero.UI.VWG
         /// </summary>
         public IBusinessObjectCollection BusinessObjectCollection
         {
-            get { return _grid.GetBusinessObjectCollection(); }
+            get { return _grid.BusinessObjectCollection; }
             set { SetBusinessObjectCollection(value); }
         }
 

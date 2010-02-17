@@ -20,7 +20,9 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.BO.TransactionCommitters;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -103,7 +105,24 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNotNull(def);
             Assert.AreSame(classDef, def);
         }
-        
+
+        [Test]
+        public void Test_Construct_WithClassDef_ShouldSetClassName()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = new ClassDef(typeof(FakeBO), new PrimaryKeyDef(), new PropDefCol(), null, null);
+            ClassDef.ClassDefs.Add(classDef);
+            SuperClassDef superClassDef = new SuperClassDef(classDef, ORMapping.ClassTableInheritance);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IClassDef def = superClassDef.SuperClassClassDef;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(def);
+            Assert.AreSame(classDef, def);
+            Assert.AreSame(classDef.ClassName, superClassDef.ClassName);
+        }
         [Test]
         public void Test_SuperClassClassDef_WithTypeParameter()
         {
@@ -179,5 +198,8 @@ namespace Habanero.Test.BO.ClassDefinition
                 SuperClassClassDef = classDef;
             }
         }
+
     }
+    internal class FakeBO : BusinessObject
+    { }
 }
