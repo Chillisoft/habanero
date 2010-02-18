@@ -568,8 +568,55 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(PropReadWriteRule.ReadWrite, keyPropDef.ReadWriteRule);
         }
 
+        [Test]
+        public void Test_Load_WhenClassWithRelatedClassXml_OnlyOneReverseRelationshipIndicated_ShouldLoadEachRel()
+        {
+            //---------------Set up test pack-------------------
+            XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), new DefClassFactory());
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            ClassDefCol classDefs = loader.LoadClassDefs(TestClassWithRelatedClassXml_OnlyOneReverseRelationshipIndicated);
+            //---------------Test Result -----------------------
+            IClassDef classDef = classDefs["FireStarter.Test.Logic", "FireStarter.Test.Logic.Loaders.TestClass"];
+            IClassDef relatedClassDef = classDefs["FireStarter.Test.Logic", "FireStarter.Test.Logic.Loaders.TestRelatedClass"];
 
+            Assert.AreEqual(1, classDef.RelationshipDefCol.Count);
+            Assert.AreEqual(1, relatedClassDef.RelationshipDefCol.Count);
 
+        private const string TestClassWithRelatedClassXml_OnlyOneReverseRelationshipIndicated =
+    @"
+                <classes>
+					<class name=""FireStarter.Test.Logic.Loaders.TestClass"" assembly=""FireStarter.Test.Logic"" >
+						<property  name=""TestClassID"" type=""Guid"" />
+                        <property name=""TestRelatedClassID"" type=""Guid"" />
+                        <primaryKey>
+                            <prop name=""TestClassID""/>
+                        </primaryKey>
+                        <relationship 
+						    name=""TestRelatedClass"" 
+						    type=""single"" 
+						    relatedClass=""FireStarter.Test.Logic.Loaders.TestRelatedClass"" 
+						    relatedAssembly=""FireStarter.Test.Logic"" 
+                            reverseRelationship=""TestClasses""
+                        >
+						        <relatedProperty property=""TestRelatedClassID"" relatedProperty=""TestRelatedClassID"" />
+    					</relationship>
+					</class>
+                    <class name=""FireStarter.Test.Logic.Loaders.TestRelatedClass"" assembly=""FireStarter.Test.Logic""  >
+					    <property  name=""TestRelatedClassID"" />
+                        <primaryKey>
+                            <prop name=""TestRelatedClassID""/>
+                        </primaryKey>
+                        <relationship 
+						    name=""TestClasses"" 
+						    type=""multiple"" 
+						    relatedClass=""FireStarter.Test.Logic.Loaders.TestClass"" 
+						    relatedAssembly=""FireStarter.Test.Logic"" 
+                        >
+                            <relatedProperty property=""TestRelatedClassID"" relatedProperty=""TestRelatedClassID"" />
+    					</relationship>
+				    </class>
+				</classes>";
         [Test, ExpectedException(typeof(XmlException))]
         public void TestNoRootNodeException()
         {
