@@ -100,7 +100,7 @@ namespace Habanero.BO
         /// <summary>
         /// The Class Definition <see cref="IClassDef"/> for this business object.
         /// </summary>
-        protected ClassDef _classDef;
+        protected IClassDef _classDef;
 
         /// <summary> The Concurrency Control mechanism used by this Business object </summary>
         protected IConcurrencyControl _concurrencyControl;
@@ -132,12 +132,36 @@ namespace Habanero.BO
         public BusinessObject() : this(null)
         {
         }
-
+        // ReSharper disable DoNotCallOverridableMethodsInConstructor
         /// <summary>
         /// Constructor that specifies a class definition
         /// </summary>
         /// <param name="def">The class definition</param>
         protected internal BusinessObject(IClassDef def)
+        {
+            ConstructEntireClassFromClassDefs(def);
+        }
+        // ReSharper disable DoNotCallOverridableMethodsInConstructor
+        /// <summary>
+        /// Constructor that specifies a class definition
+        /// </summary>
+        /// <param name="constructForFakes"></param>
+// ReSharper disable UnusedParameter.Local
+        protected BusinessObject(bool constructForFakes)
+        {
+        }
+
+        protected virtual void InitialiseForFakes(IClassDef classDef)
+        {
+            _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
+            Initialise(classDef);
+            SetupBOPropsWithThisBo();
+        }
+
+        // ReSharper restore UnusedParameter.Local
+        // ReSharper restore DoNotCallOverridableMethodsInConstructor
+
+        protected virtual void ConstructEntireClassFromClassDefs(IClassDef def)
         {
             Initialise(def);
             SetupBOPropsWithThisBo();
@@ -267,7 +291,7 @@ namespace Habanero.BO
 
         private void InitialisePrimaryKeyPropertiesBasedOnParentClass(Guid myID)
         {
-            ClassDef currentClassDef = _classDef;
+            IClassDef currentClassDef = _classDef;
             if (currentClassDef == null) return;
             while (currentClassDef.IsUsingClassTableInheritance())
             {
@@ -380,23 +404,23 @@ namespace Habanero.BO
         protected virtual void ConstructFromClassDef(bool newObject)
         {
             if (_classDef == null) _classDef = (ClassDef) ConstructClassDef();
-
+            ClassDef classDef = (ClassDef) _classDef;
             CheckClassDefNotNull();
 
-            _boPropCol = _classDef.CreateBOPropertyCol(newObject);
-            _keysCol = _classDef.CreateBOKeyCol(_boPropCol);
+            _boPropCol = classDef.CreateBOPropertyCol(newObject);
+            _keysCol = classDef.CreateBOKeyCol(_boPropCol);
 
             SetPrimaryKeyForInheritedClass();
 
-            _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
+            _relationshipCol = classDef.CreateRelationshipCol(_boPropCol, this);
         }
 
         private void SetPrimaryKeyForInheritedClass()
         {
-            ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
+            IClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
             PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDefToUseForPrimaryKey.PrimaryKeyDef;
             if ((classDefToUseForPrimaryKey.SuperClassDef == null)
-                || (classDefToUseForPrimaryKey.IsUsingConcreteTableInheritance())
+                || (((ClassDef)classDefToUseForPrimaryKey).IsUsingConcreteTableInheritance())
                 || (_classDef.IsUsingClassTableInheritance()))
             {
                 if (primaryKeyDef != null)
@@ -420,12 +444,12 @@ namespace Habanero.BO
             }
         }
 
-        internal ClassDef GetClassDefToUseForPrimaryKey()
+        internal IClassDef GetClassDefToUseForPrimaryKey()
         {
-            ClassDef classDefToUseForPrimaryKey = _classDef;
+            ClassDef classDefToUseForPrimaryKey = (ClassDef) _classDef;
             while (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance() || classDefToUseForPrimaryKey.PrimaryKeyDef == null)
             {
-                classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
+                classDefToUseForPrimaryKey = (ClassDef) classDefToUseForPrimaryKey.SuperClassClassDef;
             }
             return classDefToUseForPrimaryKey;
         }
@@ -471,7 +495,7 @@ namespace Habanero.BO
         /// </summary>
         public ClassDef ClassDef
         {
-            get { return _classDef; }
+            get { return (ClassDef) _classDef; }
             set { _classDef = value; }
         }
 //
@@ -805,7 +829,7 @@ namespace Habanero.BO
         /// <summary>
         /// The IBOState <see cref="IBOStatus"/> object for this BusinessObject, which records the status information of the object
         /// </summary>
-        public IBOStatus Status
+        public virtual IBOStatus Status
         {
             get { return _boStatus; }
         }
@@ -852,6 +876,7 @@ namespace Habanero.BO
         {
             try
             {
+                
                 return Props[propName];
             }
             catch (InvalidPropertyNameException)

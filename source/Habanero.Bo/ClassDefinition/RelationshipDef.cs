@@ -211,7 +211,7 @@ namespace Habanero.BO.ClassDefinition
 			{
 				_relatedObjectClassType = value;
 				if (_relatedObjectClassType != null)
-					ArgumentValidationHelper.CheckArgumentIsSubType(_relatedObjectClassType, "relatedObjectClassType", typeof(BusinessObject));
+					ArgumentValidationHelper.CheckArgumentIsSubType(_relatedObjectClassType, "relatedObjectClassType", typeof(IBusinessObject));
 				TypeLoader.ClassTypeInfo(_relatedObjectClassType, out _relatedObjectAssemblyName, out _relatedObjectClassName);
 			}
     	}
@@ -296,6 +296,7 @@ namespace Habanero.BO.ClassDefinition
                           + " business object is null";
                 throw new HabaneroDeveloperException(message, message);  
             }
+            if (bo.Status == null) return;
             if (bo.Status.IsNew || (this.RelationshipType != RelationshipType.Composition)) return;
 
             message = "The " + this.RelatedObjectClassName + " could not be added since the "

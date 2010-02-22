@@ -75,7 +75,7 @@ namespace Habanero.BO
         private const string ADDED_BUSINESS_OBJECT = "addedbo";
         private const string REMOVED_BUSINESS_OBJECT = "removedbo";
         private const string MARKEDFORDELETE_BUSINESS_OBJECT = "markedfordeletebo";
-        private readonly List<TBusinessObject> _boCol = new List<TBusinessObject>();
+        protected readonly List<TBusinessObject> _boCol = new List<TBusinessObject>();
 
         #region StronglyTypedComparer
 
@@ -821,7 +821,7 @@ namespace Habanero.BO
         /// Adds the specified business objects to this collection
         ///</summary>
         ///<param name="businessObjects">A parameter array of business objects to add to the collection</param>
-        public void Add(params TBusinessObject[] businessObjects)
+        public virtual void Add(params TBusinessObject[] businessObjects)
         {
             Add(new List<TBusinessObject>(businessObjects));
         }
@@ -830,7 +830,7 @@ namespace Habanero.BO
         /// Refreshes the business objects in the collection
         /// </summary>
         [ReflectionPermission(SecurityAction.Demand)]
-        public void Refresh()
+        public virtual void Refresh()
         {
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
         }
@@ -894,7 +894,7 @@ namespace Habanero.BO
         /// <param name="searchCriteria">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <param name="limit">The limit</param>
-        public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
+        public virtual void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
         {
             Criteria criteriaExpression = null;
             if (searchCriteria.Length > 0)
@@ -915,7 +915,7 @@ namespace Habanero.BO
         /// <param name="searchExpression">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <param name="limit">The limit</param>
-        public void LoadWithLimit(Criteria searchExpression, string orderByClause, int limit)
+        public virtual void LoadWithLimit(Criteria searchExpression, string orderByClause, int limit)
         {
             this.SelectQuery.Criteria = searchExpression;
 
@@ -962,7 +962,7 @@ namespace Habanero.BO
         /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
         /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
         /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
-        public void LoadWithLimit(Criteria searchCriteria, IOrderCriteria orderByClause,
+        public virtual void LoadWithLimit(Criteria searchCriteria, IOrderCriteria orderByClause,
                                   int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             this.SelectQuery.Criteria = searchCriteria;
@@ -1010,7 +1010,7 @@ namespace Habanero.BO
         /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
         /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
         /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
-        public void LoadWithLimit(string searchCriteria, string orderByClause,
+        public virtual void LoadWithLimit(string searchCriteria, string orderByClause,
                                   int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             Criteria criteria = null;
@@ -1060,7 +1060,7 @@ namespace Habanero.BO
         /// <summary>
         /// Clears the collection
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             lock (KeyObjectHashTable)
             {
@@ -1129,7 +1129,7 @@ namespace Habanero.BO
         /// Removes the business object at the index position specified
         /// </summary>
         /// <param name="index">The index position to remove from</param>
-        public void RemoveAt(int index)
+        public virtual void RemoveAt(int index)
         {
             lock (KeyObjectHashTable)
             {
@@ -1404,7 +1404,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="key">The object identifier as a Guid</param>
         /// <returns>Returns the business object if found, or null if not</returns>
-        public TBusinessObject Find(Guid key)
+        public virtual TBusinessObject Find(Guid key)
 
         {
             if (KeyObjectHashTable.ContainsKey(key))
@@ -1596,7 +1596,7 @@ namespace Habanero.BO
         /// object property</param>
         /// <param name="isAscending">Whether to sort in ascending order, set
         /// false for descending order</param>
-        public void Sort(string propertyName, bool isBoProperty, bool isAscending)
+        public virtual void Sort(string propertyName, bool isBoProperty, bool isAscending)
         {
             if (isBoProperty)
             {
@@ -1617,7 +1617,7 @@ namespace Habanero.BO
         /// Sorts the Collection using the comparer delegate
         ///</summary>
         ///<param name="comparer">The Delegate used to sort</param>
-        public void Sort(IComparer<TBusinessObject> comparer)
+        public virtual void Sort(IComparer<TBusinessObject> comparer)
         {
             _boCol.Sort(comparer);
         }
@@ -1628,7 +1628,7 @@ namespace Habanero.BO
         /// Order Criteria set up in the orderBy in the <see cref="IClassDef"/> for 
         /// the <typeparamref name="TBusinessObject"/> type (i.e. in the <c>ClassDef.xml</c>).
         /// </summary>
-        public void Sort()
+        public virtual void Sort()
         {
             if (this.SelectQuery.OrderCriteria.Fields.Count > 0)
             {
@@ -1661,7 +1661,7 @@ namespace Habanero.BO
         /// <param name="isAscending">True for ascending, false for descending
         /// </param>
         /// <returns>Returns a sorted list</returns>
-        public List<TBusinessObject> GetSortedList(string propertyName, bool isAscending)
+        public virtual List<TBusinessObject> GetSortedList(string propertyName, bool isAscending)
         {
             List<TBusinessObject> list = new List<TBusinessObject>(_boCol.Count);
             foreach (TBusinessObject o in this)
@@ -1684,7 +1684,7 @@ namespace Habanero.BO
         /// <param name="isAscending">True for ascending, false for descending
         /// </param>
         /// <returns>Returns a sorted business object collection</returns>
-        public BusinessObjectCollection<TBusinessObject> GetSortedCollection(string propertyName, bool isAscending)
+        public virtual BusinessObjectCollection<TBusinessObject> GetSortedCollection(string propertyName, bool isAscending)
         {
             //test
             BusinessObjectCollection<TBusinessObject> sortedCol = new BusinessObjectCollection<TBusinessObject>();
@@ -1699,7 +1699,7 @@ namespace Habanero.BO
         /// Returns the business object collection as an <see cref="IList"/>.
         /// </summary>
         /// <returns>Returns an <see cref="IList"/> object</returns>
-        public List<TBusinessObject> GetList()
+        public virtual List<TBusinessObject> GetList()
         {
             List<TBusinessObject> list = new List<TBusinessObject>(_boCol.Count);
             foreach (TBusinessObject o in this)
@@ -1753,7 +1753,7 @@ namespace Habanero.BO
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
         /// </summary>
-        public void CancelEdits()
+        public virtual void CancelEdits()
         {
             foreach (TBusinessObject bo in this.Clone())
             {
@@ -2150,7 +2150,7 @@ namespace Habanero.BO
         /// Marks the business object as MarkedForDeletion and places the object
         ///</summary>
         ///<param name="businessObject"></param>
-        public void MarkForDelete(TBusinessObject businessObject)
+        public virtual void MarkForDelete(TBusinessObject businessObject)
         {
             if (businessObject.Status.IsNew)
             {
@@ -2164,7 +2164,7 @@ namespace Habanero.BO
         ///</summary>
         ///<param name="index">The index position to remove from</param>if index does not exist in col
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public void MarkForDeleteAt(int index)
+        public virtual void MarkForDeleteAt(int index)
         {
             TBusinessObject boToMark = this[index];
             MarkForDelete(boToMark);

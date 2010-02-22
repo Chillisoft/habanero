@@ -267,7 +267,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                ClassDef currentClassDef = this;
+                IClassDef currentClassDef = this;
                 while (currentClassDef.SuperClassDef != null &&
                        currentClassDef.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
                 {
@@ -446,7 +446,7 @@ namespace Habanero.BO.ClassDefinition
                 {
                     _propDefColIncludingInheritance = new PropDefCol {PropDefcol};
 
-                    ClassDef currentClassDef = this;
+                    IClassDef currentClassDef = this;
                     while (currentClassDef.SuperClassClassDef != null)
                     {
                         currentClassDef = currentClassDef.SuperClassClassDef;
@@ -671,15 +671,11 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the class definition of the super-class, or null
         /// if there is no super-class
         /// </summary>
-        public ClassDef SuperClassClassDef
+        public IClassDef SuperClassClassDef
         {
             get
             {
-                if (SuperClassDef != null)
-                {
-                    return (ClassDef) SuperClassDef.SuperClassClassDef;
-                }
-                return null;
+                return SuperClassDef == null ? null : SuperClassDef.SuperClassClassDef;
             }
         }
 
@@ -776,10 +772,10 @@ namespace Habanero.BO.ClassDefinition
         public IList<ClassDef> GetAllClassDefsInHierarchy()
         {
             IList<ClassDef> classDefs = new List<ClassDef>();
-            ClassDef tempClassDef = this;
+            IClassDef tempClassDef = this;
             while (tempClassDef != null)
             {
-                classDefs.Add(tempClassDef);
+                classDefs.Add((ClassDef) tempClassDef);
                 tempClassDef = tempClassDef.SuperClassClassDef;
             }
             return classDefs;
@@ -868,7 +864,7 @@ namespace Habanero.BO.ClassDefinition
         public IPropDef GetPropDef(string propertyName, bool throwError)
         {
             IPropDef foundPropDef = null;
-            ClassDef currentClassDef = this;
+            IClassDef currentClassDef = this;
             while (currentClassDef != null)
             {
                 if (currentClassDef.PropDefcol.Contains(propertyName))
@@ -902,7 +898,7 @@ namespace Habanero.BO.ClassDefinition
         /// or null if not found</returns>
         public IRelationshipDef GetRelationship(string relationshipName)
         {
-            ClassDef currentClassDef = this;
+            IClassDef currentClassDef = this;
             while (currentClassDef != null)
             {
                 if (currentClassDef.RelationshipDefCol.Contains(relationshipName))
@@ -922,7 +918,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns the UI definition if found, or null if not found</returns>
         public IUIDef GetUIDef(string uiDefName)
         {
-            ClassDef currentClassDef = this;
+            IClassDef currentClassDef = this;
             while (currentClassDef != null)
             {
                 if (currentClassDef.UIDefCol.Contains(uiDefName))
@@ -1130,7 +1126,7 @@ namespace Habanero.BO.ClassDefinition
             }
             if (IsUsingSingleTableInheritance())
             {
-                ClassDef superClassClassDef = SuperClassClassDef;
+                IClassDef superClassClassDef = SuperClassClassDef;
                 if (superClassClassDef != null)
                 {
                     _cachedTableName = superClassClassDef.GetTableName();
@@ -1196,7 +1192,7 @@ namespace Habanero.BO.ClassDefinition
             ClassDef currentClassDef = this;
             while (currentClassDef.IsUsingSingleTableInheritance())
             {
-                currentClassDef = currentClassDef.SuperClassClassDef;
+                currentClassDef = (ClassDef) currentClassDef.SuperClassClassDef;
             }
             return currentClassDef;
         }

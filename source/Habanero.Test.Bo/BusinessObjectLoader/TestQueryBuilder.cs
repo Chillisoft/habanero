@@ -675,7 +675,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ClassDef circleClassDef = (ClassDef) CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
-            ClassDef shapeClassDef = circleClassDef.SuperClassClassDef;
+            IClassDef shapeClassDef = circleClassDef.SuperClassClassDef;
             Criteria expectedShapeCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Is, "null");
             Criteria expectedCircleCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "CircleNoPrimaryKey");
             Criteria expected = new Criteria(expectedShapeCriteria, Criteria.LogicalOp.Or, expectedCircleCriteria);
@@ -718,7 +718,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ClassDef filledCircleClassDef = (ClassDef) FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
-            ClassDef shapeClassDef = filledCircleClassDef.SuperClassClassDef.SuperClassClassDef;
+            IClassDef shapeClassDef = filledCircleClassDef.SuperClassClassDef.SuperClassClassDef;
             Criteria expectedShapeCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Is, "null");
             Criteria expectedCircleCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "CircleNoPrimaryKey");
             Criteria expectedFilledCircleCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "FilledCircleNoPrimaryKey");

@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -145,13 +146,57 @@ namespace Habanero.Test.BO
             new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
             bo.TestProp = testValue;
             bo.TestProp2 = TestUtil.GetRandomString();
-            ;
             //---------------Execute Test ----------------------
             bo.TestProp = bo.TestProp2;
             bo.TestProp = testValue;
             //---------------Test Result -----------------------
             Assert.AreEqual(testValue, bo.TestProp2);
             //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_ConstructWhenPropNotExists()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            MyBO bo = new MyBO();          
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new PropertyLink<string, string>(bo, "NonExistProp", "TestProp2", delegate(string input) { return input; });
+                Assert.Fail("Expected to throw an InvalidPropertyNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains("A BOProp with the name", ex.Message);
+                StringAssert.Contains("does not exist in the prop collection", ex.Message);
+            }
+
+        }
+        [Test]
+        public void Test_ConstructWhenRelPropNotExists()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            MyBO bo = new MyBO();          
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new PropertyLink<string, string>(bo, "TestProp", "NonExistProp2", delegate(string input) { return input; });
+                Assert.Fail("Expected to throw an InvalidPropertyNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains("A BOProp with the name", ex.Message);
+                StringAssert.Contains("does not exist in the prop collection", ex.Message);
+            }
+
         }
     }
 }

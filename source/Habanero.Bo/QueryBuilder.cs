@@ -224,10 +224,10 @@ namespace Habanero.BO
 
         private static void CreateInheritanceJoins(IClassDef classDef, Source rootSource)
         {
-            ClassDef currentClassDef = (ClassDef) classDef;
+            IClassDef currentClassDef = classDef;
             while (currentClassDef.IsUsingClassTableInheritance())
             {
-                ClassDef superClassDef = currentClassDef.SuperClassClassDef;
+                IClassDef superClassDef = currentClassDef.SuperClassClassDef;
                 Source baseSource = new Source(superClassDef.ClassNameExcludingTypeParameter, superClassDef.TableName);
                 Source.Join join = new Source.Join(rootSource, baseSource);
                 PrimaryKeyDef superClassPrimaryKeyDef = (PrimaryKeyDef) superClassDef.PrimaryKeyDef;

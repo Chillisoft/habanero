@@ -71,13 +71,13 @@ namespace Habanero.DB
 
             if (_bo.ClassDef.IsUsingClassTableInheritance())
             {
-                _currentClassDef = _bo.ClassDef.SuperClassClassDef;
+                _currentClassDef = (ClassDef) _bo.ClassDef.SuperClassClassDef;
                 while (_currentClassDef.IsUsingClassTableInheritance())
                 {
                     propsToInclude = GetPropsToInclude(_currentClassDef);
                     tableName = _currentClassDef.TableName;
                     GenerateSingleInsertStatement(propsToInclude, tableName);
-                    _currentClassDef = _currentClassDef.SuperClassClassDef;
+                    _currentClassDef = (ClassDef) _currentClassDef.SuperClassClassDef;
                 }
                 propsToInclude = GetPropsToInclude(_currentClassDef);
                 tableName = _currentClassDef.InheritedTableName;
@@ -182,8 +182,8 @@ namespace Habanero.DB
 
             if (classDef.IsUsingSingleTableInheritance())
             {
-                ClassDef superClassClassDef = classDef.SuperClassClassDef;
-                AddDiscriminatorProperties(superClassClassDef, propsToInclude, discriminatorProps);
+                IClassDef superClassClassDef = classDef.SuperClassClassDef;
+                AddDiscriminatorProperties((ClassDef) superClassClassDef, propsToInclude, discriminatorProps);
             }
         }
 
@@ -235,7 +235,7 @@ namespace Habanero.DB
         /// </summary>
         private void AddParentID(IBOPropCol propsToInclude)
         {
-            ClassDef currentClassDef = _currentClassDef;
+            IClassDef currentClassDef = _currentClassDef;
             while (currentClassDef.SuperClassClassDef != null &&
                    currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
             {
@@ -273,7 +273,7 @@ namespace Habanero.DB
         /// Builds a collection of properties to include in the insertion,
         /// depending on the inheritance type.
         /// </summary>
-        private IBOPropCol GetPropsToInclude(ClassDef currentClassDef)
+        private IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
         {
             IBOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 
@@ -289,8 +289,8 @@ namespace Habanero.DB
                 AddParentID(propsToInclude);
             }
 
-            while (currentClassDef.IsUsingSingleTableInheritance() ||
-                   currentClassDef.IsUsingConcreteTableInheritance())
+            while (((ClassDef)currentClassDef).IsUsingSingleTableInheritance() ||
+                   ((ClassDef)currentClassDef).IsUsingConcreteTableInheritance())
             {
                 propsToInclude.Add(currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true));
                 currentClassDef = currentClassDef.SuperClassClassDef;

@@ -39,7 +39,7 @@ namespace Habanero.DB
             ClassDef classDefToUseForPrimaryKey = bo.ClassDef;
             while (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance())
             {
-                classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
+                classDefToUseForPrimaryKey = (ClassDef) classDefToUseForPrimaryKey.SuperClassClassDef;
             }
             return classDefToUseForPrimaryKey;
         }

@@ -59,7 +59,7 @@ namespace Habanero.DB
                 @"DELETE FROM " + SqlFormattingHelper.FormatTableName(StatementGeneratorUtils.GetTableName(_bo), _connection) +
                 " WHERE " + StatementGeneratorUtils.PersistedDatabaseWhereClause((BOKey) _bo.ID, deleteSql));
             statementCollection.Add(deleteSql);
-            ClassDef currentClassDef = _bo.ClassDef;
+            IClassDef currentClassDef = _bo.ClassDef;
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 while (currentClassDef.SuperClassClassDef.SuperClassDef != null &&
@@ -72,7 +72,7 @@ namespace Habanero.DB
                     "DELETE FROM " +
                     SqlFormattingHelper.FormatTableName(currentClassDef.SuperClassClassDef.TableName, _connection) +
                     " WHERE " +
-                    StatementGeneratorUtils.PersistedDatabaseWhereClause(BOPrimaryKey.GetSuperClassKey(currentClassDef, _bo), deleteSql));
+                    StatementGeneratorUtils.PersistedDatabaseWhereClause(BOPrimaryKey.GetSuperClassKey((ClassDef) currentClassDef, _bo), deleteSql));
                 statementCollection.Add(deleteSql);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }

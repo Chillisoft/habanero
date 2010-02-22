@@ -129,7 +129,7 @@ namespace Habanero.BO
             {
                 if (subClassDef.SuperClassClassDef == null) return null;
 
-                subClassDef = subClassDef.SuperClassClassDef;
+                subClassDef = (ClassDef) subClassDef.SuperClassClassDef;
                 primaryKeyDef = subClassDef.PrimaryKeyDef;
             }
             return primaryKeyDef.CreateBOKey(subClassObj.Props);

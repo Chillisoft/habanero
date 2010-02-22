@@ -203,7 +203,7 @@ namespace Habanero.BO
         /// <returns>The reverse relationship or null if no reverse relationship is set up.</returns>
         internal IRelationship GetReverseRelationship(IBusinessObject bo)
         {
-            if (bo == null) return null;
+            if (bo == null || bo.Relationships == null) return null;
             if (HasReverseRelationshipDefined(this))
             {
                 foreach (IRelationship relationship in bo.Relationships)

@@ -59,13 +59,14 @@ namespace Habanero.DB
 
             while (currentClassDef.IsUsingClassTableInheritance())
             {
-                propsToInclude = GetPropsToInclude(currentClassDef.SuperClassClassDef);
+                var superClassClassDef = (ClassDef) currentClassDef.SuperClassClassDef;
+                propsToInclude = GetPropsToInclude(superClassClassDef);
                 if (propsToInclude.Count > 0)
                 {
-                    tableName = currentClassDef.SuperClassClassDef.InheritedTableName;
+                    tableName = superClassClassDef.InheritedTableName;
                     GenerateSingleUpdateStatement(tableName, propsToInclude, true, currentClassDef);
                 }
-                currentClassDef = currentClassDef.SuperClassClassDef;
+                currentClassDef = superClassClassDef;
             }
             propsToInclude = GetPropsToInclude(_bo.ClassDef);
             tableName = StatementGeneratorUtils.GetTableName(_bo);
@@ -125,7 +126,7 @@ namespace Habanero.DB
         /// Builds a collection of properties to include in the update,
         /// depending on the inheritance type
         /// </summary>
-        private static IBOPropCol GetPropsToInclude(ClassDef currentClassDef)
+        private static IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
         {
             IBOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 
@@ -136,8 +137,8 @@ namespace Habanero.DB
                 if (prop.PropDef.Persistable) propsToInclude.Add(prop);
             }
 
-            while (currentClassDef.IsUsingSingleTableInheritance() ||
-                   currentClassDef.IsUsingConcreteTableInheritance())
+            while (((ClassDef)currentClassDef).IsUsingSingleTableInheritance() ||
+                   ((ClassDef)currentClassDef).IsUsingConcreteTableInheritance())
             {
                 propsToInclude.Add(currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true));
                 currentClassDef = currentClassDef.SuperClassClassDef;

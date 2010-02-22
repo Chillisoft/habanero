@@ -235,6 +235,11 @@ namespace Habanero.Base
         ClassDefCol AllChildren { get; }
 
         /// <summary>
+        /// Returns this Classes Base/super Class's ClassDef if there is one null otherwise.
+        /// </summary>
+        IClassDef SuperClassClassDef { get; }
+
+        /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance
         /// any inheritance structure.
         /// </summary>

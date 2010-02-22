@@ -582,7 +582,7 @@ namespace Habanero.Test.BO.Loaders
 
             Assert.AreEqual(1, classDef.RelationshipDefCol.Count);
             Assert.AreEqual(1, relatedClassDef.RelationshipDefCol.Count);
-
+        }
         private const string TestClassWithRelatedClassXml_OnlyOneReverseRelationshipIndicated =
     @"
                 <classes>
