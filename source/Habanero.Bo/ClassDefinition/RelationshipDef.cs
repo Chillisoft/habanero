@@ -211,7 +211,7 @@ namespace Habanero.BO.ClassDefinition
 			{
 				_relatedObjectClassType = value;
 				if (_relatedObjectClassType != null)
-					ArgumentValidationHelper.CheckArgumentIsSubType(_relatedObjectClassType, "relatedObjectClassType", typeof(IBusinessObject));
+					ArgumentValidationHelper.CheckArgumentIsSubType(_relatedObjectClassType, "relatedObjectClassType", typeof(BusinessObject));
 				TypeLoader.ClassTypeInfo(_relatedObjectClassType, out _relatedObjectAssemblyName, out _relatedObjectClassName);
 			}
     	}

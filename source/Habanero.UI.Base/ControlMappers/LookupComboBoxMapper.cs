@@ -61,7 +61,10 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets or sets the KeyPress event handler assigned to this mapper
         /// </summary>
+// ReSharper disable UnusedMember.Global
+// This is an implementation of an interface and doew not have to be used.
         public EventHandler KeyPressHandler { get; set; }
+// ReSharper restore UnusedMember.Global
 
         /// <summary>
         /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
@@ -82,6 +85,7 @@ namespace Habanero.UI.Base
             _mapperStrategy = factory.CreateLookupComboBoxDefaultMapperStrategy();
             if (_mapperStrategy == null) return;
             _mapperStrategy.AddHandlers(this);
+            _collection = new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -96,13 +100,16 @@ namespace Habanero.UI.Base
                 _collection = value;
                 _comboBox.Items.Clear();
                 _comboBox.Items.Add(new ComboPair("", null));
-                foreach (KeyValuePair<string, string> pair in LookupList)
+                if (_collection == null) _collection  = new Dictionary<string, string>();
+                foreach (KeyValuePair<string, string> pair in _collection)
                 {
                     _comboBox.Items.Add(new ComboPair(pair.Key, pair.Value));
                 }
             }
         }
 
+// ReSharper disable UnusedMember.Global
+//This is maintained for backward compatibility
         /// <summary>
         /// Sets the lookup list to the lookupList Values
         /// </summary>
@@ -120,10 +127,12 @@ namespace Habanero.UI.Base
         [Obsolete(
             "This method is to be replaced with the property LookupList. Please use the property as this method will be removed in a future version."
             )]
+
         public void SetLookupList(Dictionary<string, string> lookupList)
         {
             this.LookupList = lookupList;
         }
+// ReSharper restore UnusedMember.Global
 
         /// <summary>
         /// Gets or sets the strategy assigned to this mapper <see cref="IComboBoxMapperStrategy"/>

@@ -27,6 +27,7 @@ using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using Habanero.Util;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.UI.Base.Mappers
 {
@@ -199,6 +200,43 @@ namespace Habanero.Test.UI.Base.Mappers
             }
 
             [Test]
+            public void Test_SetLookupListNull_ShouldNotRaiseError_ShouldSetListToNullDictionary()
+            {
+                //---------------Set up test pack-------------------
+                IComboBox cmbox = GetControlFactory().CreateComboBox();
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, GetRandomString(), false, GetControlFactory());
+                //---------------Assert Precondition----------------
+                Assert.IsNotNull(mapper.LookupList);
+                Assert.IsEmpty(mapper.LookupList);
+                //---------------Execute Test ----------------------
+                mapper.LookupList = null;
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(mapper.LookupList);
+                Assert.IsEmpty(mapper.LookupList);
+            }
+            [Test]
+            public void Test_SetLookupListNull_WhenHasItems_ShouldClearTheList()
+            {
+                //---------------Set up test pack-------------------
+                IComboBox cmbox = GetControlFactory().CreateComboBox();
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, GetRandomString(), false, GetControlFactory())
+                           {LookupList = Sample.LookupCollection};
+                //---------------Assert Precondition----------------
+                Assert.IsNotNull(mapper.LookupList);
+                Assert.IsNotEmpty(mapper.LookupList);
+                //---------------Execute Test ----------------------
+                mapper.LookupList = null;
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(mapper.LookupList);
+                Assert.IsEmpty(mapper.LookupList);
+            }
+
+            private string GetRandomString()
+            {
+                return TestUtil.GetRandomString();
+            }
+
+            [Test]
             public void TestSetBusinessObject_Null_NullLookupListSet_DoesNotRaiseError_BUGFIX()
             {
                 //---------------Set up test pack-------------------
@@ -206,7 +244,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 const string propName = "SampleLookupID";
                 LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
                 //---------------Assert Precondition----------------
-                Assert.IsNull(mapper.LookupList);
+                Assert.IsEmpty(mapper.LookupList);
                 Assert.AreEqual(0, cmbox.Items.Count);
                 Assert.IsNull(cmbox.SelectedItem);
                 //---------------Execute Test ----------------------
