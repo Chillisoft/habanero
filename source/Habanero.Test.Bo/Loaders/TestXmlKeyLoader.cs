@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -38,6 +39,7 @@ namespace Habanero.Test.BO.Loaders
         public virtual void SetupTest()
         {
             Initialise();
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
         
         protected void Initialise() {
@@ -100,37 +102,73 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(def.IgnoreIfNull);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), ExpectedMessage = "An invalid node 'keyDef' was encountered when loading the class definitions.")]
+        [Test]
         public void TestLoadKeyWithWrongElementName()
         {
-            _xmlKeyLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /></keyDef>", _propDefCol);
+            try
+            {
+                _xmlKeyLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /></keyDef>", _propDefCol);
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An invalid node 'keyDef' was encountered when loading the class", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidIgnoreIfNullValue()
         {
-            _xmlKeyLoader.LoadKey(@"
+            try
+            {
+                _xmlKeyLoader.LoadKey(@"
                 <key name=""Key1"" ignoreIfNull=""invalidvalue"">
                     <prop name=""TestProp"" />
                 </key>", _propDefCol);
+                Assert.Fail("Expected to throw an AbandonedMutexException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'key' element, the 'ignoreIfNull' attribute provided an invalid", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropElementInvalid()
         {
-            _xmlKeyLoader.LoadKey(@"
+            try
+            {
+                _xmlKeyLoader.LoadKey(@"
                 <key name=""Key1"">
                     <props name=""TestProp"" />
                 </key>", _propDefCol);
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A 'key' node is missing 'prop' nodes", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropElementMissingName()
         {
-            _xmlKeyLoader.LoadKey(@"
+            try
+            {
+                _xmlKeyLoader.LoadKey(@"
                 <key name=""Key1"">
                     <prop />
                 </key>", _propDefCol);
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The 'prop' node under a key definition is missing a valid 'name'", ex.Message);
+            }
         }
 
         [Test]

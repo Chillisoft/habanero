@@ -53,6 +53,7 @@ namespace Habanero.BO.Loaders
         public XmlClassLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
             : base(dtdLoader, defClassFactory)
         {
+            
         }
 
         /// <summary>
@@ -75,6 +76,7 @@ namespace Habanero.BO.Loaders
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xmlClassDef);
             return LoadClass(doc.DocumentElement);
+
         }
 
         /// <summary>
@@ -205,7 +207,8 @@ namespace Habanero.BO.Loaders
             foreach (string relDefXml in xmlDefs)
             {
                 XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory, _className);
-                _relationshipDefCol.Add(relationshipLoader.LoadRelationship(relDefXml, _propDefCol));
+                var loadRelationship = relationshipLoader.LoadRelationship(relDefXml, _propDefCol);
+                if(loadRelationship != null) _relationshipDefCol.Add(loadRelationship);
             }
         }
 
@@ -218,7 +221,8 @@ namespace Habanero.BO.Loaders
             foreach (string uiDefXml in xmlDefs)
             {
                 XmlUILoader loader = new XmlUILoader(DtdLoader, _defClassFactory);
-                _uiDefCol.Add(loader.LoadUIDef(uiDefXml));
+                var loadUIDef = loader.LoadUIDef(uiDefXml);
+                if(loadUIDef != null)_uiDefCol.Add(loadUIDef);
             }
         }
 
@@ -231,7 +235,8 @@ namespace Habanero.BO.Loaders
             foreach (string keyDefXml in xmlDefs)
             {
                 XmlKeyLoader loader = new XmlKeyLoader(DtdLoader, _defClassFactory);
-                _keyDefCol.Add(loader.LoadKey(keyDefXml, _propDefCol));
+                var loadKey = loader.LoadKey(keyDefXml, _propDefCol);
+                if(loadKey != null) _keyDefCol.Add(loadKey);
             }
         }
 
@@ -240,28 +245,37 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadPrimaryKeyDef(string xmlDef)
         {
-            if (xmlDef == null && _superClassDef == null)
+            try
             {
-                throw new InvalidXmlDefinitionException
-                    (String.Format
-                         ("Could not find a " + "'primaryKey' element in the class definition for the class '{0}'. "
-                          + "Each class definition requires a primary key "
-                          + "definition, which is composed of one or more property definitions, "
-                          + "implying that you will need at least one 'prop' element as " + "well.", _className));
-            }
-            if (xmlDef == null) return;
+                if (xmlDef == null && _superClassDef == null)
+                {
+                    throw new InvalidXmlDefinitionException
+                        (String.Format
+                             ("Could not find a " + "'primaryKey' element in the class definition for the class '{0}'. "
+                              + "Each class definition requires a primary key "
+                              + "definition, which is composed of one or more property definitions, "
+                              + "implying that you will need at least one 'prop' element as " + "well.", _className));
+                }
+                if (xmlDef == null) return;
 
-            XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(DtdLoader, _defClassFactory);
-            _primaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _propDefCol);
-            if (_primaryKeyDef == null)
+                XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(DtdLoader, _defClassFactory);
+                _primaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _propDefCol);
+                if (_primaryKeyDef == null)
+                {
+                    throw new InvalidXmlDefinitionException
+                        (String.Format
+                             ("There was an error loading "
+                              + "the 'primaryKey' element in the class definition for the class '{0}. '"
+                              + "Each class definition requires a primary key "
+                              + "definition, which is composed of one or more property definitions, "
+                              + "implying that you will need at least one 'prop' element as " + "well.", _className));
+                }
+            }
+            catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException
-                    (String.Format
-                         ("There was an error loading "
-                          + "the 'primaryKey' element in the class definition for the class '{0}. '"
-                          + "Each class definition requires a primary key "
-                          + "definition, which is composed of one or more property definitions, "
-                          + "implying that you will need at least one 'prop' element as " + "well.", _className));
+                //This is a RecordingExceptionNotifier so this error will be logged and thrown later
+                // thus allowing the entire XML File to be read and all errors reported
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 
@@ -270,21 +284,30 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadPropDefs(ICollection<string> xmlDefs)
         {
-            if (xmlDefs.Count == 0 && _superClassDef == null)
+            try
             {
-                throw new InvalidXmlDefinitionException(String.Format("No property " +
-                          "definitions have been specified for the class definition of '{0}'. " +
-                          "Each class requires at least one 'property' and 'primaryKey' " +
-                          "element which define the mapping from the database table fields to " +
-                          "properties in the class that is being mapped to.",
-                          _className));
+                if (xmlDefs.Count == 0 && _superClassDef == null)
+                {
+                    throw new InvalidXmlDefinitionException(String.Format("No property " +
+                                                                          "definitions have been specified for the class definition of '{0}'. " +
+                                                                          "Each class requires at least one 'property' and 'primaryKey' " +
+                                                                          "element which define the mapping from the database table fields to " +
+                                                                          "properties in the class that is being mapped to.",
+                                                                          _className));
+                }
+                _propDefCol = _defClassFactory.CreatePropDefCol();
+                foreach (string propDefXml in xmlDefs)
+                {
+                    XmlPropertyLoader propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);
+                    IPropDef propDef = propLoader.LoadProperty(propDefXml);
+                    if(propDef != null) _propDefCol.Add(propDef);
+                }
             }
-            _propDefCol = _defClassFactory.CreatePropDefCol();
-            foreach (string propDefXml in xmlDefs)
+            catch (Exception ex)
             {
-                XmlPropertyLoader propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);
-                IPropDef propDef = propLoader.LoadProperty(propDefXml);
-                _propDefCol.Add(propDef);
+                //This is a RecordingExceptionNotifier so this error will be logged and thrown later
+                // thus allowing the entire XML File to be read and all errors reported
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
             }
         }
 

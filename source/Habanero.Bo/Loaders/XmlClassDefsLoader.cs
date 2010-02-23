@@ -92,7 +92,22 @@ namespace Habanero.BO.Loaders
                      + "element 'classes'.  The document needs a master 'classes' element "
                      + "and individual 'class' elements for each of the classes you are " + "defining.", ex);
             }
-            return LoadClassDefs(doc.DocumentElement);
+            var origionalExceptionNotifier = GlobalRegistry.UIExceptionNotifier;
+            try
+            {
+                
+                var recordingExceptionNotifier = new RecordingExceptionNotifier();
+                GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+
+                var loadClassDefs = LoadClassDefs(doc.DocumentElement);
+                recordingExceptionNotifier.RethrowRecordedException();
+                return loadClassDefs;
+            }
+            finally
+            {
+                GlobalRegistry.UIExceptionNotifier = origionalExceptionNotifier;
+            }
+
         }
 
         /// <summary>
@@ -140,8 +155,18 @@ namespace Habanero.BO.Loaders
             _reader.Read();
             do
             {
-                XmlClassLoader classLoader = new XmlClassLoader(DtdLoader, _defClassFactory);
-                _classDefList.Add(classLoader.LoadClass(_reader.ReadOuterXml()));
+                try
+                {
+                    XmlClassLoader classLoader = new XmlClassLoader(DtdLoader, _defClassFactory);
+                    var classDefCol = classLoader.LoadClass(_reader.ReadOuterXml());
+                    if(classDefCol != null) _classDefList.Add(classDefCol);
+                }
+                catch (Exception ex)
+                {
+                    //This is a RecordingExceptionNotifiere so it will log this error and
+                    // allow the continued processing of this XMLFile.
+                    GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+                }
             } while (_reader.Name == "class");
         }
     }

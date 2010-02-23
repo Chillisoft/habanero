@@ -77,13 +77,114 @@ namespace Habanero.Test.Base
             Assert.AreSame(furtherMessage, exceptionDetail.FurtherMessage);
             Assert.AreSame(title, exceptionDetail.Title);
         }
+        [Test]
+        public void Test_HasException_WhenHas_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            RecordingExceptionNotifier exceptionNotifier = new RecordingExceptionNotifier();
+            exceptionNotifier.Notify(new Exception(), TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, exceptionNotifier.Exceptions.Count);
+            //---------------Execute Test ----------------------
+            var hasExceptions = exceptionNotifier.HasExceptions;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(hasExceptions);
+        }
+        [Test]
+        public void Test_HasException_WhenNotHas_ShouldRetFalse()
+        {
+            //---------------Set up test pack-------------------
+            RecordingExceptionNotifier exceptionNotifier = new RecordingExceptionNotifier();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, exceptionNotifier.Exceptions.Count);
+            //---------------Execute Test ----------------------
+            var hasExceptions = exceptionNotifier.HasExceptions;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(hasExceptions);
+        }
 
+        [Test]
+        public void Test_Message_When_NoItems_ShouldBeEmptyString()
+        {
+            //---------------Set up test pack-------------------
+//            Exception exception = new Exception();
+//            string furtherMessage = TestUtil.GetRandomString();
+//            string title = TestUtil.GetRandomString();
+            IExceptionNotifier exceptionNotifier = new RecordingExceptionNotifier();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var exceptionMessage = exceptionNotifier.ExceptionMessage;
+            //---------------Test Result -----------------------
+            Assert.IsNullOrEmpty(exceptionMessage);
+        }
+
+        [Test]
+        public void Test_Message_WhenOneItem_ShouldReturnMessage()
+        {
+            //---------------Set up test pack-------------------
+            Exception exception = new Exception(GetRandomString());
+            string furtherMessage = TestUtil.GetRandomString();
+            string title = TestUtil.GetRandomString();
+            RecordingExceptionNotifier exceptionNotifier = new RecordingExceptionNotifier();
+            exceptionNotifier.Notify(exception, furtherMessage, title);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, exceptionNotifier.Exceptions.Count);
+            //---------------Execute Test ----------------------
+            var exceptionMessage = exceptionNotifier.ExceptionMessage;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(exception.Message + " - " + furtherMessage, exceptionMessage);
+        }
+
+        [Test]
+        public void Test_Message_WhenTwoItem_ShouldReturnMessage()
+        {
+            //---------------Set up test pack-------------------
+            string title = TestUtil.GetRandomString();
+            RecordingExceptionNotifier exceptionNotifier = new RecordingExceptionNotifier();
+
+            Exception exception = new Exception(GetRandomString());
+            string furtherMessage = TestUtil.GetRandomString();
+            exceptionNotifier.Notify(exception, furtherMessage, title);
+
+            Exception exception2 = new Exception(GetRandomString());
+            string furtherMessage2 = TestUtil.GetRandomString();
+            exceptionNotifier.Notify(exception2, furtherMessage2, title);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, exceptionNotifier.Exceptions.Count);
+            //---------------Execute Test ----------------------
+            var exceptionMessage = exceptionNotifier.ExceptionMessage;
+            //---------------Test Result -----------------------
+            var expectedErrorMessage = exception.Message + " - " + furtherMessage + Environment.NewLine 
+                           + exception2.Message + " - " + furtherMessage2;
+            Assert.AreEqual(expectedErrorMessage, exceptionMessage);
+        }
+
+        [Test]
+        public void Test_ExceptionDetailToString_ShouldConcatExceptionMessageAndFurtherMessage()
+        {
+            //---------------Set up test pack-------------------
+            Exception exception = new Exception(GetRandomString());
+            string furtherMessage = TestUtil.GetRandomString();
+            RecordingExceptionNotifier.ExceptionDetail exceptionDetail
+                    = new RecordingExceptionNotifier.ExceptionDetail(exception, furtherMessage, GetRandomString());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var toString = exceptionDetail.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(exception.Message + " - " + furtherMessage, toString);
+        }
+
+        private static string GetRandomString()
+        {
+            return TestUtil.GetRandomString();
+        }
         [Test]
         public void Test_RethrowRecordedException_WhenRecordedExceptionExists_ShouldRethrowException()
         {
             //---------------Set up test pack-------------------
             RecordingExceptionNotifier exceptionNotifier = new RecordingExceptionNotifier();
-            Exception exception = new Exception();
+            Exception exception = new Exception(GetRandomString());
             string furtherMessage = TestUtil.GetRandomString();
             string title = TestUtil.GetRandomString();
             exceptionNotifier.Notify(exception, furtherMessage, title);
@@ -100,7 +201,7 @@ namespace Habanero.Test.Base
                 exceptionThrown = true;
                 StringAssert.Contains(string.Format(
                     "An Exception that was recorded by the RecordingExceptionNotifier and has been rethrown." +
-                    "{0}Title: {1}{0}Further Message: {2}", Environment.NewLine, title, furtherMessage), ex.Message);
+                    "{0}Title: {1}{0}Further Message: {2}", Environment.NewLine, title, exceptionNotifier.ExceptionMessage), ex.Message);
                 Assert.AreSame(exception, ex.InnerException);
             }
             Assert.IsTrue(exceptionThrown, "Expected to throw an Exception");
@@ -122,7 +223,6 @@ namespace Habanero.Test.Base
             catch (Exception)
             {
                 exceptionThrown = true;
-                throw;
             }
             Assert.IsFalse(exceptionThrown, "Expected not to throw an Exception");
         }

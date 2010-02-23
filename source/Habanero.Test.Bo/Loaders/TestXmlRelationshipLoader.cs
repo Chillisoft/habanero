@@ -61,6 +61,7 @@ namespace Habanero.Test.BO.Loaders
         {
             ClassDef.ClassDefs.Clear();
             Initialise();
+                        GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
 
         protected void Initialise() {

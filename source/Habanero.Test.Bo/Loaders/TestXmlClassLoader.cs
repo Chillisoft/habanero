@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Threading;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -42,6 +43,7 @@ namespace Habanero.Test.BO.Loaders
         {
             Initialise();
             ClassDef.ClassDefs.Clear();
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
 
         protected void Initialise() {
@@ -54,16 +56,27 @@ namespace Habanero.Test.BO.Loaders
         }
 
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), ExpectedMessage = "An invalid node 'class1' was encountered when loading the class definitions.")]
-        public void TestInvalidXmlFormatWrongRootElement()
+        [Test]
+        public void TestInvalidXmlFormatWrongRootElement_ShouldThrowException()
         {
-            _loader.LoadClass("<class1 name=\"TestClass\" assembly=\"Habanero.Test.BO.Loaders\" />");
+            try
+            {
+                _loader.LoadClass("<class1 name=\"TestClass\" assembly=\"Habanero.Test.BO.Loaders\" />");
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An invalid node 'class1' was encountered when loading the class definitions.", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestClassWithNoAssembly()
+        [Test]
+        public void TestClassWithNoAssembly_ShouldThrowException()
         {
-            IClassDef def = _loader.LoadClass(@"
+            try
+            {
+                IClassDef def = _loader.LoadClass(@"
                 <class name=""TestClass"" >
                     <property  name=""TestProp"" />
                     <primaryKey>
@@ -71,12 +84,21 @@ namespace Habanero.Test.BO.Loaders
                     </primaryKey>
 				</class>
 			");
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("No assembly name has been specified ", ex.InnerException.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestClassWithNoClassname()
+        [Test]
+        public void TestClassWithNoClassname_ShouldThrowException()
         {
-            IClassDef def = _loader.LoadClass(@"
+            try
+            {
+                IClassDef def = _loader.LoadClass(@"
                 <class assembly=""Habanero.Test.BO.Loaders"">
                     <property  name=""TestProp"" />
                     <primaryKey>
@@ -84,6 +106,13 @@ namespace Habanero.Test.BO.Loaders
                     </primaryKey>
 				</class>
 			");
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("No 'name' attribute has been specified for a", ex.InnerException.Message);
+            }
         }
 
         [Test]
@@ -207,13 +236,22 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TestClass", def.ClassName);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestClassWithNoProps()
+        [Test]
+        public void TestClassWithNoProps_ShouldThrowException()
         {
-            IClassDef def = _loader.LoadClass(
-                @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+            try
+            {
+                IClassDef def = _loader.LoadClass(
+                    @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
 				</class>
 			");
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("No property definitions have been specified for the class definition of 'TestClass'", ex.InnerException.Message);
+            }
         }
 
         [Test]
@@ -264,13 +302,22 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(1, def.PrimaryKeyDef.Count);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestClassWithNoPrimaryKeyException()
+        [Test]
+        public void TestClassWithNoPrimaryKeyException_ShouldThrowException()
         {
-            IClassDef def = _loader.LoadClass(
-                @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+            try
+            {
+                IClassDef def = _loader.LoadClass(
+                    @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
 				    <property  name=""TestProp"" />					
 				</class>");
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("Could not find a 'primaryKey' element in the class definition for the class 'TestClass'", ex.InnerException.Message);
+            }
         }
 
         [Test]
@@ -286,11 +333,13 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNotNull(def.SuperClassDef);
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
-        public void TestClassWithMoreThanOnePrimaryKeyDef()
+        [Test]
+        public void TestClassWithMoreThanOnePrimaryKeyDef_ShouldThrowException()
         {
-            _loader.LoadClass(
-                @"
+            try
+            {
+                _loader.LoadClass(
+                    @"
 				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
@@ -302,6 +351,13 @@ namespace Habanero.Test.BO.Loaders
 					</primaryKey>
 				</class>
 			");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException ");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("has invalid child element 'primaryKey'", ex.Message);
+            }
         }
 
         // Not reaching the exception I was trying to cover (line 254 of XmlClassLoader)
@@ -316,15 +372,24 @@ namespace Habanero.Test.BO.Loaders
 //			");
 //        }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestClassWithPrimaryKeyAndNoProps()
+        [Test]
+        public void TestClassWithPrimaryKeyAndNoProps_ShouldThrowException()
         {
-            IClassDef def = _loader.LoadClass(
-                @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+            try
+            {
+                IClassDef def = _loader.LoadClass(
+                    @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
 					<property  name=""TestProp"" />
 					<primaryKey/>
 				</class>
 			");
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A primaryKey node must have one or more prop nodes", ex.InnerException.Message);
+            }
         }
 
         [Test]
@@ -527,12 +592,14 @@ namespace Habanero.Test.BO.Loaders
             IClassDef def = _loader.LoadClass("");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestInvalidClassElementException()
+        [Test]
+        public void TestInvalidClassElementException_ShouldThrowException()
         {
             ClassDef.ClassDefs.Remove(typeof(TestClass));
             ClassDef.ClassDefs.Remove(typeof(TestRelatedClass));
-            IClassDef def = _loader.LoadClass(@"
+            try
+            {
+                IClassDef def = _loader.LoadClass(@"
 				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
 					<property  name=""TestProp"" />
 					<primaryKey>
@@ -541,6 +608,13 @@ namespace Habanero.Test.BO.Loaders
                     <invalid/>
 				</class>
 			");
+                Assert.Fail("Expected to throw an RecordedExceptionsException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The element 'invalid' is not a recognised class definition ", ex.InnerException.Message);
+            }
         }
 
         [Test]

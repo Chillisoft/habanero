@@ -38,6 +38,7 @@ namespace Habanero.Test.BO.Loaders
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
 
         protected virtual IDefClassFactory GetDefClassFactory()
@@ -46,20 +47,38 @@ namespace Habanero.Test.BO.Loaders
         }
 
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestDatabaseLookupListWithInvalidTimeout()
         {
-            XmlDatabaseLookupListLoader loader = new XmlDatabaseLookupListLoader(new DtdLoader(), GetDefClassFactory());
-            loader.LoadLookupList(
+            try
+            {
+                XmlDatabaseLookupListLoader loader = new XmlDatabaseLookupListLoader(new DtdLoader(), GetDefClassFactory());
+                loader.LoadLookupList(
                     @"<databaseLookupList sql=""Source"" timeout=""aaa"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("'databaseLookupList' element, an invalid integer was assigned to the 'timeout' attribute", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestDatabaseLookupListWithNegativeTimeout()
         {
             XmlDatabaseLookupListLoader  loader = new XmlDatabaseLookupListLoader(new DtdLoader(), GetDefClassFactory());
-            loader.LoadLookupList(
+            try
+            {
+                loader.LoadLookupList(
                     @"<databaseLookupList sql=""Source"" timeout=""-1"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("invalid integer was assigned to the 'timeout' attribute", ex.Message);
+            }
         }
 
         [Test]

@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -75,14 +76,24 @@ namespace Habanero.BO.Loaders
 		/// <returns>Returns the loaded object</returns>
 		protected object Load(XmlElement el)
 		{
-			_element = el;
-			CreateValidatingReader(el);
-			LoadFromReader();
-			CheckDocumentValidity();
-			return Create();
+		    try
+		    {
+		        _element = el;
+		        CreateValidatingReader(el);
+		        LoadFromReader();
+		        CheckDocumentValidity();
+		        return Create();
+		    }
+		    catch (Exception ex)
+		    {
+                //This is set to be recording Exception Notifier so will record all errors
+                // this can be used later to display all loading Errors to the user.
+		        GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+		    }
+		    return null;
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Creates the object using the data that has been read in using
 		/// LoadFromReader(). This method needs to be implemented by the
 		/// sub-class.

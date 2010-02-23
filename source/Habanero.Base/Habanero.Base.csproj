@@ -148,6 +148,7 @@
     <Compile Include="DateTimeTodayConverter.cs" />
     <Compile Include="DelegatedExceptionNotifier.cs" />
     <Compile Include="Exceptions\InvalidDefinitionException.cs" />
+    <Compile Include="Exceptions\RecordedExceptionsException.cs" />
     <Compile Include="IBusinessObjectLookupList.cs" />
     <Compile Include="IDatabaseLookupList.cs" />
     <Compile Include="ILookupListWithClassDef.cs" />

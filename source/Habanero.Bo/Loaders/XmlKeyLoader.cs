@@ -153,7 +153,7 @@ namespace Habanero.BO.Loaders
             do
             {
                 string propName = _reader.GetAttribute("name");
-                if (propName == null || propName.Length == 0)
+                if (string.IsNullOrEmpty(propName))
                 {
                     throw new InvalidXmlDefinitionException("The 'prop' node " +
                         "under a key definition is missing a valid 'name' attribute, " +

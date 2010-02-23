@@ -31,7 +31,11 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlFilterLoader
     {
-
+        [SetUp]
+        public virtual void SetupTest()
+        {
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
+        }
         [Test]
         public void TestConstruction()
         {
@@ -215,11 +219,11 @@ namespace Habanero.Test.BO.Loaders
                 Assert.Fail("An error should have occurred because a filter requires at least on filterProperty.");
             
             //---------------Test Result -----------------------
-            } catch (InvalidXmlDefinitionException ex)
+            }
+            catch (InvalidXmlDefinitionException ex)
             {
                 StringAssert.Contains("The 'filter' node does not conform", ex.Message);
-            }
-            //---------------Tear Down -------------------------          
+            }      
         }
 
     }

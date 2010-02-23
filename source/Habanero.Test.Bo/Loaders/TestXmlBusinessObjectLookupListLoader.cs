@@ -35,7 +35,7 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlBusinessObjectLookupListLoader
     {
-        private XmlBusinessObjectLookupListLoader itsLoader;
+        protected XmlBusinessObjectLookupListLoader _loader;
 
         [SetUp]
         public virtual void SetupTest()
@@ -45,7 +45,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         protected void Initialise() {
-            itsLoader = new XmlBusinessObjectLookupListLoader(new DtdLoader(), GetDefClassFactory());
+            _loader = new XmlBusinessObjectLookupListLoader(new DtdLoader(), GetDefClassFactory());
         }
 
         protected virtual IDefClassFactory GetDefClassFactory()
@@ -56,13 +56,13 @@ namespace Habanero.Test.BO.Loaders
         //TODO - Mark 02 Feb 2009 : Add DTD validation tests, possibly?
 
         [Test]
-        public void TestBusinessObjectLookupList()
+        public virtual void TestBusinessObjectLookupList()
         {
             //---------------Set up test pack-------------------
             const string xml = @"<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" />";
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            ILookupList lookupList = itsLoader.LoadLookupList(xml);
+            ILookupList lookupList = _loader.LoadLookupList(xml);
             //---------------Test Result -----------------------
             Assert.IsInstanceOf(typeof(IBusinessObjectLookupList), lookupList);
             IBusinessObjectLookupList source = (IBusinessObjectLookupList)lookupList;
@@ -73,27 +73,27 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestBusinessObjectLookupListWithCriteria()
+        public virtual void TestBusinessObjectLookupListWithCriteria()
         {
             //---------------Set up test pack-------------------
             const string xml = @"<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" criteria=""TestProp=Test"" />";
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            ILookupList lookupList = itsLoader.LoadLookupList(xml);
+            ILookupList lookupList = _loader.LoadLookupList(xml);
             //---------------Test Result -----------------------
             IBusinessObjectLookupList source = (IBusinessObjectLookupList)lookupList;
             Assert.AreEqual("TestProp=Test", source.CriteriaString);
         }
 
         [Test]
-        public void TestBusinessObjectLookupListWithSort()
+        public virtual void TestBusinessObjectLookupListWithSort()
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             const string xml = @"<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" sort=""TestProp asc"" />";
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            ILookupList lookupList = itsLoader.LoadLookupList(xml);
+            ILookupList lookupList = _loader.LoadLookupList(xml);
             //---------------Test Result -----------------------
             IBusinessObjectLookupList source = (IBusinessObjectLookupList)lookupList;
             Assert.AreEqual("TestProp asc", source.SortString);

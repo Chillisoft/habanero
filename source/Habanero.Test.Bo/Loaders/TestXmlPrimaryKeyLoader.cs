@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -38,6 +39,7 @@ namespace Habanero.Test.BO.Loaders
         public virtual void SetupTest()
         {
             Initialise();
+                        GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
 
         protected void Initialise() {
@@ -94,13 +96,22 @@ namespace Habanero.Test.BO.Loaders
                 </primaryKey>", itsPropDefs);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropElementForNonExistingProp()
         {
-            itsLoader.LoadPrimaryKey(@"
+            try
+            {
+                itsLoader.LoadPrimaryKey(@"
                 <primaryKey>
                     <prop name=""doesntexist"" />
                 </primaryKey>", itsPropDefs);
+                Assert.Fail("Expected to throw an AbandonedMutexException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A primary key definition has listed a 'prop' definition for ", ex.Message);
+            }
         }
     }
 }

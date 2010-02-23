@@ -42,6 +42,7 @@ namespace Habanero.Test.BO.Loaders
 
             ClassDef.ClassDefs.Add(
                 new XmlClassDefsLoader(SuperClassClassDefXml, new DtdLoader(), GetDefClassFactory()).LoadClassDefs());
+                        GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
 
         protected const string SuperClassClassDefXml = 

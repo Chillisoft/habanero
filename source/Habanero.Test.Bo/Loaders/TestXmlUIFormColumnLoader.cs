@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -36,6 +37,7 @@ namespace Habanero.Test.BO.Loaders
         public virtual void SetupTest()
         {
             Initialise();
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
 
         protected void Initialise() {

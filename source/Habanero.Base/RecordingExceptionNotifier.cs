@@ -18,6 +18,9 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.Base
 {
@@ -41,12 +44,13 @@ namespace Habanero.Base
         ///</summary>
         public void RethrowRecordedException()
         {
-            if (Exceptions.Count == 0) return;
-            ExceptionDetail exceptionDetail = Exceptions[0];
-            throw new Exception(string.Format(
+            if (!HasExceptions) return;
+            ExceptionDetail exceptionDetail = Exceptions.Last();
+
+            throw new RecordedExceptionsException(string.Format(
                     "An Exception that was recorded by the RecordingExceptionNotifier and has been rethrown." + 
                     "{0}Title: {1}{0}Further Message: {2}",
-                    Environment.NewLine, exceptionDetail.Title, exceptionDetail.FurtherMessage),
+                    Environment.NewLine, exceptionDetail.Title, this.ExceptionMessage),
                     exceptionDetail.Exception);
         }
 
@@ -68,7 +72,17 @@ namespace Habanero.Base
         ///</summary>
         public string ExceptionMessage
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                return Exceptions.Aggregate("", (current, exceptionDetail) => StringUtilities.AppendMessage(current, exceptionDetail.ToString(), Environment.NewLine));
+            }
+        }
+        /// <summary>
+        /// Returns true if there are any Exceptons Recorded
+        /// </summary>
+        public bool HasExceptions
+        {
+            get { return _exceptions.Count > 0; }
         }
 
         #endregion
@@ -105,6 +119,11 @@ namespace Habanero.Base
             /// The title for the notification
             ///</summary>
             public string Title { get; private set; }
+
+            public override string ToString()
+            {
+                return this.Exception.Message + " - " + FurtherMessage;
+            }
         }
     }
 }
