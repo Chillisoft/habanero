@@ -20,6 +20,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
@@ -107,8 +108,13 @@ namespace Habanero.Util
                     classType = classAssembly.GetType(assemblyPrefix + "." + className, false, true);
                 }
             }
-            if (classType == null) {
+            if (classType == null) 
+            {
                 classType = classAssembly.GetType(className, false, true);
+            }
+            if(classType == null)
+            {
+                classType = classAssembly.GetTypes().FirstOrDefault(type => type.Name.ToUpper() == className.ToUpper());
             }
             if (classType == null)
             {

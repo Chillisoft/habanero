@@ -339,7 +339,7 @@ namespace Habanero.DB
         {
             Criteria fullCriteria = Criteria.MergeCriteria(_selectQuery.Criteria, _selectQuery.DiscriminatorCriteria);
             ClassDef classDef = (ClassDef) _selectQuery.ClassDef;
-            if (classDef != null && classDef.ClassID != null && classDef.ClassID.HasValue)
+            if (classDef != null && classDef.ClassID.HasValue)
             {
                 Criteria classIDCriteria = new Criteria("DMClassID", Criteria.ComparisonOp.Equals, classDef.ClassID.Value);
                 fullCriteria = Criteria.MergeCriteria(fullCriteria, classIDCriteria);

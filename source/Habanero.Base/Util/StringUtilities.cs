@@ -18,6 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
@@ -282,26 +284,38 @@ namespace Habanero.Util
             }
             return formatted;
         }
+        /// <summary>
+        /// Singularises the input string using heuristics and rule.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static string Singularize(string input)
         {
-            if (input == String.Empty)
+            if (input == String.Empty) return input;
+
+            if (myUnaffectedSingular.Any(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase)))
+            {
                 return input;
-            foreach (string rule in myUnaffectedSingular)
-            {
-                if (Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
-                    return input;
             }
-            foreach (string rule in myIrregularSingular)
+            var singularised = Singularise(input, myIrregularSingular);
+            if (singularised != null) return singularised;
+
+            singularised = Singularise(input, mySingularRules);
+            return singularised ?? input;
+        }
+
+        private static string Singularise(string input, NameValueCollection singularisationRules)
+        {
+            var singularisationRule = singularisationRules
+                .Cast<string>()
+                .Where(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
+                .FirstOrDefault();
+            if (singularisationRule != null)
             {
-                if (rule.Equals(input, StringComparison.InvariantCultureIgnoreCase))
-                    return myIrregularSingular[rule];
+                return Regex.Replace(input, singularisationRule, singularisationRules[singularisationRule],
+                                     RegexOptions.IgnoreCase);
             }
-            foreach (string rule in mySingularRules)
-            {
-                if (Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
-                    return Regex.Replace(input, rule, mySingularRules[rule], RegexOptions.IgnoreCase);
-            }
-            return input;
+            return null;
         }
 
         ///<summary>
@@ -330,6 +344,100 @@ namespace Habanero.Util
                     return Regex.Replace(input, rule, myPluralRules[rule], RegexOptions.IgnoreCase);
             }
             return String.Empty;
+        }
+
+
+        public static string Camelize(string input)
+        {
+            var replace = Humanize(input);
+            replace = replace.Replace(" ", "");
+            return replace;
+        }
+        /// <summary>
+        /// Replaces all _ with whites space
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string Humanize(string input)
+        {
+            string replace = input.Replace("_", " ");
+            replace = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(replace);
+            return replace;
+        }
+        /// <summary>
+        /// Create a classification of the input this is a Singular of the input
+        ///   Camel cased.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string Classify(string input)
+        {
+            return Camelize(Singularize(input));
+        }
+
+        /// <summary>
+        /// Pascal Cases a table name that has as seperator '_', '-' or ' ' in it so that the 
+        ///  the pascal casing will be done as  follows first letter is capitalised
+        ///  the first letter that follows a seperator is capitalised. All other letters are left unchanged.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string PascalCaseTableName(string text)
+        {
+            if (text.Length > 1)
+            {
+                text = text[0].ToString().ToUpper() +
+                       text.Substring(1);
+                text = RemovePascalDelimiters(text, "_");
+                text = RemovePascalDelimiters(text, " ");
+                text = RemovePascalDelimiters(text, "-");
+            }
+            else
+            {
+                text = text.ToUpper();
+            }
+            return text;
+        }
+        private static string RemovePascalDelimiters(string text, string delimiter)
+        {
+            int pos = text.IndexOf(delimiter);
+            while (pos != -1 && pos < text.Length - 1)
+            {
+                text = text.Substring(0, pos) + text[pos + 1].ToString().ToUpper()
+                       + text.Substring(pos + 2);
+                pos = text.IndexOf(delimiter, pos);
+            }
+            return text;
+        }
+        /// <summary>
+        /// Determines whether the word is already pascal cased. 
+        /// This will return true when.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static bool IsManyPascalWords(string text)
+        {
+            if (text.Length <= 1) return false;
+            string firstLetter = text.Substring(0, 1);
+            if (firstLetter == firstLetter.ToLowerInvariant()) return false;
+
+            string textRemainderPart = text.Substring(1);
+            return textRemainderPart != textRemainderPart.ToLower();
+        }
+
+        public static string RemovePrefix(string prefix, string text)
+        {
+            if (!string.IsNullOrEmpty(prefix) && text.StartsWith(prefix, true, CultureInfo.CurrentCulture))
+            {
+                text = text.Substring(prefix.Length);
+            }
+            return text;
+        }
+
+        public static string ToLowerFirstLetter(string input)
+        {
+            char firstLetter = input[0];
+            return Char.ToLower(firstLetter) + input.Substring(1);
         }
         /// <summary>
         /// Converts the string representation of a Guid to its Guid

@@ -317,5 +317,300 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.AreEqual(0, col.Count);
         }
+
+        [Test]
+        public void Test_DelimitPascalCase_NoSeperators()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "TableName";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(tableName, pascalCase);
+        }
+        [Test]
+        public void Test_DelimitPascalCase_Seperator_()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "Table_Name";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableName";
+            Assert.AreEqual(expectedTableName, pascalCase);
+        }
+        [Test]
+        public void Test_DelimitPascalCase_Seperator_NextLetterLowerCase()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "Table_name";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableName";
+            Assert.AreEqual(expectedTableName, pascalCase);
+        }
+        [Test]
+        public void Test_DelimitPascalCase_Seperator_FirstLetterLowerCase()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "table_name";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableName";
+            Assert.AreEqual(expectedTableName, pascalCase);
+        }
+        [Test]
+        public void Test_DelimitPascalCase_DashSeperator_FirstLetterLowerCase()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "table-name";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableName";
+            Assert.AreEqual(expectedTableName, pascalCase);
+        }
+        [Test]
+        public void Test_DelimitPascalCase_TwoDashSeperator_FirstLetterLowerCase()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "table-name_full";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableNameFull";
+            Assert.AreEqual(expectedTableName, pascalCase);
+        }
+        [Test]
+        public void Test_DelimitPascalCase_TwoDashSeperator()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "table-_name";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableName";
+            Assert.AreEqual(expectedTableName, pascalCase);
+        }
+        [Test]
+        public void Test_DelimitPascalCase_SpaceSeperator_FirstLetterLowerCase()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "table name";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableName";
+            Assert.AreEqual(expectedTableName, pascalCase);
+        }
+        [Test]
+        public void Test_DelimitPascalCase_TwoSpaceSeperator_FirstLetterLowerCase()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "table  name";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableName";
+            Assert.AreEqual(expectedTableName, pascalCase);
+        }
+        [Test]
+        public void Test_DelimitPascalCase_OneChar()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "t";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string pascalCase = StringUtilities.PascalCaseTableName(tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "T";
+            Assert.AreEqual(expectedTableName, pascalCase);
+        }
+
+        [Test]
+        public void Test_Singularise()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "tables";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string singularised = StringUtilities.Singularize(tableName);
+            //---------------Test Result -----------------------
+            const string expectedName = "table";
+            Assert.AreEqual(expectedName, singularised);
+        }
+        [Test]
+        public void Test_Singularise_Regular()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "mice";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string singularised = StringUtilities.Singularize(tableName);
+            //---------------Test Result -----------------------
+            const string expectedName = "mouse";
+            Assert.AreEqual(expectedName, singularised);
+        }
+        [Test]
+        public void Test_Singularise_Irregular()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "atlases";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string singularised = StringUtilities.Singularize(tableName);
+            //---------------Test Result -----------------------
+            const string expectedName = "atlas";
+            Assert.AreEqual(expectedName, singularised);
+        }
+        [Test]
+        public void Test_Singularise_Irregular2()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "children";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string singularised = StringUtilities.Singularize(tableName);
+            //---------------Test Result -----------------------
+            const string expectedName = "child";
+            Assert.AreEqual(expectedName, singularised);
+        }
+        [Test]
+        public void Test_Singularise_Irregular3()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "loaves";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string singularised = StringUtilities.Singularize(tableName);
+            //---------------Test Result -----------------------
+            const string expectedName = "loaf";
+            Assert.AreEqual(expectedName, singularised);
+        }
+        [Test]
+        public void Test_Singularise_WhenUnaffected_ShouldNotChange()
+        {
+            //---------------Set up test pack-------------------
+            const string word = "deer";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string singularised = StringUtilities.Singularize(word);
+            //---------------Test Result -----------------------
+            const string expectedName = "deer";
+            Assert.AreEqual(expectedName, singularised);
+        }
+
+        [Test]
+        public void Test_RemovePrefix()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "tbtable";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            string updatedTableName = StringUtilities.RemovePrefix("tb", tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "table";
+            Assert.AreEqual(expectedTableName, updatedTableName);
+        }
+
+        [Test]
+        public void Test_RemoveTableNamePrefix_TableDoesNotHaveAPrefix()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "TableName";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string updatedTableName = StringUtilities.RemovePrefix("tbl", tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableName";
+            Assert.AreEqual(expectedTableName, updatedTableName);
+        }
+
+        [Test]
+        public void Test_RemoveTableNamePrefix_TableHasAPrefix_UpperCase()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "TBLTableName";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string updatedTableName = StringUtilities.RemovePrefix("tbl", tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableName";
+            Assert.AreEqual(expectedTableName, updatedTableName);
+        }
+
+        [Test]
+        public void Test_RemoveTableNamePrefix_TableHasAPrefix_AndHasPrefixValueAtEnd()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "tblTableNametbl";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string updatedTableName = StringUtilities.RemovePrefix("tbl", tableName);
+            //---------------Test Result -----------------------
+            const string expectedTableName = "TableNametbl";
+            Assert.AreEqual(expectedTableName, updatedTableName);
+        }
+
+        [Test]
+        public void Test_IsManyPascalWords_NoCaps()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "table";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool pascalCase = StringUtilities.IsManyPascalWords(tableName);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(pascalCase);
+        }
+
+        [Test]
+        public void Test_IsManyPascalWords_FirstLetterCapital()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "Table";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool pascalCase = StringUtilities.IsManyPascalWords(tableName);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(pascalCase, "Should not show as a pascal cased word since only first letter is capital");
+        }
+        [Test]
+        public void Test_IsManyPascalWords_FirstLetterNotCapital_OtherLettersCapital()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "tableName";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool pascalCase = StringUtilities.IsManyPascalWords(tableName);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(pascalCase, "Should not show as a pascal cased word since first letter is not capital");
+        }
+
+        [Test]
+        public void Test_IsManyPascalWords_FirstLetterCapital_OtherLettersCapital()
+        {
+            //---------------Set up test pack-------------------
+            const string tableName = "TableName";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool pascalCase = StringUtilities.IsManyPascalWords(tableName);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(pascalCase, "Should show as a pascal cased word since first letter is capital");
+        }
     }
 }
