@@ -484,7 +484,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsNotNull(cmbox.SelectedItem);
             Assert.AreEqual(person.Organisation, cmbox.SelectedItem);
         }
-
+     
         [Test]
         public void Test_BusinessObject_WhenSetWithNullRelatedObject_WhenItemAlreadySelected_ShouldSelectNoItemInList()
         {

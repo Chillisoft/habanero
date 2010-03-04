@@ -421,7 +421,7 @@ namespace Habanero.UI.Base
             try
             {
                 Control.SelectedItem = relatedBO;
-                //if (relatedBO == null) Control.Text = "";
+                if (relatedBO == null && !String.IsNullOrEmpty(Control.Text)) Control.Text = "";
             }
             finally
             {
