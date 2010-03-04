@@ -503,11 +503,25 @@ namespace Habanero.Test
             {
                 XmlUIFormLoader loader = CreateXmlUIFormLoader();
                 return
+                    loader.LoadUIFormDef(
+                        @"<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public IUIForm GetSimpleUIFormDefKeepValuePrivate()
+            {
+                XmlUIFormLoader loader = CreateXmlUIFormLoader();
+                return
                      loader.LoadUIFormDef(
                          @"<form>
 							<tab name=""Tab1"">
 								<columnLayout>
-									<field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
+									<field label=""Pasword:"" property=""Password"" />
 								</columnLayout>
 							</tab>
 						</form>");
@@ -939,6 +953,10 @@ namespace Habanero.Test
             public UIFormTab GetFormTabOneIntegerField()
             {
                 return (UIFormTab) GetSimpleUIFormDefInt()[0];
+            }
+            public UIFormTab GetFormTabOnePasswordField()
+            {
+                return (UIFormTab)GetSimpleUIFormDefKeepValuePrivate()[0];
             }
 
             public UIFormTab GetFormTabTwoFields()

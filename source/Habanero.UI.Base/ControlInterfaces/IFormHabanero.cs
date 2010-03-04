@@ -185,6 +185,8 @@ namespace Habanero.UI.Base
         /// </summary>
         void Close();
 
+
+
         /// <summary>
         /// Gets or sets the current multiple document interface (MDI) parent form of this form
         /// </summary>
@@ -200,11 +202,11 @@ namespace Habanero.UI.Base
         /// </summary>
         event EventHandler Closed;
 
-        //TODO Deerasha 15Apr2009 implement this in FormWin and FormVWG
-       // /// <summary>
-       // /// Occurs before closing the form
-       // /// </summary>
-        //event EventHandler Closing;
+
+        /// <summary>
+        /// Occurs before closing the form
+        /// </summary>
+        event CancelEventHandler Closing;
         
         /// <summary>
         /// Shows the form as a modal dialog box with the currently active window set as its owner

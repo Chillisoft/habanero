@@ -48,10 +48,18 @@ namespace Habanero.UI.Base
                 {
                     ShowPopupForm();
                     PopupForm.Closed += HandlePopUpFormClosedEvent;
+                 
                     PopupForm.ShowDialog();
                 };
         }
-
+        /// <summary>
+        /// Handles the Closing of the Popup form.
+        /// By default this saves the Business Object that is currently selectedin the Popup  (if there is one)
+        /// Reloads the Combo Box using <see cref="ReloadLookupValues"/>.
+        /// and Sets the Currently selected Business Object as the selected Item for the ComboBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void HandlePopUpFormClosedEvent(object sender, EventArgs e)
         {
             IBOGridAndEditorControl iboGridAndEditorControl = GetIBOGridAndEditorControl();
@@ -71,7 +79,9 @@ namespace Habanero.UI.Base
         {
             return (IBOGridAndEditorControl) PopupForm.Controls[0];
         }
-
+        /// <summary>
+        /// Reloads the ComboBox.
+        /// </summary>
         protected virtual void ReloadLookupValues()
         {
             Type classType;

@@ -124,7 +124,7 @@ namespace Habanero.Test.UI.Base
 
             ILabel label = (ILabel) panel.Controls[0];
             Assert.AreEqual("Text (UOM) :", label.Text);
-        }
+        } 
 
         [Test]
         public void Test_BuildPanelForTab_1Field_Integer()
@@ -143,7 +143,41 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOf(typeof (INumericUpDown), panel.Controls[1]);
             Assert.IsInstanceOf(typeof (IPanel), panel.Controls[2]);
         }
-       
+
+        [Test]
+        public void Test_ConfigureInputControl_WhenUIFormFieldKeepValuePrivateTrue_ShouldSetPasswordChar()
+        {
+            //---------------Set up test pack-------------------
+            FakeUIFormField field = new FakeUIFormField();
+            field.SetKeepValuePrivate(true);
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(field.KeepValuePrivate);
+            //---------------Execute Test ----------------------
+            IControlMapper mapper;
+            var habaneroControl = panelBuilder.ConfigureInputControl(field, out mapper);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<ITextBox>(habaneroControl);
+            ITextBox tBox = (ITextBox) habaneroControl;
+            Assert.AreEqual("*", tBox.PasswordChar.ToString());
+        }
+        [Test]
+        public void Test_ConfigureInputControl_WhenUIFormFieldKeepValuePrivateFalse_ShouldSetPasswordCharNull()
+        {
+            //---------------Set up test pack-------------------
+            FakeUIFormField field = new FakeUIFormField();
+            field.SetKeepValuePrivate(false);
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(field.KeepValuePrivate);
+            //---------------Execute Test ----------------------
+            IControlMapper mapper;
+            var habaneroControl = panelBuilder.ConfigureInputControl(field, out mapper);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<ITextBox>(habaneroControl);
+            ITextBox tBox = (ITextBox) habaneroControl;
+            Assert.AreEqual("\0", tBox.PasswordChar.ToString());
+        }
 
         [Test]
         public void Test_BuildPanelForTab_1Field_GroupBoxLayout_Integer()
@@ -1691,6 +1725,48 @@ namespace Habanero.Test.UI.Base
         //}
     }
 
+    public class FakeUIFormField : UIFormField
+    {
+        private bool _keepValuePrivate;
+        private IClassDef _classDef ;
+
+        public FakeUIFormField(string label, string propertyName)
+            : base(label, propertyName)
+        {
+        }
+
+        public FakeUIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, LayoutStyle layout)
+            : base(label, propertyName, controlType, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, layout)
+        {
+        }
+
+        public FakeUIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, bool? showAsComulsory, string toolTipText, Hashtable parameters, LayoutStyle layout)
+            : base(label, propertyName, controlTypeName, controlAssembly, mapperTypeName, mapperAssembly, editable, showAsComulsory, toolTipText, parameters, layout)
+        {
+        }
+
+        public FakeUIFormField() : base(TestUtil.GetRandomString(), TestUtil.GetRandomString())
+        {
+        }
+
+        public override bool KeepValuePrivate
+        {
+            get { return _keepValuePrivate; }
+        }
+        public void SetKeepValuePrivate(bool keepValuePrivate)
+        {
+            _keepValuePrivate = keepValuePrivate;
+        }
+
+        public override IClassDef GetClassDef()
+        {
+            return _classDef;
+        }
+        public void SetClassDef(IClassDef classDef)
+        {
+            _classDef = classDef;
+        }
+    }
     [TestFixture]
     public class TestPanelBuilderWinOnly
     {

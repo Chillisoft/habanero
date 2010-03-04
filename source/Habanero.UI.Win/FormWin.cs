@@ -113,6 +113,7 @@ namespace Habanero.UI.Win
         //    }
         //}
 
+       
         /// <summary>
         /// Gets or sets the dialog result that indicates what action was
         /// taken to close the form

@@ -461,7 +461,19 @@ namespace Habanero.BO.ClassDefinition
                 return propDef != null && propDef.Compulsory;
             }
         }
-
+        /// <summary>
+        /// Returns true if the Value must be kept private (i.e. this will be masked by a Password text box.)
+        /// </summary>
+        public virtual bool KeepValuePrivate
+        {
+            get
+            {
+                IClassDef def = GetClassDef();
+                if (def == null) return false;
+                IPropDef propDef = this.GetPropDefIfExists(def);
+                return propDef != null && propDef.KeepValuePrivate;
+            }
+        }
         ///<summary>
         /// The <see cref="UIFormColumn"/> that this form field is to be placed in.
         ///</summary>
@@ -517,7 +529,12 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         private bool? ShowAsCompulsory { get; set; }
 
-        private IClassDef GetClassDef()
+
+        ///<summary>
+        /// Returns the <see cref="IClassDef"/> associated with this UIFormField
+        ///</summary>
+        ///<returns></returns>
+        public virtual IClassDef GetClassDef()
         {
             IUIFormColumn column = this.UIFormColumn;
             if (column == null) return null;
@@ -531,4 +548,5 @@ namespace Habanero.BO.ClassDefinition
 
        
     }
+
 }

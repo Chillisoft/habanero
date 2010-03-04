@@ -609,7 +609,7 @@ namespace Habanero.BO.ClassDefinition
         /// This will usually be set to 'true' for password fields. This will then prevent
         /// the value being revealed in error messages and by default controls the user interface.
         ///</summary>
-        public bool KeepValuePrivate { get; private set; }
+        public bool KeepValuePrivate { get; set; }
 
 
         ///<summary>

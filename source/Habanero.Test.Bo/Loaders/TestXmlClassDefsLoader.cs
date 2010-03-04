@@ -575,16 +575,20 @@ namespace Habanero.Test.BO.Loaders
             XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), new DefClassFactory());
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            ClassDefCol classDefs = loader.LoadClassDefs(TestClassWithRelatedClassXml_OnlyOneReverseRelationshipIndicated);
+            ClassDefCol classDefs =
+                loader.LoadClassDefs(TestClassWithRelatedClassXml_OnlyOneReverseRelationshipIndicated);
             //---------------Test Result -----------------------
             IClassDef classDef = classDefs["FireStarter.Test.Logic", "FireStarter.Test.Logic.Loaders.TestClass"];
-            IClassDef relatedClassDef = classDefs["FireStarter.Test.Logic", "FireStarter.Test.Logic.Loaders.TestRelatedClass"];
+            IClassDef relatedClassDef =
+                classDefs["FireStarter.Test.Logic", "FireStarter.Test.Logic.Loaders.TestRelatedClass"];
 
             Assert.AreEqual(1, classDef.RelationshipDefCol.Count);
             Assert.AreEqual(1, relatedClassDef.RelationshipDefCol.Count);
         }
-        private const string TestClassWithRelatedClassXml_OnlyOneReverseRelationshipIndicated =
-    @"
+        
+
+        const string TestClassWithRelatedClassXml_OnlyOneReverseRelationshipIndicated =
+                @"
                 <classes>
 					<class name=""FireStarter.Test.Logic.Loaders.TestClass"" assembly=""FireStarter.Test.Logic"" >
 						<property  name=""TestClassID"" type=""Guid"" />
@@ -617,11 +621,21 @@ namespace Habanero.Test.BO.Loaders
     					</relationship>
 				    </class>
 				</classes>";
-        [Test, ExpectedException(typeof(XmlException))]
+
+        [Test]
         public void TestNoRootNodeException()
         {
             XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
-            loader.LoadClassDefs(@"<invalidRootNode>");
+            try
+            {
+                loader.LoadClassDefs(@"<invalidRootNode>");
+                Assert.Fail("Expected to throw an EXCEPTION");
+            }
+                //---------------Test Result -----------------------
+            catch (XmlException ex)
+            {
+                StringAssert.Contains("has no root element", ex.Message);
+            }
         }
 
 

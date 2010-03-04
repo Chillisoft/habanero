@@ -143,6 +143,91 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("Tested Property (NewUOM):", labelName);
 
         }
+        [Test] 
+        public void Test_PropDefKeepValuePrivate_Updates_ShouldSetFormFieldKeepValuePrivateTrue()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
+
+            const string testPropertyName = "TestPropertyKeepValuePrivate";
+            PropDef propDef = new PropDef(testPropertyName, typeof(string), PropReadWriteRule.ReadWrite, null, null, false, false, 100,
+                                          "", "This is a property for testing.", true);
+
+            classDef.PropDefcol.Add(propDef);
+
+            UIFormField uiFormField = new UIFormField(null, testPropertyName, typeof(TextBox), null, null, true, null, null, LayoutStyle.Label);
+            AddFieldToClassDef(classDef, uiFormField);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.KeepValuePrivate);
+            //---------------Execute Test ----------------------
+            bool keepValuePrivate = uiFormField.KeepValuePrivate;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(keepValuePrivate);
+
+        }
+        [Test] 
+        public void Test_PropDefNotKeepValuePrivate_ShouldSetFormFieldKeepValuePrivateFalse()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
+
+            const string testPropertyName = "TestPropertyKeepValueNotPrivate";
+            PropDef propDef = new PropDef(testPropertyName, typeof(string), PropReadWriteRule.ReadWrite, null, null, false, false, 100,
+                                          "", "This is a property for testing.", false);
+
+            classDef.PropDefcol.Add(propDef);
+
+            UIFormField uiFormField = new UIFormField(null, testPropertyName, typeof(TextBox), null, null, true, null, null, LayoutStyle.Label);
+            AddFieldToClassDef(classDef, uiFormField);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propDef.KeepValuePrivate);
+            //---------------Execute Test ----------------------
+            bool keepValuePrivate = uiFormField.KeepValuePrivate;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(keepValuePrivate);
+        }
+        [Test] 
+        public void Test_NoPropDef_ShouldSetKeepValuePrivateFalse()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadDefaultClassDef();
+
+            const string testPropertyName = "TestPropertyKeepValueNotPrivate";
+
+
+            UIFormField uiFormField = new UIFormField(null, testPropertyName, typeof(TextBox), null, null, true, null, null, LayoutStyle.Label);
+            AddFieldToClassDef(classDef, uiFormField);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool keepValuePrivate = uiFormField.KeepValuePrivate;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(keepValuePrivate);
+        } 
+        [Test] 
+        public void Test_NoClassDef_ShouldSetKeepValuePrivateFalse()
+        {
+            //---------------Set up test pack-------------------
+
+            const string testPropertyName = "TestPropertyKeepValueNotPrivate";
+
+
+            UIFormField uiFormField = new UIFormField(null, testPropertyName, typeof(TextBox), null, null, true, null, null, LayoutStyle.Label);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool keepValuePrivate = uiFormField.KeepValuePrivate;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(keepValuePrivate);
+        }
+
+        private void AddFieldToClassDef(IClassDef classDef, IUIFormField uiFormField)
+        {
+            IUIDef def = classDef.UIDefCol["default"];
+            IUIForm form = def.UIForm;
+            IUIFormTab tab = form[0];
+            IUIFormColumn column = tab[0];
+            column.Add(uiFormField);
+        }
         [Test]
         public void TestFieldToolTip()
         {

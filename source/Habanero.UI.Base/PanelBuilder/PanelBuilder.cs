@@ -389,7 +389,7 @@ namespace Habanero.UI.Base
             return controlMapper;
         }
 
-        private IControlHabanero ConfigureInputControl(UIFormField formField, out IControlMapper controlMapper)
+        internal IControlHabanero ConfigureInputControl(UIFormField formField, out IControlMapper controlMapper)
         {
             IControlHabanero inputControl = ControlFactory.CreateControl
                 (formField.ControlTypeName, formField.ControlAssemblyName);
@@ -409,6 +409,15 @@ namespace Habanero.UI.Base
             AddEmailFunctionalityToTextBox(formField, inputControl);
 
             AddMultiLineTextbox(formField, inputControl);
+
+            if (formField.KeepValuePrivate)
+            {
+                ITextBox tBox = inputControl as ITextBox;
+                if(tBox != null)
+                {
+                    tBox.PasswordChar = '*';
+                }
+            }
 
             SetToolTip(formField, inputControl);
             return inputControl;
