@@ -44,8 +44,8 @@ namespace Habanero.Test.UI.Win
             Assert.AreEqual(2, extendedComboBox.Controls.Count);
             Control control1 = extendedComboBox.Controls[0];
             Control control2 = extendedComboBox.Controls[1];
-            Assert.IsInstanceOfType(typeof(IComboBox), control1);
-            Assert.IsInstanceOfType(typeof(IButton), control2);
+            Assert.IsInstanceOf(typeof(IComboBox), control1);
+            Assert.IsInstanceOf(typeof(IButton), control2);
             Assert.AreEqual("...", control2.Text);
             Assert.AreEqual(0, control1.Left);
             Assert.LessOrEqual(control1.Width, control2.Left);

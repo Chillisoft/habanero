@@ -52,7 +52,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IMenuBuilder), menuBuilder);
+            Assert.IsInstanceOf(typeof(IMenuBuilder), menuBuilder);
         }
 
         [Test]

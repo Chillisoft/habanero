@@ -35,19 +35,19 @@ namespace Habanero.Test.UI.Win.PanelBuilder
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof(INumericUpDown), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof(INumericUpDown), panel.Controls[1]);
             INumericUpDown control1 = (INumericUpDown)panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Left, control1.TextAlign);
 
-            Assert.IsInstanceOfType(typeof(INumericUpDown), panel.Controls[Habanero.UI.Base.PanelBuilder.CONTROLS_PER_COLUMN + 1]);
+            Assert.IsInstanceOf(typeof(INumericUpDown), panel.Controls[Habanero.UI.Base.PanelBuilder.CONTROLS_PER_COLUMN + 1]);
             INumericUpDown control2 = (INumericUpDown)panel.Controls[Habanero.UI.Base.PanelBuilder.CONTROLS_PER_COLUMN + 1];
             Assert.AreEqual(HorizontalAlignment.Right, control2.TextAlign);
 
-            Assert.IsInstanceOfType(typeof(INumericUpDown), panel.Controls[Habanero.UI.Base.PanelBuilder.CONTROLS_PER_COLUMN * 2 + 1]);
+            Assert.IsInstanceOf(typeof(INumericUpDown), panel.Controls[Habanero.UI.Base.PanelBuilder.CONTROLS_PER_COLUMN * 2 + 1]);
             INumericUpDown control3 = (INumericUpDown)panel.Controls[Habanero.UI.Base.PanelBuilder.CONTROLS_PER_COLUMN * 2 + 1];
             Assert.AreEqual(HorizontalAlignment.Center, control3.TextAlign);
 
-            Assert.IsInstanceOfType(typeof(INumericUpDown), panel.Controls[Habanero.UI.Base.PanelBuilder.CONTROLS_PER_COLUMN * 3 + 1]);
+            Assert.IsInstanceOf(typeof(INumericUpDown), panel.Controls[Habanero.UI.Base.PanelBuilder.CONTROLS_PER_COLUMN * 3 + 1]);
             INumericUpDown control4 = (INumericUpDown)panel.Controls[Habanero.UI.Base.PanelBuilder.CONTROLS_PER_COLUMN * 3 + 1];
             Assert.AreEqual(HorizontalAlignment.Center, control4.TextAlign);
         }

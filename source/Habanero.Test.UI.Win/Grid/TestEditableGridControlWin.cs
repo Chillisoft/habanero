@@ -78,9 +78,9 @@ namespace Habanero.Test.UI.Win.Grid
         protected override void AssertMainControlsOnForm(IFormHabanero form)
         {
             Assert.AreEqual(3, form.Controls[0].Controls.Count);
-            Assert.IsInstanceOfType(typeof(IFilterControl), form.Controls[0].Controls[1]);
-            Assert.IsInstanceOfType(typeof(IEditableGrid), form.Controls[0].Controls[0]);
-            Assert.IsInstanceOfType(typeof(IButtonGroupControl), form.Controls[0].Controls[2]);
+            Assert.IsInstanceOf(typeof(IFilterControl), form.Controls[0].Controls[1]);
+            Assert.IsInstanceOf(typeof(IEditableGrid), form.Controls[0].Controls[0]);
+            Assert.IsInstanceOf(typeof(IButtonGroupControl), form.Controls[0].Controls[2]);
         }
 
         protected override IEditableGridControl CreateEditableGridControl()

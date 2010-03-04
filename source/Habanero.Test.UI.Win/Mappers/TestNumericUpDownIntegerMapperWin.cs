@@ -26,7 +26,7 @@ namespace Habanero.Test.UI.Win.Mappers
             int newValue = 555;
             numUpDown.Value = newValue;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(NumericUpDownMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof(NumericUpDownMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreEqual(newValue, s.SampleInt);
             //---------------Tear down -------------------------
         }

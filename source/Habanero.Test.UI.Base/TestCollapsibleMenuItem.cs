@@ -49,7 +49,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(name, collapsibleMenuItem.Text);
             Assert.IsNotNull(collapsibleMenuItem.MenuItems);
-            Assert.IsInstanceOfType(typeof (IButton), collapsibleMenuItem);
+            Assert.IsInstanceOf(typeof (IButton), collapsibleMenuItem);
         }
 
         [Test]

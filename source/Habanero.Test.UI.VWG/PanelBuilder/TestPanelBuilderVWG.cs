@@ -32,7 +32,7 @@ namespace Habanero.Test.UI.VWG.PanelBuilder
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+            Assert.IsInstanceOf(typeof(ITextBox), panel.Controls[1]);
             ITextBox control = (ITextBox)panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Right, control.TextAlign);
         }

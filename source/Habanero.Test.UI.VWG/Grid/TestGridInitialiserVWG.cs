@@ -70,7 +70,7 @@ namespace Habanero.Test.UI.VWG.Grid
             Assert.AreEqual(6, grid.Grid.Columns.Count);
             IDataGridViewColumn column3 = grid.Grid.Columns[3];
             Assert.AreEqual("TestDateTime", column3.Name);
-            Assert.IsInstanceOfType(typeof(IDataGridViewColumn), column3);
+            Assert.IsInstanceOf(typeof(IDataGridViewColumn), column3);
             AssertGridColumnTypeAfterCast(column3, customColumnType);
         }
     

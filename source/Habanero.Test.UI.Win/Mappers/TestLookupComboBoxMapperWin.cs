@@ -143,7 +143,7 @@ namespace Habanero.Test.UI.Win.Mappers
             //---------------Execute Test ----------------------
             cmbox.SelectedItem = LOOKUP_ITEM_2;
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof(ComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
         }
 
@@ -161,7 +161,7 @@ namespace Habanero.Test.UI.Win.Mappers
             //---------------Execute Test ----------------------
             cmbox.Text = "Test2";
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof(ComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
         }
 
@@ -182,7 +182,7 @@ namespace Habanero.Test.UI.Win.Mappers
             cmbox.CallSendKeyBob();
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_2), s.SampleLookupID);
         }
 
@@ -203,7 +203,7 @@ namespace Habanero.Test.UI.Win.Mappers
             cmbox.SelectedItem = LOOKUP_ITEM_2;
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreEqual((Guid)GetGuidValue(Sample.LookupCollection, LOOKUP_ITEM_1), s.SampleLookupID);
             //---------------Tear Down -------------------------
         }

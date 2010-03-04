@@ -409,7 +409,7 @@ namespace Habanero.Test.UI.Base.Controllers
             ITabPage page = selectorManger.TabControl.TabPages[0];
             Assert.AreEqual(1, page.Controls.Count);
             IControlHabanero boControl = page.Controls[0];
-            Assert.IsInstanceOfType(TypeOfBusinessObjectControl(), boControl);
+            Assert.IsInstanceOf(TypeOfBusinessObjectControl(), boControl);
             IBusinessObjectControl businessObjectControl = (IBusinessObjectControl) boControl;
             Assert.AreSame(expectedBO, businessObjectControl.BusinessObject);
             Assert.AreSame(boControl, selectorManger.BusinessObjectControl);

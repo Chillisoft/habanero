@@ -24,8 +24,8 @@ namespace Habanero.Test.UI.Win.Grid
             //---------------Test Result -----------------------
             DataGridViewColumnWin columnWin = (DataGridViewColumnWin)createdColumn;
             System.Windows.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
-            Assert.IsInstanceOfType(typeof(DataGridViewNumericUpDownColumn), column);
-            Assert.IsInstanceOfType(typeof(DataGridViewNumericUpDownColumnWin), createdColumn);
+            Assert.IsInstanceOf(typeof(DataGridViewNumericUpDownColumn), column);
+            Assert.IsInstanceOf(typeof(DataGridViewNumericUpDownColumnWin), createdColumn);
             Assert.IsTrue(typeof(DataGridViewNumericUpDownColumn).IsSubclassOf(typeof(System.Windows.Forms.DataGridViewColumn)));
         }
 
@@ -37,7 +37,7 @@ namespace Habanero.Test.UI.Win.Grid
             //---------------Execute Test ----------------------
             DataGridViewNumericUpDownColumn dtColumn = new DataGridViewNumericUpDownColumn();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(NumericUpDownCell), dtColumn.CellTemplate);
+            Assert.IsInstanceOf(typeof(NumericUpDownCell), dtColumn.CellTemplate);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace Habanero.Test.UI.Win.Grid
             Assert.AreEqual("0.00", numericUpDownCell.Style.Format);
             Assert.AreEqual(typeof(NumericUpDownEditingControl), numericUpDownCell.EditType);
             Assert.AreEqual(typeof(Decimal), numericUpDownCell.ValueType);
-            Assert.IsInstanceOfType(typeof(Decimal), numericUpDownCell.DefaultNewRowValue);
+            Assert.IsInstanceOf(typeof(Decimal), numericUpDownCell.DefaultNewRowValue);
 
             Decimal newRowValue = (Decimal)numericUpDownCell.DefaultNewRowValue;
             Assert.AreEqual(0D, newRowValue);

@@ -105,20 +105,20 @@ namespace Habanero.Test.UI.VWG.Menu
             menu.DockInForm(form);
             //---------------Test Result -----------------------
             IControlHabanero control = form.Controls[0];
-            Assert.IsInstanceOfType(typeof(ISplitContainer), control);
+            Assert.IsInstanceOf(typeof(ISplitContainer), control);
             Gizmox.WebGUI.Forms.SplitContainer splitContainerVWG = (Gizmox.WebGUI.Forms.SplitContainer)control;
             Gizmox.WebGUI.Forms.SplitterPanel panel1 = splitContainerVWG.Panel1;
             Assert.AreEqual(250, panel1.Width);
             Assert.AreEqual(1, panel1.Controls.Count);
             IControlHabanero menuControl = (IControlHabanero)panel1.Controls[0];
-            Assert.IsInstanceOfType(typeof(ICollapsiblePanelGroupControl), menuControl);
+            Assert.IsInstanceOf(typeof(ICollapsiblePanelGroupControl), menuControl);
             panel1.Size = new Size(121, 333);
             Assert.AreEqual(panel1.Width, menuControl.Width);
 
             Gizmox.WebGUI.Forms.SplitterPanel panel2 = splitContainerVWG.Panel2;
             Assert.AreEqual(1, panel2.Controls.Count);
             IControlHabanero editorControl = (IControlHabanero)panel2.Controls[0];
-            Assert.IsInstanceOfType(typeof(MainEditorPanelVWG), editorControl);
+            Assert.IsInstanceOf(typeof(MainEditorPanelVWG), editorControl);
             panel2.Size = new Size(321, 514);
             Assert.AreEqual(panel2.Width, editorControl.Width);
             Assert.AreEqual(panel2.Height, editorControl.Height);
@@ -128,13 +128,13 @@ namespace Habanero.Test.UI.VWG.Menu
         {
             Assert.AreEqual(1, form.Controls.Count, "No container control found in form");
             IControlHabanero splitCntrl = form.Controls[0];
-            Assert.IsInstanceOfType(typeof(ISplitContainer), splitCntrl);
+            Assert.IsInstanceOf(typeof(ISplitContainer), splitCntrl);
             Gizmox.WebGUI.Forms.SplitContainer splitContainerVWG = (Gizmox.WebGUI.Forms.SplitContainer)splitCntrl;
 
             Gizmox.WebGUI.Forms.SplitterPanel panel2 = splitContainerVWG.Panel2;
             Assert.AreEqual(1, panel2.Controls.Count);
             IControlHabanero editorControl = (IControlHabanero)panel2.Controls[0];
-            Assert.IsInstanceOfType(typeof(IMainEditorPanel), editorControl);
+            Assert.IsInstanceOf(typeof(IMainEditorPanel), editorControl);
             IMainEditorPanel mainEditorPanel = (IMainEditorPanel)editorControl;
             IControlHabanero contentControl = mainEditorPanel.EditorPanel;
 

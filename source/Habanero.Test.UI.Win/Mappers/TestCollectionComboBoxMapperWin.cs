@@ -105,7 +105,7 @@ namespace Habanero.Test.UI.Win.Mappers
             //---------------Execute Test ----------------------
             cmbox.Text = car2.ToString();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof(ComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreEqual(car2.CarID, s.SampleLookupID);
         }
 
@@ -129,7 +129,7 @@ namespace Habanero.Test.UI.Win.Mappers
             cmbox.Text = car2.ToString();
             cmbox.CallSendKeyBob();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreEqual(car2.CarID, s.SampleLookupID);
         }
 
@@ -151,7 +151,7 @@ namespace Habanero.Test.UI.Win.Mappers
             cmbox.SelectedItem = car2;
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+            Assert.IsInstanceOf(typeof(ComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
             Assert.AreEqual(car1.CarID, s.SampleLookupID);
         }
 

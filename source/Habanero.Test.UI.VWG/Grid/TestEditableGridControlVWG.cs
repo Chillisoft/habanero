@@ -52,9 +52,9 @@ namespace Habanero.Test.UI.VWG.Grid
         {
             Form formVWG = (Form)form;
             Assert.AreEqual(3, formVWG.Controls[0].Controls.Count);
-            Assert.IsInstanceOfType(typeof(IFilterControl), formVWG.Controls[0].Controls[1]);
-            Assert.IsInstanceOfType(typeof(IEditableGrid), formVWG.Controls[0].Controls[0]);
-            Assert.IsInstanceOfType(typeof(IButtonGroupControl), formVWG.Controls[0].Controls[2]);
+            Assert.IsInstanceOf(typeof(IFilterControl), formVWG.Controls[0].Controls[1]);
+            Assert.IsInstanceOf(typeof(IEditableGrid), formVWG.Controls[0].Controls[0]);
+            Assert.IsInstanceOf(typeof(IButtonGroupControl), formVWG.Controls[0].Controls[2]);
         }
 
         protected override IEditableGridControl CreateEditableGridControl()
@@ -137,7 +137,7 @@ namespace Habanero.Test.UI.VWG.Grid
             //---------------Test Result -----------------------
             IDataGridViewColumn column = gridControl.Grid.Columns["TestBoolean"];
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(typeof(DataGridViewCheckBoxColumnVWG), column);
+            Assert.IsInstanceOf(typeof(DataGridViewCheckBoxColumnVWG), column);
             //---------------Tear Down -------------------------          
         }
 

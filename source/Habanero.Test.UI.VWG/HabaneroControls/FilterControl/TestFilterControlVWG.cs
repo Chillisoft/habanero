@@ -25,7 +25,7 @@ namespace Habanero.Test.UI.VWG.HabaneroControls
             //            IControlHabanero control = factory.CreatePanel();
             IFilterControl ctl = factory.CreateFilterControl();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(FlowLayoutManager), ctl.LayoutManager);
+            Assert.IsInstanceOf(typeof(FlowLayoutManager), ctl.LayoutManager);
         }
 
         [Test]

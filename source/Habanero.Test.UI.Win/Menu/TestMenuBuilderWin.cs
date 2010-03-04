@@ -115,7 +115,7 @@ namespace Habanero.Test.UI.Win.Menu
             Assert.AreEqual(1, winForm.MdiChildren.Length);
             childForm = winForm.MdiChildren[0];
             Assert.AreEqual(1, childForm.Controls.Count);
-            Assert.IsInstanceOfType(typeof(FormControlStubWin), winForm.MdiChildren[0].Controls[0]);
+            Assert.IsInstanceOf(typeof(FormControlStubWin), winForm.MdiChildren[0].Controls[0]);
             Assert.AreNotSame(expectedFormControl, winForm.MdiChildren[0].Controls[0]);
 
 

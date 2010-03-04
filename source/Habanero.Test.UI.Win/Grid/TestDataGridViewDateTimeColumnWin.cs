@@ -26,8 +26,8 @@ namespace Habanero.Test.UI.Win.Grid
             //---------------Test Result -----------------------
             DataGridViewColumnWin columnWin = (DataGridViewColumnWin)createdColumn;
             System.Windows.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
-            Assert.IsInstanceOfType(typeof(DataGridViewDateTimeColumn), column);
-            Assert.IsInstanceOfType(typeof(DataGridViewDateTimeColumnWin), createdColumn);
+            Assert.IsInstanceOf(typeof(DataGridViewDateTimeColumn), column);
+            Assert.IsInstanceOf(typeof(DataGridViewDateTimeColumnWin), createdColumn);
             Assert.IsTrue(typeof(DataGridViewDateTimeColumn).IsSubclassOf(typeof(System.Windows.Forms.DataGridViewColumn)));
         }
 
@@ -39,7 +39,7 @@ namespace Habanero.Test.UI.Win.Grid
             //---------------Execute Test ----------------------
             DataGridViewDateTimeColumn dtColumn = new DataGridViewDateTimeColumn();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(CalendarCell), dtColumn.CellTemplate);
+            Assert.IsInstanceOf(typeof(CalendarCell), dtColumn.CellTemplate);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace Habanero.Test.UI.Win.Grid
             Assert.AreEqual("d", calendarCell.Style.Format);
             Assert.AreEqual(typeof(CalendarEditingControl), calendarCell.EditType);
             Assert.AreEqual(typeof(DateTime), calendarCell.ValueType);
-            Assert.IsInstanceOfType(typeof(DateTime), calendarCell.DefaultNewRowValue);
+            Assert.IsInstanceOf(typeof(DateTime), calendarCell.DefaultNewRowValue);
 
             DateTime newRowValue = (DateTime)calendarCell.DefaultNewRowValue;
             Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(newRowValue, 10));

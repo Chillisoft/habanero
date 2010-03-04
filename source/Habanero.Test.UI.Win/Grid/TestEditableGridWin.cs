@@ -463,8 +463,8 @@ namespace Habanero.Test.UI.Win.Grid
 
             //---------------Test Result -----------------------
             Assert.IsFalse(confirmationDelegateCalled);
-            Assert.IsInstanceOfType(typeof(DBNull), editableGrid.Rows[0].Cells[0].Value);
-            Assert.IsInstanceOfType(typeof(DBNull), editableGrid.Rows[1].Cells[0].Value);
+            Assert.IsInstanceOf(typeof(DBNull), editableGrid.Rows[0].Cells[0].Value);
+            Assert.IsInstanceOf(typeof(DBNull), editableGrid.Rows[1].Cells[0].Value);
             Assert.AreEqual("c", editableGrid.Rows[2].Cells[0].Value);
         }
 
@@ -514,7 +514,7 @@ namespace Habanero.Test.UI.Win.Grid
             Assert.AreEqual(1, editableGrid.CurrentCell.ColumnIndex);
             System.Windows.Forms.DataGridViewColumn column =
                 ((DataGridViewColumnWin)editableGrid.Columns[2]).DataGridViewColumn;
-            Assert.IsInstanceOfType(typeof(System.Windows.Forms.DataGridViewComboBoxColumn), column);
+            Assert.IsInstanceOf(typeof(System.Windows.Forms.DataGridViewComboBoxColumn), column);
             //---------------Execute Test ----------------------
             bool setToEditMode = ((EditableGridWin)editableGrid).CheckIfComboBoxShouldSetToEditMode(1, 0);
             //---------------Test Result -----------------------
@@ -531,7 +531,7 @@ namespace Habanero.Test.UI.Win.Grid
             IFormHabanero formWin = AddControlToForm(editableGrid);
             formWin.Show();
             //---------------Assert Precondition----------------
-            Assert.IsNotInstanceOfType(typeof(IDataGridViewComboBoxColumn), editableGrid.Columns[0]);
+            Assert.IsNotInstanceOf(typeof(IDataGridViewComboBoxColumn), editableGrid.Columns[0]);
             //---------------Execute Test ----------------------
             bool setToEditMode = ((EditableGridWin)editableGrid).CheckIfComboBoxShouldSetToEditMode(0, 0);
             //---------------Test Result -----------------------
@@ -558,7 +558,7 @@ namespace Habanero.Test.UI.Win.Grid
             Assert.AreEqual(1, editableGrid.CurrentCell.ColumnIndex);
             System.Windows.Forms.DataGridViewColumn column =
                 ((DataGridViewColumnWin)editableGrid.Columns[2]).DataGridViewColumn;
-            Assert.IsInstanceOfType(typeof(System.Windows.Forms.DataGridViewComboBoxColumn), column);
+            Assert.IsInstanceOf(typeof(System.Windows.Forms.DataGridViewComboBoxColumn), column);
 
             //---------------Execute Test ----------------------
             bool setToEditMode = ((EditableGridWin)editableGrid).CheckIfComboBoxShouldSetToEditMode(1, 0);
@@ -585,7 +585,7 @@ namespace Habanero.Test.UI.Win.Grid
             Assert.AreEqual(1, editableGrid.CurrentCell.ColumnIndex);
             System.Windows.Forms.DataGridViewColumn column =
                 ((DataGridViewColumnWin)editableGrid.Columns[2]).DataGridViewColumn;
-            Assert.IsInstanceOfType(typeof(System.Windows.Forms.DataGridViewComboBoxColumn), column);
+            Assert.IsInstanceOf(typeof(System.Windows.Forms.DataGridViewComboBoxColumn), column);
 
             //---------------Execute Test ----------------------
             bool setToEditMode = ((EditableGridWin)editableGrid).CheckIfComboBoxShouldSetToEditMode(-1, -1);

@@ -57,7 +57,7 @@ namespace Habanero.Test.UI.Base.Mappers
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
                 extendedComboBox, propName, false, controlFactory);
             //--------------- Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IControlMapper), mapper);
+            Assert.IsInstanceOf(typeof(IControlMapper), mapper);
             Assert.AreSame(extendedComboBox, mapper.Control);
             Assert.AreEqual(propName, mapper.PropertyName);
             Assert.AreEqual(false, mapper.IsReadOnly);
@@ -85,7 +85,7 @@ namespace Habanero.Test.UI.Base.Mappers
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
                 extendedComboBox, propName, true, controlFactory);
             //--------------- Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(IControlMapper), mapper);
+            Assert.IsInstanceOf(typeof(IControlMapper), mapper);
             Assert.AreEqual(true, mapper.IsReadOnly);
             ExtendedComboBoxMapper lookupComboBoxMapper = mapper;
             Assert.IsNotNull(lookupComboBoxMapper);
@@ -244,7 +244,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(1, form.Controls.Count);
             Assert.AreEqual(DockStyle.Fill, form.Controls[0].Dock);
 
-            Assert.IsInstanceOfType(typeof(IBOGridAndEditorControl), form.Controls[0]);
+            Assert.IsInstanceOf(typeof(IBOGridAndEditorControl), form.Controls[0]);
             IBOGridAndEditorControl andBOGridAndEditorControlWin = (IBOGridAndEditorControl)form.Controls[0];
             //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BOEditorControlWin.BusinessObject);
             Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);
@@ -284,7 +284,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(1, form.Controls.Count);
             Assert.AreEqual(DockStyle.Fill, form.Controls[0].Dock);
 
-            Assert.IsInstanceOfType(typeof(IBOGridAndEditorControl), form.Controls[0]);
+            Assert.IsInstanceOf(typeof(IBOGridAndEditorControl), form.Controls[0]);
             IBOGridAndEditorControl andBOGridAndEditorControlWin = (IBOGridAndEditorControl)form.Controls[0];
             //Assert.AreSame(mapper.BusinessObject, BOGridAndEditorControlWin.BOEditorControlWin.BusinessObject);
             Assert.IsTrue(andBOGridAndEditorControlWin.GridControl.IsInitialised);

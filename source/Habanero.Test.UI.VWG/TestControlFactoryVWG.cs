@@ -216,7 +216,7 @@ namespace Habanero.Test.UI.VWG
                 CreateDataGridViewColumn("DataGridViewImageColumn", null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(dataGridViewColumn);
-            Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), dataGridViewColumn);
+            Assert.IsInstanceOf(typeof(IDataGridViewImageColumn), dataGridViewColumn);
             Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
         }
         [Test, Ignore("Not implemented for VWG")]
@@ -244,7 +244,7 @@ namespace Habanero.Test.UI.VWG
             IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn(typeName, assemblyName);
             //---------------Test Result -----------------------
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(GetHabaneroMasterGridColumnType(), column);
+            Assert.IsInstanceOf(GetHabaneroMasterGridColumnType(), column);
             AssertGridColumnTypeAfterCast(column, columnType);
         }
 
@@ -259,7 +259,7 @@ namespace Habanero.Test.UI.VWG
             IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn(columnType);
             //---------------Test Result -----------------------
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(GetHabaneroMasterGridColumnType(), column);
+            Assert.IsInstanceOf(GetHabaneroMasterGridColumnType(), column);
             AssertGridColumnTypeAfterCast(column, columnType);
         }
 
@@ -274,7 +274,7 @@ namespace Habanero.Test.UI.VWG
             object column = GetControlFactory().CreateDataGridViewColumn(typeName, null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(typeof(IDataGridViewCheckBoxColumn), column);
+            Assert.IsInstanceOf(typeof(IDataGridViewCheckBoxColumn), column);
 
             string correctAssembly = GetControlFactory().CreateDataGridViewCheckBoxColumn().GetType().AssemblyQualifiedName;
             Assert.AreEqual(correctAssembly, column.GetType().AssemblyQualifiedName);

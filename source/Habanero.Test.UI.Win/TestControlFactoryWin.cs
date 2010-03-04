@@ -224,7 +224,7 @@ namespace Habanero.Test.UI.Win
             IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn(typeName, assemblyName);
             //---------------Test Result -----------------------
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(GetHabaneroMasterGridColumnType(), column);
+            Assert.IsInstanceOf(GetHabaneroMasterGridColumnType(), column);
             AssertGridColumnTypeAfterCast(column, columnType);
         }
         [Test]
@@ -238,7 +238,7 @@ namespace Habanero.Test.UI.Win
             IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn(columnType);
             //---------------Test Result -----------------------
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(GetHabaneroMasterGridColumnType(), column);
+            Assert.IsInstanceOf(GetHabaneroMasterGridColumnType(), column);
             AssertGridColumnTypeAfterCast(column, columnType);
         }
 
@@ -253,7 +253,7 @@ namespace Habanero.Test.UI.Win
             object column = GetControlFactory().CreateDataGridViewColumn(typeName, null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(column);
-            Assert.IsInstanceOfType(typeof(IDataGridViewCheckBoxColumn), column);
+            Assert.IsInstanceOf(typeof(IDataGridViewCheckBoxColumn), column);
 
             string correctAssembly = GetControlFactory().CreateDataGridViewCheckBoxColumn().GetType().AssemblyQualifiedName;
             Assert.AreEqual(correctAssembly, column.GetType().AssemblyQualifiedName);
