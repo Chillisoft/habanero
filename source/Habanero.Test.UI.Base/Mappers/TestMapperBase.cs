@@ -19,8 +19,8 @@
 
 using System;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using Rhino.Mocks;
 //using NMock;
 
@@ -29,45 +29,49 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// Summary description for TestMapperBase.
     /// </summary>
-    public class TestMapperBase : TestUsingDatabase
+    public class TestMapperBase //: TestUsingDatabase
     {
         protected MyBO itsMyBo;
 
         public TestMapperBase()
         {
-            base.SetupDBConnection();
+            //base.SetupDBConnection();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         protected void SetupClassDefs(object propValue)
         {
-            MockRepository mock = new MockRepository();
-
-            //Mock mockDbConnection = new DynamicMock(typeof (IDatabaseConnection));
-            //IDatabaseConnection connection = (IDatabaseConnection) mockDbConnection.MockInstance;
-            IDatabaseConnection connection = mock.StrictMock<IDatabaseConnection>();
-
-            //Mock relColControl = new DynamicMock(typeof (IRelationshipCol));
-            //IRelationshipCol mockRelCol = (IRelationshipCol) relColControl.MockInstance;
-            IRelationshipCol mockRelCol = mock.StrictMock<IRelationshipCol>();
-
             ClassDef.ClassDefs.Clear();
             IClassDef itsClassDef = MyBO.LoadClassDefWithRelationship();
             IClassDef itsRelatedClassDef = MyRelatedBo.LoadClassDef();
-            //itsMyBo = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
             itsMyBo = (MyBO)itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo = (MyRelatedBo)itsRelatedClassDef.CreateNewBusinessObject();
             Guid myRelatedBoGuid = relatedBo.ID.GetAsGuid();
             itsMyBo.SetPropertyValue("RelatedID", myRelatedBoGuid);
             relatedBo.SetPropertyValue("MyRelatedTestProp", propValue);
-            ((IBusinessObject)itsMyBo).Relationships = mockRelCol;
-
-            //relColControl.ExpectAndReturn("GetRelatedObject", relatedBo, new object[] {"MyRelationship"});
-            Expect.Call(mockRelCol.GetRelatedObject("MyRelationship")).Return(relatedBo).Repeat.Any();
-
-            //mockDbConnection.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(), new object[] {});
-            Expect.Call(connection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).Repeat.Any();
-
-            mock.ReplayAll();
+            itsMyBo.Save();
+            relatedBo.Save();
         }
-    }
+        //protected void SetupClassDefs(object propValue)
+        //{
+        //    MockRepository mock = new MockRepository();
+        //    IDatabaseConnection connection = mock.StrictMock<IDatabaseConnection>();
+        //    IRelationshipCol mockRelCol = mock.StrictMock<IRelationshipCol>();
+
+        //    ClassDef.ClassDefs.Clear();
+        //    IClassDef itsClassDef = MyBO.LoadClassDefWithRelationship();
+        //    IClassDef itsRelatedClassDef = MyRelatedBo.LoadClassDef();
+        //    itsMyBo = (MyBO)itsClassDef.CreateNewBusinessObject();
+        //    MyRelatedBo relatedBo = (MyRelatedBo)itsRelatedClassDef.CreateNewBusinessObject();
+        //    Guid myRelatedBoGuid = relatedBo.ID.GetAsGuid();
+        //    itsMyBo.SetPropertyValue("RelatedID", myRelatedBoGuid);
+        //    relatedBo.SetPropertyValue("MyRelatedTestProp", propValue);
+        //    ((IBusinessObject)itsMyBo).Relationships = mockRelCol;
+
+        //    Expect.Call(mockRelCol.GetRelatedObject("MyRelationship")).Return(relatedBo).Repeat.Any();
+        //    Expect.Call(connection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).Repeat.Any();
+
+        //    mock.ReplayAll();
+        //}
+        }
 }

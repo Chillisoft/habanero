@@ -21,42 +21,10 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// This test class tests the base inherited methods of the GroupBoxGroupControl class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_GroupBoxGroupControl : TestBaseMethods.TestBaseMethodsWin
+    public abstract class TestGroupBoxGroupControl
     {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateGroupBoxGroupControl();
-        }
-    }
+        protected abstract IControlFactory GetControlFactory();
 
-    /// <summary>
-    /// This test class tests the base inherited methods of the GroupBoxGroupControl class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_GroupBoxGroupControl : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateGroupBoxGroupControl();
-        }
-    }
-
-    /// <summary>
-    /// This test class tests the GroupBoxGroupControl class.
-    /// </summary>
-    [TestFixture]
-    public class TestGroupBoxGroupControlVWG
-    {
-        protected virtual IControlFactory GetControlFactory()
-        {
-            Habanero.UI.VWG.ControlFactoryVWG factory = new Habanero.UI.VWG.ControlFactoryVWG();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
         [Test]
         public virtual void Test_TestAddControl()
         {
@@ -79,15 +47,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, groupBox.Controls.Count);
         }
     }
-    [TestFixture]
-    public class TestGroupBoxGroupControlWin:TestGroupBoxGroupControlVWG
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            Habanero.UI.Win.ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
-    }
+
 
 }

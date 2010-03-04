@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -28,23 +28,7 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        //[TestFixture]
-        //public class TestDateRangeComboBoxWin : TestDateRangeComboBox
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new ControlFactoryWin();
-        //    }
-        //}
 
-        [TestFixture]
-        public class TestDateRangeComboBoxVWG : TestDateRangeComboBox
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
 
         private IDateRangeComboBox _comboBox;
         private int _numDefaultOptions;
@@ -84,8 +68,6 @@ namespace Habanero.Test.UI.Base
                 "There should b an extra item in the combo box for the user hint");
             Assert.AreEqual("(Date Ranges)", _comboBox.Items[0], "The user hint should be set as the first item");
             Assert.AreEqual("Today", _comboBox.Items[1].ToString(), "First selectable item");
-            ITextBox stdTextBox = GetControlFactory().CreateTextBox();
-            Assert.AreEqual(stdTextBox.Height, comboBox.Height);
         }
 
         [Test]

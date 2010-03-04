@@ -17,8 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -27,40 +27,8 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestControlCollectionWin : TestControlCollection
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-            [Test]
-            public void TestAddControl()
-            {
-                TextBoxWin tb = (TextBoxWin)GetControlFactory().CreateTextBox();
-                IControlCollection col = new ControlCollectionWin(new System.Windows.Forms.Control.ControlCollection(tb));
-                IControlHabanero ctl = GetControlFactory().CreateControl();
-                col.Add(ctl);
-                Assert.AreSame(ctl, col[0], "Control added should be the same object.");
-            }
-        }
+      
 
-        [TestFixture]
-        public class TestControlCollectionVWG : TestControlCollection
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }       [Test]
-        public void TestAddControl()
-        {
-            TextBoxVWG tb = (TextBoxVWG) GetControlFactory().CreateTextBox();
-            IControlCollection col = new ControlCollectionVWG(new Gizmox.WebGUI.Forms.Control.ControlCollection(tb));
-            IControlHabanero ctl = GetControlFactory().CreateControl();
-            col.Add(ctl);
-            Assert.AreSame(ctl, col[0], "Control added should be the same object.");
-        }
-        }
  
 
         //[Test]

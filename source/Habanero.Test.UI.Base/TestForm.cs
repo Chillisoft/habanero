@@ -21,67 +21,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// This test class tests the base inherited methods of the Form class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_Form : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateForm();
-        }
 
-        private IFormHabanero CreateForm()
-        {
-            IControlHabanero control = CreateControl();
-            return (IFormHabanero) control;
-        }
 
-        [Test]
-        public virtual void Test_FormBorderStyle()
-        {
-            //---------------Set up test pack-------------------
-            IFormHabanero formHabanero = CreateForm();
-            FormBorderStyle formBorderStyle = TestUtil.GetRandomEnum<FormBorderStyle>();
-            //-------------Assert Preconditions -------------
-            //---------------Execute Test ----------------------
-            formHabanero.FormBorderStyle = formBorderStyle;
-            //---------------Test Result -----------------------
-            Assert.AreEqual(formBorderStyle, formHabanero.FormBorderStyle);
-        }
-    }
-
-    /// <summary>
-    /// This test class tests the base inherited methods of the Form class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_Form : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateForm();
-        }
-
-        private IFormHabanero CreateForm()
-        {
-            IControlHabanero control = CreateControl();
-            return (IFormHabanero)control;
-        }
-
-        [Test]
-        public virtual void Test_FormBorderStyle()
-        {
-            //---------------Set up test pack-------------------
-            IFormHabanero formHabanero = CreateForm();
-            FormBorderStyle formBorderStyle = TestUtil.GetRandomEnum<FormBorderStyle>();
-            //-------------Assert Preconditions -------------
-            //---------------Execute Test ----------------------
-            formHabanero.FormBorderStyle = formBorderStyle;
-            //---------------Test Result -----------------------
-            Assert.AreEqual(formBorderStyle, formHabanero.FormBorderStyle);
-        }
-    }
 
     /// <summary>
     /// This test class tests the Form class.

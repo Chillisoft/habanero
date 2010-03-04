@@ -331,6 +331,11 @@ namespace Habanero.UI.Win
 
         private void FilterControl_OnFilter(object sender, EventArgs e)
         {
+            RefreshFilter();
+        }
+
+        public void RefreshFilter()
+        {
             if (FilterMode == FilterModes.Search)
             {
                 string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");

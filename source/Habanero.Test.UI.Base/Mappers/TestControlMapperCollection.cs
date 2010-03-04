@@ -26,80 +26,15 @@ namespace Habanero.Test.UI.Base
     public abstract class TestControlMapperCollection 
     {
         protected abstract IControlFactory GetControlFactory();
-        private const string START_VALUE_1 = "StartValue1";
-        private const string START_VALUE_2 = "StartValue2";
-        private const string TEST_PROP_1 = "TestProp";
-        private const string TEST_PROP_2 = "TestProp2";
-        private const string CHANGED_VALUE_1 = "ChangedValue1";
-        private const string CHANGED_VALUE_2 = "ChangedValue2";
+        protected const string START_VALUE_1 = "StartValue1";
+        protected const string START_VALUE_2 = "StartValue2";
+        protected const string TEST_PROP_1 = "TestProp";
+        protected const string TEST_PROP_2 = "TestProp2";
+        protected const string CHANGED_VALUE_1 = "ChangedValue1";
+        protected const string CHANGED_VALUE_2 = "ChangedValue2";
  
         
-        [TestFixture]
-        public class TestControlMapperCollectionWin : TestControlMapperCollection
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                Habanero.UI.Win.ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
-                GlobalUIRegistry.ControlFactory = factory;
-                return factory;
-            }
 
-            [Test]
-            public void TestChangeControlValues_ChangesBusinessObjectValues()
-            {
-                //---------------Set up test pack-------------------
-                MyBO.LoadDefaultClassDef();
-                MyBO myBO = new MyBO();
-                myBO.TestProp = START_VALUE_1;
-                myBO.SetPropertyValue(TEST_PROP_2, START_VALUE_2);
-
-                PanelBuilder factory = new PanelBuilder(GetControlFactory());
-                IPanelInfo panelInfo = factory.BuildPanelForForm(myBO.ClassDef.UIDefCol["default"].UIForm);
-                panelInfo.BusinessObject = myBO;
-                //---------------Execute Test ----------------------
-                ChangeValuesInControls(panelInfo);
-                panelInfo.FieldInfos[TEST_PROP_1].ControlMapper.ApplyChangesToBusinessObject();
-                panelInfo.FieldInfos[TEST_PROP_2].ControlMapper.ApplyChangesToBusinessObject();
-                //---------------Test Result -----------------------
-
-                Assert.AreEqual(CHANGED_VALUE_1, myBO.GetPropertyValue(TEST_PROP_1));
-                Assert.AreEqual(CHANGED_VALUE_2, myBO.GetPropertyValue(TEST_PROP_2));
-
-            }
-        }
-
-        [TestFixture]
-        public class TestControlMapperCollectionVWG : TestControlMapperCollection
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                Habanero.UI.VWG.ControlFactoryVWG factory = new  Habanero.UI.VWG.ControlFactoryVWG();
-                GlobalUIRegistry.ControlFactory = factory;
-                return factory;
-            }
-
-            [Test]
-            public void TestChangeControlValues_DoesNotChangeBusinessObjectValues()
-            {
-                //---------------Set up test pack-------------------
-                MyBO.LoadDefaultClassDef();
-                MyBO myBO = new MyBO();
-                myBO.TestProp = START_VALUE_1;
-                myBO.SetPropertyValue(TEST_PROP_2, START_VALUE_2);
-
-                PanelBuilder factory = new PanelBuilder(GetControlFactory());
-                IPanelInfo panelInfo = factory.BuildPanelForForm(myBO.ClassDef.UIDefCol["default"].UIForm);
-                panelInfo.BusinessObject = myBO;
-                //---------------Execute Test ----------------------
-                ChangeValuesInControls(panelInfo);
-                //---------------Test Result -----------------------
-
-                Assert.AreEqual(START_VALUE_1, myBO.GetPropertyValue(TEST_PROP_1));
-                Assert.AreEqual(START_VALUE_2, myBO.GetPropertyValue(TEST_PROP_2));
-
-            }
-
-        }
 
         [SetUp]
         public void TestSetup()
@@ -139,8 +74,8 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(START_VALUE_2, panelInfo.FieldInfos[TEST_PROP_2].ControlMapper.Control.Text);
         }
 
-        
-        private static void ChangeValuesInControls(IPanelInfo panelInfo)
+
+        protected static void ChangeValuesInControls(IPanelInfo panelInfo)
         {
             panelInfo.FieldInfos[TEST_PROP_1].ControlMapper.Control.Text = CHANGED_VALUE_1;
             panelInfo.FieldInfos[TEST_PROP_2].ControlMapper.Control.Text = CHANGED_VALUE_2;

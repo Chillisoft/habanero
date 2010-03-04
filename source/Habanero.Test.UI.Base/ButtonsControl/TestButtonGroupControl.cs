@@ -22,8 +22,6 @@ using System.Drawing;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -53,112 +51,9 @@ namespace Habanero.Test.UI.Base
         protected abstract IControlFactory GetControlFactory();
         protected abstract void AddControlToForm(IControlHabanero cntrl);
 
-        [TestFixture]
-        public class TestButtonGroupControlWin : TestButtonGroupControl
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-
-            protected override void AddControlToForm(IControlHabanero cntrl)
-            {
-                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-                frm.Controls.Add((System.Windows.Forms.Control) cntrl);
-            }
-
-            //    //protected override IReadOnlyGridControl CreateReadOnlyGridControl()
-            //    //{
-            //    //    ReadOnlyGridControlWin readOnlyGridControlWin = new ReadOnlyGridControlWin();
-            //    //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-            //    //    frm.Controls.Add(readOnlyGridControlWin);
-            //    //    return readOnlyGridControlWin;
-            //    //}
+     
+      
             [Test]
-            public void Test_SetDefaultButton_WinOnly()
-            {
-                //---------------Set up test pack-------------------
-                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-                IButton btn = buttons.AddButton("Test");
-                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-                frm.Controls.Add((System.Windows.Forms.Control)buttons);
-                //---------------Execute Test ----------------------
-                buttons.SetDefaultButton("Test");
-                //---------------Test Result -----------------------
-                Assert.AreSame(btn, frm.AcceptButton);
-            }
-
-            [Test]
-            public void Test_UseMnemonic_WinOnly()
-            {
-                //---------------Set up test pack-------------------
-                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-
-                //---------------Execute Test ----------------------
-                System.Windows.Forms.Button btn = (System.Windows.Forms.Button)buttons.AddButton("Test", delegate { });
-                //---------------Test Result -----------------------
-                Assert.IsTrue(btn.UseMnemonic);
-            }
-
-            [Test]
-            public void Test_ButtonIndexer_WithASpecialCharactersInTheName_Failing()
-            {
-                //---------------Set up test pack-------------------
-                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-                //---------------Execute Test ----------------------
-                const string buttonText = "T est@";
-                IButton btn = buttons.AddButton(buttonText);
-                //---------------Test Result -----------------------
-                Assert.AreSame(btn, buttons["T est@"]);
-            }
-        }
-
-        [TestFixture]
-        public class TestButtonGroupControlVWG : TestButtonGroupControl
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-
-            protected override void AddControlToForm(IControlHabanero cntrl)
-            {
-                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-                frm.Controls.Add((Gizmox.WebGUI.Forms.Control) cntrl);
-            }
-
-            //TODO_: Note_ this code is not expected to pass in gizmox 
-            // we need to learn how to set this up and the change test assert
-            // to commented out assert.
-            [Test]
-            public void Test_SetDefaultButton()
-            {
-                //---------------Set up test pack-------------------
-                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-                buttons.AddButton("Test");
-                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-                frm.Controls.Add((Gizmox.WebGUI.Forms.Control) buttons);
-                //---------------Execute Test ----------------------
-                buttons.SetDefaultButton("Test");
-                //---------------Test Result -----------------------
-                Assert.AreSame(null, frm.AcceptButton);
-                //Assert.AreSame(btn, frm.AcceptButton);
-            }
-
-            [Test]
-            public void Test_ButtonIndexer_WithASpecialCharactersInTheName_Failing()
-            {
-                //---------------Set up test pack-------------------
-                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-                //---------------Execute Test ----------------------
-                const string buttonText = "T est@";
-                IButton btn = buttons.AddButton(buttonText);
-                //---------------Test Result -----------------------
-                Assert.AreSame(btn, buttons["T est"]);
-            }
-        }
-
-        [Test]
         public void TestCreateButtonGroupControl()
         {
             //---------------Set up test pack-------------------

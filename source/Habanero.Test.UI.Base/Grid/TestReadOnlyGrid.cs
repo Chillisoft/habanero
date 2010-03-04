@@ -20,8 +20,6 @@
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -53,62 +51,8 @@ namespace Habanero.Test.UI.Base
         protected abstract void AddControlToForm(IControlHabanero cntrl);
 
 
-        [TestFixture]
-        public class TestReadOnlyGridWin : TestReadOnlyGrid
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-            protected override void AddControlToForm(IControlHabanero cntrl)
-            {
-                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-                frm.Controls.Add((System.Windows.Forms.Control)cntrl);
-            }
-            [Test]
-            public void TestCreateGridBaseWin()
-            {
-                //---------------Set up test pack-------------------
-                //---------------Execute Test ----------------------
-                IControlHabanero grid = GetControlFactory().CreateReadOnlyGrid();
-                ReadOnlyGridWin readOnlyGrid = (ReadOnlyGridWin)grid;
-                ////---------------Test Result -----------------------
-                Assert.IsTrue(readOnlyGrid.ReadOnly);
-                Assert.IsFalse(readOnlyGrid.AllowUserToAddRows);
-                Assert.IsFalse(readOnlyGrid.AllowUserToDeleteRows);
-                Assert.IsTrue(readOnlyGrid.SelectionMode == System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect);
-                //---------------Tear Down -------------------------   
-            }
-        }
-        [TestFixture]
-        public class TestReadOnlyGridVWG : TestReadOnlyGrid
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
 
-            protected override void AddControlToForm(IControlHabanero cntrl)
-            {
-                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-                frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
-            }
             [Test]
-            public void TestCreateGridBaseVWG()
-            {
-                //---------------Set up test pack-------------------
-                //---------------Execute Test ----------------------
-                IControlHabanero grid = GetControlFactory().CreateReadOnlyGrid();
-                ReadOnlyGridVWG readOnlyGrid = (ReadOnlyGridVWG)grid;
-                ////---------------Test Result -----------------------
-                Assert.IsTrue(readOnlyGrid.ReadOnly);
-                Assert.IsFalse(readOnlyGrid.AllowUserToAddRows);
-                Assert.IsFalse(readOnlyGrid.AllowUserToDeleteRows);
-                Assert.IsTrue(readOnlyGrid.SelectionMode == Gizmox.WebGUI.Forms.DataGridViewSelectionMode.FullRowSelect);                
-            }
-        }
-
-        [Test]
         public void TestCreateGridBase()
         {
             //---------------Set up test pack-------------------

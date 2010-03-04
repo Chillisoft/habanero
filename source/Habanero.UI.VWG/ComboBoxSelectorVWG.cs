@@ -76,7 +76,15 @@ namespace Habanero.UI.VWG
         public IBusinessObject SelectedBusinessObject
         {
             get { return _manager.SelectedBusinessObject; }
-            set { _manager.SelectedBusinessObject = value; }
+            set
+            {
+                _manager.SelectedBusinessObject = value;
+                if (value == null)
+                {
+                    this.SelectedValue = null;
+                    this.Text = null;
+        }
+            }
         }
 
         /// <summary>

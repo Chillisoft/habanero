@@ -83,7 +83,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Sets up the items to be listed in the ComboBox
         /// </summary>
-        protected internal override void SetupComboBoxItems()
+        public override void SetupComboBoxItems()
         {
             if (_businessObject == null)
             {

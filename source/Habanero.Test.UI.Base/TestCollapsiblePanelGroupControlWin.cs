@@ -5,57 +5,18 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.Test.Structure;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// This test class tests the base inherited methods of the CollapsiblePanel class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_CollapsiblePanelGroupControll : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateCollapsiblePanelGroupControl();
-        }
-    }
-
-    /// <summary>
-    /// This test class tests the base inherited methods of the CollapsiblePanel class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_CollapsiblePanelGroupControl : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateCollapsiblePanelGroupControl();
-        }
-    }
-
-
-    /// <summary>
-    /// This test class tests the CollapsiblePanel for Win.
-    /// </summary>
-    [TestFixture]
-    public class TestCollapsiblePanelGroupControlVWG : TestCollapsiblePanelGroupControlWin
-    {
-        protected override IControlFactory GetControlFactory()
-        {
-            GlobalUIRegistry.ControlFactory = new Habanero.UI.VWG.ControlFactoryVWG();
-            return GlobalUIRegistry.ControlFactory;
-        }
-    }
-    [TestFixture]
-    public class TestCollapsiblePanelGroupControlWin
+    public abstract class TestCollapsiblePanelGroupControl
     {
         [TestFixtureSetUp]
         public void SetupFixture()
         {
             ClassDef.ClassDefs.Clear();
             ClassDef.ClassDefs.Add(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()).LoadClassDefs());
-            GlobalUIRegistry.ControlFactory = new ControlFactoryWin();
         }
 
         [SetUp]
@@ -66,13 +27,9 @@ namespace Habanero.Test.UI.Base
 //            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
-        protected virtual IControlFactory GetControlFactory()
-        {
-            GlobalUIRegistry.ControlFactory = new Habanero.UI.Win.ControlFactoryWin();
-            return GlobalUIRegistry.ControlFactory;
-        }
+        protected abstract IControlFactory GetControlFactory();
 
-        protected virtual ICollapsiblePanelGroupControl CreateCollapsiblePanelGroupControlWin()
+        protected ICollapsiblePanelGroupControl CreateCollapsiblePanelGroupControl()
         {
                         return GetControlFactory().CreateCollapsiblePanelGroupControl();
         }
@@ -85,7 +42,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             //---------------Test Result -----------------------
             Assert.IsNotNull(control);
             Assert.IsNotNull(control.PanelsList);
@@ -97,7 +54,7 @@ namespace Habanero.Test.UI.Base
         public void Test_CollapsiblePanelExpandedHeight()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             ICollapsiblePanel collapsiblePanel = control.AddControl(GetControlFactory().CreatePanel(), "", 53);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, control.PanelsList.Count);
@@ -115,7 +72,7 @@ namespace Habanero.Test.UI.Base
         public void Test_AddControl()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, control.PanelsList.Count);
             //---------------Execute Test ----------------------
@@ -131,7 +88,7 @@ namespace Habanero.Test.UI.Base
         public void Test_AddTwoControl()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content2 = GetControlFactory().CreatePanel();
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, control.PanelsList.Count);
@@ -144,11 +101,12 @@ namespace Habanero.Test.UI.Base
             ICollapsiblePanel cp2 = control.PanelsList[1];
             Assert.AreSame(content2, cp2.ContentControl);
         }
+
         [Test]
         public void Test_AddControl_WhenControlIsCollapsiblePanel_ShouldAdd()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl groupControl = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl groupControl = CreateCollapsiblePanelGroupControl();
             ICollapsiblePanel collapsiblePanel = GetControlFactory().CreateCollapsiblePanel("Name");
             collapsiblePanel.MinimumSize = new Size(123, 76);
             //---------------Assert Precondition----------------
@@ -174,7 +132,7 @@ namespace Habanero.Test.UI.Base
         public void Test_AddTwoControl__WhenControlIsCollapsiblePanel_ShouldAdd()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             ICollapsiblePanel collapsiblePanel1 = GetControlFactory().CreateCollapsiblePanel("Panel1");
             collapsiblePanel1.MinimumSize = new Size(123, 76);
             ICollapsiblePanel collapsiblePanel2 = GetControlFactory().CreateCollapsiblePanel("Panel2");
@@ -195,7 +153,7 @@ namespace Habanero.Test.UI.Base
         public void Test_AddControl_TestMinHeight_EqualsButtonHeight_Plus_ControlMinHeight()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content = GetControlFactory().CreatePanel();
             const int contentControlMinimunHeight = 53;
             //---------------Assert Precondition----------------
@@ -214,7 +172,7 @@ namespace Habanero.Test.UI.Base
         public void Test_AddControl_TotalExpandedHeightEquals_CP1_ExpandedHeight()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content = GetControlFactory().CreatePanel();
             ICollapsiblePanel cp1 = control.AddControl(content, "", 53);
             ColumnLayoutManager layoutManager = control.ColumnLayoutManager;
@@ -230,7 +188,7 @@ namespace Habanero.Test.UI.Base
         public void Test_AddTwoControl_TotalExpandedHeightEquals_CP1_CP2_ExpandedHeight()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             ICollapsiblePanel cp1 = control.AddControl(content1, "", 99);
@@ -249,7 +207,7 @@ namespace Habanero.Test.UI.Base
         public void Test_AddControl_PlacesTextOnButton()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content = GetControlFactory().CreatePanel();
             const string headingText = "some text";
             //---------------Assert Precondition----------------
@@ -266,7 +224,7 @@ namespace Habanero.Test.UI.Base
         public void Test_CollapsiblePanels_HasColumnLayout()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             //---------------Assert Precondition----------------
@@ -279,11 +237,12 @@ namespace Habanero.Test.UI.Base
             int expectedCP2_Top = cp1.Height + layoutManager.BorderSize + layoutManager.GapSize;
             Assert.AreEqual(expectedCP2_Top, cp2.Top);
         }
+
         [Test]
         public void Test_UncollapseCP1_MovesCP2_Top()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             ICollapsiblePanel cp1 = control.AddControl(content1, "", 99);
@@ -300,12 +259,11 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(expected_Finish_CP2_Top, cp2.Top);
         }
 
-
         [Test]
         public void TestUncollapsingPanelCollapsingAllOtherPanels()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             ICollapsiblePanel cp1 = control.AddControl(content1, "", 99);
@@ -322,12 +280,11 @@ namespace Habanero.Test.UI.Base
             //---------------Tear down -------------------------
         }
 
-
         [Test]
         public void TestUncollapsingPanelCollapsingAllOtherPanelsExceptPinnedPanels()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             IPanel content3 = GetControlFactory().CreatePanel();
@@ -351,7 +308,7 @@ namespace Habanero.Test.UI.Base
         public void TestUnCollapseAll()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             IPanel content3 = GetControlFactory().CreatePanel();
@@ -374,11 +331,12 @@ namespace Habanero.Test.UI.Base
             }
             //---------------Tear down -------------------------
         }
+
         [Test]
         public void TestCollapseAll()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             IPanel content3 = GetControlFactory().CreatePanel();
@@ -410,12 +368,11 @@ namespace Habanero.Test.UI.Base
             //---------------Tear down -------------------------
         }
 
-
         [Test]
         public void TestCollapseOneAfterAnother()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             IPanel content3 = GetControlFactory().CreatePanel();
@@ -440,7 +397,7 @@ namespace Habanero.Test.UI.Base
         public void TestCollapseAll_DoesNotPreventControlFromExpandingAgain_FixBug()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             IPanel content3 = GetControlFactory().CreatePanel();
@@ -456,11 +413,12 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(collapsiblePanel2.ExpandedHeight, collapsiblePanel2.Height);
         }
+
         [Test]
         public void Test_UncollapsePanel_FiresItemSelected()
         {
             //---------------Set up test pack-------------------
-            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControlWin();
+            ICollapsiblePanelGroupControl control = CreateCollapsiblePanelGroupControl();
             IPanel content1 = GetControlFactory().CreatePanel();
             IPanel content2 = GetControlFactory().CreatePanel();
             IPanel content3 = GetControlFactory().CreatePanel();
@@ -479,6 +437,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(itemSelected);
         }
-
     }
+
 }

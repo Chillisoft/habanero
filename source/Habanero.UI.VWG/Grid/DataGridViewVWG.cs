@@ -196,7 +196,24 @@ namespace Habanero.UI.VWG
         public new IDataGridViewCell CurrentCell
         {
             get { return base.CurrentCell == null ? null : new DataGridViewCellVWG(base.CurrentCell); }
-            set { base.CurrentCell = value == null ? null : ((DataGridViewCellVWG) value).DataGridViewCell; }
+            set
+
+            {
+                //base.CurrentCell = value == null ? null : ((DataGridViewCellVWG) value).DataGridViewCell;
+                if (value == null)
+                {
+                    base.CurrentCell = null;
+                } else
+                {
+                    try
+                    {
+                        base.CurrentCell = ((DataGridViewCellVWG) value).DataGridViewCell;
+                    } catch (ArgumentOutOfRangeException ex)
+                    {
+                        Console.Out.WriteLine(ex.Message);
+        }
+                }
+            }
         }
 
         /// <summary>
@@ -354,7 +371,7 @@ namespace Habanero.UI.VWG
         /// This class is essentially a wrapper for the Visual Web Gui DataGridViewColumnCollection class.
         /// This is implemented so that one generic grid can be used for both windows and Web.
         /// </summary>
-        protected internal class DataGridViewColumnCollectionVWG : IDataGridViewColumnCollection
+        public class DataGridViewColumnCollectionVWG : IDataGridViewColumnCollection
         {
             private readonly DataGridViewColumnCollection _columns;
 
@@ -362,7 +379,7 @@ namespace Habanero.UI.VWG
             /// Constructor for <see cref="DataGridViewColumnCollectionVWG"/>
             /// </summary>
             /// <param name="columns"></param>
-            internal DataGridViewColumnCollectionVWG(DataGridViewColumnCollection columns)
+            public DataGridViewColumnCollectionVWG(DataGridViewColumnCollection columns)
             {
                 if (columns == null) throw new ArgumentNullException("columns");
                 _columns = columns;
@@ -494,7 +511,7 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Represents a row in a DataGridView control
         /// </summary>
-        private class DataGridViewRowVWG : IDataGridViewRow
+        public class DataGridViewRowVWG : IDataGridViewRow
         {
             private readonly DataGridViewRow _dataGridViewRow;
 
@@ -590,6 +607,8 @@ namespace Habanero.UI.VWG
                 get { return _dataGridViewRow.ReadOnly; }
                 set { _dataGridViewRow.ReadOnly = value; }
             }
+
+
         }
 
         /// <summary>

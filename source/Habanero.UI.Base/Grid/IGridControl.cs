@@ -128,8 +128,8 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets and sets the currently selected business object in the grid
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new IBusinessObject SelectedBusinessObject { get; set; }
 
+        void RefreshFilter();
     }
 }

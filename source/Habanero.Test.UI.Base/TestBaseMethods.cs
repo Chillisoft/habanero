@@ -18,8 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -35,40 +35,6 @@ namespace Habanero.Test.UI.Base
             string dockStyleToString = GetUnderlyingDockStyleToString(controlHabanero);
             Assert.AreEqual(dockStyle.ToString(), dockStyleToString);
         }
-
-        public abstract class TestBaseMethodsWin : TestBaseMethods
-        {
-            [STAThread]
-            protected override IControlFactory GetControlFactory()
-            {
-                ControlFactoryWin factory = new ControlFactoryWin();
-                GlobalUIRegistry.ControlFactory = factory;
-                return factory;
-            }
-
-            protected override string GetUnderlyingDockStyleToString(IControlHabanero controlHabanero)
-            {
-                System.Windows.Forms.Control control = (System.Windows.Forms.Control)controlHabanero;
-                return control.Dock.ToString();
-            }
-        }
-
-        public abstract class TestBaseMethodsVWG : TestBaseMethods
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                ControlFactoryVWG factory = new ControlFactoryVWG();
-                GlobalUIRegistry.ControlFactory = factory;
-                return factory;
-            }
-
-            protected override string GetUnderlyingDockStyleToString(IControlHabanero controlHabanero)
-            {
-                Gizmox.WebGUI.Forms.Control control = (Gizmox.WebGUI.Forms.Control)controlHabanero;
-                return control.Dock.ToString();
-            }
-        }
-  
 
         [Test]
         public virtual void TestConversion_DockStyle_None()

@@ -1,15 +1,13 @@
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController
 {
-    [TestFixture]
-    public class TestStringStaticFilter
+    public abstract class TestStringStaticFilter
     {
-        protected virtual IControlFactory GetControlFactory() { return new ControlFactoryWin(); }
-        
+        protected abstract IControlFactory GetControlFactory();
+
         [Test]
         public void TestConstructor_WhenFilterValueNull_ShouldReturnNullFilterClause()
         {
@@ -78,4 +76,6 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
     }
+
+
 }

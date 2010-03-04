@@ -110,7 +110,8 @@ namespace Habanero.UI.VWG
         /// </summary>
         public virtual IButton CreateButton()
         {
-            return new ButtonVWG();
+            ButtonVWG button = new ButtonVWG();
+            return button;
         }
 
         /// <summary>
@@ -289,7 +290,7 @@ namespace Habanero.UI.VWG
         public virtual ILabel CreateLabel(string labelText, bool isBold)
         {
             ILabel lbl = CreateLabel(labelText);
-            lbl.AutoSize = true;
+            lbl.AutoSize = false;
             lbl.Text = labelText;
             ((Label) lbl).FlatStyle = FlatStyle.Standard;
             if (isBold)
@@ -655,7 +656,7 @@ namespace Habanero.UI.VWG
         ///<summary>
         /// Creates a <see cref="ICollapsiblePanel"/>
         ///</summary>
-        public ICollapsiblePanel CreateCollapsiblePanel(string name)
+        public virtual ICollapsiblePanel CreateCollapsiblePanel(string name)
         {
             CollapsiblePanelVWG collapsiblePanel = new CollapsiblePanelVWG(this) {Text = name, Name = name};
             collapsiblePanel.CollapseButton.Text = name;

@@ -17,7 +17,6 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -46,6 +45,7 @@ namespace Habanero.Test.UI.Base
 
     /// <summary>
     /// This test class tests the ListView class.
+    /// TODO: Implement the ListView class
     /// </summary>
     public abstract class TestListView
     {
@@ -60,14 +60,14 @@ namespace Habanero.Test.UI.Base
 //            }
 //        }
 
-        [TestFixture]
-        public class TestLisViewVWG : TestListView
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
+        //[TestFixture]
+        //public class TestLisViewVWG : TestListView
+        //{
+        //    protected override IControlFactory GetControlFactory()
+        //    {
+        //        return new ControlFactoryVWG();
+        //    }
+        //}
         //TODO: Port
 //        [Test]
 //        public void TestListViewConstructor()

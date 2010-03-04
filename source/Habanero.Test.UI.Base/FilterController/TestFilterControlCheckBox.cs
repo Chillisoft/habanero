@@ -19,14 +19,11 @@
 
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
-    public class TestFilterControlCheckBox
+    public abstract class TestFilterControlCheckBox
     {
         #region Setup/Teardown
 
@@ -43,6 +40,7 @@ namespace Habanero.Test.UI.Base
         }
 
         #endregion
+        protected abstract IControlFactory GetControlFactory();
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -51,11 +49,13 @@ namespace Habanero.Test.UI.Base
             // are executed then it will still only be called once.
         }
 
-        public void TestAddCheckBox(IControlFactory factory)
+
+
+        public void TestAddCheckBox()
         {
             //---------------Set up test pack-------------------
             //IFilterClause nullClause = new DataViewNullFilterClause();
-            IFilterControl filterControl = factory.CreateFilterControl();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
             //---------------Execute Test ----------------------
             const string labelName = "aa";
             IControlHabanero cb = filterControl.AddBooleanFilterCheckBox(labelName, "", true);
@@ -69,11 +69,11 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        public void TestAddStringFilterCheckBox(IControlFactory factory)
+        public void TestAddStringFilterCheckBox()
         {
             //---------------Set up test pack-------------------
             IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
-            IFilterControl filterControl = factory.CreateFilterControl();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
             //---------------Execute Test ----------------------
             filterControl.AddBooleanFilterCheckBox("Test?", "TestColumn", true);
             //---------------Test Result -----------------------
@@ -85,11 +85,11 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        public void TestGetCheckBoxFilterClause(IControlFactory factory)
+        public void TestGetCheckBoxFilterClause()
         {
             //---------------Set up test pack-------------------
             IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
-            IFilterControl filterControl = factory.CreateFilterControl();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
             ICheckBox checkBox = filterControl.AddBooleanFilterCheckBox("Test?", "TestColumn", true);
 
             //---------------Execute Test ----------------------
@@ -104,11 +104,11 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        public void TestTwoCheckBoxFilter(IControlFactory factory)
+        public void TestTwoCheckBoxFilter()
         {
             //---------------Set up test pack-------------------
             IFilterClauseFactory itsFilterClauseFactory = new DataViewFilterClauseFactory();
-            IFilterControl filterControl = factory.CreateFilterControl();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
             filterControl.AddBooleanFilterCheckBox("Test1?", "TestColumn1", true);
             filterControl.AddBooleanFilterCheckBox("Test2?", "TestColumn2", false);
 
@@ -127,52 +127,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
-        public void TestAddCheckBoxVWG()
-        {
-            TestAddCheckBox(new ControlFactoryVWG());
+        
         }
-
-        [Test]
-        public void TestAddCheckBoxWinForms()
-        {
-            TestAddCheckBox(new ControlFactoryWin());
-        }
-
-        [Test]
-        public void TestAddStringFilterCheckBoxVWG()
-        {
-            TestAddStringFilterCheckBox(new ControlFactoryVWG());
-        }
-
-        [Test]
-        public void TestAddStringFilterCheckBoxWinForms()
-        {
-            TestAddStringFilterCheckBox(new ControlFactoryWin());
-        }
-
-        [Test]
-        public void TestGetCheckBoxFilterClauseVWG()
-        {
-            TestGetCheckBoxFilterClause(new ControlFactoryVWG());
-        }
-
-        [Test]
-        public void TestGetCheckBoxFilterClauseWinForms()
-        {
-            TestGetCheckBoxFilterClause(new ControlFactoryWin());
-        }
-
-        [Test]
-        public void TestTwoCheckBoxFilterVWG()
-        {
-            TestTwoCheckBoxFilter(new ControlFactoryVWG());
-        }
-
-        [Test]
-        public void TestTwoCheckBoxFilterWinForms()
-        {
-            TestTwoCheckBoxFilter(new ControlFactoryWin());
-        }
-    }
 }

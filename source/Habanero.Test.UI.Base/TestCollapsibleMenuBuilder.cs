@@ -6,14 +6,13 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.Test.Structure;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
-    public class TestCollapsibleMenuBuilderVWG
+    public abstract class TestCollapsibleMenuBuilder
     {
         [SetUp]
         public void SetupTest()
@@ -27,31 +26,15 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             ClassDef.ClassDefs.Add(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()).LoadClassDefs());
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            GlobalUIRegistry.ControlFactory = new ControlFactoryVWG();
+            GlobalUIRegistry.ControlFactory = GetControlFactory();
             GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
 
-        protected virtual IControlFactory GetControlFactory()
-        {
-            IControlFactory factory = CreateControlFactory();
-            GlobalUIRegistry.ControlFactory = factory;
-            return factory;
-        }
+        protected abstract IControlFactory CreateControlFactory();
+        protected abstract IFormControlStub CreateFormControlStub();
+        protected abstract IMenuBuilder CreateMenuBuilder();
+        protected abstract void AssertControlDockedInForm(IControlHabanero control, IControlHabanero form);
 
-        protected virtual IControlFactory CreateControlFactory()
-        {
-            return new ControlFactoryVWG();
-        }
-
-        protected virtual IFormControlStub CreateFormControlStub()
-        {
-            return new FormControlStubVWG();
-        }
-
-        protected virtual IMenuBuilder CreateMenuBuilder()
-        {
-            return new CollapsibleMenuBuilderVWG(GetControlFactory());
-        }
         protected HabaneroMenu CreateHabaneroMenuFullySetup()
         {
             IControlFactory controlFactory = GetControlFactory();
@@ -67,11 +50,10 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            CollapsibleMenuBuilderVWG CollapsibleMenuBuilderVWG = new CollapsibleMenuBuilderVWG(GetControlFactory());
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOf(typeof(IMenuBuilder), CollapsibleMenuBuilderVWG);
+            Assert.IsInstanceOfType(typeof(IMenuBuilder), menuBuilder);
         }
-
 
         [Test]
         public void Test_BuildMainMenu()
@@ -198,7 +180,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, menu.MenuItems[1].MenuItems.Count);
         }
 
-
         [Test]
         public void TestMultipleItems()
         {
@@ -250,57 +231,6 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public virtual void Test_CreateLeafMenuItems_ShouldCreatePanelWithLeafMenu()
-        {
-            //---------------Set up test pack-------------------
-            HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
-            string subMenuName = TestUtil.GetRandomString();
-            HabaneroMenu submenu = habaneroMenu.AddSubMenu(subMenuName);
-            string menuItemName1 = TestUtil.GetRandomString();
-            submenu.AddMenuItem(menuItemName1);
-            submenu.AddMenuItem(TestUtil.GetRandomString());
-            CollapsibleMenuBuilderVWG menuBuilder = (CollapsibleMenuBuilderVWG)CreateMenuBuilder();
-            IMenuItem menuItem = new CollapsibleSubMenuItemVWG(GetControlFactory(), "Some Sub Menu");
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(0, menuItem.MenuItems.Count);
-            ICollapsiblePanel menuItemAsControl = (ICollapsiblePanel)menuItem;
-            Assert.AreEqual(1, menuItemAsControl.Controls.Count);
-            Assert.AreEqual(2, submenu.MenuItems.Count);
-            //---------------Execute Test ----------------------
-            menuBuilder.CreateLeafMenuItems(submenu, menuItem);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, menuItem.MenuItems.Count);
-            Assert.AreEqual(2, menuItemAsControl.Controls.Count);
-            IControlHabanero contentControl = menuItemAsControl.ContentControl;
-            Assert.AreEqual(2, contentControl.Controls.Count);
-            IControlHabanero firstControl = contentControl.Controls[0];
-            IControlHabanero secondControl = contentControl.Controls[1];
-            Assert.GreaterOrEqual(secondControl.Top, firstControl.Top + firstControl.Height);
-        }
-
-        [Test]
-        public virtual void Test_CreateSubMenuItems_ShouldCreatePanelWithLeafMenu()
-        {
-            //---------------Set up test pack-------------------
-            HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
-            string subMenuName = TestUtil.GetRandomString();
-            habaneroMenu.AddSubMenu(subMenuName);
-            habaneroMenu.AddSubMenu("SecondSubMenu");
-            CollapsibleMenuBuilderVWG menuBuilder = (CollapsibleMenuBuilderVWG)CreateMenuBuilder();
-            IMenuItem menuItem = new CollapsibleSubMenuItemVWG(GetControlFactory(), "Some Sub Menu");
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(0, menuItem.MenuItems.Count);
-            ICollapsiblePanel menuItemAsControl = (ICollapsiblePanel)menuItem;
-            Assert.AreEqual(1, menuItemAsControl.Controls.Count);
-            Assert.AreEqual(2, habaneroMenu.Submenus.Count);
-            //---------------Execute Test ----------------------
-            menuBuilder.BuildSubMenu(habaneroMenu, menuItem.MenuItems);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, menuItem.MenuItems.Count);
-            Assert.AreEqual(1, menuItemAsControl.Controls.Count);
-        }
-
-        [Test]
         public void TestDockMenuInForm()
         {
             //---------------Set up test pack-------------------
@@ -336,7 +266,7 @@ namespace Habanero.Test.UI.Base
                 menu.DockInForm(null);
                 Assert.Fail("expected ArgumentNullException");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
@@ -344,42 +274,7 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-
-        [Test]
-        public virtual void Test_DockMenuInForm_ShouldSetUpSplitterPanels()
-        {
-            //---------------Set up test pack-------------------
-            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
-            submenu.AddMenuItem(TestUtil.GetRandomString());
-            IMenuBuilder menuBuilder = CreateMenuBuilder();
-            IControlHabanero form = habaneroMenu.Form;
-            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
-            form.Size = new Size(460, 900);
-            //-------------Assert Preconditions -------------
-            Assert.IsFalse(IsMenuDocked(menu, form));
-            //---------------Execute Test ----------------------
-            menu.DockInForm(form);
-            //---------------Test Result -----------------------
-            IControlHabanero control = form.Controls[0];
-            Assert.IsInstanceOf(typeof(ISplitContainer), control);
-            Gizmox.WebGUI.Forms.SplitContainer splitContainerVWG = (Gizmox.WebGUI.Forms.SplitContainer)control;
-            Gizmox.WebGUI.Forms.SplitterPanel panel1 = splitContainerVWG.Panel1;
-            Assert.AreEqual(250, panel1.Width);
-            Assert.AreEqual(1, panel1.Controls.Count);
-            IControlHabanero menuControl = (IControlHabanero) panel1.Controls[0];
-            Assert.IsInstanceOf(typeof(ICollapsiblePanelGroupControl), menuControl);
-            panel1.Size = new Size(121, 333);
-            Assert.AreEqual(panel1.Width, menuControl.Width);
-
-            Gizmox.WebGUI.Forms.SplitterPanel panel2 = splitContainerVWG.Panel2;
-            Assert.AreEqual(1, panel2.Controls.Count);
-            IControlHabanero editorControl = (IControlHabanero) panel2.Controls[0];
-            Assert.IsInstanceOf(typeof(MainEditorPanelVWG), editorControl);
-            panel2.Size = new Size(321, 514);
-            Assert.AreEqual(panel2.Width, editorControl.Width);
-            Assert.AreEqual(panel2.Height, editorControl.Height);
-        }
+      
 
         [Test]
         public void Test_PerformClick_NoCreatorsCalledWhenMenuFormNotSet()
@@ -390,15 +285,15 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             bool called = false;
             menuItem.FormControlCreator = delegate
-            {
-                called = true;
-                return CreateFormControlStub();
-            };
+                                              {
+                                                  called = true;
+                                                  return CreateFormControlStub();
+                                              };
             menuItem.ControlManagerCreator = delegate
-            {
-                called = true;
-                return new ControlManagerStub(GetControlFactory());
-            };
+                                                 {
+                                                     called = true;
+                                                     return new ControlManagerStub(GetControlFactory());
+                                                 };
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             //---------------Assert Precondition ---------------
@@ -422,10 +317,10 @@ namespace Habanero.Test.UI.Base
             bool creatorCalled = false;
             IFormControlStub formControlStub = CreateFormControlStub();
             FormControlCreator formControlCreatorDelegate = delegate
-            {
-                creatorCalled = true;
-                return formControlStub;
-            };
+                                                                {
+                                                                    creatorCalled = true;
+                                                                    return formControlStub;
+                                                                };
             menuItem.FormControlCreator += formControlCreatorDelegate;
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
@@ -454,15 +349,15 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             bool called = false;
             menuItem.FormControlCreator = delegate
-            {
-                called = true;
-                return CreateFormControlStub();
-            };
+                                              {
+                                                  called = true;
+                                                  return CreateFormControlStub();
+                                              };
             menuItem.ControlManagerCreator = delegate
-            {
-                called = true;
-                return new ControlManagerStub(GetControlFactory());
-            };
+                                                 {
+                                                     called = true;
+                                                     return new ControlManagerStub(GetControlFactory());
+                                                 };
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             //---------------Assert Precondition ---------------
@@ -484,10 +379,10 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             bool called = false;
             FormControlCreator formControlCreatorDelegate = delegate
-            {
-                called = true;
-                return CreateFormControlStub();
-            };
+                                                                {
+                                                                    called = true;
+                                                                    return CreateFormControlStub();
+                                                                };
             menuItem.FormControlCreator += formControlCreatorDelegate;
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
@@ -533,11 +428,11 @@ namespace Habanero.Test.UI.Base
             bool called = false;
             IControlFactory controlFactoryPassedToCreator = null;
             ControlManagerCreator formControlCreatorDelegate = delegate(IControlFactory controlFactory)
-            {
-                called = true;
-                controlFactoryPassedToCreator = controlFactory;
-                return new ControlManagerStub(controlFactory);
-            };
+                                                                   {
+                                                                       called = true;
+                                                                       controlFactoryPassedToCreator = controlFactory;
+                                                                       return new ControlManagerStub(controlFactory);
+                                                                   };
             menuItem.ControlManagerCreator += formControlCreatorDelegate;
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
@@ -552,7 +447,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(habaneroMenu.ControlFactory, controlFactoryPassedToCreator);
         }
 
-
         [Test]
         public void TestCustomMenuHandlerTakesPrecedence()
         {
@@ -564,10 +458,10 @@ namespace Habanero.Test.UI.Base
             EventHandler customerHandler = delegate { customHandlerCalled = true; };
             bool formControlHandlerCalled = false;
             FormControlCreator formControlCreatorDelegate = delegate
-            {
-                formControlHandlerCalled = true;
-                return CreateFormControlStub();
-            };
+                                                                {
+                                                                    formControlHandlerCalled = true;
+                                                                    return CreateFormControlStub();
+                                                                };
             menuItem.CustomHandler += customerHandler;
             menuItem.FormControlCreator += formControlCreatorDelegate;
             IMenuBuilder menuBuilder = CreateMenuBuilder();
@@ -609,7 +503,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsNull(null, exceptionNotifier.FurtherMessage);
             Assert.IsNull(null, exceptionNotifier.Title);
         }
-
 
         [Test]
         public void TestHandlesError_FromFormControlCreator()
@@ -749,46 +642,13 @@ namespace Habanero.Test.UI.Base
             AssertControlDockedInForm((IControlHabanero)expectedFormControl2, habaneroMenu.Form);
         }
 
-
-        protected virtual void AssertControlDockedInForm(IControlHabanero control, IControlHabanero form)
-        {
-            Assert.AreEqual(1, form.Controls.Count, "No container control found in form");
-            IControlHabanero splitCntrl = form.Controls[0];
-            Assert.IsInstanceOf(typeof(ISplitContainer), splitCntrl);
-            Gizmox.WebGUI.Forms.SplitContainer splitContainerVWG = (Gizmox.WebGUI.Forms.SplitContainer)splitCntrl;
-
-            Gizmox.WebGUI.Forms.SplitterPanel panel2 = splitContainerVWG.Panel2;
-            Assert.AreEqual(1, panel2.Controls.Count);
-            IControlHabanero editorControl = (IControlHabanero) panel2.Controls[0];
-            Assert.IsInstanceOf(typeof(IMainEditorPanel), editorControl);
-            IMainEditorPanel mainEditorPanel = (IMainEditorPanel)editorControl;
-            IControlHabanero contentControl = mainEditorPanel.EditorPanel;
-
-            Assert.AreEqual(1, contentControl.Controls.Count);
-            Assert.AreSame(control, contentControl.Controls[0]);
-            Assert.AreEqual(Habanero.UI.Base.DockStyle.Fill, control.Dock);
-        }
-
-
-        private class FormControlStubVWG : UserControlVWG, IFormControlStub
-        {
-            public void SetForm(IFormHabanero form)
-            {
-                SetFormCalled = true;
-                SetFormArgument = form;
-            }
-
-            public IFormHabanero SetFormArgument { get; private set; }
-
-            public bool SetFormCalled { get; private set; }
-        }
-
+     
         protected virtual bool IsMenuDocked(IMainMenuHabanero menu, IControlHabanero form)
         {
             return form.Controls.Count == 1;
         }
 
-        protected interface IFormControlStub : IFormControl
+        public interface IFormControlStub : IFormControl
         {
             IFormHabanero SetFormArgument { get; }
             bool SetFormCalled { get; }
@@ -810,144 +670,16 @@ namespace Habanero.Test.UI.Base
                 get { return _control; }
             }
         }
-    }
 
-        [TestFixture]
-    public class TestCollapsibleMenuBuilderWin : TestCollapsibleMenuBuilderVWG
-    {
-
-        protected override IControlFactory CreateControlFactory()
+        protected virtual IControlFactory GetControlFactory()
         {
-            return new ControlFactoryWin();
-        }
-
-        protected override IFormControlStub CreateFormControlStub()
-        {
-            return new FormControlStubWin();
-        }
-
-        protected override IMenuBuilder CreateMenuBuilder()
-        {
-            return new CollapsibleMenuBuilderWin(GetControlFactory());
-        }
-        private class FormControlStubWin : UserControlWin, IFormControlStub
-        {
-            public void SetForm(IFormHabanero form)
-            {
-                SetFormCalled = true;
-                SetFormArgument = form;
-            }
-
-            public IFormHabanero SetFormArgument { get; private set; }
-
-            public bool SetFormCalled { get; private set; }
-        }
-
-
-        [Test]
-        public override void Test_CreateLeafMenuItems_ShouldCreatePanelWithLeafMenu()
-        {
-            //---------------Set up test pack-------------------
-            HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
-            string subMenuName = TestUtil.GetRandomString();
-            HabaneroMenu submenu = habaneroMenu.AddSubMenu(subMenuName);
-            string menuItemName1 = TestUtil.GetRandomString();
-            submenu.AddMenuItem(menuItemName1);
-            submenu.AddMenuItem(TestUtil.GetRandomString());
-            CollapsibleMenuBuilderWin menuBuilder = (CollapsibleMenuBuilderWin)CreateMenuBuilder();
-            IMenuItem menuItem = new CollapsibleSubMenuItemWin(GetControlFactory(), "Some Sub Menu");
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(0, menuItem.MenuItems.Count);
-            ICollapsiblePanel menuItemAsControl = (ICollapsiblePanel)menuItem;
-            Assert.AreEqual(1, menuItemAsControl.Controls.Count);
-            Assert.AreEqual(2, submenu.MenuItems.Count);
-            //---------------Execute Test ----------------------
-            menuBuilder.CreateLeafMenuItems(submenu, menuItem);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, menuItem.MenuItems.Count);
-            Assert.AreEqual(2, menuItemAsControl.Controls.Count);
-            IControlHabanero contentControl = menuItemAsControl.ContentControl;
-            Assert.AreEqual(2, contentControl.Controls.Count);
-            IControlHabanero firstControl = contentControl.Controls[0];
-            IControlHabanero secondControl = contentControl.Controls[1];
-            Assert.GreaterOrEqual(secondControl.Top, firstControl.Top + firstControl.Height);
-        }
-
-        [Test]
-        public override void Test_CreateSubMenuItems_ShouldCreatePanelWithLeafMenu()
-        {
-            //---------------Set up test pack-------------------
-            HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
-            string subMenuName = TestUtil.GetRandomString();
-            habaneroMenu.AddSubMenu(subMenuName);
-            habaneroMenu.AddSubMenu("SecondSubMenu");
-            CollapsibleMenuBuilderWin menuBuilder = (CollapsibleMenuBuilderWin)CreateMenuBuilder();
-            IMenuItem menuItem = new CollapsibleSubMenuItemWin(GetControlFactory(), "Some Sub Menu");
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(0, menuItem.MenuItems.Count);
-            ICollapsiblePanel menuItemAsControl = (ICollapsiblePanel)menuItem;
-            Assert.AreEqual(1, menuItemAsControl.Controls.Count);
-            Assert.AreEqual(2, habaneroMenu.Submenus.Count);
-            //---------------Execute Test ----------------------
-            menuBuilder.BuildSubMenu(habaneroMenu, menuItem.MenuItems);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, menuItem.MenuItems.Count);
-            Assert.AreEqual(1, menuItemAsControl.Controls.Count);
-        }
-
-        [Test]
-        public override void Test_DockMenuInForm_ShouldSetUpSplitterPanels()
-        {
-            //---------------Set up test pack-------------------
-            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
-            HabaneroMenu submenu = habaneroMenu.AddSubMenu(TestUtil.GetRandomString());
-            submenu.AddMenuItem(TestUtil.GetRandomString());
-            IMenuBuilder menuBuilder = CreateMenuBuilder();
-            IControlHabanero form = habaneroMenu.Form;
-            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
-            form.Size = new Size(460, 900);
-            //-------------Assert Preconditions -------------
-            Assert.IsFalse(IsMenuDocked(menu, form));
-            //---------------Execute Test ----------------------
-            menu.DockInForm(form);
-            //---------------Test Result -----------------------
-            IControlHabanero control = form.Controls[0];
-            Assert.IsInstanceOf(typeof(ISplitContainer), control);
-            System.Windows.Forms.SplitContainer splitContainerVWG = (System.Windows.Forms.SplitContainer)control;
-            System.Windows.Forms.SplitterPanel panel1 = splitContainerVWG.Panel1;
-            Assert.AreEqual(250, panel1.Width);
-            Assert.AreEqual(1, panel1.Controls.Count);
-            IControlHabanero menuControl = (IControlHabanero)panel1.Controls[0];
-            Assert.IsInstanceOf(typeof(ICollapsiblePanelGroupControl), menuControl);
-            panel1.Size = new Size(121, 333);
-            Assert.AreEqual(panel1.Width, menuControl.Width);
-
-            System.Windows.Forms.SplitterPanel panel2 = splitContainerVWG.Panel2;
-            Assert.AreEqual(1, panel2.Controls.Count);
-            IControlHabanero editorControl = (IControlHabanero)panel2.Controls[0];
-            Assert.IsInstanceOf(typeof(IMainEditorPanel), editorControl);
-            panel2.Size = new Size(321, 514);
-            Assert.AreEqual(panel2.Width, editorControl.Width);
-            Assert.AreEqual(panel2.Height, editorControl.Height);
-        }
-
-        protected override void AssertControlDockedInForm(IControlHabanero control, IControlHabanero form)
-        {
-            Assert.AreEqual(1, form.Controls.Count, "No container control found in form");
-            IControlHabanero splitCntrl = form.Controls[0];
-            Assert.IsInstanceOf(typeof(ISplitContainer), splitCntrl);
-            System.Windows.Forms.SplitContainer splitContainerVWG = (System.Windows.Forms.SplitContainer)splitCntrl;
-
-            System.Windows.Forms.SplitterPanel panel2 = splitContainerVWG.Panel2;
-            Assert.AreEqual(1, panel2.Controls.Count);
-            IControlHabanero editorControl = (IControlHabanero)panel2.Controls[0];
-            Assert.IsInstanceOf(typeof(IMainEditorPanel), editorControl);
-            IMainEditorPanel mainEditorPanel = (IMainEditorPanel)editorControl;
-            IControlHabanero contentControl = mainEditorPanel.EditorPanel;
-
-            Assert.AreEqual(1, contentControl.Controls.Count);
-            Assert.AreSame(control, contentControl.Controls[0]);
-            Assert.AreEqual(Habanero.UI.Base.DockStyle.Fill, control.Dock);
+            IControlFactory factory = CreateControlFactory();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
         }
     }
+
+   
+
+  
 }

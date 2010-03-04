@@ -22,54 +22,6 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Base
 {
     /// <summary>
-    /// This test class tests the base inherited methods of the Splitter class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_Splitter : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateSplitter();
-        }
-
-        [Test]
-        public override void TestConversion_DockStyle_None()
-        {
-            //Splitter does not support setting dock styles at design time.
-        }
-
-        [Test]
-        public override void TestConversion_DockStyle_Fill()
-        {
-            //Splitter does not support setting dock styles at design time.
-        }
-    }
-
-    /// <summary>
-    /// This test class tests the base inherited methods of the Splitter class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_Splitter : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateSplitter();
-        }
-
-        [Test]
-        public override void TestConversion_DockStyle_None()
-        {
-            //Splitter does not support setting dock styles at design time.
-        }
-
-        [Test]
-        public override void TestConversion_DockStyle_Fill()
-        {
-            //Splitter does not support setting dock styles at design time.
-        }
-    }
-
-    /// <summary>
     /// This test class tests the Splitter class.
     /// </summary>
     [TestFixture]

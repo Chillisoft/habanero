@@ -42,11 +42,6 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Constructs a <see cref="MainTitleIconControlVWG"/>
         /// </summary>
-        public MainTitleIconControlVWG() : this(GlobalUIRegistry.ControlFactory)
-        { }
-        /// <summary>
-        /// Constructs a <see cref="MainTitleIconControlVWG"/>
-        /// </summary>
         public MainTitleIconControlVWG(IControlFactory controlFactory)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
@@ -67,6 +62,7 @@ namespace Habanero.UI.VWG
             _icon.Size = new Size(20, 20);
 
             _title = _controlFactory.CreateLabel();
+            _title.Font = new Font("Verdana", 10);
             _title.Dock = Habanero.UI.Base.DockStyle.Fill;
             _title.BackColor = Color.Transparent;
             _title.TextAlign = ContentAlignment.MiddleLeft;

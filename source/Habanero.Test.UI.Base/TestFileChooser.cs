@@ -17,8 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -29,23 +29,7 @@ namespace Habanero.Test.UI.Base
         private const string TEST_PATH="test/path/test";
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestFileChooserWin : TestFileChooser
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-        }
 
-        [TestFixture]
-        public class TestFileChooserVWG : TestFileChooser
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
 
         [Test]
         public void TestCreateControl()

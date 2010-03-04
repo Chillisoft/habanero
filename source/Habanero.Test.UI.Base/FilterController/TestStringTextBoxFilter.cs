@@ -22,16 +22,15 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController
 {
     [TestFixture]
-    public class TestStringTextBoxFilter
+    public abstract class TestStringTextBoxFilter
     {
-        protected virtual IControlFactory GetControlFactory() { return new ControlFactoryWin(); }
-        
+        protected abstract IControlFactory GetControlFactory();
+
         [Test]
         public void TestConstructor()
         {
@@ -80,4 +79,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Tear Down -------------------------          
         }
     }
+
+
+
 }

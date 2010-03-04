@@ -1,15 +1,15 @@
 using System;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController
 {
     [TestFixture]
-    public class TestEnumComboBoxFilter
+    public abstract class TestEnumComboBoxFilter
     {
-        protected virtual IControlFactory GetControlFactory() { return new ControlFactoryWin(); }
+        protected abstract IControlFactory GetControlFactory();
+
         public enum PurchaseOrderStatus
         {
             Open,
@@ -57,6 +57,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IComboBox comboBox = (IComboBox)filter.Control;
             string text = Convert.ToString( PurchaseOrderStatus.Processed);
             comboBox.Text = text;
+            comboBox.SelectedIndex = 2;
 
             //---------------Execute Test ----------------------
 
@@ -67,4 +68,5 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
     }
+
 }

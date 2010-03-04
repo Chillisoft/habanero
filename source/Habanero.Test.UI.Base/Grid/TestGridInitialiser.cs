@@ -51,92 +51,12 @@ namespace Habanero.Test.UI.Base
 
         protected abstract IControlFactory GetControlFactory();
         protected abstract void AddControlToForm(IControlHabanero cntrl);
-        protected abstract Type GetCustomGridColumnType();
         protected abstract Type GetDateTimeGridColumnType();
         protected abstract Type GetComboBoxGridColumnType();
         protected abstract void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType);
 
 
-        [TestFixture]
-        public class TestGridInitialiserWin : TestGridInitialiser
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.Win.ControlFactoryWin();
-            }
 
-            protected override void AddControlToForm(IControlHabanero cntrl)
-            {
-                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-                frm.Controls.Add((System.Windows.Forms.Control)cntrl);
-            }
-
-            protected override Type GetCustomGridColumnType()
-            {
-                return typeof(CustomDataGridViewColumnWin);
-            }
-
-            protected override Type GetDateTimeGridColumnType()
-            {
-                return typeof (Habanero.UI.Win.DataGridViewDateTimeColumn);
-            }
-
-            protected override Type GetComboBoxGridColumnType()
-            {
-                return typeof(System.Windows.Forms.DataGridViewComboBoxColumn);
-            }
-
-            protected override void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType)
-            {
-                Habanero.UI.Win.DataGridViewColumnWin columnWin = (Habanero.UI.Win.DataGridViewColumnWin)createdColumn;
-                System.Windows.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
-                Assert.AreEqual(expectedColumnType, column.GetType());
-            }
-        }
-
-        [TestFixture]
-        public class TestGridInitialiserVWG : TestGridInitialiser
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
-            }
-
-            protected override void AddControlToForm(IControlHabanero cntrl)
-            {
-                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-                frm.Controls.Add((Gizmox.WebGUI.Forms.Control) cntrl);
-            }
-
-            protected override Type GetCustomGridColumnType()
-            {
-                return typeof(CustomDataGridViewColumnVWG);
-            }
-
-            protected override Type GetDateTimeGridColumnType()
-            {
-                throw new NotImplementedException("Not implemented for VWG");
-                //return typeof(Habanero.UI.VWG.DataGridViewDateTimeColumn);
-            }
-
-            protected override Type GetComboBoxGridColumnType()
-            {
-                return typeof(Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn);
-            }
-
-            protected override void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType)
-            {
-                Habanero.UI.VWG.DataGridViewColumnVWG columnWin = (Habanero.UI.VWG.DataGridViewColumnVWG)createdColumn;
-                Gizmox.WebGUI.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
-                Assert.AreEqual(expectedColumnType, column.GetType());
-            }
-
-            [Test, Ignore("DateTimeColumn needs to be implemented for VWG")]
-            public override void TestInitGrid_LoadsDataGridViewDateTimeColumn()
-            {
-                base.TestInitGrid_LoadsDataGridViewDateTimeColumn();
-            }
-        }
 
         [Test]
         public void Test_InitialiseGrid_NoClassDef_NoColumnsDefined()
@@ -474,32 +394,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
-        public void TestInitGrid_LoadsCustomColumnType()
-        {
-            //---------------Set up test pack-------------------
-            IClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
-            IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            IUIDef uiDef = classDef.UIDefCol["default"];
-            IUIGrid uiGridDef = uiDef.UIGrid;
-
-            Type customColumnType = GetCustomGridColumnType();
-            uiGridDef[2].GridControlTypeName = customColumnType.Name; //"CustomDataGridViewColumn";
-            uiGridDef[2].GridControlAssemblyName = "Habanero.Test.UI.Base";
-            AddControlToForm(grid);
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            initialiser.InitialiseGrid(classDef);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(6, grid.Grid.Columns.Count);
-            IDataGridViewColumn column3 = grid.Grid.Columns[3];
-            Assert.AreEqual("TestDateTime", column3.Name);
-            Assert.IsInstanceOf(typeof(IDataGridViewColumn), column3);
-            AssertGridColumnTypeAfterCast(column3, customColumnType);
-        }
 
         [Test]
         public void TestInitGrid_WithNonDefaultUIDef()
@@ -753,17 +647,4 @@ namespace Habanero.Test.UI.Base
         }
     }
 
-    /// <summary>
-    /// Created for testing purposes
-    /// </summary>
-    public class CustomDataGridViewColumnWin : System.Windows.Forms.DataGridViewTextBoxColumn
-    {
-    }
-
-    /// <summary>
-    /// Created for testing purposes
-    /// </summary>
-    public class CustomDataGridViewColumnVWG : Gizmox.WebGUI.Forms.DataGridViewTextBoxColumn
-    {
-    }
 }

@@ -416,11 +416,12 @@ namespace Habanero.UI.Base
                 {
                     comboBoxObjectCollection.Add(relatedBO);
                 }
-            }
+            } 
             _comboBoxCollectionSelector.DeregisterForControlEvents();
             try
             {
                 Control.SelectedItem = relatedBO;
+                //if (relatedBO == null) Control.Text = "";
             }
             finally
             {

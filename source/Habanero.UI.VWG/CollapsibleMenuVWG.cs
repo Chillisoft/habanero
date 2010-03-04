@@ -169,6 +169,16 @@ namespace Habanero.UI.VWG
         /// <param name="form">The form to set up with the menu</param>
         public void DockInForm(IControlHabanero form)
         {
+            DockInForm(form, 250);
+        }
+        /// <summary>
+        ///This method sets up the form so that the menu is displayed and the form is able to 
+        ///display the controls loaded when the menu item is clicked.
+        /// </summary>
+        /// <param name="form">The form to set up with the menu</param>
+        /// <param name="menuWidth">The width of the menu - configurable to so that each application can set its menu width</param>
+        public void DockInForm(IControlHabanero form, int menuWidth)
+        {
             if (form == null) throw new ArgumentNullException("form");
             _splitContainer = this.ControlFactory.CreateSplitContainer();
             _splitContainer.Name = "SplitContainer";
@@ -177,8 +187,8 @@ namespace Habanero.UI.VWG
             SplitContainer splitContainer1 = (SplitContainer) _splitContainer;
 //            splitContainer1.IsSplitterFixed = true;
             splitContainer1.Size = new System.Drawing.Size(400, 450);
-            splitContainer1.SplitterDistance = 250;
-            splitContainer1.Panel1MinSize = 250;
+            splitContainer1.SplitterDistance = menuWidth;
+            splitContainer1.Panel1MinSize = menuWidth;
             splitContainer1.Orientation = Gizmox.WebGUI.Forms.Orientation.Vertical;
             this.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
             splitContainer1.Panel1.Controls.Add(this);
@@ -261,10 +271,12 @@ namespace Habanero.UI.VWG
             {
                 this.Text = _habaneroMenuItem.Name;
                 this.FlatStyle = FlatStyle.Flat;
-                this.BackgroundImage = "Images.smBack.gif";
+                this.BackgroundImage = "Images.smBack-white.gif";
                 this.Image = "Images.nbItemBullet.gif";
                 this.TextImageRelation = TextImageRelation.ImageBeforeText;
                 this.TextAlign = ContentAlignment.MiddleLeft;
+                this.Font = new Font("Verdana", 9);
+                this.Dock = DockStyleVWG.GetDockStyle(DockStyle.Top);
                 this.Click += ChangeButtonIcon;
             }
             MenuItems = new CollapsibleMenuItemCollectionVWG(this);
@@ -324,7 +336,7 @@ namespace Habanero.UI.VWG
                         splitContainer = (SplitContainer)_habaneroMenuItem.Form.Controls[0].Controls[0];
                     SplitterPanel panel2 = splitContainer.Panel2;
                     MainEditorPanelVWG mainEditorPanel = (MainEditorPanelVWG) panel2.Controls[0];
-                    mainEditorPanel.MainTitleIconControl.Title.Text = this.Text;
+                    mainEditorPanel.MainTitleIconControl.Title.Text = _habaneroMenuItem.ParentMenu.Name + " > " + this.Text;
                     mainEditorPanel.EditorPanel.Controls.Clear();
                     mainEditorPanel.EditorPanel.Controls.Add(control);
                     mainEditorPanel.Width -= 1;
@@ -391,7 +403,8 @@ namespace Habanero.UI.VWG
             this.CollapseButton.Text = name;
             this.Dock = DockStyleVWG.GetDockStyle(DockStyle.Top);
             this.CollapseButton.ForeColor = Color.White;
-            ((ButtonVWG) this.CollapseButton).BackgroundImage = "Images.headergradient.png";
+            this.CollapseButton.Font = new Font("Verdana", 10);
+            ((ButtonVWG)this.CollapseButton).BackgroundImage = "Images.headergradient.png";
             ((ButtonVWG) this.CollapseButton).FlatStyle = FlatStyle.Flat;
             this.Collapsed = true;
             this.CollapseButton.Click += delegate { if (this.Collapsed) this.Collapsed = false; };

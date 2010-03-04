@@ -21,7 +21,6 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -31,23 +30,7 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestCalendarCellWin : TestCalendarCell
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.Win.ControlFactoryWin();
-            }
-        }
 
-        [TestFixture]
-        public class TestCalendarCellVWG : TestCalendarCell
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
-            }
-        }
 
 
         [SetUp]

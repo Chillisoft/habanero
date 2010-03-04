@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Wizard
 {
-    [TestFixture]
-    public class TestNullWizardStepWin
+    public abstract class TestNullWizardStep
     {
         [SetUp]
         public void SetupTest()
@@ -32,10 +31,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //base.TearDownTest();
         }
 
-        protected virtual IWizardStep CreateWizardStep()
-        {
-            return new NullWizardStepWin();
-        }
+        protected abstract IWizardStep CreateWizardStep();
 
         [Test]
         public void Test_InitialiseStep_DoesnotThrowError()
@@ -62,6 +58,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //---------------Test Result -----------------------
             Assert.IsTrue(true, "Should not do anything");
         }
+
         [Test]
         public void Test_CancelStep_DoesnotThrowError()
         {
@@ -74,6 +71,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //---------------Test Result -----------------------
             Assert.IsTrue(true, "Should not do anything");
         }
+
         [Test]
         public void Test_CancelMoveOn_DoesnotThrowError()
         {
@@ -86,6 +84,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //---------------Test Result -----------------------
             Assert.IsTrue(true, "Should not do anything");
         }
+
         [Test]
         public void Test_HeaderText_DoesnotThrowError()
         {
@@ -126,12 +125,5 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.IsTrue(canMoveBack);
         }
     }
-    [TestFixture]
-    public class TestNullWizardStepVWG : TestNullWizardStepWin
-    {
-        protected override IWizardStep CreateWizardStep()
-        {
-            return new NullWizardStepVWG();
-        }
-    }
+
 }

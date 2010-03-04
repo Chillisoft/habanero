@@ -81,6 +81,11 @@ namespace Habanero.UI.VWG
 
         private void _filterControl_OnFilter(object sender, EventArgs e)
         {
+            RefreshFilter();
+        }
+
+        public void RefreshFilter()
+        {
             this.Grid.CurrentPage = 1;
             if (FilterMode == FilterModes.Search)
             {

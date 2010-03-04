@@ -17,12 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Windows.Forms;
-using Habanero.BO;
-using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
-using NUnit.Framework;
-
 namespace Habanero.Test.UI.Base
 {
     public abstract class TestListViewCollectionManager : TestUsingDatabase

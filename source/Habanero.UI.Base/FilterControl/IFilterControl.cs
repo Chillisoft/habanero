@@ -170,6 +170,11 @@ namespace Habanero.UI.Base
         IButton FilterButton { get; }
 
         /// <summary>
+        /// Returns the filter group box that contains the filter controls
+        /// </summary>
+        IGroupBox FilterGroupBox { get; }
+
+        /// <summary>
         /// Returns the clear button that when clicked clears the filter
         /// </summary>
         IButton ClearButton { get; }
@@ -201,11 +206,13 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns the layout manager used to lay the controls out on the filter control panel.
         /// The default layout manager is the FlowLayoutManager.
+        /// To use a different layout manager, set this property:
+        /// <code>GridLayoutManager layoutManager = new GridLayoutManager(filterControl.FilterPanel, _controlFactory)</code>
         /// </summary>
         LayoutManager LayoutManager { get; set; }
 
         /// <summary>
-        /// Returns the panel onto which the filter controls will be placed
+        /// Returns the panel onto which the filter controls will be placed. 
         /// </summary>
         IPanel FilterPanel { get; }
 

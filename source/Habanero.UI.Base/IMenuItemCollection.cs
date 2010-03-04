@@ -38,19 +38,26 @@ namespace Habanero.UI.Base
     ///</summary>
     public interface IMenuItemCollection: IEnumerable<IMenuItem>, IEnumerable
     {
-        ///<summary>
-        /// The num
-        ///</summary>
-        int Count { get; }
-        ///<summary>
-        /// Returns the Actual Menu item identified by the index.
-        ///</summary>
-        ///<param name="index"></param>
-        IMenuItem this[int index] { get; }
         /// <summary>
-        /// Adds a Menu item to the <see cref="IMenuItemCollection"/>.
+        /// Adds a Menu item to the <see cref="T:Habanero.UI.Base.IMenuItemCollection" />.
         /// </summary>
         /// <param name="menuItem"></param>
         void Add(IMenuItem menuItem);
+
+        /// <summary>
+        ///The number of <see cref="IMenuItem"/>s in this <see cref="IMenuItemCollection"/>
+        /// </summary>
+        int Count { get; }
+
+        /// <summary>
+        /// The Menu Item that owns this colleciton of Menu Items.
+        /// </summary>
+        IMenuItem OwnerMenuItem { get; }
+
+        /// <summary>
+        /// Returns the Actual Menu item identified by the index.
+        /// </summary>
+        /// <param name="index"></param>
+        IMenuItem this[int index] { get; }
     }
 }

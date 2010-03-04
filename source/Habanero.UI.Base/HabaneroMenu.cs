@@ -151,7 +151,7 @@ namespace Habanero.UI.Base
         ///<returns></returns>
         public Item AddMenuItem(string menuItemName)
         {
-            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(menuItemName, _form, _controlFactory);
+            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(this, menuItemName, _form, _controlFactory);
             _menuItems.Add(menuItem);
             return menuItem;
         }
@@ -165,6 +165,7 @@ namespace Habanero.UI.Base
         ///</summary>
         public class Item
         {
+            private readonly HabaneroMenu _parentMenu;
             private readonly string _name;
             private readonly IControlFactory _controlFactory;
             private readonly IControlHabanero _form;
@@ -173,7 +174,8 @@ namespace Habanero.UI.Base
             /// Constructor for an <see cref="Item"/>
             ///</summary>
             ///<param name="name"></param>
-            public Item(string name) : this(name, null, null)
+            public Item(HabaneroMenu parentMenu, string name)
+                : this(parentMenu, name, null, null)
             {}
             /// <summary>
             /// Constructor for an <see cref="Item"/>
@@ -181,8 +183,9 @@ namespace Habanero.UI.Base
             /// <param name="name"></param>
             /// <param name="form"></param>
             /// <param name="controlFactory"></param>
-            public Item(string name, IControlHabanero form, IControlFactory controlFactory)
+            public Item(HabaneroMenu parentMenu, string name, IControlHabanero form, IControlFactory controlFactory)
             {
+                _parentMenu = parentMenu;
                 _name = name;
                 _controlFactory = controlFactory;
                 _form = form;
@@ -194,6 +197,11 @@ namespace Habanero.UI.Base
             public string Name
             {
                 get { return _name; }
+            }
+
+            public HabaneroMenu ParentMenu
+            {
+                get { return _parentMenu; }
             }
 
             ///<summary>

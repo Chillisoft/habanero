@@ -17,32 +17,17 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
     public abstract class TestInputFormTextBox
     {
-        [TestFixture]
-        public class TestInputFormTextBoxVWG : TestInputFormTextBox
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
 
 
-        [TestFixture]
-        public class TestInputFormTextBoxWin : TestInputFormTextBox
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-        }
+
 
         protected abstract IControlFactory GetControlFactory();
 

@@ -20,35 +20,12 @@
 using System.ComponentModel;
 using System.Data;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Grid
 {
-    /// <summary>
-    /// This test class tests the base inherited methods of the DataGridView class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_DataGridView : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateDataGridView();
-        }
-    }
 
-    /// <summary>
-    /// This test class tests the base inherited methods of the DataGridView class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_DataGridView : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateDataGridView();
-        }
-    }
+
 
     /// <summary>
     /// This test class tests the DataGridView class.
@@ -62,47 +39,8 @@ namespace Habanero.Test.UI.Base.Grid
             return GetControlFactory().CreateDataGridView();
         }
 
-        [TestFixture]
-        public class TestDataGridViewWin : TestDataGridView
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
+      
 
-            protected override string GetUnderlyingDataGridViewSelectionModeToString(IDataGridView dataGridView)
-            {
-                System.Windows.Forms.DataGridView control = (System.Windows.Forms.DataGridView) dataGridView;
-                return control.SelectionMode.ToString();
-            }
-
-            protected override void AddToForm(IDataGridView dgv)
-            {
-                System.Windows.Forms.Form form = new System.Windows.Forms.Form();
-                form.Controls.Add((System.Windows.Forms.Control) dgv);
-            }
-        }
-
-        [TestFixture]
-        public class TestDataGridViewVWG : TestDataGridView
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-
-            protected override string GetUnderlyingDataGridViewSelectionModeToString(IDataGridView dataGridView)
-            {
-                Gizmox.WebGUI.Forms.DataGridView control = (Gizmox.WebGUI.Forms.DataGridView) dataGridView;
-                return control.SelectionMode.ToString();
-            }
-
-            protected override void AddToForm(IDataGridView dgv)
-            {
-                Gizmox.WebGUI.Forms.Form form = new Gizmox.WebGUI.Forms.Form();
-                form.Controls.Add((Gizmox.WebGUI.Forms.Control) dgv);
-            }
-        }
 
 
         [Test]

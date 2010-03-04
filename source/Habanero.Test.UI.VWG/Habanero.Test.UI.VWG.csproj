@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B60FA2CD-AC13-45D1-92F4-2137FAF45C14}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.Test.UI.VWG</RootNamespace>
+    <AssemblyName>Habanero.Test.UI.VWG</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Gizmox.WebGUI.Common, Version=3.0.5701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Gizmox.WebGUI.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gizmox.WebGUI.Forms, Version=3.0.5701.0, Culture=neutral, PublicKeyToken=c508b41386c60f1d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Gizmox.WebGUI.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="Grid\TestDataGridViewVWG.cs" />
+    <Compile Include="Grid\TestEditableGridControlVWG.cs" />
+    <Compile Include="Grid\TestEditableGridVWG.cs" />
+    <Compile Include="Grid\TestGridBaseVWG.cs" />
+    <Compile Include="Grid\TestGridInitialiserVWG.cs" />
+    <Compile Include="Grid\TestReadOnlyGridButtonControlVWG.cs" />
+    <Compile Include="Grid\TestReadOnlyGridControlVWG.cs" />
+    <Compile Include="Grid\TestReadOnlyGridVWG.cs" />
+    <Compile Include="HabaneroControls\BusinessObjectControlStubVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HabaneroControls\FilterControl\TestEnumComboBoxFilterVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlBuilderVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlDateVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlManagerVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestMultiplePropStringTextBoxFilterVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestStringStaticFilterVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestStringTextBoxFilterVWG.cs" />
+    <Compile Include="HabaneroControls\TestBOColTabControlManagerVWG.cs" />
+    <Compile Include="HabaneroControls\TestBOSelectorAndBOEditorManagerVWG.cs" />
+    <Compile Include="HabaneroControls\TestComboBoxCollectionSelectorVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlCheckBoxVWG.cs" />
+    <Compile Include="HabaneroControls\FilterControl\TestFilterControlVWG.cs" />
+    <Compile Include="HabaneroControls\TestGridWithPanelControlVWG.cs" />
+    <Compile Include="HabaneroControls\TestInputFormComboBoxVWG.cs" />
+    <Compile Include="HabaneroControls\TestInputFormDateVWG.cs" />
+    <Compile Include="HabaneroControls\TestInputFormTextBoxVWG.cs" />
+    <Compile Include="HabaneroControls\TestListBoxCollectionManagerVWG.cs" />
+    <Compile Include="HabaneroControls\TestMainEditorPanelVWG.cs" />
+    <Compile Include="HabaneroControls\TestMultiSelectorVWG.cs" />
+    <Compile Include="HabaneroControls\TestOKCancelDialogVWG.cs" />
+    <Compile Include="HabaneroControls\TestStaticDataEditorVWG.cs" />
+    <Compile Include="HabaneroControls\TestTreeViewControllerVWG.cs" />
+    <Compile Include="LayoutManager\TestColumnLayoutManagerVWG.cs" />
+    <Compile Include="LayoutManager\TestFlowLayoutManagerVWG.cs" />
+    <Compile Include="LayoutManager\TestGridLayoutManagerVWG.cs" />
+    <Compile Include="LayoutManager\TestLayoutManagerVWG.cs" />
+    <Compile Include="Mappers\TestCollectionComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestCollectionTabControlMapperVWG.cs" />
+    <Compile Include="Mappers\TestControlMapperCollectionVWG.cs" />
+    <Compile Include="Mappers\TestControlMapperVWG.cs" />
+    <Compile Include="Mappers\TestDateTimePickerMapperVWG.cs" />
+    <Compile Include="Mappers\TestEditableGridControlMapperVWG.cs" />
+    <Compile Include="Mappers\TestEnumComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestExtendedLookupComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestListComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestLookupComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestNumericUpDownCurrencyMapperVWG.cs" />
+    <Compile Include="Mappers\TestNumericUpDownIntegerMapperVWG.cs" />
+    <Compile Include="Mappers\TestRelationshipComboBoxMapperVWG.cs" />
+    <Compile Include="Mappers\TestTextBoxMapperVWG.cs" />
+    <Compile Include="Menu\TestMainMenuVWG.cs" />
+    <Compile Include="Menu\TestMenuBuilderVWG.cs" />
+    <Compile Include="PanelBuilder\TestPanelInfoVWG.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Grid\TestDataGridViewColumnCollectionVWG.cs" />
+    <Compile Include="Base\TestBaseMethodsVWG.cs" />
+    <Compile Include="Selectors\TestBOSelectorAndEditorVWG.cs" />
+    <Compile Include="Selectors\TestBOSelectorBOTabVWG.cs" />
+    <Compile Include="Selectors\TestBOSelectorEditableGridControlVWG.cs" />
+    <Compile Include="Selectors\TestBOSelectorEditableGridVWG.cs" />
+    <Compile Include="Selectors\TestBOSelectorGridVWG.cs" />
+    <Compile Include="Selectors\TestCollapsiblePanelSelectorVWG.cs" />
+    <Compile Include="Selectors\TestReadOnlyGridControlSelectorVWG.cs" />
+    <Compile Include="HabaneroControls\TestBOColTabControlVWG.cs" />
+    <Compile Include="HabaneroControls\TestBOEditorControlVWG.cs" />
+    <Compile Include="LayoutManager\TestBorderLayoutManagerVWG.cs" />
+    <Compile Include="HabaneroControls\TestButtonGroupControlVWG.cs" />
+    <Compile Include="StandardControls\TestButtonVWG.cs" />
+    <Compile Include="HabaneroControls\TestFileChooserVWG.cs" />
+    <Compile Include="TestButtonSizePolicyUserDefinedVWG.cs" />
+    <Compile Include="TestCalendarCellVWG.cs" />
+    <Compile Include="Mappers\TestCheckBoxMapperVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleMenuBuilderVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleMenuItemCollectionVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleMenuItemVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleMenuVWG.cs" />
+    <Compile Include="Menu\TestCollapsiblePanelGroupControlVWG.cs" />
+    <Compile Include="Menu\TestCollapsiblePanelVWG.cs" />
+    <Compile Include="Selectors\TestComboBoxSelectorVWG.cs" />
+    <Compile Include="Menu\TestCollapsibleSubMenuItemVWG.cs" />
+    <Compile Include="StandardControls\TestComboBoxVWG.cs" />
+    <Compile Include="TestControlCollectionVWG.cs" />
+    <Compile Include="TestControlFactoryVWG.cs" />
+    <Compile Include="HabaneroControls\TestDateRangeComboBoxVWG.cs" />
+    <Compile Include="StandardControls\TestDateTimePickerVWG.cs" />
+    <Compile Include="HabaneroControls\TestDefaultBOEditorFormVWG.cs" />
+    <Compile Include="HabaneroControls\TestGroupBoxGroupControlVWG.cs" />
+    <Compile Include="StandardControls\TestLabelVWG.cs" />
+    <Compile Include="Selectors\TestListBoxSelectorVWG.cs" />
+    <Compile Include="StandardControls\TestListBoxVWG.cs" />
+    <Compile Include="HabaneroControls\TestMainTitleIconControlVWG.cs" />
+    <Compile Include="StandardControls\TestPictureBoxVWG.cs" />
+    <Compile Include="StandardControls\TestSplitContainerVWG.cs" />
+    <Compile Include="StandardControls\TestTextBoxVWG.cs" />
+    <Compile Include="StandardControls\TestTreeViewVWG.cs" />
+    <Compile Include="TestDialogResultVWG.cs" />
+    <Compile Include="PanelBuilder\TestPanelBuilderVWG.cs" />
+    <Compile Include="TestEnumerationConverter.cs" />
+    <Compile Include="TestEnumerationsVWG.cs" />
+    <Compile Include="Wizard\TestMessageWizardStepVWG.cs" />
+    <Compile Include="Wizard\TestNullWizardStepVWG.cs" />
+    <Compile Include="Wizard\TestWizardControllerVWG.cs" />
+    <Compile Include="Wizard\TestWizardControlVWG.cs" />
+    <Compile Include="Wizard\TestWizardStepVWG.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.Bo\Habanero.Test.BO.csproj">
+      <Project>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</Project>
+      <Name>Habanero.Test.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.UI.Base\Habanero.Test.UI.Base.csproj">
+      <Project>{12A701DA-DAF5-4709-942E-17F1EFA381D8}</Project>
+      <Name>Habanero.Test.UI.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
+      <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
+      <Name>Habanero.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
+      <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
+      <Name>Habanero.UI.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.VWG\Habanero.UI.VWG.csproj">
+      <Project>{04E4FF45-6C20-46EB-A9AD-2B04895F6218}</Project>
+      <Name>Habanero.UI.VWG</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

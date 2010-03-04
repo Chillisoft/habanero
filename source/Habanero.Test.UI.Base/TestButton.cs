@@ -19,35 +19,14 @@
 
 using System;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
+
+
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    /// <summary>
-    /// This test class tests the base inherited methods of the Button class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsWin_Button : TestBaseMethods.TestBaseMethodsWin
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateButton();
-        }
-    }
 
-    /// <summary>
-    /// This test class tests the base inherited methods of the Button class.
-    /// </summary>
-    [TestFixture]
-    public class TestBaseMethodsVWG_Button : TestBaseMethods.TestBaseMethodsVWG
-    {
-        protected override IControlHabanero CreateControl()
-        {
-            return GetControlFactory().CreateButton();
-        }
-    }
+
 
     /// <summary>
     /// This test class tests the Button class.
@@ -56,23 +35,7 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestButtonWin : TestButton
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-        }
-
-        [TestFixture]
-        public class TestButtonVWG : TestButton
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryVWG();
-            }
-        }
+     
 
         [Test]
         public void TestCreateButton()

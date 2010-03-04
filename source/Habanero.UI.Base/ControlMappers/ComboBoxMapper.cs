@@ -163,7 +163,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Sets up the items to be listed in the ComboBox
         /// </summary>
-        protected internal abstract void SetupComboBoxItems();
+        public abstract void SetupComboBoxItems();
 
 //        /// <summary>
 //        /// Gets and sets the lookup list used to populate the items in the
