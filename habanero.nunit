@@ -4,6 +4,7 @@
     <assembly path="bin\Habanero.Test.dll" />
     <assembly path="bin\Habanero.Test.Bo.dll" />
     <assembly path="bin\Habanero.Test.Db.dll" />
-    <assembly path="bin\Habanero.Test.UI.Base.dll" />
+    <assembly path="bin\Habanero.Test.UI.Win.dll" />
+    <assembly path="bin\Habanero.Test.UI.VWG.dll" />
   </Config>
 </NUnitProject>
