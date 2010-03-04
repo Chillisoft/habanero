@@ -31,11 +31,12 @@ namespace Habanero.UI.Base
     public class WizardController : IWizardController
     {
         private List<IWizardStep> _wizardSteps;
-        private int _currentStep = -1;
+
         /// <summary>
         /// Event Handler for the Wizard being finished. Allows you to do special handling when this occurs.
         /// </summary>
         public event EventHandler WizardFinished;
+        private readonly Stack<IWizardStep> _visitedSteps = new Stack<IWizardStep>();
 
         /// <summary>
         /// Initiliases the Wizard. When the Wizard is created there is no current step, the first call to GetNextStep() will move to the first step.
@@ -43,6 +44,7 @@ namespace Habanero.UI.Base
         public WizardController()
         {
             _wizardSteps = new List<IWizardStep>();
+            CurrentStep = -1;
         }
 
         /// <summary>
@@ -67,11 +69,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets or Sets the Current Step of the Wizard.
         /// </summary>
-        public int CurrentStep
-        {
-            get { return _currentStep; }
-            protected set { _currentStep = value; }
-        }
+        public int CurrentStep { get; protected set; }
 
         /// <summary>
         /// Returns the next step in the Wizard and sets the current step to that step.
@@ -80,11 +78,23 @@ namespace Habanero.UI.Base
         /// <returns>The next step.</returns>
         public virtual IWizardStep GetNextStep()
         {
-            if (_currentStep < _wizardSteps.Count - 1)
+            if (CurrentStep < 0)
             {
-                return _wizardSteps[++_currentStep];
+                return GetFirstStep();
             }
-            throw new WizardStepException("Invalid Wizard Step: " + (_currentStep + 1));
+            if (CurrentStep < StepCount - 1)
+            {
+                CurrentStep++;
+                IWizardStep currentStep = GetCurrentStep();
+                if (currentStep != null)
+                {
+                    _visitedSteps.Push(currentStep);
+                }
+                return _wizardSteps[CurrentStep];
+            }
+
+
+            throw new WizardStepException("Invalid Wizard Step: " + (CurrentStep + 1));
         }
 
 
@@ -95,11 +105,15 @@ namespace Habanero.UI.Base
         /// <returns>The previous step.</returns>
         public virtual IWizardStep GetPreviousStep()
         {
-            if (_currentStep > 0)
+
+            if (CurrentStep > 0)
             {
-                return _wizardSteps[--_currentStep];
+                _visitedSteps.Pop();
+                IWizardStep previousStep = _visitedSteps.Peek();
+                CurrentStep = WizardSteps.IndexOf(previousStep);
+                return previousStep;
             }
-            throw new WizardStepException("Invalid Wizard Step: " + (_currentStep - 1));
+            throw new WizardStepException("Invalid Wizard Step: " + (CurrentStep - 1));
         }
 
 
@@ -109,13 +123,16 @@ namespace Habanero.UI.Base
         /// <returns>The first step.</returns>
         public virtual IWizardStep GetFirstStep()
         {
-            if (_wizardSteps.Count <= 0)
+            if (StepCount <= 0)
             {
                 throw new HabaneroApplicationException(
                     "There was an Error when trying to access the first step of the wizard Controller" 
                     + this.GetType() + ". The wizard controller has not been set up with steps");
             }
-            return _wizardSteps[_currentStep = 0];
+            CurrentStep = 0;
+            var currentStep = GetCurrentStep();
+            if (currentStep != null) _visitedSteps.Push(currentStep);
+            return currentStep;
         }
 
         /// <summary>
@@ -124,7 +141,7 @@ namespace Habanero.UI.Base
         /// <returns>True if the current step is the last step.</returns>
         public virtual bool IsLastStep()
         {
-            return (_currentStep == _wizardSteps.Count - 1);
+            return (CurrentStep == StepCount - 1 && StepCount > 0);
         }
 
 
@@ -134,7 +151,7 @@ namespace Habanero.UI.Base
         /// <returns>True if the current step is the first step.</returns>
         public virtual bool IsFirstStep()
         {
-            return (_currentStep == 0);
+            return (CurrentStep == 0 && StepCount > 0);
         }
 
         /// <summary>
@@ -191,7 +208,8 @@ namespace Habanero.UI.Base
         /// <returns></returns>
         public virtual IWizardStep GetCurrentStep()
         {
-            return _currentStep == -1 ? null : _wizardSteps[_currentStep];
+            if (CurrentStep == -1 && StepCount > 0) CurrentStep = 0;
+            return CurrentStep < 0 ? null : _wizardSteps[CurrentStep];
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Stores common constants used by wizard controls
     /// </summary>
-    public abstract class WizardControl
+    public static class WizardControl
     {
      /// <summary>
      /// The Padding that is used at the top, left, right and bottom when placing a wizard step in the control.

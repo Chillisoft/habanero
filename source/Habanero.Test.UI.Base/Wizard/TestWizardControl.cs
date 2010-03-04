@@ -26,7 +26,6 @@ using Rhino.Mocks;
 
 namespace Habanero.Test.UI.Base.Wizard
 {
-
     public abstract class TestWizardControl
     {
         protected abstract IControlFactory GetControlFactory();
