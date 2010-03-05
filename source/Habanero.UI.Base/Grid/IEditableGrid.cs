@@ -68,7 +68,7 @@ namespace Habanero.UI.Base
         /// </summary>
         void SaveChanges();
         
-        /// <summary>
+/*        /// <summary>
         /// Gets or sets the boolean value that determines whether to confirm
         /// deletion with the user when they have chosen to delete a row
         /// </summary>
@@ -77,7 +77,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets or sets the delegate that checks whether the user wants to delete selected rows
         /// </summary>
-        CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate{ get; set;}
+        CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate{ get; set;}*/
 
         /// <summary>
         /// Indicates what action should be taken when a selection of

@@ -39,11 +39,20 @@ namespace Habanero.UI.Win
         /// </summary>
         protected GridBaseWin()
         {
+            ConfirmDeletion = false;
+            CheckUserConfirmsDeletionDelegate = CheckUserWantsToDelete;
             _manager = new GridBaseManager(this);
             _manager.CollectionChanged += delegate { FireCollectionChanged(); };
             _manager.BusinessObjectSelected += delegate { FireBusinessObjectSelected(); };
             DoubleClick += DoubleClickHandler;
         }
+
+        /// <summary>
+        /// Displays a message box to the user to check if they want to proceed with
+        /// deleting the selected rows.
+        /// </summary>
+        /// <returns>Returns true if the user does want to delete</returns>
+        public abstract bool CheckUserWantsToDelete();
 
         /// <summary>
         /// Occurs when a business object is selected
@@ -373,5 +382,15 @@ namespace Habanero.UI.Win
         {
             get { return this.Rows.Count; }
         }
+        /// <summary>
+        /// Gets or sets the boolean value that determines whether to confirm
+        /// deletion with the user when they have chosen to delete a row
+        /// </summary>
+        public bool ConfirmDeletion { get; set; }
+
+        /// <summary>
+        /// Gets or sets the delegate that checks whether the user wants to delete selected rows
+        /// </summary>
+        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate { get; set; }
     }
 }

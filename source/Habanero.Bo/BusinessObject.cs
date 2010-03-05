@@ -149,6 +149,7 @@ namespace Habanero.BO
 // ReSharper disable UnusedParameter.Local
         protected BusinessObject(bool constructForFakes)
         {
+            _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
         }
 
         protected virtual void InitialiseForFakes(IClassDef classDef)
@@ -698,6 +699,7 @@ namespace Habanero.BO
                      Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
                 return false;
             }
+            if (Relationships == null) return true;
             foreach (IRelationship relationship in Relationships)
             {
                 bool isDeletable = relationship.IsDeletable(out message);

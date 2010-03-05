@@ -208,7 +208,7 @@ namespace Habanero.UI.Base
         /// <returns></returns>
         public virtual IWizardStep GetCurrentStep()
         {
-            if (CurrentStep == -1 && StepCount > 0) CurrentStep = 0;
+//            if (CurrentStep == -1 && StepCount > 0) CurrentStep = 0;
             return CurrentStep < 0 ? null : _wizardSteps[CurrentStep];
         }
 

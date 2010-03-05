@@ -43,7 +43,7 @@ namespace Habanero.Test.UI.Win.Grid
             IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -69,7 +69,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -99,7 +99,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.AllowUserToDeleteRows = false;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -127,7 +127,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -154,7 +154,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -181,7 +181,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -237,7 +237,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = false;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -266,7 +266,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -295,7 +295,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -325,7 +325,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -358,7 +358,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -384,7 +384,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -416,7 +416,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.ConfirmDeletion = true;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;
@@ -442,7 +442,7 @@ namespace Habanero.Test.UI.Win.Grid
             editableGrid.DeleteKeyBehaviour = DeleteKeyBehaviours.ClearContents;
 
             bool confirmationDelegateCalled = false;
-            editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+            editableGrid.CheckUserConfirmsDeletionDelegate -= editableGrid.CheckUserWantsToDelete;
             editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                                                                   {
                                                                       confirmationDelegateCalled = true;

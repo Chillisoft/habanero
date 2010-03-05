@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
@@ -39,6 +40,11 @@ namespace Habanero.UI.VWG
             this.AllowUserToAddRows = false;
             this.AllowUserToDeleteRows = false;
             this.SelectionMode = Gizmox.WebGUI.Forms.DataGridViewSelectionMode.FullRowSelect;
+        }
+
+        public override bool CheckUserWantsToDelete()
+        {
+            return true;
         }
 
         /// <summary>

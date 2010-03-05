@@ -146,16 +146,7 @@ namespace Habanero.UI.Win
             }
         }
 
-        /// <summary>
-        /// Gets or sets the boolean value that determines whether to confirm
-        /// deletion with the user when they have chosen to delete a row
-        /// </summary>
-        public bool ConfirmDeletion { get; set; }
 
-        /// <summary>
-        /// Gets or sets the delegate that checks whether the user wants to delete selected rows
-        /// </summary>
-        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate { get; set; }
 
         /// <summary>
         /// Indicates what action should be taken when a selection of
@@ -294,7 +285,7 @@ namespace Habanero.UI.Win
         /// deleting the selected rows.
         /// </summary>
         /// <returns>Returns true if the user does want to delete</returns>
-        public static bool CheckUserWantsToDelete()
+        public override bool CheckUserWantsToDelete()
         {
             return
                 MessageBox.Show

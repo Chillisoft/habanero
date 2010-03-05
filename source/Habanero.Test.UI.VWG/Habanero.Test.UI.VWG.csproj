@@ -78,6 +78,7 @@
     <Compile Include="Grid\TestReadOnlyGridControlVWG.cs" />
     <Compile Include="Grid\TestReadOnlyGridVWG.cs" />
     <Compile Include="HabaneroControls\BusinessObjectControlStubVWG.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="HabaneroControls\FilterControl\TestEnumComboBoxFilterVWG.cs" />
     <Compile Include="HabaneroControls\FilterControl\TestFilterControlBuilderVWG.cs" />

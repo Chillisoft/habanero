@@ -1,3 +1,4 @@
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.Test.UI.Base;
@@ -9,6 +10,11 @@ namespace Habanero.Test.UI.Win.Grid
 {
     public class GridBaseWinStub : GridBaseWin
     {
+        public override bool CheckUserWantsToDelete()
+        {
+            return true;
+        }
+
         /// <summary>
         /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
         /// return a read only datasetprovider, while an editable grid would return an editable one.

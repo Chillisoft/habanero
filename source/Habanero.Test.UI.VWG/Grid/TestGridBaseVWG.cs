@@ -1,3 +1,4 @@
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.Test.BO;
@@ -13,6 +14,11 @@ namespace Habanero.Test.UI.VWG.Grid
     {
         public class GridBaseVWGStub : GridBaseVWG
         {
+            public override bool CheckUserWantsToDelete()
+            {
+                return true;
+            }
+
             public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
             {
                 ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);

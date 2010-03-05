@@ -105,7 +105,7 @@ namespace Habanero.UI.VWG
         /// deleting the selected rows.
         /// </summary>
         /// <returns>Returns true if the user does want to delete</returns>
-        public static bool CheckUserWantsToDelete()
+        public override bool CheckUserWantsToDelete()
         {
             return
                 MessageBox.Show

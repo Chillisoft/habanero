@@ -635,27 +635,22 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets or sets a boolean value that determines whether to confirm
         /// deletion with the user when they have chosen to delete a row
-        /// Note_This method is implemented so as to support the interface but makes no sense in a readonly grid.
-        ///   This is a readOnly Grid and it makes no sense.
         /// </summary>
         public bool ConfirmDeletion
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return this.Grid.ConfirmDeletion; }
+            set { this.Grid.ConfirmDeletion = value; }
         }
 
         /// <summary>
         /// Gets or sets the delegate that checks whether the user wants to delete selected rows.
         /// If <see cref="IBOSelectorAndEditor.ConfirmDeletion"/> is true and no specific <see cref="IBOSelectorAndEditor.CheckUserConfirmsDeletionDelegate"/> is set then
         /// a default <see cref="CheckUserConfirmsDeletion"/> is used.
-        /// 
-        /// Note_This method is implemented so as to support the interface but makes no sense in a readonly grid.
-        ///   This is a readOnly Grid and it makes no sense.
         /// </summary>
         public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return this.Grid.CheckUserConfirmsDeletionDelegate; }
+            set { this.Grid.CheckUserConfirmsDeletionDelegate = value; }
         }
 
         #endregion

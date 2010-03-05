@@ -282,7 +282,7 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test]
-        public void TestGetCurrentStep_BeforeFirstStepCalled()
+        public void TestGetCurrentStep_BeforeFirstStepCalled_ShouldReturnNull()
         {
             Assert.AreSame(null, _wizardController.GetCurrentStep());
         }

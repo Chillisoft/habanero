@@ -77,13 +77,16 @@ namespace Habanero.UI.Base
 //        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 //        IBusinessObjectList SelectedBusinessObjects { get; }
 
-
         /// <summary>
         /// Gets a List of currently selected business objects
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         IList<BusinessObject> SelectedBusinessObjects { get; }
-
+        /// <summary>
+        /// Checks if th user wants to delete the selected Business Object (generally via a popup message
+        /// </summary>
+        /// <returns></returns>
+        bool CheckUserWantsToDelete();
 //
 //        /// <summary>
 //        /// Occurs when a business object is selected
@@ -234,6 +237,15 @@ namespace Habanero.UI.Base
         /// <returns>Returns the data set provider</returns>
         IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
 
+        /// <summary>
+        /// Gets or sets the boolean value that determines whether to confirm
+        /// deletion with the user when they have chosen to delete a row
+        /// </summary>
+        bool ConfirmDeletion { get; set; }
 
+        /// <summary>
+        /// Gets or sets the delegate that checks whether the user wants to delete selected rows
+        /// </summary>
+        CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate { get; set; }
     }
 }

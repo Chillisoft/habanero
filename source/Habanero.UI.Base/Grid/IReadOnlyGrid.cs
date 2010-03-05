@@ -26,5 +26,6 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IReadOnlyGrid : IGridBase
     {
+
     }
 }
