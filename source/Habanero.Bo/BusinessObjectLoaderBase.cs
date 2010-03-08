@@ -423,6 +423,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="collection">The collection to add to</param>
         /// <param name="loadedBo">The bo to be added</param>
+        /// <param name="originalPersistedObjects"></param>
         protected static void AddBusinessObjectToCollection
             (IBusinessObjectCollection collection, IBusinessObject loadedBo, IList originalPersistedObjects)
         {
@@ -538,7 +539,7 @@ namespace Habanero.BO
                 collection.AddWithoutEvents(businessObject);
             }
         }
-
+        // ReSharper disable UnusedMember.Global
         /// <summary>
         /// Restores the created collection. I.e. moves the items that are in the created collection
         ///  back to the main collection. Remember the main collection shows all the items from the database
@@ -567,7 +568,9 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="collection"></param>
         /// <param name="removedBusinessObjects"></param>
+
         protected static void RestoreRemovedCollection
+
             (IBusinessObjectCollection collection, IList removedBusinessObjects)
         {
             //The collection should show all loaded object less removed or deleted object not yet persisted
@@ -579,6 +582,7 @@ namespace Habanero.BO
             {
                 collection.Remove(removedBO);
             }
+            // ReSharper restore UnusedMember.Global
         }
 
         /// <summary>
