@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Linq;
 using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
@@ -27,8 +28,10 @@ namespace Habanero.BO.ClassDefinition
     public class SingleRelationshipDef : RelationshipDef
     {
         private bool _setAsOneToOne;
+        private bool _setAsCompulsory;
 
         #region Constructors
+
         // ReSharper disable DoNotCallOverridableMethodsInConstructor
         /// <summary>
         /// Constructor to create a new single relationship definition
@@ -48,6 +51,7 @@ namespace Habanero.BO.ClassDefinition
         {
             OwningBOHasForeignKey = true;
         }
+
         // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
         /// <summary>
@@ -66,9 +70,11 @@ namespace Habanero.BO.ClassDefinition
              IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
             : this(
                 relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef,
-                keepReferenceToRelatedObject, deleteParentAction, InsertParentAction.InsertRelationship, RelationshipType.Association)
+                keepReferenceToRelatedObject, deleteParentAction, InsertParentAction.InsertRelationship,
+                RelationshipType.Association)
         {
         }
+
         // ReSharper disable DoNotCallOverridableMethodsInConstructor
         ///<summary>
         /// Constructs a single Relationship
@@ -81,13 +87,17 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="deleteParentAction"></param>
         ///<param name="insertParentAction"><see cref="InsertParentAction"/></param>
         ///<param name="relationshipType"></param>
-        public SingleRelationshipDef (string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, IRelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, InsertParentAction insertParentAction, RelationshipType relationshipType)
+        public SingleRelationshipDef(string relationshipName, string relatedObjectAssemblyName,
+                                     string relatedObjectClassName, IRelKeyDef relKeyDef,
+                                     bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction,
+                                     InsertParentAction insertParentAction, RelationshipType relationshipType)
             : base(
                 relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef,
                 keepReferenceToRelatedObject, deleteParentAction, insertParentAction, relationshipType)
         {
             OwningBOHasForeignKey = true;
         }
+
         // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
         #endregion Constructors
@@ -109,8 +119,8 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
         {
-            Type relationshipBOType = typeof(SingleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
-            return (ISingleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);
+            Type relationshipBOType = typeof (SingleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
+            return (ISingleRelationship) Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);
         }
 
         public override bool IsOneToMany
@@ -127,6 +137,15 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _setAsOneToOne; }
         }
+
+        public override bool IsCompulsory
+        {
+            get
+            {
+                return _setAsCompulsory || AreAllPropsCompulsory();
+            }
+        }
+
         /// <summary>
         /// Sets this SingleRelationshipDef as a One To One.
         /// This overrides the default of it being set to ManyToOne
@@ -134,6 +153,37 @@ namespace Habanero.BO.ClassDefinition
         public void SetAsOneToOne()
         {
             _setAsOneToOne = true;
+        }
+
+        /// <summary>
+        /// Sets the single relationship as compulsory.
+        /// If this is set to true then the relationship is treated as compulsory 
+        /// else it uses the <see cref="RelationshipDef.IsCompulsory"/>
+        /// </summary>
+        public void SetAsCompulsory()
+        {
+            _setAsCompulsory = true;
+        }
+
+        /// <summary>
+        /// Returns true if this RelationshipDef is compulsory.
+        /// This relationship def will be considered to be compulsory if this
+        /// <see cref="OwningBOHasForeignKey"/> and all the <see cref="IPropDef"/>'s that make up the 
+        /// <see cref="IRelKeyDef"/> are compulsory
+        /// </summary>
+        private bool AreAllPropsCompulsory()
+        {
+            return this.OwningBOHasForeignKey
+                   && this.RelKeyDef != null
+                   && this.RelKeyDef.Count > 0
+                   && this.RelKeyDef.All(PropDefIsCompulsory);
+        }
+
+        private bool PropDefIsCompulsory(IRelPropDef def)
+        {
+            return (def.OwnerPropDef != null && def.OwnerPropDef.Compulsory)
+                   || (this.OwningClassDef != null
+                       && this.OwningClassDef.GetPropDef(def.OwnerPropertyName).Compulsory);
         }
     }
 }

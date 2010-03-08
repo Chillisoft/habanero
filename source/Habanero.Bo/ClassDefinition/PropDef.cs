@@ -571,7 +571,7 @@ namespace Habanero.BO.ClassDefinition
             get { return _lookupList; }
             set
             {
-                _lookupList = value;
+                _lookupList = value ?? new NullLookupList();
                 _lookupList.PropDef = this;
             }
         }
@@ -935,13 +935,6 @@ namespace Habanero.BO.ClassDefinition
                 if (MyPropertyType == typeof (DateTime) && _defaultValueString != null)
                 {
                     return _defaultValueString;
-                    //switch (_defaultValueString.ToUpper())
-                    //{
-                    //    case "TODAY":
-                    //        return DateTime.Today;
-                    //    case "NOW":
-                    //        return DateTime.Now;
-                    //}
                 }
                 if (_defaultValue == null && _defaultValueString != null)
                 {

@@ -377,114 +377,24 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsFalse(isOneToOne);
         }
+
+
+
         [Test]
-        public void Test_IsOneToOne_WhenIsSingleRelationship_SetOneToOneSetToTrue_ShouldReturnTrue()
+        public void Test_SetOwningClassDef_ShouldSet()
         {
             //---------------Set up test pack-------------------
-            var singleRelationshipDef = new FakeSingleRelationshipDef();
-            singleRelationshipDef.SetAsOneToOne();
-            IRelationshipDef relationshipDef = singleRelationshipDef;
+            IRelationshipDef relationshipDef = new FakeRelationshipDef();
+            var expectedClassDef = new FakeClassDef();
             //---------------Assert Precondition----------------
-            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
+            Assert.IsNull(relationshipDef.OwningClassDef);
             //---------------Execute Test ----------------------
-            bool isOneToOne = relationshipDef.IsOneToOne;
+            relationshipDef.OwningClassDef = expectedClassDef;
             //---------------Test Result -----------------------
-            Assert.IsTrue(isOneToOne);
-        }
-        [Test]
-        public void Test_IsManyToOne_WhenIsSingleRelationship_SetOneToOneSetToTrue_ShouldReturnFalse()
-        {
-            //---------------Set up test pack-------------------
-            var singleRelationshipDef = new FakeSingleRelationshipDef();
-            singleRelationshipDef.SetAsOneToOne();
-            IRelationshipDef relationshipDef = singleRelationshipDef;
-            //---------------Assert Precondition----------------
-            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
-            //---------------Execute Test ----------------------
-            bool isManyToOne = relationshipDef.IsManyToOne;
-            //---------------Test Result -----------------------
-            Assert.IsFalse(isManyToOne);
+            Assert.AreSame(expectedClassDef, relationshipDef.OwningClassDef);
         }
 
-        private class FakeMultipleRelationshipDef : MultipleRelationshipDef
-        {
-            public FakeMultipleRelationshipDef()
-                : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, "", DeleteParentAction.Prevent)
-            {
-            }
-        }
-        private class FakeSingleRelationshipDef : SingleRelationshipDef
-        {
-            public FakeSingleRelationshipDef()
-                : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
-            {
-            }
 
-        }
-
-        private class FakeRelationshipDef : RelationshipDef
-        {
-            public FakeRelationshipDef()
-                : base("rel", typeof (MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
-            {
-            }
-
-            public override bool OwningBOHasForeignKey
-            {
-                get { return true; }
-                set { }
-            }
-
-            public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
-            {
-                return null;
-            }
-
-            public override bool IsOneToMany
-            {
-                get { return true; }
-            }
-
-            public override bool IsManyToOne
-            {
-                get { return true; }
-            }
-
-            public override bool IsOneToOne
-            {
-                get { return true; }
-            }
-
-            public void SetRelationshipName(string name)
-            {
-                RelationshipName = name;
-            }
-
-            public void SetRelatedObjectAssemblyName(string name)
-            {
-                RelatedObjectAssemblyName = name;
-            }
-
-            public void SetRelatedObjectClassName(string name)
-            {
-                RelatedObjectClassName = name;
-            }
-
-            public void SetRelatedObjectClassType(Type type)
-            {
-                RelatedObjectClassType = type;
-            }
-
-            public void SetRelKeyDef(IRelKeyDef relKeyDef)
-            {
-                RelKeyDef = relKeyDef;
-            }
-
-            public void SetKeepReferenceToRelatedObject(bool keepRef)
-            {
-                KeepReferenceToRelatedObject = keepRef;
-            }
-        }
     }
 
     #region MockBO For Testing
@@ -620,6 +530,95 @@ namespace Habanero.Test.BO.ClassDefinition
             set { this.SetPropertyValue("MockBOProp1", value); }
         }
     }
+    internal class FakeRelationshipDef : RelationshipDef
+    {
+        private bool _owningBOHasFK;
 
+        public FakeRelationshipDef()
+            : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
+        {
+            _owningBOHasFK = true;
+        }
+
+        public override bool OwningBOHasForeignKey
+        {
+            get { return _owningBOHasFK; }
+            set { _owningBOHasFK = value; }
+        }
+
+        public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
+        {
+            return null;
+        }
+
+        public override bool IsOneToMany
+        {
+            get { return true; }
+        }
+
+        public override bool IsManyToOne
+        {
+            get { return true; }
+        }
+
+        public override bool IsOneToOne
+        {
+            get { return true; }
+        }
+
+        public override bool IsCompulsory
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public void SetRelationshipName(string name)
+        {
+            RelationshipName = name;
+        }
+
+        public void SetRelatedObjectAssemblyName(string name)
+        {
+            RelatedObjectAssemblyName = name;
+        }
+
+        public void SetRelatedObjectClassName(string name)
+        {
+            RelatedObjectClassName = name;
+        }
+
+        public void SetRelatedObjectClassType(Type type)
+        {
+            RelatedObjectClassType = type;
+        }
+
+        public void SetRelKeyDef(IRelKeyDef relKeyDef)
+        {
+            RelKeyDef = relKeyDef;
+        }
+
+        public void SetKeepReferenceToRelatedObject(bool keepRef)
+        {
+            KeepReferenceToRelatedObject = keepRef;
+        }
+    }
+    internal class FakeMultipleRelationshipDef : MultipleRelationshipDef
+    {
+        public FakeMultipleRelationshipDef()
+            : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, "", DeleteParentAction.Prevent)
+        {
+        }
+    }
+    internal class FakeSingleRelationshipDef : SingleRelationshipDef
+    {
+        public FakeSingleRelationshipDef()
+            : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
+        {
+        }
+
+        public void SetRelKeyDef(IRelKeyDef relKeyDef)
+        {
+            RelKeyDef = relKeyDef;
+        }
+    }
     #endregion
 }

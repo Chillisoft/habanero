@@ -628,52 +628,6 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNull(classDef.UIDefCol);
         }
 
-        // This class serves to access protected methods
-        private class FakeClassDef : ClassDef
-        {
-            public FakeClassDef() : base(typeof(ClassDef), null, null, null, null, null,null)
-            {}
-
-            public void SetAssemblyName(string assemblyName)
-            {
-                AssemblyName = assemblyName;
-            }
-
-            public void SetClassName(string className)
-            {
-                ClassName = className;
-            }
-
-            public void SetClassNameFull(string className)
-            {
-                ClassNameFull = className;
-            }
-
-            public void SetClassType(Type type)
-            {
-                ClassType = type;
-            }
-
-            public void SetPropDefCol(IPropDefCol col)
-            {
-                PropDefcol = col;
-            }
-
-            public void SetKeyCol(KeyDefCol col)
-            {
-                KeysCol = col;
-            }
-
-            public void SetPrimaryKeyDef(IPrimaryKeyDef pkDef)
-            {
-                PrimaryKeyDef = pkDef;
-            }
-
-            public void SetUIDefCol(UIDefCol col)
-            {
-                UIDefCol = col;
-            }
-        }
 
         [Test]
         public void TestCloningAClassDef()
@@ -1120,5 +1074,53 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
 
+    }
+
+    // This class serves to access protected methods
+    internal class FakeClassDef : ClassDef
+    {
+        public FakeClassDef()
+            : base(typeof(ClassDef), null, null, null, null, null, null)
+        { }
+
+        public void SetAssemblyName(string assemblyName)
+        {
+            AssemblyName = assemblyName;
+        }
+
+        public void SetClassName(string className)
+        {
+            ClassName = className;
+        }
+
+        public void SetClassNameFull(string className)
+        {
+            ClassNameFull = className;
+        }
+
+        public void SetClassType(Type type)
+        {
+            ClassType = type;
+        }
+
+        public void SetPropDefCol(IPropDefCol col)
+        {
+            PropDefcol = col;
+        }
+
+        public void SetKeyCol(KeyDefCol col)
+        {
+            KeysCol = col;
+        }
+
+        public void SetPrimaryKeyDef(IPrimaryKeyDef pkDef)
+        {
+            PrimaryKeyDef = pkDef;
+        }
+
+        public void SetUIDefCol(UIDefCol col)
+        {
+            UIDefCol = col;
+        }
     }
 }

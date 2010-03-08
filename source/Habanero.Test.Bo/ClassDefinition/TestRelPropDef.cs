@@ -93,7 +93,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             PropDef propDef = new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, null);
             PropDef propDef2 = new PropDef("prop2", typeof(string), PropReadWriteRule.ReadWrite, null);
-            RelPropDefInheritor relPropDef = new RelPropDefInheritor(propDef);
+            RelPropDefFake relPropDef = new RelPropDefFake(propDef);
 
             Assert.AreEqual(propDef, relPropDef.GetSetOwnerProperty);
             relPropDef.GetSetOwnerProperty = propDef2;
@@ -104,16 +104,30 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("newrelprop", relPropDef.RelatedClassPropName);
         }
 
-        // Grants access to protected methods
-        private class RelPropDefInheritor : RelPropDef
+        [Test]
+        public void Test_OwnerPropDef_ShouldReturnIPropDef()
         {
-            public RelPropDefInheritor(PropDef propDef) : base(propDef, "relprop")
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("Prop", typeof(string), PropReadWriteRule.ReadWrite, null);
+            var relPropDef = new RelPropDef(propDef, "PropName");
+            //---------------Assert Precondition----------------
+            
+            //---------------Execute Test ----------------------
+            var ownerPropDef = relPropDef.OwnerPropDef;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(ownerPropDef);
+            Assert.AreSame(propDef, ownerPropDef);
+        }
+        // Grants access to protected methods
+        private class RelPropDefFake : RelPropDef
+        {
+            public RelPropDefFake(IPropDef propDef) : base(propDef, "relprop")
             {}
 
             public IPropDef GetSetOwnerProperty
             {
-                get { return _ownerPropDef; }
-                set { _ownerPropDef = value; }
+                get { return OwnerPropDef; }
+                set { OwnerPropDef = value; }
             }
 
             public void SetRelatedClassPropName(string name)

@@ -46,7 +46,7 @@ namespace Habanero.BO
         /// <summary> Is the boProp valid </summary>
         protected bool _isValid = true;
         /// <summary> The propDef for the BOProp </summary>
-        protected PropDef _propDef;
+        protected IPropDef _propDef;
         /// <summary> The reason the prop is invalid </summary>
         protected string _invalidReason = "";
         /// <summary> The persisted value of the Property. </summary>
@@ -77,7 +77,7 @@ namespace Habanero.BO
         public BOProp(IPropDef propDef)
         {
             if (propDef == null) throw new ArgumentNullException("propDef");
-            _propDef = (PropDef) propDef;
+            _propDef =  propDef;
             UpdatesBusinessObjectStatus = true;
         }
 
@@ -412,7 +412,7 @@ namespace Habanero.BO
         /// </summary>
         public Type PropertyType
         {
-            get { return _propDef.PropType; }
+            get { return _propDef.PropertyType; }
         }
 
         /// <summary>

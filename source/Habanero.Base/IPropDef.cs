@@ -49,7 +49,7 @@ namespace Habanero.Base
         /// <summary>
         /// The type of the property, e.g. string
         /// </summary>
-        Type PropertyType { get; }
+        Type PropertyType { get; set; }
 
         ///// <summary>
         ///// Gets and sets the property rule relevant to this definition
@@ -206,5 +206,16 @@ namespace Habanero.Base
         ///</summary>
         ///<returns></returns>
         IPropDef Clone();
+
+        /// <summary>
+        /// Tests whether a specified property value is valid against the current
+        /// property rule.  A boolean is returned and an error message,
+        /// where appropriate, is stored in a referenced parameter.
+        /// </summary>
+        /// <param name="propValue">The property value to be tested in the user interface, clarifies error messaging</param>
+        /// <param name="errorMessage">A string which may be amended to reflect
+        /// an error message if the value is not valid</param>
+        /// <returns>Returns true if valid, false if not</returns>
+        bool IsValueValid(object propValue, ref string errorMessage);
     }
 }

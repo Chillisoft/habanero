@@ -96,5 +96,17 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(RelationshipType.Composition, relationshipDef.RelationshipType);
         }
 
+        [Test]
+        public void Test_IsCompulsory_AlwaysTrueForMultiple()
+        {
+            //---------------Set up test pack-------------------
+            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.GetRandomString(),
+                TestUtil.GetRandomString(), TestUtil.GetRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated, InsertParentAction.InsertRelationship, RelationshipType.Composition, 10000);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var isCompulsory = relationshipDef.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isCompulsory);
+        }
     }
 }

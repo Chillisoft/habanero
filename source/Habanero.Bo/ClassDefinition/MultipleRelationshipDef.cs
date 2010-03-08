@@ -195,6 +195,11 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return false; }
         }
+
+        public override bool IsCompulsory
+        {
+            get { return false; }
+        }
     }
 
     

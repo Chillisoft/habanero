@@ -46,5 +46,10 @@ namespace Habanero.Base
         /// The property name to be matched to in the related class
         /// </summary>
         string RelatedClassPropName { get; }
+
+        /// <summary>
+        /// Returns the PropDef of the OwnerClass that this RelPropDef defines.
+        /// </summary>
+        IPropDef OwnerPropDef { get; }
     }
 }

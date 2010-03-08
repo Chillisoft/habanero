@@ -22,7 +22,9 @@ using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBeProtected.Global
 namespace Habanero.BO
 {
     /// <summary>
@@ -78,7 +80,7 @@ namespace Habanero.BO
     [Serializable]
     public class BOPropWriteException : BusinessObjectException
     {
-        private readonly PropDef _propDef;
+        private readonly IPropDef _propDef;
 
         /// <summary>
         /// Constructor to initialise the exception
@@ -103,7 +105,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propDef">The property definition for the property that had the ReadWriteRule which threw the error.</param>
         /// <param name="message">The error message</param>
-        public BOPropWriteException(PropDef propDef, string message) : base(message)
+        public BOPropWriteException(IPropDef propDef, string message) : base(message)
         {
             _propDef = propDef;
         }
@@ -126,6 +128,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="info">The serialisation info</param>
         /// <param name="context">The streaming context</param>
+
         protected BOPropWriteException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
@@ -134,7 +137,7 @@ namespace Habanero.BO
         ///<summary>
         /// The property definition for the property that had the ReadWriteRule which threw the error.
         ///</summary>
-        public PropDef PropDef
+        public IPropDef PropDef
         {
             get { return _propDef; }
         }
@@ -235,7 +238,9 @@ namespace Habanero.BO
 		/// <summary>
 		/// Constructor to initialise the exception
 		/// </summary>
+
 		public BusinessObjectReferentialIntegrityException()
+
 		{
 		}
 
@@ -449,7 +454,7 @@ namespace Habanero.BO
         /// <summary>
         /// The Business Object the concurrency control exception is for
         /// </summary>
-        protected object mobj; //TODO make this be a business object only
+        protected object _obj; //TODO make this be a business object only
 
         /// <summary>
         /// Constructor to initialise the exception with the specified message
@@ -459,7 +464,7 @@ namespace Habanero.BO
         /// <param name="obj">The object involved in the exception</param>
         public BusObjectConcurrencyControlException(string message, object obj) : base(message)
         {
-            mobj = obj;
+            _obj = obj;
         }
 
         /// <summary>
@@ -467,7 +472,7 @@ namespace Habanero.BO
         /// </summary>
         public object getObject
         {
-            get { return mobj; }
+            get { return _obj; }
         }
 
         /// <summary>
@@ -479,7 +484,7 @@ namespace Habanero.BO
         protected BusObjectConcurrencyControlException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            mobj = info.GetValue("businessObject", typeof (object));
+            _obj = info.GetValue("businessObject", typeof (object));
         }
 
         /// <summary>
@@ -492,7 +497,7 @@ namespace Habanero.BO
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             // Implement type-specific serialization logic and call base serializer.
-            info.AddValue("businessObject", mobj);
+            info.AddValue("businessObject", _obj);
             base.GetObjectData(info, context);
         }
     }
@@ -543,7 +548,7 @@ namespace Habanero.BO
             mMachineNameEdited = (machineName.Length > 0 ? machineName : "[Unknown]");
             mDateUpdated = dateUpdated;
             mObjectID = objectID;
-            mobj = obj;
+            _obj = obj;
             mClassName = className;
         }
 
@@ -578,7 +583,7 @@ namespace Habanero.BO
         /// </summary>
         public IBusinessObject BusinessObject
         {
-            get { return (BusinessObject) mobj; }
+            get { return (BusinessObject) _obj; }
         }
 
         /// <summary>
@@ -703,7 +708,7 @@ namespace Habanero.BO
             mMachineNameEdited = (machineName.Length > 0 ? machineName : "[Unknown]");
             mDateUpdated = dateUpdated;
             mObjectID = objectID;
-            mobj = obj;
+            _obj = obj;
             mClassName = className;
         }
 
@@ -740,7 +745,7 @@ namespace Habanero.BO
         /// </summary>
         public IBusinessObject BusinessObject
         {
-            get { return (BusinessObject)mobj; }
+            get { return (BusinessObject)_obj; }
         }
 
         /// <summary>
@@ -1241,4 +1246,7 @@ namespace Habanero.BO
         {
         }
     }
+    // ReSharper restore UnusedMember.Global
+    // ReSharper restore MemberCanBePrivate.Global
+    // ReSharper restore MemberCanBeProtected.Global
 }

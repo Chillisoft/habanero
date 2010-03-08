@@ -20,8 +20,7 @@ namespace Habanero.Base
         ///                 </param>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
-            if (destinationType == typeof(DateTime)) return true;
-            return base.CanConvertTo(context, destinationType);
+            return destinationType == typeof(DateTime) || base.CanConvertTo(context, destinationType);
         }
 
         /// <summary>
@@ -39,8 +38,9 @@ namespace Habanero.Base
         ///                 </exception>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == typeof(DateTime)) return DateTimeToday.Value;
-            return base.ConvertTo(context, culture, value, destinationType);
+            return destinationType == typeof(DateTime) 
+                    ? DateTimeToday.Value 
+                    : base.ConvertTo(context, culture, value, destinationType);
         }
     }
 }

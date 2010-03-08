@@ -29,6 +29,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
+
     [TestFixture]
     public class TestPropDef
     {
@@ -45,70 +46,6 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private PropDef _propDef;
 
-        private class PropDefMock : PropDef
-        {
-            public PropDefMock() : base("prop", typeof (MyBO), PropReadWriteRule.ReadWrite, null)
-            {
-            }
-
-            public void SetPropertyName(string name)
-            {
-                PropertyName = name;
-            }
-
-            public void SetPropertyTypeAssemblyName(string name)
-            {
-                PropertyTypeAssemblyName = name;
-            }
-
-            public void SetPropertyTypeName(string name)
-            {
-                PropertyTypeName = name;
-            }
-
-            public void SetPropertyType(Type type)
-            {
-                PropertyType = type;
-            }
-
-            public void SetDatabaseFieldName(string name)
-            {
-                DatabaseFieldName = name;
-            }
-
-            public void SetDefaultValue(object value)
-            {
-                DefaultValue = value;
-            }
-
-            public void SetDefaultValueString(string value)
-            {
-                DefaultValueString = value;
-            }
-
-            public void SetCompulsory(bool value)
-            {
-                Compulsory = value;
-            }
-
-            public void SetReadWriteRule(PropReadWriteRule rule)
-            {
-                ReadWriteRule = rule;
-            }
-
-#pragma warning disable 168
-            public bool IsPropValueValid(object value)
-            {
-                string errors = "";
-                return IsValueValid("test", ref errors);
-            }
-#pragma warning restore 168
-
-            public void SetPropType(Type type)
-            {
-                PropType = type;
-            }
-        }
 
         [Test]
         public void Test_SetPropDefUnitOfMeasure()
@@ -156,6 +93,21 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(typeof(Guid), propertyType);
         }
 
+        [Test]
+        public void Test_SetPropType_ShouldSet()
+        {
+            //---------------Set up test pack-------------------
+            Type origPropType = typeof(Guid);
+            IPropDef propDef = new PropDef("PropName", origPropType, PropReadWriteRule.ReadOnly, null);
+            var newPropType = typeof (string);
+            //---------------Assert Precondition----------------
+            Assert.AreSame(origPropType, propDef.PropertyType);
+            //---------------Execute Test ----------------------
+            propDef.PropertyType = newPropType;
+            //---------------Test Result -----------------------
+            Assert.AreNotSame(origPropType, propDef.PropertyType);
+            Assert.AreSame(newPropType, propDef.PropertyType);
+        }
 
         [Test]
         public void Test_AddPropRule()
@@ -812,7 +764,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            PropDefMock propDef = new PropDefMock();
+            PropDefFake propDef = new PropDefFake();
 
             Assert.AreEqual("prop", propDef.PropertyName);
             propDef.SetPropertyName("myprop");
@@ -1028,6 +980,22 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsNull(newValue);
         }
+
+        [Test]
+        public void Test_SetLookupList_ToNull_ShouldNotCauseError()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null, 99)
+                                  {
+                                      LookupList = new SimpleLookupList(new Dictionary<string, string>())
+                                  };
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(propDef.LookupList);
+            //---------------Execute Test ----------------------
+            propDef.LookupList = null;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<NullLookupList>(propDef.LookupList);
+        }
         class PropDefStub : PropDef
         {
             public PropDefStub(string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName, object defaultValue) : base(propertyName, propType, propRWStatus, databaseFieldName, defaultValue)
@@ -1065,6 +1033,72 @@ namespace Habanero.Test.BO.ClassDefinition
             {
                 return this.IsLookupListItemValid(propValue, ref errorMessage);
             }
+        }
+    }
+
+    public class PropDefFake : PropDef
+    {
+        public PropDefFake()
+            : base("prop", typeof(MyBO), PropReadWriteRule.ReadWrite, null)
+        {
+        }
+
+        public void SetPropertyName(string name)
+        {
+            PropertyName = name;
+        }
+
+        public void SetPropertyTypeAssemblyName(string name)
+        {
+            PropertyTypeAssemblyName = name;
+        }
+
+        public void SetPropertyTypeName(string name)
+        {
+            PropertyTypeName = name;
+        }
+
+        public void SetPropertyType(Type type)
+        {
+            PropertyType = type;
+        }
+
+        public void SetDatabaseFieldName(string name)
+        {
+            DatabaseFieldName = name;
+        }
+
+        public void SetDefaultValue(object value)
+        {
+            DefaultValue = value;
+        }
+
+        public void SetDefaultValueString(string value)
+        {
+            DefaultValueString = value;
+        }
+
+        public void SetCompulsory(bool value)
+        {
+            Compulsory = value;
+        }
+
+        public void SetReadWriteRule(PropReadWriteRule rule)
+        {
+            ReadWriteRule = rule;
+        }
+
+#pragma warning disable 168
+        public bool IsPropValueValid(object value)
+        {
+            string errors = "";
+            return IsValueValid("test", ref errors);
+        }
+#pragma warning restore 168
+
+        public void SetPropType(Type type)
+        {
+            PropType = type;
         }
     }
 }

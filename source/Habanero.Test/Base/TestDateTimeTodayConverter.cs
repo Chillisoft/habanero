@@ -32,19 +32,19 @@ namespace Habanero.Test.Base
             //---------------Set up test pack-------------------
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            DateTimeTodayConverter DateTimeTodayConverter = new DateTimeTodayConverter();
+            DateTimeTodayConverter dateTimeTodayConverter = new DateTimeTodayConverter();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOf(typeof(TypeConverter), DateTimeTodayConverter);
+            Assert.IsInstanceOf(typeof(TypeConverter), dateTimeTodayConverter);
         }
 
         [Test]
         public void Test_CanConvertTo_WithDateTime_ShouldReturnTrue()
         {
             //---------------Set up test pack-------------------
-            DateTimeTodayConverter DateTimeTodayConverter = new DateTimeTodayConverter();
+            DateTimeTodayConverter dateTimeTodayConverter = new DateTimeTodayConverter();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            bool result = DateTimeTodayConverter.CanConvertTo(typeof(DateTime));
+            bool result = dateTimeTodayConverter.CanConvertTo(typeof(DateTime));
             //---------------Test Result -----------------------
             Assert.IsTrue(result);
         }
@@ -53,12 +53,12 @@ namespace Habanero.Test.Base
         public void Test_ConvertTo_WithDateTime_ShouldReturnTodayValue()
         {
             //---------------Set up test pack-------------------
-            DateTimeTodayConverter DateTimeTodayConverter = new DateTimeTodayConverter();
-            DateTimeToday DateTimeToday = new DateTimeToday();
+            DateTimeTodayConverter dateTimeTodayConverter = new DateTimeTodayConverter();
+            DateTimeToday dateTimeToday = new DateTimeToday();
             DateTime snapshot = DateTime.Today;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            object result = DateTimeTodayConverter.ConvertTo(DateTimeToday, typeof(DateTime));
+            object result = dateTimeTodayConverter.ConvertTo(dateTimeToday, typeof(DateTime));
             //---------------Test Result -----------------------
             DateTime dateTime = TestUtil.AssertIsInstanceOf<DateTime>(result);
             Assert.AreEqual(snapshot, dateTime);
@@ -69,11 +69,11 @@ namespace Habanero.Test.Base
         {
             //---------------Set up test pack-------------------
             TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(DateTimeToday));
-            DateTimeToday DateTimeToday = new DateTimeToday();
+            DateTimeToday dateTimeToday = new DateTimeToday();
             DateTime snapshot = DateTime.Today;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            object result = typeConverter.ConvertTo(DateTimeToday, typeof(DateTime));
+            object result = typeConverter.ConvertTo(dateTimeToday, typeof(DateTime));
             //---------------Test Result -----------------------
             DateTime dateTime = TestUtil.AssertIsInstanceOf<DateTime>(result);
             Assert.AreEqual(snapshot, dateTime);

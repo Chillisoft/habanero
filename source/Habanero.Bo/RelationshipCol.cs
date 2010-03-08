@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
@@ -55,17 +56,8 @@ namespace Habanero.BO
         ///</summary>
         public bool IsDirty
         {
-            get {
-                foreach (KeyValuePair<string, IRelationship> pair in _relationships)
-                {
-                    IRelationship relationship = pair.Value;
-                    if (relationship.IsDirty)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
+            get
+            { return _relationships.Select(pair => pair.Value).Any(relationship => relationship.IsDirty); }
         }
 
         ///<summary>

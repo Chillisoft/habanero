@@ -30,7 +30,7 @@ namespace Habanero.BO.Loaders
     public class XmlRelationshipLoader : XmlLoader
     {
         private readonly string _className;
-        private IPropDefCol _propDefCol;
+//        private IPropDefCol _propDefCol;
         private string _relatedAssemblyName;
         private string _relatedClassName;
         private IRelKeyDef _relKeyDef;
@@ -77,7 +77,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a relationship definition</returns>
         public IRelationshipDef LoadRelationship(XmlElement relationshipElement, IPropDefCol propDefs)
         {
-            _propDefCol = propDefs;
+//            _propDefCol = propDefs;
             return (IRelationshipDef) this.Load(relationshipElement);
         }
 

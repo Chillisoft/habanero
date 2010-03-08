@@ -41,15 +41,19 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class RelPropDef : IRelPropDef
     {
-        protected IPropDef _ownerPropDef;
-        private string _ownerPropDefName;
+        private readonly string _ownerPropDefName;
 
         /// <summary>
         /// The property name to be matched to in the related class
         /// </summary>
         public string RelatedClassPropName { get; protected set; }
 
-		/// <summary>
+        /// <summary>
+        /// Returns the PropDef of the OwnerClass that this RelPropDef defines.
+        /// </summary>
+        public IPropDef OwnerPropDef { get; protected set; }
+
+        /// <summary>
         /// Constructor to create new RelPropDef object
         /// </summary>
         /// <param name="ownerClassPropDef">The property definition of the 
@@ -60,7 +64,7 @@ namespace Habanero.BO.ClassDefinition
                           string relatedObjectPropName)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(ownerClassPropDef, "ownerClassPropDef");
-            _ownerPropDef = ownerClassPropDef;
+            OwnerPropDef = ownerClassPropDef;
             RelatedClassPropName = relatedObjectPropName;
 		}
 
@@ -82,7 +86,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public string OwnerPropertyName
         {
-            get { return _ownerPropDef != null ? _ownerPropDef.PropertyName : _ownerPropDefName; }
+            get { return OwnerPropDef != null ? OwnerPropDef.PropertyName : _ownerPropDefName; }
         }
 
 

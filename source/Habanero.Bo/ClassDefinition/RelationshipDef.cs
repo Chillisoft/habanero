@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
@@ -115,10 +116,12 @@ namespace Habanero.BO.ClassDefinition
 		}
         // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
+        public abstract bool IsCompulsory{ get;}
+
         ///<summary>
         /// Gets and Sets the Class Def to the ClassDefinition that owns this Relationship Def.
         ///</summary>
-        public IClassDef OwningClassDef { get; internal set; }
+        public IClassDef OwningClassDef { get; set; }
 
         #endregion Constructors
 
@@ -337,5 +340,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns true if this is a Single Relationship and the Reverse is a Single relationship
         ///</summary>
         public abstract bool IsOneToOne { get; }
+
+
     }
 }

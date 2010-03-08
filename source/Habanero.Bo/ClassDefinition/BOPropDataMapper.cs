@@ -22,7 +22,7 @@ using Habanero.Base;
 namespace Habanero.BO.ClassDefinition
 {
     ///<summary>
-    /// provides an interface for property data mappers.
+    /// Provides an interface for property data mappers.
     /// The property data mapper conforms to the GOF strategy pattern.
     /// This allows the developer to apply the data mapper that is relevant to the particular situation.
     /// E.g. Code to read data from a database (or other datasource) and convert it to the appropriate type.

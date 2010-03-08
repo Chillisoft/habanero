@@ -219,11 +219,6 @@ namespace Habanero.Base
         /// </summary>
         string RelatedObjectClassNameWithTypeParameter { get; }
 
-        ///<summary>
-        /// Gets the Class Def to the ClassDefinition that owns this Relationship Def.
-        ///</summary>
-        IClassDef OwningClassDef { get; }
-
         /// <summary>
         /// Create and return a new Relationship based on the relationship definition.
         /// </summary>
@@ -259,6 +254,19 @@ namespace Habanero.Base
         /// Returns true if this is a Single Relationship and the Reverse is a Single relationship
         ///</summary>
         bool IsOneToOne { get; }
+
+        /// <summary>
+        /// Returns true if this RelationshipDef is compulsory.
+        /// This relationship def will be considered to be compulsory if this
+        /// <see cref="OwningBOHasForeignKey"/> and all the <see cref="IPropDef"/>'s that make up the 
+        /// <see cref="IRelKeyDef"/> are compulsory
+        /// </summary>
+        bool IsCompulsory { get; }
+
+        ///<summary>
+        /// Gets and Sets the Class Def to the ClassDefinition that owns this Relationship Def.
+        ///</summary>
+        IClassDef OwningClassDef { get; set; }
     }
 
 }

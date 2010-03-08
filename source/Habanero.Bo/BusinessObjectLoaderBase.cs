@@ -65,9 +65,8 @@ namespace Habanero.BO
             where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
-            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
-            col.SelectQuery.Criteria = criteria;
-            Refresh<T>(col);
+            BusinessObjectCollection<T> col = new BusinessObjectCollection<T> {SelectQuery = {Criteria = criteria}};
+            Refresh(col);
             return col;
         }
 
@@ -391,7 +390,7 @@ namespace Habanero.BO
         #endregion
         /// <summary>
         /// Creates a Generic Collection of <see cref="IBusinessObjectCollection"/> of the Generic
-        /// Type determined by the <paramref name="boType"/>
+        /// Type determined by the <paramref name="classDef"/>
         /// </summary>
         /// <param name="classDef">The ClassDef to use for the collection (and its <see cref="SelectQuery"/>)</param>
         /// <returns></returns>
