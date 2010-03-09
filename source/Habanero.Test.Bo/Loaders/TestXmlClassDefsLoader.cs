@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Linq;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -228,6 +229,43 @@ namespace Habanero.Test.BO.Loaders
 
             Assert.IsTrue(relationshipDef.OwningBOHasForeignKey);
         }
+
+        [Test]
+        public void Test_Valid_Relationship_ShouldSetOwningClassDef()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey isObjectID=""false"">
+                                <prop name=""TestRelatedClassID""/>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" 
+                                            owningBOHasForeignKey=""true"" >
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = CreateXmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
+            //---------------Test Result -----------------------
+            IClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
+            IRelationshipDef reverseRelDef = reverseClassDef.RelationshipDefCol["TestClass"];
+
+            Assert.AreSame(reverseClassDef, reverseRelDef.OwningClassDef);
+        }
         [Test]
         public void Test_Valid_Relationship_1_M_Relationships_CanDetermine_OwningBOHasForeignKey_SecondClass()
         {
@@ -319,7 +357,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
         }
 
-        [Ignore(" Should it set owningBOhasForeignKey = True where it can i.e. where the one is a primary key and the other is not then definitely true")] //TODO  23 Feb 2009:
+        [Ignore(" Should it set owningBOhasForeignKey = True where it can i.e. where the one is a primary key and the other is not then definitely true. See Logic in FS")] //TODO  23 Feb 2009:
         [Test]
         public void Test_Valid_Relationship_1_M_Relationships_CanDetermine_OwningBOHasForeignKey_SecondClass_SetAsFalse()
         {
@@ -638,7 +676,43 @@ namespace Habanero.Test.BO.Loaders
             }
         }
 
-
+        private const string TestClassWithUIDef =
+            @"<classes>
+				<class name=""Sample"" assembly=""Habanero.Test"">
+					<property  name=""SampleID"" type=""Guid"" />
+					<property  name=""SampleText"" />
+					<property  name=""SampleInt"" type=""Int32"" />
+					<primaryKey>
+						<prop name=""SampleID"" />
+					</primaryKey>
+					<ui>
+                        <form>
+							<tab name=""Tab1"">
+								<columnLayout width=""200"">
+                                    <field label=""SampleText:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                    <field label=""SampleInt:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" editable=""false"" />
+                                </columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+			</classes>
+			";
+        [Test]
+        public void Test_Load_ShouldSetUIDefsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), new DefClassFactory());
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            ClassDefCol classDefs =
+                loader.LoadClassDefs(TestClassWithUIDef);
+            //---------------Test Result -----------------------
+            IClassDef classDef = classDefs["Habanero.Test", "Sample"];
+            var uiDef = classDef.UIDefCol.FirstOrDefault();
+            Assert.IsNotNull(uiDef);
+            Assert.AreSame(classDef, uiDef.ClassDef);
+        }
     }
 #pragma warning restore 618,612
 

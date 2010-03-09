@@ -472,6 +472,7 @@ namespace Habanero.BO
         {
             string originalValue = null;
             int count = 1;
+            if (stringValue == null) stringValue = "";
             while (sortedLookupList.ContainsKey(stringValue))
             {
                 if (originalValue == null) originalValue = stringValue;

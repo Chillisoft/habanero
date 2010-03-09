@@ -36,6 +36,8 @@ namespace Habanero.Test
     public class MyBO : BusinessObject
     {
         private readonly List<IBusinessObjectRule> _myRuleList;
+        private string _toStringValue = _stdToStringVal;
+        private static string _stdToStringVal = "STDVALUE";
 
         protected MyBO(SerializationInfo info, StreamingContext context) : base(info, context)
         {
@@ -51,6 +53,10 @@ namespace Habanero.Test
         public MyBO()
         {
             _myRuleList = new List<IBusinessObjectRule>();
+        }
+
+        protected MyBO(bool constructForFakes) : base(constructForFakes)
+        {
         }
 
         protected override IClassDef ConstructClassDef()
@@ -1588,6 +1594,7 @@ namespace Habanero.Test
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
+            if (_toStringValue != _stdToStringVal) return _toStringValue;
             if (Props.Contains("TestProp"))
             {
                 return this.TestProp + " - " + this.MyBoID;
@@ -1598,6 +1605,10 @@ namespace Habanero.Test
                 return this.ClassDef.ClassNameFull;
             }
             return StringUtilities.GuidToUpper(this.MyBoID.Value);
+        }
+        public void SetToString(string value)
+        {
+            _toStringValue = value;
         }
 
         public static IClassDef GetLoadClassDefsUIDefNoFormDef()

@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -44,6 +45,7 @@ namespace Habanero.BO.Loaders
         private string _typeParameter;
         private string _classIDString;
         private string _moduleName;
+        private IClassDef _classDef;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -95,30 +97,35 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a class definition</returns>
         protected override object Create()
         {
-            IClassDef classDef = _defClassFactory.CreateClassDef(_assemblyName, _className, _displayName, _primaryKeyDef,
-                                                                _propDefCol,
-                                                                _keyDefCol, _relationshipDefCol, _uiDefCol);
+            if (_classDef == null) _classDef = CreateClassDef();
             if (_superClassDef != null)
             {
-                classDef.SuperClassDef = _superClassDef;
+                _classDef.SuperClassDef = _superClassDef;
             }
             if (!string.IsNullOrEmpty(_tableName))
             {
-                classDef.TableName = _tableName;
+                _classDef.TableName = _tableName;
             }
             if (!string.IsNullOrEmpty(_typeParameter))
             {
-                classDef.TypeParameter = _typeParameter;
+                _classDef.TypeParameter = _typeParameter;
             }
             if (!String.IsNullOrEmpty(_classIDString))
             {
-                classDef.ClassID = new Guid(_classIDString);
+                _classDef.ClassID = new Guid(_classIDString);
             }
             if(!String.IsNullOrEmpty(_moduleName))
             {
-                classDef.Module = _moduleName;
+                _classDef.Module = _moduleName;
             }
-            return classDef;
+            return _classDef;
+        }
+
+        private IClassDef CreateClassDef()
+        {
+            return _defClassFactory.CreateClassDef(_assemblyName, _className, _displayName, _primaryKeyDef,
+                               _propDefCol,
+                               _keyDefCol, _relationshipDefCol, _uiDefCol);
         }
 
         /// <summary>
@@ -129,6 +136,10 @@ namespace Habanero.BO.Loaders
             try
             {
                 _superClassDef = null;
+                _relationshipDefCol = _defClassFactory.CreateRelationshipDefCol();
+                _keyDefCol = _defClassFactory.CreateKeyDefCol();
+                _uiDefCol = _defClassFactory.CreateUIDefCol();
+                _propDefCol = _defClassFactory.CreatePropDefCol();
                 _reader.Read();
                 LoadClassInfo();
                 LoadTableName();
@@ -138,6 +149,8 @@ namespace Habanero.BO.Loaders
                 LoadModuleName();
                 _reader.Read();
 
+                
+                
                 List<string> keyDefXmls = new List<string>();
                 List<string> propDefXmls = new List<string>();
                 List<string> relationshipDefXmls = new List<string>();
@@ -179,6 +192,7 @@ namespace Habanero.BO.Loaders
                 LoadPropDefs(propDefXmls);
                 LoadKeyDefs(keyDefXmls);
                 LoadPrimaryKeyDef(primaryKeDefXML);
+                _classDef = CreateClassDef();
                 LoadRelationshipDefs(relationshipDefXmls);
                 LoadUIDefs(uiDefXmls);
             }
@@ -203,12 +217,14 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadRelationshipDefs(IEnumerable<string> xmlDefs)
         {
-            _relationshipDefCol = _defClassFactory.CreateRelationshipDefCol();
-            foreach (string relDefXml in xmlDefs)
+            var loadedRelationships = from relDefXml in xmlDefs
+                                      let relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory, _className)
+                                      select relationshipLoader.LoadRelationship(relDefXml, _propDefCol)
+                                      into loadedRelationship where loadedRelationship != null select loadedRelationship;
+            foreach (var loadedRelationship in loadedRelationships)
             {
-                XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory, _className);
-                var loadRelationship = relationshipLoader.LoadRelationship(relDefXml, _propDefCol);
-                if(loadRelationship != null) _relationshipDefCol.Add(loadRelationship);
+                loadedRelationship.OwningClassDef = this._classDef;
+                _relationshipDefCol.Add(loadedRelationship);
             }
         }
 
@@ -217,12 +233,15 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadUIDefs(IEnumerable<string> xmlDefs)
         {
-            _uiDefCol = _defClassFactory.CreateUIDefCol();
+            
             foreach (string uiDefXml in xmlDefs)
             {
                 XmlUILoader loader = new XmlUILoader(DtdLoader, _defClassFactory);
-                var loadUIDef = loader.LoadUIDef(uiDefXml);
-                if(loadUIDef != null)_uiDefCol.Add(loadUIDef);
+                var loadedUIDef = loader.LoadUIDef(uiDefXml);
+                if (loadedUIDef == null) continue;
+
+                loadedUIDef.ClassDef = _classDef;
+                _uiDefCol.Add(loadedUIDef);
             }
         }
 
@@ -231,7 +250,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadKeyDefs(IEnumerable<string> xmlDefs)
         {
-            _keyDefCol = _defClassFactory.CreateKeyDefCol();
+            
             foreach (string keyDefXml in xmlDefs)
             {
                 XmlKeyLoader loader = new XmlKeyLoader(DtdLoader, _defClassFactory);
@@ -295,7 +314,7 @@ namespace Habanero.BO.Loaders
                                                                           "properties in the class that is being mapped to.",
                                                                           _className));
                 }
-                _propDefCol = _defClassFactory.CreatePropDefCol();
+                
                 foreach (string propDefXml in xmlDefs)
                 {
                     XmlPropertyLoader propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);

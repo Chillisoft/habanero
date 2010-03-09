@@ -27,6 +27,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 { 
@@ -558,6 +559,25 @@ namespace Habanero.Test.BO
             Assert.IsTrue(dictionary.ContainsValue(myBO1.ID.ToString()));
             Assert.IsTrue(dictionary.ContainsValue(myBO2.ID.ToString()));
             Assert.IsTrue(dictionary.ContainsValue(myBO3.ID.ToString()));
+        }        
+        [Test]
+        public void Test_CreateDisplayValueDictionary_WhenToStringIsNull_ShouldNotRaiseError()
+        {
+            //--------------- Set up test pack ------------------
+            MyBO.LoadDefaultClassDef();
+            MyBO.DeleteAllMyBos();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            MyBO myBO1 = new MyBO();
+            myBO1.SetToString(null);
+            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO> {myBO1};
+            //--------------- Test Preconditions ----------------
+            Assert.IsNull(myBO1.ToString());
+            //--------------- Execute Test ----------------------
+            Dictionary<string, string> dictionary = BusinessObjectLookupList.CreateDisplayValueDictionary(myBOs, false, Convert.ToString);
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(1, dictionary.Count);
         }
+
     }
 }
