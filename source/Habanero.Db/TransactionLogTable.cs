@@ -41,7 +41,7 @@ namespace Habanero.DB
         private readonly string _businessObjectTypeNameFieldName;
         private readonly string _crudActionFieldName;
         private readonly string _dirtyXmlFieldName;
-        private Guid _ID;
+        private Guid _id;
         private readonly ISecurityController _securityController;
         private readonly string _businessObjectToStringFieldName;
 
@@ -118,7 +118,7 @@ namespace Habanero.DB
             this._businessObjectTypeNameFieldName = businessObjectTypeNameFieldName;
             this._crudActionFieldName = crudActionFieldName;
             this._dirtyXmlFieldName = dirtyXMLFieldName;
-            this._ID = Guid.NewGuid();
+            this._id = Guid.NewGuid();
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Habanero.DB
         /// is not added twice in error.</returns>
         public string TransactionID()
         {
-            return this._ID.ToString("B");
+            return this._id.ToString("B");
         }
 
         ///<summary>

@@ -172,14 +172,12 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-
 //        private static ContactPersonTransactionLogging CreateUnsavedContactPersonTransactionLoggingAltKey()
 //        {
 //            ContactPersonTransactionLogging cp = new ContactPersonTransactionLogging();
 //            cp.Surname = Guid.NewGuid().ToString();
 //            return cp;
 //        }
-
 
         [Test,
          Ignore(

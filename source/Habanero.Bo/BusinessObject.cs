@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
@@ -119,8 +120,6 @@ namespace Habanero.BO
         /// The Relationships owned by this <see cref="IBusinessObject"/>
         /// </summary>
         protected IRelationshipCol _relationshipCol;
-
-        private ITransactionLog _transactionLog;
 
         #endregion //Fields
 
@@ -582,7 +581,7 @@ namespace Habanero.BO
         /// <param name="transactionLog">A transaction log</param>
         protected void SetTransactionLog(ITransactionLog transactionLog)
         {
-            _transactionLog = transactionLog;
+            TransactionLog = transactionLog;
         }
 
         /// <summary>
@@ -620,11 +619,7 @@ namespace Habanero.BO
         {
             string output = "";
             output += "Type: " + GetType().Name + Environment.NewLine;
-            foreach (IBOProp entry in _boPropCol)
-            {
-                output += entry.PropertyName + " - " + entry.PropertyValueString + Environment.NewLine;
-            }
-            return output;
+            return _boPropCol.Aggregate(output, (current, entry) => current + (entry.PropertyName + " - " + entry.PropertyValueString + Environment.NewLine));
         }
 
         #endregion //Properties
@@ -1000,10 +995,7 @@ namespace Habanero.BO
         /// <summary>
         /// This returns the Transaction Log object set up for this BusinessObject.
         /// </summary>
-        public ITransactionLog TransactionLog
-        {
-            get { return _transactionLog; }
-        }
+        public ITransactionLog TransactionLog { get; private set; }
 
         internal IList<IBusinessObjectRule> GetBusinessObjectRules()
         {

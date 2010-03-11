@@ -85,7 +85,7 @@ namespace Habanero.Test.BO
                 ");
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
-            Assert.AreEqual(DateTime.Today.AddDays(1), ((PropRuleDate)rule).MaxValue.Date);
+            Assert.AreEqual(DateTime.Today.AddDays(1).AddMilliseconds(-1), ((PropRuleDate)rule).MaxValue);
 
             //---------------Execute ------------------------------------------
             string errorMessage = "";
@@ -108,7 +108,7 @@ namespace Habanero.Test.BO
                 ");
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
-            Assert.AreEqual(DateTime.Today.AddDays(1), ((PropRuleDate)rule).MaxValue.Date);
+            Assert.AreEqual(DateTime.Today.AddDays(1).AddMilliseconds(-1), ((PropRuleDate)rule).MaxValue);
 
             //---------------Execute ------------------------------------------
             string errorMessage = "";
@@ -130,7 +130,7 @@ namespace Habanero.Test.BO
                 ");
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
-            Assert.AreEqual(DateTime.Today.AddDays(1), ((PropRuleDate)rule).MaxValue.Date);
+            Assert.AreEqual(DateTime.Today.AddDays(1).AddMilliseconds(-1), ((PropRuleDate)rule).MaxValue);
 
             //---------------Execute ------------------------------------------
             string errorMessage = "";
@@ -158,7 +158,7 @@ namespace Habanero.Test.BO
             DateTime maxDateTime = rule.MaxValue;
             DateTime minDateTime = rule.MinValue;
             //---------------Test Result -----------------------
-            Assert.AreEqual(DateTimeToday.Value, maxDateTime);
+            Assert.AreEqual(DateTimeToday.Value.AddMilliseconds(-1), maxDateTime);
             Assert.AreEqual(DateTimeToday.Value.AddDays(-1), minDateTime);
         }
         [Test]
@@ -178,9 +178,10 @@ namespace Habanero.Test.BO
             DateTime maxDateTime = rule.MaxValue;
             DateTime minDateTime = rule.MinValue;
             //---------------Test Result -----------------------
-            Assert.AreEqual(DateTimeToday.Value.AddDays(1), maxDateTime);
+            Assert.AreEqual(DateTimeToday.Value.AddDays(1).AddMilliseconds(-1), maxDateTime);
             Assert.AreEqual(DateTimeToday.Value, minDateTime);
         }
+
         [Test]
         public void Test_MaxAndMinValue_WhenTomorrow_ShouldRetTomorrow()
         {
@@ -198,7 +199,7 @@ namespace Habanero.Test.BO
             DateTime maxDateTime = rule.MaxValue;
             DateTime minDateTime = rule.MinValue;
             //---------------Test Result -----------------------
-            Assert.AreEqual(DateTimeToday.Value.AddDays(2), maxDateTime);
+            Assert.AreEqual(DateTimeToday.Value.AddDays(2).AddMilliseconds(-1), maxDateTime);
             Assert.AreEqual(DateTimeToday.Value.AddDays(1), minDateTime);
         }
 

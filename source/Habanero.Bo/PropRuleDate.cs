@@ -230,7 +230,7 @@ namespace Habanero.BO
             get
             {
                 DateTime dateTime = DateTimeUtilities.ParseToDate(Parameters["max"]);
-                return dateTime == DateTime.MaxValue? dateTime: dateTime.AddDays(1);
+                return dateTime == DateTime.MaxValue? dateTime: dateTime.AddDays(1).AddMilliseconds(-1);
             }
             protected set { _parameters["max"] = value; }
         }
