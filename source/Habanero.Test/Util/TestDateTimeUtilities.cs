@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using Habanero.Base;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -59,7 +60,7 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
             DateTime firstDay = DateTimeUtilities.FirstDayOFinancialYear(4, new DateTime(2007, 4, 12));
-            ;
+
             //---------------Test Result -----------------------
             Assert.AreEqual(4, firstDay.Month);
             Assert.AreEqual(1, firstDay.Day);
@@ -75,7 +76,7 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
             DateTime firstDay = DateTimeUtilities.FirstDayOFinancialYear(4, new DateTime(2007, 3, 12));
-            ;
+           
             //---------------Test Result -----------------------
             Assert.AreEqual(4, firstDay.Month);
             Assert.AreEqual(1, firstDay.Day);
@@ -90,7 +91,7 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
             DateTime firstDay = DateTimeUtilities.FirstDayOFinancialYear(12, new DateTime(2007, 12, 12));
-            ;
+
             //---------------Test Result -----------------------
             Assert.AreEqual(12, firstDay.Month);
             Assert.AreEqual(1, firstDay.Day);
@@ -106,7 +107,7 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
             DateTime firstDay = DateTimeUtilities.FirstDayOFinancialYear(01, new DateTime(2007, 12, 12));
-            ;
+
             //---------------Test Result -----------------------
             Assert.AreEqual(1, firstDay.Month);
             Assert.AreEqual(1, firstDay.Day);
@@ -158,7 +159,7 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
             DateTime firstDay = DateTimeUtilities.LastDayOfFinancialYear(12, new DateTime(2007, 12, 12));
-            ;
+            
             //---------------Test Result -----------------------
             Assert.AreEqual(11, firstDay.Month);
             Assert.AreEqual(30, firstDay.Day);
@@ -166,7 +167,7 @@ namespace Habanero.Test.Util
         }
 
         [Test]
-        public void Test_LastDayOfFinYear_currentDateOnStartDate()
+        public void Test_LastDayOfFinYear_CurrentDateOnStartDate()
         {
             //---------------Set up test pack-------------------
 
@@ -174,14 +175,13 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
             DateTime firstDay = DateTimeUtilities.LastDayOfFinancialYear(1, new DateTime(2007, 01, 01));
-            ;
             //---------------Test Result -----------------------
             Assert.AreEqual(12, firstDay.Month);
             Assert.AreEqual(31, firstDay.Day);
             Assert.AreEqual(2007, firstDay.Year);
         }
         [Test]
-        public void Test_LastDayOfFinYear_currentDateOnLastDay()
+        public void Test_LastDayOfFinYear_CurrentDateOnLastDay()
         {
             //---------------Set up test pack-------------------
 
@@ -189,7 +189,6 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
             DateTime firstDay = DateTimeUtilities.LastDayOfFinancialYear(1, new DateTime(2007, 12, 31));
-            ;
             //---------------Test Result -----------------------
             Assert.AreEqual(12, firstDay.Month);
             Assert.AreEqual(31, firstDay.Day);
@@ -275,6 +274,49 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed);
             Assert.AreEqual(DateTime.Today, parsedValue);
+        } 
+        [Test]
+        public void Test_TryParseDate_WhenYesterdayString_ShouldRetTrueAndRetTodayValue()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            bool parsed = DateTimeUtilities.TryParseDate("yesterday", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.AreEqual(DateTime.Today.AddDays(-1), parsedValue);
+        } 
+        [Test]
+        public void Test_TryParseValue_WhenTomorrowString_ShouldRetTrueAndRetTodayValue()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsed = DateTimeUtilities.TryParseValue("tomorrow", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsInstanceOf<DateTimeToday>(parsedValue);
+            Assert.AreEqual(1, ((DateTimeToday)parsedValue).OffSet);
+        }
+        [Test]
+        public void Test_TryParseDate_WhenTomorrowString_ShouldRetTrueAndRetTodayValue()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            bool parsed = DateTimeUtilities.TryParseDate("tomorrow", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.AreEqual(DateTime.Today.AddDays(1), parsedValue);
         }
         [Test]
         public void Test_TryParseDate_WhenDateString_ShouldRetTrueAndRetDate()

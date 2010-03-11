@@ -194,6 +194,20 @@ namespace Habanero.Test.BO
             TestUtil.AssertIsInstanceOf<DateTimeToday>(parsedValue);
             Assert.AreEqual(-1, ((DateTimeToday)parsedValue).OffSet);
         }
+        [Test]
+        public void Test_PropDef_ParsePropValue_FromTomorrowString()
+        {
+            //---------------Set up test pack-------------------
+            const string text = "tomorrow";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _propDef.TryParsePropValue(text, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            TestUtil.AssertIsInstanceOf<DateTimeToday>(parsedValue);
+            Assert.AreEqual(1, ((DateTimeToday)parsedValue).OffSet);
+        }
 
         [Test]
         public void Test_PropDef_ParsePropValue_FromDateTimeTodayObject()

@@ -161,6 +161,46 @@ namespace Habanero.Test.BO
             Assert.AreEqual(DateTimeToday.Value, maxDateTime);
             Assert.AreEqual(DateTimeToday.Value.AddDays(-1), minDateTime);
         }
+        [Test]
+        public void Test_MaxAndMinValue_WhenToday_ShouldRetToday()
+        {
+            //---------------Set up test pack-------------------
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+            PropRuleDate rule = (PropRuleDate) loader.LoadRule(typeof(DateTime).Name,
+                @"<rule name=""TestDate""  >
+                            <add key=""min"" value=""today"" />
+                            <add key=""max"" value=""today"" />
+                        </rule>                          
+                ");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime maxDateTime = rule.MaxValue;
+            DateTime minDateTime = rule.MinValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DateTimeToday.Value.AddDays(1), maxDateTime);
+            Assert.AreEqual(DateTimeToday.Value, minDateTime);
+        }
+        [Test]
+        public void Test_MaxAndMinValue_WhenTomorrow_ShouldRetTomorrow()
+        {
+            //---------------Set up test pack-------------------
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+            PropRuleDate rule = (PropRuleDate) loader.LoadRule(typeof(DateTime).Name,
+                @"<rule name=""TestDate""  >
+                            <add key=""min"" value=""tomorrow"" />
+                            <add key=""max"" value=""tomorrow"" />
+                        </rule>                          
+                ");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime maxDateTime = rule.MaxValue;
+            DateTime minDateTime = rule.MinValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DateTimeToday.Value.AddDays(2), maxDateTime);
+            Assert.AreEqual(DateTimeToday.Value.AddDays(1), minDateTime);
+        }
 
         [Test]
         public void Test_LoadRule_WhenMaxToday_ShouldUseStringMaxValueExpression()

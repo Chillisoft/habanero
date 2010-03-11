@@ -864,7 +864,7 @@ namespace Habanero.BO.ClassDefinition
                 object defaultValue = MyDefaultValue;
                 return HasLookupList() ? new BOPropLookupList(this, defaultValue) : new BOProp(this, defaultValue);
             }
-              return HasLookupList() ? new BOPropLookupList(this) : new BOProp(this);
+            return HasLookupList() ? new BOPropLookupList(this) : new BOProp(this);
         }
 
         #endregion //BOProps

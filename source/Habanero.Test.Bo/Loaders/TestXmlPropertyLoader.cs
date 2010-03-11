@@ -188,6 +188,14 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("Today", def.DefaultValue,
                             "Default value should be same as that specified in xml");
         }
+        [Test]
+        public void TestPropertyWithDateTimeDefaultValueYesterday()
+        {
+            IPropDef def = _loader.LoadProperty(
+                    @"<property  name=""TestProp"" type=""DateTime"" default=""yesterday"" />");
+            Assert.AreEqual("yesterday", def.DefaultValue,
+                            "Default value should be same as that specified in xml");
+        }
 
         [Test]
         public void TestPropertyWithDateTimeDefaultValueNow()

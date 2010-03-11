@@ -68,6 +68,19 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(value, boProp.Value);
         }
+        [Test]
+        public void Test_InitialiseProp_ValidDateTimeTodayString()
+        {
+            //---------------Set up test pack-------------------
+            BOProp boProp = new BOProp(_propDef);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            boProp.InitialiseProp("yesterday");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(boProp.Value);
+            Assert.AreEqual(DateTime.Today.AddDays(-1), boProp.Value);
+        }
 
         [Test]
         public void Test_InitialiseProp_ValidDateTimeString()

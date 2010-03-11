@@ -25,7 +25,7 @@ namespace Habanero.Util
     ///<summary>
     ///General utilities used for datetime manipulation e.g. LastDayOfMonth
     ///</summary>
-    public class DateTimeUtilities
+    public static class DateTimeUtilities
     {
         /// <summary>
         /// returns the last day of the month today
@@ -239,6 +239,12 @@ namespace Habanero.Util
                         ((DateTimeToday) returnValue).OffSet = -1;
                         return true;
                     }
+                    if (stringValueToConvert.ToUpper() == "TOMORROW")
+                    {
+                        returnValue = new DateTimeToday();
+                        ((DateTimeToday) returnValue).OffSet = 1;
+                        return true;
+                    }
                     if (stringValueToConvert.ToUpper() == "NOW")
                     {
                         returnValue = new DateTimeNow();
@@ -251,7 +257,6 @@ namespace Habanero.Util
                     returnValue = dateTimeOut;
                     return true;
                 }
-                returnValue = null;
                 return false;
             }
             returnValue = valueToParse;
