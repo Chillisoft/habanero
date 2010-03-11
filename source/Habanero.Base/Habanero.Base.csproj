@@ -154,7 +154,6 @@
     <Compile Include="DateTimeNow.cs" />
     <Compile Include="DateTimeNowConverter.cs" />
     <Compile Include="DateTimeTodayConverter.cs" />
-    <Compile Include="DateTimeYesterday.cs" />
     <Compile Include="DelegatedExceptionNotifier.cs" />
     <Compile Include="Exceptions\InvalidDefinitionException.cs" />
     <Compile Include="Exceptions\RecordedExceptionsException.cs" />

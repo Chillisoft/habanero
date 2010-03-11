@@ -220,7 +220,7 @@ namespace Habanero.Util
 
             if (!(valueToParse is DateTime))
             {
-                if (valueToParse is DateTimeToday || valueToParse is DateTimeNow || valueToParse is DateTimeYesterday)
+                if (valueToParse is DateTimeToday || valueToParse is DateTimeNow)
                 {
                     returnValue = valueToParse;
                     return true;
@@ -235,7 +235,8 @@ namespace Habanero.Util
                     }
                     if (stringValueToConvert.ToUpper() == "YESTERDAY")
                     {
-                        returnValue = new DateTimeYesterday();
+                        returnValue = new DateTimeToday();
+                        ((DateTimeToday) returnValue).OffSet = -1;
                         return true;
                     }
                     if (stringValueToConvert.ToUpper() == "NOW")

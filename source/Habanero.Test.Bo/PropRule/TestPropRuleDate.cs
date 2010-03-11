@@ -158,8 +158,8 @@ namespace Habanero.Test.BO
             DateTime maxDateTime = rule.MaxValue;
             DateTime minDateTime = rule.MinValue;
             //---------------Test Result -----------------------
-            Assert.AreEqual(DateTimeYesterday.Value.AddDays(1), maxDateTime);
-            Assert.AreEqual(DateTimeYesterday.Value, minDateTime);
+            Assert.AreEqual(DateTimeToday.Value, maxDateTime);
+            Assert.AreEqual(DateTimeToday.Value.AddDays(-1), minDateTime);
         }
 
         [Test]
