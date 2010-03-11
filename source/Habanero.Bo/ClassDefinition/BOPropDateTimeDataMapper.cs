@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base;
+using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -38,11 +39,11 @@ namespace Habanero.BO.ClassDefinition
 
         public override bool TryParsePropValue(object valueToParse, out object returnValue)
         {
-            if (base.TryParsePropValue(valueToParse, out returnValue)) return true;
+/*            if (base.TryParsePropValue(valueToParse, out returnValue)) return true;
 
             if (!(valueToParse is DateTime))
             {
-                if (valueToParse is DateTimeToday || valueToParse is DateTimeNow)
+                if (valueToParse is DateTimeToday || valueToParse is DateTimeNow || valueToParse is DateTimeYesterday)
                 {
                     returnValue = valueToParse;
                     return true;
@@ -53,6 +54,11 @@ namespace Habanero.BO.ClassDefinition
                     if (stringValueToConvert.ToUpper() == "TODAY")
                     {
                         returnValue = new DateTimeToday();
+                        return true;
+                    }
+                    if (stringValueToConvert.ToUpper() == "YESTERDAY")
+                    {
+                        returnValue = new DateTimeYesterday();
                         return true;
                     }
                     if (stringValueToConvert.ToUpper() == "NOW")
@@ -71,7 +77,8 @@ namespace Habanero.BO.ClassDefinition
                 return false;
             }
             returnValue = valueToParse;
-            return true;
+            return true;*/
+            return DateTimeUtilities.TryParsePropValue(valueToParse, out returnValue);
         }
     }
 }

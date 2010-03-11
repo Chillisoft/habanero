@@ -1,21 +1,3 @@
-// ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
-//  
-//  This file is part of the Habanero framework.
-//  
-//      Habanero is a free framework: you can redistribute it and/or modify
-//      it under the terms of the GNU Lesser General Public License as published by
-//      the Free Software Foundation, either version 3 of the License, or
-//      (at your option) any later version.
-//  
-//      The Habanero framework is distributed in the hope that it will be useful,
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//      GNU Lesser General Public License for more details.
-//  
-//      You should have received a copy of the GNU Lesser General Public License
-//      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-// ---------------------------------------------------------------------------------
 using System;
 using System.ComponentModel;
 using Habanero.Base;
@@ -24,7 +6,7 @@ using NUnit.Framework;
 namespace Habanero.Test.Base
 {
     [TestFixture]
-    public class TestDateTimeToday
+    public class TestDateTimeYesterday
     {
         [Test]
         public void Test_IResolvableToValue()
@@ -32,7 +14,7 @@ namespace Habanero.Test.Base
             //---------------Set up test pack-------------------
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             //---------------Test Result -----------------------
             TestUtil.AssertIsInstanceOf<IResolvableToValue>(dateTimeToday);
         }
@@ -41,7 +23,7 @@ namespace Habanero.Test.Base
         public void Test_IResolvableToValue_ResolveToValue()
         {
             //---------------Set up test pack-------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             IResolvableToValue resolvableToValue = dateTimeToday;
             DateTime today = DateTime.Today;
             //---------------Assert Precondition----------------
@@ -53,25 +35,25 @@ namespace Habanero.Test.Base
         }
 
         [Test]
-        public void Test_Comparable_Equals_WithDateTimeTodayValue()
+        public void Test_Comparable_Equals_WithDateTimeYesterdayValue()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             IComparable comparable = dateTimeToday;
             //-------------Execute test ---------------------
-            int i = comparable.CompareTo(DateTimeToday.Value);
+            int i = comparable.CompareTo(DateTimeYesterday.Value);
             //-------------Test Result ----------------------
             Assert.AreEqual(0, i);
         }
 
         [Test]
-        public void Test_Comparable_Equals_WithDateTimeTodayType()
+        public void Test_Comparable_Equals_WithDateTimeYesterdayType()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             IComparable comparable = dateTimeToday;
             //-------------Execute test ---------------------
-            int i = comparable.CompareTo(new DateTimeToday());
+            int i = comparable.CompareTo(new DateTimeYesterday());
             //-------------Test Result ----------------------
             Assert.AreEqual(0, i);
         }
@@ -80,9 +62,9 @@ namespace Habanero.Test.Base
         public void Test_Comparable_GreaterThan()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             IComparable comparable = dateTimeToday;
-            DateTime dateTime = DateTimeToday.Value.AddDays(-1);
+            DateTime dateTime = DateTimeYesterday.Value.AddDays(-1);
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
@@ -95,9 +77,9 @@ namespace Habanero.Test.Base
         public void Test_Comparable_LessThan()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             IComparable comparable = dateTimeToday;
-            DateTime dateTime = DateTimeToday.Value.AddDays(1);
+            DateTime dateTime = DateTimeYesterday.Value.AddDays(1);
 
             //-------------Test Pre-conditions --------------
 
@@ -112,12 +94,12 @@ namespace Habanero.Test.Base
         public void Test_Comparable_OfDateTime_Equals()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             IComparable<DateTime> comparable = dateTimeToday;
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
-            int i = comparable.CompareTo(DateTimeToday.Value);
+            int i = comparable.CompareTo(DateTimeYesterday.Value);
             //-------------Test Result ----------------------
             Assert.AreEqual(0, i);
         }
@@ -126,12 +108,12 @@ namespace Habanero.Test.Base
         public void Test_Comparable_OfDateTime_GreaterThan()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             IComparable<DateTime> comparable = dateTimeToday;
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
-            int i = comparable.CompareTo(DateTimeToday.Value.AddDays(-1));
+            int i = comparable.CompareTo(DateTimeYesterday.Value.AddDays(-1));
             //-------------Test Result ----------------------
             Assert.AreEqual(1, i);
         }
@@ -140,12 +122,12 @@ namespace Habanero.Test.Base
         public void Test_Comparable_OfDateTime_LessThan()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             IComparable<DateTime> comparable = dateTimeToday;
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
-            int i = comparable.CompareTo(DateTimeToday.Value.AddDays(1));
+            int i = comparable.CompareTo(DateTimeYesterday.Value.AddDays(1));
             //-------------Test Result ----------------------
             Assert.AreEqual(-1, i);
         }
@@ -154,8 +136,8 @@ namespace Habanero.Test.Base
         public void Test_Equals_WithNull_ShouldReturnFalse()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
-            const DateTimeToday dateTimeToday2 = null;
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
+            const DateTimeYesterday dateTimeToday2 = null;
             //-------------Execute test ---------------------
             bool result = dateTimeToday.Equals(dateTimeToday2);
             //-------------Test Result ----------------------
@@ -166,7 +148,7 @@ namespace Habanero.Test.Base
         public void Test_Equals_WithDateTimeValue_ShouldReturnFalse()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
             DateTime dateTime2 = DateTime.Now;
             //-------------Execute test ---------------------
             bool result = dateTimeToday.Equals(dateTime2);
@@ -175,11 +157,11 @@ namespace Habanero.Test.Base
         }
 
         [Test]
-        public void Test_Equals_WithDateTimeTodayType_ShouldReturnTrue()
+        public void Test_Equals_WithDateTimeYesterdayType_ShouldReturnTrue()
         {
             //-------------Setup Test Pack ------------------
-            DateTimeToday dateTimeToday = new DateTimeToday();
-            DateTimeToday dateTimeToday2 = new DateTimeToday();
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
+            DateTimeYesterday dateTimeToday2 = new DateTimeYesterday();
             //-------------Execute test ---------------------
             bool result = dateTimeToday.Equals(dateTimeToday2);
             //-------------Test Result ----------------------
@@ -192,7 +174,7 @@ namespace Habanero.Test.Base
             //-------------Setup Test Pack ------------------
             //-------------Test Pre-conditions --------------
             //-------------Execute test ---------------------
-            DateTime dateTime = DateTimeToday.Value;
+            DateTime dateTime = DateTimeYesterday.Value;
             //-------------Test Result ----------------------
             Assert.AreEqual(DateTime.Today, dateTime);
         }
@@ -202,7 +184,7 @@ namespace Habanero.Test.Base
             //-------------Setup Test Pack ------------------
             //-------------Test Pre-conditions --------------
             //-------------Execute test ---------------------
-            DateTime dateTime = DateTimeToday.Value;
+            DateTime dateTime = DateTimeYesterday.Value;
             //-------------Test Result ----------------------
             Assert.AreEqual(DateTime.Today, dateTime);
         }
@@ -211,7 +193,7 @@ namespace Habanero.Test.Base
         public void Test_ToString()
         {
             //---------------Set up test pack-------------------
-            DateTimeToday dteNow = new DateTimeToday();
+            DateTimeYesterday dteNow = new DateTimeYesterday();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -229,7 +211,7 @@ namespace Habanero.Test.Base
             //---------------Set up test pack-------------------
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            object[] customAttributes = typeof(DateTimeToday).GetCustomAttributes(false);
+            object[] customAttributes = typeof(DateTimeYesterday).GetCustomAttributes(false);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, customAttributes.Length);
             TypeConverterAttribute typeConverterAttribute =
@@ -238,12 +220,12 @@ namespace Habanero.Test.Base
         }
 
         [Test]
-        public void Test_TypeConverter_ShouldBeDefaultTypeConverterForDateTimeToday()
+        public void Test_TypeConverter_ShouldBeDefaultTypeConverterForDateTimeYesterday()
         {
             //---------------Set up test pack-------------------
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(DateTimeToday));
+            TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(DateTimeYesterday));
             //---------------Test Result -----------------------
             Assert.IsInstanceOf(typeof(DateTimeTodayConverter), typeConverter);
         }

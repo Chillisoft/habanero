@@ -18,7 +18,10 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -27,9 +30,6 @@ namespace Habanero.BO
     /// </summary>
     public class PropRuleDate : PropRuleBase
     {
-        private const string TODAY_STRING = "Today";
-        private const string NOW_STRING = "Now";
-
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
@@ -78,37 +78,25 @@ namespace Habanero.BO
                 {
                     object value = Parameters[key];
                     if (value == null) continue;
+                    string valueExpression = Convert.ToString(value);
                     if (value is string)
                     {
-                        if (string.IsNullOrEmpty(Convert.ToString(value))) return;
+                        if (string.IsNullOrEmpty(valueExpression)) return;
                     }
                     switch (key)
                     {
                         case "min":
-                            if (Convert.ToString(value) == TODAY_STRING || Convert.ToString(value) == NOW_STRING)
-                            {
-                                //The expression is set and not converted immediately so that the Expression
-                                // is only evaluated when needed and not when the ClassDef is first loaded for this class.
-                                //This is essential for any application running over multiple days etc.
-                                MinValueExpression = Convert.ToString(value);
-                            }
-                            else
-                            {
-                                MinValue = Convert.ToDateTime(value);
-                            }
+
+                            DateTimeUtilities.ParseToDate(valueExpression);//The output from this is not used but if the valueExpression
+                            // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
+                            // is raised early
+                            MinValueExpression = valueExpression;
                             break;
                         case "max":
-                            if (Convert.ToString(value) == TODAY_STRING || Convert.ToString(value) == NOW_STRING)
-                            {
-                                //The expression is set and not converted immediately so that the Expression
-                                // is only evaluated when needed and not when the ClassDef is first loaded for this class.
-                                //This is essential for any application running over multiple days etc.
-                                MaxValueExpression = Convert.ToString(value);
-                            }
-                            else
-                            {
-                                MaxValue = Convert.ToDateTime(value);
-                            }
+                            DateTimeUtilities.ParseToDate(valueExpression);//The output from this is not used but if the valueExpression
+                            // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
+                            // is raised early
+                            MaxValueExpression = valueExpression;
                             break;
                         default:
                             throw new InvalidXmlDefinitionException
@@ -132,6 +120,12 @@ namespace Habanero.BO
                     "element of the class definitions has an invalid value.", ex);
             }
 		}
+/*
+        private static bool IsIResolvableToValue(object value)
+        {
+            string valueAsString = Convert.ToString(value);
+            return valueAsString == TODAY_STRING || valueAsString == NOW_STRING || valueAsString == YESTERDAY_STRING;
+        }*/
 
         /// <summary>
         /// Indicates whether the property value is valid against the rules
@@ -149,9 +143,7 @@ namespace Habanero.BO
             //It is not necessary to check compulsory rules since these are checked in the base class (see previous line)
             if (propValue == null) return true;
             if (!IsPropValueADate(displayName, propValue, out errorMessage)) return false;
-            if (!IsPropValueLtMinValue(displayName, propValue, out errorMessage)) return false;
-            if (!IsPropValueGtMaxValue(displayName, propValue, out errorMessage)) return false;
-            return true;
+            return IsPropValueLtMinValue(displayName, propValue, out errorMessage) && IsPropValueGtMaxValue(displayName, propValue, out errorMessage);
         }
 
         private bool IsPropValueADate(string displayName, object propValue, out string errorMessage)
@@ -225,13 +217,7 @@ namespace Habanero.BO
         {
             get
             {
-                if (_parameters["min"] is string)
-                {
-                    if ((string)_parameters["min"] == TODAY_STRING) return DateTime.Today.AddDays(-1);
-                    if ((string)_parameters["min"] == NOW_STRING) return DateTime.Now;
-                    if (String.IsNullOrEmpty((string)_parameters["min"])) return DateTime.MinValue;
-                }
-                return Convert.ToDateTime(_parameters["min"]);
+                return DateTimeUtilities.ParseToDate(Parameters["min"]);
             }
             protected set { _parameters["min"] = value; }
 		}
@@ -243,13 +229,8 @@ namespace Habanero.BO
         {
             get
             {
-                if (_parameters["max"] is string)
-                {
-                    if ((string)_parameters["max"] == TODAY_STRING) return DateTime.Today.AddDays(1);
-                    if ((string)_parameters["max"] == NOW_STRING) return DateTime.Now;
-                    if (String.IsNullOrEmpty((string)_parameters["max"])) return DateTime.MaxValue;
-                }
-                return Convert.ToDateTime(_parameters["max"]);
+                DateTime dateTime = DateTimeUtilities.ParseToDate(Parameters["max"]);
+                return dateTime == DateTime.MaxValue? dateTime: dateTime.AddDays(1);
             }
             protected set { _parameters["max"] = value; }
         }

@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
 {
@@ -131,6 +133,97 @@ namespace Habanero.Util
         {
             TimeSpan difference = DateTime.Now - valueToCheck;
             return Math.Abs(difference.TotalSeconds) < toleranceInSeconds;
+        }
+
+        ///<summary>
+        /// Parses the <paramref name="valueToParse"/> to a valid date time
+        ///</summary>
+        ///<param name="valueToParse"></param>
+        ///<returns>The parsed valid date time</returns>
+        /// <exception cref="HabaneroIncorrectTypeException">Exception raised if value cannot be parsed</exception>
+        /// <seealso cref="TryParsePropValue"/>
+        public static DateTime ParseToDate(object valueToParse)
+        {
+            object returnValue = ParseValue(valueToParse);
+
+            if (returnValue is IResolvableToValue)
+            {
+                returnValue = ((IResolvableToValue)returnValue).ResolveToValue();
+            }
+            return (DateTime)returnValue;
+        }
+
+        private static object ParseValue(object valueToParse)
+        {
+            object returnValue;
+            bool isParsed = TryParsePropValue(valueToParse, out returnValue);
+
+            if (!isParsed)
+            {
+                RaiseIncorrectTypeException(valueToParse);
+            }
+            return returnValue;
+        }
+
+        /// <summary>
+        /// Raises an Erorr if the Incorrect type of property is being set to this BOProp.
+        /// </summary>
+        /// <param name="value"></param>
+        private static void RaiseIncorrectTypeException(object value)
+        {
+            string message = string.Format("PropRuleDate cannot be set to {0}. It is cannot be converted to a type of a DateTime", value);
+            throw new HabaneroIncorrectTypeException(message, message);
+        }
+
+
+        ///<summary>
+        ///</summary>
+        ///<param name="valueToParse"></param>
+        ///<param name="returnValue"></param>
+        ///<returns></returns>
+        public static bool TryParsePropValue(object valueToParse, out object returnValue)
+        {
+            returnValue = null;
+            if (valueToParse != null && valueToParse is string && ((string)valueToParse).Length == 0) return true;
+            if(valueToParse == null || valueToParse == DBNull.Value) return true;
+
+            if (!(valueToParse is DateTime))
+            {
+                if (valueToParse is DateTimeToday || valueToParse is DateTimeNow || valueToParse is DateTimeYesterday)
+                {
+                    returnValue = valueToParse;
+                    return true;
+                }
+                if (valueToParse is String)
+                {
+                    string stringValueToConvert = (string)valueToParse;
+                    if (stringValueToConvert.ToUpper() == "TODAY")
+                    {
+                        returnValue = new DateTimeToday();
+                        return true;
+                    }
+                    if (stringValueToConvert.ToUpper() == "YESTERDAY")
+                    {
+                        returnValue = new DateTimeYesterday();
+                        return true;
+                    }
+                    if (stringValueToConvert.ToUpper() == "NOW")
+                    {
+                        returnValue = new DateTimeNow();
+                        return true;
+                    }
+                }
+                DateTime dateTimeOut;
+                if (DateTime.TryParse(valueToParse.ToString(), out dateTimeOut))
+                {
+                    returnValue = dateTimeOut;
+                    return true;
+                }
+                returnValue = null;
+                return false;
+            }
+            returnValue = valueToParse;
+            return true;
         }
     }
 }

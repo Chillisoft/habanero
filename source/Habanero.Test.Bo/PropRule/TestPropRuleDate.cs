@@ -18,10 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -80,7 +82,7 @@ namespace Habanero.Test.BO
                             <add key=""min"" value=""01 Feb 2004"" />
                             <add key=""max"" value=""Today"" />
                         </rule>                          
-");
+                ");
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
             Assert.AreEqual(DateTime.Today.AddDays(1), ((PropRuleDate)rule).MaxValue.Date);
@@ -94,8 +96,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
         }
 
-
-
         [Test]
         public void TestPropRuleDate_MaxValue_Today_ActualValueToday()
         {
@@ -105,7 +105,7 @@ namespace Habanero.Test.BO
                             <add key=""min"" value=""01 Feb 2004"" />
                             <add key=""max"" value=""Today"" />
                         </rule>                          
-");
+                ");
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
             Assert.AreEqual(DateTime.Today.AddDays(1), ((PropRuleDate)rule).MaxValue.Date);
@@ -127,7 +127,7 @@ namespace Habanero.Test.BO
                             <add key=""min"" value=""01 Feb 2004"" />
                             <add key=""max"" value=""Today"" />
                         </rule>                          
-");
+                ");
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
             Assert.AreEqual(DateTime.Today.AddDays(1), ((PropRuleDate)rule).MaxValue.Date);
@@ -139,6 +139,66 @@ namespace Habanero.Test.BO
             //--------------Verify Result -------------------------------------
             Assert.IsFalse(isValid);
             Assert.IsFalse(string.IsNullOrEmpty(errorMessage));
+        }
+
+        [Test]
+        public void Test_MaxAndMinValue_WhenYesterday_ShouldRetYesterday()
+        {
+            //---------------Set up test pack-------------------
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+            PropRuleDate rule = (PropRuleDate) loader.LoadRule(typeof(DateTime).Name,
+                @"<rule name=""TestDate""  >
+                            <add key=""min"" value=""yesterday"" />
+                            <add key=""max"" value=""yesterday"" />
+                        </rule>                          
+                ");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime maxDateTime = rule.MaxValue;
+            DateTime minDateTime = rule.MinValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DateTimeYesterday.Value.AddDays(1), maxDateTime);
+            Assert.AreEqual(DateTimeYesterday.Value, minDateTime);
+        }
+
+        [Test]
+        public void Test_LoadRule_WhenMaxToday_ShouldUseStringMaxValueExpression()
+        {
+            //---------------Set up test pack-------------------
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            PropRuleDate rule = (PropRuleDate) loader.LoadRule(typeof(DateTime).Name,
+                @"<rule name=""TestDate""  >
+                            <add key=""min"" value=""today"" />
+                            <add key=""max"" value=""today"" />
+                        </rule>                          
+                ");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("today", rule.Parameters["max"]);
+            Assert.AreEqual("today", rule.Parameters["min"]);
+        }
+        [Test]
+        public void Test_LoadRule_WhenMaxYesterday_ShouldUseStringMaxValueExpression()
+        {
+            //---------------Set up test pack-------------------
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            PropRuleDate rule = (PropRuleDate)loader.LoadRule(typeof(DateTime).Name,
+                @"<rule name=""TestDate""  >
+                            <add key=""min"" value=""yesterday"" />
+                            <add key=""max"" value=""yesterday"" />
+                        </rule>                          
+                ");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("yesterday", rule.Parameters["max"]);
+            Assert.AreEqual("yesterday", rule.Parameters["min"]);
         }
     }
 

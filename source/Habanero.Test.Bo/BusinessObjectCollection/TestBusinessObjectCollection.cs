@@ -65,7 +65,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
         private bool _addedEventFired;
 
-        public class MyDatabaseConnectionStub : DatabaseConnection
+/*        public class MyDatabaseConnectionStub : DatabaseConnection
         {
             public MyDatabaseConnectionStub() : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection")
             {
@@ -90,7 +90,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             public override IParameterNameGenerator CreateParameterNameGenerator() {
                 return new ParameterNameGenerator("?");
             }
-        }
+        }*/
 
         private static void AssertNotContains(ContactPersonTestBO cp1, IEnumerable<ContactPersonTestBO> col)
         {
@@ -300,13 +300,13 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, keyObjectHashTable.Count);
         }
 
-        public static Hashtable GetKeyObjectHashTable(IBusinessObjectCollection cpCol)
+        private static Hashtable GetKeyObjectHashTable(IBusinessObjectCollection cpCol)
         {
             return (Hashtable) ReflectionUtilities.GetPrivatePropertyValue(cpCol, "KeyObjectHashTable");
         }
 
         [Test]
-        public void Test_ClearCurrentCollection_usingReflection()
+        public void Test_ClearCurrentCollection_UsingReflection()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.DeleteAllContactPeople();

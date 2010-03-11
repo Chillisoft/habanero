@@ -280,6 +280,32 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_GetParameterValueAsObject_WhenDateType_TodayString_ShouldReturnToday()
+        {
+            //---------------Set up test pack-------------------
+            Parameter param = new Parameter("prop", "table", "field", "=", "today", ParameterType.Date);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime parameterValueAsObject = (DateTime)param.GetParameterValueAsObject();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(parameterValueAsObject);
+            Assert.AreEqual(DateTimeYesterday.Value, parameterValueAsObject);
+        }
+        [Test]
+        public void Test_GetParameterValueAsObject_WhenDateType_YesterdayString_ShouldReturnYesterday()
+        {
+            //---------------Set up test pack-------------------
+            Parameter param = new Parameter("prop", "table", "field", "=", "Yesterday", ParameterType.Date);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime parameterValueAsObject = (DateTime)param.GetParameterValueAsObject();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(parameterValueAsObject);
+            Assert.AreEqual(DateTimeYesterday.Value, parameterValueAsObject);
+        }
+        [Test]
         public void TestGetSqlStringWithNoParameters()
         {
             Parameter param = new Parameter("prop", "table", "field", "=", "value", ParameterType.String);

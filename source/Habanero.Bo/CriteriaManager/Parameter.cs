@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base;
+using Habanero.Util;
 
 //using Habanero.BO;
 
@@ -224,15 +225,18 @@ namespace Habanero.BO.CriteriaManager
                 case ParameterType.Bool:
                     return Convert.ToBoolean(_parameterValue);
                 case ParameterType.Date:
-                    switch(_parameterValue.ToUpper())
-                    {
-                        case "TODAY":
-                            return DateTime.Today;
+/*                    switch(_parameterValue.ToUpper())
+                    {*/
+/*                        case "TODAY":
+                            return DateTimeToday.Value;
                         case "NOW":
                             return DateTime.Now;
+                        case "YESTERDAY":
+                            return DateTimeYesterday.Value;
                         default:
-                            return Convert.ToDateTime(_parameterValue);
-                    }
+                            return Convert.ToDateTime(_parameterValue);*/
+                            return DateTimeUtilities.ParseToDate(_parameterValue);
+//                    }
                 case ParameterType.Number:
                     return Convert.ToDecimal(_parameterValue);
                 case ParameterType.String:

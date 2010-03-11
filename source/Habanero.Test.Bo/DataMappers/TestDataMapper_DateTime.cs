@@ -180,6 +180,19 @@ namespace Habanero.Test.BO
             Assert.IsTrue(parseSucceed);
             TestUtil.AssertIsInstanceOf<DateTimeToday>(parsedValue);
         }
+        [Test]
+        public void Test_PropDef_ParsePropValue_FromYesterdayString()
+        {
+            //---------------Set up test pack-------------------
+            const string text = "yesterday";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _propDef.TryParsePropValue(text, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            TestUtil.AssertIsInstanceOf<DateTimeYesterday>(parsedValue);
+        }
 
         [Test]
         public void Test_PropDef_ParsePropValue_FromDateTimeTodayObject()
@@ -193,6 +206,19 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(parseSucceed);
             Assert.AreEqual(dateTimeToday, parsedValue);
+        }
+        [Test]
+        public void Test_PropDef_ParsePropValue_FromDateTimeYesterdayObject()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeYesterday dateTimeToday = new DateTimeYesterday();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _propDef.TryParsePropValue(dateTimeToday, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            Assert.AreSame(dateTimeToday, parsedValue);
         }
 
         [Test]
