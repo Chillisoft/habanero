@@ -462,7 +462,7 @@ namespace Habanero.Base
                                                          , "The operator " + _comparisonOp + " is not supported by the application");
             }
         }
-
+/*
         private static IComparable ConvertDateTimeToday(IComparable y)
         {
             if (y is DateTimeToday)
@@ -479,7 +479,7 @@ namespace Habanero.Base
                 y = DateTimeNow.Value;
             }
             return y;
-        }
+        }*/
 
         ///<summary>
         ///Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.

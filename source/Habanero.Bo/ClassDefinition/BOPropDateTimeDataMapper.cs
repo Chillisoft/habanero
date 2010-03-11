@@ -39,45 +39,6 @@ namespace Habanero.BO.ClassDefinition
 
         public override bool TryParsePropValue(object valueToParse, out object returnValue)
         {
-/*            if (base.TryParsePropValue(valueToParse, out returnValue)) return true;
-
-            if (!(valueToParse is DateTime))
-            {
-                if (valueToParse is DateTimeToday || valueToParse is DateTimeNow || valueToParse is DateTimeYesterday)
-                {
-                    returnValue = valueToParse;
-                    return true;
-                }
-                if (valueToParse is String)
-                {
-                    string stringValueToConvert = (string)valueToParse;
-                    if (stringValueToConvert.ToUpper() == "TODAY")
-                    {
-                        returnValue = new DateTimeToday();
-                        return true;
-                    }
-                    if (stringValueToConvert.ToUpper() == "YESTERDAY")
-                    {
-                        returnValue = new DateTimeYesterday();
-                        return true;
-                    }
-                    if (stringValueToConvert.ToUpper() == "NOW")
-                    {
-                        returnValue = new DateTimeNow();
-                        return true;
-                    }
-                }
-                DateTime dateTimeOut;
-                if (DateTime.TryParse(valueToParse.ToString(), out dateTimeOut))
-                {
-                    returnValue = dateTimeOut;
-                    return true;
-                }
-                returnValue = null;
-                return false;
-            }
-            returnValue = valueToParse;
-            return true;*/
             return DateTimeUtilities.TryParseValue(valueToParse, out returnValue);
         }
     }

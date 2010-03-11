@@ -65,6 +65,20 @@ namespace Habanero.Test.Base
         }
 
         [Test]
+        public void Test_ConvertTo_WhenDateTimeTodayWithOfSet_ShouldRetOffSetValue()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeTodayConverter dateTimeTodayConverter = new DateTimeTodayConverter();
+            DateTimeToday dateTimeToday = new DateTimeToday{OffSet = -5};
+            DateTime expectedResult = DateTime.Today.AddDays(dateTimeToday.OffSet);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object result = dateTimeTodayConverter.ConvertTo(dateTimeToday, typeof(DateTime));
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedResult, result);
+        }
+        [Test]
         public void Test_DefaultTypeConverter_WithDateTime_ShouldReturnTodayValue()
         {
             //---------------Set up test pack-------------------

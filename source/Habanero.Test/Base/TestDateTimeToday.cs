@@ -63,6 +63,44 @@ namespace Habanero.Test.Base
         }
 
         [Test]
+        public void Test_SetOffSet_ShouldSetOffSet()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeToday dateTimeToday = new DateTimeToday();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, dateTimeToday.OffSet);
+            //---------------Execute Test ----------------------
+            dateTimeToday.OffSet = 1;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, dateTimeToday.OffSet);
+        }
+        [Test]
+        public void Test_ResolveToValue_WhenHasOffset1_ShouldResolveToTomorrow()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeToday dateTimeToday = new DateTimeToday {OffSet = 1};
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dateTimeToday.OffSet);
+            //---------------Execute Test ----------------------
+            DateTime resolveToValue = dateTimeToday.ResolveToValue();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DateTime.Today.AddDays(dateTimeToday.OffSet), resolveToValue);
+        }
+        [Test]
+        public void Test_ResolveToValue_WhenHasOffsetNeg7_ShouldResolveToLastWeek()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeToday dateTimeToday = new DateTimeToday {OffSet = -7};
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(-7, dateTimeToday.OffSet);
+            //---------------Execute Test ----------------------
+            DateTime resolveToValue = dateTimeToday.ResolveToValue();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DateTime.Today.AddDays(dateTimeToday.OffSet), resolveToValue);
+        }
+
+        [Test]
         public void Test_Comparable_Equals_WithDateTimeTodayValue()
         {
             //-------------Setup Test Pack ------------------

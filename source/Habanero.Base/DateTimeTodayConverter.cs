@@ -30,17 +30,20 @@ namespace Habanero.Base
         /// An <see cref="T:System.Object"/> that represents the converted value.
         /// </returns>
         /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that provides a format context. 
-        ///                 </param><param name="culture">A <see cref="T:System.Globalization.CultureInfo"/>. If null is passed, the current culture is assumed. 
-        ///                 </param><param name="value">The <see cref="T:System.Object"/> to convert. 
-        ///                 </param><param name="destinationType">The <see cref="T:System.Type"/> to convert the <paramref name="value"/> parameter to. 
-        ///                 </param><exception cref="T:System.ArgumentNullException">The <paramref name="destinationType"/> parameter is null. 
-        ///                 </exception><exception cref="T:System.NotSupportedException">The conversion cannot be performed. 
-        ///                 </exception>
+        /// </param><param name="culture">A <see cref="T:System.Globalization.CultureInfo"/>. If null is passed, the current culture is assumed. 
+        /// </param><param name="value">The <see cref="T:System.Object"/> to convert. 
+        /// </param><param name="destinationType">The <see cref="T:System.Type"/> to convert the <paramref name="value"/> parameter to. 
+        /// </param><exception cref="T:System.ArgumentNullException">The <paramref name="destinationType"/> parameter is null. 
+        /// </exception><exception cref="T:System.NotSupportedException">The conversion cannot be performed. 
+        /// </exception>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            return destinationType == typeof(DateTime) 
-                    ? DateTimeToday.Value 
-                    : base.ConvertTo(context, culture, value, destinationType);
+            DateTimeToday dateTimeToday = value as DateTimeToday;
+            if (destinationType == typeof (DateTime))
+            {
+                return dateTimeToday != null ? dateTimeToday.ResolveToValue() : DateTimeToday.Value;
+            }
+            return base.ConvertTo(context, culture, value, destinationType);
         }
     }
 }

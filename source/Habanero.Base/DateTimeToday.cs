@@ -36,6 +36,10 @@ namespace Habanero.Base
         {
             get { return DateTime.Today; }
         }
+        /// <summary>
+        /// The Number of Days offset e.g. if you want tomorrow then 1 if yesterday -1.
+        /// </summary>
+        public int OffSet{ get; set; }
 
         ///<summary>
         ///Compares the current instance with another object of the same type.
@@ -53,12 +57,12 @@ namespace Habanero.Base
 
         object IResolvableToValue<object>.ResolveToValue()
         {
-            return Value;
+            return ResolveToValue();
         }
 
         public DateTime ResolveToValue()
         {
-            return Value;
+            return Value.AddDays(this.OffSet);
         }
 
         ///<summary>
@@ -67,7 +71,7 @@ namespace Habanero.Base
         ///<returns></returns>
         public override string ToString()
         {
-            return Value.ToString();
+            return ResolveToValue().ToString();
         }
 
         ///<summary>
@@ -79,7 +83,7 @@ namespace Habanero.Base
         ///<param name="other">An object to compare with this object.</param>
         public int CompareTo(DateTime other)
         {
-            return Value.CompareTo(other);
+            return ResolveToValue().CompareTo(other);
         }
 
         /// <summary>
