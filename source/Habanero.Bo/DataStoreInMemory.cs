@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using Habanero.Base;
@@ -56,7 +57,7 @@ namespace Habanero.BO
         /// Adds a new business object to the memory store.
         ///</summary>
         ///<param name="businessObject"></param>
-        public void Add(IBusinessObject businessObject)
+        public virtual void Add(IBusinessObject businessObject)
         {
             _objects.Add(businessObject.ID.ObjectID, businessObject);
         }
@@ -67,7 +68,7 @@ namespace Habanero.BO
         ///<param name="criteria"></param>
         ///<typeparam name="T"></typeparam>
         ///<returns></returns>
-        public T Find<T>(Criteria criteria) where T : class, IBusinessObject
+        public virtual T Find<T>(Criteria criteria) where T : class, IBusinessObject
         {
             return (T) Find(typeof (T), criteria);
         }
@@ -75,16 +76,16 @@ namespace Habanero.BO
         ///<summary>
         /// Finds the object of type BOType that matches  and criteria.
         ///</summary>
-        ///<param name="BOType"></param>
+        ///<param name="boType"></param>
         ///<param name="criteria"></param>
         ///<returns></returns>
         ///<exception cref="HabaneroDeveloperException"></exception>
-        public IBusinessObject Find(Type BOType, Criteria criteria)
+        public virtual IBusinessObject Find(Type boType, Criteria criteria)
         {
             IBusinessObject currentBO = null;
             foreach (IBusinessObject bo in _objects.Values)
             {
-                if (!BOType.IsInstanceOfType(bo)) continue;
+                if (!boType.IsInstanceOfType(bo)) continue;
                 if (!criteria.IsMatch(bo)) continue;
                 if (currentBO == null)
                 {
@@ -108,12 +109,12 @@ namespace Habanero.BO
         ///<param name="criteria">Criteria being used to find the BusinessObject</param>
         ///<returns></returns>
         ///<exception cref="HabaneroDeveloperException"></exception>
-        public IBusinessObject Find(IClassDef classDef, Criteria criteria)
+        public virtual IBusinessObject Find(IClassDef classDef, Criteria criteria)
         {
             IBusinessObject currentBO = null;
             foreach (IBusinessObject bo in _objects.Values)
             {
-                if (!(bo.ClassDef==classDef)) continue;
+                if (bo.ClassDef != classDef) continue;
                 if (!criteria.IsMatch(bo)) continue;
                 if (currentBO == null)
                 {
@@ -136,20 +137,16 @@ namespace Habanero.BO
         ///<param name="primaryKey"></param>
         ///<typeparam name="T"></typeparam>
         ///<returns></returns>
-        public T Find<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject
+        public virtual T Find<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject
         {
-            foreach (IBusinessObject bo in _objects.Values)
-            {
-                if (bo.ID.Equals(primaryKey)) return bo as T;
-            }
-            return null;
+            return (from bo in _objects.Values where bo.ID.Equals(primaryKey) select bo as T).FirstOrDefault();
         }
 
         ///<summary>
         /// Removes the object from the data store.
         ///</summary>
         ///<param name="businessObject"></param>
-        public void Remove(IBusinessObject businessObject)
+        public virtual void Remove(IBusinessObject businessObject)
         {
             _objects.Remove(businessObject.ID.ObjectID);
         }
@@ -160,10 +157,9 @@ namespace Habanero.BO
         ///<param name="criteria"></param>
         ///<typeparam name="T"></typeparam>
         ///<returns></returns>
-        public BusinessObjectCollection<T> FindAll<T>(Criteria criteria) where T : class, IBusinessObject, new()
+        public virtual BusinessObjectCollection<T> FindAll<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
-            col.Add(FindAllInternal<T>(criteria));
+            BusinessObjectCollection<T> col = new BusinessObjectCollection<T> {FindAllInternal<T>(criteria)};
             col.SelectQuery.Criteria = criteria;
             return col;
         }
@@ -174,16 +170,9 @@ namespace Habanero.BO
         ///<param name="criteria"></param>
         ///<typeparam name="T"></typeparam>
         ///<returns></returns>
-        internal List<T> FindAllInternal<T>(Criteria criteria) where T : class, IBusinessObject, new()
+        internal virtual List<T> FindAllInternal<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            List <T> col = new List<T>();
-            foreach (IBusinessObject bo in _objects.Values)
-            {
-                T boAsT = bo as T;
-                if (boAsT == null) continue;
-                if (criteria == null || criteria.IsMatch(boAsT)) col.Add(boAsT);
-            }
-            return col;
+            return _objects.Values.OfType<T>().Where(boAsT => criteria == null || criteria.IsMatch(boAsT)).ToList();
         }
         ///<summary>
         /// Find all objects of type boType that match the criteria.
@@ -191,14 +180,14 @@ namespace Habanero.BO
         ///<param name="BOType"></param>
         ///<param name="criteria"></param>
         ///<returns></returns>
-        public IBusinessObjectCollection FindAll(Type BOType, Criteria criteria)
+        public virtual IBusinessObjectCollection FindAll(Type BOType, Criteria criteria)
         {
             Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
             IBusinessObjectCollection col = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
-            foreach (IBusinessObject bo in _objects.Values)
+            IEnumerable<IBusinessObject> allMatchineBOs = _objects.Values.Where(BOType.IsInstanceOfType).Where(bo => criteria == null || criteria.IsMatch(bo));
+            foreach (IBusinessObject bo in allMatchineBOs)
             {
-                if (!BOType.IsInstanceOfType(bo)) continue;
-                if (criteria == null || criteria.IsMatch(bo)) col.Add(bo);
+                col.Add(bo);
             }
             col.SelectQuery.Criteria = criteria;
             return col;
@@ -209,7 +198,7 @@ namespace Habanero.BO
         /// <param name="classDef"></param>
         /// <param name="criteria"></param>
         /// <returns></returns>
-        public IBusinessObjectCollection FindAll(IClassDef classDef, Criteria criteria)
+        public virtual IBusinessObjectCollection FindAll(IClassDef classDef, Criteria criteria)
         {
             Type boType = classDef.ClassType;
             Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
