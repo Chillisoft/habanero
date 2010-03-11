@@ -1173,6 +1173,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsNotNull(displayValue);
             Assert.AreNotSame(dateTimeToday, displayValue);
+            Assert.AreEqual(dateTimeToday.ResolveToValue(), displayValue);
         }
 
         [Test]

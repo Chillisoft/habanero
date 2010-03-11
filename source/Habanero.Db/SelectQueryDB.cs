@@ -357,14 +357,10 @@ namespace Habanero.DB
         private string AddParameter(object value, SqlStatement statement)
         {
             if (value == null) value = "NULL";
-            //TODO Mark 20 Oct 2009: Convert these 'DateTime' things to use IResolvableToValue
-            if (value is DateTimeToday)
+            var resolvableValue = value as IResolvableToValue<DateTime>;
+            if (resolvableValue != null)
             {
-                value = DateTimeToday.Value;
-            }
-            if (value is DateTimeNow)
-            {
-                value = DateTimeNow.Value;
+                value = resolvableValue.ResolveToValue();
             }
             if (value is Criteria.CriteriaValues)
             {

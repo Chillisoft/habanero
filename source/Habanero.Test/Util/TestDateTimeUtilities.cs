@@ -247,5 +247,73 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public void Test_TryParseDate_WhenNull_ShouldRetTrueAndRetValueNull()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            bool parsed = DateTimeUtilities.TryParseDate(null, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsNull(parsedValue);
+        } 
+        [Test]
+        public void Test_TryParseDate_WhenTodayString_ShouldRetTrueAndRetTodayValue()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            bool parsed = DateTimeUtilities.TryParseDate("today", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.AreEqual(DateTime.Today, parsedValue);
+        }
+        [Test]
+        public void Test_TryParseDate_WhenDateString_ShouldRetTrueAndRetDate()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            bool parsed = DateTimeUtilities.TryParseDate("01/31/2010", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.AreEqual(new DateTime(2010, 01, 31), parsedValue);
+        }
+        [Test]
+        public void Test_TryParseDate_WhenDateValue_ShouldRetTrueAndRetDateValue()
+        {
+            //---------------Set up test pack-------------------
+            var dateTime = new DateTime(2010, 01, 31);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            bool parsed = DateTimeUtilities.TryParseDate(dateTime, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.AreEqual(dateTime, parsedValue);
+        }
+        [Test]
+        public void Test_TryParseDate_WhenNot_ShouldRetFalseAndNull()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            bool parsed = DateTimeUtilities.TryParseDate("Invalid", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(parsed);
+            Assert.IsNull(parsedValue);
+        }
     }
 }

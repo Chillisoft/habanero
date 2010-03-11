@@ -21,12 +21,13 @@ using System.ComponentModel;
 
 namespace Habanero.Base
 {
+
     ///<summary>
     /// This is a wrapper class for DateTime.Today. This is used by search and filter criteria to build up a search Criteria object.
     /// For loading the appropriate objects from the collection.
     ///</summary>
     [TypeConverter(typeof(DateTimeTodayConverter))]
-    public sealed class DateTimeToday : IComparable<DateTime>, IComparable, IResolvableToValue
+    public sealed class DateTimeToday : IComparable<DateTime>, IComparable, IResolvableToValue, IResolvableToValue<DateTime>
     {
         ///<summary>
         /// Returns the current Today value from the DateTime object.
@@ -51,6 +52,11 @@ namespace Habanero.Base
         }
 
         object IResolvableToValue<object>.ResolveToValue()
+        {
+            return Value;
+        }
+
+        public DateTime ResolveToValue()
         {
             return Value;
         }

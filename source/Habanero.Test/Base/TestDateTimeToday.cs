@@ -36,13 +36,23 @@ namespace Habanero.Test.Base
             //---------------Test Result -----------------------
             TestUtil.AssertIsInstanceOf<IResolvableToValue>(dateTimeToday);
         }
+        [Test]
+        public void Test_IResolvableToValueDateTime()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            DateTimeToday dateTimeToday = new DateTimeToday();
+            //---------------Test Result -----------------------
+            TestUtil.AssertIsInstanceOf<IResolvableToValue<DateTime>>(dateTimeToday);
+        }
 
         [Test]
         public void Test_IResolvableToValue_ResolveToValue()
         {
             //---------------Set up test pack-------------------
             DateTimeToday dateTimeToday = new DateTimeToday();
-            IResolvableToValue resolvableToValue = dateTimeToday;
+            IResolvableToValue<DateTime> resolvableToValue = dateTimeToday;
             DateTime today = DateTime.Today;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------

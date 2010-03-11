@@ -39,6 +39,20 @@ namespace Habanero.Test.BO.CriteriaManager
         }
 
         [Test]
+        public void Test_ToString_WhenHasNullValues_ShouldReturnOk()
+        {
+            //-------------Setup Test Pack ------------------
+            object[] values = new object[] { "100", "200", null };
+            Criteria.CriteriaValues criteriaValues = new Criteria.CriteriaValues(values);
+
+            //-------------Execute test ---------------------
+            string valuesAsString = criteriaValues.ToString();
+
+            //-------------Test Result ----------------------
+            Assert.AreEqual("('100', '200')", valuesAsString);
+        }
+
+        [Test]
         public void Test_CompareTo_WhenInValues_ShouldReturnZero()
         {
             //-------------Setup Test Pack ------------------
@@ -51,7 +65,7 @@ namespace Habanero.Test.BO.CriteriaManager
             //-------------Test Result ----------------------
             Assert.AreEqual(0, result);
         }
-    
+
         [Test]
         public void Test_CompareTo_WhenNotInValues_ShouldReturnNotZero()
         {

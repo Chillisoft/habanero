@@ -78,7 +78,7 @@ namespace Habanero.BO.ClassDefinition
             }
             returnValue = valueToParse;
             return true;*/
-            return DateTimeUtilities.TryParsePropValue(valueToParse, out returnValue);
+            return DateTimeUtilities.TryParseValue(valueToParse, out returnValue);
         }
     }
 }

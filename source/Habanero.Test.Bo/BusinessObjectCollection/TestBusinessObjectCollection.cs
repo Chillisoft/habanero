@@ -1346,7 +1346,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreSame(cp1, col[1]);
         }
 
-
         [Test]
         public void Test_SelectQuery_WhenSetToNull_ShouldRaiseError()
         {

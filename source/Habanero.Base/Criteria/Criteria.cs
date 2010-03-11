@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.Base
 {
@@ -305,10 +306,18 @@ namespace Habanero.Base
             }
             
             IComparable compareToValue = _fieldValue as IComparable;
+
             compareToValue = ConvertDateTimeStringToValue(compareToValue);
             compareToValue = ConvertGuidStringToValue(boPropertyValue, compareToValue);
 
             return IsNonNullMatch(boPropertyValue, compareToValue);
+        }
+
+        private static IComparable ConvertDateTimeStringToValue(IComparable y)
+        {
+            DateTime? parsedValue;
+            bool parsedOk = DateTimeUtilities.TryParseDate(y, out parsedValue);
+            return parsedOk ? parsedValue : y;
         }
 
         private static IComparable ConvertGuidStringToValue(IComparable propertyValue, IComparable compareToValue)
@@ -320,8 +329,8 @@ namespace Habanero.Base
                     return compareToValue;
                 }
                 Guid guidCompareToValue;
-                bool parsedOK = GuidTryParse( compareToValue.ToString(), out guidCompareToValue);
-                return parsedOK ? guidCompareToValue : compareToValue;
+                bool parsedOk = GuidTryParse( compareToValue.ToString(), out guidCompareToValue);
+                return parsedOk ? guidCompareToValue : compareToValue;
             }
             return compareToValue;
         }
@@ -363,12 +372,6 @@ namespace Habanero.Base
             return CheckValueAgainstSingleCriteria(leftValue, className);
         }
 
-        private static IComparable ConvertDateTimeStringToValue(IComparable y)
-        {
-            y = ConvertDateTimeToday(y);
-            y = ConvertDateTimeNow(y);
-            return y;
-        }
 
         private bool IsNonNullMatch(IComparable boPropertyValue, IComparable compareToValue)
         {
@@ -722,11 +725,16 @@ namespace Habanero.Base
             return false;
         }
 
-
+        /// <summary>
+        /// The list of Criterial Values.
+        /// </summary>
         public class CriteriaValues : IComparable, IEnumerable
         {
             private readonly List<object> _values;
-
+            /// <summary>
+            /// Construc the Criteria values based on a set of values.
+            /// </summary>
+            /// <param name="values"></param>
             public CriteriaValues(IEnumerable values) {
                 _values = new List<object>();
                 foreach (var value in values)
@@ -742,7 +750,9 @@ namespace Habanero.Base
                     }
                 }
             }
-
+            /// <summary>
+            /// The number of criteria items
+            /// </summary>
             public int Count
 
             {
@@ -767,7 +777,8 @@ namespace Habanero.Base
                 foreach (var value in _values)
                 {
                     if (value is string) stringValues.Add("'" + (string)value + "'");
-                    else stringValues.Add(value.ToString());
+                    
+                    else if(value != null) stringValues.Add(value.ToString());
                 }
                 return "(" + String.Join(", ", stringValues.ToArray()) + ")";
             }

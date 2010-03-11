@@ -141,14 +141,14 @@ namespace Habanero.Util
         ///<param name="valueToParse"></param>
         ///<returns>The parsed valid date time</returns>
         /// <exception cref="HabaneroIncorrectTypeException">Exception raised if value cannot be parsed</exception>
-        /// <seealso cref="TryParsePropValue"/>
+        /// <seealso cref="TryParseValue"/>
         public static DateTime ParseToDate(object valueToParse)
         {
             object returnValue = ParseValue(valueToParse);
 
-            if (returnValue is IResolvableToValue)
+            if (returnValue is IResolvableToValue<DateTime>)
             {
-                returnValue = ((IResolvableToValue)returnValue).ResolveToValue();
+                returnValue = ((IResolvableToValue<DateTime>)returnValue).ResolveToValue();
             }
             return (DateTime)returnValue;
         }
@@ -156,7 +156,7 @@ namespace Habanero.Util
         private static object ParseValue(object valueToParse)
         {
             object returnValue;
-            bool isParsed = TryParsePropValue(valueToParse, out returnValue);
+            bool isParsed = TryParseValue(valueToParse, out returnValue);
 
             if (!isParsed)
             {
@@ -175,13 +175,44 @@ namespace Habanero.Util
             throw new HabaneroIncorrectTypeException(message, message);
         }
 
+        ///<summary>
+        /// Tries to parse a value as an object to a valid DateTime.
+        /// The valid value may not be a date will always be a date i.e. "Now" will resolve to now.
+        /// If you need lazy resolution then use <see cref="TryParseValue"/>.
+        ///</summary>
+        ///<param name="valueToParse"></param>
+        ///<param name="returnValue">valid date if try Parse true else null</param>
+        ///<returns>If the value cannot be parsed to a valid date time then returns false else true</returns>
+        /// <seealso cref="TryParseValue"/>
+        public static bool TryParseDate(object valueToParse, out DateTime? returnValue)
+        {
+            object tempReturnvalue;
+            bool isParsed = TryParseValue(valueToParse, out tempReturnvalue);
+            returnValue = null;
+            if (isParsed)
+            {
+                if (tempReturnvalue is IResolvableToValue<DateTime>)
+                {
+                    returnValue = ((IResolvableToValue<DateTime>)tempReturnvalue).ResolveToValue();
+                }
+                else if(tempReturnvalue != null)
+                {
+                    returnValue = (DateTime) tempReturnvalue;
+                }
+            }
+
+            return isParsed;
+        }
 
         ///<summary>
+        /// Tries to parse a value as an object to a valid DateTimeValue or a resolvable DateTimeValue.
+        /// The valid value may not be a date but could instead return a <see cref="DateTimeToday"/> or <see cref="DateTimeNow"/> etc
+        /// These objects are convertable to DateTime via the <see cref="DateTimeToday.ResolveToValue"/>
         ///</summary>
         ///<param name="valueToParse"></param>
         ///<param name="returnValue"></param>
-        ///<returns></returns>
-        public static bool TryParsePropValue(object valueToParse, out object returnValue)
+        ///<returns>If the value cannot be parsed to a valid date time then returns false else true</returns>
+        public static bool TryParseValue(object valueToParse, out object returnValue)
         {
             returnValue = null;
             if (valueToParse != null && valueToParse is string && ((string)valueToParse).Length == 0) return true;
