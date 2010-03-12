@@ -363,7 +363,7 @@ namespace Habanero.UI.VWG
         /// <param name="name">The name of the TreeView</param>
         public virtual ITreeView CreateTreeView(string name)
         {
-            ITreeView tv = new TreeViewVWG();
+            ITreeView tv = new TreeViewVWG(this);
             tv.Name = name;
             return tv;
         }
@@ -383,7 +383,7 @@ namespace Habanero.UI.VWG
         ///<returns>The newly created TreeNode object.</returns>
         public ITreeNode CreateTreeNode(string nodeName)
         {
-            return new TreeViewVWG.TreeNodeVWG(nodeName);
+            return new TreeViewVWG.TreeNodeVWG(this, nodeName);
         }
 
         /// <summary>

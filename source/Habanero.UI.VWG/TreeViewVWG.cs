@@ -53,11 +53,6 @@ namespace Habanero.UI.VWG
         ///<summary>
         /// Constructs a new <see cref="TreeViewVWG"/>
         ///</summary>
-        public TreeViewVWG() : this(GlobalUIRegistry.ControlFactory) { }
-
-        ///<summary>
-        /// Constructs a new <see cref="TreeViewVWG"/>
-        ///</summary>
         ///<param name="controlFactory">The Control Factory to use to construct new nodes</param>
         public TreeViewVWG(IControlFactory controlFactory)
         {
@@ -271,17 +266,6 @@ namespace Habanero.UI.VWG
         public class TreeNodeVWG : TreeNode, ITreeNode
         {
             private readonly TreeNodeCollectionVWG _nodes;
-
-            ///<summary>
-            /// Constructs a new <see cref="TreeNodeVWG"/>.
-            ///</summary>
-            public TreeNodeVWG() : this("") { }
-
-            ///<summary>
-            /// Constructs a new <see cref="TreeNodeVWG"/> with the specified text.
-            ///</summary>
-            ///<param name="text">The label text of the new Tree node</param>
-            public TreeNodeVWG(string text) : this(GlobalUIRegistry.ControlFactory, text) { }
 
             ///<summary>
             /// Constructs a new <see cref="TreeNodeVWG"/> with the specified text.
