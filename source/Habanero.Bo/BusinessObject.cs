@@ -1349,9 +1349,11 @@ namespace Habanero.BO
         private bool HasErrors(ref IList<IBOError> errors)
         {
             if (errors == null) errors = new List<IBOError>();
-            foreach (IBusinessObjectRule rule in GetBusinessObjectRules())
+            var rules = GetBusinessObjectRules()
+                    .Where(rule 
+                        => (rule != null && ErrorLevelIsError(rule)) && !rule.IsValid(this));
+            foreach (IBusinessObjectRule rule in rules)
             {
-                if (rule == null || !ErrorLevelIsError(rule) || rule.IsValid()) continue;
                 CreateBOError(rule, errors);
             }
             return errors.Count != 0;

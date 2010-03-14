@@ -145,7 +145,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(classDef2, def);
         }
 
-
+#pragma warning disable 168
         [Test]
         public void Test_SuperClassClassDef_NotFound()
         {
@@ -160,7 +160,6 @@ namespace Habanero.Test.BO.ClassDefinition
                 IClassDef def = superClassDef.SuperClassClassDef;
                 //---------------Test Result -----------------------
                 Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
-                Assert.IsNull(def);// This will never get hit. It is here to state an expectation and to avoid a resharper warning.
             }
             catch (InvalidXmlDefinitionException ex)
             {
@@ -170,6 +169,7 @@ namespace Habanero.Test.BO.ClassDefinition
                     "There are 0 class definitions currently loaded.", ex.Message);
             }
         }
+#pragma warning restore 168
 
         // Grants access to protected methods
         private class SuperClassDefInheritor : SuperClassDef
@@ -193,7 +193,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 ClassName = name;
             }
 
-            public void SetSuperClassClassDef(ClassDef classDef)
+            public void SetSuperClassClassDef(IClassDef classDef)
             {
                 SuperClassClassDef = classDef;
             }

@@ -50,6 +50,11 @@ namespace Habanero.Base
         /// </summary>
         Dictionary<string, object> Parameters { get; set; }
 
+        ///<summary>
+        /// You can set any parameter for a propRule
+        ///</summary>
+        ///<param name="parameterName"></param>
+        ///<param name="value"></param>
         void SetParameter(string parameterName, object value);
 
         /// <summary>

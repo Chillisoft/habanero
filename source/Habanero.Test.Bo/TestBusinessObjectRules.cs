@@ -21,9 +21,11 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
+#pragma warning disable 612,618
     /// <summary>
     /// Summary description for TestBusinessObject.
     /// </summary>
@@ -103,6 +105,39 @@ namespace Habanero.Test.BO
             Assert.IsTrue(bo.Status.HasWarnings(out warningList));
             Assert.AreEqual(1, warningList.Count);
             Assert.AreSame(bo, warningList[0].BusinessObject);
+        }
+        [Test]
+        public void Test_BOIsValid_WithBO_WhenRuleIsNotValid_ShouldBeNotValid()
+        {
+            //---------------Set up test pack-------------------
+            MyBO bo = new MyBO();
+            BusinessObjectRuleStub ruleStub = new BusinessObjectRuleStub(false);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool isValid = ruleStub.IsValid(bo);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isValid);
+
+        }
+
+        [Test]
+        public void Test_BOIsValid_WithBO_WhenRuleWithBOIsValid_ShouldBeValid()
+        {
+            //---------------Set up test pack-------------------
+            MyBO bo = new MyBO();
+            var mockRule = MockRepository.GenerateMock<IBusinessObjectRule>();
+            mockRule.Stub(rule => rule.IsValid(bo)).Return(true);
+            mockRule.Stub(rule => rule.IsValid()).Return(false);
+
+            bo.AddBusinessRule(mockRule);
+            //---------------Assert Precondition----------------
+            Assert.True(mockRule.IsValid(bo));
+            Assert.IsFalse(mockRule.IsValid());
+            //---------------Execute Test ----------------------
+            IList<IBOError> message;
+            bool isValid = bo.Status.IsValid(out message);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isValid, "Should be Valid");
         }
 
         [Test]
@@ -194,12 +229,14 @@ namespace Habanero.Test.BO
         /// <summary>
         /// Returns the rule name
         /// </summary>
+// ReSharper disable UnusedAutoPropertyAccessor.Global
         public string Name { get; set; }
 
         /// <summary>
         /// Returns the error message for if the rule fails.
         /// </summary>
         public string Message { get; set; }
+// ReSharper restore UnusedAutoPropertyAccessor.Global
 
         /// <summary>
         /// The <see cref="IBusinessObjectRule.ErrorLevel"/> for this BusinessObjectRule e.g. Warning, Error. 
@@ -218,7 +255,13 @@ namespace Habanero.Test.BO
             return _isValid;
         }
 
+        public bool IsValid(IBusinessObject bo)
+        {
+            return _isValid;
+        }
 
         #endregion
     }
+
+#pragma warning restore 612,618
 }

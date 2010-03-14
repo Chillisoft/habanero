@@ -44,7 +44,7 @@ namespace Habanero.Test
             _myRuleList = new List<IBusinessObjectRule>();
         }
 
-        public MyBO(ClassDef def)
+        public MyBO(IClassDef def)
             : base(def)
         {
             _myRuleList = new List<IBusinessObjectRule>();

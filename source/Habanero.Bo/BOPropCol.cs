@@ -202,11 +202,10 @@ namespace Habanero.BO
             foreach (IBOProp prop in this)
             {
                 prop.Validate();
-                if (!prop.IsValid)
-                {
-                    errors.Add(new BOError(prop.InvalidReason, ErrorLevel.Error));
-                    propsValid = false;
-                }
+                if (prop.IsValid) continue;
+
+                errors.Add(new BOError(prop.InvalidReason, ErrorLevel.Error));
+                propsValid = false;
             }
             return propsValid;
         }

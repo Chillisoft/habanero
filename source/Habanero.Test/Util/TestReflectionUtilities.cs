@@ -46,7 +46,7 @@ namespace Habanero.Test.Util
             Assert.IsTrue(Convert.ToBoolean(returnValue));
         }
 
-        [Test, ExpectedException(typeof(Exception))]
+        [Test, ExpectedException(typeof (Exception))]
         public void TestExecuteMethodDoesntExist()
         {
             SimpleClass simpleClass = new SimpleClass();
@@ -78,14 +78,14 @@ namespace Habanero.Test.Util
             Assert.IsNull(classWithPrivateMethod.StringParamValue);
             Assert.IsFalse(classWithPrivateMethod.IntParamValue.HasValue);
             //--------------- Execute Test ----------------------
-            ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod, "MyPrivateMethodWithParams", testStringParam, testIntParam);
+            ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod, "MyPrivateMethodWithParams",
+                                                     testStringParam, testIntParam);
             //--------------- Test Result -----------------------
             Assert.IsTrue(classWithPrivateMethod.PrivateMethodCalled);
             Assert.AreEqual(testStringParam, classWithPrivateMethod.StringParamValue);
             Assert.IsTrue(classWithPrivateMethod.IntParamValue.HasValue);
-            Assert.AreEqual(testIntParam, classWithPrivateMethod.IntParamValue.Value);
+            Assert.AreEqual(testIntParam, classWithPrivateMethod.IntParamValue.GetValueOrDefault());
         }
-
 
 
         [Test]
@@ -96,7 +96,8 @@ namespace Habanero.Test.Util
             //--------------- Test Preconditions ----------------
             Assert.IsFalse(classWithPrivateMethod.PrivateMethodCalled);
             //--------------- Execute Test ----------------------
-            var returnValue = ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod, "MyPrivateMethodWithReturn");
+            var returnValue = ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod,
+                                                                       "MyPrivateMethodWithReturn");
             //--------------- Test Result -----------------------
             Assert.IsTrue(classWithPrivateMethod.PrivateMethodCalled);
             Assert.AreEqual("SomeString", returnValue);
@@ -114,7 +115,9 @@ namespace Habanero.Test.Util
             Assert.IsNull(classWithPrivateMethod.StringParamValue);
             Assert.IsFalse(classWithPrivateMethod.IntParamValue.HasValue);
             //--------------- Execute Test ----------------------
-            var returnValue = ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod, "MyPrivateMethodWithParamsWithReturn", testStringParam, testIntParam);
+            var returnValue = ReflectionUtilities.ExecutePrivateMethod(classWithPrivateMethod,
+                                                                       "MyPrivateMethodWithParamsWithReturn",
+                                                                       testStringParam, testIntParam);
             //--------------- Test Result -----------------------
             Assert.IsTrue(classWithPrivateMethod.PrivateMethodCalled);
             Assert.AreEqual(testStringParam, classWithPrivateMethod.StringParamValue);
@@ -220,9 +223,10 @@ namespace Habanero.Test.Util
             //---------------Execute Test ----------------------
             ReflectionUtilities.SetPrivatePropertyValue(classWithProperties, propertyName, null);
             //---------------Test Result -----------------------
-            bool? propValue = (bool?)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
+            bool? propValue = (bool?) ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
             Assert.IsNull(propValue);
         }
+
         [Test]
         public void Test_SetPrivateProp_WherePropBool()
         {
@@ -230,13 +234,14 @@ namespace Habanero.Test.Util
             const string propertyName = "BoolProp";
             var classWithProperties = new ClassWithProperties();
             //---------------Assert Precondition----------------
-            Assert.IsFalse((bool)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName));
+            Assert.IsFalse((bool) ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName));
             //---------------Execute Test ----------------------
             ReflectionUtilities.SetPrivatePropertyValue(classWithProperties, propertyName, true);
             //---------------Test Result -----------------------
-            bool propValue = (bool)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
+            bool propValue = (bool) ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
             Assert.IsTrue(propValue);
         }
+
         [Test]
         public void Test_SetPrivatePropToNull_WherePropBool()
         {
@@ -244,13 +249,14 @@ namespace Habanero.Test.Util
             const string propertyName = "BoolProp";
             var classWithProperties = new ClassWithProperties();
             //---------------Assert Precondition----------------
-            Assert.IsFalse((bool)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName));
+            Assert.IsFalse((bool) ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName));
             //---------------Execute Test ----------------------
             ReflectionUtilities.SetPrivatePropertyValue(classWithProperties, propertyName, null);
             //---------------Test Result -----------------------
-            bool propValue = (bool)ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
+            bool propValue = (bool) ReflectionUtilities.GetPrivatePropertyValue(classWithProperties, propertyName);
             Assert.IsFalse(propValue);
         }
+
         [Test]
         public void Test_GetUnderlyingPropertyType_WhenPublicNullableBool_ShouldReturnBool()
         {
@@ -259,34 +265,86 @@ namespace Habanero.Test.Util
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            Type propType = ReflectionUtilities.GetUndelyingPropertType(typeof(ClassWithProperties), "PublicNullableBoolProp");
+            Type propType = ReflectionUtilities.GetUndelyingPropertType(typeof (ClassWithProperties),
+                                                                        "PublicNullableBoolProp");
             //---------------Test Result -----------------------
-            Assert.AreEqual(typeof(bool), propType);
+            Assert.AreEqual(typeof (bool), propType);
         }
+
         [Test]
         public void Test_GetUnderlyingPropertyType_WhenPrivateNullableBool_ShouldReturnBool()
         {
             //---------------Set up test pack-------------------
-            
+
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
             Type propType = ReflectionUtilities.GetUndelyingPropertType(typeof (ClassWithProperties), "NullableBoolProp");
             //---------------Test Result -----------------------
-            Assert.AreEqual(typeof(bool), propType);
+            Assert.AreEqual(typeof (bool), propType);
         }
+
         [Test]
         public void Test_GetUnderlyingPropertyType_WhenPrivateBool_ShouldReturnBool()
         {
             //---------------Set up test pack-------------------
-            
+
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            Type propType = ReflectionUtilities.GetUndelyingPropertType(typeof(ClassWithProperties), "BoolProp");
+            Type propType = ReflectionUtilities.GetUndelyingPropertType(typeof (ClassWithProperties), "BoolProp");
             //---------------Test Result -----------------------
-            Assert.AreEqual(typeof(bool), propType);
+            Assert.AreEqual(typeof (bool), propType);
         }
+
+        [Test]
+        public void Test_GetPropertyInfo_WithLambda_ShouldRetInfo()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+
+            var propInfo = ReflectionUtilities.GetPropertyInfo<ClassWithProperties>(bo => bo.StringProperty);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("StringProperty", propInfo.Name);
+            Assert.AreSame(typeof (string), propInfo.PropertyType);
+        }
+        [Test]
+        public void Test_GetPropertyName_WithLambda_ShouldRetName()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+
+            var propertyName = ReflectionUtilities.GetPropertyName<ClassWithProperties>(bo => bo.StringProperty);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("StringProperty", propertyName);
+        }
+
+        [Test]
+        public void Test_GetPropertyInfo_WithInvalidLambda_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                ReflectionUtilities.GetPropertyInfo<ClassWithProperties>(bo => bo.GetType());
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+            //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("Not a member access", ex.Message);
+            }
+        }
+
+        // ReSharper disable UnusedAutoPropertyAccessor.Local
 
         // ReSharper disable UnusedMember.Local
         private class ClassWithProperties
@@ -300,7 +358,9 @@ namespace Habanero.Test.Util
             public bool? PublicNullableBoolProp { get; set; }
             private bool BoolProp { get; set; }
         }
+
         // ReSharper restore UnusedMember.Local
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
 
         internal interface IMyInterface
         {
@@ -313,11 +373,11 @@ namespace Habanero.Test.Util
 
         private class ClassWithPrivateMethod
         {
-
             private void MyPrivateMethod()
             {
                 PrivateMethodCalled = true;
             }
+
             private string MyPrivateMethodWithReturn()
             {
                 PrivateMethodCalled = true;
@@ -331,6 +391,7 @@ namespace Habanero.Test.Util
                 IntParamValue = intParam;
                 return stringParam;
             }
+
             private void MyPrivateMethodWithParams(string stringParam, int intParam)
             {
                 PrivateMethodCalled = true;
@@ -350,7 +411,8 @@ namespace Habanero.Test.Util
             private bool _methodCalled = false;
 
             public SimpleClass()
-            {}
+            {
+            }
 
             public void MyMethod()
             {
@@ -369,6 +431,4 @@ namespace Habanero.Test.Util
             }
         }
     }
-
-    
 }

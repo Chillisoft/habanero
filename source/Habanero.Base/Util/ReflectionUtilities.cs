@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using Habanero.Base.Exceptions;
 using log4net;
@@ -512,8 +513,62 @@ namespace Habanero.Util
         {
             return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
+        /// <summary>
+        /// Returns the Property Name of the property used in the Lambda expression of type
+        /// bo -> bo.MyProperty. This function will return 'MyProperty'.
+        /// </summary>
+        /// <typeparam name="TModel">The object whose Property Name is being returned</typeparam>
+        /// <param name="propExpression">The Lambda expression</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"> Exception if the lamda is not a lambda for a property</exception>
+        public static string GetPropertyName<TModel>(Expression<Func<TModel, object>> propExpression)
+        {
+            PropertyInfo propertyInfo = GetPropertyInfo(propExpression);
+            return propertyInfo.Name;
+        }
+        /// <summary>
+        /// Returns the <see cref="PropertyInfo"/> of the property used in the Lambda expression of type
+        /// bo -> bo.MyProperty. This function will return the PropertyInfo for MyProperty.
+        /// </summary>
+        /// <typeparam name="TModel">The object whose PropertyInfo is being returned</typeparam>
+        /// <param name="propExpression">The Lambda expression</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"> Exception if the lamda is not a lambda for a property</exception>
+        public static PropertyInfo GetPropertyInfo<TModel>(Expression<Func<TModel, object>> propExpression)
+        {
+
+            var memberExpression = GetMemberExpression(propExpression);
+
+            return (PropertyInfo)memberExpression.Member;
+        }
+
+        private static MemberExpression GetMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression)
+        {
+            return GetMemberExpression(expression, true);
+        }
+        private static MemberExpression GetMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression, bool enforceCheck)
+        {
+            MemberExpression memberExpression = null;
+            if (expression.Body.NodeType == ExpressionType.Convert)
+            {
+                var body = (UnaryExpression)expression.Body;
+                memberExpression = body.Operand as MemberExpression;
+            }
+            else if (expression.Body.NodeType == ExpressionType.MemberAccess)
+            {
+                memberExpression = expression.Body as MemberExpression;
+            }
+
+            if (enforceCheck && memberExpression == null)
+            {
+                throw new ArgumentException(expression.ToString() + " - Not a member accessor", "expression");
+            }
+
+            return memberExpression;
+        }
     }
 
+// ReSharper restore UnusedAutoPropertyAccessor.Local
     
 
    

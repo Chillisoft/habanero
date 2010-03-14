@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
@@ -112,13 +113,11 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid(out string message)
         {
-            message = "";
             IList<IBOError> errors;
             bool isValid = IsValid(out errors);
-            foreach (IBOError error in errors)
-            {
-                message += error.Message + Environment.NewLine;
-            }
+            message = errors
+                .Aggregate("", (current, error) 
+                    => current + (error.Message + Environment.NewLine));
             return isValid;
         }
 
@@ -153,8 +152,8 @@ namespace Habanero.BO
             valid &= _bo.AreCustomRulesValidInternal(out customRuleErrorsString);
             if (!String.IsNullOrEmpty(customRuleErrorsString))
             {
-                BOError customError = new BOError(customRuleErrorsString, ErrorLevel.Error);
-                customError.BusinessObject = this.BusinessObject;
+                BOError customError = new BOError(customRuleErrorsString, ErrorLevel.Error)
+                                          {BusinessObject = this.BusinessObject};
                 errors.Add(customError);
             }
 

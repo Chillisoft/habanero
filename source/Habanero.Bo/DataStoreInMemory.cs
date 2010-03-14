@@ -41,7 +41,7 @@ namespace Habanero.BO
         ///</summary>
         public int Count
         {
-            get { return _objects.Count; }
+            get { return AllObjects.Count; }
         }
 
         ///<summary>
@@ -59,7 +59,7 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public virtual void Add(IBusinessObject businessObject)
         {
-            _objects.Add(businessObject.ID.ObjectID, businessObject);
+            AllObjects.Add(businessObject.ID.ObjectID, businessObject);
         }
 
         ///<summary>
@@ -83,7 +83,7 @@ namespace Habanero.BO
         public virtual IBusinessObject Find(Type boType, Criteria criteria)
         {
             IBusinessObject currentBO = null;
-            foreach (IBusinessObject bo in _objects.Values)
+            foreach (IBusinessObject bo in AllObjects.Values)
             {
                 if (!boType.IsInstanceOfType(bo)) continue;
                 if (!criteria.IsMatch(bo)) continue;
@@ -112,7 +112,7 @@ namespace Habanero.BO
         public virtual IBusinessObject Find(IClassDef classDef, Criteria criteria)
         {
             IBusinessObject currentBO = null;
-            foreach (IBusinessObject bo in _objects.Values)
+            foreach (IBusinessObject bo in AllObjects.Values)
             {
                 if (bo.ClassDef != classDef) continue;
                 if (!criteria.IsMatch(bo)) continue;
@@ -139,7 +139,7 @@ namespace Habanero.BO
         ///<returns></returns>
         public virtual T Find<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject
         {
-            return (from bo in _objects.Values where bo.ID.Equals(primaryKey) select bo as T).FirstOrDefault();
+            return (from bo in AllObjects.Values where bo.ID.Equals(primaryKey) select bo as T).FirstOrDefault();
         }
 
         ///<summary>
@@ -148,7 +148,7 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public virtual void Remove(IBusinessObject businessObject)
         {
-            _objects.Remove(businessObject.ID.ObjectID);
+            AllObjects.Remove(businessObject.ID.ObjectID);
         }
 
         ///<summary>
@@ -172,19 +172,19 @@ namespace Habanero.BO
         ///<returns></returns>
         internal virtual List<T> FindAllInternal<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            return _objects.Values.OfType<T>().Where(boAsT => criteria == null || criteria.IsMatch(boAsT)).ToList();
+            return AllObjects.Values.OfType<T>().Where(boAsT => criteria == null || criteria.IsMatch(boAsT)).ToList();
         }
         ///<summary>
         /// Find all objects of type boType that match the criteria.
         ///</summary>
-        ///<param name="BOType"></param>
+        ///<param name="boType"></param>
         ///<param name="criteria"></param>
         ///<returns></returns>
-        public virtual IBusinessObjectCollection FindAll(Type BOType, Criteria criteria)
+        public virtual IBusinessObjectCollection FindAll(Type boType, Criteria criteria)
         {
-            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
+            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
             IBusinessObjectCollection col = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
-            IEnumerable<IBusinessObject> allMatchineBOs = _objects.Values.Where(BOType.IsInstanceOfType).Where(bo => criteria == null || criteria.IsMatch(bo));
+            IEnumerable<IBusinessObject> allMatchineBOs = AllObjects.Values.Where(boType.IsInstanceOfType).Where(bo => criteria == null || criteria.IsMatch(bo));
             foreach (IBusinessObject bo in allMatchineBOs)
             {
                 col.Add(bo);
@@ -203,8 +203,8 @@ namespace Habanero.BO
             Type boType = classDef.ClassType;
             Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
             IBusinessObjectCollection col = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
-            col.ClassDef = classDef;           
-            foreach (IBusinessObject bo in _objects.Values)
+            col.ClassDef = classDef;
+            foreach (IBusinessObject bo in AllObjects.Values)
             {
                 if (!classDef.ClassType.IsInstanceOfType(bo)) continue;
                 if (classDef.TypeParameter != bo.ClassDef.TypeParameter) continue;
@@ -219,7 +219,7 @@ namespace Habanero.BO
         /// </summary>
         public void ClearAllBusinessObjects()
         {
-            _objects.Clear();
+            AllObjects.Clear();
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace Habanero.BO
                 XmlWriter writer = XmlWriter.Create(fs, settings);
                 writer.WriteStartDocument();
                 writer.WriteStartElement("BusinessObjects");
-                foreach (var o in _objects)
+                foreach (var o in AllObjects)
                 {
 
                     ((BusinessObject) o.Value).WriteXml(writer);
@@ -269,7 +269,7 @@ namespace Habanero.BO
                 try
                 {
                     IBusinessObject bo = (IBusinessObject) xs.Deserialize(stream);
-                    this._objects.Add(bo.ID.GetAsGuid(), bo);
+                    this.AllObjects.Add(bo.ID.GetAsGuid(), bo);
                 }
                 catch (Exception ex)
                 {

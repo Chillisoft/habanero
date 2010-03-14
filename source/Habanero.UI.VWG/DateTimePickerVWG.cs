@@ -223,7 +223,7 @@ namespace Habanero.UI.VWG
             get { return _manager.NullDisplayValue; }
             set { _manager.NullDisplayValue = value; }
         }
-
+/*
         /// <summary>
         /// Gets or sets a value indicating whether a spin button control
         /// (also known as an up-down control) is used to adjust the date/time value
@@ -232,7 +232,7 @@ namespace Habanero.UI.VWG
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
-        }
+        }*/
 
         /// <summary>
         /// Gets or sets the format of the date and time displayed in the control.

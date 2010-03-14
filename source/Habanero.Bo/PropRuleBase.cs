@@ -38,7 +38,7 @@ namespace Habanero.BO
         /// A dictionary of parameters that are used for the different PropRules that Inherit from <see cref="PropRuleBase"/>
         /// e.g. values of 'min' or 'max' for that particular rule.
         /// </summary>
-        protected Dictionary<string, object> _parameters;
+        protected readonly Dictionary<string, object> _parameters;
 
 		/// <summary>
 		/// Constructor to initialise a new property rule

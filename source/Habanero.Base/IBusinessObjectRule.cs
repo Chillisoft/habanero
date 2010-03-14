@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+
 namespace Habanero.Base
 {
     /// <summary>
@@ -43,10 +45,26 @@ namespace Habanero.Base
         ErrorLevel ErrorLevel { get; }
 
         /// <summary>
+        /// Indicates whether the property value is valid against the rules.
+        /// Using <see cref="IsValid(IBusinessObject)"/> is the recommended 
+        /// practice since this allows Habanero to optimise the Loading of BusinessObjectRules.
+        /// I.e. only one rule object needs to be loaded per Business Object Type (ClassDef).
+        /// If the <see cref="IsValid(IBusinessObject)"/> method is used otherwise this
+        /// rule object will have to be created and loaded in memory for every single 
+        /// Business Object of that Type.
+        /// </summary>
+        /// <returns>Returns true if valid</returns>
+        [Obsolete("Using IsValid(IBusinessObject) is the recommended")]
+        bool IsValid();
+
+
+        /// <summary>
         /// Indicates whether the property value is valid against the rules
         /// </summary>
         /// <returns>Returns true if valid</returns>
-        bool IsValid();
+// ReSharper disable UnusedParameter.Global
+        bool IsValid(IBusinessObject bo);
+// ReSharper restore UnusedParameter.Global
 
 //        /// <summary>
 //        /// Indicates whether the property value is valid against the rules
