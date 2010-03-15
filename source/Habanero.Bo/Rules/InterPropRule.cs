@@ -85,7 +85,7 @@ namespace Habanero.BO.Rules
             _prop2Value = (IComparable) bo.GetPropertyValue(this.RightProp.PropertyName);
             if(_prop1Value == null || _prop2Value == null) return true;
             int compareTo = _prop1Value.CompareTo(_prop2Value);
-            if (this.ComparisonOp == ComparisonOperator.LessThan) return compareTo == -1;
+            if (this.ComparisonOp == ComparisonOperator.LessThan) return compareTo <= -1;
             if (this.ComparisonOp == ComparisonOperator.LessThanOrEqual) return compareTo <= 0;
             if (this.ComparisonOp == ComparisonOperator.EqualTo) return compareTo == 0;
             if (this.ComparisonOp == ComparisonOperator.GreaterThan) return compareTo > 0;
