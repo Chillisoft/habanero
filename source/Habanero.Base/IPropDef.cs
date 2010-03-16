@@ -114,7 +114,7 @@ namespace Habanero.Base
         /// In this case when the BusinessObject is inserted the field will be filled
         /// from the database field.
         /// </summary>
-        bool AutoIncrementing { get; }
+        bool AutoIncrementing { get; set; }
 
         /// <summary>
         /// Returns the maximum length for a string property
