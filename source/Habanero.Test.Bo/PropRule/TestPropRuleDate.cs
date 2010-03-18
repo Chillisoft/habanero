@@ -87,7 +87,7 @@ namespace Habanero.Test.BO
                new PropRuleDate("BirthDate", "Test", minValue, maxValue);
             //---------------Test Result -----------------------
             Assert.AreEqual(minValue, rule.MinValue);
-            Assert.AreEqual(maxValue, rule.MaxValue);
+            Assert.AreEqual(maxValue.AddDays(1).AddMilliseconds(-1), rule.MaxValue);
         }
         [Test]
         public void TestPropRuleDate_MaxValue_Today()

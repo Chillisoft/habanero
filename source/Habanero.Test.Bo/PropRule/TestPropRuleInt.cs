@@ -63,7 +63,7 @@ namespace Habanero.Test.BO
             IPropRuleComparable<int> rule = new PropRuleInteger("num", "TestMessage", 5, 10);
             //---------------Test Result -----------------------
             Assert.AreEqual(5, rule.MinValue);
-            Assert.AreEqual(5, rule.MaxValue);
+            Assert.AreEqual(10, rule.MaxValue);
         }
     }
 }
