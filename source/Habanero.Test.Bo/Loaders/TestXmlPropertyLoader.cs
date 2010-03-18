@@ -55,7 +55,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestSimpleProperty()
+        public virtual void TestSimpleProperty()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" />");
             Assert.AreEqual("TestProp", def.PropertyName, "Property name should be same as that specified in xml");
@@ -70,7 +70,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestNoPropsInString()
+        public virtual void TestNoPropsInString()
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithNoName()
+        public virtual void TestPropertyWithNoName()
         {
             try
             {
@@ -100,7 +100,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithType()
+        public virtual void TestPropertyWithType()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" type=""Int32"" />");
             Assert.AreEqual("Int32", def.PropertyTypeName, "Property type should be same as that specified in xml");
@@ -108,7 +108,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithCustomType()
+        public virtual void TestPropertyWithCustomType()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" type=""MyType"" assembly=""MyAssembly"" />");
             Assert.AreEqual("MyType", def.PropertyTypeName, "Property type should be same as that specified in xml");
@@ -116,28 +116,28 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithDescription()
+        public virtual void TestPropertyWithDescription()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" description=""Property for Testing"" />");
             Assert.AreEqual("Property for Testing", def.Description, "Property description should be same as that specified in xml");
         }
 
         [Test]
-        public void TestPropertyWithDisplayValue()
+        public virtual void TestPropertyWithDisplayValue()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" displayName=""Test Property"" />");
             Assert.AreEqual("Test Property", def.DisplayName, "Property description should be same as that specified in xml");
         }
 
         [Test]
-        public void TestPropertyWithKeepValuePrivate()
+        public virtual void TestPropertyWithKeepValuePrivate()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" keepValuePrivate=""true"" />");
             Assert.AreEqual(true, def.KeepValuePrivate, "Property 'keep value private' attribute should be same as that specified in xml");
         }
 
         [Test]
-        public void TestPropertyWithReadWriteRule()
+        public virtual void TestPropertyWithReadWriteRule()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadWrite"" />");
             Assert.AreEqual(PropReadWriteRule.ReadWrite, def.ReadWriteRule,
@@ -145,7 +145,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithReadOnlyRule()
+        public virtual void TestPropertyWithReadOnlyRule()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadOnly"" />");
             Assert.AreEqual(PropReadWriteRule.ReadOnly, def.ReadWriteRule,
@@ -153,7 +153,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithWriteOnceRule()
+        public virtual void TestPropertyWithWriteOnceRule()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteOnce"" />");
             Assert.AreEqual(PropReadWriteRule.WriteOnce, def.ReadWriteRule,
@@ -161,7 +161,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithWriteNotNewRule()
+        public virtual void TestPropertyWithWriteNotNewRule()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteNotNew"" />");
             Assert.AreEqual(PropReadWriteRule.WriteNotNew, def.ReadWriteRule,
@@ -169,7 +169,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithWriteNewRule()
+        public virtual void TestPropertyWithWriteNewRule()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteNew"" />");
             Assert.AreEqual(PropReadWriteRule.WriteNew, def.ReadWriteRule,
@@ -177,7 +177,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithInvalidReadWriterule()
+        public virtual void TestPropertyWithInvalidReadWriterule()
         {
             try
             {
@@ -192,14 +192,14 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithDefaultValue()
+        public virtual void TestPropertyWithDefaultValue()
         {
             IPropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" default=""TestValue"" />");
             Assert.AreEqual("TestValue", def.DefaultValue, "Default value should be same as that specified in xml");
         }
 
         [Test]
-        public void TestPropertyWithGuidDefaultValue()
+        public virtual void TestPropertyWithGuidDefaultValue()
         {
             IPropDef def =
                 _loader.LoadProperty(
@@ -209,7 +209,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithDateTimeDefaultValueToday()
+        public virtual void TestPropertyWithDateTimeDefaultValueToday()
         {
             IPropDef def = _loader.LoadProperty(
                     @"<property  name=""TestProp"" type=""DateTime"" default=""Today"" />");
@@ -217,7 +217,7 @@ namespace Habanero.Test.BO.Loaders
                             "Default value should be same as that specified in xml");
         }
         [Test]
-        public void TestPropertyWithDateTimeDefaultValueYesterday()
+        public virtual void TestPropertyWithDateTimeDefaultValueYesterday()
         {
             IPropDef def = _loader.LoadProperty(
                     @"<property  name=""TestProp"" type=""DateTime"" default=""yesterday"" />");
@@ -226,7 +226,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithDateTimeDefaultValueNow()
+        public virtual void TestPropertyWithDateTimeDefaultValueNow()
         {
             IPropDef def = _loader.LoadProperty(
                     @"<property  name=""TestProp"" type=""DateTime"" default=""Now"" />");
@@ -235,7 +235,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithDatabaseFieldName()
+        public virtual void TestPropertyWithDatabaseFieldName()
         {
             IPropDef def =
                 _loader.LoadProperty(@"<property  name=""TestProp"" databaseField=""TestFieldName"" />");
@@ -243,7 +243,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithDatabaseFieldNameWithSpaces()
+        public virtual void TestPropertyWithDatabaseFieldNameWithSpaces()
         {
             IPropDef def =
                 _loader.LoadProperty(@"<property name=""TestProp"" databaseField=""Test FieldName"" />");
@@ -251,7 +251,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithAutoIncrementingField()
+        public virtual void TestPropertyWithAutoIncrementingField()
         {
             IPropDef def = _loader.LoadProperty(
                       @"<property name=""TestProp"" autoIncrementing=""true"" />");
@@ -259,7 +259,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithLength()
+        public virtual void TestPropertyWithLength()
         {
             IPropDef def = _loader.LoadProperty(
                       @"<property name=""TestProp"" length=""5"" />");
@@ -267,7 +267,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithInvalidLengthException()
+        public virtual void TestPropertyWithInvalidLengthException()
         {
             try
             {
@@ -282,7 +282,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithNegativeLengthException()
+        public virtual void TestPropertyWithNegativeLengthException()
         {
             try
             {
@@ -297,7 +297,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithLengthForNonString()
+        public virtual void TestPropertyWithLengthForNonString()
         {
             try
             {
@@ -312,7 +312,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithPropRule()
+        public virtual void TestPropertyWithPropRule()
         {
             IPropDef def =
                 _loader.LoadProperty(
@@ -321,7 +321,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropertyWithInvalidPropRule()
+        public virtual void TestPropertyWithInvalidPropRule()
         {
             // this should not work as min is an invalid setting for a string rule.
             try
@@ -352,7 +352,7 @@ namespace Habanero.Test.BO.Loaders
 
 
         [Test]
-        public void TestPropertyWithDatabaseLookupList()
+        public virtual void TestPropertyWithDatabaseLookupList()
         {
             MyBO.LoadDefaultClassDef();
             IPropDef def =
@@ -371,7 +371,7 @@ namespace Habanero.Test.BO.Loaders
         
 
         [Test]
-        public void TestPropertyWithSimpleLookupList()
+        public virtual void TestPropertyWithSimpleLookupList()
         {
             IPropDef def =
                 _loader.LoadProperty(
@@ -390,7 +390,7 @@ namespace Habanero.Test.BO.Loaders
 
          
         [Test]
-        public void TestPropertyWithBusinessObjectLookupList()
+        public virtual void TestPropertyWithBusinessObjectLookupList()
         {
             IPropDef def = _loader.LoadProperty(
                     @"<property  name=""TestProp"">
@@ -404,7 +404,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestLookupListLoaderConstructors()
+        public virtual void TestLookupListLoaderConstructors()
         {
             XmlBusinessObjectLookupListLoader bollLoader = new XmlBusinessObjectLookupListLoader(new DtdLoader(), GetDefClassFactory());
             Assert.AreEqual(typeof(XmlBusinessObjectLookupListLoader), bollLoader.GetType());

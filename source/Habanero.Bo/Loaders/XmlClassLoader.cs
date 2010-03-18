@@ -194,7 +194,9 @@ namespace Habanero.BO.Loaders
                 LoadPrimaryKeyDef(primaryKeDefXML);
                 _classDef = CreateClassDef();
                 LoadRelationshipDefs(relationshipDefXmls);
+                _classDef.RelationshipDefCol = _relationshipDefCol;
                 LoadUIDefs(uiDefXmls);
+                _classDef.UIDefCol = _uiDefCol;
             }
             catch (Exception ex)
             {
