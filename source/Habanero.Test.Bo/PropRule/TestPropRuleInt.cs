@@ -51,5 +51,19 @@ namespace Habanero.Test.BO
             Assert.IsFalse(rule.IsPropValueValid("Propname", -5, ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
         }
+
+        [Test]
+        public void Test_MaxMinUsingInterface()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPropRuleComparable<int> rule = new PropRuleInteger("num", "TestMessage", 5, 10);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, rule.MinValue);
+            Assert.AreEqual(5, rule.MaxValue);
+        }
     }
 }

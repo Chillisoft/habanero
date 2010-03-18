@@ -195,6 +195,7 @@
     <Compile Include="IDataAccessor.cs" />
     <Compile Include="IDataSetProvider.cs" />
     <Compile Include="ClassDefinition\IDefClassFactory.cs" />
+    <Compile Include="IPropRuleComparable.cs" />
     <Compile Include="Loaders\ClassDefsXmlValidator.cs" />
     <Compile Include="Loaders\XmlFilterLoader.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />

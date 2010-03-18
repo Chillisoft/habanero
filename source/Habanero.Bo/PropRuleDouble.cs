@@ -25,7 +25,7 @@ namespace Habanero.BO
     /// <summary>
     /// Checks Double values against property rules that test for validity
     /// </summary>
-    public class PropRuleDouble : PropRuleBase
+    public class PropRuleDouble : PropRuleBase, IPropRuleComparable<double>
     {
         /// <summary>
         /// Constructor to initialise a new rule

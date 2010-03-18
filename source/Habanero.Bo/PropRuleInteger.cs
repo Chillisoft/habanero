@@ -27,7 +27,7 @@ namespace Habanero.BO
     /// <summary>
     /// Checks integer values against property rules that test for validity
     /// </summary>
-    public class PropRuleInteger : PropRuleBase
+    public class PropRuleInteger : PropRuleBase, IPropRuleComparable<int>
     {
         //private int _minValue = int.MinValue;
         //private int _maxValue = int.MaxValue;

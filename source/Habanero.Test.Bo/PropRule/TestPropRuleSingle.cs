@@ -43,6 +43,22 @@ namespace Habanero.Test.BO
 
 
         [Test]
+        public void Test_PropRuledateMax_ViaInterface()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            const float minValue = Single.MinValue;
+            const float maxValue = Single.MaxValue;
+            IPropRuleComparable<Single> rule =
+               new PropRuleSingle("fdsafasd", "Test", minValue, maxValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(minValue, rule.MinValue);
+            Assert.AreEqual(maxValue, rule.MaxValue);
+        }
+        [Test]
         public void TestPropRuleSingle_MaxValue_ActualValueLT()
         {
             XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3EC3275C-9D47-4DB5-8FA6-579C2B05261C}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -66,7 +66,6 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="BusinessObjectControlStub.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Grid\TestDataGridViewColumnCollectionWin.cs" />
     <Compile Include="Grid\TestDataGridViewNumericUpDownColumnWin.cs" />
@@ -74,14 +73,12 @@
     <Compile Include="Grid\TestEditableGridControlWin.cs" />
     <Compile Include="Grid\TestEditableGridWin.cs" />
     <Compile Include="Grid\TestGridBaseWin.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Grid\TestGridInitialiserWin.cs" />
     <Compile Include="Grid\TestReadOnlyGridButtonControlWin.cs" />
     <Compile Include="Grid\TestReadOnlyGridControlWin.cs" />
     <Compile Include="Grid\TestReadOnlyGridWin.cs" />
     <Compile Include="HabaneroControls\BusinessObjectControlStubWin.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="HabaneroControls\FilterControl\TestEnumComboBoxFilterWin.cs" />
     <Compile Include="HabaneroControls\FilterControl\TestFilterControlBuilderWin.cs" />
@@ -140,7 +137,6 @@
     <Compile Include="Selectors\TestCollapsiblePanelSelectorWin.cs" />
     <Compile Include="Selectors\TestReadOnlyGridControlSelectorWin.cs" />
     <Compile Include="HabaneroControls\TestBOColTabControlWin.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="HabaneroControls\TestBOEditorControlWin.cs" />
     <Compile Include="LayoutManager\TestBorderLayoutManagerWin.cs" />

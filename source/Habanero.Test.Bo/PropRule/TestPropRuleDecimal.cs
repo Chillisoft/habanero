@@ -128,5 +128,26 @@ namespace Habanero.Test.BO
             Assert.IsFalse(isValid);
             Assert.IsFalse(string.IsNullOrEmpty(errorMessage));
         }
+        [Test]
+        public void TestPropRuleDecimal_UsingComparableInterface_MaxValue_ActualValueGT()
+        {
+            XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,
+                        @"<rule name=""TestDecimal""  >
+                            <add key=""min"" value=""12.22"" />
+                            <add key=""max"" value=""15.51"" />
+                        </rule>");
+            //-----------------Assert Preconditions ---------------------------
+            Assert.AreEqual(12.22D, ((IPropRuleComparable<decimal>)rule).MinValue);
+            Assert.AreEqual(15.51D, ((IPropRuleComparable<decimal>)rule).MaxValue);
+
+            //---------------Execute ------------------------------------------
+            string errorMessage = "";
+            bool isValid = rule.IsPropValueValid("Propname", new Decimal(15.56), ref errorMessage);
+
+            //--------------Verify Result -------------------------------------
+            Assert.IsFalse(isValid);
+            Assert.IsFalse(string.IsNullOrEmpty(errorMessage));
+        }
     }
 }

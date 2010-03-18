@@ -74,6 +74,22 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_PropRuledateMax_ViaInterface()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var minValue = new DateTime(1900, 01, 01);
+            var maxValue = new DateTime(2010, 12, 31);
+            IPropRuleComparable<DateTime> rule =
+               new PropRuleDate("BirthDate", "Test", minValue, maxValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(minValue, rule.MinValue);
+            Assert.AreEqual(maxValue, rule.MaxValue);
+        }
+        [Test]
         public void TestPropRuleDate_MaxValue_Today()
         {
             XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());

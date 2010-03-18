@@ -25,7 +25,7 @@ namespace Habanero.BO
     /// <summary>
     /// Checks Single values against property rules that test for validity
     /// </summary>
-    public class PropRuleSingle : PropRuleBase
+    public class PropRuleSingle : PropRuleBase, IPropRuleComparable<Single>
     {
         //private Single _minValue = Single.MinValue;
         //private Single _maxValue = Single.MaxValue;

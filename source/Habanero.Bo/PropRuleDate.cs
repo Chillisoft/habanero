@@ -28,7 +28,7 @@ namespace Habanero.BO
     /// <summary>
     /// Checks date values against property rules that test for validity
     /// </summary>
-    public class PropRuleDate : PropRuleBase
+    public class PropRuleDate : PropRuleBase, IPropRuleComparable<DateTime>
     {
         /// <summary>
         /// Constructor to initialise a new rule

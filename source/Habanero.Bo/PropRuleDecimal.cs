@@ -25,9 +25,9 @@ namespace Habanero.BO
     /// <summary>
     /// Checks decimal values against property rules that test for validity
     /// </summary>
-    public class PropRuleDecimal : PropRuleBase
+    public class PropRuleDecimal : PropRuleBase, IPropRuleComparable<decimal>
     {
-        /// <summary>
+        /// <summary>T
         /// Constructor to initialise a new rule
         /// </summary>
         /// <param name="ruleName">The rule name</param>

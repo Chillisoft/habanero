@@ -41,7 +41,19 @@ namespace Habanero.Test.BO
             return new DefClassFactory();
         }
 
+        [Test]
+        public void Test_PropRuleAsComarableInterface()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            IPropRuleComparable<double> rule = new PropRuleDouble("num", "TestMessage", 5.32d, 10.11111d);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5.32d, rule.MinValue);
+            Assert.AreEqual(10.11111d, rule.MaxValue);
+        }
         [Test]
         public void TestPropRuleDouble_MaxValue_ActualValueLT()
         {
