@@ -77,10 +77,19 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("testpropname1 desc", def.SortColumn);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoColumns()
         {
-            loader.LoadUIGridDef(@"<grid/>");
+            try
+            {
+                loader.LoadUIGridDef(@"<grid/>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("No 'column' elements were specified in a 'grid' element.  Ensure that the element contains one or more 'column' elements, which specify ", ex.Message);
+            }
         }
 
         [Test]

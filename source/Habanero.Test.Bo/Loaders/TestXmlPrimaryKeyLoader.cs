@@ -62,17 +62,34 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(true, def.IsGuidObjectID, "Def should by default be an objectID");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), ExpectedMessage = "An invalid node 'primaryKeyDef' was encountered when loading the class definitions.")]
-
+        [Test]
         public void TestWrongElementName()
         {
-            itsLoader.LoadPrimaryKey(@"<primaryKeyDef><prop name=""TestProp"" /></primaryKeyDef>", itsPropDefs);
+            try
+            {
+                itsLoader.LoadPrimaryKey(@"<primaryKeyDef><prop name=""TestProp"" /></primaryKeyDef>", itsPropDefs);
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An invalid node 'primaryKeyDef' was encountered when loading the class definitions.", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException), ExpectedMessage = "A primaryKey node must have one or more prop nodes")]
+        [Test]
         public void TestWithNoProps()
         {
-            itsLoader.LoadPrimaryKey(@"<primaryKey></primaryKey>", itsPropDefs);
+            try
+            {
+                itsLoader.LoadPrimaryKey(@"<primaryKey></primaryKey>", itsPropDefs);
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A primaryKey node must have one or more prop nodes", ex.Message);
+            }
         }
 
         [Test]
@@ -87,13 +104,22 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(false, def.IsGuidObjectID, "Def should not be an objectID");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropElementMissingName()
         {
-            itsLoader.LoadPrimaryKey(@"
+            try
+            {
+                itsLoader.LoadPrimaryKey(@"
                 <primaryKey>
                     <prop />
                 </primaryKey>", itsPropDefs);
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The 'prop' element must have a 'name' attribute that provides the name of the property definition that serves as the primary key.", ex.Message);
+            }
         }
 
         [Test]

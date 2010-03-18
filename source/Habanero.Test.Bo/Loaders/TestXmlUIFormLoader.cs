@@ -152,22 +152,33 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("testheading", col.Title);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestMixedElementsUnderForm()
         {
-            loader.LoadUIFormDef(@"
+            try
+            {
+                loader.LoadUIFormDef(@"
 				<form width=""100"" height=""120"" title=""testheading"">
 					<tab name=""testtab"">
 						<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
 					</tab>
 					<field label=""testlabel3"" property=""testpropname3"" type=""Button"" mapperType=""testmappertypename3"" />
                 </form>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A form can have either a set of 'tab', 'columnLayout' or 'field' nodes, but not a mixture", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestMixedElementsUnderTab()
         {
-            loader.LoadUIFormDef(@"
+            try
+            {
+                loader.LoadUIFormDef(@"
 				<form width=""100"" height=""120"" title=""testheading"">
 					<tab name=""testtab"">
 						<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
@@ -176,12 +187,21 @@ namespace Habanero.Test.BO.Loaders
                         </columnLayout>
 					</tab>
                 </form>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A 'tab' can have either a set of 'columnLayout' or 'field' nodes or a single 'formGrid' node, but not a mixture", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestMixedElementsUnderFormColumn()
         {
-            loader.LoadUIFormDef(@"
+            try
+            {
+                loader.LoadUIFormDef(@"
 				<form>
 					<columnLayout>
 					    <field property=""testpropname1"" />
@@ -190,30 +210,64 @@ namespace Habanero.Test.BO.Loaders
     					</tab>
                     </columnLayout>
                 </form>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The 'columnLayout' node does not conform to its Document Type Definition (DTD). The 'tab' element is not declared.", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoElementsUnderForm()
         {
-            loader.LoadUIFormDef(@"<form/>");
+            try
+            {
+                loader.LoadUIFormDef(@"<form/>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A form can have either a set of 'tab', 'columnLayout' or 'field' nodes", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidWidth()
         {
-            loader.LoadUIFormDef(@"
+            try
+            {
+                loader.LoadUIFormDef(@"
                 <form width=""abc"">
                     <field property=""testpropname1"" />
                 </form>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'form' element, either the 'width' or 'height' attribute has been given an invalid integer pixel value", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidHeight()
         {
-            loader.LoadUIFormDef(@"
+            try
+            {
+                loader.LoadUIFormDef(@"
                 <form height=""abc"">
                     <field property=""testpropname1"" />
                 </form>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'form' element, either the 'width' or 'height' attribute has been given an invalid integer pixel value", ex.Message);
+            }
         }
 
         [Test]

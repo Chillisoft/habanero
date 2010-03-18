@@ -53,33 +53,60 @@ namespace Habanero.Test.BO.Loaders
             return new DefClassFactory();
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoKeyAttribute()
         {
-            _loader.LoadRule(typeof (int).Name,
-                @"
+            try
+            {
+                _loader.LoadRule(typeof (int).Name,
+                                 @"
                 <rule name=""TestRule"" message=""Test Message"">
                     <add value=""1"" />
                 </rule>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An 'add' attribute in the class definitions was missing the required 'key' attribute, which specifies the name of the rule to check", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoValueAttribute()
         {
-            _loader.LoadRule(typeof (int).Name,
-                @"
+            try
+            {
+                _loader.LoadRule(typeof (int).Name,
+                                 @"
                 <rule name=""TestRule"" message=""Test Message"">
                     <add key=""max"" />
                 </rule>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An 'add' attribute in the class definitions was missing the required 'value' attribute, which specifies the value to compare with for the ", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoAddElements()
         {
-            _loader.LoadRule(typeof (int).Name,
-                @"
+            try
+            {
+                _loader.LoadRule(typeof (int).Name,
+                                 @"
                 <rule name=""TestRule"" message=""Test Message"">
                 </rule>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A 'rule' element in the class definitions must contain at least one 'add' element for each component of the rule, such as the minimum ", ex.Message);
+            }
         }
 
         [Test]
@@ -93,8 +120,8 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("Test Message", rule.Message, "Message is not being read from xml correctly.");
             //Assert.AreSame(typeof(int), rule.PropertyType,
             //                   "A propRuleInteger should have int as its property type.");
-            Assert.AreEqual("2", ((IPropRule)rule).Parameters["min"]);
-            Assert.AreEqual("10", ((IPropRule)rule).Parameters["max"]);
+            Assert.AreEqual("2", rule.Parameters["min"]);
+            Assert.AreEqual("10", rule.Parameters["max"]);
         }
 
         [Test]
@@ -251,13 +278,22 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(Decimal.MaxValue, Convert.ToDecimal(rule.Parameters["max"]));
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoRuleForCustomType()
         {
-            _loader.LoadRule(typeof (TimeSpan).Name,
-                @"<rule name=""TestCustom"">
+            try
+            {
+                _loader.LoadRule(typeof (TimeSpan).Name,
+                                 @"<rule name=""TestCustom"">
                     <add key=""bob"" value=""billy"" />
                 </rule>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("Could not load the Property Rule for this type('TimeSpan'", ex.Message);
+            }
         }
 
         [Test]
@@ -270,17 +306,28 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("billy", rule.Parameters["bob"]);
         }
 
-        [Test, ExpectedException(typeof (TypeLoadException))]
+        [Test]
         public void TestCustomRuleMustInheritFromPropRuleBase()
         {
-            _loader.LoadRule(typeof (TimeSpan).Name,
-                             @"<rule name=""TestCustom"" class=""Habanero.Test.MyBO"" assembly=""Habanero.Test"">
+            try
+            {
+                _loader.LoadRule(typeof (TimeSpan).Name,
+                                 @"<rule name=""TestCustom"" class=""Habanero.Test.MyBO"" assembly=""Habanero.Test"">
                     <add key=""bob"" value=""billy"" />
                 </rule>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (TypeLoadException ex)
+            {
+                StringAssert.Contains("The prop rule 'TestCustom' must inherit from PropRuleBase", ex.Message);
+            }
         }
     }
 
+// ReSharper disable UnusedMember.Global
     public class MyRule : PropRuleBase
+
     {
         public MyRule(string name, string message)
             : base(name, message)
@@ -313,4 +360,5 @@ namespace Habanero.Test.BO.Loaders
             }
         }
     }
+    // ReSharper restore UnusedMember.Global
 }

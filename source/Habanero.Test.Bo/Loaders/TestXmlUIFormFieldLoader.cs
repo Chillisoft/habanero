@@ -144,38 +144,74 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TestValue2", uiProp.GetParameterValue("TestAtt2"));
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidEditableValue()
         {
-            loader.LoadUIProperty(@"<field property=""testpropname"" editable=""123"" />");
+            try
+            {
+                loader.LoadUIProperty(@"<field property=""testpropname"" editable=""123"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The 'editable' attribute in a 'field' element is invalid. The valid options are 'true' and 'false'", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestDuplicateParameters()
         {
-            loader.LoadUIProperty(@"
+            try
+            {
+                loader.LoadUIProperty(@"
                 <field property=""testpropname"" >
                     <parameter name=""TestAtt"" value=""TestValue"" />
                     <parameter name=""TestAtt"" value=""TestValue2"" />
                 </field>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An error occurred while loading a 'parameter' element.  There may be duplicates with the same 'name' attribute", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestParameterMissingName()
         {
-            loader.LoadUIProperty(@"
+            try
+            {
+                loader.LoadUIProperty(@"
                 <field property=""testpropname"" >
                     <parameter value=""TestValue"" />
                 </field>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'parameter' element, either the 'name' or 'value' attribute has been omitted", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestParameterMissingValue()
         {
-            loader.LoadUIProperty(@"
+            try
+            {
+                loader.LoadUIProperty(@"
                 <field property=""testpropname"" >
                     <parameter name=""TestAtt"" />
                 </field>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'parameter' element, either the 'name' or 'value' attribute has been omitted", ex.Message);
+            }
         }
 
         [Test]

@@ -98,32 +98,59 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestSimpleLookupListNoItems()
         {
-            ILookupList lookupList = _loader.LoadLookupList(@"
+            try
+            {
+                ILookupList lookupList = _loader.LoadLookupList(@"
 					<simpleLookupList></simpleLookupList>
 				");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A 'simpleLookupList' element does not contain any 'item' elements or any items in the 'options' attribute.  It should contain one or more ", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestSimpleLookupListItemHasNoDisplay()
         {
-            ILookupList lookupList = _loader.LoadLookupList(@"
+            try
+            {
+                ILookupList lookupList = _loader.LoadLookupList(@"
 					<simpleLookupList>
 						<item value=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
                     </simpleLookupList>
 				");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An 'item' is missing a 'display' attribute that specifies the string to show to the user in a display", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestSimpleLookupListItemHasNoValue()
         {
-            ILookupList lookupList = _loader.LoadLookupList(@"
+            try
+            {
+                ILookupList lookupList = _loader.LoadLookupList(@"
 				    <simpleLookupList>
 						<item display=""s1"" />
                     </simpleLookupList>
 				");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An 'item' is missing a 'value' attribute that specifies the value to store for the given property", ex.Message);
+            }
         }
 
     }

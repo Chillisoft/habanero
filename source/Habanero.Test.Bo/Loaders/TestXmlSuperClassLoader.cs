@@ -85,11 +85,20 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNull(def.Discriminator);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidInheritanceType()
         {
-            itsLoader.LoadSuperClassDesc(
+            try
+            {
+                itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""class"" assembly=""ass"" orMapping=""invalid"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The specified ORMapping type, 'invalid', is not a valid inheritance type.  The valid options are ClassTableInheritance (the default", ex.Message);
+            }
         }
 
         [Test]
@@ -110,18 +119,36 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("prop name", def.Discriminator);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestSingleTableInheritanceException()
         {
+            try
+            {
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a superClass definition, a 'discriminator' attribute is missing where the SingleTableInheritance OR-mapping type has been specified", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestSingleTableInheritanceWithIDException()
         {
+            try
+            {
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" id="""" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a superClass definition, a 'discriminator' attribute is missing where the SingleTableInheritance OR-mapping type has been specified", ex.Message);
+            }
         }
 
         [Test]
@@ -135,18 +162,36 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNull(def.Discriminator);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestConcreteTableInheritanceWithIDException()
         {
+            try
+            {
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" id=""prop"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a superClass definition, an 'id' attribute has been specified for an OR-mapping type other than ClassTableInheritance.", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestConcreteTableInheritanceWithDiscriminatorException()
         {
+            try
+            {
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" discriminator=""abc"" />");
+                    Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a superClass definition, a 'discriminator' attribute has been specified for OR-mapping type ConcreteTableInheritance", ex.Message);
+            }
         }
 
         [Test]
@@ -185,8 +230,7 @@ namespace Habanero.Test.BO.Loaders
         public void Test_TypeParameter()
         {
             //---------------Set up test pack-------------------
-            string superClassXml =
-                @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" typeParameter=""TypeParam1"" />";
+            const string superClassXml = @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" typeParameter=""TypeParam1"" />";
             
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------

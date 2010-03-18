@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -66,20 +67,38 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("testlabel2", col[1].Label);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidWidth()
         {
-            loader.LoadUIFormColumn(@"
+            try
+            {
+                loader.LoadUIFormColumn(@"
 				<columnLayout width=""aaa"">
 					<field property=""testpropname1"" />
 				</columnLayout>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'columnLayout' element, the 'width' attribute has been given an invalid integer pixel value", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoFields()
         {
-            loader.LoadUIFormColumn(@"
+            try
+            {
+                loader.LoadUIFormColumn(@"
 				<columnLayout></columnLayout>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("No 'field' elements were specified in a 'columnLayout' element.  Ensure that the element contains one or more 'field' elements, which ", ex.Message);
+            }
         }
 
         [Test]

@@ -79,12 +79,21 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("value", trigger.Value);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestCantSetBothTriggeredByAndTarget()
         {
-            ITrigger trigger =
-                loader.LoadTrigger(
-                    @"<trigger triggeredBy=""prop"" target=""prop"" action=""action"" value=""value"" />");
+            try
+            {
+                ITrigger trigger =
+                    loader.LoadTrigger(
+                        @"<trigger triggeredBy=""prop"" target=""prop"" action=""action"" value=""value"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("MESSAGE", ex.Message);
+            }
         }
     }
 }

@@ -103,10 +103,19 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TestOrder", relDef.OrderCriteriaString);
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidRelationshipType()
         {
-            _loader.LoadRelationship(SingleRelationshipString.Replace("single", "notsingle"), _propDefs);
+            try
+            {
+                _loader.LoadRelationship(SingleRelationshipString.Replace("single", "notsingle"), _propDefs);
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'relationship' element, the 'type' attribute was not included or was given an invalid value.  The 'type' refers to the type of relationship ", ex.Message);
+            }
         }
 
         [Test]
@@ -130,32 +139,59 @@ namespace Habanero.Test.BO.Loaders
         //    Assert.IsFalse(relDef.KeepReferenceToRelatedObject);
         //}
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidDeleteAction()
         {
-            _loader.LoadRelationship(
-                MultipleRelationshipString.Replace(@"TestOrder""", @"TestOrder"" deleteAction=""invalid"" "),
-                _propDefs);
+            try
+            {
+                _loader.LoadRelationship(
+                    MultipleRelationshipString.Replace(@"TestOrder""", @"TestOrder"" deleteAction=""invalid"" "),
+                    _propDefs);
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'relationship' element, the 'deleteAction' attribute has been given an invalid value. The available options are DeleteRelated, DereferenceRelated ", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoOwnerProperty()
         {
-            _loader.LoadRelationship(@"
+            try
+            {
+                _loader.LoadRelationship(@"
 					<relationship name=""rel"" type=""multiple"" relatedClass=""ass"" relatedAssembly=""ass"">
 						<relatedProperty relatedProperty=""TestRelatedProp"" />
 					</relationship>",
-                _propDefs);
+                                         _propDefs);
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A 'relatedProperty' element is missing the 'property' attribute, which specifies the property in this class to which the relationship will ", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoRelatedProperty()
         {
-            _loader.LoadRelationship(@"
+            try
+            {
+                _loader.LoadRelationship(@"
 					<relationship name=""rel"" type=""multiple"" relatedClass=""ass"" relatedAssembly=""ass"">
 						<relatedProperty property=""TestProp"" />
 					</relationship>",
-                _propDefs);
+                                         _propDefs);
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A 'relatedProperty' element is missing the 'relatedProperty' attribute, which specifies the property in the related class to which the relationship ", ex.Message);
+            }
         }
 
         [Test]

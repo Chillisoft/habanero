@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -68,16 +69,34 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(false, def.KeepValuePrivate, "keepValuePrivate should be false by default");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoPropsInString()
         {
-            _loader.LoadProperty(@"");
+            try
+            {
+                _loader.LoadProperty(@"");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An error has occurred while attempting to load a property definition, contained in a 'property' element. Check that you have correctly spe", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropertyWithNoName()
         {
-            _loader.LoadProperty(@"<property />");
+            try
+            {
+                _loader.LoadProperty(@"<property />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("A 'property' element has no 'name' attribute set. Each 'property' element requires a 'name' attribute that specifies the name of the property ", ex.Message);
+            }
         }
 
         [Test]
@@ -157,10 +176,19 @@ namespace Habanero.Test.BO.Loaders
                             "Property read write rule should be same as that specified in xml");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropertyWithInvalidReadWriterule()
         {
-            _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""invalid"" />");
+            try
+            {
+                _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""invalid"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In the property definition for 'TestProp', the 'readWriteRule' was set to an invalid value. The valid options are ReadWrite, ReadOnly, WriteOnly", ex.Message);
+            }
         }
 
         [Test]
@@ -238,22 +266,49 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(5, def.Length);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropertyWithInvalidLengthException()
         {
-            _loader.LoadProperty(@"<property name=""TestProp"" length=""fff"" />");
+            try
+            {
+                _loader.LoadProperty(@"<property name=""TestProp"" length=""fff"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In the property definition for 'TestProp', the 'length' was set to an invalid integer value", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropertyWithNegativeLengthException()
         {
-            _loader.LoadProperty(@"<property name=""TestProp"" length=""-1"" />");
+            try
+            {
+                _loader.LoadProperty(@"<property name=""TestProp"" length=""-1"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In the property definition for 'TestProp', the 'length' was set to an invalid negative value", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropertyWithLengthForNonString()
         {
-            _loader.LoadProperty(@"<property name=""TestProp"" type=""bool"" length=""5"" />");
+            try
+            {
+                _loader.LoadProperty(@"<property name=""TestProp"" type=""bool"" length=""5"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In the property definition for 'TestProp', a 'length' attribute was provided for a property type that cannot use the attribute", ex.Message);
+            }
         }
 
         [Test]
@@ -265,15 +320,21 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(1, def.PropRules.Count);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropertyWithInvalidPropRule()
         {
             // this should not work as min is an invalid setting for a string rule.
-            IPropDef def =
+            try
+            {
                 _loader.LoadProperty(
-                    @"<property  name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/></rule></property>");
-            Assert.AreEqual(1, def.PropRules.Count);
-            Assert.IsNotNull(def.PropRules[0]);
+                        @"<property  name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/></rule></property>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The specified 'add' attribute was 'min' but the allowed attributes are minLength, maxLength, patternMatch", ex.Message);
+            }
            
         }
 
@@ -293,7 +354,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyWithDatabaseLookupList()
         {
-            IClassDef classDef = MyBO.LoadDefaultClassDef();
+            MyBO.LoadDefaultClassDef();
             IPropDef def =
                 _loader.LoadProperty(
                     @"<property  name=""TestProp""><databaseLookupList sql=""Source"" timeout=""100"" class=""MyBO"" assembly=""Habanero.Test"" /></property>");

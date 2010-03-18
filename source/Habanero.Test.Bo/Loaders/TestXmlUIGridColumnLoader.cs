@@ -86,10 +86,19 @@ namespace Habanero.Test.BO.Loaders
 
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestNoPropertyName()
         {
-            loader.LoadUIProperty(@"<column />");
+            try
+            {
+                loader.LoadUIProperty(@"<column />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'column' element, the 'property' attribute was not specified. This attribute specifies which property of the class to ", ex.Message);
+            }
         }
 
         [Test]
@@ -129,10 +138,19 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(PropAlignment.centre, uiProp.Alignment);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidAlignmentValue()
         {
-            loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""123"" />");
+            try
+            {
+                loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""123"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The 'column' node does not conform to its Document Type Definition (DTD). '123' is not in the enumeration list", ex.Message);
+            }
         }
 
         //-- TODO Create Equivalence of these two in the UI assemblies
@@ -149,16 +167,34 @@ namespace Habanero.Test.BO.Loaders
         //    loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""testx"" assembly=""System.Windows.Forms"" />");
         //}
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidEditableValue()
         {
-            loader.LoadUIProperty(@"<column property=""testpropname"" editable=""123"" />");
+            try
+            {
+                loader.LoadUIProperty(@"<column property=""testpropname"" editable=""123"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The 'editable' attribute in a 'column' element is invalid. The valid options are 'true' and 'false'", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestInvalidWidthValue()
         {
-            loader.LoadUIProperty(@"<column property=""testpropname"" width=""abc"" />");
+            try
+            {
+                loader.LoadUIProperty(@"<column property=""testpropname"" width=""abc"" />");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In the 'width' attribute of a 'column' element, the value provided was invalid.  This should be an integer value in pixels", ex.Message);
+            }
         }
 
         [Test]
@@ -171,32 +207,59 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TestValue2", uiProp.GetParameterValue("TestAtt2"));
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestParameterWithNoName()
         {
-            loader.LoadUIProperty(@"
+            try
+            {
+                loader.LoadUIProperty(@"
                 <column property=""testpropname"" >
                     <parameter value=""left"" />
                 </column>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'parameter' element, either the 'name' or 'value' attribute has been omitted", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestParameterWithNoValue()
         {
-            loader.LoadUIProperty(@"
+            try
+            {
+                loader.LoadUIProperty(@"
                 <column property=""testpropname"" >
                     <parameter name=""alignment"" />
                 </column>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'parameter' element, either the 'name' or 'value' attribute has been omitted", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestDuplicateParameterNames()
         {
-            loader.LoadUIProperty(@"
+            try
+            {
+                loader.LoadUIProperty(@"
                 <column property=""testpropname"" >
                     <parameter name=""alignment"" value=""left"" />
                     <parameter name=""alignment"" value=""right"" />
                 </column>");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An error occurred while loading a 'parameter' element.  There may be duplicates with the same 'name' attribute", ex.Message);
+            }
         }
     }
 }
