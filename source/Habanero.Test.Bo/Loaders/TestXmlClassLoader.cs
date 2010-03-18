@@ -57,7 +57,7 @@ namespace Habanero.Test.BO.Loaders
 
 
         [Test]
-        public void TestInvalidXmlFormatWrongRootElement_ShouldThrowException()
+        public virtual void TestInvalidXmlFormatWrongRootElement_ShouldThrowException()
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithNoAssembly_ShouldThrowException()
+        public virtual void TestClassWithNoAssembly_ShouldThrowException()
         {
             try
             {
@@ -94,7 +94,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithNoClassname_ShouldThrowException()
+        public virtual void TestClassWithNoClassname_ShouldThrowException()
         {
             try
             {
@@ -116,7 +116,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestNoTableName()
+        public virtual void TestNoTableName()
         {
             IClassDef def =
                 _loader.LoadClass(
@@ -134,7 +134,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestTableName()
+        public virtual void TestTableName()
         {
             IClassDef def =
                 _loader.LoadClass(
@@ -150,7 +150,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestTypeParameter()
+        public virtual void TestTypeParameter()
         {
             IClassDef def =
                 _loader.LoadClass(
@@ -166,7 +166,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropDefClassDefIsSet()
+        public virtual void TestPropDefClassDefIsSet()
         {
             //---------------Set up test pack-------------------
             string classDefXml =
@@ -187,7 +187,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestDisplayName()
+        public virtual void TestDisplayName()
         {
             IClassDef def =
                 _loader.LoadClass(
@@ -203,7 +203,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestTableNameWithSpaces()
+        public virtual void TestTableNameWithSpaces()
         {
             IClassDef def =
                 _loader.LoadClass(
@@ -219,7 +219,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestTwoPropClass()
+        public virtual void TestTwoPropClass()
         {
             IClassDef def =
                 _loader.LoadClass(
@@ -237,7 +237,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithNoProps_ShouldThrowException()
+        public virtual void TestClassWithNoProps_ShouldThrowException()
         {
             try
             {
@@ -255,7 +255,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithNoProps_WithSuperClass()
+        public virtual void TestClassWithNoProps_WithSuperClass()
         {
             ClassDef.ClassDefs.Add(
                 new XmlClassDefsLoader(
@@ -286,7 +286,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithPrimaryKeyDef()
+        public virtual void TestClassWithPrimaryKeyDef()
         {
             IClassDef def =
                 _loader.LoadClass(
@@ -303,7 +303,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithNoPrimaryKeyException_ShouldThrowException()
+        public virtual void TestClassWithNoPrimaryKeyException_ShouldThrowException()
         {
             try
             {
@@ -321,7 +321,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithInheritanceAndNoPrimaryKey()
+        public virtual void TestClassWithInheritanceAndNoPrimaryKey()
         {
             IClassDef def = _loader.LoadClass(
                 @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
@@ -334,7 +334,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithMoreThanOnePrimaryKeyDef_ShouldThrowException()
+        public virtual void TestClassWithMoreThanOnePrimaryKeyDef_ShouldThrowException()
         {
             try
             {
@@ -373,7 +373,7 @@ namespace Habanero.Test.BO.Loaders
 //        }
 
         [Test]
-        public void TestClassWithPrimaryKeyAndNoProps_ShouldThrowException()
+        public virtual void TestClassWithPrimaryKeyAndNoProps_ShouldThrowException()
         {
             try
             {
@@ -393,7 +393,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithKeyDefs()
+        public virtual void TestClassWithKeyDefs()
         {
             IClassDef def =
                 _loader.LoadClass(
@@ -418,7 +418,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithSingleRelationship()
+        public virtual void TestClassWithSingleRelationship()
         {
             IClassDef def =
                 _loader.LoadClass(
@@ -445,7 +445,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithSuperClass()
+        public virtual void TestClassWithSuperClass()
         {
             ClassDef.ClassDefs.Add(
                 new XmlClassDefsLoader(
@@ -478,7 +478,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithSuperClassWithNoPK()
+        public virtual void TestClassWithSuperClassWithNoPK()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Remove(typeof (TestClass));
@@ -514,7 +514,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithSuperClassWithRelationshipAndNoPK()
+        public virtual void TestClassWithSuperClassWithRelationshipAndNoPK()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Remove(typeof(TestClass));
@@ -556,7 +556,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassWithUIDef()
+        public virtual void TestClassWithUIDef()
         {
             ClassDef.ClassDefs.Remove(typeof(TestClass));
             ClassDef.ClassDefs.Remove(typeof(TestRelatedClass));
@@ -586,14 +586,23 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNull(uiDef.UIGrid);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
-        public void TestEmptyXmlStringException()
+        [Test]
+        public virtual void TestEmptyXmlStringException()
         {
-            IClassDef def = _loader.LoadClass("");
+            try
+            {
+                _loader.LoadClass("");
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("The application is unable to read the 'classes' element from the XML class definitions file", ex.Message);
+            }
         }
 
         [Test]
-        public void TestInvalidClassElementException_ShouldThrowException()
+        public virtual void TestInvalidClassElementException_ShouldThrowException()
         {
             ClassDef.ClassDefs.Remove(typeof(TestClass));
             ClassDef.ClassDefs.Remove(typeof(TestRelatedClass));
@@ -618,7 +627,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestClassDefID()
+        public virtual void TestClassDefID()
         {
             //---------------Set up test pack-------------------
             Guid classDefID = Guid.NewGuid();
@@ -662,7 +671,7 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void Test_LoadClassDef_WithSingleTableInheritanceAndRelationshipOnBasePrimaryKey()
+        public virtual void Test_LoadClassDef_WithSingleTableInheritanceAndRelationshipOnBasePrimaryKey()
         {
             //---------------Set up test pack-------------------
             Vehicle.LoadClassDef_WithSingleTableInheritance();
