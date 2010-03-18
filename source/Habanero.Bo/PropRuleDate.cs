@@ -217,7 +217,9 @@ namespace Habanero.BO
         {
             get
             {
-                return DateTimeUtilities.ParseToDate(Parameters["min"]);
+                object minValue = Parameters["min"];
+                if (minValue is string && String.IsNullOrEmpty((string)minValue)) return DateTime.MinValue;
+                return DateTimeUtilities.ParseToDate(minValue);
             }
             protected set { _parameters["min"] = value; }
 		}
@@ -229,7 +231,9 @@ namespace Habanero.BO
         {
             get
             {
-                DateTime dateTime = DateTimeUtilities.ParseToDate(Parameters["max"]);
+                object maxValue = Parameters["max"];
+                if (maxValue is string && String.IsNullOrEmpty((string)maxValue)) return DateTime.MaxValue;
+                DateTime dateTime = DateTimeUtilities.ParseToDate(maxValue);
                 return dateTime == DateTime.MaxValue? dateTime: dateTime.AddDays(1).AddMilliseconds(-1);
             }
             protected set { _parameters["max"] = value; }

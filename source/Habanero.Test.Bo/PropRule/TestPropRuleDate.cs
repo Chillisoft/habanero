@@ -241,6 +241,26 @@ namespace Habanero.Test.BO
             Assert.AreEqual("yesterday", rule.Parameters["max"]);
             Assert.AreEqual("yesterday", rule.Parameters["min"]);
         }
+
+        [Test]
+        public void Test_WhenMinBlank_ShouldUseDateTimeMinValue()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Execute Test ----------------------
+            PropRuleDate rule = new PropRuleDate("MyRule", "MyMessage");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DateTime.MinValue, rule.MinValue);
+        }
+
+        [Test]
+        public void Test_WhenMaxBlank_ShouldUseDateTimeMaxValue()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Execute Test ----------------------
+            PropRuleDate rule = new PropRuleDate("MyRule", "MyMessage");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DateTime.MaxValue, rule.MaxValue);
+        }
     }
 
 }
