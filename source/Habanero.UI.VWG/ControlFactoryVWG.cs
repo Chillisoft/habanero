@@ -1103,7 +1103,7 @@ namespace Habanero.UI.VWG
         /// Creates a <see cref="IButton"/> configured with the collapsible style
         ///</summary>
         ///<returns>a <see cref="IButton"/> </returns>
-        public IButton CreateButtonCollapsibleStyle()
+        public virtual IButton CreateButtonCollapsibleStyle()
         {
             ButtonVWG button = (ButtonVWG)CreateButton();
             ConfigureCollapsibleStyleButton(button);
@@ -1310,7 +1310,7 @@ namespace Habanero.UI.VWG
         /// Creates a <see cref="MainTitleIconControlVWG"/>
         /// </summary>
         /// <returns></returns>
-        public IMainTitleIconControl CreateMainTitleIconControl()
+        public virtual IMainTitleIconControl CreateMainTitleIconControl()
         {
             return new MainTitleIconControlVWG(this);
         }
