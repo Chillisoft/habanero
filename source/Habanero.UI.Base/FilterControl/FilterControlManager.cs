@@ -538,7 +538,7 @@ namespace Habanero.UI.Base
     ///</summary>
     public class DateTimePickerFilter : ICustomFilter
     {
-          private readonly IControlFactory _controlFactory;
+        private readonly IControlFactory _controlFactory;
         private readonly string _propertyName;
         private readonly FilterClauseOperator _filterClauseOperator;
         private readonly IDateTimePicker _dateTimePicker;

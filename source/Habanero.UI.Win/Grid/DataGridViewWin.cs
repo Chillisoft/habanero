@@ -191,39 +191,30 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Uses internal paging algorithem
         /// </summary>
-        public bool UseInternalPaging
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
+        public bool UseInternalPaging { get; set; }
 
         /// <summary>
-        /// Gets or sets the current page of the grid when the grid implements pagination
+        /// Gets or sets the current page of the grid when the grid implements pagination.
+        /// These are not implemented in the standard windows form DataGridView
         /// </summary>
-        int IDataGridView.CurrentPage
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
+        int IDataGridView.CurrentPage { get; set; }
 
         /// <summary>
-        /// Gets or sets the number of items per page used when the grid implements pagination
+        /// Gets or sets the number of items per page used when the grid implements pagination.
+        /// These are not implemented in the standard windows form DataGridView
         /// </summary>
         int IDataGridView.ItemsPerPage
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return this.TotalItems; }
+            set { }
         }
 
         /// <summary>
         /// Gets or sets the total pages.
+        /// These are not implemented in the standard windows form DataGridView
         /// </summary>
         /// <value></value>
-        public int TotalPages
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
+        public int TotalPages { get; set; }
 
         /// <summary>
         /// Gets or sets the total items.
@@ -231,8 +222,8 @@ namespace Habanero.UI.Win
         /// <value></value>
         public int TotalItems
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return this.TotalItems; }
+            set { this.TotalItems = value; }
         }
 
         /// <summary>
@@ -848,11 +839,16 @@ namespace Habanero.UI.Win
     {
         private readonly DataGridViewCellStyle _dataGridViewCellStyle;
 
+        ///<summary>
+        ///</summary>
+        ///<param name="dataGridViewCellStyle"></param>
         public DataGridViewCellStyleWin(DataGridViewCellStyle dataGridViewCellStyle)
         {
             _dataGridViewCellStyle = dataGridViewCellStyle;
         }
 
+        ///<summary>
+        ///</summary>
         public DataGridViewCellStyle DataGridViewCellStyle
         {
             get { return _dataGridViewCellStyle; }
@@ -899,11 +895,16 @@ namespace Habanero.UI.Win
     {
         private readonly DataGridViewCell _cell;
 
+        ///<summary>
+        ///</summary>
+        ///<param name="cell"></param>
         public DataGridViewCellWin(DataGridViewCell cell)
         {
             _cell = cell;
         }
 
+        ///<summary>
+        ///</summary>
         public DataGridViewCell DataGridViewCell
         {
             get { return _cell; }

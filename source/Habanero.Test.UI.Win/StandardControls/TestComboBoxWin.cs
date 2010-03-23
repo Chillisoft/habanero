@@ -39,55 +39,55 @@ namespace Habanero.Test.UI.Win.StandardControls
             return control.AutoCompleteSource.ToString();
         }
 
-        [Ignore("Need to figure out how to run tests in STAThread for this test")]
+        [Test, Ignore("Need to figure out how to run tests in STAThread for this test")]
         public override void TestConversion_AutoCompleteSource_None()
         {
             base.TestConversion_AutoCompleteSource_None();
         }
 
-        [Ignore("Need to figure out how to run tests in STAThread for this test")]
+        [Test, Ignore("Need to figure out how to run tests in STAThread for this test")]
         public override void TestConversion_AutoCompleteSource_AllSystemSources()
         {
             base.TestConversion_AutoCompleteSource_AllSystemSources();
         }
 
-        [Ignore("Need to figure out how to run tests in STAThread for this test")]
+        [Test, Ignore("Need to figure out how to run tests in STAThread for this test")]
         public override void TestConversion_AutoCompleteSource_AllUrl()
         {
             base.TestConversion_AutoCompleteSource_AllUrl();
         }
 
-        [Ignore("Need to figure out how to run tests in STAThread for this test")]
+        [Test, Ignore("Need to figure out how to run tests in STAThread for this test")]
         public override void TestConversion_AutoCompleteSource_CustomSource()
         {
             base.TestConversion_AutoCompleteSource_CustomSource();
         }
 
-        [Ignore("Need to figure out how to run tests in STAThread for this test")]
+        [Test, Ignore("Need to figure out how to run tests in STAThread for this test")]
         public override void TestConversion_AutoCompleteSource_FileSystem()
         {
             base.TestConversion_AutoCompleteSource_FileSystem();
         }
 
-        [Ignore("Need to figure out how to run tests in STAThread for this test")]
+        [Test, Ignore("Need to figure out how to run tests in STAThread for this test")]
         public override void TestConversion_AutoCompleteSource_FileSystemDirectories()
         {
             base.TestConversion_AutoCompleteSource_FileSystemDirectories();
         }
 
-        [Ignore("Need to figure out how to run tests in STAThread for this test")]
+        [Test, Ignore("Need to figure out how to run tests in STAThread for this test")]
         public override void TestConversion_AutoCompleteSource_HistoryList()
         {
             base.TestConversion_AutoCompleteSource_HistoryList();
         }
 
-        [Ignore("Need to figure out how to run tests in STAThread for this test")]
+        [Test, Ignore("Need to figure out how to run tests in STAThread for this test")]
         public override void TestConversion_AutoCompleteSource_ListItems()
         {
             base.TestConversion_AutoCompleteSource_ListItems();
         }
 
-        [Ignore("Need to figure out how to run tests in STAThread for this test")]
+        [Test, Ignore("Need to figure out how to run tests in STAThread for this test")]
         public override void TestConversion_AutoCompleteSource_RecentlyUsedList()
         {
             base.TestConversion_AutoCompleteSource_RecentlyUsedList();

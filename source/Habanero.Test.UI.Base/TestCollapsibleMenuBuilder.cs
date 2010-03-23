@@ -428,11 +428,11 @@ namespace Habanero.Test.UI.Base
             bool called = false;
             IControlFactory controlFactoryPassedToCreator = null;
             ControlManagerCreator formControlCreatorDelegate = delegate(IControlFactory controlFactory)
-                                                                   {
-                                                                       called = true;
-                                                                       controlFactoryPassedToCreator = controlFactory;
-                                                                       return new ControlManagerStub(controlFactory);
-                                                                   };
+                       {
+                           called = true;
+                           controlFactoryPassedToCreator = controlFactory;
+                           return new ControlManagerStub(controlFactory);
+                       };
             menuItem.ControlManagerCreator += formControlCreatorDelegate;
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);

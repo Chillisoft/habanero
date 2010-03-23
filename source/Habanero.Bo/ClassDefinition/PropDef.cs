@@ -1026,6 +1026,15 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        ///<summary>
+        /// returns the ClassName from the associated <see cref="IClassDef"
+        ///</summary>
+        ///<exception cref="NotImplementedException"></exception>
+        public string ClassName
+        {
+            get { return this.ClassDef == null? "": this.ClassDef.ClassName; }
+        }
+
         private void ValidateDefaultValue(object defaultValue)
         {
             if (_hasDefaultValueBeenValidated) return;

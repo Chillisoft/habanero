@@ -56,7 +56,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef_PreventAddChild();
         }
-
+        [Test]
         public override void Test_RemoveMethod()
         {
             //DO nothing cannot get this test to work reliably on DB wierd data is always in DB when run all tests
@@ -69,7 +69,7 @@ namespace Habanero.Test.DB
             OrganisationTestBO.DeleteAllOrganisations();
 
         }
-
+        [Test]
         public override void Test_ResetParent_NewChild_SetToNull()
         {
             //DO nothing cannot get this test to work reliably on DB wierd data is always in DB when run all tests

@@ -300,22 +300,6 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                //if (_primaryKeyDef == null)
-                //{
-                //    try
-                //    {
-                //        ClassDef superClassClassDef = this.SuperClassClassDef;
-                //        if (superClassClassDef != null)
-                //        {
-                //            return superClassClassDef.PrimaryKeyDef;
-                //        }
-                //    }
-                //    catch (InvalidXmlDefinitionException)
-                //    {
-                //        // the super class def is not loaded yet, return null
-                //        return null;
-                //    }
-                //}
                 return _primaryKeyDef;
             }
             set { _primaryKeyDef = value; }
@@ -1082,14 +1066,10 @@ namespace Habanero.BO.ClassDefinition
             if (propertyName.IndexOf("-") != -1)
             {
                 return GetReflectivePropertyType(propertyName);
-//                return typeof (object);
             }
             PropDef propDef = (PropDef) GetPropDef(propertyName, false);
-            if (propDef != null && propDef.LookupList is NullLookupList)
-            {
-                return propDef.PropertyType;
-            }
-            return typeof (object);
+            //This is used because the Prop is refined to be a 
+            return propDef != null ? propDef.PropertyType : typeof (object);
         }
 
         private Type GetReflectivePropertyType(string propertyName)

@@ -37,7 +37,7 @@ namespace Habanero.Test.BO
         {
             return new EditableDataSetProvider(col);
         }
-
+        [Test]
         public override void TestUpdateBusinessObjectRowValues()
         {
             Assert.IsTrue(true, "This test cannot be conducted since edits to the grid update the BO and visa versa");
@@ -644,7 +644,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, table.Rows.Count);
             Assert.AreEqual(1, addresses.Count);
-            Assert.AreEqual(organisation.OrganisationID.ToString(), table.Rows[0][propertyName]);
+            Assert.AreEqual(organisation.OrganisationID.ToString(), table.Rows[0][propertyName].ToString());
             Assert.AreEqual(organisation.OrganisationID, contactPersonTestBO.OrganisationID);
             recordingExceptionNotifier.RethrowRecordedException();
         }

@@ -141,14 +141,25 @@ namespace Habanero.BO
                           + "the name '{0}' has been detected. Only one column " + "per property can be specified.",
                           uiProperty.PropertyName));
             }
-            Type columnPropertyType = classDef.GetPropertyType(uiProperty.PropertyName);
+            ILookupList lookupList = classDef.GetLookupList(uiProperty.PropertyName);
+            Type columnPropertyType = GetPropertyType(classDef, lookupList, uiProperty.PropertyName);
+
             column.DataType = columnPropertyType;
             column.ColumnName = uiProperty.PropertyName;
             column.Caption = uiProperty.GetHeading(classDef);
-//            column.ReadOnly = !uiProperty.Editable;
-            column.ExtendedProperties.Add("LookupList", classDef.GetLookupList(uiProperty.PropertyName));
+            column.ExtendedProperties.Add("LookupList", lookupList);
             column.ExtendedProperties.Add("Width", uiProperty.Width);
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
+        }
+
+        private static Type GetPropertyType(IClassDef classDef, ILookupList lookupList, string propertyName)
+        {
+            Type propertyType = classDef.GetPropertyType(propertyName);
+            if (lookupList != null && !(lookupList is NullLookupList))
+            {
+                propertyType = typeof(object);
+            }
+            return propertyType;
         }
 
         ///<summary>

@@ -128,7 +128,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(myBO, colSelector.SelectedBusinessObject);
             Assert.AreEqual(ActualIndex(0), SelectedIndex(colSelector));
         }
-
+        [Test]
         public override void Test_AutoSelectsFirstItem_NoItems()
         {
             //---------------Set up test pack-------------------

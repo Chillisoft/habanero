@@ -93,13 +93,13 @@ namespace Habanero.Test.DB
             Assert.AreEqual(newSurname, secondInstanceOfCP1.Surname);
         }
 
-        [Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
+        [Test, Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
         public override void Test_Refresh_W_ParametrizedClassDef_Typed()
         {
 
         }
 
-        [Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
+        [Test, Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
         public override void Test_Refresh_W_ParametrizedClassDef_Untyped() { }
     }
 }
