@@ -1043,7 +1043,7 @@ namespace Habanero.UI.VWG
         /// </summary>
         public virtual ITabControl CreateTabControl()
         {
-            return new TabControlVWG{Size = new Size(200, 100)};
+            return new TabControlVWG(this) {Size = new Size(200, 100)};
         }
 
         /// <summary>

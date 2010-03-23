@@ -30,6 +30,13 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class TabControlVWG : TabControl, ITabControl
     {
+        private readonly IControlFactory _controlFactory;
+
+        public TabControlVWG(IControlFactory controlFactory)
+        {
+            _controlFactory = controlFactory;
+        }
+
         /// <summary>
         /// Gets or sets the anchoring style.
         /// </summary>
@@ -113,13 +120,7 @@ namespace Habanero.UI.VWG
         /// <returns></returns>
         public IControlHabanero AddControl(IControlHabanero contentControl, string headingText, int minimumControlHeight, int minimumControlWidth)
         {
-            IControlFactory factory = GlobalUIRegistry.ControlFactory;
-            if (factory == null)
-            {
-                const string errMessage = "There is a serious error since the GlobalUIRegistry.ControlFactory  has not been set up.";
-                throw new HabaneroDeveloperException(errMessage, errMessage);
-            }
-            ITabPage childControl = factory.CreateTabPage(headingText);
+            ITabPage childControl = _controlFactory.CreateTabPage(headingText);
             childControl.MinimumSize = new Size(0,0);
             childControl.ClientSize = new Size(minimumControlWidth, minimumControlHeight);
             childControl.MinimumSize = childControl.Size;
