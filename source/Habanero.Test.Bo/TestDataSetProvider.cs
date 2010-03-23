@@ -747,6 +747,35 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestRelatedPropColumn_WhenIsLookup_ShouldReturnTypeObject()
+        {
+            //-------------Setup Test Pack ------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            new Address();//TO Load ClassDefs
+
+            var engine = new Engine();
+            var car = new Car();
+            engine.CarID = car.CarID;
+            IClassDef engineClassDef = engine.ClassDef;
+            IClassDef carClassDef = car.ClassDef;
+            IPropDef ownerPropDef = carClassDef.PropDefcol["OwnerId"];
+            ownerPropDef.LookupList = new BusinessObjectLookupList(typeof (ContactPerson));
+            const string columnName = "Car.OwnerID";
+            UIGrid uiGrid = CreateUiGridWithColumn(engineClassDef, columnName);
+
+            BusinessObjectCollection<Engine> engines = new BusinessObjectCollection<Engine> {engine};
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(engines);
+            //--------------Assert PreConditions----------------            
+            //---------------Execute Test ----------------------
+            DataTable dataTable = dataSetProvider.GetDataTable(uiGrid);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(dataTable.Columns.Contains(columnName), "DataTable should have the related property column");
+            DataColumn dataColumn = dataTable.Columns[columnName];
+            Assert.AreSame(typeof(object), dataColumn.DataType);
+            Assert.AreEqual(1, dataTable.Rows.Count);
+            DataRow dataRow = dataTable.Rows[0];
+        }
+        [Test]
         public void TestVirtualPropColumn()
         {
             //-------------Setup Test Pack ------------------

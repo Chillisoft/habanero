@@ -142,7 +142,7 @@ namespace Habanero.BO
                           uiProperty.PropertyName));
             }
             ILookupList lookupList = classDef.GetLookupList(uiProperty.PropertyName);
-            Type columnPropertyType = GetPropertyType(classDef, lookupList, uiProperty.PropertyName);
+            Type columnPropertyType = GetPropertyType(classDef, uiProperty.PropertyName);
 
             column.DataType = columnPropertyType;
             column.ColumnName = uiProperty.PropertyName;
@@ -152,9 +152,12 @@ namespace Habanero.BO
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
         }
 
-        private static Type GetPropertyType(IClassDef classDef, ILookupList lookupList, string propertyName)
+        private static Type GetPropertyType(IClassDef classDef, string propertyName)
         {
-            Type propertyType = classDef.GetPropertyType(propertyName);
+            IPropDef def = classDef.GetPropDef(propertyName, false);
+            if (def == null) return classDef.GetPropertyType(propertyName);
+            var lookupList = def.LookupList;
+            Type propertyType = def.PropertyType;
             if (lookupList != null && !(lookupList is NullLookupList))
             {
                 propertyType = typeof(object);

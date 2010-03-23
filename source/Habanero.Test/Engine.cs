@@ -129,6 +129,11 @@ namespace Habanero.Test
             return Relationships.GetRelatedObject<Car>("Car");
         }
 
+        public Car Car
+        {
+            get { return Relationships.GetRelatedObject<Car>("Car"); }
+        }
+
         #endregion //Relationships
 
         #region ForTesting

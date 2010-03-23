@@ -91,18 +91,17 @@ namespace Habanero.BO.Comparer
 		{
 			if (left == null)
 			{
-				if (right != null)
+			    if (right != null)
 				{
 					return -1;
-				} else
-				{
-					return 0;
 				}
-			} else if (right == null)
-			{
-				return 1;
+			    return 0;
 			}
-			TPropType leftValue = (TPropType)left;
+		    if (right == null)
+		    {
+		        return 1;
+		    }
+		    TPropType leftValue = (TPropType)left;
 			TPropType rightValue = (TPropType)right;
 			return leftValue.CompareTo(rightValue);
 		}
