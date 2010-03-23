@@ -144,6 +144,24 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestControlsVisible()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab((UIFormTab) classDef.UIDefCol["default"].UIForm[0]);
+            panelInfo.BusinessObject = new Sample();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(panelInfo.FieldInfos[0].InputControl.Visible);
+            Assert.IsTrue(panelInfo.FieldInfos[1].InputControl.Visible);
+            //---------------Execute Test ----------------------
+            panelInfo.ControlsVisible = false;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(panelInfo.FieldInfos[0].InputControl.Visible);
+            Assert.IsFalse(panelInfo.FieldInfos[1].InputControl.Visible);
+        }
+
+        [Test]
         public void TestPanelInfos()
         {
             //---------------Execute Test ----------------------

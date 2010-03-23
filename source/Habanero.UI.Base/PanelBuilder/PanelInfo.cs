@@ -90,6 +90,21 @@ namespace Habanero.UI.Base
         }
 
         ///<summary>
+        /// Sets whether the controls on this panel are visible or not
+        ///</summary>
+        public bool ControlsVisible
+        {
+            set
+            {
+                foreach (FieldInfo fieldInfo in FieldInfos)
+                {
+                    fieldInfo.InputControl.Visible = value;
+                    fieldInfo.LabelControl.Visible = value;
+                }
+            }
+        }
+
+        ///<summary>
         /// A list of all panel infos containd in this panel info.
         ///</summary>
         public IList<IPanelInfo> PanelInfos { get; private set; }

@@ -86,6 +86,11 @@ namespace Habanero.UI.Base
         string PanelTabText { get; }
 
         /// <summary>
+        /// Sets whether the controls on this panel are visible or not.
+        /// </summary>
+        bool ControlsVisible { set; }
+
+        /// <summary>
         /// Sets the Error providers Error message with the appropriate message from the businessObject for each
         /// Control mapped on this panel.
         /// </summary>
