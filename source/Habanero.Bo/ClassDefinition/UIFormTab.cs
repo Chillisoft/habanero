@@ -68,6 +68,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="column">The UIFormColumn object</param>
         public void Add(IUIFormColumn column)
         {
+            if(column == null) return;
             column.UIFormTab = this;
             _list.Add(column);
         }
@@ -78,6 +79,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="column">The UIFormColumn object</param>
         public void Remove(IUIFormColumn column)
         {
+            if (column == null) return;
             _list.Remove(column);
         }
 
@@ -87,6 +89,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="column">The UIFormColumn object</param>
         public bool Contains(IUIFormColumn column)
         {
+            if (column == null) return false;
             return _list.Contains(column);
         }
 

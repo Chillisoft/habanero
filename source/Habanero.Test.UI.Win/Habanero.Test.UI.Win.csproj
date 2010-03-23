@@ -120,6 +120,7 @@
     <Compile Include="Mappers\TestEnumComboBoxMapperWin.cs" />
     <Compile Include="Mappers\TestExtendedComboBoxMapper.cs" />
     <Compile Include="Mappers\TestExtendedLookupComboBoxMapperWin.cs" />
+    <Compile Include="Mappers\TestExtendedTextBoxMapper.cs" />
     <Compile Include="Mappers\TestListComboBoxMapperWin.cs" />
     <Compile Include="Mappers\TestLookupComboBoxMapperWin.cs" />
     <Compile Include="Mappers\TestNumericUpDownCurrencyMapperWin.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="PanelBuilder\TestPanelBuilderWin.cs" />
     <Compile Include="TestEnumerationsWin.cs" />
     <Compile Include="TestExtendedComboBox.cs" />
+    <Compile Include="TestExtendedTextbox.cs" />
     <Compile Include="Wizard\TestMessageWizardStepWin.cs" />
     <Compile Include="Wizard\TestNullWizardStepWin.cs" />
     <Compile Include="Wizard\TestWizardControllerWin.cs" />

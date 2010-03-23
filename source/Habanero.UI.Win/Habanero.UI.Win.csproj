@@ -262,6 +262,9 @@
     <Compile Include="Grid\ReadOnlyGridControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ExtendedTextBoxWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="SplitContainerWin.cs">
       <SubType>Component</SubType>
     </Compile>

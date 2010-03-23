@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{18828910-F528-48F5-B56D-7C1658D0987A}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -141,8 +141,10 @@
     <Compile Include="ControlMappers\EditableGridControlMapper.cs" />
     <Compile Include="ControlMappers\EnumComboBoxMapper.cs" />
     <Compile Include="ControlMappers\ExtendedComboBoxMapper.cs" />
+    <Compile Include="ControlMappers\ISelectItemForm.cs" />
     <Compile Include="ControlMappers\ListComboBoxMapper.cs" />
     <Compile Include="ControlMappers\RelationshipComboBoxMapper.cs" />
+    <Compile Include="ControlMappers\ExtendedTextBoxMapper.cs" />
     <Compile Include="FilterControl\DataViewEnumFilterClause.cs" />
     <Compile Include="FilterControl\EnumComboBoxFilter.cs" />
     <Compile Include="FilterControl\MultiplePropStringTextBoxFilter.cs" />
