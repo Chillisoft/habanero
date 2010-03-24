@@ -46,7 +46,7 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Gets the preferred width of the control
         /// </summary>
-        public int PreferredWidth
+        public virtual int PreferredWidth
         {
             get { return this.Text.Length * WIDTH_FACTOR; }
         }
