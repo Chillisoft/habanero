@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Habanero.Test.UI.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
@@ -37,7 +38,40 @@ namespace Habanero.Test.UI.Win.Menu
             public bool SetFormCalled { get; private set; }
         }
 
+        [Test]
+        public void Test_CreateWithNullConstructor_ShouldSetControlFactory()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            var collapsibleMenuBuilderWin = new CollapsibleMenuBuilderWin();
+            //---------------Test Result -----------------------
+            var controlFactory = collapsibleMenuBuilderWin.ControlFactory;
+            Assert.IsNotNull(controlFactory);
+            Assert.IsInstanceOf<ControlFactoryWin>(controlFactory);
+        }
+
+        [Test]
+        public void Test_Construct_WithNullControlFactory_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new CollapsibleMenuBuilderWin(null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("controlFactory", ex.ParamName);
+            }
+        }
         [Test]
         public void Test_CreateLeafMenuItems_ShouldCreatePanelWithLeafMenu()
         {

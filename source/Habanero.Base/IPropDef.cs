@@ -165,6 +165,8 @@ namespace Habanero.Base
         ///</summary>
         string DisplayNameFull { get; }
 
+        string ClassName { get; }
+
         /// <summary>
         /// Creates a new Business Object property (BOProp)
         /// </summary>

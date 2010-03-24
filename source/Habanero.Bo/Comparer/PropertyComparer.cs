@@ -94,11 +94,10 @@ namespace Habanero.BO.Comparer
 				if (right != null)
 				{
 					return -1;
-				} else
-				{
+				}
 					return 0;
 				}
-			} else if (right == null)
+		    if (right == null)
 			{
 				return 1;
 			}

@@ -181,49 +181,49 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(createdChild.Status.IsNew, "Is permanently deleted");
             Assert.IsNull(createdChild.Organisation);
         }
-
+        [Test]
         public override void Test_CancelEdit_Owner_ForAddedChild()
         {
             //This scenario does not apply for a Composition relationship
             //base.Test_CancelEdit_Owner_ForAddedChild();
         }
-
+        [Test]
         public override void Test_CancelEdit_Owner_ForRemovedChild()
         {
             //This scenario does not apply for a Composition relationship
             //base.Test_CancelEdit_Owner_ForRemovedChild();
         }
-
+        [Test]
         public override void Test_CancelEdit_NonOwner_ForAddedChild()
         {
             //This scenario does not apply for a Composition relationship
             //base.Test_CancelEdit_NonOwner_ForAddedChild();
         }
-
+        [Test]
         public override void Test_CancelEdit_NonOwner_ForRemovedChild()
         {
             //This scenario does not apply for a Composition relationship
             //base.Test_CancelEdit_NonOwner_ForRemovedChild();
         }
-
+        [Test]
         public override void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForAddedChild()
         {
             //This scenario does not apply for a Composition relationship
             //base.Test_CancelEdit_Owner_ChildOwnsTheEdit_ForAddedChild();
         }
-
+        [Test]
         public override void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForRemovedChild()
         {
             //This scenario does not apply for a Composition relationship
             //base.Test_CancelEdit_Owner_ChildOwnsTheEdit_ForRemovedChild();
         }
-
+        [Test]
         public override void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForAddedChild()
         {
             //This scenario does not apply for a Composition relationship
             //base.Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForAddedChild();
         }
-
+        [Test]
         public override void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForRemovedChild()
         {
             //This scenario does not apply for a Composition relationship

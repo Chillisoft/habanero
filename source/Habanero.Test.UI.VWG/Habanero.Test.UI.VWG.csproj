@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B60FA2CD-AC13-45D1-92F4-2137FAF45C14}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -78,6 +78,7 @@
     <Compile Include="Grid\TestReadOnlyGridControlVWG.cs" />
     <Compile Include="Grid\TestReadOnlyGridVWG.cs" />
     <Compile Include="HabaneroControls\BusinessObjectControlStubVWG.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="HabaneroControls\FilterControl\TestEnumComboBoxFilterVWG.cs" />
     <Compile Include="HabaneroControls\FilterControl\TestFilterControlBuilderVWG.cs" />

@@ -13,7 +13,7 @@ namespace Habanero.Test.UI.VWG.HabaneroControls
             return new ControlFactoryVWG();
         }
 
-        [Ignore("Minimumsize doesn't work for VWG")]
+        [Test, Ignore("Minimumsize doesn't work for VWG")]
         public override void Test_CreateOKCancelForm_ShouldSetMinimumSize()
         {
 

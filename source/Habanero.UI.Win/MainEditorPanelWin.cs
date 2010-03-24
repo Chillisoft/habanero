@@ -63,15 +63,27 @@ namespace Habanero.UI.Win
     /// </summary>
     public class CollapsibleMenuBuilderWin : IMenuBuilder
     {
-        private readonly IControlFactory _controlFactory;
 
+        /// <summary>
+        /// Returns the control factory being used to create the Menu and the MenuItems
+        /// </summary>
+        public IControlFactory ControlFactory { get; private set; }
         /// <summary>
         /// Creates a <see cref="CollapsibleMenuBuilderWin"/>
         /// </summary>
         /// <param name="controlFactory"></param>
         public CollapsibleMenuBuilderWin(IControlFactory controlFactory)
         {
-            _controlFactory = controlFactory;
+            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
+            ControlFactory = controlFactory;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="CollapsibleMenuBuilderWin"/>
+        /// </summary>
+        public CollapsibleMenuBuilderWin()
+        {
+            this.ControlFactory = GlobalUIRegistry.ControlFactory;
         }
 
         ///<summary>
@@ -129,14 +141,7 @@ namespace Habanero.UI.Win
             }
         }
 
-        /// <summary>
-        /// Returns the control factory being used to create the Menu and the MenuItems
-        /// </summary>
-        public IControlFactory ControlFactory
-        {
-            get { return _controlFactory; }
         }
-    }
 
     /// <summary>
     /// This is an individual sub menu item on an Collapsible Menu. i.e. this is the control that when clicked,
@@ -319,11 +324,13 @@ namespace Habanero.UI.Win
                     control.Dock = Habanero.UI.Base.DockStyle.Fill;
 
                     SplitContainer splitContainer = (SplitContainer)_habaneroMenuItem.Form.Controls[0];
+//                    splitContainer.
                     SplitterPanel panel2 = splitContainer.Panel2;
                     MainEditorPanelWin mainEditorPanel = (MainEditorPanelWin)panel2.Controls[0];
                     mainEditorPanel.MainTitleIconControl.Text = this.Text;
                     mainEditorPanel.EditorPanel.Controls.Clear();
                     mainEditorPanel.EditorPanel.Controls.Add(control);
+//                    control.Dock = DockStyle.Fill;
                     mainEditorPanel.Width -= 1;
                     mainEditorPanel.Width += 1;
                 }

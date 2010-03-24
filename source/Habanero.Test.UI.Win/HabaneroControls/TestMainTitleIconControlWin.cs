@@ -36,7 +36,7 @@ namespace Habanero.Test.UI.Win.HabaneroControls
             //---------------Test Result -----------------------
             Assert.AreSame(factory, outlookStyleMenu.ControlFactory);
         }
-
+        [Test]
         public void Test_Construction_WithControlFactory_Null_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------

@@ -314,8 +314,6 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(contactPersonTestBO, returnedBO);
         }
 
-
-
         [Test]
         public void Test_IsValueValid_OnePropRule_ValidValue()
         {
@@ -334,8 +332,6 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(valid);
             Assert.AreEqual("", errMsg);
         }
-
-
 
         [Test]
         public void Test_IsValueValid_OnePropRule_InValidValue()
@@ -458,7 +454,6 @@ namespace Habanero.Test.BO.ClassDefinition
             {
                 StringAssert.Contains("You cannot add a null property rule to a property def", ex.Message);
             }
-
         }
 
         [Test]
@@ -474,8 +469,8 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.AreEqual("Prop Name", displayName);
-
         }
+
         [Test]
         public void TestConvertValueToPropertyType_DateTimeAcceptsDateTimeNow()
         {
@@ -894,7 +889,6 @@ namespace Habanero.Test.BO.ClassDefinition
 
         }
 
-
         [Test]
         public void TestCreateBOPropWithLookupList_CorrectPropCreated()
         {
@@ -911,8 +905,8 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
 
             Assert.IsInstanceOf(typeof(BOPropLookupList), prop);
-
         }  
+
         [Test]
         public void TestCreateBOProp_CorrectPropCreated_WithDefaultValue()
         {            
@@ -929,7 +923,6 @@ namespace Habanero.Test.BO.ClassDefinition
 
             Assert.IsInstanceOf(typeof(BOProp), prop);
         }
-
 
         [Test]
         public void TestCreateBOPropWithLookupList_CorrectPropCreated_WithDefaultValue()
@@ -996,6 +989,50 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsInstanceOf<NullLookupList>(propDef.LookupList);
         }
+
+        [Test]
+        public void Test_ClassName_WhenHasClassDef_ShouldReturnClassDef_ClassName()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDefFake {ClassDef = new FakeClassDef{ClassName = GetRandomString()}};
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(propDef.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = propDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(propDef.ClassDef.ClassName, className);
+        }
+
+        [Test]
+        public void Test_ClassName_WhenNotHasClassDef_ShouldReturnEmptyString()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDefFake();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(propDef.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = propDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.IsEmpty(className);
+        }
+        [Test]
+        public void Test_ClassNameViaInterface_WhenNotHasClassDef_ShouldReturnEmptyString()
+        {
+            //---------------Set up test pack-------------------
+            IPropDef propDef = new PropDefFake();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(propDef.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = propDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.IsEmpty(className);
+        }
+
+        private static string GetRandomString()
+        {
+            return TestUtil.GetRandomString();
+        }
+
         class PropDefStub : PropDef
         {
             public PropDefStub(string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName, object defaultValue) : base(propertyName, propType, propRWStatus, databaseFieldName, defaultValue)

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
@@ -264,11 +265,8 @@ namespace Habanero.UI.Base
                 }
                 else
                 {
-                    //col = CreateStandardColumn(gridColDef.PropertyName, gridColDef.GetHeading());
                     col = CreateCustomColumn(gridColDef);
                 }
-//                IDataGridViewColumn col = _controlFactory.CreateDataGridViewCheckBoxColumn();
-                //col.ReadOnly = true;
                 col.HeaderText = gridColDef.GetHeading();
                 col.Name = gridColDef.PropertyName;
                 col.DataPropertyName = gridColDef.PropertyName;
@@ -276,18 +274,24 @@ namespace Habanero.UI.Base
                 col.Visible = gridColDef.Width != 0;
                 col.SortMode = DataGridViewColumnSortMode.Automatic;
                 col.ReadOnly = !gridColDef.Editable;
-                //IPropDef propDef = GetPropDef(classDef, gridColDef);
-                //if (propDef != null) col.ValueType = propDef.PropertyType;
-                Type propertyType = classDef.GetPropertyType(gridColDef.PropertyName);
+                Type propertyType = GetPropertyType(classDef, gridColDef.PropertyName);
                 if (propertyType != typeof (object))
                 {
                     col.ValueType = propertyType;
                 }
                 SetupColumnWithDefParameters(col, gridColDef, propertyType);
-//                this._gridControl.Grid.Columns.Add(col);
             }
         }
-
+        private static Type GetPropertyType(IClassDef classDef, string propertyName)
+        {
+            ILookupList lookupList = classDef.GetLookupList(propertyName);
+            Type propertyType = classDef.GetPropertyType(propertyName);
+            if (lookupList != null && !(lookupList is NullLookupList))
+            {
+                propertyType = typeof(object);
+            }
+            return propertyType;
+        }
         private static void SetupColumnWithDefParameters(IDataGridViewColumn col, IUIGridColumn gridColDef, Type propertyType)
         {
             SetupDateTimeWithParameters(propertyType, gridColDef, col);

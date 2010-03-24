@@ -824,6 +824,26 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestGetPropertyType_WhenLookup_ShouldReturnUnderlyingType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = LoadClassDef();
+            const string propertyName = "Lookup";
+            PropDef propDef = new PropDef(propertyName, typeof(string), PropReadWriteRule.ReadWrite, null)
+                          {
+                              LookupList = new SimpleLookupList(new Dictionary<string, string>())
+                          };
+            classDef.PropDefcol.Add(propDef);
+            ClassDef.ClassDefs.Add(classDef);
+            //---------------Execute Test ----------------------
+            Type stringPropType = classDef.GetPropertyType(propertyName);
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(string), stringPropType);
+            //---------------Tear down -------------------------
+        }
+
+        [Test]
         public void TestGetPropertyType_WhenVirtualPropDouble_ShouldReturnReflectedType()
         {
             //---------------Set up test pack-------------------

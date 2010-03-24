@@ -177,7 +177,7 @@ namespace Habanero.UI.VWG
         /// </summary>
         /// <param name="form">The form to set up with the menu</param>
         /// <param name="menuWidth">The width of the menu - configurable to so that each application can set its menu width</param>
-        public void DockInForm(IControlHabanero form, int menuWidth)
+        public virtual void DockInForm(IControlHabanero form, int menuWidth)
         {
             if (form == null) throw new ArgumentNullException("form");
             _splitContainer = this.ControlFactory.CreateSplitContainer();
@@ -297,7 +297,7 @@ namespace Habanero.UI.VWG
         /// <summary>
         ///             This actually executes the Code when PerformClick is selected <see cref="T:Habanero.UI.Base.IMenuItem" />.
         /// </summary>
-        public void DoClick()
+        public virtual void DoClick()
         {
             try
             {
