@@ -341,7 +341,6 @@ namespace Habanero.UI.VWG
                     mainEditorPanel.EditorPanel.Controls.Add(control);
                     mainEditorPanel.Width -= 1;
                     mainEditorPanel.Width += 1;
-                    
                 }
             }
             catch (Exception ex)

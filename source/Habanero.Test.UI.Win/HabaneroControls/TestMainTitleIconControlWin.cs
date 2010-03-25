@@ -78,7 +78,7 @@ namespace Habanero.Test.UI.Win.HabaneroControls
             Assert.AreEqual(2, titleIconControl.Panel.Controls.Count);
 
             Assert.IsInstanceOf(typeof(ILabel), titleIconControl.Icon);
-            Assert.IsNull(GetBackGroundImage(titleIconControl));
+            Assert.IsNotNull(GetBackGroundImage(titleIconControl));
             Assert.AreEqual(Color.Transparent, titleIconControl.Icon.BackColor);
             AssertBackGroundImagelayoutCentre(titleIconControl);
             Assert.AreEqual(DockStyle.Left, titleIconControl.Icon.Dock);
@@ -171,7 +171,7 @@ namespace Habanero.Test.UI.Win.HabaneroControls
             //---------------Execute Test ----------------------
             titleIconControl.RemoveIconImage();
             //---------------Test Result -----------------------
-            Assert.IsNull(((LabelWin)titleIconControl.Icon).BackgroundImage);
+            Assert.IsNotNull(((LabelWin)titleIconControl.Icon).BackgroundImage);
         }
 
     }

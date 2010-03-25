@@ -1094,7 +1094,6 @@ namespace Habanero.UI.Win
             ButtonWin buttonWin = ((ButtonWin)button);
             buttonWin.BackgroundImage = CollapsiblePanelResource.headergradient;
             buttonWin.FlatStyle = FlatStyle.Flat;
-
         }
 
         ///<summary>

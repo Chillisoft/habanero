@@ -265,9 +265,8 @@ namespace Habanero.UI.Win
                 this.TextImageRelation = TextImageRelation.ImageBeforeText;
                 this.TextAlign = ContentAlignment.MiddleLeft;
                 this.Click += ChangeButtonIcon;
-               
-               
             }
+
             MenuItems = new CollapsibleMenuItemCollectionWin(this);
         }
 
@@ -323,14 +322,17 @@ namespace Habanero.UI.Win
                     }
                     control.Dock = Habanero.UI.Base.DockStyle.Fill;
 
-                    SplitContainer splitContainer = (SplitContainer)_habaneroMenuItem.Form.Controls[0];
-//                    splitContainer.
+                    // support the menu control either being the top control of the form, or the first subcontrol of the top control
+                    SplitContainer splitContainer;
+                    if (_habaneroMenuItem.Form.Controls[0] is SplitContainer)
+                        splitContainer = (SplitContainer)_habaneroMenuItem.Form.Controls[0];
+                    else
+                        splitContainer = (SplitContainer)_habaneroMenuItem.Form.Controls[0].Controls[0];
                     SplitterPanel panel2 = splitContainer.Panel2;
                     MainEditorPanelWin mainEditorPanel = (MainEditorPanelWin)panel2.Controls[0];
-                    mainEditorPanel.MainTitleIconControl.Text = this.Text;
+                    mainEditorPanel.MainTitleIconControl.Title.Text = _habaneroMenuItem.ParentMenu.Name + " > " + this.Text;
                     mainEditorPanel.EditorPanel.Controls.Clear();
                     mainEditorPanel.EditorPanel.Controls.Add(control);
-//                    control.Dock = DockStyle.Fill;
                     mainEditorPanel.Width -= 1;
                     mainEditorPanel.Width += 1;
                 }
@@ -433,7 +435,7 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        ///             This actually executes the Code when PerformClick is selected <see cref="T:Habanero.UI.Base.IMenuItem" />.
+        /// This actually executes the Code when PerformClick is selected <see cref="T:Habanero.UI.Base.IMenuItem" />.
         /// </summary>
         public void DoClick()
         {
