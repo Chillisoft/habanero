@@ -64,7 +64,7 @@ namespace Habanero.Test.UI.Win.HabaneroControls
             //---------------Execute Test ----------------------
             MainTitleIconControlWin titleIconControl = new MainTitleIconControlWin(GetControlFactory());
             //---------------Test Result -----------------------
-
+            Assert.AreEqual(23, titleIconControl.Height);
             Assert.AreEqual(1, titleIconControl.Controls.Count);
             Assert.AreEqual(DockStyle.Top, DockStyleWin.GetDockStyle(titleIconControl.Dock));
 

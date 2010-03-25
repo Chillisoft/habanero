@@ -47,7 +47,7 @@ namespace Habanero.UI.VWG
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             _controlFactory = controlFactory;
             _panel = _controlFactory.CreatePanel();
-            ((PanelVWG)_panel).BackgroundImage = "Images.headergradient.png";
+            ((PanelVWG)_panel).BackgroundImage = @"Images.headergradient.png";
             
             _panel.BackColor = Color.Transparent;
             _panel.Dock = Habanero.UI.Base.DockStyle.Top;

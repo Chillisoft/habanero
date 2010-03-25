@@ -47,14 +47,14 @@ namespace Habanero.UI.Win
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             _controlFactory = controlFactory;
             _panel = _controlFactory.CreatePanel();
-            //TODO Brett 20 Apr 2009: Nubb to figure out ((PanelWin)_panel).BackgroundImage = "Images.headergradient.png";
+            ((PanelWin)_panel).BackgroundImage = CollapsiblePanelResource.headergradient;
             _panel.BackColor = Color.Transparent;
             _panel.Dock = Habanero.UI.Base.DockStyle.Top;
 
             _panel.Height = 23;
 
             _icon = _controlFactory.CreateLabel();
-            //TODO Brett 20 Apr 2009: Nubb to figure out ((LabelWin)_icon).BackgroundImage = "";
+            ((LabelWin)_icon).BackgroundImage = CollapsiblePanelResource.headergradient;
             _icon.BackColor = Color.Transparent;
             ((LabelWin)_icon).BackgroundImageLayout = ImageLayout.Center;
             _icon.Dock = Habanero.UI.Base.DockStyle.Left;
@@ -68,9 +68,10 @@ namespace Habanero.UI.Win
 
             _panel.Controls.Add(_title);
             _panel.Controls.Add(_icon);
-
+            _panel.MaximumSize = new Size(2000, 23);
             this.Dock = DockStyleWin.GetDockStyle(DockStyle.Top);
             this.Controls.Add((PanelWin)_panel);
+            this.Height = 23;
         }
 
         /// <summary>
