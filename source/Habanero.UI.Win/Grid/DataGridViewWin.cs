@@ -203,11 +203,7 @@ namespace Habanero.UI.Win
         /// Gets or sets the number of items per page used when the grid implements pagination.
         /// These are not implemented in the standard windows form DataGridView
         /// </summary>
-        int IDataGridView.ItemsPerPage
-        {
-            get { return this.TotalItems; }
-            set { }
-        }
+        int IDataGridView.ItemsPerPage { get; set; }
 
         /// <summary>
         /// Gets or sets the total pages.
@@ -220,11 +216,7 @@ namespace Habanero.UI.Win
         /// Gets or sets the total items.
         /// </summary>
         /// <value></value>
-        public int TotalItems
-        {
-            get { return this.TotalItems; }
-            set { this.TotalItems = value; }
-        }
+        public int TotalItems { get; set; }
 
         /// <summary>
         /// When pagination is used, changes the current page to the one containing
