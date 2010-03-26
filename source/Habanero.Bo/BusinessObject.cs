@@ -39,7 +39,7 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObject : IBusinessObject, ISerializable
     {
-        private static readonly ILog Log = LogManager.GetLogger("Habanero.BO.BusinessObject");
+        private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         #region IBusinessObject Members
 
@@ -344,7 +344,7 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                Log.Error("Error disposing BusinessObject.", ex);
+                _log.Error("Error disposing BusinessObject.", ex);
             }
             finally
             {
@@ -358,11 +358,11 @@ namespace Habanero.BO
             _boStatus = new BOStatus(this) {IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true};
             if (classDef == null)
             {
-                try { _classDef = (ClassDef)ClassDef.ClassDefs[GetType()]; }
+                try { _classDef = ClassDef.ClassDefs[GetType()]; }
                 catch (Exception) {
                     _classDef = null;  }
             }
-            else _classDef = (ClassDef) classDef;
+            else _classDef = classDef;
             ConstructFromClassDef(true);
             Guid myID = Guid.NewGuid();
             if (_primaryKey != null)
@@ -403,7 +403,7 @@ namespace Habanero.BO
         /// <param name="newObject">Whether the object is new or not</param>
         protected virtual void ConstructFromClassDef(bool newObject)
         {
-            if (_classDef == null) _classDef = (ClassDef) ConstructClassDef();
+            if (_classDef == null) _classDef = ConstructClassDef();
             ClassDef classDef = (ClassDef) _classDef;
             CheckClassDefNotNull();
 
@@ -521,7 +521,7 @@ namespace Habanero.BO
         IClassDef IBusinessObject.ClassDef
         {
             get { return _classDef; }
-            set { _classDef = (ClassDef) value; }
+            set { _classDef = value; }
         }
 
 
@@ -626,9 +626,11 @@ namespace Habanero.BO
 
         #region Editing Property Values
 
+        
         /// <summary>
         /// The primary key for this business object 
         /// </summary>
+        [Obsolete ("Please use ID")]
         protected IPrimaryKey PrimaryKey
         {
             get { return _primaryKey; }
@@ -901,7 +903,7 @@ namespace Habanero.BO
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
         /// </summary>
-        private bool _beginEditRunning = false;
+        private bool _beginEditRunning;
         private void BeginEdit(bool delete)
         {
             if (_beginEditRunning) return;
@@ -1326,11 +1328,12 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Checks the <see cref="GetBusinessObjectRules"/>. Calls through to <see cref="AreCustomRulesValid(ref List{IBOError})"/>
+        /// Checks the <see cref="GetBusinessObjectRules"/>. Calls through to 
+        /// <see cref="AreCustomRulesValid(ref System.Collections.Generic.IList{Habanero.Base.IBOError})"/>
         /// </summary>
         /// <param name="errors">The errors</param>
         /// <returns>true if no custom rule errors are encountered.</returns>
-        internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
+        protected internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {
             IList<IBOError> customErrors = new List<IBOError>();
             AreCustomRulesValid(ref customErrors);
@@ -1351,7 +1354,8 @@ namespace Habanero.BO
             if (errors == null) errors = new List<IBOError>();
             var rules = GetBusinessObjectRules()
                     .Where(rule 
-                        => (rule != null && ErrorLevelIsError(rule)) && !rule.IsValid(this));
+                      => (rule != null && ErrorLevelIsError(rule)) 
+                      && !rule.IsValid(this));
             foreach (IBusinessObjectRule rule in rules)
             {
                 CreateBOError(rule, errors);
@@ -1369,7 +1373,7 @@ namespace Habanero.BO
             errors = new List<IBOError>();
             foreach (IBusinessObjectRule rule in GetBusinessObjectRules())
             {
-                if (rule == null || ErrorLevelIsError(rule) || rule.IsValid()) continue;
+                if (rule == null || ErrorLevelIsError(rule) || rule.IsValid(this)) continue;
                 CreateBOError(rule, errors);
             }
             return errors.Count != 0;

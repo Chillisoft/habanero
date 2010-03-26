@@ -97,6 +97,14 @@ namespace Habanero.BO.ClassDefinition
         public IClassDef ClassDef { get; set; }
 
         /// <summary>
+        /// Returns the ClassName of the Class tha this UIDef is for.
+        /// </summary>
+        public string ClassName
+        {
+            get { return this.ClassDef == null ? "" : this.ClassDef.ClassName; }
+        }
+
+        /// <summary>
         /// Returns the form property definitions
         /// </summary>
         /// <returns>Returns a UIForm object</returns>

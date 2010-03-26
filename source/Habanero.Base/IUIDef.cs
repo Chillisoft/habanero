@@ -50,6 +50,10 @@ namespace Habanero.Base
         /// The Class Definition that this UIDef belongs to.
         /// </summary>
         IClassDef ClassDef { get; set; }
+        /// <summary>
+        /// Returns the ClassName of the Class tha this UIDef is for.
+        /// </summary>S
+        string ClassName { get; }
 
         /// <summary>
         /// Returns the form property definitions

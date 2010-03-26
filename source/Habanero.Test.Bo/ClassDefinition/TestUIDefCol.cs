@@ -22,6 +22,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
@@ -245,6 +246,40 @@ Assert.IsNull(uiDef.UIDefCol);
 
         }
 
+
+        [Test]
+        public void Test_ClassName_WhenClassDefNull_ShouldReturnEmptyString()
+        {
+            //---------------Set up test pack-------------------
+            UIDefCol uiDefCol = new UIDefCol();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiDefCol.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = uiDefCol.ClassName;
+            //---------------Test Result -----------------------
+            Assert.IsEmpty(className);
+        }
+        [Test]
+        public void Test_ClassName_WhenClassDefSet_ShouldReturnClassDefClassName()
+        {
+            //---------------Set up test pack-------------------
+            UIDefCol uiDefCol = new UIDefCol();
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            classDef.ClassName = GetRandomString();
+            uiDefCol.ClassDef = classDef;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(uiDefCol.ClassDef);
+            Assert.IsNotNullOrEmpty(classDef.ClassName);
+            //---------------Execute Test ----------------------
+            string className = uiDefCol.ClassName;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef.ClassName, className);
+        }
+
+        private static string GetRandomString()
+        {
+            return TestUtil.GetRandomString();
+        }
 
         public static IClassDef LoadClassDef()
         {

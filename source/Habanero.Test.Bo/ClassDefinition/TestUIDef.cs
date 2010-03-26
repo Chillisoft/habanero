@@ -20,6 +20,7 @@
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
@@ -301,8 +302,40 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(uiDefCol, uiDef.UIDefCol);
 
         }
- 
 
+        [Test]
+        public void Test_ClassName_WhenClassDefNull_ShouldReturnEmptyString()
+        {
+            //---------------Set up test pack-------------------
+            UIDef uiDef = new UIDef("test", null, null);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiDef.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = uiDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.IsEmpty(className);
+        }
+        [Test]
+        public void Test_ClassName_WhenClassDefSet_ShouldReturnClassDefClassName()
+        {
+            //---------------Set up test pack-------------------
+            IUIDef uiDef = new UIDef("test", null, null);
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            classDef.ClassName = GetRandomString();
+            uiDef.ClassDef = classDef;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(uiDef.ClassDef);
+            Assert.IsNotNullOrEmpty(classDef.ClassName);
+            //---------------Execute Test ----------------------
+            string className = uiDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef.ClassName, className);
+        }
+
+        private static string GetRandomString()
+        {
+            return TestUtil.GetRandomString();
+        }
 
         // Grants access to protected methods
         private class UIDefInheritorStub : UIDef
