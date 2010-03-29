@@ -7,7 +7,7 @@
 	type NMTOKEN #IMPLIED
 	assembly NMTOKEN #IMPLIED
 	mapperType NMTOKEN #IMPLIED
-  mapperAssembly NMTOKEN #IMPLIED
+  mapperAssembly CDATA #IMPLIED
   editable ( true | false ) "true"
 	toolTipText CDATA #IMPLIED
   layout (Label | GroupBox) "Label"
