@@ -203,7 +203,10 @@ namespace Habanero.DB
             set { _port = value; }
         }
 
-        internal string DecryptedPassword
+        /// <summary>
+        /// Gets the decrypted password.
+        /// </summary>
+        public string DecryptedPassword
         {
             get { return _passwordCrypter.DecryptString(Password);  }
         }
