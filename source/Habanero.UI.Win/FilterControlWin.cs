@@ -403,6 +403,20 @@ namespace Habanero.UI.Win
             return (IDateRangeComboBox)filter.Control;
         }
 
+        /// <summary>
+        /// Adds a DateRangeComboBox filter which provides common date ranges such as "Today" or "This Year",
+        /// so that the grid will only show rows having a date property in the given range.<br/>
+        /// Includes all dates that match the start date exactly.<br/>
+        /// Includes all dates that match the end date exactly.<br/>
+        /// </summary>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="columnName">The business object property on which to filter</param>
+        /// <returns>Returns the new DateRangeComboBox added</returns>
+        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName)
+        {
+            return AddDateRangeFilterComboBox(labelText, columnName, null, true, true);
+        }
+
         ///<summary>
         /// Adds a custom filter which allows filtering using an ICustomFilter 
         ///</summary>

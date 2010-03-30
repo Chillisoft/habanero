@@ -69,11 +69,21 @@ namespace Habanero.Test.BO.ClassDefinition
             IUIDef uiDef = col["default"];
         }
 
-        [Test, ExpectedException(typeof(HabaneroApplicationException))]
+        [Test]
         public void TestOtherUIDefMissingException()
         {
             UIDefCol col = new UIDefCol();
-            IUIDef uiDef = col["otherdef"];
+            try
+            {
+                IUIDef uiDef = col["otherdef"];
+                Assert.Fail("Expected to throw an HabaneroApplicationException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroApplicationException ex)
+            {
+                StringAssert.Contains("The ui definition with the name 'otherdef' does not " +
+                                                               "exist in the collection of definitions for the", ex.Message);
+            }
         }
 
         [Test]

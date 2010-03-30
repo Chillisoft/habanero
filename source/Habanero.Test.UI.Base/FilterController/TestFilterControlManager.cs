@@ -139,6 +139,32 @@ namespace Habanero.Test.UI.Base.FilterController
 
             Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
         }
+        [Test]
+        public void TestAdd_DateRangeFilterComboBox_WhenExclusiveNotDefined_ShouldSetAsInclusive()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            DateTime testDate = new DateTime(2007, 1, 2, 3, 4, 5, 6);
+
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test");
+            dr1.UseFixedNowDate = true;
+            dr1.FixedNowDate = testDate;
+            dr1.SelectedItem = "Today";
+            IFilterClause clause1 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpGreaterThanOrEqualTo,
+                                                           new DateTime(2007, 1, 2, 0, 0, 0));
+            IFilterClause clause2 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpLessThanOrEqualTo,
+                                                           new DateTime(2007, 1, 2, 3, 4, 5));
+            IFilterClause compClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+        }
 
         [Test]
         public void TestAdd_DateRangeFilterComboBoxExclusive()

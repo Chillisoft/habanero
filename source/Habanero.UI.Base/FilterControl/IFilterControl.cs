@@ -239,6 +239,16 @@ namespace Habanero.UI.Base
         /// <param name="includeEndDate">Includes all dates that match the end date exactly</param>
         /// <returns>Returns the new DateRangeComboBox added</returns>
         IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate);
+        /// <summary>
+        /// Adds a DateRangeComboBox filter which provides common date ranges such as "Today" or "This Year",
+        /// so that the grid will only show rows having a date property in the given range.
+        /// Includes all dates that match the start date exactly.
+        /// Includes all dates that match the end date exactly
+        /// </summary>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="columnName">The business object property on which to filter</param>
+        /// <returns>Returns the new DateRangeComboBox added</returns>
+        IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName);
 
 
         ///<summary>

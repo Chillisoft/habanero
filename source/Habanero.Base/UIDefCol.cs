@@ -115,7 +115,7 @@ namespace Habanero.BO.ClassDefinition
                     throw new HabaneroApplicationException(String.Format(
                                                                "The ui definition with the name '{0}' does not " +
                                                                "exist in the collection of definitions for the " +
-                                                               "class '{1}'.", name, this.ClassDef.ClassName));
+                                                               "class '{1}'.", name, this.ClassName));
                 }
                 return this._defs[name];
             }
