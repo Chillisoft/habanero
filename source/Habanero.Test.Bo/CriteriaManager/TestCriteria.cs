@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -586,7 +587,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             Criteria criteria = Criteria.FromPrimaryKey(primaryKey);
             //---------------Test Result -----------------------
-            StringAssert.AreEqualIgnoringCase("MyBOID = '" + myBO.MyBoID.Value.ToString("B") + "'", criteria.ToString());
+            StringAssert.AreEqualIgnoringCase("MyBOID = '" + myBO.MyBoID.GetValueOrDefault().ToString("B") + "'", criteria.ToString());
             //---------------Tear Down -------------------------          
         }
 
@@ -2247,7 +2248,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestIsMatch_OneProp_ISNot()
+        public void TestIsMatch_OneProp_IsNot()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -2262,7 +2263,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(isMatch, "The object should not be a match since it does not matches the criteria given.");
         }
         [Test]
-        public void TestNotIsMatch_OneProp_ISNot()
+        public void TestNotIsMatch_OneProp_IsNot()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -2601,6 +2602,27 @@ namespace Habanero.Test.BO
             //test for value is null
             //---------------Test Result -----------------------
 
+        }
+
+        [Test]
+        public void Test_Create_WhenPropNameNull_ShouldThrowError()
+        {
+            //---------------Set up test pack-------------------
+            string leftCriteria = null;            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new Criteria(leftCriteria, Criteria.ComparisonOp.NotIn, "fdafasdf");
+                Assert.Fail("Expected to throw an ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("fieldString", ex.ParamName);
+            }
         }
 
         #endregion //Comparison Operators

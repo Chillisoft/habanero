@@ -26,10 +26,6 @@ namespace Habanero.Base
     /// </summary>
     public class QueryField
     {
-        private readonly string _propertyName;
-        private string _fieldName;
-        private Source _source;
-
         /// <summary>
         /// Creates a QueryField with the given property name, field name and source name
         /// </summary>
@@ -38,36 +34,25 @@ namespace Habanero.Base
         /// <param name="source">The source (such as a table) that this QueryField is from.</param>
         public QueryField(string propertyName, string fieldName, Source source)
         {
-            _propertyName = propertyName;
-            _source = source;
-            _fieldName = fieldName;
+            PropertyName = propertyName;
+            Source = source;
+            FieldName = fieldName;
         }
 
         /// <summary>
         /// The name of the property (as defined in the ClassDef) that this QueryField is for
         /// </summary>
-        public string PropertyName
-        {
-            get { return _propertyName; }
-        }
+        public string PropertyName { get; private set; }
 
         /// <summary>
         /// The name of the field in the data source that this QueryField is for
         /// </summary>
-        public string FieldName
-        {
-            get { return _fieldName; }
-            set { _fieldName = value; }
-        }
+        public string FieldName { get; set; }
 
         /// <summary>
         /// The name of the source (such as a table name) that this QueryField is from.
         /// </summary>
-        public Source Source
-        {
-            get { return _source; }
-            set { _source = value; }
-        }
+        public Source Source { get; set; }
 
 
         ///<summary>
@@ -81,6 +66,7 @@ namespace Habanero.Base
         ///<returns>A <see cref="QueryField"/> created from the string</returns>
         public static QueryField FromString(string fieldString)
         {
+            if (fieldString == null) throw new ArgumentNullException("fieldString");
             string[] parts = fieldString.Trim().Split('.');
             string propertyName = parts[parts.Length - 1];
             Source source = Base.Source.FromString(String.Join(".", parts, 0, parts.Length - 1));
