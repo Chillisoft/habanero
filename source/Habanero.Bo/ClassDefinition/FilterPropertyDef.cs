@@ -51,7 +51,7 @@ namespace Habanero.BO.ClassDefinition
             FilterTypeAssembly = filterTypeAssembly;
             FilterClauseOperator = filterClauseOperator;
             Parameters = parameters;
-            if (string.IsNullOrEmpty(FilterTypeAssembly)) FilterTypeAssembly = "Habanero.UI.Base";
+            if (string.IsNullOrEmpty(FilterTypeAssembly)) FilterTypeAssembly = "Habanero.Faces.Base";
         }
 
         /// <summary>
