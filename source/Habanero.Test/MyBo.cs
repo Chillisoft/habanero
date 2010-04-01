@@ -1241,7 +1241,9 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
+// ReSharper disable UnusedMember.Global These are used by Asset Management
         public static IClassDef LoadClassDefWithThreeUITabs()
+
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
             IClassDef itsClassDef =
@@ -1319,7 +1321,7 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-
+        // ReSharper restore UnusedMember.Global
         public static IClassDef LoadClassDefWithBOStringLookup()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
