@@ -48,7 +48,7 @@ namespace Habanero.Util
             PropertyInfo propInfo = parameterType.GetProperty(
                 propertyName, BindingFlags.Instance | BindingFlags.Public);
             if (propInfo != null)
-            {
+            { 
                 MethodInfo setMethod = propInfo.GetSetMethod();
                 if (setMethod != null)
                 {
@@ -513,6 +513,7 @@ namespace Habanero.Util
         {
             return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
+
         /// <summary>
         /// Returns the Property Name of the property used in the Lambda expression of type
         /// bo -> bo.MyProperty. This function will return 'MyProperty'.
@@ -526,6 +527,7 @@ namespace Habanero.Util
             PropertyInfo propertyInfo = GetPropertyInfo(propExpression);
             return propertyInfo.Name;
         }
+
         /// <summary>
         /// Returns the <see cref="PropertyInfo"/> of the property used in the Lambda expression of type
         /// bo -> bo.MyProperty. This function will return the PropertyInfo for MyProperty.
@@ -536,9 +538,7 @@ namespace Habanero.Util
         /// <exception cref="ArgumentException"> Exception if the lamda is not a lambda for a property</exception>
         public static PropertyInfo GetPropertyInfo<TModel>(Expression<Func<TModel, object>> propExpression)
         {
-
             var memberExpression = GetMemberExpression(propExpression);
-
             return (PropertyInfo)memberExpression.Member;
         }
 
@@ -549,14 +549,15 @@ namespace Habanero.Util
         private static MemberExpression GetMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression, bool enforceCheck)
         {
             MemberExpression memberExpression = null;
-            if (expression.Body.NodeType == ExpressionType.Convert)
+            switch (expression.Body.NodeType)
             {
-                var body = (UnaryExpression)expression.Body;
-                memberExpression = body.Operand as MemberExpression;
-            }
-            else if (expression.Body.NodeType == ExpressionType.MemberAccess)
-            {
-                memberExpression = expression.Body as MemberExpression;
+                case ExpressionType.Convert:
+                    var body = (UnaryExpression)expression.Body;
+                    memberExpression = body.Operand as MemberExpression;
+                    break;
+                case ExpressionType.MemberAccess:
+                    memberExpression = expression.Body as MemberExpression;
+                    break;
             }
 
             if (enforceCheck && memberExpression == null)
