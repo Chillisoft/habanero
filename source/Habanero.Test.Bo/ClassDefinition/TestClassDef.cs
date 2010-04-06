@@ -1093,7 +1093,37 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("Test Class", def.DisplayName);
         }
 
+        [Test]
+        public void Test_GetRelationship_ShouldReturnTheRelationshipDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = MyBO.LoadClassDefWithShape_SingleTableInheritance_Relationship();
+            const string relationshipName = "Shape";
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            var relationshipDef = classDef.GetRelationship(relationshipName);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(relationshipDef);
+            Assert.AreEqual(relationshipName, relationshipDef.RelationshipName);
+        }
+        [Test]
+        public void Test_GetRelationship_WhenOnParent_ShouldReturnTheRelationshipDefFromParent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = MyBO.LoadClassDefWithShape_SingleTableInheritance_Relationship();
+            IClassDef classDefSubType = MyBOSubType.LoadInheritedTypeClassDef();
+            const string relationshipName = "Shape";
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(classDef.GetRelationship(relationshipName));
+            //---------------Execute Test ----------------------
+            var relationshipDef = classDefSubType.GetRelationship(relationshipName);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(relationshipDef);
+            Assert.AreEqual(relationshipName, relationshipDef.RelationshipName);
+        }
     }
 
     // This class serves to access protected methods

@@ -153,7 +153,7 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        private static XmlClassLoader CreateXmlClassLoader()
+        protected static XmlClassLoader CreateXmlClassLoader()
         {
             return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
         }
@@ -1715,6 +1715,24 @@ namespace Habanero.Test
             }
         }
     }
+
+    public class MyBOSubType : MyBO
+    {  
+
+
+        public static IClassDef LoadInheritedTypeClassDef()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            var classDef =
+                itsLoader.LoadClass(
+                    @"<class name=""MyBOSubType"" assembly=""Habanero.Test"">
+                        <superClass class=""MyBO"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""MyBOType"" />
+                      </class>");
+            ClassDef.ClassDefs.Add(classDef);
+            return classDef;
+        }
+    }
+
     public class MyInheritedType: MyRelatedBo
     {
         public static IClassDef LoadInheritedTypeClassDef()
