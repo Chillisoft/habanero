@@ -298,6 +298,18 @@ namespace Habanero.Test.Util
         }
 
         [Test]
+        public void Test_GetUnderlyingType_WhenPropInfoNull_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Type propType = ReflectionUtilities.GetUndelyingPropertType(null);
+            //---------------Test Result -----------------------
+            Assert.IsNull(propType);
+        }
+        [Test]
         public void Test_GetPropertyInfo_WithLambda_ShouldRetInfo()
         {
             //---------------Set up test pack-------------------
@@ -306,7 +318,7 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
 
-            var propInfo = ReflectionUtilities.GetPropertyInfo<ClassWithProperties>(bo => bo.StringProperty);
+            var propInfo = ReflectionUtilities.GetPropertyInfo<ClassWithProperties, string>(bo => bo.StringProperty);
             //---------------Test Result -----------------------
             Assert.AreEqual("StringProperty", propInfo.Name);
             Assert.AreSame(typeof (string), propInfo.PropertyType);
@@ -320,7 +332,7 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
 
-            var propertyName = ReflectionUtilities.GetPropertyName<ClassWithProperties>(bo => bo.StringProperty);
+            var propertyName = ReflectionUtilities.GetPropertyName<ClassWithProperties, string>(bo => bo.StringProperty);
             //---------------Test Result -----------------------
             Assert.AreEqual("StringProperty", propertyName);
         }
@@ -334,7 +346,7 @@ namespace Habanero.Test.Util
             //---------------Execute Test ----------------------
             try
             {
-                ReflectionUtilities.GetPropertyInfo<ClassWithProperties>(bo => bo.GetType());
+                ReflectionUtilities.GetPropertyInfo<ClassWithProperties, object>(bo => bo.GetType());
                 Assert.Fail("Expected to throw an ArgumentException");
             }
             //---------------Test Result -----------------------

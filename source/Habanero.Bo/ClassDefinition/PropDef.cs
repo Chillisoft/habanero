@@ -618,7 +618,7 @@ namespace Habanero.BO.ClassDefinition
         public IClassDef ClassDef
         {
             get { return _classDef; }
-            internal set { _classDef = (ClassDef) value; }
+            set { _classDef = (ClassDef) value; }
            
         }
 
