@@ -120,8 +120,8 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("Test Message", rule.Message, "Message is not being read from xml correctly.");
             //Assert.AreSame(typeof(int), rule.PropertyType,
             //                   "A propRuleInteger should have int as its property type.");
-            Assert.AreEqual("2", rule.Parameters["min"]);
-            Assert.AreEqual("10", rule.Parameters["max"]);
+            Assert.AreEqual(2, rule.Parameters["min"]);
+            Assert.AreEqual(10, rule.Parameters["max"]);
         }
 
         [Test]
@@ -136,6 +136,21 @@ namespace Habanero.Test.BO.Loaders
                     @"<rule name=""TestRule"" message=""Test Message""><add key=""min"" value=""1""/></rule>");
             Assert.AreEqual(int.MaxValue, Convert.ToInt32(rule.Parameters["max"]));
         }
+
+        [Test]
+        public void TestPropRuleInteger_NullValues()
+        {
+            //---------------Execute Test ----------------------
+            IPropRule rule = _loader.LoadRule(typeof(int).Name,
+                    @"<rule name=""Test Rule"" message=""Test Message"">
+                        <add key=""min"" value=""""/>
+                        <add key=""max"" value="""" /></rule>
+");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Int32.MinValue, rule.Parameters["min"]);
+            Assert.AreEqual(Int32.MaxValue, rule.Parameters["max"]);
+        }
+        
 
         //[Test]
         //public void TestIsCompulsory()
@@ -171,6 +186,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleStringAttributes()
         {
+            //---------------Execute Test ----------------------
             IPropRule rule = _loader.LoadRule(typeof (string).Name,
                 @"<rule name=""TestString"" message=""String Test Message"" >
                             <add key=""patternMatch"" value=""Test Pattern"" />
@@ -178,10 +194,25 @@ namespace Habanero.Test.BO.Loaders
                             <add key=""maxLength"" value=""10"" />
                         </rule>                          
 ");
-
+            //---------------Test Result -----------------------
             Assert.AreEqual("Test Pattern", rule.Parameters["patternMatch"]);
             Assert.AreEqual(5, Convert.ToInt32(rule.Parameters["minLength"]));
             Assert.AreEqual(10, Convert.ToInt32(rule.Parameters["maxLength"]));
+        }
+
+        [Test]
+        public void TestPropRuleStringBlankAttributesTranslateToValidValues()
+        {
+            //---------------Execute Test ----------------------
+            IPropRule rule = _loader.LoadRule(typeof (string).Name,
+                @"<rule name=""TestString"" message=""String Test Message"" >
+                            <add key=""minLength"" value="""" />          
+                            <add key=""maxLength"" value="""" />
+                        </rule>                          
+");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, Convert.ToInt32(rule.Parameters["minLength"]));
+            Assert.AreEqual(-1, Convert.ToInt32(rule.Parameters["maxLength"]));
         }
 
         [Test]
@@ -242,16 +273,34 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDate_Now()
         {
+            //---------------Execute Test ----------------------
             IPropRule rule = _loader.LoadRule(typeof(DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""Now"" />
                             <add key=""max"" value=""Now"" />
                         </rule>                          
 ");
+            //---------------Test Result -----------------------
             Assert.AreEqual("TestDate", rule.Name, "Rule name is not being read from xml correctly.");
             Assert.AreEqual("Now", rule.Parameters["min"]);
             Assert.AreEqual("Now", rule.Parameters["max"]);
         }
+
+        [Test]
+        public void TestPropRuleDate_BlankValues()
+        {
+            //---------------Execute Test ----------------------
+            PropRuleDate rule = (PropRuleDate) _loader.LoadRule(typeof(DateTime).Name,
+                                                                @"<rule name=""TestDate""  >
+                            <add key=""min"" value="""" />
+                            <add key=""max"" value="""" />
+                        </rule>                          
+");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DateTime.MinValue, rule.MinValue);
+            Assert.AreEqual(DateTime.MaxValue, rule.MaxValue);
+        }
+
 
         [Test]
         public void TestPropRuleDecimal()
@@ -275,6 +324,22 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(Decimal.MinValue, Convert.ToDecimal(rule.Parameters["min"]));
             rule =
                 _loader.LoadRule(typeof (Decimal).Name, @"<rule name=""TestDec""><add key=""min"" value=""1""/></rule>");
+            Assert.AreEqual(Decimal.MaxValue, Convert.ToDecimal(rule.Parameters["max"]));
+        }
+
+
+        [Test]
+        public void TestPropRuleDecimal_Null()
+        {
+            //---------------Set up test pack-------------------
+            IPropRule rule = _loader.LoadRule(typeof(Decimal).Name,
+                @"<rule name=""TestDec"" >
+                            <add key=""min"" value="""" />
+                            <add key=""max"" value="""" />
+                        </rule>                          
+");
+            //---------------Execute Test ----------------------
+            Assert.AreEqual(Decimal.MinValue, Convert.ToDecimal(rule.Parameters["min"]));
             Assert.AreEqual(Decimal.MaxValue, Convert.ToDecimal(rule.Parameters["max"]));
         }
 

@@ -86,17 +86,28 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "min":
-
-                            DateTimeUtilities.ParseToDate(valueExpression);//The output from this is not used but if the valueExpression
-                            // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
-                            // is raised early
-                            MinValueExpression = valueExpression;
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MinValueExpression = "";
+                            else
+                            {
+                                DateTimeUtilities.ParseToDate(valueExpression);
+                                    //The output from this is not used but if the valueExpression
+                                // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
+                                // is raised early
+                                MinValueExpression = valueExpression;
+                            }
                             break;
                         case "max":
-                            DateTimeUtilities.ParseToDate(valueExpression);//The output from this is not used but if the valueExpression
-                            // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
-                            // is raised early
-                            MaxValueExpression = valueExpression;
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MaxValueExpression = "";
+                            else
+                            {
+                                DateTimeUtilities.ParseToDate(valueExpression);
+                                    //The output from this is not used but if the valueExpression
+                                // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
+                                // is raised early
+                                MaxValueExpression = valueExpression;
+                            }
                             break;
                         default:
                             throw new InvalidXmlDefinitionException

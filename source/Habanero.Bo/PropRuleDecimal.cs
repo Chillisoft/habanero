@@ -70,18 +70,19 @@ namespace Habanero.BO
                 foreach (string key in keys)
                 {
                     object value = _parameters[key];
-                    if (value == null) return;
-                    if (value is string)
-                    {
-                        if (string.IsNullOrEmpty(Convert.ToString(value))) return;
-                    }
                     switch (key)
                     {
                         case "min":
-                            MinValue = Convert.ToDecimal(value);
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MinValue = Decimal.MinValue;
+                            else 
+                                MinValue = Convert.ToDecimal(value);
                             break;
                         case "max":
-                            MaxValue = Convert.ToDecimal(value);
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MaxValue = Decimal.MaxValue;
+                            else 
+                                MaxValue = Convert.ToDecimal(value);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException

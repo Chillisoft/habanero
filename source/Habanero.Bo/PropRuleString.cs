@@ -109,10 +109,10 @@ namespace Habanero.BO
                 {
                     object value = _parameters[key];
                     if (value == null) continue;
-                    if (value is string)
-                    {
-                        if (string.IsNullOrEmpty(Convert.ToString(value))) return;
-                    }
+                    //if (value is string)
+                    //{
+                    //    if (string.IsNullOrEmpty(Convert.ToString(value))) return;
+                    //}
                     switch (key)
                     {
                         case "patternMatch":
@@ -122,10 +122,14 @@ namespace Habanero.BO
                             PatternMatchMessage = Convert.ToString(value);
                             break;
                         case "minLength":
-                            MinLength = Convert.ToInt32(value);
+                            if (string.IsNullOrEmpty(Convert.ToString(value)))
+                                MinLength = 0;
+                            else MinLength = Convert.ToInt32(value);
                             break;
                         case "maxLength":
-                            MaxLength = Convert.ToInt32(value);
+                            if (string.IsNullOrEmpty(Convert.ToString(value)))
+                                MaxLength = -1;
+                            else MaxLength = Convert.ToInt32(value);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException
