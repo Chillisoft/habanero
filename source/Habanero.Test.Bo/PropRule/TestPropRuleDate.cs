@@ -277,6 +277,21 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(DateTime.MaxValue, rule.MaxValue);
         }
+
+        [Test]
+        public void Test_MaxValue_WhenDateTimeMaxValueLess1Minute_ShouldNotRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            PropRuleDate rule = new PropRuleDate("MyRule", "MyMessage");
+            var maxDateTime = DateTime.MaxValue.AddMilliseconds(-1);
+            rule.Parameters["max"] = maxDateTime;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(maxDateTime, rule.Parameters["max"]);
+            //---------------Execute Test ----------------------
+            var actualMaxValue = rule.MaxValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(maxDateTime, actualMaxValue);
+        }
     }
 
 }

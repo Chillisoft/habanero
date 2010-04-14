@@ -132,7 +132,7 @@ namespace Habanero.Test.Util
             MyEnum? returnedValue = TypeUtilities.ConvertTo<MyEnum?>(value);
             //---------------Test Result -----------------------
             Assert.IsTrue(returnedValue.HasValue);
-            Assert.AreEqual(value, returnedValue.Value);
+            Assert.AreEqual(value, returnedValue.GetValueOrDefault());
         }
 
         [Test]

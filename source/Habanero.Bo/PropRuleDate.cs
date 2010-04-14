@@ -243,9 +243,16 @@ namespace Habanero.BO
             get
             {
                 object maxValue = Parameters["max"];
-                if (maxValue is string && String.IsNullOrEmpty((string)maxValue)) return DateTime.MaxValue;
-                DateTime dateTime = DateTimeUtilities.ParseToDate(maxValue);
-                return dateTime == DateTime.MaxValue? dateTime: dateTime.AddDays(1).AddMilliseconds(-1);
+                try
+                {
+                    if (maxValue is string && String.IsNullOrEmpty((string)maxValue)) return DateTime.MaxValue;
+                    DateTime dateTime = DateTimeUtilities.ParseToDate(maxValue);
+                    return dateTime >= DateTime.MaxValue.AddDays(-1) ? dateTime : dateTime.AddDays(1).AddMilliseconds(-1);
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    throw new ArgumentOutOfRangeException("The value '" + maxValue + "' could not be converted to a valid MaxValue");
+                }
             }
             protected set { _parameters["max"] = value; }
         }
