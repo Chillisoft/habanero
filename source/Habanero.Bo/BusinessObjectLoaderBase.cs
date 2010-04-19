@@ -783,7 +783,7 @@ namespace Habanero.BO
         }       
         
         /// <summary>
-        /// Sets the Status for the Business Object to NotNew.
+        /// Calls the AfterLoad method on the IBusinessObject (by casting it to a <see cref="BusinessObject"/>).
         /// </summary>
         /// <param name="bo"></param>
         protected internal static void CallAfterLoad(IBusinessObject bo)

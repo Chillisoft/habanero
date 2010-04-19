@@ -32,6 +32,8 @@ namespace Habanero.Test.DB
         public override void SetupTest()
         {
             base.SetupTest();
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle_table");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from shape_table");
         }
 
         #endregion
