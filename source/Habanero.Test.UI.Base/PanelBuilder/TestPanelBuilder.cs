@@ -1017,6 +1017,25 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public virtual void Test_BuildPanelForTab_CompulsoryRelationshipsAreBoldAndStarred()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithAssociationRelationship();
+            classDef.PropDefcol["RelatedID"].Compulsory = true;
+            UIFormTab twoFieldTabOneCompulsory = (UIFormTab) classDef.UIDefCol["default"].UIForm[0];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory);
+            //---------------Test Result -----------------------
+
+            ILabel compulsoryLabel = (ILabel) panelInfo.FieldInfos["MyRelationship"].LabelControl;
+            Assert.AreEqual("My Relationship: *", compulsoryLabel.Text);
+            Assert.IsTrue(compulsoryLabel.Font.Bold);
+        }
+
+        [Test]
         public void Test_BuildPanelForTab_WithNonEditableField_ShouldDisableLabel()
         {
             //---------------Set up test pack-------------------

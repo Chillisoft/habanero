@@ -1441,6 +1441,7 @@ namespace Habanero.Test
 								<columnLayout>
 									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
 									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+						            <field property=""MyRelationship"" type=""ComboBox"" mapperType=""AutoLoadingRelationshipComboBoxMapper"" mapperAssembly=""Habanero.UI.Base"" editable=""true"" />
 								</columnLayout>
 							</tab>
 						</form>

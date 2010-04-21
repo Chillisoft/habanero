@@ -75,7 +75,7 @@ namespace Habanero.UI.VWG
         HorizontalAlignment INumericUpDown.TextAlign
         {
             get { return EnumerationConverter.HorizontalAlignmentToHabanero(TextAlign); }
-            set { throw new System.NotSupportedException(); }
+            set { this.TextAlign = EnumerationConverter.HorizontalAlignmentToVWG(value); }
         }
     }
 }

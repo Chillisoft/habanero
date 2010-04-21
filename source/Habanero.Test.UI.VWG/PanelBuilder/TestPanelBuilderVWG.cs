@@ -18,7 +18,7 @@ namespace Habanero.Test.UI.VWG.PanelBuilder
 
         protected override Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper() { return new Sample.SampleUserInterfaceMapperVWG(); }
 
-        [Test, Ignore("Gizmox does not support changing the TextAlign Property (Default value is Left) ")]
+        [Test]
         public void Test_BuildPanelForTab_Parameter_SetAlignment_NumericUpDown()
         {
             //---------------Set up test pack-------------------
@@ -32,8 +32,8 @@ namespace Habanero.Test.UI.VWG.PanelBuilder
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
 
-            Assert.IsInstanceOf(typeof(ITextBox), panel.Controls[1]);
-            ITextBox control = (ITextBox)panel.Controls[1];
+            Assert.IsInstanceOf(typeof(INumericUpDown), panel.Controls[1]);
+            INumericUpDown control = (INumericUpDown)panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Right, control.TextAlign);
         }
     }
