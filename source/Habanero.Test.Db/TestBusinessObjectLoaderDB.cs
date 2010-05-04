@@ -73,7 +73,7 @@ namespace Habanero.Test.DB
             BOWithIntID bo1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>(criteria);
             //---------------Test Result -----------------------
             Assert.IsNotNull(bo1); 
-BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>(bo1.ID);
+            BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>(bo1.ID);
             Assert.AreSame(bo1, bo2);
         }
 
@@ -225,7 +225,6 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
             Assert.AreNotSame(cp, loadedCP);
             Assert.IsTrue(loadedCP.AfterLoadCalled);
         }
-
 
         /// <summary>
         /// Tests to ensure that if the object has been edited by another user
@@ -521,7 +520,7 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
         }
 
         [Test]
-        public void Test_RefreshCallsAfterLoadNotCalledIfObjectNotReloaded()
+        public void Test_Refresh_AfterLoadNotCalledIfObjectIsNotUpdatedInReloading()
         {
             //---------------Set up test pack---------------------
             ClassDef.ClassDefs.Clear();
@@ -539,11 +538,34 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
 
             //---------------Test Result -------------------------
-            Assert.IsTrue(cp.AfterLoadCalled);
+            Assert.IsFalse(cp.AfterLoadCalled);
+        }
+        
+        [Test]
+        public void Test_Refresh_UpdatedEventIsNotFired_IfObjectIsNotUpdatedInReloading()
+        {
+            //---------------Set up test pack---------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString();
+            cp.Save();
+            bool updatedEventFired = false;
+            cp.Updated += (sender, args) => updatedEventFired = true; 
+
+            //---------------Assert Precondition------------------
+            Assert.IsFalse(updatedEventFired);
+
+            //---------------Execute Test ------------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
+
+            //---------------Test Result -------------------------
+            Assert.IsFalse(updatedEventFired);
         }
 
         [Test]
-        public void Test_RefreshCallsAfterLoadCalledIfObjectLoaded()
+        public void Test_Refresh_AfterLoadIsCalled_IfObjectUpdatedInLoading()
         {
             //---------------Set up test pack---------------------
             ClassDef.ClassDefs.Clear();
@@ -574,6 +596,38 @@ BOWithIntID bo2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
             Assert.AreEqual(newFirstname, cpLoaded.FirstName);
         }
 
+        [Test]
+        public void Test_Refresh_UpdatedEventIsFired_IfObjectUpdatedInLoading()
+        {
+            //---------------Set up test pack---------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString();
+            cp.Save();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+
+            ContactPersonTestBO cpLoaded =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
+            string newFirstname = cp.FirstName = TestUtil.GetRandomString();
+            cp.Save();
+            bool updatedEventFired = false;
+            cpLoaded.Updated += (sender, args) => updatedEventFired = true; 
+
+            //---------------Assert Precondition------------------
+            Assert.IsFalse(updatedEventFired);
+
+            //---------------Execute Test ------------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cpLoaded);
+
+            //---------------Test Result -------------------------
+            Assert.IsTrue(updatedEventFired);
+        }
+
+
+        
+        
         [Test]
         public void TestBoLoader_RefreshBusinessObjectDeletedByAnotherUser()
         {

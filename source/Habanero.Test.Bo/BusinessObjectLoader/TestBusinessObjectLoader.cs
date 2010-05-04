@@ -411,37 +411,54 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        [ExpectedException(typeof (BusObjDeleteConcurrencyControlException))]
         public void TestTryLoadDeletedObject_RaiseError()
         {
-            //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO personToDelete = ContactPersonTestBO.CreateSavedContactPerson();
-            personToDelete.MarkForDelete();
-            personToDelete.Save();
+            try
+            {
 
-            //Ensure that a fresh object is loaded from DB
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+                //---------------Set up test pack-------------------
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO personToDelete = ContactPersonTestBO.CreateSavedContactPerson();
+                personToDelete.MarkForDelete();
+                personToDelete.Save();
 
-            //--------Execute------------------------------------------------------
-            BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(personToDelete.ID);
+                //Ensure that a fresh object is loaded from DB
+                BusinessObjectManager.Instance.ClearLoadedObjects();
+
+                //--------Execute------------------------------------------------------
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(personToDelete.ID);
+                Assert.Fail("Expected to throw an BusObjDeleteConcurrencyControlException");
+            }
+            //---------------Test Result -----------------------
+            catch (BusObjDeleteConcurrencyControlException ex)
+            {
+                StringAssert.Contains("There are no records in the database for the Class: ContactPersonTestBO", ex.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof (BusObjDeleteConcurrencyControlException))]
         public void TestTryLoadDeletedObject_RaiseError_Untyped()
         {
-            //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO personToDelete = ContactPersonTestBO.CreateSavedContactPerson();
-            personToDelete.MarkForDelete();
-            personToDelete.Save();
+            try
+            {
+                //---------------Set up test pack-------------------
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO personToDelete = ContactPersonTestBO.CreateSavedContactPerson();
+                personToDelete.MarkForDelete();
+                personToDelete.Save();
 
-            //Ensure that a fresh object is loaded from DB
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+                //Ensure that a fresh object is loaded from DB
+                BusinessObjectManager.Instance.ClearLoadedObjects();
 
-            //--------Execute------------------------------------------------------
-            BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(personToDelete.ClassDef, personToDelete.ID);
+                //--------Execute------------------------------------------------------
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(personToDelete.ClassDef, personToDelete.ID);
+                Assert.Fail("Expected to throw an BusObjDeleteConcurrencyControlException");
+            }
+            //---------------Test Result -----------------------
+            catch (BusObjDeleteConcurrencyControlException ex)
+            {
+                StringAssert.Contains("There are no records in the database for the Class: ContactPersonTestBO", ex.Message);
+            }
         }
 
         [Test]
@@ -773,17 +790,28 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreSame(loadedAddressTestBO, address);
         }
 
-        [Test, ExpectedException(typeof (InvalidPropertyNameException))]
+        [Test]
         public virtual void TestGetBusinessObject_PropNameNotCorrect()
         {
+
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-
+            string propName = "NonExistantProperty";
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("NonExistantProperty", Criteria.ComparisonOp.Equals, "1");
-            BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+            try
+            {
+                Criteria criteria = new Criteria(propName, Criteria.ComparisonOp.Equals, "1");
+
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+                Assert.Fail("Expected to throw an InvalidPropertyNameException");
+            }
+            //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains(propName, ex.Message);
+            }
         }
 
         [Test]

@@ -1224,6 +1224,29 @@ namespace Habanero.Test.BO
             Assert.AreNotSame(dateTimeNow, value);
         }
 
+        [Test]
+        public void Test_InitialiseProp_ReturnsFalseIfPropValueNotChanged()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            //---------------Execute Test ----------------------
+            bool propValueChanged = boProp.InitialiseProp(null);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(propValueChanged);
+        }
+
+        [Test]
+        public void Test_InitialiseProp_ReturnsTrueIfPropValueHasChanged()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            //---------------Execute Test ----------------------
+            bool propValueChanged = boProp.InitialiseProp("NewValue");
+            //---------------Test Result -----------------------
+            Assert.IsTrue(propValueChanged);
+        }
     }
 
 }

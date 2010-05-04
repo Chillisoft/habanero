@@ -166,17 +166,26 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
 
-        [Test, ExpectedException(typeof(HabaneroApplicationException), ExpectedMessage="You cannot set an OrderCriteria for a SelectQuery if no Source has been set")]
+        [Test]
         public void TestOrderCriteriaWithNoSource()
         {
-            //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
-            //---------------Execute Test ----------------------
-            IOrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
-            selectQuery.OrderCriteria = orderCriteria;
-            //---------------Test Result -----------------------
-            Assert.AreSame(orderCriteria, selectQuery.OrderCriteria);
-            //---------------Tear Down -------------------------
+            try
+            {
+                //---------------Set up test pack-------------------
+                SelectQuery selectQuery = new SelectQuery();
+                //---------------Execute Test ----------------------
+                IOrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
+                selectQuery.OrderCriteria = orderCriteria;
+                //---------------Test Result -----------------------
+                Assert.AreSame(orderCriteria, selectQuery.OrderCriteria);
+                //---------------Tear Down -------------------------
+                Assert.Fail("Expected to throw an HabaneroApplicationException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroApplicationException ex)
+            {
+                StringAssert.Contains("You cannot set an OrderCriteria for a SelectQuery if no Source has been set", ex.Message);
+            }
         }
 
         [Test]

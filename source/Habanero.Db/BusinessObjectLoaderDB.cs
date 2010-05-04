@@ -46,6 +46,8 @@ namespace Habanero.DB
     public class BusinessObjectLoaderDB : BusinessObjectLoaderBase, IBusinessObjectLoader
     {
         private readonly IDatabaseConnection _databaseConnection;
+        private IDictionary<IClassDef, IBusinessObject> _tempObjectsByClassDef;
+        private IDictionary<Type, IBusinessObject> _tempObjectsByType;
         private static readonly ILog log = LogManager.GetLogger("Habanero.DB.BusinessObjectLoaderDB");
 
         ///<summary>
@@ -56,6 +58,8 @@ namespace Habanero.DB
         public BusinessObjectLoaderDB(IDatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
+            _tempObjectsByClassDef = new Dictionary<IClassDef, IBusinessObject>();
+            _tempObjectsByType = new Dictionary<Type, IBusinessObject>();
         }
 
         /// <summary>
@@ -161,11 +165,12 @@ namespace Habanero.DB
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
             IClassDef correctSubClassDef = null;
             T loadedBo = null;
+            bool objectUpdatedInLoading = false;
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
                 if (dr.Read())
                 {
-                    loadedBo = LoadBOFromReader<T>(dr, selectQueryDB);
+                    loadedBo = LoadBOFromReader<T>(dr, selectQueryDB, out objectUpdatedInLoading);
 
                     //Checks to see if the loaded object is the base of a single table inheritance structure
                     // and has a sub type if so then returns the correct sub type.
@@ -179,8 +184,15 @@ namespace Habanero.DB
             {
                 loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
             }
+            if (loadedBo == null) return null;
+            bool isFreshlyLoaded = loadedBo.Status.IsNew;
             SetStatusAfterLoad(loadedBo);
-            CallAfterLoad(loadedBo);
+            if (objectUpdatedInLoading)
+            {
+                CallAfterLoad(loadedBo);
+                if (!isFreshlyLoaded) FireUpdatedEvent(loadedBo);
+            }
+            
             return loadedBo;
         }
 
@@ -229,11 +241,12 @@ namespace Habanero.DB
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
             IClassDef correctSubClassDef = null;
             IBusinessObject loadedBo = null;
+            bool objectUpdatedInLoading = false;
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
                 if (dr.Read())
                 {
-                    loadedBo = LoadBOFromReader(classDef, dr, selectQueryDB);
+                    loadedBo = LoadBOFromReader(classDef, dr, selectQueryDB, out objectUpdatedInLoading);
                     correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
 
                     if (dr.Read())
@@ -248,8 +261,15 @@ namespace Habanero.DB
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
             }
+            if (loadedBo == null) return null;
+            bool isFreshlyLoaded = loadedBo.Status.IsNew;
             SetStatusAfterLoad(loadedBo);
-            CallAfterLoad(loadedBo);
+            if (objectUpdatedInLoading)
+            {
+                CallAfterLoad(loadedBo);
+                if (!isFreshlyLoaded) FireUpdatedEvent(loadedBo);
+            }
+            
             return loadedBo;
         }
 
@@ -331,12 +351,15 @@ namespace Habanero.DB
                     originalPersistedCollection.Add(businessObject);
                 }
                 IList loadedBos = new ArrayList();
+                List<bool> updatedObjects = new List<bool>();
+                List<bool> freshlyLoadedObjects = new List<bool>();
                 bool isFirstLoad = collection.TimeLastLoaded == null;
+                bool objectUpdatedInLoading;
                 using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
                 {
                     while (dr.Read())
                     {
-                        T loadedBo = (T) LoadBOFromReader(collection.ClassDef, dr, selectQuery);
+                        T loadedBo = (T) LoadBOFromReader(collection.ClassDef, dr, selectQuery, out objectUpdatedInLoading);
                         //Checks to see if the loaded object is the base of a single table inheritance structure
                         // and has a sub type
                         IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
@@ -355,13 +378,24 @@ namespace Habanero.DB
                         {
                             AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
                         }
+                        freshlyLoadedObjects.Add(loadedBo.Status.IsNew);
                         SetStatusAfterLoad(loadedBo);
                         loadedBos.Add(loadedBo);
+                        updatedObjects.Add(objectUpdatedInLoading);
                     }
                 }
-                foreach (IBusinessObject loadedBo in loadedBos)
+                for (int i = 0; i < loadedBos.Count; i++ )
                 {
-                    CallAfterLoad(loadedBo);
+                    if (updatedObjects[i])
+                    {
+                        CallAfterLoad((IBusinessObject) loadedBos[i]);
+
+                        if (!freshlyLoadedObjects[i])
+                        {
+                            FireUpdatedEvent((IBusinessObject)loadedBos[i]);
+                        }
+                    }
+                   
                 }
             }
             else
@@ -599,27 +633,67 @@ namespace Habanero.DB
             return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
         }
 
-        private static T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery)
+        private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
             where T : class, IBusinessObject, new()
         {
-            T bo = new T();
-            BusinessObjectManager.Instance.Remove(bo);
+            /// Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
+            /// is stored in a dictionary and reused as the object populated to perform a search on the business object
+            /// manager.
+            objectUpdatedInLoading = false;
+            T bo;
+            try
+            {
+                bo = (T) _tempObjectsByType[typeof(T)];
+            }
+            catch (KeyNotFoundException)
+            {
+                bo = new T();
+                BusinessObjectManager.Instance.Remove(bo);
+                _tempObjectsByType[typeof(T)] = bo;
+            }
 
-            return (T) GetLoadedBusinessObject(bo, dataReader, selectQuery);
+            IBusinessObject loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
+            if (loadedBusinessObject == bo)
+            {
+                var tempObject = new T();
+                _tempObjectsByType[typeof (T)] = tempObject;
+                BusinessObjectManager.Instance.Remove(tempObject);
+            }
+            return (T) loadedBusinessObject;
         }
 
-        private static IBusinessObject LoadBOFromReader
-            (IClassDef classDef, IDataRecord dataReader, ISelectQuery selectQuery)
+        private IBusinessObject LoadBOFromReader
+            (IClassDef classDef, IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
         {
-            IBusinessObject bo = classDef.CreateNewBusinessObject();
-            BusinessObjectManager.Instance.Remove(bo);
+            /// Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
+            /// is stored in a dictionary and reused as the object populated to perform a search on the business object
+            /// manager.
+            objectUpdatedInLoading = false;
+            IBusinessObject bo;
+            try
+            {
+                bo = _tempObjectsByClassDef[classDef];
+            } catch (KeyNotFoundException ex)
+            {
+                bo = classDef.CreateNewBusinessObject();
+                BusinessObjectManager.Instance.Remove(bo);
+                _tempObjectsByClassDef[classDef] = bo;
+            }
 
-            return GetLoadedBusinessObject(bo, dataReader, selectQuery);
+            IBusinessObject loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
+            if (loadedBusinessObject == bo)
+            {
+                var tempObject = classDef.CreateNewBusinessObject();
+                _tempObjectsByClassDef[classDef] = tempObject;
+                BusinessObjectManager.Instance.Remove(tempObject);
+            }
+            return loadedBusinessObject;
         }
 
-        private static IBusinessObject GetLoadedBusinessObject
-            (IBusinessObject bo, IDataRecord dataReader, ISelectQuery selectQuery)
+        private IBusinessObject GetLoadedBusinessObject
+            (IBusinessObject bo, IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
         {
+            objectUpdatedInLoading = false;
             PopulateBOFromReader(bo, dataReader, selectQuery);
             IPrimaryKey key = bo.ID;
 
@@ -627,6 +701,7 @@ namespace Habanero.DB
 
             if (boFromObjectManager == null )
             {
+                objectUpdatedInLoading = true;
                 BusinessObjectManager.Instance.Add(bo);
                 return bo;
             }
@@ -649,7 +724,7 @@ namespace Habanero.DB
             if (boFromObjectManager.Status.IsNew) boFromObjectManager = bo;
             if (boFromObjectManager.Status.IsEditing) return boFromObjectManager;
 
-            PopulateBOFromReader(boFromObjectManager, dataReader, selectQuery);
+            objectUpdatedInLoading = PopulateBOFromReader(boFromObjectManager, dataReader, selectQuery);
             return boFromObjectManager;
         }
 
@@ -680,15 +755,16 @@ namespace Habanero.DB
             return null;
         }
 
-        private static void PopulateBOFromReader(IBusinessObject bo, IDataRecord dr, ISelectQuery selectQuery)
+        private static bool PopulateBOFromReader(IBusinessObject bo, IDataRecord dr, ISelectQuery selectQuery)
         {
             int i = 0;
+            bool objectUpdatedInLoading = false;
             foreach (QueryField field in selectQuery.Fields.Values)
             {
                 try
                 {
                     IBOProp boProp = bo.Props[field.PropertyName];
-                    boProp.InitialiseProp(dr[i]);
+                    objectUpdatedInLoading = objectUpdatedInLoading | boProp.InitialiseProp(dr[i]);   // set objectUpdatedInLoading to true if any initialiseprop returns true
                 } catch (InvalidPropertyNameException)
                 {
                     // do nothing - this was to increase performance as catching this exception is quicker than always doing a
@@ -696,7 +772,8 @@ namespace Habanero.DB
                 }
                 i++;
             }
-            SetStatusAfterLoad(bo);
+            //SetStatusAfterLoad(bo);
+            return objectUpdatedInLoading;
         }
     }
 }

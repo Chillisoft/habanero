@@ -1102,12 +1102,14 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Extra preparation or steps to take out after loading the business
+        /// Extra preparation or steps to take out after loading the business. Override this if you need to update a calculated property, for example.
+        /// This method will be called after an object is loaded for the first time, and after it is refreshed, but only if the refreshing causes
+        /// a property to be updated.
         /// object
         /// </summary>
         protected internal virtual void AfterLoad()
         {
-            FireUpdatedEvent();
+
         }
 
         /// <summary>
@@ -1228,7 +1230,7 @@ namespace Habanero.BO
         /// <summary>
         /// Fires Updates Event for <see cref="IBusinessObject"/>
         /// </summary>
-        protected void FireUpdatedEvent()
+        internal protected void FireUpdatedEvent()
         {
             if (Updated != null)
             {

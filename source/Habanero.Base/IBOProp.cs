@@ -176,7 +176,7 @@ namespace Habanero.Base
         /// Initialises the property with the specified value,
         /// </summary>
         /// <param name="propValue">The value to assign</param>
-        void InitialiseProp(object propValue);
+        bool InitialiseProp(object propValue);
 
         /// <summary>
         /// Validates whether the property values set for the BOProp are valid

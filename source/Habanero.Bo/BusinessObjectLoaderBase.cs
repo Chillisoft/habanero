@@ -791,6 +791,17 @@ namespace Habanero.BO
             if (bo == null) return;
             BusinessObject businessObject = (BusinessObject)bo;
             businessObject.AfterLoad();
+        }       
+
+        /// <summary>
+        /// Calls the FireUpdatedEvent method on the IBusinessObject (by casting it to a <see cref="BusinessObject"/>).
+        /// </summary>
+        /// <param name="bo"></param>
+        protected internal static void FireUpdatedEvent(IBusinessObject bo)
+        {
+            if (bo == null) return;
+            BusinessObject businessObject = (BusinessObject)bo;
+            businessObject.FireUpdatedEvent();
         }
     }
 }
