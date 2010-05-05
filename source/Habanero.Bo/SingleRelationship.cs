@@ -518,7 +518,7 @@ namespace Habanero.BO
 
         private bool MustAddRemovedBOToDirtyBusinessObjects()
         {
-            return IsRemoved && IsRelationshipCompositionOrAggregation();
+            return IsRemoved && RemovedBO != null && RemovedBO.Status.IsNew == false && IsRelationshipCompositionOrAggregation();
         }
 
         /// <summary>

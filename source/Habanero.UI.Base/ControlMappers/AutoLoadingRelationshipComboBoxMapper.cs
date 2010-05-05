@@ -16,6 +16,9 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+using System.Collections;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -39,13 +42,31 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Provides an overrideable method for Loading the collection of business objects
         /// </summary>
-        protected override void LoadCollectionForBusinessObject() { 
-           // if (this.BusinessObjectCollection == null)
+        protected override void LoadCollectionForBusinessObject()
+        {
+            // if (this.BusinessObjectCollection == null)
             //{
-                
-                this.BusinessObjectCollection = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(
-                    RelatedObjectClassDef, "");
+
+            IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(
+                RelatedObjectClassDef, "");
+            collection.Sort(new ToStringComparer());
+            this.BusinessObjectCollection = collection;
             //}       
+        }
+
+        private class ToStringComparer : IComparer
+        {
+            #region Implementation of IComparer
+
+            public int Compare(object x, object y)
+            {
+                if (x == null && y == null) return 0;
+                if (x == null) return -1;
+                if (y == null) return 1;
+                return String.Compare(x.ToString(), y.ToString());
+            }
+
+            #endregion
         }
     }
 }
