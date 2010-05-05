@@ -70,7 +70,7 @@ namespace Habanero.Test.Util
                 Assert.Fail("Expected to throw an Exception");
             }
                 //---------------Test Result -----------------------
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

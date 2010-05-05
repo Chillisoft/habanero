@@ -675,7 +675,7 @@ namespace Habanero.DB
             try
             {
                 bo = _tempObjectsByClassDef[classDef];
-            } catch (KeyNotFoundException ex)
+            } catch (KeyNotFoundException)
             {
                 bo = classDef.CreateNewBusinessObject();
                 BusinessObjectManager.Instance.Remove(bo);

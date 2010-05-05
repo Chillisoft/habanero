@@ -79,7 +79,7 @@ namespace Habanero.Test.DB
                 Assert.Fail("Expected to throw an NotImplementedException");
             }
                 //---------------Test Result -----------------------
-            catch (NotImplementedException ex)
+            catch (NotImplementedException)
             {
             }
         }

@@ -200,14 +200,13 @@ namespace Habanero.Test.DB
         [Test]
         public void TestForDuplicateExistingObjects()
         {
-            ContactPerson.DeleteAllContactPeople();
             //create the first object
             ContactPerson myContact_1 = new ContactPerson();
 
             //Edit first object and save
             myContact_1.Surname = "My Surname";
-            myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1");
-            myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2");
+            myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1" + TestUtil.GetRandomString());
+            myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2" + TestUtil.GetRandomString());
             myContact_1.Save(); //
             //get the second new object from the object manager);
             ContactPerson myContact_2 = new ContactPerson();
@@ -239,14 +238,13 @@ namespace Habanero.Test.DB
         [Test]
         public void TestForDuplicateNewObjects()
         {
-            ContactPerson.DeleteAllContactPeople();
             //create the first object
             ContactPerson myContact_1 = new ContactPerson();
 
             //Edit first object and save
             myContact_1.Surname = "My Surname";
-            myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1");
-            myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2");
+            myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1" + TestUtil.GetRandomString());
+            myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2" + TestUtil.GetRandomString());
             myContact_1.Save(); //
             //get the second new object from the object manager;
             ContactPerson myContact_2 = new ContactPerson();
@@ -280,7 +278,7 @@ namespace Habanero.Test.DB
 
             //Edit first object and save
             myContact_1.Surname = "My Surname SinglePropKey 1";
-            myContact_1.SetPropertyValue("PK3Prop", "PK3PropValue1");
+            myContact_1.SetPropertyValue("PK3Prop", "PK3PropValue1" + TestUtil.GetRandomString());
             myContact_1.Save(); //
             //get the second new object from the object manager
             ContactPerson myContact_2 = new ContactPerson();

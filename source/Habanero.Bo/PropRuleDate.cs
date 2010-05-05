@@ -249,7 +249,7 @@ namespace Habanero.BO
                     DateTime dateTime = DateTimeUtilities.ParseToDate(maxValue);
                     return dateTime >= DateTime.MaxValue.AddDays(-1) ? dateTime : dateTime.AddDays(1).AddMilliseconds(-1);
                 }
-                catch (ArgumentOutOfRangeException e)
+                catch (ArgumentOutOfRangeException)
                 {
                     throw new ArgumentOutOfRangeException("The value '" + maxValue + "' could not be converted to a valid MaxValue");
                 }
