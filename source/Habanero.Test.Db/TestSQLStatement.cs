@@ -187,8 +187,20 @@ namespace Habanero.Test.DB
         [Test, ExpectedException(typeof(SqlStatementException))]
         public void TestAddJoin_WithEmptyStatement()
         {
+            //---------------Set up test pack-------------------
             SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "");
-            sql.AddJoin("left join", "bobby", "bobs = bobbys");
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                sql.AddJoin("left join", "bobby", "bobs = bobbys");
+                Assert.Fail("Expected to throw an SqlStatementException");
+            }
+                //---------------Test Result -----------------------
+            catch (SqlStatementException ex)
+            {
+                StringAssert.Contains("Cannot add a join clause to a SQL statement that does not contain a from clause", ex.Message);
+            }
         }
 
         [Test]

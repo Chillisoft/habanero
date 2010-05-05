@@ -28,13 +28,24 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestPropDefCol
     {
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestAddDuplicationException()
         {
+            //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, null);
             PropDefCol col = new PropDefCol();
             col.Add(propDef);
-            col.Add(propDef);
+            //---------------Execute Test ----------------------
+            try
+            {
+                col.Add(propDef);
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("A property definition with the name 'prop' already exists", ex.Message);
+            }
         }
 
         [Test]

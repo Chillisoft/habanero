@@ -133,7 +133,7 @@ namespace Habanero.BO
         /// <param name="boProp">The BOProp to add</param>
         public virtual void Add(IBOProp boProp)
         {
-            ArgumentValidationHelper.CheckArgumentNotNull(boProp, "bOProp");
+            ArgumentValidationHelper.CheckArgumentNotNull(boProp, "boProp");
             if (_props.ContainsKey(boProp.PropertyName))
             {
                 throw new InvalidPropertyException(String.Format(

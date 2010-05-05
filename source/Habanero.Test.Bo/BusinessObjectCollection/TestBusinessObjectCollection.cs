@@ -378,7 +378,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(alternateClassDef, newCP.ClassDef);
         }
 
-        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
+        [Test]
         public void Test_CreateBusinessObject_AlternateClassDef_NoConstructor()
         {
             //---------------Set up test pack-------------------
@@ -389,12 +389,19 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                                                                       {ClassDef = alternateClassDef};
 
             //---------------Execute Test ----------------------
+            try
+            {
 
-            //this should not work because AddressTestBO does not have a constructor that takes a ClassDef as parameter
-            OrganisationTestBO orgBo = orgCol.CreateBusinessObject();
+                //this should not work because AddressTestBO does not have a constructor that takes a ClassDef as parameter
+                OrganisationTestBO orgBo = orgCol.CreateBusinessObject();
 
-            //---------------Test Result -----------------------
-            Assert.AreEqual(alternateClassDef, orgBo.ClassDef);
+                Assert.Fail("Expected to throw an HabaneroDeveloperException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("There was a problem creating a Habanero.Test.BO.OrganisationTestBO", ex.Message);
+            }
         }
 
         [Test]

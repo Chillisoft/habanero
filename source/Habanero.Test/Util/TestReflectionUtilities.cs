@@ -46,11 +46,22 @@ namespace Habanero.Test.Util
             Assert.IsTrue(Convert.ToBoolean(returnValue));
         }
 
-        [Test, ExpectedException(typeof (Exception))]
+        [Test]
         public void TestExecuteMethodDoesntExist()
         {
+            //---------------Set up test pack-------------------
             SimpleClass simpleClass = new SimpleClass();
-            ReflectionUtilities.ExecuteMethod(simpleClass, "InvalidMethod");
+            //---------------Execute Test ----------------------
+            try
+            {
+                ReflectionUtilities.ExecuteMethod(simpleClass, "InvalidMethod");
+                Assert.Fail("Expected to throw an Exception");
+            }
+                //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                StringAssert.Contains("Virtual method call for 'InvalidMethod' does not exist for object of type 'SimpleClass'", ex.Message);
+            }
         }
 
         [Test]

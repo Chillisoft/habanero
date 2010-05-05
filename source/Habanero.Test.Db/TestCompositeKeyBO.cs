@@ -206,9 +206,9 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        [ExpectedException(typeof (BusObjDuplicateConcurrencyControlException))]
         public void SaveNewObjectWithDuplicatePrimaryKey()
         {
+            //---------------Set up test pack-------------------
             ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
             myContact.SetPropertyValue("DateOfBirth", new DateTime(1980, 01, 22));
             myContact.SetPropertyValue("FirstName", "Brad");
@@ -228,15 +228,36 @@ namespace Habanero.Test.DB
             mySecondContactPerson.SetPropertyValue("Surname", "Vincent");
             mySecondContactPerson.SetPropertyValue("PK1Prop1", myContact.GetPropertyValue("PK1Prop1"));
             mySecondContactPerson.SetPropertyValue("PK1Prop2", myContact.GetPropertyValue("PK1Prop2"));
-            mySecondContactPerson.Save(); //save the object to the DB
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                mySecondContactPerson.Save();
+                Assert.Fail("Expected to throw an BusObjDuplicateConcurrencyControlException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDuplicateConcurrencyControlException ex)
+            {
+                StringAssert.Contains("A 'Contact Person Composite Key' already exists with the same identifier", ex.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof (BusObjDeleteConcurrencyControlException))]
         public void TestDeleteContactPerson()
         {
-            ContactPersonCompositeKey mySecondContactPerson =
-                ContactPersonCompositeKey.GetContactPersonCompositeKey(mContactPDeleted.ID);
+            //---------------Execute Test ----------------------
+            try
+            {
+                ContactPersonCompositeKey mySecondContactPerson =
+                    ContactPersonCompositeKey.GetContactPersonCompositeKey(mContactPDeleted.ID);
+
+                Assert.Fail("Expected to throw an BusObjDeleteConcurrencyControlException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDeleteConcurrencyControlException ex)
+            {
+                StringAssert.Contains("the object you are trying to refresh has been deleted by another user", ex.Message);
+            }
         }
 
         [Test]

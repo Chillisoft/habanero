@@ -83,11 +83,22 @@ namespace Habanero.Test.Util
             Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("070101"));
         }
 
-        [Test, ExpectedException(typeof (FormatException))]
+        [Test]
         public void TestIdNumberUtilitiesException()
         {
+            //---------------Set up test pack-------------------
             DateTime testDate = new DateTime(2007, 1, 1);
-            Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("07010"));
+            //---------------Execute Test ----------------------
+            try
+            {
+                Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("07010"));
+                Assert.Fail("Expected to throw an FormatException");
+            }
+                //---------------Test Result -----------------------
+            catch (FormatException ex)
+            {
+                StringAssert.Contains("An ID number must have at least 6 digits to calculate the date of birth", ex.Message);
+            }
         }
 
         [Test]

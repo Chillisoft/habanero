@@ -198,7 +198,6 @@ namespace Habanero.Test.DB
         /// unique.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (BusObjDuplicateConcurrencyControlException))]
         public void TestForDuplicateExistingObjects()
         {
             //create the first object
@@ -219,7 +218,17 @@ namespace Habanero.Test.DB
             // data as the already saved object
             myContact_2.SetPropertyValue("PK2Prop1", myContact_1.GetPropertyValue("PK2Prop1"));
             myContact_2.SetPropertyValue("PK2Prop2", myContact_1.GetPropertyValue("PK2Prop2"));
-            myContact_2.Save(); //Should raise an errors
+
+            try
+            {
+                myContact_2.Save();
+                Assert.Fail("Expected to throw an BusObjDuplicateConcurrencyControlException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDuplicateConcurrencyControlException ex)
+            {
+                StringAssert.Contains("A 'Contact Person' already exists with the same identifier", ex.Message);
+            }
         }
 
         /// <summary>
@@ -227,7 +236,6 @@ namespace Habanero.Test.DB
         /// unique.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (BusObjDuplicateConcurrencyControlException))]
         public void TestForDuplicateNewObjects()
         {
             //create the first object
@@ -245,7 +253,17 @@ namespace Habanero.Test.DB
             myContact_2.Surname = "My Surname";
             myContact_2.SetPropertyValue("PK2Prop1", myContact_1.GetPropertyValue("PK2Prop1"));
             myContact_2.SetPropertyValue("PK2Prop2", myContact_1.GetPropertyValue("PK2Prop2"));
-            myContact_2.Save(); //Should raise an errors
+
+            try
+            {
+                myContact_2.Save();
+                Assert.Fail("Expected to throw an BusObjDuplicateConcurrencyControlException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDuplicateConcurrencyControlException ex)
+            {
+                StringAssert.Contains("A 'Contact Person' already exists with the same identifier", ex.Message);
+            }
         }
 
         /// <summary>
@@ -253,7 +271,6 @@ namespace Habanero.Test.DB
         /// unique.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (BusObjDuplicateConcurrencyControlException))]
         public void TestForDuplicateNewObjectsSinglePropKey()
         {
             //create the first object
@@ -269,11 +286,20 @@ namespace Habanero.Test.DB
             // data as the already saved object
             myContact_2.Surname = "My Surname SinglePropKey 22";
             myContact_2.SetPropertyValue("PK3Prop", myContact_1.GetPropertyValue("PK3Prop"));
-            myContact_2.Save(); //Should raise an errors
+
+            try
+            {
+                myContact_2.Save();
+                Assert.Fail("Expected to throw an BusObjDuplicateConcurrencyControlException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDuplicateConcurrencyControlException ex)
+            {
+                StringAssert.Contains("A 'Contact Person' already exists with the same identifier", ex.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof (BusObjDuplicateConcurrencyControlException))]
         public void TestForDuplicateNewObjectsSinglePropKeyNull()
         {
             //create the first object
@@ -290,7 +316,17 @@ namespace Habanero.Test.DB
             myContact_2.Surname = "My Surname SinglePropKeyNull";
             myContact_2.SetPropertyValue("PK3Prop", myContact_1.GetPropertyValue("PK3Prop"));
             // set the previous value to null
-            myContact_2.Save(); //Should raise an errors
+
+            try
+            {
+                myContact_2.Save();
+                Assert.Fail("Expected to throw an BusObjDuplicateConcurrencyControlException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDuplicateConcurrencyControlException ex)
+            {
+                StringAssert.Contains("A 'Contact Person' already exists with the same identifier", ex.Message);
+            }
         }
 
         [Test]
@@ -304,20 +340,40 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        [ExpectedException(typeof (BusObjectInAnInvalidStateException))]
         public void TestObjectCompulsorySurnameNotSet()
         {
+            //---------------Set up test pack-------------------
             ContactPerson myContact = new ContactPerson();
-            myContact.Save();
+            //---------------Execute Test ----------------------
+            try
+            {
+                myContact.Save();
+                Assert.Fail("Expected to throw an BusObjectInAnInvalidStateException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjectInAnInvalidStateException ex)
+            {
+                StringAssert.Contains("'ContactPerson.Surname' is a compulsory field and has no value", ex.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof (BusObjectInAnInvalidStateException))]
         public void TestObjectSurnameTooLong()
         {
+            //---------------Set up test pack-------------------
             ContactPerson myContact = new ContactPerson();
             myContact.Surname = "MyPropertyIsTooLongByFarThisWill Cause and Error in Bus object";
-            myContact.Save();
+            //---------------Execute Test ----------------------
+            try
+            {
+                myContact.Save();
+                Assert.Fail("Expected to throw an BusObjectInAnInvalidStateException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjectInAnInvalidStateException ex)
+            {
+                StringAssert.Contains("for property 'ContactPerson.Surname' is not valid for the rule 'ContactPerson-Surname'", ex.Message);
+            }
         }
 
         [Test]

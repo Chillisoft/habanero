@@ -345,10 +345,10 @@ namespace Habanero.DB
                 ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
                 // store the original persisted collection and pass it through. This is to improve performance
                 // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
-                IList originalPersistedCollection = new List<IBusinessObject>();
-                foreach (var businessObject in collection.PersistedBusinessObjects)
+                Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();
+                foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
                 {
-                    originalPersistedCollection.Add(businessObject);
+                    originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
                 }
                 IList loadedBos = new ArrayList();
                 List<bool> updatedObjects = new List<bool>();
@@ -365,6 +365,12 @@ namespace Habanero.DB
                         IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
                         // loads an object of the correct sub type (for single table inheritance)
                         loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
+                       
+                        // these collections are used to determine which objects should the AfterLoad and FireUpdatedEvent methods be called on
+                        freshlyLoadedObjects.Add(loadedBo.Status.IsNew);
+                        SetStatusAfterLoad(loadedBo);
+                        loadedBos.Add(loadedBo);
+                        updatedObjects.Add(objectUpdatedInLoading);
                         //If the origional collection had the new business object then
                         // use add internal this adds without any events being raised etc.
                         //else adds via the Add method (normal add) this raises events such that the 
@@ -378,10 +384,6 @@ namespace Habanero.DB
                         {
                             AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
                         }
-                        freshlyLoadedObjects.Add(loadedBo.Status.IsNew);
-                        SetStatusAfterLoad(loadedBo);
-                        loadedBos.Add(loadedBo);
-                        updatedObjects.Add(objectUpdatedInLoading);
                     }
                 }
                 for (int i = 0; i < loadedBos.Count; i++ )
@@ -395,13 +397,14 @@ namespace Habanero.DB
                             FireUpdatedEvent((IBusinessObject)loadedBos[i]);
                         }
                     }
-                   
                 }
+                RestoreEditedLists(collection, originalPersistedCollection);
             }
             else
             {
                 //The first record is past the end of the available records, so return an empty collection.
                 ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+                RestoreEditedLists(collection, null);
             }
             int totalCountAvailableForPaging = totalNoOfRecords == -1 ? collection.Count : totalNoOfRecords;
             collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
@@ -416,7 +419,6 @@ namespace Habanero.DB
             //  the other option would be for the business object collection to have another method (other than clone)
             //   that returns another type of object that has these methods to eliminate all these 
             //   public accessors
-            RestoreEditedLists(collection);
             collection.TimeLastLoaded = DateTime.Now;
             ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
         }

@@ -255,17 +255,27 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
 
             shapes.LoadAll();
             Assert.AreEqual(0, shapes.Count);
+            Assert.AreEqual(0, shapes.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, shapes.CreatedBusinessObjects.Count);
             circles.LoadAll();
             Assert.AreEqual(0, circles.Count);
             filledCircles.LoadAll();
             Assert.AreEqual(0, filledCircles.Count);
         }
 
-        [Test, ExpectedException(typeof (InvalidPropertyNameException))]
+        [Test]
         public void TestFilledCircleDoesntHaveCircleID()
         {
-            _filledCircle.GetPropertyValue("CircleID");
-            _filledCircle.GetPropertyValue("FilledCircleID");
+            try
+            {
+                _filledCircle.GetPropertyValue("CircleID");
+                Assert.Fail("Expected to throw an InvalidPropertyNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains("The given property name 'CircleID' does not exist in the collection of properties for the class 'FilledCircleNoPrimaryKey'", ex.Message);
+            }
         }
 
         [Test]

@@ -1580,12 +1580,14 @@ namespace Habanero.Test.BO
         public void Test_LoadObject_MulitpleRelationship_UpdatedObjectMan_Generic()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
             new AddressTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
-            AddressTestBO address = new AddressTestBO {ContactPersonID = cp.ContactPersonID};
+            AddressTestBO address = new AddressTestBO();
+            cp.Addresses.Add(address);
             address.Save();
 
             IPrimaryKey contactPersonID = cp.ID;
@@ -1602,7 +1604,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(contactPersonID);
-            RelatedBusinessObjectCollection<AddressTestBO> addresses = loadedCP.AddressTestBOs;
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = loadedCP.Addresses;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addresses.Count);

@@ -56,38 +56,82 @@ namespace Habanero.Test.Util
             Assert.AreEqual(100, sender.SmtpServerPort);
         }
 
-        [Test, ExpectedException(typeof(Exception))]
+        [Test]
         public void TestInvalidEmail()
         {
+            //---------------Set up test pack-------------------
             string[] recipients = { "to" };
             EmailSender sender = new EmailSender(recipients, "from", "subject", "content", "attach");
-            sender.Send();
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                sender.Send();
+                Assert.Fail("Expected to throw an Exception");
+            }
+                //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+            }
         }
 
-        [Test, ExpectedException(typeof(Exception))]
+        [Test]
         public void TestAuthenticatedNoHost()
         {
+            //---------------Set up test pack-------------------
             string[] recipients = { "to" };
             EmailSender sender = new EmailSender(recipients, "from", "subject", "content", "attach");
-            sender.SendAuthenticated("username", "password");
+            //---------------Execute Test ----------------------
+            try
+            {
+                sender.SendAuthenticated("username", "password");
+                Assert.Fail("Expected to throw an Exception");
+            }
+                //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                StringAssert.Contains("Please specify the SMTP Host Name before attempting to send", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(FormatException))]
+        [Test]
         public void TestAuthenticatedNoPort()
         {
+            //---------------Set up test pack-------------------
             string[] recipients = { "to", "to2" };
             EmailSender sender = new EmailSender(recipients, "from", "subject", "content", "attach");
             sender.SmtpServerHost = "testhost";
-            sender.SendAuthenticated("username", "password");
+            //---------------Execute Test ----------------------
+            try
+            {
+                sender.SendAuthenticated("username", "password");
+                Assert.Fail("Expected to throw an FormatException");
+            }
+                //---------------Test Result -----------------------
+            catch (FormatException ex)
+            {
+                StringAssert.Contains("The specified string is not in the form required for an e-mail address", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(FormatException))]
+        [Test]
         public void TestAuthenticatedWithDomain()
         {
+            //---------------Set up test pack-------------------
             string[] recipients = { "to" };
             EmailSender sender = new EmailSender(recipients, "from", "subject", "content", "attach");
             sender.SmtpServerHost = "testhost";
-            sender.SendAuthenticated("username", "password", "domain");
+            //---------------Execute Test ----------------------
+            try
+            {
+                sender.SendAuthenticated("username", "password", "domain");
+                Assert.Fail("Expected to throw an FormatException");
+            }
+                //---------------Test Result -----------------------
+            catch (FormatException ex)
+            {
+                StringAssert.Contains("The specified string is not in the form required for an e-mail address", ex.Message);
+            }
         }
     }
 }

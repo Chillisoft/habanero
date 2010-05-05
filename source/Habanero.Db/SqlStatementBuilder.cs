@@ -111,7 +111,7 @@ namespace Habanero.DB
             int posFrom = FindStatementClauseToken(FROM_CLAUSE_TOKEN);
             if (posFrom == -1)
             {
-                throw new SqlStatementException("Cannot add a join clause to a SQL statement that does not contin a from clause.");
+                throw new SqlStatementException("Cannot add a join clause to a SQL statement that does not contain a from clause.");
             }
             int posWhere = FindStatementClauseToken(WHERE_CLAUSE_TOKEN);
             if (posWhere == -1)

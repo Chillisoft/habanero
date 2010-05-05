@@ -410,12 +410,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual("TestVal", itsTable.Rows[2][1]);
         }
 
-        [Test, ExpectedException(typeof (DuplicateNameException))]
+        [Test]
         public void TestDuplicateColumnNames()
         {
+            //---------------Set up test pack-------------------
             SetupTestData();
             BOMapper mapper = new BOMapper(_collection.ClassDef.CreateNewBusinessObject());
-            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").UIGrid);
+            //---------------Execute Test ----------------------
+            try
+            {
+                itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").UIGrid);
+                Assert.Fail("Expected to throw an DuplicateNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (DuplicateNameException ex)
+            {
+                StringAssert.Contains("Only one column per property can be specified", ex.Message);
+            }
         }
 
         [Test]

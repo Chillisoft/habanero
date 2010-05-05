@@ -28,35 +28,56 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBOKeyCol
     {
-        [Test, ExpectedException(typeof(InvalidKeyException))]
+        [Test]
         public void TestAddDuplicates()
         {
+            //---------------Set up test pack-------------------
             BOKeyCol col = new BOKeyCol();
             IBOKey boKey = new BOKey(new KeyDef());
             col.Add(boKey);
+            //---------------Execute Test ----------------------
+            try
+            {
                 col.Add(boKey);
                 Assert.Fail("Expected to throw an InvalidKeyException");
+            }
+            //---------------Test Result -----------------------
+            catch (InvalidKeyException ex)
+            {
+                StringAssert.Contains("already exists in the collection", ex.Message);
+            }
         }
 
         [Test]
         public void TestIndexer()
         {
+            //---------------Set up test pack-------------------
             BOKeyCol col = new BOKeyCol();
             col.Add(new BOKey(new KeyDef("anotherkey")));
             BOKey boKey = new BOKey(new KeyDef("key"));
             col.Add(boKey);
-            Assert.AreEqual(boKey, col["key"]);
+            //---------------Execute Test ----------------------
+            IBOKey indexedKey = col["key"];
+            //---------------Test Result -----------------------
+            Assert.AreSame(boKey, indexedKey);
         }
 
-#pragma warning disable 168
-        [Test, ExpectedException(typeof(InvalidKeyException))]
+        [Test]
         public void TestIndexerWithNonExistingKey()
         {
+            //---------------Set up test pack-------------------
             BOKeyCol col = new BOKeyCol();
+            //---------------Execute Test ----------------------
+            try
+            {
                 IBOKey key = col["invalidkey"];
-
                 Assert.Fail("Expected to throw an InvalidKeyException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidKeyException ex)
+            {
+                StringAssert.Contains("does not exist in the collection of keys", ex.Message);
+            }
         }
-#pragma warning restore 168
     }
 }

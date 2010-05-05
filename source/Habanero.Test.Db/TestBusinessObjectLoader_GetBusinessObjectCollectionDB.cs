@@ -110,6 +110,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             ContactPersonTestBO.CreateSavedContactPerson();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Assert Precondition----------------
             Assert.IsFalse(cp.AfterLoadCalled);
 
@@ -123,7 +124,6 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             ContactPersonTestBO loadedBO = col[0];
-            Assert.AreSame(cp, loadedBO);
             Assert.IsTrue(loadedBO.AfterLoadCalled);
             //This works because if the object is not dirty then it is refreshed from the database
         }
@@ -134,7 +134,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Assert Precondition----------------
             Assert.IsFalse(cp.AfterLoadCalled);
 
@@ -147,7 +147,6 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             ContactPersonTestBO loadedCP = (ContactPersonTestBO)col[0];
-            Assert.AreSame(cp, loadedCP);
             Assert.IsTrue(loadedCP.AfterLoadCalled);
             Assert.IsInstanceOf(typeof(BusinessObjectCollection<ContactPersonTestBO>), col);
         }

@@ -30,34 +30,77 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestSuperClassDef
     {
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestSetIDForSingleTableException()
         {
-            SuperClassDef superClassDef =
-                new SuperClassDef("ass", "class", ORMapping.SingleTableInheritance, "id", null);
+            //---------------Execute Test ----------------------
+            try
+            {
+                SuperClassDef superClassDef =
+                    new SuperClassDef("ass", "class", ORMapping.SingleTableInheritance, "id", null);
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("An 'ID' property has been specified for a super-class definition where the OR-mapping type is other than ClassTableInheritance", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestSetIDForConcreteTableException()
         {
-            SuperClassDef superClassDef =
-                new SuperClassDef("ass", "class", ORMapping.ConcreteTableInheritance, "id", null);
+            //---------------Execute Test ----------------------
+            try
+            {
+                SuperClassDef superClassDef =
+                    new SuperClassDef("ass", "class", ORMapping.ConcreteTableInheritance, "id", null);
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("An 'ID' property has been specified for a super-class definition where the OR-mapping type is other than ClassTableInheritance", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestSetDiscriminatorForConcreteTableException()
         {
-            SuperClassDef superClassDef =
-                new SuperClassDef("ass", "class", ORMapping.ConcreteTableInheritance, null, "disc");
+            //---------------Execute Test ----------------------
+            try
+            {
+                SuperClassDef superClassDef =
+                    new SuperClassDef("ass", "class", ORMapping.ConcreteTableInheritance, null, "disc");
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("A 'Discriminator' property has been specified for a super-class definition where the OR-mapping type is ConcreteTableInheritance", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        //[Test, ExpectedException(typeof(HabaneroDeveloperException))]
-        public void TestCantFindSuperClassClassDefException()
-        {
+        [Test]
+        public void TestCantFindSuperClassClassDefException() {
+        
+            //---------------Set up test pack-------------------
             SuperClassDef superClassDef =
                 new SuperClassDef("ass", "class", ORMapping.ClassTableInheritance, null, null);
-            IClassDef classDef = superClassDef.SuperClassClassDef;
+            //---------------Execute Test ----------------------
+            try
+            {
+                IClassDef classDef = superClassDef.SuperClassClassDef;
+                Assert.Fail("Expected to throw an HabaneroDeveloperException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("The class definition for the super class with the type 'ass.class' was not found", ex.Message);
+            }
         }
 
         [Test]

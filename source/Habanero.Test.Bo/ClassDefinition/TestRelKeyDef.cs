@@ -117,11 +117,22 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("(PropName = '1') AND (PropName2 = '2')", relKey.Criteria.ToString());
         }
 
-        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+        [Test]
         public void TestAddNullException()
         {
+            //---------------Set up test pack-------------------
             RelKeyDef col = new RelKeyDef();
-            col.Add(null);
+            //---------------Execute Test ----------------------
+            try
+            {
+                col.Add(null);
+                Assert.Fail("Expected to throw an HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                StringAssert.Contains("You cannot add a null prop def to a classdef", ex.Message);
+            }
         }
 
         [Test]
@@ -138,11 +149,22 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(0, relKeyDef.Count);
         }
 
-        [Test, ExpectedException(typeof(InvalidPropertyNameException))]
+        [Test]
         public void TestThisIndexerException()
         {
+            //---------------Set up test pack-------------------
             RelKeyDef relKeyDef = new RelKeyDef();
-            IRelPropDef relPropDef = relKeyDef["prop"];
+            //---------------Execute Test ----------------------
+            try
+            {
+                IRelPropDef relPropDef = relKeyDef["prop"];
+                Assert.Fail("Expected to throw an InvalidPropertyNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains("In a relationship property definition, the property with the name 'prop' does not exist in the collection of properties", ex.Message);
+            }
         }
 
         // Grants access to protected methods

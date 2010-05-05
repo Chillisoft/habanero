@@ -159,15 +159,26 @@ namespace Habanero.Test.BO
 			mock.VerifyAll();
 		}
 
-        [Test, ExpectedException(typeof (RelationshipNotFoundException))]
+        [Test]
         public void TestGetPropertyValueWithDot_IncorrectRelationshipName()
         {
+            //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             itsClassDef = MyBO.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             BOMapper mapper = new BOMapper(bo1);
-            Assert.AreEqual(null, mapper.GetPropertyValueToDisplay("MyIncorrectRelationship.MyRelatedTestProp"));
+            //---------------Execute Test ----------------------
+            try
+            {
+                mapper.GetPropertyValueToDisplay("MyIncorrectRelationship.MyRelatedTestProp");
+                Assert.Fail("Expected to throw an RelationshipNotFoundException");
+            }
+                //---------------Test Result -----------------------
+            catch (RelationshipNotFoundException ex)
+            {
+                StringAssert.Contains("The relationship MyIncorrectRelationship was not found on a BusinessObject of type Habanero.Test.MyBO", ex.Message);
+            }
         }
 
 //        [Test]
