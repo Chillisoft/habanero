@@ -184,7 +184,7 @@ namespace Habanero.Test.DB
 
         #region Test AddJoin
 
-        [Test, ExpectedException(typeof(SqlStatementException))]
+        [Test]
         public void TestAddJoin_WithEmptyStatement()
         {
             //---------------Set up test pack-------------------

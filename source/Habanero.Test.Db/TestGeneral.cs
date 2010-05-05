@@ -200,6 +200,7 @@ namespace Habanero.Test.DB
         [Test]
         public void TestForDuplicateExistingObjects()
         {
+            ContactPerson.DeleteAllContactPeople();
             //create the first object
             ContactPerson myContact_1 = new ContactPerson();
 
@@ -238,6 +239,7 @@ namespace Habanero.Test.DB
         [Test]
         public void TestForDuplicateNewObjects()
         {
+            ContactPerson.DeleteAllContactPeople();
             //create the first object
             ContactPerson myContact_1 = new ContactPerson();
 

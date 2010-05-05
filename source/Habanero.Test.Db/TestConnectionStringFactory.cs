@@ -345,7 +345,7 @@ namespace Habanero.Test.DB
                 "ConnectionStringFactory not working for SQLite");
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestSQLiteNoDatabaseName()
         {
             try

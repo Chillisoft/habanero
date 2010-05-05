@@ -29,7 +29,7 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestUIDefCol
     {
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestAddDuplicateNameException()
         {
             //---------------Set up test pack-------------------
