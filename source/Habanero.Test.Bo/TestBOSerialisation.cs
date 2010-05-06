@@ -102,7 +102,8 @@ namespace Habanero.Test.BO
             {
                 formatter.Serialize(fs, myBO);
             }
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+//            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Assert Precondition----------------
             AssertFileHasBeenCreated(dataFile);
             //---------------Execute Test ----------------------
@@ -160,7 +161,8 @@ namespace Habanero.Test.BO
             {
                 formatter.Serialize(fs, myBOCol);
             }
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+//            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Assert Precondition----------------
             AssertFileHasBeenCreated(dataFile);
             Assert.AreEqual(2, myBOCol.Count);

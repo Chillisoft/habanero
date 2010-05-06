@@ -38,6 +38,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
+            BORegistry.BusinessObjectManager = null;
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
         }

@@ -1177,7 +1177,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1192,7 +1192,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1207,7 +1207,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1223,7 +1223,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1244,7 +1244,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey
                                                {
                                                    PK1Prop1 = TestUtil.GetRandomString(),

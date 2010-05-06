@@ -893,7 +893,7 @@ namespace Habanero.Test.BO
             StreamWriter sw = new StreamWriter(fileName);
             xs.Serialize(sw, bo);
             sw.Close();
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Assert Precondition----------------
             AssertFileHasBeenCreated(fileName);
             //---------------Execute Test ----------------------

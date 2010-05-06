@@ -63,6 +63,7 @@ namespace Habanero.Test.BO
         public void SetupTestFixture()
         {
             SetupDBConnection();
+            BORegistry.BusinessObjectManager = null;
         }
 
         [SetUp]

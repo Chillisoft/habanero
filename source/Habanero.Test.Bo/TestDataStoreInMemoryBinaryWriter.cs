@@ -80,7 +80,7 @@ namespace Habanero.Test.BO
             MemoryStream writeStream = new MemoryStream();
             DataStoreInMemoryBinaryWriter writer = new DataStoreInMemoryBinaryWriter(writeStream);
             writer.Write(savedDataStore);
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             DataStoreInMemory loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
             DataStoreInMemoryBinaryReader reader = new DataStoreInMemoryBinaryReader(writeStream);

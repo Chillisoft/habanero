@@ -35,6 +35,7 @@ namespace Habanero.Test.DB
         {
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
+            BORegistry.BusinessObjectManager = null;
             BusinessObjectManager.Instance.ClearLoadedObjects();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
