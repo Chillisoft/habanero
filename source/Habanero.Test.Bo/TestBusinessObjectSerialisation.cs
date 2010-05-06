@@ -31,6 +31,15 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBusinessObjectSerialisation
     {
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
+        {
+            //Code that is executed before any test is run in this class. If multiple tests
+            // are executed then it will still only be called once.
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BORegistry.BusinessObjectManager = null;
+        }
         [Test]
         public void Test_SerialiseDeserialise_ReturnsCorrectType()
         {

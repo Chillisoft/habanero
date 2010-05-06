@@ -54,6 +54,7 @@ namespace Habanero.Test.BO
         {
             this.SetupDBConnection();
             OrderItem.CreateTable();
+            BORegistry.BusinessObjectManager = null;
         }
 
         [TestFixtureTearDown]

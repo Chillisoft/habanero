@@ -26,7 +26,8 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestReadOnlyDataSetProvider : TestDataSetProvider
     {
-     
+
+
         protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
             _dataSetProvider = new ReadOnlyDataSetProvider(col);
