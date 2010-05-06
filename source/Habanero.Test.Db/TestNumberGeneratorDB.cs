@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Threading;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -63,10 +64,13 @@ namespace Habanero.Test.DB
             DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
             INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);
             numGen.SetSequenceNumber(0);
+            Thread.Sleep(1); // ensure that the new time is higher. just here to check if this resolves a sporadically failing test.
             //get the next number for invoice number
             numGen.NextNumber();
             //Clear all loaded objects from object manager
             BusinessObjectManager.Instance.ClearLoadedObjects();
+            Thread.Sleep(1); // ensure that the new time is higher. just here to check if this resolves a sporadically failing test.
+
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator (simulating a simultaneous user).
             INumberGenerator numGen2 = new NumberGeneratorPessimisticLocking(numberType);
@@ -74,7 +78,7 @@ namespace Habanero.Test.DB
             try
             {
                 numGen2.NextNumber();
-                Assert.Fail("Should not b able to get second number since locked");
+                Assert.Fail("Should not be able to get second number since locked");
             }
             //---------------Test Result -----------------------
             //should get locking error

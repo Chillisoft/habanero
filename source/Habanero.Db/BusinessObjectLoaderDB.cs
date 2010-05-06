@@ -346,14 +346,20 @@ namespace Habanero.DB
                 // store the original persisted collection and pass it through. This is to improve performance
                 // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
                 Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();
-                foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
-                {
-                    originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
-                }
+                
                 IList loadedBos = new ArrayList();
                 List<bool> updatedObjects = new List<bool>();
                 List<bool> freshlyLoadedObjects = new List<bool>();
                 bool isFirstLoad = collection.TimeLastLoaded == null;
+                if (isFirstLoad)
+                {
+                    collection.PersistedBusinessObjects.Clear();
+                } else {
+                    foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
+                    {
+                        originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
+                    }
+                }
                 bool objectUpdatedInLoading;
                 using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
                 {

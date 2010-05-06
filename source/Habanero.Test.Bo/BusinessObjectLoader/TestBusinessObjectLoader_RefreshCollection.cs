@@ -836,10 +836,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.IsFalse(col.Contains(cpNewLikeMatch));
         }
 
+        [Test]
         public void Test_Refresh_DoesNotRefreshDirtyOjects()
         {
             //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorDB();
             ContactPersonTestBO.DeleteAllContactPeople();
             BusinessObjectManager.Instance.ClearLoadedObjects();
 
@@ -1277,7 +1277,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_Refresh_WithRemovedBOs_Typed()
         {
             //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
             BusinessObjectCollection<ContactPersonTestBO> cpCol =
@@ -1294,6 +1293,23 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.Count);
+        }
+
+        [Test]
+        public void Test_Refresh_WithSavedBOAlreadyInCollection()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateUnsavedContactPerson();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            cpCol.Add(cp);
+            cp.Save();
+            //---------------Assert preconditions---------------
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            cpCol.Refresh();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
         }
 
         #endregion

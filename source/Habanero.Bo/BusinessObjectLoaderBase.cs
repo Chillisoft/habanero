@@ -648,6 +648,7 @@ namespace Habanero.BO
             // then load without events.
             if (collection.TimeLastLoaded == null)
             {
+                collection.PersistedBusinessObjects.Clear();
                 foreach (IBusinessObject loadedBo in loadedBOs)
                 {
                     collection.AddWithoutEvents(loadedBo);
