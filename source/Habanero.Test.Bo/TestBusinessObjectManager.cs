@@ -40,6 +40,7 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
             new Address();
+            BORegistry.BusinessObjectManager = null;
             BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
@@ -462,6 +463,7 @@ namespace Habanero.Test.BO
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
+            Assert.AreSame(boMan, BORegistry.BusinessObjectManager);
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             boMan.ClearLoadedObjects();
             cp2.ContactPersonID = cp.ContactPersonID;
@@ -2051,7 +2053,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
             Assert.IsTrue(boMan.Contains(boWithIntID));
         }
-
+        [Test]
         public void
             Test_TwoObjectTypesWithTheSameIDField_EditedToHaveTheSamevalue_CanBeAddedToObjectMan_PreviousPropValue()
         {
@@ -2076,7 +2078,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
             Assert.IsTrue(boMan.Contains(boWithIntID));
         }
-
+        [Test]
         public void
             Test_TwoObjectTypesWithTheSameIDField_EditedToHaveTheSamevalue_CanBeAddedToObjectMan_AsString_LastPersistedValue
             ()

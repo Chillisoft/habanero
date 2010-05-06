@@ -275,7 +275,7 @@ namespace Habanero.BO
 //            {
 //                relatedBo = relatedBOCol[0] == relatedBo ? null : relatedBOCol[0];
 //            }
-            return (TBusinessObject) BusinessObjectManager.Instance.FindFirst<TBusinessObject>(_relKey.Criteria);
+            return (TBusinessObject) BORegistry.BusinessObjectManager.FindFirst<TBusinessObject>(_relKey.Criteria);
         }
 
         /// <summary>

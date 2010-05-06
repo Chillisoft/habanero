@@ -257,7 +257,7 @@ namespace Habanero.DB
             }
             if (correctSubClassDef != null)
             {
-                BusinessObjectManager.Instance.Remove(loadedBo);
+                BORegistry.BusinessObjectManager.Remove(loadedBo);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
             }
@@ -509,7 +509,7 @@ namespace Habanero.DB
         {
             if (correctSubClassDef != null)
             {
-                BusinessObjectManager.Instance.Remove(loadedBo);
+                BORegistry.BusinessObjectManager.Remove(loadedBo);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = (T) subClassBusinessObject;
             }
@@ -644,9 +644,9 @@ namespace Habanero.DB
         private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
             where T : class, IBusinessObject, new()
         {
-            /// Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
-            /// is stored in a dictionary and reused as the object populated to perform a search on the business object
-            /// manager.
+            // Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
+            // is stored in a dictionary and reused as the object populated to perform a search on the business object
+            // manager.
             objectUpdatedInLoading = false;
             T bo;
             try
@@ -656,7 +656,7 @@ namespace Habanero.DB
             catch (KeyNotFoundException)
             {
                 bo = new T();
-                BusinessObjectManager.Instance.Remove(bo);
+                BORegistry.BusinessObjectManager.Remove(bo);
                 _tempObjectsByType[typeof(T)] = bo;
             }
 
@@ -665,7 +665,7 @@ namespace Habanero.DB
             {
                 var tempObject = new T();
                 _tempObjectsByType[typeof (T)] = tempObject;
-                BusinessObjectManager.Instance.Remove(tempObject);
+                BORegistry.BusinessObjectManager.Remove(tempObject);
             }
             return (T) loadedBusinessObject;
         }
@@ -673,9 +673,9 @@ namespace Habanero.DB
         private IBusinessObject LoadBOFromReader
             (IClassDef classDef, IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
         {
-            /// Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
-            /// is stored in a dictionary and reused as the object populated to perform a search on the business object
-            /// manager.
+            // Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
+            // is stored in a dictionary and reused as the object populated to perform a search on the business object
+            // manager.
             objectUpdatedInLoading = false;
             IBusinessObject bo;
             try
@@ -684,7 +684,7 @@ namespace Habanero.DB
             } catch (KeyNotFoundException)
             {
                 bo = classDef.CreateNewBusinessObject();
-                BusinessObjectManager.Instance.Remove(bo);
+                BORegistry.BusinessObjectManager.Remove(bo);
                 _tempObjectsByClassDef[classDef] = bo;
             }
 
@@ -693,7 +693,7 @@ namespace Habanero.DB
             {
                 var tempObject = classDef.CreateNewBusinessObject();
                 _tempObjectsByClassDef[classDef] = tempObject;
-                BusinessObjectManager.Instance.Remove(tempObject);
+                BORegistry.BusinessObjectManager.Remove(tempObject);
             }
             return loadedBusinessObject;
         }
@@ -706,11 +706,11 @@ namespace Habanero.DB
             IPrimaryKey key = bo.ID;
 
             IBusinessObject boFromObjectManager = GetObjectFromObjectManager(key, bo.ClassDef.ClassType);
-
+            var boManager = BORegistry.BusinessObjectManager;
             if (boFromObjectManager == null )
             {
                 objectUpdatedInLoading = true;
-                BusinessObjectManager.Instance.Add(bo);
+                boManager.Add(bo);
                 return bo;
             }
             //This is a Hack to deal with the fact that Class table inheritance does not work well
@@ -720,8 +720,8 @@ namespace Habanero.DB
             if (!bo.GetType().IsInstanceOfType(boFromObjectManager) && bo.ClassDef.IsUsingClassTableInheritance())
             {
 //                 ((ClassDef)bo.ClassDef).SuperClassDef
-                BusinessObjectManager.Instance.Remove(boFromObjectManager);
-                BusinessObjectManager.Instance.Add(bo);
+                boManager.Remove(boFromObjectManager);
+                boManager.Add(bo);
                 return bo;
             }
             // if the object is new it means there is an object in the BusinessObjectManager that has the same primary

@@ -231,12 +231,12 @@ namespace Habanero.BO
 
         private void AddToObjectManager()
         {
-            BusinessObjectManager.Instance.Add(this);
+            BORegistry.BusinessObjectManager.Add(this);
         }
 
         private void ReplaceInObjectManager()
         {
-            BusinessObjectManager.Instance.AddWithReplace(this);
+            BORegistry.BusinessObjectManager.AddWithReplace(this);
         }
 
         private void SetupBOPropsWithThisBo()
@@ -255,7 +255,7 @@ namespace Habanero.BO
 
         private void RemoveFromObjectManager()
         {
-            BusinessObjectManager.Instance.Remove(this);
+            BORegistry.BusinessObjectManager.Remove(this);
         }
 
         private void RegisterForPropertyEvents()
@@ -1122,19 +1122,20 @@ namespace Habanero.BO
             {
                 CleanUpAllRelationshipCollections();
                 SetStateAsPermanentlyDeleted();
-                BusinessObjectManager.Instance.Remove(this);
+                BORegistry.BusinessObjectManager.Remove(this);
                 FireDeletedEvent();
             }
             else
             {
-                BusinessObjectManager.Instance.Remove(this);
+                BORegistry.BusinessObjectManager.Remove(this);
                 StorePersistedPropertyValues();
                 SetStateAsUpdated();
-                if (!BusinessObjectManager.Instance.Contains(this))
+                var boManager = BORegistry.BusinessObjectManager;
+                if (!boManager.Contains(this))
                 {
-                    if (!BusinessObjectManager.Instance.Contains(ID.ObjectID))
+                    if (!boManager.Contains(ID.ObjectID))
                     {
-                        BusinessObjectManager.Instance.Add(this);
+                        boManager.Add(this);
                     }
                 }
                 FireSavedEvent();

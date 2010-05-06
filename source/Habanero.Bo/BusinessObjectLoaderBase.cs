@@ -781,7 +781,7 @@ namespace Habanero.BO
         /// <returns></returns>
         protected static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key, Type boType)
         {
-            BusinessObjectManager businessObjectManager = BusinessObjectManager.Instance;
+            BusinessObjectManager businessObjectManager = BORegistry.BusinessObjectManager;
             if (key.IsGuidObjectID)
             {
                 lock (businessObjectManager)

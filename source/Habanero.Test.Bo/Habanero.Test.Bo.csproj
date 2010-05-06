@@ -186,6 +186,7 @@
     <Compile Include="TestBORelationshipMapper.cs" />
     <Compile Include="TestBOSerialisation.cs" />
     <Compile Include="TestBusinessObjectInheritance.cs" />
+    <Compile Include="TestBusinessObjectManagerNull.cs" />
     <Compile Include="TestBusinessObjectRules.cs" />
     <Compile Include="TestBusinessObjectSerialisationXML.cs" />
     <Compile Include="TestBOStatus.cs" />

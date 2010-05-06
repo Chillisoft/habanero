@@ -755,13 +755,14 @@ namespace Habanero.BO.ClassDefinition
             if (!(this.LookupList is BusinessObjectLookupList)) return null;
             IBusinessObject businessObject = null;
             BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
+            var boManager = BORegistry.BusinessObjectManager;
             if (propValue is Guid && list.LookupBoClassDef.PrimaryKeyDef.IsGuidObjectID)
             {
-                lock (BusinessObjectManager.Instance)
+                lock (boManager)
                 {
-                    if (BusinessObjectManager.Instance.Contains((Guid)propValue))
+                    if (boManager.Contains((Guid)propValue))
                     {
-                        return BusinessObjectManager.Instance[(Guid) propValue];
+                        return boManager[(Guid)propValue];
                     }
                 }
             }
@@ -771,7 +772,8 @@ namespace Habanero.BO.ClassDefinition
             {
 //                IBusinessObjectCollection find = BusinessObjectManager.Instance.Find(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
 //                if (find.Count > 0) businessObject = find[0];
-                IBusinessObject found = BusinessObjectManager.Instance.FindFirst(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
+                IBusinessObject found = boManager.FindFirst(boPrimaryKey.GetKeyCriteria()
+                        , list.LookupBoClassDef.ClassType);
                 businessObject = found;
             }
             return businessObject;
