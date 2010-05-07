@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader
@@ -83,8 +84,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             string subsubSourceName = TestUtil.GetRandomString();
             Source source = new Source(sourceName);
             Source subSource = new Source(subSourceName);
-            source.JoinToSource(subSource);
             subSource.JoinToSource(new Source(subsubSourceName));
+            source.JoinToSource(subSource);
+            
             //---------------Execute Test ----------------------
             string sourceToString = source.ToString();
 
@@ -177,8 +179,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
 
             Assert.AreEqual(1, fromSource.Joins.Count);
-            Assert.AreSame(fromSource, fromSource.Joins[0].FromSource);
-            Assert.AreSame(toSource, fromSource.Joins[0].ToSource);
+            Assert.AreEqual(fromSource.ToString(), fromSource.Joins[0].FromSource.ToString());
+            Assert.AreEqual(toSource.ToString(), fromSource.Joins[0].ToSource.ToString());
             //---------------Tear Down -------------------------
         }
 
@@ -196,8 +198,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, fromSource.Joins.Count);
-            Assert.AreSame(fromSource, fromSource.Joins[0].FromSource);
-            Assert.AreSame(toSource, fromSource.Joins[0].ToSource);
+            Assert.AreEqual(fromSource.ToString(), fromSource.Joins[0].FromSource.ToString());
+            Assert.AreEqual(toSource.ToString(), fromSource.Joins[0].ToSource.ToString());
         }
 
         [Test]
@@ -269,7 +271,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //-------------Execute test ---------------------
             fromSource.MergeWith(otherSource);
             //-------------Test Result ----------------------
-            Assert.AreSame(fromSource.ChildSource, otherSource.ChildSource);
+            Assert.AreSame(fromSource.ChildSource.ToString(), otherSource.ChildSource.ToString());
         }
 
         [Test]
@@ -287,7 +289,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             originalSource.MergeWith(otherSource);
 
             //-------------Test Result ----------------------
-            Assert.AreSame(grandchildSource, originalSource.ChildSource.ChildSource);
+            Assert.AreSame(grandchildSource.ToString(), originalSource.ChildSource.ChildSource.ToString());
         }
 
         [Test]
@@ -336,8 +338,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             originalSource.JoinToSource(new Source("ToSource", "ToSourceEntity"));
             Source otherSource = new Source("FromSource", "FromSourceEntity");
             Source childSource = new Source("ToSource", "ToSourceEntity");
-            otherSource.JoinToSource(childSource);
             childSource.JoinToSource(new Source("GrandchildSource", "GrandchildSourceEntity"));
+            otherSource.JoinToSource(childSource);
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
@@ -466,14 +468,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //-------------Setup Test Pack ------------------
             Source source = new Source("MySource", "MY_TABLE");
             Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
-            source.JoinToSource(joinSource);
             Source joinSource2 = new Source("JoinSource2", "MY_JOINED_TABLE2");
             joinSource.JoinToSource(joinSource2);
-
+            source.JoinToSource(joinSource);
             //-------------Execute test ---------------------
             Source childSourceLeaf = source.ChildSourceLeaf;
             //-------------Test Result ----------------------
-            Assert.AreSame(joinSource2, childSourceLeaf);
+            Assert.AreEqual(joinSource2, childSourceLeaf);
         }
 
         [Test]
@@ -537,6 +538,69 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(field2, originalSource.InheritanceJoins[0].JoinFields[0].ToField);
         }
 
-        
+        [Test]
+        public void Test_MergeTwoSources_CheckThatSecondMergeDoesntAffectSourceOfFirstField()
+        {
+            //---------------Set up test pack-------------------
+            Source originalSource = new Source("Allegation", "Allegation");
+
+            Source receivedDateSource1 = new Source("Allegation");
+            receivedDateSource1.JoinToSource(new Source("Request"));
+
+            Source institutionSource = new Source("Allegation");
+            Source reqSource = new Source("Request");
+            reqSource.JoinToSource(new Source("Institution"));
+            institutionSource.JoinToSource(reqSource);
+
+            QueryField receivedDate1Field = new QueryField("ReceivedDate", "ReceivedDate", receivedDateSource1);
+            QueryField institutionField = new QueryField("Name", "Name", institutionSource);
+
+            originalSource.MergeWith(receivedDate1Field.Source);
+
+            //---------------Assert preconditions---------------
+            Assert.AreEqual("Allegation.Request", receivedDate1Field.Source.ToString());
+            Assert.AreEqual("Allegation.Request.Institution", institutionField.Source.ToString());
+            //---------------Execute Test ----------------------
+            originalSource.MergeWith(institutionField.Source);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Allegation.Request", receivedDate1Field.Source.ToString());
+            Assert.AreEqual("Allegation.Request.Institution", institutionField.Source.ToString());
+        }
+
+        [Test]
+        public void Test_Clone()
+        {
+            //---------------Set up test pack-------------------
+            string sourceName = "SourceName";
+            string entityName = "EntityName";
+            Source source = new Source(sourceName, entityName);
+            Source joinSource = new Source("JoinSource");
+            source.JoinToSource(joinSource);
+            //---------------Execute Test ----------------------
+            Source cloneOfSource = source.Clone();
+            //---------------Test Result -----------------------
+            Assert.AreNotSame(source, cloneOfSource);
+            Assert.AreEqual(source.Name, cloneOfSource.Name);
+            Assert.AreEqual(source.EntityName, cloneOfSource.EntityName);
+            Assert.AreEqual(source.Joins.Count, cloneOfSource.Joins.Count);
+            Assert.AreNotSame(source.Joins[0], cloneOfSource.Joins[0]);
+        }
+
+        [Test]
+        public void Test_Clone_Join()
+        {
+            //---------------Set up test pack-------------------
+            Source source1 = new Source("Source1");
+            Source source2 = new Source("Source2");
+            Source.Join join = new Source.Join(source1, source2);
+            //---------------Execute Test ----------------------
+            Source.Join cloneOfJoin = join.Clone();
+            //---------------Test Result -----------------------
+            Assert.AreNotSame(join, cloneOfJoin);
+            Assert.AreSame(source1, cloneOfJoin.FromSource);
+            Assert.AreSame(source2, cloneOfJoin.ToSource);
+            Assert.AreEqual(join.JoinType, cloneOfJoin.JoinType);
+            Assert.AreEqual(join.JoinFields.Count, cloneOfJoin.JoinFields.Count);
+        }
     }
 }
