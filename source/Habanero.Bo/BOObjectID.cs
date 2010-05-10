@@ -53,21 +53,21 @@ namespace Habanero.BO
         /// <summary>
         /// Adds a property to the key
         /// </summary>
-        /// <param name="BOProp">The property to add</param>
-        public override void Add(IBOProp BOProp)
+        /// <param name="boProp">The property to add</param>
+        public override void Add(IBOProp boProp)
         {
             if (Count > 0)
             {
                 throw new InvalidObjectIdException("A BOObjectID cannot have " +
                     "more than one property.");
             }
-            if (BOProp.PropertyType != typeof (Guid))
+            if (boProp.PropertyType != typeof(Guid))
             {
                 throw new InvalidObjectIdException("A BOObjectID cannot have " +
                     "a property of type other than Guid.");
             }
 
-            base.Add(BOProp);
+            base.Add(boProp);
         }
 
         /// <summary>

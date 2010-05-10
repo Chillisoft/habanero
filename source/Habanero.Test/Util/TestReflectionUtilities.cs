@@ -46,11 +46,22 @@ namespace Habanero.Test.Util
             Assert.IsTrue(Convert.ToBoolean(returnValue));
         }
 
-        [Test, ExpectedException(typeof (Exception))]
+        [Test]
         public void TestExecuteMethodDoesntExist()
         {
+            //---------------Set up test pack-------------------
             SimpleClass simpleClass = new SimpleClass();
-            ReflectionUtilities.ExecuteMethod(simpleClass, "InvalidMethod");
+            //---------------Execute Test ----------------------
+            try
+            {
+                ReflectionUtilities.ExecuteMethod(simpleClass, "InvalidMethod");
+                Assert.Fail("Expected to throw an Exception");
+            }
+                //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                StringAssert.Contains("Virtual method call for 'InvalidMethod' does not exist for object of type 'SimpleClass'", ex.Message);
+            }
         }
 
         [Test]
@@ -298,6 +309,18 @@ namespace Habanero.Test.Util
         }
 
         [Test]
+        public void Test_GetUnderlyingType_WhenPropInfoNull_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Type propType = ReflectionUtilities.GetUndelyingPropertType(null);
+            //---------------Test Result -----------------------
+            Assert.IsNull(propType);
+        }
+        [Test]
         public void Test_GetPropertyInfo_WithLambda_ShouldRetInfo()
         {
             //---------------Set up test pack-------------------
@@ -306,7 +329,7 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
 
-            var propInfo = ReflectionUtilities.GetPropertyInfo<ClassWithProperties>(bo => bo.StringProperty);
+            var propInfo = ReflectionUtilities.GetPropertyInfo<ClassWithProperties, string>(bo => bo.StringProperty);
             //---------------Test Result -----------------------
             Assert.AreEqual("StringProperty", propInfo.Name);
             Assert.AreSame(typeof (string), propInfo.PropertyType);
@@ -320,7 +343,7 @@ namespace Habanero.Test.Util
 
             //---------------Execute Test ----------------------
 
-            var propertyName = ReflectionUtilities.GetPropertyName<ClassWithProperties>(bo => bo.StringProperty);
+            var propertyName = ReflectionUtilities.GetPropertyName<ClassWithProperties, string>(bo => bo.StringProperty);
             //---------------Test Result -----------------------
             Assert.AreEqual("StringProperty", propertyName);
         }
@@ -334,7 +357,7 @@ namespace Habanero.Test.Util
             //---------------Execute Test ----------------------
             try
             {
-                ReflectionUtilities.GetPropertyInfo<ClassWithProperties>(bo => bo.GetType());
+                ReflectionUtilities.GetPropertyInfo<ClassWithProperties, object>(bo => bo.GetType());
                 Assert.Fail("Expected to throw an ArgumentException");
             }
             //---------------Test Result -----------------------

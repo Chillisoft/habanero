@@ -26,7 +26,8 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestReadOnlyDataSetProvider : TestDataSetProvider
     {
-     
+
+
         protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
             _dataSetProvider = new ReadOnlyDataSetProvider(col);
@@ -160,7 +161,7 @@ namespace Habanero.Test.BO
 //        public void TestOrderItemChangeItemAndFind()
 //        {
 //            SetupTestData();
-//            BusinessObjectManager.Instance.ClearLoadedObjects();
+//            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 //            OrderItem.ClearTable();
 //            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
 //            col.LoadAll();

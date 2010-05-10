@@ -156,7 +156,7 @@ namespace Habanero.Base
         ///<summary>
         /// Returns the class definition that this property definition is owned by.
         ///</summary>
-        IClassDef ClassDef { get; }
+        IClassDef ClassDef { get; set; }
 
         ///<summary>
         /// Returns the full display name for a property definition.
@@ -165,6 +165,9 @@ namespace Habanero.Base
         ///</summary>
         string DisplayNameFull { get; }
 
+        ///<summary>
+        /// The name of the Class if this PropDef is associated with a ClassDef.
+        ///</summary>
         string ClassName { get; }
 
         /// <summary>

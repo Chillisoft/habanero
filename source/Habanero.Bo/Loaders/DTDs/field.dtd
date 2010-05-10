@@ -4,8 +4,8 @@
 <!ATTLIST field
 	label CDATA #IMPLIED
 	property NMTOKEN #REQUIRED
-	type NMTOKEN #IMPLIED
-	assembly NMTOKEN #IMPLIED
+	type CDATA #IMPLIED
+	assembly CDATA #IMPLIED
 	mapperType NMTOKEN #IMPLIED
   mapperAssembly CDATA #IMPLIED
   editable ( true | false ) "true"

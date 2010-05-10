@@ -102,7 +102,7 @@ namespace Habanero.Test.BO
             MemoryStream writeStream = new MemoryStream();
             DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
             writer.Write(savedDataStore);
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             DataStoreInMemory loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
             DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
@@ -125,7 +125,7 @@ namespace Habanero.Test.BO
             MemoryStream writeStream = new MemoryStream();
             DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
             writer.Write(savedDataStore);
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             DataStoreInMemory loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
             DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
@@ -155,7 +155,7 @@ namespace Habanero.Test.BO
             MemoryStream writeStream = new MemoryStream();
             DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
             writer.Write(savedDataStore);
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             DataStoreInMemory loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
             DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
@@ -194,7 +194,7 @@ namespace Habanero.Test.BO
             MemoryStream writeStream = new MemoryStream();
             DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
             writer.Write(savedDataStore);
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             DataStoreInMemory loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
             DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
@@ -222,7 +222,7 @@ namespace Habanero.Test.BO
             MemoryStream writeStream = new MemoryStream();
             DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
             writer.Write(savedDataStore);
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             DataStoreInMemory loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
             DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
@@ -233,7 +233,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, loadedDataStore.Count);
             IBusinessObject loadedBO;
-            bool success = loadedDataStore.AllObjects.TryGetValue(savedBO.MyBoID.Value, out loadedBO);
+            bool success = loadedDataStore.AllObjects.TryGetValue(savedBO.MyBoID.GetValueOrDefault(), out loadedBO);
             Assert.IsTrue(success);
             Assert.IsNotNull(loadedBO);
             Assert.IsInstanceOf(typeof(MyBO), loadedBO);

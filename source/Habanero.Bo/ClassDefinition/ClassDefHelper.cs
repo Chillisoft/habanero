@@ -125,7 +125,7 @@ namespace Habanero.BO.ClassDefinition
             }
             return superClassClassDef;
         }
-
+        
         /// <summary>
         /// Returns the relationship on the classdef that matches the name given.  If no match is found,
         /// returns null.

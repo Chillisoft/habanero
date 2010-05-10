@@ -243,7 +243,7 @@ namespace Habanero.Base
                 if (toSource == null) return null;
                 bool alreadyExists = this.Exists(join1 => join1.ToSource.Name.Equals(toSource.Name));
                 if (alreadyExists) return null;
-                Join join = new Join(_fromSource, toSource, joinType);
+                Join join = new Join(_fromSource, toSource.Clone(), joinType);
                 this.Add(join);
                 return join;
             }
@@ -377,6 +377,20 @@ namespace Habanero.Base
                 }
                 return "";
             }
+
+            /// <summary>
+            /// Does a shallow clone of this join (i.e. doesn't clone the FromSource and ToSource)
+            /// </summary>
+            /// <returns></returns>
+            public Join Clone()
+            {
+                Join clone = new Join(this.FromSource, this.ToSource, this.JoinType);
+                foreach (JoinField joinField in JoinFields)
+                {
+                    clone.JoinFields.Add(joinField);
+                }
+                return clone;
+            }
         }
 
         /// <summary>
@@ -414,6 +428,25 @@ namespace Habanero.Base
 
             this.InheritanceJoins.MergeWith(sourceToMerge.InheritanceJoins);
             this.Joins.MergeWith(sourceToMerge.Joins);
+        }
+
+        /// <summary>
+        /// Does a shallow clone of this Source. That is, it copies this Source object and its lists of joins, but the 
+        /// sources linked to in the joins are not copied.
+        /// </summary>
+        /// <returns></returns>
+        public Source Clone()
+        {
+            Source clonedSource = new Source(this.Name, this.EntityName);
+            foreach (Join join in Joins)
+            {
+                clonedSource.Joins.Add(join.Clone());
+            }
+            foreach (Join join in InheritanceJoins)
+            {
+                clonedSource.InheritanceJoins.Add(join.Clone());
+            }
+            return clonedSource;
         }
     }
 }

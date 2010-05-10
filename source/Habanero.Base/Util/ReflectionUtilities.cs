@@ -30,7 +30,7 @@ namespace Habanero.Util
     ///</summary>
     public static class ReflectionUtilities
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Util.ReflectionUtilities");
+        private static readonly ILog _log = LogManager.GetLogger("Habanero.Util.ReflectionUtilities");
 
         ///<summary>
         /// This method is used to set the enum value of a property of an object.
@@ -48,7 +48,7 @@ namespace Habanero.Util
             PropertyInfo propInfo = parameterType.GetProperty(
                 propertyName, BindingFlags.Instance | BindingFlags.Public);
             if (propInfo != null)
-            {
+            { 
                 MethodInfo setMethod = propInfo.GetSetMethod();
                 if (setMethod != null)
                 {
@@ -140,7 +140,7 @@ namespace Habanero.Util
             {
                 string message = String.Format("Error retrieving public property '{0}' from object of type '{1}'", 
                     propertyName, className);
-                log.Error(String.Format("{0}" + Environment.NewLine + "{1}", message,
+                _log.Error(String.Format("{0}" + Environment.NewLine + "{1}", message,
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 //throw ex.InnerException;
                 throw new HabaneroApplicationException(message, ex.InnerException);
@@ -197,7 +197,7 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                log.Error(String.Format("Error retrieving private property '{0}' from object of type '{1}'" +
+                _log.Error(String.Format("Error retrieving private property '{0}' from object of type '{1}'" +
                                         Environment.NewLine + "{2}", propertyName, className,
                                     ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw ex.InnerException;
@@ -298,13 +298,13 @@ namespace Habanero.Util
             catch (TargetInvocationException ex)
             {
                 string message = String.Format("Error setting public property '{0}' for object of type '{1}'" , propertyName, className);
-                log.Error(String.Format(message + Environment.NewLine + "{2}",   ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                _log.Error(String.Format(message + Environment.NewLine + "{2}",   ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw new HabaneroApplicationException(message, ex.InnerException);
             }
             catch (ArgumentException ex)
             {
                 string message = String.Format("Error setting public property '{0}' for object of type '{1}'", propertyName, className);
-                log.Error(String.Format(message + Environment.NewLine + "{2}", ExceptionUtilities.GetExceptionString(ex, 8, true)));
+                _log.Error(String.Format(message + Environment.NewLine + "{2}", ExceptionUtilities.GetExceptionString(ex, 8, true)));
                 throw new HabaneroApplicationException(message, ex);
             }
         }
@@ -335,7 +335,7 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                log.Error(String.Format("Error setting private property '{0}' for object of type '{1}'" +
+                _log.Error(String.Format("Error setting private property '{0}' for object of type '{1}'" +
                                         Environment.NewLine + "{2}", propertyName, className,
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw ex.InnerException;
@@ -381,7 +381,7 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                log.Error(String.Format("Error setting internal property '{0}' for object of type '{1}'" +
+                _log.Error(String.Format("Error setting internal property '{0}' for object of type '{1}'" +
                                         Environment.NewLine + "{2}", propertyName, className,
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw ex.InnerException;
@@ -412,7 +412,7 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                log.Error(String.Format("Error calling public method '{0}' for object of type '{1}'" +
+                _log.Error(String.Format("Error calling public method '{0}' for object of type '{1}'" +
                                         Environment.NewLine + "{2}", methodName, className,
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw ex.InnerException;
@@ -454,7 +454,7 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                log.Error(String.Format("Error calling private method '{0}' for object of type '{1}'" +
+                _log.Error(String.Format("Error calling private method '{0}' for object of type '{1}'" +
                                         Environment.NewLine + "{2}", methodName, className,
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw ex.InnerException;
@@ -487,6 +487,7 @@ namespace Habanero.Util
         /// <returns></returns>
         public static Type GetUndelyingPropertType(PropertyInfo propertyInfo)
         {
+            if(propertyInfo == null) return null;
             Type propertyType = propertyInfo.PropertyType;
             return GetNullableUnderlyingType(propertyType);
         }
@@ -513,32 +514,34 @@ namespace Habanero.Util
         {
             return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
+
         /// <summary>
         /// Returns the Property Name of the property used in the Lambda expression of type
         /// bo -> bo.MyProperty. This function will return 'MyProperty'.
         /// </summary>
         /// <typeparam name="TModel">The object whose Property Name is being returned</typeparam>
+        /// <typeparam name="TReturn">The Return type of the Lambda Expression</typeparam>
         /// <param name="propExpression">The Lambda expression</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"> Exception if the lamda is not a lambda for a property</exception>
-        public static string GetPropertyName<TModel>(Expression<Func<TModel, object>> propExpression)
+        public static string GetPropertyName<TModel, TReturn>(Expression<Func<TModel, TReturn>> propExpression)
         {
             PropertyInfo propertyInfo = GetPropertyInfo(propExpression);
             return propertyInfo.Name;
         }
+
         /// <summary>
         /// Returns the <see cref="PropertyInfo"/> of the property used in the Lambda expression of type
         /// bo -> bo.MyProperty. This function will return the PropertyInfo for MyProperty.
         /// </summary>
         /// <typeparam name="TModel">The object whose PropertyInfo is being returned</typeparam>
+        /// <typeparam name="TReturn">The Return type of the Lambda expression</typeparam>
         /// <param name="propExpression">The Lambda expression</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"> Exception if the lamda is not a lambda for a property</exception>
-        public static PropertyInfo GetPropertyInfo<TModel>(Expression<Func<TModel, object>> propExpression)
+        public static PropertyInfo GetPropertyInfo<TModel, TReturn>(Expression<Func<TModel, TReturn>> propExpression)
         {
-
             var memberExpression = GetMemberExpression(propExpression);
-
             return (PropertyInfo)memberExpression.Member;
         }
 
@@ -549,14 +552,15 @@ namespace Habanero.Util
         private static MemberExpression GetMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression, bool enforceCheck)
         {
             MemberExpression memberExpression = null;
-            if (expression.Body.NodeType == ExpressionType.Convert)
+            switch (expression.Body.NodeType)
             {
-                var body = (UnaryExpression)expression.Body;
-                memberExpression = body.Operand as MemberExpression;
-            }
-            else if (expression.Body.NodeType == ExpressionType.MemberAccess)
-            {
-                memberExpression = expression.Body as MemberExpression;
+                case ExpressionType.Convert:
+                    var body = (UnaryExpression)expression.Body;
+                    memberExpression = body.Operand as MemberExpression;
+                    break;
+                case ExpressionType.MemberAccess:
+                    memberExpression = expression.Body as MemberExpression;
+                    break;
             }
 
             if (enforceCheck && memberExpression == null)

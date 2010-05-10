@@ -48,9 +48,7 @@ namespace Habanero.Test.BO.Relationship
             new Address();
         }
 
-        [Test, ExpectedException(typeof (RelationshipNotFoundException),
-            ExpectedMessage ="The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO"
-        )]
+        [Test]
         public void TestMissingRelationshipErrorMessageSingle()
         {
             //---------------Set up test pack-------------------
@@ -59,12 +57,19 @@ namespace Habanero.Test.BO.Relationship
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
 
             //---------------Execute Test ----------------------
-            bo1.Relationships.GetRelatedObject<MyBO>("WrongRelationshipName");
+            try
+            {
+                bo1.Relationships.GetRelatedObject<MyBO>("WrongRelationshipName");
+                Assert.Fail("Expected to throw an RelationshipNotFoundException");
+            }
+                //---------------Test Result -----------------------
+            catch (RelationshipNotFoundException ex)
+            {
+                StringAssert.Contains("The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof (RelationshipNotFoundException),
-              ExpectedMessage = "The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO"
-        )]
+        [Test]
         public void TestMissingRelationshipErrorMessageMultiple()
         {
             //---------------Set up test pack-------------------
@@ -73,12 +78,19 @@ namespace Habanero.Test.BO.Relationship
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
 
             //---------------Execute Test ----------------------
-            bo1.Relationships.GetRelatedCollection("WrongRelationshipName");
+            try
+            {
+                bo1.Relationships.GetRelatedCollection("WrongRelationshipName");
+                Assert.Fail("Expected to throw an RelationshipNotFoundException");
+            }
+                //---------------Test Result -----------------------
+            catch (RelationshipNotFoundException ex)
+            {
+                StringAssert.Contains("The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof (InvalidRelationshipAccessException),
-               ExpectedMessage = "The 'single' relationship MyRelationship was accessed as a 'multiple' relationship (using GetRelatedCollection())."
-        )]
+        [Test]
         public void TestInvalidRelationshipAccessSingle()
         {
             //---------------Set up test pack-------------------
@@ -87,12 +99,19 @@ namespace Habanero.Test.BO.Relationship
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
 
             //---------------Execute Test ----------------------
-            bo1.Relationships.GetRelatedCollection("MyRelationship");
+            try
+            {
+                bo1.Relationships.GetRelatedCollection("MyRelationship");
+                Assert.Fail("Expected to throw an InvalidRelationshipAccessException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidRelationshipAccessException ex)
+            {
+                StringAssert.Contains("The 'single' relationship MyRelationship was accessed as a 'multiple' relationship (using GetRelatedCollection()).", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof (InvalidRelationshipAccessException),
-               ExpectedMessage="The 'multiple' relationship MyMultipleRelationship was accessed as a 'single' relationship (using GetRelatedObject())."
-        )]
+        [Test]
         public void TestInvalidRelationshipAccessMultiple()
         {
             //---------------Set up test pack-------------------
@@ -101,7 +120,16 @@ namespace Habanero.Test.BO.Relationship
             MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
 
             //---------------Execute Test ----------------------
-            bo1.Relationships.GetRelatedObject<MyBO>("MyMultipleRelationship");
+            try
+            {
+                bo1.Relationships.GetRelatedObject<MyBO>("MyMultipleRelationship");
+                Assert.Fail("Expected to throw an InvalidRelationshipAccessException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidRelationshipAccessException ex)
+            {
+                StringAssert.Contains("The 'multiple' relationship MyMultipleRelationship was accessed as a 'single' relationship (using GetRelatedObject()).", ex.Message);
+            }
         }
 
         [Test]
@@ -298,9 +326,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreSame(bo1.GetPropertyValue("RelatedID"), relatedBo1.GetPropertyValue("MyRelatedBoID"));
         }
 
-        [Test, ExpectedException(typeof (InvalidRelationshipAccessException),
-            ExpectedMessage="SetRelatedObject() was passed a relationship (MyMultipleRelationship) that is of type 'multiple' when it expects a 'single' relationship"
-        )]
+        [Test]
         public void TestSetRelatedBusinessObjectWithWrongRelationshipType()
         {
             //---------------Set up test pack-------------------
@@ -310,7 +336,16 @@ namespace Habanero.Test.BO.Relationship
             MyRelatedBo relatedBo1 = (MyRelatedBo)relatedClassDef.CreateNewBusinessObject();
 
             //---------------Execute Test ----------------------
-            bo1.Relationships.SetRelatedObject("MyMultipleRelationship", relatedBo1);
+            try
+            {
+                bo1.Relationships.SetRelatedObject("MyMultipleRelationship", relatedBo1);
+                Assert.Fail("Expected to throw an InvalidRelationshipAccessException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidRelationshipAccessException ex)
+            {
+                StringAssert.Contains("SetRelatedObject() was passed a relationship (MyMultipleRelationship) that is of type 'multiple' when it expects a 'single' relationship", ex.Message);
+            }
         }
 
         [Test]

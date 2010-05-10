@@ -40,6 +40,7 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
             new Address();
+            BORegistry.BusinessObjectManager = null;
             BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
@@ -458,10 +459,12 @@ namespace Habanero.Test.BO
         public void Test_Add_CopyOfSameObjectTwiceShould_ThrowError()
         {
             //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = null;
             ContactPersonTestBO.LoadDefaultClassDef();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
+            Assert.AreSame(boMan, BORegistry.BusinessObjectManager);
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             boMan.ClearLoadedObjects();
             cp2.ContactPersonID = cp.ContactPersonID;
@@ -1175,7 +1178,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1190,7 +1193,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1205,7 +1208,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1221,7 +1224,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1242,7 +1245,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey
                                                {
                                                    PK1Prop1 = TestUtil.GetRandomString(),
@@ -1580,12 +1583,14 @@ namespace Habanero.Test.BO
         public void Test_LoadObject_MulitpleRelationship_UpdatedObjectMan_Generic()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
             new AddressTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
-            AddressTestBO address = new AddressTestBO {ContactPersonID = cp.ContactPersonID};
+            AddressTestBO address = new AddressTestBO();
+            cp.Addresses.Add(address);
             address.Save();
 
             IPrimaryKey contactPersonID = cp.ID;
@@ -1602,7 +1607,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(contactPersonID);
-            RelatedBusinessObjectCollection<AddressTestBO> addresses = loadedCP.AddressTestBOs;
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = loadedCP.Addresses;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addresses.Count);
@@ -2049,7 +2054,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
             Assert.IsTrue(boMan.Contains(boWithIntID));
         }
-
+        [Test]
         public void
             Test_TwoObjectTypesWithTheSameIDField_EditedToHaveTheSamevalue_CanBeAddedToObjectMan_PreviousPropValue()
         {
@@ -2074,7 +2079,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
             Assert.IsTrue(boMan.Contains(boWithIntID));
         }
-
+        [Test]
         public void
             Test_TwoObjectTypesWithTheSameIDField_EditedToHaveTheSamevalue_CanBeAddedToObjectMan_AsString_LastPersistedValue
             ()

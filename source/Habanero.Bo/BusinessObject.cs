@@ -32,6 +32,19 @@ using log4net;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// An Enum used for Constructing fake Business objects.
+    /// This is used for Testing using a Mocking Framework such as 
+    /// Rhino Mocks. In this scenario no ClassDefs are created for the BO.
+    /// This enum is created so as to make the Constructor more self documenting when called.
+    ///</summary>
+    public enum ConstructForFakes
+    {
+        ///<summary>
+        /// This object must be constructed as a Fake BO i.e. no ClassDefs
+        ///</summary>
+        True
+    }
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
@@ -39,7 +52,7 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObject : IBusinessObject, ISerializable
     {
-        private static readonly ILog Log = LogManager.GetLogger("Habanero.BO.BusinessObject");
+        private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         #region IBusinessObject Members
 
@@ -145,17 +158,10 @@ namespace Habanero.BO
         /// Constructor that specifies a class definition
         /// </summary>
         /// <param name="constructForFakes"></param>
-// ReSharper disable UnusedParameter.Local
-        protected BusinessObject(bool constructForFakes)
+        // ReSharper disable UnusedParameter.Local
+        protected BusinessObject(ConstructForFakes constructForFakes)
         {
             _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
-        }
-
-        protected virtual void InitialiseForFakes(IClassDef classDef)
-        {
-            _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
-            Initialise(classDef);
-            SetupBOPropsWithThisBo();
         }
 
         // ReSharper restore UnusedParameter.Local
@@ -231,12 +237,12 @@ namespace Habanero.BO
 
         private void AddToObjectManager()
         {
-            BusinessObjectManager.Instance.Add(this);
+            BORegistry.BusinessObjectManager.Add(this);
         }
 
         private void ReplaceInObjectManager()
         {
-            BusinessObjectManager.Instance.AddWithReplace(this);
+            BORegistry.BusinessObjectManager.AddWithReplace(this);
         }
 
         private void SetupBOPropsWithThisBo()
@@ -255,7 +261,7 @@ namespace Habanero.BO
 
         private void RemoveFromObjectManager()
         {
-            BusinessObjectManager.Instance.Remove(this);
+            BORegistry.BusinessObjectManager.Remove(this);
         }
 
         private void RegisterForPropertyEvents()
@@ -344,7 +350,7 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                Log.Error("Error disposing BusinessObject.", ex);
+                _log.Error("Error disposing BusinessObject.", ex);
             }
             finally
             {
@@ -358,11 +364,11 @@ namespace Habanero.BO
             _boStatus = new BOStatus(this) {IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true};
             if (classDef == null)
             {
-                try { _classDef = (ClassDef)ClassDef.ClassDefs[GetType()]; }
+                try { _classDef = ClassDef.ClassDefs[GetType()]; }
                 catch (Exception) {
                     _classDef = null;  }
             }
-            else _classDef = (ClassDef) classDef;
+            else _classDef = classDef;
             ConstructFromClassDef(true);
             Guid myID = Guid.NewGuid();
             if (_primaryKey != null)
@@ -403,7 +409,7 @@ namespace Habanero.BO
         /// <param name="newObject">Whether the object is new or not</param>
         protected virtual void ConstructFromClassDef(bool newObject)
         {
-            if (_classDef == null) _classDef = (ClassDef) ConstructClassDef();
+            if (_classDef == null) _classDef = ConstructClassDef();
             ClassDef classDef = (ClassDef) _classDef;
             CheckClassDefNotNull();
 
@@ -521,7 +527,7 @@ namespace Habanero.BO
         IClassDef IBusinessObject.ClassDef
         {
             get { return _classDef; }
-            set { _classDef = (ClassDef) value; }
+            set { _classDef = value; }
         }
 
 
@@ -626,9 +632,11 @@ namespace Habanero.BO
 
         #region Editing Property Values
 
+        
         /// <summary>
         /// The primary key for this business object 
         /// </summary>
+        [Obsolete ("Please use ID")]
         protected IPrimaryKey PrimaryKey
         {
             get { return _primaryKey; }
@@ -901,7 +909,7 @@ namespace Habanero.BO
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
         /// </summary>
-        private bool _beginEditRunning = false;
+        private bool _beginEditRunning;
         private void BeginEdit(bool delete)
         {
             if (_beginEditRunning) return;
@@ -1100,12 +1108,14 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Extra preparation or steps to take out after loading the business
+        /// Extra preparation or steps to take out after loading the business. Override this if you need to update a calculated property, for example.
+        /// This method will be called after an object is loaded for the first time, and after it is refreshed, but only if the refreshing causes
+        /// a property to be updated.
         /// object
         /// </summary>
         protected internal virtual void AfterLoad()
         {
-            FireUpdatedEvent();
+
         }
 
         /// <summary>
@@ -1118,19 +1128,20 @@ namespace Habanero.BO
             {
                 CleanUpAllRelationshipCollections();
                 SetStateAsPermanentlyDeleted();
-                BusinessObjectManager.Instance.Remove(this);
+                BORegistry.BusinessObjectManager.Remove(this);
                 FireDeletedEvent();
             }
             else
             {
-                BusinessObjectManager.Instance.Remove(this);
+                BORegistry.BusinessObjectManager.Remove(this);
                 StorePersistedPropertyValues();
                 SetStateAsUpdated();
-                if (!BusinessObjectManager.Instance.Contains(this))
+                var boManager = BORegistry.BusinessObjectManager;
+                if (!boManager.Contains(this))
                 {
-                    if (!BusinessObjectManager.Instance.Contains(ID.ObjectID))
+                    if (!boManager.Contains(ID.ObjectID))
                     {
-                        BusinessObjectManager.Instance.Add(this);
+                        boManager.Add(this);
                     }
                 }
                 FireSavedEvent();
@@ -1226,7 +1237,7 @@ namespace Habanero.BO
         /// <summary>
         /// Fires Updates Event for <see cref="IBusinessObject"/>
         /// </summary>
-        protected void FireUpdatedEvent()
+        internal protected void FireUpdatedEvent()
         {
             if (Updated != null)
             {
@@ -1326,11 +1337,12 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Checks the <see cref="GetBusinessObjectRules"/>. Calls through to <see cref="AreCustomRulesValid(ref List{IBOError})"/>
+        /// Checks the <see cref="GetBusinessObjectRules"/>. Calls through to 
+        /// <see cref="AreCustomRulesValid(ref System.Collections.Generic.IList{Habanero.Base.IBOError})"/>
         /// </summary>
         /// <param name="errors">The errors</param>
         /// <returns>true if no custom rule errors are encountered.</returns>
-        internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
+        protected internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {
             IList<IBOError> customErrors = new List<IBOError>();
             AreCustomRulesValid(ref customErrors);
@@ -1351,7 +1363,8 @@ namespace Habanero.BO
             if (errors == null) errors = new List<IBOError>();
             var rules = GetBusinessObjectRules()
                     .Where(rule 
-                        => (rule != null && ErrorLevelIsError(rule)) && !rule.IsValid(this));
+                      => (rule != null && ErrorLevelIsError(rule)) 
+                      && !rule.IsValid(this));
             foreach (IBusinessObjectRule rule in rules)
             {
                 CreateBOError(rule, errors);
@@ -1369,7 +1382,7 @@ namespace Habanero.BO
             errors = new List<IBOError>();
             foreach (IBusinessObjectRule rule in GetBusinessObjectRules())
             {
-                if (rule == null || ErrorLevelIsError(rule) || rule.IsValid()) continue;
+                if (rule == null || ErrorLevelIsError(rule) || rule.IsValid(this)) continue;
                 CreateBOError(rule, errors);
             }
             return errors.Count != 0;

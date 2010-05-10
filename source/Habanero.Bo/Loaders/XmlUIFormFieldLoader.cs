@@ -61,7 +61,15 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a UIFormProperty object</returns>
         public IUIFormField LoadUIProperty(string xmlUIProp)
         {
-            return this.LoadUIProperty(this.CreateXmlElement(xmlUIProp));
+            try
+            {
+                return this.LoadUIProperty(this.CreateXmlElement(xmlUIProp));
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                throw new InvalidXmlDefinitionException("The XML: " + xmlUIProp 
+                        + " could not be parsed into a UIProp because :- " + ex.Message, ex);
+            }
         }
 
         /// <summary>

@@ -707,7 +707,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsTrue(isCompulsory);
         }
-        
+
         [Test]
         public void TestIsCompulsory_WhenRelationshipField_AndRelationshipIsNotCompulsory()
         {
@@ -722,8 +722,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsFalse(isCompulsory);
         }
-
-
+        
         [Test]
         public void TestLabelTextHasStarIfCompulsory()
         {

@@ -95,10 +95,7 @@ namespace Habanero.Util
                 ByteString compareTo = (ByteString)obj;
                 return compareTo.Value.Equals(_textValue);
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>

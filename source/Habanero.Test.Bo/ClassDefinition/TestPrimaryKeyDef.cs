@@ -29,12 +29,23 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestPrimaryKeyDef
     {
-        [Test, ExpectedException(typeof(InvalidPropertyException))]
+        [Test]
         public void TestMultiplePropertiesForIDException()
         {
+            //---------------Set up test pack-------------------
             PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
             PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
-            new PrimaryKeyDef {propDef1, propDef2};
+            //---------------Execute Test ----------------------
+            try
+            {
+                new PrimaryKeyDef {propDef1, propDef2};
+                Assert.Fail("Expected to throw an InvalidPropertyException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyException ex)
+            {
+                StringAssert.Contains("You cannot have more than one property for a primary key that represents an object's Guid ID", ex.Message);
+            }
         }
 
         [Test]
@@ -46,10 +57,22 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsFalse(pkDef.IgnoreIfNull);
         }
 
-        [Test, ExpectedException(typeof(InvalidKeyException))]
+        [Test]
         public void TestSettingIgnoreIfNullTrueException()
         {
-            new PrimaryKeyDef {IgnoreIfNull = true};
+            //---------------Set up test pack-------------------
+            var primaryKeyDef = new PrimaryKeyDef();
+            //---------------Execute Test ----------------------
+            try
+            {
+                primaryKeyDef.IgnoreIfNull = true;
+                Assert.Fail("Expected to throw an InvalidKeyException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidKeyException ex)
+            {
+                StringAssert.Contains("you cannot set a primary key's IgnoreIfNull setting to true", ex.Message);
+            }
         }
 
         [Test]

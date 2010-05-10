@@ -22,20 +22,33 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
     [TestFixture]
     public class TestUIDefCol
     {
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestAddDuplicateNameException()
         {
+            //---------------Set up test pack-------------------
             UIDef uiDef1 = new UIDef("defname", null, null);
             UIDef uiDef2 = new UIDef("defname", null, null);
             UIDefCol col = new UIDefCol();
             col.Add(uiDef1);
-            col.Add(uiDef2);
+            //---------------Execute Test ----------------------
+            try
+            {
+                col.Add(uiDef2);
+
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("a definition with that name already exists", ex.Message);
+            }
         }
 
         [Test]
@@ -61,18 +74,39 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsFalse(col.Contains(uiDef));
         }
 
-        [Test, ExpectedException(typeof(HabaneroApplicationException))]
+        [Test]
         public void TestDefaultUIDefMissingException()
         {
+            //---------------Set up test pack-------------------
             UIDefCol col = new UIDefCol();
-            IUIDef uiDef = col["default"];
+            //---------------Execute Test ----------------------
+            try
+            {
+                IUIDef uiDef = col["default"];
+                Assert.Fail("Expected to throw an HabaneroApplicationException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroApplicationException ex)
+            {
+                StringAssert.Contains("No default 'ui' definition exists (a definition with no name attribute)", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(HabaneroApplicationException))]
+        [Test]
         public void TestOtherUIDefMissingException()
         {
             UIDefCol col = new UIDefCol();
-            IUIDef uiDef = col["otherdef"];
+            try
+            {
+                IUIDef uiDef = col["otherdef"];
+                Assert.Fail("Expected to throw an HabaneroApplicationException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroApplicationException ex)
+            {
+                StringAssert.Contains("The ui definition with the name 'otherdef' does not " +
+                                                               "exist in the collection of definitions for the", ex.Message);
+            }
         }
 
         [Test]
@@ -245,6 +279,40 @@ Assert.IsNull(uiDef.UIDefCol);
 
         }
 
+
+        [Test]
+        public void Test_ClassName_WhenClassDefNull_ShouldReturnEmptyString()
+        {
+            //---------------Set up test pack-------------------
+            UIDefCol uiDefCol = new UIDefCol();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiDefCol.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = uiDefCol.ClassName;
+            //---------------Test Result -----------------------
+            Assert.IsEmpty(className);
+        }
+        [Test]
+        public void Test_ClassName_WhenClassDefSet_ShouldReturnClassDefClassName()
+        {
+            //---------------Set up test pack-------------------
+            UIDefCol uiDefCol = new UIDefCol();
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            classDef.ClassName = GetRandomString();
+            uiDefCol.ClassDef = classDef;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(uiDefCol.ClassDef);
+            Assert.IsNotNullOrEmpty(classDef.ClassName);
+            //---------------Execute Test ----------------------
+            string className = uiDefCol.ClassName;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef.ClassName, className);
+        }
+
+        private static string GetRandomString()
+        {
+            return TestUtil.GetRandomString();
+        }
 
         public static IClassDef LoadClassDef()
         {

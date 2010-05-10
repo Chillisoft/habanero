@@ -67,27 +67,60 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("newvalue", trigger.Value);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestConstructorSetsTargetAndTriggeredBy()
         {
-            Trigger trigger = new Trigger(
-                "triggeredby", "target", "condition", "action", "value");
+            //---------------Execute Test ----------------------
+            try
+            {
+                Trigger trigger = new Trigger(
+                    "triggeredby", "target", "condition", "action", "value");
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("Both a target and a triggered-by source were declared for a trigger.  Only one can be set at any time", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestSetTargetWhenTriggeredByExists()
         {
+            //---------------Set up test pack-------------------
             Trigger trigger = new Trigger(
                 "triggeredby", null, "condition", "action", "value");
-            trigger.Target = "someprop";
+            //---------------Execute Test ----------------------
+            try
+            {
+                trigger.Target = "someprop";
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("Both a target and a triggered-by source were declared for a trigger.  Only one can be set at any time", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestSetTriggeredByWhenTargetExists()
         {
+            //---------------Set up test pack-------------------
             Trigger trigger = new Trigger(
                 null, "target", "condition", "action", "value");
-            trigger.TriggeredBy = "someprop";
+            //---------------Execute Test ----------------------
+            try
+            {
+                trigger.TriggeredBy = "someprop";
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("Both a target and a triggered-by source were declared for a trigger.  Only one can be set at any time", ex.Message);
+            }
         }
 
         [Test]

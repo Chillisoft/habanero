@@ -86,17 +86,28 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "min":
-
-                            DateTimeUtilities.ParseToDate(valueExpression);//The output from this is not used but if the valueExpression
-                            // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
-                            // is raised early
-                            MinValueExpression = valueExpression;
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MinValueExpression = "";
+                            else
+                            {
+                                DateTimeUtilities.ParseToDate(valueExpression);
+                                    //The output from this is not used but if the valueExpression
+                                // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
+                                // is raised early
+                                MinValueExpression = valueExpression;
+                            }
                             break;
                         case "max":
-                            DateTimeUtilities.ParseToDate(valueExpression);//The output from this is not used but if the valueExpression
-                            // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
-                            // is raised early
-                            MaxValueExpression = valueExpression;
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MaxValueExpression = "";
+                            else
+                            {
+                                DateTimeUtilities.ParseToDate(valueExpression);
+                                    //The output from this is not used but if the valueExpression
+                                // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
+                                // is raised early
+                                MaxValueExpression = valueExpression;
+                            }
                             break;
                         default:
                             throw new InvalidXmlDefinitionException
@@ -232,9 +243,16 @@ namespace Habanero.BO
             get
             {
                 object maxValue = Parameters["max"];
-                if (maxValue is string && String.IsNullOrEmpty((string)maxValue)) return DateTime.MaxValue;
-                DateTime dateTime = DateTimeUtilities.ParseToDate(maxValue);
-                return dateTime == DateTime.MaxValue? dateTime: dateTime.AddDays(1).AddMilliseconds(-1);
+                try
+                {
+                    if (maxValue is string && String.IsNullOrEmpty((string)maxValue)) return DateTime.MaxValue;
+                    DateTime dateTime = DateTimeUtilities.ParseToDate(maxValue);
+                    return dateTime >= DateTime.MaxValue.AddDays(-1) ? dateTime : dateTime.AddDays(1).AddMilliseconds(-1);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    throw new ArgumentOutOfRangeException("The value '" + maxValue + "' could not be converted to a valid MaxValue");
+                }
             }
             protected set { _parameters["max"] = value; }
         }

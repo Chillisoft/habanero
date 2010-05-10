@@ -77,10 +77,14 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "min":
-                            MinValue = Convert.ToInt32(value);
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MinValue = Int32.MinValue;
+                            else MinValue = Convert.ToInt32(value);
                             break;
                         case "max":
-                            MaxValue = Convert.ToInt32(value);
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MaxValue = Int32.MaxValue;
+                            else MaxValue = Convert.ToInt32(value);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException

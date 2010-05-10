@@ -413,6 +413,25 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(organisation.Status.IsDirty);
         }
 
+        [Test]
+        public void Test_NotDirty_IfChildIsAddedThenRemoved()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(); 
+            SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisation);
+
+            relationship.SetRelatedObject(contactPerson);
+            IList<ContactPersonTestBO> children = relationship.GetDirtyChildren();
+            //---------------Assert preconditions---------------
+            Assert.AreEqual(1, children.Count);
+            //---------------Execute Test ----------------------
+            relationship.SetRelatedObject(null);
+            children = relationship.GetDirtyChildren();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, children.Count);
+        }
+
         private SingleRelationship<ContactPersonTestBO> GetCompositionRelationship(OrganisationTestBO organisationTestBO)
         {
             RelationshipType relationshipType = RelationshipType.Composition;

@@ -141,7 +141,6 @@ namespace Habanero.Test.DB.ConcurrencyControl
             }
         }
         [Test]
-        [ExpectedException(typeof(BusObjDeleteConcurrencyControlException))]
         public void TestDeleteObjectPriorToUpdatesConcurrencyControl()
         {
             //----------SETUP TEST PACK--------------------------
@@ -166,7 +165,6 @@ namespace Habanero.Test.DB.ConcurrencyControl
             catch (BusObjDeleteConcurrencyControlException ex)
             {
                 Assert.IsTrue(ex.Message.Contains("You cannot save the changes to 'ContactPersonOptimisticLockingVersionNumberDB', as another user has deleted the record"));
-                throw;
             }
         }
         //Rollback failure must reset concurrency version number.

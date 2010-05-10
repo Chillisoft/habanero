@@ -146,32 +146,76 @@ TestDtd3";
             Assert.AreNotEqual("#include", dtd.Substring(0, 8));
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestDtdNodeInvalidException()
         {
+            //---------------Set up test pack-------------------
             DtdLoader loader = new DtdLoader();
-            string dtd = loader.LoadDtd("notexists");
+            //---------------Execute Test ----------------------
+            try
+            {
+                string dtd = loader.LoadDtd("notexists");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("An invalid node 'notexists' was encountered when loading the class definitions", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(FileNotFoundException))]
+        [Test]
         public void TestDtdNotFoundException()
         {
+            //---------------Set up test pack-------------------
             DtdLoader loader = new DtdLoader(new TextFileLoader(), "somepath");
-            string dtd = loader.LoadDtd("notexists");
+            //---------------Execute Test ----------------------
+            try
+            {
+                string dtd = loader.LoadDtd("notexists");
+                Assert.Fail("Expected to throw an FileNotFoundException");
+            }
+                //---------------Test Result -----------------------
+            catch (FileNotFoundException ex)
+            {
+                StringAssert.Contains("The Document Type Definition (DTD) for the XML element 'notexists' was not found in the path", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(FileNotFoundException))]
+        [Test]
         public void TestDtdNotFoundExceptionWithEmptyPath()
         {
+            //---------------Set up test pack-------------------
             DtdLoader loader = new DtdLoader(new TextFileLoader(), "");
-            string dtd = loader.LoadDtd("notexists");
+            //---------------Execute Test ----------------------
+            try
+            {
+                string dtd = loader.LoadDtd("notexists");
+                Assert.Fail("Expected to throw an FileNotFoundException");
+            }
+                //---------------Test Result -----------------------
+            catch (FileNotFoundException ex)
+            {
+                StringAssert.Contains("The Document Type Definition (DTD) for the XML element 'notexists' was not found in the application's output/execution directory", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(FileNotFoundException))]
+        [Test]
         public void TestDtdNotFoundExceptionWithIncludesList()
         {
+            //---------------Set up test pack-------------------
             DtdLoader loader = new DtdLoader(new TextFileLoader(), "somepath");
-            string dtd = loader.LoadDtd("somefile", new ArrayList());
+            //---------------Execute Test ----------------------
+            try
+            {
+                string dtd = loader.LoadDtd("somefile", new ArrayList());
+                Assert.Fail("Expected to throw an FileNotFoundException");
+            }
+                //---------------Test Result -----------------------
+            catch (FileNotFoundException ex)
+            {
+                StringAssert.Contains("The Document Type Definition (DTD) file, 'somefile', was not found", ex.Message);
+            }
         }
 
         [Test]

@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
@@ -27,7 +28,7 @@ namespace Habanero.BO
     public class BORegistry
     {
         private static IDataAccessor _dataAccessor;
-
+        private static readonly object _lockObject = new object();
         /// <summary>
         /// Gets and sets the DataAccessor to be used. This determines the location your
         /// BusinessObjects will persist to and load from (eg a DataAccessorDB would make the BusinessObjects
@@ -44,5 +45,24 @@ namespace Habanero.BO
             set { _dataAccessor = value; }
         }
 
+        private static BusinessObjectManager _businessObjectManager;
+
+        ///<summary>
+        /// Returns the Business Object Manager that has been set.
+        /// If no business Object manager has been set then it uses the 
+        /// Singleton Business Object Manager.
+        ///</summary>
+        ///<exception cref="NotImplementedException"></exception>
+        public static BusinessObjectManager BusinessObjectManager
+        {
+            get
+            {
+                lock (_lockObject)
+                {
+                    return _businessObjectManager ?? BusinessObjectManager.Instance;
+                }
+            }
+            set { _businessObjectManager = value; }
+        }
     }
 }

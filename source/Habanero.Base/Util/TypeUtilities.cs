@@ -25,23 +25,17 @@ namespace Habanero.Util
     /// <summary>
     /// Provides a set of Utilities to work with types.
     /// </summary>
-    public class TypeUtilities
+    public static class TypeUtilities
     {
         /// <summary>
         /// Indicates if type is an integer type.
         /// </summary>
         /// <param name="type">Type to check.</param>
         /// <returns>true if type is an integer type.</returns>
-        public static bool IsInteger(Type type)
+        public static bool IsInteger(this Type type)
         {
-            if(type == typeof(int) || type ==typeof(uint) || type == typeof(ushort) || type ==typeof(ulong) || 
-                type==typeof(short) || type ==typeof(long) || type ==typeof(byte) || type ==typeof(sbyte))
-            {
-                return true;
-            }else
-            {
-                return false;
-            }
+            return type == typeof(int) || type ==typeof(uint) || type == typeof(ushort) || type ==typeof(ulong) || 
+                   type==typeof(short) || type ==typeof(long) || type ==typeof(byte) || type ==typeof(sbyte);
         }
 
         /// <summary>
@@ -49,15 +43,9 @@ namespace Habanero.Util
         /// </summary>
         /// <param name="type">Type to check.</param>
         /// <returns>true if type is an decimal type.</returns>
-        public static bool IsDecimal(Type type)
+        public static bool IsDecimal(this Type type)
         {
-            if(type == typeof(decimal) || type==typeof(float) || type==typeof(double))
-            {
-                return true;
-            }else
-            {
-                return false;
-            }
+            return type == typeof(decimal) || type==typeof(float) || type==typeof(double);
         }
 
         ///<summary>
@@ -66,7 +54,7 @@ namespace Habanero.Util
         ///<param name="obj">The value to convert</param>
         ///<typeparam name="TDestinationType">The type to convert the value to.</typeparam>
         ///<returns>The converted value</returns>
-        public static TDestinationType ConvertTo<TDestinationType>(object obj)
+        public static TDestinationType ConvertTo<TDestinationType>(this object obj)
         {
             return (TDestinationType)ConvertTo(typeof(TDestinationType), obj);
         }
@@ -74,12 +62,12 @@ namespace Habanero.Util
         ///<summary>
         /// Converts a value to the specified type using the <see cref="TypeConverter"/> associated with the source value.
         ///</summary>
-        ///<param name="type">The type to convert the value to.</typeparam>
+        ///<param name="type">The type to convert the value to.</param>
         ///<param name="obj">The value to convert</param>
         ///<returns>The converted value</returns>
         public static object ConvertTo(Type type, object obj)
         {
-            if (Utilities.IsNull(obj)) return null;
+            if (obj.IsNull()) return null;
             Type sourceType = obj.GetType();
             bool isNullableType = false;
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))

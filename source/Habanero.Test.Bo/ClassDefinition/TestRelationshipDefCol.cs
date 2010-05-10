@@ -27,13 +27,24 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestRelationshipDefCol
     {
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestAddDuplicationException()
         {
+            //---------------Set up test pack-------------------
             SingleRelationshipDef relDef = new SingleRelationshipDef("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent);
             RelationshipDefCol col = new RelationshipDefCol();
             col.Add(relDef);
-            col.Add(relDef);
+            //---------------Execute Test ----------------------
+            try
+            {
+                col.Add(relDef);
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("A relationship definition with the name 'rel' already exists", ex.Message);
+            }
         }
 
         [Test]
@@ -49,11 +60,22 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(0, col.Count);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestThisIndexerException()
         {
+            //---------------Set up test pack-------------------
             RelationshipDefCol col = new RelationshipDefCol();
-            IRelationshipDef relDef = col["rel"];
+            //---------------Execute Test ----------------------
+            try
+            {
+                IRelationshipDef relDef = col["rel"];
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("The relationship name 'rel' does not exist in the collection of relationship definitions", ex.Message);
+            }
         }
 
         // Grants access to protected methods

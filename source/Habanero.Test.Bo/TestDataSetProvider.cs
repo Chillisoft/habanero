@@ -54,6 +54,8 @@ namespace Habanero.Test.BO
         {
             this.SetupDBConnection();
             OrderItem.CreateTable();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         [TestFixtureTearDown]
@@ -463,7 +465,7 @@ namespace Habanero.Test.BO
         public void TestOrderItemChangeItemAndFind()
         {
             SetupTestData();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             OrderItem.ClearTable();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();

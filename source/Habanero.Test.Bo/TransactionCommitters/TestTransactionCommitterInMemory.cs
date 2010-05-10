@@ -119,7 +119,7 @@ namespace Habanero.Test.BO.TransactionCommitters
 
         }
 
-        [Test, ExpectedException(typeof(BusObjPersistException))]
+        [Test]
         public void TestPreventDelete()
         {
             //---------------Set up test pack-------------------
@@ -133,8 +133,16 @@ namespace Habanero.Test.BO.TransactionCommitters
             ITransactionCommitter committer = new TransactionCommitterInMemory(dataStoreInMemory);
             committer.AddBusinessObject(contactPersonTestBO);
             //---------------Execute Test ----------------------
-            committer.CommitTransaction();
-            //---------------Test Result -----------------------
+            try
+            {
+                committer.CommitTransaction();
+                Assert.Fail("Expected to throw an BusObjPersistException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjPersistException ex)
+            {
+                StringAssert.Contains("You cannot delete ContactPersonTestBO", ex.Message);
+            }
         }
 
         [Test]

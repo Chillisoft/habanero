@@ -67,14 +67,25 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(0, col.Values.Count);
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
+        [Test]
         public void TestAddDuplicateException()
         {
+            //---------------Set up test pack-------------------
             ClassDef classDef1 = new ClassDef("ass", "class", null, null, null, null, null);
             ClassDef classDef2 = new ClassDef("ass", "class", null, null, null, null, null);
             ClassDefCol col = new ClassDefCol();
             col.Add(classDef1);
-            col.Add(classDef2);
+            //---------------Execute Test ----------------------
+            try
+            {
+                col.Add(classDef2);
+                Assert.Fail("Expected to throw an HabaneroDeveloperException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("A duplicate class element has been encountered", ex.Message);
+            }
         }
 
         [Test]
@@ -113,10 +124,20 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Tear Down -------------------------          
         }
 
-        [Test, ExpectedException(typeof (HabaneroArgumentException))]
+        [Test]
         public void TestLoadColClassDefException()
         {
-            ClassDefCol.LoadColClassDef(null);
+            //---------------Execute Test ----------------------
+            try
+            {
+                ClassDefCol.LoadColClassDef(null);
+                Assert.Fail("Expected to throw an HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                StringAssert.Contains("Cannot load a ClassDefCol if it is null", ex.Message);
+            }
         }
 
         [Test]

@@ -25,7 +25,7 @@ namespace Habanero.Util
     /// <summary>
     /// Provides serialisation utilities
     /// </summary>
-    public class SerialisationUtilities
+    public static class SerialisationUtilities
     {
         /// <summary>
         /// Converts an Object to a byte array

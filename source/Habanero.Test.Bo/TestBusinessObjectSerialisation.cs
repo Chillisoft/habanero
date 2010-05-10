@@ -31,6 +31,16 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBusinessObjectSerialisation
     {
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
+        {
+            //Code that is executed before any test is run in this class. If multiple tests
+            // are executed then it will still only be called once.
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+        }
         [Test]
         public void Test_SerialiseDeserialise_ReturnsCorrectType()
         {
@@ -43,7 +53,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPerson);
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -64,7 +74,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPerson);
@@ -87,7 +97,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPerson);
@@ -111,7 +121,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPerson);
@@ -148,7 +158,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPerson);
@@ -179,7 +189,7 @@ namespace Habanero.Test.BO
             
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPeople);
@@ -211,7 +221,7 @@ namespace Habanero.Test.BO
 
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             bool eventFired = false;
 
             //---------------Execute Test ----------------------
@@ -241,7 +251,7 @@ namespace Habanero.Test.BO
 
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Assert PreConditions---------------       
             Assert.AreEqual(2, originalPeople.CreatedBusinessObjects.Count);
@@ -280,7 +290,7 @@ namespace Habanero.Test.BO
 
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             
             //---------------Assert PreConditions---------------       
             Assert.AreEqual(2, originalPeople.PersistedBusinessObjects.Count);
@@ -324,7 +334,7 @@ namespace Habanero.Test.BO
 
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Assert PreConditions---------------       
             Assert.AreEqual(1, originalPeople.AddedBusinessObjects.Count);
 
@@ -363,7 +373,7 @@ namespace Habanero.Test.BO
 
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Assert PreConditions---------------       
             Assert.AreEqual(1, originalPeople.RemovedBusinessObjects.Count);
             Assert.AreEqual(1, originalPeople.Count);
@@ -403,7 +413,7 @@ namespace Habanero.Test.BO
 
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Assert PreConditions---------------       
             Assert.AreEqual(1, originalPeople.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(0, originalPeople.RemovedBusinessObjects.Count);
@@ -450,7 +460,7 @@ namespace Habanero.Test.BO
 
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Assert PreConditions---------------       
             Assert.AreEqual(1, originalPeople.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(1, originalPeople.RemovedBusinessObjects.Count);
@@ -494,7 +504,7 @@ namespace Habanero.Test.BO
            
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             originalPerson.FirstName = "Bob";
 
             //---------------Assert PreConditions---------------   
