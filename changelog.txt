@@ -1,5 +1,74 @@
 Habanero Change Log
 
+ Habanero v2.4 - 10 May 2010
+
+Major Changes
+- Split out the UI projects so that they can be versioned separately. These can now be found in the Habanero project called Habanero Faces
+- Huge improvements in performance (and memory usage) when loading large collections (speed up of 90% for collections of size 30000, even more for bigger collections, more than 40% for collections of 10000).
+
+Enhancements
+- Changed BusinessObject HasErrors and HasWarnings to use IsValid(bo) instead of the obsolete IsValid() for IBORules.
+- IsCompulsory on UIFormField now returns true if the field is a relationship and that relationship is compulsory (i.e. any prop in the relationship is compulsory).
+- Created BusinessObjectManagerNull. The concept of BusinessObjectManager doesn't apply in an environment like ASP.NET which is stateless. You can set this by setting the BusinessObjectManager property on the BORegistry.
+- Added Method to IBusinessObjectRule IsValid(IBusinessObject) and made the previous method IsValid() obsolete. This is so that rule objects can be shared between objects - the object will be passed in to the IsValid method instead.
+- Added a new Standard BusinessObjectRule InterPropRule. This can be used when setting a rule where one property value is valid depending on the value of another (eg if the EndDate must be greater than the StartDate)
+
+Minor Changes
+- Moved to nunit 2.5.3
+- IPropDef. Created a Set For PropertyType in IPropDef. IRelationshipDef.Moved IsCompulsory and OwningClassDef to IRelationshipDef.   IsCompulsory determines whether the relationship is compulsory based on a Flag set (SetAsCompulsory) or via checking if all the RelPropDef.OwningPropDef are Compulsory for the RelKeyDef.
+- IRelPropDef: Moved OwnerPropDef Get to Interface.
+- Added ClassName to PropDef.
+- Added Error Handling to UIForm, UIFormColumn, UIFormTab and XmlUIFormFieldLoader.
+- Implemented ExtendedTextBoxMapper.cs and ExtendedTextBoxWin.cs in Habanero.Bo/ClassDefinition/UIForm.cs
+- Added a ClassName property to IUIDef and UIDef. Code was previously using ClassDef.ClassName.
+- Added ClassName property to UIDefCol. Code was previously using ClassDef.ClassName.
+- Minor cosmetic changes to BusinessObject.
+- Changed the field dtd so that mapperAssembly is a CDATA to allow for a blank setting, which gets translated to Habanero.Faces.Base.  
+- Improved the Error Message where a Criteria is constructed with a null property name.
+- Added a GetRelationship method to IClassDef. 
+- Added PropDef ClassName and ClassDef properties.
+- Added the ability for some of the proprules' parameters to accept empty values. Changed the field's dtd - assembly and type changed to CDATA from NMTOKEN to allow empty strings.
+- Added some helper methods to DateTimeUtilities (IsWeekDay, OnOrNextDayOfWeek, OnOrNextBusinessDay, OnOrPreviousBusinessDay, NextBusinessDay, PreviousBusinessDay)
+- Made SerialisationUtilities static since all its methods are static and all other utility classes are static.
+- Changed some static methods in TypeUtilities and Utilities to allow them to be used as extension methods. They can now be used as extension methods or Utility methods.
+- Changed InitialiseProp on IBOProp to return a bool.  This indicates whether the value of the property was updated in the method. 
+- Changed the calling of the AfterLoad method on BusinessObjects: it is now called when an object is loaded for the first time, or when in the process of loading an update to any of its properties occurs. Before it was called after every refresh, even if nothing in the object changed during the refresh.
+- Changed the firing of the Updated event on BusinessObjects. It is now only called when an already previously loaded object is refreshed and in the process gets updated values for its props.
+- Changed a method signature on Broker to match the one on BusinessObjectLoader (OrderCriteria to IOrderCriteria)
+- Changed PropRuleDate to assume an empty string in min means DateTime.MinValue and in max means DateTime.MaxValue
+- Made a small change to the TypeLoader to make it simpler to specify types (you can leave off the namespace of the type if it matches the assembly name)
+- Changed IPropDefCol to IEnumerable<IPropDef>
+- Modified IRelKeyDef to IEnumerable<IRelPropDef>
+- Changed StringUtilities to include Pluralize and Singularize
+- Changed the logic of GetAsGuid to return a Guid if there is one. Note: this is mainly (only, really) used by the DataStoreInMemory, so it should always use the Guids.
+- Added UIDef method to IUIGrid interface.
+- Modified ReflectionUtilities to include ExecuteMethod return values
+- Added a number of new methods to StringUtilities (Camelize, Humanize, Classify, PascalCaseTableName, IsManyPascalWords, RemovePrefix, ToLowerFirstLetter). Improved Singularize.
+- Made KeepValuePrivate (on PropDef and UIFormField) public
+- Added support for "Yesterday" and for "Tomorrow" for default values on date fields
+- Added a set to the AutoIncrementing property on IPropDef
+
+Bug Fixes
+- Fixed Bug in ClassDef.GetPropertyType where the property type was being returned as object when the PropDef was a LookupList. This was causing any orderBy for a LookupList being returned incorrectly. This is only ever relevant where a lookup is being done for an int or a string Property e.g. A SimpleLookupList. And you want to sort by the underlying property value. To facilitate this it was required that changes where made to DataSetProvider and GridInitialiser so as to convert LookupList props to type object.
+- Fixed bugs found with the GetPropertyType, GetPropDef and GetLookupList methods on the ClassDef. These where not all handling, Reflective, Related and inherited props the same.
+- Fixed a bug in PropRuleDate where the MaxValue could result in trying to generate a value that is out of range.
+- Corrected a bug introduced in 2.3.2 where the PersistedBusinessObjects in a collection was not being set correctly after refreshing from the database (where items had been deleted from the db).
+- Made SingleRelationship not return IsDirty if the child object has been set and then removed. 
+- Corrected a bug in 2.3.2 that occurred when you saved an object that was part of a collection and then loaded the collection for the first time - the load would add the loaded object (which was the same object as the one you created and saved) into the PersistedBusinessObjects collection again.
+- Fixed a bug in the loading code where a certain criteria string would be converted to an incorrect Criteria tree
+- Fixed issue with TransactionCommitterMultiSource when there are no objects in the Transaction.
+- Modified the ClassDef constructor to set up the OwnerClassDef on its child relationships
+- Changed the DataStoreInMemoryXmlReader to load the BOSequenceNumber classdef if it's not loaded because it's a Habanero BO class used that the user is not expected to load.
+- Changed SuperClassDef.cs to use the SuperClassClassDef.ClassName instead of ClassNameFull this was so that ClassName is the same whether set using AssemblyName ClassName in constructor or constructing using the superClassClassDef constructor
+- Modified the ReflectedPropertyComparer to throw an appropriate error if constructed with null propName or an invalid propName.
+- Add Validation to PropDefCol.Contains so that propname is null no error is thrown
+- Fixed Minor bug in LookupList setting to Null was throwing an error.
+- BusinessObjectLookupList: Fixed Bug where error was being thrown if BusinessObjects.ToString was returning null.
+- XmlClassLoader: Fixed Bug where the UIDef.ClassDef was not being set.
+- Fixed a bug in PropRuleDate where a rule with a max value of Today would allow a maxvalue of tomorrow at 00:00.
+- Changed the MinValue to handle the blank "min" parameter. Changed the MaxValue to handle the blank "max" parameter
+
+
  Habanero v2.3.2 - 26 March 2010	 
 	 
 Major Changes
