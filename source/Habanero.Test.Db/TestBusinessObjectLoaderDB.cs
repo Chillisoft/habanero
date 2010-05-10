@@ -35,6 +35,8 @@ namespace Habanero.Test.DB
         [SetUp]
         public override void SetupTest()
         {
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             base.SetupTest();
             ContactPersonTestBO.DeleteAllContactPeople();
         }
@@ -67,7 +69,8 @@ namespace Habanero.Test.DB
             BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID {IntID = TestUtil.GetRandomInt()};
             bo.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             Criteria criteria = new Criteria("IntID", Criteria.ComparisonOp.Equals, bo.IntID.ToString());
             //---------------Execute Test ----------------------
             BOWithIntID bo1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>(criteria);
@@ -85,7 +88,8 @@ namespace Habanero.Test.DB
             BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID { IntID = TestUtil.GetRandomInt() };
             bo.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Execute Test ----------------------
             BOWithIntID bo1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOWithIntID>
                 (string.Format("IntID = {0}", bo.IntID));
@@ -103,7 +107,8 @@ namespace Habanero.Test.DB
             IClassDef classDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID { IntID = TestUtil.GetRandomInt() };
             bo.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Execute Test ----------------------
             BOWithIntID bo1 = (BOWithIntID) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
                 (classDef,  string.Format("IntID = {0}", bo.IntID));
@@ -133,31 +138,6 @@ namespace Habanero.Test.DB
             Assert.AreEqual("testing", tai2.TestField);
         }
 
-        //[Test]
-        //public void Test_BusinessObjectClearsItselfFromObjectManager()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    BusinessObjectManager.Instance.ClearLoadedObjects();
-        //    WaitForGC();
-        //    ClassDef.ClassDefs.Clear();
-        //    ContactPersonTestBO.LoadDefaultClassDef();
-        //    const string surname = "abc";
-        //    const string firstName = "aa";
-        //    ContactPersonTestBO savedContactPerson = CreateSavedContactPerson(surname, firstName);
-
-        //    //---------------Assert Precondition----------------
-        //    Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
-        //    Assert.IsNotNull(savedContactPerson);
-
-        //    //---------------Execute Test ----------------------
-        //    savedContactPerson = null;
-        //    WaitForGC();
-
-        //    //---------------Test Result -----------------------
-        //    Assert.IsNull(savedContactPerson);
-        //    Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
-        //}
-
         [Test]
         public void Test_ReturnSameObjectFromBusinessObjectLoader()
         {
@@ -169,7 +149,8 @@ namespace Habanero.Test.DB
             originalContactPerson.Surname = "FirstSurname";
             originalContactPerson.Save();
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //load second object from DB to ensure that it is now in the object manager
             ContactPerson myContact2 =
@@ -195,7 +176,9 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             //---------------Assert Precondition----------------
 
@@ -213,7 +196,9 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             //---------------Assert Precondition----------------
 
@@ -242,7 +227,9 @@ namespace Habanero.Test.DB
             originalContactPerson.Save();
             IPrimaryKey origCPID = originalContactPerson.ID;
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //load second object from DB to ensure that it is now in the object manager
             ContactPersonTestBO myContact2 =
@@ -272,7 +259,8 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
 
             const string surname = "abc";
@@ -304,7 +292,8 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
 
             const string surname = "abc";
@@ -337,6 +326,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
 
@@ -376,6 +366,7 @@ namespace Habanero.Test.DB
             cp.FirstName = Guid.NewGuid().ToString("N");
             cp.Save();
 
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
             BusinessObjectManager.Instance.ClearLoadedObjects();
             WaitForGC();
 
@@ -387,14 +378,15 @@ namespace Habanero.Test.DB
 
             //---------------Assert Precondition ---------------
             //Object not loaded in all loaded business objects
-            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCp =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(query);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             Assert.AreNotSame(loadedCp, cp);
             Assert.AreEqual(cp.ContactPersonID, loadedCp.ContactPersonID);
             Assert.AreEqual(cp.Surname, loadedCp.Surname);
@@ -418,7 +410,7 @@ namespace Habanero.Test.DB
             originalContactPerson.Save();
             IPrimaryKey origConactPersonID = originalContactPerson.ID;
             originalContactPerson = null;
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
 
             //load second object from DB to ensure that it is now in the object manager
@@ -429,7 +421,7 @@ namespace Habanero.Test.DB
             Assert.IsNull(originalContactPerson);
             Assert.AreEqual(firstSurname, loadedContactPerson1.Surname);
             Assert.AreNotSame(originalContactPerson, loadedContactPerson1);
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
 
             //---------------Execute Test ----------------------
 
@@ -437,7 +429,7 @@ namespace Habanero.Test.DB
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(origConactPersonID);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             Assert.AreEqual(firstSurname, loadedContactPerson2.Surname);
             Assert.AreNotSame(originalContactPerson, loadedContactPerson2);
 
@@ -459,7 +451,7 @@ namespace Habanero.Test.DB
             originalContactPerson.Surname = "FirstSurname";
             originalContactPerson.Save();
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //load second object from DB to ensure that it is now in the object manager
             ContactPersonTestBO myContact2 =
@@ -469,8 +461,8 @@ namespace Habanero.Test.DB
             //-----------------------------Assert Precondition -----------------
             Assert.AreNotSame(originalContactPerson, myContact2);
             IPrimaryKey id = myContact2.ID;
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(id));
-            IBusinessObject boFromAllLoadedObjects = BusinessObjectManager.Instance[id];
+            Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(id));
+            IBusinessObject boFromAllLoadedObjects = BORegistry.BusinessObjectManager[id];
             Assert.AreSame(boFromAllLoadedObjects, myContact2);
             Assert.IsFalse(myContact2.Status.IsEditing);
 
@@ -486,7 +478,7 @@ namespace Habanero.Test.DB
             //-----------------------------Assert Result-----------------------
             Assert.IsFalse(myContact3.Status.IsEditing);
             Assert.AreNotSame(originalContactPerson, myContact3);
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(myContact3));
+            Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(myContact3));
             Assert.AreSame(myContact3, myContact2);
             //The two surnames should be equal since the myContact3 was refreshed
             // when it was loaded.
@@ -504,10 +496,10 @@ namespace Habanero.Test.DB
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPerson1 = ContactPersonTestBO.CreateSavedContactPerson
                 (Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"));
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(0, BORegistry.BusinessObjectManager.Count);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO contactPerson =
@@ -515,8 +507,8 @@ namespace Habanero.Test.DB
                     (contactPerson1.ID);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPerson));
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
+            Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(contactPerson));
         }
 
         [Test]
@@ -531,7 +523,7 @@ namespace Habanero.Test.DB
             cp.Save();
 
             //---------------Assert Precondition------------------
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(cp));
+            Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(cp));
             Assert.IsFalse(cp.AfterLoadCalled);
 
             //---------------Execute Test ------------------------
@@ -574,7 +566,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString();
             cp.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             ContactPersonTestBO cpLoaded =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
@@ -606,7 +598,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString();
             cp.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             ContactPersonTestBO cpLoaded =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
@@ -634,7 +626,7 @@ namespace Habanero.Test.DB
             //-------------Setup Test Pack------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cpTemp = ContactPersonTestBO.CreateSavedContactPerson();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             ContactPersonTestBO cpLoaded =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cpTemp.ID);

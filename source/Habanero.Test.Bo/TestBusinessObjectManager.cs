@@ -459,6 +459,7 @@ namespace Habanero.Test.BO
         public void Test_Add_CopyOfSameObjectTwiceShould_ThrowError()
         {
             //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = null;
             ContactPersonTestBO.LoadDefaultClassDef();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();

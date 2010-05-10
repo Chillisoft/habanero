@@ -28,7 +28,7 @@ namespace Habanero.BO
     public class BORegistry
     {
         private static IDataAccessor _dataAccessor;
-
+        private static readonly object _lockObject = new object();
         /// <summary>
         /// Gets and sets the DataAccessor to be used. This determines the location your
         /// BusinessObjects will persist to and load from (eg a DataAccessorDB would make the BusinessObjects
@@ -57,7 +57,10 @@ namespace Habanero.BO
         {
             get
             {
-                return _businessObjectManager ?? BusinessObjectManager.Instance;
+                lock (_lockObject)
+                {
+                    return _businessObjectManager ?? BusinessObjectManager.Instance;
+                }
             }
             set { _businessObjectManager = value; }
         }

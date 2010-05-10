@@ -38,7 +38,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [SetUp]
         public void Setup()
         {
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             _propDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
         }
 
@@ -238,7 +238,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetBusinessObjectFromObjectManager()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BOWithIntID.LoadClassDefWithIntID();
@@ -264,9 +264,9 @@ namespace Habanero.Test.BO.ClassDefinition
             BOWithIntID expectedBO = new BOWithIntID { IntID = 3, TestField = "ValidValue" };
             expectedBO.Save();
             propDef.LookupList = new BusinessObjectLookupList(typeof(BOWithIntID));
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(0, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             IBusinessObject returnedBO = propDef.GetlookupBusinessObjectFromObjectManager(expectedBO.IntID);
             //---------------Test Result -----------------------
@@ -286,7 +286,7 @@ namespace Habanero.Test.BO.ClassDefinition
             propDef.LookupList = new BusinessObjectLookupList(typeof(BOWithIntID_DifferentType));
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             IBusinessObject returnedBO = propDef.GetlookupBusinessObjectFromObjectManager(expectedBO.IntID);
             //---------------Test Result -----------------------
@@ -297,7 +297,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetBusinessObjectFromObjectManager_WriteNewProp()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();

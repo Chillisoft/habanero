@@ -453,7 +453,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
 
             ContactPersonTestBO cp1 = CreateContactPersonTestBO();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             CreateContactPersonTestBO();
             CreateContactPersonTestBO();

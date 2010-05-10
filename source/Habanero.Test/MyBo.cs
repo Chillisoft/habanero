@@ -55,7 +55,7 @@ namespace Habanero.Test
             _myRuleList = new List<IBusinessObjectRule>();
         }
 
-        protected MyBO(bool constructForFakes) : base(constructForFakes)
+        protected MyBO(ConstructForFakes constructForFakes) : base(constructForFakes)
         {
         }
 

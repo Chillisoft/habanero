@@ -14,7 +14,7 @@ namespace Habanero.Test.BO
     public class TestBusinessObjectManagerNull
     {
         #region Setup/Teardown
-
+        // ReSharper disable PossibleNullReferenceException
         [SetUp]
         public void SetupTest()
         {
@@ -22,9 +22,10 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
             new Address();
-            BORegistry.BusinessObjectManager = null;
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
         }
+        // ReSharper restore PossibleNullReferenceException
 
         [TearDown]
         public void TearDownTest()
@@ -368,7 +369,7 @@ namespace Habanero.Test.BO
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString());
 
             //--------------- Execute Test ----------------------
-            //BusinessObjectCollection<ContactPersonTestBO> found = BusinessObjectManager.Instance.Find<ContactPersonTestBO>(criteria);
+            //BusinessObjectCollection<ContactPersonTestBO> found = BORegistry.BusinessObjectManager.Find<ContactPersonTestBO>(criteria);
             IList found = boMan.Find(criteria, typeof(ContactPersonTestBO));
 
             //--------------- Test Result -----------------------

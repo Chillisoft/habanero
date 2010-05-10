@@ -41,7 +41,7 @@ namespace Habanero.Test.BO
         [TearDown]
         public void TearDownTest()
         {
-            BORegistry.BusinessObjectManager = null;
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
         }
 
  
@@ -126,6 +126,7 @@ namespace Habanero.Test.BO
         public void Test_GetBusinessObjectManager_IfNotSet_ShouldReturnSingleton()
         {
             //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = null;
             BusinessObjectManager expectedObjectManager = BusinessObjectManager.Instance;  
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------

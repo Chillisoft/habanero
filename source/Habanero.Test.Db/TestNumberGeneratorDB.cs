@@ -35,7 +35,7 @@ namespace Habanero.Test.DB
         {
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
-            BORegistry.BusinessObjectManager = null;
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
             BusinessObjectManager.Instance.ClearLoadedObjects();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
@@ -69,7 +69,7 @@ namespace Habanero.Test.DB
             //get the next number for invoice number
             numGen.NextNumber();
             //Clear all loaded objects from object manager
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             Thread.Sleep(1); // ensure that the new time is higher. just here to check if this resolves a sporadically failing test.
 
             //---------------Execute Test ----------------------
@@ -94,7 +94,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             //Create an entry in the number generator table for entry type to seed with seed = 0 and lockduration = 15 minutes.
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             const string numberType = "tmp";
             BOSequenceNumberLocking.LoadNumberGenClassDef();
@@ -108,7 +108,7 @@ namespace Habanero.Test.DB
             Assert.AreEqual(1, num, "The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.
             UpdateDatabaseLockAsExpired(20);
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator.

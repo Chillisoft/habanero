@@ -56,7 +56,7 @@ namespace Habanero.Test.DB
 
             CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(circle.ID);
@@ -73,7 +73,7 @@ namespace Habanero.Test.DB
 
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
             FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             Shape loadedShape =
@@ -91,7 +91,7 @@ namespace Habanero.Test.DB
 
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
             FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             Shape loadedShape =
@@ -109,7 +109,7 @@ namespace Habanero.Test.DB
             Circle circle = Circle.CreateSavedCircle();
 
             //---------------Execute Test ----------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
 
             //---------------Test Result -----------------------
@@ -127,7 +127,7 @@ namespace Habanero.Test.DB
             FilledCircle filledCircle = FilledCircle.CreateSavedFilledCircle();
 
             //---------------Execute Test ----------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             FilledCircle loadedFilledCircle =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircle>(filledCircle.ID);
 
@@ -146,7 +146,7 @@ namespace Habanero.Test.DB
             Circle circle = Circle.CreateSavedCircle();
 
             //---------------Execute Test ----------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
 
             //---------------Test Result -----------------------
@@ -169,7 +169,7 @@ namespace Habanero.Test.DB
             FilledCircle filledCircle = FilledCircle.CreateSavedFilledCircle();
 
             //---------------Execute Test ----------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             FilledCircle loadedFilledCircle =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircle>(filledCircle.ID);
 
@@ -188,7 +188,7 @@ namespace Habanero.Test.DB
             CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
 
             //---------------Execute Test ----------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             CircleNoPrimaryKey loadedCircle =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(circle.ID);
 
@@ -206,7 +206,7 @@ namespace Habanero.Test.DB
             FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
 
             //---------------Execute Test ----------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             FilledCircleNoPrimaryKey loadedFilledCircle =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircleNoPrimaryKey>(
                     filledCircle.ID);
@@ -225,7 +225,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             FilledCircle.GetClassDefWithClassInheritanceHierarchy();
             Circle circle = Circle.CreateSavedCircle();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Assert Preconditions---------------
             //---------------Execute Test ----------------------
             Shape circleLoadedAsShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>("ShapeID = " + circle.ShapeID);

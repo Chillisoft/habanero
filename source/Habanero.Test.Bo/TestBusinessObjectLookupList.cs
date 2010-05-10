@@ -63,7 +63,7 @@ namespace Habanero.Test.BO
         public void SetupTestFixture()
         {
             SetupDBConnection();
-            BORegistry.BusinessObjectManager = null;
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
         }
 
         [SetUp]
@@ -72,10 +72,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
             DeleteAllContactPeople();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO.CreateSampleData();
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
         }
 
@@ -514,7 +514,7 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             MyBO.LoadDefaultClassDef();
             MyBO.DeleteAllMyBos();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             MyBO myBO1 = new MyBO();
             myBO1.Save();
@@ -541,7 +541,7 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             MyBO.LoadDefaultClassDef();
             MyBO.DeleteAllMyBos();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             MyBO myBO1 = new MyBO();
             myBO1.Save();
@@ -567,7 +567,7 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             MyBO.LoadDefaultClassDef();
             MyBO.DeleteAllMyBos();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             MyBO myBO1 = new MyBO();
             myBO1.SetToString(null);

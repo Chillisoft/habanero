@@ -42,7 +42,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             new Address();
         }
@@ -423,7 +423,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 personToDelete.Save();
 
                 //Ensure that a fresh object is loaded from DB
-                BusinessObjectManager.Instance.ClearLoadedObjects();
+                BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
                 //--------Execute------------------------------------------------------
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(personToDelete.ID);
@@ -448,7 +448,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 personToDelete.Save();
 
                 //Ensure that a fresh object is loaded from DB
-                BusinessObjectManager.Instance.ClearLoadedObjects();
+                BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
                 //--------Execute------------------------------------------------------
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(personToDelete.ClassDef, personToDelete.ID);
@@ -820,7 +820,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //-------------Setup Test Pack------------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cpTemp = ContactPersonTestBO.CreateSavedContactPerson();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             ContactPersonTestBO cpLoaded =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cpTemp.ID);
@@ -871,7 +871,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ContactPerson cp = ContactPerson.CreateSavedContactPerson();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPerson cpLoaded = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>
                 (cp.ID);
             string newSurname = TestUtil.GetRandomString();
@@ -897,7 +897,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
             ContactPersonTestBO.CreateSavedContactPerson("bbbb", "bbb");

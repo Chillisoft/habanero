@@ -38,8 +38,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BORegistry.BusinessObjectManager = null;
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
         }
 
@@ -207,7 +207,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             cp2.Save();
             ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
             
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>(parametrizedClassDef);
             //---------------Execute Test ----------------------
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
@@ -255,7 +255,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             cp2.Save();
             ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>(parametrizedClassDef);
 
             //---------------Execute Test ----------------------
@@ -842,7 +842,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.DeleteAllContactPeople();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();

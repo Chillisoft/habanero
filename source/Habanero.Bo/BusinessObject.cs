@@ -32,6 +32,19 @@ using log4net;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// An Enum used for Constructing fake Business objects.
+    /// This is used for Testing using a Mocking Framework such as 
+    /// Rhino Mocks. In this scenario no ClassDefs are created for the BO.
+    /// This enum is created so as to make the Constructor more self documenting when called.
+    ///</summary>
+    public enum ConstructForFakes
+    {
+        ///<summary>
+        /// This object must be constructed as a Fake BO i.e. no ClassDefs
+        ///</summary>
+        True
+    }
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
@@ -145,17 +158,10 @@ namespace Habanero.BO
         /// Constructor that specifies a class definition
         /// </summary>
         /// <param name="constructForFakes"></param>
-// ReSharper disable UnusedParameter.Local
-        protected BusinessObject(bool constructForFakes)
+        // ReSharper disable UnusedParameter.Local
+        protected BusinessObject(ConstructForFakes constructForFakes)
         {
             _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
-        }
-
-        protected virtual void InitialiseForFakes(IClassDef classDef)
-        {
-            _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
-            Initialise(classDef);
-            SetupBOPropsWithThisBo();
         }
 
         // ReSharper restore UnusedParameter.Local
