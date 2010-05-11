@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -132,7 +132,7 @@ namespace Habanero.Test.Util
             MyEnum? returnedValue = TypeUtilities.ConvertTo<MyEnum?>(value);
             //---------------Test Result -----------------------
             Assert.IsTrue(returnedValue.HasValue);
-            Assert.AreEqual(value, returnedValue.Value);
+            Assert.AreEqual(value, returnedValue.GetValueOrDefault());
         }
 
         [Test]

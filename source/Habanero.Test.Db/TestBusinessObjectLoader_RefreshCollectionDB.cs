@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -67,8 +67,7 @@ namespace Habanero.Test.DB
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
 
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO.CreateSavedContactPerson();
             ContactPersonTestBO.CreateSavedContactPerson();
             col.LoadAll();
@@ -93,13 +92,13 @@ namespace Habanero.Test.DB
             Assert.AreEqual(newSurname, secondInstanceOfCP1.Surname);
         }
 
-        [Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
+        [Test, Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
         public override void Test_Refresh_W_ParametrizedClassDef_Typed()
         {
 
         }
 
-        [Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
+        [Test, Ignore("Not implemented for DB as parametrized class defs are implemented in a different way (via afterload and updateobjectbeforepersisting)")]
         public override void Test_Refresh_W_ParametrizedClassDef_Untyped() { }
     }
 }

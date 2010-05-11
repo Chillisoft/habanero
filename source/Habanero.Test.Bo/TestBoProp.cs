@@ -599,26 +599,48 @@ namespace Habanero.Test.BO
 
         #region Test ReadOnly
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_ReadOnly_New()
         {
+            //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadOnly, null, null, true, false);
             IBOProp boProp = propDef.CreateBOProp(true);
+            //---------------Assert preconditions---------------
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
-            boProp.Value = "TestValue";
-            //Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "TestValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as ReadOnly", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_ReadOnly_Existing()
-        {
+        { 
+            //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadOnly, null, null, true, false);
             IBOProp boProp = propDef.CreateBOProp(false);
+            //---------------Assert preconditions---------------
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
-            boProp.Value = "TestValue";
-            //Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "TestValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as ReadOnly", ex.Message);
+            }
         }
 
         #endregion //Test ReadOnly
@@ -660,13 +682,24 @@ namespace Habanero.Test.BO
             CreateWriteOnceBoProp(true, "My Default");
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain()
         {
+            //---------------Set up test pack-------------------
             BOProp boProp = (BOProp) CreateWriteOnceBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
-            boProp.Value = "NewValue";
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "NewValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as WriteOnce and the value has already been set", ex.Message);
+            }
         }
 
         [Test]
@@ -758,19 +791,46 @@ namespace Habanero.Test.BO
             CreateWriteNewBoProp(true);
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_WriteNew_NewPersisted_WriteAgain()
         {
+            //---------------Set up test pack-------------------
             BOProp boProp = (BOProp) CreateWriteNewBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
-            boProp.Value = "NewValue";
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "NewValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as WriteNew and the object is not new", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_WriteNew_Existing()
         {
-            CreateWriteNewBoProp(false);
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                                          PropReadWriteRule.WriteNew, null, null, true, false);
+            IBOProp boProp = propDef.CreateBOProp(false);
+            //---------------Assert preconditions---------------
+            Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "TestValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as WriteNew and the object is not new", ex.Message);
+            }
         }
 
         #endregion //Test WriteNew
@@ -794,10 +854,22 @@ namespace Habanero.Test.BO
             return boProp;
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_WriteNotNew_New()
         {
-            CreateWriteNotNewBoPropWithValues(true);
+            //---------------Set up test pack-------------------
+            IBOProp boProp = CreateWriteNotNewBoProp(true);
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "TestValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as WriteNotNew and the object is new", ex.Message);
+            }
         }
 
         [Test]
@@ -1224,6 +1296,29 @@ namespace Habanero.Test.BO
             Assert.AreNotSame(dateTimeNow, value);
         }
 
+        [Test]
+        public void Test_InitialiseProp_ReturnsFalseIfPropValueNotChanged()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            //---------------Execute Test ----------------------
+            bool propValueChanged = boProp.InitialiseProp(null);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(propValueChanged);
+        }
+
+        [Test]
+        public void Test_InitialiseProp_ReturnsTrueIfPropValueHasChanged()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            //---------------Execute Test ----------------------
+            bool propValueChanged = boProp.InitialiseProp("NewValue");
+            //---------------Test Result -----------------------
+            Assert.IsTrue(propValueChanged);
+        }
     }
 
 }

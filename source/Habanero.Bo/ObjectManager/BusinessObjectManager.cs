@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -96,7 +96,7 @@ namespace Habanero.BO
         /// Add a business object to the object manager.
         /// </summary>
         /// <param name="businessObject"></param>
-        public void Add(IBusinessObject businessObject)
+        public virtual void Add(IBusinessObject businessObject)
         {
             lock (_loadedBusinessObjects)
             {
@@ -344,7 +344,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="objectID">The business object id of the object being returned. (usually bo.ID.GetObjectID</param>
         /// <returns>The business object from the object manger.</returns>
-        public IBusinessObject this[Guid objectID]
+        public virtual IBusinessObject this[Guid objectID]
         {
             get
             {
@@ -365,9 +365,8 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="objectID">The business object id of the object being returned. (bo.ID) </param>
         /// <returns>The business object from the object manger.</returns>
-        public IBusinessObject this[IPrimaryKey objectID]
+        public virtual IBusinessObject this[IPrimaryKey objectID]
         {
-            //get { return this[objectID.AsString_CurrentValue()]; }
             get { return this[objectID.ObjectID]; }
         }
 
@@ -594,6 +593,12 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// Adds the Business Object to the Object Manager and removes the existing object.
+        /// This is used for Deserialising objects etc where a new exact deserialised replacement of the
+        /// origional businessObject has been made.
+        ///</summary>
+        ///<param name="businessObject"></param>
         public void AddWithReplace(BusinessObject businessObject) { 
             if (this.Contains(businessObject.ID))
             {

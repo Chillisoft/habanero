@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -206,24 +206,24 @@ namespace Habanero.BO
                 this.MarkedForDeleteBusinessObjects.Add(businessObject);
                 //RegisterBOEvents(businessObject);
             }
-
+            var boManager = BORegistry.BusinessObjectManager;
             int createdCount = info.GetInt32(CREATED_COUNT);
             for (int i = 0; i < createdCount; i++)
             {
                 Guid createdID = (Guid)info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof (Guid));
-                this.AddCreatedBusinessObject((TBusinessObject) BusinessObjectManager.Instance[createdID]);
+                this.AddCreatedBusinessObject((TBusinessObject)boManager[createdID]);
             }
             int persistedCount = info.GetInt32(PERSISTED_COUNT);
             for (int i = 0; i < persistedCount; i++)
             {
                 Guid persistedID = (Guid)info.GetValue(PERSISTED_BUSINESS_OBJECT + i, typeof (Guid));
-                this.AddToPersistedCollection((TBusinessObject)BusinessObjectManager.Instance[persistedID]);
+                this.AddToPersistedCollection((TBusinessObject)boManager[persistedID]);
             }
             int addedCount = info.GetInt32(ADDED_COUNT);
             for (int i = 0; i < addedCount; i++)
             {
                 Guid addedID = (Guid)info.GetValue(ADDED_BUSINESS_OBJECT + i, typeof(Guid));
-                this.AddedBusinessObjects.Add((TBusinessObject)BusinessObjectManager.Instance[addedID]);
+                this.AddedBusinessObjects.Add((TBusinessObject)boManager[addedID]);
             }
         }
 

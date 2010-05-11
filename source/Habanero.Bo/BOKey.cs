@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -133,7 +133,7 @@ namespace Habanero.BO
         /// <param name="boProp">The BOProp to add</param>
         public virtual void Add(IBOProp boProp)
         {
-            ArgumentValidationHelper.CheckArgumentNotNull(boProp, "bOProp");
+            ArgumentValidationHelper.CheckArgumentNotNull(boProp, "boProp");
             if (_props.ContainsKey(boProp.PropertyName))
             {
                 throw new InvalidPropertyException(String.Format(

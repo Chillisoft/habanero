@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -91,18 +91,17 @@ namespace Habanero.BO.Comparer
 		{
 			if (left == null)
 			{
-				if (right != null)
+			    if (right != null)
 				{
 					return -1;
-				} else
-				{
-					return 0;
 				}
-			} else if (right == null)
-			{
-				return 1;
+			    return 0;
 			}
-			TPropType leftValue = (TPropType)left;
+		    if (right == null)
+		    {
+		        return 1;
+		    }
+		    TPropType leftValue = (TPropType)left;
 			TPropType rightValue = (TPropType)right;
 			return leftValue.CompareTo(rightValue);
 		}

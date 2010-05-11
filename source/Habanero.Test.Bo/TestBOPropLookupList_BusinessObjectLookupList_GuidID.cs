@@ -41,6 +41,7 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
             BusinessObjectManager.Instance.ClearLoadedObjects();
             MyBO.LoadClassDefsNoUIDef();
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -902,7 +903,7 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOPropLookupList(propDef);
             boProp.InitialiseProp(_validBusinessObject.ID.GetAsGuid());
             ContactPersonTestBO boWithNullToString = new ContactPersonTestBO();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof (Guid), propDef.PropertyType);
             Assert.IsTrue(boProp.IsValid);
@@ -943,7 +944,7 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(Shape), "", "", true) };
             BOProp boProp = new BOPropLookupList(propDef);
             Circle inheritedBO = new Circle();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(Guid), propDef.PropertyType);
 
@@ -1320,7 +1321,7 @@ namespace Habanero.Test.BO
             boProp.Value = expctedID;
             //---------------Test Result -----------------------
             Assert.AreEqual(expctedID, boProp.Value);
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             Assert.AreEqual(null, boProp.PropertyValueToDisplay);
         }
 

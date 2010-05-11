@@ -278,7 +278,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             //A driver can be removed from its related car
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             DeleteAllContactPersonAndOrganisations();
 

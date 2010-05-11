@@ -446,7 +446,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestFromString_InvalidSortOrder()
         {
             //---------------Set up test pack-------------------
@@ -461,9 +461,7 @@ namespace Habanero.Test.BO
             } catch (ArgumentException ex)
             {
                 StringAssert.Contains("is an invalid sort order. Valid options are ASC and DESC", ex.Message);
-                throw;
             }
-            //---------------Tear Down -------------------------
         }
 
         [Test]

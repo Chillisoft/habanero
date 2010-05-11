@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -143,9 +143,9 @@ namespace Habanero.BO
         /// Initialises the property with the specified value
         /// </summary>
         /// <param name="propValue">The value to assign</param>
-        public virtual void InitialiseProp(object propValue)
+        public virtual bool InitialiseProp(object propValue)
         {
-            InitialiseProp(propValue, false);
+            return InitialiseProp(propValue, false);
         }
 
         /// <summary>
@@ -173,19 +173,26 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propValue">The value to assign</param>
         /// <param name="isObjectNew">Whether the object is new or not</param>
-        protected virtual void InitialiseProp(object propValue, bool isObjectNew)
+        protected virtual bool InitialiseProp(object propValue, bool isObjectNew)
         {
             object newValue;
+            bool propValueChanged = false;
             ParsePropValue(propValue, out newValue);
             _invalidReason = "";
             //Brett 12 Jan 2009: Removed due to performance improvement during loading.
             // No bo loaded from the database will ever be placed in an invalid state
             //_isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
 
-            _currentValue = newValue;
+            if ((_currentValue == null && newValue != null) || (_currentValue != null && newValue == null) ||
+                (_currentValue != null && !_currentValue.Equals(newValue)))
+            {
+                propValueChanged = true;
+                _currentValue = newValue;
+            }
             //Set up origional properties s.t. property can be backed up and restored.
             BackupPropValue();
             this.IsObjectNew = isObjectNew;
+            return propValueChanged;
         }
         /// <summary>
         /// This method provides a the functionality to convert any object to the appropriate

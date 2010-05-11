@@ -38,7 +38,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [SetUp]
         public void Setup()
         {
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             _propDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
         }
 
@@ -238,7 +238,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetBusinessObjectFromObjectManager()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BOWithIntID.LoadClassDefWithIntID();
@@ -264,9 +264,9 @@ namespace Habanero.Test.BO.ClassDefinition
             BOWithIntID expectedBO = new BOWithIntID { IntID = 3, TestField = "ValidValue" };
             expectedBO.Save();
             propDef.LookupList = new BusinessObjectLookupList(typeof(BOWithIntID));
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(0, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             IBusinessObject returnedBO = propDef.GetlookupBusinessObjectFromObjectManager(expectedBO.IntID);
             //---------------Test Result -----------------------
@@ -286,7 +286,7 @@ namespace Habanero.Test.BO.ClassDefinition
             propDef.LookupList = new BusinessObjectLookupList(typeof(BOWithIntID_DifferentType));
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             IBusinessObject returnedBO = propDef.GetlookupBusinessObjectFromObjectManager(expectedBO.IntID);
             //---------------Test Result -----------------------
@@ -297,7 +297,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetBusinessObjectFromObjectManager_WriteNewProp()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();
@@ -313,8 +313,6 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreSame(contactPersonTestBO, returnedBO);
         }
-
-
 
         [Test]
         public void Test_IsValueValid_OnePropRule_ValidValue()
@@ -334,8 +332,6 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(valid);
             Assert.AreEqual("", errMsg);
         }
-
-
 
         [Test]
         public void Test_IsValueValid_OnePropRule_InValidValue()
@@ -458,7 +454,6 @@ namespace Habanero.Test.BO.ClassDefinition
             {
                 StringAssert.Contains("You cannot add a null property rule to a property def", ex.Message);
             }
-
         }
 
         [Test]
@@ -474,8 +469,8 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Test Result -----------------------
             Assert.AreEqual("Prop Name", displayName);
-
         }
+
         [Test]
         public void TestConvertValueToPropertyType_DateTimeAcceptsDateTimeNow()
         {
@@ -640,36 +635,50 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("PropName", prop.PropertyName);
             Assert.AreEqual("PropName", prop.DatabaseFieldName);
         }
-#pragma warning disable 168
+
         [Test]
-        [ExpectedException(typeof (FormatException))]
         public void TestCreateLatePropDefInvalidDefault()
         {
+            //---------------Set up test pack-------------------
             PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false,
                                            false);
-
-            object defaultValue = lPropDef.DefaultValue;
-
-            Assert.Fail("This line should not be reached because the previous line should have failed.");
+            //---------------Execute Test ----------------------
+            try
+            {
+                object defaultValue = lPropDef.DefaultValue;
+                Assert.Fail("Expected to throw an FormatException");
+            }
+                //---------------Test Result -----------------------
+            catch (FormatException ex)
+            {
+                StringAssert.Contains("cannot be converted to the property type", ex.Message);
+            }
         }
-#pragma warning restore 168
         [Test]
         public void TestCreateLatePropDefInvalidDefaultNotAccessed()
         {
             new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false, false);
             //No error
         }
-#pragma warning disable 168
+
         [Test]
-        [ExpectedException(typeof (UnknownTypeNameException))]
         public void TestCreateLatePropDefInvalidType()
         {
+            //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadWrite,
                                           null, "", false, false);
-            Type propType = propDef.PropertyType;
-            Assert.Fail("This line should not be reached because the previous line should have failed.");
+            //---------------Execute Test ----------------------
+            try
+            {
+                Type propType = propDef.PropertyType;
+                Assert.Fail("Expected to throw an UnknownTypeNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (UnknownTypeNameException ex)
+            {
+                StringAssert.Contains("Unable to load the property type while attempting to load a property definition", ex.Message);
+            }
         }
-#pragma warning restore 168
 
         [Test]
         public void TestCreateLatePropDefInvalidTypeNotAccessed()
@@ -688,17 +697,35 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void TestCreatePropDefInvalidDefault()
         {
-            new PropDef("prop", typeof (int), PropReadWriteRule.ReadWrite, "");
+            //---------------Execute Test ----------------------
+            try
+            {
+                new PropDef("prop", typeof (int), PropReadWriteRule.ReadWrite, "");
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("is invalid since it is not of type System.Int32", ex.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void TestCreatePropDefInvalidDefault2()
         {
-            new PropDef("prop", typeof (string), PropReadWriteRule.ReadWrite, 1);
+            //---------------Execute Test ----------------------
+            try
+            {
+                new PropDef("prop", typeof (string), PropReadWriteRule.ReadWrite, 1);
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("is invalid since it is not of type System.String", ex.Message);
+            }
         }
 
         [Test]
@@ -724,24 +751,36 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(ContactPersonTestBO.ContactType.Family, propDef.DefaultValue);
         }
 
-        [Test,
-         ExpectedException(typeof (ArgumentException),
-             ExpectedMessage =
-                 "A property name cannot contain any of the following characters: [.-|]  Invalid property name This-That"
-             )]
+        [Test]
         public void TestDashIsNotAllowedInName()
         {
-            new PropDef("This-That", typeof (string), PropReadWriteRule.ReadWrite, "");
+            //---------------Execute Test ----------------------
+            try
+            {
+                new PropDef("This-That", typeof (string), PropReadWriteRule.ReadWrite, "");
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("A property name cannot contain any of the following characters: [.-|]  Invalid property name This-That", ex.Message);
+            }
         }
 
-        [Test,
-         ExpectedException(typeof (ArgumentException),
-             ExpectedMessage =
-                 "A property name cannot contain any of the following characters: [.-|]  Invalid property name This.That"
-             )]
+        [Test]
         public void TestDotIsNotAllowedInName()
         {
-            new PropDef("This.That", typeof (string), PropReadWriteRule.ReadWrite, "");
+            //---------------Execute Test ----------------------
+            try
+            {
+                new PropDef("This.That", typeof (string), PropReadWriteRule.ReadWrite, "");
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("A property name cannot contain any of the following characters: [.-|]  Invalid property name This.That", ex.Message);
+            }
         }
 
         [Test]
@@ -751,14 +790,20 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("PropertyComparer`2", propDef.GetPropertyComparer<MyBO>().GetType().Name);
         }
 
-        [Test,
-         ExpectedException(typeof (ArgumentException),
-             ExpectedMessage =
-                 "A property name cannot contain any of the following characters: [.-|]  Invalid property name This|That"
-             )]
+        [Test]
         public void TestPipeIsNotAllowedInName()
         {
-            new PropDef("This|That", typeof (string), PropReadWriteRule.ReadWrite, "");
+            //---------------Execute Test ----------------------
+            try
+            {
+                new PropDef("This|That", typeof (string), PropReadWriteRule.ReadWrite, "");
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("A property name cannot contain any of the following characters: [.-|]  Invalid property name This|That", ex.Message);
+            }
         }
 
         [Test]
@@ -894,7 +939,6 @@ namespace Habanero.Test.BO.ClassDefinition
 
         }
 
-
         [Test]
         public void TestCreateBOPropWithLookupList_CorrectPropCreated()
         {
@@ -911,8 +955,8 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
 
             Assert.IsInstanceOf(typeof(BOPropLookupList), prop);
-
         }  
+
         [Test]
         public void TestCreateBOProp_CorrectPropCreated_WithDefaultValue()
         {            
@@ -929,7 +973,6 @@ namespace Habanero.Test.BO.ClassDefinition
 
             Assert.IsInstanceOf(typeof(BOProp), prop);
         }
-
 
         [Test]
         public void TestCreateBOPropWithLookupList_CorrectPropCreated_WithDefaultValue()
@@ -996,6 +1039,50 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsInstanceOf<NullLookupList>(propDef.LookupList);
         }
+
+        [Test]
+        public void Test_ClassName_WhenHasClassDef_ShouldReturnClassDef_ClassName()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDefFake {ClassDef = new FakeClassDef{ClassName = GetRandomString()}};
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(propDef.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = propDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(propDef.ClassDef.ClassName, className);
+        }
+
+        [Test]
+        public void Test_ClassName_WhenNotHasClassDef_ShouldReturnEmptyString()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDefFake();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(propDef.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = propDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.IsEmpty(className);
+        }
+        [Test]
+        public void Test_ClassNameViaInterface_WhenNotHasClassDef_ShouldReturnEmptyString()
+        {
+            //---------------Set up test pack-------------------
+            IPropDef propDef = new PropDefFake();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(propDef.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = propDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.IsEmpty(className);
+        }
+
+        private static string GetRandomString()
+        {
+            return TestUtil.GetRandomString();
+        }
+
         class PropDefStub : PropDef
         {
             public PropDefStub(string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName, object defaultValue) : base(propertyName, propType, propRWStatus, databaseFieldName, defaultValue)

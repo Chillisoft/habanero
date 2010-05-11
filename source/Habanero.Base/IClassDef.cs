@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -278,5 +278,15 @@ namespace Habanero.Base
         /// <returns>Returns true if so, or false if there is no
         /// super class or another type of inheritance is being used</returns>
         bool IsUsingClassTableInheritance();
+
+        /// <summary>
+        /// Searches the relationship definition collection and returns 
+        /// the relationship definition found under the
+        /// relationship with the name specified.
+        /// </summary>
+        /// <param name="relationshipName">The relationship name in question</param>
+        /// <returns>Returns the relationship definition if found, 
+        /// or null if not found</returns>
+        IRelationshipDef GetRelationship(string relationshipName);
     }
 }

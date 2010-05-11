@@ -646,7 +646,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Source carSource = selectQuery.Source.Joins[0].ToSource;
             Assert.AreEqual("Car", carSource.Name);
             Assert.AreEqual(1, carSource.Joins.Count);
-            Assert.AreSame(carSource, carSource.Joins[0].FromSource);
+            Assert.AreEqual(carSource.ToString(), carSource.Joins[0].FromSource.ToString());
             Assert.AreEqual("Owner", carSource.Joins[0].ToSource.Name);
 
             //---------------Tear Down -------------------------

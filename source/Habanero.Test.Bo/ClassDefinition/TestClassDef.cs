@@ -568,11 +568,22 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNull(classDef.GetPropDef("wrongprop", false));
         }
 
-        [Test, ExpectedException(typeof(InvalidPropertyNameException))]
+        [Test]
         public void TestGetMissingPropDefReturnsException()
         {
+            //---------------Set up test pack-------------------
             ClassDef classDef = new ClassDef(typeof(String), null, new PropDefCol(), null, null);
-            classDef.GetPropDef("wrongprop", true);
+            //---------------Execute Test ----------------------
+            try
+            {
+                classDef.GetPropDef("wrongprop", true);
+                Assert.Fail("Expected to throw an InvalidPropertyNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains("The property definition for the property 'wrongprop' could not be found", ex.Message);
+            }
         }
 
         [Test]
@@ -824,6 +835,26 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestGetPropertyType_WhenLookup_ShouldReturnUnderlyingType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = LoadClassDef();
+            const string propertyName = "Lookup";
+            PropDef propDef = new PropDef(propertyName, typeof(string), PropReadWriteRule.ReadWrite, null)
+                          {
+                              LookupList = new SimpleLookupList(new Dictionary<string, string>())
+                          };
+            classDef.PropDefcol.Add(propDef);
+            ClassDef.ClassDefs.Add(classDef);
+            //---------------Execute Test ----------------------
+            Type stringPropType = classDef.GetPropertyType(propertyName);
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(string), stringPropType);
+            //---------------Tear down -------------------------
+        }
+
+        [Test]
         public void TestGetPropertyType_WhenVirtualPropDouble_ShouldReturnReflectedType()
         {
             //---------------Set up test pack-------------------
@@ -932,7 +963,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Tear Down -------------------------
         }
 
-        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
+        [Test]
         public void TestGet_NonExistant()
         {
             //---------------Set up test pack-------------------
@@ -949,7 +980,6 @@ namespace Habanero.Test.BO.ClassDefinition
             {
             //---------------Test Result -----------------------
                 StringAssert.Contains("No ClassDef has been loaded for " + typeof(ContactPerson).FullName, ex.Message);
-                throw;
             }
             //---------------Tear Down -------------------------
         }
@@ -986,7 +1016,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Tear Down -------------------------
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestGetPropDef_WithInvalidSource_ThrowError()
         {
             //---------------Set up test pack-------------------
@@ -995,7 +1025,16 @@ namespace Habanero.Test.BO.ClassDefinition
             Source source = new Source("MyRelationship");
             const string myrelatedtestpropName = "MyRelatedTestProp";
             //---------------Execute Test ----------------------
-            myBoClassDef.GetPropDef(source, myrelatedtestpropName, true);
+            try
+            {
+                myBoClassDef.GetPropDef(source, myrelatedtestpropName, true);
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("does not contain a relationship with the name ", ex.Message);
+            }
         }
 
         [Test]
@@ -1073,7 +1112,37 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("Test Class", def.DisplayName);
         }
 
+        [Test]
+        public void Test_GetRelationship_ShouldReturnTheRelationshipDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = MyBO.LoadClassDefWithShape_SingleTableInheritance_Relationship();
+            const string relationshipName = "Shape";
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            var relationshipDef = classDef.GetRelationship(relationshipName);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(relationshipDef);
+            Assert.AreEqual(relationshipName, relationshipDef.RelationshipName);
+        }
+        [Test]
+        public void Test_GetRelationship_WhenOnParent_ShouldReturnTheRelationshipDefFromParent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = MyBO.LoadClassDefWithShape_SingleTableInheritance_Relationship();
+            IClassDef classDefSubType = MyBOSubType.LoadInheritedTypeClassDef();
+            const string relationshipName = "Shape";
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(classDef.GetRelationship(relationshipName));
+            //---------------Execute Test ----------------------
+            var relationshipDef = classDefSubType.GetRelationship(relationshipName);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(relationshipDef);
+            Assert.AreEqual(relationshipName, relationshipDef.RelationshipName);
+        }
     }
 
     // This class serves to access protected methods

@@ -74,11 +74,21 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        [ExpectedException(typeof(HabaneroArgumentException))]
         public void TestCreateRelationshipWithNonBOType()
         {
-            new MultipleRelationshipDef("Relation1", typeof(String), _RelKeyDef, false, "",
-                                                                 DeleteParentAction.DeleteRelated);
+            //---------------Execute Test ----------------------
+            try
+            {
+                new MultipleRelationshipDef("Relation1", typeof(String), _RelKeyDef, false, "",
+                                            DeleteParentAction.DeleteRelated);
+
+                Assert.Fail("Expected to throw an HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                StringAssert.Contains("The argument 'relatedObjectClassType' is not valid. The 'relatedObjectClassType' argument is expected to be of type BusinessObject", ex.Message);
+            }
         }
 
         [Test]

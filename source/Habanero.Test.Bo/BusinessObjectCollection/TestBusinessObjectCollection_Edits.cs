@@ -830,7 +830,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsTrue(addedEventFired);
         }
 
-        [Test, ExpectedException(typeof (HabaneroDeveloperException))]
+        [Test]
         public void Test_MarkForDeleteBO_Refresh()
         {
             //---------------Set up test pack-------------------
@@ -843,7 +843,16 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             AssertOnePersisted_OneMarkForDelete(cpCol);
 
             //---------------Execute Test ----------------------
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
+            try
+            {
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
+                Assert.Fail("Expected to throw an HabaneroDeveloperException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("the object being refreshed is being edited", ex.Message);
+            }
         }
 
         #endregion

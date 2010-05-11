@@ -34,7 +34,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
         }
 
@@ -158,6 +158,23 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        public void TestLoad_SingleTableInheritance_LoadingBaseType_ShouldLoadAllSubTypes()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            Shape shape = Shape.CreateSavedShape();
+            CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Shape> loadedShapes =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>("");
+
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(2, loadedShapes.Count);
+        }
+
+        [Test]
         public void TestLoad_SingleTableInheritance_Hierarchy()
         {
             //---------------Set up test pack-------------------
@@ -172,7 +189,40 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreSame(filledCircle, loadedFilledCircle);
         }
 
+
+        [Test]
+        public void TestLoad_SingleTableInheritance_Hierarchy_LoadingBaseType_ShouldLoadAllSubTypes()
+        {
+            //---------------Set up test pack-------------------
+            FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
+            FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
+            Shape shape = Shape.CreateSavedShape();
+            CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Shape> loadedShapes =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>("");
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, loadedShapes.Count);
+        }
         
+        [Test]
+        public void TestLoad_SingleTableInheritance_Hierarchy_LoadingMiddleType_ShouldLoadSubType()
+        {
+            //---------------Set up test pack-------------------
+            FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
+            FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
+            Shape shape = Shape.CreateSavedShape();
+            CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<CircleNoPrimaryKey> loadedCircles =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<CircleNoPrimaryKey>("");
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, loadedCircles.Count);
+        }
 
         [Test]
         public void TestLoad_ConcreteTableInheritance()

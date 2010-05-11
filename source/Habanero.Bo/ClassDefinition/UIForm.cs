@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -59,6 +59,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="tab">A UIFormTab object</param>
         public void Add(IUIFormTab tab)
         {
+            if (tab == null) return;
             tab.UIForm = this;
             _list.Add(tab);
         }
@@ -69,6 +70,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="tab">A UIFormTab object</param>
         public void Remove(IUIFormTab tab)
         {
+            if (tab == null) return;
             _list.Remove(tab);
         }
 
@@ -78,6 +80,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="tab">A UIFormTab object</param>
         public bool Contains(IUIFormTab tab)
         {
+            if (tab == null) return false;
             return _list.Contains(tab);
         }
 

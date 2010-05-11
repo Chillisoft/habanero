@@ -55,12 +55,12 @@ namespace Habanero.Test.BO.Loaders
         {
             IUIFormField uiProp =
                 loader.LoadUIProperty(
-                    @"<field label=""testlabel"" property=""testpropname"" type=""TextBox"" assembly=""System.Windows.Forms"" mapperType=""TextBoxMapper"" mapperAssembly=""Habanero.UI.Base"" editable=""false"" />");
+                    @"<field label=""testlabel"" property=""testpropname"" type=""TextBox"" assembly=""System.Windows.Forms"" mapperType=""TextBoxMapper"" mapperAssembly=""Habanero.Faces.Base"" editable=""false"" />");
             Assert.AreEqual("testlabel", uiProp.Label);
             Assert.AreEqual("testpropname", uiProp.PropertyName);
             Assert.AreEqual("TextBox", uiProp.ControlTypeName);
             Assert.AreEqual("System.Windows.Forms", uiProp.ControlAssemblyName);
-            Assert.AreEqual("Habanero.UI.Base", uiProp.MapperAssembly);
+            Assert.AreEqual("Habanero.Faces.Base", uiProp.MapperAssembly);
             Assert.AreEqual("TextBoxMapper", uiProp.MapperTypeName);
             Assert.AreEqual(false, uiProp.Editable);
         }

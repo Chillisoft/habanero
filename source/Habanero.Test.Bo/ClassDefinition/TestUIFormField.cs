@@ -694,6 +694,36 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestIsCompulsory_WhenRelationshipField_AndRelationshipIsCompulsory()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithAssociationRelationship();
+            classDef.PropDefcol["RelatedID"].Compulsory = true;
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField("MyRelationship");
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(classDef.RelationshipDefCol["MyRelationship"].IsCompulsory);
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isCompulsory);
+        }
+
+        [Test]
+        public void TestIsCompulsory_WhenRelationshipField_AndRelationshipIsNotCompulsory()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithAssociationRelationship();
+            classDef.PropDefcol["RelatedID"].Compulsory = false;
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField("MyRelationship");
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(classDef.RelationshipDefCol["MyRelationship"].IsCompulsory);
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isCompulsory);
+        }
+        
+        [Test]
         public void TestLabelTextHasStarIfCompulsory()
         {
             //---------------Set up test pack-------------------

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -124,6 +124,22 @@ namespace Habanero.BO.ClassDefinition
                 }
             }
             return superClassClassDef;
+        }
+        
+        /// <summary>
+        /// Returns the relationship on the classdef that matches the name given.  If no match is found,
+        /// returns null.
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static IRelationshipDef GetRelationshipDefByName(IClassDef classDef, string name)
+        {
+            foreach (IRelationshipDef def in classDef.RelationshipDefCol)
+            {
+                if (def.RelationshipName == name) return def;
+            }
+            return null;
         }
     }
 }

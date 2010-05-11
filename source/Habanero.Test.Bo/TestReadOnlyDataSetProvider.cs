@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -26,7 +26,8 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestReadOnlyDataSetProvider : TestDataSetProvider
     {
-     
+
+
         protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
             _dataSetProvider = new ReadOnlyDataSetProvider(col);
@@ -160,7 +161,7 @@ namespace Habanero.Test.BO
 //        public void TestOrderItemChangeItemAndFind()
 //        {
 //            SetupTestData();
-//            BusinessObjectManager.Instance.ClearLoadedObjects();
+//            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 //            OrderItem.ClearTable();
 //            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
 //            col.LoadAll();

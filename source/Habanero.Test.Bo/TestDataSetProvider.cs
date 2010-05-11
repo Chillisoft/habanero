@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -54,6 +54,8 @@ namespace Habanero.Test.BO
         {
             this.SetupDBConnection();
             OrderItem.CreateTable();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         [TestFixtureTearDown]
@@ -463,7 +465,7 @@ namespace Habanero.Test.BO
         public void TestOrderItemChangeItemAndFind()
         {
             SetupTestData();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             OrderItem.ClearTable();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
@@ -746,6 +748,35 @@ namespace Habanero.Test.BO
             Assert.AreEqual(myFather.DateOfBirth, value);
         }
 
+        [Test]
+        public void TestRelatedPropColumn_WhenIsLookup_ShouldReturnTypeObject()
+        {
+            //-------------Setup Test Pack ------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            new Address();//TO Load ClassDefs
+
+            var engine = new Engine();
+            var car = new Car();
+            engine.CarID = car.CarID;
+            IClassDef engineClassDef = engine.ClassDef;
+            IClassDef carClassDef = car.ClassDef;
+            IPropDef ownerPropDef = carClassDef.PropDefcol["OwnerId"];
+            ownerPropDef.LookupList = new BusinessObjectLookupList(typeof (ContactPerson));
+            const string columnName = "Car.OwnerID";
+            UIGrid uiGrid = CreateUiGridWithColumn(engineClassDef, columnName);
+
+            BusinessObjectCollection<Engine> engines = new BusinessObjectCollection<Engine> {engine};
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(engines);
+            //--------------Assert PreConditions----------------            
+            //---------------Execute Test ----------------------
+            DataTable dataTable = dataSetProvider.GetDataTable(uiGrid);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(dataTable.Columns.Contains(columnName), "DataTable should have the related property column");
+            DataColumn dataColumn = dataTable.Columns[columnName];
+            Assert.AreSame(typeof(object), dataColumn.DataType);
+            Assert.AreEqual(1, dataTable.Rows.Count);
+            DataRow dataRow = dataTable.Rows[0];
+        }
         [Test]
         public void TestVirtualPropColumn()
         {

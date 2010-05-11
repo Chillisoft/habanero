@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -80,7 +80,7 @@ namespace Habanero.Test.BO
             MemoryStream writeStream = new MemoryStream();
             DataStoreInMemoryBinaryWriter writer = new DataStoreInMemoryBinaryWriter(writeStream);
             writer.Write(savedDataStore);
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             DataStoreInMemory loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
             DataStoreInMemoryBinaryReader reader = new DataStoreInMemoryBinaryReader(writeStream);

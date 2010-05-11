@@ -108,43 +108,44 @@ namespace Habanero.Test.BO.Loaders
                 StringAssert.Contains("A 'rule' element in the class definitions must contain at least one 'add' element for each component of the rule, such as the minimum ", ex.Message);
             }
         }
-
+        
         [Test]
         public void TestRuleOfInteger()
         {
+            //---------------Execute Test ----------------------
             IPropRule rule =
-                _loader.LoadRule(typeof (int).Name,
-                    @"<rule name=""Test Rule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
+                _loader.LoadRule(typeof(int).Name,
+                                 @"<rule name=""Test Rule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
+            //---------------Test Result -----------------------
             Assert.IsInstanceOf(typeof(IPropRule), rule);
             Assert.AreEqual("Test Rule", rule.Name, "Name name is not being read from xml correctly.");
             Assert.AreEqual("Test Message", rule.Message, "Message is not being read from xml correctly.");
-            //Assert.AreSame(typeof(int), rule.PropertyType,
-            //                   "A propRuleInteger should have int as its property type.");
-            Assert.AreEqual("2", rule.Parameters["min"]);
-            Assert.AreEqual("10", rule.Parameters["max"]);
+            Assert.AreEqual(2, Convert.ToInt32(rule.Parameters["min"]));
+            Assert.AreEqual(10, Convert.ToInt32(rule.Parameters["max"]));
         }
-
+        
         [Test]
-        public void TestPropRuleIntegerNoValues()
+        public void TestPropRuleIntegerNoMinValue()
         {
+            //---------------Execute Test ----------------------
             IPropRule rule =
-                _loader.LoadRule(typeof (int).Name,
-                    @"<rule name=""TestRule"" message=""Test Message""><add key=""max"" value=""1""/></rule>");
+                _loader.LoadRule(typeof(int).Name,
+                                 @"<rule name=""TestRule"" message=""Test Message""><add key=""max"" value=""1""/></rule>");
+            //---------------Test Result -----------------------
             Assert.AreEqual(int.MinValue, Convert.ToInt32(rule.Parameters["min"]));
-            rule =
-                _loader.LoadRule(typeof (int).Name,
-                    @"<rule name=""TestRule"" message=""Test Message""><add key=""min"" value=""1""/></rule>");
-            Assert.AreEqual(int.MaxValue, Convert.ToInt32(rule.Parameters["max"]));
-        }
 
-        //[Test]
-        //public void TestIsCompulsory()
-        //{
-        //    PropRuleBase propRule =
-        //        _loader.LoadPropertyRule(
-        //            @"<propertyRuleInteger name=""TestInt"" isCompulsory=""true""></propertyRuleInteger>");
-        //    Assert.IsTrue(propRule.IsCompulsory, "Property should be compulsory as defined in the xml");
-        //}
+        }
+        [Test]
+        public void TestPropRuleIntegerNoMaxValue()
+        {
+            //---------------Execute Test ----------------------
+            IPropRule rule =
+                _loader.LoadRule(typeof(int).Name,
+                                 @"<rule name=""TestRule"" message=""Test Message""><add key=""min"" value=""1""/></rule>");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(int.MaxValue, Convert.ToInt32(rule.Parameters["max"]));
+
+        }
 
         [Test]
         public void TestPropRuleString()
@@ -171,6 +172,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleStringAttributes()
         {
+            //---------------Execute Test ----------------------
             IPropRule rule = _loader.LoadRule(typeof (string).Name,
                 @"<rule name=""TestString"" message=""String Test Message"" >
                             <add key=""patternMatch"" value=""Test Pattern"" />
@@ -178,11 +180,12 @@ namespace Habanero.Test.BO.Loaders
                             <add key=""maxLength"" value=""10"" />
                         </rule>                          
 ");
-
+            //---------------Test Result -----------------------
             Assert.AreEqual("Test Pattern", rule.Parameters["patternMatch"]);
             Assert.AreEqual(5, Convert.ToInt32(rule.Parameters["minLength"]));
             Assert.AreEqual(10, Convert.ToInt32(rule.Parameters["maxLength"]));
         }
+
 
         [Test]
         public void TestPropRuleDate()
@@ -242,12 +245,14 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDate_Now()
         {
+            //---------------Execute Test ----------------------
             IPropRule rule = _loader.LoadRule(typeof(DateTime).Name,
                 @"<rule name=""TestDate""  >
                             <add key=""min"" value=""Now"" />
                             <add key=""max"" value=""Now"" />
                         </rule>                          
 ");
+            //---------------Test Result -----------------------
             Assert.AreEqual("TestDate", rule.Name, "Rule name is not being read from xml correctly.");
             Assert.AreEqual("Now", rule.Parameters["min"]);
             Assert.AreEqual("Now", rule.Parameters["max"]);
@@ -268,13 +273,22 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
-        public void TestPropRuleDecimalNoValues()
+        public void TestPropRuleDecimalNoMinValue()
         {
+            //---------------Set up test pack-------------------
             IPropRule rule =
                 _loader.LoadRule(typeof (Decimal).Name, @"<rule name=""TestDec""><add key=""max"" value=""1""/></rule>");
+            //---------------Execute Test ----------------------
             Assert.AreEqual(Decimal.MinValue, Convert.ToDecimal(rule.Parameters["min"]));
-            rule =
+        }
+        
+        [Test]
+        public void TestPropRuleDecimalNoMaxValue()
+        {
+            //---------------Set up test pack-------------------
+            IPropRule rule =
                 _loader.LoadRule(typeof (Decimal).Name, @"<rule name=""TestDec""><add key=""min"" value=""1""/></rule>");
+            //---------------Execute Test ----------------------
             Assert.AreEqual(Decimal.MaxValue, Convert.ToDecimal(rule.Parameters["max"]));
         }
 

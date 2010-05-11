@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -28,12 +28,12 @@ namespace Habanero.Util
     public static class DateTimeUtilities
     {
         /// <summary>
-        /// returns the last day of the month today
+        /// returns the last day of the current month (i.e. LastDayOfTheMonth(Today)
         /// </summary>
         /// <returns></returns>
         public static DateTime LastDayOfTheMonth()
         {
-            return LastDayOfTheMonth(new DateTime());
+            return LastDayOfTheMonth(DateTime.Today);
         }
 
         /// <summary>
@@ -261,6 +261,128 @@ namespace Habanero.Util
             }
             returnValue = valueToParse;
             return true;
+        }
+
+        /// <summary>
+        /// Determines whether is week day.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is week day] ; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsWeekDay(DateTime date)
+        {
+            return ((date.DayOfWeek != DayOfWeek.Saturday) && (date.DayOfWeek != DayOfWeek.Sunday));
+        }
+        /// <summary>
+        /// Return the <paramref name="date"/> if it is on the <paramref name="day"/> of the week.
+        /// Else returns the following day. This i used to iteratively walk through days untill you find the '
+        /// day the next day that is the day of the week.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        public static DateTime OnOrNextDayOfWeek(DateTime date, DayOfWeek day)
+        {
+            while (date.DayOfWeek != day)
+                date = date.AddDays(1);
+            return date;
+        }
+        /// <summary>
+        /// Returns unchanged if is business day
+        /// else subsequent Monday.
+        /// Does not take into account public holidays.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns><see cref="T:System.DateTime"/></returns>
+        public static DateTime OnOrNextBusinessDay(DateTime date)
+        {
+            DateTime d = date;
+            switch (date.DayOfWeek)
+            {
+                case System.DayOfWeek.Sunday:
+                    d = date.AddDays(1);
+                    break;
+                case System.DayOfWeek.Saturday:
+                    d = date.AddDays(2);
+                    break;
+            }
+            return d;
+        }
+        /// <summary>
+        /// Returns unchanged if is business day
+        /// else previous  Friday
+        /// Does not take into account public holidays.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns></returns>
+        public static DateTime OnOrPreviousBusinessDay(DateTime date)
+        {
+            DateTime d = date;
+            switch (date.DayOfWeek)
+            {
+                case System.DayOfWeek.Sunday:
+                    d = date.AddDays(-2);
+                    break;
+                case System.DayOfWeek.Saturday:
+                    d = date.AddDays(-1);
+                    break;
+            }
+            return d;
+        }
+        /// <summary>
+        /// Next Business Day (not Sat or Sun)
+        /// Does not take into account public holidays.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns><see cref="T:System.DateTime"/></returns>
+        public static DateTime NextBusinessDay(DateTime date)
+        {
+            DateTime d = date;
+            switch (date.DayOfWeek)
+            {
+                case System.DayOfWeek.Sunday:
+                case System.DayOfWeek.Monday:
+                case System.DayOfWeek.Tuesday:
+                case System.DayOfWeek.Wednesday:
+                case System.DayOfWeek.Thursday:
+                    d = date.AddDays(1);
+                    break;
+                case System.DayOfWeek.Friday:
+                    d = date.AddDays(3);
+                    break;
+                case System.DayOfWeek.Saturday:
+                    d = date.AddDays(2);
+                    break;
+            }
+            return d;
+        }
+        /// <summary>
+        /// Previous Trade Day (not Sat or Sun)
+        /// Does not take into account public holidays.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns><see cref="T:System.DateTime"/></returns>
+        public static DateTime PreviousBusinessDay(DateTime date)
+        {
+            DateTime d = date;
+            switch (date.DayOfWeek)
+            {
+                case System.DayOfWeek.Sunday:
+                    d = date.AddDays(-2);
+                    break;
+                case System.DayOfWeek.Monday:
+                    d = date.AddDays(-3);
+                    break;
+                case System.DayOfWeek.Tuesday:
+                case System.DayOfWeek.Wednesday:
+                case System.DayOfWeek.Thursday:
+                case System.DayOfWeek.Friday:
+                case System.DayOfWeek.Saturday:
+                    d = date.AddDays(-1);
+                    break;
+            }
+            return d;
         }
     }
 }

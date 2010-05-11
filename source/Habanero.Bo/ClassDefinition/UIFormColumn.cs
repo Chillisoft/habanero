@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -67,6 +67,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="field">A form field definition</param>
         public void Add(IUIFormField field)
         {
+            if(field == null) return;
             field.UIFormColumn = this;
             _list.Add(field);
         }
@@ -77,6 +78,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="field">A form field definition</param>
         public void Remove(IUIFormField field)
         {
+            if (field == null) return;
             _list.Remove(field);
         }
 
@@ -86,6 +88,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="field">A form field definition</param>
         public bool Contains(IUIFormField field)
         {
+            if (field == null) return false;
             return _list.Contains(field);
         }
 

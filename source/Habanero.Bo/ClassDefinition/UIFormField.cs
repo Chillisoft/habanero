@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -458,7 +458,14 @@ namespace Habanero.BO.ClassDefinition
                 IClassDef def = GetClassDef();
                 if (def == null) return false;
                 IPropDef propDef = this.GetPropDefIfExists(def);
-                return propDef != null && propDef.Compulsory;
+                if (propDef != null)
+                {
+                    return propDef.Compulsory;
+                } else
+                {
+                    IRelationshipDef relationshipDef = ClassDefHelper.GetRelationshipDefByName(def, PropertyName);
+                    return relationshipDef != null && relationshipDef.IsCompulsory;
+                }
             }
         }
         /// <summary>

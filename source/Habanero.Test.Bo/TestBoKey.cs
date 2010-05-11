@@ -98,43 +98,71 @@ namespace Habanero.Test.BO
             IBOProp lProp = _boPropCol2["PropName"];
             Assert.AreSame(lProp, lBOKey1.SortedValues[0]);
         }
-#pragma warning disable 168
-        [Test, ExpectedException(typeof(InvalidPropertyNameException))]
+        [Test]
         public void TestIndexerPropertyNotFound()
         {
-            IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
-
-
+            try
+            {
+                IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
                 IBOProp prop = boKey["invalidpropname"];
-                Assert.Fail("Expected to throw an InvalidPropertyNameException`");
-
-
+                Assert.Fail("Expected to throw an InvalidPropertyNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains("invalidpropname", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(IndexOutOfRangeException))]
+        [Test]
         public void TestIndexerIntegerOutOfRange()
         {
-            IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+            try
+            {
+                IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
                 IBOProp prop = boKey[2];
-                Assert.Fail("Expected to throw an IndexOutOfRangeException");
 
+                Assert.Fail("Expected to throw an IndexOutOfRangeException");
+            }
+                //---------------Test Result -----------------------
+            catch (IndexOutOfRangeException ex)
+            {
+                StringAssert.Contains("the collection does not contain that many items", ex.Message);
+            }
         }
-#pragma warning restore 168
-        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+
+        [Test]
         public void TestAddNullBOProp()
         {
-            IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+            try
+            {
+                IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
                 boKey.Add(null);
+
                 Assert.Fail("Expected to throw an HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                StringAssert.Contains("The argument 'boProp' is not valid. boProp cannot be null", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(InvalidPropertyException))]
+        [Test]
         public void TestAddDuplicateBOProp()
         {
-            IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+            try
+            {
+                IBOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
                 boKey.Add(boKey["PropName"]);
-                Assert.Fail("Expected to throw an InvalidPropertyException");
 
+                Assert.Fail("Expected to throw an InvalidPropertyException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyException ex)
+            {
+                StringAssert.Contains("already exists in the key collection", ex.Message);
+            }
         }
 
         [Test]

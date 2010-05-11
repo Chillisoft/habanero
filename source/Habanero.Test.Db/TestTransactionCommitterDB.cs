@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -64,7 +64,7 @@ namespace Habanero.Test.DB
             // are executed then it will still only be called once.
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void TestRaisesException_onError()
         {
             //---------------Set up test pack-------------------
@@ -73,8 +73,15 @@ namespace Habanero.Test.DB
             committerDB.AddTransaction(trn);
             committerDB.AddTransaction(new StubSuccessfullTransaction());
             //---------------Execute Test ----------------------
-            committerDB.CommitTransaction();
-            //---------------Test Result -----------------------
+            try
+            {
+                committerDB.CommitTransaction();
+                Assert.Fail("Expected to throw an NotImplementedException");
+            }
+                //---------------Test Result -----------------------
+            catch (NotImplementedException)
+            {
+            }
         }
 
         [Test]
@@ -796,7 +803,7 @@ namespace Habanero.Test.DB
             Assert.AreSame(mockBo, savedMockBO);
         }
 
-        [Test, ExpectedException(typeof (BusObjectInAnInvalidStateException))]
+        [Test]
         public void TestPersistSimpleBO_Insert_InvalidData()
         {
             //---------------Set up test pack-------------------
@@ -806,7 +813,16 @@ namespace Habanero.Test.DB
             committerDB.AddTransaction(new TransactionalBusinessObjectDB(contactPersonTestBO, committerDB.DatabaseConnection));
 
             //---------------Execute Test ----------------------
-            committerDB.CommitTransaction();
+            try
+            {
+                committerDB.CommitTransaction();
+                Assert.Fail("Expected to throw an BusObjectInAnInvalidStateException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjectInAnInvalidStateException ex)
+            {
+                StringAssert.Contains("'ContactPersonTestBO.Surname' is a compulsory field and has no value", ex.Message);
+            }
         }
 
         [Test]
@@ -886,7 +902,7 @@ namespace Habanero.Test.DB
             Assert.AreEqual(mockBOProp1, mockBo.MockBOProp1);
         }
 
-        [Test, ExpectedException(typeof (BusObjPersistException))]
+        [Test]
         public void TestPreventDelete()
         {
             //---------------Set up test pack-------------------
@@ -899,7 +915,16 @@ namespace Habanero.Test.DB
             TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
             //---------------Execute Test ----------------------
-            committerDB.CommitTransaction();
+            try
+            {
+                committerDB.CommitTransaction();
+                Assert.Fail("Expected to throw an BusObjPersistException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjPersistException ex)
+            {
+                StringAssert.Contains("You cannot delete ContactPersonTestBO identified by ", ex.Message);
+            }
             //---------------Test Result -----------------------
         }
 

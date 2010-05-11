@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -85,11 +85,12 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propValue">The value to assign</param>
         /// <param name="isObjectNew">Whether the object is new or not</param>
-        protected override void InitialiseProp(object propValue, bool isObjectNew)
+        protected override bool InitialiseProp(object propValue, bool isObjectNew)
         {
             Loading = true;
-            base.InitialiseProp(propValue, isObjectNew);
+            bool propValueHasChanged = base.InitialiseProp(propValue, isObjectNew);
             Loading = false;
+            return propValueHasChanged;
         }
 
         /// <summary>

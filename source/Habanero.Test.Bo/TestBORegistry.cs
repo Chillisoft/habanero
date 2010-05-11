@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -41,7 +41,7 @@ namespace Habanero.Test.BO
         [TearDown]
         public void TearDownTest()
         {
-        
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
         }
 
  
@@ -107,7 +107,33 @@ namespace Habanero.Test.BO
             Assert.IsInstanceOf(typeof(TransactionCommitterInMemory), dataAccessor.CreateTransactionCommitter());
             //---------------Tear Down -------------------------
         }
-        
+
+
+        [Test]
+        public void Test_SetBusinessObjectManager_ShouldSet()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager expectedObjectManager = new BusinessObjectManager();            
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            BORegistry.BusinessObjectManager = expectedObjectManager;
+            //---------------Test Result -----------------------
+            var actualObjectManager = BORegistry.BusinessObjectManager;
+            Assert.AreSame(expectedObjectManager, actualObjectManager);
+        }
+
+        [Test]
+        public void Test_GetBusinessObjectManager_IfNotSet_ShouldReturnSingleton()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = null;
+            BusinessObjectManager expectedObjectManager = BusinessObjectManager.Instance;  
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualObjectManager = BORegistry.BusinessObjectManager;
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedObjectManager, actualObjectManager);
+        }
     }
 
    

@@ -82,10 +82,20 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNull(relProp, "The relProp should not have been created.");
         }
 
-        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+        [Test]
         public void TestAddNullException()
         {
-            RelPropDef relPropDef = new RelPropDef((string)null, "");
+            //---------------Execute Test ----------------------
+            try
+            {
+                RelPropDef relPropDef = new RelPropDef((string)null, "");
+                Assert.Fail("Expected to throw an HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                StringAssert.Contains("The argument 'ownerClassPropDefName' is not valid. ownerClassPropDefName cannot be null", ex.Message);
+            }
         }
 
         [Test]
