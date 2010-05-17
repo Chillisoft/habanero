@@ -16,8 +16,11 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Habanero.Base;
 
 namespace Habanero.BO
 {
@@ -32,8 +35,13 @@ namespace Habanero.BO
 
         public void Write(DataStoreInMemory dataStore)
         {
+            Write(dataStore.AllObjects);
+        }
+
+        public void Write(Dictionary<Guid, IBusinessObject> businessObjects)
+        {
             BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(_stream, dataStore.AllObjects);
+            formatter.Serialize(_stream, businessObjects);
         }
     }
 }

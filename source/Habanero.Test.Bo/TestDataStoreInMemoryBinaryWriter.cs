@@ -16,7 +16,10 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
 using System.IO;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -65,6 +68,24 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
             writer.Write(dataStore);
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(0, stream.Length);
+        }
+
+        [Test]
+        public void Test_Write_WithDictionary()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(new Car());
+            Dictionary<Guid, IBusinessObject> businessObjects = dataStore.AllObjects;
+            MemoryStream stream = new MemoryStream();
+            DataStoreInMemoryBinaryWriter writer = new DataStoreInMemoryBinaryWriter(stream);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStore.Count);
+            Assert.AreEqual(0, stream.Length);
+            //---------------Execute Test ----------------------
+            writer.Write(businessObjects);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
         }
