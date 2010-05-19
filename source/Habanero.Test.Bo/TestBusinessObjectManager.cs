@@ -2447,7 +2447,7 @@ namespace Habanero.Test.BO
             //----------------Assert preconditions ---------------
             Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
             //--------------- Execute Test ----------------------
-            IBusinessObject found = BusinessObjectManager.Instance.FindFirst(null, typeof (ContactPersonTestBO));
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst((Criteria)null, typeof (ContactPersonTestBO));
             //--------------- Test Result -----------------------
             Assert.IsNotNull(found);
         }

@@ -60,6 +60,7 @@ namespace Habanero.BO
         //    new Dictionary<string, WeakReference>();
         /// <summary> The Busienss Objects Loaded in memory. This is a <see cref="WeakReference"/> so that the objects can still be garbage collected. </summary>
         protected readonly Dictionary<Guid, WeakReference> _loadedBusinessObjects = new Dictionary<Guid, WeakReference>();
+        protected Dictionary<string, Guid> _compositeKeyIDs = new Dictionary<string, Guid>();
 
         private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
 
@@ -118,6 +119,19 @@ namespace Habanero.BO
 
                 //_loadedBusinessObjects.Add(businessObject.ID.AsString_CurrentValue(), new WeakReference(businessObject));
                 _loadedBusinessObjects.Add(businessObject.ID.ObjectID, new WeakReference(businessObject));
+
+                //If the object is not a guid id, store the current key in a dictionary along with the guid, so that the object
+                // can be found quickly using its key.
+                if (!businessObject.ID.IsGuidObjectID && (businessObject.ID.GetAsValue() != null && businessObject.ID.GetAsValue().ToString() != businessObject.ID.ObjectID.ToString()))
+                {
+                    try
+                    {
+                        _compositeKeyIDs.Add(businessObject.ID.AsString_CurrentValue(), businessObject.ID.ObjectID);
+                    } catch (ArgumentException )
+                    {
+                        _compositeKeyIDs[businessObject.ID.AsString_CurrentValue()] = businessObject.ID.ObjectID;
+                    }
+                }
             }
             businessObject.IDUpdated += _updateIDEventHandler; //Register for ID Updated event this event is fired
             // if any of the properties that make up the primary key are changed/Updated this event is fires.
@@ -263,6 +277,15 @@ namespace Habanero.BO
                 {
                     Remove(objectID, businessObject);
                 }
+                // If the object doesn't have a guid id, remove it from the composite key dictionary.
+                // use all 3 possible key descriptions because the key might have changed 
+                // (eg if this is being called from ObjectID_Updated_Handler)
+                if (!businessObject.ID.IsGuidObjectID)
+                {
+                    _compositeKeyIDs.Remove(businessObject.ID.AsString_CurrentValue());
+                    _compositeKeyIDs.Remove(businessObject.ID.AsString_PreviousValue());
+                    _compositeKeyIDs.Remove(businessObject.ID.AsString_LastPersistedValue());
+                }
                 //objectID = businessObject.ID.AsString_LastPersistedValue();
                 //if (Contains(objectID))
                 //{
@@ -390,12 +413,11 @@ namespace Habanero.BO
                     IBusinessObject businessObject = this[key];
                     this.Remove(key, businessObject);
                 }
+                _compositeKeyIDs = new Dictionary<string, Guid>();
             }
         }
 
         #endregion
-
-        //TODO 20 Jan 2009: improve performance of this, it's currently just using brute force.
 
         /// <summary>
         /// Finds all the loaded business objects that match the type T and the Criteria given.
@@ -520,6 +542,34 @@ namespace Habanero.BO
                 return collection;
             }
         }
+
+        /// <summary>
+        /// Finds the First Business Object that matches the type boType and the key given. Uses the internal composite key dictionary, 
+        /// so this method is far faster than the other FindFirst methods for finding objects with composite keys.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="boType"></param>
+        /// <returns></returns>
+        public IBusinessObject FindFirst(BOPrimaryKey key, Type boType)
+        {
+            lock (_loadedBusinessObjects)
+            {
+                string asStringCurrentValue = key.AsString_CurrentValue();
+                if (_compositeKeyIDs.ContainsKey(asStringCurrentValue))
+                {
+                    try
+                    {
+                        return this[_compositeKeyIDs[asStringCurrentValue]];
+                    }
+                    catch (HabaneroDeveloperException ex)
+                    {
+                        _compositeKeyIDs.Remove(asStringCurrentValue);
+                        return FindFirst(key.GetKeyCriteria(), boType);
+                    }
+                }
+                else return null;
+            }
+        }  
 
         /// <summary>
         /// Finds the First Business Object that matches the type boType and the Criteria given.
