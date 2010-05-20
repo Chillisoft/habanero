@@ -60,6 +60,8 @@ namespace Habanero.Test.DB
         public void TestFixtureSetup()
         {
             SetupDBConnection();
+            BORegistry.BusinessObjectManager = null;
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
         }

@@ -162,6 +162,7 @@ namespace Habanero.BO
         protected BusinessObject(ConstructForFakes constructForFakes)
         {
             _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
+            _boPropCol = new BOPropCol();
         }
 
         // ReSharper restore UnusedParameter.Local
@@ -1547,7 +1548,7 @@ namespace Habanero.BO
         /// </summary>
         protected internal virtual void CheckConcurrencyBeforePersisting()
         {
-            if (!(_concurrencyControl == null))
+            if (_concurrencyControl != null)
             {
                 _concurrencyControl.CheckConcurrencyBeforePersisting();
             }
@@ -1559,7 +1560,7 @@ namespace Habanero.BO
         /// </summary>
         protected virtual void CheckConcurrencyBeforeBeginEditing()
         {
-            if (!(_concurrencyControl == null))
+            if (_concurrencyControl != null)
             {
                 _concurrencyControl.CheckConcurrencyBeforeBeginEditing();
             }
@@ -1570,7 +1571,7 @@ namespace Habanero.BO
         /// </summary>
         protected virtual void UpdatedConcurrencyControlPropertiesBeforePersisting()
         {
-            if (!(_concurrencyControl == null))
+            if (_concurrencyControl != null)
             {
                 _concurrencyControl.UpdatePropertiesWithLatestConcurrencyInfoBeforePersisting();
             }
@@ -1581,7 +1582,7 @@ namespace Habanero.BO
         /// </summary>
         protected virtual void ReleaseWriteLocks()
         {
-            if (!(_concurrencyControl == null))
+            if (_concurrencyControl != null)
             {
                 _concurrencyControl.ReleaseWriteLocks();
             }

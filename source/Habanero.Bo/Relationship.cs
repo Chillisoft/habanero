@@ -256,6 +256,9 @@ namespace Habanero.BO
         /// initialise the RelKey object</param>
         protected Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
         {
+            if (owningBo == null) throw new ArgumentNullException("owningBo");
+            if (lRelDef == null) throw new ArgumentNullException("lRelDef");
+            if (lBOPropCol == null) throw new ArgumentNullException("lBOPropCol");
             _relDef = lRelDef;
             _owningBo = owningBo;
             _relKey = _relDef.RelKeyDef.CreateRelKey(lBOPropCol);
