@@ -541,7 +541,7 @@ namespace Habanero.Test.BO.ClassDefinition
             UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, null
                     , "", null, LayoutStyle.Label);
             //---------------Test Result -----------------------
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(uiFormField, "ShowAsCompulsory");
+            var showAsCompulsory = uiFormField.ShowAsCompulsory;
             Assert.IsNull(showAsCompulsory);
         }
 
@@ -554,7 +554,7 @@ namespace Habanero.Test.BO.ClassDefinition
             UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, false
                     , "", null, LayoutStyle.Label);
             //---------------Test Result -----------------------
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(uiFormField, "ShowAsCompulsory");
+            var showAsCompulsory = uiFormField.ShowAsCompulsory;
             Assert.IsNotNull(showAsCompulsory);
             Assert.IsFalse((bool) showAsCompulsory);
         }
@@ -568,7 +568,7 @@ namespace Habanero.Test.BO.ClassDefinition
             UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, true
                     , "", null, LayoutStyle.Label);
             //---------------Test Result -----------------------
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(uiFormField, "ShowAsCompulsory");
+            var showAsCompulsory = uiFormField.ShowAsCompulsory;
             Assert.IsNotNull(showAsCompulsory);
             Assert.IsTrue((bool)showAsCompulsory);
         }
@@ -580,11 +580,11 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             const string propertyName = "TestProp";
             IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
-            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", true);
+            field.ShowAsCompulsory = true;
             var propDef = classDef.PropDefcol[propertyName];
             //---------------Assert Precondition----------------
             Assert.IsFalse(propDef.Compulsory);
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            var showAsCompulsory = field.ShowAsCompulsory;
             Assert.IsTrue((bool)showAsCompulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;
@@ -598,12 +598,12 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             const string propertyName = "TestProp";
             IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
-            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", false);
+            field.ShowAsCompulsory = false;
             var propDef = classDef.PropDefcol[propertyName];
             propDef.Compulsory = true;
             //---------------Assert Precondition----------------
             Assert.IsTrue(propDef.Compulsory);
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            var showAsCompulsory = field.ShowAsCompulsory;
             Assert.IsFalse((bool)showAsCompulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;
@@ -617,12 +617,12 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             const string propertyName = "TestProp";
             IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
-            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", null);
+            field.ShowAsCompulsory = null;
             var propDef = classDef.PropDefcol[propertyName];
             propDef.Compulsory = true;
             //---------------Assert Precondition----------------
             Assert.IsTrue(propDef.Compulsory);
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            var showAsCompulsory = field.ShowAsCompulsory;
             Assert.IsNull(showAsCompulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;
@@ -636,12 +636,12 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             const string propertyName = "TestProp";
             IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
-            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", null);
+            field.ShowAsCompulsory = null;
             var propDef = classDef.PropDefcol[propertyName];
             propDef.Compulsory = true;
             //---------------Assert Precondition----------------
             Assert.IsTrue(propDef.Compulsory);
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            var showAsCompulsory = field.ShowAsCompulsory;
             Assert.IsNull(showAsCompulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;

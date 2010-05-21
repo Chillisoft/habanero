@@ -178,6 +178,11 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// Must the Field Show Itself as Compulsory or not
+        /// </summary>
+        public bool? ShowAsCompulsory { get; set; }
+
+        /// <summary>
         /// Indicates whether the control is editable
         /// </summary>
         public bool Editable { get; set; }
@@ -461,11 +466,9 @@ namespace Habanero.BO.ClassDefinition
                 if (propDef != null)
                 {
                     return propDef.Compulsory;
-                } else
-                {
-                    IRelationshipDef relationshipDef = ClassDefHelper.GetRelationshipDefByName(def, PropertyName);
-                    return relationshipDef != null && relationshipDef.IsCompulsory;
                 }
+                IRelationshipDef relationshipDef = ClassDefHelper.GetRelationshipDefByName(def, PropertyName);
+                return relationshipDef != null && relationshipDef.IsCompulsory;
             }
         }
         /// <summary>
@@ -530,11 +533,6 @@ namespace Habanero.BO.ClassDefinition
         /// The <see cref="LayoutStyle"/> to be used for this form field.
         ///</summary>
         public LayoutStyle Layout { get; set; }
-
-        /// <summary>
-        /// Must the Field Show Itself as Compulsory or not
-        /// </summary>
-        private bool? ShowAsCompulsory { get; set; }
 
 
         ///<summary>

@@ -121,7 +121,7 @@ namespace Habanero.Test.BO.Loaders
         public virtual void Test_Load_WhenShowAsCompulsorySet()
         {
             IUIFormField uiProp = loader.LoadUIProperty(@"<field property=""testpropname"" showAsCompulsory=""true"" />");
-            bool? privatePropertyValue = (bool?) ReflectionUtilities.GetPrivatePropertyValue(uiProp, "ShowAsCompulsory");
+            bool? privatePropertyValue = uiProp.ShowAsCompulsory;
             Assert.IsTrue(privatePropertyValue.Value);
             Assert.IsTrue(uiProp.IsCompulsory);
         }
@@ -129,7 +129,7 @@ namespace Habanero.Test.BO.Loaders
         public virtual void Test_Load_WhenShowAsCompulsoryNotSet()
         {
             IUIFormField uiProp = loader.LoadUIProperty(@"<field property=""testpropname"" />");
-            bool? privatePropertyValue = (bool?)ReflectionUtilities.GetPrivatePropertyValue(uiProp, "ShowAsCompulsory");
+            bool? privatePropertyValue = uiProp.ShowAsCompulsory;
             Assert.IsFalse(privatePropertyValue.GetValueOrDefault());
             Assert.IsFalse(uiProp.IsCompulsory);
         }

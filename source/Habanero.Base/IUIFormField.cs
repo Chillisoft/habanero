@@ -62,6 +62,11 @@ namespace Habanero.Base
         /// </summary>
         bool Editable { get;set; }
 
+        /// <summary>
+        /// Whether shown as compulsory on the form or not
+        /// </summary>
+        bool? ShowAsCompulsory { get;set; }
+
         ///<summary>
         /// Returns the text that will be shown in the Tool Tip for the control.
         ///</summary>
