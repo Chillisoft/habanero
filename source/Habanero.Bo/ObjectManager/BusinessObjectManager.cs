@@ -368,14 +368,12 @@ namespace Habanero.BO
                     _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting ClearLoadedObjects() (exit 1)");
                     return;
                 }
-                //string[] keysArray = new string[_loadedBusinessObjects.Count];
                 Guid[] keysArray = new Guid[_loadedBusinessObjects.Count];
                 _loadedBusinessObjects.Keys.CopyTo(keysArray, 0);
                 foreach (Guid key in keysArray)
                 {
-                    //if (key == null) return;
-                    if (!Contains(key)) continue;
-                    IBusinessObject businessObject = this[key];
+                    IBusinessObject businessObject = GetObjectIfInManager(key);
+                    if (businessObject == null) continue;
                     this.Remove(key, businessObject);
                 }
                 _compositeKeyIDs = new Dictionary<string, Guid>();
@@ -644,6 +642,24 @@ namespace Habanero.BO
                 this.Add(businessObject);
             }
             _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting AddWithReplace(BusinessObject businessObject)");
+        }
+
+        /// <summary>
+        /// Returns the object specified by the guid passed in, if the object exists in the object manager.
+        /// Returns null if the object is not found.
+        /// </summary>
+        /// <param name="id">The Id of the object to search the object manager for</param>
+        /// <returns>The object identified by the ID, or null if the object is not found in the manager</returns>
+        public IBusinessObject GetObjectIfInManager(Guid id)
+        {
+            lock (_lock)
+            {
+                if (this.Contains(id))
+                {
+                    return this[id];
+                }
+                return null;
+            }
         }
     }
 }
