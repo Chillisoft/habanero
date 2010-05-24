@@ -152,7 +152,13 @@ namespace Habanero.BO
         {
             if (propertyName.IndexOf(".") != -1)
             {
-                //Do Nothing
+                BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
+                boPropertyMapper.BusinessObject = _businessObject;
+                IBOProp property = boPropertyMapper.Property;
+                if (property != null)
+                {
+                    property.Value = value;
+                }
             }
             else if (propertyName.IndexOf("-") != -1)
             {
