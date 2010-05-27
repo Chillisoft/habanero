@@ -151,6 +151,104 @@ namespace Habanero.Test.Base
             Assert.AreEqual(expectedEndDate, dateRange.EndDate);
         }
 
+        [Test]
+        public void TestPreviousWeek_ReturnsStartAndEndForPreviousWeek()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Now;
+            var dateTimeNowFake = new DateTimeNowFake(dateTimeCurrent);
+            var optionsConverter = new DateRangeOptionsConverter(dateTimeNowFake);
+            var expectedStartDate = DateTimeUtilities.WeekStart(dateTimeCurrent.AddDays(-7));
+            var expectedEndDate = DateTimeUtilities.WeekEnd(dateTimeCurrent.AddDays(-7));
+            //--------------Assert PreConditions----------------
+            //---------------Execute Test ----------------------
+            DateRange dateRange = optionsConverter.ConvertDateRange(DateRangeOptions.PreviousWeek);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartDate, dateRange.StartDate);
+            Assert.AreEqual(expectedEndDate, dateRange.EndDate);
+        }
+
+        [Test]
+        public void TestPrevious7Days()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Now;
+            var dateTimeNowFake = new DateTimeNowFake(dateTimeCurrent);
+            var optionsConverter = new DateRangeOptionsConverter(dateTimeNowFake);
+            var expectedStartDate = dateTimeCurrent.AddDays(-7);
+            var expectedEndDate = dateTimeCurrent;
+            //--------------Assert PreConditions----------------
+            //---------------Execute Test ----------------------
+            DateRange dateRange = optionsConverter.ConvertDateRange(DateRangeOptions.Previous7Days);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartDate, dateRange.StartDate);
+            Assert.AreEqual(expectedEndDate, dateRange.EndDate);
+        }
+
+        [Test]
+        public void TestMonthToDate()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Now;
+            var dateTimeNowFake = new DateTimeNowFake(dateTimeCurrent);
+            var optionsConverter = new DateRangeOptionsConverter(dateTimeNowFake);
+            var expectedStartDate = DateTimeUtilities.FirstDayOfMonth(dateTimeCurrent);
+            var expectedEndDate = dateTimeCurrent;
+            //--------------Assert PreConditions----------------
+            //---------------Execute Test ----------------------
+            DateRange dateRange = optionsConverter.ConvertDateRange(DateRangeOptions.MonthToDate);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartDate, dateRange.StartDate);
+            Assert.AreEqual(expectedEndDate, dateRange.EndDate);
+        }
+
+        [Test]
+        public void TestWeekToDate()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Now;
+            var dateTimeNowFake = new DateTimeNowFake(dateTimeCurrent);
+            var optionsConverter = new DateRangeOptionsConverter(dateTimeNowFake);
+            var expectedStartDate = DateTimeUtilities.WeekStart(dateTimeCurrent);
+            var expectedEndDate = dateTimeCurrent;
+            //--------------Assert PreConditions----------------
+            //---------------Execute Test ----------------------
+            DateRange dateRange = optionsConverter.ConvertDateRange(DateRangeOptions.WeekToDate);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartDate, dateRange.StartDate);
+            Assert.AreEqual(expectedEndDate, dateRange.EndDate);
+        }
+
+        [Test]
+        public void Test_PreviousMonth()
+        {
+            //---------------Set up test pack-------------------
+//            var dateTimeCurrent = DateTime.Now;
+//            var dateTimeNowFake = new DateTimeNowFake(dateTimeCurrent);
+//            var optionsConverter = new DateRangeOptionsConverter(dateTimeNowFake);
+//            var expectedStartDate = DateTimeUtilities.MonthStart(dateTimeCurrent.AddMonths(-1));
+//            var expectedEndDate = DateTimeUtilities.MonthEnd(dateTimeCurrent.AddMonths(-1));
+            //--------------Assert PreConditions----------------
+//            Assert.AreEqual(0, expectedStartDate.Millisecond);
+            //---------------Execute Test ----------------------
+//            DateRange dateRange = optionsConverter.ConvertDateRange(DateRangeOptions.PreviousMonth);
+            //---------------Test Result -----------------------
+//            Assert.AreEqual(expectedStartDate, dateRange.StartDate);
+//            Assert.AreEqual(expectedEndDate, dateRange.EndDate);
+/*            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousMonth);
+
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2007, 10, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 1, 0, 0, 0, 0), _comboBox.EndDate);
+
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 1, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2007, 10, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 1, 0, 0, 0, 0), _comboBox.EndDate);*/
+        }
 
         private static DateTime GetDateTimeCurrent(int hour)
         {
@@ -379,24 +477,6 @@ namespace Habanero.Test.Base
                     Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
                 }
 
-                [Test]
-                public void TestLastWeek()
-                {
-                    //---------------Set up test pack-------------------
-
-                    //---------------Execute Test ----------------------
-                    _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousWeek);
-
-                    //---------------Test Result -----------------------
-                    _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-                    Assert.AreEqual(new DateTime(2007, 11, 5, 0, 0, 0, 0), _comboBox.StartDate);
-                    Assert.AreEqual(new DateTime(2007, 11, 12, 0, 0, 0, 0), _comboBox.EndDate);
-
-                    _comboBox.FixedNowDate = new DateTime(2007, 11, 12, 0, 0, 0, 0);
-                    Assert.AreEqual(new DateTime(2007, 11, 5, 0, 0, 0, 0), _comboBox.StartDate);
-                    Assert.AreEqual(new DateTime(2007, 11, 12, 0, 0, 0, 0), _comboBox.EndDate);
-                }
-
 
                 [Test]
                 public void TestLastWeek_WeekOffSet_Negative()
@@ -504,23 +584,6 @@ namespace Habanero.Test.Base
                 }
 
 
-                [Test]
-                public void TestPrevious7Days()
-                {
-                    //---------------Set up test pack-------------------
-
-                    //---------------Execute Test ----------------------
-                    _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous7Days);
-                    //---------------Test Result -----------------------
-
-                    _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-                    Assert.AreEqual(new DateTime(2007, 11, 6, 0, 0, 0, 0), _comboBox.StartDate);
-                    Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
-
-                    _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 0, 0, 0, 0);
-                    Assert.AreEqual(new DateTime(2007, 11, 6, 0, 0, 0, 0), _comboBox.StartDate);
-                    Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
-                }
 
                 [Test]
                 public void TestPrevious7Days_WithMidnightOffSet()
@@ -552,23 +615,6 @@ namespace Habanero.Test.Base
                     Assert.AreEqual(new DateTime(2007, 11, 11, 23, 0, 0, 0), _comboBox.EndDate);
                 }
 
-                [Test]
-                public void TestMonthToDate()
-                {
-                    //---------------Set up test pack-------------------
-
-                    //---------------Execute Test ----------------------
-                    _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.MonthToDate);
-
-                    //---------------Test Result -----------------------
-                    _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-                    Assert.AreEqual(new DateTime(2007, 11, 1, 0, 0, 0, 0), _comboBox.StartDate);
-                    Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
-
-                    _comboBox.FixedNowDate = new DateTime(2007, 11, 1, 0, 0, 0, 0);
-                    Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.StartDate);
-                    Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
-                }
 
                 [Test]
                 public void TestMonthToDate_WithMidnightOffset()
@@ -643,23 +689,6 @@ namespace Habanero.Test.Base
                     Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
                 }
 
-                [Test]
-                public void TestLastMonth()
-                {
-                    //---------------Set up test pack-------------------
-
-                    //---------------Execute Test ----------------------
-                    _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousMonth);
-
-                    //---------------Test Result -----------------------
-                    _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-                    Assert.AreEqual(new DateTime(2007, 10, 1, 0, 0, 0, 0), _comboBox.StartDate);
-                    Assert.AreEqual(new DateTime(2007, 11, 1, 0, 0, 0, 0), _comboBox.EndDate);
-
-                    _comboBox.FixedNowDate = new DateTime(2007, 11, 1, 0, 0, 0, 0);
-                    Assert.AreEqual(new DateTime(2007, 10, 1, 0, 0, 0, 0), _comboBox.StartDate);
-                    Assert.AreEqual(new DateTime(2007, 11, 1, 0, 0, 0, 0), _comboBox.EndDate);
-                }
 
                 [Test]
                 public void TestLastMonth_WithMidnightOffset()

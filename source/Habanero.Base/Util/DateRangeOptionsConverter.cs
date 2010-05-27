@@ -56,6 +56,34 @@ namespace Habanero.Base.Util
                     {
                         return new DateRange(WeekStart(currentDateTime), WeekEnd(currentDateTime));
                     }
+
+                case DateRangeOptions.PreviousWeek:
+                    {
+                        var lastWeekDate = currentDateTime.AddDays(-7);
+                        return new DateRange(WeekStart(lastWeekDate), WeekEnd(lastWeekDate));
+                    }
+
+                case DateRangeOptions.Previous7Days:
+                    {
+                        return new DateRange(currentDateTime.AddDays(-7), currentDateTime);
+                    }
+
+                case DateRangeOptions.MonthToDate:
+                    {
+                        return new DateRange(MonthStart(currentDateTime), currentDateTime);
+                    }
+                case DateRangeOptions.WeekToDate:
+                    {
+                        return new DateRange(WeekStart(currentDateTime), currentDateTime);
+                    }
+
+//                case DateRangeOptions.PreviousMonth:
+//                    {
+ //                       return new DateRange(MonthStart(currentDateTime).AddMonths(-1), MonthEnd( currentDateTime));
+///*                        _startDate = MonthStart(Now);
+//                        _endDate = MonthStart(Now);
+//                        break;*/
+//                    }
             }
             var range = new DateRange();
             
@@ -67,37 +95,6 @@ namespace Habanero.Base.Util
                               {
                                   _startDate = DayStart(Now.AddDays(-1));
                                   _endDate = DayStart(Now);
-                                  break;
-                              }
-         
-                          case DateRangeOptions.WeekToDate:
-                              {
-                                  _startDate = WeekStart(Now);
-                                  _endDate = Now;
-                                  break;
-                              }
-                          case DateRangeOptions.PreviousWeek:
-                              {
-                                  _startDate = WeekStart(Now).AddDays(-7);
-                                  _endDate = WeekStart(Now);
-                                  break;
-                              }
-                          case DateRangeOptions.Previous7Days:
-                              {
-                                  _startDate = DayStart(Now).AddDays(-7);
-                                  _endDate = DayStart(Now);
-                                  break;
-                              }
-                          case DateRangeOptions.MonthToDate:
-                              {
-                                  _startDate = MonthStart(Now);
-                                  _endDate = Now;
-                                  break;
-                              }
-                          case DateRangeOptions.PreviousMonth:
-                              {
-                                  _startDate = MonthStart(Now).AddMonths(-1);
-                                  _endDate = MonthStart(Now);
                                   break;
                               }
                           case DateRangeOptions.Previous30Days:
@@ -210,6 +207,10 @@ namespace Habanero.Base.Util
         private DateTime HourStart(DateTime currentDateTime)
         {
             return DateTimeUtilities.HourStart(currentDateTime);
+        }
+        private DateTime MonthStart(DateTime currentDateTime)
+        {
+            return DateTimeUtilities.FirstDayOfMonth(currentDateTime);
         }
     }
 }

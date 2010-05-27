@@ -488,6 +488,32 @@ namespace Habanero.Util
         }
 
         ///<summary>
+        /// The FirstDay of the currentDateTime
+        ///</summary>
+        ///<param name="currentDateTime"></param>
+        ///<returns></returns>
+        public static DateTime MonthStart(DateTime currentDateTime)
+        {
+            return MonthStart(currentDateTime, new TimeSpan(0));
+        }
+
+        ///<summary>
+        /// The FirstDay of the currentDateTime
+        ///</summary>
+        ///<param name="currentDateTime"></param>
+        ///<param name="timeSpan"></param>
+        ///<returns></returns>
+        public static DateTime MonthStart(DateTime currentDateTime, TimeSpan timeSpan)
+        {
+            var firstDayOfCurrentMonth = FirstDayOfMonth(currentDateTime).Add(timeSpan);
+            if (firstDayOfCurrentMonth > currentDateTime)
+            {
+                return MonthStart(currentDateTime.AddMonths(-1)).Add(timeSpan);
+            }
+            return firstDayOfCurrentMonth;
+        }
+
+        ///<summary>
         /// The WeekStart for the currentDateTime where the WeekStart is assumed to be Sunday
         ///</summary>
         ///<param name="currentDateTime"></param>
@@ -517,6 +543,28 @@ namespace Habanero.Util
             DateTime saturday = OnOrNextDayOfWeek(currentDateTime, DayOfWeek.Saturday);
             var endOfWeek = DayEnd(saturday);
             return endOfWeek.Add(startOfWeekOffSet);
+        }
+        /// <summary>
+        /// The MonthEnd For the currentDateTime where the MonthEnd is assumed to be Saturday
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
+        public static DateTime MonthEnd(DateTime currentDateTime)
+        {
+            return MonthEnd(currentDateTime, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// The MonthEnd For the currentDateTime where the MonthEnd is assumed to be Saturday
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <param name="startOfMonthOffSet">The OffSet</param>
+        /// <returns></returns>
+        public static DateTime MonthEnd(DateTime currentDateTime, TimeSpan startOfMonthOffSet)
+        {
+            DateTime lastDayOfTheMonth = LastDayOfTheMonth(currentDateTime);
+            var endOfMonth = DayEnd(lastDayOfTheMonth);
+            return endOfMonth.Add(startOfMonthOffSet);
         }
 /*
 

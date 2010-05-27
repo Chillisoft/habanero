@@ -524,6 +524,47 @@ namespace Habanero.Test.Util
             Assert.AreEqual(expectedEndTime, actualDayEnd);
         }
 
+        [Test]
+        public void Test_MonthStart_WhenNoOffSet_ShouldReturnStartOffMonth()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            var expectedStartTime = new DateTime(2010, 05, 01);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.MonthStart(dateTimeCurrent);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+
+        [Test]
+        public void Test_MonthStart_WithOffSetLTNow_ShouldReturnStartOffMonthPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            TimeSpan sixDayTwoHourOffSet = new TimeSpan(6, 2, 0, 0);
+            DateTime expectedStartTime = new DateTime(2010, 05, 01).Date.Add(sixDayTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Greater(dateTimeCurrent, expectedStartTime);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.MonthStart(dateTimeCurrent, sixDayTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+        [Test]
+        public void Test_MonthStart_WithOffSetGTNow_ShouldReturnStartOffMonthPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 05, 3, 22, 34);
+            TimeSpan sixDayTwoHourOffSet = new TimeSpan(6, 2, 0, 0);
+            DateTime expectedStartTime = new DateTime(2010, 04, 01).Add(sixDayTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Greater(dateTimeCurrent, expectedStartTime);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.MonthStart(dateTimeCurrent, sixDayTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
         private static DateTime GetDateTimeCurrent(int hour)
         {
             return GetDateTimeCurrent(hour, 12, 33, 0);
