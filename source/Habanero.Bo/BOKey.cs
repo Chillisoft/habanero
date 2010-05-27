@@ -296,11 +296,11 @@ namespace Habanero.BO
                 foreach (KeyValuePair<string, IBOProp> prop in _props) {
                     props.Add(prop.Value);
                 }
-                props.Sort(delegate(IBOProp x, IBOProp y) { return String.Compare(x.PropertyName, y.PropertyName); });
+                props.Sort((x, y) => String.Compare(x.PropertyName, y.PropertyName));
                 return props;
             }
         }
-
+        
         /// <summary>
         /// Indicates whether any of the properties of this key are auto incrementing.
         /// </summary>

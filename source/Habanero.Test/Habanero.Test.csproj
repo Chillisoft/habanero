@@ -103,6 +103,8 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="ArchitectureTest.cs" />
+    <Compile Include="Base\TestDateRange.cs" />
+    <Compile Include="Base\TestDateTimeOptionsConverter.cs" />
     <Compile Include="Base\TestDateTimeNow.cs" />
     <Compile Include="Base\TestDateTimeNowConverter.cs" />
     <Compile Include="Base\TestDateTimeToday.cs" />

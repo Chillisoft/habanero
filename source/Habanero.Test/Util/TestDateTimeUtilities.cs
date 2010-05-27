@@ -357,5 +357,184 @@ namespace Habanero.Test.Util
             Assert.IsFalse(parsed);
             Assert.IsNull(parsedValue);
         }
+
+        [Test]
+        public void Test_DayEnd_WhenNoOffSet_ShouldReturnLastMillisecondOfTheday()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Now;
+            DateTime expectedDayEnd = dateTimeCurrent.Date.AddDays(1).AddMilliseconds(-1);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayEnd  = DateTimeUtilities.DayEnd(dateTimeCurrent);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedDayEnd, actualDayEnd);
+        }
+        [Test]
+        public void Test_DayEnd_WithOffSet_ShouldReturnLastMillisecondOfThedayPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Now;
+            TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
+            DateTime expectedDayEnd = dateTimeCurrent.Date.AddDays(1).AddMilliseconds(-1).Add(sixHourOffSet);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.DayEnd(dateTimeCurrent, sixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedDayEnd, actualDayEnd);
+        }
+
+        [Test]
+        public void Test_DayStart_WhenNoOffSet_ShouldReturnStartOffday()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Now;
+            DateTime expectedStartTime = dateTimeCurrent.Date;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.DayStart(dateTimeCurrent);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+
+        [Test]
+        public void Test_DayStart_WithOffOffSetLTNow_ShouldReturnStartOffdayPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Now;
+            TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
+            DateTime expectedStartTime = dateTimeCurrent.Date.Add(sixHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Less(dateTimeCurrent.Date.Add(sixHourOffSet), dateTimeCurrent);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.DayStart(dateTimeCurrent, sixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+        [Test]
+        public void Test_DayStart_WithOffOffSetGTNow_ShouldReturnStartOffdayPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = GetDateTimeCurrent(3);
+            TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
+            DateTime expectedStartTime = dateTimeCurrent.Date.AddDays(-1).Add(sixHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Greater(dateTimeCurrent.Date.Add(sixHourOffSet), dateTimeCurrent);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.DayStart(dateTimeCurrent, sixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+
+        [Test]
+        public void Test_OnOrPreviousDayOfWeek_WhenThursday_ShouldReturnPrevSunday()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27);
+            var expectedPreviousSunday = new DateTime(2010, 05, 23);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(DayOfWeek.Thursday, dateTimeCurrent.DayOfWeek);
+            //---------------Execute Test ----------------------
+            var actualPreviousSunday = DateTimeUtilities.OnOrPreviousDayOfWeek(dateTimeCurrent, DayOfWeek.Sunday);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedPreviousSunday, actualPreviousSunday);
+            Assert.AreEqual(DayOfWeek.Sunday, actualPreviousSunday.DayOfWeek);
+        }
+        [Test]
+        public void Test_OnOrPreviousDayOfWeek_WhenSunday_ShouldReturnPrevSunday()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 23);
+            var expectedPreviousSunday = new DateTime(2010, 05, 23);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(DayOfWeek.Sunday, dateTimeCurrent.DayOfWeek);
+            //---------------Execute Test ----------------------
+            var actualPreviousSunday = DateTimeUtilities.OnOrPreviousDayOfWeek(dateTimeCurrent, DayOfWeek.Sunday);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedPreviousSunday, actualPreviousSunday);
+            Assert.AreEqual(DayOfWeek.Sunday, actualPreviousSunday.DayOfWeek);
+        }
+        [Test]
+        public void Test_WeekStart_WhenNoOffSet_ShouldReturnStartOffWeek()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            var expectedStartTime = new DateTime(2010, 05, 23);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.WeekStart(dateTimeCurrent);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+
+        [Test]
+        public void Test_WeekStart_WithOffSetLTNow_ShouldReturnStartOffWeekPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
+            DateTime expectedStartTime = new DateTime(2010, 05, 23).Date.Add(sixHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Greater(dateTimeCurrent, expectedStartTime);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.WeekStart(dateTimeCurrent, sixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+        [Test]
+        public void Test_WeekStart_WithOffSetGTNow_ShouldReturnStartOffWeekPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 23, 3, 22, 34);
+            TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
+            DateTime expectedStartTime = new DateTime(2010, 05, 16).Add(sixHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Greater(dateTimeCurrent, expectedStartTime);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.WeekStart(dateTimeCurrent, sixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+
+        [Test]
+        public void Test_WeekEnd_WhenNoOffSet_ShouldReturnEndOffWeek()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            var expectedEndTime = new DateTime(2010, 05, 30).AddMilliseconds(-1);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.WeekEnd(dateTimeCurrent);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayEnd);
+        }
+        [Test]
+        public void Test_WeekEnd_WithOffSetLTNow_ShouldReturnEndOffWeekPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
+            var expectedEndTimeWithoutOffSet = new DateTime(2010, 05, 30).AddMilliseconds(-1);
+            DateTime expectedEndTime = expectedEndTimeWithoutOffSet.Add(sixHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Less(dateTimeCurrent, expectedEndTime);
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.WeekEnd(dateTimeCurrent, sixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayEnd);
+        }
+
+        private static DateTime GetDateTimeCurrent(int hour)
+        {
+            return GetDateTimeCurrent(hour, 12, 33, 0);
+        }
+
+        private static DateTime GetDateTimeCurrent(int hour, int minutes, int seconds, int millisecond)
+        {
+            const int year = 2007;
+            const int month = 11;
+            const int day = 13;
+            return new DateTime(year, month, day, hour, minutes, seconds, millisecond);
+        }
     }
 }

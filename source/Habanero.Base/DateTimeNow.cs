@@ -26,7 +26,7 @@ namespace Habanero.Base
     /// For loading the appropriate objects from the collection.
     ///</summary>
     [TypeConverter(typeof(DateTimeNowConverter))]
-    public sealed class DateTimeNow : IComparable<DateTime>, IComparable, IResolvableToValue, IResolvableToValue<DateTime>
+    public class DateTimeNow : IComparable<DateTime>, IComparable, IResolvableToValue, IResolvableToValue<DateTime>
     {
         ///<summary>
         /// Returns the current Today value from the DateTime object.
@@ -62,7 +62,7 @@ namespace Habanero.Base
             return Value.CompareTo(other);
         }
 
-        public DateTime ResolveToValue()
+        public virtual DateTime ResolveToValue()
         {
             return Value;
         }

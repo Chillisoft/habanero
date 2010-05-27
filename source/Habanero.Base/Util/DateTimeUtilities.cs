@@ -310,6 +310,20 @@ namespace Habanero.Util
             return d;
         }
         /// <summary>
+        /// Return the <paramref name="date"/> if it is on the <paramref name="day"/> of the week.
+        /// Else returns the previous day. This i used to iteratively walk through days untill you find
+        /// the previous day that is the day of the week.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        public static DateTime OnOrPreviousDayOfWeek(DateTime date, DayOfWeek day)
+        {
+            while (date.DayOfWeek != day)
+                date = date.AddDays(-1);
+            return date;
+        }
+        /// <summary>
         /// Returns unchanged if is business day
         /// else previous  Friday
         /// Does not take into account public holidays.
@@ -384,5 +398,175 @@ namespace Habanero.Util
             }
             return d;
         }
+
+
+        /// <summary>
+        /// Converts the given date to the start of the hour
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime HourStart(DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, date.Hour, 0, 0, 0);
+        }
+        /// <summary>
+        /// Converts the given date to the start of the hour
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime HourEnd(DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, date.Hour, 59, 59, 999);
+        }
+        /// <summary>
+        /// Converts the given date to the previous midnight,
+        /// factoring in the midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime DayStart(DateTime date)
+        {
+            return DayStart(date, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// Converts the given date to the previous midnight,
+        /// factoring in the midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <param name="dayStartOffSet">You can offset the Date Start (typically used when you wan to report on date starting at 8:00 am)</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime DayStart(DateTime date, TimeSpan dayStartOffSet)
+        {
+            DateTime midnight = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, 0);
+            DateTime newMidnight = midnight.Add(dayStartOffSet);
+            if (newMidnight > date) return newMidnight.AddDays(-1);
+            double dif = (date - newMidnight).TotalHours;
+            return dif > 24 ? newMidnight.AddDays(1) : newMidnight;
+        }
+        /// <summary>
+        /// Converts the given date to the previous midnight,
+        /// factoring in the midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime DayEnd(DateTime date)
+        {
+            return DayEnd(date, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// Converts the given date to the previous midnight,
+        /// factoring in the midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <param name="dayStartOffSet">You can offset the Date Start (typically used when you wan to report on date starting at 8:00 am)</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime DayEnd(DateTime date, TimeSpan dayStartOffSet)
+        {
+            DateTime lastMillisecondOfDay = new DateTime(date.Year, date.Month, date.Day, 23, 59, 59, 999);
+
+            return lastMillisecondOfDay.Add(dayStartOffSet);
+        }
+
+        /// <summary>
+        /// Converts the given date to the previous Monday midnight,
+        /// factoring in the midnight offset and week start
+        /// </summary>
+        /// <param name="currentDateTime">The date to convert</param>
+        /// <param name="weekStartOffSet">The off set period</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime WeekStart(DateTime currentDateTime, TimeSpan weekStartOffSet)
+        {
+            DateTime sunday = DayStart( OnOrPreviousDayOfWeek(currentDateTime, DayOfWeek.Sunday));
+            var weekStart = sunday.Add(weekStartOffSet);
+            if (weekStart > currentDateTime)
+            {
+                return weekStart.AddDays(-7);
+            }
+            return weekStart;
+        }
+
+        ///<summary>
+        /// The WeekStart for the currentDateTime where the WeekStart is assumed to be Sunday
+        ///</summary>
+        ///<param name="currentDateTime"></param>
+        ///<returns></returns>
+        public static DateTime WeekStart(DateTime currentDateTime)
+        {
+            return WeekStart(currentDateTime, new TimeSpan(0));
+        }
+        /// <summary>
+        /// The WeekEnd For the currentDateTime where the WeekEnd is assumed to be Saturday
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
+        public static DateTime WeekEnd(DateTime currentDateTime)
+        {
+            return WeekEnd(currentDateTime, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// The WeekEnd For the currentDateTime where the WeekEnd is assumed to be Saturday
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <param name="startOfWeekOffSet">The OffSet</param>
+        /// <returns></returns>
+        public static DateTime WeekEnd(DateTime currentDateTime, TimeSpan startOfWeekOffSet)
+        {
+            DateTime saturday = OnOrNextDayOfWeek(currentDateTime, DayOfWeek.Saturday);
+            var endOfWeek = DayEnd(saturday);
+            return endOfWeek.Add(startOfWeekOffSet);
+        }
+/*
+
+
+        
+
+        /// <summary>
+        /// Converts the given date to the first day of the month,
+        /// factoring in the month start and midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        private DateTime MonthStart(DateTime date)
+        {
+            DateTime first = new DateTime(date.Year, date.Month, 1);
+            first = first.AddDays(MonthStartOffset).Add(MidnightOffset);
+            if (first > date)
+            {
+                first = first.AddMonths(-1);
+            }
+            if (MidnightOffset < new TimeSpan(0, 0, 0, 0, 0))
+            {
+                DateTime closer = new DateTime(date.Year, date.Month + 1, 1);
+                closer = closer.AddDays(MonthStartOffset).Add(MidnightOffset);
+                if (closer < date) return closer;
+            }
+            return first;
+        }
+
+        /// <summary>
+        /// Converts the given date to the first day of the year,
+        /// factoring in the year start, month start and midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        private DateTime YearStart(DateTime date)
+        {
+            DateTime first = new DateTime(date.Year, 1, 1);
+            first = first.AddMonths(YearStartOffset).AddDays(MonthStartOffset).Add(MidnightOffset);
+            if (first > date)
+            {
+                first = first.AddYears(-1);
+            }
+            if (MidnightOffset < new TimeSpan(0, 0, 0, 0, 0))
+            {
+                DateTime closer = new DateTime(date.Year + 1, 1, 1);
+                closer = closer.AddMonths(YearStartOffset).AddDays(MonthStartOffset).Add(MidnightOffset);
+                if (closer < date) return closer;
+            }
+            return first;
+        }*/
     }
 }
