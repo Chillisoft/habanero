@@ -27,6 +27,10 @@ namespace Habanero.Util
     ///</summary>
     public static class DateTimeUtilities
     {
+        private const  int _DECEMBER = 12;
+        private const int _NOVEMBER = 11;
+        private const int _JANUARY = 11;
+
         /// <summary>
         /// returns the last day of the current month (i.e. LastDayOfTheMonth(Today)
         /// </summary>
@@ -44,7 +48,7 @@ namespace Habanero.Util
         public static DateTime LastDayOfTheMonth(DateTime dte)
         {
             int lastDayOfMonth = DateTime.DaysInMonth(dte.Year, dte.Month);
-            return new DateTime(dte.Year, dte.Month, lastDayOfMonth);
+            return new DateTime(dte.Year, dte.Month, lastDayOfMonth, 23, 59, 59, 999);
         }
 
         /// <summary>
@@ -464,9 +468,8 @@ namespace Habanero.Util
         /// <returns>Returns the converted date</returns>
         public static DateTime DayEnd(DateTime date, TimeSpan dayStartOffSet)
         {
-            DateTime lastMillisecondOfDay = new DateTime(date.Year, date.Month, date.Day, 23, 59, 59, 999);
-
-            return lastMillisecondOfDay.Add(dayStartOffSet);
+            DateTime dayEnd = DayStart(date, dayStartOffSet).AddDays(1).AddMilliseconds(-1);
+            return dayEnd;
         }
 
         /// <summary>
@@ -498,17 +501,25 @@ namespace Habanero.Util
         }
 
         ///<summary>
-        /// The FirstDay of the currentDateTime
+        /// The FirstDay of the currentDateTime taking into a
         ///</summary>
         ///<param name="currentDateTime"></param>
-        ///<param name="timeSpan"></param>
+        ///<param name="monthStartOffSet"></param>
         ///<returns></returns>
-        public static DateTime MonthStart(DateTime currentDateTime, TimeSpan timeSpan)
+        public static DateTime MonthStart(DateTime currentDateTime, TimeSpan monthStartOffSet)
         {
-            var firstDayOfCurrentMonth = FirstDayOfMonth(currentDateTime).Add(timeSpan);
-            if (firstDayOfCurrentMonth > currentDateTime)
+            var firstDayOfCurrentMonth = FirstDayOfMonth(currentDateTime).Add(monthStartOffSet);
+            var lastDayOfCurrentMonth = LastDayOfTheMonth(currentDateTime).Add(monthStartOffSet);
+            if (currentDateTime < firstDayOfCurrentMonth)
             {
-                return MonthStart(currentDateTime.AddMonths(-1)).Add(timeSpan);
+                return firstDayOfCurrentMonth.AddMonths(-1);
+            }
+            if (currentDateTime > lastDayOfCurrentMonth)
+            {
+                DateTime newMonthStart = currentDateTime.Month == _DECEMBER 
+                         ? new DateTime(currentDateTime.Year + 1, 1, 1) 
+                         : new DateTime(currentDateTime.Year, currentDateTime.Month + 1, 1);
+                return newMonthStart.Add(monthStartOffSet);
             }
             return firstDayOfCurrentMonth;
         }
@@ -533,16 +544,15 @@ namespace Habanero.Util
         }
 
         /// <summary>
-        /// The WeekEnd For the currentDateTime where the WeekEnd is assumed to be Saturday
+        /// The WeekEnd For the currentDateTime
         /// </summary>
         /// <param name="currentDateTime"></param>
         /// <param name="startOfWeekOffSet">The OffSet</param>
         /// <returns></returns>
         public static DateTime WeekEnd(DateTime currentDateTime, TimeSpan startOfWeekOffSet)
         {
-            DateTime saturday = OnOrNextDayOfWeek(currentDateTime, DayOfWeek.Saturday);
-            var endOfWeek = DayEnd(saturday);
-            return endOfWeek.Add(startOfWeekOffSet);
+            var weekStart = WeekStart(currentDateTime, startOfWeekOffSet);
+            return weekStart.AddDays(7).AddMilliseconds(-1);
         }
         /// <summary>
         /// The MonthEnd For the currentDateTime where the MonthEnd is assumed to be Saturday
@@ -555,16 +565,46 @@ namespace Habanero.Util
         }
 
         /// <summary>
-        /// The MonthEnd For the currentDateTime where the MonthEnd is assumed to be Saturday
+        /// The MonthEnd For the currentDateTime
         /// </summary>
         /// <param name="currentDateTime"></param>
         /// <param name="startOfMonthOffSet">The OffSet</param>
         /// <returns></returns>
         public static DateTime MonthEnd(DateTime currentDateTime, TimeSpan startOfMonthOffSet)
         {
-            DateTime lastDayOfTheMonth = LastDayOfTheMonth(currentDateTime);
-            var endOfMonth = DayEnd(lastDayOfTheMonth);
-            return endOfMonth.Add(startOfMonthOffSet);
+            var firstDayOfCurrentMonth = FirstDayOfMonth(currentDateTime).Add(startOfMonthOffSet);
+            var lastDayOfCurrentMonth = LastDayOfTheMonth(currentDateTime).Add(startOfMonthOffSet);
+            if (currentDateTime < firstDayOfCurrentMonth)
+            {
+                var currentMonth = currentDateTime.Month;
+                DateTime newMonthEnd;
+                switch (currentMonth)
+                {
+                    default:
+                        newMonthEnd = new DateTime(currentDateTime.Year, currentMonth, 1);
+                        break;
+                }
+                return newMonthEnd.AddMilliseconds(-1).Add(startOfMonthOffSet);
+            }
+            if (currentDateTime > lastDayOfCurrentMonth)
+            {
+                var currentMonth = currentDateTime.Month;
+                DateTime newMonthEnd;
+                switch (currentMonth)
+                {
+                    case _DECEMBER:
+                        newMonthEnd = new DateTime(currentDateTime.Year + 1, 2, 1);
+                        break;
+                    case _NOVEMBER:
+                        newMonthEnd = new DateTime(currentDateTime.Year + 1, 1, 1);
+                        break;
+                    default:
+                        newMonthEnd = new DateTime(currentDateTime.Year, currentMonth + 2, 1);
+                        break;
+                }
+                return newMonthEnd.AddMilliseconds(-1).Add(startOfMonthOffSet);
+            }
+            return lastDayOfCurrentMonth;
         }
 /*
 
@@ -616,5 +656,88 @@ namespace Habanero.Util
             }
             return first;
         }*/
+
+        ///<summary>
+        /// The Very first second of this year.
+        ///</summary>
+        ///<param name="currentDateTime"></param>
+        ///<returns></returns>
+        public static DateTime YearStart(DateTime currentDateTime)
+        {
+            return YearStart(currentDateTime, 0);
+        }
+
+        ///<summary>
+        /// The very first second of this year plus the offset. This is typically used 
+        /// for Financial Year type calculations e.g. when you are 
+        /// looking for a year starting on 01 March use a noOfMonthsOffSet = 2.
+        ///</summary>
+        ///<param name="currentDateTime">the currentDate from which the YearStart should be calculated</param>
+        ///<param name="noOfMonthsOffSet">The noOfMonthsOffSet used to </param>
+        ///<returns></returns>
+        public static DateTime YearStart(DateTime currentDateTime, int noOfMonthsOffSet)
+        {
+            return YearStart(currentDateTime, noOfMonthsOffSet, new TimeSpan(0));
+        }
+
+        ///<summary>
+        /// The very first second of this year plus the month offset plus the Time offset. This is typically used 
+        /// for Financial Year type calculations e.g. when you are 
+        /// looking for a year starting on 01 March use a noOfMonthsOffSet = 2.
+        ///</summary>
+        ///<param name="currentDateTime">the currentDate from which the YearStart should be calculated</param>
+        ///<param name="noOfMonthsOffSet">The noOfMonthsOffSet used to </param>
+        ///<param name="monthStartOffSet"></param>
+        ///<returns></returns>
+        public static DateTime YearStart(DateTime currentDateTime, int noOfMonthsOffSet, TimeSpan monthStartOffSet)
+        {
+            var yearStartWithoutOffSet = new DateTime(currentDateTime.Year, 1, 1);
+            var yearStartWithOffSet = yearStartWithoutOffSet.AddMonths(noOfMonthsOffSet).Add(monthStartOffSet);
+            var yearEndWithoutOFfset = new DateTime(currentDateTime.Year, 12, 31);
+            var yearEndWithOffSet = yearEndWithoutOFfset.AddMonths(noOfMonthsOffSet).Add(monthStartOffSet);
+            if (currentDateTime < yearStartWithOffSet)
+            {
+                return yearStartWithOffSet.AddYears(-1);
+            }
+            if (currentDateTime > yearEndWithOffSet)
+            {
+                return yearStartWithOffSet.AddYears(1);
+            }
+            return yearStartWithOffSet;
+        }
+
+        /// <summary>
+        /// The YearEnd For the currentDateTime 
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
+        public static DateTime YearEnd(DateTime currentDateTime)
+        {
+            return YearEnd(currentDateTime, 0);
+        }
+
+        /// <summary>
+        /// The YearEnd For the currentDateTime
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <param name="noOfMonthsOffSet">The OffSet</param>
+        /// <returns></returns>
+        public static DateTime YearEnd(DateTime currentDateTime, int noOfMonthsOffSet)
+        {
+            return YearEnd(currentDateTime, noOfMonthsOffSet, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// The YearEnd For the currentDateTime
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <param name="noOfMonthsOffSet">The number of moths that are OffSet i.e. offset = 3 will result in year start 1 Apr and Year End 31 Mar</param>
+        /// <param name="monthStartOffSet"></param>
+        /// <returns></returns>
+        public static DateTime YearEnd(DateTime currentDateTime, int noOfMonthsOffSet, TimeSpan monthStartOffSet)
+        {
+            DateTime lastDayOfYear = YearStart(currentDateTime, noOfMonthsOffSet, monthStartOffSet).AddYears(1).AddMilliseconds(-1);
+            return lastDayOfYear;
+        }
     }
 }

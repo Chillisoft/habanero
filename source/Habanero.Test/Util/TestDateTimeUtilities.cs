@@ -383,6 +383,20 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDayEnd, actualDayEnd);
         }
+        [Test]
+        public void Test_DayEnd_WithOffSetGTNow_ShouldReturnLastMillisecondOfThedayPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 10, 27, 1, 0, 0);
+            TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
+            //DateTime expectedDayEnd = dateTimeCurrent.Date.AddDays(1).AddMilliseconds(-1).Add(sixHourOffSet);
+            DateTime expectedDayEnd = new DateTime(2010, 10, 27, 5, 59, 59, 999);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.DayEnd(dateTimeCurrent, sixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedDayEnd, actualDayEnd);
+        }
 
         [Test]
         public void Test_DayStart_WhenNoOffSet_ShouldReturnStartOffday()
@@ -523,6 +537,22 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedEndTime, actualDayEnd);
         }
+        [Test]
+        public void Test_WeekEnd_WithOffSetGTNow_ShouldReturnEndOffWeekPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 24, 12, 22, 34);
+            TimeSpan sixDaySixHourOffSet = new TimeSpan(6, 6, 0, 0);
+            var expectedEndTimeWithoutOffSet = new DateTime(2010, 05, 30).AddMilliseconds(-1);
+            DateTime expectedEndTime = new DateTime(2010, 05, 23).AddMilliseconds(-1).Add(sixDaySixHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Less(dateTimeCurrent, expectedEndTimeWithoutOffSet.Add(sixDaySixHourOffSet));
+//            Assert.Less(dateTimeCurrent, expectedEndTime);
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.WeekEnd(dateTimeCurrent, sixDaySixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayEnd);
+        }
 
         [Test]
         public void Test_MonthStart_WhenNoOffSet_ShouldReturnStartOffMonth()
@@ -532,10 +562,29 @@ namespace Habanero.Test.Util
             var expectedStartTime = new DateTime(2010, 05, 01);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            var actualDayStart = DateTimeUtilities.MonthStart(dateTimeCurrent);
+            var actualMonthStart = DateTimeUtilities.MonthStart(dateTimeCurrent);
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedStartTime, actualDayStart);
+            Assert.AreEqual(expectedStartTime, actualMonthStart);
         }
+/*
+        [Test]
+        public void Test_MonthStart_WhenNoOffSet_WhenCurrentLastMillisecont_ShouldReturnStartOffMonth()
+        {
+            yield return new TestCaseData(new DateRangeTestCase(DateRangeOptions.PreviousMonth
+        , "31 May 2010 23:59:59.999"
+        , "01 May 2010"
+        , "31 May 2010 23:59:59.999")).SetDescription("End EdgeCase");
+
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            var expectedStartTime = new DateTime(2010, 05, 01);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualMonthStart = DateTimeUtilities.MonthStart(dateTimeCurrent);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualMonthStart);
+        }
+*/
 
         [Test]
         public void Test_MonthStart_WithOffSetLTNow_ShouldReturnStartOffMonthPlusOffSet()
@@ -547,9 +596,9 @@ namespace Habanero.Test.Util
             //---------------Assert Precondition----------------
             Assert.Greater(dateTimeCurrent, expectedStartTime);
             //---------------Execute Test ----------------------
-            var actualDayStart = DateTimeUtilities.MonthStart(dateTimeCurrent, sixDayTwoHourOffSet);
+            var actualMonthStart = DateTimeUtilities.MonthStart(dateTimeCurrent, sixDayTwoHourOffSet);
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedStartTime, actualDayStart);
+            Assert.AreEqual(expectedStartTime, actualMonthStart);
         }
         [Test]
         public void Test_MonthStart_WithOffSetGTNow_ShouldReturnStartOffMonthPlusOffSet()
@@ -561,9 +610,311 @@ namespace Habanero.Test.Util
             //---------------Assert Precondition----------------
             Assert.Greater(dateTimeCurrent, expectedStartTime);
             //---------------Execute Test ----------------------
-            var actualDayStart = DateTimeUtilities.MonthStart(dateTimeCurrent, sixDayTwoHourOffSet);
+            var actualMonthStart = DateTimeUtilities.MonthStart(dateTimeCurrent, sixDayTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualMonthStart);
+        }
+        [Test]
+        public void Test_MonthStart_WithNegTimeSpanOffSetLTNow_ShouldReturnStartOffNextMonthAddOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 31, 23, 22, 34);
+            TimeSpan negTwoHourOffSet = new TimeSpan(0, -2, 0, 0);
+            DateTime expectedStartTime = new DateTime(2010, 06, 01).Add(negTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualMonthStart = DateTimeUtilities.MonthStart(dateTimeCurrent, negTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualMonthStart);
+        }
+        [Test]
+        public void Test_MonthStart_WithNegTimeSpanOffSetLTNow_WhenCurrMonthDecember_ShouldReturnStartOffNextMonthAddOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 12, 31, 23, 22, 34);
+            TimeSpan negTwoHourOffSet = new TimeSpan(0, -2, 0, 0);
+            DateTime expectedStartTime = new DateTime(2011, 01, 01).Add(negTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualMonthStart = DateTimeUtilities.MonthStart(dateTimeCurrent, negTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualMonthStart);
+        }
+
+        [Test]
+        public void Test_MonthEnd_WhenNoOffSet_ShouldReturnEndOffWeek()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            var expectedEndTime = new DateTime(2010, 06, 1).AddMilliseconds(-1);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualMonthEnd = DateTimeUtilities.MonthEnd(dateTimeCurrent);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualMonthEnd);
+        }
+        [Test]
+        public void Test_MonthEnd_WithOffSetLTNow_ShouldReturnEndOffWeekPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 24, 12, 22, 34);
+            TimeSpan twoDaySixHourOffSet = new TimeSpan(2, 6, 0, 0);
+            var expectedEndTimeWithoutOffSet = new DateTime(2010, 06, 1).AddMilliseconds(-1);
+            DateTime expectedEndTime = expectedEndTimeWithoutOffSet.Add(twoDaySixHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Less(dateTimeCurrent, expectedEndTimeWithoutOffSet.Add(twoDaySixHourOffSet));
+            //---------------Execute Test ----------------------
+            var actualMonthEnd = DateTimeUtilities.MonthEnd(dateTimeCurrent, twoDaySixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualMonthEnd);
+        }
+
+        [Test]
+        public void Test_MonthEnd_WithOffSetGTNow_ShouldReturnStartOffMonthPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 05, 3, 22, 34);
+            TimeSpan sixDayTwoHourOffSet = new TimeSpan(6, 2, 0, 0);
+            DateTime expectedStartTime = new DateTime(2010, 04, 01).Add(sixDayTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Greater(dateTimeCurrent, expectedStartTime);
+            //---------------Execute Test ----------------------
+            var actualMonthEnd = DateTimeUtilities.MonthStart(dateTimeCurrent, sixDayTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualMonthEnd);
+        }
+
+
+        [Test]
+        public void Test_MonthEnd_WithNegTimeSpanOffSetLTNow_ShouldReturnEndOffNextMonthAddOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 06, 30, 23, 22, 34);
+            TimeSpan negTwoHourOffSet = new TimeSpan(0, -2, 0, 0);
+            DateTime expectedEndTime = new DateTime(2010, 07, 31, 23, 59, 59, 999).Add(negTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualMonthEnd = DateTimeUtilities.MonthEnd(dateTimeCurrent, negTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualMonthEnd);
+        }
+
+        [Test]
+        public void Test_MonthEnd_WithNegTimeSpanOffSetLTNow_WhenCurrMonthDec_ShouldReturnEndOffNextMonthAddOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 12, 31, 23, 22, 34);
+            TimeSpan negTwoHourOffSet = new TimeSpan(0, -2, 0, 0);
+            DateTime expectedEndTime = new DateTime(2011, 01, 31, 23, 59, 59, 999).Add(negTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.MonthEnd(dateTimeCurrent, negTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayStart);
+        }
+        [Test]
+        public void Test_MonthEnd_WithNegTimeSpanOffSetLTNow_WhenCurrMonthNov_ShouldReturnEndOffNextMonthAddOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 11, 30, 23, 22, 34);
+            TimeSpan negTwoHourOffSet = new TimeSpan(0, -2, 0, 0);
+            DateTime expectedEndTime = new DateTime(2010, 12, 31, 23, 59, 59, 999).Add(negTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.MonthEnd(dateTimeCurrent, negTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayStart);
+        }
+
+        [Test]
+        public void Test_MonthEndWithOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 06, 02, 1, 1, 4);
+            TimeSpan offSet = new TimeSpan(2, 3, 1, 2);
+            DateTime expectedEndTime = new DateTime(2010, 06, 03, 3, 1, 1, 999);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.MonthEnd(dateTimeCurrent, offSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayStart);
+        }
+        [Test]
+        public void Test_YearStart_WhenNoOffSet_ShouldReturnStartOffYear()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            var expectedStartTime = new DateTime(2010, 01, 01);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.YearStart(dateTimeCurrent);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+        [Test]
+        public void Test_YearStart_WithOffSetLTNow_ShouldReturnStartOffYearPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            const int threeMonthOffSet = 3;
+            DateTime expectedStartTime = new DateTime(2010, 01, 01).Date.AddMonths(threeMonthOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Greater(dateTimeCurrent, expectedStartTime);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.YearStart(dateTimeCurrent, threeMonthOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+
+
+        [Test]
+        public void Test_YearStart_WithOffSetGTNow_ShouldReturnStartOffYearPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 02, 23, 3, 22, 34);
+            const int threeMonthOffSet = 3;
+            DateTime expectedStartTime = new DateTime(2009, 04, 01);
+            //---------------Assert Precondition----------------
+            Assert.Greater(new DateTime(2010, 04, 01), expectedStartTime);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.YearStart(dateTimeCurrent, threeMonthOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+
+        [Test]
+        public void Test_YearStart_WithMonthAndTimeOffSetLTNow_ShouldReturnStartOffYearPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            const int threeMonthOffSet = 3;
+            TimeSpan oneDayTwoHourOffSet = new TimeSpan(1, 2, 0, 0);
+            DateTime expectedStartTime = new DateTime(2010, 01, 01).Date.AddMonths(threeMonthOffSet).Add(oneDayTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Greater(dateTimeCurrent, expectedStartTime);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.YearStart(dateTimeCurrent, threeMonthOffSet, oneDayTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+
+        [Test]
+        public void Test_YearStart_WithMonthAndTimeOffSetGTNow_ShouldReturnStartOffYearPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 02, 23, 3, 22, 34);
+            const int threeMonthOffSet = 3;
+            TimeSpan oneDayTwoHourOffSet = new TimeSpan(1, 2, 0, 0);
+            DateTime expectedStartTime = new DateTime(2009, 04, 01).Add(oneDayTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Greater(new DateTime(2010, 04, 01), expectedStartTime);
+            //---------------Execute Test ----------------------
+            var actualDayStart = DateTimeUtilities.YearStart(dateTimeCurrent, threeMonthOffSet, oneDayTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+        [Test]
+        public void Test_YearStart_WithMonthAndTimeOffSetGTNow_NegOffSet_ShouldReturnStartOffYearPlusOffSet()
+        {
+
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2005, 12, 31, 23, 30, 0, 0);
+            TimeSpan negOneHrOffset = new TimeSpan(0, -1, 0, 0);
+            DateTime expectedStartTime = new DateTime(2005, 12, 31, 23, 0, 0, 0);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualYearStart = DateTimeUtilities.YearStart(dateTimeCurrent, 0, negOneHrOffset);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualYearStart);
+        }
+
+        [Test]
+        public void Test_YearEnd_WhenNoOffSet_ShouldReturnEndOffYear()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            var expectedEndTime = new DateTime(2011, 01, 01).AddMilliseconds(-1);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.YearEnd(dateTimeCurrent);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayEnd);
+        }
+        [Test]
+        public void Test_YearEnd_WithOffSetLTNow_ShouldReturnEndOffYearPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            const int threeMonthOffSet = 3;
+            var expectedEndTimeWithoutOffSet = new DateTime(2011, 01, 01).AddMilliseconds(-1);
+            DateTime expectedEndTime = expectedEndTimeWithoutOffSet.AddMonths(threeMonthOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Less(dateTimeCurrent, expectedEndTime);
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.YearEnd(dateTimeCurrent, threeMonthOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayEnd);
+        }
+        [Test]
+        public void Test_YearEnd_WithOffSetGTNow_ShouldReturnEndOffYearPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 02, 24, 12, 22, 34);
+            const int threeMonthOffSet = 3;
+            DateTime expectedEndTime = new DateTime(2010, 01, 01).AddMilliseconds(-1).AddMonths(threeMonthOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Less(dateTimeCurrent, new DateTime(2011, 01, 01).AddMonths(threeMonthOffSet).AddYears(-1));
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.YearEnd(dateTimeCurrent, threeMonthOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayEnd);
+        }
+
+        [Test]
+        public void Test_YearEnd_WithMonthAndTimeOffSetLTNow_ShouldReturnEndOffYearPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 05, 27, 12, 22, 34);
+            const int threeMonthOffSet = 3;
+            TimeSpan oneDayTwoHourOffSet = new TimeSpan(1, 2, 0, 0);
+            var expectedEndTimeWithoutOffSet = new DateTime(2011, 01, 01).AddMilliseconds(-1);
+            DateTime expectedEndTime = expectedEndTimeWithoutOffSet.AddMonths(threeMonthOffSet).Add(oneDayTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Less(dateTimeCurrent, expectedEndTime);
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.YearEnd(dateTimeCurrent, threeMonthOffSet, oneDayTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayEnd);
+        }
+
+        [Test]
+        public void Test_YearEnd_WithMonthAndTimeOffSetGTNow_ShouldReturnEndOffYearPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2010, 02, 24, 12, 22, 34);
+            const int threeMonthOffSet = 3;
+            TimeSpan oneDayTwoHourOffSet = new TimeSpan(1, 2, 0, 0);
+            DateTime expectedEndTime = new DateTime(2010, 01, 01).AddMilliseconds(-1).AddMonths(threeMonthOffSet).Add(oneDayTwoHourOffSet);
+            //---------------Assert Precondition----------------
+            Assert.Less(dateTimeCurrent, new DateTime(2011, 01, 01).AddMonths(threeMonthOffSet).AddYears(-1));
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.YearEnd(dateTimeCurrent, threeMonthOffSet, oneDayTwoHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayEnd);
+        }
+
+        [Test] 
+        public void Test_YearEnd_WhenCurrentLTFirstDayPlusHourOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = new DateTime(2006, 1, 1, 0, 30, 0, 0);
+            TimeSpan oneHourOffSet = new TimeSpan(0, 1, 0, 0);
+            DateTime expectedEndTime = new DateTime(2006, 1, 1, 0, 59, 59, 999);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.YearEnd(dateTimeCurrent, 0, oneHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedEndTime, actualDayEnd);
         }
         private static DateTime GetDateTimeCurrent(int hour)
         {

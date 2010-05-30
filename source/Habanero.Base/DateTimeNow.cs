@@ -121,4 +121,26 @@ namespace Habanero.Base
         //}
 
     }
+    
+    ///<summary>
+    /// This is a wrapper class for DateTime.Now when you have a fixed DateTimeNow.
+    ///</summary>
+    public class DateTimeNowFixed : DateTimeNow
+    {
+        private readonly DateTime _dateTimeNow;
+
+        ///<summary>
+        /// Constructs DateTimeNow with a fixed DateTime.
+        ///</summary>
+        ///<param name="dateTimeNow"></param>
+        public DateTimeNowFixed(DateTime dateTimeNow)
+        {
+            _dateTimeNow = dateTimeNow;
+        }
+
+        public override DateTime ResolveToValue()
+        {
+            return _dateTimeNow;
+        }
+    }
 }
