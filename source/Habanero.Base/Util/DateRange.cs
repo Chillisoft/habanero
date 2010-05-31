@@ -109,4 +109,31 @@ namespace Habanero.Base.Util
             return ((_startDate == other.StartDate) && (_endDate == other.EndDate));
         }
     }
+
+    /// <summary>
+    /// Date Range Class originally from <see cref="http://noticeablydifferent.com/CodeSamples/DateRange.aspx"/>
+    /// </summary>
+    public class DateRangeComparerByStartDate : System.Collections.IComparer,
+                                                System.Collections.Generic.IComparer<DateRange>
+    {
+        public int Compare(object x, object y)
+        {
+            if (!(x is DateRange) || !(y is DateRange))
+                throw new System.ArgumentException("Value not a DateRange");
+            return Compare((DateRange)x, (DateRange)y);
+        }
+
+        public int Compare(DateRange x, DateRange y)
+        {
+            if (x.StartDate < y.StartDate)
+            {
+                return -1;
+            }
+            if (x.StartDate > y.StartDate)
+            {
+                return 1;
+            }
+            return 0;
+        }
+    }
 }

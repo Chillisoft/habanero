@@ -271,7 +271,7 @@ namespace Habanero.Test.Base
             Assert.AreEqual(expectedEndDate, dateRange.EndDate);
         }
 
-        [Test, TestCaseSource(typeof(DateRangeConvertTestCaseSource), "DateRangeTestData")]
+        [Test, TestCaseSource(typeof(DateRangeConvertTestCaseSource), "DateRangeTestDataWithNoOffsets")]
         public void Test_DateRangeWithoutOffSets(DateRangeTestCase dateRangeTestCase)
         {
             //---------------Set up test pack-------------------
@@ -329,7 +329,7 @@ namespace Habanero.Test.Base
 
 
         // Ussed by the TestCaseSource
-        public IEnumerable<TestCaseData> DateRangeTestData
+        public IEnumerable<TestCaseData> DateRangeTestDataWithNoOffsets
         {
             get
             {
@@ -413,6 +413,14 @@ namespace Habanero.Test.Base
                  expectedStartDateTime = DateTimeUtilities.YearStart(currentDateTime.AddYears(-noPreviouYears));
                  expectedEndDateTime = DateTimeUtilities.YearEnd(currentDateTime.AddYears(-noPreviouYears)).AddYears(4);
                  yield return new TestCaseData(new DateRangeTestCase(dateRangeOptions, currentDateTime, expectedStartDateTime, expectedEndDateTime));
+
+                 //-----------------
+                dateRangeOptions = DateRangeOptions.Tommorrow;
+                var testDescription = "Tommorrow";
+                yield return new TestCaseData(new DateRangeTestCase(dateRangeOptions
+                         , "02 June 2010 1:1:4"
+                         , "03 June 2010"
+                         , "03 June 2010 23:59:59.999")).SetDescription(testDescription);
                 /**/
 
             }
@@ -492,6 +500,31 @@ namespace Habanero.Test.Base
                          , new DateTime(2005, 12, 31, 23, 0, 0, 0)
                          , new DateTime(2006, 12, 31, 22, 59, 59, 999)
                          , new TimeSpan(0, -1, 0, 0, 0), 0, 0, 0)).SetDescription(testDescription);
+
+                 //-----------------
+                 dateRangeOptions = DateRangeOptions.Tommorrow;
+                 testDescription = "Tommorrow";
+                 yield return new TestCaseData(new DateRangeTestCaseWithOffSet(dateRangeOptions
+                         , "02 June 2010 1:1:4"
+                         , "02 June 2010 6:0:0"
+                         , "03 June 2010 5:59:59.999"
+                         , new TimeSpan(0, 6, 0, 0, 0), 0, 0, 0)).SetDescription(testDescription);
+                 //-----------------
+                 dateRangeOptions = DateRangeOptions.Next7Days;
+                 testDescription = "Next7Days";
+                 yield return new TestCaseData(new DateRangeTestCaseWithOffSet(dateRangeOptions
+                         , "02 June 2010 1:1:4.011"
+                         , "02 June 2010 1:1:4.011"
+                         , "09 June 2010 5:59:59.999"
+                         , new TimeSpan(0, 6, 0, 0, 0), 0, 0, 0)).SetDescription(testDescription);
+                 //-----------------
+                 dateRangeOptions = DateRangeOptions.Next30Days;
+                 testDescription = "Next30Days";
+                 yield return new TestCaseData(new DateRangeTestCaseWithOffSet(dateRangeOptions
+                         , "02 June 2010 1:1:4.011"
+                         , "02 June 2010 1:1:4.011"
+                         , "02 July 2010 5:59:59.999"
+                         , new TimeSpan(0, 6, 0, 0, 0), 0, 0, 0)).SetDescription(testDescription);
                 /*
 
             _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);

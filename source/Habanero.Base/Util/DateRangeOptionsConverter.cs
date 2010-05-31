@@ -229,6 +229,22 @@ namespace Habanero.Base.Util
                         DateTime fiveYearsAgo = currentDateTime.AddYears(-5);
                         return new DateRange(YearStart(fiveYearsAgo), YearEnd(fiveYearsAgo).AddYears(4));
                     }
+                case DateRangeOptions.Tommorrow:
+                    {
+                        return new DateRange(DayStart(currentDateTime.AddDays(1)), DayEnd(currentDateTime.AddDays(1)));
+                    }
+                case DateRangeOptions.Next24Hours:
+                    {
+                        return new DateRange(currentDateTime, currentDateTime.AddHours(24).AddMilliseconds(-1));
+                    }
+                case DateRangeOptions.Next7Days:
+                    {
+                        return new DateRange(currentDateTime, DayEnd(currentDateTime.AddDays(7)));
+                    }
+                case DateRangeOptions.Next30Days:
+                    {
+                        return new DateRange(currentDateTime, DayEnd(currentDateTime.AddDays(30)));
+                    }
                 default:
                     {
                         return new DateRange(DateTime.MinValue, DateTime.MaxValue);
