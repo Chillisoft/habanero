@@ -377,6 +377,23 @@ namespace Habanero.Test.Util
             var dateTimeCurrent = DateTime.Now;
             TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
             DateTime expectedDayEnd = dateTimeCurrent.Date.AddDays(1).AddMilliseconds(-1).Add(sixHourOffSet);
+            if((dateTimeCurrent - DateTimeUtilities.DayStart(dateTimeCurrent)) < sixHourOffSet)
+            {
+                expectedDayEnd = dateTimeCurrent.Date.AddMilliseconds(-1).Add(sixHourOffSet);
+            }
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.DayEnd(dateTimeCurrent, sixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedDayEnd, actualDayEnd);
+        }
+        [Test]
+        public void Test_DayEnd_WithOffSet_WithFixedDate_ShouldReturnLastMillisecondOfThedayPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Parse("31-May-2010 01:07:53");
+            TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
+            DateTime expectedDayEnd = DateTime.Parse("2010-05-31 05:59:59.999");
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             var actualDayEnd = DateTimeUtilities.DayEnd(dateTimeCurrent, sixHourOffSet);
@@ -418,12 +435,28 @@ namespace Habanero.Test.Util
             var dateTimeCurrent = DateTime.Now;
             TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
             DateTime expectedStartTime = dateTimeCurrent.Date.Add(sixHourOffSet);
+            if ((dateTimeCurrent - DateTimeUtilities.DayStart(dateTimeCurrent)) < sixHourOffSet)
+            {
+                expectedStartTime = dateTimeCurrent.Date.AddDays(-1).Add(sixHourOffSet);
+            }
             //---------------Assert Precondition----------------
-            Assert.Less(dateTimeCurrent.Date.Add(sixHourOffSet), dateTimeCurrent);
             //---------------Execute Test ----------------------
             var actualDayStart = DateTimeUtilities.DayStart(dateTimeCurrent, sixHourOffSet);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedStartTime, actualDayStart);
+        }
+        [Test]
+        public void Test_DayStart_WithOffSet_WithFixedDate_ShouldReturnStartOffdayPlusOffSet()
+        {
+            //---------------Set up test pack-------------------
+            var dateTimeCurrent = DateTime.Parse("31-May-2010 01:07:53");
+            TimeSpan sixHourOffSet = new TimeSpan(6, 0, 0);
+            DateTime expectedStartTime = DateTime.Parse("2010-05-30 06:00:00.000");
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDayEnd = DateTimeUtilities.DayStart(dateTimeCurrent, sixHourOffSet);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedStartTime, actualDayEnd);
         }
         [Test]
         public void Test_DayStart_WithOffOffSetGTNow_ShouldReturnStartOffdayPlusOffSet()
