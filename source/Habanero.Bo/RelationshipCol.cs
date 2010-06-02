@@ -115,9 +115,9 @@ namespace Habanero.BO
                                                             this._bo.GetType());
                 }
 
-                IRelationship relationship = _relationships[relationshipName];
-                if (!relationship.Initialised)
-                    ReflectionUtilities.ExecutePrivateMethod(relationship, "Initialise");
+                IRelationshipForLoading relationship = (IRelationshipForLoading)_relationships[relationshipName];
+                if (!relationship.Initialised) relationship.Initialise();
+                    //ReflectionUtilities.ExecutePrivateMethod(relationship, "Initialise");
                 return relationship;
             }
 		}

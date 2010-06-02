@@ -391,11 +391,11 @@ namespace Habanero.BO.Loaders
                 errorMessage += ". Within each 'class' element you need to set " +
                                 "the 'assembly' attribute, which refers to the project or assembly " +
                                 "that contains the class which is being mapped to.";
-                throw new XmlException(errorMessage);
+                throw new InvalidXmlDefinitionException(errorMessage);
             }
             if (string.IsNullOrEmpty(_className))
             {
-                throw new XmlException("No 'name' attribute has been specified for a " +
+                throw new InvalidXmlDefinitionException("No 'name' attribute has been specified for a " +
                                        "'class' element.  The 'name' attribute indicates the name of the " +
                                        "class to which a database table will be mapped.");
             }

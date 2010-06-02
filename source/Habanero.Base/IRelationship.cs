@@ -18,10 +18,11 @@
 // ---------------------------------------------------------------------------------
 namespace Habanero.Base
 {
+
     ///<summary>
     /// The interface used to implement relationships between two classes.
     ///</summary>
-    public interface IRelationship
+    public interface IRelationship 
     {
         ///<summary>
         /// The key that identifies this relationship i.e. the properties in the 

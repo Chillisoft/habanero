@@ -977,46 +977,6 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>The type of the specified property</returns>
         public Type GetPropertyType(string propertyName)
         {
-            //This could be Generalised this for properties that do not have PropDefs
-/*
-            if (propertyName.IndexOf(".") != -1)
-            {
-                //Get the first property name
-                string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
-                propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
-                //If there are some alternative relationships to traverse through then
-                //  go through each alternative and check if there is a related object and return the first one
-                // else get the related object
-
-                string[] parts = relationshipName.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
-                var relNames = new List<string>(parts);
-                var relatedPropertyTypes = new List<Type>();
-                relNames.ForEach(delegate(string relationship)
-                                     {
-                                         IRelationshipDef relationshipDef = GetRelationship(relationship);
-                                         if (relationshipDef == null) return;
-
-                                         IClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
-                                         if (relatedObjectClassDef == null) return;
-
-                                         Type propertyType = relatedObjectClassDef.GetPropertyType(propertyName);
-                                         relatedPropertyTypes.Add(propertyType);
-                                     });
-                Type currentPropertyType = null;
-                relatedPropertyTypes.ForEach(delegate(Type propertyType)
-                                                 {
-                                                     if (currentPropertyType == null)
-                                                     {
-                                                         currentPropertyType = propertyType;
-                                                     }
-                                                     else if (currentPropertyType != propertyType)
-                                                     {
-                                                         currentPropertyType = typeof (object);
-                                                     }
-                                                 });
-
-                return currentPropertyType ?? typeof (object);
-            }*/
             if (IsReflectiveProperty(propertyName))
             {
                 return GetReflectivePropertyType(propertyName);

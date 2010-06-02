@@ -126,7 +126,7 @@ namespace Habanero.Test.BO.Loaders
                 <key name=""Key1"" ignoreIfNull=""invalidvalue"">
                     <prop name=""TestProp"" />
                 </key>", _propDefCol);
-                Assert.Fail("Expected to throw an AbandonedMutexException");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
             }
                 //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)
@@ -144,7 +144,7 @@ namespace Habanero.Test.BO.Loaders
                 <key name=""Key1"">
                     <props name=""TestProp"" />
                 </key>", _propDefCol);
-                Assert.Fail("Expected to throw an RecordedExceptionsException");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
             }
                 //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)

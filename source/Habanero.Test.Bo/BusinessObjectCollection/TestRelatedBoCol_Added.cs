@@ -24,6 +24,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectCollection
@@ -779,7 +780,9 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             MultipleRelationship<ContactPersonTestBO> relationship = GetContactPersonRelationship();
-            relationship.Initialise();
+            BOColLoaderHelper.Initialise(relationship);
+            //ReflectionUtilities.ExecutePrivateMethod(relationship, "Initialise");
+            //relationship.Initialise();
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
                 (RelatedBusinessObjectCollection<ContactPersonTestBO>) relationship.BusinessObjectCollection;
 

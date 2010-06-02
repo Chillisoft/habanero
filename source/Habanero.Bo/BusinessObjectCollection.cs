@@ -34,6 +34,66 @@ namespace Habanero.BO
     internal interface IBusinessObjectCollectionInternal : IBusinessObjectCollection
     {
         void AddInternal(IBusinessObject businessObject);
+        bool Loading { get; set; }
+        void FireRefreshedEvent();
+        void ClearCurrentCollection();
+    }
+    /// <summary>
+    /// This should never be used by a client application it is used by the DB Loading to clear collections
+    /// via the <see cref="IBusinessObjectCollectionInternal"/>
+    /// etc and it is used by testing applications to call same methods.
+    /// I.e. This is a Hack_ used so that we can call methods that I do not want as public methods
+    /// on the Collection and Relationship but which I need to be able to call during Loading or Unit Testing.
+    /// </summary>
+    public static class BOColLoaderHelper
+    {
+        /// <summary>
+        /// Calls the <see cref="IBusinessObjectCollectionInternal"/>'s ClearCurrentCollectionMethod
+        /// </summary>
+        /// <param name="col">A collection that implements the IBusinessObjectCollectionInternal</param>
+        public static void ClearCurrentCollection(IBusinessObjectCollection col)
+        {
+            IBusinessObjectCollectionInternal internalBOCol = (IBusinessObjectCollectionInternal) col;
+            internalBOCol.ClearCurrentCollection();
+        }
+        /// <summary>
+        /// Calls the <see cref="IBusinessObjectCollectionInternal"/>'s FireRefreshedEvent
+        /// </summary>
+        /// <param name="col">A collection that implements the IBusinessObjectCollectionInternal</param>
+        public static void FireRefreshedEvent(IBusinessObjectCollection col)
+        {
+            IBusinessObjectCollectionInternal internalBOCol = (IBusinessObjectCollectionInternal) col;
+            internalBOCol.FireRefreshedEvent();
+        }
+        /// <summary>
+        /// Calls the <see cref="IBusinessObjectCollectionInternal"/>'s Initialise
+        /// </summary>
+        /// <param name="relationship">A relationship that implements the IRelationshipForLoading</param>
+        public static void Initialise(IRelationship relationship)
+        {
+            IRelationshipForLoading internalRelForLoading = (IRelationshipForLoading)relationship;
+            internalRelForLoading.Initialise();
+        }
+        /// <summary>
+        /// Calls the <see cref="IBusinessObjectCollectionInternal"/>'s Loading Property and returns result
+        /// </summary>
+        /// <param name="col">A collection that implements the IBusinessObjectCollectionInternal</param>
+        public static bool GetLoading(IBusinessObjectCollection col)
+        {
+            IBusinessObjectCollectionInternal internalBOCol = (IBusinessObjectCollectionInternal) col;
+            return internalBOCol.Loading;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="IBusinessObjectCollectionInternal"/>'s Loading Property and returns result
+        /// </summary>
+        /// <param name="col">A collection that implements the IBusinessObjectCollectionInternal</param>
+        /// <param name="loading">The loading value to be set</param>
+        public static void SetLoading(IBusinessObjectCollection col, bool loading)
+        {
+            IBusinessObjectCollectionInternal internalBOCol = (IBusinessObjectCollectionInternal) col;
+            internalBOCol.Loading = loading;
+        }
     }
 
     //public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);
@@ -487,8 +547,7 @@ namespace Habanero.BO
         // ReSharper disable UnusedMember.Local
         //This is used by the BusinessObjectLoader when it has finished loading the Collection
         // ReSharper disable UnusedMember.Global
-        internal void FireRefreshedEvent()
-
+        void IBusinessObjectCollectionInternal.FireRefreshedEvent()
         {
             if (CollectionRefreshed != null)
             {
@@ -715,9 +774,12 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", true);
+                    //ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", true);
+                    var boColInternal = ((IBusinessObjectCollectionInternal)this);
+                    boColInternal.Loading = true;
                     addEventRequired = this.AddInternal(bo);
-                    ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", false);
+                    boColInternal.Loading = false;
+                    //ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", false);
                 }
             }
             if (addEventRequired) FireBusinessObjectAdded(bo);
@@ -1261,7 +1323,7 @@ namespace Habanero.BO
         /// Note_: This is used by reflection by the collection loader.
 // ReSharper disable UnusedPrivateMember
 // ReSharper disable UnusedMember.Global
-        internal void ClearCurrentCollection()
+        void IBusinessObjectCollectionInternal.ClearCurrentCollection()
         {
             foreach (TBusinessObject businessObject in this)
             {
@@ -2054,7 +2116,7 @@ namespace Habanero.BO
         /// This property is set to true while loading the collection from the datastore so as to 
         /// prevent certain checks being done (e.g. Adding persisted business objects to a collection.
         /// </summary>
-        protected bool Loading { get; set; }
+        bool IBusinessObjectCollectionInternal.Loading { get; set; }
 
 // ReSharper restore UnusedAutoPropertyAccessor.Global
 // ReSharper restore UnusedPrivateMember

@@ -110,9 +110,13 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
-            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
+            var boColInternal = ((IBusinessObjectCollectionInternal)collection);
+            //            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
+            boColInternal.Loading = true;
+//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
             DoRefresh(collection);
-            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
+            boColInternal.Loading = false;
+ //           ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
 
         /// <summary>
@@ -123,9 +127,12 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public void Refresh(IBusinessObjectCollection collection)
         {
-            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
+            var boColInternal = ((IBusinessObjectCollectionInternal)collection);
+//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
+            boColInternal.Loading = true;
             DoRefresh(collection);
-            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
+            boColInternal.Loading = false;
+//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
         /// <summary>
         /// Actual Executes the Refresh this method is impleemented by the inherited classes of the business object loader base.
@@ -621,8 +628,10 @@ namespace Habanero.BO
             where T : class, IBusinessObject, new()
         {
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
-            ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
+            var boColInternal = ((IBusinessObjectCollectionInternal)relatedCol);
 
+            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
+            boColInternal.Loading = true;
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
             IOrderCriteria preparedOrderCriteria =
                 QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
@@ -632,7 +641,8 @@ namespace Habanero.BO
             //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
             relatedCol.SelectQuery.Criteria = relationshipCriteria;
             relatedCol.SelectQuery.OrderCriteria = preparedOrderCriteria;
-            ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
+            boColInternal.Loading = false;
+            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
             return relatedCol;
         }
 
@@ -657,9 +667,9 @@ namespace Habanero.BO
                 collection.TimeLastLoaded = DateTime.Now;
             }  else {
 
-                // made internal or something and used via reflection.
-                // I (Brett) am not comfortable with it being on the Interface. 
-                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+                var boColInternal = ((IBusinessObjectCollectionInternal)collection);
+                boColInternal.ClearCurrentCollection();
+                //ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
 
                 // store the original persisted collection and pass it through. This is to improve performance
                 // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
@@ -674,7 +684,9 @@ namespace Habanero.BO
                 }
                 RestoreEditedLists(collection, originalPersistedCollection);
                 collection.TimeLastLoaded = DateTime.Now;
-                ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
+                
+                boColInternal.FireRefreshedEvent();               
+//                ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
             }
         }
 
@@ -704,15 +716,16 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship)
         {
             IBusinessObjectCollection relatedCol = RelationshipUtils.CreateRelatedBusinessObjectCollection(type, relationship);
-            
-            ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
+            BOColLoaderHelper.SetLoading(relatedCol, true);
+            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
 
             IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
                                                                         relatedCol.SelectQuery.Criteria, relatedCol.SelectQuery.OrderCriteria);
 
             LoadBOCollection(relatedCol, col);
             relatedCol.SelectQuery = col.SelectQuery;
-            ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
+            BOColLoaderHelper.SetLoading(relatedCol, false);
+            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
             return relatedCol;
         }
 

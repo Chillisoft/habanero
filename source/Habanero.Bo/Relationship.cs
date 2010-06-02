@@ -23,7 +23,10 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
-
+    internal interface IRelationshipForLoading: IRelationship
+    {
+        void Initialise();
+    }
     internal static class RelationshipUtils
     {
         /// <summary>
@@ -238,7 +241,7 @@ namespace Habanero.BO
     /// <summary>
     /// Provides a super-class for relationships between business objects
     /// </summary>
-    public abstract class Relationship : RelationshipBase
+    public abstract class Relationship : RelationshipBase, IRelationshipForLoading
     {
         /// <summary> The Definition that defines this relationship. </summary>
         protected RelationshipDef _relDef;
@@ -315,7 +318,7 @@ namespace Habanero.BO
             get { return _relDef.RelatedObjectClassDef; }
         }
 
-        internal void Initialise()
+        void IRelationshipForLoading.Initialise()
         {
             if (_initialised) return;
             DoInitialisation();

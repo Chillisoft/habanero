@@ -56,7 +56,8 @@ namespace Habanero.BO
         /// <param name="bo">The business object to add</param>
         protected override bool AddInternal(TBusinessObject bo)
         {
-            if (!Loading)
+            var boColInternal = ((IBusinessObjectCollectionInternal)this);
+            if (!boColInternal.Loading)
             {
                 if (!this._relationship.RelKey.Criteria.IsMatch(bo, false))
                 {
@@ -65,7 +66,7 @@ namespace Habanero.BO
                 }
             }
             if (!base.AddInternal(bo)) return false;
-            if (this.Loading) return true;
+            if (boColInternal.Loading) return true;
 
             if (IsForeignKeySetup(bo)) return true;
 
@@ -81,7 +82,8 @@ namespace Habanero.BO
         public override bool Remove(TBusinessObject bo)
         {
             MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
-            if (!bo.Status.IsNew && def != null && !Loading && (def.RelationshipType == RelationshipType.Composition))
+            var boColInternal = ((IBusinessObjectCollectionInternal)this);
+            if (!bo.Status.IsNew && def != null && !boColInternal.Loading && (def.RelationshipType == RelationshipType.Composition))
             {
                 string message = "The " + def.RelatedObjectClassName +
                                  " could not be removed since the " + def.RelationshipName +
@@ -101,11 +103,12 @@ namespace Habanero.BO
         /// <returns>true if the business object is removed, otherwise false.</returns>
         internal bool RemoveInternal(TBusinessObject bo)
         {
+            var boColInternal = ((IBusinessObjectCollectionInternal)this);
             if (!base.Remove(bo)) return false;
-            if (this.Loading) return true;
+            if (boColInternal.Loading) return true;
             DereferenceBO(bo);
             MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
-            if (!(!bo.Status.IsNew && def != null && !Loading && (def.RelationshipType == RelationshipType.Composition)))
+            if (!(!bo.Status.IsNew && def != null && !boColInternal.Loading && (def.RelationshipType == RelationshipType.Composition)))
             {
                 RemoveRelatedObject(bo);
             }

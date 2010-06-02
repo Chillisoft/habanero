@@ -326,8 +326,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             //---------------Execute Test ----------------------
             //cpCol.ClearCurrentCollection();
-            ReflectionUtilities.ExecutePrivateMethod(cpCol, "ClearCurrentCollection");
-
+            //ReflectionUtilities.ExecutePrivateMethod(cpCol, "ClearCurrentCollection");
+            BOColLoaderHelper.ClearCurrentCollection(cpCol);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);

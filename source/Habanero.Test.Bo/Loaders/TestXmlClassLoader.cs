@@ -84,7 +84,7 @@ namespace Habanero.Test.BO.Loaders
                     </primaryKey>
 				</class>
 			");
-                Assert.Fail("Expected to throw an RecordedExceptionsException");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
             }
                 //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)
@@ -106,7 +106,7 @@ namespace Habanero.Test.BO.Loaders
                     </primaryKey>
 				</class>
 			");
-                Assert.Fail("Expected to throw an RecordedExceptionsException");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
             }
                 //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)

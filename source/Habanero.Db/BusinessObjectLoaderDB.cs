@@ -342,7 +342,9 @@ namespace Habanero.DB
             if (IsLoadNecessary(selectQuery, totalNoOfRecords))
             {
                 ISqlStatement statement = CreateStatementAdjustedForLimits(selectQuery, totalNoOfRecords);
-                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+                //var boColInternal = ((IBusinessObjectCollectionInternal)collection);
+                BOColLoaderHelper.ClearCurrentCollection(collection);
+                //ReflectionUtilities.ExecuteMethod(collection, "ClearCurrentCollection");
                 // store the original persisted collection and pass it through. This is to improve performance
                 // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
                 Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();
@@ -409,7 +411,8 @@ namespace Habanero.DB
             else
             {
                 //The first record is past the end of the available records, so return an empty collection.
-                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+                BOColLoaderHelper.ClearCurrentCollection(collection);
+                //ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
                 RestoreEditedLists(collection, null);
             }
             int totalCountAvailableForPaging = totalNoOfRecords == -1 ? collection.Count : totalNoOfRecords;
@@ -426,7 +429,8 @@ namespace Habanero.DB
             //   that returns another type of object that has these methods to eliminate all these 
             //   public accessors
             collection.TimeLastLoaded = DateTime.Now;
-            ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
+            BOColLoaderHelper.FireRefreshedEvent(collection);
+            //ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
         }
 
         private int GetTotalNoOfRecordsIfNeeded(IClassDef classDef, ISelectQuery selectQuery)
