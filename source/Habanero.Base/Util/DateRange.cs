@@ -4,7 +4,7 @@ namespace Habanero.Base.Util
 {
     
     /// <summary>
-    /// Date Range Class originally from <see cref="http://noticeablydifferent.com/CodeSamples/DateRange.aspx"/>
+    /// Date Range Class originally from http://noticeablydifferent.com/CodeSamples/DateRange.aspx
     /// </summary>
     [CoverageExclude(ExcludeReason = "This code was downloaded from a website and did not have any tests.")]
     public class DateRange : IEquatable<DateRange>

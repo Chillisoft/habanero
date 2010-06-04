@@ -59,7 +59,7 @@ namespace Habanero.DB
         public long NextNumber()
         {
             BoSequenceNumber.SequenceNumber++;
-            return BoSequenceNumber.SequenceNumber.Value;
+            return BoSequenceNumber.SequenceNumber.GetValueOrDefault();
         }
 
         private static BOSequenceNumberLocking LoadSequenceNumber(string numberType)

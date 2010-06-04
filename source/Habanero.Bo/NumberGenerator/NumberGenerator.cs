@@ -71,7 +71,7 @@ namespace Habanero.BO
         public long NextNumber()
         {
             _boSequenceNumber.SequenceNumber++;
-            return _boSequenceNumber.SequenceNumber.Value;
+            return _boSequenceNumber.SequenceNumber.GetValueOrDefault();
         }
 
         /// <summary>
