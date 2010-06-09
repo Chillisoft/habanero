@@ -41,6 +41,7 @@ namespace Habanero.Test.BO.Relationship
             BORegistry.DataAccessor = new DataAccessorInMemory();
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
+
         }
 
 
@@ -226,7 +227,7 @@ namespace Habanero.Test.BO.Relationship
             IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(organisation.ClassDef, null, "");
             //---------------Assert Precondition -----------------------
             Assert.IsNotNull(organisation.OrganisationID);
-            Assert.AreEqual(1, collection.Count);
+            Assert.Contains(organisation, collection);
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisation;
             //---------------Test Result -----------------------

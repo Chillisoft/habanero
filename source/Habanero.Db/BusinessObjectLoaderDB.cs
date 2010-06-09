@@ -345,6 +345,7 @@ namespace Habanero.DB
                 //var boColInternal = ((IBusinessObjectCollectionInternal)collection);
                 BOColLoaderHelper.ClearCurrentCollection(collection);
                 //ReflectionUtilities.ExecuteMethod(collection, "ClearCurrentCollection");
+
                 // store the original persisted collection and pass it through. This is to improve performance
                 // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
                 Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();

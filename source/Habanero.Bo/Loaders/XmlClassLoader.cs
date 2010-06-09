@@ -18,7 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -219,12 +219,21 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadRelationshipDefs(IEnumerable<string> xmlDefs)
         {
-            var loadedRelationships = from relDefXml in xmlDefs
+/*            var loadedRelationships = from relDefXml in xmlDefs
                                       let relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory, _className)
                                       select relationshipLoader.LoadRelationship(relDefXml, _propDefCol)
                                       into loadedRelationship where loadedRelationship != null select loadedRelationship;
             foreach (var loadedRelationship in loadedRelationships)
             {
+                loadedRelationship.OwningClassDef = this._classDef;
+                _relationshipDefCol.Add(loadedRelationship);
+            }*/
+
+            foreach (string relDefXml in xmlDefs)
+            {
+                XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory, _className);
+                var loadedRelationship = relationshipLoader.LoadRelationship(relDefXml, _propDefCol);
+                if(loadedRelationship == null) continue;
                 loadedRelationship.OwningClassDef = this._classDef;
                 _relationshipDefCol.Add(loadedRelationship);
             }

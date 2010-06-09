@@ -320,52 +320,53 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.IsNull(propType);
         }
-        [Test]
-        public void Test_GetPropertyInfo_WithLambda_ShouldRetInfo()
-        {
-            //---------------Set up test pack-------------------
+         //Will not work for DotNet For 2_00
+          [Test]
+                public void Test_GetPropertyInfo_WithLambda_ShouldRetInfo()
+                {
+                    //---------------Set up test pack-------------------
 
-            //---------------Assert Precondition----------------
+                    //---------------Assert Precondition----------------
 
-            //---------------Execute Test ----------------------
+                    //---------------Execute Test ----------------------
 
-            var propInfo = ReflectionUtilities.GetPropertyInfo<ClassWithProperties, string>(bo => bo.StringProperty);
-            //---------------Test Result -----------------------
-            Assert.AreEqual("StringProperty", propInfo.Name);
-            Assert.AreSame(typeof (string), propInfo.PropertyType);
-        }
-        [Test]
-        public void Test_GetPropertyName_WithLambda_ShouldRetName()
-        {
-            //---------------Set up test pack-------------------
+                    var propInfo = ReflectionUtilities.GetPropertyInfo<ClassWithProperties, string>(bo => bo.StringProperty);
+                    //---------------Test Result -----------------------
+                    Assert.AreEqual("StringProperty", propInfo.Name);
+                    Assert.AreSame(typeof (string), propInfo.PropertyType);
+                }
+                [Test]
+                public void Test_GetPropertyName_WithLambda_ShouldRetName()
+                {
+                    //---------------Set up test pack-------------------
 
-            //---------------Assert Precondition----------------
+                    //---------------Assert Precondition----------------
 
-            //---------------Execute Test ----------------------
+                    //---------------Execute Test ----------------------
 
-            var propertyName = ReflectionUtilities.GetPropertyName<ClassWithProperties, string>(bo => bo.StringProperty);
-            //---------------Test Result -----------------------
-            Assert.AreEqual("StringProperty", propertyName);
-        }
+                    var propertyName = ReflectionUtilities.GetPropertyName<ClassWithProperties, string>(bo => bo.StringProperty);
+                    //---------------Test Result -----------------------
+                    Assert.AreEqual("StringProperty", propertyName);
+                }
 
-        [Test]
-        public void Test_GetPropertyInfo_WithInvalidLambda_ShouldRaiseError()
-        {
-            //---------------Set up test pack-------------------
-            //---------------Assert Precondition----------------
+                [Test]
+                public void Test_GetPropertyInfo_WithInvalidLambda_ShouldRaiseError()
+                {
+                    //---------------Set up test pack-------------------
+                    //---------------Assert Precondition----------------
 
-            //---------------Execute Test ----------------------
-            try
-            {
-                ReflectionUtilities.GetPropertyInfo<ClassWithProperties, object>(bo => bo.GetType());
-                Assert.Fail("Expected to throw an ArgumentException");
-            }
-            //---------------Test Result -----------------------
-            catch (ArgumentException ex)
-            {
-                StringAssert.Contains("Not a member access", ex.Message);
-            }
-        }
+                    //---------------Execute Test ----------------------
+                    try
+                    {
+                        ReflectionUtilities.GetPropertyInfo<ClassWithProperties, object>(bo => bo.GetType());
+                        Assert.Fail("Expected to throw an ArgumentException");
+                    }
+                    //---------------Test Result -----------------------
+                    catch (ArgumentException ex)
+                    {
+                        StringAssert.Contains("Not a member access", ex.Message);
+                    }
+                }/**/
 
         // ReSharper disable UnusedAutoPropertyAccessor.Local
 

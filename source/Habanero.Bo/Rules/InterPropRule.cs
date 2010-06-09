@@ -156,7 +156,7 @@ namespace Habanero.BO.Rules
             : base(propLeft, comparisonOperator, propRight)
         {
         }
-
+ //Will not work For DotNet 2_0
         ///<summary>
         /// Overloaded Constructor for the Generic InterPropRule
         ///</summary>

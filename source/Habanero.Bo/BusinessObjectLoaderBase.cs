@@ -111,7 +111,6 @@ namespace Habanero.BO
         public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
             var boColInternal = ((IBusinessObjectCollectionInternal)collection);
-            //            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
             boColInternal.Loading = true;
 //            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
             DoRefresh(collection);

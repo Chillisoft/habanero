@@ -1076,15 +1076,34 @@ namespace Habanero.BO
                                   int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             Criteria criteria = null;
-            if (searchCriteria.Length > 0)
+            if (!Utilities.IsNull(searchCriteria) && searchCriteria.Length > 0)
             {
                 criteria = CriteriaParser.CreateCriteria(searchCriteria);
                 QueryBuilder.PrepareCriteria(this.ClassDef, criteria);
+            }
+            //If there is no orderByClause then we create an order by clause using the ObjectsID
+            //This seems a bit strange but is required due to the fact that the load with Limit must be 
+            // able to return a Set of objects from the database in exactly the same order else the 
+            // paging from one page to another does not make sense.
+            if(string.IsNullOrEmpty(orderByClause))
+            {
+                orderByClause = PrimaryKeyAsOrderByClause(this.ClassDef.PrimaryKeyDef);
             }
             IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
             LoadWithLimit(criteria, orderCriteria, firstRecordToLoad, numberOfRecordsToLoad, out totalNoOfRecords);
         }
 
+
+        private static string PrimaryKeyAsOrderByClause(IPrimaryKeyDef primaryKeyDef)
+        {
+            string toStringValue = "";
+
+            foreach (IPropDef lPropDef in primaryKeyDef)
+            {
+                toStringValue = StringUtilities.AppendMessage(toStringValue, lPropDef.PropertyName, ", ");
+            }
+            return toStringValue;
+        }
         #endregion
 
         int IList.Add(object value)
@@ -1973,6 +1992,7 @@ namespace Habanero.BO
         {
             TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
             this.CopyTo(thisArray, arrayIndex);
+            array = thisArray;
             int count = _boCol.Count;
             for (int index = 0; index < count; index++)
                 array[arrayIndex + index] = thisArray[arrayIndex + index];

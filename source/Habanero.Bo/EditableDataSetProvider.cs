@@ -100,9 +100,9 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void NewRowHandler(object sender, DataTableNewRowEventArgs e)
         {
-            if (_objectInitialiser != null)
+            if (ObjectInitialiser != null)
             {
-                _objectInitialiser.InitialiseDataRow(e.Row);
+                ObjectInitialiser.InitialiseDataRow(e.Row);
             }
         }
 
@@ -449,12 +449,12 @@ namespace Habanero.BO
                 }
 
                 //log.Debug("Initialising obj");
-                if (_objectInitialiser != null)
+                if (ObjectInitialiser != null)
                 {
                     try
                     {
                         DeregisterForBOEvents();
-                        _objectInitialiser.InitialiseObject(newBo);
+                        ObjectInitialiser.InitialiseObject(newBo);
                     }
                     finally
                     {

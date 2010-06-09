@@ -53,7 +53,7 @@ namespace Habanero.BO
         /// <summary>
         /// The object initialiser being used to create a new object if this grid is allowed to create a new object.
         /// </summary>
-        protected IBusinessObjectInitialiser _objectInitialiser;
+        private IBusinessObjectInitialiser _objectInitialiser;
 
         /// <summary>
         /// A handler for the <see cref="IBusinessObject"/> has been added to the <see cref="_collection"/>.
@@ -236,6 +236,7 @@ namespace Habanero.BO
         /// <returns>Returns an array of values</returns>
         protected object[] GetValues(IBusinessObject businessObject)
         {
+            if (businessObject == null) throw new ArgumentNullException("businessObject");
             object[] values = new object[_uiGridProperties.Count + 1];
             values[0] = businessObject.ID.ObjectID;
             int i = 1;
@@ -343,7 +344,8 @@ namespace Habanero.BO
                 catch (Exception)
                 {
                     //IF you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error
-                    Console.Write("There was an error");
+                    //This suppresses the error.
+                    Console.Write("There was an error in DataSetProvider: IF you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error ");
                 }
             }
         }
@@ -483,6 +485,7 @@ namespace Habanero.BO
         public IBusinessObjectInitialiser ObjectInitialiser
         {
             set { _objectInitialiser = value; }
+            get { return _objectInitialiser; }
         }
 
         ///<summary>

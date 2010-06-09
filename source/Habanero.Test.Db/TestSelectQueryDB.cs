@@ -681,7 +681,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             const string expectedFirstSelect = "(SELECT TOP 6 MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
-            string expectedSecondSelect = string.Format("(SELECT TOP 4 FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC ) AS SecondSelect", expectedFirstSelect);
+            string expectedSecondSelect = string.Format("(SELECT TOP 4 FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC ) As SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
             string expectedMainSelect = string.Format("SELECT SecondSelect.MyBoID FROM {0} ORDER BY SecondSelect.MyBOID ASC", expectedSecondSelect);
             Assert.AreEqual(expectedMainSelect, actualStatement);
@@ -708,7 +708,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             const string expectedFirstSelect = "(SELECT TOP 8 contact_person.ContactPersonID, contact_person.Surname_field, contact_person.FirstName_field, contact_person.DateOfBirth FROM contact_person ORDER BY contact_person.Surname_field ASC) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
-            string expectedSecondSelect = string.Format("(SELECT TOP 5 FirstSelect.ContactPersonID, FirstSelect.Surname_field, FirstSelect.FirstName_field, FirstSelect.DateOfBirth FROM {0} ORDER BY FirstSelect.Surname_field DESC ) AS SecondSelect", expectedFirstSelect);
+            string expectedSecondSelect = string.Format("(SELECT TOP 5 FirstSelect.ContactPersonID, FirstSelect.Surname_field, FirstSelect.FirstName_field, FirstSelect.DateOfBirth FROM {0} ORDER BY FirstSelect.Surname_field DESC ) As SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
             string expectedMainSelect = string.Format("SELECT SecondSelect.ContactPersonID, SecondSelect.Surname_field, SecondSelect.FirstName_field, SecondSelect.DateOfBirth FROM {0} ORDER BY SecondSelect.Surname_field ASC", expectedSecondSelect);
             Assert.AreEqual(expectedMainSelect, actualStatement);
@@ -735,7 +735,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             const string expectedFirstSelect = "(SELECT TOP 8 [contact_person].[ContactPersonID], [contact_person].[Surname_field], [contact_person].[FirstName_field], [contact_person].[DateOfBirth] FROM [contact_person] ORDER BY [contact_person].[Surname_field] ASC) As [FirstSelect]";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
-            string expectedSecondSelect = string.Format("(SELECT TOP 5 [FirstSelect].[ContactPersonID], [FirstSelect].[Surname_field], [FirstSelect].[FirstName_field], [FirstSelect].[DateOfBirth] FROM {0} ORDER BY [FirstSelect].[Surname_field] DESC ) AS [SecondSelect]", expectedFirstSelect);
+            string expectedSecondSelect = string.Format("(SELECT TOP 5 [FirstSelect].[ContactPersonID], [FirstSelect].[Surname_field], [FirstSelect].[FirstName_field], [FirstSelect].[DateOfBirth] FROM {0} ORDER BY [FirstSelect].[Surname_field] DESC ) As [SecondSelect]", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
             string expectedMainSelect = string.Format("SELECT [SecondSelect].[ContactPersonID], [SecondSelect].[Surname_field], [SecondSelect].[FirstName_field], [SecondSelect].[DateOfBirth] FROM {0} ORDER BY [SecondSelect].[Surname_field] ASC", expectedSecondSelect);
             Assert.AreEqual(expectedMainSelect, actualStatement);
@@ -762,7 +762,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             const string expectedFirstSelect = "(SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 6) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
-            string expectedSecondSelect = string.Format("(SELECT FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC LIMIT 4) AS SecondSelect", expectedFirstSelect);
+            string expectedSecondSelect = string.Format("(SELECT FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC LIMIT 4) As SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
             string expectedMainSelect = string.Format("SELECT SecondSelect.MyBoID FROM {0} ORDER BY SecondSelect.MyBOID ASC", expectedSecondSelect);
             Assert.AreEqual(expectedMainSelect, actualStatement);
@@ -789,7 +789,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             const string expectedFirstSelect = "(SELECT contact_person.ContactPersonID, contact_person.Surname_field, contact_person.FirstName_field, contact_person.DateOfBirth FROM contact_person ORDER BY contact_person.Surname_field ASC LIMIT 8) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
-            string expectedSecondSelect = string.Format("(SELECT FirstSelect.ContactPersonID, FirstSelect.Surname_field, FirstSelect.FirstName_field, FirstSelect.DateOfBirth FROM {0} ORDER BY FirstSelect.Surname_field DESC LIMIT 5) AS SecondSelect", expectedFirstSelect);
+            string expectedSecondSelect = string.Format("(SELECT FirstSelect.ContactPersonID, FirstSelect.Surname_field, FirstSelect.FirstName_field, FirstSelect.DateOfBirth FROM {0} ORDER BY FirstSelect.Surname_field DESC LIMIT 5) As SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
             string expectedMainSelect = string.Format("SELECT SecondSelect.ContactPersonID, SecondSelect.Surname_field, SecondSelect.FirstName_field, SecondSelect.DateOfBirth FROM {0} ORDER BY SecondSelect.Surname_field ASC", expectedSecondSelect);
             Assert.AreEqual(expectedMainSelect, actualStatement);
@@ -816,7 +816,7 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             const string expectedFirstSelect = "(SELECT [contact_person].[ContactPersonID], [contact_person].[Surname_field], [contact_person].[FirstName_field], [contact_person].[DateOfBirth] FROM [contact_person] ORDER BY [contact_person].[Surname_field] ASC LIMIT 8) As [FirstSelect]";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
-            string expectedSecondSelect = string.Format("(SELECT [FirstSelect].[ContactPersonID], [FirstSelect].[Surname_field], [FirstSelect].[FirstName_field], [FirstSelect].[DateOfBirth] FROM {0} ORDER BY [FirstSelect].[Surname_field] DESC LIMIT 5) AS [SecondSelect]", expectedFirstSelect);
+            string expectedSecondSelect = string.Format("(SELECT [FirstSelect].[ContactPersonID], [FirstSelect].[Surname_field], [FirstSelect].[FirstName_field], [FirstSelect].[DateOfBirth] FROM {0} ORDER BY [FirstSelect].[Surname_field] DESC LIMIT 5) As [SecondSelect]", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
             string expectedMainSelect = string.Format("SELECT [SecondSelect].[ContactPersonID], [SecondSelect].[Surname_field], [SecondSelect].[FirstName_field], [SecondSelect].[DateOfBirth] FROM {0} ORDER BY [SecondSelect].[Surname_field] ASC", expectedSecondSelect);
             Assert.AreEqual(expectedMainSelect, actualStatement);

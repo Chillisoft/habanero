@@ -31,6 +31,8 @@ namespace Habanero.Test.DB
         {
             base.SetupTest();
             TestUsingDatabase.SetupDBDataAccessor();
+            OrganisationTestBO.DeleteAllOrganisations();
+            ContactPersonTestBO.DeleteAllContactPeople();
         }
 
 

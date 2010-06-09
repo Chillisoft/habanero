@@ -187,10 +187,26 @@ namespace Habanero.Test
 
         public static void DeleteAllContactPeople()
         {
+            if (DatabaseConnection.CurrentConnection == null) return;
             const string sql = "DELETE FROM ContactPersonCompositeKey";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
+        public static ContactPersonCompositeKey CreateSavedContactPerson()
+        {
+            ContactPersonCompositeKey contact = CreateUnsavedContactPerson();
+
+            contact.Save();
+            return contact;
+        }
+
+        public static ContactPersonCompositeKey CreateUnsavedContactPerson()
+        {
+            ContactPersonCompositeKey contact = new ContactPersonCompositeKey();
+            contact.PK1Prop1 = TestUtil.GetRandomString();
+            contact.PK1Prop2 = TestUtil.GetRandomString();
+            return contact;
+        }
         #endregion //ForTesting
 
         public override string ToString()

@@ -18,7 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 
@@ -45,7 +45,7 @@ namespace Habanero.Base
         public void RethrowRecordedException()
         {
             if (!HasExceptions) return;
-            ExceptionDetail exceptionDetail = Exceptions.Last();
+            ExceptionDetail exceptionDetail = Exceptions[Exceptions.Count -1];
 
             throw new RecordedExceptionsException(string.Format(
                     "An Exception that was recorded by the RecordingExceptionNotifier and has been rethrown." + 
@@ -68,13 +68,18 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// The last exception logged by the exception notifier
+        /// All the Exception messages for all logged Exceptions Concatenated.
         ///</summary>
         public string ExceptionMessage
         {
             get
             {
-                return Exceptions.Aggregate("", (current, exceptionDetail) => StringUtilities.AppendMessage(current, exceptionDetail.ToString(), Environment.NewLine));
+                string message = "";
+                foreach (var exceptionDetail in Exceptions)
+                {
+                    message = StringUtilities.AppendMessage(message, exceptionDetail.ToString(), Environment.NewLine);
+                }
+                return message;
             }
         }
         /// <summary>

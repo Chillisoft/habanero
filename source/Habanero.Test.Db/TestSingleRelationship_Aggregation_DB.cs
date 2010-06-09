@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using Habanero.Test.BO;
 using Habanero.Test.BO.Relationship;
 using NUnit.Framework;
 
@@ -29,6 +30,8 @@ namespace Habanero.Test.DB
         {
             base.SetupTest();
             TestUsingDatabase.SetupDBDataAccessor();
+            OrganisationTestBO.DeleteAllOrganisations();
+            ContactPersonTestBO.DeleteAllContactPeople();
         }
     }
 }

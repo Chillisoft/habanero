@@ -38,6 +38,7 @@ namespace Habanero.Test
             if (DatabaseConnection.CurrentConnection != null &&
     DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql))
             {
+                if (BORegistry.DataAccessor == null) BORegistry.DataAccessor = new DataAccessorDB();
                 return;
             }
             DatabaseConnection.CurrentConnection =

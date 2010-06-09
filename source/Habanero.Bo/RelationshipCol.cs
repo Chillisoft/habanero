@@ -19,7 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
@@ -57,7 +57,14 @@ namespace Habanero.BO
         public bool IsDirty
         {
             get
-            { return _relationships.Select(pair => pair.Value).Any(relationship => relationship.IsDirty); }
+            {
+                foreach (var relationship in _relationships.Values)
+                {
+                    if(relationship.IsDirty) return true;
+                }
+                return false;
+                //return _relationships.Select(pair => pair.Value).Any(relationship => relationship.IsDirty);
+            }
         }
 
         ///<summary>
@@ -89,7 +96,7 @@ namespace Habanero.BO
         /// Adds a collection of relationships to the business object
         /// </summary>
         /// <param name="relCol">The collection of relationships to add</param>
-        public void Add(RelationshipCol relCol)
+        public void Add(IEnumerable<IRelationship> relCol)
         {
             foreach (IRelationship rel in relCol)
             {

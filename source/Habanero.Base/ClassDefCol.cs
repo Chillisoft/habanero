@@ -19,7 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 
@@ -264,7 +264,13 @@ namespace Habanero.Base
         ///<returns>The class definition with the specified name, otherwise returns null.</returns>
         public IClassDef FindByClassName(string className)
         {
-            return _classDefs.Values.FirstOrDefault(classDef => classDef.ClassName == className);
+            foreach (var classDef in _classDefs.Values)
+            {
+                if (classDef.ClassName == className) {
+                    return classDef; }
+            }
+            return null;
+           // return _classDefs.Values.FirstOrDefault(classDef => classDef.ClassName == className);
         }
 
         #region Singleton ClassDefCol
