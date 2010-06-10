@@ -114,6 +114,19 @@ namespace Habanero.Test.BO
             Assert.AreEqual(testPropDefault, bo.Props["TestProp"].PersistedPropertyValue);
             Assert.AreEqual(null, bo.Props["TestProp2"].PersistedPropertyValue);
         }
+        [Test]
+        public void Test_Instantiate_ShouldSetBusinessObjectOnPrimaryKey()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            string testPropDefault = TestUtil.GetRandomString();
+            MyBO.LoadDefaultClassDefWithDefault(testPropDefault);
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            MyBO bo = new MyBO();
+            //---------------Test Result -----------------------
+            Assert.AreSame(bo, bo.ID.BusinessObject);
+        }
 
         [Test]
         public void Test_Instantiate_NewObjectIdIsBackedUp()

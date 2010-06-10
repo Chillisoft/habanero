@@ -440,15 +440,14 @@ namespace Habanero.BO
                 if (primaryKeyDef != null)
                 {
                     PrimaryKeyDef def = (PrimaryKeyDef) classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef;
-                    _primaryKey =
-                        (BOPrimaryKey)
-                        def.CreateBOKey(_boPropCol);
+                    _primaryKey =(BOPrimaryKey) def.CreateBOKey(_boPropCol);
                 }
             }
             if (_primaryKey == null)
             {
                 SetupPrimaryKey();
             }
+            if (_primaryKey != null) _primaryKey.BusinessObject = this;
         }
 
         internal IClassDef GetClassDefToUseForPrimaryKey()

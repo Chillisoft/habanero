@@ -20,7 +20,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
+//using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
@@ -114,7 +114,8 @@ namespace Habanero.Util
             }
             if(classType == null)
             {
-                classType = classAssembly.GetTypes().FirstOrDefault(type => type.Name.ToUpper() == className.ToUpper());
+                classType = FindFirstTypeWithName(classAssembly.GetTypes(), className);
+                //classType = classAssembly.GetTypes().FirstOrDefault(type => type.Name.ToUpper() == className.ToUpper());
             }
             if (classType == null)
             {
@@ -122,6 +123,15 @@ namespace Habanero.Util
                     String.Format("The type {0} does not exist in assembly {1}", className, assemblyName));
             }
             return classType;
+        }
+
+        private static Type FindFirstTypeWithName(Type[] types, string className)
+        {
+            foreach (var type in types)
+            {
+                if (type.Name.ToUpper() == className.ToUpper()) return type;
+            }
+            return null;
         }
 
         ///<summary>

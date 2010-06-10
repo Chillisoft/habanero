@@ -42,28 +42,7 @@ namespace Habanero.Util
             return !testNull.IsAlive;
         }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="type"></param>
-        ///<exception cref="UnknownTypeNameException"></exception>
-        public static void CheckTypeCanBeCreated(this Type type)
-        {
-            //Check that the type can be created and raise appropriate error 
-            try
-            {
-                Activator.CreateInstance(type, true);
-            }
-            catch (Exception ex)
-            {
-                throw new UnknownTypeNameException
-                    (String.Format
-                         ("An error occurred while attempting to load a related "
-                          + "business object collection, with the type given as '{0}'. "
-                          + "Check that the given type exists and has been correctly "
-                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
-                     ex);
-            }
-        }
+
 
         ///<summary>
         /// Copies the elements of the <see cref="System.Collections.IList"/> to a new array of the specified type.
@@ -71,9 +50,17 @@ namespace Habanero.Util
         ///<param name="list">The <see cref="System.Collections.IList"/> to be copied.</param>
         ///<typeparam name="T">The type of the elemtnes of the array to be returned.</typeparam>
         ///<returns>An array of type <see cref="T"/> containing copies of the elements of the <see cref="System.Collections.IList"/>.</returns>
-        public static T[] ToArray<T>(this IList list)
+        public static T[] ToArray<T>(IList list)
         {
-            return list.Cast<T>().ToArray();
+            //return list.Cast<T>().ToArray();//TODO brett 08 Jun 2010: For 2_0
+            T[] array = new T[list.Count];
+            int i = 0;
+            foreach (T item in list)
+            {
+                array[i] = item;
+                i++;
+            }
+            return array;
         }
     }
 }

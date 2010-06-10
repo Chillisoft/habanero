@@ -111,7 +111,7 @@ namespace Habanero.BO.ClassDefinition
         /// key definition</returns>
         public override IBOKey CreateBOKey(IBOPropCol lBOPropCol)
         {
-		    BOPrimaryKey lBOKey = _isGuidObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
+            BOPrimaryKey lBOKey = _isGuidObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
             foreach (PropDef lPropDef in this)
             {
                 lBOKey.Add(lBOPropCol[lPropDef.PropertyName]);

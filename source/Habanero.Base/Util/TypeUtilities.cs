@@ -27,6 +27,7 @@ namespace Habanero.Util
     /// </summary>
     public static class TypeUtilities
     {
+        //TODO brett 08 Jun 2010: For 2_0 Removed this from IsInteger and IsDecimal
         /// <summary>
         /// Indicates if type is an integer type.
         /// </summary>
@@ -67,7 +68,8 @@ namespace Habanero.Util
         ///<returns>The converted value</returns>
         public static object ConvertTo(Type type, object obj)
         {
-            if (obj.IsNull()) return null;
+            
+            if (Utilities.IsNull(obj)) return null;
             Type sourceType = obj.GetType();
             bool isNullableType = false;
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -88,5 +90,28 @@ namespace Habanero.Util
             }
             return returnValue;
         }
+        /*//TODO brett 08 Jun 2010: For 2_0 
+  ///<summary>
+        ///</summary>
+        ///<param name="type"></param>
+        ///<exception cref="UnknownTypeNameException"></exception>
+        public static void CheckTypeCanBeCreated(this Type type)
+        {
+            //Check that the type can be created and raise appropriate error 
+            try
+            {
+                Activator.CreateInstance(type, true);
+            }
+            catch (Exception ex)
+            {
+                throw new UnknownTypeNameException
+                    (String.Format
+                         ("An error occurred while attempting to load a related "
+                          + "business object collection, with the type given as '{0}'. "
+                          + "Check that the given type exists and has been correctly "
+                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
+                     ex);
+            }
+        }*/
     }
 }

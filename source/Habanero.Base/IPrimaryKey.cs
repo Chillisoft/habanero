@@ -89,5 +89,10 @@ namespace Habanero.Base
         ///   collection, dataset provider to update the ID for the object.
         ///</summary>
         Guid PreviousObjectID { get; }
+
+        /// <summary>
+        /// The Business Object that this PrimaryKey is for.
+        /// </summary>
+        IBusinessObject BusinessObject { get; set; }
     }
 }

@@ -794,7 +794,8 @@ namespace Habanero.BO
         protected static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key, Type boType)
         {
             BusinessObjectManager businessObjectManager = BORegistry.BusinessObjectManager;
-            if (key.IsGuidObjectID)
+            return businessObjectManager.GetBusinessObject(key);
+/*            if (key.IsGuidObjectID)
             {
                 lock (businessObjectManager)
                 {
@@ -804,7 +805,7 @@ namespace Habanero.BO
             BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
 //            IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
 //            return find.Count > 0 ? find[0] : null;
-            return businessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria(), boType);
+            return businessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria(), boType);*/
         }
         /// <summary>
         /// Sets the Status for the Business Object to NotNew.

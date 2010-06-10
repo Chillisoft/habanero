@@ -469,7 +469,26 @@ namespace Habanero.BO
                 return null;
             }
         }
-
+        ///<summary>
+        /// Returns the BusinessObject identified by key.
+        /// If no Business object is found then returns null.
+        ///</summary>
+        ///<param name="key"></param>
+        ///<returns></returns>
+        public  IBusinessObject GetBusinessObject(IPrimaryKey key)
+        {
+           if (key.IsGuidObjectID)
+            {
+                lock (_loadedBusinessObjects)
+                {
+                    return this.Contains(key) ? this[key] : null;
+                }
+            }
+            
+            BOPrimaryKey boPrimaryKey = ((BOPrimaryKey)key);
+            if(boPrimaryKey.BusinessObject == null) return null;
+            return this.FindFirst(boPrimaryKey.GetKeyCriteria(), boPrimaryKey.BusinessObject.ClassDef);
+        }
         private static IBusinessObject GetBusinessObject(WeakReference weakReference)
         {
             try
