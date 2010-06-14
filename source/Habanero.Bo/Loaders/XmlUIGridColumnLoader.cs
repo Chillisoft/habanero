@@ -166,7 +166,7 @@ namespace Habanero.BO.Loaders
         private void LoadPropertyName()
         {
             _propertyName = _reader.GetAttribute("property");
-            if (_propertyName == null || _propertyName.Length == 0)
+            if (string.IsNullOrEmpty(_propertyName))
             {
                 throw new InvalidXmlDefinitionException("In a 'column' " +
                     "element, the 'property' attribute was not specified. This " +
@@ -238,8 +238,8 @@ namespace Habanero.BO.Loaders
             {
                 string attName = _reader.GetAttribute("name");
                 string attValue = _reader.GetAttribute("value");
-                if (attName == null || attName.Length == 0 ||
-                    attValue == null || attValue.Length == 0)
+                if (string.IsNullOrEmpty(attName) ||
+                    string.IsNullOrEmpty(attValue))
                 {
                     throw new InvalidXmlDefinitionException("In a " +
                         "'parameter' element, either the 'name' or " +
