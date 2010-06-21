@@ -47,7 +47,7 @@ namespace Habanero.BO.ClassDefinition
         /// edited directly)</param>
         /// <param name="width">The width</param>
         /// <param name="alignment">The horizontal alignment</param>
-        /// /// <param name="parameters">The parameters for the column</param>
+        /// <param name="parameters">The parameters for the column</param>
         public UIGridColumn(string heading, string propertyName, String gridControlTypeName, String gridControlAssembly, bool editable, int width,
                             PropAlignment alignment, Hashtable parameters)
         {

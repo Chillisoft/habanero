@@ -23,7 +23,6 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -796,8 +795,119 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(column, uiFormField1.UIFormColumn);
         }
 
+        [Test]
+        public void Test_DecimalPlaces_WhenSetShouldReturn()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedDecimalPlace = "2";
+            Hashtable parameters = new Hashtable {{"decimalPlaces", expectedDecimalPlace}};
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            var decimalPlaces = uiFormField1.DecimalPlaces;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedDecimalPlace, decimalPlaces);
+        }
+        [Test]
+        public void Test_DecimalPlaces_WhenNotSet_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            var decimalPlaces = uiFormField1.DecimalPlaces;
+            //---------------Test Result -----------------------
+            Assert.IsNull(decimalPlaces);
+        }
+        [Test]
+        public void Test_Options_WhenSetShouldReturn()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedOptions = "2";
+            Hashtable parameters = new Hashtable { { "options", expectedOptions } };
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var options = uiFormField1.Options;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedOptions, options);
+        }
+        [Test]
+        public void Test_Options_WhenNotSet_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var options = uiFormField1.Options;
+            //---------------Test Result -----------------------
+            Assert.IsNull(options);
+        }
+        [Test]
+        public void Test_IsEmail_WhenSetShouldReturn()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedIsEmail = "2";
+            Hashtable parameters = new Hashtable { { "isEmail", expectedIsEmail } };
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var isEmail = uiFormField1.IsEmail;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedIsEmail, isEmail);
+        }
+        [Test]
+        public void Test_IsEmail_WhenNotSet_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var isEmail = uiFormField1.IsEmail;
+            //---------------Test Result -----------------------
+            Assert.IsNull(isEmail);
+        }
+        [Test]
+        public void Test_DateFormat_WhenSetShouldReturn()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedDateFormat = "2";
+            Hashtable parameters = new Hashtable { { "dateFormat", expectedDateFormat } };
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var dateFormat = uiFormField1.DateFormat;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedDateFormat, dateFormat);
+        }
+        [Test]
+        public void Test_DateFormat_WhenNotSet_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var dateFormat = uiFormField1.DateFormat;
+            //---------------Test Result -----------------------
+            Assert.IsNull(dateFormat);
+        }
+
+        private static UIFormField CreateFormField(Hashtable parameters)
+        {
+            return new UIFormField("L", "L", "", "", "", "", true, null, "", parameters, LayoutStyle.Label);
+        }
 
         [Test]
         public void Test_Layout()

@@ -51,11 +51,6 @@ namespace Habanero.BO
         protected DataTable _table;
 
         /// <summary>
-        /// The object initialiser being used to create a new object if this grid is allowed to create a new object.
-        /// </summary>
-        private IBusinessObjectInitialiser _objectInitialiser;
-
-        /// <summary>
         /// A handler for the <see cref="IBusinessObject"/> has been added to the <see cref="_collection"/>.
         /// </summary>
         protected EventHandler<BOEventArgs> _boAddedHandler;
@@ -482,11 +477,7 @@ namespace Habanero.BO
         /// <summary>
         /// Sets the object initialiser
         /// </summary>
-        public IBusinessObjectInitialiser ObjectInitialiser
-        {
-            set { _objectInitialiser = value; }
-            get { return _objectInitialiser; }
-        }
+        public IBusinessObjectInitialiser ObjectInitialiser { get; set; }
 
         ///<summary>
         /// The column name used for the <see cref="DataTable"/> column which stores the unique object identifier of the <see cref="IBusinessObject"/>.
@@ -497,4 +488,5 @@ namespace Habanero.BO
             get { return _idColumnName; }
         }
     }
+
 }

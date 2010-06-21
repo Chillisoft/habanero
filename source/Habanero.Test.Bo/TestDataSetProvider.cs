@@ -846,6 +846,19 @@ namespace Habanero.Test.BO
             return uiGrid;
         }
 
+        [Test]
+        public void Test_ObjectInitialiser_SetGet_ShouldReturnSetInitialiser()
+        {
+            //---------------Set up test pack-------------------
+            DataSetProvider dataSetProvider = new DataSetProviderStub();
+            var expectedInitialiser = new BusinessObjectInitialiserStub();
+            //---------------Assert Precondition----------------
+            Assert.AreNotSame(expectedInitialiser, dataSetProvider.ObjectInitialiser);
+            //---------------Execute Test ----------------------
+            dataSetProvider.ObjectInitialiser = expectedInitialiser;
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedInitialiser, dataSetProvider.ObjectInitialiser);
+        }
         #region Internal Classes
 
         public class MyContactPerson : ContactPerson
@@ -927,4 +940,280 @@ namespace Habanero.Test.BO
 
 
     }
+
+   class DataSetProviderStub : DataSetProvider
+   {
+       public DataSetProviderStub()
+           : base(new BusinessObjectCollectionStub())
+       {
+       }
+
+       public override void InitialiseLocalData()
+       {
+           
+       }
+   }
+
+   class BusinessObjectInitialiserStub : IBusinessObjectInitialiser
+   {
+       public void InitialiseObject(IBusinessObject objToInitialise)
+       {
+
+       }
+
+       public void InitialiseDataRow(DataRow row)
+       {
+       }
+   }
+
+   class BusinessObjectCollectionStub : IBusinessObjectCollection
+   {
+       public IEnumerator GetEnumerator()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void CopyTo(Array array, int index)
+       {
+           throw new NotImplementedException();
+       }
+
+       public int Count
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public object SyncRoot
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public bool IsSynchronized
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public int Add(object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public bool Contains(object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Clear()
+       {
+           throw new NotImplementedException();
+       }
+
+       public int IndexOf(object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Insert(int index, object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Remove(object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void RemoveAt(int index)
+       {
+           throw new NotImplementedException();
+       }
+
+       public IBusinessObject this[int index]
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public void Add(IBusinessObject item)
+       {
+           throw new NotImplementedException();
+       }
+
+       public bool Contains(IBusinessObject item)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void CopyTo(IBusinessObject[] array, int arrayIndex)
+       {
+           throw new NotImplementedException();
+       }
+
+       public bool Remove(IBusinessObject item)
+       {
+           throw new NotImplementedException();
+       }
+
+       public bool IsValid(out string errorMessage)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void SaveAll()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Sort(string propertyName, bool isBoProperty, bool isAscending)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Sort(IComparer comparer)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Load(string searchCriteria, string orderByClause)
+       {
+           throw new NotImplementedException();
+       }
+
+       public IBusinessObject CreateBusinessObject()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void LoadAll()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void LoadAll(string orderByClause)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void AddWithoutEvents(IBusinessObject businessObject)
+       {
+           throw new NotImplementedException();
+       }
+
+       public IList PersistedBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public IList CreatedBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public IList RemovedBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public IList AddedBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public IList MarkedForDeleteBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public int TotalCountAvailableForPaging
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public DateTime? TimeLastLoaded
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public void RestoreAll()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void CancelEdits()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void LoadWithLimit(string searchCriteria, string orderByClause, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Refresh()
+       {
+           throw new NotImplementedException();
+       }
+
+       public event EventHandler<BOEventArgs> BusinessObjectAdded;
+       public event EventHandler<BOEventArgs> BusinessObjectRemoved;
+       public event EventHandler<BOEventArgs> BusinessObjectUpdated;
+       public event EventHandler<BOPropUpdatedEventArgs> BusinessObjectPropertyUpdated;
+       public event EventHandler<BOEventArgs> BusinessObjectIDUpdated;
+       public event EventHandler CollectionRefreshed;
+
+       public IClassDef ClassDef
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public bool IsDirty
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public ISelectQuery SelectQuery
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public IBusinessObject Find(Guid key)
+       {
+           throw new NotImplementedException();
+       }
+
+       public IBusinessObjectCollection Clone()
+       {
+           throw new NotImplementedException();
+       }
+
+       public int IndexOf(IBusinessObject item)
+       {
+           throw new NotImplementedException();
+       }
+
+       object IList.this[int index]
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public bool IsReadOnly
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public bool IsFixedSize
+       {
+           get { throw new NotImplementedException(); }
+       }
+   }
 }

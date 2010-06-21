@@ -42,8 +42,8 @@ namespace Habanero.BO
     /// This should never be used by a client application it is used by the DB Loading to clear collections
     /// via the <see cref="IBusinessObjectCollectionInternal"/>
     /// etc and it is used by testing applications to call same methods.
-    /// I.e. This is a Hack_ used so that we can call methods that I do not want as public methods
-    /// on the Collection and Relationship but which I need to be able to call during Loading or Unit Testing.
+    /// I.e. This is a Hack_ used so that we can call methods that we do not want as public methods
+    /// on the Collection and Relationship but which we need to be able to call during Loading and/or Unit Testing.
     /// </summary>
     public static class BOColLoaderHelper
     {
@@ -95,8 +95,6 @@ namespace Habanero.BO
             internalBOCol.Loading = loading;
         }
     }
-
-    //public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);
 
     /// <summary>
     /// Manages a collection of business objects.  This class also serves
@@ -240,8 +238,6 @@ namespace Habanero.BO
         protected BusinessObjectCollection(SerializationInfo info, StreamingContext context)
         {
             int count = info.GetInt32(COUNT);
-            
-            
             
             Type classType = Util.TypeLoader.LoadType(info.GetString(ASSEMBLY_NAME), info.GetString(CLASS_NAME));
             this.Initialise(ClassDefinition.ClassDef.ClassDefs[classType], null);

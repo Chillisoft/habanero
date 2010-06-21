@@ -506,7 +506,9 @@ namespace Habanero.BO.ClassDefinition
         }
 
         ///<summary>
-        /// Returns the Options property from the form field or null if none is provided
+        /// Returns the Options property from the form field or null if none is provided.
+        /// The Options are a set of strings seperated by a '|'
+        /// This can be used as the list of options shown in a combo box.
         ///</summary>
         public string Options
         {

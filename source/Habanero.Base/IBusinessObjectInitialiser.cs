@@ -40,6 +40,7 @@ namespace Habanero.Base
         void InitialiseDataRow(DataRow row);
     }
 
+
     /// <summary>
     /// An interface to model a business object initialiser: A business object initialiser is used by the Habanero framework's standard forms
     ///  and grids to initialise a new object with data. There are default object initialisers that will be used in the case where
