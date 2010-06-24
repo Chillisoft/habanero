@@ -24,6 +24,7 @@ using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
@@ -36,7 +37,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
 
 
-            UIGridColumn column = new UIGridColumn("heading", null, null, null, true, 100,
+            IUIGridColumn column = new UIGridColumn("heading", null, null, null, true, 100,
                                                    PropAlignment.left, parameters);
 
             Assert.AreEqual(0, column.Parameters.Count);
@@ -48,9 +49,8 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestParameters_Null()
         {
-            Hashtable parameters = new Hashtable();
 
-            UIGridColumn column = new UIGridColumn("heading", null, null, null, true, 100,
+            IUIGridColumn column = new UIGridColumn("heading", null, null, null, true, 100,
                                                    PropAlignment.left, null);
 
             Assert.IsNull(column.GetParameterValue("somename"));
@@ -59,8 +59,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestFieldDefaultLabel()
         {
-            UIGridColumn uiGridColumn;
-            uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left, null);
+            IUIGridColumn uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left, null);
             Assert.AreEqual("Test Property", uiGridColumn.GetHeading());
         }
 
@@ -68,9 +67,54 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestFieldDefaultLabelFromClassDef()
         {
             ClassDef classDef = CreateTestClassDef("");
-            UIGridColumn uiGridColumn;
-            uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left , null);
+            IUIGridColumn uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left , null);
             Assert.AreEqual("Tested Property", uiGridColumn.GetHeading(classDef));
+        }
+
+        [Test]
+        public void Test_SetUIGrid_ShouldSetUIGrid()
+        {
+            //---------------Set up test pack-------------------
+            var expectedGridDef = MockRepository.GenerateStub<IUIGrid>();
+            IUIGridColumn uiGridColumn = new UIGridColumnSpy();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiGridColumn.ClassDef);
+            //---------------Execute Test ----------------------
+            uiGridColumn.UIGrid = expectedGridDef;
+            var actualGridDef = uiGridColumn.UIGrid;
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedGridDef, actualGridDef);
+        }
+
+        [Test]
+        public void Test_ClassDef_ShouldReturnUIGridsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            var expectedGridDef = MockRepository.GenerateStub<IUIGrid>();
+            IClassDef expectedClassDef = MockRepository.GenerateStub<IClassDef>();
+            expectedGridDef.Stub(grid => grid.ClassDef).Return(expectedClassDef);
+            IUIGridColumn uiGridColumn = new UIGridColumnSpy();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiGridColumn.ClassDef);
+            Assert.IsNotNull(expectedGridDef.ClassDef);
+            //---------------Execute Test ----------------------
+            uiGridColumn.UIGrid = expectedGridDef;
+            var actualClassDef = uiGridColumn.ClassDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedClassDef, actualClassDef);
+        }
+        [Test]
+        public void Test_ClassDef_WhenUIDefNull_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            IUIGridColumn uiGridColumn = new UIGridColumnSpy();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiGridColumn.ClassDef);
+            Assert.IsNull(uiGridColumn.UIGrid);
+            //---------------Execute Test ----------------------
+            var actualClassDef = uiGridColumn.ClassDef;
+            //---------------Test Result -----------------------
+            Assert.IsNull(actualClassDef);
         }
 
         [Test]
@@ -137,7 +181,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            UIGridColumnInheritor column = new UIGridColumnInheritor();
+            UIGridColumnSpy column = new UIGridColumnSpy();
 
             Assert.AreEqual("heading", column.Heading);
             column.SetHeading("newheading");
@@ -276,11 +320,10 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(operatorNotEquals);
             //---------------Tear Down -------------------------          
         }
-
         // Grants access to protected fields
-        private class UIGridColumnInheritor : UIGridColumn
+        private class UIGridColumnSpy : UIGridColumn
         {
-            public UIGridColumnInheritor() : base("heading", null, null, null, true, 100,
+            public UIGridColumnSpy() : base("heading", null, null, null, true, 100,
                 PropAlignment.left, null)
             {}
 

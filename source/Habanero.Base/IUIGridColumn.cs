@@ -23,7 +23,7 @@ using Habanero.Base;
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// Interface describing a column of a grid.  This is implemented by <see cref="UIGridColumn"/>.
+    /// Interface describing a column of a grid.  This is implemented by UIGridColumn.
     /// </summary>
     public interface IUIGridColumn
     {
@@ -66,6 +66,16 @@ namespace Habanero.BO.ClassDefinition
         /// Gets and sets the assembly name of the grid control type
         /// </summary>
         String GridControlAssemblyName { get; set; }
+
+        ///<summary>
+        /// The <see cref="IUIGrid">Grid Definition</see> that this IUIGridColumn belongs to.
+        ///</summary>
+        IUIGrid UIGrid { get; set; }
+
+        ///<summary>
+        /// The <see cref="IClassDef">ClassDefinition</see> that this IUIGridColumn belongs to.
+        ///</summary>
+        IClassDef ClassDef { get; }
 
         ///<summary>
         /// Gets the heading for this grid column.

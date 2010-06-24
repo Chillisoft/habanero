@@ -56,6 +56,7 @@ namespace Habanero.BO.ClassDefinition
                         "a 'name' attribute.)", def.Name, def.ClassName));
             }
             def.UIDefCol = this;
+            def.ClassDef = this.ClassDef;
             _defs.Add(def.Name, def);
         }
 

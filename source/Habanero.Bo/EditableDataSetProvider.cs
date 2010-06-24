@@ -137,10 +137,8 @@ namespace Habanero.BO
                         changedBo.Save();
                         //_deletedRows.Add(row, changedBo);
 
-                        //TODO Brett 25 May 2009: Put in try-finally
                        //this.DeregisterForTableEvents();
                        
-
                        // row.AcceptChanges();
                        //this.RegisterForTableEvents();
                     }

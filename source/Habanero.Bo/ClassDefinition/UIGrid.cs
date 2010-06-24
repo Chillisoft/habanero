@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
@@ -45,6 +46,7 @@ namespace Habanero.BO.ClassDefinition
         public void Add(IUIGridColumn prop)
         {
             _list.Add(prop);
+            prop.UIGrid = this;
         }
 
         /// <summary>
@@ -161,6 +163,22 @@ namespace Habanero.BO.ClassDefinition
         /// The UI Def that this UIForm is related to.
         ///</summary>
         public IUIDef UIDef { get; set; }
+
+        public IClassDef ClassDef
+        {
+            get
+            {
+                return this.UIDef == null ? null : this.UIDef.ClassDef;
+            }
+        }
+
+        IEnumerator<IUIGridColumn> IEnumerable<IUIGridColumn>.GetEnumerator()
+        {
+            foreach (var item in _list)
+            {
+                yield return (IUIGridColumn) item;
+            }
+        }
 
         ///<summary>
         ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.

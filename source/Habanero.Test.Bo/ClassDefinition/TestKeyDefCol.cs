@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
@@ -46,6 +47,23 @@ namespace Habanero.Test.BO.ClassDefinition
                 StringAssert.Contains("already exists", ex.Message);
             }
         }
+/*
+        [Test]
+        public void Test_Add_ShouldSetPropDefsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            var keyDef = new KeyDef();
+            var col = new KeyDefCol();
+            var expectedClassDef = MockRepository.GenerateStub<IClassDef>();
+            col.ClassDef = expectedClassDef;
+            //---------------Assert Preconditions---------------
+            Assert.IsNull(keyDef.ClassDef);
+            //---------------Execute Test ----------------------
+            col.Add(keyDef);
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedClassDef, keyDef.ClassDef);
+        }*/
+
 
         [Test]
         public void TestRemove()

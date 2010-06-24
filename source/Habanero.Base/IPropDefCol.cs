@@ -102,6 +102,11 @@ namespace Habanero.Base
         /// into this one.
         /// </summary>
         /// <param name="propDefCol">The collection of property definitions</param>
-        void Add(IPropDefCol propDefCol);
+        void Add(IEnumerable<IPropDef> propDefCol);
+
+        ///<summary>
+        /// The ClassDef that these PropDefs belong to.
+        ///</summary>
+        IClassDef ClassDef { get; set; }
     }
 }

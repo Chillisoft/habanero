@@ -129,20 +129,12 @@ namespace Habanero.Base
         /// <summary>
         /// The type of the business object that this class definition is for.
         /// </summary>
-        Type ClassType
-        {
-            get;
-            set;
-        }
+        Type ClassType { get; set; }
 
         /// <summary>
         /// The collection of property definitions
         /// </summary>
-        IPropDefCol PropDefcol
-        {
-            get;
-            set;
-        }
+        IPropDefCol PropDefcol { get; set; }
 
         /// <summary>
         /// The collection of property definitions for this

@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
@@ -33,8 +34,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, null);
-            PropDefCol col = new PropDefCol();
-            col.Add(propDef);
+            PropDefCol col = new PropDefCol {propDef};
             //---------------Execute Test ----------------------
             try
             {
@@ -46,6 +46,21 @@ namespace Habanero.Test.BO.ClassDefinition
             {
                 StringAssert.Contains("A property definition with the name 'prop' already exists", ex.Message);
             }
+        }
+        [Test]
+        public void Test_Add_ShouldSetPropDefsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDefFake();
+            PropDefCol col = new PropDefCol();
+            var expectedClassDef = MockRepository.GenerateStub<IClassDef>();
+            col.ClassDef = expectedClassDef;
+            //---------------Assert Preconditions---------------
+            Assert.IsNull(propDef.ClassDef);
+            //---------------Execute Test ----------------------
+            col.Add(propDef);
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedClassDef, propDef.ClassDef);
         }
 
         [Test]

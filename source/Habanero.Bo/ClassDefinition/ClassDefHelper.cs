@@ -50,7 +50,7 @@ namespace Habanero.BO.ClassDefinition
                 string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
                 propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
                 List<string> relNames = new List<string>();
-                relNames.AddRange(relationshipName.Split(new string[]{"|"}, StringSplitOptions.RemoveEmptyEntries));
+                relNames.AddRange(relationshipName.Split(new[]{"|"}, StringSplitOptions.RemoveEmptyEntries));
                 IRelationshipDefCol relationshipDefCol = classDef.RelationshipDefCol;
                 IPropDef propDef = null;
                 foreach (string relName in relNames)
@@ -59,7 +59,7 @@ namespace Habanero.BO.ClassDefinition
                     {
                         IRelationshipDef relationshipDef = relationshipDefCol[relName];
                         IClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-                        propDef = GetPropDefByPropName((ClassDef) relatedClassDef, propertyName);
+                        propDef = GetPropDefByPropName(relatedClassDef, propertyName);
                     }
                     if (propDef != null)
                     {

@@ -18,11 +18,9 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
-using Habanero.BO.Loaders;
 using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
@@ -215,12 +213,11 @@ namespace Habanero.BO.ClassDefinition
             _displayName = displayName ?? "";
             _tableName = string.IsNullOrEmpty(tableName) ? _className : tableName;
             _primaryKeyDef = primaryKeyDef;
-            _propDefCol = propDefCol;
+            this.PropDefcol = propDefCol;
+            this.KeysCol = keyDefCol;
+            this.RelationshipDefCol = relationshipDefCol;
             SetClassDefOnChildClasses();
-            _keysCol = keyDefCol;
-            _relationshipDefCol = relationshipDefCol;
-            _uiDefCol = uiDefCol ?? new UIDefCol();
-            _uiDefCol.ClassDef = this;
+            this.UIDefCol = uiDefCol ?? new UIDefCol();
         }
 
         private void SetClassDefOnChildClasses()
@@ -237,6 +234,13 @@ namespace Habanero.BO.ClassDefinition
                 foreach (RelationshipDef relationshipDef in _relationshipDefCol)
                 {
                     relationshipDef.OwningClassDef = this;
+                }
+            }
+            if(this.UIDefCol != null)
+            {
+                foreach (UIDef uiDef in UIDefCol)
+                {
+                    uiDef.ClassDef = this;
                 }
             }
         }
@@ -288,7 +292,11 @@ namespace Habanero.BO.ClassDefinition
         public KeyDefCol KeysCol
         {
             get { return _keysCol; }
-            set { _keysCol = value; }
+            set
+            {
+                _keysCol = value;
+                if(_keysCol != null) _keysCol.ClassDef = this;
+            }
         }
 
         /// <summary>
@@ -324,7 +332,9 @@ namespace Habanero.BO.ClassDefinition
         public UIDefCol UIDefCol
         {
             get { return _uiDefCol; }
-            set { _uiDefCol = value; }
+            set { _uiDefCol = value;
+                if(_uiDefCol != null) _uiDefCol.ClassDef = this;
+            }
         }
 
         /// <summary>
@@ -415,7 +425,11 @@ namespace Habanero.BO.ClassDefinition
         public IPropDefCol PropDefcol
         {
             get { return _propDefCol; }
-            set { _propDefCol = value; }
+            set
+            {
+                _propDefCol = value;
+                if(_propDefCol != null) _propDefCol.ClassDef = this;
+            }
         }
 
         /// <summary>
@@ -428,15 +442,19 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (_propDefColIncludingInheritance == null)
                 {
-                    _propDefColIncludingInheritance = new PropDefCol {PropDefcol};
+                    
+                    _propDefColIncludingInheritance = new PropDefCol {ClassDef = this};
+                    _propDefColIncludingInheritance.Add(PropDefcol);
 
                     IClassDef currentClassDef = this;
                     while (currentClassDef.SuperClassClassDef != null)
                     {
                         currentClassDef = currentClassDef.SuperClassClassDef;
+                        _propDefColIncludingInheritance.ClassDef = currentClassDef;
                         _propDefColIncludingInheritance.Add(currentClassDef.PropDefcol);
                     }
                 }
+                _propDefColIncludingInheritance.ClassDef = this;
                 return _propDefColIncludingInheritance;
             }
         }
@@ -447,7 +465,9 @@ namespace Habanero.BO.ClassDefinition
         public IRelationshipDefCol RelationshipDefCol
         {
             get { return _relationshipDefCol; }
-            set { _relationshipDefCol = value; }
+            set { _relationshipDefCol = value;
+                if(_relationshipDefCol != null) _relationshipDefCol.ClassDef = this;
+            }
         }
 
         ///// <summary>
@@ -1007,7 +1027,7 @@ namespace Habanero.BO.ClassDefinition
 
         private IPropDef GetInheritedPropDef(string propertyName, bool throwError)
         {
-            IPropDef foundPropDef = null;
+/*            IPropDef foundPropDef = null;
             IClassDef currentClassDef = this;
             while (currentClassDef != null)
             {
@@ -1021,14 +1041,23 @@ namespace Habanero.BO.ClassDefinition
             if (foundPropDef != null)
             {
                 return foundPropDef;
-            }
-            if (throwError)
+            }*/
+
+            try
             {
-                throw new InvalidPropertyNameException(String.Format(
-                                                           "The property definition for the property '{0}' could not be " +
-                                                           "found on a ClassDef of type '{1}'", propertyName,
-                                                           ClassNameFull));
+                return this.PropDefColIncludingInheritance[propertyName];
             }
+            catch (Exception)
+            {
+                if (throwError)
+                {
+                    throw new InvalidPropertyNameException(String.Format(
+                                                               "The property definition for the property '{0}' could not be " +
+                                                               "found on a ClassDef of type '{1}'", propertyName,
+                                                               ClassNameFull));
+                }
+            }
+
             return null;
         }
         /// <summary>

@@ -359,6 +359,26 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual("Engine.Car.Owner", criteria.Field.Source.ToString());
         }
 
+
+        [Test]
+        public void Test_PrepareCriteria_WhenClassTableInheritance_ShouldUseCorrectSourceEntityName()
+        {
+            //---------------Set up test pack-------------------
+            Structure.Entity.LoadDefaultClassDef();
+            IClassDef classDef = Test.Structure.Part.LoadClassDef_WithClassTableInheritance();
+            string entityType = TestUtil.GetRandomString();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+            selectQuery.Criteria = criteria;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("table_Entity", criteria.Field.Source.EntityName); 
+        }
+
         [Test]
         public void TestPrepareCriteria_Twice()
         {

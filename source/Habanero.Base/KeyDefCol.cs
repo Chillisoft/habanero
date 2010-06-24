@@ -188,5 +188,10 @@ namespace Habanero.Base
         }
 
         #endregion
+
+        ///<summary>
+        /// The ClassDef that these KeyDefs belong to.
+        ///</summary>
+        public IClassDef ClassDef { get; set; }
     }
 }

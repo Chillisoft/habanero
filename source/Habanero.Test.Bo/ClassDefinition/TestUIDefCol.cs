@@ -341,6 +341,52 @@ Assert.IsNull(uiDef.UIDefCol);
 			");
             return def;
         }
+
+        [Test]
+        public void Test_SetClassDef_ShouldSet()
+        {
+            //---------------Set up test pack-------------------
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            UIDefCol uiDefCol = new UIDefCol();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiDefCol.ClassDef);
+            //---------------Execute Test ----------------------
+            uiDefCol.ClassDef = classDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, uiDefCol.ClassDef);
+        }
+        [Test]
+        public void Test_Add_ShouldSetUIDefssClassDef()
+        {
+            //---------------Set up test pack-------------------
+            var uiDef = new UIDefStub();
+            var col = new UIDefCol();
+            var expectedClassDef = MockRepository.GenerateStub<IClassDef>();
+            col.ClassDef = expectedClassDef;
+            //---------------Assert Preconditions---------------
+            Assert.IsNull(uiDef.ClassDef);
+            //---------------Execute Test ----------------------
+            col.Add(uiDef);
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedClassDef, uiDef.ClassDef);
+        }
+        [Test]
+        public void Test_Add_ShouldSetUIDefsGridDefsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            var uiDef = new UIDefStub();
+            UIGrid uiGrid = new UIGrid();
+            uiDef.SetUIGrid(uiGrid);
+            var col = new UIDefCol();
+            var expectedClassDef = MockRepository.GenerateStub<IClassDef>();
+            col.ClassDef = expectedClassDef;
+            //---------------Assert Preconditions---------------
+            Assert.IsNull(uiDef.ClassDef);
+            //---------------Execute Test ----------------------
+            col.Add(uiDef);
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedClassDef, uiGrid.ClassDef);
+        }
     }
 
 }

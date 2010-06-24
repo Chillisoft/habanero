@@ -20,6 +20,7 @@
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
@@ -405,6 +406,52 @@ namespace Habanero.Test.BO.ClassDefinition
             IUIGridColumn column = uiGrid["nonexistent property"];
             //---------------Test Result -----------------------
             Assert.IsNull(column);
+        }
+
+        [Test]
+        public void Test_GetClassDef_WhenUIDefNull_ReturnsNull()
+        {
+            //---------------Set up test pack-------------------
+            IUIGrid uiGrid = new UIGrid();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiGrid.ClassDef);
+            Assert.IsNull(uiGrid.UIDef);
+            //---------------Execute Test ----------------------
+            var actualClassDef = uiGrid.ClassDef;
+            //---------------Test Result -----------------------
+            Assert.IsNull(actualClassDef);
+        }
+        [Test]
+        public void Test_GetClassDef_ReturnsUIDefsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef expectedClassDef = MockRepository.GenerateStub<IClassDef>();
+            IUIGrid uiGrid = new UIGrid();
+            IUIDef uiDef = MockRepository.GenerateStub<IUIDef>();
+            
+            uiGrid.UIDef = uiDef;
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiGrid.ClassDef);
+            Assert.IsNotNull(uiGrid.UIDef);
+            //---------------Execute Test ----------------------
+            uiDef.ClassDef = expectedClassDef;
+            var actualClassDef = uiGrid.ClassDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedClassDef, actualClassDef);
+        }
+
+        [Test]
+        public void Test_AddColumn_ShouldSetColumnsUIGrid()
+        {
+            //---------------Set up test pack-------------------
+            IUIGrid uiGrid = new UIGrid();
+            var column = MockRepository.GenerateStub<IUIGridColumn>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(column.UIGrid);
+            //---------------Execute Test ----------------------
+            uiGrid.Add(column);
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiGrid, column.UIGrid);
         }
     }
 }

@@ -73,7 +73,6 @@ namespace Habanero.BO.ClassDefinition
 
         private string _displayName;
         private bool _persistable = true;
-        private ClassDef _classDef;
         private string _unitOfMeasure = "";
         private BOPropDataMapper _propDataMapper;
 
@@ -615,12 +614,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// Gets and sets the class def that this propDef is part of.
         ///</summary>
-        public IClassDef ClassDef
-        {
-            get { return _classDef; }
-            set { _classDef = (ClassDef) value; }
-           
-        }
+        public IClassDef ClassDef { get; set; }
 
         #endregion
 
@@ -1129,7 +1123,7 @@ namespace Habanero.BO.ClassDefinition
                    && Equals(obj._lookupList, _lookupList) && obj.AutoIncrementing.Equals(AutoIncrementing)
                    && obj.Length == Length && Equals(obj._displayName, _displayName)
                    && obj.KeepValuePrivate.Equals(KeepValuePrivate) && obj._persistable.Equals(_persistable)
-                   && Equals(obj._classDef, _classDef) && Equals(obj._unitOfMeasure, _unitOfMeasure);
+                   && Equals(obj.ClassDef, ClassDef) && Equals(obj._unitOfMeasure, _unitOfMeasure);
         }
 
         ///<summary>
@@ -1159,7 +1153,7 @@ namespace Habanero.BO.ClassDefinition
                 result = (result * 397) ^ (_displayName != null ? _displayName.GetHashCode() : 0);
                 result = (result * 397) ^ KeepValuePrivate.GetHashCode();
                 result = (result * 397) ^ _persistable.GetHashCode();
-                result = (result * 397) ^ (_classDef != null ? _classDef.GetHashCode() : 0);
+                result = (result * 397) ^ (ClassDef != null ? ClassDef.GetHashCode() : 0);
                 result = (result * 397) ^ (_unitOfMeasure != null ? _unitOfMeasure.GetHashCode() : 0);
                 return result;
             }

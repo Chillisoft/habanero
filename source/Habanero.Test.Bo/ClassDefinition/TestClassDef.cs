@@ -25,6 +25,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
@@ -1143,8 +1144,107 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNotNull(relationshipDef);
             Assert.AreEqual(relationshipName, relationshipDef.RelationshipName);
         }
-    }
 
+        [Test]
+        public void Test_SetRelationshipDefCol_ShouldSetClassDefOnRelDefCol()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = new FakeClassDef();
+            IRelationshipDefCol relationshipDefCol = MockRepository.GenerateStub<IRelationshipDefCol>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(relationshipDefCol.ClassDef);
+            //---------------Execute Test ----------------------
+            classDef.RelationshipDefCol = relationshipDefCol;
+            //---------------Test Result -----------------------
+            Assert.AreSame(relationshipDefCol, classDef.RelationshipDefCol);
+            Assert.AreSame(classDef, relationshipDefCol.ClassDef);
+        }
+        [Test]
+        public void Test_SetUIDefCol_ShouldSetClassDefOnCol()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = new FakeClassDef();
+            var uiDefCol = MockRepository.GenerateStub<UIDefCol>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiDefCol.ClassDef);
+            //---------------Execute Test ----------------------
+            classDef.UIDefCol = uiDefCol;
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiDefCol, classDef.UIDefCol);
+            Assert.AreSame(classDef, uiDefCol.ClassDef);
+        }
+        [Test]
+        public void Test_SetKeyCol_ShouldSetClassDefOnCol()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = new FakeClassDef();
+            var keyDefCol = MockRepository.GenerateStub<KeyDefCol>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(keyDefCol.ClassDef);
+            //---------------Execute Test ----------------------
+            classDef.KeysCol = keyDefCol;
+            //---------------Test Result -----------------------
+            Assert.AreSame(keyDefCol, classDef.KeysCol);
+            Assert.AreSame(classDef, keyDefCol.ClassDef);
+        }
+        [Test]
+        public void Test_SetPropDefCol_ShouldSetClassDefOnCol()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IClassDef classDef = new FakeClassDef();
+            var propDefCol = MockRepository.GenerateStub<IPropDefCol>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(propDefCol.ClassDef);
+            //---------------Execute Test ----------------------
+            classDef.PropDefcol = propDefCol;
+            //---------------Test Result -----------------------
+            Assert.AreSame(propDefCol, classDef.PropDefcol);
+            Assert.AreSame(classDef, propDefCol.ClassDef);
+        }
+
+        [Test]
+        public void Test_GetPropDef_ShouldNotClearPropDefsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            var superClassDef = Structure.Entity.LoadDefaultClassDef();
+            IClassDef classDef = Test.Structure.Part.LoadClassDef_WithClassTableInheritance();
+            const string propertyName = "EntityType";
+            IPropDef expectedpropdef = superClassDef.PropDefcol[propertyName];
+            //---------------Assert Precondition----------------
+            Assert.AreSame(superClassDef, expectedpropdef.ClassDef);
+            Assert.AreSame(superClassDef, classDef.SuperClassClassDef);
+            Assert.IsTrue(classDef.PropDefColIncludingInheritance.Contains(propertyName));
+            //---------------Execute Test ----------------------
+            IPropDef propDef = classDef.GetPropDef(propertyName);
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedpropdef, propDef);
+            Assert.AreSame(superClassDef, propDef.ClassDef);
+        }
+
+        [Test]
+        public void Test_GetPropDef_FromPropDefColIncludingInheritance_ShouldNotClearPropDefsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            var superClassDef = Structure.Entity.LoadDefaultClassDef();
+            IClassDef classDef = Test.Structure.Part.LoadClassDef_WithClassTableInheritance();
+            const string propertyName = "EntityType";
+            IPropDef expectedpropdef = superClassDef.PropDefcol[propertyName];
+            //---------------Assert Precondition----------------
+            Assert.AreSame(superClassDef, expectedpropdef.ClassDef);
+            Assert.AreSame(superClassDef, classDef.SuperClassClassDef);
+            Assert.IsTrue(classDef.PropDefColIncludingInheritance.Contains(propertyName));
+            //---------------Execute Test ----------------------
+            IPropDef propDef = classDef.PropDefColIncludingInheritance[propertyName];
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedpropdef, propDef);
+            Assert.AreSame(superClassDef, propDef.ClassDef);
+        }
+    }
+    
     // This class serves to access protected methods
     internal class FakeClassDef : ClassDef
     {

@@ -32,9 +32,6 @@ namespace Habanero.BO.ClassDefinition
         private string _heading;
         private string _propertyName;
         private Type _gridControlType;
-        private readonly Hashtable _parameters;
-        private string _gridControlTypeName;
-        private string _gridControlAssemblyName;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -53,12 +50,12 @@ namespace Habanero.BO.ClassDefinition
         {
             _heading = heading;
             _propertyName = propertyName;
-            _gridControlTypeName = gridControlTypeName;
-            _gridControlAssemblyName = gridControlAssembly;
+            GridControlTypeName = gridControlTypeName;
+            GridControlAssemblyName = gridControlAssembly;
             Editable = editable;
             Width = width;
             Alignment = alignment;
-            _parameters = parameters ?? new Hashtable();
+            Parameters = parameters ?? new Hashtable();
         }
 
         /// <summary>
@@ -108,8 +105,8 @@ namespace Habanero.BO.ClassDefinition
             set
             {
                 _gridControlType = value;
-                _gridControlTypeName = _gridControlType.Name;
-                _gridControlAssemblyName = _gridControlType.Namespace;
+                GridControlTypeName = _gridControlType.Name;
+                GridControlAssemblyName = _gridControlType.Namespace;
             }
         }
 
@@ -131,26 +128,29 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Returns the Hashtable containing the property parameters
         /// </summary>
-        public Hashtable Parameters
-        {
-            get { return _parameters; }
-        }
+        public Hashtable Parameters { get; private set; }
+
         /// <summary>
         /// Gets and sets the name of the grid control type
         /// </summary>
-        public String GridControlTypeName
-        {
-            get { return _gridControlTypeName; }
-            set { _gridControlTypeName = value; }
-        }
+        public string GridControlTypeName { get; set; }
 
         /// <summary>
         /// Gets and sets the assembly name of the grid control type
         /// </summary>
-        public String GridControlAssemblyName
+        public string GridControlAssemblyName { get; set; }
+
+        ///<summary>
+        /// The <see cref="IUIGrid">Grid Definition</see> that this IUIGridColumn belongs to.
+        ///</summary>
+        public IUIGrid UIGrid { get; set; }
+
+        ///<summary>
+        /// The <see cref="IClassDef">ClassDefinition</see> that this IUIGridColumn belongs to
+        ///</summary>
+        public IClassDef ClassDef
         {
-            get { return _gridControlAssemblyName; }
-            set { _gridControlAssemblyName = value; }
+            get { return this.UIGrid == null ? null : this.UIGrid.ClassDef; }
         }
 
         #region Helper Methods
@@ -196,10 +196,9 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="parameterName">The parameter name</param>
         /// <returns>Returns the parameter value or null if not found</returns>
-        /// TODO this should return a string
         public object GetParameterValue(string parameterName)
         {
-            return _parameters.ContainsKey(parameterName) ? _parameters[parameterName] : null;
+            return Parameters.ContainsKey(parameterName) ? Parameters[parameterName] : null;
         }
 
         ///<summary>
@@ -274,10 +273,9 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>a new collection that is a shallow copy of this collection</returns>
         public IUIGridColumn Clone()
         {
-            UIGridColumn newUIForm = new UIGridColumn(this.Heading,
+            return new UIGridColumn(this.Heading,
                 this.PropertyName,this.GridControlTypeName,this.GridControlAssemblyName ,
                 this.Editable,this.Width,this.Alignment, this.Parameters);
-            return newUIForm;
         }
     }
 }

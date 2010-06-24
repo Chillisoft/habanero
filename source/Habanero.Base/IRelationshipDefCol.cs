@@ -55,5 +55,10 @@ namespace Habanero.Base
         /// Gets the count of items in this collection
         /// </summary>
         int Count { get; }
+
+        /// <summary>
+        /// The ClassDef this RelationshipDefCol belongs to
+        /// </summary>
+        IClassDef ClassDef { get; set; }
     }
 }

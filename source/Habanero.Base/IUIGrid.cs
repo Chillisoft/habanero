@@ -18,14 +18,14 @@
 // ---------------------------------------------------------------------------------
 using System.Collections;
 using Habanero.Base;
-
+using System.Collections.Generic;
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// An interface describing a grid.  An IUIGrid contains a collection of <see cref="IUIGridColumn"/> objects, a <see cref="IFilterDef"/>
-    /// and a sort column.  Implemented by <see cref="UIGrid"/>
+    /// and a sort column.  Implemented by UIGrid
     /// </summary>
-    public interface IUIGrid : ICollection
+    public interface IUIGrid : ICollection, IEnumerable<IUIGridColumn>
     {
         /// <summary>
         /// Adds a grid property definition
@@ -82,5 +82,9 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         IUIDef UIDef { get; set; }
 
+        /// <summary>
+        /// The ClassDef that this IUIGridDef is associated with
+        /// </summary>
+        IClassDef ClassDef { get; }
     }
 }

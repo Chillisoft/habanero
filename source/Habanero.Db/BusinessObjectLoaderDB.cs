@@ -142,12 +142,9 @@ namespace Habanero.DB
         ///<returns></returns>
         private static ISelectQuery GetSelectQuery(IClassDef classDef, Criteria criteria)
         {
-            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
-            /* From Brett: I refactored this since the QueryBuilder CreateCriteria seemed to do 
-             * the exact same thing. All tests are passing.
-             * ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);  
-                        QueryBuilder.PrepareCriteria(classDef, criteria);
-                        selectQuery.Criteria = criteria;*/
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+            selectQuery.Criteria = criteria;
             return selectQuery;
         }
 

@@ -30,7 +30,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            UIDefInheritorStub uiDef = new UIDefInheritorStub();
+            UIDefStub uiDef = new UIDefStub();
 
             Assert.AreEqual("uidef", uiDef.Name);
             uiDef.SetName("newuidef");
@@ -51,7 +51,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetFormField()
         {
             //---------------Set up test pack-------------------
-            UIDefInheritorStub uiDef = new UIDefInheritorStub();
+            UIDefStub uiDef = new UIDefStub();
             uiDef.SetUIForm(GetUiForm());
             //---------------Assert Precondition----------------
 
@@ -65,7 +65,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetFormField_NoPropReturnsNull()
         {
             //---------------Set up test pack-------------------
-            UIDefInheritorStub uiDef = new UIDefInheritorStub();
+            UIDefStub uiDef = new UIDefStub();
             uiDef.SetUIForm(GetUiForm());
             //---------------Assert Precondition----------------
 
@@ -337,28 +337,29 @@ namespace Habanero.Test.BO.ClassDefinition
             return TestUtil.GetRandomString();
         }
 
-        // Grants access to protected methods
-        private class UIDefInheritorStub : UIDef
+
+    }
+    // Grants access to protected methods
+    internal class UIDefStub : UIDef
+    {
+        public UIDefStub()
+            : base("uidef", null, null)
         {
-            public UIDefInheritorStub()
-                : base("uidef", null, null)
-            {
-            }
+        }
 
-            public void SetName(string name)
-            {
-                Name = name;
-            }
+        public void SetName(string name)
+        {
+            Name = name;
+        }
 
-            public void SetUIForm(UIForm uiForm)
-            {
-                UIForm = uiForm;
-            }
+        public void SetUIForm(UIForm uiForm)
+        {
+            UIForm = uiForm;
+        }
 
-            public void SetUIGrid(UIGrid uiGrid)
-            {
-                UIGrid = uiGrid;
-            }
+        public void SetUIGrid(UIGrid uiGrid)
+        {
+            UIGrid = uiGrid;
         }
     }
 }
