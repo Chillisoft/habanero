@@ -447,7 +447,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO.DeleteAllOrganisations();
             ContactPersonTestBO.DeleteAllContactPeople();
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> col 
+                    = new BusinessObjectCollection<ContactPersonTestBO>();
 
             ContactPersonTestBO cp1 = CreateContactPersonTestBO();
             BORegistry.BusinessObjectManager.ClearLoadedObjects();

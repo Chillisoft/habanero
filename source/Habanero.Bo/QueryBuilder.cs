@@ -51,19 +51,12 @@ namespace Habanero.BO
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             SelectQuery selectQuery = new SelectQuery();
-            foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance)
-            {
-                if (propDef.Persistable)
-                {
-                    selectQuery.Fields.Add(propDef.PropertyName,
-                                           new QueryField(propDef.PropertyName, propDef.DatabaseFieldName,
-                                                          new Source(classDef.GetTableName(propDef))));
-                }
-            }
-
+            AddAllPropsToQuery(classDef, selectQuery);
+            //Add discriminator Criteria for Inheritance (e.g. single table Inheritance).
             Criteria discriminatorCriteria = null;
             AddDiscriminatorFields(selectQuery, classDef, ref discriminatorCriteria);
             selectQuery.DiscriminatorCriteria = discriminatorCriteria;
+
             Source source = null;
             PrepareSource(classDef, ref source);
             selectQuery.Source = source;
@@ -72,6 +65,24 @@ namespace Habanero.BO
             selectQuery.Criteria = criteria;
             selectQuery.ClassDef = classDef;
             return selectQuery;
+        }
+
+        private static void AddAllPropsToQuery(IClassDef classDef, SelectQuery selectQuery)
+        {
+            foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance)
+            {
+                if (propDef.Persistable)
+                {
+                    QueryField queryField = GetQueryField(classDef, propDef);
+                    selectQuery.Fields.Add(propDef.PropertyName, queryField);
+                }
+            }
+        }
+
+        private static QueryField GetQueryField(IClassDef classDef, IPropDef propDef)
+        {
+            Source propSource = new Source(classDef.GetTableName(propDef));
+            return new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, propSource);
         }
 
         private static void AddDiscriminatorFields(ISelectQuery selectQuery, IClassDef classDef, ref Criteria criteria)
@@ -170,7 +181,9 @@ namespace Habanero.BO
                     IPropDef propDef = propParentClassDef.GetPropDef(field.PropertyName);
                     field.FieldName = propDef.DatabaseFieldName;
                     field.Source.ChildSourceLeaf.EntityName = propParentClassDef.GetTableName(propDef);
-                    if (criteria.CanBeParametrised() && (criteria.ComparisonOperator != Criteria.ComparisonOp.In && criteria.ComparisonOperator != Criteria.ComparisonOp.NotIn))
+                    if (criteria.CanBeParametrised()
+                            && (criteria.ComparisonOperator != Criteria.ComparisonOp.In 
+                            && criteria.ComparisonOperator != Criteria.ComparisonOp.NotIn))
                     {
                         object returnedValue;
                         propDef.TryParsePropValue(criteria.FieldValue, out returnedValue );

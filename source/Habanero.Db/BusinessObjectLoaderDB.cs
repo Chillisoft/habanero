@@ -73,9 +73,11 @@ namespace Habanero.DB
         /// <summary>
         /// Loads a business object of type T, using the Primary key given as the criteria
         /// </summary>
-        /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <typeparam name="T">The type of object to load. This must be a class that implements 
+        /// IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="primaryKey">The primary key to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. 
+        /// If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
             T businessObject = GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
@@ -140,9 +142,12 @@ namespace Habanero.DB
         ///<returns></returns>
         private static ISelectQuery GetSelectQuery(IClassDef classDef, Criteria criteria)
         {
-            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
-            QueryBuilder.PrepareCriteria(classDef, criteria);
-            selectQuery.Criteria = criteria;
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            /* From Brett: I refactored this since the QueryBuilder CreateCriteria seemed to do 
+             * the exact same thing. All tests are passing.
+             * ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);  
+                        QueryBuilder.PrepareCriteria(classDef, criteria);
+                        selectQuery.Criteria = criteria;*/
             return selectQuery;
         }
 
