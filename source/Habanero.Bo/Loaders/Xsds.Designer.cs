@@ -83,6 +83,15 @@ namespace Habanero.BO.Loaders {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an error in DataSetProvider: If you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error .
+        /// </summary>
+        internal static string There_was_an_error_in_DataSetProvider_MultipleDelesHit {
+            get {
+                return ResourceManager.GetString("There_was_an_error_in_DataSetProvider_MultipleDelesHit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;xs:schema xmlns=&quot;http://tempuri.org/uis&quot; elementFormDefault=&quot;qualified&quot; targetNamespace=&quot;http://tempuri.org/uis&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;xs:element name=&quot;parameter&quot;&gt;

@@ -85,10 +85,9 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             try
             {
-                IClassDef def = ClassDefHelper.GetSuperClassClassDef(superClassDef, classDefCol);
+                ClassDefHelper.GetSuperClassClassDef(superClassDef, classDefCol);
                 //---------------Test Result -----------------------
                 Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
-                Assert.IsNull(def);// This will never get hit. It is here to state an expectation and to avoid a resharper warning.
             }
             catch (InvalidXmlDefinitionException ex)
             {

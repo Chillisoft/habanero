@@ -239,8 +239,12 @@ namespace Habanero.Base
 
         ///<summary>
         /// Gets the type of the specified property for this classDef.
-        /// The specified property can also have a format like the custom properties for a UiGridColumn or UiFormField def.
-        /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name
+        /// The specified property can also have a 
+        /// format like the custom properties for a UiGridColumn or UiFormField def.
+        /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name.
+        /// The PropType can also be determined in cases where the
+        /// property name is a reflective prop i.e. there is no
+        /// PropDef associated with it.
         ///</summary>
         ///<param name="propertyName">The property to get the type for.</param>
         ///<returns>The type of the specified property</returns>

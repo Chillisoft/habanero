@@ -32,7 +32,7 @@ namespace Habanero.BO.ClassDefinition
         private string _heading;
         private string _propertyName;
         private Type _gridControlType;
-
+        protected IPropDef _propDef;
         /// <summary>
         /// Constructor to initialise a new definition
         /// </summary>
@@ -93,7 +93,11 @@ namespace Habanero.BO.ClassDefinition
         public string PropertyName
         {
             get { return _propertyName; }
-            set { _propertyName = value; }
+            set
+            {
+                _propertyName = value;
+                this._propDef = null;
+            }
         }
 
         /// <summary>
@@ -148,9 +152,24 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// The <see cref="IClassDef">ClassDefinition</see> that this IUIGridColumn belongs to
         ///</summary>
-        public IClassDef ClassDef
+        public virtual IClassDef ClassDef
         {
             get { return this.UIGrid == null ? null : this.UIGrid.ClassDef; }
+        }
+        /// <summary>
+        /// Returns the LookupList for the PropDef that 
+        /// is associated with this PropDef.
+        /// If there is no PropDef associated with this column
+        /// then returns <see cref="NullLookupList"/>.
+        /// </summary>
+        public ILookupList LookupList
+        {
+            get
+            {
+                return this.ClassDef == null 
+                    ? new NullLookupList() 
+                    : this.ClassDef.GetLookupList(this.PropertyName);
+            }
         }
 
         #region Helper Methods
@@ -161,7 +180,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns> The heading for this grid column </returns>
         public string GetHeading()
         {
-            return GetHeading(null);
+            return GetHeading(this.ClassDef);
         }
 
         ///<summary>
@@ -187,7 +206,26 @@ namespace Habanero.BO.ClassDefinition
             }
             return heading;
         }
-       
+        ///<summary>
+        /// Gets the heading for this grid column.
+        ///</summary>
+        ///<returns> The heading for this grid column </returns>
+        public Type GetPropertyType()
+        {
+            if (PropDef == null) return ClassDef.GetPropertyType(PropertyName);
+            if (this.PropDef.HasLookupList()) return typeof (object);
+            return PropDef.PropertyType;
+        }
+
+        private IPropDef PropDef
+        {
+            get
+            {
+                if (_propDef != null) return _propDef;
+                _propDef = ClassDefHelper.GetPropDefByPropName(ClassDef, PropertyName);
+                return _propDef;
+            }
+        }
 
         #endregion //Helper Methods
 

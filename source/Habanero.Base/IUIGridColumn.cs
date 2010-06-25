@@ -77,6 +77,14 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         IClassDef ClassDef { get; }
 
+        /// <summary>
+        /// Returns the LookupList for the PropDef that 
+        /// is associated with this PropDef.
+        /// If there is no PropDef associated with this column
+        /// then returns NullLookupList.
+        /// </summary>
+        ILookupList LookupList { get; }
+
         ///<summary>
         /// Gets the heading for this grid column.
         ///</summary>
@@ -88,6 +96,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="classDef">The class definition that corresponds to this grid column. </param>
         ///<returns> The heading for this grid column </returns>
+        [Obsolete("This is no longer required since the IUIGridColumn can now acquire its ClassDef")]
         string GetHeading(IClassDef classDef);
 
         /// <summary>
@@ -98,5 +107,10 @@ namespace Habanero.BO.ClassDefinition
         /// TODO this should return a string
         object GetParameterValue(string parameterName);
 
+        ///<summary>
+        /// Gets the heading for this grid column.
+        ///</summary>
+        ///<returns> The heading for this grid column </returns>
+        Type GetPropertyType();
     }
 }

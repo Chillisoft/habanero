@@ -877,6 +877,8 @@ namespace Habanero.BO.ClassDefinition
         /// Searches the relationship definition collection and returns 
         /// the relationship definition found under the
         /// relationship with the name specified.
+        /// This searches through all the entire inheritance Hierachy i.e. all the
+        /// superclasses relationships are also searched for.
         /// </summary>
         /// <param name="relationshipName">The relationship name in question</param>
         /// <returns>Returns the relationship definition if found, 
@@ -1029,7 +1031,6 @@ namespace Habanero.BO.ClassDefinition
                 return GetReflectivePropertyType(propertyName);
             }
             PropDef propDef = (PropDef) GetPropDef(propertyName, false);
-            //This is used because the Prop is refined to be a 
             return propDef != null ? propDef.PropertyType : typeof (object);
         }
 
@@ -1157,7 +1158,8 @@ namespace Habanero.BO.ClassDefinition
 
         ///<summary>
         /// Creates a property comparer for the given property
-        /// The specified property can also have a format like the custom properties for a UiGridColumn or UiFormField def.
+        /// The specified property can also have a format like the custom properties 
+        /// for a UiGridColumn or UiFormField def.
         /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name
         ///</summary>
         ///<param name="propertyName">The property to get the type for.</param>

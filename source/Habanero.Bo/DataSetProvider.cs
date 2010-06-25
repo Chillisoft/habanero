@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using log4net;
 
 namespace Habanero.BO
@@ -115,7 +116,7 @@ namespace Habanero.BO
             IClassDef classDef = _collection.ClassDef;
             foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
-                AddColumn(uiProperty, (ClassDef) classDef);
+                AddColumn(uiProperty, classDef);
             }
             foreach (BusinessObject businessObject in _collection.Clone())
             {
@@ -125,7 +126,7 @@ namespace Habanero.BO
             return _table;
         }
 
-        private void AddColumn(UIGridColumn uiProperty, ClassDef classDef)
+        private void AddColumn(IUIGridColumn uiProperty, IClassDef classDef)
         {
             DataColumn column = _table.Columns.Add();
             if (_table.Columns.Contains(uiProperty.PropertyName))
@@ -136,13 +137,15 @@ namespace Habanero.BO
                           + "the name '{0}' has been detected. Only one column " + "per property can be specified.",
                           uiProperty.PropertyName));
             }
-            ILookupList lookupList = classDef.GetLookupList(uiProperty.PropertyName);
+            //ILookupList lookupList = classDef.GetLookupList(uiProperty.PropertyName);
             Type columnPropertyType = GetPropertyType(classDef, uiProperty.PropertyName);
 
             column.DataType = columnPropertyType;
             column.ColumnName = uiProperty.PropertyName;
-            column.Caption = uiProperty.GetHeading(classDef);
-            column.ExtendedProperties.Add("LookupList", lookupList);
+            column.Caption = uiProperty.ClassDef == null 
+                    ? uiProperty.GetHeading(classDef) 
+                    : uiProperty.GetHeading();
+            column.ExtendedProperties.Add("LookupList", uiProperty.LookupList);
             column.ExtendedProperties.Add("Width", uiProperty.Width);
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
         }
@@ -340,7 +343,7 @@ namespace Habanero.BO
                 {
                     //IF you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error
                     //This suppresses the error.
-                    Console.Write("There was an error in DataSetProvider: IF you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error ");
+                    Console.Write(Xsds.There_was_an_error_in_DataSetProvider_MultipleDelesHit);
                 }
             }
         }

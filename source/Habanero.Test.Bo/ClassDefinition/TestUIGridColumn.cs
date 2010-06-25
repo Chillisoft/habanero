@@ -21,8 +21,10 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.Testability;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -68,6 +70,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             ClassDef classDef = CreateTestClassDef("");
             IUIGridColumn uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left , null);
+
             Assert.AreEqual("Tested Property", uiGridColumn.GetHeading(classDef));
         }
 
@@ -186,7 +189,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("heading", column.Heading);
             column.SetHeading("newheading");
             Assert.AreEqual("newheading", column.Heading);
-
+            column.SetPropertyName(null);
             Assert.IsNull(column.PropertyName);
             column.SetPropertyName("prop");
             Assert.AreEqual("prop", column.PropertyName);
@@ -320,10 +323,155 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(operatorNotEquals);
             //---------------Tear Down -------------------------          
         }
+
+        [Test]
+        public void Test_LookupList_ShouldReturnClassDefsLookupList()
+        {
+            //---------------Set up test pack-------------------
+            var expectedLList = MockRepository.GenerateStub<ILookupList>();
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            UIGridColumn gridColumn = GetGridColumn(classDef, expectedLList);
+            //---------------Assert Precondition----------------
+            Assert.AreSame(classDef, gridColumn.ClassDef);
+            Assert.AreSame(expectedLList, classDef.GetLookupList(gridColumn.PropertyName));
+            //---------------Execute Test ----------------------
+            ILookupList actualLList = gridColumn.LookupList;
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedLList, actualLList);
+        }
+        [Test]
+        public void Test_LookupList_WhenNullClassDef_ShouldReturnNullLookupList()
+        {
+            //---------------Set up test pack-------------------
+            UIGridColumn gridColumn = new UIGridColumnSpy();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(gridColumn.ClassDef);
+            //---------------Execute Test ----------------------
+            ILookupList actualLList = gridColumn.LookupList;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<NullLookupList>(actualLList );
+        }
+
+        [Test]
+        public void Test_GetPropType_WhenSetPropDefViaSpy_ShouldReturnSetPropDefsType()
+        {
+            //This is actually testing an optimisation so that we do not
+            // continually have to go refetch the PropDef for the Column
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy();
+            IPropDef propDef = GetIntPropDef();
+            gridColumn.SetPropDef(propDef);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var propertyType = gridColumn.GetPropertyType();
+            //---------------Test Result -----------------------
+            Assert.AreSame(propDef.PropertyType, propertyType);
+        }
+
+        private IPropDef GetIntPropDef()
+        {
+            var propDef = MockRepository.GenerateStub<IPropDef>();
+            propDef.PropertyType = typeof (int);
+            return propDef;
+        }
+
+        [Test]
+        public void Test_GetPropertyType_WhenHasPropDef_ButNotSet_ShouldReturnPropDefPropType()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy();
+            IClassDef classDef = MockRepository.GenerateStub<IClassDef>();
+            classDef.Stub(def => def.GetPropDef(gridColumn.PropertyName, false)).Return(GetIntPropDef());
+            gridColumn.SetClassDef(classDef);
+            //---------------Assert Precondition----------------
+            Assert.AreSame(typeof(int), classDef.GetPropDef(gridColumn.PropertyName, false).PropertyType);
+            //---------------Execute Test ----------------------
+            var propertyType = gridColumn.GetPropertyType();
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(int), propertyType);
+        }
+        [Test]
+        public void Test_GetPropertyType_WhenReflectiveProp_ReturnReflectivePropType()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy();
+            IClassDef classDef = MockRepository.GenerateStub<IClassDef>();
+            string propertyName = gridColumn.PropertyName;
+            classDef.Stub(def => def.GetPropertyType(propertyName)).Return(typeof(bool));
+            gridColumn.SetClassDef(classDef);
+            //---------------Assert Precondition----------------
+            Assert.AreSame(typeof(bool), classDef.GetPropertyType(gridColumn.PropertyName));
+            //---------------Execute Test ----------------------
+            var propertyType = gridColumn.GetPropertyType();
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(bool), propertyType);
+        }
+        [Test]
+        public void Test_GetPropertyType_WhenPropDefLookupList_ShouldReturnObjectType()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy();
+            var propDef = MockRepository.GenerateStub<IPropDef>();
+            propDef.PropertyType = typeof (bool);
+            propDef.Stub(def => def.HasLookupList()).Return(true);
+            gridColumn.SetPropDef(propDef);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.HasLookupList());
+            //---------------Execute Test ----------------------
+            var propertyType = gridColumn.GetPropertyType();
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(object), propertyType);
+        }
+
+        [Test]
+        public void Test_SetPropName_SetsProtectedPropDefToNull()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy();
+            var propDef = MockRepository.GenerateStub<IPropDef>();
+            gridColumn.SetPropDef(propDef);
+            //---------------Assert Precondition----------------
+            Assert.AreSame(propDef, gridColumn.PropDef);
+            //---------------Execute Test ----------------------
+            gridColumn.PropertyName = RandomValueGen.GetRandomString();
+            //---------------Test Result -----------------------
+            Assert.IsNull(gridColumn.PropDef);
+        }
+
+        [Test]
+        public void Test_GetPropertyType_FromInterface_WhenPropDefLookupList_ShouldReturnObjectType()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy();
+            var propDef = MockRepository.GenerateStub<IPropDef>();
+            propDef.PropertyType = typeof(bool);
+            propDef.Stub(def => def.HasLookupList()).Return(true);
+            gridColumn.SetPropDef(propDef);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.HasLookupList());
+            //---------------Execute Test ----------------------
+            var propertyType = ((IUIGridColumn)gridColumn).GetPropertyType();
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(object), propertyType);
+        }
+
+        private UIGridColumn GetGridColumn(IClassDef classDef, ILookupList lookupList)
+        {
+            UIGridColumnSpy gridColumn = new UIGridColumnSpy();
+            classDef.GetLookupList(gridColumn.PropertyName);
+            classDef.Stub(def => def.GetLookupList(gridColumn.PropertyName)).Return(lookupList);
+
+            gridColumn.SetClassDef(classDef);
+            return gridColumn;
+        }
+
         // Grants access to protected fields
         private class UIGridColumnSpy : UIGridColumn
         {
-            public UIGridColumnSpy() : base("heading", null, null, null, true, 100,
+            private IClassDef _setClassDef;
+            
+
+            public UIGridColumnSpy() : base("heading", RandomValueGen.GetRandomString(), null, null, true, 100,
                 PropAlignment.left, null)
             {}
 
@@ -355,6 +503,27 @@ namespace Habanero.Test.BO.ClassDefinition
             public void SetAlignment(PropAlignment alignment)
             {
                 Alignment = alignment;
+            }
+            public void SetClassDef(IClassDef classDef)
+            {
+                _setClassDef = classDef;
+            }
+            public override IClassDef ClassDef
+            {
+                get
+                {
+                    return _setClassDef ?? base.ClassDef;
+                }
+            }
+
+            public IPropDef PropDef
+            {
+                get { return _propDef; }
+            }
+
+            public void SetPropDef(IPropDef propDef)
+            {
+                _propDef = propDef;
             }
         }
     }
