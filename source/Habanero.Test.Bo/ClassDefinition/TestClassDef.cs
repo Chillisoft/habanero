@@ -1217,12 +1217,50 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
             Assert.AreSame(superClassDef, expectedpropdef.ClassDef);
             Assert.AreSame(superClassDef, classDef.SuperClassClassDef);
-            Assert.IsTrue(classDef.PropDefColIncludingInheritance.Contains(propertyName));
+            //Assert.IsTrue(classDef.PropDefColIncludingInheritance.Contains(propertyName));
             //---------------Execute Test ----------------------
             IPropDef propDef = classDef.GetPropDef(propertyName);
             //---------------Test Result -----------------------
             Assert.AreSame(expectedpropdef, propDef);
             Assert.AreSame(superClassDef, propDef.ClassDef);
+        }
+
+        [Test]
+        public void Test_CallGetPropDef_AddPropDefToPropDefCol_ThenGetPropDef_ShouldHaveNewPropDef_FixBug583()
+        {
+            //---------------Set up test pack-------------------
+            FakeClassDef classDef = new FakeClassDef();
+            classDef.SetPropDefCol(new PropDefCol());
+            const string propertyName = "SomePropName";
+            var initialPropDef = classDef.GetPropDef(propertyName, false);
+            var addedPropDef = new PropDefFake(propertyName);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(initialPropDef);
+            //---------------Execute Test ----------------------
+            classDef.PropDefcol.Add(addedPropDef);
+            var returnedPropDef = classDef.GetPropDef(propertyName, false);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(returnedPropDef);
+            Assert.AreSame(addedPropDef, returnedPropDef);
+        }
+        [Test]
+        public void Test_CallGetPropDef_RemovePropDefToPropDefCol_ThenGetPropDef_ShouldNotHaveRemovedPropDef_FixBug583()
+        {
+            //---------------Set up test pack-------------------
+            FakeClassDef classDef = new FakeClassDef();
+            classDef.SetPropDefCol(new PropDefCol());
+            const string propertyName = "SomePropName";           
+            var removedPropDef = new PropDefFake(propertyName);
+            classDef.PropDefcol.Add(removedPropDef);
+
+            var initialPropDef = classDef.GetPropDef(propertyName, false);
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(initialPropDef);
+            //---------------Execute Test ----------------------
+            classDef.PropDefcol.Remove(removedPropDef);
+            var returnedPropDef = classDef.GetPropDef(propertyName, false);
+            //---------------Test Result -----------------------
+            Assert.IsNull(returnedPropDef);
         }
 
         [Test]
@@ -1236,7 +1274,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
             Assert.AreSame(superClassDef, expectedpropdef.ClassDef);
             Assert.AreSame(superClassDef, classDef.SuperClassClassDef);
-            Assert.IsTrue(classDef.PropDefColIncludingInheritance.Contains(propertyName));
+            Assert.IsTrue(classDef.PropDefColIncludingInheritance.Contains(expectedpropdef));
             //---------------Execute Test ----------------------
             IPropDef propDef = classDef.PropDefColIncludingInheritance[propertyName];
             //---------------Test Result -----------------------

@@ -68,8 +68,7 @@ namespace Habanero.BO.ClassDefinition
                 }
                 return null;
             }
-            IPropDefCol propDefCol = classDef.PropDefColIncludingInheritance;
-            return propDefCol.Contains(propertyName) ? propDefCol[propertyName] : null;
+            return classDef.GetPropDef(propertyName, false);
         }
 
         ///<summary>

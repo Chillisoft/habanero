@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -140,10 +141,7 @@ namespace Habanero.Base
         /// The collection of property definitions for this
         /// class and any properties inherited from parent classes
         /// </summary>
-        IPropDefCol PropDefColIncludingInheritance
-        {
-            get;
-        }
+        IPropDefCol PropDefColIncludingInheritance { get; }
 
         /// <summary>
         /// The name of the assembly for the class definition

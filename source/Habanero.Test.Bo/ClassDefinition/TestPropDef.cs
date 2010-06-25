@@ -1129,7 +1129,10 @@ namespace Habanero.Test.BO.ClassDefinition
             : base("prop", typeof(MyBO), PropReadWriteRule.ReadWrite, null)
         {
         }
-
+        public PropDefFake(string propName)
+            : base(propName, typeof(MyBO), PropReadWriteRule.ReadWrite, null)
+        {
+        }
         public void SetPropertyName(string name)
         {
             PropertyName = name;

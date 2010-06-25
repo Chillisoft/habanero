@@ -440,11 +440,12 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (_propDefColIncludingInheritance == null)
-                {
-                    
+
+                if (_propDefColIncludingInheritance == null ||
+                    _propDefColIncludingInheritance.Count != this.TotalNoOfPropsIncludingInheritance)
+                {                   
                     _propDefColIncludingInheritance = new PropDefCol {ClassDef = this};
-                    _propDefColIncludingInheritance.Add(PropDefcol);
+                    _propDefColIncludingInheritance.Add(this.PropDefcol);
 
                     IClassDef currentClassDef = this;
                     while (currentClassDef.SuperClassClassDef != null)
@@ -455,10 +456,36 @@ namespace Habanero.BO.ClassDefinition
                     }
                 }
                 _propDefColIncludingInheritance.ClassDef = this;
+
                 return _propDefColIncludingInheritance;
             }
         }
-
+        /// <summary>
+        /// This is a bit of a Hack but you need to be able to deal with a situation
+        /// where you call <see cref="PropDefColIncludingInheritance"/> then add a prop
+        /// to this class or any of its superclasses and then call
+        /// <see cref="PropDefColIncludingInheritance"/> again.
+        /// You would expect to see the new PropDef added at the same time you
+        /// do not want to do the recursive algorithm of building the PropDef list repeatedly
+        /// since this is used by the GetPropDef method which is used intensively.
+        /// This recursive method with adding all the properties is less intense.
+        /// We also do not want to add events to the PropDefCol that can be fired every
+        /// time a PropDef is added or removed since this would
+        ///  </summary>
+        private int TotalNoOfPropsIncludingInheritance
+        {
+            get
+            {
+                int noProps = this.PropDefcol.Count;
+                ClassDef currentClassDef = this;
+                while (currentClassDef.SuperClassClassDef != null)
+                {
+                    currentClassDef = (ClassDef) currentClassDef.SuperClassClassDef;
+                    noProps += currentClassDef.TotalNoOfPropsIncludingInheritance;
+                }
+                return noProps;
+            }
+        }
         /// <summary>
         /// The collection of relationship definitions
         /// </summary>
