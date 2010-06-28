@@ -656,7 +656,16 @@ namespace Habanero.BO
             {
                 if (this.Contains(id))
                 {
-                    return this[id];
+                    try
+                    {
+                        return this[id];
+                    } catch (HabaneroDeveloperException ex)
+                    {
+                        _log.Debug(
+                            "Error in GetObjectIfInManager: Contains returned true but this[] threw an exception: " +
+                            ex.Message + Environment.NewLine + ex.StackTrace);
+                        return null;
+                    }
                 }
                 return null;
             }
