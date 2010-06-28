@@ -71,7 +71,9 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef classDef = CreateTestClassDef("");
             IUIGridColumn uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left , null);
 
+#pragma warning disable 612,618
             Assert.AreEqual("Tested Property", uiGridColumn.GetHeading(classDef));
+#pragma warning restore 612,618
         }
 
         [Test]
@@ -135,7 +137,9 @@ namespace Habanero.Test.BO.ClassDefinition
 
             UIGridColumn uiGridColumn;
             uiGridColumn = new UIGridColumn(null, "TestRel.TestProperty2", typeof(DataGridViewTextBoxColumn), false, 100, PropAlignment.left, null);
+#pragma warning disable 612,618
             Assert.AreEqual("Tested Property2", uiGridColumn.GetHeading(classDef));
+#pragma warning restore 612,618
         }
         
         [Test]
@@ -162,10 +166,13 @@ namespace Habanero.Test.BO.ClassDefinition
             PropDef propDef = new PropDef("TestProperty" + suffix, typeof(string), PropReadWriteRule.ReadWrite, null, null, false, false, 100,
                                           "Tested Property" + suffix, null);
             propDefCol.Add(propDef);
-            PrimaryKeyDef primaryKeyDef = new PrimaryKeyDef();
-            primaryKeyDef.Add(propDef);
-            return new ClassDef("TestAssembly", "TestClass" + suffix, primaryKeyDef,
-                                propDefCol, new KeyDefCol(), new RelationshipDefCol(), new UIDefCol());
+            PrimaryKeyDef primaryKeyDef = new PrimaryKeyDef {propDef};
+            var testClassDef = new ClassDef("TestAssembly", "TestClass" + suffix, primaryKeyDef,
+                                            propDefCol, new KeyDefCol(), new RelationshipDefCol(), new UIDefCol());
+            var uiGrid = new UIGrid();
+            testClassDef.UIDefCol.Add(new UIDef("UIDef1", new UIForm(), uiGrid ));
+            return testClassDef;
+
         }
 
         [Test]
@@ -455,7 +462,156 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(typeof(object), propertyType);
         }
 
-        private UIGridColumn GetGridColumn(IClassDef classDef, ILookupList lookupList)
+        private IUIGridColumn GetGridColumn()
+        {
+            ClassDef classDef = CreateTestClassDef("");
+            UIGridColumn gridColumn = new UIGridColumn("T P", "TestProperty",  null, null, true, 100, PropAlignment.left, null)
+                                          {
+                                              Editable = true,
+                                              UIGrid = classDef.UIDefCol["UIDef1"].UIGrid
+                                          };
+            return gridColumn;
+        }
+        [Test]
+        public void Test_PropDef_WhenHas_ShouldReturnPropDef()
+        {
+            //---------------Set up test pack-------------------
+            IUIGridColumn gridColumn = GetGridColumn();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(((UIGridColumn)gridColumn).HasPropDef);
+            //---------------Execute Test ----------------------
+            IPropDef propDef = gridColumn.PropDef;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(propDef);
+        }
+        [Test]
+        public void Test_PropDef_WhenNotHas_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            IUIGridColumn gridColumn = GetGridColumn();
+            gridColumn.PropertyName = "SomeNonExistentName";
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(((UIGridColumn)gridColumn).HasPropDef);
+            //---------------Execute Test ----------------------
+            IPropDef propDef = gridColumn.PropDef;
+            //---------------Test Result -----------------------
+            Assert.IsNull(propDef);
+        }
+        [Test]
+        public void Test_HasPropDef_WhenHas_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy();
+            gridColumn.SetPropDef(MockRepository.GenerateMock<IPropDef>());
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(gridColumn.PropDef);
+            //---------------Execute Test ----------------------
+            bool hasPropDef = gridColumn.HasPropDef;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(hasPropDef);
+        }
+        [Test]
+        public void Test_HasPropDef_WhenNotHas_ShouldRetFalse()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(gridColumn.PropDef);
+            //---------------Execute Test ----------------------
+            bool hasPropDef = gridColumn.HasPropDef;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(hasPropDef);
+        }
+
+        [Test]
+        public void Test_Editable_WhenSetToFalse_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            IUIGridColumn gridColumn = GetGridColumnSpy();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(gridColumn.Editable);
+            //---------------Execute Test ----------------------
+            gridColumn.Editable = false;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(gridColumn.Editable);
+        }
+
+        private IUIGridColumn GetGridColumnSpy()
+        {
+            ClassDef classDef = CreateTestClassDef("");
+            IUIGridColumn gridColumn = new UIGridColumnSpy("TestProperty") {Editable = true};
+            ((UIGridColumnSpy)gridColumn).SetClassDef(classDef);
+            return gridColumn;
+        }
+
+        [Test]
+        public void Test_Editable_WhenSetToTrue_ShouldReturnTrue()
+        {
+            //---------------Set up test pack-------------------
+            IUIGridColumn gridColumn = GetGridColumnSpy();
+            gridColumn.Editable = false;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(gridColumn.Editable);
+            //---------------Execute Test ----------------------
+            gridColumn.Editable = true;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(gridColumn.Editable);
+        }
+
+        [Test]
+        public void Test_Editable_WhenSetToTrue_WhenHasPropDefReadOnly_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy { Editable = true };
+            var propDef = MockRepository.GenerateStub<IPropDef>();
+            propDef.ReadWriteRule = PropReadWriteRule.ReadOnly;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(gridColumn.Editable);
+            Assert.IsNull(gridColumn.PropDef);
+            Assert.AreEqual(PropReadWriteRule.ReadOnly, propDef.ReadWriteRule);
+            //---------------Execute Test ----------------------
+            gridColumn.SetPropDef(propDef);
+            var editable = gridColumn.Editable;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(editable, "The PropDef ReadOnly Editability should override the loaded GridColumn Editability.");
+        }
+
+        [Test]
+        public void Test_Editable_WhenSetToTrue_WhenHasPropDefReadWrite_ShouldReturnTrue()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy { Editable = true };
+            var propDef = MockRepository.GenerateStub<IPropDef>();
+            propDef.ReadWriteRule = PropReadWriteRule.ReadWrite;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(gridColumn.Editable);
+            Assert.IsNull(gridColumn.PropDef);
+            Assert.AreEqual(PropReadWriteRule.ReadWrite, propDef.ReadWriteRule);
+            //---------------Execute Test ----------------------
+            gridColumn.SetPropDef(propDef);
+            var editable = gridColumn.Editable;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(editable, "Both PropDef and GridColumn defined as editable so should be editable.");
+        }
+        [Test]
+        public void Test_Editable_WhenSetToFalse_WhenHasPropDefReadWrite_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            var gridColumn = new UIGridColumnSpy { Editable = false };
+            var propDef = MockRepository.GenerateStub<IPropDef>();
+            propDef.ReadWriteRule = PropReadWriteRule.ReadWrite;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(gridColumn.Editable);
+            Assert.IsNull(gridColumn.PropDef);
+            Assert.AreEqual(PropReadWriteRule.ReadWrite, propDef.ReadWriteRule);
+            //---------------Execute Test ----------------------
+            gridColumn.SetPropDef(propDef);
+            var editable = gridColumn.Editable;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(editable, "The GridColumn Editable False should override the PropDef ReadWrite.");
+        }
+
+        private static UIGridColumn GetGridColumn(IClassDef classDef, ILookupList lookupList)
         {
             UIGridColumnSpy gridColumn = new UIGridColumnSpy();
             classDef.GetLookupList(gridColumn.PropertyName);
@@ -473,6 +629,13 @@ namespace Habanero.Test.BO.ClassDefinition
 
             public UIGridColumnSpy() : base("heading", RandomValueGen.GetRandomString(), null, null, true, 100,
                 PropAlignment.left, null)
+            {}
+            
+            public UIGridColumnSpy(string propName)
+                : base("label", propName, null, null, true, 100, PropAlignment.left, null)
+            {}
+            public UIGridColumnSpy(string propLabel, string propName)
+                : base(propLabel, propName, null, null, true, 100, PropAlignment.left, null)
             {}
 
             public void SetHeading(string name)

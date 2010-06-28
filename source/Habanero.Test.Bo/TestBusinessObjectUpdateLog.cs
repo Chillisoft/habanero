@@ -203,7 +203,7 @@ namespace Habanero.Test.BO
 
         public IBusinessObjectUpdateLog BusinessObjectUpdateLog
         {
-            get { return _businessObjectUpdateLog; }
+            get { return base.BusinessObjectUpdateLog; }
         }
 
         public static IClassDef LoadDefaultClassDef()

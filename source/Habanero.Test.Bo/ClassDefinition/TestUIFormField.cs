@@ -71,6 +71,24 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void Test_GetLabel_WhenUIFormFieldHasClassDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = CreateTestClassDef("");
+            var uiFormField = new UIFormFieldStub(null, "TestProperty");
+            uiFormField.SetLabel(null);
+            uiFormField.SetClassDef(classDef);
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(classDef.GetPropDef(uiFormField.PropertyName));
+            Assert.AreSame(classDef, uiFormField.GetClassDef());
+            Assert.IsNull(uiFormField.Label);
+            //---------------Execute Test ----------------------
+            var actualLabel = uiFormField.GetLabel();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Tested Property:", actualLabel);
+        }
+
+        [Test]
         public void Test_DisplaynameFull_NoPropDef_DisplayName()
         {
             //---------------Set up test pack-------------------
@@ -273,7 +291,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            UIFormFieldInheritorStub field = new UIFormFieldInheritorStub();
+            UIFormFieldStub field = new UIFormFieldStub();
             
             Assert.AreEqual("label", field.Label);
             field.SetLabel("newlabel");
@@ -931,10 +949,18 @@ namespace Habanero.Test.BO.ClassDefinition
         private static UIFormField CreateFormField(string propName) { return new UIFormField("L", propName, "", "", "", "", true, null, "", null, LayoutStyle.Label); }
 
         // Grants access to protected fields
-        private class UIFormFieldInheritorStub : UIFormField
+        private class UIFormFieldStub : UIFormField
         {
-            public UIFormFieldInheritorStub()
+            private IClassDef _classDef;
+
+            public UIFormFieldStub()
                 : base("label", "prop", "control", null, null, null, true, null, null, null, LayoutStyle.Label)
+            {}
+            public UIFormFieldStub(string propName)
+                : base("label", propName, "control", null, null, null, true, null, null, null, LayoutStyle.Label)
+            {}
+            public UIFormFieldStub(string propLabel, string propName)
+                : base(propLabel, propName, "control", null, null, null, true, null, null, null, LayoutStyle.Label)
             {}
 
             public void SetLabel(string name)
@@ -970,6 +996,14 @@ namespace Habanero.Test.BO.ClassDefinition
             public void SetEditable(bool editable)
             {
                 Editable = editable;
+            }
+            public void SetClassDef(IClassDef classDef)
+            {
+                _classDef = classDef;
+            }
+            public override IClassDef GetClassDef()
+            {
+                return _classDef;
             }
         }
     }

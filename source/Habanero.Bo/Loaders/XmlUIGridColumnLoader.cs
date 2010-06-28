@@ -96,7 +96,7 @@ namespace Habanero.BO.Loaders
             LoadPropertyName();
             LoadHeading();
             LoadGridControlType();
-            LoadIsReadOnly();
+            LoadIsEditable();
             LoadWidth();
             LoadAlignment();
             LoadParameters();
@@ -106,7 +106,7 @@ namespace Habanero.BO.Loaders
         /// Loads the "isReadOnly" attribute from the reader. This method
         /// is called by LoadFromReader().
         /// </summary>
-        private void LoadIsReadOnly()
+        private void LoadIsEditable()
         {
             try
             {

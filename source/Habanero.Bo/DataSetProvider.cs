@@ -143,8 +143,8 @@ namespace Habanero.BO
             column.DataType = columnPropertyType;
             column.ColumnName = uiProperty.PropertyName;
             column.Caption = uiProperty.ClassDef == null 
-                    ? uiProperty.GetHeading(classDef) 
-                    : uiProperty.GetHeading();
+                        ? uiProperty.GetHeading(classDef) 
+                        : uiProperty.GetHeading();
             column.ExtendedProperties.Add("LookupList", uiProperty.LookupList);
             column.ExtendedProperties.Add("Width", uiProperty.Width);
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);

@@ -95,7 +95,7 @@ namespace Habanero.BO
 
         #region Fields
 
-        private IBusinessObjectAuthorisation _authorisationRules;
+        private IBusinessObjectAuthorisation AuthorisationRules { get; set; }
 
         /// <summary>
         /// The Collection of Business Object Properties for this Business Object.
@@ -109,7 +109,7 @@ namespace Habanero.BO
         /// <summary>
         /// The Update Log being used for this Business Object.
         /// </summary>
-        protected IBusinessObjectUpdateLog _businessObjectUpdateLog;
+        private IBusinessObjectUpdateLog _businessObjectUpdateLog;
 
         /// <summary>
         /// The Class Definition <see cref="IClassDef"/> for this business object.
@@ -285,14 +285,6 @@ namespace Habanero.BO
 
         private void BOProp_OnUpdated(object sender, BOPropEventArgs e)
         {
-            //if (e.Prop.IsDirty)
-            //{
-            //    //if (!Status.IsEditing)
-            //    //{
-            //    //    BeginEdit();
-            //    //}
-            //    _boStatus.IsDirty = true;
-            //}
             FirePropertyUpdatedEvent(e.Prop);
         }
 
@@ -596,7 +588,7 @@ namespace Habanero.BO
         /// <param name="authorisationRules">The authorisation Rules</param>
         protected internal void SetAuthorisationRules(IBusinessObjectAuthorisation authorisationRules)
         {
-            _authorisationRules = authorisationRules;
+            AuthorisationRules = authorisationRules;
         }
 
         /// <summary>
@@ -605,7 +597,7 @@ namespace Habanero.BO
         /// <param name="businessObjectUpdateLog">A businessObject update log object</param>
         protected void SetBusinessObjectUpdateLog(IBusinessObjectUpdateLog businessObjectUpdateLog)
         {
-            _businessObjectUpdateLog = businessObjectUpdateLog;
+            BusinessObjectUpdateLog = businessObjectUpdateLog;
         }
 
         /// <summary>
@@ -651,8 +643,8 @@ namespace Habanero.BO
         public virtual bool IsCreatable(out string message)
         {
             message = "";
-            if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanCreate)) return true;
+            if (AuthorisationRules == null) return true;
+            if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanCreate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to create a {1}", Thread.CurrentPrincipal.Identity.Name,
                  ClassDef.ClassName);
@@ -674,8 +666,8 @@ namespace Habanero.BO
         public virtual bool IsEditable(out string message)
         {
             message = "";
-            if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanUpdate)) return true;
+            if (AuthorisationRules == null) return true;
+            if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanUpdate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to update {1} Identified By {2}",
                  Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
@@ -695,7 +687,7 @@ namespace Habanero.BO
         public virtual bool IsDeletable(out string message)
         {
             message = "";
-            if (_authorisationRules != null && !_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanDelete))
+            if (AuthorisationRules != null && !AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanDelete))
             {
                 message = string.Format
                     ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
@@ -771,6 +763,7 @@ namespace Habanero.BO
             return businessObject.GetPersistedPropertyValue(null, propName);
         }
 
+
         /// <summary>
         /// Sets a property value to a new value
         /// </summary>
@@ -779,24 +772,12 @@ namespace Habanero.BO
         public void SetPropertyValue(string propName, object newPropValue)
         {
             IBOProp prop = GetProperty(propName);
-            //            if (prop == null)
-            //            {
-            //                throw new InvalidPropertyNameException
-            //                    (String.Format
-            //                         ("The given property name '{0}' does not exist in the "
-            //                          + "collection of properties for the class '{1}'.", propName, ClassName));
-            //            }
             object propValue = prop.Value;
             object newPropValue1;
             if (!PropValueHasChanged(propValue, newPropValue)) return;
             ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
             if (PropValueHasChanged(propValue, newPropValue1))
             {
-                //if (!Status.IsEditing)
-                //{
-                //    BeginEdit();
-                //}
-                //_boStatus.IsDirty = true;
                 prop.Value = newPropValue1;
             }
         }
@@ -858,8 +839,8 @@ namespace Habanero.BO
         public virtual bool IsReadable(out string message)
         {
             message = "";
-            if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanRead)) return true;
+            if (AuthorisationRules == null) return true;
+            if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanRead)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
                  ClassDef.ClassName);
@@ -910,6 +891,7 @@ namespace Habanero.BO
         /// database by calling Save().
         /// </summary>
         private bool _beginEditRunning;
+
         private void BeginEdit(bool delete)
         {
             if (_beginEditRunning) return;
@@ -1004,6 +986,15 @@ namespace Habanero.BO
         /// This returns the Transaction Log object set up for this BusinessObject.
         /// </summary>
         public ITransactionLog TransactionLog { get; private set; }
+
+        /// <summary>
+        /// The Update Log being used for this Business Object.
+        /// </summary>
+        protected internal IBusinessObjectUpdateLog BusinessObjectUpdateLog
+        {
+            get { return _businessObjectUpdateLog; }
+            set { _businessObjectUpdateLog = value; }
+        }
 
         internal IList<IBusinessObjectRule> GetBusinessObjectRules()
         {
@@ -1208,9 +1199,9 @@ namespace Habanero.BO
             //}
             Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter) transactionCommitter);
 
-            if (_businessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
+            if (BusinessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
             {
-                _businessObjectUpdateLog.Update();
+                BusinessObjectUpdateLog.Update();
             }
         }
 

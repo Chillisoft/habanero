@@ -667,7 +667,7 @@ namespace Habanero.Test.BO
             RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
             GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
             AddressTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            var contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
             OrganisationTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
             contactPersonTestBOS.Add(new ContactPersonTestBO(), new ContactPersonTestBO(), new ContactPersonTestBO());
@@ -675,6 +675,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO organisation = new OrganisationTestBO();
 
             UIGrid uiGrid = new UIGrid();
+            new UIDef("fdafdas", new UIForm(), uiGrid) { ClassDef = contactPersonClassDef };
             const string propertyName = "-Organisation-";
             uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
 
@@ -701,13 +702,14 @@ namespace Habanero.Test.BO
             RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
             GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
             AddressTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            var contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
             OrganisationTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
 
             OrganisationTestBO organisation = new OrganisationTestBO();
 
             UIGrid uiGrid = new UIGrid();
+            new UIDef("fdafdas", new UIForm(), uiGrid) {ClassDef = contactPersonClassDef};
             const string propertyName = "-Organisation-";
             uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
 

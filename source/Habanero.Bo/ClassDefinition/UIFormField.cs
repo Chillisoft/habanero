@@ -261,7 +261,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns> The label for this form field </returns>
         public string GetLabel()
         {
-            return GetLabel(null);
+            return GetLabel(GetClassDef());
         }
 
         ///<summary>
@@ -545,7 +545,11 @@ namespace Habanero.BO.ClassDefinition
         {
             IUIFormColumn column = this.UIFormColumn;
             if (column == null) return null;
-            IUIDef uiDef = column.UIFormTab.UIForm.UIDef;
+            IUIFormTab tab = column.UIFormTab;
+            if (tab == null) return null;
+            IUIForm form = tab.UIForm;
+            if (form == null) return null;
+            IUIDef uiDef = form.UIDef;
             if (uiDef == null) return null;
             if (uiDef.ClassDef != null) return uiDef.ClassDef;
             return uiDef.UIDefCol == null ? null : uiDef.UIDefCol.ClassDef;

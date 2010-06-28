@@ -85,6 +85,12 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         ILookupList LookupList { get; }
 
+        /// <summary>
+        /// Returns the PropDef associated with this UIGridColumn. If there is one
+        /// If this GridColumn is for a reflective Prop then returns null.
+        /// </summary>
+        IPropDef PropDef { get; }
+
         ///<summary>
         /// Gets the heading for this grid column.
         ///</summary>
