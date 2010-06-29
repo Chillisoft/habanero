@@ -18,6 +18,11 @@
 // ---------------------------------------------------------------------------------
 namespace Habanero.Base
 {
+    /// <summary>
+    /// A LookupList that is associated with a particular Business Object type.
+    /// E.g. A Lookup List of all customers. This is therefore associated with 
+    /// a particular ClassDefinition.
+    /// </summary>
     public interface IBusinessObjectLookupList : ILookupListWithClassDef
     {
         /// <summary>

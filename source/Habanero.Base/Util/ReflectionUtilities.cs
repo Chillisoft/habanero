@@ -504,7 +504,8 @@ namespace Habanero.Util
         {
             return IsNullableType(type) ? Nullable.GetUnderlyingType(type) : type;
         }
-
+        // ReSharper disable PossibleNullReferenceException
+        //The PossibleNullReferenceException is ignored since it is not valid the first check is for a generic type.
         ///<summary>
         /// Returns true if the Type is Nullable e.g. Guid? or int?
         ///</summary>
@@ -512,9 +513,9 @@ namespace Habanero.Util
         ///<returns></returns>
         public static bool IsNullableType(Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
+            return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof (Nullable<>));
         }
-
+        // ReSharper restore PossibleNullReferenceException
         /// <summary>
         /// Returns the Property Name of the property used in the Lambda expression of type
         /// bo -> bo.MyProperty. This function will return 'MyProperty'.

@@ -91,6 +91,13 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         IPropDef PropDef { get; }
 
+        /// <summary>
+        /// Return true if this UIGridColumn is associated with a <see cref="IPropDef"/>.
+        /// This is used since a GridColumn can be associated with
+        /// Reflective Property 
+        /// </summary>
+        bool HasPropDef { get; }
+
         ///<summary>
         /// Gets the heading for this grid column.
         ///</summary>

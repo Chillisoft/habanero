@@ -97,43 +97,74 @@ namespace Habanero.BO
         /// <returns>Returns the formatted object to display</returns>
         public object GetPropertyValueToDisplay(string propertyName)
         {
-            if (propertyName.IndexOf(".") != -1)
+            if (IsAlternateRelationshipProp(propertyName))
             {
+                return GetAlternateRelationshipValue(propertyName);
+            }
+
+            if (IsReflectiveProperty(propertyName))
+            {
+                return GetVirtualPropertyValue(propertyName);
+            }
+
+            if (IsRelatedProperty(propertyName))
+            {
+                BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
+                boPropertyMapper.BusinessObject = _businessObject;
+                return boPropertyMapper.GetPropertyValue();
+/*                //boPropertyMapper.SetPropertyValue();
                 IBusinessObject relatedBo = this._businessObject;
                 //Get the first property name
                 string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
                 propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
-                //If there are some alternative relationships to traverse through then
-                //  go through each alternative and check if there is a related object and return the first one
-                // else get the related object
-                if (relationshipName.IndexOf("|") != -1)
-                {
-                    string[] parts = relationshipName.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
-                    List<string> relNames = new List<string>(parts);
-                    IBusinessObject oldBo = relatedBo;
-                    int i = 0;
-                    do
-                    {
-                        relatedBo = oldBo.Relationships.GetRelatedObject(relNames[i++]);
-                    } while (relatedBo == null && i < relNames.Count);
-                }
-                else
-                {
-                    relatedBo = relatedBo.Relationships.GetRelatedObject(relationshipName);
-                }
+
+                relatedBo = relatedBo.Relationships.GetRelatedObject(relationshipName);
                 if (relatedBo == null)
                 {
                     return null;
                     //throw new HabaneroApplicationException("Unable to retrieve property " + propertyName + " from a business object of type " + this._businessObject.GetType().Name);
                 }
                 BOMapper relatedBoMapper = new BOMapper(relatedBo);
-                return relatedBoMapper.GetPropertyValueToDisplay(propertyName);
-            }
-            if (propertyName.IndexOf("-") != -1)
-            {
-                return GetVirtualPropertyValue(propertyName);
+                return relatedBoMapper.GetPropertyValueToDisplay(propertyName);*/
             }
             return ((BusinessObject) _businessObject).GetPropertyValueToDisplay(propertyName);
+        }
+
+        private object GetAlternateRelationshipValue(string propertyName)
+        {
+            string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
+            propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
+            string[] parts = relationshipName.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            List<string> relNames = new List<string>(parts);
+            IBusinessObject relatedBo = this._businessObject;
+            IBusinessObject oldBo = relatedBo;
+            int i = 0;
+            do
+            {
+                relatedBo = oldBo.Relationships.GetRelatedObject(relNames[i++]);
+            } while (relatedBo == null && i < relNames.Count);
+            if (relatedBo == null)
+            {
+                return null;
+                //throw new HabaneroApplicationException("Unable to retrieve property " + propertyName + " from a business object of type " + this._businessObject.GetType().Name);
+            }
+            BOMapper relatedBoMapper = new BOMapper(relatedBo);
+            return relatedBoMapper.GetPropertyValueToDisplay(propertyName);
+        }
+
+        private bool IsAlternateRelationshipProp(string relationshipName)
+        {
+            return relationshipName.IndexOf("|") != -1;
+        }
+
+        private static bool IsReflectiveProperty(string propertyName)
+        {
+            return propertyName.IndexOf("-") != -1;
+        }
+
+        private static bool IsRelatedProperty(string propertyName)
+        {
+            return propertyName.IndexOf(".") != -1;
         }
 
         private object GetVirtualPropertyValue(string propertyName)
@@ -150,17 +181,13 @@ namespace Habanero.BO
         ///<param name="value">The value to set.</param>
         public void SetDisplayPropertyValue(string propertyName, object value)
         {
-            if (propertyName.IndexOf(".") != -1)
+            if (IsRelatedProperty(propertyName))
             {
-                BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
-                boPropertyMapper.BusinessObject = _businessObject;
-                IBOProp property = boPropertyMapper.Property;
-                if (property != null)
-                {
-                    property.Value = value;
-                }
+                BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName)
+                        {BusinessObject = _businessObject};
+                boPropertyMapper.SetPropertyValue(value);
             }
-            else if (propertyName.IndexOf("-") != -1)
+            else if (IsReflectiveProperty(propertyName))
             {
                 SetVirtualPropertyValue(propertyName, value);
             }
@@ -184,8 +211,11 @@ namespace Habanero.BO
         }
         // ReSharper restore MemberCanBePrivate.Global
         /// <summary>
-        /// Returns the class definition related to the specified database 
-        /// lookup list for the specified property in the class definition
+        /// Returns the class definition related to the
+        /// lookup list for the specified property.
+        /// If the property does not have a LookupList returns null.
+        /// If the LookupList is not of Type <see cref="ILookupListWithClassDef"/>
+        /// then returns null.
         /// </summary>
         /// <param name="propertyName">The property name</param>
         /// <returns>Returns the class definition or null if not available</returns>

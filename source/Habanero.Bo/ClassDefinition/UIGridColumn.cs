@@ -135,7 +135,11 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// Indicates whether the column is editable
+        /// Indicates whether the column is editable.
+        /// This takes into account the following.
+        /// 1) Has the GridColumn Been set to Not Editable Explicitely e.g. via ClassDef.xml.
+        /// 2) Is the PropDef in a Non editable state e.g. PropDef ReadWriteStatus is ReadOnly
+        /// 3) If there is no PropDef then does the reflective PropInfo have a Setter.
         /// </summary>
         public bool Editable
         {
@@ -146,6 +150,17 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        /// <summary>
+        /// Updates the isEditable flag and updates 
+        /// the control according to the current state
+        /// </summary>
+        private bool DetermineIsEditable()
+        {
+            if (!_editable) return false;
+            return IsPropertyReflective()
+                       ? DoesVirtualPropertyHaveSetter()
+                       : PropDefIsEditable();
+        }
         /// <summary>
         /// Returns the width
         /// </summary>
@@ -276,17 +291,6 @@ namespace Habanero.BO.ClassDefinition
             get { return this.PropDef != null; }
         }
 
-        /// <summary>
-        /// Updates the isEditable flag and updates 
-        /// the control according to the current state
-        /// </summary>
-        private bool DetermineIsEditable()
-        {
-            if (!_editable) return false;
-            return IsPropertyReflective()
-                       ? DoesVirtualPropertyHaveSetter()
-                       : PropDefIsEditable();
-        }
 
         private bool PropDefIsEditable()
         {
@@ -317,11 +321,12 @@ namespace Habanero.BO.ClassDefinition
             return IsPropertyViaRelationship() || IsPropertyReflective();
         }
 
+         */
+/*
         private bool IsPropertyViaRelationship()
         {
             return PropertyName.IndexOf(".") != -1;
-        } */
-
+        }*/
 
         private bool IsPropertyReflective()
         {

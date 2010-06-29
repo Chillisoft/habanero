@@ -119,10 +119,8 @@ namespace Habanero.BO
                     else
                     {
                         IClassDef classDef = businessObject.ClassDef;
-                        throw new HabaneroDeveloperException("The relationship '" + RelationshipName + "' on '"
-                                                             + classDef.ClassName + "' cannot be found. Please contact your system administrator.",
-                                                             "The relationship '" + RelationshipName + "' does not exist on the BusinessObject '"
-                                                             + classDef.ClassNameFull + "'.");
+                        throw new RelationshipNotFoundException("The relationship '" + RelationshipName + "' on '"
+                                                             + classDef.ClassNameFull + "' cannot be found. Please contact your system administrator.");
                     }
                 }
                 _businessObject = businessObject;

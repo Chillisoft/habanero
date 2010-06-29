@@ -382,14 +382,9 @@ namespace Habanero.BO
 
         private static void SetBOPropertyValue(IBusinessObject bo, string propertyName, DataRow row, out IBOProp property)
         {
-            BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
-            boPropertyMapper.BusinessObject = bo;
+            BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName) {BusinessObject = bo};
+            boPropertyMapper.SetPropertyValue(row[propertyName]);
             property = boPropertyMapper.Property;
-            if (property != null)
-            {
-                property.Value = row[propertyName];
-            }
-            //bo.SetPropertyValue(propertyName, row[propertyName]);
         }
 
         private Guid GetRowID(DataRow row)

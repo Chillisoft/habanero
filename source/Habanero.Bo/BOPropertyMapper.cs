@@ -36,10 +36,11 @@ namespace Habanero.BO
     public class BOPropertyMapper
     {
         private IBusinessObject _businessObject;
-        private IBOProp _property;
+        protected IBOProp _property;
         private readonly BOPropertyMapper _childBoPropertyMapper;
         private readonly BORelationshipMapper _relationshipPathMapper;
         private ISingleRelationship _childRelationship;
+        private const string RELATIONSHIP_SEPARATOR = ".";
 
         ///<summary>
         /// Creates a BOPropertyMapper for the specified property name/path.
@@ -50,10 +51,10 @@ namespace Habanero.BO
         {
             if (String.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
             PropertyName = propertyName;
-            if (PropertyName.Contains("."))
+            if (PropertyName.Contains(RELATIONSHIP_SEPARATOR))
             {
                 string[] parts = PropertyName.Split('.');
-                string relationshipPath = String.Join(".", parts, 0, parts.Length - 1);
+                string relationshipPath = String.Join(RELATIONSHIP_SEPARATOR, parts, 0, parts.Length - 1);
                 _relationshipPathMapper = new BORelationshipMapper(relationshipPath);
                 string childPropertyName = parts[parts.Length - 1];
                 _childBoPropertyMapper = new BOPropertyMapper(childPropertyName);
@@ -174,5 +175,54 @@ namespace Habanero.BO
         {
             if (PropertyChanged != null) PropertyChanged(this, new EventArgs());
         }
+        /// <summary>
+        /// Sets the BOProp that this mapper is mapped to the associated propValue
+        /// </summary>
+        /// <param name="propValue"></param>
+        public void SetPropertyValue(object propValue)
+        {
+            CheckBusinessObjectSet("Set Property Value");
+            //Ideally we should raise an error when the Property is null 
+            // but this is replacing code that currently just ignores
+            // this. In the future as we refactor this to 
+            // include reflective props then this should be changed.
+            var boProp = this.Property;
+            if(boProp != null) boProp.Value = propValue;
+        }
+
+        private void CheckBusinessObjectSet(string methodName)
+        {
+            if(this.BusinessObject == null)
+            {
+                throw new HabaneroApplicationException(string.Format("Tried to {1} the BOPropertyMapper for Property '{0}' when the BusinessObject is not set ", this.PropertyName, methodName));
+            }
+        }
+        /// <summary>
+        /// Return the Property Value for the Property being mapped.
+        /// </summary>
+        /// <returns></returns>
+        public object GetPropertyValue()
+        {
+            CheckBusinessObjectSet("GetPropertyValue");
+            //Ideally we should raise an error when the Property is null 
+            // but this is replacing code that currently just ignores
+            // this. In the future as we refactor this to 
+            // include reflective props then this should be changed.
+            var boProp = this.Property;
+            if (boProp != null) return this.Property.PropertyValueToDisplay;
+            return null;
+        }
+/*
+        private void CheckPropertyNotNull()
+        {
+            if (this.Property == null)
+            {
+                string errMessage = string.Format(
+                    "Tried to GetPropertyValue the BOPropertyMapper for Property '{0}' but there is no BOProp for this prop"
+                    , this.PropertyName);
+                throw new HabaneroApplicationException(errMessage);
+            }
+        }*/
     }
+
 }

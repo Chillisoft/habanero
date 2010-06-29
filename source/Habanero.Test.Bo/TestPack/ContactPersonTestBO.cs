@@ -894,6 +894,10 @@ namespace Habanero.Test.BO
             {
                 return;
             }
+            if(BORegistry.DataAccessor is DataAccessorMultiSource)
+            {
+                return;
+            }
             string sql = "DELETE FROM contact_person_address";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
             sql = "DELETE FROM Contact_Person";

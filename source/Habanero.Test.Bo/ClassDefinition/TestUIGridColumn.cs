@@ -484,6 +484,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsNotNull(propDef);
         }
+
         [Test]
         public void Test_PropDef_WhenNotHas_ShouldReturnNull()
         {
@@ -491,7 +492,7 @@ namespace Habanero.Test.BO.ClassDefinition
             IUIGridColumn gridColumn = GetGridColumn();
             gridColumn.PropertyName = "SomeNonExistentName";
             //---------------Assert Precondition----------------
-            Assert.IsFalse(((UIGridColumn)gridColumn).HasPropDef);
+            Assert.IsFalse(gridColumn.HasPropDef);
             //---------------Execute Test ----------------------
             IPropDef propDef = gridColumn.PropDef;
             //---------------Test Result -----------------------
@@ -514,7 +515,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_HasPropDef_WhenNotHas_ShouldRetFalse()
         {
             //---------------Set up test pack-------------------
-            var gridColumn = new UIGridColumnSpy();
+            IUIGridColumn gridColumn = new UIGridColumnSpy();
             //---------------Assert Precondition----------------
             Assert.IsNull(gridColumn.PropDef);
             //---------------Execute Test ----------------------

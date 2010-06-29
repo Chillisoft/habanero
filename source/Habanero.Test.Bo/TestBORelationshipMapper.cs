@@ -159,12 +159,12 @@ namespace Habanero.Test.BO
                 Assert.Fail("Expected to throw a HabaneroDeveloperException");
             }
             //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
+            catch (RelationshipNotFoundException ex)
             {
                 StringAssert.Contains("The relationship '" + relationshipName + "' on '"
                      + contactPersonTestBO.ClassDef.ClassName + "' cannot be found. Please contact your system administrator.", ex.Message);
-                StringAssert.Contains("The relationship '" + relationshipName + "' does not exist on the BusinessObject '"
-                     + contactPersonTestBO.ClassDef.ClassNameFull + "'", ex.DeveloperMessage);
+/*                StringAssert.Contains("The relationship '" + relationshipName + "' does not exist on the BusinessObject '"
+                     + contactPersonTestBO.ClassDef.ClassNameFull + "'", ex.DeveloperMessage);*/
                 Assert.IsNull(boRelationshipMapper.BusinessObject);
                 Assert.IsNull(boRelationshipMapper.Relationship);
             }
@@ -323,12 +323,12 @@ namespace Habanero.Test.BO
                 Assert.Fail("Expected to throw a HabaneroDeveloperException");
             }
             //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
+            catch (RelationshipNotFoundException ex)
             {
                 StringAssert.Contains("The relationship '" + innerRelationshipName + "' on '"
                      + organisationClassDef.ClassName + "' cannot be found. Please contact your system administrator.", ex.Message);
-                StringAssert.Contains("The relationship '" + innerRelationshipName + "' does not exist on the BusinessObject '"
-                     + organisationClassDef.ClassNameFull + "'", ex.DeveloperMessage);
+/*                StringAssert.Contains("The relationship '" + innerRelationshipName + "' does not exist on the BusinessObject '"
+                     + organisationClassDef.ClassNameFull + "'", ex.DeveloperMessage);*/
                 Assert.IsNull(boRelationshipMapper.BusinessObject);
                 Assert.IsNull(boRelationshipMapper.Relationship);
             }
@@ -444,12 +444,12 @@ namespace Habanero.Test.BO
                 Assert.Fail("Expected to throw a HabaneroDeveloperException");
             }
             //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
+            catch (RelationshipNotFoundException ex)
             {
                 StringAssert.Contains("The relationship '" + outerRelationshipName + "' on '"
                      + contactPersonClassDef.ClassName + "' cannot be found. Please contact your system administrator.", ex.Message);
-                StringAssert.Contains("The relationship '" + outerRelationshipName + "' does not exist on the BusinessObject '"
-                     + contactPersonClassDef.ClassNameFull + "'", ex.DeveloperMessage);
+/*                StringAssert.Contains("The relationship '" + outerRelationshipName + "' does not exist on the BusinessObject '"
+                     + contactPersonClassDef.ClassNameFull + "'", ex.DeveloperMessage);*/
                 Assert.IsNull(boRelationshipMapper.BusinessObject);
                 Assert.IsNull(boRelationshipMapper.Relationship);
             }

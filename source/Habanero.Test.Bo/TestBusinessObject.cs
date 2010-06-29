@@ -505,7 +505,7 @@ namespace Habanero.Test.BO
         }
 
 
-        // This test is duplicated in TestBoMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
+        // This test is duplicated in TestBOMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
         [Test]
         public void TestGetPropertyValueToDisplayWithBOLookupList()
         {
