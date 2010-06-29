@@ -106,11 +106,9 @@ namespace Habanero.BO
             _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering void Add(IBusinessObject businessObject)");
             lock (_lock)
             {
-                //if (_loadedBusinessObjects.ContainsKey(businessObject.ID.AsString_CurrentValue()))
-                if (_loadedBusinessObjects.ContainsKey(businessObject.ID.ObjectID))
+                IBusinessObject loadedBusinessObject = GetObjectIfInManager(businessObject.ID.ObjectID);
+                if (loadedBusinessObject != null) 
                 {
-                    //IBusinessObject loadedBusinessObject = this[businessObject.ID];
-                    IBusinessObject loadedBusinessObject = this[businessObject.ID.ObjectID];
                     if (ReferenceEquals(loadedBusinessObject, businessObject))
                     {
                         _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting void Add(IBusinessObject businessObject) (exit 1)");
@@ -179,7 +177,15 @@ namespace Habanero.BO
                 if (Contains(objectID))
                 {
                     //if business object references are the same return true
-                    if (ReferenceEquals(businessObject, this[objectID]))
+                    IBusinessObject businessObjectFromManager;
+                    try
+                    {
+                        businessObjectFromManager = this[objectID];
+                    } catch (HabaneroDeveloperException) // this still might happen (although I don't know why since we lock...) 
+                    {
+                        return false;
+                    }
+                    if (ReferenceEquals(businessObject, businessObjectFromManager))
                     {
                         _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(IBusinessObject businessObject) (exit 1)");
                         return true;
@@ -188,7 +194,16 @@ namespace Habanero.BO
                 Guid previousObjectID = ((BOPrimaryKey) businessObject.ID).PreviousObjectID;
                 if (Contains(previousObjectID))
                 {
-                    if (ReferenceEquals(businessObject, this[previousObjectID]))
+                    IBusinessObject businessObjectFromManager;
+                    try
+                    {
+                        businessObjectFromManager = this[previousObjectID];
+                    }
+                    catch (HabaneroDeveloperException) // this still might happen (although I don't know why since we lock...)
+                    {
+                        return false;
+                    }
+                    if (ReferenceEquals(businessObject, businessObjectFromManager))
                     {
                         _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(IBusinessObject businessObject) (exit 2)");
                         return true;
