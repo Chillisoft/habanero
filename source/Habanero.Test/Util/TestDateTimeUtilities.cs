@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Threading;
 using Habanero.Util;
 using NUnit.Framework; 
 
@@ -218,7 +219,7 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             DateTime testValue = DateTime.Now.AddSeconds(20);
             Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(testValue, 50));
-            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 20)); //milliseconds should pass?
+            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 19));
         }
     }
 }
