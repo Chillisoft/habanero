@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.Structure;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -1319,6 +1320,105 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(propValueChanged);
         }
-    }
 
+        [Test]
+        public void Test_PropValueEquals_WhenSame_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            object x = 1;
+            object y = x;
+            BOProp prop = new BOPropSpy {Value = x};
+            //---------------Assert Precondition----------------
+            Assert.AreSame(x, y);
+            Assert.AreSame(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+
+
+        [Test]
+        public void Test_PropValueEquals_WhenEqualNumber_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            int? x = 1;
+            int? y = 1;
+            BOPropSpy prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(x, y);
+            Assert.AreEqual(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+        [Test]
+        public void Test_PropValueEquals_WhenEqualNumberAndNullable_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            int? x = 1;
+            int y = 1;
+            BOPropSpy prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(x, y);
+            Assert.AreEqual(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+
+        [Test]
+        public void Test_PropValueEquals_WhenEqualObject_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            int? x = 1;
+            object y = 1;
+            BOPropSpy prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(x, y);
+            Assert.AreEqual(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+
+        [Test]
+        public void Test_PropValueEquals_WhenBothNull_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            int? x = null;
+            int? y = null;
+            BOPropSpy prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(x, y);
+            Assert.AreEqual(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+
+        [TestCase(1, 1, true, "")]
+        [TestCase(1, 1, true, "")]
+        [TestCase(null, 1, false, "")]
+        [TestCase(3, null, false, "")]
+        [TestCase(null, null, true, "")]
+        [TestCase(1, "1", false, "This code does not do any parsing i.e. the '1' is not parsed to be an int and hence this will return false")]
+        public void Test_CurrentValueEquals(object x, object y, bool areEqual, string message)
+        {
+            //---------------Set up test pack-------------------
+            IBOProp prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            string expectedMessage 
+                = string.Format("x : '{0}' - y : '{1}' CurrentValueEquals Should be : {2}"
+                    , x, y, areEqual) + Environment.NewLine + message;
+            Assert.AreEqual(areEqual, currentValueEquals, expectedMessage);
+        }
+    }
 }

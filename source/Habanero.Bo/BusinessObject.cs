@@ -772,11 +772,11 @@ namespace Habanero.BO
         public void SetPropertyValue(string propName, object newPropValue)
         {
             IBOProp prop = GetProperty(propName);
-            object propValue = prop.Value;
             object newPropValue1;
-            if (!PropValueHasChanged(propValue, newPropValue)) return;
+            if(prop.CurrentValueEquals(newPropValue)) return;
+            //if (!PropValueHasChanged(currentPropValue, newPropValue)) return;
             ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
-            if (PropValueHasChanged(propValue, newPropValue1))
+            if (!prop.CurrentValueEquals(newPropValue1))
             {
                 prop.Value = newPropValue1;
             }
@@ -954,10 +954,10 @@ namespace Habanero.BO
             return val != null ? val.ToString() : "";
         }
 
-        internal static bool PropValueHasChanged(object propValue, object newPropValue)
+        internal static bool PropValueHasChanged(object currentPropValue, object newPropValue)
         {
-            if (propValue == newPropValue) return false;
-            if (propValue != null) return !propValue.Equals(newPropValue);
+            if (currentPropValue == newPropValue) return false;
+            if (currentPropValue != null) return !currentPropValue.Equals(newPropValue);
             return (newPropValue != null && !string.IsNullOrEmpty(Convert.ToString(newPropValue)));
         }
 
@@ -990,7 +990,7 @@ namespace Habanero.BO
         /// <summary>
         /// The Update Log being used for this Business Object.
         /// </summary>
-        protected internal IBusinessObjectUpdateLog BusinessObjectUpdateLog
+        protected virtual internal IBusinessObjectUpdateLog BusinessObjectUpdateLog
         {
             get { return _businessObjectUpdateLog; }
             set { _businessObjectUpdateLog = value; }

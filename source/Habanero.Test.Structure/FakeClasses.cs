@@ -38,11 +38,15 @@ namespace Habanero.Test.Structure
     /// <summary>
     /// Fake so that can use simple constructor.
     /// </summary>
-    public class FakeBOProp : BOProp
+    public class BOPropSpy : BOProp
     {
-        public FakeBOProp()
+        public BOPropSpy()
             : base(new FakePropDef())
         {
+        }
+        public void SetCurrentValue(object newValue)
+        {
+            _currentValue = newValue;
         }
     }
 }

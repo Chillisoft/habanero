@@ -1300,7 +1300,7 @@ namespace Habanero.Test.BO
             bo.Deletable = true;
             bo.MarkForDelete();
         }
-
+/*
         [Test]
         public void TestPropValueHasChanged()
         {
@@ -1334,7 +1334,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(BusinessObject.PropValueHasChanged(x, null));
             x = null;
             Assert.IsTrue(BusinessObject.PropValueHasChanged(x, y));
-        }
+        }*/
 
         [Test]
         public void TestSaveUsesFactoryGeneratedTransactionCommitter()

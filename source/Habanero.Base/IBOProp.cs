@@ -205,5 +205,13 @@ namespace Habanero.Base
         ///<param name="message">the reason why the user cannot read the property.</param>
         ///<returns></returns>
         bool IsReadable(out string message);
+
+        /// <summary>
+        /// is the <paramref name="compareToValue"/> equal to the 
+        /// current Value of the BOProp. 
+        /// </summary>
+        /// <param name="compareToValue"></param>
+        /// <returns></returns>
+        bool CurrentValueEquals(object compareToValue);
     }
 }

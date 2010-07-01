@@ -60,7 +60,7 @@ namespace Habanero.BO
         /// <summary> The value prior to the last edit. </summary>
         protected object _valueBeforeLastEdit;
         private IBOPropAuthorisation _boPropAuthorisation;
-
+        protected bool _convertEmptyStringToNull = true;
         private bool _loadedPropHasBeenValidated;
         /// <summary>
         /// Indicates that the value held by the property has been
@@ -564,6 +564,19 @@ namespace Habanero.BO
             }
             message = "";
             return true;
+        }
+        /// <summary>
+        /// is the <paramref name="compareToValue"/> equal to the 
+        /// current Value of the BOProp. 
+        /// </summary>
+        /// <param name="compareToValue"></param>
+        /// <returns></returns>
+        public bool CurrentValueEquals(object compareToValue)
+        {
+            if (_currentValue == compareToValue) return true;
+            if (_currentValue != null) return _currentValue.Equals(compareToValue);
+            if(compareToValue == null) return true;
+            return _convertEmptyStringToNull && (string.IsNullOrEmpty(Convert.ToString(compareToValue)));
         }
     }
 }
