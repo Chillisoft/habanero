@@ -774,7 +774,6 @@ namespace Habanero.BO
             IBOProp prop = GetProperty(propName);
             object newPropValue1;
             if(prop.CurrentValueEquals(newPropValue)) return;
-            //if (!PropValueHasChanged(currentPropValue, newPropValue)) return;
             ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
             if (!prop.CurrentValueEquals(newPropValue1))
             {
@@ -857,7 +856,14 @@ namespace Habanero.BO
         {
             return (T) GetPropertyValue(propName);
         }
-
+        /// <summary>
+        /// Returns the <see cref="IBOProp"/> that for this property.
+        /// Raises <see cref="InvalidPropertyNameException"/> if prop not found.
+        /// </summary>
+        /// <param name="propName"></param>
+        /// <exception cref="InvalidPropertyNameException">Raised if BOProp with propname does not exit in
+        /// Props the collection of BOPRops</exception>
+        /// <returns></returns>
         internal IBOProp GetProperty(string propName)
         {
             try

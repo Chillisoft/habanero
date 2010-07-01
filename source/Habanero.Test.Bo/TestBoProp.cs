@@ -176,7 +176,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "String",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
-
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = "x";
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
@@ -200,6 +202,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Guid",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = Guid.NewGuid();
 
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
@@ -229,6 +234,10 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Int32",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = 44;
+
 
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
@@ -260,6 +269,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Decimal",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = 44.44;
 
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
@@ -284,7 +296,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Double",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
-
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = 44.44;
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
@@ -308,7 +322,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "DateTime",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
-
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = DateTime.Now;
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
@@ -332,7 +348,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Boolean",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
-
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = true;
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);

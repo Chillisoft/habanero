@@ -271,12 +271,13 @@ namespace Habanero.BO
             }
             set
             {
-                if ((_currentValue != null) && (_currentValue.Equals(value))) return;
+                if(CurrentValueEquals(value)) return;
+                //if ((_currentValue != null) && (_currentValue.Equals(value))) return;
 
                 object newValue;
                 ParsePropValue(value, out newValue);
-
-                if (!Equals(_persistedValue, newValue))
+                if(CurrentValueEquals(newValue)) return;
+                if (!PersistedValueEquals(newValue))
                 {
                     string message;
                     if (!IsEditable(out message))
@@ -292,7 +293,7 @@ namespace Habanero.BO
                 _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
                 _valueBeforeLastEdit = _currentValue;
                 _currentValue = newValue;
-                _isDirty = !Equals(_persistedValue, newValue);
+                _isDirty = !PersistedValueEquals(newValue);
                 if (_isDirty && UpdatesBusinessObjectStatus && _businessObject != null)
                 {
                     _businessObject.SetDirty(true);
@@ -300,7 +301,35 @@ namespace Habanero.BO
                 FireBOPropValueUpdated();
             }
         }
+        /// <summary>
+        /// Is the <paramref name="compareToValue"/> equal to the 
+        /// current Value of the BOProp. 
+        /// </summary>
+        /// <param name="compareToValue"></param>
+        /// <returns></returns>
+        public bool CurrentValueEquals(object compareToValue)
+        {
+            return CompareValues(_currentValue, compareToValue);
+        }
 
+        private bool CompareValues(object compareFromValue, object compareToValue)
+        {
+            if (compareFromValue == compareToValue) return true;
+            if (compareFromValue != null) return compareFromValue.Equals(compareToValue);
+            if (compareToValue == null) return true;
+            return _convertEmptyStringToNull && (string.IsNullOrEmpty(Convert.ToString(compareToValue)));
+        }
+
+        /// <summary>
+        /// Is the <paramref name="compareToValue"/> equal to the 
+        /// persisted Value of the BOProp. 
+        /// </summary>
+        /// <param name="compareToValue"></param>
+        /// <returns></returns>
+        private bool PersistedValueEquals(object compareToValue)
+        {
+            return CompareValues(_persistedValue, compareToValue);
+        }
         /// <summary>
         /// Raises an Erorr if the Incorrect type of property is being set to this BOProp.
         /// </summary>
@@ -565,18 +594,6 @@ namespace Habanero.BO
             message = "";
             return true;
         }
-        /// <summary>
-        /// is the <paramref name="compareToValue"/> equal to the 
-        /// current Value of the BOProp. 
-        /// </summary>
-        /// <param name="compareToValue"></param>
-        /// <returns></returns>
-        public bool CurrentValueEquals(object compareToValue)
-        {
-            if (_currentValue == compareToValue) return true;
-            if (_currentValue != null) return _currentValue.Equals(compareToValue);
-            if(compareToValue == null) return true;
-            return _convertEmptyStringToNull && (string.IsNullOrEmpty(Convert.ToString(compareToValue)));
-        }
+
     }
 }
