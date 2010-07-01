@@ -32,7 +32,7 @@ namespace Habanero.Test.BO
 
     /// <summary>
     /// Tests the DataSet provider base behaviour via the ReadOnlyDataSetProvider
-    /// </summary
+    /// </summary>
    [TestFixture]
     public class TestDataSetProvider : TestUsingDatabase
     {

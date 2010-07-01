@@ -181,7 +181,7 @@ namespace Habanero.Test.BO
     }
     internal class BusinessObjectUpdateLogStub : IBusinessObjectUpdateLog
     {
-        private bool _called = false;
+        private bool _called;
 
         public bool Called
         {
@@ -201,7 +201,7 @@ namespace Habanero.Test.BO
             SetBusinessObjectUpdateLog(new BusinessObjectUpdateLogStub());
         }
 
-        public IBusinessObjectUpdateLog BusinessObjectUpdateLog
+        public new IBusinessObjectUpdateLog BusinessObjectUpdateLog
         {
             get { return base.BusinessObjectUpdateLog; }
         }

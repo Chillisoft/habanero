@@ -1057,12 +1057,11 @@ namespace Habanero.Test.BO
 
         public static ContactPersonTestBO CreateUnsavedContactPerson(string surname, string firstName)
         {
-            ContactPersonTestBO contact = new ContactPersonTestBO();
-            contact.Surname = surname;
-            contact.FirstName = firstName;
+            ContactPersonTestBO contact = new ContactPersonTestBO {Surname = surname, FirstName = firstName};
             return contact;
         }
 
+        public string ReflectiveProp { get; set; }
         #region Properties
 
         public Guid ContactPersonID

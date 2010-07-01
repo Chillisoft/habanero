@@ -351,6 +351,8 @@ namespace Habanero.BO
             string columnError;
             string columnName = uiProperty.PropertyName;
             if (!uiProperty.Editable) return;
+            IBOPropertyMapper boPropertyMapper = BOPropMapperFactory.CreateMapper(changedBo, columnName);
+            boPropertyMapper.SetPropertyValue(row[columnName]);
             if (IsReflectiveProperty(uiProperty))
             {
                 SetVirtualBOPropertyValue(row, columnName, changedBo, out columnError);
@@ -359,7 +361,7 @@ namespace Habanero.BO
             {
                 IBOProp prop;
                 SetBOPropertyValue(changedBo, columnName, row, out prop);
-                columnError = prop != null ? prop.InvalidReason : "Property not found";
+                columnError = prop != null ? prop.InvalidReason : "BOProp not found";
             }
             row.SetColumnError(columnName, columnError);
         }

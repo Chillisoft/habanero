@@ -341,8 +341,14 @@ namespace Habanero.Util
                 throw ex.InnerException;
             }
         }
-
-        private static void SetPropValue(object obj, PropertyInfo propInfo, object value)
+        /// <summary>
+        /// Sets the <paramref name="value"/> onto the property identified by <paramref name="propInfo"/>
+        /// for the object identified by <paramref name="obj"/>
+        /// </summary>
+        /// <param name="obj">The object on which the value is being set</param>
+        /// <param name="propInfo">The Property Info for the type of object</param>
+        /// <param name="value">The value that the property is being set for.</param>
+        public static void SetPropValue(object obj, PropertyInfo propInfo, object value)
         {
             Type propertyType = GetUndelyingPropertType(propInfo);
             object newValue = value == null ? value : ConvertType(value, propertyType);

@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="BOError.cs" />
     <Compile Include="BOHelper.cs" />
+    <Compile Include="BOPropMapperFactory.cs" />
     <Compile Include="BOPropCol.cs" />
     <Compile Include="BOPropertyMapper.cs" />
     <Compile Include="BOPropLookupList.cs" />
@@ -354,6 +355,7 @@
     <Compile Include="PropRuleString.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ReflectionPropertyMapper.cs" />
     <Compile Include="RelatedBusinessObjectCollection.cs" />
     <Compile Include="Relationship.cs">
       <SubType>Code</SubType>

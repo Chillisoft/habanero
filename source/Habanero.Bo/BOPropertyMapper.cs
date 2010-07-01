@@ -25,6 +25,54 @@ namespace Habanero.BO
     /// <summary>
     /// This is a mapper class that handles the mapping of a property name 
     /// to a specific property for a specified <see cref="IBusinessObject"/>.
+    /// The property name can be specified as a path through single relationships 
+    /// on the <see cref="IBusinessObject"/>
+    /// and its' relationship tree.
+    /// The property name can also be specified as a reflective Property i.e. a 
+    /// property on the business object that is not mapped to a persistent prop of
+    /// the business object.
+    /// <remarks>For Related Prop Example:<br/>
+    /// For the ContactPerson BusinessObject when the propertyName is "FirstName",
+    ///  the returned <see cref="IBOProp"/> will be the "FirstName" property on ContactPerson.<br/>
+    /// If the propertyName was "Organisation.Name" then the Organisation relationship on the contact person will 
+    /// be traversed and monitored and return the corresponding "Name" <see cref="IBOProp"/> for the ContactPerson's current Organisation.</remarks>
+    /// <remarks>For Reflective Prop Example:<br/>
+    /// For the ContactPerson BusinessObject you may have a derived Property age
+    ///  that is calculated based on date of birth.</remarks>
+    /// </summary>
+    public interface IBOPropertyMapper{
+        ///<summary>
+        /// The BusinessObject for which the Property is being mapped.
+        ///</summary>
+        ///<exception cref="HabaneroDeveloperException">This is thrown if the specified property does not exist on the <see cref="IBusinessObject"/> being set or if one of the Relationships within the Property Path is not a single relationship.</exception>
+        IBusinessObject BusinessObject { get;}
+        ///<summary>
+        /// The name of the property to be mapped. 
+        /// This could also be in the form of a path through single relationships on the BO.
+        /// See <see cref="BOPropertyMapper"/> for more details.
+        ///</summary>
+        string PropertyName { get; }
+
+        /// <summary>
+        /// If the Property is invalid then returns the Invalid reason.
+        /// </summary>
+        string InvalidReason { get; }
+
+        /// <summary>
+        /// Sets the BOProp that this mapper is mapped to the associated propValue
+        /// </summary>
+        /// <param name="propValue"></param>
+        void SetPropertyValue(object propValue);
+
+        /// <summary>
+        /// Return the Property Value for the Property being mapped.
+        /// </summary>
+        /// <returns></returns>
+        object GetPropertyValue();
+    }
+    /// <summary>
+    /// This is a mapper class that handles the mapping of a property name 
+    /// to a specific property for a specified <see cref="IBusinessObject"/>.
     /// The property name can be specified as a path through single relationships on the <see cref="IBusinessObject"/>
     /// and its' relationship tree.
     /// <remarks>For Example:<br/>
@@ -33,7 +81,7 @@ namespace Habanero.BO
     /// If the propertyName was "Organisation.Name" then the Organisation relationship on the contact person will 
     /// be traversed and monitored and return the corresponding "Name" <see cref="IBOProp"/> for the ContactPerson's current Organisation.</remarks>
     /// </summary>
-    public class BOPropertyMapper
+    public class BOPropertyMapper : IBOPropertyMapper
     {
         private IBusinessObject _businessObject;
         protected IBOProp _property;
@@ -97,7 +145,7 @@ namespace Habanero.BO
         /// The BusinessObject for which the Property is being mapped.
         /// Once this property has been set, the <see cref="BOPropertyMapper"/>.<see cref="Property"/> property will be populated accordingly.
         ///</summary>
-        ///<exception cref="HabaneroDeveloperException">This is thrown if the specified property does not exist on the <see cref="IBusinessObject"/> being set or if one of the Relationships within the Property Path is not a single relationship.</exception>
+        ///<exception cref="InvalidPropertyException">This is thrown if the specified property does not exist on the <see cref="IBusinessObject"/> being set or if one of the Relationships within the Property Path is not a single relationship.</exception>
         public IBusinessObject BusinessObject
         {
             get { return _businessObject; }
@@ -120,10 +168,8 @@ namespace Habanero.BO
                     else
                     {
                         IClassDef classDef = businessObject.ClassDef;
-                        throw new HabaneroDeveloperException("The property '" + PropertyName + "' on '"
-                                                             + classDef.ClassName + "' cannot be found. Please contact your system administrator.",
-                                                             "The property '" + PropertyName + "' does not exist on the BusinessObject '"
-                                                             + classDef.ClassNameFull + "'.");
+                        throw new InvalidPropertyException("The property '" + PropertyName + "' on '"
+                                                             + classDef.ClassName + "' cannot be found. Please contact your system administrator.");
                     }
                 }
                 _businessObject = businessObject;
@@ -138,10 +184,8 @@ namespace Habanero.BO
             if (childRelationship != null && !(childRelationship is ISingleRelationship))
             {
                 IClassDef classDef = childRelationship.OwningBO.ClassDef;
-                throw new HabaneroDeveloperException("The relationship '" + _relationshipPathMapper.RelationshipName + "' on '"
-                                                     + classDef.ClassName + "' is not a Single Relationship. Please contact your system administrator.",
-                                                     "The relationship '" + _relationshipPathMapper.RelationshipName + "' on the BusinessObject '"
-                                                     + classDef.ClassNameFull + "' is not a Single Relationship therefore cannot be traversed.");
+                throw new RelationshipNotFoundException("The relationship '" + _relationshipPathMapper.RelationshipName + "' on '"
+                                                     + classDef.ClassName + "' is not a Single Relationship. Please contact your system administrator.");
             }
             _childRelationship = (ISingleRelationship)childRelationship;
             RegisterForChildRelationshipEvents();
@@ -212,17 +256,22 @@ namespace Habanero.BO
             if (boProp != null) return this.Property.PropertyValueToDisplay;
             return null;
         }
-/*
-        private void CheckPropertyNotNull()
+        /// <summary>
+        /// If the Property is invalid then returns the Invalid reason.
+        /// </summary>
+        public string InvalidReason
         {
-            if (this.Property == null)
+            get
             {
-                string errMessage = string.Format(
-                    "Tried to GetPropertyValue the BOPropertyMapper for Property '{0}' but there is no BOProp for this prop"
-                    , this.PropertyName);
-                throw new HabaneroApplicationException(errMessage);
+                var boProp = this.Property;
+                if (boProp == null)
+                {
+                    return string.Format("The Property '{0}' is not available"
+                                         , PropertyName);
+                }
+                return boProp.InvalidReason;
             }
-        }*/
+        }
     }
 
 }

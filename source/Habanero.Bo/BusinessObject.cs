@@ -884,7 +884,7 @@ namespace Habanero.BO
         /// <summary>
         /// Sets the object's state into editing mode.  The original state can
         /// be restored with Restore() and changes can be committed to the
-        /// database by calling Save().
+        /// datastore by calling Save().
         /// </summary>
         internal void BeginEdit()
         {

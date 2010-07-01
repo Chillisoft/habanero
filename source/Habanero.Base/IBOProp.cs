@@ -214,4 +214,5 @@ namespace Habanero.Base
         /// <returns></returns>
         bool CurrentValueEquals(object compareToValue);
     }
+
 }

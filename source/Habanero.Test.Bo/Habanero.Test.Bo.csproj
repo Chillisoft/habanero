@@ -182,6 +182,7 @@
     <Compile Include="TestBOHelper.cs" />
     <Compile Include="TestBOObjectID.cs" />
     <Compile Include="TestBOPropertyMapper.cs" />
+    <Compile Include="TestBOPropertyMapperFactory.cs" />
     <Compile Include="TestBOPropInteger.cs" />
     <Compile Include="TestBORelationshipMapper.cs" />
     <Compile Include="TestBOSerialisation.cs" />
@@ -283,6 +284,7 @@
     <Compile Include="BusinessObjectLoader\TestSelectQuery.cs" />
     <Compile Include="BusinessObjectLoader\TestSource.cs" />
     <Compile Include="TestPropertyLink.cs" />
+    <Compile Include="TestReflectionPropertyMapper.cs" />
     <Compile Include="TestRelKey.cs" />
     <Compile Include="TestSimpleLookupList.cs" />
     <Compile Include="TransactionCommitters\TestTransactionalBusinessObject.cs" />

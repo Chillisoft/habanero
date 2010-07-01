@@ -41,7 +41,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         public static IPropDef GetPropDefByPropName(IClassDef classDef, string propertyName)
         {
-            if (classDef == null || propertyName.IndexOf("-") != -1)
+            if (classDef == null || IsReflectiveProperty(propertyName))
             {
                 return null;
             }
@@ -70,6 +70,12 @@ namespace Habanero.BO.ClassDefinition
             }*/
             return classDef.GetPropDef(propertyName, false);
         }
+
+        private static bool IsReflectiveProperty(string propertyName)
+        {
+            return propertyName.IndexOf("-") != -1;
+        }
+
 /*
         private static bool IsRelatedProperty(string propertyName)
         {

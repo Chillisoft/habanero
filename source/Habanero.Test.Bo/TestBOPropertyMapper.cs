@@ -5,6 +5,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Testability;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
@@ -143,12 +144,12 @@ namespace Habanero.Test.BO
                 Assert.Fail("Expected to throw a HabaneroDeveloperException");
             }
             //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
+            catch (InvalidPropertyException ex)
             {
                 StringAssert.Contains("The property '" + propertyName + "' on '"
                      + contactPersonTestBO.ClassDef.ClassName + "' cannot be found. Please contact your system administrator.", ex.Message);
-                StringAssert.Contains("The property '" + propertyName + "' does not exist on the BusinessObject '"
-                     + contactPersonTestBO.ClassDef.ClassNameFull + "'", ex.DeveloperMessage);
+/*                StringAssert.Contains("The property '" + propertyName + "' does not exist on the BusinessObject '"
+                     + contactPersonTestBO.ClassDef.ClassNameFull + "'", ex.DeveloperMessage);*/
                 Assert.IsNull(boPropertyMapper.BusinessObject);
                 Assert.IsNull(boPropertyMapper.Property);
             }
@@ -307,12 +308,12 @@ namespace Habanero.Test.BO
                 Assert.Fail("Expected to throw a HabaneroDeveloperException");
             }
             //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
+            catch (InvalidPropertyException ex)
             {
                 StringAssert.Contains("The property '" + innerPropertyName + "' on '"
                      + organisationClassDef.ClassName + "' cannot be found. Please contact your system administrator.", ex.Message);
-                StringAssert.Contains("The property '" + innerPropertyName + "' does not exist on the BusinessObject '"
-                     + organisationClassDef.ClassNameFull + "'", ex.DeveloperMessage);
+/*                StringAssert.Contains("The property '" + innerPropertyName + "' does not exist on the BusinessObject '"
+                     + organisationClassDef.ClassNameFull + "'", ex.DeveloperMessage);*/
                 Assert.IsNull(boPropertyMapper.BusinessObject);
                 Assert.IsNull(boPropertyMapper.Property);
             }
@@ -462,21 +463,19 @@ namespace Habanero.Test.BO
                 Assert.Fail("Expected to throw a HabaneroDeveloperException");
             }
             //---------------Test Result -----------------------
-            catch (HabaneroDeveloperException ex)
+            catch (RelationshipNotFoundException ex)
             {
                 StringAssert.Contains("The relationship '" + outerRelationshipName + "' on '"
                      + contactPersonClassDef.ClassName + "' is not a Single Relationship. Please contact your system administrator.", ex.Message);
+/*
                 StringAssert.Contains("The relationship '" + outerRelationshipName + "' on the BusinessObject '"
                      + contactPersonClassDef.ClassNameFull + "' is not a Single Relationship therefore cannot be traversed.", ex.DeveloperMessage);
+*/
                 Assert.IsNull(boPropertyMapper.BusinessObject);
                 Assert.IsNull(boPropertyMapper.Property);
             }
         }
- /*                   ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            contactPersonTestBO.Organisation = new OrganisationTestBO();
-            const string innerPropertyName = "Name";
-            const string propertyName = "Organisation." + innerPropertyName;
-            BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);*/
+
         [Test]
         public void Test_SetPropertyValue_ShouldSetBOPropsValue()
         {
@@ -520,6 +519,8 @@ namespace Habanero.Test.BO
         [Test]
         public void Test_SetPropertyValue_WhenPropertyNull_ShouldDoNothing()
         {
+            //Ideally this should raise an error but code this is replacing behaves like this
+            // I will review in the future Brett: 01 Jul 2010
             //---------------Set up test pack-------------------
             const string propName = "Surname";
             BOPropertyMapperSpy boPropertyMapper = new BOPropertyMapperSpy(propName);
@@ -607,13 +608,51 @@ namespace Habanero.Test.BO
                 StringAssert.Contains(expectedErrorMessage, ex.Message);
             }
         }
+
+        [Test]
+        public void Test_InvalidMessage_ShouldReturnPropInvalidMessage()
+        {
+            //---------------Set up test pack-------------------
+            BOPropertyMapperSpy propMapper = new BOPropertyMapperSpy();
+            var boPropStub = MockRepository.GenerateStub<IBOProp>();
+            boPropStub.Stub(prop => prop.InvalidReason).Return(RandomValueGen.GetRandomString());
+            propMapper.SetBOProp(boPropStub);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var invalidMessage = propMapper.InvalidReason;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(boPropStub.InvalidReason, invalidMessage);
+        }
+        [Test]
+        public void Test_InvalidMessage_WhenPropNull_ShouldReturnStdMessage()
+        {
+            //---------------Set up test pack-------------------
+            BOPropertyMapperSpy propMapper = new BOPropertyMapperSpy();
+            IBOProp boPropStub = null;
+            propMapper.SetBOProp(boPropStub);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(propMapper.Property);
+            //---------------Execute Test ----------------------
+            var invalidMessage = propMapper.InvalidReason;
+            //---------------Test Result -----------------------
+            var expectedMessage = string.Format("The Property '{0}' is not available"
+                     , propMapper.PropertyName );
+            Assert.AreEqual(expectedMessage, invalidMessage);
+        }
+
     }
 
     class BOPropertyMapperSpy : BOPropertyMapper
     {
+        public BOPropertyMapperSpy()
+            : base(RandomValueGen.GetRandomString())
+        {
+        }
         public BOPropertyMapperSpy(string propertyName) : base(propertyName)
         {
         }
+
+
         public void SetBOProp(IBOProp prop)
         {
             _property = prop;
