@@ -23,12 +23,14 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
+#pragma warning disable 612,618
     [TestFixture]
     public class TestTrigger
     {
         [Test]
         public void TestConstructors()
         {
+
             Trigger trigger = new Trigger(
                 "triggeredby", null, "condition", "action", "value");
 
@@ -73,7 +75,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             try
             {
-                Trigger trigger = new Trigger(
+                new Trigger(
                     "triggeredby", "target", "condition", "action", "value");
 
                 Assert.Fail("Expected to throw an ArgumentException");
@@ -182,4 +184,5 @@ namespace Habanero.Test.BO.ClassDefinition
             }
         }
     }
+#pragma warning restore 612,618
 }

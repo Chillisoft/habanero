@@ -737,7 +737,11 @@ namespace Habanero.Base
             }
 
             #region Implementation of IComparable
-
+            /// <summary>
+            /// Compare obj to any Value in the CriteriaValues list of values.
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
             public int CompareTo(object obj) {
                 foreach (var value in _values)
                 {

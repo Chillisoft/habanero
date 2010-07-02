@@ -365,17 +365,17 @@ namespace Habanero.Util
             replace = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(replace);
             return replace;
         }
-        //TODO brett 08 Jun 2010: For 2_0  
-          /// <summary>
-                /// Create a classification of the input this is a Singular of the input
-                ///   Camel cased.
-                /// </summary>
-                /// <param name="input"></param>
-                /// <returns></returns>
-                public static string Classify(string input)
-                {
-                    return Camelize(Singularize(input));
-                }/**/
+        //TODO_ brett 08 Jun 2010: For DotNet 2_0  
+        /// <summary>
+        /// Create a classification of the input this is a Singular of the input
+        ///   Camel cased.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string Classify(string input)
+        {
+            return Camelize(Singularize(input));
+        }
 
         /// <summary>
         /// Pascal Cases a table name that has as seperator '_', '-' or ' ' in it so that the 
