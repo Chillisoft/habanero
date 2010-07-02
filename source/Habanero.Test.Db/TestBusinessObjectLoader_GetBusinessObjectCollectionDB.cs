@@ -86,8 +86,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            TestUtil.WaitForGC();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -107,10 +106,11 @@ namespace Habanero.Test.DB
         public void TestAfterLoadCalled_GetCollection_Generic_NotReloaded()
         {
             //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             ContactPersonTestBO.CreateSavedContactPerson();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
             Assert.IsFalse(cp.AfterLoadCalled);
 
@@ -134,7 +134,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
             Assert.IsFalse(cp.AfterLoadCalled);
 
