@@ -42,8 +42,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
-            TestUtil.WaitForGC();
+            BORegistry.BusinessObjectManager = null;//Ensures a new BOMan is created and used for each test
             new Address();
         }
 
