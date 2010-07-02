@@ -16,7 +16,6 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
-using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -24,7 +23,6 @@ using Habanero.DB;
 using Habanero.Test.BO;
 using Habanero.Test.BO.BusinessObjectLoader;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace Habanero.Test.DB
 {

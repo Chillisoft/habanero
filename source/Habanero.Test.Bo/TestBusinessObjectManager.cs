@@ -40,8 +40,7 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
             new Address();
-            BORegistry.BusinessObjectManager = null;
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
         }
 
         [TearDown]
@@ -459,7 +458,7 @@ namespace Habanero.Test.BO
         public void Test_Add_CopyOfSameObjectTwiceShould_ThrowError()
         {
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager = null;
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
             ContactPersonTestBO.LoadDefaultClassDef();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
@@ -2364,5 +2363,15 @@ namespace Habanero.Test.BO
         }
 
         // ReSharper restore AccessToStaticMemberViaDerivedType
+    }
+    /// <summary>
+    /// This is created entirely for the purposes of creating a public constructor so that the
+    /// Current BusinessObjectManager can be swapped out during testing.
+    /// </summary>
+    public class BusinessObjectManagerSpy : BusinessObjectManager
+    {
+        public BusinessObjectManagerSpy()
+        {
+        }
     }
 }

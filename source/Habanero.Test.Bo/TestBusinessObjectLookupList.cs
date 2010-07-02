@@ -63,7 +63,7 @@ namespace Habanero.Test.BO
         public void SetupTestFixture()
         {
             SetupDBConnection();
-            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
         }
 
         [SetUp]

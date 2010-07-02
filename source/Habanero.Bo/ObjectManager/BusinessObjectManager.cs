@@ -64,7 +64,7 @@ namespace Habanero.BO
         private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
 
         /// <summary>
-        /// The constructor for the Busienss Object Manager.
+        /// The constructor for the Business Object Manager.
         /// </summary>
         protected internal BusinessObjectManager()
         {
@@ -78,7 +78,6 @@ namespace Habanero.BO
         public static BusinessObjectManager Instance
         {
             get { return _businessObjectManager; }
-            internal set { _businessObjectManager = value; }
         }
 
         #region IBusObjectManager Members
@@ -626,4 +625,5 @@ namespace Habanero.BO
             this.Add(businessObject);
         }
     }
+
 }

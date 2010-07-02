@@ -37,8 +37,7 @@ namespace Habanero.Test.BO.Relationship
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
         }

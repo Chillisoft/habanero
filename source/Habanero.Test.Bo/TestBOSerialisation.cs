@@ -35,9 +35,8 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            BORegistry.BusinessObjectManager = null;
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
-
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+        
             string dataFileDirectoryName = Path.GetDirectoryName(_dataFileName);
             if (!Directory.Exists(dataFileDirectoryName))
             {

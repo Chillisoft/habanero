@@ -41,8 +41,7 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
             MyBO.LoadClassDefsNoUIDef();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             _propDefGuid = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);

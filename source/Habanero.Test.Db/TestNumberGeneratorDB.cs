@@ -23,6 +23,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO;
+using Habanero.Testability;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB
@@ -35,8 +36,7 @@ namespace Habanero.Test.DB
         {
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
-            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//ensure that a new BOManagager.Instance is used
             BORegistry.DataAccessor = new DataAccessorDB();
         }
 
@@ -60,9 +60,9 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
-            const string numberType = "tmp";
+            string numberType = RandomValueGen.GetRandomString();
             BOSequenceNumberLocking.LoadNumberGenClassDef();
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
+            //DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
             INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);
             numGen.SetSequenceNumber(0);
             Thread.Sleep(1); // ensure that the new time is higher. just here to check if this resolves a sporadically failing test.
@@ -96,9 +96,9 @@ namespace Habanero.Test.DB
             //Create an entry in the number generator table for entry type to seed with seed = 0 and lockduration = 15 minutes.
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
-            const string numberType = "tmp";
+            string numberType = RandomValueGen.GetRandomString();
             BOSequenceNumberLocking.LoadNumberGenClassDef();
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
+            //DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
             NumberGeneratorPessimisticLocking numGen = new NumberGeneratorPessimisticLocking(numberType);
             numGen.SetSequenceNumber(0);
 
@@ -107,7 +107,7 @@ namespace Habanero.Test.DB
             BOSequenceNumberLocking boSequenceNumber1 = numGen.BoSequenceNumber;
             Assert.AreEqual(1, num, "The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.
-            UpdateDatabaseLockAsExpired(20);
+            UpdateDatabaseLockAsExpired(numberType, 20);
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
             //---------------Execute Test ----------------------
@@ -124,6 +124,7 @@ namespace Habanero.Test.DB
             //assert nextnumber = 1
             Assert.AreEqual(1, num, "The second generated number should be 1. Time: " + DateTime.Now.ToLongTimeString());
         }
+
 
 
         [Test]
@@ -156,14 +157,18 @@ namespace Habanero.Test.DB
         }
 
 
-
-        private static void UpdateDatabaseLockAsExpired(int lockDuration)
+        private static void UpdateDatabaseLockAsExpired(string numberType, int lockDuration)
         {
             SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection);
             sqlStatement.Statement.Append("UPDATE `numbergenerator` SET ");
             sqlStatement.Statement.Append(SqlFormattingHelper.FormatFieldName("DateTimeLocked", DatabaseConnection.CurrentConnection));
             sqlStatement.Statement.Append(" = ");
             sqlStatement.AddParameterToStatement(DateTime.Now.AddMinutes(-1 * lockDuration - 1));
+            sqlStatement.Statement.Append(" WHERE ");
+            sqlStatement.Statement.Append(SqlFormattingHelper.FormatFieldName("NumberType",
+                                          DatabaseConnection.CurrentConnection));
+            sqlStatement.Statement.Append(" = ");
+            sqlStatement.AddParameterToStatement(numberType);
             DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatement);
         }
     }

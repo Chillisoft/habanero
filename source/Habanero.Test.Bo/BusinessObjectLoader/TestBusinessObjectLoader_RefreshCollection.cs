@@ -35,13 +35,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            BORegistry.BusinessObjectManager = null;
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
         }
-        [TestFixtureTearDown]
+/*        [TestFixtureTearDown]
         public virtual void FixtureTearDownTest()
         {
-            BORegistry.BusinessObjectManager = null;//Ensure that a real BOManager is created next time
-        }
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+        }*/
 
         [TearDown]
         public virtual void TearDownTest()
