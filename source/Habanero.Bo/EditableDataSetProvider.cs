@@ -348,7 +348,6 @@ namespace Habanero.BO
 
         private void ApplyRowCellValueToBOProperty(DataRow row, UIGridColumn uiProperty, IBusinessObject changedBo)
         {
-            string columnError;
             string columnName = uiProperty.PropertyName;
             if (!uiProperty.Editable) return;
             IBOPropertyMapper boPropertyMapper = BOPropMapperFactory.CreateMapper(changedBo, columnName);

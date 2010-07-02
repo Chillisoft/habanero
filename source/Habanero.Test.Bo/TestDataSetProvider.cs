@@ -26,6 +26,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NMock;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
@@ -1175,7 +1176,19 @@ namespace Habanero.Test.BO
        {
            throw new NotImplementedException();
        }
+       // ReSharper disable UnusedMember.Local
+       //This is being used so as to prevent Compiler warnings which I do not seem to be able to suppress with pragma's
+       private void RaiseEvents()
 
+       {
+           BusinessObjectAdded(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+           BusinessObjectRemoved(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+           BusinessObjectUpdated(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+           BusinessObjectPropertyUpdated(this,MockRepository.GenerateStub<BOPropUpdatedEventArgs>());
+           BusinessObjectIDUpdated(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+           CollectionRefreshed(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+       }
+       // ReSharper restore UnusedMember.Local
        public event EventHandler<BOEventArgs> BusinessObjectAdded;
        public event EventHandler<BOEventArgs> BusinessObjectRemoved;
        public event EventHandler<BOEventArgs> BusinessObjectUpdated;
