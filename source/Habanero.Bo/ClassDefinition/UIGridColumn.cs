@@ -271,7 +271,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the PropDef that is associated with this UIGridColumn.
         /// If one is associaciated. Returns null otherwise
         /// </summary>
-        public IPropDef PropDef
+        public virtual IPropDef PropDef
         {
             get
             {

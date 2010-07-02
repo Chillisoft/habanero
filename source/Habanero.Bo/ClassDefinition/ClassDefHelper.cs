@@ -71,7 +71,7 @@ namespace Habanero.BO.ClassDefinition
             return classDef.GetPropDef(propertyName, false);
         }
 
-        private static bool IsReflectiveProperty(string propertyName)
+        internal static bool IsReflectiveProperty(string propertyName)
         {
             return propertyName.IndexOf("-") != -1;
         }

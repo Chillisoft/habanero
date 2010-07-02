@@ -25,6 +25,7 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders
 {
+#pragma warning disable 612,618
     /// <summary>
     /// Loads UI form property information from xml data
     /// </summary>
@@ -118,7 +119,7 @@ namespace Habanero.BO.Loaders
             try
             {
                 layoutAttribute = _reader.GetAttribute("layout");
-                _layout = (LayoutStyle) Enum.Parse(typeof(LayoutStyle), layoutAttribute);
+                if(layoutAttribute != null) _layout = (LayoutStyle) Enum.Parse(typeof(LayoutStyle), layoutAttribute);
             }
             catch (Exception ex)
             {
@@ -287,4 +288,6 @@ namespace Habanero.BO.Loaders
             }
         }
     }
+
+#pragma warning restore 612,618
 }

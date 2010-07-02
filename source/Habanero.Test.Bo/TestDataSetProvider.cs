@@ -29,6 +29,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+#pragma warning disable 67
 
     /// <summary>
     /// Tests the DataSet provider base behaviour via the ReadOnlyDataSetProvider
@@ -1231,4 +1232,5 @@ namespace Habanero.Test.BO
        }
    }
 #pragma warning restore 067
+#pragma warning restore 67
 }

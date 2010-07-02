@@ -125,7 +125,7 @@ namespace Habanero.BO
             this.RegisterForEvents();
             return _table;
         }
-
+#pragma warning disable 612,618
         private void AddColumn(IUIGridColumn uiProperty, IClassDef classDef)
         {
             DataColumn column = _table.Columns.Add();
@@ -143,13 +143,14 @@ namespace Habanero.BO
             column.DataType = columnPropertyType;
             column.ColumnName = uiProperty.PropertyName;
             column.Caption = uiProperty.ClassDef == null 
+
                         ? uiProperty.GetHeading(classDef) 
                         : uiProperty.GetHeading();
             column.ExtendedProperties.Add("LookupList", uiProperty.LookupList);
             column.ExtendedProperties.Add("Width", uiProperty.Width);
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
         }
-
+#pragma warning restore 612,618
         private static Type GetPropertyType(IClassDef classDef, string propertyName)
         {
             IPropDef def = classDef.GetPropDef(propertyName, false);

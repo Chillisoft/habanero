@@ -23,6 +23,7 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders
 {
+#pragma warning disable 612,618
     /// <summary>
     /// Loads UI form trigger information from xml data
     /// </summary>
@@ -129,4 +130,5 @@ namespace Habanero.BO.Loaders
             _value = _reader.GetAttribute("value");
         }
     }
+#pragma warning restore 612,618
 }

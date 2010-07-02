@@ -635,9 +635,9 @@ namespace Habanero.Test.BO.ClassDefinition
             public UIGridColumnSpy(string propName)
                 : base("label", propName, null, null, true, 100, PropAlignment.left, null)
             {}
-            public UIGridColumnSpy(string propLabel, string propName)
+/*            public UIGridColumnSpy(string propLabel, string propName)
                 : base(propLabel, propName, null, null, true, 100, PropAlignment.left, null)
-            {}
+            {}*/
 
             public void SetHeading(string name)
             {
@@ -680,7 +680,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 }
             }
 
-            public IPropDef PropDef
+            public override IPropDef PropDef
             {
                 get { return _propDef; }
             }

@@ -353,7 +353,8 @@ namespace Habanero.BO
             if (!uiProperty.Editable) return;
             IBOPropertyMapper boPropertyMapper = BOPropMapperFactory.CreateMapper(changedBo, columnName);
             boPropertyMapper.SetPropertyValue(row[columnName]);
-            if (IsReflectiveProperty(uiProperty))
+            row.SetColumnError(columnName, boPropertyMapper.InvalidReason);
+/*            if (IsReflectiveProperty(uiProperty))
             {
                 SetVirtualBOPropertyValue(row, columnName, changedBo, out columnError);
             }
@@ -363,9 +364,9 @@ namespace Habanero.BO
                 SetBOPropertyValue(changedBo, columnName, row, out prop);
                 columnError = prop != null ? prop.InvalidReason : "BOProp not found";
             }
-            row.SetColumnError(columnName, columnError);
+            row.SetColumnError(columnName, columnError);*/
         }
-
+/*
         private static void SetVirtualBOPropertyValue(DataRow row, string columnName, IBusinessObject changedBo, out string columnError)
         {
             string propertyName = columnName.Replace("-", "");
@@ -387,7 +388,7 @@ namespace Habanero.BO
             BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName) {BusinessObject = bo};
             boPropertyMapper.SetPropertyValue(row[propertyName]);
             property = boPropertyMapper.Property;
-        }
+        }*/
 
         private Guid GetRowID(DataRow row)
         {
@@ -516,10 +517,10 @@ namespace Habanero.BO
                 throw;
             }
         }
-
+/*
         private static bool IsReflectiveProperty(UIGridColumn uiProperty)
         {
             return uiProperty.PropertyName.IndexOf("-") >= 0;
-        }
+        }*/
     }
 }
