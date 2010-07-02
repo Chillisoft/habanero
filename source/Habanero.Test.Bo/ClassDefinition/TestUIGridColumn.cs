@@ -167,7 +167,7 @@ namespace Habanero.Test.BO.ClassDefinition
                                           "Tested Property" + suffix, null);
             propDefCol.Add(propDef);
             PrimaryKeyDef primaryKeyDef = new PrimaryKeyDef {propDef};
-            var testClassDef = new ClassDef("TestAssembly", "TestClass" + suffix, primaryKeyDef,
+            var testClassDef = new ClassDef("Habanero.Test.Structure", "Person" + suffix, primaryKeyDef,
                                             propDefCol, new KeyDefCol(), new RelationshipDefCol(), new UIDefCol());
             var uiGrid = new UIGrid();
             testClassDef.UIDefCol.Add(new UIDef("UIDef1", new UIForm(), uiGrid ));
@@ -387,11 +387,10 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             var gridColumn = new UIGridColumnSpy();
-            IClassDef classDef = MockRepository.GenerateStub<IClassDef>();
-            classDef.Stub(def => def.GetPropDef(gridColumn.PropertyName, false)).Return(GetIntPropDef());
-            gridColumn.SetClassDef(classDef);
+            var intPropDef = GetIntPropDef();
+            gridColumn.SetPropDef(intPropDef);
             //---------------Assert Precondition----------------
-            Assert.AreSame(typeof(int), classDef.GetPropDef(gridColumn.PropertyName, false).PropertyType);
+            Assert.AreSame(typeof(int), intPropDef.PropertyType);
             //---------------Execute Test ----------------------
             var propertyType = gridColumn.GetPropertyType();
             //---------------Test Result -----------------------
@@ -540,8 +539,10 @@ namespace Habanero.Test.BO.ClassDefinition
         private IUIGridColumn GetGridColumnSpy()
         {
             ClassDef classDef = CreateTestClassDef("");
-            IUIGridColumn gridColumn = new UIGridColumnSpy("TestProperty") {Editable = true};
-            ((UIGridColumnSpy)gridColumn).SetClassDef(classDef);
+            const string propertyName = "TestProperty";
+            UIGridColumnSpy gridColumn = new UIGridColumnSpy(propertyName) { Editable = true };
+            gridColumn.SetClassDef(classDef);
+            gridColumn.SetPropDef(classDef.PropDefcol[propertyName]);
             return gridColumn;
         }
 
