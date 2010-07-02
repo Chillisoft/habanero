@@ -63,8 +63,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            TestUtil.WaitForGC();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------

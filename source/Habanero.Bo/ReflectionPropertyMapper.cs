@@ -83,6 +83,13 @@ namespace Habanero.BO
         public void SetPropertyValue(object propValue)
         {
             CheckBusinessObjectSet("Set Property Value");
+            if (_businessObject == null) return;
+/*            string virtualPropName = propertyName.Substring(1, propertyName.Length - 2);
+            PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
+            if (propertyInfo != null && propertyInfo.CanWrite)
+            {
+                ReflectionUtilities.SetPropertyValue(_businessObject, virtualPropName, value);
+            }*/
             try
             {
                 ReflectionUtilities.SetPropValue(this.BusinessObject, this._propertyInfo, propValue);
