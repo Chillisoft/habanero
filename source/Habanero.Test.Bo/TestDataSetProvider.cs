@@ -942,15 +942,17 @@ namespace Habanero.Test.BO
         public void Test_RegisterForEventsFromStrubs_ToPreventCompilerWarnings()
         {
             //---------------Set up test pack-------------------
-            
+            var collectionStub = new BusinessObjectCollectionStub();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-
+            collectionStub.BusinessObjectAdded +=delegate {  };
+            collectionStub.BusinessObjectIDUpdated +=delegate {  };
+            collectionStub.BusinessObjectPropertyUpdated +=delegate {  };
+            collectionStub.BusinessObjectRemoved +=delegate {  };
+            collectionStub.BusinessObjectUpdated +=delegate {  };
             //---------------Test Result -----------------------
-            Assert.Fail("Not Yet Implemented");
         }
-
     }
 
    class DataSetProviderStub : DataSetProvider

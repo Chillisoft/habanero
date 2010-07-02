@@ -279,8 +279,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj)) return true;
-            return Equals(obj as UIForm);
+            return ReferenceEquals(this, obj) || Equals(obj as UIForm);
         }
 
         ///<summary>
