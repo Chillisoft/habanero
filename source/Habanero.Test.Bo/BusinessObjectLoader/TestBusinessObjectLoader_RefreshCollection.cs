@@ -32,20 +32,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
     public class TestBusinessObjectLoader_RefreshCollection 
     {
         #region Setup/Teardown
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
+        {
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerNull();
+        }
+        [TestFixtureTearDown]
+        public virtual void FixtureTearDownTest()
+        {
+            BORegistry.BusinessObjectManager = null;//Ensure that a real BOManager is created next time
+        }
+
+        [TearDown]
+        public virtual void TearDownTest()
+        {
+        }
 
         [SetUp]
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BORegistry.BusinessObjectManager = new BusinessObjectManager();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            
             TestUtil.WaitForGC();
-        }
-
-        [TearDown]
-        public virtual void TearDownTest()
-        {
         }
 
         #endregion

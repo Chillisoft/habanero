@@ -43,8 +43,8 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             BOWithIntID.LoadClassDefWithIntID();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            BORegistry.BusinessObjectManager = null;//Ensures a new BOMan is created and used for each test
         }
 
         [TestFixtureSetUp]
@@ -54,8 +54,6 @@ namespace Habanero.Test.BO
             // are executed then it will still only be called once.
             ClassDef.ClassDefs.Clear();
             BOWithIntID.LoadClassDefWithIntID();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-
             _propDef_int = new PropDef("PropName", typeof (int), PropReadWriteRule.ReadWrite, null);
             _validBusinessObject = new BOWithIntID {TestField = _validLookupValue};
             _validIntID = 3;
@@ -606,7 +604,6 @@ namespace Habanero.Test.BO
         [Test]
         public void Test_GetBusinessObject_NewBusinessObject_NotInList()
         {
-            //Assert.Fail("Not yet implemented");
             //Check Validation of lookup list does not make invalid
             ClassDef.ClassDefs.Clear();
             IClassDef classDefWithIntID = BOWithIntID.LoadClassDefWithIntID();
@@ -625,7 +622,6 @@ namespace Habanero.Test.BO
         [Test]
         public void Test_GetBusinessObject_NewBusinessObject_NotInList_NoClassDefOverloadedMethod()
         {
-            //Assert.Fail("Not yet implemented");
             //Check Validation of lookup list does not make invalid
             ClassDef.ClassDefs.Clear();
             BOWithIntID.LoadClassDefWithIntID();
@@ -641,7 +637,6 @@ namespace Habanero.Test.BO
         [Test]
         public void Test_GetBusinessObject_PersistedBusinessObject_NoClassDefOverloadedMethod()
         {
-            //Assert.Fail("Not yet implemented");
             //Check Validation of lookup list does not make invalid
             ClassDef.ClassDefs.Clear();
             BOWithIntID.LoadClassDefWithIntID();
