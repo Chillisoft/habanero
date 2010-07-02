@@ -60,6 +60,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             string numberType = RandomValueGen.GetRandomString();
             BOSequenceNumberLocking.LoadNumberGenClassDef();
             //DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
@@ -69,12 +70,13 @@ namespace Habanero.Test.DB
             //get the next number for invoice number
             numGen.NextNumber();
             //Clear all loaded objects from object manager
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             Thread.Sleep(1); // ensure that the new time is higher. just here to check if this resolves a sporadically failing test.
 
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator (simulating a simultaneous user).
             INumberGenerator numGen2 = new NumberGeneratorPessimisticLocking(numberType);
+            Assert.AreNotSame(numGen, numGen2);
             //try Get second number
             try
             {
@@ -94,7 +96,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             //Create an entry in the number generator table for entry type to seed with seed = 0 and lockduration = 15 minutes.
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             TestUtil.WaitForGC();
             string numberType = RandomValueGen.GetRandomString();
             BOSequenceNumberLocking.LoadNumberGenClassDef();
@@ -108,12 +110,12 @@ namespace Habanero.Test.DB
             Assert.AreEqual(1, num, "The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.
             UpdateDatabaseLockAsExpired(numberType, 20);
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
-            TestUtil.WaitForGC();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator.
             //try Get  number
             NumberGeneratorPessimisticLocking numGen2 = new NumberGeneratorPessimisticLocking(numberType);
+            Assert.AreNotSame(numGen, numGen2);
             //try Get second number
             num = numGen2.NextNumber();
             BOSequenceNumberLocking boSequenceNumber2 = numGen2.BoSequenceNumber;
