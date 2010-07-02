@@ -21,6 +21,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Test.BO;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB
@@ -384,7 +385,7 @@ namespace Habanero.Test.DB
 
             IPrimaryKey id = _contactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, _contactPTestSave.ID);
-
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             ContactPerson mySecondContactPerson =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
             Assert.IsFalse(_contactPTestSave.Status.IsNew); // this object is recovered from the DB
@@ -397,7 +398,7 @@ namespace Habanero.Test.DB
             // pointing at the same physical object
 
             _contactPTestSave.FirstName = "Change FirstName";
-            Assert.IsFalse(_contactPTestSave.FirstName == mySecondContactPerson.FirstName);
+            Assert.AreNotEqual(_contactPTestSave.FirstName, mySecondContactPerson.FirstName);
         }
 
         [Test]
