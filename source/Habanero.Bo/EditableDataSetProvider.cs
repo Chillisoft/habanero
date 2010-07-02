@@ -520,7 +520,6 @@ namespace Habanero.BO
         private static bool IsReflectiveProperty(UIGridColumn uiProperty)
         {
             return uiProperty.PropertyName.IndexOf("-") >= 0;
-            //return uiProperty.PropertyName.IndexOf(".") >= 0 || uiProperty.PropertyName.IndexOf("-") >= 0;
         }
     }
 }

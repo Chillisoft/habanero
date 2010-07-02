@@ -312,21 +312,6 @@ namespace Habanero.BO.ClassDefinition
             return virtualPropertySetExists;
         }
 
-/*        /// <summary>
-        /// is the property a virtual property i.e. is it loaded via reflection or via a relationship.
-        /// </summary>
-        /// <returns></returns>
-        private bool IsPropertyVirtual()
-        {
-            return IsPropertyViaRelationship() || IsPropertyReflective();
-        }
-
-         */
-/*
-        private bool IsPropertyViaRelationship()
-        {
-            return PropertyName.IndexOf(".") != -1;
-        }*/
 
         private bool IsPropertyReflective()
         {

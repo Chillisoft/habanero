@@ -12,6 +12,7 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBOPropertyMapper
     {
+        private string _RelationshipPathSeperator = ".";
 
         [SetUp]
         public void SetupTest()
@@ -417,7 +418,7 @@ namespace Habanero.Test.BO
             contactPersonTestBO.Organisation = new OrganisationTestBO();
             const string outerRelationshipName = "NonExistingRelationship";
             const string innerPropertyName = "Name";
-            const string propertyName = outerRelationshipName + "." + innerPropertyName;
+            string propertyName = outerRelationshipName + _RelationshipPathSeperator + innerPropertyName;
             BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
             //---------------Assert Precondition----------------
             Assert.IsNull(boPropertyMapper.BusinessObject);
@@ -451,7 +452,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string outerRelationshipName = "Addresses";
             const string innerPropertyName = "ContactPersonTestBO";
-            const string propertyName = outerRelationshipName + "." + innerPropertyName;
+            string propertyName = outerRelationshipName + _RelationshipPathSeperator + innerPropertyName;
             BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
             //---------------Assert Precondition----------------
             Assert.IsNull(boPropertyMapper.BusinessObject);

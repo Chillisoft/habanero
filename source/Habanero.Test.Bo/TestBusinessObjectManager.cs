@@ -40,7 +40,9 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
             new Address();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+            BORegistry.BusinessObjectManager = null;//Ensures a new BOMan used is always the singleton
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
         }
 
         [TearDown]
@@ -458,7 +460,6 @@ namespace Habanero.Test.BO
         public void Test_Add_CopyOfSameObjectTwiceShould_ThrowError()
         {
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
             ContactPersonTestBO.LoadDefaultClassDef();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
