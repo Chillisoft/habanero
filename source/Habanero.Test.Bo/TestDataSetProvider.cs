@@ -820,7 +820,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
             BusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
-            AddressTestBO address = AddressTestBO.CreateUnsavedAddress(contactPersonTestBO);
+            AddressTestBO.CreateUnsavedAddress(contactPersonTestBO);
 
             UIGrid uiGrid = new UIGrid();
             const string propertyName = "ContactPersonTestBO.FirstName";
@@ -979,7 +979,7 @@ namespace Habanero.Test.BO
        {
        }
    }
-
+#pragma warning restore 067
    class BusinessObjectCollectionStub : IBusinessObjectCollection
    {
        public IEnumerator GetEnumerator()
@@ -1230,4 +1230,5 @@ namespace Habanero.Test.BO
            get { throw new NotImplementedException(); }
        }
    }
+#pragma warning restore 067
 }

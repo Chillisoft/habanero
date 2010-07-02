@@ -4,6 +4,10 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// A Transaction committer for commiting items to a remote data source 
+    /// e.g. via remoting.
+    /// </summary>
     public class TransactionCommitterRemote : ITransactionCommitter
     {
         private readonly ITransactionCommitter _remoteTransactionCommitter;
