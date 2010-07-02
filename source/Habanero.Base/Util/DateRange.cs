@@ -10,11 +10,17 @@ namespace Habanero.Base.Util
     public class DateRange : IEquatable<DateRange>
     {
         private DateTime _startDate, _endDate;
-
+        /// <summary>
+        /// Constructs range with StartDate - DateTime.Min and EndDate DateTime.Max.
+        /// </summary>
         public DateRange() : this(DateTime.MinValue, DateTime.MaxValue)
         {
         }
-
+        /// <summary>
+        /// Constructs DateRange with specified start and end date.
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
         public DateRange(DateTime startDate, DateTime endDate)
         {
             AssertStartDateFollowsEndDate(startDate, endDate);
@@ -54,7 +60,7 @@ namespace Habanero.Base.Util
             }
         }
 
-        private void AssertStartDateFollowsEndDate(DateTime? startDate,
+        private static void AssertStartDateFollowsEndDate(DateTime? startDate,
                                                    DateTime? endDate)
         {
             if ((startDate.HasValue && endDate.HasValue) &&
@@ -111,7 +117,7 @@ namespace Habanero.Base.Util
     }
 
     /// <summary>
-    /// Date Range Class originally from <see cref="http://noticeablydifferent.com/CodeSamples/DateRange.aspx"/>
+    /// Date Range Class originally from http://noticeablydifferent.com/CodeSamples/DateRange.aspx
     /// </summary>
     public class DateRangeComparerByStartDate : System.Collections.IComparer,
                                                 System.Collections.Generic.IComparer<DateRange>

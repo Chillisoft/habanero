@@ -49,10 +49,10 @@ namespace Habanero.Util
         ///</summary>
         ///<param name="list">The <see cref="System.Collections.IList"/> to be copied.</param>
         ///<typeparam name="T">The type of the elemtnes of the array to be returned.</typeparam>
-        ///<returns>An array of type <see cref="T"/> containing copies of the elements of the <see cref="System.Collections.IList"/>.</returns>
+        ///<returns>An array of type <typeparamref name="T"/> containing copies of the elements of the <see cref="System.Collections.IList"/>.</returns>
         public static T[] ToArray<T>(IList list)
         {
-            //return list.Cast<T>().ToArray();//TODO brett 08 Jun 2010: For 2_0
+            //return list.Cast<T>().ToArray();//TODO_ brett 08 Jun 2010: Removed for compatibility to For 2_0
             T[] array = new T[list.Count];
             int i = 0;
             foreach (T item in list)

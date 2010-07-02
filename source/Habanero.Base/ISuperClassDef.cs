@@ -18,6 +18,9 @@
 // ---------------------------------------------------------------------------------
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Definition of the inheritance Relationship between a SubClass and a its SuperClass
+    /// </summary>
     public interface ISuperClassDef
     {
         /// <summary>

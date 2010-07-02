@@ -17,15 +17,16 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// An interface describing a form consisting of one or more <see cref="IUIFormTab"/> objects.  
-    /// Implemented by <see cref="UIForm"/>.
+    /// Implemented by UIForm.
     /// </summary>
-    public interface IUIForm : ICollection
+    public interface IUIForm : ICollection, IEnumerable<IUIFormTab>
     {
         /// <summary>
         /// Adds a tab to the form

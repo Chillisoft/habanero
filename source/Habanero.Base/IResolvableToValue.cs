@@ -6,13 +6,13 @@ namespace Habanero.Base
     public interface IResolvableToValue : IResolvableToValue<object> { }
 
     ///<summary>
-    /// Defines a generalised type that can be resolved to a value of type <see cref="T"/>
+    /// Defines a generalised type that can be resolved to a value of type <typeparamref name="T"/>.
     ///</summary>
     ///<typeparam name="T">The value type that this object can be resolved to.</typeparam>
     public interface IResolvableToValue<T>
     {
         ///<summary>
-        /// Resolved the instance class to a value of type <see cref="T"/>.
+        /// Resolved the instance class to a value of type <typeparamref name="T"/>.
         ///</summary>
         ///<returns>The value that the instance class is resolved to.</returns>
         T ResolveToValue();

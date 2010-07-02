@@ -62,6 +62,10 @@ namespace Habanero.Base
             return Value.CompareTo(other);
         }
 
+        ///<summary>
+        /// Resolved the instance class to a value of type DateTime.
+        ///</summary>
+        ///<returns>The value that the instance class is resolved to.</returns>
         public virtual DateTime ResolveToValue()
         {
             return Value;

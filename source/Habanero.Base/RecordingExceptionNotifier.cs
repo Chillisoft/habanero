@@ -124,7 +124,10 @@ namespace Habanero.Base
             /// The title for the notification
             ///</summary>
             public string Title { get; private set; }
-
+            /// <summary>
+            /// The Exception beign wrapped message plus any FurtherMessage.
+            /// </summary>
+            /// <returns></returns>
             public override string ToString()
             {
                 return this.Exception.Message + " - " + FurtherMessage;

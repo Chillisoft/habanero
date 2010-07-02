@@ -18,6 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
@@ -259,6 +261,11 @@ namespace Habanero.BO.ClassDefinition
                 }
             }
             return true;
+        }
+
+        IEnumerator<IUIFormTab> IEnumerable<IUIFormTab>.GetEnumerator()
+        {
+            return _list.Cast<IUIFormTab>().GetEnumerator();
         }
 
         ///<summary>

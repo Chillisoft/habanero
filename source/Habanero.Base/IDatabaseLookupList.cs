@@ -18,6 +18,10 @@
 // ---------------------------------------------------------------------------------
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Lookup list that directly loads items from the Database using the specified sql string.
+    /// This is generally only used in instances where this level of optimisation is required.
+    /// </summary>
     public interface IDatabaseLookupList : ILookupListWithClassDef
     {
         /// <summary>

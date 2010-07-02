@@ -938,6 +938,18 @@ namespace Habanero.Test.BO
 
         #endregion //Internal Classes
 
+        [Test]
+        public void Test_RegisterForEventsFromStrubs_ToPreventCompilerWarnings()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+
+            //---------------Test Result -----------------------
+            Assert.Fail("Not Yet Implemented");
+        }
 
     }
 
