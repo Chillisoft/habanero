@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
@@ -124,6 +125,13 @@ namespace Habanero.BO
             }
             this.RegisterForEvents();
             return _table;
+        }
+
+        public IBindingListView GetDataView(IUIGrid uiGrid)
+        {
+            var dataTable = GetDataTable(uiGrid);
+            if(dataTable == null) return null;
+            return dataTable.DefaultView;
         }
 #pragma warning disable 612,618
         private void AddColumn(IUIGridColumn uiProperty, IClassDef classDef)

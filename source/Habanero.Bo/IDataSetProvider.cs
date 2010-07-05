@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.ComponentModel;
 using System.Data;
 using Habanero.BO.ClassDefinition;
 
@@ -32,8 +33,14 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="uiGrid">The UIGridDef</param>
         /// <returns>Returns a DataTable object</returns>
+        [Obsolete("Should rather use GetDataView This provides the more generic IBindingListView")]
         DataTable GetDataTable(IUIGrid uiGrid);
-
+        /// <summary>
+        /// Returns a data view for the UIGridDef provided
+        /// </summary>
+        /// <param name="uiGrid">The UIGridDef</param>
+        /// <returns>Returns a DataTable object</returns>
+        IBindingListView GetDataView(IUIGrid uiGrid);
         /// <summary>
         /// Finds an IBusinessObject given the ID.
         /// </summary>

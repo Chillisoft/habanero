@@ -31,7 +31,8 @@ using Rhino.Mocks;
 namespace Habanero.Test.BO
 {
 #pragma warning disable 67
-
+#pragma warning disable 612,618
+//Obsolete methods are still under test until removed.
     /// <summary>
     /// Tests the DataSet provider base behaviour via the ReadOnlyDataSetProvider
     /// </summary>
@@ -123,14 +124,6 @@ namespace Habanero.Test.BO
         }
 		protected void SetupSaveExpectation()
 		{
-//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                  DatabaseConnection.CurrentConnection.GetConnection());
-//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                  DatabaseConnection.CurrentConnection.GetConnection());
-//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                  DatabaseConnection.CurrentConnection.GetConnection());
-//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                  DatabaseConnection.CurrentConnection.GetConnection());
 		}
 
         [Test]
@@ -365,7 +358,7 @@ namespace Habanero.Test.BO
             //Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=1;OrderItem.Product=car"));
             //Assert.AreEqual(chair, provider.Find("OrderItem.OrderNumber=2;OrderItem.Product=chair"));
             Assert.AreEqual(car, provider.Find(car.ID.ObjectID));
-            Assert.AreEqual(chair, provider.Find(chair.ID.ObjectID));
+            Assert.AreEqual(chair, ((IDataSetProvider)provider).Find(chair.ID.ObjectID));
 
             OrderItem roof = OrderItem.AddOrder3Roof();
             Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
@@ -678,11 +671,9 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-//        [Test, Ignore("Not yet implemented critical to implement immediately")]
         [Test]
         public void Test_CustomDefined_Property()
         {
-            //Assert.Fail("Not yet implemented");
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithDateTime();
             ClassDef.ClassDefs.Clear();
@@ -832,7 +823,9 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, addresses.Count);
             //---------------Execute Test ----------------------
+
             DataTable table = dataSetProvider.GetDataTable(uiGrid);
+
             //---------------Test Result -----------------------
             Assert.AreEqual(1, table.Rows.Count);
             Assert.AreEqual(contactPersonTestBO.FirstName, table.Rows[0][propertyName]);
@@ -954,6 +947,31 @@ namespace Habanero.Test.BO
             collectionStub.BusinessObjectRemoved +=delegate {  };
             collectionStub.BusinessObjectUpdated +=delegate {  };
             //---------------Test Result -----------------------
+        }
+
+        [Test]
+        public void Test_GetDataView_ShouldReturnDataViewfordataTable()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO bo = new MyBO();
+            const string dateTimeProp = "TestDateTime";
+            DateTime expectedDate = DateTime.Now;
+            bo.SetPropertyValue(dateTimeProp, expectedDate);
+
+            col.Add(bo);
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(col);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            var uiGrid = bo.ClassDef.GetUIDef("default").UIGrid;
+            var dataView = dataSetProvider.GetDataView(uiGrid);
+            //---------------Test Result -----------------------
+            var dataTable = ((DataView)dataView).Table;
+            Assert.AreSame(typeof(DateTime), dataTable.Columns[dateTimeProp].DataType);
+            Assert.IsInstanceOf(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
         }
     }
 
@@ -1244,6 +1262,6 @@ namespace Habanero.Test.BO
            get { throw new NotImplementedException(); }
        }
    }
-#pragma warning restore 067
 #pragma warning restore 67
+#pragma warning restore 612,618
 }
