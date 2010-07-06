@@ -49,6 +49,10 @@ namespace Habanero.Base
         /// <summary>
         /// The data is less than the filter value
         /// </summary>
-        OpLessThan
+        OpLessThan,
+        /// <summary>
+        /// E.g. Is Null and Is Not Null.
+        /// </summary>
+        Is
     }
 }

@@ -856,7 +856,7 @@ namespace Habanero.Test.BO
         }
         #region Internal Classes
 
-        public class MyContactPerson : ContactPerson
+        private class MyContactPerson : ContactPerson
         {
             private readonly DateTime _dateTime = DateTime.Now;
             private const string fatherRelationshipName = "Father";
@@ -904,7 +904,7 @@ namespace Habanero.Test.BO
                 }
             }
 
-            public class MySingleRelationship : SingleRelationship<MyContactPerson>, ISingleRelationship
+            private class MySingleRelationship : SingleRelationship<MyContactPerson>, ISingleRelationship
             {
                 private MyContactPerson _myContactPerson;
 
@@ -924,7 +924,7 @@ namespace Habanero.Test.BO
                 /// Sets the related object to that provided
                 /// </summary>
                 /// <param name="relatedObject">The object to relate to</param>
-                    void ISingleRelationship.SetRelatedObject(IBusinessObject relatedObject)
+                void ISingleRelationship.SetRelatedObject(IBusinessObject relatedObject)
                 {
                     _myContactPerson = relatedObject as MyContactPerson;
                 }
