@@ -56,6 +56,7 @@ namespace Habanero.BO
         /// <param name="boProp">The property to add</param>
         public override void Add(IBOProp boProp)
         {
+            
             if (Count > 0)
             {
                 throw new InvalidObjectIdException("A BOObjectID cannot have " +
@@ -79,7 +80,7 @@ namespace Habanero.BO
             {
                 if (_objectIDProp == null)
                 {
-                    _objectIDProp = base[KeyDef.KeyName];
+                    _objectIDProp = base[KeyName];
                     //HACK: This works because the primary key name is set to the property name in the case of an object ID
                 }
                 if (_objectIDProp == null)

@@ -43,9 +43,11 @@ namespace Habanero.Base
         Guid GetAsGuid();
 
         /// <summary>
-        /// Sets the object's ID this is used when a new object is constructed. The object is given a unique identifier.
+        /// Sets the object's ID this is used when a new object is constructed. 
+        /// The object is given a unique identifier.
         /// If the object is later loaded from the database then this ID is replaced by the Database ID.
-        /// If the <see cref="IBusinessObject"/> has an object ID (i.e. Its primary key in the database is a Guid) then 
+        /// If the <see cref="IBusinessObject"/> has an object ID 
+        /// (i.e. Its primary key in the database is a Guid) then 
         /// a new object will be inserted into the database using this Guid Value for the ID Field.
         /// </summary>
         /// <param name="id">The ID to set to</param>
@@ -83,8 +85,9 @@ namespace Habanero.Base
         Guid ObjectID { get; }
 
         ///<summary>
-        /// Returns the Previous Object ID this is only for new objects that are assigned
-        ///   an object id and then loaded from the database and the object is is updated to the 
+        /// Returns the Previous Object ID this is only for new object typically with composite keys.
+        ///   that are assigned an object id and then persisted
+        ///   and then loaded from the database and the object is is updated to the 
         ///   value from the database. The previous Object ID is then used by the object manager,
         ///   collection, dataset provider to update the ID for the object.
         ///</summary>

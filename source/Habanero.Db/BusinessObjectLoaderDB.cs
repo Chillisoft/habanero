@@ -640,21 +640,37 @@ namespace Habanero.DB
         /// <summary>
         /// Creates a Generic Collection of the appropriate Typee.
         /// </summary>
-        /// <param name="BOType">The Type of collection to create</param>
+        /// <param name="boType">The Type of collection to create</param>
         /// <returns></returns>
-        protected static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
+        protected static IBusinessObjectCollection CreateCollectionOfType(Type boType)
         {
-            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
+            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
             return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
         }
-
+        // ReSharper disable RedundantAssignment
         private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
             where T : class, IBusinessObject, new()
         {
             // Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
             // is stored in a dictionary and reused as the object populated to perform a search on the business object
             // manager.
+
             objectUpdatedInLoading = false;
+
+            T bo = GetTempBO<T>();
+
+            IBusinessObject loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
+            if (loadedBusinessObject == bo)
+            {
+                var tempObject = new T();
+                _tempObjectsByType[typeof (T)] = tempObject;
+                BORegistry.BusinessObjectManager.Remove(tempObject);
+            }
+            return (T) loadedBusinessObject;
+        }
+
+        private T GetTempBO<T>() where T : class, IBusinessObject, new()
+        {
             T bo;
             try
             {
@@ -666,15 +682,7 @@ namespace Habanero.DB
                 BORegistry.BusinessObjectManager.Remove(bo);
                 _tempObjectsByType[typeof(T)] = bo;
             }
-
-            IBusinessObject loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
-            if (loadedBusinessObject == bo)
-            {
-                var tempObject = new T();
-                _tempObjectsByType[typeof (T)] = tempObject;
-                BORegistry.BusinessObjectManager.Remove(tempObject);
-            }
-            return (T) loadedBusinessObject;
+            return bo;
         }
 
         private IBusinessObject LoadBOFromReader
@@ -704,7 +712,7 @@ namespace Habanero.DB
             }
             return loadedBusinessObject;
         }
-
+        // ReSharper restore RedundantAssignment
         private IBusinessObject GetLoadedBusinessObject
             (IBusinessObject bo, IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
         {

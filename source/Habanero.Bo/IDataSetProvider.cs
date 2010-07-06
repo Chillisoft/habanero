@@ -53,6 +53,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="rowNum">The row number</param>
         /// <returns>Returns a business object</returns>
+        [Obsolete("This is no longer used use Find(Guid objectID) instead 6/7/2010")]
         IBusinessObject Find(int rowNum);
 
         /// <summary>
@@ -60,6 +61,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="row">The row related to the business object</param>
         /// <returns>Returns a business object</returns>
+        [Obsolete("This is no longer used use Find(Guid objectID) instead 6/7/2010")]
         IBusinessObject Find(DataRow row);
 
         /// <summary>

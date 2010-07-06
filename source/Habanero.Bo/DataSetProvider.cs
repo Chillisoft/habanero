@@ -104,6 +104,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="uiGrid">The UIGridDef</param>
         /// <returns>Returns a DataTable object</returns>
+        [Obsolete("Please use GetDataView instead")]
         public DataTable GetDataTable(IUIGrid uiGrid)
         {
             if (uiGrid == null) throw new ArgumentNullException("uiGrid");
@@ -127,13 +128,19 @@ namespace Habanero.BO
             return _table;
         }
 
+#pragma warning disable 612,618
+//This should be moved to a private method when this method is removed from UI.
+        /// <summary>
+        /// Returns a data view for the UIGridDef provided
+        /// </summary>
+        /// <param name="uiGrid">The UIGridDef</param>
+        /// <returns>Returns a DataTable object</returns>
         public IBindingListView GetDataView(IUIGrid uiGrid)
         {
             var dataTable = GetDataTable(uiGrid);
-            if(dataTable == null) return null;
-            return dataTable.DefaultView;
+            return dataTable == null ? null : dataTable.DefaultView;
         }
-#pragma warning disable 612,618
+
         private void AddColumn(IUIGridColumn uiProperty, IClassDef classDef)
         {
             DataColumn column = _table.Columns.Add();
@@ -154,6 +161,8 @@ namespace Habanero.BO
 
                         ? uiProperty.GetHeading(classDef) 
                         : uiProperty.GetHeading();
+            //TODO brett 06 Jul 2010: These extended properties are never used by faces any more
+            // and can be removed from this column.
             column.ExtendedProperties.Add("LookupList", uiProperty.LookupList);
             column.ExtendedProperties.Add("Width", uiProperty.Width);
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
@@ -256,14 +265,14 @@ namespace Habanero.BO
             return values;
         }
 
-        /// <summary>
+/*        /// <summary>
         /// Adds handlers to be called when updates occur
         /// </summary>
         public virtual void DeregisterForEvents()
         {
             DeregisterForBOEvents();
             DeregisterForTableEvents();
-        }
+        }*/
         /// <summary>
         /// Derigisters the Data Set Provider from all events raised by the BO collection.
         /// </summary>
@@ -414,11 +423,15 @@ namespace Habanero.BO
         /// </summary>
         public abstract void InitialiseLocalData();
 
+        //TODO brett 06 Jul 2010: This method should be moved to a private
+        // method once the obsolete Find on the interface is removed
+
         /// <summary>
         /// Returns the business object at the row number specified
         /// </summary>
         /// <param name="rowNum">The row number</param>
         /// <returns>Returns a business object</returns>
+        [Obsolete("This is no longer used use Find(Guid objectID) instead 6/7/2010")]
         public IBusinessObject Find(int rowNum)
         {
             DataRow row;
@@ -435,11 +448,15 @@ namespace Habanero.BO
             return this.Find(row);
         }
 
+        //TODO brett 06 Jul 2010: This method should be moved to a private
+        // method once the obsolete Find on the interface is removed
+
         /// <summary>
         /// Returns the business object at the row specified
         /// </summary>
         /// <param name="row">The row related to the business object</param>
         /// <returns>Returns a business object</returns>
+        [Obsolete("This is no longer used use Find(Guid objectID) instead 6/7/2010")]
         public IBusinessObject Find(DataRow row)
         {
             try

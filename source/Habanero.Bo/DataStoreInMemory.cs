@@ -114,7 +114,10 @@ namespace Habanero.BO
             IBusinessObject currentBO = null;
             foreach (IBusinessObject bo in AllObjects.Values)
             {
-                if (bo.ClassDef != classDef) continue;
+                if (bo.ClassDef != classDef && !classDef.ClassType.IsInstanceOfType(bo))
+                {
+                    continue;
+                }
                 if (!criteria.IsMatch(bo)) continue;
                 if (currentBO == null)
                 {
