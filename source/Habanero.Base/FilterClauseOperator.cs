@@ -53,8 +53,11 @@ namespace Habanero.Base
         /// <summary>
         /// E.g. Is Null and Is Not Null.
         /// </summary>
-        Is
-
+        Is,
+        /// <summary>
+        /// NotEqual i.e. != .
+        /// </summary>
+        OpNotEqual
 
     }
 }
