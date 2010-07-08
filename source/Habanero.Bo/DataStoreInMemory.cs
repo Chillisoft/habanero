@@ -175,7 +175,16 @@ namespace Habanero.BO
         ///<returns></returns>
         internal virtual List<T> FindAllInternal<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            return AllObjects.Values.OfType<T>().Where(boAsT => criteria == null || criteria.IsMatch(boAsT)).ToList();
+            //return AllObjects.Values.OfType<T>().Where(boAsT => criteria == null || criteria.IsMatch(boAsT)).ToList();
+            List<T> list = new List<T>();
+            Type boType = typeof (T);
+            foreach (IBusinessObject bo in AllObjects.Values)
+            {
+                if (!boType.IsInstanceOfType(bo)) continue;
+                if (criteria == null || criteria.IsMatch(bo)) list.Add((T)bo);
+            }
+
+            return list;
         }
         ///<summary>
         /// Find all objects of type boType that match the criteria.
@@ -185,16 +194,30 @@ namespace Habanero.BO
         ///<returns></returns>
         public virtual IBusinessObjectCollection FindAll(Type boType, Criteria criteria)
         {
-            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
-            IBusinessObjectCollection col = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
-            IEnumerable<IBusinessObject> allMatchineBOs = AllObjects.Values.Where(boType.IsInstanceOfType).Where(bo => criteria == null || criteria.IsMatch(bo));
+            IBusinessObjectCollection col = CreateGenericCollection(boType);
+
+/*            IEnumerable<IBusinessObject> allMatchineBOs = AllObjects.Values.Where(boType.IsInstanceOfType).Where(bo => criteria == null || criteria.IsMatch(bo));
             foreach (IBusinessObject bo in allMatchineBOs)
             {
                 col.Add(bo);
+            }*/
+
+            foreach (IBusinessObject bo in AllObjects.Values)
+            {
+                if (!boType.IsInstanceOfType(bo)) continue;
+                if (criteria == null || criteria.IsMatch(bo)) col.Add(bo);
             }
             col.SelectQuery.Criteria = criteria;
             return col;
+
         }
+
+        private static IBusinessObjectCollection CreateGenericCollection(Type boType)
+        {
+            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
+            return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
+        }
+
         ///<summary>
         /// Find all objects of type boType that match the criteria.
         ///</summary>
@@ -204,12 +227,11 @@ namespace Habanero.BO
         public virtual IBusinessObjectCollection FindAll(IClassDef classDef, Criteria criteria)
         {
             Type boType = classDef.ClassType;
-            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
-            IBusinessObjectCollection col = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
+            IBusinessObjectCollection col = CreateGenericCollection(boType);
             col.ClassDef = classDef;
             foreach (IBusinessObject bo in AllObjects.Values)
             {
-                if (!classDef.ClassType.IsInstanceOfType(bo)) continue;
+                if (!boType.IsInstanceOfType(bo)) continue;
                 if (classDef.TypeParameter != bo.ClassDef.TypeParameter) continue;
                 if (criteria == null || criteria.IsMatch(bo)) col.Add(bo);
             }
