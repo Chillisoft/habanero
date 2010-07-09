@@ -19,11 +19,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base.Exceptions;
-
+namespace System.Runtime.CompilerServices
+{
+    [AttributeUsage(AttributeTargets.Method
+                    | AttributeTargets.Class
+                    | AttributeTargets.Assembly)]
+    public sealed class ExtensionAttribute : Attribute
+    {
+    }
+}
 namespace Habanero.Util
 {
+
+
+
     ///<summary>
     /// General Utilities
     ///</summary>
@@ -52,7 +63,7 @@ namespace Habanero.Util
         ///<returns>An array of type <typeparamref name="T"/> containing copies of the elements of the <see cref="System.Collections.IList"/>.</returns>
         public static T[] ToArray<T>(IList list)
         {
-            //return list.Cast<T>().ToArray();//TODO_ brett 08 Jun 2010: Removed for compatibility to For 2_0
+            //return list.Cast<T>().ToArray();//TODO_ brett 08 Jun 2010: Removed for compatibility to For DotNet 2_0
             T[] array = new T[list.Count];
             int i = 0;
             foreach (T item in list)

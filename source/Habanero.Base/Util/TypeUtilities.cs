@@ -19,6 +19,7 @@
 using System;
 using System.ComponentModel;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
 {
@@ -27,7 +28,6 @@ namespace Habanero.Util
     /// </summary>
     public static class TypeUtilities
     {
-        //TODO brett 08 Jun 2010: For 2_0 Removed this from IsInteger and IsDecimal
         /// <summary>
         /// Indicates if type is an integer type.
         /// </summary>
@@ -90,8 +90,8 @@ namespace Habanero.Util
             }
             return returnValue;
         }
-        /*//TODO brett 08 Jun 2010: For 2_0 
-  ///<summary>
+
+        ///<summary>
         ///</summary>
         ///<param name="type"></param>
         ///<exception cref="UnknownTypeNameException"></exception>
@@ -112,6 +112,6 @@ namespace Habanero.Util
                           + "defined in the relationship and class definitions for the classes " + "involved.", type),
                      ex);
             }
-        }*/
+        }
     }
 }

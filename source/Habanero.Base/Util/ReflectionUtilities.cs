@@ -17,7 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Linq.Expressions;
+//using System.Linq.Expressions;
 using System.Reflection;
 using Habanero.Base.Exceptions;
 using log4net;
@@ -521,6 +521,7 @@ namespace Habanero.Util
         {
             return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof (Nullable<>));
         }
+/*
         // ReSharper restore PossibleNullReferenceException
         /// <summary>
         /// Returns the Property Name of the property used in the Lambda expression of type
@@ -577,6 +578,7 @@ namespace Habanero.Util
 
             return memberExpression;
         }
+*/
     }
 
 // ReSharper restore UnusedAutoPropertyAccessor.Local

@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+//TODO_ brett 08 Jun 2010: For DotNet 2_0  using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using Habanero.Base;
@@ -142,7 +142,16 @@ namespace Habanero.BO
         ///<returns></returns>
         public virtual T Find<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject
         {
-            return (from bo in AllObjects.Values where bo.ID.Equals(primaryKey) select bo as T).FirstOrDefault();
+            Type boType = typeof(T);
+            foreach (IBusinessObject bo in AllObjects.Values)
+            {
+                if (!boType.IsInstanceOfType(bo)) continue;
+                if (bo.ID.Equals(primaryKey)) return bo as T;
+            }
+            return null;
+            //TODO_ brett 08 Jun 2010: For DotNet 2_0
+/*
+            return (from bo in AllObjects.Values where bo.ID.Equals(primaryKey) select bo as T).FirstOrDefault();*/
         }
 
         ///<summary>

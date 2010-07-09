@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;//TODO brett 08 Jun 2010: For 2_0
+//using System.Linq;//TODO_ brett 08 Jun 2010: For DotNet 2_0
 using System.Text;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
@@ -145,7 +145,7 @@ namespace Habanero.Util
             mySingularRules["(n)ews$"] = "$1ews";
             mySingularRules["s$"] = "";
 
-            myUnaffectedSingular = new string[]
+            myUnaffectedSingular = new[]
                                        {
                                            "^(.*[nrlm]ese)$", "^(.*deer)$", "^(.*fish)$", "^(.*measles)$", "^(.*ois)$",
                                            "^(.*pox)$", "^(.*sheep)$", "^(.*us)$", "^(.*ss)$", "^(Amoyese)$", "^(bison)$",
@@ -265,7 +265,7 @@ namespace Habanero.Util
                 if (isNotTheFirstLetter && (isUpperCase || isInteger))
                 {
                     if (isNotASpace && previousLetterIsNotASpace &&
-                        (!isInteger ||(isInteger && !previousLetterIsInteger)) &&
+                        (!isInteger ||(!previousLetterIsInteger)) &&
                         (nextLetterIsLowerCase || !previousLetterIsUpperCase))
                     {
                         addDelimiter = true;
@@ -284,40 +284,60 @@ namespace Habanero.Util
             }
             return formatted;
         }
-               //TODO brett 08 Jun 2010: For 2_0
-          /// <summary>
-                /// Singularises the input string using heuristics and rule.
-                /// </summary>
-                /// <param name="input"></param>
-                /// <returns></returns>
-                public static string Singularize(string input)
-                {
-                    if (input == String.Empty) return input;
+        //TODO_ brett 08 Jun 2010: For DotNet 2_0
+        /// <summary>
+        /// Singularises the input string using heuristics and rule.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string Singularize(string input)
+        {
+            if (input == String.Empty) return input;
 
-                    if (myUnaffectedSingular.Any(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase)))
-                    {
-                        return input;
-                    }
-                    var singularised = Singularise(input, myIrregularSingular);
-                    if (singularised != null) return singularised;
+            foreach (var unaffectedSingularRules in myUnaffectedSingular)
+            {
+                if(Regex.IsMatch(input, unaffectedSingularRules, RegexOptions.IgnoreCase)) return input;
+            }
+            /*//TODO_ brett 08 Jun 2010: For DotNet 2_0
+                        if (myUnaffectedSingular.Any(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase)))
+                        {
+                            return input;
+                        }*/
+            var singularised = Singularise(input, myIrregularSingular);
+            if (singularised != null) return singularised;
 
-                    singularised = Singularise(input, mySingularRules);
-                    return singularised ?? input;
-                }
+            singularised = Singularise(input, mySingularRules);
+            return singularised ?? input;
+        }
 
-                private static string Singularise(string input, NameValueCollection singularisationRules)
-                {
-                    var singularisationRule = singularisationRules
-                        .Cast<string>()
-                        .Where(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
-                        .FirstOrDefault();
-                    if (singularisationRule != null)
-                    {
-                        return Regex.Replace(input, singularisationRule, singularisationRules[singularisationRule],
-                                             RegexOptions.IgnoreCase);
-                    }
-                    return null;
-                }/**/
+        private static string Singularise(string input, NameValueCollection singularisationRules)
+        {
+            string singularisationRule = null;
+            foreach (var rule in singularisationRules)
+            {
+                var stringRule = (string) rule;
+                if (!Regex.IsMatch(input, stringRule, RegexOptions.IgnoreCase)) continue;
+                singularisationRule = stringRule;
+                break;
+            }
+            if (singularisationRule != null)
+            {
+                return Regex.Replace(input, singularisationRule, singularisationRules[singularisationRule],
+                                     RegexOptions.IgnoreCase);
+            }
+            return null;
+            /*//TODO_ brett 08 Jun 2010: For DotNet 2_0
+                        var singularisationRule = singularisationRules
+                            .Cast<string>()
+                            .Where(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
+                            .FirstOrDefault();
+                        if (singularisationRule != null)
+                        {
+                            return Regex.Replace(input, singularisationRule, singularisationRules[singularisationRule],
+                                                 RegexOptions.IgnoreCase);
+                        }
+                        return null;*/
+        }
 
         ///<summary>
         /// Pluralises a noun using standard rule e.g. Name => Names
@@ -347,7 +367,11 @@ namespace Habanero.Util
             return String.Empty;
         }
 
-
+        /// <summary>
+        /// Camel cases the input string.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static string Camelize(string input)
         {
             var replace = Humanize(input);
@@ -365,7 +389,7 @@ namespace Habanero.Util
             replace = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(replace);
             return replace;
         }
-        //TODO_ brett 08 Jun 2010: For DotNet 2_0  
+ /*       //TODO__ brett 08 Jun 2010: For DotNet 2_0  
         /// <summary>
         /// Create a classification of the input this is a Singular of the input
         ///   Camel cased.
@@ -376,7 +400,7 @@ namespace Habanero.Util
         {
             return Camelize(Singularize(input));
         }
-
+*/
         /// <summary>
         /// Pascal Cases a table name that has as seperator '_', '-' or ' ' in it so that the 
         ///  the pascal casing will be done as  follows first letter is capitalised
@@ -727,4 +751,149 @@ namespace Habanero.Util
             return guid.ToString("B").ToUpperInvariant();
         }
     }
+
 }
+
+/*
+namespace colib {
+	public abstract class inflector_t {
+		list_t<pair_t> _plural_rules;
+		list_t<pair_t> _singular_rules;
+		list_t<string> _equivalent;
+
+		public inflector_t() {
+			_plural_rules = new list_t<pair_t>();
+			_singular_rules = new list_t<pair_t>();
+			_equivalent = new list_t<string>();
+			initialise();
+		}
+
+		protected abstract void initialise();
+
+		protected void plural(string from, string to) {
+			_plural_rules.shift(new pair_t(from, to));
+		}
+
+		protected void singular(string from, string to) {
+			_singular_rules.shift(new pair_t(from, to));
+		}
+
+		protected void irregular(string _singular, string _plural) {
+			plural(string.Format("({0}){1}$",
+													 l_t.left(_singular, 1),
+													 l_t.splice(_singular, 1, -1)), "$1");
+			singular(string.Format("({0}){1}$",
+														 l_t.left(_plural, 1),
+														 l_t.splice(_plural, 1, -1)), "$1");
+		}
+
+		protected void equivalent(string word) {
+			_equivalent.add(word);
+		}
+
+		public string pluralise(string word) {
+			return apply(word, _plural_rules);
+		}
+
+		public string singularise(string word) {
+			return apply(word, _singular_rules);
+		}
+
+		string apply(string word, list_t<pair_t> rules) {
+			if (_equivalent.IndexOf(word) != -1) {
+				return word;
+			}
+			foreach (pair_t rule in rules) {
+				Regex re = new Regex(rule.left, RegexOptions.IgnoreCase);
+				string ret = re.Replace(word, rule.right);
+				if (ret != word) {
+					return ret;
+				}
+			}
+			return word;
+		}
+	}
+
+	public class en_us_inflector_t : inflector_t {
+		protected override void initialise() {
+			plural("$", "s");
+			plural("s$", "s");
+			plural("(ax|test)is$", "$1es");
+			plural("(octop|vir)us$", "$1i");
+			plural("(alias|status)$", "$1es");
+			plural("/(bu)s$", "$1ses");
+			plural("/(buffal|tomat)o$", "$1oes");
+			plural("/([ti])um$", "$1a");
+			plural("sis$", "ses");
+			plural("(?:([^f])fe|([lr])f)", "$1$2ves");
+			plural("(hive)$", "$1s");
+			plural("([^aeiouy]|qu)y$", "$1ies");
+			plural("([^aeiouy]|qu)ies$", "$1y");
+			plural("(x|ch|ss|sh)$", "$1es");
+			plural("(matr|vert|ind)ix|ex$", "$1ices");
+			plural("([m|l])ouse$", "$1ice");
+			plural("^(ox)$", "$1en");
+			plural("(quiz)$", "$1zes");
+
+			singular("s$", "");
+			singular("(n)ews$", "$1ews");
+			singular("([ti])a$", "$1um");
+			singular("((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$", "$1$2sis");
+			singular("(^analy)ses$", "$1sis");
+			singular("([^f])ves$", "$1fe");
+			singular("(hive)s$", "$1");
+			singular("(tive)s$", "$1");
+			singular("([lr])ves$", "$1f");
+			singular("([^aeiouy]|qu)ies$", "$1y");
+			singular("(s)eries$", "$1eries");
+			singular("(m)ovies$", "$1ovie");
+			singular("(x|ch|ss|sh)es$", "$1");
+			singular("([m|l])ice$", "$1ouse");
+			singular("(bus)es$", "$1");
+			singular("(o)es$", "$1");
+			singular("(shoe)s$", "$1");
+			singular("(cris|ax|test)es$", "$1is");
+			singular("([octop|vir])i$", "$1us");
+			singular("(alias|status)es$", "$1");
+			singular("^(ox)en$", "$1");
+			singular("(vert|ind)ices$", "$1ex");
+			singular("(matr)ices$", "$1ix");
+			singular("(quiz)zes$", "$1");
+
+			irregular("person", "people");
+			irregular("man", "men");
+			irregular("child", "children");
+			irregular("sex", "sexes");
+			irregular("move", "moves");
+
+			equivalent("equipment");
+			equivalent("information");
+			equivalent("rice");
+			equivalent("money");
+			equivalent("species");
+			equivalent("series");
+			equivalent("fish");
+			equivalent("sheep");
+		}
+	}
+
+	public class inflect_t {
+		static inflector_t inflector = new en_us_inflector_t();
+
+		public static string pluralise(string word) {
+			return inflector.pluralise(word);
+		}
+
+		public static string singularise(string word) {
+			return inflector.singularise(word);
+		}
+
+		public static string capitalise(string str) {
+			//todo: make this capitalise all words
+			return l_t.head(str).ToUpper() + l_t.tail(str).ToLower();
+		}
+
+		/*public string camelise(string str) {
+			}
+	}
+}*/

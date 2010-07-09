@@ -19,7 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+//TODO_ brett 08 Jun 2010: For DotNet 2_0 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
@@ -608,7 +608,7 @@ namespace Habanero.BO
         {
             return _keysCol;
         }
-
+/*//TODO_ brett 08 Jun 2010: For DotNet 2_0
         /// <summary>
         /// Returns a string useful for debugging output
         /// </summary>
@@ -618,7 +618,7 @@ namespace Habanero.BO
             string output = "";
             output += "Type: " + GetType().Name + Environment.NewLine;
             return _boPropCol.Aggregate(output, (current, entry) => current + (entry.PropertyName + " - " + entry.PropertyValueString + Environment.NewLine));
-        }
+        }*/
 
         #endregion //Properties
 
@@ -1354,10 +1354,28 @@ namespace Habanero.BO
             }
             return errors == null || errors.Count == 0;
         }
-
+        //TODO_ brett 08 Jun 2010: For DotNet 2_0
         private bool HasErrors(ref IList<IBOError> errors)
         {
             if (errors == null) errors = new List<IBOError>();
+            var rules = new List<IBusinessObjectRule>();
+
+            foreach (var rule in GetBusinessObjectRules())
+            {
+                if (rule != null && ErrorLevelIsError(rule) && !rule.IsValid(this))
+                {
+                    rules.Add(rule);
+                }
+            }
+            
+
+            foreach (IBusinessObjectRule rule in rules)
+            {
+                CreateBOError(rule, errors);
+            }
+            return errors.Count != 0;
+            // ...end of .NET 2 Code.
+ /*           if (errors == null) errors = new List<IBOError>();
             var rules = GetBusinessObjectRules()
                     .Where(rule 
                       => (rule != null && ErrorLevelIsError(rule)) 
@@ -1366,7 +1384,7 @@ namespace Habanero.BO
             {
                 CreateBOError(rule, errors);
             }
-            return errors.Count != 0;
+            return errors.Count != 0;*/
         }
 
         /// <summary>

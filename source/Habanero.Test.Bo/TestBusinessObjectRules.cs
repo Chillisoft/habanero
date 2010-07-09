@@ -106,6 +106,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, warningList.Count);
             Assert.AreSame(bo, warningList[0].BusinessObject);
         }
+
         [Test]
         public void Test_BOIsValid_WithBO_WhenRuleIsNotValid_ShouldBeNotValid()
         {
@@ -232,10 +233,24 @@ namespace Habanero.Test.BO
 // ReSharper disable UnusedAutoPropertyAccessor.Global
         public string Name { get; set; }
 
+        private string _message;
+
         /// <summary>
         /// Returns the error message for if the rule fails.
         /// </summary>
-        public string Message { get; set; }
+        public string Message
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_message))
+                {
+                    if (!_isValid) return "Rule Failed";
+                }
+                return _message;
+            }
+            set { _message = value; }
+        }
+
 // ReSharper restore UnusedAutoPropertyAccessor.Global
 
         /// <summary>

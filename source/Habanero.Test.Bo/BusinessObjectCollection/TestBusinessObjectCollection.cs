@@ -459,20 +459,20 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             string newSurname = Guid.NewGuid().ToString();
             cp1.Surname = newSurname;
             cp1.Save();
-            ContactPersonTestBO secondInstanceOfCP1 = col.Find(cp1.ContactPersonID);
+            ContactPersonTestBO secondInstanceOfCp1 = col.Find(cp1.ContactPersonID);
 
             //--------------------Assert Preconditions----------
             AssertNotContains(cp1, col);
             Assert.AreEqual(newSurname, cp1.Surname);
-            Assert.AreNotSame(secondInstanceOfCP1, cp1);
-            Assert.AreNotEqual(newSurname, secondInstanceOfCP1.Surname);
+            Assert.AreNotSame(secondInstanceOfCp1, cp1);
+            Assert.AreNotEqual(newSurname, secondInstanceOfCp1.Surname);
             Assert.IsFalse(cp1.Status.IsDirty);
             //---------------Execute Test ----------------------
             col.Refresh();
 
             //---------------Test Result -----------------------
-            Assert.AreNotSame(secondInstanceOfCP1, cp1);
-            Assert.AreEqual(newSurname, secondInstanceOfCP1.Surname);
+            Assert.AreNotSame(secondInstanceOfCp1, cp1);
+            Assert.AreEqual(newSurname, secondInstanceOfCp1.Surname);
         }
 
         [Test]
