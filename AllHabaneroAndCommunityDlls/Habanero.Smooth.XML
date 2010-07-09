@@ -1,0 +1,639 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Habanero.Smooth</name>
+    </assembly>
+    <members>
+        <member name="T:Habanero.Smooth.ReflectionClassDefLoader">
+            <summary>
+             Provides a <see cref="T:Habanero.BO.Loaders.IClassDefsLoader"/> that will load a class Definition
+             based on reflection and heuristics.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionClassDefLoader.#ctor(Habanero.Smooth.ITypeSource)">
+            <summary>
+             constructor that takes a <see cref="T:Habanero.Smooth.ITypeSource"/> that wil be used to build the
+             ClassDefinitions.
+            </summary>
+            <param name="source"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionClassDefLoader.LoadClassDefs(System.String)">
+            <summary>
+            Thius is not implemented since with a Reflective ClassDefLoader you will never load from 
+            a string xml def.
+            </summary>
+            <param name="classDefsXml"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionClassDefLoader.LoadClassDefs">
+            <summary>
+            Loads one ClassDef for each Type in the <see cref="T:Habanero.Smooth.ITypeSource"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Habanero.Smooth.ITypeSource">
+            <summary>
+            A source for Type instances, acts as a facade for an Assembly or as an alternative Type provider.
+            </summary>
+        </member>
+        <member name="T:Habanero.Smooth.InheritanceAutoMapperExtensions">
+            <summary>
+            Simple Extension methods to make the code for 
+            automapping extension methods more fluid.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.InheritanceAutoMapperExtensions.MapInheritance(System.Type)">
+            <summary>
+            Maps any Inhertiance Relationships for the <paramref name="type"/>.
+            and returns the <see cref="T:Habanero.Base.ISuperClassDef"/> that is used to 
+            map these in Habanero.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.InheritanceAutoMapperExtensions.MapInheritance(Habanero.Smooth.ReflectionWrappers.TypeWrapper)">
+            <summary>
+            Maps any Inhertiance Relationships for the <paramref name="typeWrapper"/>.
+            and returns the <see cref="T:Habanero.Base.ISuperClassDef"/> that is used to 
+            map these in Habanero.
+            </summary>
+        </member>
+        <member name="T:Habanero.Smooth.InheritanceAutoMapper">
+            <summary>
+            Automatically maps an inheritance Relationship.
+            based on the heuristic of ChildClass: ParentClass
+            where the ChildClass and ParentClass are both <see cref="T:Habanero.BO.BusinessObject"/>s.
+            The Inhertiance Relationship is always taken as Single Table.
+            
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.AssemblyTypeSource.#ctor(System.Type)">
+            <summary>
+            sets the assembly to be the assembly that the Type type belongs to.
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="T:Habanero.Smooth.ClassAutoMapperExtensions">
+            <summary>
+            Extension method so that the code for automappin
+            an individual class can b more fluent.
+            </summary>
+        </member>
+        <member name="T:Habanero.Smooth.AllClassesAutoMapperExtensions">
+            <summary>
+            Extension methods used so that a more smooth syntax can be used when
+            coding and using Habanero.Smooth.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.AllClassesAutoMapperExtensions.MapClasses(System.Reflection.Assembly)">
+            <summary>
+            Maps All classes in the Given Assembly to a <see cref="T:Habanero.Base.ClassDefCol"/>
+            </summary>
+            <param name="assembly"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.AllClassesAutoMapperExtensions.MapClasses(System.Type)">
+            <summary>
+            Maps all classes in the Assembly for the given type <see cref="T:Habanero.Base.ClassDefCol"/>
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.AllClassesAutoMapperExtensions.MapClasses(System.Type,System.Func{System.Type,System.Boolean})">
+            <summary>
+            Maps all classes in the Assembly for the given type <see cref="T:Habanero.Base.ClassDefCol"/>
+            </summary>
+            <param name="type"></param>
+            <param name="where">a valid where clause used to limit the Classes being mapped</param>
+            <returns></returns>
+        </member>
+        <member name="T:Habanero.Smooth.AllClassesAutoMapper">
+            <summary>
+            Maps all Business Objects in an ITypeSource to a <see cref="T:Habanero.Base.IClassDef"/>
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.AllClassesAutoMapper.#ctor(Habanero.Smooth.ITypeSource)">
+            <summary>
+            Constructs the AllClassesAutoMapper with a specified Source.
+            </summary>
+            <param name="source"></param>
+        </member>
+        <member name="M:Habanero.Smooth.AllClassesAutoMapper.RelatedObjectClassDef(Habanero.Base.ClassDefCol,Habanero.Base.IRelationshipDef)">
+            <summary>
+            The <see cref="T:Habanero.BO.ClassDefinition.ClassDef"/> for the related object.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.PropertyWrapper.GetSingleReverseRelPropInfos">
+            <summary>
+            Gets all single ReverseRelationship 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.PropertyWrapper.GetSingleReverseRelationshipName``1">
+            <summary>
+            If no single rev rel and Attribute with no RevRelName then RevRelName = ClassName
+            If no single rev rel and Att with RevRelName then RevRelName = DeclaredRevRelName
+            If has single rev rel then RevRelName = foundRevRelationshipName 
+            </summary>
+            <typeparam name="TAttributeType"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.PropertyWrapper.HasIgnoreAttribute">
+            <summary>
+            Returns true if the <see cref="P:Habanero.Smooth.ReflectionWrappers.PropertyWrapper.PropertyInfo"/> has an <see cref="T:Habanero.Smooth.AutoMapIgnoreAttribute"/>
+            false otherwise. Returns false if propInfo is null
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.PropertyWrapper.HasDefaultAttribute">
+            <summary>
+            Returns true if the Property has a <see cref="T:Habanero.Smooth.AutoMapDefaultAttribute"/> set on it.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.PropertyWrapper.HasCompulsoryAttribute">
+            <summary>
+            Returns true if this property has the <see cref="T:Habanero.Smooth.AutoMapCompulsoryAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.ReflectionExtensions.GetBaseDefinition(System.Reflection.PropertyInfo)">
+            <summary>
+            When overridden in a derived class, returns the <see cref="!:propertyInfo"/> object for the
+            method on the direct or indirect base class in which the property represented
+            by this instance was first declared.
+            </summary>
+            <returns>A <see cref="!:propertyInfo"/> object for the first implementation of this property.</returns>
+        </member>
+        <member name="T:Habanero.Smooth.ReflectionWrappers.TypeWrapperExtensions">
+            <summary>
+             Simple class providing Extension methods for the
+             TypeWrapper. These methods allow the more 
+             fluent programming syntax for programming Habanero.Smooth.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapperExtensions.ToTypeWrapper(System.Type)">
+            <summary>
+             Simple Extension that allows the more smooth 
+             wrapping of a Type with a Type Wrapper making the 
+             use in linq etc more readable.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapperExtensions.IsNull(Habanero.Smooth.ReflectionWrappers.TypeWrapper)">
+            <summary>
+            Simple extension that allows the more fluent programming of 
+            Habanero Smooth. Making the use in linq etc more readable.
+            </summary>
+            <param name="typeWrapper"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Habanero.Smooth.ReflectionWrappers.TypeWrapper">
+            <summary>
+            This is a class that wraps a <see cref="T:System.Type"/> and 
+            provides specific methods and properties that provide
+            specific additional capabalities required for AutoMapping.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.#ctor(System.Type)">
+            <summary>
+            Construct the Type Wrapper for the specified Type.
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.GetGenericArguments">
+            <summary>
+             If the Type is generic e.g. IBusinessObjectCollection{T} then 
+             this will return an enumerable with a Type wrapper for actual type T.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.HasProperty(System.String)">
+            <summary>
+            Returns try if the UnderlyingType has a property identified by
+            <paramref name="propertyName"/>.
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.GetProperty(System.String)">
+            <summary>
+             Returns a Property Wrapper for the <see cref="T:System.Reflection.PropertyInfo"/>
+             identified by <paramref name="propertyName"/>.
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.IsOfType(System.Type)">
+            <summary>
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.IsOfType``1">
+            <summary>
+             Returns true if the Type <typeparamref name="T"/> is assignable from
+             the Underlying Type. I.e. the underlying type is a sub type of or 
+             implements the interface of type <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.GetProperties">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.ToString">
+            <summary>
+            returns the underlying types to string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.MakeGenericBusinessObjectCollection">
+            <summary>
+             Creates a Generic Business Object Collection for the Underlying type.
+             
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.GetPKPropName">
+            <summary>
+             Returns the PKPropName that will be used for the underlying type.
+             The PKPropName will either be determined by attributes or by 
+             convention e.g. ClassNameID.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.GetNullableUndelyingType">
+            <summary>
+            Returnes the Prop Type for the PropertyInfo.
+            If the PropertyInfo is Nullable then it returns the underlying type. 
+            (i.e bool? will return bool)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.Equals(Habanero.Smooth.ReflectionWrappers.TypeWrapper)">
+            <summary>
+            Determines whether the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            for other is the same as the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            for this wrapper.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.Equals(System.Type)">
+            <summary>
+            Determines whether the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            for this wrapper is the same as other.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.Equals(System.String)">
+            <summary>
+            Determines whether the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.Name"/> of the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            is the same as other.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+            </returns>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. 
+                            </param><exception cref="T:System.NullReferenceException">The <paramref name="obj"/> parameter is null.
+                            </exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.GetHashCode">
+            <summary>
+            Serves as a hash function for a particular type. 
+            </summary>
+            <returns>
+            A hash code for the current <see cref="T:System.Object"/>.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.op_Equality(Habanero.Smooth.ReflectionWrappers.TypeWrapper,System.Type)">
+            <summary>
+            Determines whether the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            for other is the same as the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            for this wrapper.
+            </summary>
+            <param name="original"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.op_Inequality(Habanero.Smooth.ReflectionWrappers.TypeWrapper,System.Type)">
+            <summary>
+            Determines whether the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            for other type is Not the same as the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            for this wrapper (origional).
+            </summary>
+            <param name="original"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.op_Equality(System.Type,Habanero.Smooth.ReflectionWrappers.TypeWrapper)">
+            <summary>
+            Determines whether the origional
+            is the same as 
+            the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/> of type.
+            </summary>
+            <param name="original"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.op_Inequality(System.Type,Habanero.Smooth.ReflectionWrappers.TypeWrapper)">
+            <summary>
+            Determines whether the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            for other (type) is Not the same as the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/>
+            for this type (origional).
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.op_Equality(Habanero.Smooth.ReflectionWrappers.TypeWrapper,Habanero.Smooth.ReflectionWrappers.TypeWrapper)">
+            <summary>
+            Determines whether the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/> of origional
+            is the same as 
+            the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/> of other.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.ReflectionWrappers.TypeWrapper.op_Inequality(Habanero.Smooth.ReflectionWrappers.TypeWrapper,Habanero.Smooth.ReflectionWrappers.TypeWrapper)">
+            <summary>
+            Determines whether the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/> of origional
+            is Not the same as 
+            the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/> of other.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.IsRealClass">
+            <summary>
+            Returns tru if the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/> is a real class 
+            i.e. it is not an abstract type, an interface or a generic type.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.Name">
+            <summary>
+            Returns the Types Name
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.Namespace">
+            <summary>
+            Returns the Types Name
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.IsGenericType">
+            <summary>
+            Returns true if this type si a Generic Type
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.BaseType">
+            <summary>
+            Returns the Base Type if this Type Inherits from 
+            another type.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.HasBaseType">
+            <summary>
+            Returns the True if this Type Inherits from 
+            another type.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.IsBaseTypeLayerSuperType">
+            <summary>
+            Returns the Base Type if this Type Inherits from 
+            another type.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.AssemblyName">
+            <summary>
+             Returns the Assembly Name for the Underlying Type.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.HasIgnoreAttribute">
+            <summary>
+             Returns true if the Underlying Type has one or more <see cref="T:Habanero.Smooth.AutoMapIgnoreAttribute"/>.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.AssemblyQualifiedName">
+            <summary>
+             Returns the UnderlyingTypes AssemblyQualifiedName.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType">
+            <summary>
+             Returns the Underlying type
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.PropNamingConvention">
+            <summary>
+             Returnes the Property naming convention being used for this
+             automapping
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.IsBusinessObject">
+            <summary>
+             Returns true if the <see cref="T:System.Type"/> being wrapped by this TypeWrapper is 
+             a business object.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.IsNullableType">
+            <summary>
+            Returns true if the <see cref="P:Habanero.Smooth.ReflectionWrappers.TypeWrapper.UnderlyingType"/> is Generic and is Nullable
+            e.g. Guid? is actually Nullable{Guid}.
+            </summary>
+        </member>
+        <member name="T:Habanero.Smooth.OneToOneAutoMapper">
+             <summary>
+            Conventions
+             1) If no single reverse relationship and no Attribute is found then it is assumed that relationship is a M:1 i.e. its rev is a 1:M
+             2) If no single rev rel and 1:1Attribute with no RevRelName then RevRelName = ClassName
+             3) If no single rev rel and 1:1Att with RevRelName then RevRelName = DeclaredRevRelName
+             4) If has single rev rel then RevRelName = foundRevRelationshipName 
+             Determing RelatedProps 
+             if ownerClass.HasProp(RelName+ID) and relatedClass.NotHasProp(RevRelName+ID) 
+                  owningBOHasForeignKey = true;
+                  ownerProp = foundOwnerPropName
+                  relatedProp = RelatedClass.ID.
+             if relatedClass.HasProp(reverseRel+ID) and ownerClass.NotHasProp(RelName+ID)
+                  owningBOHasForeignKey = false;
+                  ownerProp = OwnerClass.Id
+                  relatedProp = foundRelatedPropName
+             if ownerClass.HasProp(RelName+ID) and relatedClass.HasProp(RevRelName+ID)
+                  if(RelName == relatedClassName) owningBOHasForeignKey = true;
+                  ownerProp = foundOwnerClassId
+                  relatedProp = foundRelatedPropName
+             Else if ownerClassName LT relatedClassName
+                 owningBOHasForeignKey = false;
+                 ownerProp = OwnerClassId
+                 relatedProp = reverseRelationshipName+ID
+             Else
+                owningBOHasForeignKey = true;
+                ownerProp = RelationshipName+ID
+                relatedProp = RelatedClass.ID
+             </summary>
+        </member>
+        <member name="M:Habanero.Smooth.OneToOneAutoMapper.#ctor(Habanero.Smooth.ReflectionWrappers.PropertyWrapper)">
+            <summary>
+             Construct a One to One Relationship mapper.
+            </summary>
+            <param name="propWrap"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Habanero.Smooth.OneToOneAutoMapper.MapOneToOne">
+            <summary>
+            Maps the <see cref="T:Habanero.Smooth.ReflectionWrappers.PropertyWrapper"/> to a <see cref="T:Habanero.Base.IRelationshipDef"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.OneToOneAutoMapper.MustBeMapped">
+            <summary>
+            Determines based on heuristics whether the Property wrapped by the
+            <see cref="T:Habanero.Smooth.ReflectionWrappers.PropertyWrapper"/> must be mapped to a One to One
+            Relationship or not
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.OneToOneAutoMapper.GetOwningPropName">
+            <summary>
+            Using a set of heuristics the Owning Property Name
+            is determined from the RelationshipName and any attributes on the
+            Property.
+            I.e. The Property of the class that owns this One To One Relationship.
+            I.e. The Property on the Class that owns the Property that wrapped by
+            the PropertyWrapper.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.OneToOneAutoMapper.GetRelatedPropName">
+            <summary>
+            Using a set of heuristics the Related Property Name
+            is determined from the RelationshipName and any attributes on the
+            Property.
+            I.e. The Property of the class that is related by One To One Relationship.
+            I.e. The Property on the Class that is returned by the Property that is wrapped by
+            the PropertyWrapper.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.OneToOneAutoMapper.CreateRelPropDef">
+            <summary>
+            Create a RelPropDef based on the OwningPrropName and the RelatedPropName.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Habanero.Smooth.OneToOneAutoMapper.PropNamingConvention">
+            <summary>
+            Returns the object that contains the naming conventions used
+            by this auto mapper.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.OneToOneAutoMapper.OwningBoHasForeignKey">
+            <summary>
+            Determines whether the Owning Class or the related class has the foriegn key.
+            This is determined by looking at the Primary keys of each class.
+            </summary>
+        </member>
+        <member name="P:Habanero.Smooth.OneToOneAutoMapper.ReverseRelationshipName">
+            <summary>
+            The relationship name of the Relationship on the Related class that is the 
+            reverse relationship of this.
+            </summary>
+        </member>
+        <member name="T:Habanero.Smooth.OneToOneAutoMapperExtensions">
+            <summary>
+            Provides extension methods to provide a more fluent mechanism for 
+            determining a RelationshipDef from the Property.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.OneToOneAutoMapperExtensions.MapOneToOne(Habanero.Smooth.ReflectionWrappers.PropertyWrapper)">
+            <summary>
+             Creates the <see cref="T:Habanero.Base.IRelationshipDef"/> from the PropertyWrapper.
+            </summary>
+            <param name="propWrapper"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Habanero.Smooth.PropertyAutoMapper">
+            <summary>
+             This is a class that will automap all properties in the BusinessObject.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.PropertyAutoMapper.#ctor(System.Reflection.PropertyInfo)">
+            <summary>
+             Constructs the Property Automapper for a particular <see cref="T:System.Reflection.PropertyInfo"/>.
+            </summary>
+            <param name="propInfo"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Habanero.Smooth.PropertyAutoMapper.#ctor(Habanero.Smooth.ReflectionWrappers.PropertyWrapper)">
+            <summary>
+            Constructs the Property Automapper for a particular <see cref="T:Habanero.Smooth.ReflectionWrappers.PropertyWrapper"/>
+            where a PropertyWrapper typically wraps a <see cref="T:System.Reflection.PropertyInfo"/> and provides additional methods.
+            </summary>
+            <param name="propertyWrapper"></param>
+        </member>
+        <member name="M:Habanero.Smooth.PropertyAutoMapper.MapProperty">
+            <summary>
+            Will attempt to map a PropertyInfo to an IPropDef.
+            If it cannot be mapped then will return null.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Habanero.Smooth.PropMapperExtensions">
+            <summary>
+            Provides extension methods that allow a more fluent programming style 
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.PropMapperExtensions.MapProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            Based on the information available for the PropertyInfo (Name, Attributes, DataTypes etc)
+            And a set of Heuristics a Property Definition is created for this <see cref="T:System.Reflection.PropertyInfo"/>
+            </summary>
+            <param name="propInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Habanero.Smooth.PropMapperExtensions.CanMapToProp(System.Type)">
+            <summary>
+            Using the heuristic that the property should be a mappable type
+            or an <see cref="T:System.Enum"/> to be mapped as a property else it should be a 
+            Relationship or a component.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Habanero.Smooth.Guard">
+            <summary>
+            Performs common argument validation.
+            </summary>
+        </member>
+        <member name="M:Habanero.Smooth.Guard.AgainstNullOrEmptyString(System.String,System.String)">
+            <summary>
+            Checks a string argument to ensure it isn't null or empty.
+            </summary>
+            <param name="argumentValue">The argument value to check.</param>
+            <param name="argumentName">The name of the argument.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="argumentValue"/> is a null reference.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="argumentValue"/> is <see cref="F:System.String.Empty"/>.</exception>
+        </member>
+        <member name="M:Habanero.Smooth.Guard.AgainstEmptyString(System.String,System.String)">
+            <summary>
+            Checks a string argument to ensure it isn't empty.
+            </summary>
+            <param name="argumentValue">The argument value to check.</param>
+            <param name="argumentName">The name of the argument.</param>
+            <exception cref="T:System.ArgumentException"><paramref name="argumentValue"/> is <see cref="F:System.String.Empty"/>.</exception>
+        </member>
+        <member name="M:Habanero.Smooth.Guard.AgainstNull(System.Object,System.String)">
+            <summary>
+            Checks an argument to ensure it isn't null.
+            </summary>
+            <param name="argumentValue">The argument value to check.</param>
+            <param name="argumentName">The name of the argument.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="argumentValue"/> is a null reference.</exception>
+        </member>
+    </members>
+</doc>

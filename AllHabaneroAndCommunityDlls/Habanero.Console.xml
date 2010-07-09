@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Habanero.Console</name>
+    </assembly>
+    <members>
+        <member name="T:Habanero.Console.ConsoleExceptionNotifier">
+            <summary>
+            Displays exception message output to the console
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.ConsoleExceptionNotifier.Notify(System.Exception,System.String,System.String)">
+            <summary>
+            Notifies the user of an exception that has occurred, by adding
+            the error text to the console
+            </summary>
+            <param name="ex">The exception</param>
+            <param name="furtherMessage">Any further error messages</param>
+            <param name="title">The title</param>
+        </member>
+        <member name="P:Habanero.Console.ConsoleExceptionNotifier.ExceptionMessage">
+            <summary>
+             The last exception logged by the exception notifier
+            </summary>
+        </member>
+        <member name="T:Habanero.Console.ConsoleProgressIndicator">
+            <summary>
+            Indicates to the user how much progress has been made in 
+            completing a task, by adding text output to the console
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.ConsoleProgressIndicator.#ctor">
+            <summary>
+            Constructor to initialise a new indicator
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.ConsoleProgressIndicator.UpdateProgress(System.Int32,System.Int32,System.String)">
+            <summary>
+            Updates the indicator with progress information by adding a line
+            of text output to the console
+            </summary>
+            <param name="amountComplete">The amount complete already</param>
+            <param name="totalToComplete">The total amount to be completed</param>
+            <param name="description">A description</param>
+        </member>
+        <member name="M:Habanero.Console.ConsoleProgressIndicator.Complete">
+            <summary>
+            Adds a line of text to the console with the message "Complete."
+            </summary>
+        </member>
+        <member name="T:Habanero.Console.HabaneroAppConsole">
+            <summary>
+            Provides a template for a standard Habanero application, including
+            standard fields and initialisations.  Specific details covered are:
+            <ul>
+            <li>The class definitions that define how the data is represented
+            and limited</li>
+            <li>The database configuration, connection and settings</li>
+            <li>A logger to record debugging and error messages</li>
+            <li>An exception notifier to communicate exceptions to the user</li>
+            <li>Automatic version upgrades when an application is out-of-date</li>
+            <li>A synchronisation controller</li>
+            </ul>
+            To set up and launch an application:
+            <ol>
+            <li>Instantiate the application with the constructor</li>
+            <li>Specify any individual settings as required</li>
+            <li>Call the Startup() method to launch the application</li>
+            </ol>
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsole.#ctor(System.String,System.String)">
+            <summary>
+            Constructor to initialise a new application with basic application
+            information.  Use the Startup() method to launch the application.
+            </summary>
+            <param name="appName">The application name</param>
+            <param name="appVersion">The application version</param>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsole.SetPrivateKey(System.String)">
+            <summary>
+            Sets the private key used to decrypt the database password. If your database password as supplied is
+            in plaintext then this is not necessary. If you supply the DatabaseConfig object you can also set the
+            private key on that instead.
+            </summary>
+            <param name="xmlPrivateKey">The private key (RSA) in xml format</param>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsole.GetXmlClassDefsLoader">
+            <summary>
+            Gets the loader for the xml class definitions
+            </summary>
+            <returns>Returns the loader</returns>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsole.SetupClassDefs">
+            <summary>
+            Loads the class definitions
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsole.SetupSettings">
+            <summary>
+            Initialises the settings.  If not provided, DatabaseSettings
+            is assumed.
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsole.SetupDatabaseConnection">
+            <summary>
+            Sets up the database connection.  If not provided, then
+            reads the connection from the config file.
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsole.SetupExceptionNotifier">
+            <summary>
+            Sets up the exception notifier used to display
+            exceptions to the final user.  If not specified,
+            assumes the ConsoleExceptionNotifier.
+            </summary>
+        </member>
+        <member name="P:Habanero.Console.HabaneroAppConsole.DatabaseConfig">
+            <summary>
+            Sets the database configuration object, which contains basic 
+            connection information along with the database vendor name 
+            (eg. MySql, Oracle).
+            </summary>
+        </member>
+        <member name="T:Habanero.Console.HabaneroAppConsoleInMemory">
+            <summary>
+            Provides a template for a standard Habanero application, including
+            standard fields and initialisations.  Specific details covered are:
+            <ul>
+            <li>The class definitions that define how the data is represented
+            and limited</li>
+            <li>The database configuration, connection and settings</li>
+            <li>A logger to record debugging and error messages</li>
+            <li>An exception notifier to communicate exceptions to the user</li>
+            <li>Automatic version upgrades when an application is out-of-date</li>
+            <li>A synchronisation controller</li>
+            </ul>
+            To set up and launch an application:
+            <ol>
+            <li>Instantiate the application with the constructor</li>
+            <li>Specify any individual settings as required</li>
+            <li>Call the Startup() method to launch the application</li>
+            </ol>
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsoleInMemory.#ctor(System.String,System.String)">
+            <summary>
+            Constructor to initialise a new application with basic application
+            information.  Use the Startup() method to launch the application.
+            </summary>
+            <param name="appName">The application name</param>
+            <param name="appVersion">The application version</param>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsoleInMemory.GetXmlClassDefsLoader">
+            <summary>
+            Gets the loader for the xml class definitions
+            </summary>
+            <returns>Returns the loader</returns>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsoleInMemory.SetupClassDefs">
+            <summary>
+            Loads the class definitions
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsoleInMemory.SetupSettings">
+            <summary>
+            Initialises the settings.  If not provided, DatabaseSettings
+            is assumed.
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsoleInMemory.SetupDatabaseConnection">
+            <summary>
+            Sets up the database connection.  If not provided, then
+            reads the connection from the config file.
+            </summary>
+        </member>
+        <member name="M:Habanero.Console.HabaneroAppConsoleInMemory.SetupExceptionNotifier">
+            <summary>
+            Sets up the exception notifier used to display
+            exceptions to the final user.  If not specified,
+            assumes the ConsoleExceptionNotifier.
+            </summary>
+        </member>
+        <member name="P:Habanero.Console.HabaneroAppConsoleInMemory.DataStoreInMemory">
+            <summary>
+             The <see cref="P:Habanero.Console.HabaneroAppConsoleInMemory.DataStoreInMemory"/> created by this class for use in your application.
+            </summary>
+        </member>
+    </members>
+</doc>
