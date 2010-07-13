@@ -27,6 +27,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+#pragma warning disable 612,618
+//pragma warning disable 612,618 - Although obselete the tests are still required.
     /// <summary>
     /// Summary description for TestEditableDataSetProvider.
     /// </summary>
@@ -80,7 +82,9 @@ namespace Habanero.Test.BO
 
             _dataSetProvider = new EditableDataSetProvider(boCollection);
             BOMapper mapper = new BOMapper(boCollection.ClassDef.CreateNewBusinessObject());
+
             itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+
 
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(2, boCollection.Count);
@@ -737,4 +741,5 @@ namespace Habanero.Test.BO
         }
 
     }
+#pragma warning restore 612,618
 }
