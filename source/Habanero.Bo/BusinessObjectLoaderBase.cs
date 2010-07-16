@@ -797,16 +797,14 @@ namespace Habanero.BO
             return businessObjectManager.GetBusinessObject(key);
 /*            if (key.IsGuidObjectID)
             {
-                lock (businessObjectManager)
-                {
-                    return businessObjectManager.Contains(key) ? businessObjectManager[key] : null;
-                }
+                return BORegistry.BusinessObjectManager.GetObjectIfInManager(key.ObjectID);
             }
             BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
 //            IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
 //            return find.Count > 0 ? find[0] : null;
             return businessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria(), boType);*/
         }
+
         /// <summary>
         /// Sets the Status for the Business Object to NotNew.
         /// </summary>
