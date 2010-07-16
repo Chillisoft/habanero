@@ -2294,11 +2294,44 @@ namespace Habanero.Test.BO
             //----------------Assert preconditions ---------------
             Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
             //--------------- Execute Test ----------------------
-            IBusinessObject found = BusinessObjectManager.Instance.FindFirst(null, typeof (ContactPersonTestBO));
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst((Criteria)null, typeof (ContactPersonTestBO));
             //--------------- Test Result -----------------------
             Assert.IsNotNull(found);
         }
 
+        [Test]
+        public void Test_GetObjectIfInManager_WhenObjectIsInManager_ShouldReturnObject()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO bo1 = new ContactPersonTestBO();
+            //----------------Assert preconditions ---------------
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            //---------------Execute Test ----------------------
+            IBusinessObject found = BusinessObjectManager.Instance.GetObjectIfInManager(bo1.ID.ObjectID);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(found);
+        }
+
+        [Test]
+        public void Test_GetObjectIfInManager_WhenObjectIsNotInManager_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO bo1 = new ContactPersonTestBO();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            //----------------Assert preconditions ---------------
+            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+            //---------------Execute Test ----------------------
+            IBusinessObject found = BusinessObjectManager.Instance.GetObjectIfInManager(bo1.ID.ObjectID);
+            //---------------Test Result -----------------------
+            Assert.IsNull(found);
+        }
 
         private static ContactPersonTestBO CreateSavedCP()
         {

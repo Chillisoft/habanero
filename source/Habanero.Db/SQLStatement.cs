@@ -57,7 +57,7 @@ namespace Habanero.DB
                 {
                     _sampleCommand = _idbConnection.CreateCommand();
                     _gen = connection.CreateParameterNameGenerator();
-                    if (_idbConnection.State == ConnectionState.Open) log.Info("The created Connection is Open");
+                    if (_idbConnection.State == ConnectionState.Open) log.Debug("The created Connection is Open");
                 }
                 else
                 {

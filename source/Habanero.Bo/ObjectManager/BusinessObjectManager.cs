@@ -479,20 +479,17 @@ namespace Habanero.BO
         ///</summary>
         ///<param name="key"></param>
         ///<returns></returns>
-        public  IBusinessObject GetBusinessObject(IPrimaryKey key)
+        public IBusinessObject GetBusinessObject(IPrimaryKey key)
         {
-           if (key.IsGuidObjectID)
+            if (key.IsGuidObjectID)
             {
-                lock (_loadedBusinessObjects)
-                {
-                    return this.Contains(key) ? this[key] : null;
-                }
+                return GetObjectIfInManager(key.ObjectID);
             }
-            
-            BOPrimaryKey boPrimaryKey = ((BOPrimaryKey)key);
-            if(boPrimaryKey.BusinessObject == null) return null;
-            return this.FindFirst(boPrimaryKey.GetKeyCriteria(), boPrimaryKey.BusinessObject.ClassDef);
+            BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
+            if (boPrimaryKey.BusinessObject == null) return null;
+            return this.FindFirst(boPrimaryKey, boPrimaryKey.BusinessObject.ClassDef);
         }
+
         private static IBusinessObject GetBusinessObject(WeakReference weakReference)
         {
             try
@@ -575,6 +572,40 @@ namespace Habanero.BO
                 else
                 {
                     _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, Type boType) (exit 2)");
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds the First Business Object that matches the IClassDef classDef and the key given. Uses the internal composite key dictionary, 
+        /// so this method is far faster than the other FindFirst methods for finding objects with composite keys.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="boType"></param>
+        /// <returns></returns>
+        public IBusinessObject FindFirst(BOPrimaryKey key, IClassDef classDef)
+        {
+            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst(BOPrimaryKey key, IClassDef classDef)");
+            lock (_lock)
+            {
+                string asStringCurrentValue = key.AsString_CurrentValue();
+                if (_compositeKeyIDs.ContainsKey(asStringCurrentValue))
+                {
+                    try
+                    {
+                        return this[_compositeKeyIDs[asStringCurrentValue]];
+                    }
+                    catch (HabaneroDeveloperException ex)
+                    {
+                        _compositeKeyIDs.Remove(asStringCurrentValue);
+                        _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, IClassDef classDef) (exit 1)");
+                        return FindFirst(key.GetKeyCriteria(), classDef);
+                    }
+                }
+                else
+                {
+                    _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, IClassDef classDef) (exit 2)");
                     return null;
                 }
             }

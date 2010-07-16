@@ -133,12 +133,14 @@ namespace Habanero.BO
             boColInternal.Loading = false;
 //            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
+
         /// <summary>
         /// Actual Executes the Refresh this method is impleemented by the inherited classes of the business object loader base.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
         protected abstract void DoRefresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new();
+
         /// <summary>
         /// Actual Executes the Refresh this method is impleemented by the inherited classes of the business object loader base.
         /// </summary>
@@ -244,6 +246,7 @@ namespace Habanero.BO
             totalNoOfRecords = col.TotalCountAvailableForPaging;
             return col;
         }
+
         /// <summary>
         /// Loads a business Object collection of the type defined by the <paramref name="classDef"/> with the appropriate 
         /// criteria and the start no of records and max number of records. For full details 
@@ -269,6 +272,7 @@ namespace Habanero.BO
             totalNoOfRecords = col.TotalCountAvailableForPaging;
             return col;
         }
+
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, and limiting the number of objects loaded. 
@@ -394,6 +398,7 @@ namespace Habanero.BO
         }
 
         #endregion
+
         /// <summary>
         /// Creates a Generic Collection of <see cref="IBusinessObjectCollection"/> of the Generic
         /// Type determined by the <paramref name="classDef"/>
@@ -424,6 +429,7 @@ namespace Habanero.BO
 //            }
 //            collection.PersistedBOCol.Add(loadedBo);
 //        }
+
         /// <summary>
         /// Adds the business object <paramref name="loadedBo"/> to the collection identified by <paramref name="collection"/>
         /// </summary>
@@ -554,6 +560,7 @@ namespace Habanero.BO
                 collection.Remove(businessObject);
             }
         }
+
         /// <summary>
         /// Restores the created collection. I.e. moves the items that are in the created collection
         ///  back to the main collection. Remember the main collection shows all the items from the database
@@ -567,6 +574,7 @@ namespace Habanero.BO
                 collection.AddWithoutEvents(businessObject);
             }
         }
+
         // ReSharper disable UnusedMember.Global
         /// <summary>
         /// Restores the created collection. I.e. moves the items that are in the created collection
@@ -589,6 +597,7 @@ namespace Habanero.BO
                 collection.AddWithoutEvents(createdBO);
             }
         }
+
         /// <summary>
         /// Restores the removed collection. I.e. moves the items that are in the removed collection
         ///  out of the main collection. Remember the main collection shows all the items from the database
@@ -766,6 +775,7 @@ namespace Habanero.BO
             IClassDef classDef = ClassDef.ClassDefs[type];
             return GetBusinessObjectByValue(classDef, idValue);
         }
+
         ///<summary>
         /// For a given value e.g. a Guid Identifier '{......}' this will 
         /// load the business object from the Data store.
@@ -785,6 +795,7 @@ namespace Habanero.BO
             IClassDef classDef = ClassDef.ClassDefs[typeof(T)];
             return (T) GetBusinessObjectByValue(classDef, idValue);
         }
+
         /// <summary>
         /// Returns the Business Object for the primary Key from the object manager
         /// </summary>

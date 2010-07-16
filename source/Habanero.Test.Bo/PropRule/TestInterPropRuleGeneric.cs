@@ -17,10 +17,10 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using AutoMappingHabanero;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.BO.Rules;
 using NUnit.Framework;
 
@@ -32,8 +32,9 @@ namespace Habanero.Test.BO.PropRule
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            var classDef = typeof (FakeBO).MapClass();
-            ClassDef.ClassDefs.Add(classDef);
+           // var classDef = typeof (FakeBO).MapClass();
+           // ClassDef.ClassDefs.Add(classDef);
+            ClassDef.ClassDefs.Add(FakeBO.LoadClassDef());
         }
         //Will not work for DotNet For 2_0
         [Test]
@@ -202,33 +203,40 @@ namespace Habanero.Test.BO.PropRule
                 : base(TestUtil.GetRandomString(), typeof(int), PropReadWriteRule.ReadWrite, null)
             {
             }
-        }  
-        private class FakeBO: BusinessObject
-        {
-            public virtual System.Int32? EconomicLife
-            {
-                get
-                {
-                    return ((System.Int32?)(base.GetPropertyValue("EconomicLife")));
-                }
-/*                set
-                {
-                    base.SetPropertyValue("EconomicLife", value);
-                }*/
-            }
-
-            public virtual System.Int32? EngineeringLife
-            {
-                get
-                {
-                    return ((System.Int32?)(base.GetPropertyValue("EngineeringLife")));
-                }
-/*                set
-                {
-                    base.SetPropertyValue("EngineeringLife", value);
-                }*/
-            }
         }
     }
 
+    public class FakeBO : BusinessObject
+    {
+        public static IClassDef LoadClassDef()
+        {
+            XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+            return loader.LoadClass(
+                    @"
+				<class name=""Habanero.Test.BO.PropRule.FakeBO"" assembly=""Habanero.Test.BO"">
+					<property  name=""FakeBOID"" type=""Guid"" />
+					<property  name=""EconomicLife"" type=""Int32"" />
+					<property  name=""EngineeringLife"" type=""Int32"" />
+                    <primaryKey>
+						<prop name=""FakeBOID"" />
+					</primaryKey>
+				</class>
+			");
+        }
+        public virtual System.Int32? EconomicLife
+        {
+            get
+            {
+                return ((System.Int32?)(base.GetPropertyValue("EconomicLife")));
+            }
+        }
+
+        public virtual System.Int32? EngineeringLife
+        {
+            get
+            {
+                return ((System.Int32?)(base.GetPropertyValue("EngineeringLife")));
+            }
+        }
+    }
 }
