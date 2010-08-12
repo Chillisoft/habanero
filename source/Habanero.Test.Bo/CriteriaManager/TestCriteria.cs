@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -586,7 +587,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             Criteria criteria = Criteria.FromPrimaryKey(primaryKey);
             //---------------Test Result -----------------------
-            StringAssert.AreEqualIgnoringCase("MyBOID = '" + myBO.MyBoID.Value.ToString("B") + "'", criteria.ToString());
+            StringAssert.AreEqualIgnoringCase("MyBOID = '" + myBO.MyBoID.GetValueOrDefault().ToString("B") + "'", criteria.ToString());
             //---------------Tear Down -------------------------          
         }
 
@@ -703,31 +704,41 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "And is not a valid Logical Operator for a Unary Criteria")]
+        [Test]
         public void TestUnaryConstructorDoesntWorkForAnd()
         {
             //---------------Set up test pack-------------------
             Criteria dateTimeCriteria = new Criteria("DateTime", Criteria.ComparisonOp.GreaterThan, DateTime.Now);
             
             //---------------Execute Test ----------------------
-            new Criteria(Criteria.LogicalOp.And, dateTimeCriteria);
-            //---------------Test Result -----------------------
-
-            //---------------Tear Down -------------------------
-
+            try
+            {
+                new Criteria(Criteria.LogicalOp.And, dateTimeCriteria);
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("And is not a valid Logical Operator for a Unary Criteria", ex.Message);
+            }
         }
-        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Or is not a valid Logical Operator for a Unary Criteria")]
+        [Test]
         public void TestUnaryConstructorDoesntWorkForOr()
         {
             //---------------Set up test pack-------------------
             Criteria dateTimeCriteria = new Criteria("DateTime", Criteria.ComparisonOp.GreaterThan, DateTime.Now);
 
             //---------------Execute Test ----------------------
-            new Criteria(Criteria.LogicalOp.Or, dateTimeCriteria);
-            //---------------Test Result -----------------------
-
-            //---------------Tear Down -------------------------
-
+            try
+            {
+                new Criteria(Criteria.LogicalOp.Or, dateTimeCriteria);
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("Or is not a valid Logical Operator for a Unary Criteria", ex.Message);
+            }
         }
 
 
@@ -1062,7 +1073,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void TestIsMatch_LessThan_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1085,7 +1096,6 @@ namespace Habanero.Test.BO
             catch (InvalidOperationException ex)
             {
                 StringAssert.Contains("does not implement IComparable and cannot be matched", ex.Message);
-                throw;
             }
             //---------------Tear Down -------------------------          
         }
@@ -1198,7 +1208,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void TestIsMatch_LessThanEqual_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1221,9 +1231,7 @@ namespace Habanero.Test.BO
             catch (InvalidOperationException ex)
             {
                 StringAssert.Contains("does not implement IComparable and cannot be matched", ex.Message);
-                throw;
             }
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -1334,7 +1342,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void TestIsMatch_GreaterThanEqual_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1357,9 +1365,7 @@ namespace Habanero.Test.BO
             catch (InvalidOperationException ex)
             {
                 StringAssert.Contains("does not implement IComparable and cannot be matched", ex.Message);
-                throw;
             }
-            //---------------Tear Down -------------------------          
         }
         [Test]
         public void TestToString_LeafCriteria_String_GreaterThanEqual()
@@ -1791,7 +1797,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void TestIsMatch_Like_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1815,9 +1821,7 @@ namespace Habanero.Test.BO
             catch (InvalidOperationException ex)
             {
                 StringAssert.Contains("does not implement IComparable and cannot be matched", ex.Message);
-                throw;
             }
-            //---------------Tear Down -------------------------          
         }
         [Test]
         public void Test_ToString_LeafCriteria_String_Like()
@@ -2180,7 +2184,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void TestIsMatch_NotLike_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -2204,9 +2208,7 @@ namespace Habanero.Test.BO
             catch (InvalidOperationException ex)
             {
                 StringAssert.Contains("does not implement IComparable and cannot be matched", ex.Message);
-                throw;
             }
-            //---------------Tear Down -------------------------          
         }
         [Test]
         public void Test_ToString_LeafCriteria_String_NotLike()
@@ -2247,7 +2249,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestIsMatch_OneProp_ISNot()
+        public void TestIsMatch_OneProp_IsNot()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -2262,7 +2264,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(isMatch, "The object should not be a match since it does not matches the criteria given.");
         }
         [Test]
-        public void TestNotIsMatch_OneProp_ISNot()
+        public void TestNotIsMatch_OneProp_IsNot()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -2601,6 +2603,27 @@ namespace Habanero.Test.BO
             //test for value is null
             //---------------Test Result -----------------------
 
+        }
+
+        [Test]
+        public void Test_Create_WhenPropNameNull_ShouldThrowError()
+        {
+            //---------------Set up test pack-------------------
+            string leftCriteria = null;            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new Criteria(leftCriteria, Criteria.ComparisonOp.NotIn, "fdafasdf");
+                Assert.Fail("Expected to throw an ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("fieldString", ex.ParamName);
+            }
         }
 
         #endregion //Comparison Operators

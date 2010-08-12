@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -58,8 +58,7 @@
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>067</NoWarn>
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -115,10 +114,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMappingHabanero, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c8a289c9d9f7993b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\AutoMappingHabanero.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data, Version=6.2.2.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MySql.Data.dll</HintPath>
@@ -168,6 +163,7 @@
     <Compile Include="Loaders\TestXmlBusinessObjectLookupListLoader.cs" />
     <Compile Include="Loaders\TestXmlDatabaseLookupListLoader.cs" />
     <Compile Include="Loaders\TestXmlFilterLoader.cs" />
+    <Compile Include="Loaders\TestXmlPropertyRuleLoader_ClassDefOnly.cs" />
     <Compile Include="Loaders\TestXmlSimpleLookupListLoader.cs" />
     <Compile Include="PropRule\TestInterPropRule.cs" />
     <Compile Include="PropRule\TestInterPropRuleGeneric.cs" />
@@ -181,10 +177,12 @@
     <Compile Include="TestBOHelper.cs" />
     <Compile Include="TestBOObjectID.cs" />
     <Compile Include="TestBOPropertyMapper.cs" />
+    <Compile Include="TestBOPropertyMapperFactory.cs" />
     <Compile Include="TestBOPropInteger.cs" />
     <Compile Include="TestBORelationshipMapper.cs" />
     <Compile Include="TestBOSerialisation.cs" />
     <Compile Include="TestBusinessObjectInheritance.cs" />
+    <Compile Include="TestBusinessObjectManagerNull.cs" />
     <Compile Include="TestBusinessObjectRules.cs" />
     <Compile Include="TestBusinessObjectSerialisationXML.cs" />
     <Compile Include="TestBOStatus.cs" />
@@ -281,6 +279,7 @@
     <Compile Include="BusinessObjectLoader\TestSelectQuery.cs" />
     <Compile Include="BusinessObjectLoader\TestSource.cs" />
     <Compile Include="TestPropertyLink.cs" />
+    <Compile Include="TestReflectionPropertyMapper.cs" />
     <Compile Include="TestRelKey.cs" />
     <Compile Include="TestSimpleLookupList.cs" />
     <Compile Include="TransactionCommitters\TestTransactionalBusinessObject.cs" />

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -117,7 +117,7 @@ namespace Habanero.BO.Loaders
                         "'add' attribute was '" + keyAtt + "' but the allowed " +
                         "attributes are " + String.Join(", ", _propRule.AvailableParameters.ToArray()) + ".");
 				}
-                _propRule.SetParameter(keyAtt, valueAtt);
+                _ruleParameters[keyAtt] = valueAtt;
             	counter++;
                 ReadAndIgnoreEndTag();
             }
@@ -129,7 +129,8 @@ namespace Habanero.BO.Loaders
                     "element for each component of the rule, such as the " +
                     "minimum value for an integer.");
             }
-        	//_propRule.Parameters = _ruleParameters;
+          
+        	_propRule.Parameters = _ruleParameters;
         }
 
         ///// <summary>

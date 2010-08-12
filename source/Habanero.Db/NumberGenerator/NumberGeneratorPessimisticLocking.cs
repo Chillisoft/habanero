@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -59,7 +59,7 @@ namespace Habanero.DB
         public long NextNumber()
         {
             BoSequenceNumber.SequenceNumber++;
-            return BoSequenceNumber.SequenceNumber.Value;
+            return BoSequenceNumber.SequenceNumber.GetValueOrDefault();
         }
 
         private static BOSequenceNumberLocking LoadSequenceNumber(string numberType)

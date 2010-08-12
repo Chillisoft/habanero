@@ -95,8 +95,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, joinList.Count);
-            Assert.AreSame(fromSource, joinList[0].FromSource);
-            Assert.AreSame(toSource, joinList[0].ToSource);
+            Assert.AreEqual(fromSource.ToString(), joinList[0].FromSource.ToString());
+            Assert.AreEqual(toSource.ToString(), joinList[0].ToSource.ToString());
         }
 
         [Test]
@@ -222,7 +222,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //-------------Test Result ----------------------
             Assert.AreEqual(1, originalJoinList.Count);
-            Assert.AreSame(joinList[0].ToSource, originalJoinList[0].ToSource);
+            Assert.AreEqual(joinList[0].ToSource.ToString(), originalJoinList[0].ToSource.ToString());
         }
 
         [Test]
@@ -236,8 +236,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Source.JoinList joinList = otherSource.Joins;
             Source childSource = new Source("ChildSource", "ChildSourceEntity");
             Source grandchildSource = new Source("GrandChildSource", "GrandchildSourceEntity");
-            otherSource.JoinToSource(childSource);
             childSource.JoinToSource(grandchildSource);
+            otherSource.JoinToSource(childSource);
+           
             //-------------Assert Preconditions -------------
             Assert.IsNull(originalSource.ChildSource);
             Assert.IsNotNull(otherSource.ChildSource);
@@ -248,8 +249,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //-------------Test Result ----------------------
             Assert.AreEqual(1, originalJoinList.Count);
             Source originalJoinListNewChild = originalJoinList[0].ToSource;
-            Assert.AreSame(childSource, originalJoinListNewChild);
-            Assert.AreSame(grandchildSource, originalSource.ChildSource.ChildSource);
+            Assert.AreEqual(childSource.ToString(), originalJoinListNewChild.ToString());
+            Assert.AreEqual(grandchildSource.ToString(), originalSource.ChildSource.ChildSource.ToString());
         }
 
         //[Test]

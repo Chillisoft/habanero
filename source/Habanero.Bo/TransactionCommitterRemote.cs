@@ -4,6 +4,10 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// A Transaction committer for commiting items to a remote data source 
+    /// e.g. via remoting.
+    /// </summary>
     public class TransactionCommitterRemote : ITransactionCommitter
     {
         private readonly ITransactionCommitter _remoteTransactionCommitter;
@@ -20,7 +24,7 @@ namespace Habanero.BO
         public void AddTransaction(ITransactional transaction) { _remoteTransactionCommitter.AddTransaction(transaction); }
         List<Guid> ITransactionCommitter.CommitTransaction() {
             List<Guid> executedTransactions = _remoteTransactionCommitter.CommitTransaction();
-            executedTransactions.ForEach(guid => ((BusinessObject)BusinessObjectManager.Instance[guid]).UpdateStateAsPersisted());
+            executedTransactions.ForEach(guid => ((BusinessObject)BORegistry.BusinessObjectManager[guid]).UpdateStateAsPersisted());
             return executedTransactions;
         }
 

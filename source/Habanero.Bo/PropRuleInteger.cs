@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -77,10 +77,14 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "min":
-                            MinValue = Convert.ToInt32(value);
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MinValue = Int32.MinValue;
+                            else MinValue = Convert.ToInt32(value);
                             break;
                         case "max":
-                            MaxValue = Convert.ToInt32(value);
+                            if (value is string && string.IsNullOrEmpty((string)value))
+                                MaxValue = Int32.MaxValue;
+                            else MaxValue = Convert.ToInt32(value);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException

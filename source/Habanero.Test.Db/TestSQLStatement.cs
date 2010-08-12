@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -184,11 +184,23 @@ namespace Habanero.Test.DB
 
         #region Test AddJoin
 
-        [Test, ExpectedException(typeof(SqlStatementException))]
+        [Test]
         public void TestAddJoin_WithEmptyStatement()
         {
+            //---------------Set up test pack-------------------
             SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "");
-            sql.AddJoin("left join", "bobby", "bobs = bobbys");
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                sql.AddJoin("left join", "bobby", "bobs = bobbys");
+                Assert.Fail("Expected to throw an SqlStatementException");
+            }
+                //---------------Test Result -----------------------
+            catch (SqlStatementException ex)
+            {
+                StringAssert.Contains("Cannot add a join clause to a SQL statement that does not contain a from clause", ex.Message);
+            }
         }
 
         [Test]

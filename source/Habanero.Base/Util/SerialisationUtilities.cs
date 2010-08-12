@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -25,7 +25,7 @@ namespace Habanero.Util
     /// <summary>
     /// Provides serialisation utilities
     /// </summary>
-    public class SerialisationUtilities
+    public static class SerialisationUtilities
     {
         /// <summary>
         /// Converts an Object to a byte array

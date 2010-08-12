@@ -24,6 +24,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders
 {
+#pragma warning disable 612,618
+
     [Ignore("Triggers are not included in Habanero at the moment")]
     [TestFixture]
     public class TestXmlTriggerLoader
@@ -84,7 +86,7 @@ namespace Habanero.Test.BO.Loaders
         {
             try
             {
-                ITrigger trigger =
+                
                     loader.LoadTrigger(
                         @"<trigger triggeredBy=""prop"" target=""prop"" action=""action"" value=""value"" />");
                 Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
@@ -96,4 +98,5 @@ namespace Habanero.Test.BO.Loaders
             }
         }
     }
+#pragma warning restore 612,618
 }

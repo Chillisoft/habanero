@@ -249,11 +249,20 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(0, rowsPanForColumnToTheRight);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void GetRowSpanForColumnToTheRight_Zero()
         {
             //---------------Execute Test ----------------------
-           new UIFormColumn().GetRowSpanForColumnToTheRight(0);
+            try
+            {
+                new UIFormColumn().GetRowSpanForColumnToTheRight(0);
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("columnsRight cannot be zero", ex.Message);
+            }
            
         }
 

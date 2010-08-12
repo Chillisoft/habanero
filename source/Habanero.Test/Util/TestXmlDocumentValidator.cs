@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -46,11 +46,22 @@ namespace Habanero.Test.Util
             validator.ValidateDocument(itsXmlDocument, "test", itsDTD);
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
+        [Test]
         public void TestWithInvalidDocument()
         {
+            //---------------Set up test pack-------------------
             XmlDocumentValidator validator = new XmlDocumentValidator();
-            validator.ValidateDocument(itsXmlDocument.Replace("oneprop", "twoprop"), "test", itsDTD);
+            //---------------Execute Test ----------------------
+            try
+            {
+                validator.ValidateDocument(itsXmlDocument.Replace("oneprop", "twoprop"), "test", itsDTD);
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The relationship node does not conform to the dtd.The 'twoprop' element is not declared", ex.Message);
+            }
         }
     }
 }

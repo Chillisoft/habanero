@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -63,8 +63,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            TestUtil.WaitForGC();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -86,8 +85,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            TestUtil.WaitForGC();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -107,9 +105,11 @@ namespace Habanero.Test.DB
         public void TestAfterLoadCalled_GetCollection_Generic_NotReloaded()
         {
             //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             ContactPersonTestBO.CreateSavedContactPerson();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
             Assert.IsFalse(cp.AfterLoadCalled);
 
@@ -123,7 +123,6 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             ContactPersonTestBO loadedBO = col[0];
-            Assert.AreSame(cp, loadedBO);
             Assert.IsTrue(loadedBO.AfterLoadCalled);
             //This works because if the object is not dirty then it is refreshed from the database
         }
@@ -134,7 +133,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
             Assert.IsFalse(cp.AfterLoadCalled);
 
@@ -147,7 +146,6 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             ContactPersonTestBO loadedCP = (ContactPersonTestBO)col[0];
-            Assert.AreSame(cp, loadedCP);
             Assert.IsTrue(loadedCP.AfterLoadCalled);
             Assert.IsInstanceOf(typeof(BusinessObjectCollection<ContactPersonTestBO>), col);
         }
@@ -380,7 +378,142 @@ namespace Habanero.Test.DB
             Assert.IsInstanceOf(typeof(FilledCircleNoPrimaryKey), loadedShape);
             //---------------Tear Down -------------------------          
         }
+/*        [Test]
+        public void Test_LoadWithLimit_SearchCriteriaNullString_ShouldNotRaiseError_FixBug565()
+        {
+            TestUsingDatabase.SetupDBDataAccessor();
+            ContactPersonTestBO.DeleteAllContactPeople();
+            const int totalRecords = 3;
+            const int firstRecord = 0;
+            const int limit = 2;
+            const int expectedCount = 2;
 
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+
+            int totalNoOfRecords;
+            col.LoadWithLimit((string)null, "Surname", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, expectedCount, contactPersonTestBOs, col, totalNoOfRecords);
+        }
+        [Test]
+        public void Test_LoadWithLimit_SortCriteriaEmptyString_ShouldNotRaiseError_FixBug566()
+        {
+
+            TestUsingDatabase.SetupDBDataAccessor();
+            ContactPersonTestBO.DeleteAllContactPeople();
+            const int totalRecords = 3;
+            const int firstRecord = 0;
+            const int limit = 2;
+            const int expectedCount = 2;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            Assert.AreEqual
+                (totalRecords, totalNoOfRecords, "The returned total number of availabe records is incorrect");
+            Assert.AreEqual
+                (firstRecord, col.SelectQuery.FirstRecordToLoad,
+                 "Collection query FirstRecordToLoad does not match expectation.");
+            Assert.AreEqual
+                (limit, col.SelectQuery.Limit, "Collection query limit does not match expectation.");
+            Assert.AreEqual(expectedCount, col.Count, "Collection size does not match expectation.");
+        }
+        [Test]
+        public void Test_LoadWithLimit_SortCriteriaNullString_ShouldNotRaiseError_FixBug566()
+        {
+
+            TestUsingDatabase.SetupDBDataAccessor();
+            ContactPersonTestBO.DeleteAllContactPeople();
+            Assert.IsInstanceOf<DataAccessorDB>(BORegistry.DataAccessor, "Should b using Database");
+            const int totalRecords = 6;
+            const int firstRecord = 2;
+            const int limit = 2;
+            const int expectedCount = 2;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            Assert.IsInstanceOf<DataAccessorDB>(BORegistry.DataAccessor, "Should b using Database");
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit((string)null, (string)null, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            Assert.AreEqual
+                (totalRecords, totalNoOfRecords, "The returned total number of availabe records is incorrect");
+            Assert.AreEqual
+                (firstRecord, col.SelectQuery.FirstRecordToLoad,
+                 "Collection query FirstRecordToLoad does not match expectation.");
+            Assert.AreEqual
+                (limit, col.SelectQuery.Limit, "Collection query limit does not match expectation.");
+            Assert.AreEqual(expectedCount, col.Count, "Collection size does not match expectation.");
+        }
+
+        [Test]
+        public void Test_LoadWithLimit_WithSortCriteriaNullString_WhenCompositePK_ShouldNotRaiseError_FixBug567()
+        {
+            TestUsingDatabase.SetupDBDataAccessor();
+            ContactPersonCompositeKey.DeleteAllContactPeople();
+            Assert.IsInstanceOf<DataAccessorDB>(BORegistry.DataAccessor, "Should b using Database");
+            const int totalRecords = 6;
+            const int firstRecord = 2;
+            const int limit = 2;
+            const int expectedCount = 2;
+            ContactPersonCompositeKey.LoadClassDefs();
+            ContactPersonCompositeKey[] contactPersonTestBOs = CreateCompositeContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonCompositeKey>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            Assert.IsInstanceOf<DataAccessorDB>(BORegistry.DataAccessor, "Should b using Database");
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit((string)null, (string)null, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            Assert.AreEqual
+                (totalRecords, totalNoOfRecords, "The returned total number of availabe records is incorrect");
+            Assert.AreEqual
+                (firstRecord, col.SelectQuery.FirstRecordToLoad,
+                 "Collection query FirstRecordToLoad does not match expectation.");
+            Assert.AreEqual
+                (limit, col.SelectQuery.Limit, "Collection query limit does not match expectation.");
+            Assert.AreEqual(expectedCount, col.Count, "Collection size does not match expectation.");
+        }
+        /// <summary>
+        /// Creates the specified number of saved Contact People with random Surnames and returns an array of the 
+        /// created items sorted by their surname.
+        /// </summary>
+        /// <param name="noOfPeople">The number of saved contact people to create</param>
+        /// <returns>Returns an array of the created items sorted by their surname.</returns>
+        private static ContactPersonTestBO[] CreateSavedSortedContactPeople(int noOfPeople)
+        {
+            System.Collections.Generic.List<ContactPersonTestBO> createdBos = new List<ContactPersonTestBO>(noOfPeople);
+            while (createdBos.Count < noOfPeople)
+            {
+                createdBos.Add(ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString()));
+            }
+            createdBos.Sort((x, y) => StringComparer.InvariantCultureIgnoreCase.Compare(x.Surname, y.Surname));
+            return createdBos.ToArray();
+        }
+        private static ContactPersonCompositeKey[] CreateCompositeContactPeople(int totalRecords)
+        {
+            List<ContactPersonCompositeKey> createdBos = new List<ContactPersonCompositeKey>(totalRecords);
+            while (createdBos.Count < totalRecords)
+            {
+                createdBos.Add(ContactPersonCompositeKey.CreateSavedContactPerson());
+            }
+            return createdBos.ToArray();
+        }*/
         #endregion //Test that the load returns the correct sub type
     }
 }

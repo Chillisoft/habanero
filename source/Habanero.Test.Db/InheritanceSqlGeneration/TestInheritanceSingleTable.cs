@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -104,10 +104,19 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
                             "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");
         }
 
-        [Test, ExpectedException(typeof (InvalidPropertyNameException))]
+        [Test]
         public void TestCircleDoesntHaveCircleID()
         {
-            objCircle.GetPropertyValue("CircleID");
+            try
+            {
+                objCircle.GetPropertyValue("CircleID");
+                Assert.Fail("Expected to throw an InvalidPropertyNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains("The given property name 'CircleID' does not exist in the collection of properties for the class 'CircleNoPrimaryKey'", ex.Message);
+            }
         }
 
         [Test]

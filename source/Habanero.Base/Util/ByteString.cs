@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -95,10 +95,7 @@ namespace Habanero.Util
                 ByteString compareTo = (ByteString)obj;
                 return compareTo.Value.Equals(_textValue);
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>

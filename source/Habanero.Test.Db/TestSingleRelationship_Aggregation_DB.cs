@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using Habanero.Test.BO;
 using Habanero.Test.BO.Relationship;
 using NUnit.Framework;
 
@@ -29,6 +30,8 @@ namespace Habanero.Test.DB
         {
             base.SetupTest();
             TestUsingDatabase.SetupDBDataAccessor();
+            OrganisationTestBO.DeleteAllOrganisations();
+            ContactPersonTestBO.DeleteAllContactPeople();
         }
     }
 }

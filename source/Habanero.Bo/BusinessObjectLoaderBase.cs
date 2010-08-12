@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -110,9 +110,12 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
-            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
+            var boColInternal = ((IBusinessObjectCollectionInternal)collection);
+            boColInternal.Loading = true;
+//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
             DoRefresh(collection);
-            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
+            boColInternal.Loading = false;
+ //           ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
 
         /// <summary>
@@ -123,16 +126,21 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public void Refresh(IBusinessObjectCollection collection)
         {
-            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
+            var boColInternal = ((IBusinessObjectCollectionInternal)collection);
+//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
+            boColInternal.Loading = true;
             DoRefresh(collection);
-            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
+            boColInternal.Loading = false;
+//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
+
         /// <summary>
         /// Actual Executes the Refresh this method is impleemented by the inherited classes of the business object loader base.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
         protected abstract void DoRefresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new();
+
         /// <summary>
         /// Actual Executes the Refresh this method is impleemented by the inherited classes of the business object loader base.
         /// </summary>
@@ -238,6 +246,7 @@ namespace Habanero.BO
             totalNoOfRecords = col.TotalCountAvailableForPaging;
             return col;
         }
+
         /// <summary>
         /// Loads a business Object collection of the type defined by the <paramref name="classDef"/> with the appropriate 
         /// criteria and the start no of records and max number of records. For full details 
@@ -263,6 +272,7 @@ namespace Habanero.BO
             totalNoOfRecords = col.TotalCountAvailableForPaging;
             return col;
         }
+
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, and limiting the number of objects loaded. 
@@ -388,6 +398,7 @@ namespace Habanero.BO
         }
 
         #endregion
+
         /// <summary>
         /// Creates a Generic Collection of <see cref="IBusinessObjectCollection"/> of the Generic
         /// Type determined by the <paramref name="classDef"/>
@@ -418,6 +429,7 @@ namespace Habanero.BO
 //            }
 //            collection.PersistedBOCol.Add(loadedBo);
 //        }
+
         /// <summary>
         /// Adds the business object <paramref name="loadedBo"/> to the collection identified by <paramref name="collection"/>
         /// </summary>
@@ -425,7 +437,7 @@ namespace Habanero.BO
         /// <param name="loadedBo">The bo to be added</param>
         /// <param name="originalPersistedObjects"></param>
         protected static void AddBusinessObjectToCollection
-            (IBusinessObjectCollection collection, IBusinessObject loadedBo, IList originalPersistedObjects)
+            (IBusinessObjectCollection collection, IBusinessObject loadedBo, Dictionary<string, IBusinessObject> originalPersistedObjects)
         {
             if (collection == null) throw new ArgumentNullException("collection");
             if (loadedBo == null) throw new ArgumentNullException("loadedBo");
@@ -439,9 +451,11 @@ namespace Habanero.BO
                 collection.PersistedBusinessObjects.Add(loadedBo);
                 return;
             }
-            if (originalPersistedObjects.Contains(loadedBo))
+            string idAsString = loadedBo.ID.AsString_CurrentValue();
+            if (originalPersistedObjects.ContainsKey(idAsString))
             {
                 collection.AddWithoutEvents(loadedBo);
+                originalPersistedObjects[idAsString] = null;
                 return;
             }
             collection.PersistedBusinessObjects.Add(loadedBo);
@@ -461,21 +475,40 @@ namespace Habanero.BO
         ///   public accessors
         /// </summary>
         /// <param name="collection"></param>
-        protected static void RestoreEditedLists(IBusinessObjectCollection collection)
+        protected static void RestoreEditedLists(IBusinessObjectCollection collection, Dictionary<string, IBusinessObject> originalPersistedCollection)
         {
             ArrayList addedBoArray = new ArrayList();
             addedBoArray.AddRange(collection.AddedBusinessObjects);
-
             RestoreCreatedCollection(collection);
-
             RestoreRemovedCollection(collection);
-
-            RestoreMarkForDeleteCollection(collection);
-
+            RestoreMarkForDeleteCollection(collection, originalPersistedCollection);
             RestoreAddedCollection(collection, addedBoArray);
-            collection.TimeLastLoaded = DateTime.Now;
-            ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
+            if (originalPersistedCollection != null)
+            {
+                CorrectPersistedCollection(collection, originalPersistedCollection);
+            }
         }
+
+        /// <summary>
+        /// Corrects the items in the <see cref="IBusinessObjectCollection.PersistedBusinessObjects"/> collection.
+        /// i.e. the objects that are in the <see cref="IBusinessObjectCollection.PersistedBusinessObjects"/> collection that were not loaded
+        /// in this load are removed from that collection.
+        /// </summary>
+        /// <param name="collection">the collection to be corrected</param>
+        /// <param name="originalPersistedCollection">A Dictionary of IDs and objects. If the object is not null then it is to be removed.</param>
+        private static void CorrectPersistedCollection(IBusinessObjectCollection collection, Dictionary<string, IBusinessObject> originalPersistedCollection)
+        {
+            // remove whichever persisted objects have been deleted from the datasource since we last refreshed.
+            // this is a performance enhancement.
+            foreach (var b in originalPersistedCollection)
+            {
+                if (b.Value != null)
+                {
+                    collection.PersistedBusinessObjects.Remove(b.Value);
+                }
+            }
+        }
+
         /// <summary>
         /// Restores the items in the <see cref="IBusinessObjectCollection.AddedBusinessObjects"/> collection
         ///  back into the collection <paramref name="collection"/>
@@ -504,12 +537,13 @@ namespace Habanero.BO
             }
         }
 
-        private static void RestoreMarkForDeleteCollection(IBusinessObjectCollection collection)
+        private static void RestoreMarkForDeleteCollection(IBusinessObjectCollection collection, Dictionary<string, IBusinessObject> originalPersistedCollection)
         {
             foreach (BusinessObject businessObject in Utilities.ToArray<BusinessObject>(collection.MarkedForDeleteBusinessObjects))
             {
                 collection.Remove(businessObject);
                 collection.RemovedBusinessObjects.Remove(businessObject);
+                originalPersistedCollection[businessObject.ID.AsString_CurrentValue()] = null;
             }
         }
 
@@ -526,6 +560,7 @@ namespace Habanero.BO
                 collection.Remove(businessObject);
             }
         }
+
         /// <summary>
         /// Restores the created collection. I.e. moves the items that are in the created collection
         ///  back to the main collection. Remember the main collection shows all the items from the database
@@ -539,6 +574,7 @@ namespace Habanero.BO
                 collection.AddWithoutEvents(businessObject);
             }
         }
+
         // ReSharper disable UnusedMember.Global
         /// <summary>
         /// Restores the created collection. I.e. moves the items that are in the created collection
@@ -561,6 +597,7 @@ namespace Habanero.BO
                 collection.AddWithoutEvents(createdBO);
             }
         }
+
         /// <summary>
         /// Restores the removed collection. I.e. moves the items that are in the removed collection
         ///  out of the main collection. Remember the main collection shows all the items from the database
@@ -599,8 +636,10 @@ namespace Habanero.BO
             where T : class, IBusinessObject, new()
         {
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
-            ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
+            var boColInternal = ((IBusinessObjectCollectionInternal)relatedCol);
 
+            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
+            boColInternal.Loading = true;
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
             IOrderCriteria preparedOrderCriteria =
                 QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
@@ -610,7 +649,8 @@ namespace Habanero.BO
             //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
             relatedCol.SelectQuery.Criteria = relationshipCriteria;
             relatedCol.SelectQuery.OrderCriteria = preparedOrderCriteria;
-            ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
+            boColInternal.Loading = false;
+            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
             return relatedCol;
         }
 
@@ -626,6 +666,7 @@ namespace Habanero.BO
             // then load without events.
             if (collection.TimeLastLoaded == null)
             {
+                collection.PersistedBusinessObjects.Clear();
                 foreach (IBusinessObject loadedBo in loadedBOs)
                 {
                     collection.AddWithoutEvents(loadedBo);
@@ -634,24 +675,26 @@ namespace Habanero.BO
                 collection.TimeLastLoaded = DateTime.Now;
             }  else {
 
-                // made internal or something and used via reflection.
-                // I (Brett) am not comfortable with it being on the Interface. 
-                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+                var boColInternal = ((IBusinessObjectCollectionInternal)collection);
+                boColInternal.ClearCurrentCollection();
+                //ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
 
                 // store the original persisted collection and pass it through. This is to improve performance
                 // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
-                IList originalPersistedCollection = new List<IBusinessObject>();
-                foreach (var businessObject in collection.PersistedBusinessObjects)
+                Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();
+                foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
                 {
-                    originalPersistedCollection.Add(businessObject);
+                    originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
                 }
                 foreach (IBusinessObject loadedBo in loadedBOs)
                 {
                     AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
                 }
-                RestoreEditedLists(collection);
+                RestoreEditedLists(collection, originalPersistedCollection);
                 collection.TimeLastLoaded = DateTime.Now;
-                ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
+                
+                boColInternal.FireRefreshedEvent();               
+//                ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
             }
         }
 
@@ -681,15 +724,16 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship)
         {
             IBusinessObjectCollection relatedCol = RelationshipUtils.CreateRelatedBusinessObjectCollection(type, relationship);
-            
-            ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
+            BOColLoaderHelper.SetLoading(relatedCol, true);
+            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
 
             IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
                                                                         relatedCol.SelectQuery.Criteria, relatedCol.SelectQuery.OrderCriteria);
 
             LoadBOCollection(relatedCol, col);
             relatedCol.SelectQuery = col.SelectQuery;
-            ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
+            BOColLoaderHelper.SetLoading(relatedCol, false);
+            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
             return relatedCol;
         }
 
@@ -731,6 +775,7 @@ namespace Habanero.BO
             IClassDef classDef = ClassDef.ClassDefs[type];
             return GetBusinessObjectByValue(classDef, idValue);
         }
+
         ///<summary>
         /// For a given value e.g. a Guid Identifier '{......}' this will 
         /// load the business object from the Data store.
@@ -750,6 +795,7 @@ namespace Habanero.BO
             IClassDef classDef = ClassDef.ClassDefs[typeof(T)];
             return (T) GetBusinessObjectByValue(classDef, idValue);
         }
+
         /// <summary>
         /// Returns the Business Object for the primary Key from the object manager
         /// </summary>
@@ -758,19 +804,18 @@ namespace Habanero.BO
         /// <returns></returns>
         protected static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key, Type boType)
         {
-            BusinessObjectManager businessObjectManager = BusinessObjectManager.Instance;
-            if (key.IsGuidObjectID)
+            BusinessObjectManager businessObjectManager = BORegistry.BusinessObjectManager;
+            return businessObjectManager.GetBusinessObject(key);
+/*            if (key.IsGuidObjectID)
             {
-                lock (businessObjectManager)
-                {
-                    return businessObjectManager.Contains(key) ? businessObjectManager[key] : null;
-                }
+                return BORegistry.BusinessObjectManager.GetObjectIfInManager(key.ObjectID);
             }
             BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
 //            IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
 //            return find.Count > 0 ? find[0] : null;
-            return businessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria(), boType);
+            return businessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria(), boType);*/
         }
+
         /// <summary>
         /// Sets the Status for the Business Object to NotNew.
         /// </summary>
@@ -783,7 +828,7 @@ namespace Habanero.BO
         }       
         
         /// <summary>
-        /// Sets the Status for the Business Object to NotNew.
+        /// Calls the AfterLoad method on the IBusinessObject (by casting it to a <see cref="BusinessObject"/>).
         /// </summary>
         /// <param name="bo"></param>
         protected internal static void CallAfterLoad(IBusinessObject bo)
@@ -791,6 +836,17 @@ namespace Habanero.BO
             if (bo == null) return;
             BusinessObject businessObject = (BusinessObject)bo;
             businessObject.AfterLoad();
+        }       
+
+        /// <summary>
+        /// Calls the FireUpdatedEvent method on the IBusinessObject (by casting it to a <see cref="BusinessObject"/>).
+        /// </summary>
+        /// <param name="bo"></param>
+        protected internal static void FireUpdatedEvent(IBusinessObject bo)
+        {
+            if (bo == null) return;
+            BusinessObject businessObject = (BusinessObject)bo;
+            businessObject.FireUpdatedEvent();
         }
     }
 }

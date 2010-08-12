@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -96,7 +96,7 @@ namespace Habanero.BO.Loaders
             LoadPropertyName();
             LoadHeading();
             LoadGridControlType();
-            LoadIsReadOnly();
+            LoadIsEditable();
             LoadWidth();
             LoadAlignment();
             LoadParameters();
@@ -106,7 +106,7 @@ namespace Habanero.BO.Loaders
         /// Loads the "isReadOnly" attribute from the reader. This method
         /// is called by LoadFromReader().
         /// </summary>
-        private void LoadIsReadOnly()
+        private void LoadIsEditable()
         {
             try
             {
@@ -166,7 +166,7 @@ namespace Habanero.BO.Loaders
         private void LoadPropertyName()
         {
             _propertyName = _reader.GetAttribute("property");
-            if (_propertyName == null || _propertyName.Length == 0)
+            if (string.IsNullOrEmpty(_propertyName))
             {
                 throw new InvalidXmlDefinitionException("In a 'column' " +
                     "element, the 'property' attribute was not specified. This " +
@@ -238,8 +238,8 @@ namespace Habanero.BO.Loaders
             {
                 string attName = _reader.GetAttribute("name");
                 string attValue = _reader.GetAttribute("value");
-                if (attName == null || attName.Length == 0 ||
-                    attValue == null || attValue.Length == 0)
+                if (string.IsNullOrEmpty(attName) ||
+                    string.IsNullOrEmpty(attValue))
                 {
                     throw new InvalidXmlDefinitionException("In a " +
                         "'parameter' element, either the 'name' or " +

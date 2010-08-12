@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -26,7 +26,7 @@ namespace Habanero.Base
     /// For loading the appropriate objects from the collection.
     ///</summary>
     [TypeConverter(typeof(DateTimeNowConverter))]
-    public sealed class DateTimeNow : IComparable<DateTime>, IComparable, IResolvableToValue, IResolvableToValue<DateTime>
+    public class DateTimeNow : IComparable<DateTime>, IComparable, IResolvableToValue, IResolvableToValue<DateTime>
     {
         ///<summary>
         /// Returns the current Today value from the DateTime object.
@@ -62,7 +62,11 @@ namespace Habanero.Base
             return Value.CompareTo(other);
         }
 
-        public DateTime ResolveToValue()
+        ///<summary>
+        /// Resolved the instance class to a value of type DateTime.
+        ///</summary>
+        ///<returns>The value that the instance class is resolved to.</returns>
+        public virtual DateTime ResolveToValue()
         {
             return Value;
         }
@@ -120,5 +124,27 @@ namespace Habanero.Base
         //    return !Equals(left, right);
         //}
 
+    }
+    
+    ///<summary>
+    /// This is a wrapper class for DateTime.Now when you have a fixed DateTimeNow.
+    ///</summary>
+    public class DateTimeNowFixed : DateTimeNow
+    {
+        private readonly DateTime _dateTimeNow;
+
+        ///<summary>
+        /// Constructs DateTimeNow with a fixed DateTime.
+        ///</summary>
+        ///<param name="dateTimeNow"></param>
+        public DateTimeNowFixed(DateTime dateTimeNow)
+        {
+            _dateTimeNow = dateTimeNow;
+        }
+
+        public override DateTime ResolveToValue()
+        {
+            return _dateTimeNow;
+        }
     }
 }

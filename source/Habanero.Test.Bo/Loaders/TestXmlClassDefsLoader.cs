@@ -713,6 +713,60 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNotNull(uiDef);
             Assert.AreSame(classDef, uiDef.ClassDef);
         }
+        private const string TestClassWithUIGridDef =
+            @"<classes>
+				<class name=""Sample"" assembly=""Habanero.Test"">
+					<property  name=""SampleID"" type=""Guid"" />
+					<property  name=""SampleText"" />
+					<property  name=""SampleInt"" type=""Int32"" />
+					<primaryKey>
+						<prop name=""SampleID"" />
+					</primaryKey>
+					<ui>
+                      <grid>
+                        <column heading=""SampleText:"" property=""SampleText"" />
+                      </grid>
+					</ui>
+				</class>
+			</classes>
+			";
+
+        [Test]
+        public void Test_Load_ShouldSetUIGridDefsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), new DefClassFactory());
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            ClassDefCol classDefs =
+                loader.LoadClassDefs(TestClassWithUIGridDef);
+            //---------------Test Result -----------------------
+            IClassDef classDef = classDefs["Habanero.Test", "Sample"];
+            var uiDef = classDef.UIDefCol.FirstOrDefault();
+            Assert.AreSame(classDef, uiDef.ClassDef, "UIDefs ClassDef should be set");
+            var uiGrid = uiDef.UIGrid;
+            Assert.IsNotNull(uiGrid);
+            Assert.AreSame(classDef, uiGrid.ClassDef);
+        }
+        [Test]
+        public void Test_Load_ShouldSetUIGridDefColumnClassDef()
+        {
+            //---------------Set up test pack-------------------
+            XmlClassDefsLoader loader = new XmlClassDefsLoader("", new DtdLoader(), new DefClassFactory());
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            ClassDefCol classDefs =
+                loader.LoadClassDefs(TestClassWithUIGridDef);
+            //---------------Test Result -----------------------
+            IClassDef classDef = classDefs["Habanero.Test", "Sample"];
+            var uiDef = classDef.UIDefCol.FirstOrDefault();
+            Assert.IsNotNull(uiDef.UIGrid);
+            var gridColumn = uiDef.UIGrid.FirstOrDefault();
+            Assert.IsNotNull(gridColumn.UIGrid);
+            Assert.AreSame(classDef, gridColumn.ClassDef);
+        }
+
+
     }
 #pragma warning restore 618,612
 

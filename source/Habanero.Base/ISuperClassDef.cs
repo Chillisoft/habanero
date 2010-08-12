@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -18,6 +18,9 @@
 // ---------------------------------------------------------------------------------
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Definition of the inheritance Relationship between a SubClass and a its SuperClass
+    /// </summary>
     public interface ISuperClassDef
     {
         /// <summary>

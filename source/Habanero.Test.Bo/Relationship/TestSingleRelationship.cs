@@ -37,7 +37,7 @@ namespace Habanero.Test.BO.Relationship
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
         }
@@ -133,7 +133,7 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
             //---------------Assert preconditions --------------
-            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             //---------------Test Result -----------------------
@@ -152,7 +152,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(contactPerson.Status.IsNew);
             Assert.IsNull(contactPerson.OrganisationID);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisationTestBO;
 
@@ -166,7 +166,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
 
             //---------------Assert preconditions---------------
@@ -174,7 +174,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(contactPerson.Status.IsNew);
             Assert.IsNull(contactPerson.OrganisationID);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisationTestBO;
             //---------------Test Result -----------------------
@@ -189,7 +189,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateUnsavedOrganisation();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
 
             //---------------Assert preconditions---------------
@@ -197,7 +197,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(contactPerson.Status.IsNew);
             Assert.IsNull(contactPerson.OrganisationID);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisationTestBO;
 
@@ -219,7 +219,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(contactPerson.Status.IsNew);
             Assert.IsNull(contactPerson.OrganisationID);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             organisationTestBO.ContactPerson = contactPerson;
             //---------------Test Result -----------------------
@@ -239,7 +239,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(organisationTestBO.Status.IsNew);
             Assert.IsTrue(contactPerson.Status.IsNew);
             Assert.IsNull(contactPerson.OrganisationID);
-            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             organisationTestBO.ContactPerson = contactPerson;
             //---------------Test Result -----------------------
@@ -285,7 +285,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(organisationTestBO.Status.IsNew);
             Assert.IsTrue(contactPerson.Status.IsNew);
             Assert.IsNull(contactPerson.OrganisationID);
-            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisationTestBO;
             //---------------Test Result -----------------------
@@ -320,7 +320,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
 
             //---------------Assert preconditions---------------
@@ -328,7 +328,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(contactPerson.Status.IsNew);
             Assert.IsNull(contactPerson.OrganisationID);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             organisationTestBO.ContactPerson = contactPerson;
             //---------------Test Result -----------------------
@@ -343,14 +343,14 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateUnsavedOrganisation();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
             //---------------Assert preconditions---------------
             Assert.IsTrue(organisationTestBO.Status.IsNew);
             Assert.IsTrue(contactPerson.Status.IsNew);
             Assert.IsNull(contactPerson.OrganisationID);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             organisationTestBO.ContactPerson = contactPerson;
             //---------------Test Result -----------------------
@@ -411,7 +411,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
@@ -420,8 +420,8 @@ namespace Habanero.Test.BO.Relationship
                 FirstName = TestUtil.GetRandomString()
             };
             //---------------Assert Preconditions --------------
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPerson));
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
+            Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(contactPerson));
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             OrganisationTestBO returnedOrg = contactPerson.Organisation;
@@ -433,7 +433,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
@@ -445,8 +445,8 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.Save();
             OrganisationTestBO origOrganisation = contactPerson.Organisation;
             //---------------Assert Preconditions --------------
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPerson));
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
+            Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(contactPerson));
             Assert.AreSame(organisationTestBO, origOrganisation);
             Assert.IsNotNull(origOrganisation.ContactPerson);
             //---------------Execute Test ----------------------
@@ -464,7 +464,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             OrganisationTestBO organisationTestBO2 = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
@@ -475,8 +475,8 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             OrganisationTestBO origOrganisation = contactPerson.Organisation;
             //---------------Assert Preconditions --------------
-            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
-            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPerson));
+            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
+            Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(contactPerson));
             Assert.AreSame(organisationTestBO, origOrganisation);
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = organisationTestBO2.OrganisationID;
@@ -979,7 +979,7 @@ namespace Habanero.Test.BO.Relationship
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleCompositeReverse();
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
         }
@@ -993,7 +993,7 @@ namespace Habanero.Test.BO.Relationship
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             BOWithIntID.LoadClassDefWithIntID_RelationshipToSelf();
             BOWithIntID_DifferentType.LoadClassDefWithIntID();
         }
@@ -1007,7 +1007,7 @@ namespace Habanero.Test.BO.Relationship
             boWithIntID_DifferentType.IntID = boWithIntID.IntID;
             SingleRelationship<BOWithIntID> childRelationship = (SingleRelationship<BOWithIntID>) boWithIntID.Relationships["MyChildBoWithInt"];
             //--------------- Test Preconditions ----------------
-            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
             Assert.IsNull(childRelationship.GetRelatedObject());
             Assert.AreEqual(boWithIntID.IntID, boWithIntID_DifferentType.IntID);
             //--------------- Execute Test ----------------------
@@ -1029,7 +1029,7 @@ namespace Habanero.Test.BO.Relationship
             boWithIntID_DifferentType.IntID = boWithIntID.IntID;
             SingleRelationship<BOWithIntID> childRelationship = (SingleRelationship<BOWithIntID>) boWithIntID.Relationships["MyChildBoWithInt"];
             //--------------- Test Preconditions ----------------
-            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
             Assert.IsNull(childRelationship.GetRelatedObject());
             Assert.AreEqual(boWithIntID.IntID, boWithIntID_DifferentType.IntID);
             //--------------- Execute Test ----------------------
@@ -1051,7 +1051,7 @@ namespace Habanero.Test.BO.Relationship
             boWithIntID_DifferentType.IntID = boWithIntID.IntID;
             SingleRelationship<BOWithIntID> parentRelationship = (SingleRelationship<BOWithIntID>)boWithIntID.Relationships["MyParentBOWithInt"];
             //--------------- Test Preconditions ----------------
-            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
             Assert.IsNull(parentRelationship.GetRelatedObject());
             Assert.AreEqual(boWithIntID.IntID, boWithIntID_DifferentType.IntID);
             //--------------- Execute Test ----------------------
@@ -1073,7 +1073,7 @@ namespace Habanero.Test.BO.Relationship
 //        {
 //            ClassDef.ClassDefs.Clear();
 //            BORegistry.DataAccessor = new DataAccessorInMemory();
-//            BusinessObjectManager.Instance.ClearLoadedObjects();
+//            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 //            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleCompositeReverse();
 //            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
 //        }

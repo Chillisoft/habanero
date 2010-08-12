@@ -6,13 +6,13 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.TransactionCommitters
 {
     [TestFixture]
     public class TestTransactionCommitterMultiSource
     {
-
         [Test]
         public void Test_DefaultDataAccessor_OneObject()
         {
@@ -179,6 +179,27 @@ namespace Habanero.Test.BO.TransactionCommitters
             Assert.IsNotNull(dataStore1.Find<MyRelatedBo>(bo2.ID));
             //---------------Tear down -------------------------
 
+        }
+
+        [Test]
+        public void Test_CommitTransaction_WhenEmpty_ShouldNotCommitOnAnyDataAccessors()
+        {
+            //---------------Set up test pack-------------------
+            IDataAccessor defaultDataAccessor = MockRepository.GenerateStub<IDataAccessor>();
+            IDataAccessor alternateDataAccessor = MockRepository.GenerateStub<IDataAccessor>();
+
+            MyBO.LoadDefaultClassDef();
+            Dictionary<Type, IDataAccessor> dataAccessors = new Dictionary<Type, IDataAccessor>();
+            dataAccessors.Add(typeof(MyBO), alternateDataAccessor);
+            ITransactionCommitter transactionCommitter = new TransactionCommitterMultiSource(defaultDataAccessor, dataAccessors);
+            //---------------Assert Precondition----------------
+            defaultDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
+            alternateDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
+            //---------------Execute Test ----------------------
+            transactionCommitter.CommitTransaction();
+            //---------------Test Result -----------------------
+            defaultDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
+            alternateDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
         }
 
     }

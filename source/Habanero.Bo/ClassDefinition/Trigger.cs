@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -28,11 +28,12 @@ namespace Habanero.BO.ClassDefinition
     /// earlier choices by a user (eg. country > province > city), or disabling
     /// certain controls when the user sets some control to a certain value.
     /// </summary>
-    /// TODO ERIC:
+    /// TODO_ ERIC:
     /// - Consider switching enabled to readonly, or adding support for
     /// readonly or adding attribute/parameter in field for enabled (problem is
     /// you can't have something disabled initially so you enable it using a
     /// trigger)
+    [Obsolete("This is no longer used")]
     public class Trigger : ITrigger
     {
         private string _triggeredBy;

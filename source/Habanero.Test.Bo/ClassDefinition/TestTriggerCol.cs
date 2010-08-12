@@ -22,6 +22,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
+
+#pragma warning disable 612,618
     [TestFixture]
     public class TestTriggerCol
     {
@@ -47,4 +49,5 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(0, col.Count);
         }
     }
+#pragma warning restore 612,618
 }

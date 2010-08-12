@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -181,7 +181,7 @@ namespace Habanero.Test.BO
     }
     internal class BusinessObjectUpdateLogStub : IBusinessObjectUpdateLog
     {
-        private bool _called = false;
+        private bool _called;
 
         public bool Called
         {
@@ -201,9 +201,9 @@ namespace Habanero.Test.BO
             SetBusinessObjectUpdateLog(new BusinessObjectUpdateLogStub());
         }
 
-        public IBusinessObjectUpdateLog BusinessObjectUpdateLog
+        public new IBusinessObjectUpdateLog BusinessObjectUpdateLog
         {
-            get { return _businessObjectUpdateLog; }
+            get { return base.BusinessObjectUpdateLog; }
         }
 
         public static IClassDef LoadDefaultClassDef()

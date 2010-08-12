@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -275,7 +275,7 @@ namespace Habanero.BO
 //            {
 //                relatedBo = relatedBOCol[0] == relatedBo ? null : relatedBOCol[0];
 //            }
-            return (TBusinessObject) BusinessObjectManager.Instance.FindFirst<TBusinessObject>(_relKey.Criteria);
+            return (TBusinessObject) BORegistry.BusinessObjectManager.FindFirst<TBusinessObject>(_relKey.Criteria);
         }
 
         /// <summary>
@@ -518,7 +518,7 @@ namespace Habanero.BO
 
         private bool MustAddRemovedBOToDirtyBusinessObjects()
         {
-            return IsRemoved && IsRelationshipCompositionOrAggregation();
+            return IsRemoved && RemovedBO != null && RemovedBO.Status.IsNew == false && IsRelationshipCompositionOrAggregation();
         }
 
         /// <summary>

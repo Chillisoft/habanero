@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -120,11 +120,6 @@ namespace Habanero.Base
         /// </summary>
         public const string DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
 
-        private readonly Criteria _leftCriteria;
-        private readonly LogicalOp _logicalOp;
-        private readonly ComparisonOp _comparisonOp;
-        private readonly Criteria _rightCriteria;
-        private object _fieldValue;
         /// <summary>
         /// An array of logical operations (e.g. AND, OR, NOT') that can be used when building <see cref="Criteria"/>
         /// </summary>
@@ -134,7 +129,6 @@ namespace Habanero.Base
         /// This is used to convert the <see cref="ComparisonOp"/> value to a <see cref="ComparisonOperatorString"/>
         /// </summary>
         protected readonly string[] _comparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT", "IN", "NOT IN"};
-        private readonly QueryField _field;
 
         /// <summary>
         /// This constructor is used by the Sub Classes of Criteria E.g. CriteriaDB.
@@ -161,11 +155,11 @@ namespace Habanero.Base
         /// <param name="rightCriteria">The right criteria (can be a whole tree structure)</param>
         public Criteria(Criteria leftCriteria, LogicalOp logicalOp, Criteria rightCriteria)
         {
-            _leftCriteria = leftCriteria;
-            _logicalOp = logicalOp;
-            _rightCriteria = rightCriteria;
+            LeftCriteria = leftCriteria;
+            LogicalOperator = logicalOp;
+            RightCriteria = rightCriteria;
         }
-
+        // ReSharper disable DoNotCallOverridableMethodsInConstructor
         /// <summary>
         /// Creates a leaf criteria (meaning it has no children in the tree structure).
         /// </summary>
@@ -174,11 +168,12 @@ namespace Habanero.Base
         /// <param name="value">The value to compare to</param>
         public Criteria(QueryField field, ComparisonOp comparisonOp, object value)
         {
-            _field = field;
-            _comparisonOp = comparisonOp;
-            _fieldValue = value;
-            if (_fieldValue is IEnumerable && !(_fieldValue is string)) _fieldValue = new CriteriaValues((IEnumerable)_fieldValue);
+            Field = field;
+            ComparisonOperator = comparisonOp;
+            FieldValue = value;
+            if (FieldValue is IEnumerable && !(FieldValue is string)) FieldValue = new CriteriaValues((IEnumerable)FieldValue);
         }
+        // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
         /// <summary>
         /// 
@@ -189,8 +184,8 @@ namespace Habanero.Base
         {
             if (logicalOp == LogicalOp.And) throw new ArgumentException("And is not a valid Logical Operator for a Unary Criteria");
             if (logicalOp == LogicalOp.Or) throw new ArgumentException("Or is not a valid Logical Operator for a Unary Criteria");
-            _logicalOp = logicalOp;
-            _rightCriteria = criteria;
+            LogicalOperator = logicalOp;
+            RightCriteria = criteria;
         }
 
         ///<summary>
@@ -198,51 +193,32 @@ namespace Habanero.Base
         /// the query field is a query field object representing the objects property as defined in the 
         /// Constructor [Criteria(string propName, ComparisonOp op, object value)].
         ///</summary>
-        public virtual QueryField Field
-        {
-            get { return _field; }
-        }
+        public virtual QueryField Field { get; private set; }
 
         ///<summary>
         /// Gets the left critieria object (If this is not a leaf criteria)
         ///</summary>
-        public virtual Criteria LeftCriteria
-        {
-            get { return _leftCriteria; }
-        }
+        public virtual Criteria LeftCriteria { get; private set; }
 
         ///<summary>
         /// Gets the right criteria object (If this is not a leaf criteria)
         ///</summary>
-        public virtual Criteria RightCriteria
-        {
-            get { return _rightCriteria; }
-        }
+        public virtual Criteria RightCriteria { get; private set; }
 
         ///<summary>
         /// Gets the logical operator being used for this criteria object (If this is not a leaf criteria)
         ///</summary>
-        public virtual LogicalOp LogicalOperator
-        {
-            get { return _logicalOp; }
-        }
+        public virtual LogicalOp LogicalOperator { get; private set; }
 
         ///<summary>
         /// Gets or sets the field value being compared to for this criteria object (If this is a leaf criteria)
         ///</summary>
-        public virtual object FieldValue
-        {
-            get { return _fieldValue; }
-            set { _fieldValue = value; }
-        }
+        public virtual object FieldValue { get; set; }
 
         ///<summary>
         /// Gets the comparison operator being used by this Criteria object (If this is a leaf criteria)
         ///</summary>
-        public virtual ComparisonOp ComparisonOperator
-        {
-            get { return _comparisonOp; }
-        }
+        public virtual ComparisonOp ComparisonOperator { get; private set; }
 
         ///<summary>
         /// Returns true if the business object matches 
@@ -259,31 +235,31 @@ namespace Habanero.Base
 
             if (IsComposite())
             {
-                switch (_logicalOp)
+                switch (LogicalOperator)
                 {
                     case LogicalOp.And:
-                        return _leftCriteria.IsMatch(businessObject, usePersistedValue) && _rightCriteria.IsMatch(businessObject, usePersistedValue);
+                        return LeftCriteria.IsMatch(businessObject, usePersistedValue) && RightCriteria.IsMatch(businessObject, usePersistedValue);
                     case LogicalOp.Or:
-                        return _leftCriteria.IsMatch(businessObject, usePersistedValue) || _rightCriteria.IsMatch(businessObject, usePersistedValue);
+                        return LeftCriteria.IsMatch(businessObject, usePersistedValue) || RightCriteria.IsMatch(businessObject, usePersistedValue);
                     case LogicalOp.Not:
-                        return !_rightCriteria.IsMatch(businessObject, usePersistedValue);
+                        return !RightCriteria.IsMatch(businessObject, usePersistedValue);
                 }
             }
 
             object leftValue;
-            if (_field.Source != null && _field.Source.ChildSource != null)
+            if (Field.Source != null && Field.Source.ChildSource != null)
             {
                 if (usePersistedValue)
-                    leftValue = businessObject.GetPersistedPropertyValue(_field.Source.ChildSource, _field.PropertyName);
+                    leftValue = businessObject.GetPersistedPropertyValue(Field.Source.ChildSource, Field.PropertyName);
                 else 
-                    leftValue = businessObject.GetPropertyValue(_field.Source.ChildSource, _field.PropertyName);
+                    leftValue = businessObject.GetPropertyValue(Field.Source.ChildSource, Field.PropertyName);
             }
             else
             {
                 if (usePersistedValue) 
-                    leftValue = businessObject.GetPersistedPropertyValue(null, _field.PropertyName);
+                    leftValue = businessObject.GetPersistedPropertyValue(null, Field.PropertyName);
                 else
-                    leftValue = businessObject.GetPropertyValue(null, _field.PropertyName);
+                    leftValue = businessObject.GetPropertyValue(null, Field.PropertyName);
             }
             string className = businessObject.GetType().FullName; 
             return CheckValueAgainstSingleCriteria(leftValue, className);
@@ -301,11 +277,11 @@ namespace Habanero.Base
                 
                 throw new InvalidOperationException(
                     string.Format(
-                        "Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", _field.PropertyName,
+                        "Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", Field.PropertyName,
                         className));
             }
             
-            IComparable compareToValue = _fieldValue as IComparable;
+            IComparable compareToValue = FieldValue as IComparable;
 
             compareToValue = ConvertDateTimeStringToValue(compareToValue);
             compareToValue = ConvertGuidStringToValue(boPropertyValue, compareToValue);
@@ -355,19 +331,19 @@ namespace Habanero.Base
         {
             if (IsComposite())
             {
-                switch (_logicalOp)
+                switch (LogicalOperator)
                 {
                     case LogicalOp.And:
-                        return _leftCriteria.IsMatch(dto) && _rightCriteria.IsMatch(dto);
+                        return LeftCriteria.IsMatch(dto) && RightCriteria.IsMatch(dto);
                     case LogicalOp.Or:
-                        return _leftCriteria.IsMatch(dto) || _rightCriteria.IsMatch(dto);
+                        return LeftCriteria.IsMatch(dto) || RightCriteria.IsMatch(dto);
                     case LogicalOp.Not:
-                        return !_rightCriteria.IsMatch(dto);
+                        return !RightCriteria.IsMatch(dto);
                 }
             }
 
 
-            object leftValue = dto.Props[_field.PropertyName.ToUpper()];
+            object leftValue = dto.Props[Field.PropertyName.ToUpper()];
             string className = dto.ClassDefName;
             return CheckValueAgainstSingleCriteria(leftValue, className);
         }
@@ -375,7 +351,7 @@ namespace Habanero.Base
 
         private bool IsNonNullMatch(IComparable boPropertyValue, IComparable compareToValue)
         {
-            switch (_comparisonOp)
+            switch (ComparisonOperator)
             {
                 case ComparisonOp.Equals:
                     return boPropertyValue.Equals(compareToValue);
@@ -403,7 +379,7 @@ namespace Habanero.Base
                     return compareToValue.CompareTo(boPropertyValue) != 0;
                 default:
                     throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
-                                                         , "The operator " + _comparisonOp + " is not supported by the application");
+                                                         , "The operator " + ComparisonOperator + " is not supported by the application");
             }
         }
 
@@ -429,37 +405,37 @@ namespace Habanero.Base
 
         private bool IsNullMatch()
         {
-            switch (_comparisonOp)
+            switch (ComparisonOperator)
             {
                 case ComparisonOp.Equals:
-                    return _fieldValue == null;
+                    return FieldValue == null;
                 case ComparisonOp.GreaterThan:
                     return false;
                 case ComparisonOp.LessThan:
                     return false;
                 case ComparisonOp.NotEquals:
-                    return _fieldValue != null;
+                    return FieldValue != null;
                 case ComparisonOp.LessThanEqual:
                     return false;
                 case ComparisonOp.GreaterThanEqual:
                     return false;
                 case ComparisonOp.Like:
-                    return _fieldValue == null;
+                    return FieldValue == null;
                 case ComparisonOp.NotLike:
-                    return _fieldValue != null;
+                    return FieldValue != null;
                 case ComparisonOp.Is:
-                    if (_fieldValue == null) return true;
-                    return _fieldValue.ToString().ToUpper() == "NULL";
+                    if (FieldValue == null) return true;
+                    return FieldValue.ToString().ToUpper() == "NULL";
                 case ComparisonOp.IsNot:
-                    if (_fieldValue == null) return false;
-                    return _fieldValue.ToString().ToUpper() != "NULL";
+                    if (FieldValue == null) return false;
+                    return FieldValue.ToString().ToUpper() != "NULL";
                 case ComparisonOp.In:
-                    return ((IComparable)_fieldValue).CompareTo(null) == 0;
+                    return ((IComparable)FieldValue).CompareTo(null) == 0;
                 case ComparisonOp.NotIn:
-                    return ((IComparable)_fieldValue).CompareTo(null) != 0;
+                    return ((IComparable)FieldValue).CompareTo(null) != 0;
                 default:
                     throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
-                                                         , "The operator " + _comparisonOp + " is not supported by the application");
+                                                         , "The operator " + ComparisonOperator + " is not supported by the application");
             }
         }
 /*
@@ -494,7 +470,7 @@ namespace Habanero.Base
             if (IsComposite())
             {
                 string rightCriteriaAsString;
-                if (_logicalOp == LogicalOp.Not)
+                if (LogicalOperator == LogicalOp.Not)
                 {
                     rightCriteriaAsString = RightCriteria.ToString();
                     return string.Format("{0} ({1})", _logicalOps[(int)LogicalOperator], rightCriteriaAsString);
@@ -505,7 +481,7 @@ namespace Habanero.Base
                 return string.Format("({0}) {1} ({2})", leftCriteriaAsString, _logicalOps[(int)LogicalOperator],
                                      rightCriteriaAsString);
             }
-            string sourceName = Convert.ToString(_field.Source);
+            string sourceName = Convert.ToString(Field.Source);
             if (!String.IsNullOrEmpty(sourceName)) sourceName += ".";
             string stringComparisonOp = ComparisonOperatorString();
             return string.Format("{0}{1} {2} {3}", sourceName, Field.PropertyName, stringComparisonOp, GetValueAsString());
@@ -541,7 +517,7 @@ namespace Habanero.Base
             return "'" + valueString + "'";
         }
 
-
+        // ReSharper disable DoNotCallOverridableMethodsInConstructor
         ///<summary>
         ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
         ///</summary>
@@ -559,14 +535,15 @@ namespace Habanero.Base
             {
                 if (!otherCriteria.IsComposite()) return false;
                 if (!LeftCriteria.Equals(otherCriteria.LeftCriteria)) return false;
-                return LogicalOperator == otherCriteria.LogicalOperator && _rightCriteria.Equals(otherCriteria.RightCriteria);
+                return LogicalOperator == otherCriteria.LogicalOperator && RightCriteria.Equals(otherCriteria.RightCriteria);
             }
             if (ComparisonOperator != otherCriteria.ComparisonOperator) return false;
             if (String.Compare(Field.PropertyName, otherCriteria.Field.PropertyName) != 0) return false;
-            if (_fieldValue == null && otherCriteria.FieldValue == null) return true;
-            if (_fieldValue == null && otherCriteria.FieldValue != null) return false;
-            return _fieldValue == null || _fieldValue.Equals(otherCriteria.FieldValue);
+            if (FieldValue == null && otherCriteria.FieldValue == null) return true;
+            if (FieldValue == null ) return false;
+            return FieldValue.Equals(otherCriteria.FieldValue);
         }
+        // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
         ///<summary>
         ///Serves as a hash function for a particular type. <see cref="M:System.Object.GetHashCode"></see> is suitable for use in hashing algorithms and data structures like a hash table.
@@ -760,7 +737,11 @@ namespace Habanero.Base
             }
 
             #region Implementation of IComparable
-
+            /// <summary>
+            /// Compare obj to any Value in the CriteriaValues list of values.
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
             public int CompareTo(object obj) {
                 foreach (var value in _values)
                 {

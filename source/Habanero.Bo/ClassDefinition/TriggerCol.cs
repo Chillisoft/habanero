@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -25,6 +26,7 @@ namespace Habanero.BO.ClassDefinition
     /// Manages a collection of triggers assigned to a specific
     /// user interface control
     /// </summary>
+    [Obsolete("This is no longer used")]
     public class TriggerCol : List<ITrigger>, IEnumerable<ITrigger>
     {
 //        private Dictionary<string, Trigger> _triggers;

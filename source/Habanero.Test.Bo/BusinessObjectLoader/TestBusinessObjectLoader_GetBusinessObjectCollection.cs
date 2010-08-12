@@ -42,8 +42,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            TestUtil.WaitForGC();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
             new Address();
         }
 
@@ -1982,7 +1981,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         /// <param name="orderedPeople">An ordered array that will be used to validate the items of the collection</param>
         /// <param name="actualCol">The actual Collection</param>
         /// <param name="returnedTotalNoOfRecords">The returned total Number of records to check</param>
-        private static void AssertLimitedResultsCorrect
+        protected static void AssertLimitedResultsCorrect
             (int expectedFirstRecord, int expectedLimit, int expectedTotal, int expectedCount,
              ContactPersonTestBO[] orderedPeople, IBusinessObjectCollection actualCol,
              int returnedTotalNoOfRecords)
@@ -2885,7 +2884,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO loadedCp =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(singleCritieria);
             BusinessObjectCollection<ContactPersonTestBO> col =
@@ -2910,7 +2909,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO loadedCp =
                 (ContactPersonTestBO)
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(cp1.ClassDef, singleCritieria);
@@ -3311,7 +3310,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             SetupDataAccessor();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
 
@@ -3501,17 +3500,132 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual
                 (developerException.DeveloperMessage, ExceptionHelper._loaderGenericTypeMethodExceptionMessage);
         }
-
-        [Test, Ignore("No Test Implemented")]
-        public void Test_LoadWithCriteria_MultipleLevels()
+        [Test]
+        public void Test_CollectionLoad_LoadWithLimit_WithSearchCriteriaNullString_ShouldNotRaiseError_FixBug565()
         {
-            //---------------Set up test pack-------------------
+            ContactPersonTestBO.DeleteAllContactPeople();
+            const int totalRecords = 3;
+            const int firstRecord = 0;
+            const int limit = 2;
+            const int expectedCount = 2;
 
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
             //---------------Execute Test ----------------------
 
+            int totalNoOfRecords;
+            col.LoadWithLimit((string)null, "Surname", firstRecord, limit, out totalNoOfRecords);
             //---------------Test Result -----------------------
+            AssertLimitedResultsCorrect
+                (firstRecord, limit, totalRecords, expectedCount, contactPersonTestBOs, col, totalNoOfRecords);
+        }
 
-            //---------------Tear Down -------------------------
+        [Test]
+        public void Test_CollectionLoad_LoadWithLimit_WithSortCriteriaEmptyString_ShouldNotRaiseError_FixBug566()
+        {
+            ContactPersonTestBO.DeleteAllContactPeople();
+            const int totalRecords = 3;
+            const int firstRecord = 0;
+            const int limit = 2;
+            const int expectedCount = 2;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit("", "", firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            Assert.AreEqual
+                (totalRecords, totalNoOfRecords, "The returned total number of availabe records is incorrect");
+            Assert.AreEqual
+                (firstRecord, col.SelectQuery.FirstRecordToLoad,
+                 "Collection query FirstRecordToLoad does not match expectation.");
+            Assert.AreEqual
+                (limit, col.SelectQuery.Limit, "Collection query limit does not match expectation.");
+            Assert.AreEqual(expectedCount, col.Count, "Collection size does not match expectation.");
+        }
+        [Test]
+        public void Test_CollectionLoad_LoadWithLimit_WithSortCriteriaNullString_ShouldNotRaiseError_FixBug566()
+        {
+            ContactPersonTestBO.DeleteAllContactPeople();
+            const int totalRecords = 6;
+            const int firstRecord = 2;
+            const int limit = 2;
+            const int expectedCount = 2;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit((string)null, (string)null, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            Assert.AreEqual
+                (totalRecords, totalNoOfRecords, "The returned total number of availabe records is incorrect");
+            Assert.AreEqual
+                (firstRecord, col.SelectQuery.FirstRecordToLoad,
+                 "Collection query FirstRecordToLoad does not match expectation.");
+            Assert.AreEqual
+                (limit, col.SelectQuery.Limit, "Collection query limit does not match expectation.");
+            Assert.AreEqual(expectedCount, col.Count, "Collection size does not match expectation.");
+        }
+
+        [Test]
+        public void Test_CollectionLoad_LoadWithLimit_WithSortCriteriaNullString_WhenCompositePK_ShouldNotRaiseError_FixBug567()
+        {
+            ContactPersonCompositeKey.DeleteAllContactPeople();
+            const int totalRecords = 6;
+            const int firstRecord = 2;
+            const int limit = 2;
+            const int expectedCount = 2;
+            ContactPersonCompositeKey.LoadClassDefs();
+            ContactPersonCompositeKey[] contactPersonTestBOs = CreateCompositeContactPeople(totalRecords);
+            IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonCompositeKey>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
+            //---------------Execute Test ----------------------
+            int totalNoOfRecords;
+            col.LoadWithLimit((string)null, (string)null, firstRecord, limit, out totalNoOfRecords);
+            //---------------Test Result -----------------------
+            Assert.AreEqual
+                (totalRecords, totalNoOfRecords, "The returned total number of availabe records is incorrect");
+            Assert.AreEqual
+                (firstRecord, col.SelectQuery.FirstRecordToLoad,
+                 "Collection query FirstRecordToLoad does not match expectation.");
+            Assert.AreEqual
+                (limit, col.SelectQuery.Limit, "Collection query limit does not match expectation.");
+            Assert.AreEqual(expectedCount, col.Count, "Collection size does not match expectation.");
+        }
+        /// <summary>
+        /// Creates the specified number of saved Contact People with random Surnames and returns an array of the 
+        /// created items sorted by their surname.
+        /// </summary>
+        /// <param name="noOfPeople">The number of saved contact people to create</param>
+        /// <returns>Returns an array of the created items sorted by their surname.</returns>
+        private static ContactPersonTestBO[] CreateSavedSortedContactPeople(int noOfPeople)
+        {
+            List<ContactPersonTestBO> createdBos = new List<ContactPersonTestBO>(noOfPeople);
+            while (createdBos.Count < noOfPeople)
+            {
+                createdBos.Add(ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString()));
+            }
+            createdBos.Sort((x, y) => StringComparer.InvariantCultureIgnoreCase.Compare(x.Surname, y.Surname));
+            return createdBos.ToArray();
+        }
+        private static ContactPersonCompositeKey[] CreateCompositeContactPeople(int totalRecords)
+        {
+            List<ContactPersonCompositeKey> createdBos = new List<ContactPersonCompositeKey>(totalRecords);
+            while (createdBos.Count < totalRecords)
+            {
+                createdBos.Add(ContactPersonCompositeKey.CreateSavedContactPerson());
+            }
+            return createdBos.ToArray();
         }
     }
 

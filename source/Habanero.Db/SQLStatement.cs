@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -57,7 +57,7 @@ namespace Habanero.DB
                 {
                     _sampleCommand = _idbConnection.CreateCommand();
                     _gen = connection.CreateParameterNameGenerator();
-                    if (_idbConnection.State == ConnectionState.Open) log.Info("The created Connection is Open");
+                    if (_idbConnection.State == ConnectionState.Open) log.Debug("The created Connection is Open");
                 }
                 else
                 {

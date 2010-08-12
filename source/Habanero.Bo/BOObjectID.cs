@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -53,21 +53,22 @@ namespace Habanero.BO
         /// <summary>
         /// Adds a property to the key
         /// </summary>
-        /// <param name="BOProp">The property to add</param>
-        public override void Add(IBOProp BOProp)
+        /// <param name="boProp">The property to add</param>
+        public override void Add(IBOProp boProp)
         {
+            
             if (Count > 0)
             {
                 throw new InvalidObjectIdException("A BOObjectID cannot have " +
                     "more than one property.");
             }
-            if (BOProp.PropertyType != typeof (Guid))
+            if (boProp.PropertyType != typeof(Guid))
             {
                 throw new InvalidObjectIdException("A BOObjectID cannot have " +
                     "a property of type other than Guid.");
             }
 
-            base.Add(BOProp);
+            base.Add(boProp);
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace Habanero.BO
             {
                 if (_objectIDProp == null)
                 {
-                    _objectIDProp = base[KeyDef.KeyName];
+                    _objectIDProp = base[KeyName];
                     //HACK: This works because the primary key name is set to the property name in the case of an object ID
                 }
                 if (_objectIDProp == null)

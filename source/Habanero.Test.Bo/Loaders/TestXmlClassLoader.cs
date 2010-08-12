@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Threading;
-using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -27,7 +25,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.Test.Structure;
 using NUnit.Framework;
-
+#pragma warning disable 168
 namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
@@ -84,7 +82,7 @@ namespace Habanero.Test.BO.Loaders
                     </primaryKey>
 				</class>
 			");
-                Assert.Fail("Expected to throw an RecordedExceptionsException");
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
             }
                 //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)
@@ -98,6 +96,7 @@ namespace Habanero.Test.BO.Loaders
         {
             try
             {
+
                 IClassDef def = _loader.LoadClass(@"
                 <class assembly=""Habanero.Test.BO.Loaders"">
                     <property  name=""TestProp"" />
@@ -106,7 +105,8 @@ namespace Habanero.Test.BO.Loaders
                     </primaryKey>
 				</class>
 			");
-                Assert.Fail("Expected to throw an RecordedExceptionsException");
+
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
             }
                 //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)
@@ -694,7 +694,7 @@ namespace Habanero.Test.BO.Loaders
             //---------------Tear Down -------------------------          
         }
     }
-
+#pragma warning restore 168
     public class TestClass : BusinessObject
     {
         protected override IClassDef ConstructClassDef()

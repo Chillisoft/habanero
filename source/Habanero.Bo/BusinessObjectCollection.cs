@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -34,9 +34,67 @@ namespace Habanero.BO
     internal interface IBusinessObjectCollectionInternal : IBusinessObjectCollection
     {
         void AddInternal(IBusinessObject businessObject);
+        bool Loading { get; set; }
+        void FireRefreshedEvent();
+        void ClearCurrentCollection();
     }
+    /// <summary>
+    /// This should never be used by a client application it is used by the DB Loading to clear collections
+    /// via the <see cref="IBusinessObjectCollectionInternal"/>
+    /// etc and it is used by testing applications to call same methods.
+    /// I.e. This is a Hack_ used so that we can call methods that we do not want as public methods
+    /// on the Collection and Relationship but which we need to be able to call during Loading and/or Unit Testing.
+    /// </summary>
+    public static class BOColLoaderHelper
+    {
+        /// <summary>
+        /// Calls the <see cref="IBusinessObjectCollectionInternal"/>'s ClearCurrentCollectionMethod
+        /// </summary>
+        /// <param name="col">A collection that implements the IBusinessObjectCollectionInternal</param>
+        public static void ClearCurrentCollection(IBusinessObjectCollection col)
+        {
+            IBusinessObjectCollectionInternal internalBOCol = (IBusinessObjectCollectionInternal) col;
+            internalBOCol.ClearCurrentCollection();
+        }
+        /// <summary>
+        /// Calls the <see cref="IBusinessObjectCollectionInternal"/>'s FireRefreshedEvent
+        /// </summary>
+        /// <param name="col">A collection that implements the IBusinessObjectCollectionInternal</param>
+        public static void FireRefreshedEvent(IBusinessObjectCollection col)
+        {
+            IBusinessObjectCollectionInternal internalBOCol = (IBusinessObjectCollectionInternal) col;
+            internalBOCol.FireRefreshedEvent();
+        }
+        /// <summary>
+        /// Calls the <see cref="IBusinessObjectCollectionInternal"/>'s Initialise
+        /// </summary>
+        /// <param name="relationship">A relationship that implements the IRelationshipForLoading</param>
+        public static void Initialise(IRelationship relationship)
+        {
+            IRelationshipForLoading internalRelForLoading = (IRelationshipForLoading)relationship;
+            internalRelForLoading.Initialise();
+        }
+        /// <summary>
+        /// Calls the <see cref="IBusinessObjectCollectionInternal"/>'s Loading Property and returns result
+        /// </summary>
+        /// <param name="col">A collection that implements the IBusinessObjectCollectionInternal</param>
+        public static bool GetLoading(IBusinessObjectCollection col)
+        {
+            IBusinessObjectCollectionInternal internalBOCol = (IBusinessObjectCollectionInternal) col;
+            return internalBOCol.Loading;
+        }
 
-    //public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);
+        /// <summary>
+        /// Sets the <see cref="IBusinessObjectCollectionInternal"/>'s Loading Property and returns result
+        /// </summary>
+        /// <param name="col">A collection that implements the IBusinessObjectCollectionInternal</param>
+        /// <param name="loading">The loading value to be set</param>
+        public static void SetLoading(IBusinessObjectCollection col, bool loading)
+        {
+            IBusinessObjectCollectionInternal internalBOCol = (IBusinessObjectCollectionInternal) col;
+            internalBOCol.Loading = loading;
+        }
+    }
 
     /// <summary>
     /// Manages a collection of business objects.  This class also serves
@@ -181,8 +239,6 @@ namespace Habanero.BO
         {
             int count = info.GetInt32(COUNT);
             
-            
-            
             Type classType = Util.TypeLoader.LoadType(info.GetString(ASSEMBLY_NAME), info.GetString(CLASS_NAME));
             this.Initialise(ClassDefinition.ClassDef.ClassDefs[classType], null);
             SetupEventHandlers();
@@ -206,24 +262,24 @@ namespace Habanero.BO
                 this.MarkedForDeleteBusinessObjects.Add(businessObject);
                 //RegisterBOEvents(businessObject);
             }
-
+            var boManager = BORegistry.BusinessObjectManager;
             int createdCount = info.GetInt32(CREATED_COUNT);
             for (int i = 0; i < createdCount; i++)
             {
                 Guid createdID = (Guid)info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof (Guid));
-                this.AddCreatedBusinessObject((TBusinessObject) BusinessObjectManager.Instance[createdID]);
+                this.AddCreatedBusinessObject((TBusinessObject)boManager[createdID]);
             }
             int persistedCount = info.GetInt32(PERSISTED_COUNT);
             for (int i = 0; i < persistedCount; i++)
             {
                 Guid persistedID = (Guid)info.GetValue(PERSISTED_BUSINESS_OBJECT + i, typeof (Guid));
-                this.AddToPersistedCollection((TBusinessObject)BusinessObjectManager.Instance[persistedID]);
+                this.AddToPersistedCollection((TBusinessObject)boManager[persistedID]);
             }
             int addedCount = info.GetInt32(ADDED_COUNT);
             for (int i = 0; i < addedCount; i++)
             {
                 Guid addedID = (Guid)info.GetValue(ADDED_BUSINESS_OBJECT + i, typeof(Guid));
-                this.AddedBusinessObjects.Add((TBusinessObject)BusinessObjectManager.Instance[addedID]);
+                this.AddedBusinessObjects.Add((TBusinessObject)boManager[addedID]);
             }
         }
 
@@ -487,8 +543,7 @@ namespace Habanero.BO
         // ReSharper disable UnusedMember.Local
         //This is used by the BusinessObjectLoader when it has finished loading the Collection
         // ReSharper disable UnusedMember.Global
-        internal void FireRefreshedEvent()
-
+        void IBusinessObjectCollectionInternal.FireRefreshedEvent()
         {
             if (CollectionRefreshed != null)
             {
@@ -715,9 +770,12 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", true);
+                    //ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", true);
+                    var boColInternal = ((IBusinessObjectCollectionInternal)this);
+                    boColInternal.Loading = true;
                     addEventRequired = this.AddInternal(bo);
-                    ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", false);
+                    boColInternal.Loading = false;
+                    //ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", false);
                 }
             }
             if (addEventRequired) FireBusinessObjectAdded(bo);
@@ -1014,15 +1072,34 @@ namespace Habanero.BO
                                   int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
             Criteria criteria = null;
-            if (searchCriteria.Length > 0)
+            if (!Utilities.IsNull(searchCriteria) && searchCriteria.Length > 0)
             {
                 criteria = CriteriaParser.CreateCriteria(searchCriteria);
                 QueryBuilder.PrepareCriteria(this.ClassDef, criteria);
+            }
+            //If there is no orderByClause then we create an order by clause using the ObjectsID
+            //This seems a bit strange but is required due to the fact that the load with Limit must be 
+            // able to return a Set of objects from the database in exactly the same order else the 
+            // paging from one page to another does not make sense.
+            if(string.IsNullOrEmpty(orderByClause))
+            {
+                orderByClause = PrimaryKeyAsOrderByClause(this.ClassDef.PrimaryKeyDef);
             }
             IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
             LoadWithLimit(criteria, orderCriteria, firstRecordToLoad, numberOfRecordsToLoad, out totalNoOfRecords);
         }
 
+
+        private static string PrimaryKeyAsOrderByClause(IPrimaryKeyDef primaryKeyDef)
+        {
+            string toStringValue = "";
+
+            foreach (IPropDef lPropDef in primaryKeyDef)
+            {
+                toStringValue = StringUtilities.AppendMessage(toStringValue, lPropDef.PropertyName, ", ");
+            }
+            return toStringValue;
+        }
         #endregion
 
         int IList.Add(object value)
@@ -1261,7 +1338,7 @@ namespace Habanero.BO
         /// Note_: This is used by reflection by the collection loader.
 // ReSharper disable UnusedPrivateMember
 // ReSharper disable UnusedMember.Global
-        internal void ClearCurrentCollection()
+        void IBusinessObjectCollectionInternal.ClearCurrentCollection()
         {
             foreach (TBusinessObject businessObject in this)
             {
@@ -1911,6 +1988,7 @@ namespace Habanero.BO
         {
             TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
             this.CopyTo(thisArray, arrayIndex);
+            array = thisArray;
             int count = _boCol.Count;
             for (int index = 0; index < count; index++)
                 array[arrayIndex + index] = thisArray[arrayIndex + index];
@@ -2054,7 +2132,7 @@ namespace Habanero.BO
         /// This property is set to true while loading the collection from the datastore so as to 
         /// prevent certain checks being done (e.g. Adding persisted business objects to a collection.
         /// </summary>
-        protected bool Loading { get; set; }
+        bool IBusinessObjectCollectionInternal.Loading { get; set; }
 
 // ReSharper restore UnusedAutoPropertyAccessor.Global
 // ReSharper restore UnusedPrivateMember

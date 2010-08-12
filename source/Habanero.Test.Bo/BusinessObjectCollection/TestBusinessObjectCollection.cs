@@ -98,10 +98,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             {
                 if (ReferenceEquals(bo, cp1)) Assert.Fail("Should not contain object");             
             }
-//            col.ForEach(delegate(ContactPersonTestBO bo)
-//                        {
-//                            if (ReferenceEquals(bo, cp1)) Assert.Fail("Should not contain object");
-//                        });
         }
 
         //Load a collection from the database.
@@ -326,8 +322,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             //---------------Execute Test ----------------------
             //cpCol.ClearCurrentCollection();
-            ReflectionUtilities.ExecutePrivateMethod(cpCol, "ClearCurrentCollection");
-
+            //ReflectionUtilities.ExecutePrivateMethod(cpCol, "ClearCurrentCollection");
+            BOColLoaderHelper.ClearCurrentCollection(cpCol);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
@@ -378,7 +374,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(alternateClassDef, newCP.ClassDef);
         }
 
-        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
+        [Test]
         public void Test_CreateBusinessObject_AlternateClassDef_NoConstructor()
         {
             //---------------Set up test pack-------------------
@@ -389,12 +385,19 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                                                                       {ClassDef = alternateClassDef};
 
             //---------------Execute Test ----------------------
+            try
+            {
 
-            //this should not work because AddressTestBO does not have a constructor that takes a ClassDef as parameter
-            OrganisationTestBO orgBo = orgCol.CreateBusinessObject();
+                //this should not work because AddressTestBO does not have a constructor that takes a ClassDef as parameter
+                OrganisationTestBO orgBo = orgCol.CreateBusinessObject();
 
-            //---------------Test Result -----------------------
-            Assert.AreEqual(alternateClassDef, orgBo.ClassDef);
+                Assert.Fail("Expected to throw an HabaneroDeveloperException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("There was a problem creating a Habanero.Test.BO.OrganisationTestBO", ex.Message);
+            }
         }
 
         [Test]
@@ -441,12 +444,14 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorDB();
-
+            OrganisationTestBO.DeleteAllOrganisations();
+            ContactPersonTestBO.DeleteAllContactPeople();
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> col 
+                    = new BusinessObjectCollection<ContactPersonTestBO>();
 
             ContactPersonTestBO cp1 = CreateContactPersonTestBO();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             CreateContactPersonTestBO();
             CreateContactPersonTestBO();
@@ -959,7 +964,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = 3;
             const int limit = 4;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
             contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -986,7 +991,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = 3;
             const int limit = -1;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1005,7 +1010,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = 3;
             const int limit = 0;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1024,7 +1029,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = totalRecords - 1;
             const int limit = 1;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1043,7 +1048,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = totalRecords - 1;
             const int limit = 3;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1062,7 +1067,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = totalRecords - 1;
             const int limit = 3;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             ContactPersonTestBO[] contactPersonTestBOsPlusOne = new ContactPersonTestBO[totalRecords + 1];
             contactPersonTestBOs.CopyTo(contactPersonTestBOsPlusOne, 0);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -1089,7 +1094,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = totalRecords - 1;
             const int limit = -1;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1108,7 +1113,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = totalRecords - 1;
             const int limit = 0;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1127,7 +1132,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = 5;
             const int limit = 2;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1146,7 +1151,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = 4;
             const int limit = -1;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1165,7 +1170,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             const int firstRecord = 4;
             const int limit = 0;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1178,13 +1183,13 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_LoadWithLimit_LoadWithLimit_FirstNegative_ThrowsError()
+        public void Test_LoadWithLimit_FirstNegative_ThrowsError()
         {
             const int totalRecords = 3;
             const int firstRecord = -1;
             const int limit = 0;
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedContactPeople(totalRecords);
+            ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(totalRecords, contactPersonTestBOs.Length);
@@ -1201,6 +1206,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                 Assert.AreEqual("FirstRecordToLoad should not be negative.", ex.Message);
             }
         }
+
 
         [Test]
         public void Test_SetTimeLastLoaded_ShouldSetTimeLastLoaded()
@@ -1641,7 +1647,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         /// </summary>
         /// <param name="noOfPeople">The number of saved contact people to create</param>
         /// <returns>Returns an array of the created items sorted by their surname.</returns>
-        private static ContactPersonTestBO[] CreateSavedContactPeople(int noOfPeople)
+        private static ContactPersonTestBO[] CreateSavedSortedContactPeople(int noOfPeople)
         {
             List<ContactPersonTestBO> createdBos = new List<ContactPersonTestBO>(noOfPeople);
             while (createdBos.Count < noOfPeople)

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -176,7 +176,7 @@ namespace Habanero.Base
         /// Initialises the property with the specified value,
         /// </summary>
         /// <param name="propValue">The value to assign</param>
-        void InitialiseProp(object propValue);
+        bool InitialiseProp(object propValue);
 
         /// <summary>
         /// Validates whether the property values set for the BOProp are valid
@@ -205,5 +205,14 @@ namespace Habanero.Base
         ///<param name="message">the reason why the user cannot read the property.</param>
         ///<returns></returns>
         bool IsReadable(out string message);
+
+        /// <summary>
+        /// is the <paramref name="compareToValue"/> equal to the 
+        /// current Value of the BOProp. 
+        /// </summary>
+        /// <param name="compareToValue"></param>
+        /// <returns></returns>
+        bool CurrentValueEquals(object compareToValue);
     }
+
 }

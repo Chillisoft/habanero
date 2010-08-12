@@ -22,19 +22,45 @@ using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
     [TestFixture]
     public class TestPropDefCol
     {
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestAddDuplicationException()
         {
+            //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, null);
+            PropDefCol col = new PropDefCol {propDef};
+            //---------------Execute Test ----------------------
+            try
+            {
+                col.Add(propDef);
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("A property definition with the name 'prop' already exists", ex.Message);
+            }
+        }
+        [Test]
+        public void Test_Add_ShouldSetPropDefsClassDef()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDefFake();
             PropDefCol col = new PropDefCol();
+            var expectedClassDef = MockRepository.GenerateStub<IClassDef>();
+            col.ClassDef = expectedClassDef;
+            //---------------Assert Preconditions---------------
+            Assert.IsNull(propDef.ClassDef);
+            //---------------Execute Test ----------------------
             col.Add(propDef);
-            col.Add(propDef);
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedClassDef, propDef.ClassDef);
         }
 
         [Test]

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -894,6 +894,10 @@ namespace Habanero.Test.BO
             {
                 return;
             }
+            if(BORegistry.DataAccessor is DataAccessorMultiSource)
+            {
+                return;
+            }
             string sql = "DELETE FROM contact_person_address";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
             sql = "DELETE FROM Contact_Person";
@@ -1053,12 +1057,11 @@ namespace Habanero.Test.BO
 
         public static ContactPersonTestBO CreateUnsavedContactPerson(string surname, string firstName)
         {
-            ContactPersonTestBO contact = new ContactPersonTestBO();
-            contact.Surname = surname;
-            contact.FirstName = firstName;
+            ContactPersonTestBO contact = new ContactPersonTestBO {Surname = surname, FirstName = firstName};
             return contact;
         }
 
+        public string ReflectiveProp { get; set; }
         #region Properties
 
         public Guid ContactPersonID

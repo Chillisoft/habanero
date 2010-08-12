@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -49,13 +49,14 @@ namespace Habanero.BO.ClassDefinition
             if (Contains(def.Name))
             {
                 throw new InvalidXmlDefinitionException(String.Format(
-                                                            "A 'ui' definition with the name '{0}' is being added to " +
-                                                            "the collection of ui definitions for the class, but a " +
-                                                            "definition with that name already exists.  (Note: " +
-                                                            "'default' is the name given to a 'ui' element without " +
-                                                            "a 'name' attribute.)", def.Name));
+                        "A 'ui' definition with the name '{0}' is being added to " +
+                        "the collection of ui definitions for the class '{1}', but a " +
+                        "definition with that name already exists.  (Note: " +
+                        "'default' is the name given to a 'ui' element without " +
+                        "a 'name' attribute.)", def.Name, def.ClassName));
             }
             def.UIDefCol = this;
+            def.ClassDef = this.ClassDef;
             _defs.Add(def.Name, def);
         }
 
@@ -115,7 +116,7 @@ namespace Habanero.BO.ClassDefinition
                     throw new HabaneroApplicationException(String.Format(
                                                                "The ui definition with the name '{0}' does not " +
                                                                "exist in the collection of definitions for the " +
-                                                               "class.", name));
+                                                               "class '{1}'.", name, this.ClassName));
                 }
                 return this._defs[name];
             }
@@ -145,6 +146,13 @@ namespace Habanero.BO.ClassDefinition
                 {
                     def.Value.ClassDef = value;
                 }}
+        }
+        /// <summary>
+        /// Returns the ClassName of the Class tha this UIDef is for.
+        /// </summary>
+        public string ClassName
+        {
+            get { return this.ClassDef == null ? "" : this.ClassDef.ClassName; }
         }
 
         ///<summary>

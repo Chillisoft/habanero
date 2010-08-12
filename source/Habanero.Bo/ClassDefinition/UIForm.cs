@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -18,6 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
@@ -59,6 +61,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="tab">A UIFormTab object</param>
         public void Add(IUIFormTab tab)
         {
+            if (tab == null) return;
             tab.UIForm = this;
             _list.Add(tab);
         }
@@ -69,6 +72,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="tab">A UIFormTab object</param>
         public void Remove(IUIFormTab tab)
         {
+            if (tab == null) return;
             _list.Remove(tab);
         }
 
@@ -78,6 +82,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="tab">A UIFormTab object</param>
         public bool Contains(IUIFormTab tab)
         {
+            if (tab == null) return false;
             return _list.Contains(tab);
         }
 
@@ -258,6 +263,11 @@ namespace Habanero.BO.ClassDefinition
             return true;
         }
 
+        IEnumerator<IUIFormTab> IEnumerable<IUIFormTab>.GetEnumerator()
+        {
+            return _list.Cast<IUIFormTab>().GetEnumerator();
+        }
+
         ///<summary>
         ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
         ///</summary>
@@ -269,8 +279,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj)) return true;
-            return Equals(obj as UIForm);
+            return ReferenceEquals(this, obj) || Equals(obj as UIForm);
         }
 
         ///<summary>

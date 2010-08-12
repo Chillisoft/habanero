@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -111,7 +111,7 @@ namespace Habanero.DB
             int posFrom = FindStatementClauseToken(FROM_CLAUSE_TOKEN);
             if (posFrom == -1)
             {
-                throw new SqlStatementException("Cannot add a join clause to a SQL statement that does not contin a from clause.");
+                throw new SqlStatementException("Cannot add a join clause to a SQL statement that does not contain a from clause.");
             }
             int posWhere = FindStatementClauseToken(WHERE_CLAUSE_TOKEN);
             if (posWhere == -1)

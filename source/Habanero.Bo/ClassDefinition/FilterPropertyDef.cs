@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -51,7 +51,7 @@ namespace Habanero.BO.ClassDefinition
             FilterTypeAssembly = filterTypeAssembly;
             FilterClauseOperator = filterClauseOperator;
             Parameters = parameters;
-            if (string.IsNullOrEmpty(FilterTypeAssembly)) FilterTypeAssembly = "Habanero.UI.Base";
+            if (string.IsNullOrEmpty(FilterTypeAssembly)) FilterTypeAssembly = "Habanero.Faces.Base";
         }
 
         /// <summary>

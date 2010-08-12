@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -39,6 +39,7 @@ namespace Habanero.Base
         /// <param name="row">The DataRow object to initialise</param>
         void InitialiseDataRow(DataRow row);
     }
+
 
     /// <summary>
     /// An interface to model a business object initialiser: A business object initialiser is used by the Habanero framework's standard forms

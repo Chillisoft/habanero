@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -18,11 +18,9 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
-using Habanero.BO.Loaders;
 using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
@@ -215,12 +213,11 @@ namespace Habanero.BO.ClassDefinition
             _displayName = displayName ?? "";
             _tableName = string.IsNullOrEmpty(tableName) ? _className : tableName;
             _primaryKeyDef = primaryKeyDef;
-            _propDefCol = propDefCol;
+            this.PropDefcol = propDefCol;
+            this.KeysCol = keyDefCol;
+            this.RelationshipDefCol = relationshipDefCol;
             SetClassDefOnChildClasses();
-            _keysCol = keyDefCol;
-            _relationshipDefCol = relationshipDefCol;
-            _uiDefCol = uiDefCol ?? new UIDefCol();
-            _uiDefCol.ClassDef = this;
+            this.UIDefCol = uiDefCol ?? new UIDefCol();
         }
 
         private void SetClassDefOnChildClasses()
@@ -237,6 +234,13 @@ namespace Habanero.BO.ClassDefinition
                 foreach (RelationshipDef relationshipDef in _relationshipDefCol)
                 {
                     relationshipDef.OwningClassDef = this;
+                }
+            }
+            if(this.UIDefCol != null)
+            {
+                foreach (UIDef uiDef in UIDefCol)
+                {
+                    uiDef.ClassDef = this;
                 }
             }
         }
@@ -288,7 +292,11 @@ namespace Habanero.BO.ClassDefinition
         public KeyDefCol KeysCol
         {
             get { return _keysCol; }
-            set { _keysCol = value; }
+            set
+            {
+                _keysCol = value;
+                if(_keysCol != null) _keysCol.ClassDef = this;
+            }
         }
 
         /// <summary>
@@ -300,22 +308,6 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                //if (_primaryKeyDef == null)
-                //{
-                //    try
-                //    {
-                //        ClassDef superClassClassDef = this.SuperClassClassDef;
-                //        if (superClassClassDef != null)
-                //        {
-                //            return superClassClassDef.PrimaryKeyDef;
-                //        }
-                //    }
-                //    catch (InvalidXmlDefinitionException)
-                //    {
-                //        // the super class def is not loaded yet, return null
-                //        return null;
-                //    }
-                //}
                 return _primaryKeyDef;
             }
             set { _primaryKeyDef = value; }
@@ -340,7 +332,9 @@ namespace Habanero.BO.ClassDefinition
         public UIDefCol UIDefCol
         {
             get { return _uiDefCol; }
-            set { _uiDefCol = value; }
+            set { _uiDefCol = value;
+                if(_uiDefCol != null) _uiDefCol.ClassDef = this;
+            }
         }
 
         /// <summary>
@@ -431,7 +425,11 @@ namespace Habanero.BO.ClassDefinition
         public IPropDefCol PropDefcol
         {
             get { return _propDefCol; }
-            set { _propDefCol = value; }
+            set
+            {
+                _propDefCol = value;
+                if(_propDefCol != null) _propDefCol.ClassDef = this;
+            }
         }
 
         /// <summary>
@@ -442,28 +440,61 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (_propDefColIncludingInheritance == null)
-                {
-                    _propDefColIncludingInheritance = new PropDefCol {PropDefcol};
+
+                if (_propDefColIncludingInheritance == null ||
+                    _propDefColIncludingInheritance.Count != this.TotalNoOfPropsIncludingInheritance)
+                {                   
+                    _propDefColIncludingInheritance = new PropDefCol {ClassDef = this};
+                    _propDefColIncludingInheritance.Add(this.PropDefcol);
 
                     IClassDef currentClassDef = this;
                     while (currentClassDef.SuperClassClassDef != null)
                     {
                         currentClassDef = currentClassDef.SuperClassClassDef;
+                        _propDefColIncludingInheritance.ClassDef = currentClassDef;
                         _propDefColIncludingInheritance.Add(currentClassDef.PropDefcol);
                     }
                 }
+                _propDefColIncludingInheritance.ClassDef = this;
+
                 return _propDefColIncludingInheritance;
             }
         }
-
+        /// <summary>
+        /// This is a bit of a Hack but you need to be able to deal with a situation
+        /// where you call <see cref="PropDefColIncludingInheritance"/> then add a prop
+        /// to this class or any of its superclasses and then call
+        /// <see cref="PropDefColIncludingInheritance"/> again.
+        /// You would expect to see the new PropDef added at the same time you
+        /// do not want to do the recursive algorithm of building the PropDef list repeatedly
+        /// since this is used by the GetPropDef method which is used intensively.
+        /// This recursive method with adding all the properties is less intense.
+        /// We also do not want to add events to the PropDefCol that can be fired every
+        /// time a PropDef is added or removed since this would
+        ///  </summary>
+        private int TotalNoOfPropsIncludingInheritance
+        {
+            get
+            {
+                int noProps = this.PropDefcol.Count;
+                ClassDef currentClassDef = this;
+                while (currentClassDef.SuperClassClassDef != null)
+                {
+                    currentClassDef = (ClassDef) currentClassDef.SuperClassClassDef;
+                    noProps += currentClassDef.TotalNoOfPropsIncludingInheritance;
+                }
+                return noProps;
+            }
+        }
         /// <summary>
         /// The collection of relationship definitions
         /// </summary>
         public IRelationshipDefCol RelationshipDefCol
         {
             get { return _relationshipDefCol; }
-            set { _relationshipDefCol = value; }
+            set { _relationshipDefCol = value;
+                if(_relationshipDefCol != null) _relationshipDefCol.ClassDef = this;
+            }
         }
 
         ///// <summary>
@@ -795,28 +826,19 @@ namespace Habanero.BO.ClassDefinition
         /// found, or a NullLookupList object if not</returns>
         public ILookupList GetLookupList(string propertyName)
         {
-            if (PropDefcol.Contains(propertyName))
+/*            if (PropDefcol.Contains(propertyName))
             {
                 return PropDefcol[propertyName].LookupList;
             }
             return SuperClassDef == null
                        ? new NullLookupList()
-                       : SuperClassClassDef.GetLookupList(propertyName);
+                       : SuperClassClassDef.GetLookupList(propertyName);*/
+            PropDef propDef = (PropDef)GetPropDef(propertyName, false);
+            return propDef == null
+                       ? new NullLookupList()
+                       : propDef.LookupList;
         }
 
-        /// <summary>
-        /// Searches the property definition collection and returns the 
-        /// property definition for the property with the name provided.
-        /// </summary>
-        /// <param name="propertyName">The property name in question</param>
-        /// <returns>Returns the property definition if found, or
-        /// throws an error if not</returns>
-        /// <exception cref="InvalidPropertyNameException">
-        /// This exception is thrown if the property is not found</exception>
-        public IPropDef GetPropDef(string propertyName)
-        {
-            return GetPropDef(propertyName, true);
-        }
 
         ///<summary>
         /// Returns a particular property definition for a class definition.
@@ -849,49 +871,14 @@ namespace Habanero.BO.ClassDefinition
             return relatedClassDef.GetPropDef(propertyName, throwError);
         }
 
-        /// <summary>
-        /// Searches the property definition collection and returns the 
-        /// property definition for the property with the name provided.
-        /// </summary>
-        /// <param name="propertyName">The property name in question</param>
-        /// <param name="throwError">Should an error be thrown if the property is not found</param>
-        /// <returns>Returns the property definition if found, or
-        /// throw an error if <paramref name="throwError"/> is true,
-        /// otherwise return null</returns>
-        /// <exception cref="InvalidPropertyNameException">
-        /// This exception is thrown if the property is not found and 
-        /// <paramref name="throwError"/> is true</exception>
-        public IPropDef GetPropDef(string propertyName, bool throwError)
-        {
-            IPropDef foundPropDef = null;
-            IClassDef currentClassDef = this;
-            while (currentClassDef != null)
-            {
-                if (currentClassDef.PropDefcol.Contains(propertyName))
-                {
-                    foundPropDef = currentClassDef.PropDefcol[propertyName];
-                    break;
-                }
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
-            if (foundPropDef != null)
-            {
-                return foundPropDef;
-            }
-            if (throwError)
-            {
-                throw new InvalidPropertyNameException(String.Format(
-                                                           "The property definition for the property '{0}' could not be " +
-                                                           "found on a ClassDef of type '{1}'", propertyName,
-                                                           ClassNameFull));
-            }
-            return null;
-        }
+
 
         /// <summary>
         /// Searches the relationship definition collection and returns 
         /// the relationship definition found under the
         /// relationship with the name specified.
+        /// This searches through all the entire inheritance Hierachy i.e. all the
+        /// superclasses relationships are also searched for.
         /// </summary>
         /// <param name="relationshipName">The relationship name in question</param>
         /// <returns>Returns the relationship definition if found, 
@@ -1039,57 +1026,128 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>The type of the specified property</returns>
         public Type GetPropertyType(string propertyName)
         {
-            //This could be Generalised this for properties that do not have PropDefs
-
-            if (propertyName.IndexOf(".") != -1)
-            {
-                //Get the first property name
-                string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
-                propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
-                //If there are some alternative relationships to traverse through then
-                //  go through each alternative and check if there is a related object and return the first one
-                // else get the related object
-
-                string[] parts = relationshipName.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
-                var relNames = new List<string>(parts);
-                var relatedPropertyTypes = new List<Type>();
-                relNames.ForEach(delegate(string relationship)
-                                     {
-                                         IRelationshipDef relationshipDef = GetRelationship(relationship);
-                                         if (relationshipDef == null) return;
-
-                                         IClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
-                                         if (relatedObjectClassDef == null) return;
-
-                                         Type propertyType = relatedObjectClassDef.GetPropertyType(propertyName);
-                                         relatedPropertyTypes.Add(propertyType);
-                                     });
-                Type currentPropertyType = null;
-                relatedPropertyTypes.ForEach(delegate(Type propertyType)
-                                                 {
-                                                     if (currentPropertyType == null)
-                                                     {
-                                                         currentPropertyType = propertyType;
-                                                     }
-                                                     else if (currentPropertyType != propertyType)
-                                                     {
-                                                         currentPropertyType = typeof (object);
-                                                     }
-                                                 });
-
-                return currentPropertyType ?? typeof (object);
-            }
-            if (propertyName.IndexOf("-") != -1)
+            if (IsReflectiveProperty(propertyName))
             {
                 return GetReflectivePropertyType(propertyName);
-//                return typeof (object);
             }
             PropDef propDef = (PropDef) GetPropDef(propertyName, false);
-            if (propDef != null && propDef.LookupList is NullLookupList)
+            return propDef != null ? propDef.PropertyType : typeof (object);
+        }
+
+        private static bool IsReflectiveProperty(string propertyName)
+        {
+            return ClassDefHelper.IsReflectiveProperty(propertyName);
+        }
+
+        /// <summary>
+        /// Searches the property definition collection and returns the 
+        /// property definition for the property with the name provided.
+        /// </summary>
+        /// <param name="propertyName">The property name in question</param>
+        /// <returns>Returns the property definition if found, or
+        /// throws an error if not</returns>
+        /// <exception cref="InvalidPropertyNameException">
+        /// This exception is thrown if the property is not found</exception>
+        public IPropDef GetPropDef(string propertyName)
+        {
+            return GetPropDef(propertyName, true);
+        }
+
+        private IPropDef GetInheritedPropDef(string propertyName, bool throwError)
+        {
+/*            IPropDef foundPropDef = null;
+            IClassDef currentClassDef = this;
+            while (currentClassDef != null)
             {
-                return propDef.PropertyType;
+                if (currentClassDef.PropDefcol.Contains(propertyName))
+                {
+                    foundPropDef = currentClassDef.PropDefcol[propertyName];
+                    break;
+                }
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
-            return typeof (object);
+            if (foundPropDef != null)
+            {
+                return foundPropDef;
+            }*/
+
+            try
+            {
+                return this.PropDefColIncludingInheritance[propertyName];
+            }
+            catch (Exception)
+            {
+                if (throwError)
+                {
+                    throw new InvalidPropertyNameException(String.Format(
+                                                               "The property definition for the property '{0}' could not be " +
+                                                               "found on a ClassDef of type '{1}'", propertyName,
+                                                               ClassNameFull));
+                }
+            }
+
+            return null;
+        }
+        /// <summary>
+        /// Searches the property definition collection and returns the 
+        /// property definition for the property with the name provided.
+        /// </summary>
+        /// <param name="propertyName">The property name in question</param>
+        /// <param name="throwError">Should an error be thrown if the property is not found</param>
+        /// <returns>Returns the property definition if found, or
+        /// throw an error if <paramref name="throwError"/> is true,
+        /// otherwise return null</returns>
+        /// <exception cref="InvalidPropertyNameException">
+        /// This exception is thrown if the property is not found and 
+        /// <paramref name="throwError"/> is true</exception>
+        public IPropDef GetPropDef(string propertyName, bool throwError)
+        {
+            //If this prop def is from a related class e.g. this.Car.EngineID then
+            // need to get the PropDef from the related class.
+            return IsRelatedProperty(propertyName)
+                       ? GetRelatedPropertyDef(propertyName, throwError)
+                       : GetInheritedPropDef(propertyName, throwError);
+        }
+
+        private static bool IsRelatedProperty(string propertyName)
+        {
+            return propertyName.IndexOf(".") != -1;
+        }
+
+        private IPropDef GetRelatedPropertyDef(string propertyName, bool throwError)
+        {
+            string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
+            propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
+            //If there are some alternative relationships to traverse through then
+            //  go through each alternative and check if there is a related object and return the first one
+            // else get the related object
+
+            string[] parts = relationshipName.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
+            var relNames = new List<string>(parts);
+            foreach (string relationship in relNames)
+            {
+                IRelationshipDef relationshipDef = GetRelationship(relationship);
+                if (relationshipDef == null) continue;
+
+                IClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+                if (relatedObjectClassDef == null) continue;
+
+                IPropDef propDef = relatedObjectClassDef.GetPropDef(propertyName, false);
+                if (propDef != null) return propDef;
+            }
+            if (throwError)
+            {
+                ThrowPropertyNotFoundError(propertyName);
+            }
+            return null;
+        }
+
+        private void ThrowPropertyNotFoundError(string propertyName)
+        {
+            throw new InvalidPropertyNameException(String.Format(
+                "The property definition for the property '{0}' could not be " +
+                "found on a ClassDef of type '{1}'", propertyName,
+                ClassNameFull));
         }
 
         private Type GetReflectivePropertyType(string propertyName)
@@ -1100,7 +1158,8 @@ namespace Habanero.BO.ClassDefinition
 
         ///<summary>
         /// Creates a property comparer for the given property
-        /// The specified property can also have a format like the custom properties for a UiGridColumn or UiFormField def.
+        /// The specified property can also have a format like the custom properties 
+        /// for a UiGridColumn or UiFormField def.
         /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name
         ///</summary>
         ///<param name="propertyName">The property to get the type for.</param>

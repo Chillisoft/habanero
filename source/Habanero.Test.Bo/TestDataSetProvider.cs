@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -26,13 +26,16 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NMock;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
-
+#pragma warning disable 67
+#pragma warning disable 612,618
+//Obsolete methods are still under test until removed.
     /// <summary>
     /// Tests the DataSet provider base behaviour via the ReadOnlyDataSetProvider
-    /// </summary
+    /// </summary>
    [TestFixture]
     public class TestDataSetProvider : TestUsingDatabase
     {
@@ -54,6 +57,8 @@ namespace Habanero.Test.BO
         {
             this.SetupDBConnection();
             OrderItem.CreateTable();
+            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         [TestFixtureTearDown]
@@ -119,14 +124,6 @@ namespace Habanero.Test.BO
         }
 		protected void SetupSaveExpectation()
 		{
-//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                  DatabaseConnection.CurrentConnection.GetConnection());
-//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                  DatabaseConnection.CurrentConnection.GetConnection());
-//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                  DatabaseConnection.CurrentConnection.GetConnection());
-//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                  DatabaseConnection.CurrentConnection.GetConnection());
 		}
 
         [Test]
@@ -361,7 +358,7 @@ namespace Habanero.Test.BO
             //Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=1;OrderItem.Product=car"));
             //Assert.AreEqual(chair, provider.Find("OrderItem.OrderNumber=2;OrderItem.Product=chair"));
             Assert.AreEqual(car, provider.Find(car.ID.ObjectID));
-            Assert.AreEqual(chair, provider.Find(chair.ID.ObjectID));
+            Assert.AreEqual(chair, ((IDataSetProvider)provider).Find(chair.ID.ObjectID));
 
             OrderItem roof = OrderItem.AddOrder3Roof();
             Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
@@ -463,7 +460,7 @@ namespace Habanero.Test.BO
         public void TestOrderItemChangeItemAndFind()
         {
             SetupTestData();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             OrderItem.ClearTable();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
@@ -674,11 +671,9 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-//        [Test, Ignore("Not yet implemented critical to implement immediately")]
         [Test]
         public void Test_CustomDefined_Property()
         {
-            //Assert.Fail("Not yet implemented");
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithDateTime();
             ClassDef.ClassDefs.Clear();
@@ -747,6 +742,35 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestRelatedPropColumn_WhenIsLookup_ShouldReturnTypeObject()
+        {
+            //-------------Setup Test Pack ------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            new Address();//TO Load ClassDefs
+
+            var engine = new Engine();
+            var car = new Car();
+            engine.CarID = car.CarID;
+            IClassDef engineClassDef = engine.ClassDef;
+            IClassDef carClassDef = car.ClassDef;
+            IPropDef ownerPropDef = carClassDef.PropDefcol["OwnerId"];
+            ownerPropDef.LookupList = new BusinessObjectLookupList(typeof (ContactPerson));
+            const string columnName = "Car.OwnerID";
+            UIGrid uiGrid = CreateUiGridWithColumn(engineClassDef, columnName);
+
+            BusinessObjectCollection<Engine> engines = new BusinessObjectCollection<Engine> {engine};
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(engines);
+            //--------------Assert PreConditions----------------            
+            //---------------Execute Test ----------------------
+            DataTable dataTable = dataSetProvider.GetDataTable(uiGrid);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(dataTable.Columns.Contains(columnName), "DataTable should have the related property column");
+            DataColumn dataColumn = dataTable.Columns[columnName];
+            Assert.AreSame(typeof(object), dataColumn.DataType);
+            Assert.AreEqual(1, dataTable.Rows.Count);
+            DataRow dataRow = dataTable.Rows[0];
+        }
+        [Test]
         public void TestVirtualPropColumn()
         {
             //-------------Setup Test Pack ------------------
@@ -789,7 +813,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
             BusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
-            AddressTestBO address = AddressTestBO.CreateUnsavedAddress(contactPersonTestBO);
+            AddressTestBO.CreateUnsavedAddress(contactPersonTestBO);
 
             UIGrid uiGrid = new UIGrid();
             const string propertyName = "ContactPersonTestBO.FirstName";
@@ -799,7 +823,9 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, addresses.Count);
             //---------------Execute Test ----------------------
+
             DataTable table = dataSetProvider.GetDataTable(uiGrid);
+
             //---------------Test Result -----------------------
             Assert.AreEqual(1, table.Rows.Count);
             Assert.AreEqual(contactPersonTestBO.FirstName, table.Rows[0][propertyName]);
@@ -815,9 +841,22 @@ namespace Habanero.Test.BO
             return uiGrid;
         }
 
+        [Test]
+        public void Test_ObjectInitialiser_SetGet_ShouldReturnSetInitialiser()
+        {
+            //---------------Set up test pack-------------------
+            DataSetProvider dataSetProvider = new DataSetProviderStub();
+            var expectedInitialiser = new BusinessObjectInitialiserStub();
+            //---------------Assert Precondition----------------
+            Assert.AreNotSame(expectedInitialiser, dataSetProvider.ObjectInitialiser);
+            //---------------Execute Test ----------------------
+            dataSetProvider.ObjectInitialiser = expectedInitialiser;
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedInitialiser, dataSetProvider.ObjectInitialiser);
+        }
         #region Internal Classes
 
-        public class MyContactPerson : ContactPerson
+        private class MyContactPerson : ContactPerson
         {
             private readonly DateTime _dateTime = DateTime.Now;
             private const string fatherRelationshipName = "Father";
@@ -865,7 +904,7 @@ namespace Habanero.Test.BO
                 }
             }
 
-            public class MySingleRelationship : SingleRelationship<MyContactPerson>, ISingleRelationship
+            private class MySingleRelationship : SingleRelationship<MyContactPerson>, ISingleRelationship
             {
                 private MyContactPerson _myContactPerson;
 
@@ -885,7 +924,7 @@ namespace Habanero.Test.BO
                 /// Sets the related object to that provided
                 /// </summary>
                 /// <param name="relatedObject">The object to relate to</param>
-                    void ISingleRelationship.SetRelatedObject(IBusinessObject relatedObject)
+                void ISingleRelationship.SetRelatedObject(IBusinessObject relatedObject)
                 {
                     _myContactPerson = relatedObject as MyContactPerson;
                 }
@@ -894,6 +933,335 @@ namespace Habanero.Test.BO
 
         #endregion //Internal Classes
 
+        [Test]
+        public void Test_RegisterForEventsFromStrubs_ToPreventCompilerWarnings()
+        {
+            //---------------Set up test pack-------------------
+            var collectionStub = new BusinessObjectCollectionStub();
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            collectionStub.BusinessObjectAdded +=delegate {  };
+            collectionStub.BusinessObjectIDUpdated +=delegate {  };
+            collectionStub.BusinessObjectPropertyUpdated +=delegate {  };
+            collectionStub.BusinessObjectRemoved +=delegate {  };
+            collectionStub.BusinessObjectUpdated +=delegate {  };
+            //---------------Test Result -----------------------
+        }
+
+        [Test]
+        public void Test_GetDataView_ShouldReturnDataViewfordataTable()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO bo = new MyBO();
+            const string dateTimeProp = "TestDateTime";
+            DateTime expectedDate = DateTime.Now;
+            bo.SetPropertyValue(dateTimeProp, expectedDate);
+
+            col.Add(bo);
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(col);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            var uiGrid = bo.ClassDef.GetUIDef("default").UIGrid;
+            var dataView = dataSetProvider.GetDataView(uiGrid);
+            //---------------Test Result -----------------------
+            var dataTable = ((DataView)dataView).Table;
+            Assert.AreSame(typeof(DateTime), dataTable.Columns[dateTimeProp].DataType);
+            Assert.IsInstanceOf(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
+        }
     }
+
+   class DataSetProviderStub : DataSetProvider
+   {
+       public DataSetProviderStub()
+           : base(new BusinessObjectCollectionStub())
+       {
+       }
+
+       public override void InitialiseLocalData()
+       {
+           
+       }
+   }
+
+   class BusinessObjectInitialiserStub : IBusinessObjectInitialiser
+   {
+       public void InitialiseObject(IBusinessObject objToInitialise)
+       {
+
+       }
+
+       public void InitialiseDataRow(DataRow row)
+       {
+       }
+   }
+#pragma warning restore 067
+   class BusinessObjectCollectionStub : IBusinessObjectCollection
+   {
+       public IEnumerator GetEnumerator()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void CopyTo(Array array, int index)
+       {
+           throw new NotImplementedException();
+       }
+
+       public int Count
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public object SyncRoot
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public bool IsSynchronized
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public int Add(object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public bool Contains(object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Clear()
+       {
+           throw new NotImplementedException();
+       }
+
+       public int IndexOf(object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Insert(int index, object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Remove(object value)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void RemoveAt(int index)
+       {
+           throw new NotImplementedException();
+       }
+
+       public IBusinessObject this[int index]
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public void Add(IBusinessObject item)
+       {
+           throw new NotImplementedException();
+       }
+
+       public bool Contains(IBusinessObject item)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void CopyTo(IBusinessObject[] array, int arrayIndex)
+       {
+           throw new NotImplementedException();
+       }
+
+       public bool Remove(IBusinessObject item)
+       {
+           throw new NotImplementedException();
+       }
+
+       public bool IsValid(out string errorMessage)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void SaveAll()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Sort(string propertyName, bool isBoProperty, bool isAscending)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Sort(IComparer comparer)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Load(string searchCriteria, string orderByClause)
+       {
+           throw new NotImplementedException();
+       }
+
+       public IBusinessObject CreateBusinessObject()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void LoadAll()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void LoadAll(string orderByClause)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void AddWithoutEvents(IBusinessObject businessObject)
+       {
+           throw new NotImplementedException();
+       }
+
+       public IList PersistedBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public IList CreatedBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public IList RemovedBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public IList AddedBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public IList MarkedForDeleteBusinessObjects
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public int TotalCountAvailableForPaging
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public DateTime? TimeLastLoaded
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public void RestoreAll()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void CancelEdits()
+       {
+           throw new NotImplementedException();
+       }
+
+       public void LoadWithLimit(string searchCriteria, string orderByClause, int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
+       {
+           throw new NotImplementedException();
+       }
+
+       public void Refresh()
+       {
+           throw new NotImplementedException();
+       }
+       // ReSharper disable UnusedMember.Local
+       //This is being used so as to prevent Compiler warnings which I do not seem to be able to suppress with pragma's
+       private void RaiseEvents()
+
+       {
+           BusinessObjectAdded(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+           BusinessObjectRemoved(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+           BusinessObjectUpdated(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+           BusinessObjectPropertyUpdated(this,MockRepository.GenerateStub<BOPropUpdatedEventArgs>());
+           BusinessObjectIDUpdated(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+           CollectionRefreshed(this, new BOEventArgs(MockRepository.GenerateStub<IBusinessObject>()));
+       }
+       // ReSharper restore UnusedMember.Local
+       public event EventHandler<BOEventArgs> BusinessObjectAdded;
+       public event EventHandler<BOEventArgs> BusinessObjectRemoved;
+       public event EventHandler<BOEventArgs> BusinessObjectUpdated;
+       public event EventHandler<BOPropUpdatedEventArgs> BusinessObjectPropertyUpdated;
+       public event EventHandler<BOEventArgs> BusinessObjectIDUpdated;
+       public event EventHandler CollectionRefreshed;
+
+       public IClassDef ClassDef
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public bool IsDirty
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public ISelectQuery SelectQuery
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public IBusinessObject Find(Guid key)
+       {
+           throw new NotImplementedException();
+       }
+
+       public IBusinessObjectCollection Clone()
+       {
+           throw new NotImplementedException();
+       }
+
+       public int IndexOf(IBusinessObject item)
+       {
+           throw new NotImplementedException();
+       }
+
+       object IList.this[int index]
+       {
+           get { throw new NotImplementedException(); }
+           set { throw new NotImplementedException(); }
+       }
+
+       public bool IsReadOnly
+       {
+           get { throw new NotImplementedException(); }
+       }
+
+       public bool IsFixedSize
+       {
+           get { throw new NotImplementedException(); }
+       }
+   }
+#pragma warning restore 67
+#pragma warning restore 612,618
 }

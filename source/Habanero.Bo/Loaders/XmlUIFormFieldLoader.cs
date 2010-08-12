@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -25,6 +25,7 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders
 {
+#pragma warning disable 612,618
     /// <summary>
     /// Loads UI form property information from xml data
     /// </summary>
@@ -61,7 +62,15 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a UIFormProperty object</returns>
         public IUIFormField LoadUIProperty(string xmlUIProp)
         {
-            return this.LoadUIProperty(this.CreateXmlElement(xmlUIProp));
+            try
+            {
+                return this.LoadUIProperty(this.CreateXmlElement(xmlUIProp));
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                throw new InvalidXmlDefinitionException("The XML: " + xmlUIProp 
+                        + " could not be parsed into a UIProp because :- " + ex.Message, ex);
+            }
         }
 
         /// <summary>
@@ -110,7 +119,7 @@ namespace Habanero.BO.Loaders
             try
             {
                 layoutAttribute = _reader.GetAttribute("layout");
-                _layout = (LayoutStyle) Enum.Parse(typeof(LayoutStyle), layoutAttribute);
+                if(layoutAttribute != null) _layout = (LayoutStyle) Enum.Parse(typeof(LayoutStyle), layoutAttribute);
             }
             catch (Exception ex)
             {
@@ -241,8 +250,8 @@ namespace Habanero.BO.Loaders
             {
                 string attName = _reader.GetAttribute("name");
                 string attValue = _reader.GetAttribute("value");
-                if (attName == null || attName.Length == 0 ||
-                    attValue == null || attValue.Length == 0)
+                if (string.IsNullOrEmpty(attName) ||
+                    string.IsNullOrEmpty(attValue))
                 {
                     throw new InvalidXmlDefinitionException("In a " +
                                                             "'parameter' element, either the 'name' or " +
@@ -279,4 +288,6 @@ namespace Habanero.BO.Loaders
             }
         }
     }
+
+#pragma warning restore 612,618
 }

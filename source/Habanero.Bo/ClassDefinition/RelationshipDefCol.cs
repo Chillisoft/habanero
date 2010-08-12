@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -146,7 +146,12 @@ namespace Habanero.BO.ClassDefinition
             }
 		}
 
-		#region IEnumerable<IRelationshipDef> Members
+        /// <summary>
+        /// The ClassDef this RelationshipDefCol belongs to
+        /// </summary>
+        public IClassDef ClassDef { get; set; }
+
+        #region IEnumerable<IRelationshipDef> Members
 
         ///<summary>
         ///Returns an enumerator that iterates through the collection.

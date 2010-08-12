@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -230,6 +230,12 @@ namespace Habanero.BO
         {
             get { return _objectID; }
         }
+
+        /// <summary>
+        /// The Business Object that this PrimaryKey is for.
+        /// </summary>
+        public IBusinessObject BusinessObject { get; set; }
+
         ///<summary>
         /// For a given value e.g. a Guid Identifier '{......}' this will build up a primary key object that can be used to
         /// load the business object from the Data store (see Business Object loader GetBusinessObjectByValue)

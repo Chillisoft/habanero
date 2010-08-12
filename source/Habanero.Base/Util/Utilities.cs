@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
@@ -35,49 +36,31 @@ namespace Habanero.Util
         ///</summary>
         ///<param name="obj">The object to be tested it it is null or not.</param>
         ///<returns>True if the object is null, or false if not.</returns>
-        public static bool IsNull(object obj)
+        public static bool IsNull(this object obj)
         {
             WeakReference testNull = new WeakReference(obj);
             return !testNull.IsAlive;
         }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="type"></param>
-        ///<exception cref="UnknownTypeNameException"></exception>
-        public static void CheckTypeCanBeCreated(Type type)
-        {
-            //Check that the type can be created and raise appropriate error 
-            try
-            {
-                Activator.CreateInstance(type, true);
-            }
-            catch (Exception ex)
-            {
-                throw new UnknownTypeNameException
-                    (String.Format
-                         ("An error occurred while attempting to load a related "
-                          + "business object collection, with the type given as '{0}'. "
-                          + "Check that the given type exists and has been correctly "
-                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
-                     ex);
-            }
-        }
+
 
         ///<summary>
         /// Copies the elements of the <see cref="System.Collections.IList"/> to a new array of the specified type.
         ///</summary>
         ///<param name="list">The <see cref="System.Collections.IList"/> to be copied.</param>
         ///<typeparam name="T">The type of the elemtnes of the array to be returned.</typeparam>
-        ///<returns>An array of type <see cref="T"/> containing copies of the elements of the <see cref="System.Collections.IList"/>.</returns>
+        ///<returns>An array of type <typeparamref name="T"/> containing copies of the elements of the <see cref="System.Collections.IList"/>.</returns>
         public static T[] ToArray<T>(IList list)
         {
-            List<T> bos = new List<T>();
-            foreach (T businessObject in list)
+            //return list.Cast<T>().ToArray();//TODO_ brett 08 Jun 2010: Removed for compatibility to For 2_0
+            T[] array = new T[list.Count];
+            int i = 0;
+            foreach (T item in list)
             {
-                bos.Add(businessObject);
+                array[i] = item;
+                i++;
             }
-            return bos.ToArray();
+            return array;
         }
     }
 }

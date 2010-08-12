@@ -21,6 +21,8 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Testability;
+using Habanero.Util;
 using NMock;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -28,10 +30,10 @@ using Rhino.Mocks;
 namespace Habanero.Test.BO
 {
     /// <summary>
-    /// Summary description for TestBoMapper.
+    /// Summary description for TestBOMapper.
     /// </summary>
     [TestFixture]
-    public class TestBoMapper : TestUsingDatabase
+    public class TestBOMapper : TestUsingDatabase
     {
         private IClassDef itsClassDef;
         private IClassDef itsRelatedClassDef;
@@ -41,6 +43,97 @@ namespace Habanero.Test.BO
         {
             this.SetupDBConnection();
         }
+
+        [Test]
+        public void Test_SetDisplayPropertyValue_ShouldSetPropValue()
+        {
+            //---------------Set up test pack-------------------
+            const string propName = "TestProp";
+            ClassDef.ClassDefs.Clear();
+
+            var myBOClassDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO myBO = (MyBO) myBOClassDef.CreateNewBusinessObject();
+            BOMapper boMapper = new BOMapper(myBO);
+            var initialPropValue = RandomValueGen.GetRandomString();
+            myBO.SetPropertyValue(propName, initialPropValue);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(initialPropValue, myBO.GetPropertyValue(propName));
+            //---------------Execute Test ----------------------
+            var expectedPropValue = RandomValueGen.GetRandomString();
+            boMapper.SetDisplayPropertyValue(propName, expectedPropValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedPropValue, myBO.GetPropertyValue(propName));
+        }
+        [Test]
+        public void Test_SetDisplayPropertyValue_WithRelatedPropName_ShouldSetPropValue()
+        {
+            //---------------Set up test pack-------------------
+            const string underlyingPropName = "MyRelatedTestProp";
+            const string propName = "MyRelationship." + underlyingPropName;
+            ClassDef.ClassDefs.Clear();
+
+            var myBOClassDef = MyBO.LoadClassDefWithRelationship();
+            var relatedClassDef = MyRelatedBo.LoadClassDef();
+
+            MyBO myBO = (MyBO)myBOClassDef.CreateNewBusinessObject();
+            MyRelatedBo myRelatedBo = (MyRelatedBo) relatedClassDef.CreateNewBusinessObject();
+            myBO.Relationships.SetRelatedObject("MyRelationship", myRelatedBo);
+            BOMapper boMapper = new BOMapper(myBO);
+            var initialPropValue = RandomValueGen.GetRandomString();
+            myRelatedBo.SetPropertyValue(underlyingPropName, initialPropValue);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(initialPropValue, myRelatedBo.GetPropertyValue(underlyingPropName));
+            //---------------Execute Test ----------------------
+            var expectedPropValue = RandomValueGen.GetRandomString();
+            boMapper.SetDisplayPropertyValue(propName, expectedPropValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedPropValue, myRelatedBo.GetPropertyValue(underlyingPropName));
+        }
+
+        [Test]
+        public void Test_SetDisplayPropertyValue_WhenLookupList_ShouldSetUnderlyingValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            const string propertyName = "TestProp2";
+            const string expectedLookupDisplayValue = "s1";
+            Guid expectedLookupValue;
+            StringUtilities.GuidTryParse("{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}", out expectedLookupValue);
+            itsClassDef = MyBO.LoadClassDefWithLookup();
+            MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject();
+            BOMapper boMapper = new BOMapper(bo1);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(bo1.TestProp2);
+            //---------------Execute Test ----------------------
+            boMapper.SetDisplayPropertyValue(propertyName, expectedLookupDisplayValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedLookupValue, bo1.GetPropertyValue(propertyName));
+            Assert.AreEqual(expectedLookupDisplayValue, bo1.GetPropertyValueToDisplay(propertyName));
+        }
+/*
+
+        [Test]
+        public void Test_IsDirty_WhenBOPropDirty_ShouldReturnTrue()
+        {
+            //---------------Set up test pack-------------------
+            const string propName = "TestProp";
+            ClassDef.ClassDefs.Clear();
+
+            var myBOClassDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO myBO = (MyBO)myBOClassDef.CreateNewBusinessObject();
+            BOMapper boMapper = new BOMapper(myBO);
+            var initialPropValue = RandomValueGen.GetRandomString();
+            myBO.SetPropertyValue(propName, initialPropValue);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            boMapper.IsDirty()
+            //---------------Test Result -----------------------
+            Assert.Fail("Not Yet Implemented");
+        }
+*/
 
         [Test]
         public void TestGetPropertyValueToDisplay()
@@ -127,14 +220,6 @@ namespace Habanero.Test.BO
 		[Test]
 		public void TestGetPropertyValueWithDot()
 		{
-			MockRepository mock = new MockRepository();
-			
-			//Mock mockDbConnection = new DynamicMock(typeof(IDatabaseConnection));
-            IDatabaseConnection connection = mock.StrictMock<IDatabaseConnection>();
-			
-			//Mock relColControl = new DynamicMock(typeof(IRelationshipCol));
-			IRelationshipCol mockRelCol = mock.StrictMock<IRelationshipCol>();
-
 			ClassDef.ClassDefs.Clear();
 			itsClassDef = MyBO.LoadClassDefWithRelationship();
 			itsRelatedClassDef = MyRelatedBo.LoadClassDef();
@@ -145,29 +230,30 @@ namespace Habanero.Test.BO
 			bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
 			relatedBo.SetPropertyValue("MyRelatedTestProp", "MyValue");
 			BOMapper mapper = new BOMapper(bo1);
-            ((IBusinessObject)bo1).Relationships = mockRelCol;
 
-			//relColControl.ExpectAndReturn("GetRelatedObject", relatedBo, new object[] { "MyRelationship" });
-			//Expect.AtLeastOnce.On(mockRelCol).Method("GetRelatedObject").With("MyRelationship").Will(Return.Value(relatedBo));
-			Expect.Call(mockRelCol.GetRelatedObject("MyRelationship")).Return(relatedBo);
-
-			//mockDbConnection.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(), new object[] { });
-			//Expect.AtLeastOnce.On(connection).Method("GetConnection").Will(Return.Value(DatabaseConnection.CurrentConnection.GetConnection()));
-			Expect.Call(connection.GetConnection()).Repeat.Never();
-			mock.ReplayAll();
 			Assert.AreEqual("MyValue", mapper.GetPropertyValueToDisplay("MyRelationship.MyRelatedTestProp"));
-			mock.VerifyAll();
 		}
 
-        [Test, ExpectedException(typeof (RelationshipNotFoundException))]
+        [Test]
         public void TestGetPropertyValueWithDot_IncorrectRelationshipName()
         {
+            //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             itsClassDef = MyBO.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             BOMapper mapper = new BOMapper(bo1);
-            Assert.AreEqual(null, mapper.GetPropertyValueToDisplay("MyIncorrectRelationship.MyRelatedTestProp"));
+            //---------------Execute Test ----------------------
+            try
+            {
+                mapper.GetPropertyValueToDisplay("MyIncorrectRelationship.MyRelatedTestProp");
+                Assert.Fail("Expected to throw an RelationshipNotFoundException");
+            }
+                //---------------Test Result -----------------------
+            catch (RelationshipNotFoundException ex)
+            {
+                StringAssert.Contains("The relationship 'MyIncorrectRelationship' on 'MyBO' cannot be found", ex.Message);
+            }
         }
 
 //        [Test]
@@ -198,17 +284,8 @@ namespace Habanero.Test.BO
 //        }
 
 		[Test]
-		public void TestGetPropertyValueWithDotNoValue()
+		public void TestGetPropertyValueWithDotNoValue_WhenPropDoesNotExist()
 		{
-			MockRepository mock = new MockRepository();
-			//Mock mockDbConnection = new DynamicMock(typeof(IDatabaseConnection));
-			//IDatabaseConnection connection = (IDatabaseConnection)mockDbConnection.MockInstance;
-            IDatabaseConnection connection = mock.StrictMock<IDatabaseConnection>();
-
-			//Mock relColControl = new DynamicMock(typeof(IRelationshipCol));
-			//IRelationshipCol mockRelCol = (IRelationshipCol)relColControl.MockInstance;
-            IRelationshipCol mockRelCol = mock.StrictMock<IRelationshipCol>();
-
 			ClassDef.ClassDefs.Clear();
 			itsClassDef = MyBO.LoadClassDefWithRelationship();
 			itsRelatedClassDef = MyRelatedBo.LoadClassDef();
@@ -219,29 +296,15 @@ namespace Habanero.Test.BO
 			//			bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
 			relatedBo.SetPropertyValue("MyRelatedTestProp", "MyValue");
 			BOMapper mapper = new BOMapper(bo1);
-            ((IBusinessObject)bo1).Relationships = mockRelCol;
 
-			//relColControl.ExpectAndReturn("GetRelatedObject", null, new object[] { "MyRelationship" });
-			Expect.Call(mockRelCol.GetRelatedObject("MyRelationship")).Return(null);
-
-			//mockDbConnection.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(), new object[] { });
-			Expect.Call(connection.GetConnection()).Repeat.Never();
-			mock.ReplayAll();
 			Assert.AreEqual(null, mapper.GetPropertyValueToDisplay("MyRelationship.MyRelatedTestProp"));
-			mock.VerifyAll();
 		}
 
         [Test]
         public void TestVirtualPropertyValue()
         {
-            Mock mockDbConnection = new DynamicMock(typeof (IDatabaseConnection));
-#pragma warning disable 168
-            IDatabaseConnection connection = (IDatabaseConnection) mockDbConnection.MockInstance;
-#pragma warning restore 168
-
             ClassDef.ClassDefs.Clear();
             itsClassDef = MyBO.LoadDefaultClassDef();
-            //MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
             MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject();
 
             BOMapper mapper = new BOMapper(bo1);

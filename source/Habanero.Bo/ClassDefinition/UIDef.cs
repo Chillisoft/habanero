@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -95,6 +95,14 @@ namespace Habanero.BO.ClassDefinition
         /// The Class Definition that this UIDef belongs to.
         /// </summary>
         public IClassDef ClassDef { get; set; }
+
+        /// <summary>
+        /// Returns the ClassName of the Class tha this UIDef is for.
+        /// </summary>
+        public string ClassName
+        {
+            get { return this.ClassDef == null ? "" : this.ClassDef.ClassName; }
+        }
 
         /// <summary>
         /// Returns the form property definitions

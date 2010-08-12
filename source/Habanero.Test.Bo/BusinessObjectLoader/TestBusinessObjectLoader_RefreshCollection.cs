@@ -32,19 +32,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
     public class TestBusinessObjectLoader_RefreshCollection 
     {
         #region Setup/Teardown
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
+        {
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+        }
+/*        [TestFixtureTearDown]
+        public virtual void FixtureTearDownTest()
+        {
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+        }*/
+
+        [TearDown]
+        public virtual void TearDownTest()
+        {
+        }
 
         [SetUp]
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            
             TestUtil.WaitForGC();
-        }
-
-        [TearDown]
-        public virtual void TearDownTest()
-        {
         }
 
         #endregion
@@ -206,7 +216,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             cp2.Save();
             ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
             
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>(parametrizedClassDef);
             //---------------Execute Test ----------------------
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
@@ -254,7 +264,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             cp2.Save();
             ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>(parametrizedClassDef);
 
             //---------------Execute Test ----------------------
@@ -836,12 +846,12 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.IsFalse(col.Contains(cpNewLikeMatch));
         }
 
+        [Test]
         public void Test_Refresh_DoesNotRefreshDirtyOjects()
         {
             //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorDB();
             ContactPersonTestBO.DeleteAllContactPeople();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -1277,7 +1287,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_Refresh_WithRemovedBOs_Typed()
         {
             //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
             BusinessObjectCollection<ContactPersonTestBO> cpCol =
@@ -1294,6 +1303,23 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.Count);
+        }
+
+        [Test]
+        public void Test_Refresh_WithSavedBOAlreadyInCollection()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateUnsavedContactPerson();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            cpCol.Add(cp);
+            cp.Save();
+            //---------------Assert preconditions---------------
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            cpCol.Refresh();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
         }
 
         #endregion

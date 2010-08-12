@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -25,23 +25,18 @@ namespace Habanero.Util
     /// <summary>
     /// Provides a set of Utilities to work with types.
     /// </summary>
-    public class TypeUtilities
+    public static class TypeUtilities
     {
+        //TODO brett 08 Jun 2010: For 2_0 Removed this from IsInteger and IsDecimal
         /// <summary>
         /// Indicates if type is an integer type.
         /// </summary>
         /// <param name="type">Type to check.</param>
         /// <returns>true if type is an integer type.</returns>
-        public static bool IsInteger(Type type)
+        public static bool IsInteger(this Type type)
         {
-            if(type == typeof(int) || type ==typeof(uint) || type == typeof(ushort) || type ==typeof(ulong) || 
-                type==typeof(short) || type ==typeof(long) || type ==typeof(byte) || type ==typeof(sbyte))
-            {
-                return true;
-            }else
-            {
-                return false;
-            }
+            return type == typeof(int) || type ==typeof(uint) || type == typeof(ushort) || type ==typeof(ulong) || 
+                   type==typeof(short) || type ==typeof(long) || type ==typeof(byte) || type ==typeof(sbyte);
         }
 
         /// <summary>
@@ -49,15 +44,9 @@ namespace Habanero.Util
         /// </summary>
         /// <param name="type">Type to check.</param>
         /// <returns>true if type is an decimal type.</returns>
-        public static bool IsDecimal(Type type)
+        public static bool IsDecimal(this Type type)
         {
-            if(type == typeof(decimal) || type==typeof(float) || type==typeof(double))
-            {
-                return true;
-            }else
-            {
-                return false;
-            }
+            return type == typeof(decimal) || type==typeof(float) || type==typeof(double);
         }
 
         ///<summary>
@@ -66,7 +55,7 @@ namespace Habanero.Util
         ///<param name="obj">The value to convert</param>
         ///<typeparam name="TDestinationType">The type to convert the value to.</typeparam>
         ///<returns>The converted value</returns>
-        public static TDestinationType ConvertTo<TDestinationType>(object obj)
+        public static TDestinationType ConvertTo<TDestinationType>(this object obj)
         {
             return (TDestinationType)ConvertTo(typeof(TDestinationType), obj);
         }
@@ -74,11 +63,12 @@ namespace Habanero.Util
         ///<summary>
         /// Converts a value to the specified type using the <see cref="TypeConverter"/> associated with the source value.
         ///</summary>
-        ///<param name="type">The type to convert the value to.</typeparam>
+        ///<param name="type">The type to convert the value to.</param>
         ///<param name="obj">The value to convert</param>
         ///<returns>The converted value</returns>
         public static object ConvertTo(Type type, object obj)
         {
+            
             if (Utilities.IsNull(obj)) return null;
             Type sourceType = obj.GetType();
             bool isNullableType = false;
@@ -100,5 +90,28 @@ namespace Habanero.Util
             }
             return returnValue;
         }
+        /*//TODO brett 08 Jun 2010: For 2_0 
+  ///<summary>
+        ///</summary>
+        ///<param name="type"></param>
+        ///<exception cref="UnknownTypeNameException"></exception>
+        public static void CheckTypeCanBeCreated(this Type type)
+        {
+            //Check that the type can be created and raise appropriate error 
+            try
+            {
+                Activator.CreateInstance(type, true);
+            }
+            catch (Exception ex)
+            {
+                throw new UnknownTypeNameException
+                    (String.Format
+                         ("An error occurred while attempting to load a related "
+                          + "business object collection, with the type given as '{0}'. "
+                          + "Check that the given type exists and has been correctly "
+                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
+                     ex);
+            }
+        }*/
     }
 }

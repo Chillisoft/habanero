@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -23,7 +23,10 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
-
+    internal interface IRelationshipForLoading: IRelationship
+    {
+        void Initialise();
+    }
     internal static class RelationshipUtils
     {
         /// <summary>
@@ -238,7 +241,7 @@ namespace Habanero.BO
     /// <summary>
     /// Provides a super-class for relationships between business objects
     /// </summary>
-    public abstract class Relationship : RelationshipBase
+    public abstract class Relationship : RelationshipBase, IRelationshipForLoading
     {
         /// <summary> The Definition that defines this relationship. </summary>
         protected RelationshipDef _relDef;
@@ -256,6 +259,9 @@ namespace Habanero.BO
         /// initialise the RelKey object</param>
         protected Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
         {
+            if (owningBo == null) throw new ArgumentNullException("owningBo");
+            if (lRelDef == null) throw new ArgumentNullException("lRelDef");
+            if (lBOPropCol == null) throw new ArgumentNullException("lBOPropCol");
             _relDef = lRelDef;
             _owningBo = owningBo;
             _relKey = _relDef.RelKeyDef.CreateRelKey(lBOPropCol);
@@ -312,7 +318,7 @@ namespace Habanero.BO
             get { return _relDef.RelatedObjectClassDef; }
         }
 
-        internal void Initialise()
+        void IRelationshipForLoading.Initialise()
         {
             if (_initialised) return;
             DoInitialisation();

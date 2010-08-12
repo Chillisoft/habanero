@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -49,6 +49,15 @@ namespace Habanero.Base
         /// <summary>
         /// The data is less than the filter value
         /// </summary>
-        OpLessThan
+        OpLessThan,
+        /// <summary>
+        /// E.g. Is Null and Is Not Null.
+        /// </summary>
+        Is,
+        /// <summary>
+        /// NotEqual i.e. != .
+        /// </summary>
+        OpNotEqual
+
     }
 }

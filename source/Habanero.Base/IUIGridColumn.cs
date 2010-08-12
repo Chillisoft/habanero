@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -23,7 +23,7 @@ using Habanero.Base;
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// Interface describing a column of a grid.  This is implemented by <see cref="UIGridColumn"/>.
+    /// Interface describing a column of a grid.  This is implemented by UIGridColumn.
     /// </summary>
     public interface IUIGridColumn
     {
@@ -68,6 +68,37 @@ namespace Habanero.BO.ClassDefinition
         String GridControlAssemblyName { get; set; }
 
         ///<summary>
+        /// The <see cref="IUIGrid">Grid Definition</see> that this IUIGridColumn belongs to.
+        ///</summary>
+        IUIGrid UIGrid { get; set; }
+
+        ///<summary>
+        /// The <see cref="IClassDef">ClassDefinition</see> that this IUIGridColumn belongs to.
+        ///</summary>
+        IClassDef ClassDef { get; }
+
+        /// <summary>
+        /// Returns the LookupList for the PropDef that 
+        /// is associated with this PropDef.
+        /// If there is no PropDef associated with this column
+        /// then returns NullLookupList.
+        /// </summary>
+        ILookupList LookupList { get; }
+
+        /// <summary>
+        /// Returns the PropDef associated with this UIGridColumn. If there is one
+        /// If this GridColumn is for a reflective Prop then returns null.
+        /// </summary>
+        IPropDef PropDef { get; }
+
+        /// <summary>
+        /// Return true if this UIGridColumn is associated with a <see cref="IPropDef"/>.
+        /// This is used since a GridColumn can be associated with
+        /// Reflective Property 
+        /// </summary>
+        bool HasPropDef { get; }
+
+        ///<summary>
         /// Gets the heading for this grid column.
         ///</summary>
         ///<returns> The heading for this grid column </returns>
@@ -78,6 +109,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="classDef">The class definition that corresponds to this grid column. </param>
         ///<returns> The heading for this grid column </returns>
+        [Obsolete("This is no longer required since the IUIGridColumn can now acquire its ClassDef")]
         string GetHeading(IClassDef classDef);
 
         /// <summary>
@@ -88,5 +120,10 @@ namespace Habanero.BO.ClassDefinition
         /// TODO this should return a string
         object GetParameterValue(string parameterName);
 
+        ///<summary>
+        /// Gets the heading for this grid column.
+        ///</summary>
+        ///<returns> The heading for this grid column </returns>
+        Type GetPropertyType();
     }
 }

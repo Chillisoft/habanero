@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -82,6 +82,7 @@ namespace Habanero.BO.ClassDefinition
         {
             CheckPropNotAlreadyAdded(propDef.PropertyName);
             _propDefs.Add(propDef.PropertyName.ToUpper(), propDef);
+            propDef.ClassDef = this.ClassDef;
         }
 
         /// <summary>
@@ -276,13 +277,18 @@ namespace Habanero.BO.ClassDefinition
         /// into this one.
         /// </summary>
         /// <param name="propDefCol">The collection of property definitions</param>
-        public void Add(IPropDefCol propDefCol)
+        public void Add(IEnumerable<IPropDef> propDefCol)
         {
             foreach (PropDef def in propDefCol)
             {
                 Add(def);
             }
         }
+
+        ///<summary>
+        /// The ClassDef that these PropDefs belong to.
+        ///</summary>
+        public IClassDef ClassDef { get; set; }
 
         /// <summary>
         /// Create a new property definition and add it to the collection

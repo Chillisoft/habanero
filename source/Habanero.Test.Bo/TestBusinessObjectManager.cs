@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -40,7 +40,9 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
             new Address();
+            BORegistry.BusinessObjectManager = null;//Ensures a new BOMan used is always the singleton
             BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
         }
 
         [TearDown]
@@ -462,6 +464,7 @@ namespace Habanero.Test.BO
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
+            Assert.AreSame(boMan, BORegistry.BusinessObjectManager);
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             boMan.ClearLoadedObjects();
             cp2.ContactPersonID = cp.ContactPersonID;
@@ -691,230 +694,6 @@ namespace Habanero.Test.BO
             Assert.IsFalse(containsOrigContactPerson);
         }
 
-//
-//        [Test]
-//        public void Test_ContainsForCompositeKey_ReturnsFalse_IfPreviousKeyValueEqual_And_ReferenceNotEquals()
-//        {
-//            //---------------Set up test pack-------------------
-//            ContactPersonCompositeKey.LoadClassDefs();
-//            BusinessObjectManagerStub.SetNewBusinessObjectManager();
-//            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub) BusinessObjectManagerStub.Instance;
-//
-//            ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
-//                                                   {
-//                                                       PK1Prop1 = TestUtil.GetRandomString(),
-//                                                       PK1Prop2 = TestUtil.GetRandomString()
-//                                                   };
-//
-//            ContactPersonCompositeKey copyContactPerson = new ContactPersonCompositeKey();
-//            boMan.ClearLoadedObjects();
-//            copyContactPerson.PK1Prop1 = origCp.PK1Prop1;
-//            copyContactPerson.PK1Prop2 = origCp.PK1Prop2;
-//
-//            origCp.Props.BackupPropertyValues();
-//            origCp.PK1Prop1 = TestUtil.GetRandomString();
-//            copyContactPerson.Props.BackupPropertyValues();
-//            copyContactPerson.PK1Prop1 = TestUtil.GetRandomString();
-//
-//            //boMan.AddBusinessObject(copyContactPerson, origCp.ID.AsString_PreviousValue());
-//            boMan.AddBusinessObject(copyContactPerson, origCp.ID.ObjectID);
-//            //---------------Assert Precondition----------------
-//            Assert.AreEqual(1, boMan.Count);
-//            Assert.AreEqual(copyContactPerson.ID.AsString_PreviousValue(), origCp.ID.AsString_PreviousValue());
-//            Assert.AreNotEqual(copyContactPerson.ID.AsString_CurrentValue(), origCp.ID.AsString_CurrentValue());
-//            Assert.AreNotEqual(copyContactPerson.ID.AsString_PreviousValue(), copyContactPerson.ID.AsString_CurrentValue());
-//            Assert.IsTrue(boMan.Contains(copyContactPerson));
-//            Assert.IsTrue(boMan.Contains(copyContactPerson.ID.ObjectID));
-//            Assert.IsTrue(boMan.Contains(copyContactPerson.ID.AsString_PreviousValue()));
-//            Assert.IsFalse(boMan.Contains(copyContactPerson.ID.AsString_CurrentValue()));
-//            //Assert.AreSame(copyContactPerson, boMan[copyContactPerson.ID.AsString_PreviousValue()]);
-//            Assert.AreSame(copyContactPerson, boMan[copyContactPerson.ID.ObjectID]);
-//            //---------------Execute Test AsString_PreviousValue
-//            bool containsOrigContactPerson = boMan.Contains(origCp);
-//
-//            //---------------Test Result -----------------------
-//            Assert.IsFalse(containsOrigContactPerson);
-//        }
-
-//
-//        [Test]
-//        public void Test_ContainsForCompositeKey_ReturnsTru_IfPreviousKeyValueEqual_And_ReferenceEquals()
-//        {
-//            //---------------Set up test pack-------------------
-//            ContactPersonCompositeKey.LoadClassDefs();
-//            BusinessObjectManagerStub.SetNewBusinessObjectManager();
-//            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub) BusinessObjectManagerStub.Instance;
-//
-//            ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
-//                                                   {
-//                                                       PK1Prop1 = TestUtil.GetRandomString(),
-//                                                       PK1Prop2 = TestUtil.GetRandomString()
-//                                                   };
-//
-//            boMan.ClearLoadedObjects();
-//
-//            origCp.Props.BackupPropertyValues();
-//            origCp.PK1Prop1 = TestUtil.GetRandomString();
-//
-//            //boMan.AddBusinessObject(origCp, origCp.ID.AsString_PreviousValue());
-//            boMan.AddBusinessObject(origCp, origCp.ID.ObjectID);
-//            //---------------Assert Precondition----------------
-//            Assert.AreEqual(1, boMan.Count);
-//            Assert.AreNotEqual(origCp.ID.AsString_PreviousValue(), origCp.ID.AsString_CurrentValue());
-//            Assert.IsTrue(boMan.Contains(origCp.ID.AsString_PreviousValue()));
-//            Assert.IsFalse(boMan.Contains(origCp.ID.AsString_CurrentValue()));
-//            //Assert.AreSame(origCp, boMan[origCp.ID.AsString_PreviousValue()]);
-//            Assert.AreSame(origCp, boMan[origCp.ID.ObjectID]);
-//            //---------------Execute Test AsString_PreviousValue
-//            bool containsOrigContactPerson = boMan.Contains(origCp);
-//
-//            //---------------Test Result -----------------------
-//            Assert.IsTrue(containsOrigContactPerson);
-//        }
-//
-//        [Test]
-//        public void Test_ContainsForCompositeKey_ReturnsTrue_IfCurrentKeyValueEqual_And_ReferenceEquals()
-//        {
-//            //---------------Set up test pack-------------------
-//            ContactPersonCompositeKey.LoadClassDefs();
-//            BusinessObjectManagerStub.SetNewBusinessObjectManager();
-//            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub) BusinessObjectManagerStub.Instance;
-//
-//            ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
-//                                                   {
-//                                                       PK1Prop1 = TestUtil.GetRandomString(),
-//                                                       PK1Prop2 = TestUtil.GetRandomString()
-//                                                   };
-//
-//            boMan.ClearLoadedObjects();
-//
-//            origCp.Props.BackupPropertyValues();
-//            origCp.PK1Prop1 = TestUtil.GetRandomString();
-//
-//            //boMan.AddBusinessObject(origCp, origCp.ID.AsString_CurrentValue());
-//            boMan.AddBusinessObject(origCp, origCp.ID.ObjectID);
-//            //---------------Assert Precondition----------------
-//            Assert.AreEqual(1, boMan.Count);
-//            Assert.AreNotEqual(origCp.ID.AsString_PreviousValue(), origCp.ID.AsString_CurrentValue());
-//            Assert.AreNotEqual(origCp.ID.AsString_LastPersistedValue(), origCp.ID.AsString_CurrentValue());
-//            Assert.AreNotEqual(origCp.ID.AsString_LastPersistedValue(), origCp.ID.AsString_PreviousValue());
-//            Assert.IsTrue(boMan.Contains(origCp.ID.AsString_CurrentValue()));
-//            Assert.IsFalse(boMan.Contains(origCp.ID.AsString_PreviousValue()));
-//            //Assert.AreSame(origCp, boMan[origCp.ID.AsString_CurrentValue()]);
-//            Assert.AreSame(origCp, boMan[origCp.ID.ObjectID]);
-//            //---------------Execute Test AsString_PreviousValue
-//            bool containsOrigContactPerson = boMan.Contains(origCp);
-//
-//            //---------------Test Result -----------------------
-//            Assert.IsTrue(containsOrigContactPerson);
-//        }
-//
-//        [Test]
-//        public void Test_ContainsForCompositeKey_ReturnsTrue_IfLastPersistedKeyValueEqual_And_ReferenceEquals()
-//        {
-//            //---------------Set up test pack-------------------
-//            ContactPersonCompositeKey.LoadClassDefs();
-//            BusinessObjectManagerStub.SetNewBusinessObjectManager();
-//            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub) BusinessObjectManagerStub.Instance;
-//
-//            ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
-//                                                   {
-//                                                       PK1Prop1 = TestUtil.GetRandomString(),
-//                                                       PK1Prop2 = TestUtil.GetRandomString()
-//                                                   };
-//
-//            boMan.ClearLoadedObjects();
-//
-//            origCp.Props.BackupPropertyValues();
-//            origCp.PK1Prop1 = TestUtil.GetRandomString();
-//
-//            //boMan.AddBusinessObject(origCp, origCp.ID.AsString_LastPersistedValue());
-//            boMan.AddBusinessObject(origCp, origCp.ID.ObjectID);
-//            //---------------Assert Precondition----------------
-//            Assert.AreEqual(1, boMan.Count);
-//            Assert.AreNotEqual(origCp.ID.AsString_PreviousValue(), origCp.ID.AsString_CurrentValue());
-//            Assert.AreNotEqual(origCp.ID.AsString_LastPersistedValue(), origCp.ID.AsString_CurrentValue());
-//            Assert.AreNotEqual(origCp.ID.AsString_LastPersistedValue(), origCp.ID.AsString_PreviousValue());
-//            Assert.IsTrue(boMan.Contains(origCp.ID.AsString_LastPersistedValue()));
-//            Assert.IsFalse(boMan.Contains(origCp.ID.AsString_PreviousValue()));
-//            Assert.IsFalse(boMan.Contains(origCp.ID.AsString_CurrentValue()));
-//            //Assert.AreSame(origCp, boMan[origCp.ID.AsString_LastPersistedValue()]);
-//            Assert.AreSame(origCp, boMan[origCp.ID.ObjectID]);
-//            //---------------Execute Test -----------------
-//            bool containsOrigContactPerson = boMan.Contains(origCp);
-//
-//            //---------------Test Result -----------------------
-//            Assert.IsTrue(containsOrigContactPerson);
-//        }
-//
-//        [Test]
-//        public void Test_ContainsForCompositeKey_ReturnsFalse_IfCurrentKeyValueEqual_And_ReferenceNotEquals()
-//        {
-//            //---------------Set up test pack-------------------
-//            ContactPersonCompositeKey.LoadClassDefs();
-//            BusinessObjectManagerStub.SetNewBusinessObjectManager();
-//            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub) BusinessObjectManagerStub.Instance;
-//
-//            ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
-//                                                   {
-//                                                       PK1Prop1 = TestUtil.GetRandomString(),
-//                                                       PK1Prop2 = TestUtil.GetRandomString()
-//                                                   };
-//            ContactPersonCompositeKey copyContactPerson = new ContactPersonCompositeKey();
-//            boMan.ClearLoadedObjects();
-//            copyContactPerson.PK1Prop1 = origCp.PK1Prop1;
-//            copyContactPerson.PK1Prop2 = origCp.PK1Prop2;
-//            //boMan.AddBusinessObject(copyContactPerson, origCp.ID.AsString_CurrentValue());
-//            boMan.AddBusinessObject(copyContactPerson, origCp.ID.ObjectID);
-//            //---------------Assert Precondition----------------
-//            Assert.AreEqual(1, boMan.Count);
-//            Assert.IsTrue(boMan.Contains(copyContactPerson));
-//            Assert.IsTrue(boMan.Contains(copyContactPerson.ID));
-//            Assert.IsTrue(boMan.Contains(copyContactPerson.ID.AsString_CurrentValue()));
-//            //Assert.AreSame(copyContactPerson, boMan[copyContactPerson.ID.AsString_CurrentValue()]);
-//            Assert.AreSame(copyContactPerson, boMan[copyContactPerson.ID.ObjectID]);
-//            Assert.AreEqual(copyContactPerson.ID.AsString_CurrentValue(), origCp.ID.AsString_CurrentValue());
-//            //---------------Execute Test AsString_PreviousValue
-//            bool containsOrigContactPerson = boMan.Contains(origCp);
-//
-//            //---------------Test Result -----------------------
-//            Assert.IsFalse(containsOrigContactPerson);
-//        }
-//
-//        [Test]
-//        public void Test_ContainsForCompositeKey_ReturnsFalse_IfPersistedKeyValueEqual_And_ReferenceNotEquals()
-//        {
-//            //---------------Set up test pack-------------------
-//            ContactPersonCompositeKey.LoadClassDefs();
-//            BusinessObjectManagerStub.SetNewBusinessObjectManager();
-//            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub) BusinessObjectManagerStub.Instance;
-//
-//            ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
-//                                                   {
-//                                                       PK1Prop1 = TestUtil.GetRandomString(),
-//                                                       PK1Prop2 = TestUtil.GetRandomString()
-//                                                   };
-//            ContactPersonCompositeKey copyContactPerson = new ContactPersonCompositeKey();
-//            boMan.ClearLoadedObjects();
-//            copyContactPerson.PK1Prop1 = origCp.PK1Prop1;
-//            copyContactPerson.PK1Prop2 = origCp.PK1Prop2;
-//            //boMan.AddBusinessObject(copyContactPerson, origCp.ID.AsString_LastPersistedValue());
-//            boMan.AddBusinessObject(copyContactPerson, origCp.ID.ObjectID);
-//            //---------------Assert Precondition----------------
-//            Assert.AreEqual(1, boMan.Count);
-//            Assert.IsTrue(boMan.Contains(copyContactPerson));
-//            Assert.IsTrue(boMan.Contains(copyContactPerson.ID.AsString_LastPersistedValue()));
-//            //Assert.AreSame(copyContactPerson, boMan[copyContactPerson.ID.AsString_LastPersistedValue()]);
-//            Assert.AreSame(copyContactPerson, boMan[copyContactPerson.ID.ObjectID]);
-//            Assert.AreEqual(copyContactPerson.ID.AsString_LastPersistedValue(), origCp.ID.AsString_LastPersistedValue());
-//            //---------------Execute Test AsString_PreviousValue
-//            bool containsOrigContactPerson = boMan.Contains(origCp);
-//
-//            //---------------Test Result -----------------------
-//            Assert.IsFalse(containsOrigContactPerson);
-//        }
-
-
         [Test]
         public void Test_RemoveBusinessObject_DoesNotRemoveCurrentValue_ReferenceNotEquals()
         {
@@ -973,7 +752,6 @@ namespace Habanero.Test.BO
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
             boMan.ClearLoadedObjects();
-            //boMan.AddBusinessObject(originalContactPerson, originalContactPerson.ID.AsString_CurrentValue());
             boMan.AddBusinessObject(originalContactPerson, originalContactPerson.ID.ObjectID);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -999,7 +777,6 @@ namespace Habanero.Test.BO
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO {ContactPersonID = Guid.NewGuid()};
             boMan.ClearLoadedObjects();
-            //boMan.AddBusinessObject(originalContactPerson, originalContactPerson.ID.AsString_PreviousValue());
             boMan.AddBusinessObject(originalContactPerson, originalContactPerson.ID.PreviousObjectID);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -1175,7 +952,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1190,7 +967,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1205,7 +982,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
@@ -1221,18 +998,24 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
             //---------------Execute Tests----------------------
-            ContactPersonCompositeKey cp = new ContactPersonCompositeKey
-                                               {
-                                                   PK1Prop1 = TestUtil.GetRandomString(),
-                                                   PK1Prop2 = TestUtil.GetRandomString()
-                                               };
+            ContactPersonCompositeKey cp = CreateCompositeCP();
 
             //---------------Execute Test ----------------------
+            Assert.IsNotNull(cp);
             Assert.AreEqual(1, boMan.Count);
+        }
+
+        private ContactPersonCompositeKey CreateCompositeCP()
+        {
+            return new ContactPersonCompositeKey
+                       {
+                           PK1Prop1 = TestUtil.GetRandomString(),
+                           PK1Prop2 = TestUtil.GetRandomString()
+                       };
         }
 
         //Test edit primary key and save.
@@ -1242,7 +1025,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = new BusinessObjectManager();
-            BusinessObjectManager.Instance = boMan;
+            BORegistry.BusinessObjectManager = boMan;
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey
                                                {
                                                    PK1Prop1 = TestUtil.GetRandomString(),
@@ -1580,12 +1363,14 @@ namespace Habanero.Test.BO
         public void Test_LoadObject_MulitpleRelationship_UpdatedObjectMan_Generic()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
             new AddressTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
-            AddressTestBO address = new AddressTestBO {ContactPersonID = cp.ContactPersonID};
+            AddressTestBO address = new AddressTestBO();
+            cp.Addresses.Add(address);
             address.Save();
 
             IPrimaryKey contactPersonID = cp.ID;
@@ -1602,7 +1387,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(contactPersonID);
-            RelatedBusinessObjectCollection<AddressTestBO> addresses = loadedCP.AddressTestBOs;
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = loadedCP.Addresses;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addresses.Count);
@@ -2049,7 +1834,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
             Assert.IsTrue(boMan.Contains(boWithIntID));
         }
-
+        [Test]
         public void
             Test_TwoObjectTypesWithTheSameIDField_EditedToHaveTheSamevalue_CanBeAddedToObjectMan_PreviousPropValue()
         {
@@ -2074,7 +1859,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
             Assert.IsTrue(boMan.Contains(boWithIntID));
         }
-
+        [Test]
         public void
             Test_TwoObjectTypesWithTheSameIDField_EditedToHaveTheSamevalue_CanBeAddedToObjectMan_AsString_LastPersistedValue
             ()
@@ -2262,6 +2047,73 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_GetBusinessObject_WithPrimaryKey_WhenExists_ShouldRetObject_FixBug533()
+        {
+            //--------------- Set up test pack ------------------
+            var businessObjectManager = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = businessObjectManager;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO expectedFound = new ContactPersonTestBO();
+            //----------------Assert Preconditions---------------
+            Assert.IsTrue( businessObjectManager.Contains(expectedFound.ID));
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = businessObjectManager.GetBusinessObject(expectedFound.ID);
+            //--------------- Test Result -----------------------
+            Assert.AreSame(expectedFound, found);
+        }
+        [Test]
+        public void Test_GetBusinessObject_WithPrimaryKey_WhenNotExists_ShouldRetNull_FixBug533()
+        {
+            //--------------- Set up test pack ------------------
+            var businessObjectManager = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = businessObjectManager;
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            var otherBOMan = new BusinessObjectManager();
+            //----------------Assert Preconditions---------------
+            Assert.IsFalse(otherBOMan.Contains(cp.ID));
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = otherBOMan.GetBusinessObject(cp.ID);
+            //--------------- Test Result -----------------------
+            Assert.IsNull(found);
+        }
+
+
+        [Test]
+        public void Test_GetBusinessObject_WithPrimaryKey_WhenExistsWhenComposite_ShouldRetObject_FixBug533()
+        {
+            //--------------- Set up test pack ------------------
+            var businessObjectManager = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = businessObjectManager;
+            ContactPersonCompositeKey.LoadClassDefs();
+            ContactPersonCompositeKey expectedFound = CreateCompositeCP();
+            //----------------Assert Preconditions---------------
+            Assert.IsNotNull(expectedFound.ID);
+            Assert.IsNotNull(((BOPrimaryKey)expectedFound.ID).BusinessObject);
+            Assert.IsTrue(businessObjectManager.Contains(expectedFound.ID));
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = businessObjectManager.GetBusinessObject(expectedFound.ID);
+            //--------------- Test Result -----------------------
+            Assert.AreSame(expectedFound, found);
+        }
+        [Test]
+        public void Test_GetBusinessObject_WithPrimaryKey_WhenNotExistsWhenComposite_ShouldRetNull_FixBug533()
+        {
+            //--------------- Set up test pack ------------------
+            var businessObjectManager = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = businessObjectManager;
+            ContactPersonCompositeKey.LoadClassDefs();
+            ContactPersonCompositeKey cp = CreateCompositeCP();
+            var otherBOMan = new BusinessObjectManager();
+            //----------------Assert Preconditions---------------
+            Assert.IsNotNull(cp.ID);
+            Assert.IsFalse(otherBOMan.Contains(cp.ID));
+            //--------------- Execute Test ----------------------
+            IBusinessObject found = otherBOMan.GetBusinessObject(cp.ID);
+            //--------------- Test Result -----------------------
+            Assert.IsNull(found);
+        }
+        [Test]
         public void Test_Find_NonGeneric_Null_ReturnsAllOfType()
         {
             //--------------- Set up test pack ------------------
@@ -2442,11 +2294,44 @@ namespace Habanero.Test.BO
             //----------------Assert preconditions ---------------
             Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
             //--------------- Execute Test ----------------------
-            IBusinessObject found = BusinessObjectManager.Instance.FindFirst(null, typeof (ContactPersonTestBO));
+            IBusinessObject found = BusinessObjectManager.Instance.FindFirst((Criteria)null, typeof (ContactPersonTestBO));
             //--------------- Test Result -----------------------
             Assert.IsNotNull(found);
         }
 
+        [Test]
+        public void Test_GetObjectIfInManager_WhenObjectIsInManager_ShouldReturnObject()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO bo1 = new ContactPersonTestBO();
+            //----------------Assert preconditions ---------------
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            //---------------Execute Test ----------------------
+            IBusinessObject found = BusinessObjectManager.Instance.GetObjectIfInManager(bo1.ID.ObjectID);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(found);
+        }
+
+        [Test]
+        public void Test_GetObjectIfInManager_WhenObjectIsNotInManager_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO bo1 = new ContactPersonTestBO();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            //----------------Assert preconditions ---------------
+            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+            //---------------Execute Test ----------------------
+            IBusinessObject found = BusinessObjectManager.Instance.GetObjectIfInManager(bo1.ID.ObjectID);
+            //---------------Test Result -----------------------
+            Assert.IsNull(found);
+        }
 
         private static ContactPersonTestBO CreateSavedCP()
         {
@@ -2512,5 +2397,15 @@ namespace Habanero.Test.BO
         }
 
         // ReSharper restore AccessToStaticMemberViaDerivedType
+    }
+    /// <summary>
+    /// This is created entirely for the purposes of creating a public constructor so that the
+    /// Current BusinessObjectManager can be swapped out during testing.
+    /// </summary>
+    public class BusinessObjectManagerSpy : BusinessObjectManager
+    {
+        public BusinessObjectManagerSpy()
+        {
+        }
     }
 }

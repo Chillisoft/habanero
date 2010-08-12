@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -193,7 +193,7 @@ namespace Habanero.DB
 
         private void AppendOrderBySecondSelect(StringBuilder builder)
         {
-            builder.Append(") AS " + DelimitTable("SecondSelect"));
+/*            builder.Append(") AS " + DelimitTable("SecondSelect"));
             builder.Append(" ORDER BY ");
             foreach (OrderCriteriaField field in this.OrderCriteria.Fields)
             {
@@ -201,30 +201,49 @@ namespace Habanero.DB
                 builder.Append(DelimitField("SecondSelect", orderByFieldName));
                 if (field.SortDirection == SortDirection.Ascending)
                 {
-                    builder.Append(" ASC");
+                    AppendAsc(builder);
                 }
                 else
                 {
-                    builder.Append(" DESC");
+                    AppendDesc(builder);
                 }
-            }
+            }*/
+            AppendOrderBy(builder, "SecondSelect", true);
+        }
+
+        private static void AppendDesc(StringBuilder builder)
+        {
+            builder.Append(" DESC");
+        }
+
+        private static void AppendAsc(StringBuilder builder)
+        {
+            builder.Append(" ASC");
         }
 
         private void AppendOrderByFirstSelect(StringBuilder builder)
         {
-            builder.Append(") As " + DelimitTable("FirstSelect"));
+            AppendOrderBy(builder, "FirstSelect", false);
+        }
+
+        private void AppendOrderBy(StringBuilder builder, string selectName, bool reverseSortDirection)
+        {
+            builder.Append(") As " + DelimitTable(selectName));
             builder.Append(" ORDER BY ");
+            int i = 0;
             foreach (OrderCriteriaField field in this.OrderCriteria.Fields)
             {
                 string orderByFieldName = GetOrderByFieldName(field);
-                builder.Append(DelimitField("FirstSelect", orderByFieldName));
-                if (field.SortDirection == SortDirection.Ascending)
+                if (i > 0) builder.Append(", "); //Append a seperator if composite sort criteria.
+                builder.Append(DelimitField(selectName, orderByFieldName));
+                if (field.SortDirection == SortDirection.Ascending && !reverseSortDirection)
                 {
-                    builder.Append(" DESC");
+                    AppendDesc(builder);
                 } else
                 {
-                    builder.Append(" ASC");
+                    AppendAsc(builder);
                 }
+                i++;
             }
         }
 

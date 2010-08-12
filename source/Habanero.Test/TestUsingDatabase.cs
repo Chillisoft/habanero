@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -38,6 +38,7 @@ namespace Habanero.Test
             if (DatabaseConnection.CurrentConnection != null &&
     DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql))
             {
+                if (BORegistry.DataAccessor == null) BORegistry.DataAccessor = new DataAccessorDB();
                 return;
             }
             DatabaseConnection.CurrentConnection =

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -18,6 +18,10 @@
 // ---------------------------------------------------------------------------------
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Lookup list that directly loads items from the Database using the specified sql string.
+    /// This is generally only used in instances where this level of optimisation is required.
+    /// </summary>
     public interface IDatabaseLookupList : ILookupListWithClassDef
     {
         /// <summary>

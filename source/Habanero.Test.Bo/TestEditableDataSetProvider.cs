@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -27,6 +27,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+#pragma warning disable 612,618
+//pragma warning disable 612,618 - Although obselete the tests are still required.
     /// <summary>
     /// Summary description for TestEditableDataSetProvider.
     /// </summary>
@@ -37,7 +39,7 @@ namespace Habanero.Test.BO
         {
             return new EditableDataSetProvider(col);
         }
-
+        [Test]
         public override void TestUpdateBusinessObjectRowValues()
         {
             Assert.IsTrue(true, "This test cannot be conducted since edits to the grid update the BO and visa versa");
@@ -80,7 +82,9 @@ namespace Habanero.Test.BO
 
             _dataSetProvider = new EditableDataSetProvider(boCollection);
             BOMapper mapper = new BOMapper(boCollection.ClassDef.CreateNewBusinessObject());
+
             itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+
 
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(2, boCollection.Count);
@@ -207,7 +211,7 @@ namespace Habanero.Test.BO
         public void TestAddRowAddsBo()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             SetupTestData();
             int originalCount = _collection.Count;
             //---------------Assert Precondition----------------
@@ -233,7 +237,7 @@ namespace Habanero.Test.BO
         public void TestRejectChangesRemovesNewRow()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
             SetupTestData();
             int originalCount = _collection.Count;
             itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
@@ -254,7 +258,7 @@ namespace Habanero.Test.BO
 //        public void TestRejectChangesUnDoesDeletedRow()
 //        {
 //            //---------------Set up test pack-------------------
-//            BusinessObjectManager.Instance.ClearLoadedObjects();
+//            BORegistry.BusinessObjectManager.ClearLoadedObjects();
 //            SetupTestData();
 //            _collection.SaveAll();
 //            int originalCount = _collection.Count;
@@ -410,12 +414,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual("TestVal", itsTable.Rows[2][1]);
         }
 
-        [Test, ExpectedException(typeof (DuplicateNameException))]
+        [Test]
         public void TestDuplicateColumnNames()
         {
+            //---------------Set up test pack-------------------
             SetupTestData();
             BOMapper mapper = new BOMapper(_collection.ClassDef.CreateNewBusinessObject());
-            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").UIGrid);
+            //---------------Execute Test ----------------------
+            try
+            {
+                itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").UIGrid);
+                Assert.Fail("Expected to throw an DuplicateNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (DuplicateNameException ex)
+            {
+                StringAssert.Contains("Only one column per property can be specified", ex.Message);
+            }
         }
 
         [Test]
@@ -644,7 +659,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, table.Rows.Count);
             Assert.AreEqual(1, addresses.Count);
-            Assert.AreEqual(organisation.OrganisationID.ToString(), table.Rows[0][propertyName]);
+            Assert.AreEqual(organisation.OrganisationID.ToString(), table.Rows[0][propertyName].ToString());
             Assert.AreEqual(organisation.OrganisationID, contactPersonTestBO.OrganisationID);
             recordingExceptionNotifier.RethrowRecordedException();
         }
@@ -656,7 +671,7 @@ namespace Habanero.Test.BO
             RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
             GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
             AddressTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            var contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
             OrganisationTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
             contactPersonTestBOS.Add(new ContactPersonTestBO(), new ContactPersonTestBO(), new ContactPersonTestBO());
@@ -664,6 +679,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO organisation = new OrganisationTestBO();
 
             UIGrid uiGrid = new UIGrid();
+            new UIDef("fdafdas", new UIForm(), uiGrid) { ClassDef = contactPersonClassDef };
             const string propertyName = "-Organisation-";
             uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
 
@@ -690,13 +706,14 @@ namespace Habanero.Test.BO
             RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
             GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
             AddressTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+            var contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
             OrganisationTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
 
             OrganisationTestBO organisation = new OrganisationTestBO();
 
             UIGrid uiGrid = new UIGrid();
+            new UIDef("fdafdas", new UIForm(), uiGrid) {ClassDef = contactPersonClassDef};
             const string propertyName = "-Organisation-";
             uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
 
@@ -724,4 +741,5 @@ namespace Habanero.Test.BO
         }
 
     }
+#pragma warning restore 612,618
 }

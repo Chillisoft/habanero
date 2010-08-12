@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -55,5 +55,10 @@ namespace Habanero.Base
         /// Gets the count of items in this collection
         /// </summary>
         int Count { get; }
+
+        /// <summary>
+        /// The ClassDef this RelationshipDefCol belongs to
+        /// </summary>
+        IClassDef ClassDef { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -18,10 +18,11 @@
 // ---------------------------------------------------------------------------------
 namespace Habanero.Base
 {
+
     ///<summary>
     /// The interface used to implement relationships between two classes.
     ///</summary>
-    public interface IRelationship
+    public interface IRelationship 
     {
         ///<summary>
         /// The key that identifies this relationship i.e. the properties in the 

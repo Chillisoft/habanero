@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -32,6 +32,19 @@ using log4net;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// An Enum used for Constructing fake Business objects.
+    /// This is used for Testing using a Mocking Framework such as 
+    /// Rhino Mocks. In this scenario no ClassDefs are created for the BO.
+    /// This enum is created so as to make the Constructor more self documenting when called.
+    ///</summary>
+    public enum ConstructForFakes
+    {
+        ///<summary>
+        /// This object must be constructed as a Fake BO i.e. no ClassDefs
+        ///</summary>
+        True
+    }
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
@@ -39,7 +52,7 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObject : IBusinessObject, ISerializable
     {
-        private static readonly ILog Log = LogManager.GetLogger("Habanero.BO.BusinessObject");
+        private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         #region IBusinessObject Members
 
@@ -82,7 +95,7 @@ namespace Habanero.BO
 
         #region Fields
 
-        private IBusinessObjectAuthorisation _authorisationRules;
+        private IBusinessObjectAuthorisation AuthorisationRules { get; set; }
 
         /// <summary>
         /// The Collection of Business Object Properties for this Business Object.
@@ -96,7 +109,7 @@ namespace Habanero.BO
         /// <summary>
         /// The Update Log being used for this Business Object.
         /// </summary>
-        protected IBusinessObjectUpdateLog _businessObjectUpdateLog;
+        private IBusinessObjectUpdateLog _businessObjectUpdateLog;
 
         /// <summary>
         /// The Class Definition <see cref="IClassDef"/> for this business object.
@@ -145,17 +158,11 @@ namespace Habanero.BO
         /// Constructor that specifies a class definition
         /// </summary>
         /// <param name="constructForFakes"></param>
-// ReSharper disable UnusedParameter.Local
-        protected BusinessObject(bool constructForFakes)
+        // ReSharper disable UnusedParameter.Local
+        protected BusinessObject(ConstructForFakes constructForFakes)
         {
             _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
-        }
-
-        protected virtual void InitialiseForFakes(IClassDef classDef)
-        {
-            _boStatus = new BOStatus(this) { IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true };
-            Initialise(classDef);
-            SetupBOPropsWithThisBo();
+            _boPropCol = new BOPropCol();
         }
 
         // ReSharper restore UnusedParameter.Local
@@ -231,12 +238,12 @@ namespace Habanero.BO
 
         private void AddToObjectManager()
         {
-            BusinessObjectManager.Instance.Add(this);
+            BORegistry.BusinessObjectManager.Add(this);
         }
 
         private void ReplaceInObjectManager()
         {
-            BusinessObjectManager.Instance.AddWithReplace(this);
+            BORegistry.BusinessObjectManager.AddWithReplace(this);
         }
 
         private void SetupBOPropsWithThisBo()
@@ -255,7 +262,7 @@ namespace Habanero.BO
 
         private void RemoveFromObjectManager()
         {
-            BusinessObjectManager.Instance.Remove(this);
+            BORegistry.BusinessObjectManager.Remove(this);
         }
 
         private void RegisterForPropertyEvents()
@@ -278,14 +285,6 @@ namespace Habanero.BO
 
         private void BOProp_OnUpdated(object sender, BOPropEventArgs e)
         {
-            //if (e.Prop.IsDirty)
-            //{
-            //    //if (!Status.IsEditing)
-            //    //{
-            //    //    BeginEdit();
-            //    //}
-            //    _boStatus.IsDirty = true;
-            //}
             FirePropertyUpdatedEvent(e.Prop);
         }
 
@@ -344,7 +343,7 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                Log.Error("Error disposing BusinessObject.", ex);
+                _log.Error("Error disposing BusinessObject.", ex);
             }
             finally
             {
@@ -358,11 +357,11 @@ namespace Habanero.BO
             _boStatus = new BOStatus(this) {IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true};
             if (classDef == null)
             {
-                try { _classDef = (ClassDef)ClassDef.ClassDefs[GetType()]; }
+                try { _classDef = ClassDef.ClassDefs[GetType()]; }
                 catch (Exception) {
                     _classDef = null;  }
             }
-            else _classDef = (ClassDef) classDef;
+            else _classDef = classDef;
             ConstructFromClassDef(true);
             Guid myID = Guid.NewGuid();
             if (_primaryKey != null)
@@ -403,7 +402,7 @@ namespace Habanero.BO
         /// <param name="newObject">Whether the object is new or not</param>
         protected virtual void ConstructFromClassDef(bool newObject)
         {
-            if (_classDef == null) _classDef = (ClassDef) ConstructClassDef();
+            if (_classDef == null) _classDef = ConstructClassDef();
             ClassDef classDef = (ClassDef) _classDef;
             CheckClassDefNotNull();
 
@@ -433,15 +432,14 @@ namespace Habanero.BO
                 if (primaryKeyDef != null)
                 {
                     PrimaryKeyDef def = (PrimaryKeyDef) classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef;
-                    _primaryKey =
-                        (BOPrimaryKey)
-                        def.CreateBOKey(_boPropCol);
+                    _primaryKey =(BOPrimaryKey) def.CreateBOKey(_boPropCol);
                 }
             }
             if (_primaryKey == null)
             {
                 SetupPrimaryKey();
             }
+            if (_primaryKey != null) _primaryKey.BusinessObject = this;
         }
 
         internal IClassDef GetClassDefToUseForPrimaryKey()
@@ -521,7 +519,7 @@ namespace Habanero.BO
         IClassDef IBusinessObject.ClassDef
         {
             get { return _classDef; }
-            set { _classDef = (ClassDef) value; }
+            set { _classDef = value; }
         }
 
 
@@ -590,7 +588,7 @@ namespace Habanero.BO
         /// <param name="authorisationRules">The authorisation Rules</param>
         protected internal void SetAuthorisationRules(IBusinessObjectAuthorisation authorisationRules)
         {
-            _authorisationRules = authorisationRules;
+            AuthorisationRules = authorisationRules;
         }
 
         /// <summary>
@@ -599,7 +597,7 @@ namespace Habanero.BO
         /// <param name="businessObjectUpdateLog">A businessObject update log object</param>
         protected void SetBusinessObjectUpdateLog(IBusinessObjectUpdateLog businessObjectUpdateLog)
         {
-            _businessObjectUpdateLog = businessObjectUpdateLog;
+            BusinessObjectUpdateLog = businessObjectUpdateLog;
         }
 
         /// <summary>
@@ -626,9 +624,11 @@ namespace Habanero.BO
 
         #region Editing Property Values
 
+        
         /// <summary>
         /// The primary key for this business object 
         /// </summary>
+        [Obsolete ("Please use ID")]
         protected IPrimaryKey PrimaryKey
         {
             get { return _primaryKey; }
@@ -643,8 +643,8 @@ namespace Habanero.BO
         public virtual bool IsCreatable(out string message)
         {
             message = "";
-            if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanCreate)) return true;
+            if (AuthorisationRules == null) return true;
+            if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanCreate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to create a {1}", Thread.CurrentPrincipal.Identity.Name,
                  ClassDef.ClassName);
@@ -666,8 +666,8 @@ namespace Habanero.BO
         public virtual bool IsEditable(out string message)
         {
             message = "";
-            if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanUpdate)) return true;
+            if (AuthorisationRules == null) return true;
+            if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanUpdate)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to update {1} Identified By {2}",
                  Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
@@ -687,7 +687,7 @@ namespace Habanero.BO
         public virtual bool IsDeletable(out string message)
         {
             message = "";
-            if (_authorisationRules != null && !_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanDelete))
+            if (AuthorisationRules != null && !AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanDelete))
             {
                 message = string.Format
                     ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
@@ -763,6 +763,7 @@ namespace Habanero.BO
             return businessObject.GetPersistedPropertyValue(null, propName);
         }
 
+
         /// <summary>
         /// Sets a property value to a new value
         /// </summary>
@@ -771,26 +772,13 @@ namespace Habanero.BO
         public void SetPropertyValue(string propName, object newPropValue)
         {
             IBOProp prop = GetProperty(propName);
-            //            if (prop == null)
-            //            {
-            //                throw new InvalidPropertyNameException
-            //                    (String.Format
-            //                         ("The given property name '{0}' does not exist in the "
-            //                          + "collection of properties for the class '{1}'.", propName, ClassName));
-            //            }
-            object propValue = prop.Value;
-            object newPropValue1;
-            if (!PropValueHasChanged(propValue, newPropValue)) return;
+/*            object newPropValue1;
+            if(prop.CurrentValueEquals(newPropValue)) return;
             ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
-            if (PropValueHasChanged(propValue, newPropValue1))
-            {
-                //if (!Status.IsEditing)
-                //{
-                //    BeginEdit();
-                //}
-                //_boStatus.IsDirty = true;
-                prop.Value = newPropValue1;
-            }
+            if (!prop.CurrentValueEquals(newPropValue1))
+            {*/
+                prop.Value = newPropValue;
+            //}
         }
 
         /// <summary>
@@ -850,8 +838,8 @@ namespace Habanero.BO
         public virtual bool IsReadable(out string message)
         {
             message = "";
-            if (_authorisationRules == null) return true;
-            if (_authorisationRules.IsAuthorised(this, BusinessObjectActions.CanRead)) return true;
+            if (AuthorisationRules == null) return true;
+            if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanRead)) return true;
             message = string.Format
                 ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
                  ClassDef.ClassName);
@@ -868,7 +856,14 @@ namespace Habanero.BO
         {
             return (T) GetPropertyValue(propName);
         }
-
+        /// <summary>
+        /// Returns the <see cref="IBOProp"/> that for this property.
+        /// Raises <see cref="InvalidPropertyNameException"/> if prop not found.
+        /// </summary>
+        /// <param name="propName"></param>
+        /// <exception cref="InvalidPropertyNameException">Raised if BOProp with propname does not exit in
+        /// Props the collection of BOPRops</exception>
+        /// <returns></returns>
         internal IBOProp GetProperty(string propName)
         {
             try
@@ -889,7 +884,7 @@ namespace Habanero.BO
         /// <summary>
         /// Sets the object's state into editing mode.  The original state can
         /// be restored with Restore() and changes can be committed to the
-        /// database by calling Save().
+        /// datastore by calling Save().
         /// </summary>
         internal void BeginEdit()
         {
@@ -901,7 +896,8 @@ namespace Habanero.BO
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
         /// </summary>
-        private bool _beginEditRunning = false;
+        private bool _beginEditRunning;
+
         private void BeginEdit(bool delete)
         {
             if (_beginEditRunning) return;
@@ -964,10 +960,10 @@ namespace Habanero.BO
             return val != null ? val.ToString() : "";
         }
 
-        internal static bool PropValueHasChanged(object propValue, object newPropValue)
+        internal static bool PropValueHasChanged(object currentPropValue, object newPropValue)
         {
-            if (propValue == newPropValue) return false;
-            if (propValue != null) return !propValue.Equals(newPropValue);
+            if (currentPropValue == newPropValue) return false;
+            if (currentPropValue != null) return !currentPropValue.Equals(newPropValue);
             return (newPropValue != null && !string.IsNullOrEmpty(Convert.ToString(newPropValue)));
         }
 
@@ -996,6 +992,15 @@ namespace Habanero.BO
         /// This returns the Transaction Log object set up for this BusinessObject.
         /// </summary>
         public ITransactionLog TransactionLog { get; private set; }
+
+        /// <summary>
+        /// The Update Log being used for this Business Object.
+        /// </summary>
+        protected virtual internal IBusinessObjectUpdateLog BusinessObjectUpdateLog
+        {
+            get { return _businessObjectUpdateLog; }
+            set { _businessObjectUpdateLog = value; }
+        }
 
         internal IList<IBusinessObjectRule> GetBusinessObjectRules()
         {
@@ -1100,12 +1105,14 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Extra preparation or steps to take out after loading the business
+        /// Extra preparation or steps to take out after loading the business. Override this if you need to update a calculated property, for example.
+        /// This method will be called after an object is loaded for the first time, and after it is refreshed, but only if the refreshing causes
+        /// a property to be updated.
         /// object
         /// </summary>
         protected internal virtual void AfterLoad()
         {
-            FireUpdatedEvent();
+
         }
 
         /// <summary>
@@ -1118,19 +1125,20 @@ namespace Habanero.BO
             {
                 CleanUpAllRelationshipCollections();
                 SetStateAsPermanentlyDeleted();
-                BusinessObjectManager.Instance.Remove(this);
+                BORegistry.BusinessObjectManager.Remove(this);
                 FireDeletedEvent();
             }
             else
             {
-                BusinessObjectManager.Instance.Remove(this);
+                BORegistry.BusinessObjectManager.Remove(this);
                 StorePersistedPropertyValues();
                 SetStateAsUpdated();
-                if (!BusinessObjectManager.Instance.Contains(this))
+                var boManager = BORegistry.BusinessObjectManager;
+                if (!boManager.Contains(this))
                 {
-                    if (!BusinessObjectManager.Instance.Contains(ID.ObjectID))
+                    if (!boManager.Contains(ID.ObjectID))
                     {
-                        BusinessObjectManager.Instance.Add(this);
+                        boManager.Add(this);
                     }
                 }
                 FireSavedEvent();
@@ -1197,9 +1205,9 @@ namespace Habanero.BO
             //}
             Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter) transactionCommitter);
 
-            if (_businessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
+            if (BusinessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
             {
-                _businessObjectUpdateLog.Update();
+                BusinessObjectUpdateLog.Update();
             }
         }
 
@@ -1226,7 +1234,7 @@ namespace Habanero.BO
         /// <summary>
         /// Fires Updates Event for <see cref="IBusinessObject"/>
         /// </summary>
-        protected void FireUpdatedEvent()
+        internal protected void FireUpdatedEvent()
         {
             if (Updated != null)
             {
@@ -1326,11 +1334,12 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Checks the <see cref="GetBusinessObjectRules"/>. Calls through to <see cref="AreCustomRulesValid(ref List{IBOError})"/>
+        /// Checks the <see cref="GetBusinessObjectRules"/>. Calls through to 
+        /// <see cref="AreCustomRulesValid(ref System.Collections.Generic.IList{Habanero.Base.IBOError})"/>
         /// </summary>
         /// <param name="errors">The errors</param>
         /// <returns>true if no custom rule errors are encountered.</returns>
-        internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
+        protected internal bool AreCustomRulesValidInternal(out IList<IBOError> errors)
         {
             IList<IBOError> customErrors = new List<IBOError>();
             AreCustomRulesValid(ref customErrors);
@@ -1351,7 +1360,8 @@ namespace Habanero.BO
             if (errors == null) errors = new List<IBOError>();
             var rules = GetBusinessObjectRules()
                     .Where(rule 
-                        => (rule != null && ErrorLevelIsError(rule)) && !rule.IsValid(this));
+                      => (rule != null && ErrorLevelIsError(rule)) 
+                      && !rule.IsValid(this));
             foreach (IBusinessObjectRule rule in rules)
             {
                 CreateBOError(rule, errors);
@@ -1369,7 +1379,7 @@ namespace Habanero.BO
             errors = new List<IBOError>();
             foreach (IBusinessObjectRule rule in GetBusinessObjectRules())
             {
-                if (rule == null || ErrorLevelIsError(rule) || rule.IsValid()) continue;
+                if (rule == null || ErrorLevelIsError(rule) || rule.IsValid(this)) continue;
                 CreateBOError(rule, errors);
             }
             return errors.Count != 0;
@@ -1534,7 +1544,7 @@ namespace Habanero.BO
         /// </summary>
         protected internal virtual void CheckConcurrencyBeforePersisting()
         {
-            if (!(_concurrencyControl == null))
+            if (_concurrencyControl != null)
             {
                 _concurrencyControl.CheckConcurrencyBeforePersisting();
             }
@@ -1546,7 +1556,7 @@ namespace Habanero.BO
         /// </summary>
         protected virtual void CheckConcurrencyBeforeBeginEditing()
         {
-            if (!(_concurrencyControl == null))
+            if (_concurrencyControl != null)
             {
                 _concurrencyControl.CheckConcurrencyBeforeBeginEditing();
             }
@@ -1557,7 +1567,7 @@ namespace Habanero.BO
         /// </summary>
         protected virtual void UpdatedConcurrencyControlPropertiesBeforePersisting()
         {
-            if (!(_concurrencyControl == null))
+            if (_concurrencyControl != null)
             {
                 _concurrencyControl.UpdatePropertiesWithLatestConcurrencyInfoBeforePersisting();
             }
@@ -1568,7 +1578,7 @@ namespace Habanero.BO
         /// </summary>
         protected virtual void ReleaseWriteLocks()
         {
-            if (!(_concurrencyControl == null))
+            if (_concurrencyControl != null)
             {
                 _concurrencyControl.ReleaseWriteLocks();
             }

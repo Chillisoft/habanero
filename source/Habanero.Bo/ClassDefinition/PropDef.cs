@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -73,7 +73,6 @@ namespace Habanero.BO.ClassDefinition
 
         private string _displayName;
         private bool _persistable = true;
-        private ClassDef _classDef;
         private string _unitOfMeasure = "";
         private BOPropDataMapper _propDataMapper;
 
@@ -615,12 +614,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// Gets and sets the class def that this propDef is part of.
         ///</summary>
-        public IClassDef ClassDef
-        {
-            get { return _classDef; }
-            internal set { _classDef = (ClassDef) value; }
-           
-        }
+        public IClassDef ClassDef { get; set; }
 
         #endregion
 
@@ -757,21 +751,15 @@ namespace Habanero.BO.ClassDefinition
             BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
             if (propValue is Guid && list.LookupBoClassDef.PrimaryKeyDef.IsGuidObjectID)
             {
-                lock (BusinessObjectManager.Instance)
-                {
-                    if (BusinessObjectManager.Instance.Contains((Guid)propValue))
-                    {
-                        return BusinessObjectManager.Instance[(Guid) propValue];
-                    }
-                }
+                IBusinessObject objectInManager = BORegistry.BusinessObjectManager.GetObjectIfInManager((Guid)propValue);
+                if (objectInManager != null) return objectInManager;
             }
             BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue((ClassDef) list.LookupBoClassDef, propValue);
 
             if (boPrimaryKey != null)
             {
-//                IBusinessObjectCollection find = BusinessObjectManager.Instance.Find(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
-//                if (find.Count > 0) businessObject = find[0];
-                IBusinessObject found = BusinessObjectManager.Instance.FindFirst(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
+                IBusinessObject found = BORegistry.BusinessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria()
+                        , list.LookupBoClassDef.ClassType);
                 businessObject = found;
             }
             return businessObject;
@@ -1026,6 +1014,15 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        ///<summary>
+        /// returns the ClassName from the associated <see cref="IClassDef"
+        ///</summary>
+        ///<exception cref="NotImplementedException"></exception>
+        public string ClassName
+        {
+            get { return this.ClassDef == null? "": this.ClassDef.ClassName; }
+        }
+
         private void ValidateDefaultValue(object defaultValue)
         {
             if (_hasDefaultValueBeenValidated) return;
@@ -1118,7 +1115,7 @@ namespace Habanero.BO.ClassDefinition
                    && Equals(obj._lookupList, _lookupList) && obj.AutoIncrementing.Equals(AutoIncrementing)
                    && obj.Length == Length && Equals(obj._displayName, _displayName)
                    && obj.KeepValuePrivate.Equals(KeepValuePrivate) && obj._persistable.Equals(_persistable)
-                   && Equals(obj._classDef, _classDef) && Equals(obj._unitOfMeasure, _unitOfMeasure);
+                   && Equals(obj.ClassDef, ClassDef) && Equals(obj._unitOfMeasure, _unitOfMeasure);
         }
 
         ///<summary>
@@ -1148,7 +1145,7 @@ namespace Habanero.BO.ClassDefinition
                 result = (result * 397) ^ (_displayName != null ? _displayName.GetHashCode() : 0);
                 result = (result * 397) ^ KeepValuePrivate.GetHashCode();
                 result = (result * 397) ^ _persistable.GetHashCode();
-                result = (result * 397) ^ (_classDef != null ? _classDef.GetHashCode() : 0);
+                result = (result * 397) ^ (ClassDef != null ? ClassDef.GetHashCode() : 0);
                 result = (result * 397) ^ (_unitOfMeasure != null ? _unitOfMeasure.GetHashCode() : 0);
                 return result;
             }

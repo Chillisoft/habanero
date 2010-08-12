@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -106,29 +106,60 @@ namespace Habanero.Test.DB
                             "ConnectionStringFactory not working for MySql");
         }
 
-        [Test, ExpectedException(typeof (ArgumentException))]
+        [Test]
         public void TestMySqlNoServerName()
         {
-            String conn =
-                new ConnectionStringMySqlFactory().GetConnectionString("", "testdb",
-                                                                                             "testusername",
-                                                                                             "testpassword", "testport");
+            //---------------Execute Test ----------------------
+            try
+            {
+                String conn =
+                    new ConnectionStringMySqlFactory().GetConnectionString("", "testdb",
+                                                                           "testusername",
+                                                                           "testpassword", "testport");
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("The server, database and userName of a connect string can never be empty", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof (ArgumentException))]
+        [Test]
         public void TestMySqlNoUserName()
         {
-            String conn =
-                new ConnectionStringMySqlFactory().GetConnectionString("sdf", "testdb", "",
-                                                                                             "testpassword", "testport");
+            try
+            {
+                String conn =
+                    new ConnectionStringMySqlFactory().GetConnectionString("sdf", "testdb", "",
+                                                                           "testpassword", "testport");
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("The server, database and userName of a connect string can never be empty", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof (ArgumentException))]
+        [Test]
         public void TestMySqlNoDatabaseName()
         {
-            String conn =
-                new ConnectionStringMySqlFactory().GetConnectionString("sdf", "", "sasdf",
-                                                                                             "testpassword", "testport");
+            try
+            {
+                String conn =
+                    new ConnectionStringMySqlFactory().GetConnectionString("sdf", "", "sasdf",
+                                                                           "testpassword", "testport");
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("The server, database and userName of a connect string can never be empty", ex.Message);
+            }
         }
 
         [Test]
@@ -197,29 +228,59 @@ namespace Habanero.Test.DB
 							"ConnectionStringFactory not working for PostgreSql");
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void TestPostgreSqlNoServerName()
 		{
-			String conn =
-                new ConnectionStringPostgreSqlFactory().GetConnectionString("", "testdb",
-																							 "testusername",
-																							 "testpassword", "testport");
+		    try
+		    {
+		        String conn =
+		            new ConnectionStringPostgreSqlFactory().GetConnectionString("", "testdb",
+		                                                                        "testusername",
+		                                                                        "testpassword", "testport");
+
+		        Assert.Fail("Expected to throw an ArgumentExc");
+		    }
+		        //---------------Test Result -----------------------
+		    catch (ArgumentException ex)
+		    {
+                StringAssert.Contains("The server, database and userName of a connect string can never be empty", ex.Message);
+		    }
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void TestPostgreSqlNoUserName()
 		{
-			String conn =
-                new ConnectionStringPostgreSqlFactory().GetConnectionString("sdf", "testdb", "",
-																							 "testpassword", "testport");
+		    try
+		    {
+		        String conn =
+		            new ConnectionStringPostgreSqlFactory().GetConnectionString("sdf", "testdb", "",
+		                                                                        "testpassword", "testport");
+
+		        Assert.Fail("Expected to throw an ArgumentException");
+		    }
+		        //---------------Test Result -----------------------
+		    catch (ArgumentException ex)
+		    {
+                StringAssert.Contains("The server, database and userName of a connect string can never be empty", ex.Message);
+		    }
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void TestPostgreSqlNoDatabaseName()
 		{
-			String conn =
-                new ConnectionStringPostgreSqlFactory().GetConnectionString("sdf", "", "sasdf",
-																							 "testpassword", "testport");
+		    try
+		    {
+		        String conn =
+		            new ConnectionStringPostgreSqlFactory().GetConnectionString("sdf", "", "sasdf",
+		                                                                        "testpassword", "testport");
+
+		        Assert.Fail("Expected to throw an ArgumentException");
+		    }
+		        //---------------Test Result -----------------------
+		    catch (ArgumentException ex)
+		    {
+                StringAssert.Contains("The server, database and userName of a connect string can never be empty", ex.Message);
+		    }
 		}
 
 		[Test]
@@ -284,12 +345,22 @@ namespace Habanero.Test.DB
                 "ConnectionStringFactory not working for SQLite");
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestSQLiteNoDatabaseName()
         {
-            String conn =
-                new ConnectionStringSQLiteFactory().GetConnectionString("testserver", "", "testusername",
-                                                                                             "testpassword", "testport");
+            try
+            {
+                String conn =
+                    new ConnectionStringSQLiteFactory().GetConnectionString("testserver", "", "testusername",
+                                                                            "testpassword", "testport");
+
+                Assert.Fail("Expected to throw an Argument");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("The database parameter of a connect string can never be empty", ex.Message);
+            }
         }
 
         [Test]
@@ -330,13 +401,23 @@ namespace Habanero.Test.DB
                             "ConnectionStringFactory not working for Firebird");
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestFirebirdNoServerName()
         {
-            String conn =
-                new ConnectionStringFirebirdFactory().GetConnectionString("", "testdb",
-                                                                                             "testusername",
-                                                                                             "testpassword", "testport");
+            try
+            {
+                String conn =
+                    new ConnectionStringFirebirdFactory().GetConnectionString("", "testdb",
+                                                                              "testusername",
+                                                                              "testpassword", "testport");
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("The server, database, password and userName of a connect string can never be empty", ex.Message);
+            }
         }
 
         [Test]
@@ -348,20 +429,40 @@ namespace Habanero.Test.DB
                                                                                              "testpassword", "testport");
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestFirebirdNoUserName()
         {
-            String conn =
-                new ConnectionStringFirebirdFactory().GetConnectionString("sdf", "testdb", "",
-                                                                                             "testpassword", "testport");
+            try
+            {
+                String conn =
+                    new ConnectionStringFirebirdFactory().GetConnectionString("sdf", "testdb", "",
+                                                                              "testpassword", "testport");
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("The server, database, password and userName of a connect string can never be empty", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestFirebirdNoDatabaseName()
         {
-            String conn =
-                new ConnectionStringFirebirdFactory().GetConnectionString("sdf", "", "sasdf",
-                                                                                             "testpassword", "testport");
+            try
+            {
+                String conn =
+                    new ConnectionStringFirebirdFactory().GetConnectionString("sdf", "", "sasdf",
+                                                                              "testpassword", "testport");
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains("The server, database, password and userName of a connect string can never be empty", ex.Message);
+            }
         }
 
         #endregion //Firebird

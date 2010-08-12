@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -55,11 +55,19 @@ namespace Habanero.Base
             return Value.CompareTo(obj);
         }
 
+        ///<summary>
+        /// Resolved the instance class to a value of type DateTime.
+        ///</summary>
+        ///<returns>The value that the instance class is resolved to.</returns>
         object IResolvableToValue<object>.ResolveToValue()
         {
             return ResolveToValue();
         }
 
+        ///<summary>
+        /// Resolved the instance class to a value of type DateTime.
+        ///</summary>
+        ///<returns>The value that the instance class is resolved to.</returns>
         public DateTime ResolveToValue()
         {
             return Value.AddDays(this.OffSet);

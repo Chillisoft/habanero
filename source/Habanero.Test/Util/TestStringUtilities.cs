@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -83,11 +83,22 @@ namespace Habanero.Test.Util
             Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("070101"));
         }
 
-        [Test, ExpectedException(typeof (FormatException))]
+        [Test]
         public void TestIdNumberUtilitiesException()
         {
+            //---------------Set up test pack-------------------
             DateTime testDate = new DateTime(2007, 1, 1);
-            Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("07010"));
+            //---------------Execute Test ----------------------
+            try
+            {
+                Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("07010"));
+                Assert.Fail("Expected to throw an FormatException");
+            }
+                //---------------Test Result -----------------------
+            catch (FormatException ex)
+            {
+                StringAssert.Contains("An ID number must have at least 6 digits to calculate the date of birth", ex.Message);
+            }
         }
 
         [Test]
@@ -437,79 +448,79 @@ namespace Habanero.Test.Util
             const string expectedTableName = "T";
             Assert.AreEqual(expectedTableName, pascalCase);
         }
-
-        [Test]
-        public void Test_Singularise()
-        {
-            //---------------Set up test pack-------------------
-            const string tableName = "tables";
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            string singularised = StringUtilities.Singularize(tableName);
-            //---------------Test Result -----------------------
-            const string expectedName = "table";
-            Assert.AreEqual(expectedName, singularised);
-        }
-        [Test]
-        public void Test_Singularise_Regular()
-        {
-            //---------------Set up test pack-------------------
-            const string tableName = "mice";
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            string singularised = StringUtilities.Singularize(tableName);
-            //---------------Test Result -----------------------
-            const string expectedName = "mouse";
-            Assert.AreEqual(expectedName, singularised);
-        }
-        [Test]
-        public void Test_Singularise_Irregular()
-        {
-            //---------------Set up test pack-------------------
-            const string tableName = "atlases";
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            string singularised = StringUtilities.Singularize(tableName);
-            //---------------Test Result -----------------------
-            const string expectedName = "atlas";
-            Assert.AreEqual(expectedName, singularised);
-        }
-        [Test]
-        public void Test_Singularise_Irregular2()
-        {
-            //---------------Set up test pack-------------------
-            const string tableName = "children";
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            string singularised = StringUtilities.Singularize(tableName);
-            //---------------Test Result -----------------------
-            const string expectedName = "child";
-            Assert.AreEqual(expectedName, singularised);
-        }
-        [Test]
-        public void Test_Singularise_Irregular3()
-        {
-            //---------------Set up test pack-------------------
-            const string tableName = "loaves";
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            string singularised = StringUtilities.Singularize(tableName);
-            //---------------Test Result -----------------------
-            const string expectedName = "loaf";
-            Assert.AreEqual(expectedName, singularised);
-        }
-        [Test]
-        public void Test_Singularise_WhenUnaffected_ShouldNotChange()
-        {
-            //---------------Set up test pack-------------------
-            const string word = "deer";
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            string singularised = StringUtilities.Singularize(word);
-            //---------------Test Result -----------------------
-            const string expectedName = "deer";
-            Assert.AreEqual(expectedName, singularised);
-        }
+        //Will not work for DotNet For 2_0
+                [Test]
+                public void Test_Singularise()
+                {
+                    //---------------Set up test pack-------------------
+                    const string tableName = "tables";
+                    //---------------Assert Precondition----------------
+                    //---------------Execute Test ----------------------
+                    string singularised = StringUtilities.Singularize(tableName);
+                    //---------------Test Result -----------------------
+                    const string expectedName = "table";
+                    Assert.AreEqual(expectedName, singularised);
+                }
+                [Test]
+                public void Test_Singularise_Regular()
+                {
+                    //---------------Set up test pack-------------------
+                    const string tableName = "mice";
+                    //---------------Assert Precondition----------------
+                    //---------------Execute Test ----------------------
+                    string singularised = StringUtilities.Singularize(tableName);
+                    //---------------Test Result -----------------------
+                    const string expectedName = "mouse";
+                    Assert.AreEqual(expectedName, singularised);
+                }
+                [Test]
+                public void Test_Singularise_Irregular()
+                {
+                    //---------------Set up test pack-------------------
+                    const string tableName = "atlases";
+                    //---------------Assert Precondition----------------
+                    //---------------Execute Test ----------------------
+                    string singularised = StringUtilities.Singularize(tableName);
+                    //---------------Test Result -----------------------
+                    const string expectedName = "atlas";
+                    Assert.AreEqual(expectedName, singularised);
+                }
+                [Test]
+                public void Test_Singularise_Irregular2()
+                {
+                    //---------------Set up test pack-------------------
+                    const string tableName = "children";
+                    //---------------Assert Precondition----------------
+                    //---------------Execute Test ----------------------
+                    string singularised = StringUtilities.Singularize(tableName);
+                    //---------------Test Result -----------------------
+                    const string expectedName = "child";
+                    Assert.AreEqual(expectedName, singularised);
+                }
+                [Test]
+                public void Test_Singularise_Irregular3()
+                {
+                    //---------------Set up test pack-------------------
+                    const string tableName = "loaves";
+                    //---------------Assert Precondition----------------
+                    //---------------Execute Test ----------------------
+                    string singularised = StringUtilities.Singularize(tableName);
+                    //---------------Test Result -----------------------
+                    const string expectedName = "loaf";
+                    Assert.AreEqual(expectedName, singularised);
+                }
+                [Test]
+                public void Test_Singularise_WhenUnaffected_ShouldNotChange()
+                {
+                    //---------------Set up test pack-------------------
+                    const string word = "deer";
+                    //---------------Assert Precondition----------------
+                    //---------------Execute Test ----------------------
+                    string singularised = StringUtilities.Singularize(word);
+                    //---------------Test Result -----------------------
+                    const string expectedName = "deer";
+                    Assert.AreEqual(expectedName, singularised);
+                }/**/
 
         [Test]
         public void Test_RemovePrefix()

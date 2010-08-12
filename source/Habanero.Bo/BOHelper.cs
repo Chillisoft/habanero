@@ -8,6 +8,8 @@ namespace Habanero.BO
 {
     ///<summary>
     /// A helper class that allows access to internal or hidden details about an <see cref="BusinessObject"/>.
+    /// This is currently only used in unit tests so that we can access the rule collection and verify that they are
+    /// set up correctly for a particular business object without having to make the method public.
     ///</summary>
     public class BOHelper
     {

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -46,6 +46,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ClassDef.ClassDefs.Add(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()).LoadClassDefs());
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
         }
 
         [Test]
@@ -192,7 +193,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             XmlSerializer xs = new XmlSerializer(typeof(Person));
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPerson);
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -212,7 +213,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             XmlSerializer xs = new XmlSerializer(typeof(Person));
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPerson);
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -228,7 +229,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             XmlSerializer xs = new XmlSerializer(typeof(Person));
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPerson);
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -250,7 +251,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             XmlSerializer xs = new XmlSerializer(typeof(Person));
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
 
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPerson);
@@ -280,7 +281,7 @@ namespace Habanero.Test.BO
             originalPeople.Add(person3);
             XmlSerializer xs = new XmlSerializer(typeof(BusinessObjectCollection<Person>));
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPeople);
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -307,7 +308,7 @@ namespace Habanero.Test.BO
             originalPeople.CreateBusinessObject();
             XmlSerializer xs = new XmlSerializer(typeof(BusinessObjectCollection<Person>));
             MemoryStream memoryStream = new MemoryStream();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Execute Test ----------------------
             xs.Serialize(memoryStream, originalPeople);
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -893,7 +894,7 @@ namespace Habanero.Test.BO
             StreamWriter sw = new StreamWriter(fileName);
             xs.Serialize(sw, bo);
             sw.Close();
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Assert Precondition----------------
             AssertFileHasBeenCreated(fileName);
             //---------------Execute Test ----------------------

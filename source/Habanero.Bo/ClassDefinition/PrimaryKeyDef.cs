@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -111,7 +111,7 @@ namespace Habanero.BO.ClassDefinition
         /// key definition</returns>
         public override IBOKey CreateBOKey(IBOPropCol lBOPropCol)
         {
-		    BOPrimaryKey lBOKey = _isGuidObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
+            BOPrimaryKey lBOKey = _isGuidObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
             foreach (PropDef lPropDef in this)
             {
                 lBOKey.Add(lBOPropCol[lPropDef.PropertyName]);

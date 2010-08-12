@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Habanero.Base;
@@ -40,10 +41,15 @@ namespace Habanero.BO
 
         public void Write(DataStoreInMemory dataStore)
         {
+            Write(dataStore.AllObjects);
+        }
+
+        public void Write(Dictionary<Guid, IBusinessObject> businessObjects)
+        {
             XmlWriter writer = XmlWriter.Create(_stream, _settings);
             writer.WriteStartDocument();
             writer.WriteStartElement("BusinessObjects");
-            foreach (var o in dataStore.AllObjects)
+            foreach (var o in businessObjects)
             {
                 writer.WriteStartElement("bo");
                 writer.WriteAttributeString("__tn", o.Value.ClassDef.ClassName);
@@ -57,7 +63,6 @@ namespace Habanero.BO
             writer.WriteEndElement();
             writer.WriteEndDocument();
             writer.Close();
-
         }
     }
 }

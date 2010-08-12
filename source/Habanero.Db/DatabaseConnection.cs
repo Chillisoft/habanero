@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -256,7 +256,7 @@ namespace Habanero.DB
         {
             try
             {
-                log.Info(string.Format("GetOpenConnectionForReading: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
+                log.Debug(string.Format("GetOpenConnectionForReading: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
                 
                 // looks for closed connections for reading because open 
                 // connections could have readers still associated with them.
@@ -290,7 +290,7 @@ namespace Habanero.DB
         {
             try
             {
-                log.Info(string.Format("GetConnection: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
+                log.Debug(string.Format("GetConnection: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
                 foreach (IDbConnection dbConnection in _connections)
                 {
                     if (dbConnection.State == ConnectionState.Closed)
@@ -387,7 +387,7 @@ namespace Habanero.DB
             }
             finally
             {
-                if (con != null) log.Info(string.Format("LoadDataReader(string): Final Connection state: {0}", con.State));
+                if (con != null) log.Debug(string.Format("LoadDataReader(string): Final Connection state: {0}", con.State));
             }
         }
 
@@ -425,7 +425,7 @@ namespace Habanero.DB
             }
             finally
             {
-                if (con != null) log.Info(string.Format("LoadDataReader(string, IDbTransaction): Final Connection state: {0}", con.State));
+                if (con != null) log.Debug(string.Format("LoadDataReader(string, IDbTransaction): Final Connection state: {0}", con.State));
             }
         }
 
@@ -471,7 +471,7 @@ namespace Habanero.DB
             }
             finally
             {
-                if (con != null) log.Info(string.Format("LoadDataReader(ISqlStatement): Final Connection state: {0}", con.State));
+                if (con != null) log.Debug(string.Format("LoadDataReader(ISqlStatement): Final Connection state: {0}", con.State));
             }
         }
 
@@ -839,7 +839,7 @@ namespace Habanero.DB
             }
             finally
             {
-                if (con != null) log.Info(string.Format("LoadDataTable(ISqlStatement, string, string): Final Connection state: {0}", con.State));
+                if (con != null) log.Debug(string.Format("LoadDataTable(ISqlStatement, string, string): Final Connection state: {0}", con.State));
             }
         }
         /// <summary>

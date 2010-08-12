@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.Structure;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -175,7 +176,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "String",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
-
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = "x";
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
@@ -199,6 +202,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Guid",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = Guid.NewGuid();
 
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
@@ -228,6 +234,10 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Int32",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = 44;
+
 
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
@@ -259,6 +269,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Decimal",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = 44.44;
 
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
@@ -283,7 +296,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Double",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
-
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = 44.44;
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
@@ -307,7 +322,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "DateTime",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
-
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = DateTime.Now;
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
@@ -331,7 +348,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "Boolean",
                 PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
-
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+            boProp.Value = true;
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
@@ -599,26 +618,48 @@ namespace Habanero.Test.BO
 
         #region Test ReadOnly
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_ReadOnly_New()
         {
+            //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadOnly, null, null, true, false);
             IBOProp boProp = propDef.CreateBOProp(true);
+            //---------------Assert preconditions---------------
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
-            boProp.Value = "TestValue";
-            //Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "TestValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as ReadOnly", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_ReadOnly_Existing()
-        {
+        { 
+            //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadOnly, null, null, true, false);
             IBOProp boProp = propDef.CreateBOProp(false);
+            //---------------Assert preconditions---------------
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
-            boProp.Value = "TestValue";
-            //Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "TestValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as ReadOnly", ex.Message);
+            }
         }
 
         #endregion //Test ReadOnly
@@ -660,13 +701,24 @@ namespace Habanero.Test.BO
             CreateWriteOnceBoProp(true, "My Default");
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain()
         {
+            //---------------Set up test pack-------------------
             BOProp boProp = (BOProp) CreateWriteOnceBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
-            boProp.Value = "NewValue";
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "NewValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as WriteOnce and the value has already been set", ex.Message);
+            }
         }
 
         [Test]
@@ -758,19 +810,46 @@ namespace Habanero.Test.BO
             CreateWriteNewBoProp(true);
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_WriteNew_NewPersisted_WriteAgain()
         {
+            //---------------Set up test pack-------------------
             BOProp boProp = (BOProp) CreateWriteNewBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
-            boProp.Value = "NewValue";
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "NewValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as WriteNew and the object is not new", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_WriteNew_Existing()
         {
-            CreateWriteNewBoProp(false);
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                                          PropReadWriteRule.WriteNew, null, null, true, false);
+            IBOProp boProp = propDef.CreateBOProp(false);
+            //---------------Assert preconditions---------------
+            Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "TestValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as WriteNew and the object is not new", ex.Message);
+            }
         }
 
         #endregion //Test WriteNew
@@ -794,10 +873,22 @@ namespace Habanero.Test.BO
             return boProp;
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
         public void TestUpdateProp_WriteNotNew_New()
         {
-            CreateWriteNotNewBoPropWithValues(true);
+            //---------------Set up test pack-------------------
+            IBOProp boProp = CreateWriteNotNewBoProp(true);
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = "TestValue";
+                Assert.Fail("Expected to throw an BOPropWriteException");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("is not editable since it is set up as WriteNotNew and the object is new", ex.Message);
+            }
         }
 
         [Test]
@@ -1224,6 +1315,128 @@ namespace Habanero.Test.BO
             Assert.AreNotSame(dateTimeNow, value);
         }
 
-    }
+        [Test]
+        public void Test_InitialiseProp_ReturnsFalseIfPropValueNotChanged()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            //---------------Execute Test ----------------------
+            bool propValueChanged = boProp.InitialiseProp(null);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(propValueChanged);
+        }
 
+        [Test]
+        public void Test_InitialiseProp_ReturnsTrueIfPropValueHasChanged()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            //---------------Execute Test ----------------------
+            bool propValueChanged = boProp.InitialiseProp("NewValue");
+            //---------------Test Result -----------------------
+            Assert.IsTrue(propValueChanged);
+        }
+
+        [Test]
+        public void Test_PropValueEquals_WhenSame_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            object x = 1;
+            object y = x;
+            BOProp prop = new BOPropSpy {Value = x};
+            //---------------Assert Precondition----------------
+            Assert.AreSame(x, y);
+            Assert.AreSame(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+
+
+        [Test]
+        public void Test_PropValueEquals_WhenEqualNumber_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            int? x = 1;
+            int? y = 1;
+            BOPropSpy prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(x, y);
+            Assert.AreEqual(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+        [Test]
+        public void Test_PropValueEquals_WhenEqualNumberAndNullable_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            int? x = 1;
+            int y = 1;
+            BOPropSpy prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(x, y);
+            Assert.AreEqual(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+
+        [Test]
+        public void Test_PropValueEquals_WhenEqualObject_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            int? x = 1;
+            object y = 1;
+            BOPropSpy prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(x, y);
+            Assert.AreEqual(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+
+        [Test]
+        public void Test_PropValueEquals_WhenBothNull_ShouldRetTrue()
+        {
+            //---------------Set up test pack-------------------
+            int? x = null;
+            int? y = null;
+            BOPropSpy prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(x, y);
+            Assert.AreEqual(prop.Value, y);
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(currentValueEquals);
+        }
+
+        [TestCase(1, 1, true, "")]
+        [TestCase(1, 1, true, "")]
+        [TestCase(null, 1, false, "")]
+        [TestCase(3, null, false, "")]
+        [TestCase(null, null, true, "")]
+        [TestCase(1, "1", false, "This code does not do any parsing i.e. the '1' is not parsed to be an int and hence this will return false")]
+        public void Test_CurrentValueEquals(object x, object y, bool areEqual, string message)
+        {
+            //---------------Set up test pack-------------------
+            IBOProp prop = new BOPropSpy { Value = x };
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            bool currentValueEquals = prop.CurrentValueEquals(y);
+            //---------------Test Result -----------------------
+            string expectedMessage 
+                = string.Format("x : '{0}' - y : '{1}' CurrentValueEquals Should be : {2}"
+                    , x, y, areEqual) + Environment.NewLine + message;
+            Assert.AreEqual(areEqual, currentValueEquals, expectedMessage);
+        }
+    }
 }

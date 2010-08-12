@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,11 +16,15 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// The interface for a <see cref="Trigger"/>. 
+    /// The interface for a a Trigger which is a trigger set up to two properties so that when one changes
+    /// the other can be notified.
     /// </summary>
+    [Obsolete("This is no longer used")]
     public interface ITrigger
     {
         /// <summary>

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -60,7 +60,7 @@ namespace Habanero.BO
         /// <summary> The value prior to the last edit. </summary>
         protected object _valueBeforeLastEdit;
         private IBOPropAuthorisation _boPropAuthorisation;
-
+        protected bool _convertEmptyStringToNull = true;
         private bool _loadedPropHasBeenValidated;
         /// <summary>
         /// Indicates that the value held by the property has been
@@ -143,9 +143,9 @@ namespace Habanero.BO
         /// Initialises the property with the specified value
         /// </summary>
         /// <param name="propValue">The value to assign</param>
-        public virtual void InitialiseProp(object propValue)
+        public virtual bool InitialiseProp(object propValue)
         {
-            InitialiseProp(propValue, false);
+            return InitialiseProp(propValue, false);
         }
 
         /// <summary>
@@ -173,19 +173,26 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propValue">The value to assign</param>
         /// <param name="isObjectNew">Whether the object is new or not</param>
-        protected virtual void InitialiseProp(object propValue, bool isObjectNew)
+        protected virtual bool InitialiseProp(object propValue, bool isObjectNew)
         {
             object newValue;
+            bool propValueChanged = false;
             ParsePropValue(propValue, out newValue);
             _invalidReason = "";
             //Brett 12 Jan 2009: Removed due to performance improvement during loading.
             // No bo loaded from the database will ever be placed in an invalid state
             //_isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
 
-            _currentValue = newValue;
+            if ((_currentValue == null && newValue != null) || (_currentValue != null && newValue == null) ||
+                (_currentValue != null && !_currentValue.Equals(newValue)))
+            {
+                propValueChanged = true;
+                _currentValue = newValue;
+            }
             //Set up origional properties s.t. property can be backed up and restored.
             BackupPropValue();
             this.IsObjectNew = isObjectNew;
+            return propValueChanged;
         }
         /// <summary>
         /// This method provides a the functionality to convert any object to the appropriate
@@ -264,12 +271,13 @@ namespace Habanero.BO
             }
             set
             {
-                if ((_currentValue != null) && (_currentValue.Equals(value))) return;
+                if(CurrentValueEquals(value)) return;
+                //if ((_currentValue != null) && (_currentValue.Equals(value))) return;
 
                 object newValue;
                 ParsePropValue(value, out newValue);
-
-                if (!Equals(_persistedValue, newValue))
+                if(CurrentValueEquals(newValue)) return;
+                if (!PersistedValueEquals(newValue))
                 {
                     string message;
                     if (!IsEditable(out message))
@@ -285,7 +293,7 @@ namespace Habanero.BO
                 _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
                 _valueBeforeLastEdit = _currentValue;
                 _currentValue = newValue;
-                _isDirty = !Equals(_persistedValue, newValue);
+                _isDirty = !PersistedValueEquals(newValue);
                 if (_isDirty && UpdatesBusinessObjectStatus && _businessObject != null)
                 {
                     _businessObject.SetDirty(true);
@@ -293,7 +301,35 @@ namespace Habanero.BO
                 FireBOPropValueUpdated();
             }
         }
+        /// <summary>
+        /// Is the <paramref name="compareToValue"/> equal to the 
+        /// current Value of the BOProp. 
+        /// </summary>
+        /// <param name="compareToValue"></param>
+        /// <returns></returns>
+        public bool CurrentValueEquals(object compareToValue)
+        {
+            return CompareValues(_currentValue, compareToValue);
+        }
 
+        private bool CompareValues(object compareFromValue, object compareToValue)
+        {
+            if (compareFromValue == compareToValue) return true;
+            if (compareFromValue != null) return compareFromValue.Equals(compareToValue);
+            if (compareToValue == null) return true;
+            return _convertEmptyStringToNull && (string.IsNullOrEmpty(Convert.ToString(compareToValue)));
+        }
+
+        /// <summary>
+        /// Is the <paramref name="compareToValue"/> equal to the 
+        /// persisted Value of the BOProp. 
+        /// </summary>
+        /// <param name="compareToValue"></param>
+        /// <returns></returns>
+        private bool PersistedValueEquals(object compareToValue)
+        {
+            return CompareValues(_persistedValue, compareToValue);
+        }
         /// <summary>
         /// Raises an Erorr if the Incorrect type of property is being set to this BOProp.
         /// </summary>
@@ -558,5 +594,6 @@ namespace Habanero.BO
             message = "";
             return true;
         }
+
     }
 }

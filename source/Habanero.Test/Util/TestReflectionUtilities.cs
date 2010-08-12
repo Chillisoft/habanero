@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -46,11 +46,22 @@ namespace Habanero.Test.Util
             Assert.IsTrue(Convert.ToBoolean(returnValue));
         }
 
-        [Test, ExpectedException(typeof (Exception))]
+        [Test]
         public void TestExecuteMethodDoesntExist()
         {
+            //---------------Set up test pack-------------------
             SimpleClass simpleClass = new SimpleClass();
-            ReflectionUtilities.ExecuteMethod(simpleClass, "InvalidMethod");
+            //---------------Execute Test ----------------------
+            try
+            {
+                ReflectionUtilities.ExecuteMethod(simpleClass, "InvalidMethod");
+                Assert.Fail("Expected to throw an Exception");
+            }
+                //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                StringAssert.Contains("Virtual method call for 'InvalidMethod' does not exist for object of type 'SimpleClass'", ex.Message);
+            }
         }
 
         [Test]
@@ -298,51 +309,64 @@ namespace Habanero.Test.Util
         }
 
         [Test]
-        public void Test_GetPropertyInfo_WithLambda_ShouldRetInfo()
+        public void Test_GetUnderlyingType_WhenPropInfoNull_ShouldReturnNull()
         {
             //---------------Set up test pack-------------------
-
+            
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-
-            var propInfo = ReflectionUtilities.GetPropertyInfo<ClassWithProperties>(bo => bo.StringProperty);
+            Type propType = ReflectionUtilities.GetUndelyingPropertType(null);
             //---------------Test Result -----------------------
-            Assert.AreEqual("StringProperty", propInfo.Name);
-            Assert.AreSame(typeof (string), propInfo.PropertyType);
+            Assert.IsNull(propType);
         }
-        [Test]
-        public void Test_GetPropertyName_WithLambda_ShouldRetName()
-        {
-            //---------------Set up test pack-------------------
+         //Will not work for DotNet For 2_00
+          [Test]
+                public void Test_GetPropertyInfo_WithLambda_ShouldRetInfo()
+                {
+                    //---------------Set up test pack-------------------
 
-            //---------------Assert Precondition----------------
+                    //---------------Assert Precondition----------------
 
-            //---------------Execute Test ----------------------
+                    //---------------Execute Test ----------------------
 
-            var propertyName = ReflectionUtilities.GetPropertyName<ClassWithProperties>(bo => bo.StringProperty);
-            //---------------Test Result -----------------------
-            Assert.AreEqual("StringProperty", propertyName);
-        }
+                    var propInfo = ReflectionUtilities.GetPropertyInfo<ClassWithProperties, string>(bo => bo.StringProperty);
+                    //---------------Test Result -----------------------
+                    Assert.AreEqual("StringProperty", propInfo.Name);
+                    Assert.AreSame(typeof (string), propInfo.PropertyType);
+                }
+                [Test]
+                public void Test_GetPropertyName_WithLambda_ShouldRetName()
+                {
+                    //---------------Set up test pack-------------------
 
-        [Test]
-        public void Test_GetPropertyInfo_WithInvalidLambda_ShouldRaiseError()
-        {
-            //---------------Set up test pack-------------------
-            //---------------Assert Precondition----------------
+                    //---------------Assert Precondition----------------
 
-            //---------------Execute Test ----------------------
-            try
-            {
-                ReflectionUtilities.GetPropertyInfo<ClassWithProperties>(bo => bo.GetType());
-                Assert.Fail("Expected to throw an ArgumentException");
-            }
-            //---------------Test Result -----------------------
-            catch (ArgumentException ex)
-            {
-                StringAssert.Contains("Not a member access", ex.Message);
-            }
-        }
+                    //---------------Execute Test ----------------------
+
+                    var propertyName = ReflectionUtilities.GetPropertyName<ClassWithProperties, string>(bo => bo.StringProperty);
+                    //---------------Test Result -----------------------
+                    Assert.AreEqual("StringProperty", propertyName);
+                }
+
+                [Test]
+                public void Test_GetPropertyInfo_WithInvalidLambda_ShouldRaiseError()
+                {
+                    //---------------Set up test pack-------------------
+                    //---------------Assert Precondition----------------
+
+                    //---------------Execute Test ----------------------
+                    try
+                    {
+                        ReflectionUtilities.GetPropertyInfo<ClassWithProperties, object>(bo => bo.GetType());
+                        Assert.Fail("Expected to throw an ArgumentException");
+                    }
+                    //---------------Test Result -----------------------
+                    catch (ArgumentException ex)
+                    {
+                        StringAssert.Contains("Not a member access", ex.Message);
+                    }
+                }/**/
 
         // ReSharper disable UnusedAutoPropertyAccessor.Local
 

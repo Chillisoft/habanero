@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -41,16 +41,16 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         public static IPropDef GetPropDefByPropName(IClassDef classDef, string propertyName)
         {
-            if (classDef == null || propertyName.IndexOf("-") != -1)
+            if (classDef == null || IsReflectiveProperty(propertyName))
             {
                 return null;
             }
-            if (propertyName.IndexOf(".") != -1)
+/*            if (IsRelatedProperty(propertyName))
             {
                 string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
                 propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
                 List<string> relNames = new List<string>();
-                relNames.AddRange(relationshipName.Split(new string[]{"|"}, StringSplitOptions.RemoveEmptyEntries));
+                relNames.AddRange(relationshipName.Split(new[]{"|"}, StringSplitOptions.RemoveEmptyEntries));
                 IRelationshipDefCol relationshipDefCol = classDef.RelationshipDefCol;
                 IPropDef propDef = null;
                 foreach (string relName in relNames)
@@ -59,7 +59,7 @@ namespace Habanero.BO.ClassDefinition
                     {
                         IRelationshipDef relationshipDef = relationshipDefCol[relName];
                         IClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-                        propDef = GetPropDefByPropName((ClassDef) relatedClassDef, propertyName);
+                        propDef = GetPropDefByPropName(relatedClassDef, propertyName);
                     }
                     if (propDef != null)
                     {
@@ -67,11 +67,20 @@ namespace Habanero.BO.ClassDefinition
                     }
                 }
                 return null;
-            }
-            IPropDefCol propDefCol = classDef.PropDefColIncludingInheritance;
-            return propDefCol.Contains(propertyName) ? propDefCol[propertyName] : null;
+            }*/
+            return classDef.GetPropDef(propertyName, false);
         }
 
+        internal static bool IsReflectiveProperty(string propertyName)
+        {
+            return propertyName.IndexOf("-") != -1;
+        }
+
+/*
+        private static bool IsRelatedProperty(string propertyName)
+        {
+            return propertyName.IndexOf(".") != -1;
+        }*/
         ///<summary>
         /// Returns the <see cref="ClassDef.PrimaryKeyDef"/> for the specified <see cref="ClassDef"/>.
         /// This may be an inherited <see cref="ClassDef.PrimaryKeyDef"/> from a super class.
@@ -124,6 +133,23 @@ namespace Habanero.BO.ClassDefinition
                 }
             }
             return superClassClassDef;
+        }
+        
+        /// <summary>
+        /// Returns the relationship on the classdef that matches the name given.  If no match is found,
+        /// returns null.
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static IRelationshipDef GetRelationshipDefByName(IClassDef classDef, string name)
+        {
+            return classDef.GetRelationship(name);
+/*            foreach (IRelationshipDef def in classDef.RelationshipDefCol)
+            {
+                if (def.RelationshipName == name) return def;
+            }
+            return null;*/
         }
     }
 }

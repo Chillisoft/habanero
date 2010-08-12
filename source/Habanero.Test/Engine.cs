@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -127,6 +127,11 @@ namespace Habanero.Test
         public Car GetCar()
         {
             return Relationships.GetRelatedObject<Car>("Car");
+        }
+
+        public Car Car
+        {
+            get { return Relationships.GetRelatedObject<Car>("Car"); }
         }
 
         #endregion //Relationships

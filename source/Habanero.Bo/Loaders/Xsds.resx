@@ -124,4 +124,7 @@
   <data name="ui" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>xsds\ui.xsd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+	<data name="There_was_an_error_in_DataSetProvider_MultipleDelesHit">
+		<value><![CDATA[There was an error in DataSetProvider: If you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error ]]></value>
+	</data>
 </root>

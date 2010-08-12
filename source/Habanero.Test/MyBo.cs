@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -55,7 +55,7 @@ namespace Habanero.Test
             _myRuleList = new List<IBusinessObjectRule>();
         }
 
-        protected MyBO(bool constructForFakes) : base(constructForFakes)
+        protected MyBO(ConstructForFakes constructForFakes) : base(constructForFakes)
         {
         }
 
@@ -153,7 +153,7 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        private static XmlClassLoader CreateXmlClassLoader()
+        protected static XmlClassLoader CreateXmlClassLoader()
         {
             return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
         }
@@ -1241,7 +1241,9 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
+// ReSharper disable UnusedMember.Global These are used by Asset Management
         public static IClassDef LoadClassDefWithThreeUITabs()
+
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
             IClassDef itsClassDef =
@@ -1319,7 +1321,7 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-
+        // ReSharper restore UnusedMember.Global
         public static IClassDef LoadClassDefWithBOStringLookup()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
@@ -1441,6 +1443,7 @@ namespace Habanero.Test
 								<columnLayout>
 									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
 									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+						            <field property=""MyRelationship"" type=""ComboBox"" mapperType=""AutoLoadingRelationshipComboBoxMapper"" mapperAssembly=""Habanero.Faces.Base"" editable=""true"" />
 								</columnLayout>
 							</tab>
 						</form>
@@ -1713,6 +1716,24 @@ namespace Habanero.Test
             }
         }
     }
+
+    public class MyBOSubType : MyBO
+    {  
+
+
+        public static IClassDef LoadInheritedTypeClassDef()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            var classDef =
+                itsLoader.LoadClass(
+                    @"<class name=""MyBOSubType"" assembly=""Habanero.Test"">
+                        <superClass class=""MyBO"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""MyBOType"" />
+                      </class>");
+            ClassDef.ClassDefs.Add(classDef);
+            return classDef;
+        }
+    }
+
     public class MyInheritedType: MyRelatedBo
     {
         public static IClassDef LoadInheritedTypeClassDef()

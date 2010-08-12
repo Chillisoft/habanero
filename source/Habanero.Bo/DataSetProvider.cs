@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -19,9 +19,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using log4net;
 
 namespace Habanero.BO
@@ -49,11 +51,6 @@ namespace Habanero.BO
         /// The <see cref="DataTable"/> that is set up to represent the items in this collection.
         /// </summary>
         protected DataTable _table;
-
-        /// <summary>
-        /// The object initialiser being used to create a new object if this grid is allowed to create a new object.
-        /// </summary>
-        protected IBusinessObjectInitialiser _objectInitialiser;
 
         /// <summary>
         /// A handler for the <see cref="IBusinessObject"/> has been added to the <see cref="_collection"/>.
@@ -107,6 +104,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="uiGrid">The UIGridDef</param>
         /// <returns>Returns a DataTable object</returns>
+        [Obsolete("Please use GetDataView instead")]
         public DataTable GetDataTable(IUIGrid uiGrid)
         {
             if (uiGrid == null) throw new ArgumentNullException("uiGrid");
@@ -120,7 +118,7 @@ namespace Habanero.BO
             IClassDef classDef = _collection.ClassDef;
             foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
-                AddColumn(uiProperty, (ClassDef) classDef);
+                AddColumn(uiProperty, classDef);
             }
             foreach (BusinessObject businessObject in _collection.Clone())
             {
@@ -130,7 +128,20 @@ namespace Habanero.BO
             return _table;
         }
 
-        private void AddColumn(UIGridColumn uiProperty, ClassDef classDef)
+#pragma warning disable 612,618
+//This should be moved to a private method when this method is removed from UI.
+        /// <summary>
+        /// Returns a data view for the UIGridDef provided
+        /// </summary>
+        /// <param name="uiGrid">The UIGridDef</param>
+        /// <returns>Returns a DataTable object</returns>
+        public IBindingListView GetDataView(IUIGrid uiGrid)
+        {
+            var dataTable = GetDataTable(uiGrid);
+            return dataTable == null ? null : dataTable.DefaultView;
+        }
+
+        private void AddColumn(IUIGridColumn uiProperty, IClassDef classDef)
         {
             DataColumn column = _table.Columns.Add();
             if (_table.Columns.Contains(uiProperty.PropertyName))
@@ -141,14 +152,33 @@ namespace Habanero.BO
                           + "the name '{0}' has been detected. Only one column " + "per property can be specified.",
                           uiProperty.PropertyName));
             }
-            Type columnPropertyType = classDef.GetPropertyType(uiProperty.PropertyName);
+            //ILookupList lookupList = classDef.GetLookupList(uiProperty.PropertyName);
+            Type columnPropertyType = GetPropertyType(classDef, uiProperty.PropertyName);
+
             column.DataType = columnPropertyType;
             column.ColumnName = uiProperty.PropertyName;
-            column.Caption = uiProperty.GetHeading(classDef);
-//            column.ReadOnly = !uiProperty.Editable;
-            column.ExtendedProperties.Add("LookupList", classDef.GetLookupList(uiProperty.PropertyName));
+            column.Caption = uiProperty.ClassDef == null 
+
+                        ? uiProperty.GetHeading(classDef) 
+                        : uiProperty.GetHeading();
+            //TODO brett 06 Jul 2010: These extended properties are never used by faces any more
+            // and can be removed from this column.
+            column.ExtendedProperties.Add("LookupList", uiProperty.LookupList);
             column.ExtendedProperties.Add("Width", uiProperty.Width);
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
+        }
+#pragma warning restore 612,618
+        private static Type GetPropertyType(IClassDef classDef, string propertyName)
+        {
+            IPropDef def = classDef.GetPropDef(propertyName, false);
+            if (def == null) return classDef.GetPropertyType(propertyName);
+            var lookupList = def.LookupList;
+            Type propertyType = def.PropertyType;
+            if (lookupList != null && !(lookupList is NullLookupList))
+            {
+                propertyType = typeof(object);
+            }
+            return propertyType;
         }
 
         ///<summary>
@@ -222,6 +252,7 @@ namespace Habanero.BO
         /// <returns>Returns an array of values</returns>
         protected object[] GetValues(IBusinessObject businessObject)
         {
+            if (businessObject == null) throw new ArgumentNullException("businessObject");
             object[] values = new object[_uiGridProperties.Count + 1];
             values[0] = businessObject.ID.ObjectID;
             int i = 1;
@@ -234,14 +265,14 @@ namespace Habanero.BO
             return values;
         }
 
-        /// <summary>
+/*        /// <summary>
         /// Adds handlers to be called when updates occur
         /// </summary>
         public virtual void DeregisterForEvents()
         {
             DeregisterForBOEvents();
             DeregisterForTableEvents();
-        }
+        }*/
         /// <summary>
         /// Derigisters the Data Set Provider from all events raised by the BO collection.
         /// </summary>
@@ -329,7 +360,8 @@ namespace Habanero.BO
                 catch (Exception)
                 {
                     //IF you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error
-                    Console.Write("There was an error");
+                    //This suppresses the error.
+                    Console.Write(Xsds.There_was_an_error_in_DataSetProvider_MultipleDelesHit);
                 }
             }
         }
@@ -391,11 +423,15 @@ namespace Habanero.BO
         /// </summary>
         public abstract void InitialiseLocalData();
 
+        //TODO brett 06 Jul 2010: This method should be moved to a private
+        // method once the obsolete Find on the interface is removed
+
         /// <summary>
         /// Returns the business object at the row number specified
         /// </summary>
         /// <param name="rowNum">The row number</param>
         /// <returns>Returns a business object</returns>
+        [Obsolete("This is no longer used use Find(Guid objectID) instead 6/7/2010")]
         public IBusinessObject Find(int rowNum)
         {
             DataRow row;
@@ -412,11 +448,15 @@ namespace Habanero.BO
             return this.Find(row);
         }
 
+        //TODO brett 06 Jul 2010: This method should be moved to a private
+        // method once the obsolete Find on the interface is removed
+
         /// <summary>
         /// Returns the business object at the row specified
         /// </summary>
         /// <param name="row">The row related to the business object</param>
         /// <returns>Returns a business object</returns>
+        [Obsolete("This is no longer used use Find(Guid objectID) instead 6/7/2010")]
         public IBusinessObject Find(DataRow row)
         {
             try
@@ -466,10 +506,7 @@ namespace Habanero.BO
         /// <summary>
         /// Sets the object initialiser
         /// </summary>
-        public IBusinessObjectInitialiser ObjectInitialiser
-        {
-            set { _objectInitialiser = value; }
-        }
+        public IBusinessObjectInitialiser ObjectInitialiser { get; set; }
 
         ///<summary>
         /// The column name used for the <see cref="DataTable"/> column which stores the unique object identifier of the <see cref="IBusinessObject"/>.
@@ -480,4 +517,5 @@ namespace Habanero.BO
             get { return _idColumnName; }
         }
     }
+
 }

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -113,6 +113,19 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(testPropDefault, bo.Props["TestProp"].PersistedPropertyValue);
             Assert.AreEqual(null, bo.Props["TestProp2"].PersistedPropertyValue);
+        }
+        [Test]
+        public void Test_Instantiate_ShouldSetBusinessObjectOnPrimaryKey()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            string testPropDefault = TestUtil.GetRandomString();
+            MyBO.LoadDefaultClassDefWithDefault(testPropDefault);
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            MyBO bo = new MyBO();
+            //---------------Test Result -----------------------
+            Assert.AreSame(bo, bo.ID.BusinessObject);
         }
 
         [Test]
@@ -492,7 +505,7 @@ namespace Habanero.Test.BO
         }
 
 
-        // This test is duplicated in TestBoMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
+        // This test is duplicated in TestBOMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
         [Test]
         public void TestGetPropertyValueToDisplayWithBOLookupList()
         {
@@ -1287,7 +1300,7 @@ namespace Habanero.Test.BO
             bo.Deletable = true;
             bo.MarkForDelete();
         }
-
+/*
         [Test]
         public void TestPropValueHasChanged()
         {
@@ -1321,7 +1334,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(BusinessObject.PropValueHasChanged(x, null));
             x = null;
             Assert.IsTrue(BusinessObject.PropValueHasChanged(x, y));
-        }
+        }*/
 
         [Test]
         public void TestSaveUsesFactoryGeneratedTransactionCommitter()

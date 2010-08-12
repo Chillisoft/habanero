@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Reflection;
 using Habanero.Base;
 using Habanero.Util;
 
@@ -25,16 +26,29 @@ namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Manages property definitions for a column in a user interface grid,
-    /// as specified in the class definitions xml file
+    /// usually as specified in the class definitions xml file.
+    /// The UIGridColumn can be for 
+    /// <li>A Reflective Property e.g. 
+    /// an Order BO may have a property "CustomerName" that is declared on the 
+    /// Order BO class directly but is derived from the Customer class and therefore 
+    /// does not have a PropDef associated with it.</li>
+    /// <li>A Defined Property i.e. a normal property of the BO that is mapped to a column 
+    /// in the database e.g. for Order BO an OrderNumber. This property will have a 
+    /// PropDef.</li>
+    /// <li>A Related Property Habanero has the ability to define a property for a grid etc.
+    /// via its relationships e.g. for a grid showing order details we may want to show the 
+    /// CustomerName and CustomerCode. We could define these as properties on the Order BO and
+    /// use Reflective Properties (as above) or we could declare the Related Properties i.e.
+    /// Customer.CustomerName and Customer.CustomerCode. Habanero will then find the PropDef for the
+    /// Related Property via its defined relationships.
+    /// A Related Property can be defined via any of the Business Objects single Relationships.</li>
     /// </summary>
     public class UIGridColumn : IUIGridColumn
     {
-        private string _heading;
         private string _propertyName;
         private Type _gridControlType;
-        private readonly Hashtable _parameters;
-        private string _gridControlTypeName;
-        private string _gridControlAssemblyName;
+        protected IPropDef _propDef;
+        private bool _editable;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -47,18 +61,19 @@ namespace Habanero.BO.ClassDefinition
         /// edited directly)</param>
         /// <param name="width">The width</param>
         /// <param name="alignment">The horizontal alignment</param>
-        /// /// <param name="parameters">The parameters for the column</param>
-        public UIGridColumn(string heading, string propertyName, String gridControlTypeName, String gridControlAssembly, bool editable, int width,
+        /// <param name="parameters">The parameters for the column</param>
+        public UIGridColumn(string heading, string propertyName, String gridControlTypeName, String gridControlAssembly,
+                            bool editable, int width,
                             PropAlignment alignment, Hashtable parameters)
         {
-            _heading = heading;
+            Heading = heading;
             _propertyName = propertyName;
-            _gridControlTypeName = gridControlTypeName;
-            _gridControlAssemblyName = gridControlAssembly;
+            GridControlTypeName = gridControlTypeName;
+            GridControlAssemblyName = gridControlAssembly;
             Editable = editable;
             Width = width;
             Alignment = alignment;
-            _parameters = parameters ?? new Hashtable();
+            Parameters = parameters ?? new Hashtable();
         }
 
         /// <summary>
@@ -76,19 +91,19 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="parameters">The parameters for the column</param>
         public UIGridColumn(string heading, string propertyName, Type gridControlType, bool editable, int width,
                             PropAlignment alignment, Hashtable parameters)
-            : this(heading, propertyName, gridControlType.Name, gridControlType.Namespace, editable, width, alignment, parameters)
+            : this(
+                heading, propertyName, gridControlType.Name, gridControlType.Namespace, editable, width, alignment,
+                parameters)
         {
         }
 
 
         /// <summary>
-        /// Returns the heading text that will be used for this column.
+        /// Returns the heading text that has been defined specifically for this
+        /// UIGridColumn. If this is null then the Heading determined via
+        /// <see cref="GetHeading()"/> will be used. 
         /// </summary>
-        public string Heading
-        {
-            get { return _heading; }
-            set { _heading = value; }
-        }
+        public string Heading { get; set; }
 
         /// <summary>
         /// Returns the property name
@@ -96,7 +111,13 @@ namespace Habanero.BO.ClassDefinition
         public string PropertyName
         {
             get { return _propertyName; }
-            set { _propertyName = value; }
+            set
+            {
+                _propertyName = value;
+                //If the PropName has changed then 
+                // the cached propDef may no longer be valid.
+                this._propDef = null;
+            }
         }
 
         /// <summary>
@@ -108,16 +129,38 @@ namespace Habanero.BO.ClassDefinition
             set
             {
                 _gridControlType = value;
-                _gridControlTypeName = _gridControlType.Name;
-                _gridControlAssemblyName = _gridControlType.Namespace;
+                GridControlTypeName = _gridControlType.Name;
+                GridControlAssemblyName = _gridControlType.Namespace;
             }
         }
 
         /// <summary>
-        /// Indicates whether the column is editable
+        /// Indicates whether the column is editable.
+        /// This takes into account the following.
+        /// 1) Has the GridColumn Been set to Not Editable Explicitely e.g. via ClassDef.xml.
+        /// 2) Is the PropDef in a Non editable state e.g. PropDef ReadWriteStatus is ReadOnly
+        /// 3) If there is no PropDef then does the reflective PropInfo have a Setter.
         /// </summary>
-        public bool Editable { get; set; }
+        public bool Editable
+        {
+            get { return DetermineIsEditable(); }
+            set
+            {
+                _editable = value;
+            }
+        }
 
+        /// <summary>
+        /// Updates the isEditable flag and updates 
+        /// the control according to the current state
+        /// </summary>
+        private bool DetermineIsEditable()
+        {
+            if (!_editable) return false;
+            return IsPropertyReflective()
+                       ? DoesVirtualPropertyHaveSetter()
+                       : PropDefIsEditable();
+        }
         /// <summary>
         /// Returns the width
         /// </summary>
@@ -131,63 +174,149 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Returns the Hashtable containing the property parameters
         /// </summary>
-        public Hashtable Parameters
-        {
-            get { return _parameters; }
-        }
+        public Hashtable Parameters { get; private set; }
+
         /// <summary>
         /// Gets and sets the name of the grid control type
         /// </summary>
-        public String GridControlTypeName
-        {
-            get { return _gridControlTypeName; }
-            set { _gridControlTypeName = value; }
-        }
+        public string GridControlTypeName { get; set; }
 
         /// <summary>
         /// Gets and sets the assembly name of the grid control type
         /// </summary>
-        public String GridControlAssemblyName
+        public string GridControlAssemblyName { get; set; }
+
+        ///<summary>
+        /// The <see cref="IUIGrid">Grid Definition</see> that this IUIGridColumn belongs to.
+        ///</summary>
+        public IUIGrid UIGrid { get; set; }
+
+        ///<summary>
+        /// The <see cref="IClassDef">ClassDefinition</see> that this IUIGridColumn belongs to
+        ///</summary>
+        public virtual IClassDef ClassDef
         {
-            get { return _gridControlAssemblyName; }
-            set { _gridControlAssemblyName = value; }
+            get { return this.UIGrid == null ? null : this.UIGrid.ClassDef; }
+        }
+
+        /// <summary>
+        /// Returns the LookupList for the PropDef that 
+        /// is associated with this PropDef.
+        /// If there is no PropDef associated with this column
+        /// then returns <see cref="NullLookupList"/>.
+        /// </summary>
+        public ILookupList LookupList
+        {
+            get
+            {
+                return this.ClassDef == null
+                           ? new NullLookupList()
+                           : this.ClassDef.GetLookupList(this.PropertyName);
+            }
         }
 
         #region Helper Methods
 
+#pragma warning disable 612,618
         ///<summary>
         /// Gets the heading for this grid column.
         ///</summary>
         ///<returns> The heading for this grid column </returns>
         public string GetHeading()
         {
-            return GetHeading(null);
+            return GetHeading(this.ClassDef);
         }
-
+#pragma warning restore 612,618
         ///<summary>
         /// Gets the heading for this grid column given a classDef.
         ///</summary>
         ///<param name="classDef">The class definition that corresponds to this grid column. </param>
         ///<returns> The heading for this grid column </returns>
+        [Obsolete("This is no longer necessary since the UIGridColumn can now return its associated classDef.")]
         public string GetHeading(IClassDef classDef)
         {
-            if (!String.IsNullOrEmpty(_heading))
+            //If the heading is overriden specifically for this UIGridColumn
+            // i.e. it is not derived from the DisplayName of the 
+            // PropDef then use it.
+            if (!String.IsNullOrEmpty(Heading))
             {
-                return _heading;
+                return Heading;
             }
-            string heading = null;
+            //Else use the PropDefs Display name
             IPropDef propDef = ClassDefHelper.GetPropDefByPropName(classDef, PropertyName);
             if (propDef != null)
             {
-                heading = propDef.DisplayName;
+                return propDef.DisplayName;
             }
-            if (String.IsNullOrEmpty(heading))
-            {
-                heading = StringUtilities.DelimitPascalCase(_propertyName, " ");
-            }
-            return heading;
+            //Else use a Delimited Prop Name i.e. "FirstName" -> "First Name"
+            return StringUtilities.DelimitPascalCase(_propertyName, " ");
         }
-       
+
+        ///<summary>
+        /// Gets the heading for this grid column.
+        ///</summary>
+        ///<returns> The heading for this grid column </returns>
+        public Type GetPropertyType()
+        {
+            if (PropDef == null) return ClassDef.GetPropertyType(PropertyName);
+            //If the Propdef has a Lookup then it is impossible for the
+            // the Grid Column to know the datatype and it is not essential
+            // since we will manually determine the Control type.
+            // e.g. If Readonly then TextBox Column else ComboBox Column.
+            if (this.PropDef.HasLookupList()) return typeof (object);
+            return PropDef.PropertyType;
+        }
+
+        /// <summary>
+        /// Returns the PropDef that is associated with this UIGridColumn.
+        /// If one is associaciated. Returns null otherwise
+        /// </summary>
+        public virtual IPropDef PropDef
+        {
+            get
+            {
+                if (_propDef != null) return _propDef;
+                _propDef = ClassDefHelper.GetPropDefByPropName(ClassDef, PropertyName);
+                return _propDef;
+            }
+        }
+
+        /// <summary>
+        /// Return true if this UIGridColumn is associated with a <see cref="IPropDef"/>.
+        /// This is used since a GridColumn can be associated with
+        /// Reflective Property 
+        /// </summary>
+        public bool HasPropDef
+        {
+            get { return this.PropDef != null; }
+        }
+
+
+        private bool PropDefIsEditable()
+        {
+            return !PropDefIsReadOnly();
+        }
+
+        private bool PropDefIsReadOnly()
+        {
+            return (this.PropDef != null && this.PropDef.ReadWriteRule == PropReadWriteRule.ReadOnly);
+        }
+
+        private bool DoesVirtualPropertyHaveSetter()
+        {
+            if(this.ClassDef == null) return false;
+            string virtualPropName = PropertyName.Trim('-');
+            PropertyInfo propertyInfo =
+                ReflectionUtilities.GetPropertyInfo(this.ClassDef.ClassType, virtualPropName);
+            bool virtualPropertySetExists = propertyInfo != null && propertyInfo.CanWrite;
+            return virtualPropertySetExists;
+        }
+
+
+        private bool IsPropertyReflective()
+        {
+            return PropertyName.IndexOf("-") != -1 || (this.PropDef == null && this.ClassDef != null);
+        }
 
         #endregion //Helper Methods
 
@@ -196,10 +325,9 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="parameterName">The parameter name</param>
         /// <returns>Returns the parameter value or null if not found</returns>
-        /// TODO this should return a string
         public object GetParameterValue(string parameterName)
         {
-            return _parameters.ContainsKey(parameterName) ? _parameters[parameterName] : null;
+            return Parameters.ContainsKey(parameterName) ? Parameters[parameterName] : null;
         }
 
         ///<summary>
@@ -217,8 +345,8 @@ namespace Habanero.BO.ClassDefinition
 
             UIGridColumn otherGridColumn = obj as UIGridColumn;
             if (otherGridColumn == null) return false;
-            if ((otherGridColumn.PropertyName != this.PropertyName) 
-                || (otherGridColumn.Heading != this.Heading) 
+            if ((otherGridColumn.PropertyName != this.PropertyName)
+                || (otherGridColumn.Heading != this.Heading)
                 || (otherGridColumn.GridControlTypeName != this.GridControlTypeName)
                 || (otherGridColumn.Editable != this.Editable)) return false;
             return true;
@@ -248,7 +376,7 @@ namespace Habanero.BO.ClassDefinition
             }
 
             // If one is null, but not both, return false.
-            if (((object)a == null) || ((object)b == null))
+            if (((object) a == null) || ((object) b == null))
             {
                 return false;
             }
@@ -274,10 +402,9 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>a new collection that is a shallow copy of this collection</returns>
         public IUIGridColumn Clone()
         {
-            UIGridColumn newUIForm = new UIGridColumn(this.Heading,
-                this.PropertyName,this.GridControlTypeName,this.GridControlAssemblyName ,
-                this.Editable,this.Width,this.Alignment, this.Parameters);
-            return newUIForm;
+            return new UIGridColumn(this.Heading,
+                                    this.PropertyName, this.GridControlTypeName, this.GridControlAssemblyName,
+                                    this.Editable, this.Width, this.Alignment, this.Parameters);
         }
     }
 }

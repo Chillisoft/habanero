@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -133,7 +133,7 @@ namespace Habanero.BO
         /// <param name="boProp">The BOProp to add</param>
         public virtual void Add(IBOProp boProp)
         {
-            ArgumentValidationHelper.CheckArgumentNotNull(boProp, "bOProp");
+            ArgumentValidationHelper.CheckArgumentNotNull(boProp, "boProp");
             if (_props.ContainsKey(boProp.PropertyName))
             {
                 throw new InvalidPropertyException(String.Format(
@@ -296,11 +296,11 @@ namespace Habanero.BO
                 foreach (KeyValuePair<string, IBOProp> prop in _props) {
                     props.Add(prop.Value);
                 }
-                props.Sort(delegate(IBOProp x, IBOProp y) { return String.Compare(x.PropertyName, y.PropertyName); });
+                props.Sort((x, y) => String.Compare(x.PropertyName, y.PropertyName));
                 return props;
             }
         }
-
+        
         /// <summary>
         /// Indicates whether any of the properties of this key are auto incrementing.
         /// </summary>

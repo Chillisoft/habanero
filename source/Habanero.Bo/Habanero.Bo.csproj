@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -45,6 +45,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -139,6 +141,7 @@
   <ItemGroup>
     <Compile Include="BOError.cs" />
     <Compile Include="BOHelper.cs" />
+    <Compile Include="BOPropMapperFactory.cs" />
     <Compile Include="BOPropCol.cs" />
     <Compile Include="BOPropertyMapper.cs" />
     <Compile Include="BOPropLookupList.cs" />
@@ -207,6 +210,7 @@
     </Compile>
     <Compile Include="NumberGenerator\NumberGenerator.cs" />
     <Compile Include="ObjectManager\BusinessObjectManager.cs" />
+    <Compile Include="ObjectManager\BusinessObjectManagerNull.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -249,6 +253,7 @@
     </Compile>
     <Compile Include="PropertyLink.cs" />
     <Compile Include="PropRuleDouble.cs" />
+    <Compile Include="PropRuleLong.cs" />
     <Compile Include="PropRuleSingle.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="ReadOnlyDataSetProvider.cs">
@@ -351,6 +356,7 @@
     <Compile Include="PropRuleString.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ReflectionPropertyMapper.cs" />
     <Compile Include="RelatedBusinessObjectCollection.cs" />
     <Compile Include="Relationship.cs">
       <SubType>Code</SubType>
@@ -453,6 +459,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

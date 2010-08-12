@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -71,11 +71,21 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        [ExpectedException(typeof (HabaneroArgumentException))]
         public void TestCreateRelationshipWithNonBOType()
         {
-            new SingleRelationshipDef
-                ("Relation1", typeof (String), mRelKeyDef, false, DeleteParentAction.Prevent);
+            //---------------Execute Test ----------------------
+            try
+            {
+                new SingleRelationshipDef
+                    ("Relation1", typeof (String), mRelKeyDef, false, DeleteParentAction.Prevent);
+
+                Assert.Fail("Expected to throw an HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                StringAssert.Contains("The 'relatedObjectClassType' argument is expected to be of type BusinessObject", ex.Message);
+            }
         }
 
         [Test]
@@ -230,10 +240,10 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
         }
 
-#pragma warning disable 168
-        [Test, ExpectedException(typeof(UnknownTypeNameException))]
+        [Test]
         public void TestWithUnknownRelatedType()
         {
+            //---------------Set up test pack-------------------
             DefClassFactory defClassFactory = new DefClassFactory();
             XmlRelationshipLoader loader = new XmlRelationshipLoader(new DtdLoader(), defClassFactory, "TestClass");
             IPropDefCol propDefs = defClassFactory.CreatePropDefCol();
@@ -251,7 +261,18 @@ namespace Habanero.Test.BO.ClassDefinition
 
 					</relationship>",
                                       propDefs);
-            Type classType = relDef.RelatedObjectClassType;
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                Type classType = relDef.RelatedObjectClassType;
+                Assert.Fail("Expected to throw an UnknownTypeNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (UnknownTypeNameException ex)
+            {
+                StringAssert.Contains("Unable to load the related object type while attempting to load a relationship definition", ex.Message);
+            }
         }
 
         [Ignore("Need to write this test")]
@@ -276,7 +297,6 @@ namespace Habanero.Test.BO.ClassDefinition
 					</relationship>",
                                       propDefs);
             Type classType = relDef.RelatedObjectClassType;
-#pragma warning restore 168
         }
 
         [Test]

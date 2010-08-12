@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -129,29 +130,18 @@ namespace Habanero.Base
         /// <summary>
         /// The type of the business object that this class definition is for.
         /// </summary>
-        Type ClassType
-        {
-            get;
-            set;
-        }
+        Type ClassType { get; set; }
 
         /// <summary>
         /// The collection of property definitions
         /// </summary>
-        IPropDefCol PropDefcol
-        {
-            get;
-            set;
-        }
+        IPropDefCol PropDefcol { get; set; }
 
         /// <summary>
         /// The collection of property definitions for this
         /// class and any properties inherited from parent classes
         /// </summary>
-        IPropDefCol PropDefColIncludingInheritance
-        {
-            get;
-        }
+        IPropDefCol PropDefColIncludingInheritance { get; }
 
         /// <summary>
         /// The name of the assembly for the class definition
@@ -249,8 +239,12 @@ namespace Habanero.Base
 
         ///<summary>
         /// Gets the type of the specified property for this classDef.
-        /// The specified property can also have a format like the custom properties for a UiGridColumn or UiFormField def.
-        /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name
+        /// The specified property can also have a 
+        /// format like the custom properties for a UiGridColumn or UiFormField def.
+        /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name.
+        /// The PropType can also be determined in cases where the
+        /// property name is a reflective prop i.e. there is no
+        /// PropDef associated with it.
         ///</summary>
         ///<param name="propertyName">The property to get the type for.</param>
         ///<returns>The type of the specified property</returns>
@@ -278,5 +272,15 @@ namespace Habanero.Base
         /// <returns>Returns true if so, or false if there is no
         /// super class or another type of inheritance is being used</returns>
         bool IsUsingClassTableInheritance();
+
+        /// <summary>
+        /// Searches the relationship definition collection and returns 
+        /// the relationship definition found under the
+        /// relationship with the name specified.
+        /// </summary>
+        /// <param name="relationshipName">The relationship name in question</param>
+        /// <returns>Returns the relationship definition if found, 
+        /// or null if not found</returns>
+        IRelationshipDef GetRelationship(string relationshipName);
     }
 }

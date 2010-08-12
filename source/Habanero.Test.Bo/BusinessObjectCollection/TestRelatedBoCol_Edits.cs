@@ -528,7 +528,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
         }
 
-        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
+        [Test]
         public void Test_Remove_Refresh()
         {
             //-----Create Test pack---------------------
@@ -540,10 +540,16 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
 
             //-----Run tests----------------------------
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
-
-            ////-----Test results-------------------------
-            AssertOneObjectInRemovedAndPersistedCollection(cpCol);
+            try
+            {
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
+                Assert.Fail("Expected to throw an HabaneroDeveloperException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("the object being refreshed is being edited", ex.Message);
+            }
         }
 
 
@@ -889,7 +895,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsTrue(_addedEventFired);
         }
 
-        [Test, ExpectedException(typeof (HabaneroDeveloperException))]
+        [Test]
         public void Test_MarkForDeleteBO_Refresh()
         {
             //---------------Set up test pack-------------------
@@ -901,7 +907,16 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             AssertOnePersisted_OneMarkForDelete(cpCol);
 
             //---------------Execute Test ----------------------
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
+            try
+            {
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
+                Assert.Fail("Expected to throw an HabaneroDeveloperException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("the object being refreshed is being edited", ex.Message);
+            }
         }
 
         #endregion

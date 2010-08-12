@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.ComponentModel;
 using System.Data;
 using Habanero.BO.ClassDefinition;
 
@@ -32,8 +33,14 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="uiGrid">The UIGridDef</param>
         /// <returns>Returns a DataTable object</returns>
+        [Obsolete("Should rather use GetDataView This provides the more generic IBindingListView")]
         DataTable GetDataTable(IUIGrid uiGrid);
-
+        /// <summary>
+        /// Returns a data view for the UIGridDef provided
+        /// </summary>
+        /// <param name="uiGrid">The UIGridDef</param>
+        /// <returns>Returns a DataTable object</returns>
+        IBindingListView GetDataView(IUIGrid uiGrid);
         /// <summary>
         /// Finds an IBusinessObject given the ID.
         /// </summary>
@@ -46,6 +53,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="rowNum">The row number</param>
         /// <returns>Returns a business object</returns>
+        [Obsolete("This is no longer used use Find(Guid objectID) instead 6/7/2010")]
         IBusinessObject Find(int rowNum);
 
         /// <summary>
@@ -53,6 +61,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="row">The row related to the business object</param>
         /// <returns>Returns a business object</returns>
+        [Obsolete("This is no longer used use Find(Guid objectID) instead 6/7/2010")]
         IBusinessObject Find(DataRow row);
 
         /// <summary>

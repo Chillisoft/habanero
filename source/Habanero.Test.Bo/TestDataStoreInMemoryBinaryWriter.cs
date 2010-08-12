@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,7 +16,10 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
 using System.IO;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -70,6 +73,24 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_Write_WithDictionary()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(new Car());
+            Dictionary<Guid, IBusinessObject> businessObjects = dataStore.AllObjects;
+            MemoryStream stream = new MemoryStream();
+            DataStoreInMemoryBinaryWriter writer = new DataStoreInMemoryBinaryWriter(stream);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStore.Count);
+            Assert.AreEqual(0, stream.Length);
+            //---------------Execute Test ----------------------
+            writer.Write(businessObjects);
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(0, stream.Length);
+        }
+
+        [Test]
         public void Test_Read()
         {
             //---------------Set up test pack-------------------
@@ -80,7 +101,7 @@ namespace Habanero.Test.BO
             MemoryStream writeStream = new MemoryStream();
             DataStoreInMemoryBinaryWriter writer = new DataStoreInMemoryBinaryWriter(writeStream);
             writer.Write(savedDataStore);
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             DataStoreInMemory loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
             DataStoreInMemoryBinaryReader reader = new DataStoreInMemoryBinaryReader(writeStream);

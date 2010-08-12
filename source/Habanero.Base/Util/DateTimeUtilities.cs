@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -27,13 +27,17 @@ namespace Habanero.Util
     ///</summary>
     public static class DateTimeUtilities
     {
+        private const  int _DECEMBER = 12;
+        private const int _NOVEMBER = 11;
+        private const int _JANUARY = 11;
+
         /// <summary>
-        /// returns the last day of the month today
+        /// returns the last day of the current month (i.e. LastDayOfTheMonth(Today)
         /// </summary>
         /// <returns></returns>
         public static DateTime LastDayOfTheMonth()
         {
-            return LastDayOfTheMonth(new DateTime());
+            return LastDayOfTheMonth(DateTime.Today);
         }
 
         /// <summary>
@@ -44,7 +48,7 @@ namespace Habanero.Util
         public static DateTime LastDayOfTheMonth(DateTime dte)
         {
             int lastDayOfMonth = DateTime.DaysInMonth(dte.Year, dte.Month);
-            return new DateTime(dte.Year, dte.Month, lastDayOfMonth);
+            return new DateTime(dte.Year, dte.Month, lastDayOfMonth, 23, 59, 59, 999);
         }
 
         /// <summary>
@@ -261,6 +265,479 @@ namespace Habanero.Util
             }
             returnValue = valueToParse;
             return true;
+        }
+
+        /// <summary>
+        /// Determines whether is week day.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is week day] ; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsWeekDay(DateTime date)
+        {
+            return ((date.DayOfWeek != DayOfWeek.Saturday) && (date.DayOfWeek != DayOfWeek.Sunday));
+        }
+        /// <summary>
+        /// Return the <paramref name="date"/> if it is on the <paramref name="day"/> of the week.
+        /// Else returns the following day. This i used to iteratively walk through days untill you find the '
+        /// day the next day that is the day of the week.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        public static DateTime OnOrNextDayOfWeek(DateTime date, DayOfWeek day)
+        {
+            while (date.DayOfWeek != day)
+                date = date.AddDays(1);
+            return date;
+        }
+        /// <summary>
+        /// Returns unchanged if is business day
+        /// else subsequent Monday.
+        /// Does not take into account public holidays.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns><see cref="T:System.DateTime"/></returns>
+        public static DateTime OnOrNextBusinessDay(DateTime date)
+        {
+            DateTime d = date;
+            switch (date.DayOfWeek)
+            {
+                case System.DayOfWeek.Sunday:
+                    d = date.AddDays(1);
+                    break;
+                case System.DayOfWeek.Saturday:
+                    d = date.AddDays(2);
+                    break;
+            }
+            return d;
+        }
+        /// <summary>
+        /// Return the <paramref name="date"/> if it is on the <paramref name="day"/> of the week.
+        /// Else returns the previous day. This i used to iteratively walk through days untill you find
+        /// the previous day that is the day of the week.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        public static DateTime OnOrPreviousDayOfWeek(DateTime date, DayOfWeek day)
+        {
+            while (date.DayOfWeek != day)
+                date = date.AddDays(-1);
+            return date;
+        }
+        /// <summary>
+        /// Returns unchanged if is business day
+        /// else previous  Friday
+        /// Does not take into account public holidays.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns></returns>
+        public static DateTime OnOrPreviousBusinessDay(DateTime date)
+        {
+            DateTime d = date;
+            switch (date.DayOfWeek)
+            {
+                case System.DayOfWeek.Sunday:
+                    d = date.AddDays(-2);
+                    break;
+                case System.DayOfWeek.Saturday:
+                    d = date.AddDays(-1);
+                    break;
+            }
+            return d;
+        }
+        /// <summary>
+        /// Next Business Day (not Sat or Sun)
+        /// Does not take into account public holidays.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns><see cref="T:System.DateTime"/></returns>
+        public static DateTime NextBusinessDay(DateTime date)
+        {
+            DateTime d = date;
+            switch (date.DayOfWeek)
+            {
+                case System.DayOfWeek.Sunday:
+                case System.DayOfWeek.Monday:
+                case System.DayOfWeek.Tuesday:
+                case System.DayOfWeek.Wednesday:
+                case System.DayOfWeek.Thursday:
+                    d = date.AddDays(1);
+                    break;
+                case System.DayOfWeek.Friday:
+                    d = date.AddDays(3);
+                    break;
+                case System.DayOfWeek.Saturday:
+                    d = date.AddDays(2);
+                    break;
+            }
+            return d;
+        }
+        /// <summary>
+        /// Previous Trade Day (not Sat or Sun)
+        /// Does not take into account public holidays.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns><see cref="T:System.DateTime"/></returns>
+        public static DateTime PreviousBusinessDay(DateTime date)
+        {
+            DateTime d = date;
+            switch (date.DayOfWeek)
+            {
+                case System.DayOfWeek.Sunday:
+                    d = date.AddDays(-2);
+                    break;
+                case System.DayOfWeek.Monday:
+                    d = date.AddDays(-3);
+                    break;
+                case System.DayOfWeek.Tuesday:
+                case System.DayOfWeek.Wednesday:
+                case System.DayOfWeek.Thursday:
+                case System.DayOfWeek.Friday:
+                case System.DayOfWeek.Saturday:
+                    d = date.AddDays(-1);
+                    break;
+            }
+            return d;
+        }
+
+
+        /// <summary>
+        /// Converts the given date to the start of the hour
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime HourStart(DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, date.Hour, 0, 0, 0);
+        }
+        /// <summary>
+        /// Converts the given date to the start of the hour
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime HourEnd(DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, date.Hour, 59, 59, 999);
+        }
+        /// <summary>
+        /// Converts the given date to the previous midnight,
+        /// factoring in the midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime DayStart(DateTime date)
+        {
+            return DayStart(date, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// Converts the given date to the previous midnight,
+        /// factoring in the midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <param name="dayStartOffSet">You can offset the Date Start (typically used when you wan to report on date starting at 8:00 am)</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime DayStart(DateTime date, TimeSpan dayStartOffSet)
+        {
+            DateTime midnight = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, 0);
+            DateTime newMidnight = midnight.Add(dayStartOffSet);
+            if (newMidnight > date) return newMidnight.AddDays(-1);
+            double dif = (date - newMidnight).TotalHours;
+            return dif > 24 ? newMidnight.AddDays(1) : newMidnight;
+        }
+        /// <summary>
+        /// Converts the given date to the previous midnight,
+        /// factoring in the midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime DayEnd(DateTime date)
+        {
+            return DayEnd(date, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// Converts the given date to the previous midnight,
+        /// factoring in the midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <param name="dayStartOffSet">You can offset the Date Start (typically used when you wan to report on date starting at 8:00 am)</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime DayEnd(DateTime date, TimeSpan dayStartOffSet)
+        {
+            DateTime dayEnd = DayStart(date, dayStartOffSet).AddDays(1).AddMilliseconds(-1);
+            return dayEnd;
+        }
+
+        /// <summary>
+        /// Converts the given date to the previous Monday midnight,
+        /// factoring in the midnight offset and week start
+        /// </summary>
+        /// <param name="currentDateTime">The date to convert</param>
+        /// <param name="weekStartOffSet">The off set period</param>
+        /// <returns>Returns the converted date</returns>
+        public static DateTime WeekStart(DateTime currentDateTime, TimeSpan weekStartOffSet)
+        {
+            DateTime sunday = DayStart( OnOrPreviousDayOfWeek(currentDateTime, DayOfWeek.Sunday));
+            var weekStart = sunday.Add(weekStartOffSet);
+            if (weekStart > currentDateTime)
+            {
+                return weekStart.AddDays(-7);
+            }
+            return weekStart;
+        }
+
+        ///<summary>
+        /// The FirstDay of the currentDateTime
+        ///</summary>
+        ///<param name="currentDateTime"></param>
+        ///<returns></returns>
+        public static DateTime MonthStart(DateTime currentDateTime)
+        {
+            return MonthStart(currentDateTime, new TimeSpan(0));
+        }
+
+        ///<summary>
+        /// The FirstDay of the currentDateTime taking into a
+        ///</summary>
+        ///<param name="currentDateTime"></param>
+        ///<param name="monthStartOffSet"></param>
+        ///<returns></returns>
+        public static DateTime MonthStart(DateTime currentDateTime, TimeSpan monthStartOffSet)
+        {
+            var firstDayOfCurrentMonth = FirstDayOfMonth(currentDateTime).Add(monthStartOffSet);
+            var lastDayOfCurrentMonth = LastDayOfTheMonth(currentDateTime).Add(monthStartOffSet);
+            if (currentDateTime < firstDayOfCurrentMonth)
+            {
+                return firstDayOfCurrentMonth.AddMonths(-1);
+            }
+            if (currentDateTime > lastDayOfCurrentMonth)
+            {
+                DateTime newMonthStart = currentDateTime.Month == _DECEMBER 
+                         ? new DateTime(currentDateTime.Year + 1, 1, 1) 
+                         : new DateTime(currentDateTime.Year, currentDateTime.Month + 1, 1);
+                return newMonthStart.Add(monthStartOffSet);
+            }
+            return firstDayOfCurrentMonth;
+        }
+
+        ///<summary>
+        /// The WeekStart for the currentDateTime where the WeekStart is assumed to be Sunday
+        ///</summary>
+        ///<param name="currentDateTime"></param>
+        ///<returns></returns>
+        public static DateTime WeekStart(DateTime currentDateTime)
+        {
+            return WeekStart(currentDateTime, new TimeSpan(0));
+        }
+        /// <summary>
+        /// The WeekEnd For the currentDateTime where the WeekEnd is assumed to be Saturday
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
+        public static DateTime WeekEnd(DateTime currentDateTime)
+        {
+            return WeekEnd(currentDateTime, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// The WeekEnd For the currentDateTime
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <param name="startOfWeekOffSet">The OffSet</param>
+        /// <returns></returns>
+        public static DateTime WeekEnd(DateTime currentDateTime, TimeSpan startOfWeekOffSet)
+        {
+            var weekStart = WeekStart(currentDateTime, startOfWeekOffSet);
+            return weekStart.AddDays(7).AddMilliseconds(-1);
+        }
+        /// <summary>
+        /// The MonthEnd For the currentDateTime where the MonthEnd is assumed to be Saturday
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
+        public static DateTime MonthEnd(DateTime currentDateTime)
+        {
+            return MonthEnd(currentDateTime, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// The MonthEnd For the currentDateTime
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <param name="startOfMonthOffSet">The OffSet</param>
+        /// <returns></returns>
+        public static DateTime MonthEnd(DateTime currentDateTime, TimeSpan startOfMonthOffSet)
+        {
+            var firstDayOfCurrentMonth = FirstDayOfMonth(currentDateTime).Add(startOfMonthOffSet);
+            var lastDayOfCurrentMonth = LastDayOfTheMonth(currentDateTime).Add(startOfMonthOffSet);
+            if (currentDateTime < firstDayOfCurrentMonth)
+            {
+                var currentMonth = currentDateTime.Month;
+                DateTime newMonthEnd;
+                switch (currentMonth)
+                {
+                    default:
+                        newMonthEnd = new DateTime(currentDateTime.Year, currentMonth, 1);
+                        break;
+                }
+                return newMonthEnd.AddMilliseconds(-1).Add(startOfMonthOffSet);
+            }
+            if (currentDateTime > lastDayOfCurrentMonth)
+            {
+                var currentMonth = currentDateTime.Month;
+                DateTime newMonthEnd;
+                switch (currentMonth)
+                {
+                    case _DECEMBER:
+                        newMonthEnd = new DateTime(currentDateTime.Year + 1, 2, 1);
+                        break;
+                    case _NOVEMBER:
+                        newMonthEnd = new DateTime(currentDateTime.Year + 1, 1, 1);
+                        break;
+                    default:
+                        newMonthEnd = new DateTime(currentDateTime.Year, currentMonth + 2, 1);
+                        break;
+                }
+                return newMonthEnd.AddMilliseconds(-1).Add(startOfMonthOffSet);
+            }
+            return lastDayOfCurrentMonth;
+        }
+/*
+
+
+        
+
+        /// <summary>
+        /// Converts the given date to the first day of the month,
+        /// factoring in the month start and midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        private DateTime MonthStart(DateTime date)
+        {
+            DateTime first = new DateTime(date.Year, date.Month, 1);
+            first = first.AddDays(MonthStartOffset).Add(MidnightOffset);
+            if (first > date)
+            {
+                first = first.AddMonths(-1);
+            }
+            if (MidnightOffset < new TimeSpan(0, 0, 0, 0, 0))
+            {
+                DateTime closer = new DateTime(date.Year, date.Month + 1, 1);
+                closer = closer.AddDays(MonthStartOffset).Add(MidnightOffset);
+                if (closer < date) return closer;
+            }
+            return first;
+        }
+
+        /// <summary>
+        /// Converts the given date to the first day of the year,
+        /// factoring in the year start, month start and midnight offset
+        /// </summary>
+        /// <param name="date">The date to convert</param>
+        /// <returns>Returns the converted date</returns>
+        private DateTime YearStart(DateTime date)
+        {
+            DateTime first = new DateTime(date.Year, 1, 1);
+            first = first.AddMonths(YearStartOffset).AddDays(MonthStartOffset).Add(MidnightOffset);
+            if (first > date)
+            {
+                first = first.AddYears(-1);
+            }
+            if (MidnightOffset < new TimeSpan(0, 0, 0, 0, 0))
+            {
+                DateTime closer = new DateTime(date.Year + 1, 1, 1);
+                closer = closer.AddMonths(YearStartOffset).AddDays(MonthStartOffset).Add(MidnightOffset);
+                if (closer < date) return closer;
+            }
+            return first;
+        }*/
+
+        ///<summary>
+        /// The Very first second of this year.
+        ///</summary>
+        ///<param name="currentDateTime"></param>
+        ///<returns></returns>
+        public static DateTime YearStart(DateTime currentDateTime)
+        {
+            return YearStart(currentDateTime, 0);
+        }
+
+        ///<summary>
+        /// The very first second of this year plus the offset. This is typically used 
+        /// for Financial Year type calculations e.g. when you are 
+        /// looking for a year starting on 01 March use a noOfMonthsOffSet = 2.
+        ///</summary>
+        ///<param name="currentDateTime">the currentDate from which the YearStart should be calculated</param>
+        ///<param name="noOfMonthsOffSet">The noOfMonthsOffSet used to </param>
+        ///<returns></returns>
+        public static DateTime YearStart(DateTime currentDateTime, int noOfMonthsOffSet)
+        {
+            return YearStart(currentDateTime, noOfMonthsOffSet, new TimeSpan(0));
+        }
+
+        ///<summary>
+        /// The very first second of this year plus the month offset plus the Time offset. This is typically used 
+        /// for Financial Year type calculations e.g. when you are 
+        /// looking for a year starting on 01 March use a noOfMonthsOffSet = 2.
+        ///</summary>
+        ///<param name="currentDateTime">the currentDate from which the YearStart should be calculated</param>
+        ///<param name="noOfMonthsOffSet">The noOfMonthsOffSet used to </param>
+        ///<param name="monthStartOffSet"></param>
+        ///<returns></returns>
+        public static DateTime YearStart(DateTime currentDateTime, int noOfMonthsOffSet, TimeSpan monthStartOffSet)
+        {
+            var yearStartWithoutOffSet = new DateTime(currentDateTime.Year, 1, 1);
+            var yearStartWithOffSet = yearStartWithoutOffSet.AddMonths(noOfMonthsOffSet).Add(monthStartOffSet);
+            var yearEndWithoutOFfset = new DateTime(currentDateTime.Year, 12, 31);
+            var yearEndWithOffSet = yearEndWithoutOFfset.AddMonths(noOfMonthsOffSet).Add(monthStartOffSet);
+            if (currentDateTime < yearStartWithOffSet)
+            {
+                return yearStartWithOffSet.AddYears(-1);
+            }
+            if (currentDateTime > yearEndWithOffSet)
+            {
+                return yearStartWithOffSet.AddYears(1);
+            }
+            return yearStartWithOffSet;
+        }
+
+        /// <summary>
+        /// The YearEnd For the currentDateTime 
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
+        public static DateTime YearEnd(DateTime currentDateTime)
+        {
+            return YearEnd(currentDateTime, 0);
+        }
+
+        /// <summary>
+        /// The YearEnd For the currentDateTime
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <param name="noOfMonthsOffSet">The OffSet</param>
+        /// <returns></returns>
+        public static DateTime YearEnd(DateTime currentDateTime, int noOfMonthsOffSet)
+        {
+            return YearEnd(currentDateTime, noOfMonthsOffSet, new TimeSpan(0));
+        }
+
+        /// <summary>
+        /// The YearEnd For the currentDateTime
+        /// </summary>
+        /// <param name="currentDateTime"></param>
+        /// <param name="noOfMonthsOffSet">The number of moths that are OffSet i.e. offset = 3 will result in year start 1 Apr and Year End 31 Mar</param>
+        /// <param name="monthStartOffSet"></param>
+        /// <returns></returns>
+        public static DateTime YearEnd(DateTime currentDateTime, int noOfMonthsOffSet, TimeSpan monthStartOffSet)
+        {
+            DateTime lastDayOfYear = YearStart(currentDateTime, noOfMonthsOffSet, monthStartOffSet).AddYears(1).AddMilliseconds(-1);
+            return lastDayOfYear;
         }
     }
 }

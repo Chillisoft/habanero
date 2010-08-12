@@ -1,0 +1,528 @@
+Habanero Change Log
+
+ Habanero v2.4 - 10 May 2010
+
+Major Changes
+- Split out the UI projects so that they can be versioned separately. These can now be found in the Habanero project called Habanero Faces
+- Huge improvements in performance (and memory usage) when loading large collections (speed up of 90% for collections of size 30000, even more for bigger collections, more than 40% for collections of 10000).
+
+Enhancements
+- Changed BusinessObject HasErrors and HasWarnings to use IsValid(bo) instead of the obsolete IsValid() for IBORules.
+- IsCompulsory on UIFormField now returns true if the field is a relationship and that relationship is compulsory (i.e. any prop in the relationship is compulsory).
+- Created BusinessObjectManagerNull. The concept of BusinessObjectManager doesn't apply in an environment like ASP.NET which is stateless. You can set this by setting the BusinessObjectManager property on the BORegistry.
+- Added Method to IBusinessObjectRule IsValid(IBusinessObject) and made the previous method IsValid() obsolete. This is so that rule objects can be shared between objects - the object will be passed in to the IsValid method instead.
+- Added a new Standard BusinessObjectRule InterPropRule. This can be used when setting a rule where one property value is valid depending on the value of another (eg if the EndDate must be greater than the StartDate)
+
+Minor Changes
+- Moved to nunit 2.5.3
+- IPropDef. Created a Set For PropertyType in IPropDef. IRelationshipDef.Moved IsCompulsory and OwningClassDef to IRelationshipDef.   IsCompulsory determines whether the relationship is compulsory based on a Flag set (SetAsCompulsory) or via checking if all the RelPropDef.OwningPropDef are Compulsory for the RelKeyDef.
+- IRelPropDef: Moved OwnerPropDef Get to Interface.
+- Added ClassName to PropDef.
+- Added Error Handling to UIForm, UIFormColumn, UIFormTab and XmlUIFormFieldLoader.
+- Implemented ExtendedTextBoxMapper.cs and ExtendedTextBoxWin.cs in Habanero.Bo/ClassDefinition/UIForm.cs
+- Added a ClassName property to IUIDef and UIDef. Code was previously using ClassDef.ClassName.
+- Added ClassName property to UIDefCol. Code was previously using ClassDef.ClassName.
+- Minor cosmetic changes to BusinessObject.
+- Changed the field dtd so that mapperAssembly is a CDATA to allow for a blank setting, which gets translated to Habanero.Faces.Base.  
+- Improved the Error Message where a Criteria is constructed with a null property name.
+- Added a GetRelationship method to IClassDef. 
+- Added PropDef ClassName and ClassDef properties.
+- Added the ability for some of the proprules' parameters to accept empty values. Changed the field's dtd - assembly and type changed to CDATA from NMTOKEN to allow empty strings.
+- Added some helper methods to DateTimeUtilities (IsWeekDay, OnOrNextDayOfWeek, OnOrNextBusinessDay, OnOrPreviousBusinessDay, NextBusinessDay, PreviousBusinessDay)
+- Made SerialisationUtilities static since all its methods are static and all other utility classes are static.
+- Changed some static methods in TypeUtilities and Utilities to allow them to be used as extension methods. They can now be used as extension methods or Utility methods.
+- Changed InitialiseProp on IBOProp to return a bool.  This indicates whether the value of the property was updated in the method. 
+- Changed the calling of the AfterLoad method on BusinessObjects: it is now called when an object is loaded for the first time, or when in the process of loading an update to any of its properties occurs. Before it was called after every refresh, even if nothing in the object changed during the refresh.
+- Changed the firing of the Updated event on BusinessObjects. It is now only called when an already previously loaded object is refreshed and in the process gets updated values for its props.
+- Changed a method signature on Broker to match the one on BusinessObjectLoader (OrderCriteria to IOrderCriteria)
+- Changed PropRuleDate to assume an empty string in min means DateTime.MinValue and in max means DateTime.MaxValue
+- Made a small change to the TypeLoader to make it simpler to specify types (you can leave off the namespace of the type if it matches the assembly name)
+- Changed IPropDefCol to IEnumerable<IPropDef>
+- Modified IRelKeyDef to IEnumerable<IRelPropDef>
+- Changed StringUtilities to include Pluralize and Singularize
+- Changed the logic of GetAsGuid to return a Guid if there is one. Note: this is mainly (only, really) used by the DataStoreInMemory, so it should always use the Guids.
+- Added UIDef method to IUIGrid interface.
+- Modified ReflectionUtilities to include ExecuteMethod return values
+- Added a number of new methods to StringUtilities (Camelize, Humanize, Classify, PascalCaseTableName, IsManyPascalWords, RemovePrefix, ToLowerFirstLetter). Improved Singularize.
+- Made KeepValuePrivate (on PropDef and UIFormField) public
+- Added support for "Yesterday" and for "Tomorrow" for default values on date fields
+- Added a set to the AutoIncrementing property on IPropDef
+
+Bug Fixes
+- Fixed Bug in ClassDef.GetPropertyType where the property type was being returned as object when the PropDef was a LookupList. This was causing any orderBy for a LookupList being returned incorrectly. This is only ever relevant where a lookup is being done for an int or a string Property e.g. A SimpleLookupList. And you want to sort by the underlying property value. To facilitate this it was required that changes where made to DataSetProvider and GridInitialiser so as to convert LookupList props to type object.
+- Fixed bugs found with the GetPropertyType, GetPropDef and GetLookupList methods on the ClassDef. These where not all handling, Reflective, Related and inherited props the same.
+- Fixed a bug in PropRuleDate where the MaxValue could result in trying to generate a value that is out of range.
+- Corrected a bug introduced in 2.3.2 where the PersistedBusinessObjects in a collection was not being set correctly after refreshing from the database (where items had been deleted from the db).
+- Made SingleRelationship not return IsDirty if the child object has been set and then removed. 
+- Corrected a bug in 2.3.2 that occurred when you saved an object that was part of a collection and then loaded the collection for the first time - the load would add the loaded object (which was the same object as the one you created and saved) into the PersistedBusinessObjects collection again.
+- Fixed a bug in the loading code where a certain criteria string would be converted to an incorrect Criteria tree
+- Fixed issue with TransactionCommitterMultiSource when there are no objects in the Transaction.
+- Modified the ClassDef constructor to set up the OwnerClassDef on its child relationships
+- Changed the DataStoreInMemoryXmlReader to load the BOSequenceNumber classdef if it's not loaded because it's a Habanero BO class used that the user is not expected to load.
+- Changed SuperClassDef.cs to use the SuperClassClassDef.ClassName instead of ClassNameFull this was so that ClassName is the same whether set using AssemblyName ClassName in constructor or constructing using the superClassClassDef constructor
+- Modified the ReflectedPropertyComparer to throw an appropriate error if constructed with null propName or an invalid propName.
+- Add Validation to PropDefCol.Contains so that propname is null no error is thrown
+- Fixed Minor bug in LookupList setting to Null was throwing an error.
+- BusinessObjectLookupList: Fixed Bug where error was being thrown if BusinessObjects.ToString was returning null.
+- XmlClassLoader: Fixed Bug where the UIDef.ClassDef was not being set.
+- Fixed a bug in PropRuleDate where a rule with a max value of Today would allow a maxvalue of tomorrow at 00:00.
+- Changed the MinValue to handle the blank "min" parameter. Changed the MaxValue to handle the blank "max" parameter
+
+ Habanero v2.3.2 - 26 March 2010	 
+	 
+Major Changes
+- Added Support for MSAccess2007 to Habanero
+- Dramatically improved the performance of loading collections. 
+- Add the IN operator to loading BusinessObjectCollections.
+- Created a DataAccessorMultiSource, which can switch between DataAccessors based on the type loaded or saved. For this I also created a BusinessObjectLoaderMultiSource and a TransactionCommitterMultiSource. 
+- Added a TransactionCommitterRemote which can be used to create a 3-tier deployment architecture where the TransactionCommitterRemote operates as a proxy for the real transaction committer on another physical machine.
+
+Enhancements
+- Added the ability to set virtual properties using the EditableDataSetProvider. (i.e editable grid can edit C# properties, not just BOProps)
+- Added auto increment field support for In-Memory data store ( fixed issue #276 ).
+- Added a new HabaneroAppConsoleInMemory which sets up a console app with an in-memory data store.
+- Added a new parameter for the DataGridView: 'currencyFormat'. This can be used when defining a column in a UIGrid to set the format to display a double/decimal value.
+- The GridControls now use the GlobalUIRegistry.DateDisplaySettings.GridDateFormat to display all dates that do not have formats defined by the "dateFormat" parameter
+- Added ShowAsCompulsory Property to UIFormField Definition.  This allows you to override the properties underlying Compulsory value with a derived Value for a particular BusinessObject.
+
+Minor Changes
+- Changed BusinessObject.Save to return the BusinessObject
+- Created a ClassDefValidator class that does the PostLoadChecks. Moved the tests from TestXmlClassDefsLoader. Updated the HabaneroApp classes to load and validate the classdefs using the new classdefvalidator.
+- Changed the creation preference of ControlMappers via reflection to constructors with an IControlFactory argument.
+- Added a ToArray method to the Utilities class.
+- Updated Rhino.Mocks to the latest version.
+- Added CollectionRefreshedEvent on BusinessObjectCollection
+- Improved the FilterDef and FilterPropertyDef constructors.
+- Added BOHelper to aid testing BO Rules linked to a BO.
+- Added a Remove method to ClassDefCol that takes a className and assemblyName.
+- Added a typeParameter property to ISuperClassDef, and to the loader that loads it from xml.
+- Changed BusinessObjectCollection to implement IList instead of Inherit from List this is due to the strange behaviour that you get when you try to use a BusinessObjectCollection as a List and you run into issues that the incorrect Add and Remove are being used.
+- Changed the ClassDefHelper.GetSuperClassClassDef to take into account the type parameter of the ISuperClassDef
+- Add RemoveAll to BusinessObjectCollection
+- Changed the default of 'now' and 'today' of a propdef to resolve the value on creation instead of on persistance. Moved DateTimeNow into its own class. DateTimeNow and DateTimeToday now have TypeConverter classes.
+- Added a ConvertTo method to TypeUtilities.
+- Added the ToArray method to BusinessObjectCollection.
+- Extracted an IOrderCriteria from OrderCriteria. Moved OrderCriteria.Field to a class called OrderCriteriaField and extracted an interface called IOrderCriteriaField
+- Changed the default min button size because our resolutions are getting bigger.
+- Increased the visibility of some classes.
+- Changed the PrimaryKeyDef property to return null if it is null (it was returning the super class' PrimaryKeyDef).  Changed the construction behaviour to use the super class' PrimaryKeyDef if its one is null.  
+- Set the ShowIcon property on the _createdForm to false. This prevents the visual studio icon from appearing on the top right of forms created using the FormControlCreator.
+- Added an Property to expose a DataAccessorInMemory's DataStoreInMemory.
+- Removed the JpgMetaData and test class - it's a very ancillary class and shouldn't be part of core Habanero.
+- Added HasSetting to the ISettings interface.
+- Added PreserveSelectedItem to ComboBoxCollectionSelector.  Changed RelationshipComboBoxMapper to preserve the selected item.
+- Modified IFilterControl AddBooleanFilterComboBox to use a default value.
+- Removed DatabaseUtil because it is no longer needed.
+- Added MoveBack and MoveOn Wizard Step Properties to cater for functionality on those actions and wrote tests for the wizard controller.
+- Added a TestDataAccessorDB class, and added the ability to give a DataAccessorDB the connection you want it to use instead of it just using the CurrentConnection.
+- Removed some references to DatabaseConnection.CurrentConnection, replacing them with parameters in the constructor to the object (injecting).
+- Made the CollapsibleMenuVWG and related classes enumerable.  
+- Added a CoverageExcludeAttribute for excluding pieces of code from test coverage stats (for untestable code eg network accessing or message boxes popping up)
+- Changes to support loading of xml into domain model in FireStarter Modeller
+- Changed to use IRelationshipDef and IRelKeyDef etc to support loading into the domain model using the xml loaders.
+
+Bug Fixes
+- Added Error handling with DataStoreInMemoryXmlReader which allows the business object to be loaded from an XML store when the business object has had a property removed since the data was written to.
+- Fixed a bug with loading a classdef where two classes using single table inheritance with the same base class are related on one's primary key. Had to take out a check at load time because the superclass may not have been loaded yet, but there is a check in the post-load checks that validates the relationship correctly.
+- Fixed bug in DataStoreInMemory where the Inherited children where not being returned when Refreshing a BusinessObjectCollection.
+- Wrote tests and fixed issue with removing events on the BusinessObjectCollection that have not been added.
+- Fixed a small bug in EditableDataSetProvider when a related property (eg MyOwner.CarID) did not have a MyOwner set up.  Just added a check for a null property and skipped the assignment of the value in the grid to the property.  This prevents an ugly "object reference not set" error, but it also means the object is not set. Fortunately this is picked up in the error provider so you still get notified of a problem.
+- Fixed some code in BusinessObjectLoaderBase to avoid the collection was modified exception.
+- Fixed errors in the DataStoreInMemoryXmlReader where loaded object were New and Dirty.
+- Fixed some methods that were still not implemented for BOCol.
+- Fixed MultiSelector s.t. uses IList instead of List
+- Fixed Bugs in the CollectionComboBoxMapper.
+- Fixed some bugs in PanelBuilder and DefaultBOEditorForm.
+- Fixed the sizing of the panels produced by the PanelBuilder.
+- Fixed Minor Bug in HasWarnings
+- Fixed Bug in ReadOnlyGridControl Relating to setting AllowUsersToAddBO, AllowUsersToDeleteBO and AllowUsersToEditBO should hide/show relevant buttons.
+- Fixed bug in Reflection Utilities when using SetPropertyValue with an interface type property.
+- Fixed bug in EditableDataSetProvider with Virtual Property's default values.
+- Fixed Bug where setting ReadOnlyGridControl AllowUsersToEditBO did not set DoubleClickEditsBusinessObject.
+- Fixed Bug where the AllowUsersToAddBO is being set to true when the Collection is set even if it is false after.
+- Fixed Grid Initialiser s.t. uses Format correctly for Virtual Props.
+- Fixed ClassDef GetPropertyType s.t. it returns the Correct type for Virtual Props.
+- Fixed Bug where the PropertyType for a ReflectiveProperty that is Nullable did not return the underlying Type
+- Implemented custom SqlFormatter for Access so that it handles boolean values correctly.
+- Fixed Minor bug in CollectionComboBoxMapper where OwningBoPropertyName of certain datatypes would not find item.
+- Made the DefaultBOEditorFormVWG use the BORegistry.DataAccessor to create its ITransactionCommitter instead of using a TransactionCommitterDB.
+- Fixed a minor bug with adding a null Business Object to the transaction committer
+
+
+ Habanero v2.3.1 - 10 September 2009
+
+HABANERO
+MAJOR CHANGES
+- Added ability to write the contents of a DataStoreInMemory to a stream using DataStoreInMemoryXmlWriter and DataStoreInMemoryXmlReader.
+- Added DataStoreInMemoryBinaryWriter and DataStoreInMemoryBinaryReader to write to a binary file.
+- Changed SQL Server IsolationLevel to ReadUncommitted.
+- Added code to set the Related Object on Relationship when the ID is set.
+- Moved files from the Util project into base. Removed the Util project.
+  Note: Any systems that use ByteString or LongText (these are custom property types supplied by Habanero) will need to change those properties to use the new assembly and namespace.
+   i.e.: The line:
+    <property name=""TestProp"" type=""LongText"" assembly=""Habanero.Util"" />
+   Should now read:
+    <property name=""TestProp"" type=""Habanero.Util.LongText"" assembly=""Habanero.Base"" />
+   And the line:
+    <property name=""TestProp"" type=""ByteString"" assembly=""Habanero.Util"" />
+   Should now read:
+    <property name=""TestProp"" type=""Habanero.Util.ByteString"" assembly=""Habanero.Base"" />
+- Added some visual tests to Column and Grid Layout Managers.
+- Improved layout manager performance by using SuspendLayout and ResumeLayout.
+- Removed all trace of FormGrids. These are replaced by the a new feature in forms that allows you to put a groupbox down and put whatever control you want inside it (such as a grid, with its mapper).
+
+MINOR CHANGES
+General
+- HabaneroApp's now default to inmemory database when app.config does not have the vendor set or when it is "inmemory". HabaneroAppMemoryWin/HabaneroAppMemoryVWG are now no longer needed.
+- Added new Result class which can be used to return operation success instead of using bool and "out string errors".
+- Created CrossThreadRunner in Habanero.Base(Util) for tests that require execution on the STA Thread.
+- Changed RethrowingExceptionNotifier to throw the original error.
+- Restructured the tests - moved tests from Habanero.Test.General to other places where they belonged more. Analysed the tests in general and deleted some that were duplicating tests done elsewhere.
+- Added better error handling to ReflectionUtilities.GetPropertyValue.
+- Changed GlobalRegistry.UIExceptionNotifier to return a RethrowingExceptionNotifier if none is set up.
+- Created a RecordingExceptionNotifier and a DelegatedExceptionNotifier
+- Moved Habanero Function delegates to Habanero.Base(Util).
+DB
+- Added a GetDataTable() Method to DatabaseConnection
+- Added AssemblyName, FullClassName, ConnectionStringFactoryAssemblyName and ConnectionStringFactoryClassName to IDatabaseConfig.
+- Extracted an IParameterNameGenerator interface.
+- Added a CreateParameterNameGenerator method to IDatabaseConnection, so ParameterNameGenerator doesn't need a IDbConnection any more.
+- Parametrised the ParameterNameGenerator constructor (with the prefixchar) and wrote a CreateParameterNameGenerator method for each DatabaseConnection type.
+- Extracted IConnectionStringFactory and IDatabaseConnectionFactory interfaces.
+DOMAIN MODEL
+- Created an xsd file to validate ClassDefs xml. Created a class to validate a classdefs xml against this schema.
+- Added TimeOut feature to the BusinessObjectLookupList.
+- Modified XmlLoader to allow a Discriminator on ClassTableInheritance, but this is still not supported in the BO.
+- Converted all ClassDef classes to implement interfaces which now exist in Habanero.Base.
+- Changed IDefClassFactory to return ClassDef objects by their interfaces so that it can be overridden with other implementing objects.
+- Added a BusinessObject property to the IBOProp interface.
+- Got rid of parameterless constructor on XmlLoader so that the IDefClassFactory always has to be set so that it can be injected.
+- Changed the Xml loading tests to allow for overriding the IDefClassFactory instantiation.
+UI
+- Added support for multiple levels of relationship mapping in the UI mappers (Created BORelationshipMapper and BOPropertyMapper).
+- Made ControlFactoryWin members virtual (so that they can be overridden)
+- Modified MultiSelector/IMultiSelector by adding access to the GroupBox around the AvailableOptionsListBox and SelectedOptionsListBox.
+- Added better error handling to ReadOnlyGridControls.
+- Added new CollectionComboBoxMapper.
+- Ceated an EnumComboBoxMapper so that Enum properties can be represented in the UI in a ComboBox.
+- Made changes to EditableDataSetProvider so that it can handle the setting of related properties.
+- Added standard error handling to Button click delegate for a button on the ButtonGroupControl.
+- Refactored code in the ControlMapper class so that the enabling of the control can be overridden.
+- Added FormBorderStyle and Hide() to IFormHabanero interface.
+- Created a MultiplePropStringTextBoxFilter, this allows adding a single filter control (only textbox at this point) for multiple propertys.
+- Created a StaticTextFilter for permanent filter criteria.
+- Centred DefaultBOEditorForm on the screen by default.
+- Renamed a couple of the DateRangeComboBox options to clear ambiguity - had reports from users about it not working correctly because he interpreted "This Month" to include all dates until the end of the month. Have renamed "This Month" to "Month to Date". Same for "This Year" and "This Week".
+
+BUG FIXES
+GENERAL
+- Fixed DelimitPascalCase in StringUtilities so groups of capitals are not separated ('IDNumber' now becomes 'ID Number' instead of 'I D Number').
+DOMAIN MODEL
+- Fixed bug in Habanero where a circular Delete Related was not being resolved.
+- Fixed a bug where the added event was fired twice if you call CreateBusinessObject on a MultipleRelationship that has reverse relationship set up both ways.
+- Fixed a bug in committing a single-to-single relationship that has DereferenceRelated and no related object.
+UI
+- Fixed bug in GridInitialiser where it would fail if the column was not a BOProp.
+- Fixed bug with ComboBoxWin with Binding to Datasource resulting in combobox.Items not being updated
+- Made small changes and bug fixes in the TreeView controls and the TreeViewControllers.
+- Fixed a bug in Panel Builder with the dateFormat attribute for a DateTimePickerMapper.
+- Fixed bug where DefaultBOEditorForm would not cancel the edit when the form was closed using the 'X' in the title bar.
+- Fixed bug in FormExceptionNotifier for VWG where an error in the startup and would not be shown because the VWG app had not started yet.
+- Fixed a bug in ComboBoxWin, where the Items collection would get out of sync.
+- Fixed bug in GridInitialiser where it would fail if the column was not a BOProp.
+- Fixed sizing issues in the OKCancelDialogFactory implementations.
+- Fixed the sizing and layout of the InputFormComboBox.
+
+FIRESTARTER
+- Fixed some versioning issues (Pascal Casing, Old version warning, etc).
+- Added Generate property to DefProperty and DefRelationship.
+- Added a quick link button to get to the reverse relationship.
+- Added timeout to BusinessObjectLookupList.
+- Code Generation: fixed error in valid value templates where min without max would use single parameter, which is interpreted as max.
+
+
+Habanero v2.3.0 - 12 June 2009
+
+
+HABANERO
+MAJOR CHANGES
+- Added XML serialisation for BusinessObjects
+- Completed dependency inversion so Habanero.DB now references Habanero.BO
+- Introduced a number of performance optimisations
+- Added timeout to multiple relationships to provide performance control
+
+MINOR CHANGES
+- Heavy improvement of editable grids regarding
+- Added CollapsiblePanel control
+- Added CollapsibleMenu control
+- Continued extraction of many BO classes to interfaces in Base
+- Delete() is now MarkForDelete()
+- Restore() is now CancelEdits()
+- Can now save the DataStoreInMemory
+- Firestarter now generates for Visual Studio 2008
+
+BUG FIXES
+- Several fixes to relating to different relationship types
+- Piles of other smaller bug fixes
+
+
+Habanero v2.2.0 - 18 March 2009
+
+
+HABANERO
+MAJOR CHANGES
+- Introduced 3 relationship types: Composition, Association, Aggregation
+- Added incremental loading for collections (for pagination)
+
+
+Habanero v2.1.2 - 29 December 2008
+
+
+HABANERO
+MAJOR CHANGES
+- Firestarter generates test classes for BusinessObjects
+
+MINOR CHANGES
+- Improvements to runtime tab page generation
+- Improvements to layout managers
+
+BUG FIXES
+- Several Firestarter fixes relating to code generation
+
+
+Habanero v2.1 - 10 December 2008
+
+
+HABANERO
+MAJOR CHANGES
+- Added form generation to Firestarter using common templates
+- Rewrote PanelFactory (form builder) as the new PanelBuilder
+- Created PanelInfo and FieldInfo to access controls in a generated form
+- Laid foundation for future Firestarter code generation with dynamic templates
+
+MINOR CHANGES
+- Introduced MenuItemCreator to support reflective menu construction
+- Improved scrolling behaviour for grid selections
+
+BUG FIXES
+- Fixed problem where BO was dirty since the props were not converted to correct type
+- Better handling for deleting new objects not in the database
+
+
+Habanero v2.0.1 - 16 October 2008
+
+
+HABANERO
+MAJOR CHANGES
+- Added IControlManager to develop UI with a manager pattern (builder creational pattern)
+- Added Serialization support for BusinessObject
+- Updated sample project to support WinForms and VWG in one application
+
+MINOR CHANGES
+- Added StaticDataEditor and TreeView for VWG
+- Added "Email" button to error message popups
+- Improved Firebird support, removed name delimiters
+
+BUG FIXES
+- Supplied default assembly names for VWG controls
+
+
+Habanero v2.0.0 - 15 September 2008
+
+
+HABANERO
+MAJOR CHANGES
+- Habanero.UI split into Win and VWG and rewritten
+- ControlFactory structure introduced to UI generation
+- Data layer separated from BO layer
+- In-memory database support added
+- BO loading rewritten
+- New Habanero Criteria and Query criteria trees
+- Added support for Firebird
+
+MINOR CHANGES
+- Replaced FormController
+- Replaced object manager
+- Restructured console layer
+- Combined grid, buttons and filter into one
+- Introduced BOColTabControl
+- Many more, too numerous to mention...
+
+
+Habanero v1.4.1 - 9 June 2008
+
+
+HABANERO
+MAJOR CHANGES
+- Entire framework source moved to free open source under LGPL
+- BusinessObjectCollection criteria supports cross-table querying and ordering by related properties
+- Added support for locking strategies and implementations of optimistic and pessimistic locking
+- Added new trigger feature for forms
+- Added wizard functionality
+
+MINOR CHANGES
+- Added better concurrency control
+- Added number generator with two strategies (with/without locking)
+- Added ITransactional and ITransactionDB interfaces for adding non business objects to a transaction
+- Added new structure for implementation of transaction strategies
+- Added transaction logging
+- Added new property ReadWriteRule options: WriteNew and WriteNotNew
+- Added 'not like' and 'not in' to supported operators for load criteria
+- Added support for 'Now' or 'Today' in Date criteria strings and property default values
+- Fixed problems with SingleTableInheritance
+- Fixed problems with handling of deletion in relationships
+
+
+FIRESTARTER (WITH HABANERO)
+MAJOR CHANGES
+- Executable released for free
+- Added fields to support different inheritance types
+- Added fields for DisplayName, KeepValuePrivate, Description and ToolTipText
+- Added fields to support sorting on BusinessObjectLookupList and Grids
+
+
+Habanero v1.1.3 - 8 January 2008
+
+
+HABANERO
+MAJOR CHANGES
+- Added support for several new inheritance formats/structures
+- Several improvements for ReadOnlyGrid and EditableGrid
+
+MINOR CHANGES
+- Added new GetBusinessObjectByID methods on BOLoader
+- Added new "length" attribute on string property definitions
+
+
+FIRESTARTER (WITH HABANERO)
+MINOR CHANGES
+- Project file now remembers connections and custom types
+
+
+Habanero v1.1.1 - 3 December 2007
+
+
+HABANERO
+MAJOR CHANGES
+- Added support for SQLite
+- Added DateRangeComboBox to simplify date range selection
+
+MINOR CHANGES
+- Added ObjectInitialiser support to ReadOnlyGridWithButtons
+- Improved support for multiple database switching at runtime
+- Restructured BeforeSave on BusinessObject
+- Renamed and restructured test packages to mirror the main packages
+- Added dialog utilities for easier file dialog usage
+
+BUG FIXES
+- Fixed CSVFileReader/Writer
+- Fixed two deconstructors
+
+
+FIRESTARTER (WITH HABANERO)
+MINOR CHANGES
+- Fixed bug in Oracle reverse generation
+- Corrected MS Access reverse generation
+- Enabled Sql Server recognition of non-dbo schemas
+- Fixed bug so that program settings are stored
+
+
+Habanero v1.1 - 6 November 2007
+
+
+HABANERO
+MAJOR CHANGES
+- Habanero Beta separated into Habanero Standard and Habanero Professional
+- Added support for PostgreSQL databases
+
+MINOR CHANGES
+- Added support for auto-incrementing integer primary keys
+
+BUG FIXES
+- Corrected wrong ordering of "limit" clause in MySQL statements
+
+
+FIRESTARTER (WITH HABANERO)
+MAJOR CHANGES
+- For reverse engineering from database, added support for Sql Server, Oracle and PostgreSQL
+
+MINOR CHANGES
+- UI control type determined automatically from data type
+- Corrected post-build script for generated code
+- Corrected ordering of generated projects so that root project becomes the startup project
+- Fully implemented connection string test
+- Fixed bug that removes underscores from class and property names
+- Fixed bug that prevents inherited properties from appearing in child drop-down options
+
+
+Habanero Beta v1.0.2b - 22 October 2007
+
+HABANERO
+MAJOR CHANGES
+- Added an interface for the generic BusinessObjectCollection called IBusinessObjectCollection.
+- Improved support for generic collections across several methods.
+- Added more Load overloads to BusinessObjectCollection and added LoadAll methods.
+- Added a facility to encrypt your config database password with the SetPrivateKey method.
+- Added a DateTimePickerNullableMapper which uses the DateTimePickerController to support null values.
+- Added support for deletion prevention or cascading deletes in multiple relationships.
+
+MINOR CHANGES
+- Added check for Empty String and DBNull in compulsory check
+- Changed Dtd to allow for a type of "Byte[]" to be passed through for the property type.
+- Changed some mock tests to use Rhino.Mocks instead of nmock.
+- Amended public access settings on some methods
+- Added GuidTryParse method to StringUtilities.
+- Made changes to ControlMapper to allow for use of reflected and/or related properties.
+- Made changes to ControlMapper to allow for a null BusinessObject reference.
+- Added "insert" and "add" methods to the ISqlStatementCollection interface.
+- Restructured the ITransaction interface.
+- Changed the persistence code in BusinessObject to use Transaction code.
+- Added the ITransactionCommitter interface.
+- Added a method to the RelationshipDef class to retrieve the ClassDef of the related class.
+- Added a BusinessObjectReferentialIntegrityException class.
+- Changed the IRelationshipCol interface to support IEnumerable and have a Contains method.
+- Gave MultipleRelationship a public constructor and virtual methods so it can be inherited from and mocked.
+- Added the IsValid property to the BOState class.
+- Got the right-click adding working for BusinessObjectLookupListSource - need a way to disable it still.
+
+BUG FIXES
+- The internal ID column was not being setup correctly in the grid.
+- Problem when setting a non-string property value to an empty string.
+- The ID column should not be visible after the Grid is reloaded.
+- Problem when setting a non-string property value to an empty string.
+- With background color in the control mappers and in the DateTimePickerMapper.
+- Two EditableGrid bugs fixed (add then delete row before saving, and add row then reject changes)
+- Problem with no table name in the load criteria for a relationship that refers to an inheriting class.
+
+
+FIRESTARTER (WITH HABANERO)
+MAJOR CHANGES
+- Added custom Property Types, Assembly Types, Control Types, Mapper Types and Column Types.
+- Added database reverse engineering (only MySql, SqlServer may work but is untested)
+- Added generation of project files, solution files, and standard files.
+- Added auto saving of database config settings.
+- Now saves Firestarter project files rather than just XMLs
+- Added Error List Window, can click error list to take you to the problem
+
+MINOR CHANGES
+- Added restriction: A class cannot inherit from classes that inherit from it.
+- Fixed bug: You couldn't delete items from the Simple Lookup List.
+- Added related properties (i.e. TableName changes with ClassName if they are the same).
+- Added Support for related properties
+- Added Multi-Selectors for Grid Columns and Form Fields
+- Added feature to import and export class Definitions
+- Added Rules.
+- Added Dockable Windows.
+- Added defaults to new project settings.
+- Added rule: Property cannot have the same name as it's class.
+- Now Generates project Habanero references with relative paths.
+- Added Program Options Screen and Menu.
+- Fixed bug with equal objects in a collection.
+- Added 'Letters and Numbers only' validation to Class, Property, and Relationship names.
+
+
+Habanero Beta v1.0b - 25 July 2007
+
+- Launch version
+- Included ORM mapping, UI generation, FireStarter
+- FireStarter manages class definitions 

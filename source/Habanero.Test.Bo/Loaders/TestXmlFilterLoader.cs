@@ -70,7 +70,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(propName, filterDef.FilterPropertyDefs[0].PropertyName);
             Assert.AreEqual(label, filterDef.FilterPropertyDefs[0].Label);
             Assert.AreEqual("StringTextBoxFilter", filterDef.FilterPropertyDefs[0].FilterType);
-            Assert.AreEqual("Habanero.UI.Base", filterDef.FilterPropertyDefs[0].FilterTypeAssembly);
+            Assert.AreEqual("Habanero.Faces.Base", filterDef.FilterPropertyDefs[0].FilterTypeAssembly);
             Assert.AreEqual(FilterClauseOperator.OpLike, filterDef.FilterPropertyDefs[0].FilterClauseOperator);
             Assert.AreEqual(0, filterDef.FilterPropertyDefs[0].Parameters.Count);
             Assert.AreEqual(FilterModes.Filter, filterDef.FilterMode);

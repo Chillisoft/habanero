@@ -23,7 +23,6 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -69,6 +68,24 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("Tested Property:", uiFormField.GetLabel(classDef));
             uiFormField = new UIFormField(null, "TestProperty", typeof(CheckBox), null, null, true, null, null, LayoutStyle.Label);
             Assert.AreEqual("Tested Property?", uiFormField.GetLabel(classDef));
+        }
+
+        [Test]
+        public void Test_GetLabel_WhenUIFormFieldHasClassDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = CreateTestClassDef("");
+            var uiFormField = new UIFormFieldStub(null, "TestProperty");
+            uiFormField.SetLabel(null);
+            uiFormField.SetClassDef(classDef);
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(classDef.GetPropDef(uiFormField.PropertyName));
+            Assert.AreSame(classDef, uiFormField.GetClassDef());
+            Assert.IsNull(uiFormField.Label);
+            //---------------Execute Test ----------------------
+            var actualLabel = uiFormField.GetLabel();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Tested Property:", actualLabel);
         }
 
         [Test]
@@ -274,7 +291,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            UIFormFieldInheritorStub field = new UIFormFieldInheritorStub();
+            UIFormFieldStub field = new UIFormFieldStub();
             
             Assert.AreEqual("label", field.Label);
             field.SetLabel("newlabel");
@@ -541,7 +558,7 @@ namespace Habanero.Test.BO.ClassDefinition
             UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, null
                     , "", null, LayoutStyle.Label);
             //---------------Test Result -----------------------
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(uiFormField, "ShowAsCompulsory");
+            var showAsCompulsory = uiFormField.ShowAsCompulsory;
             Assert.IsNull(showAsCompulsory);
         }
 
@@ -554,7 +571,7 @@ namespace Habanero.Test.BO.ClassDefinition
             UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, false
                     , "", null, LayoutStyle.Label);
             //---------------Test Result -----------------------
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(uiFormField, "ShowAsCompulsory");
+            var showAsCompulsory = uiFormField.ShowAsCompulsory;
             Assert.IsNotNull(showAsCompulsory);
             Assert.IsFalse((bool) showAsCompulsory);
         }
@@ -568,7 +585,7 @@ namespace Habanero.Test.BO.ClassDefinition
             UIFormField uiFormField = new UIFormField("L", "L", "", "", "", "", true, true
                     , "", null, LayoutStyle.Label);
             //---------------Test Result -----------------------
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(uiFormField, "ShowAsCompulsory");
+            var showAsCompulsory = uiFormField.ShowAsCompulsory;
             Assert.IsNotNull(showAsCompulsory);
             Assert.IsTrue((bool)showAsCompulsory);
         }
@@ -580,11 +597,11 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             const string propertyName = "TestProp";
             IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
-            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", true);
+            field.ShowAsCompulsory = true;
             var propDef = classDef.PropDefcol[propertyName];
             //---------------Assert Precondition----------------
             Assert.IsFalse(propDef.Compulsory);
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            var showAsCompulsory = field.ShowAsCompulsory;
             Assert.IsTrue((bool)showAsCompulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;
@@ -598,12 +615,12 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             const string propertyName = "TestProp";
             IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
-            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", false);
+            field.ShowAsCompulsory = false;
             var propDef = classDef.PropDefcol[propertyName];
             propDef.Compulsory = true;
             //---------------Assert Precondition----------------
             Assert.IsTrue(propDef.Compulsory);
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            var showAsCompulsory = field.ShowAsCompulsory;
             Assert.IsFalse((bool)showAsCompulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;
@@ -617,12 +634,12 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             const string propertyName = "TestProp";
             IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
-            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", null);
+            field.ShowAsCompulsory = null;
             var propDef = classDef.PropDefcol[propertyName];
             propDef.Compulsory = true;
             //---------------Assert Precondition----------------
             Assert.IsTrue(propDef.Compulsory);
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            var showAsCompulsory = field.ShowAsCompulsory;
             Assert.IsNull(showAsCompulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;
@@ -636,12 +653,12 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef classDef = MyBO.LoadDefaultClassDef();
             const string propertyName = "TestProp";
             IUIFormField field = classDef.UIDefCol["default"].GetFormField(propertyName);
-            ReflectionUtilities.SetPrivatePropertyValue(field, "ShowAsCompulsory", null);
+            field.ShowAsCompulsory = null;
             var propDef = classDef.PropDefcol[propertyName];
             propDef.Compulsory = true;
             //---------------Assert Precondition----------------
             Assert.IsTrue(propDef.Compulsory);
-            var showAsCompulsory = ReflectionUtilities.GetPrivatePropertyValue(field, "ShowAsCompulsory");
+            var showAsCompulsory = field.ShowAsCompulsory;
             Assert.IsNull(showAsCompulsory);
             //---------------Execute Test ----------------------
             bool isCompulsory = field.IsCompulsory;
@@ -693,6 +710,36 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsFalse(isCompulsory);
         }
 
+        [Test]
+        public void TestIsCompulsory_WhenRelationshipField_AndRelationshipIsCompulsory()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithAssociationRelationship();
+            classDef.PropDefcol["RelatedID"].Compulsory = true;
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField("MyRelationship");
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(classDef.RelationshipDefCol["MyRelationship"].IsCompulsory);
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isCompulsory);
+        }
+
+        [Test]
+        public void TestIsCompulsory_WhenRelationshipField_AndRelationshipIsNotCompulsory()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithAssociationRelationship();
+            classDef.PropDefcol["RelatedID"].Compulsory = false;
+            IUIFormField field = classDef.UIDefCol["default"].GetFormField("MyRelationship");
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(classDef.RelationshipDefCol["MyRelationship"].IsCompulsory);
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isCompulsory);
+        }
+        
         [Test]
         public void TestLabelTextHasStarIfCompulsory()
         {
@@ -766,8 +813,119 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(column, uiFormField1.UIFormColumn);
         }
 
+        [Test]
+        public void Test_DecimalPlaces_WhenSetShouldReturn()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedDecimalPlace = "2";
+            Hashtable parameters = new Hashtable {{"decimalPlaces", expectedDecimalPlace}};
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            var decimalPlaces = uiFormField1.DecimalPlaces;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedDecimalPlace, decimalPlaces);
+        }
+        [Test]
+        public void Test_DecimalPlaces_WhenNotSet_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            var decimalPlaces = uiFormField1.DecimalPlaces;
+            //---------------Test Result -----------------------
+            Assert.IsNull(decimalPlaces);
+        }
+        [Test]
+        public void Test_Options_WhenSetShouldReturn()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedOptions = "2";
+            Hashtable parameters = new Hashtable { { "options", expectedOptions } };
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var options = uiFormField1.Options;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedOptions, options);
+        }
+        [Test]
+        public void Test_Options_WhenNotSet_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var options = uiFormField1.Options;
+            //---------------Test Result -----------------------
+            Assert.IsNull(options);
+        }
+        [Test]
+        public void Test_IsEmail_WhenSetShouldReturn()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedIsEmail = "2";
+            Hashtable parameters = new Hashtable { { "isEmail", expectedIsEmail } };
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var isEmail = uiFormField1.IsEmail;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedIsEmail, isEmail);
+        }
+        [Test]
+        public void Test_IsEmail_WhenNotSet_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var isEmail = uiFormField1.IsEmail;
+            //---------------Test Result -----------------------
+            Assert.IsNull(isEmail);
+        }
+        [Test]
+        public void Test_DateFormat_WhenSetShouldReturn()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedDateFormat = "2";
+            Hashtable parameters = new Hashtable { { "dateFormat", expectedDateFormat } };
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var dateFormat = uiFormField1.DateFormat;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedDateFormat, dateFormat);
+        }
+        [Test]
+        public void Test_DateFormat_WhenNotSet_ShouldReturnNull()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            UIFormField uiFormField1 = CreateFormField(parameters);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var dateFormat = uiFormField1.DateFormat;
+            //---------------Test Result -----------------------
+            Assert.IsNull(dateFormat);
+        }
+
+        private static UIFormField CreateFormField(Hashtable parameters)
+        {
+            return new UIFormField("L", "L", "", "", "", "", true, null, "", parameters, LayoutStyle.Label);
+        }
 
         [Test]
         public void Test_Layout()
@@ -791,10 +949,18 @@ namespace Habanero.Test.BO.ClassDefinition
         private static UIFormField CreateFormField(string propName) { return new UIFormField("L", propName, "", "", "", "", true, null, "", null, LayoutStyle.Label); }
 
         // Grants access to protected fields
-        private class UIFormFieldInheritorStub : UIFormField
+        private class UIFormFieldStub : UIFormField
         {
-            public UIFormFieldInheritorStub()
+            private IClassDef _classDef;
+
+            public UIFormFieldStub()
                 : base("label", "prop", "control", null, null, null, true, null, null, null, LayoutStyle.Label)
+            {}
+            public UIFormFieldStub(string propName)
+                : base("label", propName, "control", null, null, null, true, null, null, null, LayoutStyle.Label)
+            {}
+            public UIFormFieldStub(string propLabel, string propName)
+                : base(propLabel, propName, "control", null, null, null, true, null, null, null, LayoutStyle.Label)
             {}
 
             public void SetLabel(string name)
@@ -830,6 +996,14 @@ namespace Habanero.Test.BO.ClassDefinition
             public void SetEditable(bool editable)
             {
                 Editable = editable;
+            }
+            public void SetClassDef(IClassDef classDef)
+            {
+                _classDef = classDef;
+            }
+            public override IClassDef GetClassDef()
+            {
+                return _classDef;
             }
         }
     }

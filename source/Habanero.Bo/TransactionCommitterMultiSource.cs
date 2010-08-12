@@ -54,7 +54,7 @@ namespace Habanero.BO
 
         public List<Guid> CommitTransaction()
         {
-            return _transactionCommitter.CommitTransaction();
+            return _transactionCommitter != null ? _transactionCommitter.CommitTransaction() : new List<Guid>();
         }
     }
 }

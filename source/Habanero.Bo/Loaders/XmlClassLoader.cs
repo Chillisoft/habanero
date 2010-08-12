@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -18,7 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -219,12 +219,21 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadRelationshipDefs(IEnumerable<string> xmlDefs)
         {
-            var loadedRelationships = from relDefXml in xmlDefs
+/*            var loadedRelationships = from relDefXml in xmlDefs
                                       let relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory, _className)
                                       select relationshipLoader.LoadRelationship(relDefXml, _propDefCol)
                                       into loadedRelationship where loadedRelationship != null select loadedRelationship;
             foreach (var loadedRelationship in loadedRelationships)
             {
+                loadedRelationship.OwningClassDef = this._classDef;
+                _relationshipDefCol.Add(loadedRelationship);
+            }*/
+
+            foreach (string relDefXml in xmlDefs)
+            {
+                XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory, _className);
+                var loadedRelationship = relationshipLoader.LoadRelationship(relDefXml, _propDefCol);
+                if(loadedRelationship == null) continue;
                 loadedRelationship.OwningClassDef = this._classDef;
                 _relationshipDefCol.Add(loadedRelationship);
             }
@@ -391,11 +400,11 @@ namespace Habanero.BO.Loaders
                 errorMessage += ". Within each 'class' element you need to set " +
                                 "the 'assembly' attribute, which refers to the project or assembly " +
                                 "that contains the class which is being mapped to.";
-                throw new XmlException(errorMessage);
+                throw new InvalidXmlDefinitionException(errorMessage);
             }
             if (string.IsNullOrEmpty(_className))
             {
-                throw new XmlException("No 'name' attribute has been specified for a " +
+                throw new InvalidXmlDefinitionException("No 'name' attribute has been specified for a " +
                                        "'class' element.  The 'name' attribute indicates the name of the " +
                                        "class to which a database table will be mapped.");
             }

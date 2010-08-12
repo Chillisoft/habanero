@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -188,5 +188,10 @@ namespace Habanero.Base
         }
 
         #endregion
+
+        ///<summary>
+        /// The ClassDef that these KeyDefs belong to.
+        ///</summary>
+        public IClassDef ClassDef { get; set; }
     }
 }

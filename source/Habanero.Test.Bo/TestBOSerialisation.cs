@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -30,22 +30,24 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBOSerialisation
     {
-        private const string DataFileName = @"TestData\DataFile.dat";
-        
+        private const string _dataFileName = @"TestData\DataFile.dat";
+        // ReSharper disable PossibleNullReferenceException   
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            string dataFileDirectoryName = Path.GetDirectoryName(DataFileName);
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+        
+            string dataFileDirectoryName = Path.GetDirectoryName(_dataFileName);
             if (!Directory.Exists(dataFileDirectoryName))
             {
                 Directory.CreateDirectory(dataFileDirectoryName);
             }
         }
-
+        // ReSharper restore PossibleNullReferenceException
         [TestFixtureTearDown]
         public void TearDownTestFixture()
         {
-            string dataFileDirectoryName = Path.GetDirectoryName(DataFileName);
+            string dataFileDirectoryName = Path.GetDirectoryName(_dataFileName);
             if (Directory.Exists(dataFileDirectoryName))
             {
                 Directory.Delete(dataFileDirectoryName, true);
@@ -66,7 +68,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefs_OneProp();
             BusinessObject myBO = new MyBO();
-            const string dataFile = DataFileName;
+            const string dataFile = _dataFileName;
             File.Delete(dataFile);
             
             // Construct a BinaryFormatter and use it 
@@ -91,7 +93,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefs_OneProp();
             MyBO myBO = new MyBO();
-            const string dataFile = DataFileName;
+            const string dataFile = _dataFileName;
             File.Delete(dataFile);
 
             // Construct a BinaryFormatter and use it 
@@ -102,7 +104,8 @@ namespace Habanero.Test.BO
             {
                 formatter.Serialize(fs, myBO);
             }
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+//            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Assert Precondition----------------
             AssertFileHasBeenCreated(dataFile);
             //---------------Execute Test ----------------------
@@ -123,7 +126,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefs_OneProp();
             IBusinessObjectCollection myBOCol = GetMyBOColWithTwoBOs();
-            const string dataFile = DataFileName;
+            const string dataFile = _dataFileName;
             File.Delete(dataFile);
             
             // Construct a BinaryFormatter and use it 
@@ -149,7 +152,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefs_OneProp();
             IBusinessObjectCollection myBOCol = GetMyBOColWithTwoBOs();
-            const string dataFile = DataFileName;
+            const string dataFile = _dataFileName;
             File.Delete(dataFile);
 
             // Construct a BinaryFormatter and use it 
@@ -160,7 +163,8 @@ namespace Habanero.Test.BO
             {
                 formatter.Serialize(fs, myBOCol);
             }
-            BusinessObjectManager.Instance = new BusinessObjectManager();
+//            BusinessObjectManager.Instance = new BusinessObjectManager();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             //---------------Assert Precondition----------------
             AssertFileHasBeenCreated(dataFile);
             Assert.AreEqual(2, myBOCol.Count);
@@ -175,63 +179,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, deserialisedBOCol.CreatedBusinessObjects.Count);
         } 
 
-//        [Test]
-//        public void Test_SerialiseBOPrimaryKey()
-//        {
-//            //---------------Set up test pack-------------------
-//            ClassDef.ClassDefs.Clear();
-//            MyBO.LoadClassDefs_OneProp();
-//            MyBO myBO = new MyBO();
-//            const string dataFile = @"C:\DataFile.dat";
-//            File.Delete(dataFile);
-//            
-//            // Construct a BinaryFormatter and use it 
-//            // to serialize the data to the stream.
-//            BinaryFormatter formatter = new BinaryFormatter();
-//            //---------------Assert Precondition----------------
-//            AssertFileDoesNotExist(dataFile);
-//            //---------------Execute Test ----------------------
-//            // Serialize the BO.
-//            using (FileStream fs = new FileStream(dataFile, FileMode.Create))
-//            {
-//                formatter.Serialize(fs, myBO.ID);
-//            }
-//            //---------------Test Result -----------------------
-//            AssertFileHasBeenCreated(dataFile);
-//        }
-
-//        [Test]
-//        public void Test_DeSerialiseBOObjectID()
-//        {
-//            //---------------Set up test pack-------------------
-//            ClassDef.ClassDefs.Clear();
-//            MyBO.LoadClassDefs_OneProp();
-//            MyBO myBO = new MyBO();
-//            const string dataFile = @"C:\DataFile.dat";
-//            File.Delete(dataFile);
-//
-//            // Construct a BinaryFormatter and use it 
-//            // to serialize the data to the stream.
-//            IFormatter formatter = new BinaryFormatter();
-//            // Serialize the BO.
-//            using (FileStream fs = new FileStream(dataFile, FileMode.Create))
-//            {
-//                formatter.Serialize(fs, myBO.ID);
-//            }
-//            BusinessObjectManager.Instance = new BusinessObjectManager();
-//            //---------------Assert Precondition----------------
-//            AssertFileHasBeenCreated(dataFile);
-//            //---------------Execute Test ----------------------
-//            IPrimaryKey deserialisedPrimaryKey;
-//            using (Stream stream = new FileStream(dataFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-//            {
-//                deserialisedPrimaryKey = (IPrimaryKey) formatter.Deserialize(stream);
-//            }
-//            //---------------Test Result -----------------------
-////            Assert.AreEqual(2, deserialisedBOCol.Count);
-////            Assert.AreEqual(2, deserialisedBOCol.CreatedBusinessObjects.Count);
-//        }
-
         //TODO Brett 18 Feb 2009: Tests for added, mark for deleted, removed etc.
         //TODO Brett 18 Feb 2009: Tests for serialising the full state of the boprop.
 
@@ -240,7 +187,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             TrySerialisable trySerial = new TrySerialisable();
-            const string dataFile = DataFileName;
+            const string dataFile = _dataFileName;
             // Construct a BinaryFormatter and use it 
             // to serialize the data to the stream.
             BinaryFormatter formatter = new BinaryFormatter();

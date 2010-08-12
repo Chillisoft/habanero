@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;
+using System.Linq;//TODO brett 08 Jun 2010: For 2_0
 using System.Text;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
@@ -62,7 +62,7 @@ namespace Habanero.Util
             myPluralRules["s$"] = "s"; // no change (compatibility)
             myPluralRules["$"] = "s";
 
-            myUnaffectedPlural = new string[]
+            myUnaffectedPlural = new[]
                                      {
                                          "^(.*[nrlm]ese)$", "^(.*deer)$", "^(.*fish)$", "^(.*measles)$", "^(.*ois)$",
                                          "^(.*pox)$", "^(.*sheep)$", "^(Amoyese)$", "^(bison)$", "^(Borghese)$",
@@ -284,39 +284,40 @@ namespace Habanero.Util
             }
             return formatted;
         }
-        /// <summary>
-        /// Singularises the input string using heuristics and rule.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string Singularize(string input)
-        {
-            if (input == String.Empty) return input;
+               //TODO brett 08 Jun 2010: For 2_0
+          /// <summary>
+                /// Singularises the input string using heuristics and rule.
+                /// </summary>
+                /// <param name="input"></param>
+                /// <returns></returns>
+                public static string Singularize(string input)
+                {
+                    if (input == String.Empty) return input;
 
-            if (myUnaffectedSingular.Any(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase)))
-            {
-                return input;
-            }
-            var singularised = Singularise(input, myIrregularSingular);
-            if (singularised != null) return singularised;
+                    if (myUnaffectedSingular.Any(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase)))
+                    {
+                        return input;
+                    }
+                    var singularised = Singularise(input, myIrregularSingular);
+                    if (singularised != null) return singularised;
 
-            singularised = Singularise(input, mySingularRules);
-            return singularised ?? input;
-        }
+                    singularised = Singularise(input, mySingularRules);
+                    return singularised ?? input;
+                }
 
-        private static string Singularise(string input, NameValueCollection singularisationRules)
-        {
-            var singularisationRule = singularisationRules
-                .Cast<string>()
-                .Where(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
-                .FirstOrDefault();
-            if (singularisationRule != null)
-            {
-                return Regex.Replace(input, singularisationRule, singularisationRules[singularisationRule],
-                                     RegexOptions.IgnoreCase);
-            }
-            return null;
-        }
+                private static string Singularise(string input, NameValueCollection singularisationRules)
+                {
+                    var singularisationRule = singularisationRules
+                        .Cast<string>()
+                        .Where(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
+                        .FirstOrDefault();
+                    if (singularisationRule != null)
+                    {
+                        return Regex.Replace(input, singularisationRule, singularisationRules[singularisationRule],
+                                             RegexOptions.IgnoreCase);
+                    }
+                    return null;
+                }/**/
 
         ///<summary>
         /// Pluralises a noun using standard rule e.g. Name => Names
@@ -364,6 +365,7 @@ namespace Habanero.Util
             replace = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(replace);
             return replace;
         }
+        //TODO_ brett 08 Jun 2010: For DotNet 2_0  
         /// <summary>
         /// Create a classification of the input this is a Singular of the input
         ///   Camel cased.
@@ -425,6 +427,12 @@ namespace Habanero.Util
             return textRemainderPart != textRemainderPart.ToLower();
         }
 
+        ///<summary>
+        /// Removes a prefix defined by prefix from the text if it is found to be the leading characters of text.
+        ///</summary>
+        ///<param name="prefix"></param>
+        ///<param name="text"></param>
+        ///<returns></returns>
         public static string RemovePrefix(string prefix, string text)
         {
             if (!string.IsNullOrEmpty(prefix) && text.StartsWith(prefix, true, CultureInfo.CurrentCulture))
@@ -434,8 +442,14 @@ namespace Habanero.Util
             return text;
         }
 
+        ///<summary>
+        /// Changes the first character to a lowercase.
+        ///</summary>
+        ///<param name="input"></param>
+        ///<returns></returns>
         public static string ToLowerFirstLetter(string input)
         {
+            if (input.Length == 0) return "";
             char firstLetter = input[0];
             return Char.ToLower(firstLetter) + input.Substring(1);
         }
@@ -633,7 +647,9 @@ namespace Habanero.Util
 
         /// <summary>
         /// Appends a given message to an existing message, using the given separator
-        /// betweeen the two parts
+        /// betweeen the two parts.
+        /// Ensures that the seperator is only inserted between two appended messages.
+        /// I.e. there will never be a trailing seperator.
         /// </summary>
         /// <param name="origMessage">The existing message (left part)</param>
         /// <param name="messageToAppend">The message to add on (right part)</param>

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -19,7 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
@@ -57,7 +57,14 @@ namespace Habanero.BO
         public bool IsDirty
         {
             get
-            { return _relationships.Select(pair => pair.Value).Any(relationship => relationship.IsDirty); }
+            {
+                foreach (var relationship in _relationships.Values)
+                {
+                    if(relationship.IsDirty) return true;
+                }
+                return false;
+                //return _relationships.Select(pair => pair.Value).Any(relationship => relationship.IsDirty);
+            }
         }
 
         ///<summary>
@@ -89,7 +96,7 @@ namespace Habanero.BO
         /// Adds a collection of relationships to the business object
         /// </summary>
         /// <param name="relCol">The collection of relationships to add</param>
-        public void Add(RelationshipCol relCol)
+        public void Add(IEnumerable<IRelationship> relCol)
         {
             foreach (IRelationship rel in relCol)
             {
@@ -115,9 +122,9 @@ namespace Habanero.BO
                                                             this._bo.GetType());
                 }
 
-                IRelationship relationship = _relationships[relationshipName];
-                if (!relationship.Initialised)
-                    ReflectionUtilities.ExecutePrivateMethod(relationship, "Initialise");
+                IRelationshipForLoading relationship = (IRelationshipForLoading)_relationships[relationshipName];
+                if (!relationship.Initialised) relationship.Initialise();
+                    //ReflectionUtilities.ExecutePrivateMethod(relationship, "Initialise");
                 return relationship;
             }
 		}

@@ -261,8 +261,10 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             //---------------Assert Precondition----------------
             util.AssertOneObjectInCurrentPersistedCollection(cpCol);
-            Assert.IsFalse((bool)ReflectionUtilities.GetPrivatePropertyValue(cpCol, "Loading"));
-
+            var loading = BOColLoaderHelper.GetLoading(cpCol);
+            Assert.IsFalse(loading);
+            //Assert.IsFalse((bool)ReflectionUtilities.GetPrivatePropertyValue(cpCol, "Loading"));
+            //BOColLoaderHelper.ClearCurrentCollection(collection);
             //---------------Execute Test ----------------------
             try
             {

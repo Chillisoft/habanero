@@ -20,6 +20,7 @@
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
@@ -29,7 +30,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            UIDefInheritorStub uiDef = new UIDefInheritorStub();
+            UIDefStub uiDef = new UIDefStub();
 
             Assert.AreEqual("uidef", uiDef.Name);
             uiDef.SetName("newuidef");
@@ -50,7 +51,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetFormField()
         {
             //---------------Set up test pack-------------------
-            UIDefInheritorStub uiDef = new UIDefInheritorStub();
+            UIDefStub uiDef = new UIDefStub();
             uiDef.SetUIForm(GetUiForm());
             //---------------Assert Precondition----------------
 
@@ -64,7 +65,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetFormField_NoPropReturnsNull()
         {
             //---------------Set up test pack-------------------
-            UIDefInheritorStub uiDef = new UIDefInheritorStub();
+            UIDefStub uiDef = new UIDefStub();
             uiDef.SetUIForm(GetUiForm());
             //---------------Assert Precondition----------------
 
@@ -301,31 +302,64 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(uiDefCol, uiDef.UIDefCol);
 
         }
- 
 
-
-        // Grants access to protected methods
-        private class UIDefInheritorStub : UIDef
+        [Test]
+        public void Test_ClassName_WhenClassDefNull_ShouldReturnEmptyString()
         {
-            public UIDefInheritorStub()
-                : base("uidef", null, null)
-            {
-            }
+            //---------------Set up test pack-------------------
+            UIDef uiDef = new UIDef("test", null, null);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiDef.ClassDef);
+            //---------------Execute Test ----------------------
+            string className = uiDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.IsEmpty(className);
+        }
+        [Test]
+        public void Test_ClassName_WhenClassDefSet_ShouldReturnClassDefClassName()
+        {
+            //---------------Set up test pack-------------------
+            IUIDef uiDef = new UIDef("test", null, null);
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            classDef.ClassName = GetRandomString();
+            uiDef.ClassDef = classDef;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(uiDef.ClassDef);
+            Assert.IsNotNullOrEmpty(classDef.ClassName);
+            //---------------Execute Test ----------------------
+            string className = uiDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef.ClassName, className);
+        }
 
-            public void SetName(string name)
-            {
-                Name = name;
-            }
+        private static string GetRandomString()
+        {
+            return TestUtil.GetRandomString();
+        }
 
-            public void SetUIForm(UIForm uiForm)
-            {
-                UIForm = uiForm;
-            }
 
-            public void SetUIGrid(UIGrid uiGrid)
-            {
-                UIGrid = uiGrid;
-            }
+    }
+    // Grants access to protected methods
+    internal class UIDefStub : UIDef
+    {
+        public UIDefStub()
+            : base("uidef", null, null)
+        {
+        }
+
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+
+        public void SetUIForm(UIForm uiForm)
+        {
+            UIForm = uiForm;
+        }
+
+        public void SetUIGrid(UIGrid uiGrid)
+        {
+            UIGrid = uiGrid;
         }
     }
 }

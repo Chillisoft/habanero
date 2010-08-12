@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -119,10 +119,8 @@ namespace Habanero.BO
                     else
                     {
                         IClassDef classDef = businessObject.ClassDef;
-                        throw new HabaneroDeveloperException("The relationship '" + RelationshipName + "' on '"
-                                                             + classDef.ClassName + "' cannot be found. Please contact your system administrator.",
-                                                             "The relationship '" + RelationshipName + "' does not exist on the BusinessObject '"
-                                                             + classDef.ClassNameFull + "'.");
+                        throw new RelationshipNotFoundException("The relationship '" + RelationshipName + "' on '"
+                                                             + classDef.ClassNameFull + "' cannot be found. Please contact your system administrator.");
                     }
                 }
                 _businessObject = businessObject;

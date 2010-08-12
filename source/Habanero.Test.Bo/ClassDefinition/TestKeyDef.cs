@@ -55,18 +55,40 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(mKeyDef.IgnoreIfNull);
         }
 
-        [Test, ExpectedException(typeof(InvalidPropertyNameException))]
+        [Test]
         public void TestThisInvalidPropertyNameException()
         {
+            //---------------Set up test pack-------------------
             KeyDef keyDef = new KeyDef();
-            IPropDef propDef = keyDef["wrongprop"];
+            //---------------Execute Test ----------------------
+            try
+            {
+                IPropDef propDef = keyDef["wrongprop"];
+                Assert.Fail("Expected to throw an InvalidPropertyNameException");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidPropertyNameException ex)
+            {
+                StringAssert.Contains("no property with the name 'wrongprop' exists in the collection of properties", ex.Message);
+            }
         }
 
-        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+        [Test]
         public void TestAddNullException()
         {
+            //---------------Set up test pack-------------------
             KeyDef keyDef = new KeyDef();
-            keyDef.Add(null);
+            //---------------Execute Test ----------------------
+            try
+            {
+                keyDef.Add(null);
+                Assert.Fail("Expected to throw an HabaneroArgumentException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroArgumentException ex)
+            {
+                StringAssert.Contains("You cannot add a null prop def to a classdef", ex.Message);
+            }
         }
 
         [Test]
@@ -154,7 +176,7 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void TestIndexer_Int_OutOfRange()
         {
             //---------------Set up test pack-------------------
@@ -165,9 +187,16 @@ namespace Habanero.Test.BO.ClassDefinition
             keyDef.Add(propDef2);
             //-------------Test Pre-conditions --------------
             //-------------Execute test ---------------------
-            IPropDef keyDef0 = keyDef[2];
-            //------------Test Result ----------------------
-
+            try
+            {
+                IPropDef keyDef0 = keyDef[2];
+                Assert.Fail("Expected to throw an ArgumentOutOfRangeException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentOutOfRangeException ex)
+            {
+                StringAssert.Contains("index out of range", ex.Message);
+            }
         }
     }
 

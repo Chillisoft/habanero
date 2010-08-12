@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -156,7 +156,7 @@ namespace Habanero.Base
         ///<summary>
         /// Returns the class definition that this property definition is owned by.
         ///</summary>
-        IClassDef ClassDef { get; }
+        IClassDef ClassDef { get; set; }
 
         ///<summary>
         /// Returns the full display name for a property definition.
@@ -164,6 +164,11 @@ namespace Habanero.Base
         /// If there is no display name then it will return the PascalCase Delimited property Name i.e. Display Name.
         ///</summary>
         string DisplayNameFull { get; }
+
+        ///<summary>
+        /// The name of the Class if this PropDef is associated with a ClassDef.
+        ///</summary>
+        string ClassName { get; }
 
         /// <summary>
         /// Creates a new Business Object property (BOProp)

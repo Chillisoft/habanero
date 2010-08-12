@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -61,6 +61,11 @@ namespace Habanero.Base
         /// Indicates whether the control is editable
         /// </summary>
         bool Editable { get;set; }
+
+        /// <summary>
+        /// Whether shown as compulsory on the form or not
+        /// </summary>
+        bool? ShowAsCompulsory { get;set; }
 
         ///<summary>
         /// Returns the text that will be shown in the Tool Tip for the control.

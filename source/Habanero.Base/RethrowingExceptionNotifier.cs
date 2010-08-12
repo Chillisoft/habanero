@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Threading;
 
 namespace Habanero.Base
 {
@@ -36,8 +37,14 @@ namespace Habanero.Base
         /// <param name="title">The title</param>
         public void Notify(Exception ex, string furtherMessage, string title)
         {
-            // throw new Exception("Rethrowing exception", ex);
-            throw ex;
+            if (ex != null)
+            {
+                ThreadStart savestack =
+                    Delegate.CreateDelegate(typeof (ThreadStart), ex, "InternalPreserveStackTrace", false, false) as
+                    ThreadStart;
+                if (savestack != null) savestack();
+                throw ex;
+            }
         }
 
         ///<summary>

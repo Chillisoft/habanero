@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2009 Chillisoft Solutions
+//  Copyright (C) 2007-2010 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -178,6 +178,11 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// Must the Field Show Itself as Compulsory or not
+        /// </summary>
+        public bool? ShowAsCompulsory { get; set; }
+
+        /// <summary>
         /// Indicates whether the control is editable
         /// </summary>
         public bool Editable { get; set; }
@@ -256,7 +261,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns> The label for this form field </returns>
         public string GetLabel()
         {
-            return GetLabel(null);
+            return GetLabel(GetClassDef());
         }
 
         ///<summary>
@@ -458,7 +463,12 @@ namespace Habanero.BO.ClassDefinition
                 IClassDef def = GetClassDef();
                 if (def == null) return false;
                 IPropDef propDef = this.GetPropDefIfExists(def);
-                return propDef != null && propDef.Compulsory;
+                if (propDef != null)
+                {
+                    return propDef.Compulsory;
+                }
+                IRelationshipDef relationshipDef = ClassDefHelper.GetRelationshipDefByName(def, PropertyName);
+                return relationshipDef != null && relationshipDef.IsCompulsory;
             }
         }
         /// <summary>
@@ -496,7 +506,9 @@ namespace Habanero.BO.ClassDefinition
         }
 
         ///<summary>
-        /// Returns the Options property from the form field or null if none is provided
+        /// Returns the Options property from the form field or null if none is provided.
+        /// The Options are a set of strings seperated by a '|'
+        /// This can be used as the list of options shown in a combo box.
         ///</summary>
         public string Options
         {
@@ -524,11 +536,6 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public LayoutStyle Layout { get; set; }
 
-        /// <summary>
-        /// Must the Field Show Itself as Compulsory or not
-        /// </summary>
-        private bool? ShowAsCompulsory { get; set; }
-
 
         ///<summary>
         /// Returns the <see cref="IClassDef"/> associated with this UIFormField
@@ -538,7 +545,11 @@ namespace Habanero.BO.ClassDefinition
         {
             IUIFormColumn column = this.UIFormColumn;
             if (column == null) return null;
-            IUIDef uiDef = column.UIFormTab.UIForm.UIDef;
+            IUIFormTab tab = column.UIFormTab;
+            if (tab == null) return null;
+            IUIForm form = tab.UIForm;
+            if (form == null) return null;
+            IUIDef uiDef = form.UIDef;
             if (uiDef == null) return null;
             if (uiDef.ClassDef != null) return uiDef.ClassDef;
             return uiDef.UIDefCol == null ? null : uiDef.UIDefCol.ClassDef;
