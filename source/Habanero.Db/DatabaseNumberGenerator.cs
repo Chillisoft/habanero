@@ -123,7 +123,7 @@ namespace Habanero.DB
         /// <returns>Returns an ITransactional object</returns>
         ITransactional IDBNumberGenerator.GetUpdateTransaction()
         {
-            throw new NotImplementedException();
+            return GetUpdateTransaction();
         }
 
         /// <summary>
