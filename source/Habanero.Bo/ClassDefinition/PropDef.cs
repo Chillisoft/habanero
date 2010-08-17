@@ -588,7 +588,7 @@ namespace Habanero.BO.ClassDefinition
         /// LookupList equates to NullLookupList</returns>
         public bool HasLookupList()
         {
-            return (!(_lookupList is NullLookupList));
+            return (!(LookupList is NullLookupList));
         }
 
         /// <summary>
