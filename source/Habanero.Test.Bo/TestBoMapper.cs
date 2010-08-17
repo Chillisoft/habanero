@@ -21,7 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.Testability;
+using Habanero.Test.Structure;
 using Habanero.Util;
 using NMock;
 using NUnit.Framework;

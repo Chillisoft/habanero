@@ -4,7 +4,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Testability
+namespace Habanero.Test.Structure
 {
     /// <summary>
     /// Provides a standard set of utilities to be used by tests for BusinessObjects in this
