@@ -168,6 +168,7 @@
     <Compile Include="PropRule\TestInterPropRule.cs" />
     <Compile Include="PropRule\TestInterPropRuleGeneric.cs" />
     <Compile Include="PropRule\TestPropRuleDouble.cs" />
+    <Compile Include="PropRule\TestPropRuleLong.cs" />
     <Compile Include="PropRule\TestPropRuleSingle.cs" />
     <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Aggregation.cs" />
     <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Association.cs" />
