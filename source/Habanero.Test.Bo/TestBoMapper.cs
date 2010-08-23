@@ -320,5 +320,22 @@ namespace Habanero.Test.BO
             BOMapper mapper = new BOMapper(bo);
             Assert.AreEqual(0, mapper.GetLookupList("TestProp").Count);
         }
+
+        [Test]
+        public void TestVirtualPropertyValueWithDot()
+        {
+            ClassDef.ClassDefs.Clear();
+            itsClassDef = MyRelatedBo.LoadClassDef_WithUIDefVirtualProp();
+            itsRelatedClassDef = MyBO.LoadClassDefWithRelationship();
+            //MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
+            MyRelatedBo bo1 = (MyRelatedBo)itsClassDef.CreateNewBusinessObject();
+            MyBO relatedBo = (MyBO)itsRelatedClassDef.CreateNewBusinessObject();
+            Guid myRelatedBoGuid = relatedBo.ID.GetAsGuid();
+            bo1.SetPropertyValue("MyBoID", myRelatedBoGuid);
+            BOMapper mapper = new BOMapper(bo1);
+            Assert.AreEqual("MyNameIsMyBo", mapper.GetPropertyValueToDisplay("MyRelationship.-MyName-"));
+        }
+
+
     }
 }

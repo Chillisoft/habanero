@@ -86,6 +86,12 @@ namespace Habanero.BO
         private IBusinessObject _businessObject;
         protected IBOProp _property;
         private readonly BOPropertyMapper _childBoPropertyMapper;
+
+        public BOPropertyMapper ChildBoPropertyMapper
+        {
+            get { return _childBoPropertyMapper; }
+        }
+
         private readonly BORelationshipMapper _relationshipPathMapper;
         private ISingleRelationship _childRelationship;
         private const string RELATIONSHIP_SEPARATOR = ".";
