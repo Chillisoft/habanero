@@ -1988,7 +1988,7 @@ namespace Habanero.BO
         {
             TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
             this.CopyTo(thisArray, arrayIndex);
-            array = thisArray;
+            //array = thisArray;
             int count = _boCol.Count;
             for (int index = 0; index < count; index++)
                 array[arrayIndex + index] = thisArray[arrayIndex + index];

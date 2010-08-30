@@ -1919,6 +1919,34 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
+        public static IClassDef LoadClassDef_WithUIDefVirtualProp()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" type=""Guid""/>
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" type=""Guid""/>
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationship"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""My Related Test Prop"" property=""MyRelatedTestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""My Related Virtual Prop"" property=""MyRelationship.-MyName-"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+                    </ui>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
     }
 
 //    /// <summary>
