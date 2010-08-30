@@ -1,5 +1,46 @@
 Habanero Change Log
 
+ Habanero v2.5.0 - 30 August 2010
+
+Major Changes
+
+#711 (Support for .NET 2.0) Ensured that all code supports .NET Framework 2.0. 2.5 is the last Habanero release series that will support .NET 2.0
+#525 (Loading large collections (>1000) of objects with composite keys is very slow). The loading code was extensively profiled and improved to enhance the speed of loading  collections where the primary key is not a guid.  This is now much, much faster (order of magnitude faster) as it scales linearly.
+
+Enhancements
+
+#702 (ShowAsCompulsory field on IUIFormField) Added the property 'ShowAsCompulsory' for the UIFormField on the IUIFormField and made it a public property.
+#708 (Move DateRange code into Habanero Core) Moved a lot of the DateRange functionality from Habanero Faces to Habanero Core so that it can be used for other functionality such as setting Defaults and Rules in Habanero. Added new DateRangeOptions: Tommorrow, Next24Hours, Next7Days, Next30Days
+#734 (Virtualised (cached) grid loader) Added GetDataView to the DataSetProvider. This returns an IBindingListView which is an interface implemented by a DataView. This is changed so that we can generalise the Binding Behaviour in Habanero.Faces to IBindingListView. 
+#542 (Remove Reflection from Loading Relationships and Collections). The reflection used was replaced with an internal Interface and a helper class. This should help with deploying websites in a medium trust environments where reflection sometimes can't be used.
+
+Minor Changes
+
+#701 (DataStore writers should be able to write Dictionary<Guid, IBusinessObject>) Made some adjustments to the DataStore writers so that you can pass in a dictionary as an alternative to the InMemoryDataStore.
+#738 (IDataSetProvider - Find(int) and Find(DataRow) should be made obsolete): Marked some methods of IDataSetProvider as obsolete since these are not being used by Faces or By Habanero.Base/IPrimaryKey.cs
+#592 (Need Support for Is Operator in FilterClauseOperator.)
+#739 (Need Support for NotEquals Operator in FilterClauseOperator.)
+#707 (BOMapper.SetDisplayPropertyValue - add support for related props) Added the ability to set properties through Relationships on the BOMapper.
+#610 (PropRuleLong required).
+#677 (Upgrade solution and projects to VS 2010)
+
+Bugs
+
+#710 (Intermittent test failures: TestDateTimeUtilities) Fixed two tests that were failing when DateTime.Now was within first 2 hours of the morning.
+#540 (Rethrowing Exception notifier suppressing original stack trace) 
+#565 (BOCol.LoadWithLimit with null string criteria resulting in error)
+#566 (BOCol.LoadWithLimit with null string order criteria resulting in error)
+#567 (LoadWithLimit with Composite Sort Criteria results in invalid SQL)
+#533 (Possible race condition in GetObjectFromObjectManager) 
+#583 (Call PropDefColIncludingInheritance and then add a PropDef results in bug)
+#735 (Interacting tests)
+#736 (Excessive compiler warnings) 
+#737 (DataStoreInMemory.Find failing for parameterised classdefs):
+#533 (Possible race condition in GetObjectFromObjectManager). Added a new method to BusinessObjectManager called GetObjectIfInManager.
+#740 (Logging in DatabaseConnection - should be Debug, not info)
+#676 (IDBNumberGenerator.GetUpdateTransaction not implemented in DatabaseNumberGenerator)
+#724 (BusinessObjectCollection.CopyTo In BOCol returning Array with Null values)
+
  Habanero v2.4 - 10 May 2010
 
 Major Changes
