@@ -526,11 +526,6 @@ namespace Habanero.Test.BO
             get { return ((long?)(base.GetPropertyValue("LongProp"))); }
             set { base.SetPropertyValue("LongProp", value); }
         }
-        public virtual string YNStringProp
-        {
-            get { return ((string)(base.GetPropertyValue("YNStringProp"))); }
-            set { base.SetPropertyValue("YNStringProp", value); }
-        }
 
         internal static void LoadNumberGenClassDef()
         {
