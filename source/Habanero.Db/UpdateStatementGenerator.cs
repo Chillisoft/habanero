@@ -102,6 +102,7 @@ namespace Habanero.DB
                         includedProps++;
                         _updateSql.Statement.Append(SqlFormattingHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
                         _updateSql.Statement.Append(" = ");
+                        //prop.PropDef.GetDataMapper().GetDatabaseValue(prop.Value);
                         _updateSql.AddParameterToStatement(prop.Value);
                         _updateSql.Statement.Append(", ");
                     }

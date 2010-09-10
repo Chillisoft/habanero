@@ -210,14 +210,13 @@ namespace Habanero.DB
         /// <param name="prop">The business object property</param>
         private void AddPropToInsertStatement(BOProp prop)
         {
-            string paramName;
             if (!_firstField)
             {
                 _dbFieldList.Append(", ");
                 _dbValueList.Append(", ");
             }
             _dbFieldList.Append(SqlFormattingHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
-            paramName = _gen.GetNextParameterName();
+            string paramName = _gen.GetNextParameterName();
             _dbValueList.Append(paramName);
             _insertSql.AddParameter(paramName, prop.Value);
             //_insertSql.AddParameter(paramName, DatabaseUtil.PrepareValue(prop.PropertyValue));

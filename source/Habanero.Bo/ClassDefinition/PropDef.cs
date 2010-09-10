@@ -1198,12 +1198,16 @@ namespace Habanero.BO.ClassDefinition
             else if (this.PropertyType == typeof(bool))
             {
                 _propDataMapper = new BOPropBoolDataMapper();
-            } else if (this.PropertyType == typeof(int))
+            }
+            else if (this.PropertyType == typeof(int))
             {
                 _propDataMapper = new BOPropIntDataMapper();
             }
-            if (_propDataMapper == null) _propDataMapper = new BOPropGeneralDataMapper(this);
-            return _propDataMapper;
+            else if (this.PropertyType == typeof(long))
+            {
+                _propDataMapper = new BOPropLongDataMapper();
+            }
+            return _propDataMapper ?? (_propDataMapper = new BOPropGeneralDataMapper(this));
         }
 
     }
