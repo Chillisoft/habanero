@@ -269,7 +269,7 @@
       <xs:attribute name="name" type="xs:NMTOKEN" />
       <xs:attribute name="label" type="xs:string" />
       <xs:attribute default="StringTextBoxFilter" name="filterType" type="xs:NMTOKEN" />
-      <xs:attribute default="Habanero.UI.Base" name="filterTypeAssembly" type="xs:string" />
+      <xs:attribute default="Habanero.Faces.Base" name="filterTypeAssembly" type="xs:string" />
       <xs:attribute default="OpLike" name="operator">
         <xs:simpleType>
           <xs:restriction base="xs:NMTOKEN">
@@ -362,8 +362,8 @@
     <xs:complexType>
       <xs:attribute name="relationship" type="xs:NMTOKEN" use="required" />
       <xs:attribute name="reverseRelationship" type="xs:NMTOKEN" use="required" />
-      <xs:attribute default="Habanero.UI.Win.EditableGridWin" name="type" type="xs:NMTOKEN" />
-      <xs:attribute default="Habanero.UI.Win" name="assembly" type="xs:NMTOKEN" />
+      <xs:attribute default="Habanero.Faces.Win.EditableGridWin" name="type" type="xs:NMTOKEN" />
+      <xs:attribute default="Habanero.Faces.Win" name="assembly" type="xs:NMTOKEN" />
     </xs:complexType>
   </xs:element>
   <xs:element name="tab">

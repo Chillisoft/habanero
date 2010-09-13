@@ -219,6 +219,10 @@ namespace Habanero.BO.Loaders
             if (_propTypeName == typeof(Double).Name) {
     	        return _defClassFactory.CreatePropRuleDouble(_name, _message);
     	    }
+            if (_propTypeName == typeof(Int64).Name)
+            {
+                return _defClassFactory.CreatePropRuleInteger(_name, _message);
+            }
     	    throw new InvalidXmlDefinitionException("Could not load the Property Rule " +
 				"for this type('" + _propTypeName + "').");
         }
