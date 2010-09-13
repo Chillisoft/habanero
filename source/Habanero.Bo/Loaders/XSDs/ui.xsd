@@ -44,7 +44,7 @@
       <xs:attribute name="name" type="xs:NMTOKEN" />
       <xs:attribute name="label" type="xs:string" />
       <xs:attribute default="StringTextBoxFilter" name="filterType" type="xs:NMTOKEN" />
-      <xs:attribute default="Habanero.UI.Base" name="filterTypeAssembly" type="xs:string" />
+      <xs:attribute default="Habanero.Faces.Base" name="filterTypeAssembly" type="xs:string" />
       <xs:attribute default="OpLike" name="operator">
         <xs:simpleType>
           <xs:restriction base="xs:NMTOKEN">
