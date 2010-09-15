@@ -308,6 +308,14 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
+/*                if(_primaryKeyDef == null)
+                {
+                    if(SuperClassDef != null && SuperClassDef.SuperClassClassDef != null)
+                    {
+                        var superClassClassDef = SuperClassDef.SuperClassClassDef;
+                        return superClassClassDef.PrimaryKeyDef;
+                    }
+                }*/
                 return _primaryKeyDef;
             }
             set { _primaryKeyDef = value; }

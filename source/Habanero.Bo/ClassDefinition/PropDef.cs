@@ -749,7 +749,8 @@ namespace Habanero.BO.ClassDefinition
             if (!(this.LookupList is BusinessObjectLookupList)) return null;
             IBusinessObject businessObject = null;
             BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
-            if (propValue is Guid && list.LookupBoClassDef.PrimaryKeyDef.IsGuidObjectID)
+            var primaryKeyDef =  ClassDefHelper.GetPrimaryKeyDef(list.LookupBoClassDef, ClassDefinition.ClassDef.ClassDefs);
+            if (propValue is Guid && primaryKeyDef.IsGuidObjectID)
             {
                 IBusinessObject objectInManager = BORegistry.BusinessObjectManager.GetObjectIfInManager((Guid)propValue);
                 if (objectInManager != null) return objectInManager;
