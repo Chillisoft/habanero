@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -633,5 +634,34 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
                 StringAssert.Contains(cpLoaded.ID.ToString(), ex.Message);
             }
         }
+
+        [Test]
+        public void Test_Refresh_WithDuplicateObjectsInPersistedCollection_ShouldThrowHabaneroDeveloperException()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            MyBO bo = new MyBO();
+            bo.Save();
+            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>();
+            collection.Load("MyBoID = '" + bo.MyBoID + "'", "");
+            collection.PersistedBusinessObjects.Add(bo);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, collection.PersistedBusinessObjects.Count);
+            Assert.AreSame(collection.PersistedBusinessObjects[0], collection.PersistedBusinessObjects[1]);
+            //---------------Execute Test ----------------------
+            try
+            {
+                collection.Refresh();
+                //---------------Test Result -----------------------
+            } catch (Exception ex) 
+            {
+                Assert.IsInstanceOf<HabaneroDeveloperException>(ex, "Should have thrown a HabaneroDeveloperException because of the duplicate item in the PersistedBusinessObjects collection");
+                StringAssert.Contains("A duplicate Business Object was found in the persisted objects collection of the BusinessObjectCollection during a reload", ex.Message);
+                StringAssert.Contains("MyBO", ex.Message);
+                StringAssert.Contains(bo.MyBoID.Value.ToString("B").ToUpper(), ex.Message);
+            }
+
+        }
+
     }
 }

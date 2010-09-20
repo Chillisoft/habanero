@@ -362,7 +362,15 @@ namespace Habanero.DB
                 } else {
                     foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
                     {
-                        originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
+                        try
+                        {
+                            originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
+                        } catch (ArgumentException)
+                        {
+                            throw new HabaneroDeveloperException(String.Format("A duplicate Business Object was found in the persisted objects collection of the BusinessObjectCollection during a reload. This is usually indicative of duplicate items being returned in your original query. " + 
+                                "This can be caused by a view returning duplicates or where the primary key of your object is incorrectly defined. " + 
+                                "The database table used for loading this collections was '{0}' and the original load sql query was as follows: '{1}'", selectQuery.Source, statement.ToString()));
+                        }
                     }
                 }
                 bool objectUpdatedInLoading;
