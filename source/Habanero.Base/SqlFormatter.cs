@@ -77,7 +77,7 @@ namespace Habanero.Base
         ///<returns>The delimited table name</returns>
         public string DelimitTable(string tableName)
         {
-            return _leftFieldDelimiter + tableName + _rightFieldDelimiter;
+            return _leftFieldDelimiter + tableName.Replace(".", _rightFieldDelimiter + "." + _leftFieldDelimiter) + _rightFieldDelimiter;  
         }
 
         ///<summary>
