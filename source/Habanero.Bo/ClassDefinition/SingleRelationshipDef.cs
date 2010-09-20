@@ -135,7 +135,13 @@ namespace Habanero.BO.ClassDefinition
 
         public override bool IsOneToOne
         {
-            get { return _setAsOneToOne; }
+            get
+            {
+                if (!string.IsNullOrEmpty(this.ReverseRelationshipName)
+                    && (this.RelatedObjectClassDef.GetRelationship(this.ReverseRelationshipName) is SingleRelationshipDef))
+                    return true;
+                return _setAsOneToOne;
+            }
         }
 
         public override bool IsCompulsory

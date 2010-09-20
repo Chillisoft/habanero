@@ -1456,6 +1456,28 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
+        // use this along with MyRelatedBo.LoadClassDefWithSingleRelationshipBackToMyBo() or LoadClassDefWithMultipleRelationshipBackToMyBo()
+        public static IClassDef LoadClassDefWithSingleRelationshipWithReverseRelationship()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            IClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" type=""Guid""/>
+					<property  name=""TestProp"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationship"" type=""single"" relatedClass=""MyRelatedBo"" relatedAssembly=""Habanero.Test"" reverseRelationship=""MyRelationshipToMyBo"">
+						<relatedProperty property=""RelatedID"" relatedProperty=""MyRelatedBoID"" />
+					</relationship>
+				</class>
+			");
+			ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
 
         public static IClassDef LoadClassDefWithRelationshipAndFormGrid()
         {
@@ -1863,7 +1885,51 @@ namespace Habanero.Test
 					<primaryKey>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKey>
-					<relationship name=""MyRelationshipToMyBo"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"">
+					<relationship name=""MyRelationshipToMyBo"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"" >
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static IClassDef LoadClassDefWithSingleRelationshipBackToMyBo()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" type=""Guid""/>
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" type=""Guid""/>
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationshipToMyBo"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"" reverseRelationship=""MyRelationship"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static IClassDef LoadClassDefWithMultipleRelationshipBackToMyBo()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" type=""Guid""/>
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" type=""Guid""/>
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationshipToMyBo"" type=""multiple"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"" reverseRelationship=""MyRelationship"">
 						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
 					</relationship>
 				</class>
