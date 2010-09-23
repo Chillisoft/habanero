@@ -18,5 +18,13 @@
 // ---------------------------------------------------------------------------------
 namespace Habanero.Base
 {
+
+    /// <summary>
+    /// A basic lookup-list content provider that stores a collection of
+    /// string-Guid pairs as provided in the constructor.
+    /// A lookup-list is typically used to populate features like a ComboBox,
+    /// where the string would be displayed, but the Guid would be the
+    /// value stored (for reasons of data integrity).
+    /// </summary>
     public interface ISimpleLookupList : ILookupList { }
 }

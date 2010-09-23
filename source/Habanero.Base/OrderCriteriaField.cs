@@ -2,6 +2,9 @@ using System;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Field represents one field in an OrderCriteria object.  Each OrderCriteriaField has a name and SortDirection.
+    /// </summary>
     public interface IOrderCriteriaField {
         /// <summary>
         /// The name of the property (as defined in the ClassDef) that this QueryField is for
@@ -36,8 +39,6 @@ namespace Habanero.Base
     {
 
         private readonly string _propertyName;
-        private string _fieldName;
-        private Source _source;
         private readonly SortDirection _sortDirection;
         private IClassDef _classDef;
         /// <summary>
@@ -61,8 +62,8 @@ namespace Habanero.Base
         {
             _sortDirection = sortDirection;
             _propertyName = propertyName;
-            _source = source;
-            _fieldName = fieldName;
+            Source = source;
+            FieldName = fieldName;
         }
 
         /// <summary>
@@ -86,20 +87,12 @@ namespace Habanero.Base
         /// <summary>
         /// The name of the field in the data source that this QueryField is for
         /// </summary>
-        public string FieldName
-        {
-            get { return _fieldName; }
-            set { _fieldName = value; }
-        }
+        public string FieldName { get; set; }
 
         /// <summary>
         /// The name of the source (such as a table name) that this QueryField is from.
         /// </summary>
-        public Source Source
-        {
-            get { return _source; }
-            set { _source = value; }
-        }
+        public Source Source { get; set; }
 
         /// <summary>
         /// The SortDirection option to use when sorting

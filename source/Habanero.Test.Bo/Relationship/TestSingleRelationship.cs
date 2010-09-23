@@ -1027,7 +1027,7 @@ namespace Habanero.Test.BO.Relationship
             BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
             BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = id };
             boWithIntID_DifferentType.IntID = boWithIntID.IntID;
-            SingleRelationship<BOWithIntID> childRelationship = (SingleRelationship<BOWithIntID>) boWithIntID.Relationships["MyChildBoWithInt"];
+            ISingleRelationship childRelationship = (SingleRelationship<BOWithIntID>) boWithIntID.Relationships["MyChildBoWithInt"];
             //--------------- Test Preconditions ----------------
             Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
             Assert.IsNull(childRelationship.GetRelatedObject());

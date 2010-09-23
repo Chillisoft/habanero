@@ -204,7 +204,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="bo">The related Business object (in the example the invoice lines)</param>
         /// <returns>The reverse relationship or null if no reverse relationship is set up.</returns>
-        internal IRelationship GetReverseRelationship(IBusinessObject bo)
+        public IRelationship GetReverseRelationship(IBusinessObject bo)
         {
             if (bo == null || bo.Relationships == null) return null;
             if (HasReverseRelationshipDefined(this))
@@ -225,7 +225,6 @@ namespace Habanero.BO
                         this.RelatedObjectClassDef.ClassName), "");
             }
             return null;
-            //return FindRelationshipByRelationshipKey(bo);
         }
         /// <summary>
         /// Returns true if htis relationship has a reverse relationship defined. False otherwise.
