@@ -985,23 +985,6 @@ namespace Habanero.Test.DB
                 "WHERE a2.[testfield] = ?Param0", statement.Statement.ToString());
         }
 
-        [Test]
-        public void Test_SetupAliases()
-        {
-            //---------------Set up test pack-------------------
-            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
-            MyRelatedBo.LoadClassDef();
-            Criteria criteria = CriteriaParser.CreateCriteria("MyRelationship.MyRelatedTestProp = 'test'");
-            SelectQuery selectQuery = (SelectQuery) QueryBuilder.CreateSelectQuery(classDef, criteria);
-            //---------------Execute Test ----------------------
-            selectQuery.SetupAliases();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, selectQuery.Aliases.Count);
-            Assert.AreEqual("a1", selectQuery.Aliases[selectQuery.Source]);
-            Assert.IsTrue(selectQuery.Aliases.Values.Contains("a1"));
-            Assert.IsTrue(selectQuery.Aliases.Values.Contains("a2"));
-        }
-
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
         {
 #pragma warning disable 672 //Tests on backward compatibility are being maintained.
