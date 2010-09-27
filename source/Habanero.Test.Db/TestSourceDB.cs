@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using NUnit.Framework;
@@ -342,6 +343,27 @@ namespace Habanero.Test.DB
                                                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
+
+        [Test]
+        public void Test_CreateSQL_ShouldUseAliasesInJoins()
+        {
+            //---------------Set up test pack-------------------
+            var mysource = new Source("mysource");
+            QueryField fieldOnMySource = new QueryField("testfield", "testfield", mysource);
+            Source joinedTableSource = new Source("myjoinedtosource");
+            QueryField fieldOnJoinedTableSource = new QueryField("testfield", "testfield", joinedTableSource);
+            mysource.Joins.Add(new Source.Join(mysource, joinedTableSource));
+            mysource.Joins[0].JoinFields.Add(new Source.Join.JoinField(fieldOnMySource, fieldOnJoinedTableSource));
+            SourceDB sourceDB = new SourceDB(mysource);
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            IDictionary<Source, string> aliases = new Dictionary<Source, string>() { { mysource, "a1" }, { joinedTableSource, "a2"} };
+            //---------------Execute Test ----------------------
+            string sql = sourceDB.CreateSQL(sqlFormatter, aliases);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(
+                "([mysource] a1 JOIN [myjoinedtosource] a2 on a1.[testfield] = a2.[testfield])", sql); 
+        }
+
 
         private static Source.Join CreateAndAddJoin(Source fromSource, Source toSource)
         {

@@ -23,6 +23,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
+using System.Linq;
 
 namespace Habanero.DB
 {
@@ -117,6 +118,11 @@ namespace Habanero.DB
         {
             get { return _selectQuery.FirstRecordToLoad; }
             set { _selectQuery.FirstRecordToLoad = value; }
+        }
+
+        public IDictionary<Source, string> Aliases
+        {
+            get { return _selectQuery.Aliases; }
         }
 
         #endregion
@@ -270,20 +276,33 @@ namespace Habanero.DB
         private void AppendFrom(StringBuilder builder)
         {
             SourceDB source = new SourceDB(_selectQuery.Source);
-            builder.AppendFormat(" FROM {0}", source.CreateSQL(_sqlFormatter));
-            if (_selectQuery.OrderCriteria == null) return;
+            //if (Aliases.Count > 0)
+            //{
+            //    builder.AppendFormat(" FROM {0} {1}", source.CreateSQL(_sqlFormatter, Aliases), Aliases[source]);
+            //}
+            //else
+            //{
+                builder.AppendFormat(" FROM {0}", source.CreateSQL(_sqlFormatter, Aliases));
+            //}
         }
 
 
         private void AppendFields(StringBuilder builder)
         {
-            //QueryBuilder.IncludeFieldsFromOrderCriteria(_selectQuery);
-            foreach (QueryField field in _selectQuery.Fields.Values)
+            if (Aliases.Count > 0)
             {
-                builder.AppendFormat("{0}, ", DelimitField(field.Source, field.FieldName));
+                var fields = from field in _selectQuery.Fields.Values
+                             select String.Format("{0}.{1}", _selectQuery.Aliases[field.Source], DelimitFieldName(field.FieldName));
+                builder.AppendFormat(String.Join(", ", fields.ToArray()));
             }
-            builder.Remove(builder.Length - 2, 2);
+            else
+            {
+                var fields = from field in _selectQuery.Fields.Values
+                          select DelimitField(field.Source, field.FieldName);
+                builder.AppendFormat(String.Join(", ", fields.ToArray()));
+            }
         }
+
 
 
         private void AppendNoOfRecordsClauseAtBeginning(StringBuilder builder)
@@ -368,7 +387,8 @@ namespace Habanero.DB
             builder.Append(" WHERE ");
             CriteriaDB criteriaDB = new CriteriaDB(fullCriteria);
             
-            string whereClause = criteriaDB.ToString(_sqlFormatter, value => AddParameter(value, statement));
+
+            string whereClause = criteriaDB.ToString(_sqlFormatter, value => AddParameter(value, statement),Aliases);
 
             builder.Append(whereClause);
         }
@@ -426,6 +446,11 @@ namespace Habanero.DB
         private string DelimitTable(string tableName)
         {
             return _sqlFormatter.DelimitTable(tableName);
+        }
+
+        private string DelimitFieldName(string fieldName)
+        {
+            return _sqlFormatter.DelimitField(fieldName);
         }
     }
 }

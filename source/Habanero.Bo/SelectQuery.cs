@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -33,12 +34,15 @@ namespace Habanero.BO
         private Criteria _criteria;
         private IOrderCriteria _orderCriteria = new OrderCriteria();
 
+        public IDictionary<Source, string> Aliases { get; private set; }
+
         ///<summary>
         /// Creates a SelectQuery with no Criteria and no fields.  In order to use the SelectQuery at least on field must be added
         /// to the <see cref="Fields"/>, and a <see cref="Source"/> must be specified.
         ///</summary>
         public SelectQuery()
         {
+            Aliases = new Dictionary<Source, string>();
             Limit = -1;
             FirstRecordToLoad = 0;
         }
@@ -49,7 +53,8 @@ namespace Habanero.BO
         /// to the <see cref="Fields"/>, and a <see cref="Source"/> must be specified.
         ///</summary>
         /// <param name="criteria">The Criteria to initialise this SelectQuery with.</param>
-        public SelectQuery(Criteria criteria) : this()
+        public SelectQuery(Criteria criteria)
+            : this()
         {
             _criteria = criteria;
         }
@@ -136,5 +141,29 @@ namespace Habanero.BO
         /// Gets and sets the first record to be loaded by the select query.
         ///</summary>
         public int FirstRecordToLoad { get; set; }
+
+
+        private int aliasCount;
+        /// <summary>
+        /// Sets up the aliases to use for each of the sources in this select query.
+        /// </summary>
+        public void SetupAliases()
+        {
+            aliasCount = 0;
+            AddAliasForSource(this.Source);
+
+        }
+
+
+        private void AddAliasForSource(Source source)
+        {
+            if (this.Aliases.ContainsKey(source)) return;
+            this.Aliases.Add(source, "a" + ++aliasCount);
+            this.Source.Joins.ForEach(@join =>
+                {
+                    if (!this.Aliases.ContainsKey(@join.FromSource)) AddAliasForSource(@join.FromSource);
+                    if (!this.Aliases.ContainsKey(@join.ToSource)) AddAliasForSource(@join.ToSource);
+                });
+        }
     }
 }

@@ -113,7 +113,37 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(expectedSourceName2, selectQuery.Source.Joins[1].ToSource.Name);
         }
 
+        [Test]
+        public void TestSetupAliases_SetsAliasOnSource()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            const string sourceName = "mysource";
+            var source1 = new Source(sourceName);
+            selectQuery.Source = source1;
+            selectQuery.Criteria = null;
+            //---------------Execute Test ----------------------
+            selectQuery.SetupAliases();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("a1", selectQuery.Aliases[source1]);
+        }
 
+        [Test]
+        public void Test_SetupAliases_SetsUpAliasesForAllSources()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            Criteria criteria = CriteriaParser.CreateCriteria("MyRelationship.MyRelatedTestProp = 'test'");
+            SelectQuery selectQuery = (SelectQuery)QueryBuilder.CreateSelectQuery(classDef, criteria);
+            //---------------Execute Test ----------------------
+            selectQuery.SetupAliases();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, selectQuery.Aliases.Count);
+            Assert.AreEqual("a1", selectQuery.Aliases[selectQuery.Source]);
+            Assert.IsTrue(selectQuery.Aliases.Values.Contains("a1"));
+            Assert.IsTrue(selectQuery.Aliases.Values.Contains("a2"));
+        }
 
         [Test]
         public void Test_SetOrderCriteriaToNull_NoError()
@@ -164,7 +194,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(selectQuery.Source, selectQuery.Source.Joins[0].FromSource);
             Assert.AreEqual(expectedSourceName, selectQuery.Source.Joins[0].ToSource.Name);
         }
-
 
         [Test]
         public void TestOrderCriteriaWithNoSource()
