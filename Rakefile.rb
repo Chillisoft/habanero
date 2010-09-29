@@ -56,7 +56,8 @@ exec :checkout_smooth do |cmd| #command to check out smooth source using SVN
 end
 
 msbuild :msdo_smooth do |msb| #builds smooth with msbuild
-    msb.targets :Build
+  msb.targets :Rebuild
+  msb.properties :configuration => :Release
 	#msb.path_to_command = "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe"
 	msb.verbosity = "quiet"
     msb.solution = "temp/Habanero Community/SmoothHabanero/trunk/source/SmoothHabanero.sln"
