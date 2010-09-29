@@ -26,7 +26,7 @@ task :clean_habanero do #deletes bin folder before build
 	FileUtils.rm_rf 'temp/Habanero/trunk/bin/'
 end
 exec :checkout_habanero do |cmd| #command to check out habanero source using SVN
-	cmd.path_to_command = "../../../Utilities/BuildServer/Subversion/bin/svn.exe" # for some reason this doesn't pick up environment variables so I can't just use 'svn'
+	cmd.path_to_command = "../../Utilities/BuildServer/Subversion/bin/svn.exe" # for some reason this doesn't pick up environment variables so I can't just use 'svn'
 	cmd.parameters %q(checkout "http://delicious:8080/svn/habanero/Habanero/trunk" "temp/Habanero/trunk/" --username chilli --password chilli) 
 end
 
