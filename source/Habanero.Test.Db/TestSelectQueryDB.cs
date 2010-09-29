@@ -24,7 +24,6 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO;
 using NUnit.Framework;
-using System.Linq;
 
 namespace Habanero.Test.DB
 {
