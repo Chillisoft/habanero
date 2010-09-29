@@ -28,7 +28,8 @@ msbuild :msbuild_habanero do |msb| #builds habanero with msbuild
 
 ncoverconsole :run_ncover do |ncc| #This runs the ncover and (hopefully nunit) stuff
  ncc.path_to_command = $Ncover_path
- ncc.output :xml => "Coverage.xml"
+ ncc.output :xml => "Coverage.xml" 
+ ncc.output :html => "CoverageReport.html"
  ncc.working_directory = "."
  ncc.cover_assemblies("Habanero.BO")
  #ncc.ignore_assemblies("Habanero.Base.CoverageExcludeAttribute") #this only works with the commercial version of ncover
@@ -37,7 +38,7 @@ ncoverconsole :run_ncover do |ncc| #This runs the ncover and (hopefully nunit) s
   nunit = NUnitTestRunner.new($Nunit_path)
 # nunit-console-x86.exe is run to prevent the "Profiler connection not established" error from old Ncover versions
  nunit.assemblies 'bin\Habanero.Test.dll','bin\Habanero.Test.Bo.dll','bin\Habanero.Test.Db.dll'
-
+ nunit.options '/xml=nunit-result.xml'
 #nunit.options '/labels'
 #enable this if you want to see pretty test names scrolling in the hudson page while it builds
  
