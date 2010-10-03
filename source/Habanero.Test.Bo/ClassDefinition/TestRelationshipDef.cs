@@ -17,7 +17,6 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Diagnostics;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -239,7 +238,7 @@ namespace Habanero.Test.BO.ClassDefinition
             }
             //---------------Test Result -----------------------
         }
-
+#pragma warning disable 168
         [Test]
         public void TestWithUnknownRelatedType()
         {
@@ -265,7 +264,9 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             try
             {
+
                 Type classType = relDef.RelatedObjectClassType;
+
                 Assert.Fail("Expected to throw an UnknownTypeNameException");
             }
                 //---------------Test Result -----------------------
@@ -274,7 +275,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 StringAssert.Contains("Unable to load the related object type while attempting to load a relationship definition", ex.Message);
             }
         }
-
+#pragma warning restore 168
         [Ignore("Need to write this test")]
         [Test]
         public void Test_LoadInheritedRelationship_UsingInheritedRelatedProps()
@@ -312,93 +313,6 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreSame(classDef, relationshipDef.OwningClassDef);
         }
-        [Test]
-        public void Test_GetClassDef_ShouldReturnClassDef()
-        {
-            //---------------Set up test pack-------------------
-            IClassDef classDef = MockRepository.GenerateMock<IClassDef>();
-            IRelationshipDef relationshipDef = new FakeRelationshipDef {OwningClassDef = classDef};
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            IClassDef owningClassDef = relationshipDef.OwningClassDef;
-            //---------------Test Result -----------------------
-            Assert.AreSame(classDef, owningClassDef);
-        }
-
-        [Test]
-        public void Test_IsOneToMany_WhenIsMultipleRelationship_ShouldReturnTrue()
-        {
-            //---------------Set up test pack-------------------
-            IRelationshipDef relationshipDef = new FakeMultipleRelationshipDef();
-            //---------------Assert Precondition----------------
-            Assert.IsInstanceOf(typeof(MultipleRelationshipDef), relationshipDef);
-            //---------------Execute Test ----------------------
-            bool isOneToMany = relationshipDef.IsOneToMany;
-            //---------------Test Result -----------------------
-            Assert.IsTrue(isOneToMany);
-        }
-        [Test]
-        public void Test_IsOneToMany_WhenIsSingleRelationship_ShouldReturnFalse()
-        {
-            //---------------Set up test pack-------------------
-            IRelationshipDef relationshipDef = new FakeSingleRelationshipDef();
-            //---------------Assert Precondition----------------
-            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
-            //---------------Execute Test ----------------------
-            bool isOneToMany = relationshipDef.IsOneToMany;
-            //---------------Test Result -----------------------
-            Assert.IsFalse(isOneToMany);
-        }
-        [Test]
-        public void Test_IsManyToOne_WhenIsMultipleRelationship_ShouldReturnFalse()
-        {
-            //---------------Set up test pack-------------------
-            IRelationshipDef relationshipDef = new FakeMultipleRelationshipDef();
-            //---------------Assert Precondition----------------
-            Assert.IsInstanceOf(typeof(MultipleRelationshipDef), relationshipDef);
-            //---------------Execute Test ----------------------
-            bool isOneToMany = relationshipDef.IsManyToOne;
-            //---------------Test Result -----------------------
-            Assert.IsFalse(isOneToMany);
-        }
-        [Test]
-        public void Test_IsManyToOne_WhenIsSingleRelationship_ByDefault_ShouldReturnTrue()
-        {
-            //---------------Set up test pack-------------------
-            IRelationshipDef relationshipDef = new FakeSingleRelationshipDef();
-            //---------------Assert Precondition----------------
-            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
-            //---------------Execute Test ----------------------
-            bool isOneToMany = relationshipDef.IsManyToOne;
-            //---------------Test Result -----------------------
-            Assert.IsTrue(isOneToMany);
-        }
-        [Test]
-        public void Test_IsOneToOne_WhenIsMultipleRelationship_ShouldReturnFalse()
-        {
-            //---------------Set up test pack-------------------
-            IRelationshipDef relationshipDef = new FakeMultipleRelationshipDef();
-            //---------------Assert Precondition----------------
-            Assert.IsInstanceOf(typeof(MultipleRelationshipDef), relationshipDef);
-            //---------------Execute Test ----------------------
-            bool isOneToOne = relationshipDef.IsOneToOne;
-            //---------------Test Result -----------------------
-            Assert.IsFalse(isOneToOne);
-        }
-        [Test]
-        public void Test_IsOneToOne_WhenIsSingleRelationship_ByDefault_ShouldReturnFalse()
-        {
-            //---------------Set up test pack-------------------
-            IRelationshipDef relationshipDef = new FakeSingleRelationshipDef();
-            //---------------Assert Precondition----------------
-            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
-            //---------------Execute Test ----------------------
-            bool isOneToOne = relationshipDef.IsOneToOne;
-            //---------------Test Result -----------------------
-            Assert.IsFalse(isOneToOne);
-        }
-
-
 
         [Test]
         public void Test_SetOwningClassDef_ShouldSet()
@@ -413,8 +327,127 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreSame(expectedClassDef, relationshipDef.OwningClassDef);
         }
+        [Test]
+        public void Test_GetClassDef_ShouldReturnClassDef()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MockRepository.GenerateMock<IClassDef>();
+            IRelationshipDef relationshipDef = new FakeRelationshipDef {OwningClassDef = classDef};
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IClassDef owningClassDef = relationshipDef.OwningClassDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, owningClassDef);
+        }
 
+        [Test]
+        public void Test_OwningClassName_WhenOwningClassDefNull_ShouldReturnEmptyString()
+        {
+            //---------------Set up test pack-------------------
+            IRelationshipDef relationshipDef = new FakeRelationshipDef();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(relationshipDef.OwningClassDef);
+            //---------------Execute Test ----------------------
+            var owningClassName = relationshipDef.OwningClassName;
+            //---------------Test Result -----------------------
+            Assert.IsEmpty(owningClassName);
+        }
+        [Test]
+        public void Test_OwningClassName_WhenOwningClassDefSet_ShouldReturnOwningClassDefName()
+        {
+            IClassDef classDef = MockRepository.GenerateStub<IClassDef>();
+            classDef.ClassName = GetRandomString();
+            IRelationshipDef relationshipDef = new FakeRelationshipDef { OwningClassDef = classDef };
+            //---------------Assert Precondition----------------
+            Assert.IsNotNullOrEmpty(classDef.ClassName);
+            //---------------Execute Test ----------------------
+            var owningClassName = relationshipDef.OwningClassName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(classDef.ClassName, owningClassName);
+        }
 
+        [Test]
+        public void Test_IsOneToMany_WhenIsMultipleRelationship_ShouldReturnTrue()
+        {
+            //---------------Set up test pack-------------------
+            IRelationshipDef relationshipDef = new FakeMultipleRelationshipDef();
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf(typeof(MultipleRelationshipDef), relationshipDef);
+            //---------------Execute Test ----------------------
+            bool isOneToMany = relationshipDef.IsOneToMany;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isOneToMany);
+        }
+
+        [Test]
+        public void Test_IsOneToMany_WhenIsSingleRelationship_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            IRelationshipDef relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
+            //---------------Execute Test ----------------------
+            bool isOneToMany = relationshipDef.IsOneToMany;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isOneToMany);
+        }
+
+        [Test]
+        public void Test_IsManyToOne_WhenIsMultipleRelationship_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            IRelationshipDef relationshipDef = new FakeMultipleRelationshipDef();
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf(typeof(MultipleRelationshipDef), relationshipDef);
+            //---------------Execute Test ----------------------
+            bool isOneToMany = relationshipDef.IsManyToOne;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isOneToMany);
+        }
+
+        [Test]
+        public void Test_IsManyToOne_WhenIsSingleRelationship_ByDefault_ShouldReturnTrue()
+        {
+            //---------------Set up test pack-------------------
+            IRelationshipDef relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
+            //---------------Execute Test ----------------------
+            bool isOneToMany = relationshipDef.IsManyToOne;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isOneToMany);
+        }
+
+        [Test]
+        public void Test_IsOneToOne_WhenIsMultipleRelationship_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            IRelationshipDef relationshipDef = new FakeMultipleRelationshipDef();
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf(typeof(MultipleRelationshipDef), relationshipDef);
+            //---------------Execute Test ----------------------
+            bool isOneToOne = relationshipDef.IsOneToOne;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isOneToOne);
+        }
+
+        [Test]
+        public void Test_IsOneToOne_WhenIsSingleRelationship_ByDefault_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            IRelationshipDef relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
+            //---------------Execute Test ----------------------
+            bool isOneToOne = relationshipDef.IsOneToOne;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isOneToOne);
+        }
+
+        private static string GetRandomString()
+        {
+            return TestUtil.GetRandomString();
+        }
     }
 
     #region MockBO For Testing
@@ -495,16 +528,16 @@ namespace Habanero.Test.BO.ClassDefinition
 
         #endregion //For Testing
     }
-
+    // ReSharper disable UnusedMember.Global
     internal class MockBOWithCompulsoryField : BusinessObject
     {
-        public MockBOWithCompulsoryField()
+/*        public MockBOWithCompulsoryField()
         {
-        }
-
+        }*/
+/*
         public MockBOWithCompulsoryField(ClassDef def) : base(def)
         {
-        }
+        }*/
 
         protected override IClassDef ConstructClassDef()
         {
@@ -546,7 +579,9 @@ namespace Habanero.Test.BO.ClassDefinition
 
         public Guid? MockBOProp1
         {
+
             get { return (Guid?) this.GetPropertyValue("MockBOProp1"); }
+
             set { this.SetPropertyValue("MockBOProp1", value); }
         }
     }
@@ -641,4 +676,5 @@ namespace Habanero.Test.BO.ClassDefinition
         }
     }
     #endregion
+    // ReSharper restore UnusedMember.Global
 }
