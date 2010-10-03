@@ -162,6 +162,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// Returns true where the owning business object has the foreign key for this relationship false otherwise.
         /// This is used to differentiate between the two sides of the relationship.
+        /// For A Multiple Relatiosnhip this will always return false since the FK must be on the related Class.
         ///</summary>
         public override bool OwningBOHasForeignKey { get {
             return false;
