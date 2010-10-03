@@ -125,16 +125,25 @@ namespace Habanero.BO.ClassDefinition
             return (ISingleRelationship) Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);
         }
 
+        ///<summary>
+        /// Returns true if this is a Multiple Relationship and the Reverse is a single relationship
+        ///</summary>
         public override bool IsOneToMany
         {
             get { return false; }
         }
 
+        ///<summary>
+        /// Returns true if this is a Single Relationship and the Reverse is a Multiple relationship
+        ///</summary>
         public override bool IsManyToOne
         {
             get { return !IsOneToOne; }
         }
 
+        ///<summary>
+        /// Returns true if this is a Single Relationship and the Reverse is a Single relationship
+        ///</summary>
         public override bool IsOneToOne
         {
             get
