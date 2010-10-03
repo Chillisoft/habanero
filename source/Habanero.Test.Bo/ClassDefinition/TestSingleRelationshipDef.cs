@@ -106,6 +106,47 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(isOneToOne);
         }
         [Test]
+        public void Test_IsOneToOne_WhenNoRevRelTypeLoaded_SetOneToOneSetToFalse_ShouldReturnFalseBug944()
+        {
+            //---------------Set up test pack-------------------
+            var singleRelationshipDef = new FakeSingleRelationshipDef
+            {
+                ReverseRelationshipName = GetRandomString()
+            };
+            IRelationshipDef relationshipDef = singleRelationshipDef;
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
+            Assert.IsNotNullOrEmpty(relationshipDef.ReverseRelationshipName);
+            //---------------Execute Test ----------------------
+            bool isOneToOne = relationshipDef.IsOneToOne;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isOneToOne);
+        }
+        [Test]
+        public void Test_IsOneToOne_WhenNoRevRelTypeLoaded_SetOneToOneSetToTrue_ShouldReturnTrue_Bug944()
+        {
+            //---------------Set up test pack-------------------
+            var singleRelationshipDef = new FakeSingleRelationshipDef
+                                            {
+                                                ReverseRelationshipName = GetRandomString()
+                                            };
+            singleRelationshipDef.SetAsOneToOne();
+            IRelationshipDef relationshipDef = singleRelationshipDef;
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
+            Assert.IsNotNullOrEmpty(relationshipDef.ReverseRelationshipName);
+            //---------------Execute Test ----------------------
+            bool isOneToOne = relationshipDef.IsOneToOne;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isOneToOne);
+        }
+
+        private static string GetRandomString()
+        {
+            return TestUtil.GetRandomString();
+        }
+
+        [Test]
         public void Test_IsManyToOne_WhenIsSingleRelationship_SetOneToOneSetToTrue_ShouldReturnFalse()
         {
             //---------------Set up test pack-------------------

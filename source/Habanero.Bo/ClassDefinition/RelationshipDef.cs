@@ -190,9 +190,15 @@ namespace Habanero.BO.ClassDefinition
     	{
     		get
     		{
+    		    
     		    return ClassDef.ClassDefs[RelatedObjectAssemblyName, RelatedObjectClassNameWithTypeParameter];
     		}
     	}
+
+        protected bool RelatedClassDefLoaded()
+        {
+            return ClassDef.ClassDefs.Contains(RelatedObjectAssemblyName, RelatedObjectClassNameWithTypeParameter);
+        }
 
         public string RelatedObjectClassNameWithTypeParameter
         {
