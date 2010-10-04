@@ -331,5 +331,110 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsFalse(isCompulsory, "Rel Should not be compulsory");
         }
+
+        #region ISingleValueDef
+
+        [Test]
+        public void Test_PropertyName_ShouldReturnRelationshipName()
+        {
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef(GetRandomString());
+            
+            //---------------Assert Precondition----------------
+            Assert.IsNotNullOrEmpty(relationshipDef.RelationshipName);
+            //---------------Execute Test ----------------------
+            var propertyName = relationshipDef.PropertyName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(relationshipDef.RelationshipName, propertyName);
+        }
+        [Test]
+        public void Test_SetPropertyName_ShouldSetRelationshipName()
+        {
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef(GetRandomString());
+            var expectedRelationshipName = GetRandomString();
+
+            //---------------Assert Precondition----------------
+            Assert.AreNotEqual(expectedRelationshipName, relationshipDef.RelationshipName);
+            //---------------Execute Test ----------------------
+            relationshipDef.PropertyName = expectedRelationshipName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedRelationshipName, relationshipDef.RelationshipName);
+        }
+        [Test]
+        public void Test_DispalyName_ShouldReturnRelationshipNamePascalCased()
+        {
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef("SomeName");
+            const string expectedDisplayName = "Some Name";
+            //---------------Assert Precondition----------------
+            Assert.IsNotNullOrEmpty(relationshipDef.RelationshipName);
+            //---------------Execute Test ----------------------
+            var propertyName = relationshipDef.PropertyName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedDisplayName, propertyName);
+        }
+
+        [Test]
+        public void Test_GetCompulsory_WhenTrue_ShouldReturnRelationshipIsCompulsory()
+        {
+            //---------------Set up test pack-------------------
+
+            var relationshipDef = new FakeSingleRelationshipDef();
+            relationshipDef.SetAsCompulsory();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(relationshipDef.IsCompulsory);
+            //---------------Execute Test ----------------------
+            var compulsory = relationshipDef.Compulsory;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(compulsory);
+        }
+        [Test]
+        public void Test_GetCompulsory_WhenFalse_ShouldReturnRelationshipIsCompulsory()
+        {
+            //---------------Set up test pack-------------------
+
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(relationshipDef.IsCompulsory);
+            //---------------Execute Test ----------------------
+            var compulsory = relationshipDef.Compulsory;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(compulsory);
+        }
+
+        [Test]
+        public void Test_GetDescription_WhenNotSetShouldReturnEmptyString()
+        {
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var actualDescription = relationshipDef.Description;
+            //---------------Test Result -----------------------
+            Assert.IsNullOrEmpty(actualDescription);
+        }
+        [Test]
+        public void Test_SetDescription_ShouldSeet()
+        {
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            var expectedRelationshipDescription = GetRandomString();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            relationshipDef.Description = expectedRelationshipDescription;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedRelationshipDescription, relationshipDef.Description);
+        }
+
+        //TODO mark 04 Oct 2010: For Charles Do tests for
+        //PropertyTypeAssemblyName
+        //PropertyTypeName
+        //PropertyType
+        //ClassDef
+        //DisplayNameFull
+        //ClassName
+        #endregion
+
     }
 }

@@ -19,13 +19,14 @@
 using System;
 using System.Linq;
 using Habanero.Base;
+using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Defines a relationship where the owner relates to only one other object.
     /// </summary>
-    public class SingleRelationshipDef : RelationshipDef
+    public class SingleRelationshipDef : RelationshipDef, ISingleValueDef
     {
         private bool _setAsOneToOne;
         private bool _setAsCompulsory;
@@ -225,5 +226,62 @@ namespace Habanero.BO.ClassDefinition
                    || (this.OwningClassDef != null
                        && this.OwningClassDef.GetPropDef(def.OwnerPropertyName).Compulsory);
         }
+
+        #region Implementation of ISingleValueDef
+
+        public string DisplayName
+        {
+            get { return StringUtilities.DelimitPascalCase(this.RelationshipName, " "); }
+        }
+
+        public string Description { get; set; }
+            
+        public string PropertyTypeAssemblyName
+        {
+            get { return this.RelatedObjectAssemblyName; }
+            set { this.RelatedObjectAssemblyName = value; }
+        }
+
+        public string PropertyTypeName
+        {
+            get { return this.RelatedObjectClassName; }
+            set { this.RelatedObjectAssemblyName = value; }
+        }
+
+        public Type PropertyType
+        {
+            get { return this.RelatedObjectClassType; }
+            set { this.RelatedObjectClassType = value; }
+        }
+
+        public bool Compulsory
+        {
+            get {return this.IsCompulsory; }
+            set { _setAsCompulsory = value; }
+        }
+
+        public string PropertyName
+        {
+            get { return this.RelationshipName; }
+            set { this.RelationshipName = value; }
+        }
+
+        public IClassDef ClassDef
+        {
+            get { return this.OwningClassDef; }
+            set { this.OwningClassDef = value; }
+        }
+
+        public string DisplayNameFull
+        {
+            get { return this.DisplayName; }
+        }
+
+        public string ClassName
+        {
+            get { return this.OwningClassName; }
+        }
+
+        #endregion
     }
 }
