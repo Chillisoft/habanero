@@ -120,7 +120,7 @@ namespace Habanero.DB
             set { _selectQuery.FirstRecordToLoad = value; }
         }
 
-        public IDictionary<Source, string> Aliases
+        public IDictionary<string, string> Aliases
         {
             get { return _selectQuery.Aliases; }
         }
@@ -292,7 +292,7 @@ namespace Habanero.DB
             if (Aliases.Count > 0)
             {
                 var fields = from field in _selectQuery.Fields.Values
-                             select String.Format("{0}.{1}", _selectQuery.Aliases[field.Source], DelimitFieldName(field.FieldName));
+                             select String.Format("{0}.{1}", _selectQuery.Aliases[field.Source.ToString()], DelimitFieldName(field.FieldName));
                 builder.AppendFormat(String.Join(", ", fields.ToArray()));
             }
             else
@@ -357,17 +357,40 @@ namespace Habanero.DB
             string tableAndFieldName;
             if (orderOrderCriteriaField.Source != null)
             {
-                tableAndFieldName = DelimitField(orderOrderCriteriaField.Source.ChildSourceLeaf, orderOrderCriteriaField.FieldName);
+                if (this.Aliases.Count>0)
+                {
+                    tableAndFieldName = this.Aliases[orderOrderCriteriaField.Source.ChildSourceLeaf.ToString()] + "." + DelimitFieldName(orderOrderCriteriaField.FieldName); 
+                }
+                else
+                {
+                    tableAndFieldName = DelimitField(orderOrderCriteriaField.Source.ChildSourceLeaf, orderOrderCriteriaField.FieldName);
+                }
             }
             else
             {
                 if (Fields.ContainsKey(orderOrderCriteriaField.PropertyName))
                 {
                     QueryField queryField = Fields[orderOrderCriteriaField.PropertyName];
-                    tableAndFieldName = DelimitField(queryField.Source, queryField.FieldName);
+                    if (this.Aliases.Count>0)
+                    {
+                        tableAndFieldName = this.Aliases[queryField.Source.ToString()] + "." + DelimitFieldName(queryField.FieldName); 
+                    }
+                    else
+                    {
+                        tableAndFieldName = DelimitField(queryField.Source, queryField.FieldName);
+                    }
+                    //tableAndFieldName = DelimitField(queryField.Source, queryField.FieldName);
                 } else
                 {
-                    tableAndFieldName = DelimitField(this.Source, orderOrderCriteriaField.FieldName);
+                    if (this.Aliases.Count > 0)
+                    {
+                        tableAndFieldName = this.Aliases[Source.ToString()] + "." + DelimitFieldName(orderOrderCriteriaField.FieldName);
+                    }
+                    else
+                    {
+                        tableAndFieldName = DelimitField(Source, orderOrderCriteriaField.FieldName);
+                    }
+                    //tableAndFieldName = DelimitField(this.Source, orderOrderCriteriaField.FieldName);
                 }
             }
             StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");
@@ -451,6 +474,55 @@ namespace Habanero.DB
         private string DelimitFieldName(string fieldName)
         {
             return _sqlFormatter.DelimitField(fieldName);
+        }
+
+        private int aliasCount;
+        /// <summary>
+        /// Sets up the aliases to use for each of the sources in this select query.
+        /// </summary>
+        public void SetupAliases()
+        {
+            aliasCount = 0;
+            AddAliasForSource(this.Source);
+ }
+
+
+        private void AddAliasForSource(Source source)
+        {
+            var sourceName = source.ToString();
+            if (this.Aliases.ContainsKey(sourceName)) return;
+
+            aliasCount = aliasCount + 1;
+
+            var sourceParts = sourceName.Split('.').ToList();
+            Queue<string> queue = new Queue<string>();
+            sourceParts.ForEach(queue.Enqueue);
+
+            string subSourceName = "";
+            while (queue.Count > 0)
+            {
+                if (!String.IsNullOrEmpty(subSourceName)) subSourceName += ".";
+                subSourceName += queue.Dequeue();
+                if (!this.Aliases.ContainsKey(subSourceName))
+                    this.Aliases.Add(subSourceName, "a" + aliasCount);
+            }
+
+            if (source.ChildSource != null) AddAliasForSource(source.ChildSource);
+            if (source.ChildSourceLeaf != null) AddAliasForSource(source.ChildSourceLeaf);
+            foreach (var queryField in Fields)
+            {
+                AddAliasForSource(queryField.Value.Source);
+            }
+            source.InheritanceJoins.ForEach(@join =>
+            {
+                if (!this.Aliases.ContainsKey(@join.ToString())) AddAliasForSource(@join.FromSource);
+                if (!this.Aliases.ContainsKey(@join.ToSource.ToString())) AddAliasForSource(@join.ToSource);
+            });
+            source.Joins.ForEach(@join =>
+            {
+                if (!this.Aliases.ContainsKey(@join.FromSource.ToString())) AddAliasForSource(@join.FromSource);
+                if (!this.Aliases.ContainsKey(@join.ToSource.ToString())) AddAliasForSource(@join.ToSource);
+            });
         }
     }
 }

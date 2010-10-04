@@ -24,6 +24,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader
@@ -2700,6 +2701,50 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.Contains(engine, col);
         }
 
+        [Test]
+        [Ignore("Working on this: issue #908")]
+        public virtual void Test_LoadThroughSelfReferencingRelationship_OneLevel()
+        {
+            //---------------Set up test pack-------------------
+            Asset.LoadClassDef();
+            Asset parentAsset = new Asset();
+            parentAsset.Save();
+            Asset asset = new Asset();
+            asset.Parent = parentAsset;
+            asset.Save();
+            string criteria = string.Format("Parent.AssetID = '{0}'", parentAsset.AssetID);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Asset> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Asset>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(asset, col);
+        }
+
+        [Test]
+        [Ignore("Working on this: issue #908")]
+        public virtual void Test_LoadThroughSelfReferencingRelationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            Asset.LoadClassDef();
+            Asset grandparentAsset = new Asset();
+            grandparentAsset.Save();
+            Asset parentAsset = new Asset();
+            parentAsset.Parent = grandparentAsset;
+            parentAsset.Save();
+            Asset asset = new Asset();
+            asset.Parent = parentAsset;
+            asset.Save();
+            string criteria = string.Format("Parent.Parent.AssetID = '{0}'", grandparentAsset.AssetID);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Asset> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Asset>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(asset, col);
+        }
 
         [Test]
         public virtual void Test_Load_CriteriaString_ThroughRelationship_TwoLevels()

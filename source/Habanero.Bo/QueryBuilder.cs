@@ -60,6 +60,11 @@ namespace Habanero.BO
             Source source = null;
             PrepareSource(classDef, ref source);
             selectQuery.Source = source;
+            //foreach (var queryField in selectQuery.Fields)
+            //{
+            //    //if (queryField.Value.Source.Name == classDef.ClassName)
+            //    queryField.Value.Source = source;
+            //}
             PrepareCriteria(classDef, criteria);
             PrepareDiscriminatorCriteria(classDef, discriminatorCriteria);
             selectQuery.Criteria = criteria;
@@ -81,7 +86,7 @@ namespace Habanero.BO
 
         private static QueryField GetQueryField(IClassDef classDef, IPropDef propDef)
         {
-            Source propSource = new Source(classDef.GetTableName(propDef));
+            Source propSource = new Source(propDef.ClassName, classDef.GetTableName(propDef));
             return new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, propSource);
         }
 
@@ -319,7 +324,7 @@ namespace Habanero.BO
             else
             {
                 criteria.Field.FieldName = criteria.Field.PropertyName;
-                criteria.Field.Source = new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter,
+                criteria.Field.Source = new Source(((ClassDef)classDef).ClassNameExcludingTypeParameter,
                                                    classDef.GetTableName());
             }
         }

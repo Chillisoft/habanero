@@ -338,6 +338,7 @@ namespace Habanero.DB
         {
             IClassDef classDef = collection.ClassDef;
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery, _databaseConnection);
+           // selectQuery.SetupAliases();
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
 
             int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);

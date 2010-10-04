@@ -131,7 +131,7 @@ namespace Habanero.Base
 
         public string ToString(ISqlFormatter formatter, AddParameterDelegate addParameter)
         {
-            return ToString(formatter, addParameter, new Dictionary<Source, string>());
+            return ToString(formatter, addParameter, new Dictionary<string, string>());
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Habanero.Base
         /// <param name="addParameter">The delegate to use to convert the value in object form to a value in string form. 
         /// See <see cref="AddParameterDelegate"/></param>
         /// <returns>The Criteria in string form.</returns>
-        public string ToString(ISqlFormatter formatter, AddParameterDelegate addParameter, IDictionary<Source, string> aliases)
+        public string ToString(ISqlFormatter formatter, AddParameterDelegate addParameter, IDictionary<string, string> aliases)
         {
             if (IsComposite())
             {
@@ -185,7 +185,7 @@ namespace Habanero.Base
             string separator = "";
             if (aliases.Count > 0)
             {
-                if (Field.Source != null) sourceEntityName = aliases[Field.Source.ChildSourceLeaf];
+                if (Field.Source != null) sourceEntityName = aliases[Field.Source.ChildSourceLeaf.ToString()];
                 separator = ".";
             }
             else
