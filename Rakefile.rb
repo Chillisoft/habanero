@@ -29,7 +29,6 @@ msbuild :msbuild_habanero do |msb| #builds habanero with msbuild
 ncoverconsole :run_ncover do |ncc| #This runs the ncover and (hopefully nunit) stuff
  ncc.path_to_command = $Ncover_path
  ncc.output :xml => "Coverage.xml" 
- ncc.output :html => "CoverageReport.html"
  ncc.working_directory = "."
  ncc.cover_assemblies("Habanero.BO")
  #ncc.ignore_assemblies("Habanero.Base.CoverageExcludeAttribute") #this only works with the commercial version of ncover
