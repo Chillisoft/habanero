@@ -362,7 +362,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(expectedRelationshipName, relationshipDef.RelationshipName);
         }
         [Test]
-        public void Test_DispalyName_ShouldReturnRelationshipNamePascalCased()
+        public void Test_DisplayName_ShouldReturnRelationshipNamePascalCased()
         {
             //---------------Set up test pack-------------------
             var relationshipDef = new FakeSingleRelationshipDef("SomeName");
@@ -370,7 +370,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
             Assert.IsNotNullOrEmpty(relationshipDef.RelationshipName);
             //---------------Execute Test ----------------------
-            var propertyName = relationshipDef.PropertyName;
+            var propertyName = relationshipDef.DisplayName;
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDisplayName, propertyName);
         }
