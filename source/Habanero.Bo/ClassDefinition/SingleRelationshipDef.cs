@@ -23,10 +23,11 @@ using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
+
     /// <summary>
     /// Defines a relationship where the owner relates to only one other object.
     /// </summary>
-    public class SingleRelationshipDef : RelationshipDef, ISingleValueDef
+    public class SingleRelationshipDef : RelationshipDef, ISingleRelationshipDef
     {
         private bool _setAsOneToOne;
         private bool _setAsCompulsory;

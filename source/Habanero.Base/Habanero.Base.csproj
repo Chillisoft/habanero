@@ -155,6 +155,8 @@
     <Compile Include="InvalidOrderCriteriaException.cs" />
     <Compile Include="IResolvableToValue.cs" />
     <Compile Include="ISimpleLookupList.cs" />
+    <Compile Include="ISingleRelationshipDef.cs" />
+    <Compile Include="ISingleValueDef.cs" />
     <Compile Include="OrderCriteriaField.cs" />
     <Compile Include="RecordingExceptionNotifier.cs" />
     <Compile Include="Exceptions\InvalidKeyException.cs" />
