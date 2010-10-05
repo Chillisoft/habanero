@@ -436,5 +436,143 @@ namespace Habanero.Test.BO.ClassDefinition
         //ClassName
         #endregion
 
+        #region ISingleValueDef_ImplementngAboveList
+       
+        [Test]
+        public void Test_GetPropertyTypeAssemblyName_ShouldReturnRelatedObjectAssemblyName()
+        {//PropertyTypeAssemblyName
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var propertyTypeAssemblyName = relationshipDef.PropertyTypeAssemblyName;
+            //---------------Test Result -----------------------
+            Assert.IsNotNullOrEmpty(propertyTypeAssemblyName);
+            Assert.AreEqual(propertyTypeAssemblyName, relationshipDef.RelatedObjectAssemblyName);
+         }
+
+        [Test]
+        public void Test_SetPropertyTypeAssemblyName_ShouldSetItToRelatedObjectAssemblyName()
+        {  //PropertyTypeAssemblyName
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            var relatedObjectAssemblyName= GetRandomString();
+             //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            relationshipDef.PropertyTypeAssemblyName = relatedObjectAssemblyName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(relatedObjectAssemblyName, relationshipDef.RelatedObjectAssemblyName);
+        }
+
+        [Test]
+        public void Test_GetPropertyTypeName_ShouldReturnRelatedObjectClassName()
+        {//PropertyTypeName
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var propertyTypeName = relationshipDef.PropertyTypeName;
+            //---------------Test Result -----------------------
+            Assert.IsNotNullOrEmpty(propertyTypeName);
+            Assert.AreEqual(propertyTypeName, relationshipDef.RelatedObjectClassName);
+        }
+
+        [Test]
+        public void Test_SetPropertyTypeName_ShouldSetItToRelatedObjectAssemblyName()
+        {  ////PropertyTypeName
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            var relatedObjectAssemblyName = relationshipDef.RelatedObjectAssemblyName;
+           
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            relationshipDef.PropertyTypeName = relatedObjectAssemblyName;
+            //---------------Test Result -----------------------
+            StringAssert.Contains(relatedObjectAssemblyName,relationshipDef.PropertyTypeName);
+        
+        }
+
+        [Test]
+        public void Test_GetPropertyType_ShouldReturnRelatedObjectClassType()
+        {//PropertyType
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var propertyType = relationshipDef.PropertyType;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(propertyType, relationshipDef.RelatedObjectClassType);
+            Assert.AreSame(propertyType, relationshipDef.RelatedObjectClassType);
+        }
+
+
+        [Test]
+        public void Test_SetPropertyType_ShouldSetItToRelatedObjectClassType()
+        {  ////PropertyType
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            var randomType=relationshipDef.RelatedObjectClassType;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            relationshipDef.PropertyType = randomType;
+            //---------------Test Result -----------------------
+            Assert.AreSame(randomType, relationshipDef.PropertyType);
+        }
+
+        [Test]
+        public void Test_GetClassDef_ShouldReturnOwningClassDef()
+        {//ClassDef
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var classDef = relationshipDef.ClassDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, relationshipDef.OwningClassDef);
+        }
+
+
+        [Test]
+        public void Test_SetClassDef_ShouldSetItToOwningClassDef()
+        {  ////ClassDef
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            var classDef = relationshipDef.OwningClassDef;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            relationshipDef.ClassDef = classDef; 
+            //---------------Test Result -----------------------
+            Assert.AreEqual(classDef, relationshipDef.ClassDef);
+        }
+
+
+        [Test]
+        public void Test_GetDisplayNameFull_ShouldReturnDisplayName()
+        {//ClassName
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+
+            var classNameFull = relationshipDef.DisplayNameFull;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(classNameFull, relationshipDef.DisplayName);
+        }
+
+        [Test]
+        public void Test_GetClassName_ShouldReturnOwningClassName()
+        {//ClassName
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var className = relationshipDef.ClassName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(className, relationshipDef.OwningClassName);
+        }
+        
+
+        #endregion
+
     }
 }

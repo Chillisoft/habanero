@@ -150,7 +150,7 @@ namespace Habanero.BO.ClassDefinition
 		/// </summary>
 		public string RelatedObjectAssemblyName
 		{
-			get { return _relatedObjectAssemblyName; }
+            get { return _relatedObjectAssemblyName; }
 			protected set { _relatedObjectAssemblyName = value; }
 		}
 
