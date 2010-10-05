@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using Habanero.Base.Exceptions;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -61,6 +62,44 @@ namespace Habanero.Test.Util
             catch (Exception ex)
             {
                 StringAssert.Contains("Virtual method call for 'InvalidMethod' does not exist for object of type 'SimpleClass'", ex.Message);
+            }
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_ThatThrowsError_ShouldRethrowError()
+        {
+            //---------------Set up test pack-------------------
+            SimpleClass simpleClass = new SimpleClass();
+            //---------------Execute Test ----------------------
+            try
+            {
+                ReflectionUtilities.SetPropertyValue(simpleClass, "MyPropWithException", true);
+                Assert.Fail("Expected to throw an HabaneroApplicationException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroApplicationException ex)
+            {
+                StringAssert.Contains("Error setting public property 'MyPropWithException' for object of type 'SimpleClass'", ex.Message);
+                Assert.IsInstanceOf<ArgumentNullException>(ex.InnerException);
+                StringAssert.Contains("Value cannot be null", ex.InnerException.Message);
+            }
+        }
+        [Test]
+        public void Test_SetPropertyValue_ThatThrowsArgumentException_ShouldRethrowError()
+        {
+            //---------------Set up test pack-------------------
+            SimpleClass simpleClass = new SimpleClass();
+            //---------------Execute Test ----------------------
+            try
+            {
+                ReflectionUtilities.SetPropertyValue(simpleClass, "MyPropWithArgumentExceptionn", true);
+                Assert.Fail("Expected to throw an HabaneroApplicationException");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroApplicationException ex)
+            {
+                StringAssert.Contains("Error setting public property 'MyPropWithArgumentExceptionn' for object of type 'SimpleClass'", ex.Message);
+                Assert.IsInstanceOf<ArgumentException>(ex.InnerException);
             }
         }
 
@@ -453,6 +492,9 @@ namespace Habanero.Test.Util
             {
                 get { return _methodCalled; }
             }
+
+            public bool MyPropWithException{ set{ throw new ArgumentNullException();}}
+            public bool MyPropWithArgumentExceptionn { set { throw new ArgumentException(); } }
         }
     }
 }

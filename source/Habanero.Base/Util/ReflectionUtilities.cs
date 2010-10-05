@@ -298,13 +298,13 @@ namespace Habanero.Util
             catch (TargetInvocationException ex)
             {
                 string message = String.Format("Error setting public property '{0}' for object of type '{1}'" , propertyName, className);
-                _log.Error(String.Format(message + Environment.NewLine + "{2}",   ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                _log.Error(message + Environment.NewLine + String.Format("{0}", ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw new HabaneroApplicationException(message, ex.InnerException);
             }
             catch (ArgumentException ex)
             {
                 string message = String.Format("Error setting public property '{0}' for object of type '{1}'", propertyName, className);
-                _log.Error(String.Format(message + Environment.NewLine + "{2}", ExceptionUtilities.GetExceptionString(ex, 8, true)));
+                _log.Error(message + Environment.NewLine + String.Format("{0}", ExceptionUtilities.GetExceptionString(ex, 8, true)));
                 throw new HabaneroApplicationException(message, ex);
             }
         }

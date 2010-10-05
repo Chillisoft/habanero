@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
@@ -229,14 +230,14 @@ namespace Habanero.BO.ClassDefinition
                     def.ClassDef = this;
                 }
             }
-            if(_relationshipDefCol != null)
+            if (_relationshipDefCol != null)
             {
                 foreach (RelationshipDef relationshipDef in _relationshipDefCol)
                 {
                     relationshipDef.OwningClassDef = this;
                 }
             }
-            if(this.UIDefCol != null)
+            if (this.UIDefCol != null)
             {
                 foreach (UIDef uiDef in UIDefCol)
                 {
@@ -246,6 +247,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         #endregion Constructors
+
         #region Properties
 
         ///<summary>
@@ -295,7 +297,7 @@ namespace Habanero.BO.ClassDefinition
             set
             {
                 _keysCol = value;
-                if(_keysCol != null) _keysCol.ClassDef = this;
+                if (_keysCol != null) _keysCol.ClassDef = this;
             }
         }
 
@@ -340,8 +342,10 @@ namespace Habanero.BO.ClassDefinition
         public UIDefCol UIDefCol
         {
             get { return _uiDefCol; }
-            set { _uiDefCol = value;
-                if(_uiDefCol != null) _uiDefCol.ClassDef = this;
+            set
+            {
+                _uiDefCol = value;
+                if (_uiDefCol != null) _uiDefCol.ClassDef = this;
             }
         }
 
@@ -436,7 +440,7 @@ namespace Habanero.BO.ClassDefinition
             set
             {
                 _propDefCol = value;
-                if(_propDefCol != null) _propDefCol.ClassDef = this;
+                if (_propDefCol != null) _propDefCol.ClassDef = this;
             }
         }
 
@@ -448,10 +452,9 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-
                 if (_propDefColIncludingInheritance == null ||
                     _propDefColIncludingInheritance.Count != this.TotalNoOfPropsIncludingInheritance)
-                {                   
+                {
                     _propDefColIncludingInheritance = new PropDefCol {ClassDef = this};
                     _propDefColIncludingInheritance.Add(this.PropDefcol);
 
@@ -468,6 +471,7 @@ namespace Habanero.BO.ClassDefinition
                 return _propDefColIncludingInheritance;
             }
         }
+
         /// <summary>
         /// This is a bit of a Hack but you need to be able to deal with a situation
         /// where you call <see cref="PropDefColIncludingInheritance"/> then add a prop
@@ -494,14 +498,17 @@ namespace Habanero.BO.ClassDefinition
                 return noProps;
             }
         }
+
         /// <summary>
         /// The collection of relationship definitions
         /// </summary>
         public IRelationshipDefCol RelationshipDefCol
         {
             get { return _relationshipDefCol; }
-            set { _relationshipDefCol = value;
-                if(_relationshipDefCol != null) _relationshipDefCol.ClassDef = this;
+            set
+            {
+                _relationshipDefCol = value;
+                if (_relationshipDefCol != null) _relationshipDefCol.ClassDef = this;
             }
         }
 
@@ -712,10 +719,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public IClassDef SuperClassClassDef
         {
-            get
-            {
-                return SuperClassDef == null ? null : SuperClassDef.SuperClassClassDef;
-            }
+            get { return SuperClassDef == null ? null : SuperClassDef.SuperClassClassDef; }
         }
 
         /// <summary>
@@ -841,7 +845,7 @@ namespace Habanero.BO.ClassDefinition
             return SuperClassDef == null
                        ? new NullLookupList()
                        : SuperClassClassDef.GetLookupList(propertyName);*/
-            PropDef propDef = (PropDef)GetPropDef(propertyName, false);
+            PropDef propDef = (PropDef) GetPropDef(propertyName, false);
             return propDef == null
                        ? new NullLookupList()
                        : propDef.LookupList;
@@ -878,7 +882,6 @@ namespace Habanero.BO.ClassDefinition
             }
             return relatedClassDef.GetPropDef(propertyName, throwError);
         }
-
 
 
         /// <summary>
@@ -1003,14 +1006,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public bool HasAutoIncrementingField
         {
-            get
-            {
-                foreach (PropDef def in _propDefCol)
-                {
-                    if (def.AutoIncrementing) return true;
-                }
-                return false;
-            }
+            get { return _propDefCol.Cast<PropDef>().Any(def => def.AutoIncrementing); }
         }
 
         ///<summary>
@@ -1088,14 +1084,15 @@ namespace Habanero.BO.ClassDefinition
                 if (throwError)
                 {
                     throw new InvalidPropertyNameException(String.Format(
-                                                               "The property definition for the property '{0}' could not be " +
-                                                               "found on a ClassDef of type '{1}'", propertyName,
-                                                               ClassNameFull));
+                        "The property definition for the property '{0}' could not be " +
+                        "found on a ClassDef of type '{1}'", propertyName,
+                        ClassNameFull));
                 }
             }
 
             return null;
         }
+
         /// <summary>
         /// Searches the property definition collection and returns the 
         /// property definition for the property with the name provided.
