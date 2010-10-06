@@ -16,7 +16,7 @@ end
 
 exec :checkout_habanero do |cmd| #command to check out habanero source using SVN
 	cmd.path_to_command = "../../Utilities/BuildServer/Subversion/bin/svn.exe" # for some reason this doesn't pick up environment variables so I can't just use 'svn'
-	cmd.parameters %q(checkout "http://delicious:8080/svn/habanero/Habanero/trunk" ./ --username chilli --password chilli) 
+	cmd.parameters "update" #%q(checkout "http://delicious:8080/svn/habanero/Habanero/trunk" ./ --username chilli --password chilli) 
 end
 
 msbuild :msbuild_habanero do |msb| #builds habanero with msbuild
