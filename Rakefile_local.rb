@@ -3,7 +3,7 @@ require 'albacore'
     
 task :default => [:build_habanero] #this is the starting point for the script
 
-task :build_habanero => [:clean_habanero,:msbuild_habanero,:run_ncover,:run_ncoverexp] # a list of tasks spawned off the default task
+task :build_habanero => [:clean_habanero,:checkout_habanero,:msbuild_habanero,:run_ncover,:run_ncoverexp] # a list of tasks spawned off the default task
 
 $Ncover_path = "C:/Program Files (x86)/NCover/NCover.Console.exe"
 $Nunit_path = %q("C:/Program Files (x86)/NUnit 2.5.6/bin/net-2.0/nunit-console-x86.exe")
@@ -12,6 +12,11 @@ $NcoverExp_path = "c:/program files (x86)/ncoverexplorer/ncoverexplorer.console.
 #build_habanero tasks
 task :clean_habanero do #deletes bin folder
 	FileUtils.rm_rf 'bin'
+end
+
+exec :checkout_habanero do |cmd| #command to check out habanero source using SVN
+	cmd.path_to_command = "../../Utilities/BuildServer/Subversion/bin/svn.exe" # for some reason this doesn't pick up environment variables so I can't just use 'svn'
+	cmd.parameters "update" #%q(checkout "http://delicious:8080/svn/habanero/Habanero/trunk" ./ --username chilli --password chilli) 
 end
 
 msbuild :msbuild_habanero do |msb| #builds habanero with msbuild
