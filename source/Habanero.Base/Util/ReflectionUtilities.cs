@@ -142,7 +142,6 @@ namespace Habanero.Util
                     propertyName, className);
                 _log.Error(String.Format("{0}" + Environment.NewLine + "{1}", message,
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
-                //throw ex.InnerException;
                 throw new HabaneroApplicationException(message, ex.InnerException);
             }
         }
