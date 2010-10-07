@@ -17,9 +17,11 @@ end
 msbuild :msbuild_habanero do |msb| #builds habanero with msbuild
   msb.targets :Rebuild
   msb.properties :configuration => :Release
+  msb.path_to_command = "C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe"
   msb.solution = "source/Habanero.sln"
-  msb.verbosity = "quiet"
-  end
+  msb.verbosity = "quiet"  #verbose
+  #msb.log_level = :verbose
+end
 
 ncoverconsole :run_ncover do |ncc| #This runs the ncover and (hopefully nunit) stuff
  ncc.path_to_command = $Ncover_path
