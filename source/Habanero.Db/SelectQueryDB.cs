@@ -489,6 +489,7 @@ namespace Habanero.DB
 
         private void AddAliasForSource(Source source)
         {
+            if (source == null) return;
             var sourceName = source.ToString();
             if (this.Aliases.ContainsKey(sourceName)) return;
 

@@ -215,24 +215,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(0, fromSource.Joins.Count);
         }
 
-        [Test]
-        public void TestMergeWith_Impossible()
-        {
-            //-------------Setup Test Pack ------------------
-            Source originalSource = new Source("FromSource", "FromSourceEntity");
-            Source toSource = new Source("ToSource", "ToSourceEntity");
-
-            //-------------Execute test ---------------------
-            Exception exception = null;
-            try
-            {
-                originalSource.MergeWith(toSource);
-            } catch (Exception ex) { exception = ex; }
-            //-------------Test Result ----------------------
-            Assert.IsNotNull(exception);
-            Assert.IsInstanceOf(typeof(HabaneroDeveloperException), exception);
-            StringAssert.Contains("A source cannot merge with another source if they do not have the same base source.", exception.Message);
-        }
 
         [Test]
         public void TestMergeWith_EmptySource()

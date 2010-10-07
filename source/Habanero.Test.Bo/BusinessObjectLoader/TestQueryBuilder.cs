@@ -601,7 +601,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual("ShapeType_field", discCriteria.Field.PropertyName);
             Assert.AreEqual("ShapeType_field", discCriteria.Field.FieldName);
-            Assert.AreEqual("CircleNoPrimaryKey", discCriteria.Field.Source.Name);
+            Assert.AreEqual("Shape", discCriteria.Field.Source.Name);
             Assert.AreEqual("Shape_table", discCriteria.Field.Source.EntityName);
         }
 
@@ -728,7 +728,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Criteria discCriteria = selectQuery.DiscriminatorCriteria;
             Assert.AreEqual("ShapeType_field", discCriteria.Field.PropertyName);
             Assert.AreEqual("ShapeType_field", discCriteria.Field.FieldName);
-            Assert.AreEqual("CircleNoPrimaryKey", discCriteria.Field.Source.Name);
+            Assert.AreEqual("Shape", discCriteria.Field.Source.Name);
             Assert.AreEqual("Shape_table", discCriteria.Field.Source.EntityName);
         }
 

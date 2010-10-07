@@ -69,10 +69,11 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
         private static SelectQuery CreateManualSelectQueryOrderedByDateOfBirth(DateTime now, BusinessObject cp1)
         {
+            var source = new Source(cp1.ClassDef.ClassNameExcludingTypeParameter, cp1.ClassDef.TableName); 
             SelectQuery query = new SelectQuery(new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, now));
-            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", null));
-            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
-            query.Source = new Source(cp1.ClassDef.TableName);
+            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", source));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", source));
+            query.Source = source;
             query.OrderCriteria = new OrderCriteria().Add("DateOfBirth");
             return query;
         }
@@ -2702,7 +2703,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        [Ignore("Working on this: issue #908")]
         public virtual void Test_LoadThroughSelfReferencingRelationship_OneLevel()
         {
             //---------------Set up test pack-------------------
@@ -2723,7 +2723,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        [Ignore("Working on this: issue #908")]
+        [Ignore("Working on this #908")]
         public virtual void Test_LoadThroughSelfReferencingRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
