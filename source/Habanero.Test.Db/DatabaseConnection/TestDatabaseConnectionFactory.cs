@@ -156,7 +156,6 @@ namespace Habanero.Test.DB
         #endregion
 
         #region all
-
         [Test]
         public void TestUsingCustomAssembly()
         {
@@ -171,7 +170,8 @@ namespace Habanero.Test.DB
 
             //---------------Test Result -----------------------
             Assert.AreEqual("System.Data.SqlClient", dbConnection.GetType().Namespace);
-            Assert.AreEqual(config.AssemblyName, dbConnection.GetType().Assembly.FullName);
+            StringAssert.Contains("System.Data, ", dbConnection.GetType().Assembly.FullName);
+            StringAssert.Contains(", Culture=neutral, PublicKeyToken=b77a5c561934e089", dbConnection.GetType().Assembly.FullName);
             //---------------Tear Down -------------------------          
         }
         #endregion
