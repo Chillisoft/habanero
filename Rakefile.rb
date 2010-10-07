@@ -3,11 +3,9 @@ require 'albacore'
     
 task :default => [:build_habanero] #this is the starting point for the script
 
-task :build_habanero => [:clean_habanero,:msbuild_habanero,:run_ncover,:run_ncoverexp] # a list of tasks spawned off the default task
+task :build_habanero => [:clean_habanero,:msbuild_habanero,:run_nunit] # a list of tasks spawned off the default task
 
-$Ncover_path = "C:/Program Files (x86)/NCover/NCover.Console.exe"
-$Nunit_path = %q("C:/Program Files (x86)/NUnit 2.5.6/bin/net-2.0/nunit-console-x86.exe")
-$NcoverExp_path = "c:/program files (x86)/ncoverexplorer/ncoverexplorer.console.exe"
+$Nunit_path = "C:/Program Files (x86)/NUnit 2.5.6/bin/net-2.0/nunit-console-x86.exe"
 
 #build_habanero tasks
 task :clean_habanero do #deletes bin folder
@@ -23,6 +21,20 @@ msbuild :msbuild_habanero do |msb| #builds habanero with msbuild
   #msb.log_level = :verbose
 end
 
+nunit :run_nunit do |nunit|
+ nunit.path_to_command = $Nunit_path
+ nunit.assemblies 'bin/Habanero.Test.dll','bin\Habanero.Test.Bo.dll','bin\Habanero.Test.Db.dll'
+ nunit.options '/xml=nunit-result.xml'
+end
+
+
+
+
+# the following are not being used because NCover 1.5.8 (the open source one) doesn't support .NET 4
+
+$Ncover_path = "C:/Program Files (x86)/NCover/NCover.Console.exe"
+$NcoverExp_path = "c:/program files (x86)/ncoverexplorer/ncoverexplorer.console.exe"
+
 ncoverconsole :run_ncover do |ncc| #This runs the ncover and (hopefully nunit) stuff
  ncc.path_to_command = $Ncover_path
  ncc.output :xml => "Coverage.xml" 
@@ -33,13 +45,14 @@ ncoverconsole :run_ncover do |ncc| #This runs the ncover and (hopefully nunit) s
 #trigger Nunit
   nunit = NUnitTestRunner.new($Nunit_path)
 # nunit-console-x86.exe is run to prevent the "Profiler connection not established" error from old Ncover versions
- nunit.assemblies 'bin\Habanero.Test.dll','bin\Habanero.Test.Bo.dll','bin\Habanero.Test.Db.dll'
+ nunit.assemblies 'bin/Habanero.Test.dll','bin\Habanero.Test.Bo.dll' #,'bin\Habanero.Test.Db.dll'
  nunit.options '/xml=nunit-result.xml'
 #nunit.options '/labels'
 #enable this if you want to see pretty test names scrolling in the hudson page while it builds
  
 #set Nunit as the test runner
  ncc.testrunner = nunit
+ ncc.log_level = :verbose
 end
 
 exec :run_ncoverexp do |cmd| # uses a batch file to run ncover because I ran into some very wierd stuff trying to get the parameters to run on an exec task
