@@ -2,7 +2,7 @@
   <Settings activeconfig="Default" />
   <Config name="Default" binpathtype="Auto">
     <assembly path="bin\Habanero.Test.dll" />
-    <assembly path="bin\Habanero.Test.Bo.dll" />
-    <assembly path="bin\Habanero.Test.Db.dll" />
+    <assembly path="bin\Habanero.Test.BO.dll" />
+    <assembly path="bin\Habanero.Test.DB.dll" />
   </Config>
 </NUnitProject>
