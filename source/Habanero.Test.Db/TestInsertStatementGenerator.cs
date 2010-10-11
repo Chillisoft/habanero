@@ -158,7 +158,7 @@ namespace Habanero.Test.DB.SqlGeneration
             Assert.IsTrue(index > 0);
             index = sql.IndexOf("ShapeType", index + 1);
             Assert.IsTrue(index < 0, "There were two ShapeType fields specified");
-            Assert.AreEqual("FilledCircleNoPrimaryKey", sqlStatement.Parameters[0].Value);
+            Assert.AreEqual("FilledCircleNoPrimaryKey", sqlStatement.Parameters[4].Value);
         }
 
 
