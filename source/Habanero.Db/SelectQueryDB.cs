@@ -503,7 +503,9 @@ namespace Habanero.DB
             while (queue.Count > 0)
             {
                 if (!String.IsNullOrEmpty(subSourceName)) subSourceName += ".";
-                subSourceName += queue.Dequeue();
+                var singlePartOfSourceName = queue.Dequeue();
+                subSourceName += singlePartOfSourceName;
+                if (queue.Count > 0 && queue.Peek() == singlePartOfSourceName) continue;
                 if (!this.Aliases.ContainsKey(subSourceName))
                     this.Aliases.Add(subSourceName, "a" + aliasCount);
             }

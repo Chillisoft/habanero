@@ -2723,7 +2723,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        [Ignore("Working on this #908")]
         public virtual void Test_LoadThroughSelfReferencingRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
@@ -2745,6 +2744,33 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(1, col.Count);
             Assert.Contains(asset, col);
         }
+
+        [Test]
+        public virtual void Test_LoadThroughSelfReferencingRelationship_ThreeLevels()
+        {
+            //---------------Set up test pack-------------------
+            Asset.LoadClassDef();
+            Asset greatgrandparentAsset = new Asset();
+            greatgrandparentAsset.Save();
+            Asset grandparentAsset = new Asset();
+            grandparentAsset.Parent = greatgrandparentAsset;
+            grandparentAsset.Save();
+            Asset parentAsset = new Asset();
+            parentAsset.Parent = grandparentAsset;
+            parentAsset.Save();
+            Asset asset = new Asset();
+            asset.Parent = parentAsset;
+            asset.Save();
+            string criteria = string.Format("Parent.Parent.Parent.AssetID = '{0}'", greatgrandparentAsset.AssetID);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Asset> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Asset>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(asset, col);
+        }
+
 
         [Test]
         public virtual void Test_Load_CriteriaString_ThroughRelationship_TwoLevels()
