@@ -183,19 +183,10 @@ namespace Habanero.Base
             }
             string sourceEntityName = "";
             string separator = "";
-            if (aliases.Count > 0)
+            if (Field.Source != null)
             {
-                if (Field.Source != null) sourceEntityName = aliases[Field.Source.ChildSourceLeaf.ToString()];
+                sourceEntityName = aliases[Field.Source.ChildSourceLeaf.ToString()];
                 separator = ".";
-            }
-            else
-            {
-                if (Field.Source != null) sourceEntityName = Field.Source.ChildSourceLeaf.EntityName;
-                if (!String.IsNullOrEmpty(sourceEntityName))
-                {
-                    sourceEntityName = formatter.DelimitTable(sourceEntityName);
-                    separator = ".";
-                }
             }
             string fieldNameString = formatter.DelimitField(Field.FieldName);
             return string.Format("{0}{1}{2} {3} {4}", sourceEntityName, separator, fieldNameString, comparisonOperator, valueString);

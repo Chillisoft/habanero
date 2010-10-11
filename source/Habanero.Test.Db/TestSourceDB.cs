@@ -67,9 +67,9 @@ namespace Habanero.Test.DB
             Source source = new Source("MySource", tableName);
             SourceDB sourceDB = new SourceDB(source);
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL();
+            string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source));
             //-------------Test Result ----------------------
-            Assert.AreEqual(tableName, sql);
+            Assert.AreEqual(tableName + " a1", sql);
         }
 
         [Test]
@@ -80,9 +80,9 @@ namespace Habanero.Test.DB
             Source source = new Source("MySource", tableName);
             SourceDB sourceDB = new SourceDB(source);
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL(new SqlFormatter("[", "]", "TOP", ""));
+            string sql = sourceDB.CreateSQL(new SqlFormatter("[", "]", "TOP", ""), CreateAliases(source));
             //-------------Test Result ----------------------
-            Assert.AreEqual(string.Format("[{0}]", tableName), sql);
+            Assert.AreEqual(string.Format("[{0}] a1", tableName), sql);
         }
 
         [Test]
@@ -97,10 +97,10 @@ namespace Habanero.Test.DB
             SourceDB sourceDB = new SourceDB(source);
   
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL();
+            string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource));
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
-            string expectedSql = string.Format("({0} JOIN {1} ON {0}.{2} = {1}.{3})", source.EntityName, joinSource.EntityName,
+            string expectedSql = string.Format("({0} a1 JOIN {1} a2 ON a1.{2} = a2.{3})", source.EntityName, joinSource.EntityName,
                                                joinField.FromField.FieldName, joinField.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
@@ -116,11 +116,26 @@ namespace Habanero.Test.DB
             SourceDB sourceDB = new SourceDB(source);
             //-------------Execute test ---------------------
 
-            string sql = sourceDB.CreateSQL();
+            string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource));
             //-------------Test Result ----------------------
             StringAssert.Contains("JOIN", sql);
             Assert.IsFalse(sql.Contains("LEFT JOIN"));
 
+        }
+
+        private IDictionary<string, string> CreateAliases(params Source[] sources)
+        {
+            Dictionary<string, string> aliases = new Dictionary<string, string>();
+            for (int i = 0; i < sources.Length; i++)
+            {
+                aliases.Add(sources[i].ToString(), "a" + (i+1));
+            }
+            return aliases;
+        }
+
+        private SqlFormatter GetSqlFormatter()
+        {
+            return new SqlFormatter("", "", "", "");
         }
 
         [Test]
@@ -135,7 +150,7 @@ namespace Habanero.Test.DB
             SourceDB leftJoinSourceDB = new SourceDB(source);
             //-------------Execute test ---------------------
 
-            string sql = leftJoinSourceDB.CreateSQL();
+            string sql = leftJoinSourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource));
             //-------------Test Result ----------------------
             StringAssert.Contains("LEFT JOIN", sql);
         }
@@ -157,10 +172,10 @@ namespace Habanero.Test.DB
             SourceDB sourceDB = new SourceDB(source);
 
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL();
+            string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource));
             //-------------Test Result ----------------------
 
-            string expectedSql = string.Format("({0} JOIN {1} ON {0}.{2} = {1}.{3} AND {0}.{4} = {1}.{5})", 
+            string expectedSql = string.Format("({0} a1 JOIN {1} a2 ON a1.{2} = a2.{3} AND a1.{4} = a2.{5})", 
                                                source.EntityName, joinSource.EntityName, 
                                                joinField1.FromField.FieldName, joinField1.ToField.FieldName,
                                                joinField2.FromField.FieldName, joinField2.ToField.FieldName);
@@ -181,10 +196,10 @@ namespace Habanero.Test.DB
 
             //-------------Execute test ---------------------
             SqlFormatter myFormatter = new SqlFormatter("[", "]", "TOP", "");
-            string sql = sourceDB.CreateSQL(myFormatter);
+            string sql = sourceDB.CreateSQL(myFormatter, CreateAliases(source, joinSource));
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
-            string expectedSql = string.Format("([{0}] JOIN [{1}] ON [{0}].[{2}] = [{1}].[{3}])", source.EntityName, joinSource.EntityName,
+            string expectedSql = string.Format("([{0}] a1 JOIN [{1}] a2 ON a1.[{2}] = a2.[{3}])", source.EntityName, joinSource.EntityName,
                                                joinField.FromField.FieldName, joinField.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
@@ -207,7 +222,7 @@ namespace Habanero.Test.DB
             Exception exception = null;
             try
             {
-                sourceDB.CreateSQL();
+                sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource));
             } catch( Exception ex)
             {
                 exception = ex;
@@ -234,11 +249,11 @@ namespace Habanero.Test.DB
             SourceDB sourceDB = new SourceDB(source);
 
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL();
+            string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource, joinSource2));
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
             Source.Join.JoinField joinField2 = join2.JoinFields[0];
-            string expectedSql = string.Format("(({0} JOIN {1} ON {0}.{2} = {1}.{3}) JOIN {4} ON {1}.{5} = {4}.{6})",
+            string expectedSql = string.Format("(({0} a1 JOIN {1} a2 ON a1.{2} = a2.{3}) JOIN {4} a3 ON a2.{5} = a3.{6})",
                                                sourceDB.EntityName,
                                                joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
                                                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
@@ -259,11 +274,11 @@ namespace Habanero.Test.DB
             SourceDB sourceDB = new SourceDB(source);
 
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL();
+            string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource, joinSource2));
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = source.Joins[0].JoinFields[0];
             Source.Join.JoinField joinField2 = source.Joins[1].JoinFields[0];
-            string expectedSql = string.Format("(({0} JOIN {1} ON {0}.{2} = {1}.{3}) JOIN {4} ON {0}.{5} = {4}.{6})",
+            string expectedSql = string.Format("(({0} a1 JOIN {1} a2 ON a1.{2} = a2.{3}) JOIN {4} a3 ON a1.{5} = a3.{6})",
                                                sourceDB.EntityName,
                                                joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
                                                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
@@ -286,12 +301,12 @@ namespace Habanero.Test.DB
             SourceDB sourceDB = new SourceDB(source);
 
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL();
+            string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource, branch1, branch2));
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
             Source.Join.JoinField joinFieldBranch1 = branchJoin1.JoinFields[0];
             Source.Join.JoinField joinFieldBranch2 = branchJoin2.JoinFields[0];
-            string expectedSql = string.Format("((({0} JOIN {1} ON {0}.{4} = {1}.{5}) JOIN {2} ON {1}.{6} = {2}.{7}) JOIN {3} ON {1}.{8} = {3}.{9})",
+            string expectedSql = string.Format("((({0} a1 JOIN {1} a2 ON a1.{4} = a2.{5}) JOIN {2} a3 ON a2.{6} = a3.{7}) JOIN {3} a4 ON a2.{8} = a4.{9})",
                                                sourceDB.EntityName, joinSource.EntityName, branch1.EntityName, branch2.EntityName,
                                                joinField.FromField.FieldName, joinField.ToField.FieldName,
                                                joinFieldBranch1.FromField.FieldName, joinFieldBranch1.ToField.FieldName, 
@@ -311,10 +326,10 @@ namespace Habanero.Test.DB
             SourceDB sourceDB = new SourceDB(source);
 
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL();
+            string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource));
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
-            string expectedSql = string.Format("({0} JOIN {1} ON {0}.{2} = {1}.{3})", source.EntityName, joinSource.EntityName,
+            string expectedSql = string.Format("({0} a1 JOIN {1} a2 ON a1.{2} = a2.{3})", source.EntityName, joinSource.EntityName,
                                                joinField.FromField.FieldName, joinField.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
@@ -333,11 +348,11 @@ namespace Habanero.Test.DB
             SourceDB sourceDB = new SourceDB(source);
 
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL();
+            string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource, joinSource2));
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
             Source.Join.JoinField joinField2 = join2.JoinFields[0];
-            string expectedSql = string.Format("(({0} JOIN {1} ON {0}.{2} = {1}.{3}) JOIN {4} ON {1}.{5} = {4}.{6})",
+            string expectedSql = string.Format("(({0} a1 JOIN {1} a2 ON a1.{2} = a2.{3}) JOIN {4} a3 ON a2.{5} = a3.{6})",
                                                sourceDB.EntityName,
                                                joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
                                                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);

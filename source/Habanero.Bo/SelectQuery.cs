@@ -34,15 +34,12 @@ namespace Habanero.BO
         private Criteria _criteria;
         private IOrderCriteria _orderCriteria = new OrderCriteria();
 
-        public IDictionary<string, string> Aliases { get; private set; }
-
         ///<summary>
         /// Creates a SelectQuery with no Criteria and no fields.  In order to use the SelectQuery at least on field must be added
         /// to the <see cref="Fields"/>, and a <see cref="Source"/> must be specified.
         ///</summary>
         public SelectQuery()
         {
-            Aliases = new Dictionary<string, string>();
             Limit = -1;
             FirstRecordToLoad = 0;
         }
