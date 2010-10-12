@@ -823,7 +823,9 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the value under the property name specified
+        /// Returns the value under the property name specified. 
+        /// But returns the value as a string regardless of the
+        /// true underlying value type.
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns a string</returns>
@@ -851,6 +853,7 @@ namespace Habanero.BO
 
         ///<summary>
         /// Returns the value under the property name specified
+        /// as a specific type <paramref name="{T}"/>
         ///</summary>
         ///<param name="propName">The property name</param>
         ///<typeparam name="T">The type to cast the retrieved property value to.</typeparam>
@@ -952,8 +955,8 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the property value as in GetPropertyValueToDisplay(), but
-        /// returns the value as a string
+        /// Returns the property value as in <see cref="GetPropertyValueToDisplay"/> , but
+        /// returns the value as a string.
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns a string</returns>
@@ -962,7 +965,7 @@ namespace Habanero.BO
             object val = GetPropertyValueToDisplay(propName);
             return val != null ? val.ToString() : "";
         }
-
+        [Obsolete("2010/10/11 This internal method no longer appears to be used anywhere")]
         internal static bool PropValueHasChanged(object currentPropValue, object newPropValue)
         {
             if (currentPropValue == newPropValue) return false;

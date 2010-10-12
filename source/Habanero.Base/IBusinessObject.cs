@@ -27,7 +27,6 @@ namespace Habanero.Base
     /// </summary>
     public interface IBusinessObject : IXmlSerializable
     {
-        //set; }
 
         /// <summary>
         /// Returns the primary key ID of this object.  If there is no primary key on this
