@@ -51,13 +51,13 @@ namespace Habanero.BO
     /// 
     /// Only one Business object manager will be loaded per user session. To implement this the Singleton Pattern from the GOF is used.
     ///</summary>
-    public class BusinessObjectManager
+    public class BusinessObjectManager : IBusinessObjectManager
     {
         private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.BusinessObjectManager");
         /// <summary>
         /// The Single Instance of the <see cref="BusinessObjectManager"/> used by the Singleton.
         /// </summary>
-        protected static BusinessObjectManager _businessObjectManager = new BusinessObjectManager();
+        protected static IBusinessObjectManager _businessObjectManager = new BusinessObjectManager();
 
         //protected readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
         //    new Dictionary<string, WeakReference>();
@@ -80,7 +80,7 @@ namespace Habanero.BO
         /// Returns the particular instance of the Business Object manager being used. 
         /// This implements the Singleton Design pattern.
         ///</summary>
-        public static BusinessObjectManager Instance
+        public static IBusinessObjectManager Instance
         {
             get { return _businessObjectManager; }
         }

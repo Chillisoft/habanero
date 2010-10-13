@@ -45,7 +45,7 @@ namespace Habanero.BO
             set { _dataAccessor = value; }
         }
 
-        private static BusinessObjectManager _businessObjectManager;
+        private static IBusinessObjectManager _businessObjectManager;
 
         ///<summary>
         /// Returns the Business Object Manager that has been set.
@@ -53,13 +53,13 @@ namespace Habanero.BO
         /// Singleton Business Object Manager.
         ///</summary>
         ///<exception cref="NotImplementedException"></exception>
-        public static BusinessObjectManager BusinessObjectManager
+        public static IBusinessObjectManager BusinessObjectManager
         {
             get
             {
                 lock (_lockObject)
                 {
-                    return _businessObjectManager ?? BusinessObjectManager.Instance;
+                    return _businessObjectManager ?? Habanero.BO.BusinessObjectManager.Instance;
                 }
             }
             set { _businessObjectManager = value; }
