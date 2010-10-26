@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Habanero.Base;
+﻿using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -12,6 +9,19 @@ namespace Habanero.Test.BO
         [TestFixture]
         public class TestBusinessObjectInheritance
         {
+            // ReSharper disable InconsistentNaming
+
+            [TestFixtureSetUp]
+            public void TestFixtureSetup()
+            {
+                ClassDef.ClassDefs.Clear();
+            }
+            [SetUp]
+            public void TestSetup()
+            {
+                ClassDef.ClassDefs.Clear();
+            }
+
             [Test]
             public void Test_Instantiate_SubClassWithNoPrimaryKey()
             {
@@ -99,19 +109,56 @@ namespace Habanero.Test.BO
             }
 
             [Test]
-            public void Test_ConstructCircle_WithSingleTableInheritance_ShouldSetDiscriminatorField_Bug252()
+            public void Test_ConstructCircle_WithSingleTableInheritance_ShouldSetDiscriminatorField_Bug1044()
             {
                 //---------------Set up test pack-------------------
                 Circle.GetClassDefWithSingleTableInheritance();
-                Shape.GetClassDef().PropDefcol.Add(new PropDef("ShapeType_field", typeof(string), PropReadWriteRule.WriteOnce, "ShapeType_field", null));
+                Shape.GetClassDef().PropDefcol.Add(new PropDef("SHAPETYPE", typeof(string), PropReadWriteRule.WriteOnce, "ShapeType_field", null));
                 //---------------Assert Precondition----------------
 
                 //---------------Execute Test ----------------------
                 Circle circle = new Circle();
                 //---------------Test Result -----------------------
-                Assert.AreEqual("Circle", circle.GetPropertyValue("ShapeType_field"));
+                Assert.AreEqual("Circle", circle.GetPropertyValue("SHAPETYPE"));
+            }
+            [Test]
+            public void Test_ConstructCircle_WithSingleTableInheritance_ShouldSetDiscriminatorField_Bug252()
+            {
+                //---------------Set up test pack-------------------
+                Circle.GetClassDefWithSingleTableInheritance();
+                Shape.GetClassDef().PropDefcol.Add(new PropDef("ShapeType", typeof(string), PropReadWriteRule.WriteOnce, "ShapeType_field", null));
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                Circle circle = new Circle();
+                //---------------Test Result -----------------------
+                Assert.AreEqual("Circle", circle.GetPropertyValue("ShapeType"));
+            }
+            [Test]
+            public void Test_ConstructCircle_WithSingleTableInheritance_WhenDiscrimatorFieldDoesNotExist_ShouldRaiseError_Bug252()
+            {
+                //---------------Set up test pack-------------------
+               
+                Circle.GetClassDefWithSingleTableInheritance();
+                Shape.GetClassDef();
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                
+                try
+                {
+                    new Circle();
+                    Assert.Fail("Expected to throw an HabaneroDeveloperException");
+                }
+                    //---------------Test Result -----------------------
+                catch (HabaneroDeveloperException ex)
+                {
+                    StringAssert.Contains("Your discriminator field is not included in the properties of the class and you are using Single Table Inheritanc", ex.Message);
+                }
             }
 
         }
+        // ReSharper restore InconsistentNaming
+
     }
 

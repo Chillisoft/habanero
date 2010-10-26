@@ -67,7 +67,7 @@ namespace Habanero.BO
         /// <param name="owningBo">The Business object that owns this relationship.</param>
         /// <param name="lRelDef">The <see cref="IRelationshipDef"/> that this relationship is for </param>
         /// <param name="lBOPropCol">The Collection of business objects properties (<see cref="BOPropCol"/> that is used to create the relKey</param>
-        protected SingleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
+        protected SingleRelationshipBase(IBusinessObject owningBo, IRelationshipDef lRelDef, IBOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
         }
@@ -115,7 +115,7 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public SingleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
+        public SingleRelationship(IBusinessObject owningBo, IRelationshipDef lRelDef, IBOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
             this.RelKey.RelatedPropValueChanged += (sender, e) => FireRelatedBusinessObjectChangedEvent();
@@ -599,4 +599,5 @@ namespace Habanero.BO
             return dirtyChildren;
         }
     }
+
 }

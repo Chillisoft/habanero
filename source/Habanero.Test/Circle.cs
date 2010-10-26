@@ -100,7 +100,7 @@ namespace Habanero.Test
             IClassDef circleClassDef = GetClassDef();
             SuperClassDef superClassDef = new SuperClassDef(shapeClassDef, ORMapping.SingleTableInheritance);
             circleClassDef.SuperClassDef = superClassDef;
-            superClassDef.Discriminator = "ShapeType_field";
+            superClassDef.Discriminator = "ShapeType";
             return circleClassDef;
         }
 
