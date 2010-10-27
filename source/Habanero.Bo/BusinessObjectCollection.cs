@@ -870,6 +870,7 @@ namespace Habanero.BO
         /// <param name="col"></param>
         public void Add(IEnumerable<TBusinessObject> col)
         {
+            if (col == null) throw new ArgumentNullException("col");
             foreach (TBusinessObject bo in col)
             {
                 this.Add(bo);
