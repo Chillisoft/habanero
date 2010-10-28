@@ -103,12 +103,12 @@ namespace Habanero.BO
         }        
         
         ///<summary>
-        /// Finds
+        /// Finds a single business object matching the criteria. Throws an Error if more than one BO matches.
         ///</summary>
         ///<param name="classDef">ClassDef to match on.</param>
         ///<param name="criteria">Criteria being used to find the BusinessObject</param>
         ///<returns></returns>
-        ///<exception cref="HabaneroDeveloperException"></exception>
+        ///<exception cref="HabaneroDeveloperException">Error if more than one BO matches criteria</exception>
         public virtual IBusinessObject Find(IClassDef classDef, Criteria criteria)
         {
             IBusinessObject currentBO = null;
