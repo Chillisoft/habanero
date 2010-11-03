@@ -34,7 +34,7 @@ namespace Habanero.Base
     /// </summary>
     public abstract class HabaneroApp
     {
-        private IApplicationVersionUpgrader _applicationVersionUpgrader;
+        protected IApplicationVersionUpgrader _applicationVersionUpgrader;
 
         //private ISynchronisationController _synchronisationController;
 
@@ -130,7 +130,7 @@ namespace Habanero.Base
         }
 
 
-        private void SetupApplicationNameAndVersion()
+        protected void SetupApplicationNameAndVersion()
         {
             GlobalRegistry.ApplicationName = AppName;
             GlobalRegistry.ApplicationVersion = AppVersion;
