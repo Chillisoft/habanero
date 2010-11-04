@@ -35,7 +35,7 @@ namespace Habanero.Base
     public abstract class HabaneroApp
     {
         private static ILog _log;
-        private IApplicationVersionUpgrader _applicationVersionUpgrader;
+        protected IApplicationVersionUpgrader _applicationVersionUpgrader;
         private string _classDefsXml;
 
         //private ISynchronisationController _synchronisationController;
@@ -109,7 +109,7 @@ namespace Habanero.Base
             return true;
         }
 
-        private static void SetupLogging()
+        protected static void SetupLogging()
         {
             try {
                 XmlConfigurator.Configure();
@@ -125,7 +125,7 @@ namespace Habanero.Base
             _log = LogManager.GetLogger("HabaneroApp");
         }
 
-        private void SetupApplicationNameAndVersion()
+        protected void SetupApplicationNameAndVersion()
         {
             GlobalRegistry.ApplicationName = AppName;
             GlobalRegistry.ApplicationVersion = AppVersion;
