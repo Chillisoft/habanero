@@ -140,9 +140,9 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             //Create an objects that sets the number generator for it.
             //Edit the objects.
-            ContactPersonNumberGenerator cp = new ContactPersonNumberGenerator();
+            ContactPersonWithNumberGenerator cp = new ContactPersonWithNumberGenerator();
             cp.Surname = Guid.NewGuid().ToString();
-            ContactPersonNumberGenerator cp2 = new ContactPersonNumberGenerator();
+            ContactPersonWithNumberGenerator cp2 = new ContactPersonWithNumberGenerator();
             cp2.Surname = Guid.NewGuid().ToString();
             //---------------Execute Test ----------------------
             //Add the objects 

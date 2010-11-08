@@ -31,6 +31,9 @@ namespace Habanero.BO
     /// There is also no guarantee that the number will not have missing numbers in the sequence.
     /// E.g. member 1 asks for a number and gets 0001, member2 gets 0002 and member3 gets 0003.
     /// member3 is saved and member2 and member1 are not then there will be missing numbers in the sequence.
+    /// If you require a number generator with a locking strategy then look at
+    ///  Habanero.DB.NumberGeneratorPessimisticLocking. You can also implement your own number generator that 
+    /// implements INumberGenerator.
     /// </summary>
     public class NumberGenerator : INumberGenerator
     {
