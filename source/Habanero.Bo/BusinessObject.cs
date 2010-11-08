@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
@@ -1723,5 +1724,76 @@ namespace Habanero.BO
         //    BusinessObjectManager.Instance.Add(this);
         //    return clonedBO;
         //}
+    }
+
+    public class BusinessObject<T> : BusinessObject
+    {
+        public BusinessObject() : base() { }
+        protected internal BusinessObject(IClassDef def) : base(def) { }
+        protected BusinessObject(ConstructForFakes constructForFakes) : base(constructForFakes)
+        {
+        }
+
+        ///// <summary>
+        ///// Sets a property value to a new value
+        ///// </summary>
+        ///// <param name="propNameExpression">The property name expression (eg. p => p.Name)</param>
+        ///// <param name="newPropValue">The new value to set to</param>
+        ///// <remarks>This runs about 5 times slower than the normal <see cref="BusinessObject.SetPropertyValue"/> method but has the advantage
+        ///// of being type safe.  Unless you are experiencing performance problems using this method, it is the recommended way of setting a property value.
+        ///// </remarks>
+        //public void SetPropertyValue(Expression<Func<T, object>> propNameExpression, object newPropValue)
+        //{
+        //    var memberExpression = propNameExpression.Body as MemberExpression;
+        //    if (memberExpression == null)
+        //    {
+        //        throw new ArgumentException(propNameExpression + " is not a valid property on " + this.GetType().Name);
+        //    }
+        //    SetPropertyValue(memberExpression.Member.Name, newPropValue);
+        //}
+        /// <summary>
+        /// Sets a property value to a new value
+        /// </summary>
+        /// <param name="propNameExpression">The property name expression (eg. p => p.Name)</param>
+        /// <param name="newPropValue">The new value to set to</param>
+        /// <remarks>This runs about 5 times slower than the normal <see cref="BusinessObject.SetPropertyValue"/> method but has the advantage
+        /// of being type safe.  Unless you are experiencing performance problems using this method, it is the recommended way of setting a property value.
+        /// </remarks>
+        public void SetPropertyValue(Expression<Func<T, object>> propNameExpression, object newPropValue)
+        {
+            MemberExpression memberExpression;
+            try
+            {
+                memberExpression = (MemberExpression)propNameExpression.Body;  //this is done instead of "as" for a small performance gain
+            }
+            catch (InvalidCastException)
+            {
+                throw new ArgumentException(propNameExpression + " is not a valid property on " + this.GetType().Name);
+            }
+            SetPropertyValue(memberExpression.Member.Name, newPropValue);
+        }
+
+        /// <summary>
+        /// Returns the value under the property name specified
+        /// </summary>
+        /// <param name="propNameExpression">The property name expression (eg. p => p.Name)</param>
+        /// <returns>Returns the value if found</returns>
+        /// <remarks>This runs about 5 times slower than the normal <see cref="BusinessObject.GetPropertyValue(string)"/> method but has the 
+        /// advantage of being type safe.  Unless you are experiencing performance problems using this method, 
+        /// it is the recommended way of setting a property value.
+        /// </remarks>
+        public TOut GetPropertyValue<TOut>(Expression<Func<T, TOut>> propNameExpression)
+        {
+            MemberExpression memberExpression;
+            try
+            {
+                memberExpression = (MemberExpression)propNameExpression.Body;  //this is done instead of "as" for a small performance gain
+            }
+            catch (InvalidCastException)
+            {
+                throw new ArgumentException(propNameExpression + " is not a valid property on " + this.GetType().Name);
+            }
+            return (TOut) GetPropertyValue(memberExpression.Member.Name);
+        }
     }
 }

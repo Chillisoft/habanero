@@ -1414,6 +1414,44 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_GetPropertyValue_WithExpression()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            var originalFirstName = TestUtil.GetRandomString();
+            contactPersonTestBO.SetPropertyValue(bo => bo.FirstName, originalFirstName);
+            //---------------Assert Precondition----------------
+            
+            //---------------Execute Test ----------------------
+            var firstName = contactPersonTestBO.GetPropertyValue(testBo => testBo.FirstName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalFirstName, firstName);
+        }
+
+        [Test]
+        public void Test_GetPropertyValue_WithExpression_WhenInvalidProperty()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                var firstName = contactPersonTestBO.GetPropertyValue(testBo => testBo.FirstName + "123");
+            }
+            //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOf<ArgumentException>(ex);
+                StringAssert.Contains("testBo => (testBo.FirstName + \"123\") is not a valid property on ContactPersonTestBO", ex.Message);
+            }
+        }
+
+
+        [Test]
         public void TestBoStatusEqual()
         {
             //---------------Set up test pack-------------------
@@ -1664,6 +1702,44 @@ namespace Habanero.Test.BO
 //                prop.InvalidReason);
 
             //Habanero.BO.InvalidPropertyValueException: An error occurred while attempting to convert the loaded property value of 'ContactType' to its specified type of 'Habanero.Test.BO.ContactPersonTestBO+ContactType'. The property value is 'InvalidOption'. See log for details
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_WithExpression()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            var firstName = TestUtil.GetRandomString();
+            //---------------Assert Precondition----------------
+            Assert.IsNullOrEmpty(contactPersonTestBO.FirstName);
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.SetPropertyValue(bo => bo.FirstName, firstName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(firstName, contactPersonTestBO.FirstName);
+        }
+
+
+        [Test]
+        public void Test_SetPropertyValue_WithExpression_WhenInvalidProperty()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            var firstName = TestUtil.GetRandomString();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                contactPersonTestBO.SetPropertyValue(testBo => testBo.FirstName + "123", firstName);
+            }
+            //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOf<ArgumentException>(ex);
+                StringAssert.Contains("testBo => (testBo.FirstName + \"123\") is not a valid property on ContactPersonTestBO", ex.Message);
+            }
         }
 
         [Test]
