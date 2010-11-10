@@ -1429,6 +1429,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual(originalFirstName, firstName);
         }
 
+
+        [Test]
+        public void Test_GetPropertyValue_WithExpression_ValueType()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            var originalDateTime = DateTime.Today.AddDays(-TestUtil.GetRandomInt(365));
+            contactPersonTestBO.SetPropertyValue(bo => bo.DateOfBirth, originalDateTime);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var dateOfBirth = contactPersonTestBO.GetPropertyValue(testBo => testBo.DateOfBirth);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalDateTime, dateOfBirth);
+        }
+
         [Test]
         public void Test_GetPropertyValue_WithExpression_WhenInvalidProperty()
         {
@@ -1719,7 +1736,20 @@ namespace Habanero.Test.BO
             Assert.AreEqual(firstName, contactPersonTestBO.FirstName);
         }
 
-
+        [Test]
+        public void Test_SetPropertyValue_WithExpression_ValueType()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            var dateOfBirth = DateTime.Today;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.DateOfBirthAsExpression = dateOfBirth;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(dateOfBirth, contactPersonTestBO.DateOfBirth);
+        }
+        
         [Test]
         public void Test_SetPropertyValue_WithExpression_WhenInvalidProperty()
         {

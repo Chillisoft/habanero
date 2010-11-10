@@ -1728,23 +1728,6 @@ namespace Habanero.BO
         {
         }
 
-        ///// <summary>
-        ///// Sets a property value to a new value
-        ///// </summary>
-        ///// <param name="propNameExpression">The property name expression (eg. p => p.Name)</param>
-        ///// <param name="newPropValue">The new value to set to</param>
-        ///// <remarks>This runs about 5 times slower than the normal <see cref="BusinessObject.SetPropertyValue"/> method but has the advantage
-        ///// of being type safe.  Unless you are experiencing performance problems using this method, it is the recommended way of setting a property value.
-        ///// </remarks>
-        //public void SetPropertyValue(Expression<Func<T, object>> propNameExpression, object newPropValue)
-        //{
-        //    var memberExpression = propNameExpression.Body as MemberExpression;
-        //    if (memberExpression == null)
-        //    {
-        //        throw new ArgumentException(propNameExpression + " is not a valid property on " + this.GetType().Name);
-        //    }
-        //    SetPropertyValue(memberExpression.Member.Name, newPropValue);
-        //}
         /// <summary>
         /// Sets a property value to a new value
         /// </summary>
@@ -1753,7 +1736,7 @@ namespace Habanero.BO
         /// <remarks>This runs about 5 times slower than the normal <see cref="BusinessObject.SetPropertyValue"/> method but has the advantage
         /// of being type safe.  Unless you are experiencing performance problems using this method, it is the recommended way of setting a property value.
         /// </remarks>
-        public void SetPropertyValue(Expression<Func<T, object>> propNameExpression, object newPropValue)
+        public void SetPropertyValue<TOut>(Expression<Func<T, TOut>> propNameExpression, object newPropValue)
         {
             MemberExpression memberExpression;
             try
