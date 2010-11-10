@@ -26,7 +26,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    public class ContactPersonTestBO : BusinessObject
+    public class ContactPersonTestBO : BusinessObject<ContactPersonTestBO>
     {
         public ContactPersonTestBO() : base() { }
         public ContactPersonTestBO(ClassDef def) : base(def) { }
