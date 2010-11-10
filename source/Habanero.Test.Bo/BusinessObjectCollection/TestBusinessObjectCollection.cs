@@ -1551,6 +1551,65 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
+        public void Test_CopyToArrayOfTBusinessObjects_ShouldContainAllItems()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            var contactPersonsArray = new ContactPersonTestBO[3];
+            col.CopyTo(contactPersonsArray, 0);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, contactPersonsArray.Length);
+            Assert.Contains(cp1, contactPersonsArray);
+            Assert.Contains(cp2, contactPersonsArray);
+            Assert.Contains(cp3, contactPersonsArray);
+        }
+        [Test]
+        public void Test_CopyToArray_ShouldContainAllItems()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            Array contactPersonsArray = new ContactPersonTestBO[3];
+            col.CopyTo(contactPersonsArray, 0);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, contactPersonsArray.Length);
+            Assert.Contains(cp1, contactPersonsArray);
+            Assert.Contains(cp2, contactPersonsArray);
+            Assert.Contains(cp3, contactPersonsArray);
+        }
+
+        [Test]
+        public void Test_CopyToArray_WhenIndexNonZero_ShouldContainAllItems()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            //---------------Execute Test ----------------------
+            Array contactPersonsArray = new ContactPersonTestBO[4];
+            col.CopyTo(contactPersonsArray, 1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, contactPersonsArray.Length, "Since start copying at index 1 should copy 3 items into index 1,2,3");
+            Assert.Contains(cp1, contactPersonsArray);
+            Assert.Contains(cp2, contactPersonsArray);
+            Assert.Contains(cp3, contactPersonsArray);
+        }
+
+        [Test]
         public void Test_ConvertAll_ShouldCallConversionDelegateForEachObject()
         {
             //---------------Set up test pack-------------------
@@ -1558,7 +1617,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO cp2;
             ContactPersonTestBO cp3;
             BusinessObjectCollection<ContactPersonTestBO> col = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
-            List<ContactPersonTestBO> called = new List<ContactPersonTestBO>();
+            var called = new List<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
             Assert.AreEqual(3, col.Count);
             //---------------Execute Test ----------------------
