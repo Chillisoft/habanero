@@ -17,8 +17,6 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Linq;
-using System.Linq.Expressions;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
