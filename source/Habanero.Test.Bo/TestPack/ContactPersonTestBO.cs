@@ -1076,6 +1076,12 @@ namespace Habanero.Test.BO
             set { SetPropertyValue("Surname", value); }
         }
 
+        public string SurnameAsExpression
+        {
+            get { return GetPropertyValue(bo => bo.Surname); }
+            set { SetPropertyValue(bo => bo.Surname, value); }
+        }
+
         public string FirstName
         {
             get { return (string) GetPropertyValue("FirstName"); }
@@ -1086,6 +1092,12 @@ namespace Habanero.Test.BO
         {
             get { return (DateTime) GetPropertyValue("DateOfBirth"); }
             set { SetPropertyValue("DateOfBirth", value); }
+        }
+
+        public DateTime DateOfBirthAsExpression
+        {
+            get { return GetPropertyValue(bo => bo.DateOfBirth); }
+            set { SetPropertyValue(bo => bo.DateOfBirth, value); }
         }
 
         public RelatedBusinessObjectCollection<AddressTestBO> Addresses
