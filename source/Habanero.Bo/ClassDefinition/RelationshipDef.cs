@@ -123,6 +123,13 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public IClassDef OwningClassDef { get; set; }
 
+        /// <summary>
+        /// The ClassName of the BusinessObject type that owns this relationship definition.
+        /// </summary>
+        public string OwningClassName
+        {
+            get { return this.OwningClassDef == null ? "" : this.OwningClassDef.ClassName; }
+        }
         #endregion Constructors
 
 		#region Properties

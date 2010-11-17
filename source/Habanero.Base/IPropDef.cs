@@ -24,32 +24,8 @@ namespace Habanero.Base
     ///<summary>
     /// interface for a property definition.
     ///</summary>
-    public interface IPropDef
+    public interface IPropDef : ISingleValueDef
     {
-        ///<summary>
-        /// The display name for the property.
-        ///</summary>
-        string DisplayName { get; } // set; }
-
-        ///<summary>
-        /// The description of the property.
-        ///</summary>
-        string Description { get; set; }
-
-        /// <summary>
-        /// The name of the property type assembly
-        /// </summary>
-        string PropertyTypeAssemblyName { get; set; }
-
-        /// <summary>
-        /// The name of the property type
-        /// </summary>
-        string PropertyTypeName { get; set; }
-
-        /// <summary>
-        /// The type of the property, e.g. string
-        /// </summary>
-        Type PropertyType { get; set; }
 
         ///// <summary>
         ///// Gets and sets the property rule relevant to this definition
@@ -84,11 +60,6 @@ namespace Habanero.Base
         /// The default value that a property of a new object will be set to
         /// </summary>
         string DefaultValueString { get; set; }
-
-        ///<summary>
-        /// Is this property compulsary or not
-        ///</summary>
-        bool Compulsory { get; set; }
 
         /// <summary>
         /// Provides access to read and write the ILookupList object
@@ -149,28 +120,6 @@ namespace Habanero.Base
         bool Persistable { get; set; }
 
         /// <summary>
-        /// The name of the property, e.g. surname
-        /// </summary>
-        string PropertyName { get; set; }
-
-        ///<summary>
-        /// Returns the class definition that this property definition is owned by.
-        ///</summary>
-        IClassDef ClassDef { get; set; }
-
-        ///<summary>
-        /// Returns the full display name for a property definition.
-        /// If there is a unit of measure then it is appended to the display name in brackets e.g. DisplayName (UOM).
-        /// If there is no display name then it will return the PascalCase Delimited property Name i.e. Display Name.
-        ///</summary>
-        string DisplayNameFull { get; }
-
-        ///<summary>
-        /// The name of the Class if this PropDef is associated with a ClassDef.
-        ///</summary>
-        string ClassName { get; }
-
-        /// <summary>
         /// Creates a new Business Object property (BOProp)
         /// </summary>
         /// <param name="assignDefaultValue">Whether to initialise the property 
@@ -178,7 +127,6 @@ namespace Habanero.Base
         /// </param>
         /// <returns>The newly created BO property</returns>
         IBOProp CreateBOProp(bool assignDefaultValue);
-
 
         ///<summary>
         /// returns true if obj is equal to this object
