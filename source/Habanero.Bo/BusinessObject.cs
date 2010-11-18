@@ -326,18 +326,8 @@ namespace Habanero.BO
                 {
                     return boKeyCol.ToString();
                 }
-/*
-            if (this.ID.IsCompositeKey)
-            {
-                return this.ID.Aggregate("", AppendPropValue);
-            }*/
             return ID.GetAsValue() == null ? this.ID.ToString() : ID.GetAsValue().ToString();
         }
-
-/*        private static string AppendPropValue(string compositeToString, IBOProp boProp)
-        {
-            return StringUtilities.AppendMessage(compositeToString, boProp.PropertyValueString, "_");
-        }*/
 
         private bool HasAlternateKeys()
         {
