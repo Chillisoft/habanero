@@ -29,6 +29,7 @@ using System.Xml.Schema;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -320,12 +321,32 @@ namespace Habanero.BO
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
-            if (!String.IsNullOrEmpty(ClassDef.TypeParameter) && _keysCol.Count > 0)
+            if (HasTypeParameter() && HasAlternateKeys())
                 foreach (BOKey boKeyCol in _keysCol)
                 {
                     return boKeyCol.ToString();
                 }
-            return ID.GetAsValue() == null ? base.ToString() : ID.GetAsValue().ToString();
+/*
+            if (this.ID.IsCompositeKey)
+            {
+                return this.ID.Aggregate("", AppendPropValue);
+            }*/
+            return ID.GetAsValue() == null ? this.ID.ToString() : ID.GetAsValue().ToString();
+        }
+
+/*        private static string AppendPropValue(string compositeToString, IBOProp boProp)
+        {
+            return StringUtilities.AppendMessage(compositeToString, boProp.PropertyValueString, "_");
+        }*/
+
+        private bool HasAlternateKeys()
+        {
+            return _keysCol.Count > 0;
+        }
+
+        private bool HasTypeParameter()
+        {
+            return !String.IsNullOrEmpty(ClassDef.TypeParameter);
         }
 
         /// <summary>

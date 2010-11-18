@@ -64,20 +64,70 @@ namespace Habanero.Test.BO
             Assert.AreEqual(myBO.ID.GetAsValue().ToString(), toString);
         }
         [Test]
-        public void Test_ToString_WhenHasCompositePrimaryKey_ShouldReturnCompositePrimaryKeyToString()
+        public void Test_ToString_WhenHasCompositePrimaryKey_AndValueSet_ShouldReturnAggregateOfKeyProps()
         {
             //---------------Set up test pack-------------------
-            ContactPersonCompositeKey.LoadClassDefs();
-            var myBO = new ContactPersonCompositeKey();
-            myBO
+            BOWithCompositePK.LoadClassDefs();
+            var myBO = new BOWithCompositePK();
+            const string pk1Prop1Value = "somevalue";
+            const string pk1Prop2Value = "anothervalue";
+            myBO.PK1Prop1 = pk1Prop1Value;
+            myBO.PK1Prop2 = pk1Prop2Value;
             //---------------Assert Precondition----------------
-
+            Assert.IsNotNull(myBO.PK1Prop1);
+            Assert.IsNotNull(myBO.PK1Prop2);
             //---------------Execute Test ----------------------
-            string toString = myBO.ToString();
+            string actualToString = myBO.ToString();
             //---------------Test Result -----------------------
-            Assert.AreEqual(myBO.ID.GetAsValue().ToString(), toString);
+            Assert.AreEqual(myBO.ID.ToString(), actualToString);
         }
+        [Test]
+        public void Test_ToString_WhenHasCompositePrimaryKey_AndValueSet_ShouldReturnGuidIdToString()
+        {
+            //---------------Set up test pack-------------------
+            BOWithCompositePK.LoadClassDefs();
+            var myBO = new BOWithCompositePK();
+            //---------------Assert Precondition----------------
+            Assert.IsNullOrEmpty(myBO.PK1Prop1);
+            Assert.IsNullOrEmpty(myBO.PK1Prop2);
+            //---------------Execute Test ----------------------
+            string actualToString = myBO.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(myBO.ID.GetAsGuid().ToString(), actualToString);
+        }
+        
+        [Test]
+        public void Test_ToString_WhenHasStringPKProp_AndValueSet_ShouldReturnTheSingleValueAsAToString()
+        {
+            //---------------Set up test pack-------------------
+            BOWithStringPKProp.LoadClassDefs();
+            var myBO = new BOWithStringPKProp();
+            const string pk1Prop1Value = "somevalue";
+            myBO.PK1Prop1 = pk1Prop1Value;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(myBO.PK1Prop1);
+            //---------------Execute Test ----------------------
+            string actualToString = myBO.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(pk1Prop1Value, actualToString);
+        }
+        [Test]
+        public void Test_ToString_WhenHasStringPKProp_AndValueSet_ShouldReturnGuidIDToString()
+        {
+            //---------------Set up test pack-------------------
+            BOWithStringPKProp.LoadClassDefs();
+            var myBO = new BOWithStringPKProp();
+            //---------------Assert Precondition----------------
+            Assert.IsNullOrEmpty(myBO.PK1Prop1);
+            //---------------Execute Test ----------------------
+            string actualToString = myBO.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(myBO.ID.GetAsGuid().ToString(), actualToString);
+        }
+
     }
+
+
     /// <summary>
     /// Summary description for TestBusinessObject.
     /// </summary>
