@@ -36,17 +36,46 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public override void TestFixtureSetup()
         {
-            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [SetUp]
         public override void SetupTest()
         {
-            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
             ClassDef.ClassDefs.Clear();
             new Address();
+        }
+
+
+        [Test]
+        public void Test_ToString_WhenHasObjectID_ShouldReturnObjectIDToString()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            Car myBO = new Car();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string toString = myBO.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(myBO.ID.GetAsValue().ToString(), toString);
+        }
+        [Test]
+        public void Test_ToString_WhenHasCompositePrimaryKey_ShouldReturnCompositePrimaryKeyToString()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonCompositeKey.LoadClassDefs();
+            var myBO = new ContactPersonCompositeKey();
+            myBO
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string toString = myBO.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(myBO.ID.GetAsValue().ToString(), toString);
         }
     }
     /// <summary>
@@ -1794,19 +1823,6 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
-        public void Test_ToString()
-        {
-            //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
-            Car myBO = new Car();
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            string toString = myBO.ToString();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(myBO.ID.GetAsValue().ToString(), toString);
-        }
 
     }
 }
