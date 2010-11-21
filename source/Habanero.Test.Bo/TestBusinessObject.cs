@@ -24,6 +24,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
+using Habanero.Test.Structure;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -119,6 +120,34 @@ namespace Habanero.Test.BO
             var myBO = new BOWithStringPKProp();
             //---------------Assert Precondition----------------
             Assert.IsNullOrEmpty(myBO.PK1Prop1);
+            //---------------Execute Test ----------------------
+            string actualToString = myBO.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(myBO.ID.GetAsGuid().ToString(), actualToString);
+        }       
+        [Test]
+        public void Test_ToString_WhenHasIntPKProp_AndValueSet_ShouldReturnTheSingleValueAsAToString()
+        {
+            //---------------Set up test pack-------------------
+            BOWithIntPKProp.LoadClassDefs();
+            var myBO = new BOWithIntPKProp();
+            int pk1Prop1Value = RandomValueGen.GetRandomInt();
+            myBO.PK1Prop1 = pk1Prop1Value;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(myBO.PK1Prop1);
+            //---------------Execute Test ----------------------
+            string actualToString = myBO.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(pk1Prop1Value.ToString(), actualToString);
+        }
+        [Test]
+        public void Test_ToString_WhenHasIntPKProp_AndValueSet_ShouldReturnGuidIDToString()
+        {
+            //---------------Set up test pack-------------------
+            BOWithIntPKProp.LoadClassDefs();
+            var myBO = new BOWithIntPKProp();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(myBO.PK1Prop1);
             //---------------Execute Test ----------------------
             string actualToString = myBO.ToString();
             //---------------Test Result -----------------------
