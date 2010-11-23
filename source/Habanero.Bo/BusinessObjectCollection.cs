@@ -1263,7 +1263,6 @@ namespace Habanero.BO
         /// <filterpriority>2</filterpriority>
         public void CopyTo(Array array, int index)
         {
-            _boCol.CopyTo(new TBusinessObject[0], index);
             if (object.ReferenceEquals(array, null))
             {
                 throw new ArgumentNullException(
