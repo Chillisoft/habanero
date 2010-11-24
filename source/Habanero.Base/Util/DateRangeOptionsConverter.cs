@@ -102,7 +102,7 @@ namespace Habanero.Base.Util
         }
 
         ///<summary>
-        /// Usign the Current Date Time <see cref="DateTimeNow"/> and the <see cref="DateRangeOptions"/>
+        /// Using the Current Date Time <see cref="DateTimeNow"/> and the <see cref="DateRangeOptions"/>
         /// returns an appropriate <see cref="DateRange"/>.
         ///</summary>
         ///<param name="dateRangeOptions">A date range option e.g. Yesterday</param>
