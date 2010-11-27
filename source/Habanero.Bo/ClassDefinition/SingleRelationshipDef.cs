@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Habanero.Base;
 using Habanero.Util;
@@ -241,6 +242,14 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return this.RelatedObjectAssemblyName; }
             set { this.RelatedObjectAssemblyName = value; }
+        }
+
+        /// <summary>
+        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition <see cref="IPropDef>"/> or Single RelationshipDefinition <see cref="ISingleRelationshipDef"/>.
+        /// </summary>
+        public List<IPropRule> PropRules
+        {
+            get { return new List<IPropRule>(); }
         }
 
         public string PropertyTypeName

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
@@ -61,5 +62,10 @@ namespace Habanero.Base
         /// The name of the property type assembly
         /// </summary>
         string PropertyTypeAssemblyName { get; set; }
+
+        /// <summary>
+        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition <see cref="IPropDef>"/> or Single RelationshipDefinition <see cref="ISingleRelationshipDef"/>.
+        /// </summary>
+        List<IPropRule> PropRules { get; }
     }
 }

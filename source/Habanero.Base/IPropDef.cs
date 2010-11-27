@@ -26,10 +26,7 @@ namespace Habanero.Base
     public interface IPropDef : ISingleValueDef
     {
 
-        /// <summary>
-        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition.
-        /// </summary>
-        List<IPropRule> PropRules { get; }
+
 
         ///<summary>
         /// Adds an <see cref="IPropRule"/> to the <see cref="PropRules"/> for the 
