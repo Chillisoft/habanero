@@ -252,6 +252,12 @@ namespace Habanero.BO.ClassDefinition
             get { return new List<IPropRule>(); }
         }
 
+        public ILookupList LookupList
+        {
+            get { return new NullLookupList(); }
+            set { }
+        }
+
         public string PropertyTypeName
         {
             get { return this.RelatedObjectClassName; }

@@ -259,8 +259,7 @@ namespace Habanero.BO
             // this. In the future as we refactor this to 
             // include reflective props then this should be changed.
             var boProp = this.Property;
-            if (boProp != null) return this.Property.PropertyValueToDisplay;
-            return null;
+            return boProp != null ? this.Property.PropertyValueToDisplay : null;
         }
         /// <summary>
         /// If the Property is invalid then returns the Invalid reason.

@@ -24,6 +24,7 @@ using Rhino.Mocks;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
+    // ReSharper disable InconsistentNaming
     [TestFixture]
     public class TestSingleRelationshipDef
     {
@@ -574,5 +575,57 @@ namespace Habanero.Test.BO.ClassDefinition
 
         #endregion
 
+        #region Implement ISingleValueDef
+        // in terms of redmine issue
+        //Feature #1279 Modify Testability to use the new ISingleValueDef instead of PropDef
+        //These methods have been moved onto the ISingleValueDef interface.
+        //However in the future these should be implemented with more intelligent behavious
+        // when we start rationalising code in Habanero.Faces to use the SingleValue 
+        // e.g. AutoLoadingComboLookupMapper and LookupComboBox mappers do not inherit common
+        //behaviour.
+
+        [Test]
+        public void Test_LookupList_ShouldReturnNullLookupList()
+        {
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var lookupList = relationshipDef.LookupList;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(lookupList);
+            Assert.IsInstanceOf<NullLookupList>(lookupList);
+        }
+        [Test]
+        public void Test_SetLookupList_ShouldDoNothing_ShouldReturnNullLookupList()
+        {
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var lookupList = relationshipDef.LookupList;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(lookupList);
+            Assert.IsInstanceOf<NullLookupList>(lookupList);
+        }
+        [Test]
+        public void Test_PropRules_ShouldReturnEmptyPropRules()
+        {
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var propRules = relationshipDef.PropRules;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(propRules);
+            Assert.IsEmpty(propRules, "Should be empty list of prop rules");
+        }
+
+        #endregion
+
     }
+    // ReSharper restore InconsistentNaming
 }

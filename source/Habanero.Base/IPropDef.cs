@@ -26,10 +26,8 @@ namespace Habanero.Base
     public interface IPropDef : ISingleValueDef
     {
 
-
-
         ///<summary>
-        /// Adds an <see cref="IPropRule"/> to the <see cref="PropRules"/> for the 
+        /// Adds an <see cref="IPropRule"/> to the list of rules for the 
         /// Property Definiton.
         ///</summary>
         ///<param name="rule">The new rules to be added for the Property Definition.</param>
@@ -53,11 +51,6 @@ namespace Habanero.Base
         /// </summary>
         string DefaultValueString { get; set; }
 
-        /// <summary>
-        /// Provides access to read and write the ILookupList object
-        /// in this definition
-        /// </summary>
-        ILookupList LookupList { get; set; }
 
         /// <summary>
         /// Returns the rule for how the property can be accessed. 

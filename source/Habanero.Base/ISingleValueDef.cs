@@ -67,5 +67,11 @@ namespace Habanero.Base
         /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition <see cref="IPropDef>"/> or Single RelationshipDefinition <see cref="ISingleRelationshipDef"/>.
         /// </summary>
         List<IPropRule> PropRules { get; }
+
+        /// <summary>
+        /// Provides access to read and write the ILookupList object
+        /// in this definition
+        /// </summary>
+        ILookupList LookupList { get; set; }
     }
 }
