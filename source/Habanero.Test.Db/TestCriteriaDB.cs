@@ -57,11 +57,18 @@ namespace Habanero.Test.DB
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
 
             //-------------Execute test ---------------------
+            
             string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "", ""),
-                                                       delegate(object value) { return Convert.ToString(value); });
+                                                       delegate(object value) { return Convert.ToString(value); }, 
+                                                       SetupSingleAlias(""));
             //-------------Test Result ----------------------
 
-            Assert.AreEqual(string.Format("<<{0}>> = {1}", surname, surnameValue), tostring);
+            Assert.AreEqual(string.Format("a1.<<{0}>> = {1}", surname, surnameValue), tostring);
+        }
+
+        private Dictionary<string, string> SetupSingleAlias(string sourceName)
+        {
+            return new Dictionary<string, string>() { { sourceName, "a1" } };
         }
 
         [Test]
@@ -76,10 +83,11 @@ namespace Habanero.Test.DB
 
             //-------------Execute test ---------------------
             string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "",""),
-                                                       delegate(object value) { return Convert.ToString(value); });
+                                                       delegate(object value) { return Convert.ToString(value); },
+                                                       SetupSingleAlias(surnameTable));
             //-------------Test Result ----------------------
 
-            Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> IS NULL", surnameTable, surnameField), tostring);
+            Assert.AreEqual(string.Format("a1.<<{0}>> IS NULL",  surnameField), tostring);
         }
 
 
@@ -95,10 +103,11 @@ namespace Habanero.Test.DB
 
             //-------------Execute test ---------------------
             string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "", ""),
-                                                       Convert.ToString);
+                                                       Convert.ToString,
+                                                       SetupSingleAlias(surnameTable));
             //-------------Test Result ----------------------
 
-            Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> IS NULL", surnameTable, surnameField), tostring);
+            Assert.AreEqual(string.Format("a1.<<{0}>> IS NULL", surnameField), tostring);
         }
         
         [Test]
@@ -113,10 +122,11 @@ namespace Habanero.Test.DB
 
             //-------------Execute test ---------------------
             string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "", ""),
-                                                       Convert.ToString);
+                                                       Convert.ToString,
+                                                       SetupSingleAlias(surnameTable));
             //-------------Test Result ----------------------
 
-            Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> IS NOT NULL", surnameTable, surnameField), tostring);
+            Assert.AreEqual(string.Format("a1.<<{0}>> IS NOT NULL", surnameField), tostring);
         }
 
         [Test]
@@ -149,10 +159,11 @@ namespace Habanero.Test.DB
 
             //-------------Execute test ---------------------
             string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>","",""),
-                                                       delegate(object value) { return Convert.ToString(value); });
+                                                       delegate(object value) { return Convert.ToString(value); },
+                                                        SetupSingleAlias(surnameTable));
             //-------------Test Result ----------------------
 
-            Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> = {2}", surnameTable, surname, surnameValue), tostring);
+            Assert.AreEqual(string.Format("a1.<<{0}>> = {1}", surname, surnameValue), tostring);
         }
 
         [Test]

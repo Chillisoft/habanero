@@ -121,11 +121,11 @@ namespace Habanero.Base
             }
             Join.JoinField joinField = join.JoinFields[0];
             var toSourceNameWithAlias = sqlFormatter.DelimitTable(join.ToSource.EntityName);
-            if (aliases.Count > 0) toSourceNameWithAlias += " " + aliases[join.ToSource.ToString()];
+            toSourceNameWithAlias += " " + aliases[join.ToSource.ToString()];
             var fromSourceAlias = sqlFormatter.DelimitTable(join.FromSource.EntityName);
-            if (aliases.Count > 0) fromSourceAlias = aliases[join.FromSource.ToString()];
+            fromSourceAlias = aliases[join.FromSource.ToString()];
             var toSourceAlias = sqlFormatter.DelimitTable(join.ToSource.EntityName);
-            if (aliases.Count > 0) toSourceAlias = aliases[join.ToSource.ToString()];
+            toSourceAlias = aliases[join.ToSource.ToString()];
             string joinString = string.Format("{0} {1} ON {2}.{3} = {4}.{5}",
                                               join.GetJoinClause(),
                      toSourceNameWithAlias,
@@ -139,8 +139,12 @@ namespace Habanero.Base
                 for (int i = 1; i < join.JoinFields.Count; i++)
                 {
                     joinField = join.JoinFields[i];
+                    var fromSourceAlias1 = sqlFormatter.DelimitTable(join.FromSource.EntityName);
+                    fromSourceAlias1 = aliases[join.FromSource.ToString()];
+                    var toSourceAlias1 = sqlFormatter.DelimitTable(join.ToSource.EntityName);
+                    toSourceAlias1 = aliases[join.ToSource.ToString()];
                     joinString += string.Format(" AND {0}.{2} = {1}.{3}",
-                        sqlFormatter.DelimitTable(join.FromSource.EntityName), sqlFormatter.DelimitTable(join.ToSource.EntityName),
+                        fromSourceAlias1, toSourceAlias1,
                         sqlFormatter.DelimitField(joinField.FromField.FieldName), sqlFormatter.DelimitField(joinField.ToField.FieldName));
                 }
             }
@@ -150,7 +154,7 @@ namespace Habanero.Base
         private string GetTableJoinString(Source source, ISqlFormatter sqlFormatter, IDictionary<string, string> aliases)
         {
             string joinString = sqlFormatter.DelimitTable(EntityName);
-            if (aliases.Count > 0) joinString += " " + aliases[this.ToString()];
+             joinString += " " + aliases[this.ToString()];
             joinString = GetInheritanceJoinString(sqlFormatter, source, joinString, aliases);
             return joinString;
         }

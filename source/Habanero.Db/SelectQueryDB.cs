@@ -35,7 +35,7 @@ namespace Habanero.DB
         private readonly ISelectQuery _selectQuery;
         private readonly IDatabaseConnection _databaseConnection;
         private ISqlFormatter _sqlFormatter;
-
+        public IDictionary<string, string> Aliases { get; private set; }
         ///<summary>
         /// Creates a SelectQueryDB, wrapping an ISelectQuery (Decorator pattern)
         ///</summary>
@@ -43,8 +43,10 @@ namespace Habanero.DB
         ///<param name="databaseConnection"></param>
         public SelectQueryDB(ISelectQuery selectQuery, IDatabaseConnection databaseConnection)
         {
+            Aliases = new Dictionary<string, string>();
             _selectQuery = selectQuery;
             _databaseConnection = databaseConnection;
+            SetupAliases();
         }
 
         #region ISelectQuery Members
@@ -118,11 +120,6 @@ namespace Habanero.DB
         {
             get { return _selectQuery.FirstRecordToLoad; }
             set { _selectQuery.FirstRecordToLoad = value; }
-        }
-
-        public IDictionary<string, string> Aliases
-        {
-            get { return _selectQuery.Aliases; }
         }
 
         #endregion
@@ -199,21 +196,6 @@ namespace Habanero.DB
 
         private void AppendOrderBySecondSelect(StringBuilder builder)
         {
-/*            builder.Append(") AS " + DelimitTable("SecondSelect"));
-            builder.Append(" ORDER BY ");
-            foreach (OrderCriteriaField field in this.OrderCriteria.Fields)
-            {
-                string orderByFieldName = GetOrderByFieldName(field);
-                builder.Append(DelimitField("SecondSelect", orderByFieldName));
-                if (field.SortDirection == SortDirection.Ascending)
-                {
-                    AppendAsc(builder);
-                }
-                else
-                {
-                    AppendDesc(builder);
-                }
-            }*/
             AppendOrderBy(builder, "SecondSelect", true);
         }
 
@@ -276,31 +258,16 @@ namespace Habanero.DB
         private void AppendFrom(StringBuilder builder)
         {
             SourceDB source = new SourceDB(_selectQuery.Source);
-            //if (Aliases.Count > 0)
-            //{
-            //    builder.AppendFormat(" FROM {0} {1}", source.CreateSQL(_sqlFormatter, Aliases), Aliases[source]);
-            //}
-            //else
-            //{
-                builder.AppendFormat(" FROM {0}", source.CreateSQL(_sqlFormatter, Aliases));
-            //}
+            builder.AppendFormat(" FROM {0}", source.CreateSQL(_sqlFormatter, Aliases));
         }
-
-
+        
         private void AppendFields(StringBuilder builder)
         {
-            if (Aliases.Count > 0)
-            {
-                var fields = from field in _selectQuery.Fields.Values
-                             select String.Format("{0}.{1}", _selectQuery.Aliases[field.Source.ToString()], DelimitFieldName(field.FieldName));
-                builder.AppendFormat(String.Join(", ", fields.ToArray()));
-            }
-            else
-            {
-                var fields = from field in _selectQuery.Fields.Values
-                          select DelimitField(field.Source, field.FieldName);
-                builder.AppendFormat(String.Join(", ", fields.ToArray()));
-            }
+            var fields = from field in _selectQuery.Fields.Values
+                            select String.Format("{0}{1}", 
+                                field.Source != null ? this.Aliases[field.Source.ToString()] + "." : "", 
+                                DelimitFieldName(field.FieldName));
+            builder.AppendFormat(String.Join(", ", fields.ToArray()));
         }
 
 
@@ -357,40 +324,17 @@ namespace Habanero.DB
             string tableAndFieldName;
             if (orderOrderCriteriaField.Source != null)
             {
-                if (this.Aliases.Count>0)
-                {
-                    tableAndFieldName = this.Aliases[orderOrderCriteriaField.Source.ChildSourceLeaf.ToString()] + "." + DelimitFieldName(orderOrderCriteriaField.FieldName); 
-                }
-                else
-                {
-                    tableAndFieldName = DelimitField(orderOrderCriteriaField.Source.ChildSourceLeaf, orderOrderCriteriaField.FieldName);
-                }
+                tableAndFieldName = this.Aliases[orderOrderCriteriaField.Source.ChildSourceLeaf.ToString()] + "." + DelimitFieldName(orderOrderCriteriaField.FieldName); 
             }
             else
             {
                 if (Fields.ContainsKey(orderOrderCriteriaField.PropertyName))
                 {
                     QueryField queryField = Fields[orderOrderCriteriaField.PropertyName];
-                    if (this.Aliases.Count>0)
-                    {
-                        tableAndFieldName = this.Aliases[queryField.Source.ToString()] + "." + DelimitFieldName(queryField.FieldName); 
-                    }
-                    else
-                    {
-                        tableAndFieldName = DelimitField(queryField.Source, queryField.FieldName);
-                    }
-                    //tableAndFieldName = DelimitField(queryField.Source, queryField.FieldName);
+                    tableAndFieldName = String.Format("{0}{1}", queryField.Source != null ? this.Aliases[queryField.Source.ToString()] + "." : "", DelimitFieldName(queryField.FieldName)); 
                 } else
                 {
-                    if (this.Aliases.Count > 0)
-                    {
-                        tableAndFieldName = this.Aliases[Source.ToString()] + "." + DelimitFieldName(orderOrderCriteriaField.FieldName);
-                    }
-                    else
-                    {
-                        tableAndFieldName = DelimitField(Source, orderOrderCriteriaField.FieldName);
-                    }
-                    //tableAndFieldName = DelimitField(this.Source, orderOrderCriteriaField.FieldName);
+                    tableAndFieldName = this.Aliases[Source.ToString()] + "." + DelimitFieldName(orderOrderCriteriaField.FieldName);
                 }
             }
             StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");
@@ -403,7 +347,9 @@ namespace Habanero.DB
             if (classDef != null && classDef.ClassID.HasValue)
             {
                 Criteria classIDCriteria = new Criteria("DMClassID", Criteria.ComparisonOp.Equals, classDef.ClassID.Value);
+                classIDCriteria.Field.Source = this.Source;
                 fullCriteria = Criteria.MergeCriteria(fullCriteria, classIDCriteria);
+
             }
 
             if (fullCriteria == null) return;
@@ -480,7 +426,7 @@ namespace Habanero.DB
         /// <summary>
         /// Sets up the aliases to use for each of the sources in this select query.
         /// </summary>
-        public void SetupAliases()
+        private void SetupAliases()
         {
             aliasCount = 0;
             AddAliasForSource(this.Source);
@@ -489,6 +435,7 @@ namespace Habanero.DB
 
         private void AddAliasForSource(Source source)
         {
+            if (source == null) return;
             var sourceName = source.ToString();
             if (this.Aliases.ContainsKey(sourceName)) return;
 
@@ -502,7 +449,9 @@ namespace Habanero.DB
             while (queue.Count > 0)
             {
                 if (!String.IsNullOrEmpty(subSourceName)) subSourceName += ".";
-                subSourceName += queue.Dequeue();
+                var singlePartOfSourceName = queue.Dequeue();
+                subSourceName += singlePartOfSourceName;
+                if (queue.Count > 0 && queue.Peek() == singlePartOfSourceName) continue;
                 if (!this.Aliases.ContainsKey(subSourceName))
                     this.Aliases.Add(subSourceName, "a" + aliasCount);
             }

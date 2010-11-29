@@ -142,7 +142,7 @@ namespace Habanero.Test.DB
         public void TestLoad_ConcreteTableInheritance_Fresh()
         {
             //---------------Set up test pack-------------------
-            Circle.GetClassDef();
+            Circle.GetClassDefWithConcreteTableInheritance();
             Circle circle = Circle.CreateSavedCircle();
 
             //---------------Execute Test ----------------------

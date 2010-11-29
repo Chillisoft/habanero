@@ -69,10 +69,11 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
         private static SelectQuery CreateManualSelectQueryOrderedByDateOfBirth(DateTime now, BusinessObject cp1)
         {
+            var source = new Source(cp1.ClassDef.ClassNameExcludingTypeParameter, cp1.ClassDef.TableName); 
             SelectQuery query = new SelectQuery(new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, now));
-            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", null));
-            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
-            query.Source = new Source(cp1.ClassDef.TableName);
+            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", source));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", source));
+            query.Source = source;
             query.OrderCriteria = new OrderCriteria().Add("DateOfBirth");
             return query;
         }
@@ -2702,7 +2703,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        [Ignore("Working on this: issue #908")]
         public virtual void Test_LoadThroughSelfReferencingRelationship_OneLevel()
         {
             //---------------Set up test pack-------------------
@@ -2723,7 +2723,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        [Ignore("Working on this: issue #908")]
         public virtual void Test_LoadThroughSelfReferencingRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
@@ -2745,6 +2744,33 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(1, col.Count);
             Assert.Contains(asset, col);
         }
+
+        [Test]
+        public virtual void Test_LoadThroughSelfReferencingRelationship_ThreeLevels()
+        {
+            //---------------Set up test pack-------------------
+            Asset.LoadClassDef();
+            Asset greatgrandparentAsset = new Asset();
+            greatgrandparentAsset.Save();
+            Asset grandparentAsset = new Asset();
+            grandparentAsset.Parent = greatgrandparentAsset;
+            grandparentAsset.Save();
+            Asset parentAsset = new Asset();
+            parentAsset.Parent = grandparentAsset;
+            parentAsset.Save();
+            Asset asset = new Asset();
+            asset.Parent = parentAsset;
+            asset.Save();
+            string criteria = string.Format("Parent.Parent.Parent.AssetID = '{0}'", greatgrandparentAsset.AssetID);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Asset> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Asset>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(asset, col);
+        }
+
 
         [Test]
         public virtual void Test_Load_CriteriaString_ThroughRelationship_TwoLevels()

@@ -98,7 +98,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statementString);
+            StringAssert.AreEqualIgnoringCase("SELECT a1.MyBoID, a1.TestProp, a1.TestProp2 FROM MyBO a1", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -116,7 +116,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO WHERE DMClassID = ?Param0", statementString);
+            StringAssert.AreEqualIgnoringCase("SELECT a1.MyBoID, a1.TestProp, a1.TestProp2 FROM MyBO a1 WHERE a1.DMClassID = ?Param0", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -135,7 +135,7 @@ namespace Habanero.Test.DB
 
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.AreEqualIgnoringCase("SELECT [Surname], [ContactPersonID] FROM [bob]", statementString);
+            StringAssert.AreEqualIgnoringCase("SELECT [Surname], [ContactPersonID] FROM [bob] a1", statementString);
 
             //---------------Tear Down -------------------------
         }
@@ -153,7 +153,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("WHERE [MyBO].[TestProp] = ?Param0", statementString);
+            StringAssert.EndsWith("WHERE a1.[TestProp] = ?Param0", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             Assert.AreEqual("test", statement.Parameters[0].Value);
             //---------------Tear Down -------------------------          
@@ -175,7 +175,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("WHERE [MyBO].[TestProp] IN (?Param0, ?Param1, ?Param2)", statementString);
+            StringAssert.EndsWith("WHERE a1.[TestProp] IN (?Param0, ?Param1, ?Param2)", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             Assert.AreEqual("100", statement.Parameters[0].Value);
             Assert.AreEqual("?Param1", statement.Parameters[1].ParameterName);
@@ -200,7 +200,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("WHERE [MyBO].[TestProp] NOT IN (?Param0, ?Param1, ?Param2)", statementString);
+            StringAssert.EndsWith("WHERE a1.[TestProp] NOT IN (?Param0, ?Param1, ?Param2)", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             Assert.AreEqual("100", statement.Parameters[0].Value);
             Assert.AreEqual("?Param1", statement.Parameters[1].ParameterName);
@@ -224,10 +224,10 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("WHERE ([MyBO].[TestProp] = ?Param0)", statementString);
+            StringAssert.Contains("WHERE (a1.[TestProp] = ?Param0)", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             Assert.AreEqual("test", statement.Parameters[0].Value);
-            StringAssert.EndsWith("([DMClassID] = ?Param1)", statementString);
+            StringAssert.EndsWith("(a1.[DMClassID] = ?Param1)", statementString);
             Assert.AreEqual("?Param1", statement.Parameters[1].ParameterName);
             Assert.AreEqual(classDef.ClassID.Value.ToString("B").ToUpper(), statement.Parameters[1].Value);
             //---------------Tear Down -------------------------          
@@ -249,7 +249,7 @@ namespace Habanero.Test.DB
             DateTime dateTimeAfter = DateTime.Today;
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("WHERE [MyBO].[TestDateTime] = ?Param0", statementString);
+            StringAssert.EndsWith("WHERE a1.[TestDateTime] = ?Param0", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             object value = statement.Parameters[0].Value;
             Assert.IsInstanceOf(typeof(DateTime), value);
@@ -272,7 +272,7 @@ namespace Habanero.Test.DB
             DateTime dateTimeAfter = DateTime.Today.AddDays(1);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("WHERE [MyBO].[TestDateTime] = ?Param0", statementString);
+            StringAssert.EndsWith("WHERE a1.[TestDateTime] = ?Param0", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             object value = statement.Parameters[0].Value;
             Assert.IsInstanceOf(typeof(DateTime), value);
@@ -295,7 +295,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             StringAssert.Contains(
-                "[MyBO] LEFT JOIN [MyRelatedBo] ON [MyBO].[RelatedID] = [MyRelatedBo].[MyRelatedBoID]", 
+                "[MyBO] a1 LEFT JOIN [MyRelatedBo] a2 ON a1.[RelatedID] = a2.[MyRelatedBoID]", 
                 statement.Statement.ToString());
             //---------------Tear Down -------------------------
         }
@@ -313,7 +313,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] ASC, [MyBO].[TestProp] ASC", statementString);
+            StringAssert.EndsWith("ORDER BY a1.[MyBoID] ASC, a1.[TestProp] ASC", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -330,7 +330,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] ASC, [MyBO].[TestProp] ASC", statementString);
+            StringAssert.EndsWith("ORDER BY a1.[MyBoID] ASC, a1.[TestProp] ASC", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -347,7 +347,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("ORDER BY [my_bo].[my_bo_id] ASC, [my_bo].[test_prop] ASC", statementString);
+            StringAssert.EndsWith("ORDER BY a1.[my_bo_id] ASC, a1.[test_prop] ASC", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -364,7 +364,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("FROM [MyBO]", statementString, "An empty OrderCriteria should be ignored");
+            StringAssert.EndsWith("FROM [MyBO] a1", statementString, "An empty OrderCriteria should be ignored");
             //---------------Tear Down -------------------------          
         }
 
@@ -381,7 +381,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] DESC, [MyBO].[TestProp] DESC", statementString);
+            StringAssert.EndsWith("ORDER BY a1.[MyBoID] DESC, a1.[TestProp] DESC", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -398,7 +398,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] DESC, [MyBO].[TestProp] ASC", statementString);
+            StringAssert.EndsWith("ORDER BY a1.[MyBoID] DESC, a1.[TestProp] ASC", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -418,8 +418,8 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("JOIN [contact_person] ON [contact_person_address].[ContactPersonID] = [contact_person].[ContactPersonID]", statementString);
-            StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
+            StringAssert.Contains("JOIN [contact_person] a2 ON a1.[ContactPersonID] = a2.[ContactPersonID]", statementString);
+            StringAssert.EndsWith("ORDER BY a2.[Surname_field] ASC", statementString);
         }
 
         [Test]
@@ -439,10 +439,10 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            string expectedJoinSql = "LEFT JOIN [car_table] ON [Table_Engine].[CAR_ID] = [car_table].[CAR_ID])";
-            expectedJoinSql += " LEFT JOIN [contact_person] ON [car_table].[OWNER_ID] = [contact_person].[ContactPersonID])";
+            string expectedJoinSql = "LEFT JOIN [car_table] a2 ON a1.[CAR_ID] = a2.[CAR_ID])";
+            expectedJoinSql += " LEFT JOIN [contact_person] a3 ON a2.[OWNER_ID] = a3.[ContactPersonID])";
             StringAssert.Contains(expectedJoinSql, statementString);
-            StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
+            StringAssert.EndsWith("ORDER BY a3.[Surname_field] ASC", statementString);
         }
 
         [Test]
@@ -460,8 +460,8 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("JOIN [ContactPersonCompositeKey] ON [car_table].[Driver_FK1] = [ContactPersonCompositeKey].[PK1_Prop1] AND [car_table].[Driver_FK2] = [ContactPersonCompositeKey].[PK1_Prop2]) ", statementString);
-            StringAssert.EndsWith("ORDER BY [ContactPersonCompositeKey].[Surname] ASC", statementString);
+            StringAssert.Contains("JOIN [ContactPersonCompositeKey] a2 ON a1.[Driver_FK1] = a2.[PK1_Prop1] AND a1.[Driver_FK2] = a2.[PK1_Prop2]) ", statementString);
+            StringAssert.EndsWith("ORDER BY a2.[Surname] ASC", statementString);
         }
 
         [Test]
@@ -538,7 +538,7 @@ namespace Habanero.Test.DB
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
             selectQuery.OrderCriteria = new OrderCriteria().FromString(fieldName);
-            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);           
             SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -563,7 +563,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("FROM [Table1]", statementString);
+            StringAssert.EndsWith("FROM [Table1] a1", statementString);
             //---------------Tear Down -------------------------
         }
 
@@ -579,7 +579,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
-            StringAssert.Contains("([circle_table] JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field])", statement.Statement.ToString());
+            StringAssert.Contains("([circle_table] a1 JOIN [Shape_table] a2 ON a1.[CircleID_field] = a2.[ShapeID_field])", statement.Statement.ToString());
         }
 
         [Test]
@@ -594,8 +594,8 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
-            StringAssert.Contains("(([FilledCircle_table] JOIN [circle_table] ON [FilledCircle_table].[FilledCircleID_field] = [circle_table].[CircleID_field])" +
-                                  " JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field])", statement.Statement.ToString());
+            StringAssert.Contains("(([FilledCircle_table] a1 JOIN [circle_table] a2 ON a1.[FilledCircleID_field] = a2.[CircleID_field])" +
+                                  " JOIN [Shape_table] a3 ON a2.[CircleID_field] = a3.[ShapeID_field])", statement.Statement.ToString());
         }
 
         [Test]
@@ -613,7 +613,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
-            StringAssert.Contains("[table_Entity].[field_Entity_Type] = ?Param0", statement.Statement.ToString());
+            StringAssert.Contains("a2.[field_Entity_Type] = ?Param0", statement.Statement.ToString());
 
             //---------------Tear Down -------------------------
 
@@ -630,7 +630,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
-            StringAssert.Contains("[Shape_table].[ShapeType_field] = ?Param0", statement.Statement.ToString());
+            StringAssert.Contains("a1.[ShapeType_field] = ?Param0", statement.Statement.ToString());
             Assert.AreEqual(1, statement.Parameters.Count);
             Assert.AreEqual("CircleNoPrimaryKey", statement.Parameters[0].Value);
             //---------------Tear Down -------------------------
@@ -649,14 +649,14 @@ namespace Habanero.Test.DB
             classDef.PropDefcol.Add(newPropDef);
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
-
+            
             //---------------Execute Test ----------------------
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             ISqlStatement statement = query.CreateSqlStatement();
 
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statementString);
+            StringAssert.AreEqualIgnoringCase("SELECT a1.MyBoID, a1.TestProp, a1.TestProp2 FROM MyBO a1", statementString);
             
             //---------------Tear Down -------------------------          
         }
@@ -680,7 +680,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             string actualStatement = statement.Statement.ToString();
             //---------------Test Result -----------------------
-            const string expectedFirstSelect = "(SELECT TOP 6 MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC) As FirstSelect";
+            const string expectedFirstSelect = "(SELECT TOP 6 a1.MyBoID FROM MyBO a1 ORDER BY a1.MyBOID ASC) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
             string expectedSecondSelect = string.Format("(SELECT TOP 4 FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC ) As SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
@@ -707,7 +707,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             string actualStatement = statement.Statement.ToString();
             //---------------Test Result -----------------------
-            const string expectedFirstSelect = "(SELECT TOP 8 contact_person.ContactPersonID, contact_person.Surname_field, contact_person.FirstName_field, contact_person.DateOfBirth FROM contact_person ORDER BY contact_person.Surname_field ASC) As FirstSelect";
+            const string expectedFirstSelect = "(SELECT TOP 8 a1.ContactPersonID, a1.Surname_field, a1.FirstName_field, a1.DateOfBirth FROM contact_person a1 ORDER BY a1.Surname_field ASC) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
             string expectedSecondSelect = string.Format("(SELECT TOP 5 FirstSelect.ContactPersonID, FirstSelect.Surname_field, FirstSelect.FirstName_field, FirstSelect.DateOfBirth FROM {0} ORDER BY FirstSelect.Surname_field DESC ) As SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
@@ -734,7 +734,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             string actualStatement = statement.Statement.ToString();
             //---------------Test Result -----------------------
-            const string expectedFirstSelect = "(SELECT TOP 8 [contact_person].[ContactPersonID], [contact_person].[Surname_field], [contact_person].[FirstName_field], [contact_person].[DateOfBirth] FROM [contact_person] ORDER BY [contact_person].[Surname_field] ASC) As [FirstSelect]";
+            const string expectedFirstSelect = "(SELECT TOP 8 a1.[ContactPersonID], a1.[Surname_field], a1.[FirstName_field], a1.[DateOfBirth] FROM [contact_person] a1 ORDER BY a1.[Surname_field] ASC) As [FirstSelect]";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
             string expectedSecondSelect = string.Format("(SELECT TOP 5 [FirstSelect].[ContactPersonID], [FirstSelect].[Surname_field], [FirstSelect].[FirstName_field], [FirstSelect].[DateOfBirth] FROM {0} ORDER BY [FirstSelect].[Surname_field] DESC ) As [SecondSelect]", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
@@ -761,7 +761,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             string actualStatement = statement.Statement.ToString();
             //---------------Test Result -----------------------
-            const string expectedFirstSelect = "(SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 6) As FirstSelect";
+            const string expectedFirstSelect = "(SELECT a1.MyBoID FROM MyBO a1 ORDER BY a1.MyBOID ASC LIMIT 6) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
             string expectedSecondSelect = string.Format("(SELECT FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC LIMIT 4) As SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
@@ -788,7 +788,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             string actualStatement = statement.Statement.ToString();
             //---------------Test Result -----------------------
-            const string expectedFirstSelect = "(SELECT contact_person.ContactPersonID, contact_person.Surname_field, contact_person.FirstName_field, contact_person.DateOfBirth FROM contact_person ORDER BY contact_person.Surname_field ASC LIMIT 8) As FirstSelect";
+            const string expectedFirstSelect = "(SELECT a1.ContactPersonID, a1.Surname_field, a1.FirstName_field, a1.DateOfBirth FROM contact_person a1 ORDER BY a1.Surname_field ASC LIMIT 8) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
             string expectedSecondSelect = string.Format("(SELECT FirstSelect.ContactPersonID, FirstSelect.Surname_field, FirstSelect.FirstName_field, FirstSelect.DateOfBirth FROM {0} ORDER BY FirstSelect.Surname_field DESC LIMIT 5) As SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
@@ -815,7 +815,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             string actualStatement = statement.Statement.ToString();
             //---------------Test Result -----------------------
-            const string expectedFirstSelect = "(SELECT [contact_person].[ContactPersonID], [contact_person].[Surname_field], [contact_person].[FirstName_field], [contact_person].[DateOfBirth] FROM [contact_person] ORDER BY [contact_person].[Surname_field] ASC LIMIT 8) As [FirstSelect]";
+            const string expectedFirstSelect = "(SELECT a1.[ContactPersonID], a1.[Surname_field], a1.[FirstName_field], a1.[DateOfBirth] FROM [contact_person] a1 ORDER BY a1.[Surname_field] ASC LIMIT 8) As [FirstSelect]";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
             string expectedSecondSelect = string.Format("(SELECT [FirstSelect].[ContactPersonID], [FirstSelect].[Surname_field], [FirstSelect].[FirstName_field], [FirstSelect].[DateOfBirth] FROM {0} ORDER BY [FirstSelect].[Surname_field] DESC LIMIT 5) As [SecondSelect]", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
@@ -837,7 +837,7 @@ namespace Habanero.Test.DB
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
-            Assert.AreEqual("SELECT Count(*) FROM MyBO", statement.Statement.ToString());
+            Assert.AreEqual("SELECT Count(*) FROM MyBO a1", statement.Statement.ToString());
         }
 
         [Test]
@@ -856,8 +856,8 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("SELECT [Count(*)] FROM [MyBO] WHERE ", statement.Statement.ToString());
-            StringAssert.EndsWith("WHERE [MyBO].[TestProp] = ?Param0", statementString);
+            StringAssert.Contains("SELECT [Count(*)] FROM [MyBO] a1 WHERE ", statement.Statement.ToString());
+            StringAssert.EndsWith("WHERE a1.[TestProp] = ?Param0", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             Assert.AreEqual("test", statement.Parameters[0].Value);
 
@@ -872,9 +872,9 @@ namespace Habanero.Test.DB
             var source1 = new Source(sourceName);
             selectQuery.Source = source1;
             selectQuery.Criteria = null;
-            SelectQueryDB selectQueryDb = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            
             //---------------Execute Test ----------------------
-            selectQueryDb.SetupAliases();
+            SelectQueryDB selectQueryDb = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             //---------------Test Result -----------------------
             Assert.AreEqual("a1", selectQueryDb.Aliases[source1.ToString()]);
         }
@@ -887,9 +887,9 @@ namespace Habanero.Test.DB
             MyRelatedBo.LoadClassDef();
             Criteria criteria = CriteriaParser.CreateCriteria("MyRelationship.MyRelatedTestProp = 'test'");
             SelectQuery selectQuery = (SelectQuery)QueryBuilder.CreateSelectQuery(classDef, criteria);
-            SelectQueryDB selectQueryDb = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            
             //---------------Execute Test ----------------------
-            selectQueryDb.SetupAliases();
+            SelectQueryDB selectQueryDb = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection); 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, selectQueryDb.Aliases.Count);
             Assert.AreEqual("a1", selectQueryDb.Aliases["MyBO"]);
@@ -912,7 +912,6 @@ namespace Habanero.Test.DB
             selectQuery.Fields.Add(field1.FieldName, field1);
             selectQuery.Criteria = null;
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
-            query.SetupAliases();
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -934,7 +933,6 @@ namespace Habanero.Test.DB
             selectQuery.Criteria = new Criteria(field1, Criteria.ComparisonOp.Equals, "myvalue");
             
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
-            query.SetupAliases(); 
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -959,7 +957,6 @@ namespace Habanero.Test.DB
                 new Criteria(field1, Criteria.ComparisonOp.GreaterThan, "myvalue2"));
             
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
-            query.SetupAliases(); 
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -984,7 +981,6 @@ namespace Habanero.Test.DB
                 new Criteria(field1, Criteria.ComparisonOp.Is, null));
             
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
-            query.SetupAliases(); 
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -1013,7 +1009,6 @@ namespace Habanero.Test.DB
 
             selectQuery.Criteria = new Criteria(fieldOnJoinedTableSource, Criteria.ComparisonOp.Equals, "myvalue");
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
-            query.SetupAliases();
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -1039,7 +1034,6 @@ namespace Habanero.Test.DB
             selectQuery.OrderCriteria = new OrderCriteria();
             selectQuery.OrderCriteria.Add("testfield");
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
-            query.SetupAliases();
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -1063,7 +1057,6 @@ namespace Habanero.Test.DB
             selectQuery.OrderCriteria = new OrderCriteria();
             selectQuery.OrderCriteria.Add("testfield_other");
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
-            query.SetupAliases();
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -1089,7 +1082,6 @@ namespace Habanero.Test.DB
             selectQuery.OrderCriteria = new OrderCriteria();
             selectQuery.OrderCriteria.Add(orderCriteriaField);
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
-            query.SetupAliases();
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);

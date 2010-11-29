@@ -422,9 +422,9 @@ namespace Habanero.Base
         {
             if (sourceToMerge == null) return;
             if (String.IsNullOrEmpty(sourceToMerge.Name)) return;
-            if (!this.Equals(sourceToMerge))
-                throw new HabaneroDeveloperException("A source cannot merge with another source if they do not have the same base source.", 
-                        "Please check your Source structures. Base Source:" + this + " source to merge " + sourceToMerge);
+            if (!this.Equals(sourceToMerge)) return;
+                //throw new HabaneroDeveloperException("A source cannot merge with another source if they do not have the same base source.", 
+                //        "Please check your Source structures. Base Source:" + this + " source to merge " + sourceToMerge);
 
             this.InheritanceJoins.MergeWith(sourceToMerge.InheritanceJoins);
             this.Joins.MergeWith(sourceToMerge.Joins);

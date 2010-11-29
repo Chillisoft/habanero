@@ -78,7 +78,10 @@ namespace Habanero.BO
             {
                 if (propDef.Persistable)
                 {
-                    QueryField queryField = GetQueryField(classDef, propDef);
+                    IClassDef fieldClassDef = classDef;
+                    if (!((ClassDef)classDef).IsUsingConcreteTableInheritance())
+                        fieldClassDef = propDef.ClassDef;
+                    QueryField queryField = GetQueryField(fieldClassDef, propDef);
                     selectQuery.Fields.Add(propDef.PropertyName, queryField);
                 }
             }
@@ -86,7 +89,7 @@ namespace Habanero.BO
 
         private static QueryField GetQueryField(IClassDef classDef, IPropDef propDef)
         {
-            Source propSource = new Source(propDef.ClassName, classDef.GetTableName(propDef));
+            Source propSource = new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter, classDef.GetTableName(propDef));
             return new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, propSource);
         }
 
@@ -105,7 +108,7 @@ namespace Habanero.BO
                 if (!selectQuery.Fields.ContainsKey(discriminator))
                 {
                     selectQuery.Fields.Add(discriminator,
-                                           new QueryField(discriminator, discriminator, new Source(classDef.GetTableName())));
+                                           new QueryField(discriminator, discriminator, new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter, classDef.GetTableName())));
                 }
                 discriminatorCriteriaList.Add(new Criteria(discriminator, Criteria.ComparisonOp.Equals, thisClassDef.ClassName));
             }
@@ -142,7 +145,10 @@ namespace Habanero.BO
                 {
                     Source source = field.Source;
                     IClassDef relatedClassDef;
-                    PrepareSource(classDef, ref source, out relatedClassDef);
+                    IClassDef classDefOfField = classDef;
+                    if (classDef.IsUsingClassTableInheritance())
+                        classDefOfField = classDef.GetPropDef(field.PropertyName).ClassDef;
+                    PrepareSource(classDefOfField, ref source, out relatedClassDef);
                     field.Source = source;
 
                     IPropDef propDef = relatedClassDef.GetPropDef(field.PropertyName);
@@ -178,8 +184,11 @@ namespace Habanero.BO
             {
                 QueryField field = criteria.Field;
                 Source currentSource = field.Source;
+                IClassDef classDefOfField = classDef;
+                if (classDef.IsUsingClassTableInheritance())
+                    classDefOfField = classDef.GetPropDef(field.PropertyName).ClassDef;
                 IClassDef propParentClassDef;
-                PrepareSource(classDef, ref currentSource, out propParentClassDef);
+                PrepareSource(classDefOfField, ref currentSource, out propParentClassDef);
                 field.Source = currentSource;
                 if (propParentClassDef != null)
                 {
@@ -214,7 +223,7 @@ namespace Habanero.BO
             if (classDef == null) throw new ArgumentNullException("classDef");
             relatedClassDef = null;
             if (source != null && source.IsPrepared) return;
-            Source rootSource = new Source(classDef.ClassNameExcludingTypeParameter, classDef.GetTableName());
+            Source rootSource = new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter, classDef.GetTableName());
             CreateInheritanceJoins(classDef, rootSource);
             if (source == null)
             {
@@ -324,7 +333,7 @@ namespace Habanero.BO
             else
             {
                 criteria.Field.FieldName = criteria.Field.PropertyName;
-                criteria.Field.Source = new Source(((ClassDef)classDef).ClassNameExcludingTypeParameter,
+                criteria.Field.Source = new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter,
                                                    classDef.GetTableName());
             }
         }
