@@ -78,6 +78,6 @@ namespace Habanero.Base
         ///</summary>
         int FirstRecordToLoad { get; set; }
 
-        IDictionary<Source, string> Aliases { get; }
+        IDictionary<string, string> Aliases { get; }
     }
 }

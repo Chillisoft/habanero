@@ -862,6 +862,42 @@ namespace Habanero.Test.DB
             Assert.AreEqual("test", statement.Parameters[0].Value);
 
         }
+
+        [Test]
+        public void TestSetupAliases_SetsAliasOnSource()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            const string sourceName = "mysource";
+            var source1 = new Source(sourceName);
+            selectQuery.Source = source1;
+            selectQuery.Criteria = null;
+            SelectQueryDB selectQueryDb = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            //---------------Execute Test ----------------------
+            selectQueryDb.SetupAliases();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("a1", selectQueryDb.Aliases[source1.ToString()]);
+        }
+
+        [Test]
+        public void Test_SetupAliases_SetsUpAliasesForAllSources()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            Criteria criteria = CriteriaParser.CreateCriteria("MyRelationship.MyRelatedTestProp = 'test'");
+            SelectQuery selectQuery = (SelectQuery)QueryBuilder.CreateSelectQuery(classDef, criteria);
+            SelectQueryDB selectQueryDb = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            //---------------Execute Test ----------------------
+            selectQueryDb.SetupAliases();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, selectQueryDb.Aliases.Count);
+            Assert.AreEqual("a1", selectQueryDb.Aliases["MyBO"]);
+            Assert.AreEqual("a1", selectQueryDb.Aliases["MyBO.MyRelationship"]);
+            Assert.AreEqual("a2", selectQueryDb.Aliases["MyRelationship"]);
+            Assert.IsTrue(selectQueryDb.Aliases.Values.Contains("a1"));
+            Assert.IsTrue(selectQueryDb.Aliases.Values.Contains("a2"));
+        }
         
         [Test]
         public void Test_CreateSQL_ShouldUseAliases_WhenAliasesAreSetup()
@@ -875,8 +911,8 @@ namespace Habanero.Test.DB
             QueryField field1 = new QueryField("testfield", "testfield", field1Source);
             selectQuery.Fields.Add(field1.FieldName, field1);
             selectQuery.Criteria = null;
-            selectQuery.SetupAliases();
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            query.SetupAliases();
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -896,8 +932,9 @@ namespace Habanero.Test.DB
             QueryField field1 = new QueryField("testfield", "testfield", field1Source);
             selectQuery.Fields.Add(field1.FieldName, field1);
             selectQuery.Criteria = new Criteria(field1, Criteria.ComparisonOp.Equals, "myvalue");
-            selectQuery.SetupAliases();
+            
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            query.SetupAliases(); 
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -920,8 +957,9 @@ namespace Habanero.Test.DB
                 new Criteria(field1, Criteria.ComparisonOp.LessThan, "myvalue1"), 
                     Criteria.LogicalOp.And,
                 new Criteria(field1, Criteria.ComparisonOp.GreaterThan, "myvalue2"));
-            selectQuery.SetupAliases();
+            
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            query.SetupAliases(); 
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -944,8 +982,9 @@ namespace Habanero.Test.DB
                 null,
                     Criteria.LogicalOp.Not,
                 new Criteria(field1, Criteria.ComparisonOp.Is, null));
-            selectQuery.SetupAliases();
+            
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            query.SetupAliases(); 
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -973,8 +1012,8 @@ namespace Habanero.Test.DB
             selectQuery.Fields.Add(fieldOnMySource.FieldName, fieldOnMySource);
 
             selectQuery.Criteria = new Criteria(fieldOnJoinedTableSource, Criteria.ComparisonOp.Equals, "myvalue");
-            selectQuery.SetupAliases();
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            query.SetupAliases();
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
@@ -984,6 +1023,83 @@ namespace Habanero.Test.DB
                 "JOIN [myjoinedtosource] a2 on a1.[testfield] = a2.[testfield]) " + 
                 "WHERE a2.[testfield] = ?Param0", statement.Statement.ToString());
         }
+
+
+        [Test]
+        public void Test_CreateSQL_ShouldUseAliasesInOrderByClause_WhenOrderByFieldIsInFields()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            var mysource = new Source("mysource");
+            selectQuery.Source = mysource;
+
+            QueryField fieldOnMySource = new QueryField("testfield", "testfield", mysource);
+            selectQuery.Fields.Add(fieldOnMySource.FieldName, fieldOnMySource);
+
+            selectQuery.OrderCriteria = new OrderCriteria();
+            selectQuery.OrderCriteria.Add("testfield");
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            query.SetupAliases();
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(
+                "SELECT a1.[testfield] FROM [mysource] a1 ORDER BY a1.[testfield] ASC", statement.Statement.ToString());
+        }
+
+
+        [Test]
+        public void Test_CreateSQL_ShouldUseAliasesInOrderByClause_WhenOrderByFieldIsNotInFields()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            var mysource = new Source("mysource");
+            selectQuery.Source = mysource;
+
+            QueryField fieldOnMySource = new QueryField("testfield", "testfield", mysource);
+            selectQuery.Fields.Add(fieldOnMySource.FieldName, fieldOnMySource);
+
+            selectQuery.OrderCriteria = new OrderCriteria();
+            selectQuery.OrderCriteria.Add("testfield_other");
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            query.SetupAliases();
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(
+                "SELECT a1.[testfield] FROM [mysource] a1 ORDER BY a1.[testfield_other] ASC", statement.Statement.ToString());
+        }
+
+        [Test]
+        public void Test_CreateSQL_ShouldUseAliasesInOrderByClause_WhenOrderByFieldSourceIsSpecified()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            var mysource = new Source("mysource");
+            selectQuery.Source = mysource;
+
+            QueryField fieldOnMySource = new QueryField("testfield", "testfield", mysource);
+            selectQuery.Fields.Add(fieldOnMySource.FieldName, fieldOnMySource);
+
+            var orderCriteriaField = OrderCriteriaField.FromString("testfield");
+            orderCriteriaField.Source = mysource;
+
+            selectQuery.OrderCriteria = new OrderCriteria();
+            selectQuery.OrderCriteria.Add(orderCriteriaField);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            query.SetupAliases();
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(
+                "SELECT a1.[testfield] FROM [mysource] a1 ORDER BY a1.[testfield] ASC", statement.Statement.ToString());
+        }
+
+
+
 
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
         {

@@ -23,6 +23,7 @@ using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
+
     /// <summary>
     /// Defines a relationship where the owner relates to only one other object.
     /// </summary>
@@ -219,7 +220,6 @@ namespace Habanero.BO.ClassDefinition
                        && this.OwningClassDef.GetPropDef(def.OwnerPropertyName).Compulsory);
         }
 
-
         #region Implementation of ISingleValueDef
 
         public string DisplayName
@@ -228,7 +228,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         public string Description { get; set; }
-
+            
         public string PropertyTypeAssemblyName
         {
             get { return this.RelatedObjectAssemblyName; }
@@ -249,7 +249,7 @@ namespace Habanero.BO.ClassDefinition
 
         public bool Compulsory
         {
-            get { return this.IsCompulsory; }
+            get {return this.IsCompulsory; }
             set { _setAsCompulsory = value; }
         }
 

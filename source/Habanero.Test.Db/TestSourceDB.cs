@@ -356,7 +356,7 @@ namespace Habanero.Test.DB
             mysource.Joins[0].JoinFields.Add(new Source.Join.JoinField(fieldOnMySource, fieldOnJoinedTableSource));
             SourceDB sourceDB = new SourceDB(mysource);
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
-            IDictionary<Source, string> aliases = new Dictionary<Source, string>() { { mysource, "a1" }, { joinedTableSource, "a2"} };
+            IDictionary<string, string> aliases = new Dictionary<string, string>() { { mysource.ToString(), "a1" }, { joinedTableSource.ToString(), "a2"} };
             //---------------Execute Test ----------------------
             string sql = sourceDB.CreateSQL(sqlFormatter, aliases);
             //---------------Test Result -----------------------

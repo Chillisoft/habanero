@@ -229,7 +229,7 @@ namespace Habanero.Test.DB
             Source field1Source = source1;
             QueryField field1 = new QueryField("testfield", "testfield", field1Source);
             Criteria criteria = new Criteria(field1, Criteria.ComparisonOp.Equals, "myvalue");
-            IDictionary<Source, string> aliases = new Dictionary<Source, string>() {{ source1, "a1"}};
+            IDictionary<string, string> aliases = new Dictionary<string, string>() {{ source1.ToString(), "a1"}};
             CriteriaDB criteriaDb = new CriteriaDB(criteria);
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------

@@ -16,7 +16,6 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
-using System;
 using System.Collections.Generic;
 
 namespace Habanero.Base
@@ -27,11 +26,7 @@ namespace Habanero.Base
     public interface IPropDef : ISingleValueDef
     {
 
-        ///// <summary>
-        ///// Gets and sets the property rule relevant to this definition
-        ///// </summary>
-        //IPropRule PropRule { get; set; }
-        /// <summary>
+
         /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition.
         /// </summary>
         List<IPropRule> PropRules { get; }

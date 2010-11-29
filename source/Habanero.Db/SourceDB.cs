@@ -87,18 +87,18 @@ namespace Habanero.Base
         /// <param name="sqlFormatter">The formatter used to construct the appropriate Sql</param>
         public string CreateSQL(ISqlFormatter sqlFormatter)
         {
-            return CreateSQL(sqlFormatter, new Dictionary<Source, string>());
+            return CreateSQL(sqlFormatter, new Dictionary<string, string>());
             
         }
 
-        public string CreateSQL(ISqlFormatter sqlFormatter, IDictionary<Source, string> aliases)
+        public string CreateSQL(ISqlFormatter sqlFormatter, IDictionary<string, string> aliases)
         {
             //if (Joins.Count == 0) return sqlFormatter.DelimitTable(EntityName);
             string tableJoinString = GetTableJoinString(this, sqlFormatter, aliases);
             return GetJoinString(sqlFormatter, this, tableJoinString, aliases);
         }
 
-        private string GetJoinString(ISqlFormatter sqlFormatter, Source source, string joinString, IDictionary<Source, string> aliases)
+        private string GetJoinString(ISqlFormatter sqlFormatter, Source source, string joinString, IDictionary<string, string> aliases)
         {
             foreach (Join join in source.Joins)
             {
@@ -111,7 +111,7 @@ namespace Habanero.Base
             return joinString;
         }
 
-        private string GetJoinString(ISqlFormatter sqlFormatter, Join join, IDictionary<Source, string> aliases)
+        private string GetJoinString(ISqlFormatter sqlFormatter, Join join, IDictionary<string, string> aliases)
         {
             if (join.JoinFields.Count == 0)
             {
@@ -121,11 +121,11 @@ namespace Habanero.Base
             }
             Join.JoinField joinField = join.JoinFields[0];
             var toSourceNameWithAlias = sqlFormatter.DelimitTable(join.ToSource.EntityName);
-            if (aliases.Count > 0) toSourceNameWithAlias += " " + aliases[join.ToSource];
+            if (aliases.Count > 0) toSourceNameWithAlias += " " + aliases[join.ToSource.ToString()];
             var fromSourceAlias = sqlFormatter.DelimitTable(join.FromSource.EntityName);
-            if (aliases.Count > 0) fromSourceAlias = aliases[join.FromSource];
+            if (aliases.Count > 0) fromSourceAlias = aliases[join.FromSource.ToString()];
             var toSourceAlias = sqlFormatter.DelimitTable(join.ToSource.EntityName);
-            if (aliases.Count > 0) toSourceAlias = aliases[join.ToSource];
+            if (aliases.Count > 0) toSourceAlias = aliases[join.ToSource.ToString()];
             string joinString = string.Format("{0} {1} ON {2}.{3} = {4}.{5}",
                                               join.GetJoinClause(),
                      toSourceNameWithAlias,
@@ -147,15 +147,15 @@ namespace Habanero.Base
             return joinString;
         }
 
-        private string GetTableJoinString(Source source, ISqlFormatter sqlFormatter, IDictionary<Source, string> aliases)
+        private string GetTableJoinString(Source source, ISqlFormatter sqlFormatter, IDictionary<string, string> aliases)
         {
             string joinString = sqlFormatter.DelimitTable(EntityName);
-            if (aliases.Count > 0) joinString += " " + aliases[this];
+            if (aliases.Count > 0) joinString += " " + aliases[this.ToString()];
             joinString = GetInheritanceJoinString(sqlFormatter, source, joinString, aliases);
             return joinString;
         }
 
-        private string GetInheritanceJoinString(ISqlFormatter sqlFormatter, Source source, string joinString, IDictionary<Source, string> aliases)
+        private string GetInheritanceJoinString(ISqlFormatter sqlFormatter, Source source, string joinString, IDictionary<string, string> aliases)
         {
             foreach (Join join in source.InheritanceJoins)
             {

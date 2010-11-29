@@ -665,8 +665,12 @@ namespace Habanero.Test.BO.ClassDefinition
     }
     internal class FakeSingleRelationshipDef : SingleRelationshipDef
     {
+        public FakeSingleRelationshipDef(string relationshipName)
+            : base(relationshipName, typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
+        {
+        }
         public FakeSingleRelationshipDef()
-            : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
+            : this("rel")
         {
         }
 

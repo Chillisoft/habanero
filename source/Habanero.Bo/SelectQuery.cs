@@ -34,7 +34,7 @@ namespace Habanero.BO
         private Criteria _criteria;
         private IOrderCriteria _orderCriteria = new OrderCriteria();
 
-        public IDictionary<Source, string> Aliases { get; private set; }
+        public IDictionary<string, string> Aliases { get; private set; }
 
         ///<summary>
         /// Creates a SelectQuery with no Criteria and no fields.  In order to use the SelectQuery at least on field must be added
@@ -42,7 +42,7 @@ namespace Habanero.BO
         ///</summary>
         public SelectQuery()
         {
-            Aliases = new Dictionary<Source, string>();
+            Aliases = new Dictionary<string, string>();
             Limit = -1;
             FirstRecordToLoad = 0;
         }
@@ -143,27 +143,6 @@ namespace Habanero.BO
         public int FirstRecordToLoad { get; set; }
 
 
-        private int aliasCount;
-        /// <summary>
-        /// Sets up the aliases to use for each of the sources in this select query.
-        /// </summary>
-        public void SetupAliases()
-        {
-            aliasCount = 0;
-            AddAliasForSource(this.Source);
-
-        }
-
-
-        private void AddAliasForSource(Source source)
-        {
-            if (this.Aliases.ContainsKey(source)) return;
-            this.Aliases.Add(source, "a" + ++aliasCount);
-            this.Source.Joins.ForEach(@join =>
-                {
-                    if (!this.Aliases.ContainsKey(@join.FromSource)) AddAliasForSource(@join.FromSource);
-                    if (!this.Aliases.ContainsKey(@join.ToSource)) AddAliasForSource(@join.ToSource);
-                });
-        }
+     
     }
 }
