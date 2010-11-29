@@ -176,7 +176,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            var cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO.DeleteAllContactPeople();
             CreateTwoSavedContactPeople();
             cpCol.LoadAll();
@@ -1473,6 +1473,29 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             Assert.AreEqual(4, col.Count);
             Assert.IsTrue(col.Contains(newPerson));
+        }
+
+        [Test]
+        public void Test_Add_Enumerable_WhenNull_ShouldRaiseException()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            var col = new BusinessObjectCollection<ContactPersonTestBO>();
+            IList<ContactPersonTestBO> addedCol = null;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                col.Add(addedCol);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("col", ex.ParamName);
+            }
         }
 
         [Test]
