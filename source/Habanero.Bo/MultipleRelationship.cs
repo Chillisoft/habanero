@@ -59,7 +59,7 @@ namespace Habanero.BO
         /// <param name="owningBo">The <see cref="IBusinessObject"/> that owns this BO.</param>
         /// <param name="lRelDef">The <see cref="IRelationshipDef"/> that identifies  </param>
         /// <param name="lBOPropCol"></param>
-        protected MultipleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
+        protected MultipleRelationshipBase(IBusinessObject owningBo, IRelationshipDef lRelDef, IBOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
         }
@@ -103,12 +103,12 @@ namespace Habanero.BO
         /// <param name="lBOPropCol">The set of properties used to initialise the RelKey object</param>
         /// <param name="timeOut">The timeout between when the collection was last loaded.</param>
         public MultipleRelationship
-            (IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol, int timeOut)
+            (IBusinessObject owningBo, IRelationshipDef lRelDef, IBOPropCol lBOPropCol, int timeOut)
             : base(owningBo, lRelDef, lBOPropCol)
         {
             _boCol =
                 (RelatedBusinessObjectCollection<TBusinessObject>)
-                RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
+                RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectAssemblyName, _relDef.RelatedObjectClassName, this);
             TimeOut = timeOut;
         }
 

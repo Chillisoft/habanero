@@ -20,6 +20,7 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -42,6 +43,34 @@ namespace Habanero.BO
             return collection;
         }
 
+        /// <summary>
+        /// Creates a <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> with boType as its type parameter, using the Activator.
+        /// </summary>
+        /// <param name="boClassName"></param>
+        /// <param name="relationship">The relationship that this <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> is the collection for</param>
+        /// <param name="boAssemblyName"></param>
+        /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
+        public static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(string boAssemblyName, string boClassName, IMultipleRelationship relationship)
+        {
+            var collection = CreateNewRelatedBusinessObjectCollection(boAssemblyName, boClassName, relationship);
+            SetupCriteriaForRelationship(relationship, collection);
+            return collection;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> with boType as its type parameter, using the Activator.
+        /// </summary>
+        /// <param name="boClassName"></param>
+        /// <param name="relationship">The relationship that this <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> is the collection for</param>
+        /// <param name="boAssemblyName"></param>
+        /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
+        private static IBusinessObjectCollection CreateNewRelatedBusinessObjectCollection(string boAssemblyName, string boClassName, IRelationship relationship)
+        {
+            Type classType = null;
+            TypeLoader.LoadClassType(ref classType, boAssemblyName, boClassName,
+                                     "related object", "relationship definition");
+            return CreateNewRelatedBusinessObjectCollection(classType, relationship);
+        }
         /// <summary>
         /// Creates a <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> with boType as its type parameter, using the Activator.
         /// </summary>
@@ -243,7 +272,7 @@ namespace Habanero.BO
     public abstract class Relationship : RelationshipBase, IRelationshipForLoading
     {
         /// <summary> The Definition that defines this relationship. </summary>
-        protected RelationshipDef _relDef;
+        protected IRelationshipDef _relDef;
         /// <summary> The Busienss Object that owns this relationship </summary>
         protected readonly IBusinessObject _owningBo;
         private bool _initialised;
@@ -256,7 +285,7 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        protected Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, IBOPropCol lBOPropCol)
+        protected Relationship(IBusinessObject owningBo, IRelationshipDef lRelDef, IBOPropCol lBOPropCol)
         {
             if (owningBo == null) throw new ArgumentNullException("owningBo");
             if (lRelDef == null) throw new ArgumentNullException("lRelDef");
