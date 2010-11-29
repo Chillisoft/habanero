@@ -1281,6 +1281,23 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(expectedpropdef, propDef);
             Assert.AreSame(superClassDef, propDef.ClassDef);
         }
+/*
+        [Test]
+        public void Test_GetPK_WhenIsSubType_AndIDIsDeclaredOnParent_ShouldReturnParentsPK_FixBugBug867()
+        {
+            //---------------Set up test pack-------------------
+            SuperClass.LoadClassDef();
+            SubClass.LoadClassDef();
+            var subClass = new SubClass();
+            var superClass = new SuperClass();
+            var superClassPKDef = superClass.ClassDef.PrimaryKeyDef;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(superClassPKDef);
+            //---------------Execute Test ----------------------
+            var primaryKeyDef = subClass.ClassDef.PrimaryKeyDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(superClassPKDef, primaryKeyDef);
+        }*/
     }
     
     // This class serves to access protected methods
@@ -1328,6 +1345,45 @@ namespace Habanero.Test.BO.ClassDefinition
         public void SetUIDefCol(UIDefCol col)
         {
             UIDefCol = col;
+        }
+    }
+
+    public class SuperClass : BusinessObject
+    {
+        public static IClassDef LoadClassDef()
+        {
+            const string classDefStr = @"<class name=""SuperClass"" assembly=""Habanero.Test.BO"">
+                        <property name=""SuperClassID"" type=""Guid"" readWriteRule=""WriteNew"" compulsory=""true""/>
+                        <property name=""SuperClassType"" />
+                        <primaryKey>
+                          <prop name=""SuperClassID"" />
+                        </primaryKey>
+                    </class>";
+            return LoadClassDef(classDefStr);
+        }
+
+        protected static IClassDef LoadClassDef(string classDefStr)
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            IClassDef classDef =
+                itsLoader.LoadClass(classDefStr);
+            ClassDef.ClassDefs.Add(classDef);
+            return classDef;
+        }
+
+        private static XmlClassLoader CreateXmlClassLoader()
+        {
+            return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+        }
+        public Guid? SuperClassID { get; set; }
+    }
+    public class SubClass : SuperClass
+    {
+        public new static IClassDef LoadClassDef()
+        {
+            const string classDefStr = "<class name=\"SubClass\" assembly=\"Habanero.Test.BO\"> <superClass class=\"SuperClass\" assembly=\"Habanero.Test.BO\" orMapping=\"SingleTableInheritance\" discriminator=\"SuperClassType\"/> </class>";
+
+            return LoadClassDef(classDefStr);
         }
     }
 }

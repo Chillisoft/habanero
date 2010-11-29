@@ -345,7 +345,7 @@ namespace Habanero.BO
                 return DisplayValueDictionary;
             }
             IClassDef classDef = LookupBoClassDef;
-            PrimaryKeyDef primaryKeyDef = (PrimaryKeyDef) classDef.PrimaryKeyDef;
+            IPrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, ClassDef.ClassDefs);
             if (primaryKeyDef.Count > 1)
             {
                 throw new HabaneroDeveloperException

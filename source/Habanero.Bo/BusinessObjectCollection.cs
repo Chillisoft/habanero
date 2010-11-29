@@ -23,6 +23,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
 using Habanero.Util;
 
@@ -1083,7 +1084,9 @@ namespace Habanero.BO
             // paging from one page to another does not make sense.
             if(string.IsNullOrEmpty(orderByClause))
             {
-                orderByClause = PrimaryKeyAsOrderByClause(this.ClassDef.PrimaryKeyDef);
+                var classDefCol = Habanero.BO.ClassDefinition.ClassDef.ClassDefs;
+                var primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(this.ClassDef, classDefCol);
+                orderByClause = PrimaryKeyAsOrderByClause(primaryKeyDef);
             }
             IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
             LoadWithLimit(criteria, orderCriteria, firstRecordToLoad, numberOfRecordsToLoad, out totalNoOfRecords);

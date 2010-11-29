@@ -24,10 +24,11 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB;
+using Habanero.Test.BO.ClassDefinition;
 using Habanero.Util;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 { 
@@ -54,6 +55,21 @@ namespace Habanero.Test.BO
                 _dataStore = new DataStoreInMemory();
                 BORegistry.DataAccessor = new DataAccessorInMemory(_dataStore);
             }
+
+            [Test]
+            public void Test_GetLookupList_WhenSubType_AndIDDeclaredOnTheParent_ShouldLoad_FixBug867()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectLookupList businessObjectLookupList = new BusinessObjectLookupList(typeof(SubClass));
+                new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = businessObjectLookupList };
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                var lookupList = businessObjectLookupList.GetLookupList(false);
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(lookupList);
+            }
+
         }
         protected static string GuidToString(Guid guid)
         {
@@ -77,6 +93,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
+            SuperClass.LoadClassDef();
+            SubClass.LoadClassDef();
         }
 
         [TestFixtureTearDown]
@@ -579,6 +597,7 @@ namespace Habanero.Test.BO
             //--------------- Test Result -----------------------
             Assert.AreEqual(1, dictionary.Count);
         }
-
     }
+
+
 }

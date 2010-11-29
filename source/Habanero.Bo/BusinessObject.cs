@@ -784,13 +784,7 @@ namespace Habanero.BO
         public void SetPropertyValue(string propName, object newPropValue)
         {
             IBOProp prop = GetProperty(propName);
-/*            object newPropValue1;
-            if(prop.CurrentValueEquals(newPropValue)) return;
-            ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
-            if (!prop.CurrentValueEquals(newPropValue1))
-            {*/
-                prop.Value = newPropValue;
-            //}
+            prop.Value = newPropValue;
         }
 
         /// <summary>
