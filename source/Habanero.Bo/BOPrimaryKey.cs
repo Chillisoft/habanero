@@ -185,16 +185,19 @@ namespace Habanero.BO
         /// <returns>Returns an object</returns>
         public object GetAsValue()
         {
+            //If this is a non composite PrimaryKey then return the primaryKeyPropsValue
+            //else return the concatenated PrimaryKey PropName:PropValue pairs for the
+            //CompositePrimaryKey
             IBOPropCol boPropCol = this.GetBOPropCol();
             foreach (BOProp  boProp in boPropCol)
             {
                 //HACK: This is really wierd code the boPropCol does not have an int accessor.
-                // there is therefore no way to get hte first item in the col other than this.
+                // there is therefore no way to get the first item in the col other than this.
+                //This will return the value for a NonCompositePrimaryKey
                 if (boPropCol.Count == 1)
                 {
                     return boProp.Value;
                 }
-//                list.Add(boProp.PropDef.ClassDef.ClassName + "." + boProp.PropertyName + "=" + boProp.Value);
             }
             return this.AsString_CurrentValue();
         }

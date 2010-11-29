@@ -127,6 +127,8 @@
     <Compile Include="Base\TestRSAPasswordCrypter.cs" />
     <Compile Include="Base\TestXmlWrapper.cs" />
     <Compile Include="BeforeSaveBo.cs" />
+    <Compile Include="BOWithCompositePK.cs" />
+    <Compile Include="BOWithStringPKProp.cs" />
     <Compile Include="Car.cs" />
     <Compile Include="Circle.cs" />
     <Compile Include="CircleNoPrimaryKey.cs" />

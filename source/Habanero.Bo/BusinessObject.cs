@@ -29,6 +29,7 @@ using System.Xml.Schema;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -320,12 +321,22 @@ namespace Habanero.BO
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
-            if (!String.IsNullOrEmpty(ClassDef.TypeParameter) && _keysCol.Count > 0)
+            if (HasTypeParameter() && HasAlternateKeys())
                 foreach (BOKey boKeyCol in _keysCol)
                 {
                     return boKeyCol.ToString();
                 }
-            return ID.GetAsValue() == null ? base.ToString() : ID.GetAsValue().ToString();
+            return ID.GetAsValue() == null ? this.ID.ToString() : ID.GetAsValue().ToString();
+        }
+
+        private bool HasAlternateKeys()
+        {
+            return _keysCol.Count > 0;
+        }
+
+        private bool HasTypeParameter()
+        {
+            return !String.IsNullOrEmpty(ClassDef.TypeParameter);
         }
 
         /// <summary>
@@ -1734,6 +1745,23 @@ namespace Habanero.BO
         {
         }
 
+        ///// <summary>
+        ///// Sets a property value to a new value
+        ///// </summary>
+        ///// <param name="propNameExpression">The property name expression (eg. p => p.Name)</param>
+        ///// <param name="newPropValue">The new value to set to</param>
+        ///// <remarks>This runs about 5 times slower than the normal <see cref="BusinessObject.SetPropertyValue"/> method but has the advantage
+        ///// of being type safe.  Unless you are experiencing performance problems using this method, it is the recommended way of setting a property value.
+        ///// </remarks>
+        //public void SetPropertyValue(Expression<Func<T, object>> propNameExpression, object newPropValue)
+        //{
+        //    var memberExpression = propNameExpression.Body as MemberExpression;
+        //    if (memberExpression == null)
+        //    {
+        //        throw new ArgumentException(propNameExpression + " is not a valid property on " + this.GetType().Name);
+        //    }
+        //    SetPropertyValue(memberExpression.Member.Name, newPropValue);
+        //}
         /// <summary>
         /// Sets a property value to a new value
         /// </summary>
@@ -1742,7 +1770,7 @@ namespace Habanero.BO
         /// <remarks>This runs about 5 times slower than the normal <see cref="BusinessObject.SetPropertyValue"/> method but has the advantage
         /// of being type safe.  Unless you are experiencing performance problems using this method, it is the recommended way of setting a property value.
         /// </remarks>
-        public void SetPropertyValue<TOut>(Expression<Func<T, TOut>> propNameExpression, object newPropValue)
+        public void SetPropertyValue(Expression<Func<T, object>> propNameExpression, object newPropValue)
         {
             MemberExpression memberExpression;
             try

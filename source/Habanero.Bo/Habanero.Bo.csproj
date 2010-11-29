@@ -210,6 +210,7 @@
     <Compile Include="NumberGenerator\NumberGenerator.cs" />
     <Compile Include="ObjectManager\BusinessObjectManager.cs" />
     <Compile Include="ObjectManager\BusinessObjectManagerNull.cs" />
+    <Compile Include="ObjectManager\IBusinessObjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

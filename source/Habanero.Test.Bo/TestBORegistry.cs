@@ -113,7 +113,7 @@ namespace Habanero.Test.BO
         public void Test_SetBusinessObjectManager_ShouldSet()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager expectedObjectManager = new BusinessObjectManager();            
+            IBusinessObjectManager expectedObjectManager = new BusinessObjectManager();            
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             BORegistry.BusinessObjectManager = expectedObjectManager;
@@ -127,7 +127,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             BORegistry.BusinessObjectManager = null;
-            BusinessObjectManager expectedObjectManager = BusinessObjectManager.Instance;  
+            IBusinessObjectManager expectedObjectManager = BusinessObjectManager.Instance;  
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             var actualObjectManager = BORegistry.BusinessObjectManager;
