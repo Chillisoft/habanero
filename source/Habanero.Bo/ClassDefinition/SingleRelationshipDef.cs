@@ -140,11 +140,23 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (!string.IsNullOrEmpty(this.ReverseRelationshipName)
-                    && (this.RelatedObjectClassDef.GetRelationship(this.ReverseRelationshipName) is SingleRelationshipDef))
-                    return true;
-                return _setAsOneToOne;
+                return ReverseRelationshipIsSingle() || _setAsOneToOne;
             }
+        }
+
+        private bool ReverseRelationshipIsSingle()
+        {
+            return HasReverseRelationshipDefined() && RelatedClassDefLoaded() && (GetReverseRelationshipDef() is SingleRelationshipDef);
+        }
+
+        private bool HasReverseRelationshipDefined()
+        {
+            return !string.IsNullOrEmpty(this.ReverseRelationshipName);
+        }
+
+        private IRelationshipDef GetReverseRelationshipDef()
+        {
+            return this.RelatedObjectClassDef.GetRelationship(this.ReverseRelationshipName);
         }
 
         /// <summary>
