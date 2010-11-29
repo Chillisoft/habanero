@@ -17,7 +17,9 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB
@@ -25,6 +27,11 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestCriteriaDB
     {
+        [TestFixtureSetUp]
+        public void SetupDatabaseConnection()
+        {
+            DatabaseConnection.CurrentConnection = TestUtil.GetDatabaseConfig().GetDatabaseConnection();
+        }
         [Test]
         public void TestConstructor()
         {
@@ -211,6 +218,24 @@ namespace Habanero.Test.DB
             string expectedString = string.Format("Surname NOT IN ('{0}', '{1}')", surnameValue1, surnameValue2);
             StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
             //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestToString_ShouldUseAliases()
+        {
+            //---------------Set up test pack-------------------
+            const string sourceName = "mysource";
+            var source1 = new Source(sourceName);
+            Source field1Source = source1;
+            QueryField field1 = new QueryField("testfield", "testfield", field1Source);
+            Criteria criteria = new Criteria(field1, Criteria.ComparisonOp.Equals, "myvalue");
+            IDictionary<Source, string> aliases = new Dictionary<Source, string>() {{ source1, "a1"}};
+            CriteriaDB criteriaDb = new CriteriaDB(criteria);
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Execute Test ----------------------
+            string whereClause = criteriaDb.ToString(sqlFormatter, value => "Param", aliases);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("a1.[testfield] = Param", whereClause);
         }
     }
 }

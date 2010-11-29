@@ -24,6 +24,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO;
 using NUnit.Framework;
+using System.Linq;
 
 namespace Habanero.Test.DB
 {
@@ -861,7 +862,129 @@ namespace Habanero.Test.DB
             Assert.AreEqual("test", statement.Parameters[0].Value);
 
         }
+        
+        [Test]
+        public void Test_CreateSQL_ShouldUseAliases_WhenAliasesAreSetup()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            const string sourceName = "mysource";
+            var source1 = new Source(sourceName);
+            selectQuery.Source = source1;
+            Source field1Source = source1;
+            QueryField field1 = new QueryField("testfield", "testfield", field1Source);
+            selectQuery.Fields.Add(field1.FieldName, field1);
+            selectQuery.Criteria = null;
+            selectQuery.SetupAliases();
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("SELECT a1.[testfield] FROM [mysource] a1", statement.Statement.ToString());
+        }
  
+        [Test]
+        public void Test_CreateSQL_ShouldUseAliasesInCriteria_WhenAliasesAreSetup()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            const string sourceName = "mysource";
+            var source1 = new Source(sourceName);
+            selectQuery.Source = source1;
+            Source field1Source = source1;
+            QueryField field1 = new QueryField("testfield", "testfield", field1Source);
+            selectQuery.Fields.Add(field1.FieldName, field1);
+            selectQuery.Criteria = new Criteria(field1, Criteria.ComparisonOp.Equals, "myvalue");
+            selectQuery.SetupAliases();
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("SELECT a1.[testfield] FROM [mysource] a1 WHERE a1.[testfield] = ?Param0", statement.Statement.ToString());
+        }
+
+        [Test]
+        public void Test_CreateSQL_ShouldUseAliasesInCriteria_WhenTwoFieldsAreSetup()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            const string sourceName = "mysource";
+            var source1 = new Source(sourceName);
+            selectQuery.Source = source1;
+            Source field1Source = source1;
+            QueryField field1 = new QueryField("testfield", "testfield", field1Source);
+            selectQuery.Fields.Add(field1.FieldName, field1);
+            selectQuery.Criteria = new Criteria(
+                new Criteria(field1, Criteria.ComparisonOp.LessThan, "myvalue1"), 
+                    Criteria.LogicalOp.And,
+                new Criteria(field1, Criteria.ComparisonOp.GreaterThan, "myvalue2"));
+            selectQuery.SetupAliases();
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("SELECT a1.[testfield] FROM [mysource] a1 WHERE (a1.[testfield] < ?Param0) AND (a1.[testfield] > ?Param1)", statement.Statement.ToString());
+        }
+
+        [Test]
+        public void Test_CreateSQL_ShouldUseAliasesInCriteria_WhenNotCriteria()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            const string sourceName = "mysource";
+            var source1 = new Source(sourceName);
+            selectQuery.Source = source1;
+            Source field1Source = source1;
+            QueryField field1 = new QueryField("testfield", "testfield", field1Source);
+            selectQuery.Fields.Add(field1.FieldName, field1);
+            selectQuery.Criteria = new Criteria(
+                null,
+                    Criteria.LogicalOp.Not,
+                new Criteria(field1, Criteria.ComparisonOp.Is, null));
+            selectQuery.SetupAliases();
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("SELECT a1.[testfield] FROM [mysource] a1 WHERE NOT (a1.[testfield] IS NULL)", statement.Statement.ToString());
+        }
+
+
+        [Test]
+        public void Test_CreateSQL_ShouldUseAliasesInJoins()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            var mysource = new Source("mysource");
+            selectQuery.Source = mysource;
+
+            QueryField fieldOnMySource = new QueryField("testfield", "testfield", mysource);
+
+            Source joinedTableSource = new Source("mysource");
+            joinedTableSource.JoinToSource(new Source("myjoinedtosource"));
+
+            QueryField fieldOnJoinedTableSource = new QueryField("testfield", "testfield", joinedTableSource);
+
+            joinedTableSource.Joins[0].JoinFields.Add(new Source.Join.JoinField(fieldOnMySource, fieldOnJoinedTableSource));
+            selectQuery.Fields.Add(fieldOnMySource.FieldName, fieldOnMySource);
+
+            selectQuery.Criteria = new Criteria(fieldOnJoinedTableSource, Criteria.ComparisonOp.Equals, "myvalue");
+            selectQuery.SetupAliases();
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(
+                "SELECT a1.[testfield] FROM ([mysource] a1 " + 
+                "JOIN [myjoinedtosource] a2 on a1.[testfield] = a2.[testfield]) " + 
+                "WHERE a2.[testfield] = ?Param0", statement.Statement.ToString());
+        }
+
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
         {
 #pragma warning disable 672 //Tests on backward compatibility are being maintained.

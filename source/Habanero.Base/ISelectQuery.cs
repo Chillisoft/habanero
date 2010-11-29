@@ -77,5 +77,7 @@ namespace Habanero.Base
         /// Gets and sets the first record to be loaded by the select query.
         ///</summary>
         int FirstRecordToLoad { get; set; }
+
+        IDictionary<Source, string> Aliases { get; }
     }
 }

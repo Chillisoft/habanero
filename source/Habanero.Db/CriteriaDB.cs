@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
@@ -128,6 +129,11 @@ namespace Habanero.Base
             get { return _criteria.ComparisonOperator; }
         }
 
+        public string ToString(ISqlFormatter formatter, AddParameterDelegate addParameter)
+        {
+            return ToString(formatter, addParameter, new Dictionary<Source, string>());
+        }
+
         /// <summary>
         /// Converts this Criteria object to a string, using field names instead of property names and entity names instead of
         /// source names. The <see cref="AddParameterDelegate"/> allows a database query builder to create a parameter value
@@ -141,18 +147,18 @@ namespace Habanero.Base
         /// <param name="addParameter">The delegate to use to convert the value in object form to a value in string form. 
         /// See <see cref="AddParameterDelegate"/></param>
         /// <returns>The Criteria in string form.</returns>
-        public string ToString(ISqlFormatter formatter, AddParameterDelegate addParameter)
+        public string ToString(ISqlFormatter formatter, AddParameterDelegate addParameter, IDictionary<Source, string> aliases)
         {
             if (IsComposite())
             {
                 string rightCriteriaAsString;
                 if (LogicalOperator == LogicalOp.Not)
                 {
-                    rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter);
+                    rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter, aliases);
                     return string.Format("{0} ({1})", _logicalOps[(int)LogicalOperator], rightCriteriaAsString);
                 } 
-                string leftCriteriaAsString = new CriteriaDB(LeftCriteria).ToString(formatter, addParameter);
-                rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter);
+                string leftCriteriaAsString = new CriteriaDB(LeftCriteria).ToString(formatter, addParameter, aliases);
+                rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter, aliases);
                 return string.Format("({0}) {1} ({2})", leftCriteriaAsString, _logicalOps[(int)LogicalOperator],
                                      rightCriteriaAsString);
             }
@@ -175,12 +181,21 @@ namespace Habanero.Base
                 }
 
             }
-            string sourceEntityName = ""; if (Field.Source != null) sourceEntityName = Field.Source.ChildSourceLeaf.EntityName;
+            string sourceEntityName = "";
             string separator = "";
-            if (!String.IsNullOrEmpty(sourceEntityName))
+            if (aliases.Count > 0)
             {
-                sourceEntityName = formatter.DelimitTable(sourceEntityName);
+                if (Field.Source != null) sourceEntityName = aliases[Field.Source.ChildSourceLeaf];
                 separator = ".";
+            }
+            else
+            {
+                if (Field.Source != null) sourceEntityName = Field.Source.ChildSourceLeaf.EntityName;
+                if (!String.IsNullOrEmpty(sourceEntityName))
+                {
+                    sourceEntityName = formatter.DelimitTable(sourceEntityName);
+                    separator = ".";
+                }
             }
             string fieldNameString = formatter.DelimitField(Field.FieldName);
             return string.Format("{0}{1}{2} {3} {4}", sourceEntityName, separator, fieldNameString, comparisonOperator, valueString);
