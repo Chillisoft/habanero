@@ -119,7 +119,7 @@ namespace Habanero.DB
                 posWhere = _statement.Statement.Length;
             }
             joinType = joinType.Trim().ToUpper();
-            string joinClause = " " + joinType + " " + SqlFormattingHelper.FormatTableName(joinTable, _connection) +
+            string joinClause = " " + joinType + " " + _connection.SqlFormatter.DelimitTable(joinTable) +
                                 JOIN_ON_TOKEN + joinCriteria;
             int posExistingJoin = FindStatementClauseToken(" JOIN ");
             string closingBracket = ")";
@@ -150,10 +150,7 @@ namespace Habanero.DB
             }
             _statement.Statement.Insert(pos + SELECT_CLAUSE_TOKEN.Length, DISTINCT_CLAUSE_TOKEN.Trim() + " ");
         }
-
-
-
-
+        
         /// <summary>
         /// Adds more fields to the select fields list in the statement.
         /// </summary>
@@ -170,7 +167,7 @@ namespace Habanero.DB
             string fieldList = "";
             foreach (string field in fields)
             {
-                string formattedField = SqlFormattingHelper.FormatFieldName(field, _connection);
+                string formattedField = _connection.SqlFormatter.DelimitField(field);
                 if (currentSelectFields.IndexOf(formattedField) == -1)
                 {
                     fieldList += ", " + formattedField;

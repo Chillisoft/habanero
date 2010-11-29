@@ -67,6 +67,10 @@ namespace Habanero.Base
         ///<returns>The delimited field name</returns>
         public string DelimitField(string fieldName)
         {
+            if ((_leftFieldDelimiter != null && fieldName.StartsWith(_leftFieldDelimiter)) &&
+                (_rightFieldDelimiter != null && fieldName.EndsWith(_rightFieldDelimiter)))
+            return fieldName;
+
             return _leftFieldDelimiter + fieldName + _rightFieldDelimiter;
         }
 
@@ -77,6 +81,10 @@ namespace Habanero.Base
         ///<returns>The delimited table name</returns>
         public string DelimitTable(string tableName)
         {
+            if ((_leftFieldDelimiter != null && tableName.StartsWith(_leftFieldDelimiter)) &&
+             (_rightFieldDelimiter != null && tableName.EndsWith(_rightFieldDelimiter)))
+                return tableName;
+
             return _leftFieldDelimiter + tableName.Replace(".", _rightFieldDelimiter + "." + _leftFieldDelimiter) + _rightFieldDelimiter;  
         }
 

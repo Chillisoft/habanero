@@ -88,7 +88,7 @@ namespace Habanero.DB
         {
             _updateSql = new SqlStatement(_connection);
             _updateSql.Statement.Append(
-                @"UPDATE " + SqlFormattingHelper.FormatTableName(tableName, _connection) + " SET ");
+                @"UPDATE " + _connection.SqlFormatter.DelimitTable(tableName) + " SET ");
             int includedProps = 0;
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
@@ -100,7 +100,7 @@ namespace Habanero.DB
                          !primaryKeyDef.IsGuidObjectID))
                     {
                         includedProps++;
-                        _updateSql.Statement.Append(SqlFormattingHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
+                        _updateSql.Statement.Append(_connection.SqlFormatter.DelimitField(prop.DatabaseFieldName));
                         _updateSql.Statement.Append(" = ");
                         //prop.PropDef.GetDataMapper().GetDatabaseValue(prop.Value);
                         _updateSql.AddParameterToStatement(prop.Value);

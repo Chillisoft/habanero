@@ -63,8 +63,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
         {
             SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection);
             sqlStatement.Statement.Append("UPDATE `contact_person` SET ");
-            sqlStatement.Statement.Append(SqlFormattingHelper.FormatFieldName("DateTimeLocked",
-                                                                              DatabaseConnection.CurrentConnection));
+            sqlStatement.Statement.Append(DatabaseConnection.CurrentConnection.SqlFormatter.DelimitField("DateTimeLocked"));
             sqlStatement.Statement.Append(" = ");
             sqlStatement.AddParameterToStatement(DateTime.Now.AddMinutes(-1*lockDuration - 1));
             DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatement);
