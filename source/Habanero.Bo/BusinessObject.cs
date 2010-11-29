@@ -1770,7 +1770,7 @@ namespace Habanero.BO
         /// <remarks>This runs about 5 times slower than the normal <see cref="BusinessObject.SetPropertyValue"/> method but has the advantage
         /// of being type safe.  Unless you are experiencing performance problems using this method, it is the recommended way of setting a property value.
         /// </remarks>
-        public void SetPropertyValue(Expression<Func<T, object>> propNameExpression, object newPropValue)
+        public void SetPropertyValue<TOut>(Expression<Func<T, TOut>> propNameExpression, object newPropValue)
         {
             MemberExpression memberExpression;
             try
