@@ -37,14 +37,17 @@ namespace Habanero.Base
     /// <summary>
     /// An enumeration that gives some instructions or limitations in the
     /// case where a parent is saved and the related objects are new.
-    /// For Composition and Aggregation this is always true.
+    /// For Composition and Aggregation this is always true (I.e. InsertRelationship).
     /// This control is only required for an association relationship (<see cref="RelationshipType"/>.
     /// In this case there are two options 
     /// <li>1) If the owing BO is saved and there are new 
     /// objects related to it via this relationship then these new related objects must be inserted.</li>
     /// <li>2) If the owning BO is saved and there are new objects related to it via this relationship then
     ///   these new objects must not be inserted. This is required where the Related Business Object has other Foreign keys
-    ///   and the inserted business object may result in Referential integrity violations in a relational database.</li>
+    ///   to the same Business Object
+    ///   and the inserted business object may result in Referential integrity violations in a relational database.
+    ///   E.g. ProposalRequest has a collection of Quotes but has a single active quote and the single Active quote
+    ///   is tracked by a a ForeignKey on the ProposalRequest Object</li>
     /// </summary>
     public enum InsertParentAction
     {
@@ -259,7 +262,8 @@ namespace Habanero.Base
         /// Returns true if this RelationshipDef is compulsory.
         /// This relationship def will be considered to be compulsory if this
         /// <see cref="OwningBOHasForeignKey"/> and all the <see cref="IPropDef"/>'s that make up the 
-        /// <see cref="IRelKeyDef"/> are compulsory
+        /// <see cref="IRelKeyDef"/> are compulsory. This is only relevant for ManyToOne and OneToOne Relationships.
+        /// I.e. to single Relationships
         /// </summary>
         bool IsCompulsory { get; }
 

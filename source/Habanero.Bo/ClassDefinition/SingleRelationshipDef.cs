@@ -105,7 +105,9 @@ namespace Habanero.BO.ClassDefinition
 
         ///<summary>
         /// Returns true where the owning business object has the foreign key for this relationship false otherwise.
-        /// This is used to differentiate between the two sides of the relationship.
+        /// This is used to differentiate between the two sides of a One to One relationship in all other cases this can be
+        /// determined based on the Cardinality.
+        /// This is usually set as part of loading the ClassDefinitions.
         ///</summary>
         public override bool OwningBOHasForeignKey { get; set; }
 
@@ -131,7 +133,7 @@ namespace Habanero.BO.ClassDefinition
 
         public override bool IsManyToOne
         {
-            get { return !_setAsOneToOne; }
+            get { return !IsOneToOne; }
         }
 
         public override bool IsOneToOne
@@ -145,6 +147,13 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        /// <summary>
+        /// Returns true if this RelationshipDef is compulsory.
+        /// This relationship def will be considered to be compulsory if this
+        /// <see cref="IRelationshipDef.OwningBOHasForeignKey"/> and all the <see cref="IPropDef"/>'s that make up the 
+        /// <see cref="IRelKeyDef"/> are compulsory. This is only relevant for ManyToOne and OneToOne Relationships.
+        /// I.e. to single Relationships
+        /// </summary>
         public override bool IsCompulsory
         {
             get
@@ -155,7 +164,9 @@ namespace Habanero.BO.ClassDefinition
 
         /// <summary>
         /// Sets this SingleRelationshipDef as a One To One.
-        /// This overrides the default of it being set to ManyToOne
+        /// This overrides the default of it being set to ManyToOne.
+        /// This is used by the Reflective ClassDefLoaders in Habanero.Smooth 
+        /// to load ClassDefinitions based on the BusinessObject. 
         /// </summary>
         public void SetAsOneToOne()
         {
@@ -165,7 +176,9 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Sets the single relationship as compulsory.
         /// If this is set to true then the relationship is treated as compulsory 
-        /// else it uses the <see cref="RelationshipDef.IsCompulsory"/>
+        /// else it uses the algorithm of Checking that all the ForeignKey Props are compulsory.
+        /// This is primarily used by the Reflective ClassDefLoaders in Habanero.Smooth
+        /// to load ClassDefinitions based on the BusinessObject.
         /// </summary>
         public void SetAsCompulsory()
         {

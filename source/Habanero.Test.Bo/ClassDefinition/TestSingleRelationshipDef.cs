@@ -89,7 +89,6 @@ namespace Habanero.Test.BO.ClassDefinition
             bool isOneToOne = relationshipDef.IsOneToOne;
             //---------------Test Result -----------------------
             Assert.IsTrue(isOneToOne);
-
         }
 
         [Test]
@@ -120,6 +119,50 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsFalse(isManyToOne);
         }
+        [Test]
+        public void Test_IsManyToOne_WhenIsSingleRelationship_NotSetOneToOne_ShouldReturnTrue()
+        {
+            //---------------Set up test pack-------------------
+            var singleRelationshipDef = new FakeSingleRelationshipDef();
+            IRelationshipDef relationshipDef = singleRelationshipDef;
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf(typeof(SingleRelationshipDef), relationshipDef);
+            //---------------Execute Test ----------------------
+            bool isManyToOne = relationshipDef.IsManyToOne;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isManyToOne);
+        }
+
+        [Test]
+        public void Test_IsManyToOne_WhenHasReverseRelationshipAndIsOneToOne_ShouldBeFalse()
+        {
+            //---------------Set up test pack-------------------
+            var classDef = MyBO.LoadClassDefWithSingleRelationshipWithReverseRelationship();
+            var relationshipDef = classDef.RelationshipDefCol["MyRelationship"];
+            MyRelatedBo.LoadClassDefWithSingleRelationshipBackToMyBo();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(relationshipDef.IsOneToOne);
+            //---------------Execute Test ----------------------
+            bool isManyToOne = relationshipDef.IsManyToOne;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isManyToOne);
+        }
+
+        [Test]
+        public void Test_IsManyToOne_WhenHasReverseRelationshipAndIsOneToMany_ShouldBeTrue()
+        {
+            //---------------Set up test pack-------------------
+            var classDef = MyBO.LoadClassDefWithSingleRelationshipWithReverseRelationship();
+            var relationshipDef = classDef.RelationshipDefCol["MyRelationship"];
+            MyRelatedBo.LoadClassDefWithMultipleRelationshipBackToMyBo();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(relationshipDef.IsOneToOne);
+            //---------------Execute Test ----------------------
+            bool isManyToOne = relationshipDef.IsManyToOne;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isManyToOne);
+        }
+
         [Test]
         public void Test_SetAsCompulsory_ShouldSetIsCompulsoryTrue()
         {

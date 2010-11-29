@@ -116,6 +116,13 @@ namespace Habanero.BO.ClassDefinition
 		}
         // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
+        /// <summary>
+        /// Returns true if this RelationshipDef is compulsory.
+        /// This relationship def will be considered to be compulsory if this
+        /// <see cref="IRelationshipDef.OwningBOHasForeignKey"/> and all the <see cref="IPropDef"/>'s that make up the 
+        /// <see cref="IRelKeyDef"/> are compulsory. This is only relevant for ManyToOne and OneToOne Relationships.
+        /// I.e. to single Relationships
+        /// </summary>
         public abstract bool IsCompulsory{ get;}
 
         ///<summary>
