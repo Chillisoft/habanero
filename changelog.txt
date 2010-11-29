@@ -1,5 +1,39 @@
 Habanero Change Log
 
+ Habanero v2.5.1 - 29 November 2010
+
+This is mainly a bug fix release with one or two small enhancements
+
+Enhancements
+
+#1000: Extract an IBusinessObjectManager interface and make BusinessObjectManagerNull truly empty. 
+- If you're doing an ASP.NET based application it is highly recommended that this BusinessObjectManagerNull is used. This can be done by setting the BusinessObjectManager.Instance in your startup code.
+#730: Support for multiple schemas (simply added support for a . in table names)
+#941: Add Ability to GetPropertyValue and SetPropertyValue via Lambdas
+
+Minor Changes
+
+#956: Extract Common Interface for SingleRelationshipDef and IPropDef
+#946: RelationshipDef.OwningClassName : Add this Property Get
+#907: Relationship: Made internal method GetReverseRelationship public
+#1146: ToString: Composite Primary Key.ToString is not returning a sensible value
+
+Bugs
+
+#252: Set the discriminator property when using In-Memory
+#582: Get error when searching a self referencing object three or more levels deeps in a search grid control.
+#741: RelationshipDef.IsOneToOne is not working
+#759: Improve error message for duplicates in collection when reloading
+#816: Add BOPropDataMapper fro Int64
+#867: Error when loading lookup list where the type is a sub class and inherits its parents PrimaryKey
+#908: Support for circular relationships in criteria
+#944: RelationshipDef.IsManyToOne is not working
+#970: Reflection Utils : SetPropertyValue when property throws Exception not rethrowing exception correctly
+#1048: Use IRelationshipDef for creating relationships
+#1058: BOCol<T> Add(IEnumerable<T> does not check for a null collection
+#1091: Change methods in Habanero.Base\HabaneroApp.cs to protected
+#1109: BusinessObjectCollection.CopyTo(Array ... ) has bug.
+
  Habanero v2.5.0 - 30 August 2010
 
 Major Changes
