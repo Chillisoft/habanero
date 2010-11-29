@@ -101,11 +101,11 @@ namespace Habanero.Test.Structure
                 return;
             }
             string sqlStatement = "CREATE TABLE ";
-            sqlStatement += SqlFormattingHelper.FormatTableName(classDef.TableName, _databaseConnection);
+            sqlStatement += _databaseConnection.SqlFormatter.DelimitTable(classDef.TableName);
             sqlStatement += " (";
             foreach (PropDef propDef in classDef.PropDefcol)
             {
-                sqlStatement += SqlFormattingHelper.FormatFieldName(propDef.DatabaseFieldName, _databaseConnection);
+                sqlStatement += _databaseConnection.SqlFormatter.DelimitField(propDef.DatabaseFieldName);
                 sqlStatement += " " + GetFieldType(propDef);
                 if (propDef.Compulsory)
                 {
@@ -117,7 +117,7 @@ namespace Habanero.Test.Structure
             List<string> fields = new List<string>();
             foreach (PropDef propDef in classDef.PrimaryKeyDef)
             {
-                fields.Add(SqlFormattingHelper.FormatFieldName(propDef.DatabaseFieldName, _databaseConnection));
+                fields.Add(_databaseConnection.SqlFormatter.DelimitField(propDef.DatabaseFieldName));
             }
             sqlStatement += String.Join(", ", fields.ToArray());
             sqlStatement += "));";
@@ -182,7 +182,7 @@ namespace Habanero.Test.Structure
             }
             string sqlStatement;
             sqlStatement = "ALTER TABLE ";
-            sqlStatement += SqlFormattingHelper.FormatTableName(classDef.TableName, _databaseConnection);
+            sqlStatement += _databaseConnection.SqlFormatter.DelimitTable(classDef.TableName);
             List<string> constraints = new List<string>();
             foreach (RelationshipDef relationshipDef in classDef.RelationshipDefCol)
             {
@@ -194,8 +194,8 @@ namespace Habanero.Test.Structure
                     }
                     IClassDef relatedClassDef = classDefCol[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
 
-                    string constraintName = SqlFormattingHelper.FormatFieldName(
-                        classDef.TableName + "_" + relationshipDef.RelationshipName + "_FK", _databaseConnection);
+                    string constraintName = _databaseConnection.SqlFormatter.DelimitField(
+                        classDef.TableName + "_" + relationshipDef.RelationshipName + "_FK");
                     string constraintSql = " ADD CONSTRAINT " + constraintName;
                     constraintSql += " FOREIGN KEY " + constraintName;
                     List<string> props = new List<string>();
@@ -214,8 +214,8 @@ namespace Habanero.Test.Structure
                         {
                             relPropName = relatedPropDef.DatabaseFieldName;
                         }
-                        props.Add(SqlFormattingHelper.FormatFieldName(propName, _databaseConnection));
-                        relProps.Add(SqlFormattingHelper.FormatFieldName(relPropName, _databaseConnection));
+                        props.Add(_databaseConnection.SqlFormatter.DelimitField(propName));
+                        relProps.Add(_databaseConnection.SqlFormatter.DelimitField(relPropName));
                     }
                     constraintSql += " (" + String.Join(",", props.ToArray()) + ")";
                     constraintSql += " REFERENCES ";
@@ -225,7 +225,7 @@ namespace Habanero.Test.Structure
                         relatedBaseClassDef = (ClassDef)relatedBaseClassDef.SuperClassDef.SuperClassClassDef;
                     }
                     string relatedTableName = relatedBaseClassDef.TableName;
-                    constraintSql += SqlFormattingHelper.FormatTableName(relatedTableName, _databaseConnection);
+                    constraintSql += _databaseConnection.SqlFormatter.DelimitTable(relatedTableName);
                     constraintSql += " (" + String.Join(",", relProps.ToArray()) + ")";
                     constraintSql += " ON DELETE RESTRICT ";
                     constraintSql += " ON UPDATE RESTRICT";
