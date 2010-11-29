@@ -46,6 +46,18 @@ INSERT INTO `another_number_generator` (`SequenceNumber`,`NumberType`,`UserLocke
  (1,'tmp',NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `another_number_generator` ENABLE KEYS */;
 
+--
+-- Definition of table `asset`
+--
+
+DROP TABLE IF EXISTS `asset`;
+CREATE TABLE `asset` (
+  `AssetID` char(38) NOT NULL,
+  `ParentAssetID` char(38) DEFAULT NULL,
+  PRIMARY KEY (`AssetID`),
+  KEY `FK_asset_1` (`ParentAssetID`),
+  CONSTRAINT `FK_asset_1` FOREIGN KEY (`ParentAssetID`) REFERENCES `asset` (`AssetID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Table structure for table `habanero_test_branch_2_5`.`bowithintid`
