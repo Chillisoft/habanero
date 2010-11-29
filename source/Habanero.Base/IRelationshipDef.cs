@@ -268,7 +268,7 @@ namespace Habanero.Base
         bool IsCompulsory { get; }
 
         ///<summary>
-        /// Gets and Sets the Class Def to the ClassDefinition that owns this Relationship Def.
+        /// Gets and Sets the Class Def to the ClassDefinition (<see cref="IClassDef"/>) that owns this Relationship Def.
         ///</summary>
         IClassDef OwningClassDef { get; set; }
         /// <summary>
