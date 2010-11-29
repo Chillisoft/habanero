@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -95,6 +96,20 @@ namespace Habanero.Test.BO
                 Shape parent = (Shape)objCircleNoPrimaryKey;
                 Assert.AreEqual(objCircleNoPrimaryKey.ID, parent.ID);
                 Assert.AreEqual(objCircleNoPrimaryKey.GetPropertyValue("ShapeID"), parent.GetPropertyValue("ShapeID"));
+            }
+
+            [Test]
+            public void Test_ConstructCircle_WithSingleTableInheritance_ShouldSetDiscriminatorField_Bug252()
+            {
+                //---------------Set up test pack-------------------
+                Circle.GetClassDefWithSingleTableInheritance();
+                Shape.GetClassDef().PropDefcol.Add(new PropDef("ShapeType_field", typeof(string), PropReadWriteRule.WriteOnce, "ShapeType_field", null));
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                Circle circle = new Circle();
+                //---------------Test Result -----------------------
+                Assert.AreEqual("Circle", circle.GetPropertyValue("ShapeType_field"));
             }
 
         }

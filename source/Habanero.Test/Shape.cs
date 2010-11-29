@@ -50,6 +50,7 @@ namespace Habanero.Test
             propDef = new PropDef("ShapeID", typeof(Guid), PropReadWriteRule.WriteOnce, "ShapeID_field", null);
             lPropDefCol.Add(propDef);
 
+
            // propDef = new PropDef("MyID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
            // lPropDefCol.Add(propDef);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();

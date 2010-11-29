@@ -422,7 +422,16 @@ namespace Habanero.BO
             _keysCol = classDef.CreateBOKeyCol(_boPropCol);
 
             SetPrimaryKeyForInheritedClass();
-
+            if (classDef.IsUsingSingleTableInheritance())
+            {
+                try
+                {
+                    this.SetPropertyValue(classDef.SuperClassDef.Discriminator, this.GetType().Name);
+                } catch (InvalidPropertyNameException ex)
+                {
+                    throw new HabaneroDeveloperException(ex.Message + " Your discriminator field is not included in the properties of the class and you are using Single Table Inheritance. Please include the discriminator field as a property.");
+                }
+            }
             _relationshipCol = classDef.CreateRelationshipCol(_boPropCol, this);
         }
 

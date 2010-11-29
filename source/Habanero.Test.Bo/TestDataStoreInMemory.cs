@@ -384,6 +384,7 @@ namespace Habanero.Test.BO
             CircleNoPrimaryKey.GetClassDef().SuperClassDef =
                 new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
             CircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType_field";
+            Shape.GetClassDef().PropDefcol.Add(new PropDef("ShapeType_field", typeof(string), PropReadWriteRule.WriteOnce, "ShapeType_field", null));
 
             DataStoreInMemory dataStore = new DataStoreInMemory();
             CircleNoPrimaryKey circleNoPrimaryKey = new CircleNoPrimaryKey ();

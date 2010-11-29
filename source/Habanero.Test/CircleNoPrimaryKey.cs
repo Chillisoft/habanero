@@ -72,6 +72,7 @@ namespace Habanero.Test
         public static IClassDef GetClassDefWithSingleInheritance()
         {
             IClassDef shapeClassDef = Shape.GetClassDef();
+            shapeClassDef.PropDefcol.Add(new PropDef("ShapeType_field", typeof(string), PropReadWriteRule.WriteOnce, "ShapeType_field", null));
             IClassDef circleClassDef = GetClassDef();
             circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.SingleTableInheritance);
             circleClassDef.SuperClassDef.Discriminator = "ShapeType_field";
