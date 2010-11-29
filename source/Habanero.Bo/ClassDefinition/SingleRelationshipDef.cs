@@ -24,7 +24,6 @@ using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
-
     /// <summary>
     /// Defines a relationship where the owner relates to only one other object.
     /// </summary>
@@ -149,15 +148,13 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public override bool IsOneToOne
         {
-            get
-            {
-                return ReverseRelationshipIsSingle() || _setAsOneToOne;
-            }
+            get { return ReverseRelationshipIsSingle() || _setAsOneToOne; }
         }
 
         private bool ReverseRelationshipIsSingle()
         {
-            return HasReverseRelationshipDefined() && RelatedClassDefLoaded() && (GetReverseRelationshipDef() is SingleRelationshipDef);
+            return HasReverseRelationshipDefined() && RelatedClassDefLoaded() &&
+                   (GetReverseRelationshipDef() is SingleRelationshipDef);
         }
 
         private bool HasReverseRelationshipDefined()
@@ -179,10 +176,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public override bool IsCompulsory
         {
-            get
-            {
-                return _setAsCompulsory || AreAllPropsCompulsory();
-            }
+            get { return _setAsCompulsory || AreAllPropsCompulsory(); }
         }
 
         /// <summary>
@@ -237,7 +231,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         public string Description { get; set; }
-            
+
         public string PropertyTypeAssemblyName
         {
             get { return this.RelatedObjectAssemblyName; }
@@ -258,6 +252,8 @@ namespace Habanero.BO.ClassDefinition
             set { }
         }
 
+        public PropReadWriteRule ReadWriteRule { get; set; }
+
         public string PropertyTypeName
         {
             get { return this.RelatedObjectClassName; }
@@ -272,7 +268,7 @@ namespace Habanero.BO.ClassDefinition
 
         public bool Compulsory
         {
-            get {return this.IsCompulsory; }
+            get { return this.IsCompulsory; }
             set { _setAsCompulsory = value; }
         }
 

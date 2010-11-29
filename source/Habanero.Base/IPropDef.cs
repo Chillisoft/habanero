@@ -53,12 +53,6 @@ namespace Habanero.Base
 
 
         /// <summary>
-        /// Returns the rule for how the property can be accessed. 
-        /// See the PropReadWriteRule enumeration for more detail.
-        /// </summary>
-        PropReadWriteRule ReadWriteRule { get; set; }
-
-        /// <summary>
         /// Indicates whether this object has a LookupList object set
         /// </summary>
         /// <returns>Returns true if so, or false if the local

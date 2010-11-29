@@ -73,5 +73,12 @@ namespace Habanero.Base
         /// in this definition
         /// </summary>
         ILookupList LookupList { get; set; }
+
+
+        /// <summary>
+        /// Returns the rule for how the property/single Relationship can be accessed. 
+        /// See the PropReadWriteRule enumeration (<see cref="PropReadWriteRule"/> for more detail.
+        /// </summary>
+        PropReadWriteRule ReadWriteRule { get; set; }
     }
 }

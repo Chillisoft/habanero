@@ -624,6 +624,31 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsEmpty(propRules, "Should be empty list of prop rules");
         }
 
+        [Test]
+        public void Test_ConstructRelDef_ShouldSetReadWriteRuleToReadWriteByDefault()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(PropReadWriteRule.ReadWrite, relationshipDef.ReadWriteRule);
+        }
+        [Test]
+        public void Test_SetReadWriteRule_ShouldSetRuleOnRelationship()
+        {
+            //---------------Set up test pack-------------------
+            var relationshipDef = new FakeSingleRelationshipDef();
+            
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(PropReadWriteRule.ReadWrite, relationshipDef.ReadWriteRule);
+            //---------------Execute Test ----------------------
+            relationshipDef.ReadWriteRule = PropReadWriteRule.WriteNew;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(PropReadWriteRule.WriteNew, relationshipDef.ReadWriteRule);
+        }
         #endregion
 
     }
