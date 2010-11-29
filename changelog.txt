@@ -2,7 +2,7 @@ Habanero Change Log
 
  Habanero v2.5.1 - 29 November 2010
 
-This is mainly a bug fix release with one or two small enhancements
+This is mainly a bug fix release with a few small enhancements. New features are planned for the 2.6 release.
 
 Enhancements
 
@@ -17,6 +17,7 @@ Minor Changes
 #946: RelationshipDef.OwningClassName : Add this Property Get
 #907: Relationship: Made internal method GetReverseRelationship public
 #1146: ToString: Composite Primary Key.ToString is not returning a sensible value
+#1298: Remove SqlFormattingHelper - this has been replaced by SqlFormatter
 
 Bugs
 
