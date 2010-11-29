@@ -22,7 +22,7 @@ using Habanero.Base;
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// An interface describing a column of fields on a form.  This is implemented by <see cref="UIFormColumn"/>.
+    /// An interface describing a column of fields on a form.  This is implemented by <see cref="IUIFormColumn"/>.
     /// </summary>
     public interface IUIFormColumn : ICollection
     {

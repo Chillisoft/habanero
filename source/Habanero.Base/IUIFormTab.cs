@@ -63,7 +63,7 @@ namespace Habanero.BO.ClassDefinition
         IUIFormGrid UIFormGrid { set; get; }
 
         /// <summary>
-        /// Returns the <see cref="UIForm"/> that this <see cref="UIFormTab"/> is defined for.
+        /// Returns the <see cref="UIForm"/> that this <see cref="IUIForm"/> is defined for.
         /// </summary>
         IUIForm UIForm { get; set; }
     }

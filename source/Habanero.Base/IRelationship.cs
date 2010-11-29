@@ -98,5 +98,14 @@ namespace Habanero.Base
         /// See <see cref="IBusinessObject.MarkForDelete"/>
         /// </summary>
         void MarkForDelete();
+
+        /// <summary>
+        /// Returns the reverse relationship for this relationship i.e. If invoice has invoice lines and you 
+        /// can navigate from invoice lines to invoices then the invoicelines to invoice relationship is the
+        /// reverse relationship of the invoice to invoicelines relationship and vica versa.
+        /// </summary>
+        /// <param name="bo">The related Business object (in the example the invoice lines)</param>
+        /// <returns>The reverse relationship or null if no reverse relationship is set up.</returns>
+        IRelationship GetReverseRelationship(IBusinessObject bo);
     }
 }
