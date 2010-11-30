@@ -21,7 +21,7 @@ using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
-    internal class BOPropBoolDataMapper : BOPropDataMapper
+    public class BOPropBoolDataMapper : BOPropDataMapper
     {
         public override bool TryParsePropValue(object valueToParse, out object returnValue)
         {

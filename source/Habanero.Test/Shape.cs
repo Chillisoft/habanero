@@ -69,7 +69,8 @@ namespace Habanero.Test
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             //relDefCol.Add(relDef);
 
-            ClassDef lClassDef = new ClassDef(typeof (Shape), primaryKey, "Shape_table", lPropDefCol, keysCol, relDefCol);
+            ClassDef lClassDef = new ClassDef(typeof (Shape), primaryKey,  lPropDefCol, keysCol, relDefCol);
+            lClassDef.TableName = "Shape_table";
 			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
@@ -102,7 +103,8 @@ namespace Habanero.Test
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             //relDefCol.Add(relDef);
 
-            ClassDef lClassDef = new ClassDef(typeof(Shape), primaryKey, "Shape_table", lPropDefCol, keysCol, relDefCol);
+            ClassDef lClassDef = new ClassDef(typeof(Shape), primaryKey, lPropDefCol, keysCol, relDefCol);
+            lClassDef.TableName = "Shape_table";
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }

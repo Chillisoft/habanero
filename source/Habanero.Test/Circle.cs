@@ -52,12 +52,12 @@ namespace Habanero.Test
             primaryKey.Add(lPropDefCol["CircleID"]);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
-            ClassDef lClassDef = new ClassDef(typeof (Circle), primaryKey, "circle_table", lPropDefCol, keysCol, relDefCol)
+            ClassDef lClassDef = new ClassDef(typeof (Circle), primaryKey,  lPropDefCol, keysCol, relDefCol)
                                      {
                                          SuperClassDef =
                                              new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance)
                                      };
-
+            lClassDef.TableName = "circle_table";
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }

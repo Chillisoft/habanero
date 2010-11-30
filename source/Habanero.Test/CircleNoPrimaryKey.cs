@@ -55,7 +55,8 @@ namespace Habanero.Test
             //RelationshipDef relDef = new SingleRelationshipDef("ContactPerson", typeof(ContactPerson), relKeyDef, false, DeleteParentAction.DoNothing);
             //relDefCol.Add(relDef);
 
-            ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, "circle_table", lPropDefCol, keysCol, relDefCol, null);
+            ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null,  lPropDefCol, keysCol, relDefCol, null);
+            lClassDef.TableName = "circle_table";
             //ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, lPropDefCol, keysCol, relDefCol);
             
             lClassDef.SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);

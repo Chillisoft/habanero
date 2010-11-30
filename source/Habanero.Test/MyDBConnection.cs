@@ -34,17 +34,17 @@ namespace Habanero.Test
 
         public static DatabaseConfig GetDatabaseConfig()
         {
-            IDictionary settings = new Hashtable();
+            IDictionary settings = new Hashtable
+                   {
+                       {"vendor", DatabaseConfig.MySql},
+                       {"server", "localhost"},
+                       {"database", "habanero_test_branch_2_5"},
+                       {"username", "root"},
+                       {"password", "root"},
+                       {"port", "3306"}
+                   };
 
-            settings.Add("vendor", DatabaseConfig.MySql);
-            settings.Add("server", "localhost");
-            settings.Add("database", "habanero_test_trunk");
-            settings.Add("username", "root");
-            settings.Add("password", "root");
-            settings.Add("port", "3306");
-
-            DatabaseConfig config = new DatabaseConfig(settings);
-            return config;
+            return new DatabaseConfig(settings);
         }
     }
 }

@@ -62,7 +62,8 @@ namespace Habanero.Test
 
             RelationshipDefCol relDefCol = CreateRelationshipDefCol(propDefCol);
 
-            ClassDef classDef = new ClassDef(typeof (Address),  primaryKey, "contact_person_address", propDefCol, keysCol, relDefCol);
+            ClassDef classDef = new ClassDef(typeof (Address),  primaryKey,  propDefCol, keysCol, relDefCol);
+            classDef.TableName = "contact_person_address";
             ClassDef.ClassDefs.Add(classDef);
             return classDef;
         }

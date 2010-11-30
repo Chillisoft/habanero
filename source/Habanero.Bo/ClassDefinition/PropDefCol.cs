@@ -290,42 +290,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public IClassDef ClassDef { get; set; }
 
-        /// <summary>
-        /// Create a new property definition and add it to the collection
-        /// </summary>
-        /// <param name="propName">The name of the property, e.g. surname</param>
-        /// <param name="propType">The type of the property, e.g. string</param>
-        /// <param name="propRWStatus">Rules for how a property can be
-        /// accessed. See PropReadWriteRule enumeration for more detail.</param>
-        /// <param name="databaseFieldName">The database field name - this
-        /// allows you to have a database field name that is different to the
-        /// property name, which is useful for migrating systems where
-        /// the database has already been set up</param>
-        /// <param name="defaultValue">The default value that a property 
-        /// of a new object will be set to</param>
-        /// <returns>Returns the new definition created, after it has
-        /// been added to the collection</returns>
-        internal IPropDef Add
-            (string propName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
-             object defaultValue)
-        {
-            CheckPropNotAlreadyAdded(propName);
-            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, databaseFieldName, defaultValue);
-            _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
-            return lPropDef;
-        }
 
-        /// <summary>
-        /// Creates and adds a new property definition as before, but 
-        /// assumes the database field name is the same as the property name.
-        /// </summary>
-        internal IPropDef Add(string propName, Type propType, PropReadWriteRule propRWStatus, object defaultValue)
-        {
-            CheckPropNotAlreadyAdded(propName);
-            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, defaultValue);
-            _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
-            return lPropDef;
-        }
 
         /// <summary>
         /// Checks if a property definition with that name has already been added

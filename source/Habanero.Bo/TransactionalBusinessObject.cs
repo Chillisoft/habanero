@@ -235,4 +235,5 @@ namespace Habanero.BO
             return _businessObject.CanBePersisted(out errMsg);
         }
     }
+
 }
