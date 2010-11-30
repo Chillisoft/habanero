@@ -577,7 +577,7 @@ namespace Habanero.BO.ClassDefinition
 
         /// <summary>
         /// Returns the rule for how the property can be accessed. 
-        /// See the PropReadWriteRule enumeration for more detail.
+        /// See the PropReadWriteRule enumeration (<see cref="PropReadWriteRule"/> for more detail.
         /// </summary>
         public PropReadWriteRule ReadWriteRule { get; set; }
 
@@ -636,8 +636,7 @@ namespace Habanero.BO.ClassDefinition
             string displayNameFull = this.ClassDef == null ? DisplayName : this.ClassDef.ClassName + "." + DisplayName;
             if (_compulsory)
             {
-                if (propValue == null || propValue == DBNull.Value
-                    || (propValue is string && (string) propValue == String.Empty))
+                if (IsNullOrEmpty(propValue))
                 {
                     errorMessage = String.Format("'{0}' is a compulsory field and has no value.", displayNameFull);
                     return false;
@@ -654,9 +653,6 @@ namespace Habanero.BO.ClassDefinition
                 return false;
             }
             //Validate string lengths are less than the maximum length allowable for this propdef.
-            //TODO Brett 09 Jan 2009: I think this should be removed since it is one of the rules. I agree with the capability
-            //   in firestarter to be able to easily set up a property rule that has a maximum length but it should not be a seperate
-            //   property on prop def.
             if (propValue is string && Length != Int32.MaxValue)
             {
                 if (((string) propValue).Length > Length)
@@ -677,6 +673,13 @@ namespace Habanero.BO.ClassDefinition
             }
             return valid;
         }
+
+        private static bool IsNullOrEmpty(object propValue)
+        {
+            return propValue == null || propValue == DBNull.Value
+                   || (propValue is string && (string) propValue == String.Empty);
+        }
+
         /// <summary>
         /// Is lookup list item with a value of propValue valid if not outs Error message
         /// </summary>
