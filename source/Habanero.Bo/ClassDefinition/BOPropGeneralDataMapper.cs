@@ -25,7 +25,7 @@ using log4net;
 namespace Habanero.BO.ClassDefinition
 {
     ///<summary>
-    /// Implements a data mapper for a Guid Property
+    /// Implements a data mapper for a Property of an unknown type
     /// The property data mapper conforms to the GOF strategy pattern <seealso cref="BOPropDataMapper"/>.
     ///</summary>
     public class BOPropGeneralDataMapper : BOPropDataMapper

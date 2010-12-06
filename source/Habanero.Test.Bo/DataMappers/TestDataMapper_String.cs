@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO
 {
     [TestFixture]
@@ -522,3 +523,4 @@ namespace Habanero.Test.BO
         #endregion
     }
 }
+// ReSharper restore InconsistentNaming

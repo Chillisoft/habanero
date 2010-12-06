@@ -40,7 +40,9 @@ namespace Habanero.BO
         /// <summary> The Logger </summary>
         protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
         /// <summary> The current value of the BOProp </summary>
+// ReSharper disable InconsistentNaming
         protected object _currentValue;
+
         /// <summary> Whether the prop has been edited since being created or loaded from the database </summary>
         protected internal bool _isDirty;
         /// <summary> Is the boProp valid </summary>
@@ -62,6 +64,7 @@ namespace Habanero.BO
         private IBOPropAuthorisation _boPropAuthorisation;
         protected bool _convertEmptyStringToNull = true;
         private bool _loadedPropHasBeenValidated;
+        // ReSharper restore InconsistentNaming
         /// <summary>
         /// Indicates that the value held by the property has been
         /// changed. This is fired any time that the current value of the property is set to a new value.
