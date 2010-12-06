@@ -232,24 +232,25 @@ namespace Habanero.Util
                 if (valueToParse is String)
                 {
                     string stringValueToConvert = (string)valueToParse;
-                    if (stringValueToConvert.ToUpper() == "TODAY")
+                    var stringValueToConvertUpperCase = stringValueToConvert.ToUpper();
+                    if (stringValueToConvertUpperCase == "TODAY")
                     {
                         returnValue = new DateTimeToday();
                         return true;
                     }
-                    if (stringValueToConvert.ToUpper() == "YESTERDAY")
+                    if (stringValueToConvertUpperCase == "YESTERDAY")
                     {
                         returnValue = new DateTimeToday();
                         ((DateTimeToday) returnValue).OffSet = -1;
                         return true;
                     }
-                    if (stringValueToConvert.ToUpper() == "TOMORROW")
+                    if (stringValueToConvertUpperCase == "TOMORROW")
                     {
                         returnValue = new DateTimeToday();
                         ((DateTimeToday) returnValue).OffSet = 1;
                         return true;
                     }
-                    if (stringValueToConvert.ToUpper() == "NOW")
+                    if (stringValueToConvertUpperCase == "NOW")
                     {
                         returnValue = new DateTimeNow();
                         return true;
