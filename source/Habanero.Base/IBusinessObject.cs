@@ -100,11 +100,6 @@ namespace Habanero.Base
         void SetPropertyValue(string propName, object newPropValue);
 
         /// <summary>
-        /// Commits to the database any changes made to the object
-        /// </summary>
-        IBusinessObject Save();
-
-        /// <summary>
         /// Cancel all edits made to the object since it was loaded from the 
         /// database or last saved to the database
         /// </summary>

@@ -1031,16 +1031,16 @@ namespace Habanero.BO
             return _boRules;
         }
 
-        /// <summary>
-        /// Commits to the database any changes made to the object
-        /// </summary>
-        public virtual IBusinessObject Save()
-        {
-            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
-            committer.AddBusinessObject(this);
-            committer.CommitTransaction();
-            return this;
-        }
+        ///// <summary>
+        ///// Commits to the database any changes made to the object
+        ///// </summary>
+        //public virtual IBusinessObject Save()
+        //{
+        //    ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+        //    committer.AddBusinessObject(this);
+        //    committer.CommitTransaction();
+        //    return this;
+        //}
 
         /// <summary>
         /// Cancel all edits made to the object since it was loaded from the 
@@ -1805,6 +1805,20 @@ namespace Habanero.BO
                 throw new ArgumentException(propNameExpression + " is not a valid property on " + this.GetType().Name);
             }
             return (TOut) GetPropertyValue(memberExpression.Member.Name);
+        }
+    }
+
+    public static class BusinessObjectExtensions
+    {
+        /// <summary>
+        /// Commits to the database any changes made to the object
+        /// </summary>
+        public static IBusinessObject Save<T>(this T businessObject) where T: IBusinessObject
+        {
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(businessObject);
+            committer.CommitTransaction();
+            return businessObject;
         }
     }
 }
