@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -74,7 +75,7 @@ namespace Habanero.BO
 
         private static void AddAllPropsToQuery(IClassDef classDef, SelectQuery selectQuery)
         {
-            foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance)
+            foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance.ToList())
             {
                 if (propDef.Persistable)
                 {
