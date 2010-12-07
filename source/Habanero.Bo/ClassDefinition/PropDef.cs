@@ -637,9 +637,9 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns true if valid, false if not</returns>
         public bool IsValueValid(object propValue, ref string errorMessage)
         {
-            string tmpErrMsg = "";
+            var tmpErrMsg = "";
             errorMessage = "";
-            string displayNameFull = this.ClassDef == null ? DisplayName : this.ClassDef.ClassName + "." + DisplayName;
+            var displayNameFull = this.ClassDef == null ? DisplayName : this.ClassDef.ClassName + "." + DisplayName;
             if (Compulsory)
             {
                 if (IsNullOrEmpty(propValue))
@@ -667,13 +667,12 @@ namespace Habanero.BO.ClassDefinition
                     return false;
                 }
             }
-            
-            bool valid = true;
-            foreach (IPropRule propRule in PropRules)
+            var propValueParsedToCorrectType = ChangeType(propValue);
+            var valid = true;
+            foreach (var propRule in PropRules)
             {
-
-                bool tmpValid = (propRule == null
-                                 || propRule.IsPropValueValid(displayNameFull, GetNewValue(propValue), ref tmpErrMsg));
+                var tmpValid = (propRule == null
+                                 || propRule.IsPropValueValid(displayNameFull, propValueParsedToCorrectType, ref tmpErrMsg));
                 valid = valid & tmpValid;
                 errorMessage = StringUtilities.AppendMessage(errorMessage, tmpErrMsg);
             }
@@ -818,15 +817,12 @@ namespace Habanero.BO.ClassDefinition
             var propertyType = this.PropertyType;
             if (propValue.GetType().IsSubclassOf(propertyType)) return true;
 
-            try
-            {
-                ChangeType(propValue);
-            }
-            catch (Exception ex)
-            {
-                errorMessage = ex.Message;
-            }
-            return string.IsNullOrEmpty(errorMessage);
+            //If you can parse the value then it is of a valid type.
+            object value;
+            if (TryParseValue(propValue, out value)) return true;
+
+            errorMessage = GetErrorMessage(propValue);
+            return false;
         }
 
         private string GetErrorMessage(object propValue)

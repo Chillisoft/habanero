@@ -79,7 +79,7 @@ namespace Habanero.BO.ClassDefinition
                     returnValue = SerialisationUtilities.ByteArrayToObject((byte[]) valueToParse);
                     return true;
                 }
-                if (_propDef.PropertyType.IsSubclassOf(typeof (CustomProperty)))
+                if (_propDef.PropertyType.IsSubclassOf(typeof(CustomProperty)) && !CanConvertUsingTypeConverter(valueToParse))
                 {
                     returnValue = _propDef.PropertyType.IsInstanceOfType(valueToParse) 
                                       ? valueToParse 
@@ -101,12 +101,13 @@ namespace Habanero.BO.ClassDefinition
                     returnValue = Enum.Parse(_propDef.PropertyType, (string) valueToParse);
                     return true;
                 }
-                var tc = TypeDescriptor.GetConverter(this._propDef.PropertyType);
-                if (tc != null && tc.CanConvertFrom(valueToParse.GetType()))
+                if (CanConvertUsingTypeConverter(valueToParse))
                 {
+                    var tc = GetTypeConverter();
                     returnValue = tc.ConvertFrom(valueToParse);
                     return true;
-                }  
+                }
+
                 try
                 {
                     var propDef = this._propDef;
@@ -136,6 +137,16 @@ namespace Habanero.BO.ClassDefinition
                           _propDef.PropertyType, valueToParse), ex);
             }
             return true;
+        }
+        private bool CanConvertUsingTypeConverter(object valueToParse)
+        {
+            var tc = GetTypeConverter();
+            return tc != null && tc.CanConvertFrom(valueToParse.GetType());
+        }
+
+        private TypeConverter GetTypeConverter()
+        {
+            return TypeDescriptor.GetConverter(this._propDef.PropertyType);
         }
     }
 }
