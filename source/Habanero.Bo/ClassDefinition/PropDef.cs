@@ -429,10 +429,15 @@ namespace Habanero.BO.ClassDefinition
             _displayName = displayName;
             if (string.IsNullOrEmpty(_displayName))
             {
-                _displayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
+                _displayName = GetDisplayName(_propertyName);
             }
             _description = description;
             KeepValuePrivate = keepValuePrivate;
+        }
+
+        private static string GetDisplayName(string propertyName)
+        {
+            return StringUtilities.DelimitPascalCase(propertyName, " ");
         }
 
         #endregion
@@ -809,28 +814,24 @@ namespace Habanero.BO.ClassDefinition
             if (propValue == null) return true;
             if (propValue is string && string.IsNullOrEmpty((string) propValue)) return true;
             if (this.HasLookupList()) return true;
-            Type propertyType = this.PropertyType;
+            var propertyType = this.PropertyType;
             if (propValue.GetType().IsSubclassOf(propertyType)) return true;
+
             try
             {
-                Convert.ChangeType(propValue, propertyType);
+                ChangeType(propValue);
             }
-            catch (InvalidCastException)
+            catch (Exception ex)
             {
-                if (!(propValue is Guid && propertyType == typeof (string)))
-                {
-                    errorMessage = GetErrorMessage(propValue,this.DisplayName);
-                }
-            }
-            catch (FormatException)
-            {
-                errorMessage = GetErrorMessage(propValue, this.DisplayName);
+                errorMessage = ex.Message;
             }
             return string.IsNullOrEmpty(errorMessage);
         }
 
-        private string GetErrorMessage(object propValue, string displayName)
+        private string GetErrorMessage(object propValue)
         {
+            string displayName = this.DisplayName;
+            if (string.IsNullOrEmpty(displayName)) displayName = GetDisplayName(this.PropertyName);
             string errorMessage = String.Format("'{0}' for property '{1}' is not valid. ", propValue, displayName);
             errorMessage += "It is not a type of " + this.PropertyTypeName + ".";
             return errorMessage;
@@ -922,7 +923,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                //TODO Brett: Remove all this code move to mapper.
+                //This is necessary due to the fact that the _defaultValueString might be 'Today', 'YesterDay' etc
                 object defaultValue;
                 if (MyPropertyType == typeof (DateTime) && _defaultValueString != null)
                 {
@@ -931,35 +932,7 @@ namespace Habanero.BO.ClassDefinition
                 if (_defaultValue == null && _defaultValueString != null)
                 {
                     _hasDefaultValueBeenValidated = false;
-                    if (MyPropertyType == typeof (Guid))
-                    {
-                        defaultValue = new Guid(_defaultValueString);
-                    }
-                    else if (MyPropertyType.IsEnum)
-                    {
-                        defaultValue = Enum.Parse(MyPropertyType, _defaultValueString);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            defaultValue = Convert.ChangeType(_defaultValueString, MyPropertyType);
-                        }
-                        catch (InvalidCastException ex)
-                        {
-                            throw new InvalidCastException
-                                (String.Format
-                                     ("The default value '{0}' cannot be cast to " + "the property type ({1}).",
-                                      _defaultValueString, _propTypeName), ex);
-                        }
-                        catch (FormatException ex)
-                        {
-                            throw new FormatException
-                                (String.Format
-                                     ("The default value '{0}' cannot be converted to " + "the property type ({1}).",
-                                      _defaultValueString, _propTypeName), ex);
-                        }
-                    }
+                    defaultValue = ChangeType(_defaultValueString);
                 }
                 else
                 {
@@ -974,6 +947,54 @@ namespace Habanero.BO.ClassDefinition
                 ValidateDefaultValue(value);
                 _defaultValueString = _defaultValue != null ? _defaultValue.ToString() : null;
             }
+        }
+
+        private object ChangeType(object valueToChange)
+        {
+            object value;
+            if (TryParseValue(valueToChange, out value)) return value;
+
+            //If you cannot Change the Type then throw an exception
+            throw new InvalidCastException(GetErrorMessage(valueToChange));
+/*            object defaultValue;
+            if (MyPropertyType == typeof (Guid))
+            {
+                defaultValue = new Guid(defaultValueString);
+            }
+            else if (MyPropertyType.IsEnum)
+            {
+                defaultValue = Enum.Parse(MyPropertyType, defaultValueString);
+            }
+            else
+            {
+                object defaultValue1;
+                try
+                {
+                    defaultValue1 = Convert.ChangeType(defaultValueString, MyPropertyType);
+                }
+                catch (InvalidCastException ex)
+                {
+                    throw new InvalidCastException
+                        (String.Format
+                             ("The default value '{0}' cannot be cast to " + "the property type ({1}).",
+                              defaultValueString, _propTypeName), ex);
+                }
+                catch (FormatException ex)
+                {
+                    throw new FormatException
+                        (String.Format
+                             ("The default value '{0}' cannot be converted to " + "the property type ({1}).",
+                              defaultValueString, _propTypeName), ex);
+                }
+                defaultValue = defaultValue1;
+            }
+            return defaultValue;*/
+        }
+
+        private bool TryParseValue(object valueToChange, out object value)
+        {
+            _propDataMapper = GetDataMapper();
+            return _propDataMapper.TryParsePropValue(valueToChange, out value);
         }
 
 
@@ -1030,18 +1051,16 @@ namespace Habanero.BO.ClassDefinition
         private void ValidateDefaultValue(object defaultValue)
         {
             if (_hasDefaultValueBeenValidated) return;
-
-            if ((defaultValue == null) || MyPropertyType.IsInstanceOfType(defaultValue))
+            if (defaultValue == null) return;
+            string errorMessage = "";
+            if (IsValueValidType(defaultValue, ref errorMessage))
             {
-                _defaultValue = defaultValue;
+                _defaultValue = ChangeType(defaultValue);
                 _hasDefaultValueBeenValidated = true;
             }
             else
             {
-                throw new ArgumentException
-                    (string.Format
-                         ("Default value {0} is invalid since it is " + "not of type {1}.", defaultValue,
-                          _propTypeName), "defaultValue");
+                throw new ArgumentException(errorMessage);
             }
         }
 
@@ -1166,7 +1185,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>An object of the correct type.</returns>
         public bool TryParsePropValue(object valueToParse, out object returnValue)
         {
-            _propDataMapper = CreateDataMapper();
+            _propDataMapper = GetDataMapper();
             return _propDataMapper.TryParsePropValue(valueToParse, out returnValue);
         }
 
@@ -1178,12 +1197,11 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>The converted string.</returns>
         public string ConvertValueToString(object value)
         {
-            CreateDataMapper();
-
+            _propDataMapper = GetDataMapper();
             return _propDataMapper == null ? value.ToString() : _propDataMapper.ConvertValueToString(value);
         }
 
-        private BOPropDataMapper CreateDataMapper()
+        private BOPropDataMapper GetDataMapper()
         {
             if (_propDataMapper != null) return _propDataMapper;
 

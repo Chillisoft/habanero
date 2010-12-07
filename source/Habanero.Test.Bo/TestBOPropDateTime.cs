@@ -24,6 +24,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO
 {
     [TestFixture]
@@ -328,12 +329,14 @@ namespace Habanero.Test.BO
             boProp.Value = expectedDateTime.ToString("d");
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsTrue(boProp.Value is DateTime);
+            Assert.IsInstanceOf<DateTime>(boProp.Value);
             //---------------Execute Test ----------------------
+
             string propertyValueString = boProp.PropertyValueString;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDateTime.ToString(_standardDateTimeFormat), propertyValueString);
+
         }
 
 

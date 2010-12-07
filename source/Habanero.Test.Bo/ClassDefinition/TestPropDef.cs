@@ -27,6 +27,7 @@ using Habanero.BO.CriteriaManager;
 using Habanero.Util;
 using NUnit.Framework;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.ClassDefinition
 {
 
@@ -635,25 +636,27 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("PropName", prop.PropertyName);
             Assert.AreEqual("PropName", prop.DatabaseFieldName);
         }
-
+#pragma warning disable 168
         [Test]
-        public void TestCreateLatePropDefInvalidDefault()
+        public void TestCreatePropDefInvalidDefault_ShouldRaiseError()
         {
             //---------------Set up test pack-------------------
-            PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false,
+            PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "ddd", false,
                                            false);
             //---------------Execute Test ----------------------
             try
             {
-                object defaultValue = lPropDef.DefaultValue;
+
+                var defaultValue = lPropDef.DefaultValue;
                 Assert.Fail("Expected to throw an FormatException");
             }
                 //---------------Test Result -----------------------
-            catch (FormatException ex)
+            catch (InvalidCastException ex)
             {
-                StringAssert.Contains("cannot be converted to the property type", ex.Message);
+                StringAssert.Contains("for property 'prop' is not valid. It is not a type of", ex.Message);
             }
         }
+#pragma warning restore 168
         [Test]
         public void TestCreateLatePropDefInvalidDefaultNotAccessed()
         {
@@ -702,32 +705,31 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             try
             {
-                new PropDef("prop", typeof (int), PropReadWriteRule.ReadWrite, "");
+                new PropDef("prop", typeof (int), PropReadWriteRule.ReadWrite, "fdsafasd");
                 Assert.Fail("Expected to throw an ArgumentException");
             }
                 //---------------Test Result -----------------------
             catch (ArgumentException ex)
             {
-                StringAssert.Contains("is invalid since it is not of type System.Int32", ex.Message);
+                StringAssert.Contains("for property 'prop' is not valid. It is not a type of System.Int32", ex.Message);
             }
         }
 
         [Test]
-        public void TestCreatePropDefInvalidDefault2()
+        public void Test_ConstructEnumProp_WithDefaultValueString_ShouldConstruct()
         {
-            //---------------Execute Test ----------------------
-            try
-            {
-                new PropDef("prop", typeof (string), PropReadWriteRule.ReadWrite, 1);
-                Assert.Fail("Expected to throw an ArgumentException");
-            }
-                //---------------Test Result -----------------------
-            catch (ArgumentException ex)
-            {
-                StringAssert.Contains("is invalid since it is not of type System.String", ex.Message);
-            }
-        }
+            //---------------Set up test pack-------------------
+            var type = typeof(ContactPersonTestBO.ContactType);
+            
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            var propDef = new PropDef("EnumProp", type.Assembly.FullName, type.Name,
+                              PropReadWriteRule.ReadWrite,"EnumField", "Family", false, false);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Family", propDef.DefaultValueString);
+            Assert.AreEqual(ContactPersonTestBO.ContactType.Family, propDef.DefaultValue);
+        }
         [Test]
         public void TestCreatePropDefWithEnumType()
         {
@@ -1077,7 +1079,21 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsEmpty(className);
         }
+        [Test]
+        public void Test_ConstructPropDef_WithDefaultValueForCustomType_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var propDef = new PropDef("Name", typeof (EMailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD",
+                                      expectedValue, false, false);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(expectedValue, propDef.DefaultValue.ToString());
+            Assert.AreEqual(expectedValue, propDef.DefaultValueString);
+        }
 
+        // ReSharper restore InconsistentNaming
         private static string GetRandomString()
         {
             return TestUtil.GetRandomString();

@@ -246,7 +246,7 @@ namespace Habanero.BO
         ///<exception cref="NotImplementedException"></exception>
         public IBusinessObject GetBusinessObjectForProp()
         {
-            IPropDef propDef = this.PropDef;
+            var propDef = this.PropDef;
             if (propDef.LookupList is BusinessObjectLookupList)
             {
                 BusinessObjectLookupList businessObjectLookupList = propDef.LookupList as BusinessObjectLookupList;

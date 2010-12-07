@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -26,6 +28,7 @@ using Habanero.Test.Structure;
 using NUnit.Framework;
 using Rhino.Mocks;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO
 {
     [TestFixture]
@@ -1438,5 +1441,163 @@ namespace Habanero.Test.BO
                     , x, y, areEqual) + Environment.NewLine + message;
             Assert.AreEqual(areEqual, currentValueEquals, expectedMessage);
         }
+
+        [Test]
+        public void Test_Cunstruct_WhenCustomTypeWithATypeConverter_WithDefault_ShouldSetPropValue()
+        {
+            //---------------Set up test pack-------------------
+            var propDef = new PropDef("Name", typeof(EMailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD", null, false, false);
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var prop = new BOProp(propDef, expectedValue);
+            var value = prop.Value;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EMailAddressAsCustomProperty>(prop.Value);
+            Assert.AreEqual(expectedValue, value.ToString());
+        }
+        [Test]
+        public void Test_SetValue_WhenCustomTypeWithATypeConverter()
+        {
+            //---------------Set up test pack-------------------
+            var propDef = new PropDef("Name", typeof(EMailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD", null, false, false);
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            var prop = new BOProp(propDef, null);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(prop.Value);
+            //---------------Execute Test ----------------------
+            prop.Value = expectedValue;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EMailAddressAsCustomProperty>(prop.Value);
+            Assert.AreEqual(expectedValue, prop.Value.ToString());
+        }
+
+        [Test]
+        public void Test_ConstructProp_WithDefaultValueForCustomType_ShouldConstructWithCorrectValue()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            var propDef = new PropDef("Name", typeof(EMailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD", expectedValue, false, false);
+            
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(expectedValue, propDef.DefaultValue.ToString());
+            Assert.AreEqual(expectedValue, propDef.DefaultValueString);
+            //---------------Execute Test ----------------------
+            var prop = propDef.CreateBOProp(true);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EMailAddressAsCustomProperty>(prop.Value);
+            Assert.AreEqual(expectedValue, prop.Value.ToString());
+        }
+        // ReSharper restore InconsistentNaming
     }
+
+    ///<summary>
+    /// The Type Converter class for conversion of a DateTimeNow value to a DateTime.
+    ///</summary>
+    public class EmailAddressConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string)) return true;
+            return base.CanConvertFrom(context, sourceType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value is string) return new EmailAddressWithTypeConverter(Convert.ToString(value));
+
+            return base.ConvertFrom(context, culture, value);
+        }
+/*
+        /// <summary>
+        /// Returns whether this converter can convert the object to the specified type, using the specified context.
+        /// </summary>
+        /// <returns>
+        /// true if this converter can perform the conversion; otherwise, false.
+        /// </returns>
+        /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that provides a format context. 
+        ///                 </param><param name="destinationType">A <see cref="T:System.Type"/> that represents the type you want to convert to. 
+        ///                 </param>
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            if (destinationType == typeof(string)) return true;
+            return base.CanConvertTo(context, destinationType);
+        }
+
+        // ReSharper disable PossibleNullReferenceException
+        /// <summary>
+        /// Converts the given value object to the specified type, using the specified context and culture information.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Object"/> that represents the converted value.
+        /// </returns>
+        /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that provides a format context. 
+        ///                 </param><param name="culture">A <see cref="T:System.Globalization.CultureInfo"/>. If null is passed, the current culture is assumed. 
+        ///                 </param><param name="value">The <see cref="T:System.Object"/> to convert. 
+        ///                 </param><param name="destinationType">The <see cref="T:System.Type"/> to convert the <paramref name="value"/> parameter to. 
+        ///                 </param><exception cref="T:System.ArgumentNullException">The <paramref name="destinationType"/> parameter is null. 
+        ///                 </exception><exception cref="T:System.NotSupportedException">The conversion cannot be performed. 
+        ///                 </exception>
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value,
+                                         Type destinationType)
+        {
+            if (destinationType == typeof(string)) return value.ToString();
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+
+        /// <summary>
+        /// Returns whether the given value object is valid for this type and for the specified context.
+        /// </summary>
+        /// <returns>
+        /// true if the specified value is valid for this object; otherwise, false.
+        /// </returns>
+        /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that provides a format context. </param><param name="value">The <see cref="T:System.Object"/> to test for validity. </param>
+        public override bool IsValid(ITypeDescriptorContext context, object value)
+        {
+            return true;
+        }*/
+
+
+        // ReSharper restore PossibleNullReferenceException
+    }
+
+    [TypeConverter(typeof(EmailAddressConverter))]
+    public class EmailAddressWithTypeConverter
+    {
+        private readonly string _emailAddress;
+        public EmailAddressWithTypeConverter(string emailAddress)
+        {
+            _emailAddress = emailAddress;
+        }
+        public override string ToString()
+        {
+            return this._emailAddress;
+        }
+    }
+
+
+    public class EMailAddressAsCustomProperty : CustomProperty
+    {
+        private readonly string _emailAddress;
+        public EMailAddressAsCustomProperty(string emailAddress, bool isLoading)
+            : base(emailAddress, isLoading)
+        {
+            _emailAddress = emailAddress;
+        }
+/*        public EMailAddressAsCustomProperty(string emailAddress): this(emailAddress, false)
+        {
+        }*/
+        public override string ToString()
+        {
+            return this._emailAddress;
+        }
+
+        public override object GetPersistValue()
+        {
+            return this._emailAddress;
+        }
+    }
+
 }
