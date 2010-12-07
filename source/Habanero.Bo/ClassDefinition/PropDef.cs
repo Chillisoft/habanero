@@ -865,14 +865,6 @@ namespace Habanero.BO.ClassDefinition
 
         #region "For Testing"
 
-        /// <summary>
-        /// Returns the type of the property
-        /// </summary>
-        protected internal Type PropType
-        {
-            get { return MyPropertyType; }
-            protected set { MyPropertyType = value; }
-        }
 
         #endregion
 
@@ -1042,7 +1034,7 @@ namespace Habanero.BO.ClassDefinition
                     Persistable = Persistable,
                     DefaultValue = DefaultValue,
                     PropertyTypeAssemblyName = PropertyTypeAssemblyName,
-                    PropType = PropType
+                    PropertyType = PropertyType
                 };
             foreach (IPropRule rule in PropRules)
             {

@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using Habanero.Base;
 using Habanero.Util;
@@ -39,6 +40,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="propDef"></param>
         public BOPropGeneralDataMapper(IPropDef propDef)
         {
+            if (propDef == null) throw new ArgumentNullException("propDef");
             _propDef = (PropDef) propDef;
         }
 
@@ -56,6 +58,12 @@ namespace Habanero.BO.ClassDefinition
 
             try
             {
+                if (this._propDef.PropertyType.IsInstanceOfType(valueToParse))
+                {
+                    returnValue = valueToParse;
+                    return true;
+                }
+
                 if (valueToParse.GetType().Name == "MySqlDateTime")
                 {
                     if (valueToParse.ToString().Trim().Length > 0)
@@ -69,45 +77,53 @@ namespace Habanero.BO.ClassDefinition
                 if (_propDef.PropertyType == typeof(Image) && valueToParse is byte[])
                 {
                     returnValue = SerialisationUtilities.ByteArrayToObject((byte[]) valueToParse);
+                    return true;
                 }
-                else if (_propDef.PropertyType.IsSubclassOf(typeof (CustomProperty)))
+                if (_propDef.PropertyType.IsSubclassOf(typeof (CustomProperty)))
                 {
                     returnValue = _propDef.PropertyType.IsInstanceOfType(valueToParse) 
-                        ? valueToParse 
-                        : Activator.CreateInstance(_propDef.PropertyType, new[] {valueToParse, false});
+                                      ? valueToParse 
+                                      : Activator.CreateInstance(_propDef.PropertyType, new[] {valueToParse, false});
+                    return true;
                 }
-                else if (_propDef.PropertyType == typeof (Object))
+                if (_propDef.PropertyType == typeof (Object))
                 {
                     //valueToParse = valueToParse;
+                    return true;
                 }
-                else if (_propDef.PropertyType == typeof (TimeSpan) && valueToParse.GetType() == typeof (DateTime))
+                if (_propDef.PropertyType == typeof (TimeSpan) && valueToParse.GetType() == typeof (DateTime))
                 {
                     returnValue = ((DateTime) valueToParse).TimeOfDay;
+                    return true;
                 }
-                else if (_propDef.PropertyType.IsEnum && valueToParse is string)
+                if (_propDef.PropertyType.IsEnum && valueToParse is string)
                 {
                     returnValue = Enum.Parse(_propDef.PropertyType, (string) valueToParse);
+                    return true;
                 }
-                else
+                var tc = TypeDescriptor.GetConverter(this._propDef.PropertyType);
+                if (tc != null && tc.CanConvertFrom(valueToParse.GetType()))
                 {
-                    try
-                    {
-                        PropDef propDef = (PropDef) this._propDef;
-                        returnValue = propDef.GetNewValue(valueToParse);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        log.Error
-                            (string.Format
-                                 ("Problem in InitialiseProp(): Can't convert value of type {0} to {1}",
-                                  valueToParse.GetType().FullName, _propDef.PropertyType.FullName));
-                        string tableName = this._propDef.ClassDef == null ? "" : this._propDef.ClassDef.GetTableName(_propDef);
-                        log.Error
-                            (string.Format
-                                 ("Value: {0}, Property: {1}, Field: {2}, Table: {3}", valueToParse,
-                                  this._propDef.PropertyName, this._propDef.DatabaseFieldName, tableName));
-                        throw;
-                    }
+                    returnValue = tc.ConvertFrom(valueToParse);
+                    return true;
+                }  
+                try
+                {
+                    var propDef = this._propDef;
+                    returnValue = propDef.GetNewValue(valueToParse);
+                }
+                catch (InvalidCastException)
+                {
+                    log.Error
+                        (string.Format
+                             ("Problem in InitialiseProp(): Can't convert value of type {0} to {1}",
+                              valueToParse.GetType().FullName, _propDef.PropertyType.FullName));
+                    string tableName = this._propDef.ClassDef == null ? "" : this._propDef.ClassDef.GetTableName(_propDef);
+                    log.Error
+                        (string.Format
+                             ("Value: {0}, Property: {1}, Field: {2}, Table: {3}", valueToParse,
+                              this._propDef.PropertyName, this._propDef.DatabaseFieldName, tableName));
+                    throw;
                 }
             }
             catch (Exception ex)

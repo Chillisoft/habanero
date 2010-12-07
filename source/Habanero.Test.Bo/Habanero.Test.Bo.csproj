@@ -154,6 +154,7 @@
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Events.cs" />
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderInMemory.cs" />
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderMultiSource.cs" />
+    <Compile Include="ClassDefinition\TestBOPropGeneralDataMapper.cs" />
     <Compile Include="ClassDefinition\TestClassDefHelper.cs" />
     <Compile Include="ClassDefinition\TestDefClassFactory.cs" />
     <Compile Include="ClassDefinition\TestFilterDef.cs" />

@@ -695,7 +695,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             Assert.AreEqual("PropName", _propDef.PropertyName);
             Assert.AreEqual("PropName", _propDef.DatabaseFieldName);
-            Assert.AreEqual(typeof (string), _propDef.PropType);
+            Assert.AreEqual(typeof (string), _propDef.PropertyType);
             new PropDef("prop", typeof (int), PropReadWriteRule.ReadWrite, 1);
         }
 
@@ -730,6 +730,20 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("Family", propDef.DefaultValueString);
             Assert.AreEqual(ContactPersonTestBO.ContactType.Family, propDef.DefaultValue);
         }
+        [Test]
+        public void Test_ConstructPropDef_ForCustomTypeWithATypeConverter_WithDefaultValueString_ShouldConstructWithCorrectValue()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            var type = typeof(EmailAddressWithTypeConverter);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var propDef = new PropDef("Name", type.Assembly.FullName, type.Name, PropReadWriteRule.ReadWrite, "DD", expectedValue, false, false);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EmailAddressWithTypeConverter>(propDef.DefaultValue);
+            Assert.AreEqual(expectedValue, propDef.DefaultValue.ToString());
+            Assert.AreEqual(expectedValue, propDef.DefaultValueString);
+                }
         [Test]
         public void TestCreatePropDefWithEnumType()
         {
@@ -854,9 +868,9 @@ namespace Habanero.Test.BO.ClassDefinition
 
             Assert.IsTrue(propDef.IsPropValueValid("somestring"));
 
-            Assert.AreEqual(typeof (String), propDef.PropType);
+            Assert.AreEqual(typeof (String), propDef.PropertyType);
             propDef.SetPropType(typeof (DateTime));
-            Assert.AreEqual(typeof (DateTime), propDef.PropType);
+            Assert.AreEqual(typeof(DateTime), propDef.PropertyType);
 
             PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef);
             Assert.AreEqual(ParameterType.Date, propDefParameterSQLInfo.ParameterType);
@@ -1204,7 +1218,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
         public void SetPropType(Type type)
         {
-            PropType = type;
+            PropertyType = type;
         }
     }
 }
