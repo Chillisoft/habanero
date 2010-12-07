@@ -362,6 +362,7 @@
     <Compile Include="Util\TypeUtilities.cs" />
     <Compile Include="Util\Utilities.cs" />
     <Compile Include="Util\XmlDocumentValidator.cs" />
+    <Compile Include="ValueObject.cs" />
     <Compile Include="XMLWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

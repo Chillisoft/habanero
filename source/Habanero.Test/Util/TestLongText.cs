@@ -239,6 +239,7 @@ namespace Habanero.Test.Util
             string oracleTypeEnumString = ReflectionUtilities.GetEnumPropertyValue(longTextParam, "OracleType");
             Assert.IsTrue(oracleTypeEnumString == "Clob");
         }
+
     }
 
     

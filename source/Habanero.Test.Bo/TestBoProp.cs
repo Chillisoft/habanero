@@ -1443,7 +1443,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_Cunstruct_WhenCustomType_WithDefault_ShouldSetPropValue()
+        public void Test_Construct_WhenCustomType_WithDefault_ShouldSetPropValue()
         {
             //---------------Set up test pack-------------------
             var propDef = new PropDef("Name", typeof(EMailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD", null, false, false);

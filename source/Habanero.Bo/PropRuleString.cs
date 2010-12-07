@@ -193,7 +193,7 @@ namespace Habanero.BO
         {
             get
             {
-                List<string> parameters = new List<string> { "minLength", "maxLength", "patternMatch", "patternMatchMessage" };
+                var parameters = new List<string> { "minLength", "maxLength", "patternMatch", "patternMatchMessage" };
                 return parameters;
             }
         }

@@ -177,6 +177,7 @@
     <Compile Include="Util\TestStringUtilities.cs" />
     <Compile Include="Util\TestTypeUtilities.cs" />
     <Compile Include="Util\TestUtilities.cs" />
+    <Compile Include="Util\TestValueObject.cs" />
     <Compile Include="Util\TestXmlDocumentValidator.cs" />
   </ItemGroup>
   <ItemGroup>

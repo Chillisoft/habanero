@@ -43,5 +43,6 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns the property being held</returns>
         public abstract object GetPersistValue();
+
     }
 }

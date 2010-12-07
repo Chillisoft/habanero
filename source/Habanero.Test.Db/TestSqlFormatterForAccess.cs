@@ -7,7 +7,7 @@ namespace Habanero.Test.DB
     public class TestSqlFormatterForAccess
     {
         [Test]
-        public void Test_PrepareValue_WithGuid_WhenTrue()
+        public void Test_PrepareValue_WithBool_WhenTrue_ShouldReturnNeg1()
         {
             //---------------Set up test pack-------------------
             SqlFormatterForAccess sqlFormatter = new SqlFormatterForAccess("", "", "", "");
@@ -20,7 +20,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void Test_PrepareValue_WithGuid_WhenFalse()
+        public void Test_PrepareValue_WithBool_WhenFalse_ShouldreturnZero()
         {
             //---------------Set up test pack-------------------
             SqlFormatterForAccess sqlFormatter = new SqlFormatterForAccess("", "", "", "");

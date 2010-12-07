@@ -654,20 +654,13 @@ namespace Habanero.BO.ClassDefinition
                 return false;
             }
             //Valid Item in list
-            if (!IsLookupListItemValid(propValue, ref errorMessage))
-            {
-                return false;
-            }
+            if (!IsLookupItemValid(propValue, ref errorMessage)) return false;
             //Validate string lengths are less than the maximum length allowable for this propdef.
-            if (propValue is string && Length != Int32.MaxValue)
-            {
-                if (((string) propValue).Length > Length)
-                {
-                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", displayNameFull, Length);
-                    return false;
-                }
-            }
+            if (!IsStringLengthValid(propValue, displayNameFull, out errorMessage)) return false;
+
             var propValueParsedToCorrectType = ChangeType(propValue);
+
+            if (!IsValueObjectValid(propValueParsedToCorrectType, out errorMessage)) return false;
             var valid = true;
             foreach (var propRule in PropRules)
             {
@@ -677,6 +670,45 @@ namespace Habanero.BO.ClassDefinition
                 errorMessage = StringUtilities.AppendMessage(errorMessage, tmpErrMsg);
             }
             return valid;
+        }
+
+        private bool IsLookupItemValid(object propValue, ref string errorMessage)
+        {
+            if (!IsLookupListItemValid(propValue, ref errorMessage))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsStringLengthValid(object propValue, string displayNameFull, out string errorMessage)
+        {
+            if (propValue is string && Length != Int32.MaxValue)
+            {
+                if (((string) propValue).Length > Length)
+                {
+                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", displayNameFull, Length);
+                    return false;
+                }
+            }
+            errorMessage = "";
+            return true;
+        }
+
+        private static bool IsValueObjectValid(object propValueParsedToCorrectType, out string errorMessage)
+        {
+            if (propValueParsedToCorrectType is ValueObject)
+            {
+                var valueObject = propValueParsedToCorrectType as ValueObject;
+                var isValid = valueObject.IsValid();
+                if (!isValid.Successful)
+                {
+                    errorMessage = isValid.Message;
+                    return false;
+                }
+            }
+            errorMessage = "";
+            return true;
         }
 
         private static bool IsNullOrEmpty(object propValue)
