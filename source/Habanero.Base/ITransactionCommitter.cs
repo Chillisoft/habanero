@@ -86,7 +86,7 @@ namespace Habanero.Base
         ///<summary>
         /// This method adds an <see cref="ITransactional"/> to the list of transactions.
         ///</summary>
-        ///<param name="transaction"></param>
+        ///<param name="transaction">The transaction to add to the <see cref="ITransactionCommitter"/>.</param>
         void AddTransaction(ITransactional transaction);
 
         ///<summary>

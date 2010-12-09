@@ -78,6 +78,7 @@ namespace Habanero.BO
         /// A list of all the transactions that are added to the transaction committer by the application developer.
         /// </summary>
         private readonly List<ITransactional> _originalTransactions = new List<ITransactional>();
+        private readonly Dictionary<string, ITransactional> _originalTransactionsByKey = new Dictionary<string, ITransactional>();
 
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitter");
 
@@ -121,25 +122,37 @@ namespace Habanero.BO
                 return;
             }
             TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(businessObject);
-            this.AddTransaction(transaction);
-            bool added = _originalTransactions.Contains(transaction);
+            bool added = AddTransactionInternal(transaction);
             if (added && _runningUpdatingBeforePersisting)
             {
                 transaction.UpdateObjectBeforePersisting(this);
             }
         }
 
-        /// 
         ///<summary>
         /// This method adds an <see cref="ITransactional"/> to the list of transactions.
         ///</summary>
-        ///<param name="transaction"></param>
+        ///<param name="transaction">The transaction to add to the <see cref="ITransactionCommitter"/>.</param>
         public void AddTransaction(ITransactional transaction)
         {
-            ITransactional foundTransactional = _originalTransactions.Find
-                (obj => obj.TransactionID() == transaction.TransactionID());
-            if (foundTransactional != null) return;
+            AddTransactionInternal(transaction);
+        }
+
+        /// <summary>
+        /// This method adds an <see cref="ITransactional"/> to the list of transactions and 
+        /// returns true or false if the provided object was added or not.
+        /// </summary>
+        /// <param name="transaction">The transaction to add to the <see cref="ITransactionCommitter"/>.</param>
+        /// <returns>True or false if the provided object was added or not.</returns>
+        private bool AddTransactionInternal(ITransactional transaction)
+        {
+            var transactionID = transaction.TransactionID();
+            // NOTE: The sole purpose of the dictionary is to optimise the performance of a this check on TransactionID.
+            // The original transactions list is still maintained because the transactions must be in the order they were added.
+            if (_originalTransactionsByKey.ContainsKey(transactionID)) return false;
+            _originalTransactionsByKey.Add(transactionID, transaction);
             _originalTransactions.Add(transaction);
+            return true;
         }
 
         ///<summary>
