@@ -1,10 +1,9 @@
 namespace Habanero.Base
 {
     /// <summary>
-    /// A super-class for a property that may be customised before
-    /// persistance to the database
+    /// A super class for a simple value object (i.e. a value object that consists of only one property.
     /// </summary>
-    public abstract class ValueObject: CustomProperty
+    public abstract class SimpleValueObject: CustomProperty
     {
         /// <summary>
         /// Constructor to initialise the property
@@ -15,7 +14,7 @@ namespace Habanero.Base
         /// This might determine whether the object is in its normal or
         /// customised form.
         /// </param>
-        public ValueObject(object value, bool isLoading):base(value, isLoading)
+        public SimpleValueObject(object value, bool isLoading):base(value, isLoading)
         {
         }
 
@@ -24,7 +23,6 @@ namespace Habanero.Base
         /// </summary>
         /// <returns></returns>
         public abstract Result IsValid();
-
 
     }
 }

@@ -286,8 +286,71 @@ namespace Habanero.Test.BO
             Assert.IsFalse(loadedBO.Status.IsDirty, "Should not be Dirty");
             Assert.IsFalse(loadedBO.Status.IsEditing, "Should not be Editing");
         }
-        
+
+        [Test]
+        public void Test_Read_WhenCalled_ShouldSet_ReadResult()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefsNoUIDef();
+            DataStoreInMemory savedDataStore = new DataStoreInMemory();
+            savedDataStore.Add(new MyBO());
+            MemoryStream writeStream = new MemoryStream();
+            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
+            writer.Write(savedDataStore);
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
+            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
+            writeStream.Seek(0, SeekOrigin.Begin);
+            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReaderSpy(writeStream);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, savedDataStore.Count);
+            //---------------Execute Test ----------------------
+            loadedDataStore.AllObjects = reader.Read();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, loadedDataStore.Count);
+            Assert.IsNotNull(reader.ReadResult);
+        }
+
+        [Test]
+        public void Test_Read_WhenCalledAndNoPropertyReadExceptions_ShouldSet_ReadResult_Successful_True()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefsNoUIDef();
+            DataStoreInMemory savedDataStore = new DataStoreInMemory();
+            savedDataStore.Add(new MyBO());
+            MemoryStream writeStream = new MemoryStream();
+            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
+            writer.Write(savedDataStore);
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
+            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
+            writeStream.Seek(0, SeekOrigin.Begin);
+            DataStoreInMemoryXmlReaderSpy reader = new DataStoreInMemoryXmlReaderSpy(writeStream);
+            reader.SetupPropertyShouldThrowException = false;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, savedDataStore.Count);
+            //---------------Execute Test ----------------------
+            loadedDataStore.AllObjects = reader.Read();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, loadedDataStore.Count);
+            Assert.IsNotNull(reader.ReadResult);
+            Assert.IsTrue(reader.ReadResult.Successful);
+        }
     }
 
-  
+    public class DataStoreInMemoryXmlReaderSpy : DataStoreInMemoryXmlReader
+    {
+        public DataStoreInMemoryXmlReaderSpy(Stream stream) : base(stream)
+        {
+            SetupPropertyShouldThrowException = false;
+        }
+
+        public bool SetupPropertyShouldThrowException { get; set; }
+        
+        protected override void SetupProperty(IBusinessObject bo, string propertyName, string propertyValue)
+        {
+            if (SetupPropertyShouldThrowException) throw new Exception("Test property read exception");
+            
+        }
+    }
 }

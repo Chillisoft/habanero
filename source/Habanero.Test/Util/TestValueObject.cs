@@ -12,15 +12,15 @@ using NUnit.Framework;
 // ReSharper disable InconsistentNaming
 namespace Habanero.Test.Util
 {
-    public class ValueObjectStub: ValueObject{
+    public class SimpleValueObjectStub: SimpleValueObject{
         private readonly object _value;
 
-        public ValueObjectStub(object value, bool isLoading) : base(value, isLoading)
+        public SimpleValueObjectStub(object value, bool isLoading) : base(value, isLoading)
         {
             Successful = true;
             _value = value;
         }
-        public ValueObjectStub(object value): this(value, false)
+        public SimpleValueObjectStub(object value): this(value, false)
         {
             
         }
@@ -59,7 +59,7 @@ namespace Habanero.Test.Util
                 (@"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
-					<property  name=""TestProp"" type=""Habanero.Test.Util.ValueObjectStub"" assembly=""Habanero.Test"" />
+					<property  name=""TestProp"" type=""Habanero.Test.Util.SimpleValueObjectStub"" assembly=""Habanero.Test"" />
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
@@ -72,7 +72,7 @@ namespace Habanero.Test.Util
         [Test]
         public void TestLoadingConstructor()
         {
-            var valueObject = new ValueObjectStub("test");
+            var valueObject = new SimpleValueObjectStub("test");
             Assert.IsTrue(valueObject.ToString().Equals("test"));
         }
 
@@ -80,7 +80,7 @@ namespace Habanero.Test.Util
         [Test]
         public void TestToString()
         {
-            var valueObject = new ValueObjectStub("test");
+            var valueObject = new SimpleValueObjectStub("test");
             Assert.AreEqual("test", valueObject.ToString());
         }
 
@@ -88,15 +88,15 @@ namespace Habanero.Test.Util
         public void TestPropertyType()
         {
             var propDef = (PropDef) _itsClassDef.PropDefcol["TestProp"];
-            Assert.AreEqual(propDef.PropertyType, typeof(ValueObjectStub));
+            Assert.AreEqual(propDef.PropertyType, typeof(SimpleValueObjectStub));
         }
 
         [Test]
         public void Test_BOPropGeneralDataMapper_TryParseCustomProperty()
         {
             //---------------Set up test pack-------------------
-            var propDef = new PropDef("Name", typeof(ValueObjectStub), PropReadWriteRule.ReadWrite, null);
-            var valueObject = new ValueObjectStub("test");
+            var propDef = new PropDef("Name", typeof(SimpleValueObjectStub), PropReadWriteRule.ReadWrite, null);
+            var valueObject = new SimpleValueObjectStub("test");
             BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
             //---------------Assert Precondition----------------
 
@@ -113,7 +113,7 @@ namespace Habanero.Test.Util
         {
             //---------------Set up test pack-------------------
             var propDef = new PropDef("Name", typeof(CustomProperty), PropReadWriteRule.ReadWrite, null);
-            var valueObject = new ValueObjectStub("test");
+            var valueObject = new SimpleValueObjectStub("test");
             var generalDataMapper = new BOPropGeneralDataMapper(propDef);
             //---------------Assert Precondition----------------
 
@@ -129,7 +129,7 @@ namespace Habanero.Test.Util
         public void Test_BOPropGeneralDataMapper_TryParseCustomProperty_StringValue()
         {
             //---------------Set up test pack-------------------
-            var propDef = new PropDef("Name", typeof(ValueObjectStub), PropReadWriteRule.ReadWrite, null);
+            var propDef = new PropDef("Name", typeof(SimpleValueObjectStub), PropReadWriteRule.ReadWrite, null);
             const string test = "test";
             var generalDataMapper = new BOPropGeneralDataMapper(propDef);
             //---------------Assert Precondition----------------
@@ -139,8 +139,8 @@ namespace Habanero.Test.Util
             generalDataMapper.TryParsePropValue(test, out returnValue);
             //---------------Test Result -----------------------
             Assert.IsNotNull(returnValue);
-            Assert.IsInstanceOf(typeof(ValueObjectStub), returnValue);
-            var valueObject = (ValueObjectStub) returnValue;
+            Assert.IsInstanceOf(typeof(SimpleValueObjectStub), returnValue);
+            var valueObject = (SimpleValueObjectStub) returnValue;
             Assert.AreSame(test, valueObject.ToString());
         }
 
@@ -149,7 +149,7 @@ namespace Habanero.Test.Util
         {
             //---------------Set up test pack-------------------
             IBusinessObject bo = _itsClassDef.CreateNewBusinessObject();
-            var valueObject = new ValueObjectStub("test");
+            var valueObject = new SimpleValueObjectStub("test");
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -158,7 +158,7 @@ namespace Habanero.Test.Util
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(actualValue);
-            Assert.IsInstanceOf(typeof(ValueObjectStub), actualValue);
+            Assert.IsInstanceOf(typeof(SimpleValueObjectStub), actualValue);
             Assert.AreSame(valueObject, actualValue);
         }
 
@@ -167,14 +167,14 @@ namespace Habanero.Test.Util
         {
             IBusinessObject bo = _itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
-            Assert.AreSame(typeof(ValueObjectStub), bo.GetPropertyValue("TestProp").GetType());
+            Assert.AreSame(typeof(SimpleValueObjectStub), bo.GetPropertyValue("TestProp").GetType());
             Assert.AreEqual("test", bo.GetPropertyValue("TestProp").ToString());
         }
 
         [Test]
         public void TestSqlFormatter_PrepareValue_ShouldReturnValue()
         {
-            var valueObject = new ValueObjectStub("test");
+            var valueObject = new SimpleValueObjectStub("test");
             var sqlFormatter = new SqlFormatter("'", "'", "f", "yh");
             var preparedValue = sqlFormatter.PrepareValue(valueObject);
             Assert.AreEqual("test", preparedValue.ToString());
@@ -185,7 +185,7 @@ namespace Habanero.Test.Util
         {
             //---------------Set up test pack-------------------
             var propDef = (PropDef)_itsClassDef.PropDefcol["TestProp"];
-            var valueObject = new ValueObjectStub("test");
+            var valueObject = new SimpleValueObjectStub("test");
             //---------------Assert Precondition----------------
             Assert.IsTrue(valueObject.IsValid().Successful);
             //---------------Execute Test ----------------------
@@ -199,7 +199,7 @@ namespace Habanero.Test.Util
         {
             //---------------Set up test pack-------------------
             var propDef = (PropDef)_itsClassDef.PropDefcol["TestProp"];
-            var valueObject = new ValueObjectStub("test") {Successful = false, FailMessage = TestUtil.GetRandomString()};
+            var valueObject = new SimpleValueObjectStub("test") {Successful = false, FailMessage = TestUtil.GetRandomString()};
             //---------------Assert Precondition----------------
             Assert.IsFalse(valueObject.IsValid().Successful);
             //---------------Execute Test ----------------------

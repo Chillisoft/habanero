@@ -697,9 +697,9 @@ namespace Habanero.BO.ClassDefinition
 
         private static bool IsValueObjectValid(object propValueParsedToCorrectType, out string errorMessage)
         {
-            if (propValueParsedToCorrectType is ValueObject)
+            if (propValueParsedToCorrectType is SimpleValueObject)
             {
-                var valueObject = propValueParsedToCorrectType as ValueObject;
+                var valueObject = propValueParsedToCorrectType as SimpleValueObject;
                 var isValid = valueObject.IsValid();
                 if (!isValid.Successful)
                 {

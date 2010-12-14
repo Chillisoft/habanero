@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -29,6 +30,10 @@ namespace Habanero.BO
     public class DataStoreInMemoryXmlReader
     {
         private readonly Stream _stream;
+
+        private List<string> _propertyReadExceptions = new List<string>();
+        public Result ReadResult { get; private set; }
+
 
         public DataStoreInMemoryXmlReader(Stream stream)
         {
@@ -60,11 +65,13 @@ namespace Habanero.BO
                     string propertyValue = reader.Value;
                     try
                     {
-                        bo.Props[propertyName].InitialiseProp(propertyValue);
+                        SetupProperty(bo, propertyName, propertyValue);
                     }
-                    catch (InvalidPropertyNameException)
+                    catch (Exception ex)
                     {
-                        //Do Nothing since the property no longer exists.
+
+                        // Log the exception and continue
+                        _propertyReadExceptions.Add(string.Format("An error occured when attempting to set property '{0}'. {1}", propertyName, ex.Message));
                         continue;
                     }
                 }
@@ -79,7 +86,34 @@ namespace Habanero.BO
                 businessObject.Props.BackupPropertyValues();
             }
 
+            if (_propertyReadExceptions.Count == 0)
+            {
+                ReadResult = new Result(true);
+            }
+            else
+            {
+                ReadResult = new Result(false, BuildExceptionMessage(_propertyReadExceptions));
+            }
             return objects;
         }
+
+        private static string BuildExceptionMessage(IEnumerable<string> propertyReadExceptions)
+        {
+            const string crlf = @"\r\n";
+            var exceptionMessage = new StringBuilder("");
+            foreach (var propertyReadException in propertyReadExceptions)
+            {
+                exceptionMessage.Append(propertyReadException);
+                exceptionMessage.Append(crlf);
+            }
+            return exceptionMessage.ToString();
+        }
+
+        protected  virtual void SetupProperty(IBusinessObject bo, string propertyName, string propertyValue)
+        {
+            bo.Props[propertyName].InitialiseProp(propertyValue);
+        }
     }
+
+
 }
