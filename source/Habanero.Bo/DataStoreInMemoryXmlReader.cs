@@ -71,7 +71,7 @@ namespace Habanero.BO
                     {
 
                         // Log the exception and continue
-                        _propertyReadExceptions.Add(string.Format("An error occured when attempting to set property '{0}'. {1}", propertyName, ex.Message));
+                        _propertyReadExceptions.Add(string.Format("An error occured when attempting to set property '{0}.{1}'. {2}", bo.ClassDef.ClassName , propertyName, ex.Message));
                         continue;
                     }
                 }

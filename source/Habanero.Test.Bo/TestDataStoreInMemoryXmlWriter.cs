@@ -27,6 +27,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+    // ReSharper disable InconsistentNaming
     [TestFixture]
     public class TestDataStoreInMemoryXmlWriter
     {
@@ -136,15 +137,14 @@ namespace Habanero.Test.BO
         public void Test_Read()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
-            DataStoreInMemory savedDataStore = new DataStoreInMemory();
+            LoadMyBOClassDefsWithNoUIDefs();
+            var savedDataStore = new DataStoreInMemory();
             savedDataStore.Add(new MyBO());
-            MemoryStream writeStream = new MemoryStream();
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
+            var writeStream = new MemoryStream();
+            var writer = new DataStoreInMemoryXmlWriter(writeStream);
             writer.Write(savedDataStore);
             BORegistry.BusinessObjectManager = new BusinessObjectManager();
-            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
+            var loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
             DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
             //---------------Assert Precondition----------------
@@ -153,14 +153,13 @@ namespace Habanero.Test.BO
             loadedDataStore.AllObjects = reader.Read();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, loadedDataStore.Count);
-            
         }
+
         [Test]
         public void Test_Read_WhenPropHasBeenRemoved_ShouldReadWithoutProp()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            IClassDef def = MyBO.LoadClassDefsNoUIDef();
+            IClassDef def = LoadMyBOClassDefsWithNoUIDefs();
             DataStoreInMemory savedDataStore = new DataStoreInMemory();
             savedDataStore.Add(new MyBO());
             MemoryStream writeStream = new MemoryStream();
@@ -184,8 +183,7 @@ namespace Habanero.Test.BO
         public void Test_Read_ShouldLoadPropertiesCorrectly()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
+            LoadMyBOClassDefsWithNoUIDefs();
             DataStoreInMemory savedDataStore = new DataStoreInMemory();
             MyBO savedBO = new MyBO();
             savedBO.TestProp = TestUtil.GetRandomString();
@@ -225,8 +223,7 @@ namespace Habanero.Test.BO
         public void Test_ReadWrite_MultipleObjects()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
+            LoadMyBOClassDefsWithNoUIDefs();
             DataStoreInMemory savedDataStore = new DataStoreInMemory();
             MyBO bo1 = new MyBO();
             Car bo2 = new Car();
@@ -253,8 +250,7 @@ namespace Habanero.Test.BO
         public void Test_Read_ShouldLoadObjectsWithCorrectStatus()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
+            LoadMyBOClassDefsWithNoUIDefs();
             DataStoreInMemory savedDataStore = new DataStoreInMemory();
             MyBO savedBO = new MyBO();
             TransactionCommitterInMemory transactionCommitter = new TransactionCommitterInMemory(savedDataStore);
@@ -291,8 +287,7 @@ namespace Habanero.Test.BO
         public void Test_Read_WhenCalled_ShouldSet_ReadResult()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
+            LoadMyBOClassDefsWithNoUIDefs();
             DataStoreInMemory savedDataStore = new DataStoreInMemory();
             savedDataStore.Add(new MyBO());
             MemoryStream writeStream = new MemoryStream();
@@ -301,7 +296,7 @@ namespace Habanero.Test.BO
             BORegistry.BusinessObjectManager = new BusinessObjectManager();
             DataStoreInMemory loadedDataStore = new DataStoreInMemory();
             writeStream.Seek(0, SeekOrigin.Begin);
-            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReaderSpy(writeStream);
+            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryReaderWithSetupPropertyException(writeStream);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, savedDataStore.Count);
             //---------------Execute Test ----------------------
@@ -312,45 +307,101 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_Read_WhenCalledAndNoPropertyReadExceptions_ShouldSet_ReadResult_Successful_True()
+        public void Test_Read_WhenCalledAndNoPropertyReadExceptions_ShouldSet_ReadResult_Successful_True_Bug1336()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
-            DataStoreInMemory savedDataStore = new DataStoreInMemory();
-            savedDataStore.Add(new MyBO());
-            MemoryStream writeStream = new MemoryStream();
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
-            writer.Write(savedDataStore);
-            BORegistry.BusinessObjectManager = new BusinessObjectManager();
-            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
-            writeStream.Seek(0, SeekOrigin.Begin);
-            DataStoreInMemoryXmlReaderSpy reader = new DataStoreInMemoryXmlReaderSpy(writeStream);
-            reader.SetupPropertyShouldThrowException = false;
+            LoadMyBOClassDefsWithNoUIDefs();
+            var bo = new MyBO();
+            var reader = new DataStoreInMemoryXmlReader(WriteBoToStream(bo));
             //---------------Assert Precondition----------------
-            Assert.AreEqual(1, savedDataStore.Count);
             //---------------Execute Test ----------------------
-            loadedDataStore.AllObjects = reader.Read();
+            reader.Read();
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, loadedDataStore.Count);
             Assert.IsNotNull(reader.ReadResult);
             Assert.IsTrue(reader.ReadResult.Successful);
         }
-    }
 
-    public class DataStoreInMemoryXmlReaderSpy : DataStoreInMemoryXmlReader
-    {
-        public DataStoreInMemoryXmlReaderSpy(Stream stream) : base(stream)
+        [Test]
+        public void Acceptance_Test_Read_WhenCalledWithPropertyReadExceptions_ShouldSet_ReadResult_Successful_False_And_Message_Bug1336()
         {
-            SetupPropertyShouldThrowException = false;
+            //---------------Set up test pack-------------------
+            var classDef = LoadMyBOClassDefsWithNoUIDefs();
+            var bo = new MyBO {TestProp = "characters"};
+            var propDef = classDef.PropDefcol["TestProp"];
+            classDef.PropDefcol.Remove(propDef);
+            var propDefWithDifferentType = propDef.Clone();
+
+            // Change type to force property read exception
+            propDefWithDifferentType.PropertyType = typeof(int);
+            classDef.PropDefcol.Add(propDefWithDifferentType);
+            var reader = new DataStoreInMemoryXmlReader(WriteBoToStream(bo));
+            //---------------Assert Precondition----------------
+            Assert.IsNull(reader.ReadResult);
+            //---------------Execute Test ----------------------
+            var businessObjects = reader.Read();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, businessObjects.Count);
+            Assert.IsNotNull(reader.ReadResult);
+            Assert.IsFalse(reader.ReadResult.Successful);
+            StringAssert.Contains("An error occured when attempting to set property 'MyBO.TestProp'.", reader.ReadResult.Message);
         }
 
-        public bool SetupPropertyShouldThrowException { get; set; }
+        [Test]
+        public void Test_Read_WhenCalledWithPropertyReadExceptions_ShouldSet_ReadResult_Successful_False_And_Message_Bug1336()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBOClassDefsWithNoUIDefs();
+            var bo = new MyBO {TestProp = "characters"};
+            var stream = WriteBoToStream(bo);
+            var reader = new DataStoreInMemoryReaderWithSetupPropertyException(stream);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(reader.ReadResult);
+            //---------------Execute Test ----------------------
+            var businessObjects = reader.Read();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, businessObjects.Count);
+            Assert.IsNotNull(reader.ReadResult);
+            Assert.IsFalse(reader.ReadResult.Successful);
+            StringAssert.Contains("An error occured when attempting to set property 'MyBO.MyBoID'.", reader.ReadResult.Message);
+            StringAssert.Contains("An error occured when attempting to set property 'MyBO.TestProp'.", reader.ReadResult.Message);
+            StringAssert.Contains("An error occured when attempting to set property 'MyBO.TestProp2'.", reader.ReadResult.Message);
+        }
+
+        private static MemoryStream WriteBoToStream(MyBO bo)
+        {
+            var savedDataStore = new DataStoreInMemory();
+            savedDataStore.Add(bo);
+            var writeStream = new MemoryStream();
+            var writer = new DataStoreInMemoryXmlWriter(writeStream);
+            writer.Write(savedDataStore);
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
+            writeStream.Seek(0, SeekOrigin.Begin);
+            return writeStream;
+        }
+
+        private static IClassDef LoadMyBOClassDefsWithNoUIDefs()
+        {
+            ClassDef.ClassDefs.Clear();
+            return MyBO.LoadClassDefsNoUIDef();
+        }
+        // ReSharper restore InconsistentNaming
+
+    }
+
+    /// <summary>
+    /// This spy class is used to simulate SetupPropertyExceptions.  We want to be able to test the ReadResult property when SetupProperty throws exceptions
+    /// </summary>
+    public class DataStoreInMemoryReaderWithSetupPropertyException : DataStoreInMemoryXmlReader
+    {
+        public DataStoreInMemoryReaderWithSetupPropertyException(Stream stream) : base(stream)
+        {
+        }
         
         protected override void SetupProperty(IBusinessObject bo, string propertyName, string propertyValue)
         {
-            if (SetupPropertyShouldThrowException) throw new Exception("Test property read exception");
+            throw new Exception("Test property read exception");
             
         }
     }
+
 }
