@@ -17,7 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Linq.Expressions;
+//using System.Linq.Expressions;
 using System.Reflection;
 using Habanero.Base.Exceptions;
 using log4net;
@@ -48,7 +48,7 @@ namespace Habanero.Util
             PropertyInfo propInfo = parameterType.GetProperty(
                 propertyName, BindingFlags.Instance | BindingFlags.Public);
             if (propInfo != null)
-            { 
+            {
                 MethodInfo setMethod = propInfo.GetSetMethod();
                 if (setMethod != null)
                 {
@@ -62,7 +62,7 @@ namespace Habanero.Util
                             object customEnumValue = Enum.Parse(enumType, enumItemName);
                             if (customEnumValue != null)
                             {
-                                propInfo.SetValue(obj, customEnumValue, new object[] {});
+                                propInfo.SetValue(obj, customEnumValue, new object[] { });
                                 return;
                             }
                             throw new ReflectionException("Specified enum value ('" + enumItemName +
@@ -100,7 +100,7 @@ namespace Habanero.Util
                     Type enumType = getMethod.ReturnType;
                     if (enumType.IsEnum)
                     {
-                        object returnedEnumValue = propInfo.GetValue(obj, new object[] {});
+                        object returnedEnumValue = propInfo.GetValue(obj, new object[] { });
                         return returnedEnumValue != null ? Enum.GetName(enumType, returnedEnumValue) : "";
                     }
                     throw new ReflectionException("Specified property ('" + propertyName + "') is not an Enum type.");
@@ -138,10 +138,11 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                string message = String.Format("Error retrieving public property '{0}' from object of type '{1}'", 
+                string message = String.Format("Error retrieving public property '{0}' from object of type '{1}'",
                     propertyName, className);
                 _log.Error(String.Format("{0}" + Environment.NewLine + "{1}", message,
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                //throw ex.InnerException;
                 throw new HabaneroApplicationException(message, ex.InnerException);
             }
         }
@@ -296,14 +297,14 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                string message = String.Format("Error setting public property '{0}' for object of type '{1}'" , propertyName, className);
-                _log.Error(message + Environment.NewLine + String.Format("{0}", ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                string message = String.Format("Error setting public property '{0}' for object of type '{1}'", propertyName, className);
+                _log.Error(String.Format(message + Environment.NewLine + "{2}", ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw new HabaneroApplicationException(message, ex.InnerException);
             }
             catch (ArgumentException ex)
             {
                 string message = String.Format("Error setting public property '{0}' for object of type '{1}'", propertyName, className);
-                _log.Error(message + Environment.NewLine + String.Format("{0}", ExceptionUtilities.GetExceptionString(ex, 8, true)));
+                _log.Error(String.Format(message + Environment.NewLine + "{2}", ExceptionUtilities.GetExceptionString(ex, 8, true)));
                 throw new HabaneroApplicationException(message, ex);
             }
         }
@@ -413,7 +414,7 @@ namespace Habanero.Util
                                           "Virtual method call for '{0}' does not exist for object of type '{1}'.",
                                           methodName, className)));
                 }
-                return methodInfo.Invoke(obj, new object[] {});
+                return methodInfo.Invoke(obj, new object[] { });
             }
             catch (TargetInvocationException ex)
             {
@@ -430,7 +431,7 @@ namespace Habanero.Util
         /// <param name="methodName">The name of the method</param>
         public static object ExecutePrivateMethod(object obj, string methodName)
         {
-            return ExecutePrivateMethod(obj, methodName, new object[]{});
+            return ExecutePrivateMethod(obj, methodName, new object[] { });
         }
 
         /// <summary>
@@ -475,7 +476,7 @@ namespace Habanero.Util
         /// <returns>The Property Type</returns>
         public static Type GetUndelyingPropertType(Type classType, string propName)
         {
-            PropertyInfo propertyInfo = GetPropertyInfo(classType, propName) 
+            PropertyInfo propertyInfo = GetPropertyInfo(classType, propName)
                         ?? GetPrivatePropertyInfo(classType, propName);
             if (propertyInfo == null || propertyInfo.PropertyType == null)
             {
@@ -492,7 +493,7 @@ namespace Habanero.Util
         /// <returns></returns>
         public static Type GetUndelyingPropertType(PropertyInfo propertyInfo)
         {
-            if(propertyInfo == null) return null;
+            if (propertyInfo == null) return null;
             Type propertyType = propertyInfo.PropertyType;
             return GetNullableUnderlyingType(propertyType);
         }
@@ -518,68 +519,70 @@ namespace Habanero.Util
         ///<returns></returns>
         public static bool IsNullableType(Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof (Nullable<>));
+            return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
-        // ReSharper restore PossibleNullReferenceException
-        /// <summary>
-        /// Returns the Property Name of the property used in the Lambda expression of type
-        /// bo -> bo.MyProperty. This function will return 'MyProperty'.
-        /// </summary>
-        /// <typeparam name="TModel">The object whose Property Name is being returned</typeparam>
-        /// <typeparam name="TReturn">The Return type of the Lambda Expression</typeparam>
-        /// <param name="propExpression">The Lambda expression</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"> Exception if the lamda is not a lambda for a property</exception>
-        public static string GetPropertyName<TModel, TReturn>(Expression<Func<TModel, TReturn>> propExpression)
-        {
-            PropertyInfo propertyInfo = GetPropertyInfo(propExpression);
-            return propertyInfo.Name;
-        }
+        /*
+                // ReSharper restore PossibleNullReferenceException
+                /// <summary>
+                /// Returns the Property Name of the property used in the Lambda expression of type
+                /// bo -> bo.MyProperty. This function will return 'MyProperty'.
+                /// </summary>
+                /// <typeparam name="TModel">The object whose Property Name is being returned</typeparam>
+                /// <typeparam name="TReturn">The Return type of the Lambda Expression</typeparam>
+                /// <param name="propExpression">The Lambda expression</param>
+                /// <returns></returns>
+                /// <exception cref="ArgumentException"> Exception if the lamda is not a lambda for a property</exception>
+                public static string GetPropertyName<TModel, TReturn>(Expression<Func<TModel, TReturn>> propExpression)
+                {
+                    PropertyInfo propertyInfo = GetPropertyInfo(propExpression);
+                    return propertyInfo.Name;
+                }
 
-        /// <summary>
-        /// Returns the <see cref="PropertyInfo"/> of the property used in the Lambda expression of type
-        /// bo -> bo.MyProperty. This function will return the PropertyInfo for MyProperty.
-        /// </summary>
-        /// <typeparam name="TModel">The object whose PropertyInfo is being returned</typeparam>
-        /// <typeparam name="TReturn">The Return type of the Lambda expression</typeparam>
-        /// <param name="propExpression">The Lambda expression</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"> Exception if the lamda is not a lambda for a property</exception>
-        public static PropertyInfo GetPropertyInfo<TModel, TReturn>(Expression<Func<TModel, TReturn>> propExpression)
-        {
-            var memberExpression = GetMemberExpression(propExpression);
-            return (PropertyInfo)memberExpression.Member;
-        }
+                /// <summary>
+                /// Returns the <see cref="PropertyInfo"/> of the property used in the Lambda expression of type
+                /// bo -> bo.MyProperty. This function will return the PropertyInfo for MyProperty.
+                /// </summary>
+                /// <typeparam name="TModel">The object whose PropertyInfo is being returned</typeparam>
+                /// <typeparam name="TReturn">The Return type of the Lambda expression</typeparam>
+                /// <param name="propExpression">The Lambda expression</param>
+                /// <returns></returns>
+                /// <exception cref="ArgumentException"> Exception if the lamda is not a lambda for a property</exception>
+                public static PropertyInfo GetPropertyInfo<TModel, TReturn>(Expression<Func<TModel, TReturn>> propExpression)
+                {
+                    var memberExpression = GetMemberExpression(propExpression);
+                    return (PropertyInfo)memberExpression.Member;
+                }
 
-        private static MemberExpression GetMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression)
-        {
-            return GetMemberExpression(expression, true);
-        }
-        private static MemberExpression GetMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression, bool enforceCheck)
-        {
-            MemberExpression memberExpression = null;
-            switch (expression.Body.NodeType)
-            {
-                case ExpressionType.Convert:
-                    var body = (UnaryExpression)expression.Body;
-                    memberExpression = body.Operand as MemberExpression;
-                    break;
-                case ExpressionType.MemberAccess:
-                    memberExpression = expression.Body as MemberExpression;
-                    break;
-            }
+                private static MemberExpression GetMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression)
+                {
+                    return GetMemberExpression(expression, true);
+                }
+                private static MemberExpression GetMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression, bool enforceCheck)
+                {
+                    MemberExpression memberExpression = null;
+                    switch (expression.Body.NodeType)
+                    {
+                        case ExpressionType.Convert:
+                            var body = (UnaryExpression)expression.Body;
+                            memberExpression = body.Operand as MemberExpression;
+                            break;
+                        case ExpressionType.MemberAccess:
+                            memberExpression = expression.Body as MemberExpression;
+                            break;
+                    }
 
-            if (enforceCheck && memberExpression == null)
-            {
-                throw new ArgumentException(expression.ToString() + " - Not a member accessor", "expression");
-            }
+                    if (enforceCheck && memberExpression == null)
+                    {
+                        throw new ArgumentException(expression.ToString() + " - Not a member accessor", "expression");
+                    }
 
-            return memberExpression;
-        }
+                    return memberExpression;
+                }
+        */
     }
 
-// ReSharper restore UnusedAutoPropertyAccessor.Local
-    
+    // ReSharper restore UnusedAutoPropertyAccessor.Local
 
-   
+
+
 }

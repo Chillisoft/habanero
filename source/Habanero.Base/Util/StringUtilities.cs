@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;//TODO brett 08 Jun 2010: For 2_0
+//using System.Linq;//TODO brett 08 Jun 2010: For 2_0
 using System.Text;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
@@ -284,40 +284,61 @@ namespace Habanero.Util
             }
             return formatted;
         }
-               //TODO brett 08 Jun 2010: For 2_0
-          /// <summary>
-                /// Singularises the input string using heuristics and rule.
-                /// </summary>
-                /// <param name="input"></param>
-                /// <returns></returns>
-                public static string Singularize(string input)
-                {
-                    if (input == String.Empty) return input;
 
-                    if (myUnaffectedSingular.Any(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase)))
-                    {
-                        return input;
-                    }
-                    var singularised = Singularise(input, myIrregularSingular);
-                    if (singularised != null) return singularised;
+        //TODO brett 08 Jun 2010: For 2_0
+        /// <summary>
+        /// Singularises the input string using heuristics and rule.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string Singularize(string input)
+        {
+            if (input == String.Empty) return input;
 
-                    singularised = Singularise(input, mySingularRules);
-                    return singularised ?? input;
-                }
+            foreach (var unaffectedSingularRules in myUnaffectedSingular)
+            {
+                if (Regex.IsMatch(input, unaffectedSingularRules, RegexOptions.IgnoreCase)) return input;
+            }
+            /*//TODO_ brett 08 Jun 2010: For DotNet 2_0
+                        if (myUnaffectedSingular.Any(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase)))
+                        {
+                            return input;
+                        }*/
+            var singularised = Singularise(input, myIrregularSingular);
+            if (singularised != null) return singularised;
 
-                private static string Singularise(string input, NameValueCollection singularisationRules)
-                {
-                    var singularisationRule = singularisationRules
-                        .Cast<string>()
-                        .Where(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
-                        .FirstOrDefault();
-                    if (singularisationRule != null)
-                    {
-                        return Regex.Replace(input, singularisationRule, singularisationRules[singularisationRule],
-                                             RegexOptions.IgnoreCase);
-                    }
-                    return null;
-                }/**/
+            singularised = Singularise(input, mySingularRules);
+            return singularised ?? input;
+        }
+
+        private static string Singularise(string input, NameValueCollection singularisationRules)
+        {
+            string singularisationRule = null;
+            foreach (var rule in singularisationRules)
+            {
+                var stringRule = (string)rule;
+                if (!Regex.IsMatch(input, stringRule, RegexOptions.IgnoreCase)) continue;
+                singularisationRule = stringRule;
+                break;
+            }
+            if (singularisationRule != null)
+            {
+                return Regex.Replace(input, singularisationRule, singularisationRules[singularisationRule],
+                                     RegexOptions.IgnoreCase);
+            }
+            return null;
+            /*//TODO_ brett 08 Jun 2010: For DotNet 2_0
+                        var singularisationRule = singularisationRules
+                            .Cast<string>()
+                            .Where(rule => Regex.IsMatch(input, rule, RegexOptions.IgnoreCase))
+                            .FirstOrDefault();
+                        if (singularisationRule != null)
+                        {
+                            return Regex.Replace(input, singularisationRule, singularisationRules[singularisationRule],
+                                                 RegexOptions.IgnoreCase);
+                        }
+                        return null;*/
+        }
 
         ///<summary>
         /// Pluralises a noun using standard rule e.g. Name => Names

@@ -23,7 +23,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
-using System.Linq;
+//using System.Linq;
 
 namespace Habanero.DB
 {
@@ -266,11 +266,17 @@ namespace Habanero.DB
         
         private void AppendFields(StringBuilder builder)
         {
-            var fields = from field in _selectQuery.Fields.Values
-                            select String.Format("{0}{1}", 
-                                field.Source != null ? this.Aliases[field.Source.ToString()] + "." : "", 
+            string[] formattedFields = new string[_selectQuery.Fields.Values.Count];
+            int i = 0;
+            foreach (var field in _selectQuery.Fields.Values)
+            {
+                formattedFields[i] = String.Format("{0}{1}",
+                                field.Source != null ? this.Aliases[field.Source.ToString()] + "." : "",
                                 DelimitFieldName(field.FieldName));
-            builder.AppendFormat(String.Join(", ", fields.ToArray()));
+                i++;
+            }
+
+            builder.AppendFormat(String.Join(", ", formattedFields));
         }
 
 
@@ -443,9 +449,12 @@ namespace Habanero.DB
 
             _aliasCount = _aliasCount + 1;
 
-            var sourceParts = sourceName.Split('.').ToList();
+            var sourceParts = sourceName.Split('.');
             Queue<string> queue = new Queue<string>();
-            sourceParts.ForEach(queue.Enqueue);
+            foreach (var sourcePart in sourceParts)
+            {
+                queue.Enqueue(sourcePart);
+            }
 
             string subSourceName = "";
             while (queue.Count > 0)

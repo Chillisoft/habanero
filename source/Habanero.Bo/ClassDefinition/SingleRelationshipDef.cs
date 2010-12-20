@@ -18,7 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base;
 using Habanero.Util;
 
@@ -210,10 +210,23 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         private bool AreAllPropsCompulsory()
         {
-            return this.OwningBOHasForeignKey
+            //TODO_ brett 08 Jun 2010: For DotNet 2_0  
+            if (!(this.OwningBOHasForeignKey
                    && this.RelKeyDef != null
-                   && this.RelKeyDef.Count > 0
-                   && this.RelKeyDef.All(PropDefIsCompulsory);
+                   && this.RelKeyDef.Count > 0)) return false;
+
+            foreach (var relPropDef in this.RelKeyDef)
+            {
+                if (PropDefIsCompulsory(relPropDef)) continue;
+                return false;
+            }
+            return true;
+            // ...end of .NET 2 Code.
+            /*//TODO_ brett 08 Jun 2010: For DotNet 2_0
+                        return this.OwningBOHasForeignKey
+                               && this.RelKeyDef != null
+                               && this.RelKeyDef.Count > 0
+                               && this.RelKeyDef.All(PropDefIsCompulsory);*/
         }
 
         private bool PropDefIsCompulsory(IRelPropDef def)

@@ -360,6 +360,7 @@ namespace Habanero.Test.Util
             Assert.IsNull(propType);
         }
          //Will not work for DotNet For 2_00
+        /*
           [Test]
                 public void Test_GetPropertyInfo_WithLambda_ShouldRetInfo()
                 {
@@ -405,7 +406,7 @@ namespace Habanero.Test.Util
                     {
                         StringAssert.Contains("Not a member access", ex.Message);
                     }
-                }/**/
+                }*/
 
         // ReSharper disable UnusedAutoPropertyAccessor.Local
 

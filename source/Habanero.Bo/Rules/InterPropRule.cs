@@ -17,7 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Linq.Expressions;
+//using System.Linq.Expressions;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
@@ -157,7 +157,7 @@ namespace Habanero.BO.Rules
         {
         }
  //Will not work For DotNet 2_0
-        ///<summary>
+/*        ///<summary>
         /// Overloaded Constructor for the Generic InterPropRule
         ///</summary>
         ///<param name="propExpressionLeft"></param>
@@ -174,6 +174,6 @@ namespace Habanero.BO.Rules
 
             this.LeftProp = classDef.PropDefcol[propertyNameLeft];
             this.RightProp = classDef.PropDefcol[propertyNameRight];
-        }
+        }*/
     }
 }

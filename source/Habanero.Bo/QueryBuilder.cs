@@ -18,7 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -75,14 +75,11 @@ namespace Habanero.BO
 
         private static void AddAllPropsToQuery(IClassDef classDef, SelectQuery selectQuery)
         {
-            foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance.ToList())
+            foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance)
             {
                 if (propDef.Persistable)
                 {
-                    IClassDef fieldClassDef = classDef;
-                    if (!((ClassDef)classDef).IsUsingConcreteTableInheritance())
-                        fieldClassDef = propDef.ClassDef;
-                    QueryField queryField = GetQueryField(fieldClassDef, propDef);
+                    QueryField queryField = GetQueryField(classDef, propDef);
                     selectQuery.Fields.Add(propDef.PropertyName, queryField);
                 }
             }

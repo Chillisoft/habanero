@@ -19,7 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
@@ -36,7 +36,7 @@ namespace Habanero.Util
         ///</summary>
         ///<param name="obj">The object to be tested it it is null or not.</param>
         ///<returns>True if the object is null, or false if not.</returns>
-        public static bool IsNull(this object obj)
+        public static bool IsNull(object obj)
         {
             WeakReference testNull = new WeakReference(obj);
             return !testNull.IsAlive;

@@ -18,7 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
@@ -1006,7 +1006,14 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public bool HasAutoIncrementingField
         {
-            get { return _propDefCol.Cast<PropDef>().Any(def => def.AutoIncrementing); }
+            get
+            {
+                foreach (PropDef def in _propDefCol)
+                {
+                    if (def.AutoIncrementing) return true;
+                }
+                return false;
+            }
         }
 
         ///<summary>

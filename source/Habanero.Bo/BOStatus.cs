@@ -18,9 +18,10 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -113,12 +114,18 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid(out string message)
         {
+            //TODO_ brett 08 Jun 2010: For DotNet 2_0
             IList<IBOError> errors;
             bool isValid = IsValid(out errors);
-            message = errors
-                .Aggregate("", (current, error) 
-                    => current + (error.Message + Environment.NewLine));
-            return isValid;
+            message = string.Empty;
+            if (isValid) return true;
+
+            foreach (var objError in errors)
+            {
+                message = StringUtilities.AppendMessage(message, objError.Message, Environment.NewLine);
+            }
+            return false;
+            // ...end of .NET 2 Code.
         }
 
         /// <summary>

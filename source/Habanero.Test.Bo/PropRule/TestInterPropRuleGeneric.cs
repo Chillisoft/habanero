@@ -125,7 +125,7 @@ namespace Habanero.Test.BO.PropRule
                 StringAssert.Contains("propLeft", ex.ParamName);
             }
         }
-        
+        /*
                 [Test]
                 public void Test_Construct_WithNullRightExpression_ShouldRaiseError()
                 {
@@ -192,7 +192,7 @@ namespace Habanero.Test.BO.PropRule
                     //---------------Test Result -----------------------
                     Assert.AreSame(propDefLeft, rule.LeftProp);
                     Assert.AreSame(propDefRight, rule.RightProp);
-                }/**/
+                }*/
 
         /// <summary>
         /// Fake so that can use simple constructor.
