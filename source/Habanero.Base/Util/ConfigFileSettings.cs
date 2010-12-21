@@ -23,30 +23,33 @@ using Habanero.Base;
 
 namespace Habanero.Util
 {
+
+    //TODO andrew 21 Dec 2010: Removed all failing code to get Habanero to compile with CF
+
     /// <summary>
     /// Stores settings from the application's configuration file
     /// </summary>
     public class ConfigFileSettings : ISettings
     {
-        private readonly Configuration _configuration;
+        //private readonly Configuration _configuration;
 
         /// <summary>
         /// Initialises a new settings store with the default Exe config settings storer.
         /// </summary>
         public ConfigFileSettings()
         {
-            _configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+           // _configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
-        ///<summary>
-        /// Initialises a new settings store with the specified config settings storer.
-        ///</summary>
-        ///<param name="configuration">The Configuration to use to store the settings.</param>
-        public ConfigFileSettings(Configuration configuration)
-        {
-            if (configuration == null) throw new ArgumentNullException("configuration");
-            _configuration = configuration;
-        }
+        /////<summary>
+        ///// Initialises a new settings store with the specified config settings storer.
+        /////</summary>
+        /////<param name="configuration">The Configuration to use to store the settings.</param>
+        //public ConfigFileSettings(Configuration configuration)
+        //{
+        //    if (configuration == null) throw new ArgumentNullException("configuration");
+        //    _configuration = configuration;
+        //}
 
         ///<summary>
         /// Returns whether the setting exists or not.
@@ -55,7 +58,8 @@ namespace Habanero.Util
         ///<returns>Returns whether the setting exists or not</returns>
         public bool HasSetting(string settingName)
         {
-            return GetSettingConfigurationElement(settingName) != null;
+            //return GetSettingConfigurationElement(settingName) != null;
+            return false;
         }
 
         /// <summary>
@@ -143,30 +147,31 @@ namespace Habanero.Util
 
         private string GetSettingValue(string settingName)
         {
-            KeyValueConfigurationElement configurationElement = GetSettingConfigurationElement(settingName);
-            if (configurationElement == null)
-                throw new InvalidOperationException(
-                    string.Format("The key '{0}' does not exist in the appSettings configuration section.", settingName));
-            return configurationElement.Value;
+            //KeyValueConfigurationElement configurationElement = GetSettingConfigurationElement(settingName);
+            //if (configurationElement == null)
+            //    throw new InvalidOperationException(
+            //        string.Format("The key '{0}' does not exist in the appSettings configuration section.", settingName));
+            //return configurationElement.Value;
+            return string.Empty;
         }
 
         private void SetSettingValue(string settingName, string settingValue)
         {
-            KeyValueConfigurationElement configurationElement = GetSettingConfigurationElement(settingName);
-            if (configurationElement == null)
-            {
-                _configuration.AppSettings.Settings.Add(settingName, settingValue);
-            }
-            else
-            {
-                configurationElement.Value = settingValue;
-            }
-            _configuration.Save(ConfigurationSaveMode.Modified);
+            //KeyValueConfigurationElement configurationElement = GetSettingConfigurationElement(settingName);
+            //if (configurationElement == null)
+            //{
+            //    _configuration.AppSettings.Settings.Add(settingName, settingValue);
+            //}
+            //else
+            //{
+            //    configurationElement.Value = settingValue;
+            //}
+            //_configuration.Save(ConfigurationSaveMode.Modified);
         }
 
-        private KeyValueConfigurationElement GetSettingConfigurationElement(string settingName)
-        {
-            return _configuration.AppSettings.Settings[settingName];
-        }
+        //private KeyValueConfigurationElement GetSettingConfigurationElement(string settingName)
+        //{
+        //    return _configuration.AppSettings.Settings[settingName];
+        //}
     }
 }

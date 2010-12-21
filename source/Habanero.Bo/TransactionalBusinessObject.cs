@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Util;
 
 namespace Habanero.BO
 {
@@ -195,7 +196,7 @@ namespace Habanero.BO
                     if (this.BusinessObject.Status.IsNew && boKey.HasAutoIncrementingProperty) continue;
                     if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, primaryKeyCriteria).Count > 0)
                     {
-                        errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
+                        errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + StringUtilitiesCE.NewLine;
                     }
                     continue;
                 }
@@ -205,7 +206,7 @@ namespace Habanero.BO
                     keyCriteria = new Criteria(keyCriteria, Criteria.LogicalOp.And, new Criteria(Criteria.LogicalOp.Not, primaryKeyCriteria));
 
                 if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, keyCriteria).Count > 0)
-                    errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
+                    errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + StringUtilitiesCE.NewLine;
             }
 
             return !String.IsNullOrEmpty(errMsg);

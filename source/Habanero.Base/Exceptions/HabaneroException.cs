@@ -17,7 +17,9 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Runtime.Serialization;
+
+//TODO andrew 21 Dec 2010: Removed Serialization code
+//using System.Runtime.Serialization;
 
 namespace Habanero.Base.Exceptions
 {
@@ -73,16 +75,16 @@ namespace Habanero.Base.Exceptions
             _developerMessage = developerMessage;
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected HabaneroDeveloperException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected HabaneroDeveloperException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
 
         ///<summary>
         /// The developer message set in teh constructor
@@ -91,16 +93,16 @@ namespace Habanero.Base.Exceptions
         {
             get { return _developerMessage; }
         }
-        /// <summary>
-        /// Required for ISerializable.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("developerMessage", _developerMessage);
-        }
+        ///// <summary>
+        ///// Required for ISerializable.
+        ///// </summary>
+        ///// <param name="info"></param>
+        ///// <param name="context"></param>
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    base.GetObjectData(info, context);
+        //    info.AddValue("developerMessage", _developerMessage);
+        //}
     }
     /// <summary>
     /// Provides a generalised application exception to throw
@@ -134,15 +136,15 @@ namespace Habanero.Base.Exceptions
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected HabaneroApplicationException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected HabaneroApplicationException(SerializationInfo info, StreamingContext context) : base(info, context)
+        //{
+        //}
     }
 
     /// <summary>
@@ -178,15 +180,15 @@ namespace Habanero.Base.Exceptions
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected UserException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected UserException(SerializationInfo info, StreamingContext context) : base(info, context)
+        //{
+        //}
     }
     /// <summary>
     /// Provides an Exception class which is raised in the Habanero Architecture when a developer uses 
@@ -226,16 +228,16 @@ namespace Habanero.Base.Exceptions
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected HabaneroIncorrectTypeException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected HabaneroIncorrectTypeException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
 
         ///<summary>
         /// The developer message set in the constructor
@@ -244,15 +246,15 @@ namespace Habanero.Base.Exceptions
         {
             get { return _developerMessage; }
         }
-        /// <summary>
-        /// Required for ISerializable.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("developerMessage", _developerMessage);
-        }
+        ///// <summary>
+        ///// Required for ISerializable.
+        ///// </summary>
+        ///// <param name="info"></param>
+        ///// <param name="context"></param>
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    base.GetObjectData(info, context);
+        //    info.AddValue("developerMessage", _developerMessage);
+        //}
     }
 }

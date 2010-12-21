@@ -21,11 +21,14 @@ using System.ComponentModel;
 
 namespace Habanero.Base
 {
+
+    //TODO andrew 21 Dec 2010: CF : Removed TypeConverter Attrib
+
     ///<summary>
     /// This is a wrapper class for DateTime.Now. This is used by search and filter criteria to build up a search Criteria object.
     /// For loading the appropriate objects from the collection.
     ///</summary>
-    [TypeConverter(typeof(DateTimeNowConverter))]
+    //[TypeConverter(typeof(DateTimeNowConverter))]
     public class DateTimeNow : IComparable<DateTime>, IComparable, IResolvableToValue, IResolvableToValue<DateTime>
     {
         ///<summary>

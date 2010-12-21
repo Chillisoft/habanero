@@ -18,7 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Runtime.Serialization;
+
+//TODO andrew 21 Dec 2010: Removed Serilization code
+//using System.Runtime.Serialization;
 
 namespace Habanero.Base.Exceptions
 {
@@ -56,16 +58,16 @@ namespace Habanero.Base.Exceptions
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected InvalidPropertyNameException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected InvalidPropertyNameException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
 
 

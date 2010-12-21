@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 //using System.Linq;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.Util;
 
 namespace Habanero.Base
@@ -50,7 +51,7 @@ namespace Habanero.Base
             throw new RecordedExceptionsException(string.Format(
                     "An Exception that was recorded by the RecordingExceptionNotifier and has been rethrown." + 
                     "{0}Title: {1}{0}Further Message: {2}",
-                    Environment.NewLine, exceptionDetail.Title, this.ExceptionMessage),
+                    StringUtilitiesCE.NewLine, exceptionDetail.Title, this.ExceptionMessage),
                     exceptionDetail.Exception);
         }
 
@@ -77,7 +78,7 @@ namespace Habanero.Base
                 string message = "";
                 foreach (var exceptionDetail in Exceptions)
                 {
-                    message = StringUtilities.AppendMessage(message, exceptionDetail.ToString(), Environment.NewLine);
+                    message = StringUtilities.AppendMessage(message, exceptionDetail.ToString(), StringUtilitiesCE.NewLine);
                 }
                 return message;
             }

@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -52,7 +53,7 @@ namespace Habanero.BO
 			CheckCanDeleteSafe(bo, new List<IBusinessObject>(), listOfPaths, "", ref results);
 			foreach (KeyValuePair<string, int> pair in results)
 			{
-				reason += Environment.NewLine + String.Format(
+                reason += StringUtilitiesCE.NewLine + String.Format(
 					"There are {0} objects related through the '{1}' relationship that need to be deleted first.",
 					pair.Value, pair.Key);
 			}

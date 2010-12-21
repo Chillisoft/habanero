@@ -21,6 +21,7 @@ using System.Collections.Generic;
 //using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.Util;
 
 namespace Habanero.BO
@@ -122,7 +123,7 @@ namespace Habanero.BO
 
             foreach (var objError in errors)
             {
-                message = StringUtilities.AppendMessage(message, objError.Message, Environment.NewLine);
+                message = StringUtilities.AppendMessage(message, objError.Message, StringUtilitiesCE.NewLine);
             }
             return false;
             // ...end of .NET 2 Code.

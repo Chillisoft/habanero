@@ -363,10 +363,11 @@ namespace Habanero.Base
             (string searchCriteria, string orderByClause, int firstRecordToLoad, int numberOfRecordsToLoad,
              out int totalNoOfRecords);
 
+        //TODO andrew 21 Dec 2010: Removed ReflectionPermission as it is not supported in .Net compact framework
         /// <summary>
         /// Refreshes the business objects in the collection
         /// </summary>
-        [ReflectionPermission(SecurityAction.Demand)]
+        //[ReflectionPermission(SecurityAction.Demand)]
         void Refresh();
 
     }

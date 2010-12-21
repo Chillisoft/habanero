@@ -1,6 +1,7 @@
 using System;
-using System.Runtime.Serialization;
 
+//TODO andrew 21 Dec 2010: Removed Serialization code
+//using System.Runtime.Serialization;
 namespace Habanero.Base.Exceptions
 {
     /// <summary>
@@ -37,15 +38,15 @@ namespace Habanero.Base.Exceptions
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected InvalidOrderCriteriaException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected InvalidOrderCriteriaException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
 }

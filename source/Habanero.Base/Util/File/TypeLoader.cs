@@ -22,8 +22,10 @@ using System.Drawing;
 using System.IO;
 //using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
+//TODO andrew 21 Dec 2010: System.Windows.Forms doesn't exist in compact framework 2
+//using System.Windows.Forms;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 
 namespace Habanero.Util
 {
@@ -55,7 +57,9 @@ namespace Habanero.Util
             {
                 if (assemblyName == "System.Windows.Forms")
                 {
-                    classAssembly = typeof(Control).Assembly;
+                    // This should never happen
+                    throw new HabaneroApplicationException("Assembly name is System.Windows.Forms, this should not be possible in .Net Compact Framework apps");
+                    //classAssembly = typeof(Control).Assembly;
                 } else if (assemblyName == "System")
                 {
                     classAssembly = typeof(String).Assembly;
@@ -95,9 +99,10 @@ namespace Habanero.Util
             Type classType = classAssembly.GetType(assemblyName + "." + className);
             //If the classType is not found then check if it is a fully qualified 
             // classname. If so, then use it to get the classType.
-            if (classType == null && className.Contains(assemblyName))
+            if (classType == null && StringUtilitiesCE.Contains(assemblyName, className))
             {
-                classType = classAssembly.GetType(className, false, true);
+                //classType = classAssembly.GetType(className, false, true);
+                classType = classAssembly.GetType(className, false);
             }
             if (classType == null)
             {
@@ -105,12 +110,14 @@ namespace Habanero.Util
                 if (posPoint != -1)
                 {
                     string assemblyPrefix = assemblyName.Substring(0, posPoint);
-                    classType = classAssembly.GetType(assemblyPrefix + "." + className, false, true);
+                    //classType = classAssembly.GetType(assemblyPrefix + "." + className, false, true);
+                    classType = classAssembly.GetType(assemblyPrefix + "." + className, false);
                 }
             }
             if (classType == null) 
             {
-                classType = classAssembly.GetType(className, false, true);
+                //classType = classAssembly.GetType(className, false, true);
+                classType = classAssembly.GetType(className, false);
             }
             if(classType == null)
             {
@@ -192,7 +199,9 @@ namespace Habanero.Util
         {
             if (classType != null)
             {
-                assemblyName = CleanUpAssemblyName(classType.Assembly.ManifestModule.ScopeName);
+                //assemblyName = CleanUpAssemblyName(classType.Assembly.ManifestModule.ScopeName);
+                //TODO andrew 21 Dec 2010: Is this the correct change need to check this with tests
+                assemblyName = CleanUpAssemblyName(classType.Assembly.ManifestModule.Name);
                 className = classType.FullName;
             } else
             {
@@ -210,7 +219,7 @@ namespace Habanero.Util
         {
             if (assemblyName.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase)
                 || assemblyName.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase))
-                assemblyName = assemblyName.Remove(assemblyName.Length - 4);
+                assemblyName = assemblyName.Remove(0, assemblyName.Length - 4);
             return assemblyName;
         }
     }

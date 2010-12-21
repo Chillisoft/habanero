@@ -198,24 +198,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Name>Habanero.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
-      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
-      <Name>Habanero.BO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Console\Habanero.Console.csproj">
-      <Project>{9B32C6E9-037A-4610-85CB-95C9A050CF7C}</Project>
-      <Name>Habanero.Console</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
-      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
-      <Name>Habanero.DB</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -236,6 +218,16 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{75043A90-2D88-43A0-8C64-EA51B6B2826A}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{F214D8D4-F00F-46E7-8167-86331E5398DB}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Base\Exceptions\" />

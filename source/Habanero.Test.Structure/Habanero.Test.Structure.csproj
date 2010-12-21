@@ -135,36 +135,6 @@
     <EmbeddedResource Include="ClassDefs.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Name>Habanero.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Name>Habanero.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
-      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
-      <Name>Habanero.BO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
-      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
-      <Name>Habanero.BO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
-      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
-      <Name>Habanero.DB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
-      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
-      <Name>Habanero.DB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
-      <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
-      <Name>Habanero.Test</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +158,20 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{75043A90-2D88-43A0-8C64-EA51B6B2826A}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{F214D8D4-F00F-46E7-8167-86331E5398DB}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+      <Project>{47FDF59D-7304-4883-AC23-129ED1BF1908}</Project>
+      <Name>Habanero.Db</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

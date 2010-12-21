@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -380,7 +381,7 @@ namespace Habanero.BO
             catch (Exception ex)
             {
                 log.Error
-                    ("Error executing transaction: " + Environment.NewLine
+                    ("Error executing transaction: " + StringUtilitiesCE.NewLine
                      + ExceptionUtilities.GetExceptionString(ex, 4, true));
                 try
                 {
@@ -389,7 +390,7 @@ namespace Habanero.BO
                 catch (Exception rollBackException)
                 {
                     log.Error
-                        ("Error rolling back transaction: " + Environment.NewLine
+                        ("Error rolling back transaction: " + StringUtilitiesCE.NewLine
                          + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
                 }
                 UpdateTransactionsAsRolledBack();
@@ -437,7 +438,7 @@ namespace Habanero.BO
                 catch (Exception rollBackException)
                 {
                     log.Error
-                        ("Error rolling back transaction: " + Environment.NewLine
+                        ("Error rolling back transaction: " + StringUtilitiesCE.NewLine
                          + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
                 }
                 throw;
@@ -455,7 +456,7 @@ namespace Habanero.BO
                 catch (Exception rollBackException)
                 {
                     log.Error
-                        ("Error rolling back transaction: " + Environment.NewLine
+                        ("Error rolling back transaction: " + StringUtilitiesCE.NewLine
                          + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
                     throw;
                 }

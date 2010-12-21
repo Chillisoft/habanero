@@ -22,6 +22,7 @@ using System.IO;
 using System.Resources;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 
 namespace Habanero.BO.Loaders
 {
@@ -154,7 +155,7 @@ namespace Habanero.BO.Loaders
                 else
                 {
                     dtd += line;
-                    dtd += Environment.NewLine;
+                    dtd += StringUtilitiesCE.NewLine;
                 }
             } while (reader.Peek() != -1);
             return dtd;

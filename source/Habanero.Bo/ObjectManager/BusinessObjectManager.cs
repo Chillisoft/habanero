@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -118,7 +119,7 @@ namespace Habanero.BO
                         ("Two copies of the business object '{0}' identified by '{1}' "
                          + "were added to the object manager", businessObject.ClassDef.ClassNameFull,
                          businessObject.ID.ObjectID);
-                    string userMessage = "There was a serious developer exception. " + Environment.NewLine
+                    string userMessage = "There was a serious developer exception. " + StringUtilitiesCE.NewLine
                                          + developerMessage;
                     throw new HabaneroDeveloperException(userMessage, developerMessage);
                 }
@@ -352,7 +353,7 @@ namespace Habanero.BO
                                  + "' from the object manager but it is not currently loaded.";
                 //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting this[Guid objectID] (exit 2)");
                 throw new HabaneroDeveloperException
-                    ("There is an application error please contact your system administrator." + Environment.NewLine
+                    ("There is an application error please contact your system administrator." + StringUtilitiesCE.NewLine
                      + message, message);
             }
         }
@@ -727,7 +728,7 @@ namespace Habanero.BO
                     {
                         _log.Debug(
                             "Error in GetObjectIfInManager: Contains returned true but this[] threw an exception: " +
-                            ex.Message + Environment.NewLine + ex.StackTrace);
+                            ex.Message + StringUtilitiesCE.NewLine + ex.StackTrace);
                         return null;
                     }
                 }

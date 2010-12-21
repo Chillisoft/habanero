@@ -23,6 +23,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 
 namespace Habanero.Util
 {
@@ -644,7 +645,7 @@ namespace Habanero.Util
         /// <returns>Returns the abbreviated string portion</returns>
         public static string GetRightSection(string fullText, string searchText)
         {
-            if (fullText.Contains(searchText))
+            if (StringUtilitiesCE.Contains(searchText, fullText))
             {
                 int startPos = fullText.IndexOf(searchText) + searchText.Length;
                 return fullText.Substring(startPos, fullText.Length - startPos);
@@ -661,7 +662,7 @@ namespace Habanero.Util
         /// <returns>Returns the combined string</returns>
         public static string AppendMessage(string origMessage, string messageToAppend)
         {
-            if (!String.IsNullOrEmpty(origMessage)) origMessage += Environment.NewLine;
+            if (!String.IsNullOrEmpty(origMessage)) origMessage += StringUtilitiesCE.NewLine;
             origMessage += messageToAppend;
             return origMessage;
         }

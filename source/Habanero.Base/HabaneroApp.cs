@@ -19,6 +19,7 @@
 using System;
 using System.Xml;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using log4net;
 using log4net.Config;
 using log4net.Core;
@@ -93,7 +94,7 @@ namespace Habanero.Base
                 if (log != null)
                 {
                     log.Log("---------------------------------------------" +
-                              Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true), LogCategory.Exception);
+                              StringUtilitiesCE.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true), LogCategory.Exception);
                     errorMessage += " Please look at the log file for details of the problem.";
                 }
                 if (GlobalRegistry.UIExceptionNotifier != null)

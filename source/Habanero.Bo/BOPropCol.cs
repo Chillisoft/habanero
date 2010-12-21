@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 
 namespace Habanero.BO
 {
@@ -181,7 +182,7 @@ namespace Habanero.BO
                 prop.Validate();
                 if (!prop.IsValid)
                 {
-                    reason.Append(prop.InvalidReason + Environment.NewLine);
+                    reason.Append(prop.InvalidReason + StringUtilitiesCE.NewLine);
                     propsValid = false;
                 }
             }

@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using Habanero.Base.Util;
 
 namespace Habanero.Base.Exceptions
 {
@@ -57,15 +58,15 @@ namespace Habanero.Base.Exceptions
             }
             if (showStackTrace)
             {
-                str += Environment.NewLine + GetIndent(indent);
+                str += StringUtilitiesCE.NewLine + GetIndent(indent);
                 str += ex.StackTrace;
             }
             if (ex.InnerException != null)
             {
-                str += Environment.NewLine + Environment.NewLine;
+                str += StringUtilitiesCE.NewLine + StringUtilitiesCE.NewLine;
                 str += GetIndent(indent + 8);
                 return
-                    str + "INNER EXCEPTION:" + Environment.NewLine +
+                    str + "INNER EXCEPTION:" + StringUtilitiesCE.NewLine +
                     GetExceptionString(ex.InnerException, indent + 8, showStackTrace);
             }
             return str;

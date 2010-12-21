@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.Util;
 
 namespace Habanero.Base
@@ -400,7 +401,7 @@ namespace Habanero.Base
             {
                 return boPropertyValue.ToString().EndsWith(compareValueStringWNoPct);
             }
-            return boPropertyValue.ToString().Contains(compareValueStringWNoPct);
+            return StringUtilitiesCE.Contains(compareValueStringWNoPct, boPropertyValue.ToString());
         }
 
         private bool IsNullMatch()

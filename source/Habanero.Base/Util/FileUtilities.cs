@@ -19,9 +19,12 @@
 using System;
 using System.IO;
 using System.Text;
+using Habanero.Base.Util;
 
 namespace Habanero.Util
 {
+    //TODO andrew 21 Dec 2010: CF : Change to use StringUtilitiesCE
+
     /// <summary>
     /// Provides a collection of utilities for strings
     /// </summary>
@@ -35,12 +38,12 @@ namespace Habanero.Util
         /// </summary>
         public static bool StringHasOnlyWhitespaceSinceLastNewline(string result)
         {
-            if (result.Contains(Environment.NewLine))
+            if (StringUtilitiesCE.Contains(StringUtilitiesCE.NewLine, result))
             {
                 do // keeps eliminating everything left of and including the next newline until there are no newlines left
                 {
-                    result = StringUtilities.GetRightSection(result, Environment.NewLine);
-                } while (result.Contains(Environment.NewLine));
+                    result = StringUtilities.GetRightSection(result, StringUtilitiesCE.NewLine);
+                } while (StringUtilitiesCE.Contains(StringUtilitiesCE.NewLine, result));
                 result = result.Replace(" ", "");
                 result = result.Replace("\t", "");
                 return result.Length == 0;
