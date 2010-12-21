@@ -79,10 +79,14 @@ namespace Habanero.BO
             {
                 if (propDef.Persistable)
                 {
-                    QueryField queryField = GetQueryField(classDef, propDef);
+                    IClassDef fieldClassDef = classDef;
+                    if (!((ClassDef)classDef).IsUsingConcreteTableInheritance())
+                        fieldClassDef = propDef.ClassDef;
+                    QueryField queryField = GetQueryField(fieldClassDef, propDef);
                     selectQuery.Fields.Add(propDef.PropertyName, queryField);
                 }
             }
+
         }
 
         private static QueryField GetQueryField(IClassDef classDef, IPropDef propDef)
