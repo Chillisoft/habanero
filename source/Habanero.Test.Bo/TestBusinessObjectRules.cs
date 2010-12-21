@@ -79,8 +79,8 @@ namespace Habanero.Test.BO
         public void Test_BOIsValid_WhenBORuleIsNotValid_ShouldBeNotValid()
         {
             //---------------Set up test pack-------------------
-            MyBO bo = new MyBO();
-            BusinessObjectRuleStub ruleStub = new BusinessObjectRuleStub(false);
+            var bo = new MyBO();
+            var ruleStub = new BusinessObjectRuleStub(false) {Message = TestUtil.GetRandomString()};
             string msg;
             IList<IBOError> msgList;
             //---------------Assert Precondition----------------

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -116,8 +117,7 @@ namespace Habanero.BO
             IList<IBOError> errors;
             bool isValid = IsValid(out errors);
             message = errors
-                .Aggregate("", (current, error) 
-                    => current + (error.Message + Environment.NewLine));
+                .Aggregate("", (current, error) => StringUtilities.AppendMessage(current, error.Message));
             return isValid;
         }
 
