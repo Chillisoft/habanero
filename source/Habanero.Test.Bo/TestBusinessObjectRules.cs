@@ -81,6 +81,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO bo = new MyBO();
             BusinessObjectRuleStub ruleStub = new BusinessObjectRuleStub(false);
+            ruleStub.Message = TestUtil.GetRandomString();
             string msg;
             IList<IBOError> msgList;
             //---------------Assert Precondition----------------
