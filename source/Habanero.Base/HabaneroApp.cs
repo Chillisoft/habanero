@@ -94,7 +94,7 @@ namespace Habanero.Base
                 if (log != null)
                 {
                     log.Log("---------------------------------------------" +
-                              StringUtilitiesCE.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true), LogCategory.Exception);
+                              EnvironmentCF.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true), LogCategory.Exception);
                     errorMessage += " Please look at the log file for details of the problem.";
                 }
                 if (GlobalRegistry.UIExceptionNotifier != null)

@@ -21,6 +21,7 @@ using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using OpenNETCF;
 
 namespace Habanero.BO.Loaders
 {
@@ -93,7 +94,7 @@ namespace Habanero.BO.Loaders
 			string orMappingType = _reader.GetAttribute("orMapping");
 			try
             {
-                _orMapping = (ORMapping)Enum.Parse(typeof(ORMapping), orMappingType);
+                _orMapping = (ORMapping)Enum2.Parse(typeof(ORMapping), orMappingType);
             }
             catch (Exception ex)
             {

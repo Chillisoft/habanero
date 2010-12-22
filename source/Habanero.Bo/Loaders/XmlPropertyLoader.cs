@@ -22,6 +22,7 @@ using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using OpenNETCF;
 
 namespace Habanero.BO.Loaders
 {
@@ -199,7 +200,7 @@ namespace Habanero.BO.Loaders
             {
                 _readWriteRule =
                     (PropReadWriteRule)
-                    Enum.Parse(typeof (PropReadWriteRule), _reader.GetAttribute("readWriteRule"));
+                    Enum2.Parse(typeof (PropReadWriteRule), _reader.GetAttribute("readWriteRule"));
             }
             catch (Exception ex)
             {
@@ -272,12 +273,25 @@ namespace Habanero.BO.Loaders
             string length = _reader.GetAttribute("length");
             if (length != null)
             {
-                if (!Int32.TryParse(length, out _length))
+                //TODO andrew 22 Dec 2010: CF : TryParse is not supported
+
+                try
+                {
+                    _length = Int32.Parse(length);
+                }
+                catch 
                 {
                     throw new InvalidXmlDefinitionException(String.Format(
                         "In the property definition for '{0}', the 'length' " +
                         "was set to an invalid integer value.", _propertyName));
                 }
+
+                //if (!Int32.TryParse(length, out _length))
+                //{
+                //    throw new InvalidXmlDefinitionException(String.Format(
+                //        "In the property definition for '{0}', the 'length' " +
+                //        "was set to an invalid integer value.", _propertyName));
+                //}
                 if (_length < 0)
                 {
                     throw new InvalidXmlDefinitionException(String.Format(

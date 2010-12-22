@@ -155,7 +155,7 @@ namespace Habanero.BO.Loaders
                 else
                 {
                     dtd += line;
-                    dtd += StringUtilitiesCE.NewLine;
+                    dtd += EnvironmentCF.NewLine;
                 }
             } while (reader.Peek() != -1);
             return dtd;

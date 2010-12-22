@@ -99,7 +99,7 @@ namespace Habanero.Util
             Type classType = classAssembly.GetType(assemblyName + "." + className);
             //If the classType is not found then check if it is a fully qualified 
             // classname. If so, then use it to get the classType.
-            if (classType == null && StringUtilitiesCE.Contains(assemblyName, className))
+            if (classType == null && StringUtilitiesCF.Contains(assemblyName, className))
             {
                 //classType = classAssembly.GetType(className, false, true);
                 classType = classAssembly.GetType(className, false);

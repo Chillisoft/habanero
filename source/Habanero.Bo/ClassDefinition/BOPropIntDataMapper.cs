@@ -74,12 +74,25 @@ namespace Habanero.BO.ClassDefinition
                     returnValue = null;
                     return false;
                 }
-                int intValue;
-                if (int.TryParse(Convert.ToString(valueToParse), out intValue))
+                //TODO andrew 22 Dec 2010: CF : TryParse not supported
+
+                try
                 {
+                    int intValue = int.Parse(Convert.ToString(valueToParse));
                     returnValue = intValue;
                     return true;
                 }
+                catch 
+                {}
+
+                //int intValue;
+                //if (int.TryParse(Convert.ToString(valueToParse), out intValue))
+                //{
+                //    returnValue = intValue;
+                //    return true;
+                //}
+
+
                 if (valueToParse is decimal)
                 {
                     decimal decimalValue = (decimal)valueToParse;

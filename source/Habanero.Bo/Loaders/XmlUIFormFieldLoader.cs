@@ -22,6 +22,7 @@ using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using OpenNETCF;
 
 namespace Habanero.BO.Loaders
 {
@@ -119,7 +120,7 @@ namespace Habanero.BO.Loaders
             try
             {
                 layoutAttribute = _reader.GetAttribute("layout");
-                if(layoutAttribute != null) _layout = (LayoutStyle) Enum.Parse(typeof(LayoutStyle), layoutAttribute);
+                if(layoutAttribute != null) _layout = (LayoutStyle) Enum2.Parse(typeof(LayoutStyle), layoutAttribute);
             }
             catch (Exception ex)
             {

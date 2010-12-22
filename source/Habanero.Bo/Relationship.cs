@@ -79,11 +79,12 @@ namespace Habanero.BO
         /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
         private static IBusinessObjectCollection CreateNewRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
         {
-//            Utilities.CheckTypeCanBeCreated(boType);
-            Type relatedCollectionType = typeof(RelatedBusinessObjectCollection<>);
-            relatedCollectionType = relatedCollectionType.MakeGenericType(boType);
-            IBusinessObjectCollection collection = (IBusinessObjectCollection)Activator.CreateInstance(relatedCollectionType, relationship);
-            return collection;
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+////            Utilities.CheckTypeCanBeCreated(boType);
+//            Type relatedCollectionType = typeof(RelatedBusinessObjectCollection<>);
+//            relatedCollectionType = relatedCollectionType.MakeGenericType(boType);
+//            IBusinessObjectCollection collection = (IBusinessObjectCollection)Activator.CreateInstance(relatedCollectionType, relationship);
+//            return collection;
         }
 
         internal static void SetupCriteriaForRelationship(IMultipleRelationship relationship, IBusinessObjectCollection collection)

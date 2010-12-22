@@ -17,7 +17,9 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Runtime.Serialization;
+
+//TODO andrew 22 Dec 2010: CF : does not support serialization
+//using System.Runtime.Serialization;
 
 namespace Habanero.BO
 {
@@ -53,14 +55,14 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected RelationshipNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected RelationshipNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+        //{
+        //}
     }
 }

@@ -182,7 +182,7 @@ namespace Habanero.BO
                 prop.Validate();
                 if (!prop.IsValid)
                 {
-                    reason.Append(prop.InvalidReason + StringUtilitiesCE.NewLine);
+                    reason.Append(prop.InvalidReason + EnvironmentCF.NewLine);
                     propsValid = false;
                 }
             }

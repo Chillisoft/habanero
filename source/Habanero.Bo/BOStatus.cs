@@ -123,7 +123,7 @@ namespace Habanero.BO
 
             foreach (var objError in errors)
             {
-                message = StringUtilities.AppendMessage(message, objError.Message, StringUtilitiesCE.NewLine);
+                message = StringUtilities.AppendMessage(message, objError.Message, EnvironmentCF.NewLine);
             }
             return false;
             // ...end of .NET 2 Code.

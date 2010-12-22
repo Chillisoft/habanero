@@ -50,6 +50,10 @@
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="OpenNETCF, Version=2.2.0.0, Culture=neutral, PublicKeyToken=e60dbea84bb431b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\OpenNETCF.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -217,6 +221,7 @@
     <Compile Include="Util\DateTimeUtilities.cs" />
     <Compile Include="Util\Delegates.cs" />
     <Compile Include="Util\EmailSender.cs" />
+    <Compile Include="Util\EnvironmentCF.cs" />
     <Compile Include="Util\FileUtilities.cs" />
     <Compile Include="Util\File\CSVFileReader.cs" />
     <Compile Include="Util\File\CSVFileWriter.cs" />
@@ -229,7 +234,7 @@
     <Compile Include="Util\SerialisationUtilities.cs" />
     <Compile Include="Util\SortedStringCollection.cs" />
     <Compile Include="Util\StringUtilities.cs" />
-    <Compile Include="Util\StringUtilitiesCE.cs" />
+    <Compile Include="Util\StringUtilitiesCF.cs" />
     <Compile Include="Util\TypeUtilities.cs" />
     <Compile Include="Util\Utilities.cs" />
     <Compile Include="Util\XmlDocumentValidator.cs" />

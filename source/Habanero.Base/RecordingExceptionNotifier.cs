@@ -51,7 +51,7 @@ namespace Habanero.Base
             throw new RecordedExceptionsException(string.Format(
                     "An Exception that was recorded by the RecordingExceptionNotifier and has been rethrown." + 
                     "{0}Title: {1}{0}Further Message: {2}",
-                    StringUtilitiesCE.NewLine, exceptionDetail.Title, this.ExceptionMessage),
+                    EnvironmentCF.NewLine, exceptionDetail.Title, this.ExceptionMessage),
                     exceptionDetail.Exception);
         }
 
@@ -78,7 +78,7 @@ namespace Habanero.Base
                 string message = "";
                 foreach (var exceptionDetail in Exceptions)
                 {
-                    message = StringUtilities.AppendMessage(message, exceptionDetail.ToString(), StringUtilitiesCE.NewLine);
+                    message = StringUtilities.AppendMessage(message, exceptionDetail.ToString(), EnvironmentCF.NewLine);
                 }
                 return message;
             }

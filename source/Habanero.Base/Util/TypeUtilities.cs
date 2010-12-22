@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.ComponentModel;
+using OpenNETCF.ComponentModel;
 using Habanero.Base;
 
 namespace Habanero.Util
@@ -81,12 +82,14 @@ namespace Habanero.Util
             if (type == sourceType || sourceType.IsSubclassOf(type)) returnValue = obj;
             else
             {
-                TypeConverter typeConverter = TypeDescriptor.GetConverter(sourceType);
-                returnValue = typeConverter.ConvertTo(obj, type);
+                throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                //TypeConverter typeConverter = TypeDescriptor.GetConverter(sourceType);
+                //returnValue = typeConverter.ConvertTo(obj, type);
             }
             if (isNullableType)
             {
-                returnValue = Activator.CreateInstance(typeof (Nullable<>).MakeGenericType(type), returnValue);
+                throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                //returnValue = Activator.CreateInstance(typeof (Nullable<>).MakeGenericType(type), returnValue);
             }
             return returnValue;
         }

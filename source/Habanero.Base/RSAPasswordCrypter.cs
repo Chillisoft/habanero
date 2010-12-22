@@ -46,15 +46,15 @@ namespace Habanero.Base
         /// <returns>Returns the unaltered string provided</returns>
         public string DecryptString(string value)
         {
-
-            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            provider.FromXmlString(_rsa.ToXmlString(true));
-             byte[] passwordBytes = new byte[value.Length/2];
-                    for (int i = 0; i < passwordBytes.Length; i++) {
-                        passwordBytes[i] = Convert.ToByte(value.Substring(i * 2, 2), 16);
-                    }
-                    byte[] encryptedByes = provider.Decrypt(passwordBytes, false);
-                   return ASCIIEncoding.ASCII.GetString(encryptedByes);
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
+            //provider.FromXmlString(_rsa.ToXmlString(true));
+            // byte[] passwordBytes = new byte[value.Length/2];
+            //        for (int i = 0; i < passwordBytes.Length; i++) {
+            //            passwordBytes[i] = Convert.ToByte(value.Substring(i * 2, 2), 16);
+            //        }
+            //        byte[] encryptedByes = provider.Decrypt(passwordBytes, false);
+            //       return ASCIIEncoding.ASCII.GetString(encryptedByes);
         }
 
         /// <summary>
@@ -64,16 +64,18 @@ namespace Habanero.Base
         /// <returns>Returns the unaltered string provided</returns>
         public string EncryptString(string value)
         {
-            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            provider.FromXmlString(_rsa.ToXmlString(false));
-            byte[] passwordBytes = ASCIIEncoding.ASCII.GetBytes(value);
-            byte[] encryptedByes = provider.Encrypt(passwordBytes, false);
-            string text = "";
-            foreach (byte bye in encryptedByes)
-            {
-                text += String.Format("{0:x2}", bye);
-            }
-            return text;
+
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
+            //provider.FromXmlString(_rsa.ToXmlString(false));
+            //byte[] passwordBytes = ASCIIEncoding.ASCII.GetBytes(value);
+            //byte[] encryptedByes = provider.Encrypt(passwordBytes, false);
+            //string text = "";
+            //foreach (byte bye in encryptedByes)
+            //{
+            //    text += String.Format("{0:x2}", bye);
+            //}
+            //return text;
         }
     }
 }

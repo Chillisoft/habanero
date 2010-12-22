@@ -19,7 +19,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+//TODO andrew 22 Dec 2010: CF: Serialization is not available in compact framework
+//using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -97,6 +98,13 @@ namespace Habanero.BO
         }
     }
 
+    //TODO andrew 22 Dec 2010: Removed ISerializable
+
+    //    [Serializable]
+    //public class BusinessObjectCollection<TBusinessObject>
+    //    : IList<TBusinessObject>, IBusinessObjectCollectionInternal, ISerializable
+    //    where TBusinessObject : class, IBusinessObject, new()
+
     /// <summary>
     /// Manages a collection of business objects.  This class also serves
     /// as a base class from which most types of business object collections
@@ -117,7 +125,7 @@ namespace Habanero.BO
     /// </summary>
     [Serializable]
     public class BusinessObjectCollection<TBusinessObject>
-        : IList<TBusinessObject>, IBusinessObjectCollectionInternal, ISerializable
+        : IList<TBusinessObject>, IBusinessObjectCollectionInternal
         where TBusinessObject : class, IBusinessObject, new()
     {
         private const string COUNT = "Count";
@@ -231,110 +239,110 @@ namespace Habanero.BO
             _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
         }
 
-        /// <summary>
-        /// Reconstitutes the collection from a stream that was serialized.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        protected BusinessObjectCollection(SerializationInfo info, StreamingContext context)
-        {
-            int count = info.GetInt32(COUNT);
+        ///// <summary>
+        ///// Reconstitutes the collection from a stream that was serialized.
+        ///// </summary>
+        ///// <param name="info"></param>
+        ///// <param name="context"></param>
+        //protected BusinessObjectCollection(SerializationInfo info, StreamingContext context)
+        //{
+        //    int count = info.GetInt32(COUNT);
             
-            Type classType = Util.TypeLoader.LoadType(info.GetString(ASSEMBLY_NAME), info.GetString(CLASS_NAME));
-            this.Initialise(ClassDefinition.ClassDef.ClassDefs[classType], null);
-            SetupEventHandlers();
-            for (int i = 0; i < count; i++)
-            {
-                TBusinessObject businessObject = (TBusinessObject) info.GetValue(BUSINESS_OBJECT + i, typeof (TBusinessObject));
-                this.AddWithoutEvents(businessObject);
-                RegisterBOEvents(businessObject);
-            }
-            int removedCount = info.GetInt32(REMOVED_COUNT);
-            for (int i = 0; i < removedCount; i++)
-            {
-                TBusinessObject businessObject = (TBusinessObject)info.GetValue(REMOVED_BUSINESS_OBJECT + i, typeof(TBusinessObject));
-                this.RemovedBusinessObjects.Add(businessObject);
-                //RegisterBOEvents(businessObject);
-            }
-            int markedForDeleteCount = info.GetInt32(MARKEDFORDELETE_COUNT);
-            for (int i = 0; i < markedForDeleteCount; i++)
-            {
-                TBusinessObject businessObject = (TBusinessObject)info.GetValue(MARKEDFORDELETE_BUSINESS_OBJECT + i, typeof(TBusinessObject));
-                this.MarkedForDeleteBusinessObjects.Add(businessObject);
-                //RegisterBOEvents(businessObject);
-            }
-            var boManager = BORegistry.BusinessObjectManager;
-            int createdCount = info.GetInt32(CREATED_COUNT);
-            for (int i = 0; i < createdCount; i++)
-            {
-                Guid createdID = (Guid)info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof (Guid));
-                this.AddCreatedBusinessObject((TBusinessObject)boManager[createdID]);
-            }
-            int persistedCount = info.GetInt32(PERSISTED_COUNT);
-            for (int i = 0; i < persistedCount; i++)
-            {
-                Guid persistedID = (Guid)info.GetValue(PERSISTED_BUSINESS_OBJECT + i, typeof (Guid));
-                this.AddToPersistedCollection((TBusinessObject)boManager[persistedID]);
-            }
-            int addedCount = info.GetInt32(ADDED_COUNT);
-            for (int i = 0; i < addedCount; i++)
-            {
-                Guid addedID = (Guid)info.GetValue(ADDED_BUSINESS_OBJECT + i, typeof(Guid));
-                this.AddedBusinessObjects.Add((TBusinessObject)boManager[addedID]);
-            }
-        }
+        //    Type classType = Util.TypeLoader.LoadType(info.GetString(ASSEMBLY_NAME), info.GetString(CLASS_NAME));
+        //    this.Initialise(ClassDefinition.ClassDef.ClassDefs[classType], null);
+        //    SetupEventHandlers();
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        TBusinessObject businessObject = (TBusinessObject) info.GetValue(BUSINESS_OBJECT + i, typeof (TBusinessObject));
+        //        this.AddWithoutEvents(businessObject);
+        //        RegisterBOEvents(businessObject);
+        //    }
+        //    int removedCount = info.GetInt32(REMOVED_COUNT);
+        //    for (int i = 0; i < removedCount; i++)
+        //    {
+        //        TBusinessObject businessObject = (TBusinessObject)info.GetValue(REMOVED_BUSINESS_OBJECT + i, typeof(TBusinessObject));
+        //        this.RemovedBusinessObjects.Add(businessObject);
+        //        //RegisterBOEvents(businessObject);
+        //    }
+        //    int markedForDeleteCount = info.GetInt32(MARKEDFORDELETE_COUNT);
+        //    for (int i = 0; i < markedForDeleteCount; i++)
+        //    {
+        //        TBusinessObject businessObject = (TBusinessObject)info.GetValue(MARKEDFORDELETE_BUSINESS_OBJECT + i, typeof(TBusinessObject));
+        //        this.MarkedForDeleteBusinessObjects.Add(businessObject);
+        //        //RegisterBOEvents(businessObject);
+        //    }
+        //    var boManager = BORegistry.BusinessObjectManager;
+        //    int createdCount = info.GetInt32(CREATED_COUNT);
+        //    for (int i = 0; i < createdCount; i++)
+        //    {
+        //        Guid createdID = (Guid)info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof (Guid));
+        //        this.AddCreatedBusinessObject((TBusinessObject)boManager[createdID]);
+        //    }
+        //    int persistedCount = info.GetInt32(PERSISTED_COUNT);
+        //    for (int i = 0; i < persistedCount; i++)
+        //    {
+        //        Guid persistedID = (Guid)info.GetValue(PERSISTED_BUSINESS_OBJECT + i, typeof (Guid));
+        //        this.AddToPersistedCollection((TBusinessObject)boManager[persistedID]);
+        //    }
+        //    int addedCount = info.GetInt32(ADDED_COUNT);
+        //    for (int i = 0; i < addedCount; i++)
+        //    {
+        //        Guid addedID = (Guid)info.GetValue(ADDED_BUSINESS_OBJECT + i, typeof(Guid));
+        //        this.AddedBusinessObjects.Add((TBusinessObject)boManager[addedID]);
+        //    }
+        //}
 
 
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            lock (KeyObjectHashTable)
-            {
-                info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
-                info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
-                info.AddValue(COUNT, _boCol.Count);
-                int count = 0;
-                foreach (TBusinessObject businessObject in this)
-                {
-                    info.AddValue(BUSINESS_OBJECT + count, businessObject);
-                    count++;
-                }
-                info.AddValue(REMOVED_COUNT, this.RemovedBusinessObjects.Count);
-                int removedCount = 0;
-                foreach (TBusinessObject removedBusinessObject in this.RemovedBusinessObjects)
-                {
-                    info.AddValue(REMOVED_BUSINESS_OBJECT + removedCount, removedBusinessObject);
-                    removedCount++;
-                }
-                info.AddValue(MARKEDFORDELETE_COUNT, this.MarkedForDeleteBusinessObjects.Count);
-                int markedForDeleteCount = 0;
-                foreach (TBusinessObject markedForDeleteBusinessObject in this.MarkedForDeleteBusinessObjects)
-                {
-                    info.AddValue(MARKEDFORDELETE_BUSINESS_OBJECT + markedForDeleteCount, markedForDeleteBusinessObject);
-                    markedForDeleteCount++;
-                }
-                info.AddValue(CREATED_COUNT, this.CreatedBusinessObjects.Count);
-                int createdCount = 0;
-                foreach (TBusinessObject createdBusinessObject in this.CreatedBusinessObjects)
-                {
-                    info.AddValue(CREATED_BUSINESS_OBJECT + createdCount, createdBusinessObject.ID.ObjectID);
-                    createdCount++;
-                }
-                info.AddValue(PERSISTED_COUNT, this.PersistedBusinessObjects.Count);
-                int persistedCount = 0;
-                foreach (TBusinessObject persistedBusinessObject in this.PersistedBusinessObjects)
-                {
-                    info.AddValue(PERSISTED_BUSINESS_OBJECT + persistedCount, persistedBusinessObject.ID.ObjectID);
-                    persistedCount++;
-                }
-                info.AddValue(ADDED_COUNT, this.AddedBusinessObjects.Count);
-                int addedCount = 0;
-                foreach (TBusinessObject addedBusinessObject in this.AddedBusinessObjects)
-                {
-                    info.AddValue(ADDED_BUSINESS_OBJECT + addedCount, addedBusinessObject.ID.ObjectID);
-                    addedCount++;
-                }
-            }
-        }
+        //void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    lock (KeyObjectHashTable)
+        //    {
+        //        info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
+        //        info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
+        //        info.AddValue(COUNT, _boCol.Count);
+        //        int count = 0;
+        //        foreach (TBusinessObject businessObject in this)
+        //        {
+        //            info.AddValue(BUSINESS_OBJECT + count, businessObject);
+        //            count++;
+        //        }
+        //        info.AddValue(REMOVED_COUNT, this.RemovedBusinessObjects.Count);
+        //        int removedCount = 0;
+        //        foreach (TBusinessObject removedBusinessObject in this.RemovedBusinessObjects)
+        //        {
+        //            info.AddValue(REMOVED_BUSINESS_OBJECT + removedCount, removedBusinessObject);
+        //            removedCount++;
+        //        }
+        //        info.AddValue(MARKEDFORDELETE_COUNT, this.MarkedForDeleteBusinessObjects.Count);
+        //        int markedForDeleteCount = 0;
+        //        foreach (TBusinessObject markedForDeleteBusinessObject in this.MarkedForDeleteBusinessObjects)
+        //        {
+        //            info.AddValue(MARKEDFORDELETE_BUSINESS_OBJECT + markedForDeleteCount, markedForDeleteBusinessObject);
+        //            markedForDeleteCount++;
+        //        }
+        //        info.AddValue(CREATED_COUNT, this.CreatedBusinessObjects.Count);
+        //        int createdCount = 0;
+        //        foreach (TBusinessObject createdBusinessObject in this.CreatedBusinessObjects)
+        //        {
+        //            info.AddValue(CREATED_BUSINESS_OBJECT + createdCount, createdBusinessObject.ID.ObjectID);
+        //            createdCount++;
+        //        }
+        //        info.AddValue(PERSISTED_COUNT, this.PersistedBusinessObjects.Count);
+        //        int persistedCount = 0;
+        //        foreach (TBusinessObject persistedBusinessObject in this.PersistedBusinessObjects)
+        //        {
+        //            info.AddValue(PERSISTED_BUSINESS_OBJECT + persistedCount, persistedBusinessObject.ID.ObjectID);
+        //            persistedCount++;
+        //        }
+        //        info.AddValue(ADDED_COUNT, this.AddedBusinessObjects.Count);
+        //        int addedCount = 0;
+        //        foreach (TBusinessObject addedBusinessObject in this.AddedBusinessObjects)
+        //        {
+        //            info.AddValue(ADDED_BUSINESS_OBJECT + addedCount, addedBusinessObject.ID.ObjectID);
+        //            addedCount++;
+        //        }
+        //    }
+        //}
 
 
         #region Events and event handlers
@@ -886,10 +894,12 @@ namespace Habanero.BO
             Add(new List<TBusinessObject>(businessObjects));
         }
 
+        //TODO andrew 22 Dec 2010: Removed ReflectionPermissionAttribute
+
         /// <summary>
         /// Refreshes the business objects in the collection
         /// </summary>
-        [ReflectionPermission(SecurityAction.Demand)]
+        //[ReflectionPermission(SecurityAction.Demand)]
         public virtual void Refresh()
         {
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
@@ -1989,7 +1999,11 @@ namespace Habanero.BO
         /// Type T cannot be cast automatically to the type of the destination array.</exception>
         void IBusinessObjectCollection.CopyTo(IBusinessObject[] array, int arrayIndex)
         {
-            TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
+            //TODO andrew 22 Dec 2010: CF : Does not support LongLength this is a bit of a hack
+
+            var longLength = (long) array.Length;
+            TBusinessObject[] thisArray = new TBusinessObject[longLength];
+            //TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
             this.CopyTo(thisArray, arrayIndex);
             //array = thisArray;
             int count = _boCol.Count;
@@ -2184,8 +2198,9 @@ namespace Habanero.BO
                 //use the customised classdef instead of the default.
                 try
                 {
-                    newBO = (TBusinessObject)
-                            Activator.CreateInstance(typeof (TBusinessObject), new object[] {this.ClassDef});
+                    throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                    //newBO = (TBusinessObject)
+                    //        Activator.CreateInstance(typeof (TBusinessObject), new object[] {this.ClassDef});
                 }
                 catch (MissingMethodException ex)
                 {

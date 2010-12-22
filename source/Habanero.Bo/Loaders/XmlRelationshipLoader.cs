@@ -21,6 +21,7 @@ using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using OpenNETCF;
 
 namespace Habanero.BO.Loaders
 {
@@ -144,7 +145,7 @@ namespace Habanero.BO.Loaders
 
             try
             {
-                _relationshipType = (RelationshipType) Enum.Parse(typeof (RelationshipType), relationshipTypeString);
+                _relationshipType = (RelationshipType) Enum2.Parse(typeof (RelationshipType), relationshipTypeString);
             }
             catch (Exception ex)
             {
@@ -184,7 +185,7 @@ namespace Habanero.BO.Loaders
             try
             {
                 _deleteParentAction =
-                    (DeleteParentAction) Enum.Parse(typeof (DeleteParentAction), _reader.GetAttribute("deleteAction"));
+                    (DeleteParentAction) Enum2.Parse(typeof (DeleteParentAction), _reader.GetAttribute("deleteAction"));
             }
             catch (Exception ex)
             {
@@ -204,7 +205,7 @@ namespace Habanero.BO.Loaders
                     }
                     _insertParentAction =
                         (InsertParentAction)
-                        Enum.Parse(typeof (InsertParentAction), attribute);
+                        Enum2.Parse(typeof (InsertParentAction), attribute);
                 }
                 catch (Exception ex)
                 {

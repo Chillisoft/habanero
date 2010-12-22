@@ -624,7 +624,8 @@ namespace Habanero.BO.ClassDefinition
             {
                 try
                 {
-                    return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this});
+                    throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                    //return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this});
                 }
                 catch (MissingMethodException ex)
                 {
@@ -636,7 +637,8 @@ namespace Habanero.BO.ClassDefinition
             }
             try
             {
-                return (BusinessObject) Activator.CreateInstance(MyClassType, true);
+                throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                //return (BusinessObject) Activator.CreateInstance(MyClassType, true);
             }
             catch (MissingMethodException ex)
             {
@@ -1134,7 +1136,19 @@ namespace Habanero.BO.ClassDefinition
             //  go through each alternative and check if there is a related object and return the first one
             // else get the related object
 
-            string[] parts = relationshipName.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
+            //TODO andrew 22 Dec 2010: Removed string split options - should test
+            char[] c = { '|' };
+            string[] parts = relationshipName.Split(new[] { '|' });
+            // manually remove empty entries
+            List<string> partsList = new List<string>(parts);
+            int j = partsList.Count - 1;
+            while (j > 0)
+            {
+                if (partsList[j].Trim().Length == 0) partsList.RemoveAt(j);
+                j--;
+            }
+
+            //string[] parts = relationshipName.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
             var relNames = new List<string>(parts);
             foreach (string relationship in relNames)
             {
@@ -1178,11 +1192,12 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>The type of the specified property</returns>
         public IPropertyComparer<T> CreatePropertyComparer<T>(string propertyName) where T : IBusinessObject
         {
-            Type comparerType = typeof (PropertyComparer<,>);
-            Type propertyType = GetPropertyType(propertyName);
-            comparerType = comparerType.MakeGenericType(typeof (T), propertyType);
-            var comparer = (IPropertyComparer<T>) Activator.CreateInstance(comparerType, propertyName);
-            return comparer;
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //Type comparerType = typeof (PropertyComparer<,>);
+            //Type propertyType = GetPropertyType(propertyName);
+            //comparerType = comparerType.MakeGenericType(typeof (T), propertyType);
+            //var comparer = (IPropertyComparer<T>) Activator.CreateInstance(comparerType, propertyName);
+            //return comparer;
         }
 
         /// <summary>

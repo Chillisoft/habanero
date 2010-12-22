@@ -256,13 +256,25 @@ namespace Habanero.Util
                         return true;
                     }
                 }
-                DateTime dateTimeOut;
-                if (DateTime.TryParse(valueToParse.ToString(), out dateTimeOut))
+                
+                try
                 {
+                    DateTime dateTimeOut = DateTime.Parse(valueToParse.ToString());
                     returnValue = dateTimeOut;
                     return true;
                 }
-                return false;
+                catch (Exception)
+                {
+
+                    return false;
+                }
+                //DateTime dateTimeOut;
+                //if (DateTime.TryParse(valueToParse.ToString(), out dateTimeOut))
+                //{
+                //    returnValue = dateTimeOut;
+                //    return true;
+                //}
+                //return false;
             }
             returnValue = valueToParse;
             return true;

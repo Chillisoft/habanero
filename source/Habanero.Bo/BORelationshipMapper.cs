@@ -19,6 +19,7 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 
 namespace Habanero.BO
 {
@@ -50,7 +51,7 @@ namespace Habanero.BO
         {
             if (String.IsNullOrEmpty(relationshipName)) throw new ArgumentNullException("relationshipName");
             RelationshipName = relationshipName;
-            if (RelationshipName.Contains("."))
+            if (StringUtilitiesCF.Contains(".", RelationshipName))
             {
                 string[] parts = RelationshipName.Split('.');
                 string localRelationshipName = parts[0];

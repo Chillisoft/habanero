@@ -1,0 +1,395 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OpenNETCF.Web.Services2</name>
+    </assembly>
+    <members>
+        <member name="T:OpenNETCF.Web.Services2.Security.Cryptography.AES128EncryptionFormatter">
+            <summary>
+            Provides AES128 encryption/decryption services
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Ns">
+            <summary>
+            Summary description for Ns.
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.CryptoEx">
+            <summary>
+            for stuff that was in bNb.Sec and hid in OpenNET
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.DimeAttachment">
+            <summary>
+            Used to specify the header and payload data for sending and receiving DIME attachments
+            with the DimeSoapExtension.DimeExtension.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeAttachment.#ctor">
+            <summary>
+            Creates a new DimeAttachment.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeAttachment.#ctor(System.String,System.String,OpenNETCF.Web.Services2.Dime.TypeFormatEnum,System.IO.Stream)">
+            <summary>
+            Creates a DimeAttachment object
+            </summary>
+            <param name="id">The unique id for the DIME record.</param>
+            <param name="type">The type of payload data in the record. The format of this type is 
+            specified by the typeFormat parameter. For example, if typeFormat is TypeFormatEnum.MediaType
+            then a valid type is "plain/text; charset=utf-8"</param>
+            <param name="typeFormat">The format of the type parameter.</param>
+            <param name="stream">The stream for reading or writing the payload data.</param>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeAttachment.Id">
+            <summary>
+            The unique id for the attachment. When setting the id it will be
+            converted into its canonical Uri format.
+            </summary>    
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeAttachment.Type">
+            <summary>
+            The type of payload data in the attachment. The format of this type name is 
+            specified by the TypeFormat property. For example, if TypeFormat is TypeFormatEnum.MediaType
+            then a valid Type is "plain/text; charset=utf-8"
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeAttachment.TypeFormat">
+            <summary>
+            The format of the Type property.
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeAttachment.Stream">
+            <summary>
+            The stream for reading and writing the attachment payload data.
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.DimeAttachmentCollection">
+            <summary>
+            A collection of DimeAttachment objects.
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.DimeExtension">
+            <summary>
+            A soap extension that provides DIME encapsulation of SOAP messages and sending
+            and receiving of DIME attachments.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeExtension.BeforeSerialize(System.Web.Services.Protocols.SoapMessage)">
+            <summary>
+            Collects the the set of DimeAttachment objects to send in the message.
+            For referenced attachments these are collected from the parameter list or return value.
+            For unreferenced attachments these are collected from the IDimeAttachmentContainter
+            collections. The SOAP envelope and attachments are written into the network stream
+            in the AfterSerialize method.
+            If an exception has been thrown, the soap message containing the exception is 
+            not encapsulated.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeExtension.AfterSerialize(System.Web.Services.Protocols.SoapMessage)">
+            <summary>
+            Encapsulates the SOAP message into a DIME message.  The stored attachments are added as DIME records.
+            If an exception has been thrown, the soap message containing the exception is 
+            not encapsulated.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeExtension.BeforeDeserialize(System.Web.Services.Protocols.SoapMessage)">
+            <summary>
+            Retrieves the SOAP message from the DIME message.  DIME attachments
+            are removed from the stream and stored for future use by the AfterDeserialize
+            method.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeExtension.AfterDeSerialize(System.Web.Services.Protocols.SoapMessage)">
+            <summary>
+            Sets the method's DimeAttachment parameters and return value to the stored values. 
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeExtension.CheckAttachment(OpenNETCF.Web.Services2.Dime.DimeAttachment)">
+            <summary>
+            Validates the attachment.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeExtension.BinaryCopy(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Binary copy from one stream to another.
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.DimeExtensionAttribute">
+            <summary>
+            Attribute to be used on the web method on the server and client proxy
+            to enable the DimeExtension.
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.DimeReader">
+            <summary>
+            Reads DIME messages from a stream as a series of DIME records.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeReader.#ctor(System.IO.Stream)">
+            <summary>
+            Creates a DimeMessageReader object 
+            </summary>
+            <param name="stream">Must be an open readable stream.</param>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeReader.ReadRecord">
+            <summary>
+            Returns the next record in the DIME message in read-only mode. If the DimeReader is closed then
+            an InvalidOperationException will occur. When the end of
+            the message is reached ReadRecord will return null. ReadRecord is a blocking i/o call in that the 
+            DIME record header is read before the method returns.
+            </summary>
+            <returns>
+            A read-only DimeRecord, or null if it's the end of the DIME message. If the record has TNF=None
+            and it is the last record in the message null is also returned.
+            </returns>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeReader.Close">
+            <summary>
+            Close discards the remaining records in the message before closing.
+            Close is a blocking call if all records haven't been read since it will
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.DimeRecord">
+            <summary>
+            Represents the header and payload of a DIME record. DimeRecord is not directly creatable, they are
+            created by DimeReader and DimeWriter when reading and writing DIME messages. 
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeRecord.#ctor(System.IO.Stream)">
+            <summary>
+             Creates a read-only DimeRecord object.  
+            </summary>
+            <param name="stream">Must be an open and readable stream.</param>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeRecord.#ctor(System.IO.Stream,System.Uri,System.String,OpenNETCF.Web.Services2.Dime.TypeFormatEnum,System.Boolean,System.Int32,System.Int32)">
+            <summary>
+            Creates a write-only DimeRecord object.
+            </summary>
+            <param name="stream">stream must be open and writeable.</param>
+            <param name="id">id must be null or a valid URI.</param>
+            <param name="type">type must be a valid URI or a media type.</param>
+            <param name="typeFormat"></param>
+            <param name="contentLength">contentLength is the length of the records content.  If contentLength
+            equals -1, chunking is used.</param>
+            <param name="beginOfMessage">beginOfMessage marks this record as the first record in a message.</param>
+            <param name="chunkSize"></param>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeRecord.Close">
+            <summary>
+            Closes the record. If writing a chunked record then any buffered
+            data will be written out. DimeReader and DimeWriter will automatically
+            close a record when starting to read or write the next one, or if
+            DimeReader.Close() or DimeWriter.Close() is called.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeRecord.WriteHeader(System.Boolean,System.Boolean,System.Int64)">
+            <summary>
+            Writes the header to the stream.
+            </summary>
+            <param name="endOfRecord"></param>
+            <param name="endOfMessage"></param>
+            <param name="contentLength"></param>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeRecord.ReadHeader">
+            <summary>
+            Reads the header's properties from a stream
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeRecord.BodyStream">
+            <summary>
+            A stream for reading or writing the payload data of the DIME record. This stream
+            will read from or write to the stream passed to the DimeReader or DimeWriter. However
+            it is a different Stream instance because it has a different position, open/closed state,
+            etc. When writing chunked messages the stream may be partially buffered, otherwise
+            the writes will go directly to the underlying stream.
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeRecord.Chunked">
+            <summary>
+            When reading a record this property indicates that this record is chunked.
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeRecord.ChunkSize">
+            <summary>
+            Specifies the minimum size of a chunk when writing chunked payload DIME records.
+            Essentially this is the amount of buffering that will occur before the chunked 
+            payload is written to the underlying stream, the actual chunk size may be
+            greater. The default value for ChunkSize is specified by DimeWriter.DefaultChunkSize.
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeRecord.ContentLength">
+            <summary>
+            When writing specifies the payload length in bytes of the DIME record or -1 if the record
+            is chunked. When reading indicates the length of the payload as specified in the
+            DIME record header. 
+            </summary>       
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeRecord.EndOfMessage">
+            <summary>
+            When reading a record this property indicates that this record is the last one 
+            in the message. When writing a record the message end flag is automatically set
+            when the DimeWriter is closed.
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeRecord.Type">
+            <summary>
+            Specifies the type of the data in the payload. The TypeFormat property should be used
+            to interpret the Type property. For example if TypeFormat is TypeFormatEnum.MediaType
+            then a valid Type would be "plain/text; charset=utf-8" or "image/jpeg".
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeRecord.TypeFormat">
+            <summary>
+            Specifies what format the Type property is so that the format of the payload can be 
+            understood.
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeRecord.Id">
+            <summary>
+            The id of the DIME record. Should be unique for all DIME records
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.DimeStream">
+            <summary>
+            DimeStream is used to read or write the record payload data through a Stream
+            interface. The DimeStream delegates all of its work back to DimeRecord.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeStream.#ctor(OpenNETCF.Web.Services2.Dime.DimeRecord)">
+            <summary>
+            Creates a DimeStream object
+            </summary>
+            <param name="dimeRecord">A valid header for the DIME record.</param>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads data from the stream.  Returns 0 when the end of the record is reached.  
+            For chunked records, read will continue to read data, discarding the chunked 
+            record headers until the end of the chunked record set is reached. If Read() 
+            is called when the stream is closed, an exception is thrown.
+            </summary>
+            <param name="buffer">The buffer the data is copied into.</param>
+            <param name="offset">The offset in the buffer to begin copying to.</param>
+            <param name="count">The number of bytes to copy.</param>
+            <returns>The number of bytes copied.</returns>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes to the stream.  If ContentLength is exceeded, an exception is thrown. 
+            For chunked records, each write will generate a new chunked record if enough
+            bytes are available to exceed the chunk size. If Write() 
+            is called when the stream is closed, an exception is thrown.
+            </summary>
+            <param name="buffer">The data to be written.</param>
+            <param name="offset">The offset to write the data from.</param>
+            <param name="count">The number of bytes to write.</param>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeStream.Close">
+            <summary>
+            Closes the stream.  
+            Read-only mode: If the number of bytes read is less than ContentLength, the remaining
+            bytes are read from the stream and discarded.  
+            Write-only mode: If number of bytes written doesn’t equal the ContentLength, an 
+            exception is thrown.
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.IDimeAttachmentContainer">
+            <summary>
+            IDimeAttachmentContainer is an interface used by the DimeExtension to
+            get and set unreferenced DIME attachments. This interface can be implemented
+            on the service or proxy to add support for unreferenced attachments.
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.DimeWriter">
+            <summary>
+            Writes a DIME message as a series of DIME records to a stream.
+            </summary>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeWriter.#ctor(System.IO.Stream)">
+            <summary>
+            Creates a DimeWriter to write a DIME message to the given stream.
+            </summary>
+            <param name="stream">stream must be an open writeable stream</param>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeWriter.CreateRecord(System.Uri,System.String,OpenNETCF.Web.Services2.Dime.TypeFormatEnum)">
+            <summary>
+            Returns the next record to write in the DIME message. The record payload will be written
+            in chunked mode since no contentLength is specified. When the DimeWriter is closed then the
+            message end flag is automatically set on the last record.
+            </summary>
+            <param name="id">The unique identifier of the record in the form of a URI.</param>
+            <param name="type">The type of payload data in the record. The format of this type is 
+            specified by the typeFormat parameter. For example, if typeFormat is TypeFormatEnum.MediaType
+            then a valid type is "plain/text; charset=utf-8"</param>
+            <param name="typeFormat">The format of the type parameter.</param>
+            <returns>a write-only DimeRecord.</returns>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeWriter.CreateRecord(System.Uri,System.String,OpenNETCF.Web.Services2.Dime.TypeFormatEnum,System.Int32)">
+            <summary>
+            Returns the next record to write in the DIME message. If the length of the payload data is not
+            known upfront then use contentLength==-1 to specify chunked records. Otherwise the amount of data
+            written to the record must match the content length specified. When the DimeWriter is closed then the
+            message end flag is automatically set on the last record. If writing in non-chunked mode then
+            an empty terminating record with TNF=TypeFormatEnum.None will be automatically sent when the
+            DimeWriter is closed.
+            </summary>
+            <param name="id">The unique identifier of the record in the form of a URI.</param>
+            <param name="type">The type of payload data in the record. The format of this type is 
+            specified by the typeFormat parameter. For example, if typeFormat is TypeFormatEnum.MediaType
+            then a valid type is "plain/text; charset=utf-8"</param>
+            <param name="typeFormat">The format of the type parameter.</param>
+            <param name="contentLength">The count of bytes to be written to the DIME record, or -1 to specify
+            writing a chunked payload record.
+            </param>
+            <returns>A write-only DimeRecord.</returns>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.Dime.DimeWriter.Close">
+            <summary>
+            Closes the DIME message. If writing chunked payloads then any buffered data is written to
+            the underlying stream and the chunked record and message end flags are set. If writing
+            non-chunked then a terminating empty record with TNF=TypeFormatEnum.None is written to 
+            end the DIME message..
+            </summary>
+        </member>
+        <member name="P:OpenNETCF.Web.Services2.Dime.DimeWriter.DefaultChunkSize">
+            <summary>
+            Specifies the default chunk size in bytes when writing chunked payload DIME records. The default
+            value for the DefaultChunkSize is 1024 bytes.
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.Dime.TypeFormatEnum">
+            <summary>
+            Specifies possible Type formats as defined in the DIME specification. For example,
+            if the type format is TypeFormatEnum.MediaType then a valid Type would be
+            "plain/text; charset=utf-8" or "image/jpeg".
+            </summary>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.pathHeader">
+            <summary>
+            WS-Routing is a simple, stateless, SOAP-based protocol for routing SOAP messages 
+            over a variety of transports like TCP, UDP, and HTTP. With WS-Routing, the entire 
+            message path for a SOAP message (as well as its return path) can be described 
+            directly within the SOAP envelope. It supports one-way messaging, 
+            two-way messaging such as request/response and peer-to-peer conversations, 
+            and long running dialogs.
+            </summary>
+            <remarks>just keeping this around for WSE 1.0.
+            WSE 2.0 uses WS-Addressing</remarks>
+        </member>
+        <member name="M:OpenNETCF.Web.Services2.pathHeader.#ctor(System.String,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="action">Element that indicates the intent of the message in a manner 
+            akin to the SOAPAction HTTP header field defined for SOAP (required).</param>
+            <param name="to">The ultimate receiver (required).</param>
+            <param name="relatesTo">Element that indicates a relation with another message (optional).</param>
+        </member>
+        <member name="T:OpenNETCF.Web.Services2.SecConvHandler">
+            <summary>
+            Summary description for SecConvHandler.
+            </summary>
+        </member>
+    </members>
+</doc>

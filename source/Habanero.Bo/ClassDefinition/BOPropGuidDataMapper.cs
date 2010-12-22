@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.Util;
 
@@ -101,7 +102,7 @@ namespace Habanero.BO.ClassDefinition
 
         private static string ToUpperInvariant(Guid guidValue)
         {
-            return guidValue.ToString("B").ToUpperInvariant();
+            return guidValue.ToString("B").ToUpper(CultureInfo.InvariantCulture);
         }
     }
 }

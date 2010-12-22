@@ -58,15 +58,15 @@ namespace Habanero.Base.Exceptions
             }
             if (showStackTrace)
             {
-                str += StringUtilitiesCE.NewLine + GetIndent(indent);
+                str += EnvironmentCF.NewLine + GetIndent(indent);
                 str += ex.StackTrace;
             }
             if (ex.InnerException != null)
             {
-                str += StringUtilitiesCE.NewLine + StringUtilitiesCE.NewLine;
+                str += EnvironmentCF.NewLine + EnvironmentCF.NewLine;
                 str += GetIndent(indent + 8);
                 return
-                    str + "INNER EXCEPTION:" + StringUtilitiesCE.NewLine +
+                    str + "INNER EXCEPTION:" + EnvironmentCF.NewLine +
                     GetExceptionString(ex.InnerException, indent + 8, showStackTrace);
             }
             return str;

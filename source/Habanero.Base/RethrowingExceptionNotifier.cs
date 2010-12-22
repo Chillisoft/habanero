@@ -37,14 +37,16 @@ namespace Habanero.Base
         /// <param name="title">The title</param>
         public void Notify(Exception ex, string furtherMessage, string title)
         {
-            if (ex != null)
-            {
-                ThreadStart savestack =
-                    Delegate.CreateDelegate(typeof (ThreadStart), ex, "InternalPreserveStackTrace", false, false) as
-                    ThreadStart;
-                if (savestack != null) savestack();
-                throw ex;
-            }
+
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //if (ex != null)
+            //{
+            //    ThreadStart savestack =
+            //        Delegate.CreateDelegate(typeof (ThreadStart), ex, "InternalPreserveStackTrace", false, false) as
+            //        ThreadStart;
+            //    if (savestack != null) savestack();
+            //    throw ex;
+            //}
         }
 
         ///<summary>

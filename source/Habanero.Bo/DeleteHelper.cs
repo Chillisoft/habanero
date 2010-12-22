@@ -53,7 +53,7 @@ namespace Habanero.BO
 			CheckCanDeleteSafe(bo, new List<IBusinessObject>(), listOfPaths, "", ref results);
 			foreach (KeyValuePair<string, int> pair in results)
 			{
-                reason += StringUtilitiesCE.NewLine + String.Format(
+                reason += EnvironmentCF.NewLine + String.Format(
 					"There are {0} objects related through the '{1}' relationship that need to be deleted first.",
 					pair.Value, pair.Key);
 			}

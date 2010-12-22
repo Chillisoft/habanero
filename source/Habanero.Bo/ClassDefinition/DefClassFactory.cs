@@ -71,11 +71,13 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public ILookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className, bool limitToList)
 		{
-            Type databaseLookupListType = Util.TypeLoader.LoadType("Habanero.DB", "DatabaseLookupList");
-            return
-                (ILookupList)
-                Activator.CreateInstance(databaseLookupListType,
-                                         new object[] {sqlString, timeout, assemblyName, className, limitToList});
+
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //Type databaseLookupListType = Util.TypeLoader.LoadType("Habanero.DB", "DatabaseLookupList");
+            //return
+            //    (ILookupList)
+            //    Activator.CreateInstance(databaseLookupListType,
+            //                             new object[] {sqlString, timeout, assemblyName, className, limitToList});
 		}
 
         ///<summary>

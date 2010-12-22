@@ -401,7 +401,7 @@ namespace Habanero.Base
             {
                 return boPropertyValue.ToString().EndsWith(compareValueStringWNoPct);
             }
-            return StringUtilitiesCE.Contains(compareValueStringWNoPct, boPropertyValue.ToString());
+            return StringUtilitiesCF.Contains(compareValueStringWNoPct, boPropertyValue.ToString());
         }
 
         private bool IsNullMatch()

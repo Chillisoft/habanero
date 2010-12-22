@@ -22,6 +22,7 @@ using System.Drawing;
 using Habanero.Base;
 using Habanero.Util;
 using log4net;
+using OpenNETCF;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -81,9 +82,10 @@ namespace Habanero.BO.ClassDefinition
                 }
                 if (_propDef.PropertyType.IsSubclassOf(typeof(CustomProperty)) && !CanConvertUsingTypeConverter(valueToParse))
                 {
-                    returnValue = _propDef.PropertyType.IsInstanceOfType(valueToParse) 
-                                      ? valueToParse 
-                                      : Activator.CreateInstance(_propDef.PropertyType, new[] {valueToParse, false});
+                    throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                    //returnValue = _propDef.PropertyType.IsInstanceOfType(valueToParse) 
+                    //                  ? valueToParse 
+                    //                  : Activator.CreateInstance(_propDef.PropertyType, new[] {valueToParse, false});
                     return true;
                 }
                 if (_propDef.PropertyType == typeof (Object))
@@ -98,13 +100,14 @@ namespace Habanero.BO.ClassDefinition
                 }
                 if (_propDef.PropertyType.IsEnum && valueToParse is string)
                 {
-                    returnValue = Enum.Parse(_propDef.PropertyType, (string) valueToParse);
+                    returnValue = Enum2.Parse(_propDef.PropertyType, (string) valueToParse);
                     return true;
                 }
                 if (CanConvertUsingTypeConverter(valueToParse))
                 {
-                    var tc = GetTypeConverter();
-                    returnValue = tc.ConvertFrom(valueToParse);
+                    throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                    //var tc = GetTypeConverter();
+                    //returnValue = tc.ConvertFrom(valueToParse);
                     return true;
                 }
 
@@ -140,13 +143,15 @@ namespace Habanero.BO.ClassDefinition
         }
         private bool CanConvertUsingTypeConverter(object valueToParse)
         {
-            var tc = GetTypeConverter();
-            return tc != null && tc.CanConvertFrom(valueToParse.GetType());
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //var tc = GetTypeConverter();
+            //return tc != null && tc.CanConvertFrom(valueToParse.GetType());
         }
 
         private TypeConverter GetTypeConverter()
         {
-            return TypeDescriptor.GetConverter(this._propDef.PropertyType);
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //return TypeDescriptor.GetConverter(this._propDef.PropertyType);
         }
     }
 }

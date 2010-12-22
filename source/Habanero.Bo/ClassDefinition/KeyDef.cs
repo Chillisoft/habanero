@@ -201,7 +201,7 @@ namespace Habanero.BO.ClassDefinition
                     if (i == index) return propDef.Value;
                     i++;
                 }
-                throw new ArgumentOutOfRangeException("index", index, "index out of range");
+                throw new ArgumentOutOfRangeException("index", string.Format("index out of range at : {0}",index));
             }
         }
 

@@ -383,8 +383,11 @@ namespace Habanero.Util
         /// <returns></returns>
         public static string Humanize(string input)
         {
+            
             string replace = input.Replace("_", " ");
-            replace = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(replace);
+            //TODO andrew 22 Dec 2010: CF change.  Check that this change is good
+            replace = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(replace);
+            //replace = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(replace);
             return replace;
         }
         //TODO_ brett 08 Jun 2010: For DotNet 2_0  
@@ -443,7 +446,7 @@ namespace Habanero.Util
         {
             if (text.Length <= 1) return false;
             string firstLetter = text.Substring(0, 1);
-            if (firstLetter == firstLetter.ToLowerInvariant()) return false;
+            if (firstLetter == firstLetter.ToLower(CultureInfo.InvariantCulture)) return false;
 
             string textRemainderPart = text.Substring(1);
             return textRemainderPart != textRemainderPart.ToLower();
@@ -457,7 +460,7 @@ namespace Habanero.Util
         ///<returns></returns>
         public static string RemovePrefix(string prefix, string text)
         {
-            if (!string.IsNullOrEmpty(prefix) && text.StartsWith(prefix, true, CultureInfo.CurrentCulture))
+            if (!string.IsNullOrEmpty(prefix) && StringUtilitiesCF.StartsWith(text, prefix, true, CultureInfo.CurrentCulture))
             {
                 text = text.Substring(prefix.Length);
             }
@@ -582,7 +585,10 @@ namespace Habanero.Util
         public static int CountOccurrences(string fullText, string searchText, int startIndex, int length)
         {
             string text = fullText.Substring(startIndex, length);
-            string[] parts = text.Split(new[] {searchText}, StringSplitOptions.None);
+            //TODO andrew 22 Dec 2010: CF : split out the char array and removed StringSplitOptions - should be tested
+            char[] c = searchText.ToCharArray();
+            string[] parts = text.Split(c);
+            //string[] parts = text.Split(new[] {searchText}, StringSplitOptions.None);
             return parts.Length - 1;
         }
 
@@ -628,7 +634,7 @@ namespace Habanero.Util
         /// <returns>Returns the abbreviated string portion</returns>
         public static string GetLeftSection(string fullText, string searchText)
         {
-            if (fullText.Contains(searchText))
+            if (StringUtilitiesCF.Contains(searchText, fullText))
             {
                 return fullText.Substring(0, fullText.IndexOf(searchText));
             }
@@ -645,7 +651,7 @@ namespace Habanero.Util
         /// <returns>Returns the abbreviated string portion</returns>
         public static string GetRightSection(string fullText, string searchText)
         {
-            if (StringUtilitiesCE.Contains(searchText, fullText))
+            if (StringUtilitiesCF.Contains(searchText, fullText))
             {
                 int startPos = fullText.IndexOf(searchText) + searchText.Length;
                 return fullText.Substring(startPos, fullText.Length - startPos);
@@ -662,7 +668,7 @@ namespace Habanero.Util
         /// <returns>Returns the combined string</returns>
         public static string AppendMessage(string origMessage, string messageToAppend)
         {
-            if (!String.IsNullOrEmpty(origMessage)) origMessage += StringUtilitiesCE.NewLine;
+            if (!String.IsNullOrEmpty(origMessage)) origMessage += EnvironmentCF.NewLine;
             origMessage += messageToAppend;
             return origMessage;
         }
@@ -746,7 +752,7 @@ namespace Habanero.Util
         ///<returns></returns>
         public static string GuidToUpper(Guid guid)
         {
-            return guid.ToString("B").ToUpperInvariant();
+            return guid.ToString("B").ToUpper(CultureInfo.InvariantCulture);
         }
     }
 }

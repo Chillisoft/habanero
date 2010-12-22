@@ -19,6 +19,7 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 
 namespace Habanero.BO
 {
@@ -105,7 +106,7 @@ namespace Habanero.BO
         {
             if (String.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
             PropertyName = propertyName;
-            if (PropertyName.Contains(RELATIONSHIP_SEPARATOR))
+            if (StringUtilitiesCF.Contains(RELATIONSHIP_SEPARATOR, PropertyName))
             {
                 string[] parts = PropertyName.Split('.');
                 string relationshipPath = String.Join(RELATIONSHIP_SEPARATOR, parts, 0, parts.Length - 1);

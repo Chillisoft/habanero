@@ -10,7 +10,8 @@
 
 namespace Habanero.BO.Loaders {
     using System;
-    
+
+    //TODO andrew 22 Dec 2010: CF : Removed CompilerGeneratedAttribute
     
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
@@ -21,7 +22,7 @@ namespace Habanero.BO.Loaders {
     // with the /str option, or rebuild your VS project.
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    //[global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Dtds {
         
         private static global::System.Resources.ResourceManager resourceMan;

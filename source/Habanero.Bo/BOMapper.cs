@@ -122,7 +122,20 @@ namespace Habanero.BO
         {
             string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
             propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
-            string[] parts = relationshipName.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //TODO andrew 22 Dec 2010: Removed string split options - should test
+            char[] c = {'|'};
+            string[] parts = relationshipName.Split(new[] {'|'});
+            // manually remove empty entries
+            List<string> partsList = new List<string>(parts);
+            int j = partsList.Count - 1;
+            while (j > 0)
+            {
+                if (partsList[j].Trim().Length==0) partsList.RemoveAt(j);
+                j--;
+            }
+
+            //string[] parts = relationshipName.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             List<string> relNames = new List<string>(parts);
             IBusinessObject relatedBo = this._businessObject;
             IBusinessObject oldBo = relatedBo;

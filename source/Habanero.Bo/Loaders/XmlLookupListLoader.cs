@@ -92,21 +92,22 @@ namespace Habanero.BO.Loaders
 		/// <param name="defClassFactory">The factory for the definition classes</param>
         public static void LoadLookupListIntoProperty(string sourceElement, IPropDef def, DtdLoader dtdLoader, IDefClassFactory defClassFactory)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(sourceElement);
-            if (doc.DocumentElement == null)
-            {
-                throw new HabaneroDeveloperException
-                    ("There was a problem loading the class definitions pleaser refer to the system administrator",
-                     "The load lookup list property could not be loaded since the source element does not contain a document name");
-            }
-            string loaderClassName = "Xml" + doc.DocumentElement.Name + "Loader";
-            Type loaderType = Type.GetType
-                (typeof (XmlLookupListLoader).Namespace + "." + loaderClassName, true, true);
-            XmlLookupListLoader loader =
-                (XmlLookupListLoader)
-                Activator.CreateInstance(loaderType, new object[] {dtdLoader, defClassFactory});
-            def.LookupList = loader.LoadLookupList(doc.DocumentElement);
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //XmlDocument doc = new XmlDocument();
+            //doc.LoadXml(sourceElement);
+            //if (doc.DocumentElement == null)
+            //{
+            //    throw new HabaneroDeveloperException
+            //        ("There was a problem loading the class definitions pleaser refer to the system administrator",
+            //         "The load lookup list property could not be loaded since the source element does not contain a document name");
+            //}
+            //string loaderClassName = "Xml" + doc.DocumentElement.Name + "Loader";
+            //Type loaderType = Type.GetType
+            //    (typeof (XmlLookupListLoader).Namespace + "." + loaderClassName, true, true);
+            //XmlLookupListLoader loader =
+            //    (XmlLookupListLoader)
+            //    Activator.CreateInstance(loaderType, new object[] {dtdLoader, defClassFactory});
+            //def.LookupList = loader.LoadLookupList(doc.DocumentElement);
         }
     }
 }

@@ -1,5 +1,6 @@
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 
 namespace Habanero.BO
 {
@@ -21,7 +22,7 @@ namespace Habanero.BO
         {
             if (IsReflectiveProp(propertyName))
             {
-                if (propertyName.Contains(RELATIONSHIP_SEPARATOR))
+                if (StringUtilitiesCF.Contains(RELATIONSHIP_SEPARATOR, propertyName))
                 {
                     IBusinessObject relatedBo = businessObject;
                     //Get the first property name

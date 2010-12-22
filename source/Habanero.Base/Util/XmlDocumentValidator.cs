@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
@@ -55,11 +56,12 @@ namespace Habanero.Util
         /// is a validation failure</exception>
         public void ValidateDocument(string xmlDocument, string rootElementName, string dtd)
         {
-            _xmlDocument = new XmlDocument();
-            _xmlDocument.LoadXml(xmlDocument);
-            _xmlDocument.InsertBefore(_xmlDocument.CreateDocumentType(rootElementName, null, null, dtd),
-                                        _xmlDocument.DocumentElement);
-            ValidateCurrentDocument();
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //_xmlDocument = new XmlDocument();
+            //_xmlDocument.LoadXml(xmlDocument);
+            //_xmlDocument.InsertBefore(_xmlDocument.CreateDocumentType(rootElementName, null, null, dtd),
+            //                            _xmlDocument.DocumentElement);
+            //ValidateCurrentDocument();
         }
 
         /// <summary>
@@ -69,23 +71,25 @@ namespace Habanero.Util
         /// is a validation failure</exception>
         private void ValidateCurrentDocument()
         {
-             XmlReaderSettings settings = new XmlReaderSettings();
-            settings.ValidationType = ValidationType.DTD;
-            settings.ConformanceLevel = ConformanceLevel.Auto;
-            settings.ValidationEventHandler += ValidationHandler;
-            XmlReader validatingReader = XmlReader.Create(new XmlTextReader(new StringReader(_xmlDocument.OuterXml)), settings);
-               // new XmlValidatingReader(new XmlTextReader(new StringReader(_xmlDocument.OuterXml)));
-            //validatingReader.ValidationType = ValidationType.DTD;
-            //validatingReader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
-            while (validatingReader.Read())
-            {
-                ;
-            }
-            if (!_documentValid)
-            {
-                throw new InvalidXmlDefinitionException("The relationship node does not conform to the dtd." +
-                                                        _invalidDocumentArgs.Message);
-            }
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+
+            // XmlReaderSettings settings = new XmlReaderSettings();
+            //settings.ValidationType = ValidationType.DTD;
+            //settings.ConformanceLevel = ConformanceLevel.Auto;
+            //settings.ValidationEventHandler += ValidationHandler;
+            //XmlReader validatingReader = XmlReader.Create(new XmlTextReader(new StringReader(_xmlDocument.OuterXml)), settings);
+            //   // new XmlValidatingReader(new XmlTextReader(new StringReader(_xmlDocument.OuterXml)));
+            ////validatingReader.ValidationType = ValidationType.DTD;
+            ////validatingReader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
+            //while (validatingReader.Read())
+            //{
+            //    ;
+            //}
+            //if (!_documentValid)
+            //{
+            //    throw new InvalidXmlDefinitionException("The relationship node does not conform to the dtd." +
+            //                                            _invalidDocumentArgs.Message);
+            //}
         }
 
         /// <summary>
@@ -96,11 +100,13 @@ namespace Habanero.Util
         /// is a validation failure</exception>
         public void ValidateDocument(XmlDocument xmlDocument)
         {
-            _xmlDocument = xmlDocument;
-            _xmlDocument.InsertBefore(
-                xmlDocument.CreateDocumentType(xmlDocument.DocumentElement.Name, null, null,
-                                               GetDTD(xmlDocument.DocumentElement.Name)), xmlDocument.DocumentElement);
-            ValidateCurrentDocument();
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+
+            //_xmlDocument = xmlDocument;
+            //_xmlDocument.InsertBefore(
+            //    xmlDocument.CreateDocumentType(xmlDocument.DocumentElement.Name, null, null,
+            //                                   GetDTD(xmlDocument.DocumentElement.Name)), xmlDocument.DocumentElement);
+            //ValidateCurrentDocument();
         }
 
         /// <summary>

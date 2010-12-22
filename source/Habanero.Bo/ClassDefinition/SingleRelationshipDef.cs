@@ -123,8 +123,9 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
         {
-            Type relationshipBOType = typeof (SingleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
-            return (ISingleRelationship) Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //Type relationshipBOType = typeof (SingleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
+            //return (ISingleRelationship) Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);
         }
 
         ///<summary>

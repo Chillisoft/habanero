@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Globalization;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -69,7 +70,7 @@ namespace Habanero.BO.ClassDefinition
                     returnValue = null;
                     return true;
                 }
-                returnValue = guid.ToString("B").ToUpperInvariant();
+                returnValue = guid.ToString("B").ToUpper(CultureInfo.InvariantCulture);
                 return true;
             }
             if (valueToParse is DateTime)
@@ -83,7 +84,7 @@ namespace Habanero.BO.ClassDefinition
 
         private static string ToUpperInvariant(Guid guidValue)
         {
-            return guidValue.ToString("B").ToUpperInvariant();
+            return guidValue.ToString("B").ToUpper(CultureInfo.InvariantCulture);
         }
     }
 }

@@ -19,7 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+//TODO andrew 22 Dec 2010: CF : Serilization is not available in CF
+//using System.Runtime.Serialization.Formatters.Binary;
 using Habanero.Base;
 
 namespace Habanero.BO
@@ -35,9 +36,10 @@ namespace Habanero.BO
 
         public Dictionary<Guid, IBusinessObject> Read()
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            Dictionary<Guid, IBusinessObject> objects = (Dictionary<Guid, IBusinessObject>)formatter.Deserialize(_stream);
-            return objects;
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //BinaryFormatter formatter = new BinaryFormatter();
+            //Dictionary<Guid, IBusinessObject> objects = (Dictionary<Guid, IBusinessObject>)formatter.Deserialize(_stream);
+            //return objects;
         }
     }
 }

@@ -190,14 +190,15 @@ namespace Habanero.BO.Loaders
 					"PropRuleBase Subclass", "Property Rule Definition");
 				if (customPropRuleType.IsSubclassOf(typeof(PropRuleBase)))
 				{
-                    try
-                    {
-                        return (PropRuleBase) Activator.CreateInstance(customPropRuleType, new object[] {_name, _message });
-                    }
-                    catch (MissingMethodException)
-                    {
-                        return (PropRuleBase) Activator.CreateInstance(customPropRuleType, new object[] { _name, _message, _ruleParameters });
-                    }
+                    throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                    //try
+                    //{
+                    //    return (PropRuleBase) Activator.CreateInstance(customPropRuleType, new object[] {_name, _message });
+                    //}
+                    //catch (MissingMethodException)
+                    //{
+                    //    return (PropRuleBase) Activator.CreateInstance(customPropRuleType, new object[] { _name, _message, _ruleParameters });
+                    //}
 				}
 			    throw new TypeLoadException("The prop rule '" + _name + "' must inherit from PropRuleBase.");
 			}

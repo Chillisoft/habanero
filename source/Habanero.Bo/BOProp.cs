@@ -471,7 +471,8 @@ namespace Habanero.BO
 
         private static string FormatForXML(string text)
         {
-            return SecurityElement.Escape(text);
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //return SecurityElement.Escape(text);
         }
 
         /// <summary>
@@ -522,9 +523,10 @@ namespace Habanero.BO
             if (_boPropAuthorisation == null) return true;
             if (!_boPropAuthorisation.IsAuthorised(this, BOPropActions.CanUpdate))
             {
-                message = string.Format
-                    ("The logged on user {0} is not authorised to update the {1} ",
-                     Thread.CurrentPrincipal.Identity.Name, this.PropertyName);
+                throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                //message = string.Format
+                //    ("The logged on user {0} is not authorised to update the {1} ",
+                //     Thread.CurrentPrincipal.Identity.Name, this.PropertyName);
                 return false;
             }
 
@@ -550,9 +552,10 @@ namespace Habanero.BO
             message = "";
             if (!IsReadable())
             {
-                message = string.Format
-                    ("The logged on user {0} is not authorised to read the {1} ", Thread.CurrentPrincipal.Identity.Name,
-                     this.PropertyName);
+                throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                //message = string.Format
+                //    ("The logged on user {0} is not authorised to read the {1} ", Thread.CurrentPrincipal.Identity.Name,
+                //     this.PropertyName);
                 return false;
             }
             return true;

@@ -20,7 +20,7 @@ using System;
 using System.IO;
 using System.Text;
 using Habanero.Base.Util;
-
+using OpenNETCF.IO;
 namespace Habanero.Util
 {
     //TODO andrew 21 Dec 2010: CF : Change to use StringUtilitiesCE
@@ -38,12 +38,12 @@ namespace Habanero.Util
         /// </summary>
         public static bool StringHasOnlyWhitespaceSinceLastNewline(string result)
         {
-            if (StringUtilitiesCE.Contains(StringUtilitiesCE.NewLine, result))
+            if (StringUtilitiesCF.Contains(EnvironmentCF.NewLine, result))
             {
                 do // keeps eliminating everything left of and including the next newline until there are no newlines left
                 {
-                    result = StringUtilities.GetRightSection(result, StringUtilitiesCE.NewLine);
-                } while (StringUtilitiesCE.Contains(StringUtilitiesCE.NewLine, result));
+                    result = StringUtilities.GetRightSection(result, EnvironmentCF.NewLine);
+                } while (StringUtilitiesCF.Contains(EnvironmentCF.NewLine, result));
                 result = result.Replace(" ", "");
                 result = result.Replace("\t", "");
                 return result.Length == 0;
@@ -149,11 +149,11 @@ namespace Habanero.Util
                 CreateDirectory(path);
                 if (encoding != null)
                 {
-                    File.WriteAllText(destFile, fileContents, encoding);
+                    FileHelper.WriteAllText(destFile, fileContents, encoding);
                 }
                 else
                 {
-                    File.WriteAllText(destFile, fileContents);
+                    FileHelper.WriteAllText(destFile, fileContents);
                 }
             }
             return destFile;

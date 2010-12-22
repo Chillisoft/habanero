@@ -407,8 +407,9 @@ namespace Habanero.BO
         /// <returns></returns>
         protected static IBusinessObjectCollection CreateCollectionOfType(IClassDef classDef)
         {
-            Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(classDef.ClassType);
-            return (IBusinessObjectCollection) Activator.CreateInstance(boColType, classDef);
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(classDef.ClassType);
+            //return (IBusinessObjectCollection) Activator.CreateInstance(boColType, classDef);
         }
 
 //        protected static void AddBusinessObjectToCollection<T>

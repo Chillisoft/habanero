@@ -36,18 +36,20 @@ namespace Habanero.Util
         /// <returns>Returns a thumbnail Image</returns>
         public Image CreateThumbnail(Image fullImage, int newHeight)
         {
-            Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
-            int newWidth;
-            if (fullImage.Height > fullImage.Width)
-            {
-                newWidth = Convert.ToInt32(Math.Round((double) ((fullImage.Height/fullImage.Width)*newHeight)));
-            }
-            else
-            {
-                newWidth = Convert.ToInt32(Math.Round((double) ((fullImage.Width/fullImage.Height)*newHeight)));
-            }
 
-            return fullImage.GetThumbnailImage(newWidth, newHeight, myCallback, IntPtr.Zero);
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+            //int newWidth;
+            //if (fullImage.Height > fullImage.Width)
+            //{
+            //    newWidth = Convert.ToInt32(Math.Round((double) ((fullImage.Height/fullImage.Width)*newHeight)));
+            //}
+            //else
+            //{
+            //    newWidth = Convert.ToInt32(Math.Round((double) ((fullImage.Width/fullImage.Height)*newHeight)));
+            //}
+
+            //return fullImage.GetThumbnailImage(newWidth, newHeight, myCallback, IntPtr.Zero);
         }
 
         /// <summary>

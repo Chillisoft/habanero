@@ -813,7 +813,8 @@ namespace Habanero.BO.ClassDefinition
             object newValue;
             try
             {
-                newValue = Convert.ChangeType(value, this.PropertyType);
+                throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                //newValue = Convert.ChangeType(value, this.PropertyType);
             }
             catch (InvalidCastException)
             {
@@ -910,11 +911,12 @@ namespace Habanero.BO.ClassDefinition
         /// type is not one of those mentioned above</returns>
         public IPropertyComparer<T> GetPropertyComparer<T>() where T : IBusinessObject
         {
-            Type comparerType = typeof (PropertyComparer<,>);
-            comparerType = comparerType.MakeGenericType(typeof (T), PropertyType);
-            IPropertyComparer<T> comparer =
-                (IPropertyComparer<T>) Activator.CreateInstance(comparerType, this.PropertyName);
-            return comparer;
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //Type comparerType = typeof (PropertyComparer<,>);
+            //comparerType = comparerType.MakeGenericType(typeof (T), PropertyType);
+            //IPropertyComparer<T> comparer =
+            //    (IPropertyComparer<T>) Activator.CreateInstance(comparerType, this.PropertyName);
+            //return comparer;
         }
 
         #endregion //PropertyComparer

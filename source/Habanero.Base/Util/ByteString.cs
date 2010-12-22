@@ -56,8 +56,10 @@ namespace Habanero.Util
             }
             else if (value is byte[])
             {
-                _textValue = Encoding.Unicode.GetString((byte[])value);
-            } else 
+                var bytes = (byte[])value;
+                _textValue = Encoding.Unicode.GetString(bytes, 0, bytes.Length);
+            }
+            else 
             {
                 _textValue = value.ToString();
             }

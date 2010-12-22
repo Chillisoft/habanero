@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using OpenNETCF;
 
 namespace Habanero.BO.Loaders
 {
@@ -65,7 +66,7 @@ namespace Habanero.BO.Loaders
             {
                 _reader.Read();
                 string filterModeStr = _reader.GetAttribute("filterMode");
-                _filterMode = (FilterModes) Enum.Parse(typeof (FilterModes), filterModeStr);
+                _filterMode = (FilterModes) Enum2.Parse(typeof (FilterModes), filterModeStr);
                 _columns = Convert.ToInt32(_reader.GetAttribute("columns"));
 
             }
@@ -80,7 +81,7 @@ namespace Habanero.BO.Loaders
                 string filterTypeAssembly = _reader.GetAttribute("filterTypeAssembly");
                 string filterClauseOperatorStr = _reader.GetAttribute("operator");
                 FilterClauseOperator filterClauseOperator 
-                    = (FilterClauseOperator) Enum.Parse(typeof (FilterClauseOperator), filterClauseOperatorStr);
+                    = (FilterClauseOperator) Enum2.Parse(typeof (FilterClauseOperator), filterClauseOperatorStr);
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 IFilterPropertyDef filterPropertyDef = 
                     _defClassFactory.CreateFilterPropertyDef(propertyName, label, filterType, filterTypeAssembly, filterClauseOperator, parameters);

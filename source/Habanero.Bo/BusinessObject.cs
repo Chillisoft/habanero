@@ -21,7 +21,8 @@ using System.Collections;
 using System.Collections.Generic;
 //using System.Linq;
 //using System.Linq.Expressions;
-using System.Runtime.Serialization;
+//TODO andrew 22 Dec 2010: CF : Serilization is not available in CF
+//using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
 using System.Xml;
@@ -47,12 +48,16 @@ namespace Habanero.BO
         ///</summary>
         True
     }
+
+    //TODO andrew 22 Dec 2010: Removed ISerializable
+
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
     /// This Class implements the Layer SuperType - Fowler (xxx)
     /// </summary>
-    public class BusinessObject : IBusinessObject, ISerializable
+    //public class BusinessObject : IBusinessObject, ISerializable
+    public class BusinessObject : IBusinessObject
     {
         private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
@@ -180,61 +185,61 @@ namespace Habanero.BO
 
         #region Serialisation of BusinessObject
 
-        // TODO_ - Mark 03 Feb 2009 : The only detail that is recorded off of a BOProp is the current value. Is this correct?
-        //      I noticed that the prop values that have come out of a seriaizable context are all going to be the persisted values as well.
-        /// <summary>
-        /// Constructs an <see cref="IBusinessObject"/> from a serialised source.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        protected BusinessObject(SerializationInfo info, StreamingContext context)
-        {
-            Initialise(ClassDef.ClassDefs[GetType()]);
-            foreach (BOProp prop in _boPropCol)
-            {
-                try
-                {
-                    prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
-                    prop._isDirty = (bool)info.GetValue(prop.PropertyName + "_IsDirty", typeof(Boolean));
-                }
-                catch (SerializationException ex)
-                {
-                    if (ex.Message.Contains("Member") && ex.Message.Contains("was not found"))
-                    {
-                        continue;
-                    }
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    string message = "The Business Object " + ClassDef.ClassName
-                                     + " could not be deserialised because the property " + prop.PropertyName
-                                     + " raised an exception";
-                    throw new HabaneroDeveloperException(message, message, ex);
-                }
-            }
-            _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
-            _boStatus.BusinessObject = this;
-            SetupBOPropsWithThisBo();
-            ReplaceInObjectManager();
-            RegisterForPropertyEvents();
-        }
+        //// TODO_ - Mark 03 Feb 2009 : The only detail that is recorded off of a BOProp is the current value. Is this correct?
+        ////      I noticed that the prop values that have come out of a seriaizable context are all going to be the persisted values as well.
+        ///// <summary>
+        ///// Constructs an <see cref="IBusinessObject"/> from a serialised source.
+        ///// </summary>
+        ///// <param name="info"></param>
+        ///// <param name="context"></param>
+        //protected BusinessObject(SerializationInfo info, StreamingContext context)
+        //{
+        //    Initialise(ClassDef.ClassDefs[GetType()]);
+        //    foreach (BOProp prop in _boPropCol)
+        //    {
+        //        try
+        //        {
+        //            prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
+        //            prop._isDirty = (bool)info.GetValue(prop.PropertyName + "_IsDirty", typeof(Boolean));
+        //        }
+        //        catch (SerializationException ex)
+        //        {
+        //            if (ex.Message.Contains("Member") && ex.Message.Contains("was not found"))
+        //            {
+        //                continue;
+        //            }
+        //            throw;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            string message = "The Business Object " + ClassDef.ClassName
+        //                             + " could not be deserialised because the property " + prop.PropertyName
+        //                             + " raised an exception";
+        //            throw new HabaneroDeveloperException(message, message, ex);
+        //        }
+        //    }
+        //    _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
+        //    _boStatus.BusinessObject = this;
+        //    SetupBOPropsWithThisBo();
+        //    ReplaceInObjectManager();
+        //    RegisterForPropertyEvents();
+        //}
 
-        /// <summary>
-        /// Gets the Objects data for the purposes of serialisation.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            foreach (IBOProp prop in _boPropCol)
-            {
-                info.AddValue(prop.PropertyName, prop.Value);
-                info.AddValue(prop.PropertyName + "_IsDirty", prop.IsDirty);
-            }
-            info.AddValue("Status", Status);
-        }
+        ///// <summary>
+        ///// Gets the Objects data for the purposes of serialisation.
+        ///// </summary>
+        ///// <param name="info"></param>
+        ///// <param name="context"></param>
+        //[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        //public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    foreach (IBOProp prop in _boPropCol)
+        //    {
+        //        info.AddValue(prop.PropertyName, prop.Value);
+        //        info.AddValue(prop.PropertyName + "_IsDirty", prop.IsDirty);
+        //    }
+        //    info.AddValue("Status", Status);
+        //}
 
         #endregion // Serialisation of BusinessObject
 
@@ -667,9 +672,11 @@ namespace Habanero.BO
             message = "";
             if (AuthorisationRules == null) return true;
             if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanCreate)) return true;
-            message = string.Format
-                ("The logged on user {0} is not authorised to create a {1}", Thread.CurrentPrincipal.Identity.Name,
-                 ClassDef.ClassName);
+
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //message = string.Format
+            //    ("The logged on user {0} is not authorised to create a {1}", Thread.CurrentPrincipal.Identity.Name,
+            //     ClassDef.ClassName);
             return false;
         }
 
@@ -690,9 +697,10 @@ namespace Habanero.BO
             message = "";
             if (AuthorisationRules == null) return true;
             if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanUpdate)) return true;
-            message = string.Format
-                ("The logged on user {0} is not authorised to update {1} Identified By {2}",
-                 Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //message = string.Format
+            //    ("The logged on user {0} is not authorised to update {1} Identified By {2}",
+            //     Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
             return false;
         }
 
@@ -711,9 +719,11 @@ namespace Habanero.BO
             message = "";
             if (AuthorisationRules != null && !AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanDelete))
             {
-                message = string.Format
-                    ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
-                     Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
+                throw new NotImplementedException("CF: Code commented out to get CF to compile");
+
+                //message = string.Format
+                //    ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
+                //     Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
                 return false;
             }
             if (Relationships == null) return true;
@@ -858,9 +868,10 @@ namespace Habanero.BO
             message = "";
             if (AuthorisationRules == null) return true;
             if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanRead)) return true;
-            message = string.Format
-                ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
-                 ClassDef.ClassName);
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            //message = string.Format
+            //    ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
+            //     ClassDef.ClassName);
             return false;
         }
 

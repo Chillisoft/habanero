@@ -17,7 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Runtime.Serialization;
+//TODO andrew 22 Dec 2010: CF : does not support serialization
+//using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -61,16 +62,16 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusinessObjectException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusinessObjectException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
 
     /// <summary>
@@ -122,17 +123,17 @@ namespace Habanero.BO
             _propDef = propDef;
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
 
-        protected BOPropWriteException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        //protected BOPropWriteException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
         
         ///<summary>
         /// The property definition for the property that had the ReadWriteRule which threw the error.
@@ -172,16 +173,16 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BOPropReadException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BOPropReadException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
 
     /// <summary>
@@ -216,16 +217,16 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusinessObjectNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusinessObjectNotFoundException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
 
 	/// <summary>
@@ -265,16 +266,16 @@ namespace Habanero.BO
 		{
 		}
 
-		/// <summary>
-		/// Constructor to initialise the exception with the serialisation info
-		/// and streaming context provided
-		/// </summary>
-		/// <param name="info">The serialisation info</param>
-		/// <param name="context">The streaming context</param>
-		protected BusinessObjectReferentialIntegrityException(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
-		}
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusinessObjectReferentialIntegrityException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
 	}
     /// <summary>
     /// Provides an exception to throw when a the referential integrity constraints of 
@@ -311,16 +312,16 @@ namespace Habanero.BO
 		{
 		}
 
-		/// <summary>
-		/// Constructor to initialise the exception with the serialisation info
-		/// and streaming context provided
-		/// </summary>
-		/// <param name="info">The serialisation info</param>
-		/// <param name="context">The streaming context</param>
-        protected BusObjPersistException(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
-		}
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusObjPersistException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
    
 
@@ -356,15 +357,15 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected InvalidPropertyValueException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected InvalidPropertyValueException(SerializationInfo info, StreamingContext context) : base(info, context)
+        //{
+        //}
     }
 
 
@@ -405,16 +406,16 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusObjectInAnInvalidStateException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusObjectInAnInvalidStateException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
 
 
@@ -475,31 +476,31 @@ namespace Habanero.BO
             get { return _obj; }
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusObjectConcurrencyControlException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            _obj = info.GetValue("businessObject", typeof (object));
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusObjectConcurrencyControlException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //    _obj = info.GetValue("businessObject", typeof (object));
+        //}
 
-        /// <summary>
-        /// Gets object data using the specified serialisation info and
-        /// streaming context
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            // Implement type-specific serialization logic and call base serializer.
-            info.AddValue("businessObject", _obj);
-            base.GetObjectData(info, context);
-        }
+        ///// <summary>
+        ///// Gets object data using the specified serialisation info and
+        ///// streaming context
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    // Implement type-specific serialization logic and call base serializer.
+        //    info.AddValue("businessObject", _obj);
+        //    base.GetObjectData(info, context);
+        //}
     }
 
 
@@ -626,39 +627,39 @@ namespace Habanero.BO
             get { return mClassName; }
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusObjOptimisticConcurrencyControlException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            mUserNameEdited = (string) info.GetValue("UserNameEdited", typeof (string));
-            mMachineNameEdited = (string) info.GetValue("MachineNameEdited", typeof (string));
-            mDateUpdated = (DateTime) info.GetValue("DateUpdated", typeof (DateTime));
-            mObjectID = (string) info.GetValue("ObjectID", typeof (string));
-            mClassName = (string) info.GetValue("_className", typeof (string));
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusObjOptimisticConcurrencyControlException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //    mUserNameEdited = (string) info.GetValue("UserNameEdited", typeof (string));
+        //    mMachineNameEdited = (string) info.GetValue("MachineNameEdited", typeof (string));
+        //    mDateUpdated = (DateTime) info.GetValue("DateUpdated", typeof (DateTime));
+        //    mObjectID = (string) info.GetValue("ObjectID", typeof (string));
+        //    mClassName = (string) info.GetValue("_className", typeof (string));
+        //}
 
-        /// <summary>
-        /// Gets object data using the specified serialisation info and
-        /// streaming context
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            // Implement type-specific serialization logic and call base serializer.
-            info.AddValue("UserNameEdited", mUserNameEdited);
-            info.AddValue("MachineNameEdited", mMachineNameEdited);
-            info.AddValue("DateUpdated", mDateUpdated);
-            info.AddValue("ObjectID", mObjectID);
-            info.AddValue("_className", mClassName);
-            base.GetObjectData(info, context);
-        }
+        ///// <summary>
+        ///// Gets object data using the specified serialisation info and
+        ///// streaming context
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    // Implement type-specific serialization logic and call base serializer.
+        //    info.AddValue("UserNameEdited", mUserNameEdited);
+        //    info.AddValue("MachineNameEdited", mMachineNameEdited);
+        //    info.AddValue("DateUpdated", mDateUpdated);
+        //    info.AddValue("ObjectID", mObjectID);
+        //    info.AddValue("_className", mClassName);
+        //    base.GetObjectData(info, context);
+        //}
     }
 
 
@@ -788,39 +789,39 @@ namespace Habanero.BO
             get { return mClassName; }
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusObjPessimisticConcurrencyControlException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            mUserNameEdited = (string)info.GetValue("UserNameEdited", typeof(string));
-            mMachineNameEdited = (string)info.GetValue("MachineNameEdited", typeof(string));
-            mDateUpdated = (DateTime)info.GetValue("DateUpdated", typeof(DateTime));
-            mObjectID = (string)info.GetValue("ObjectID", typeof(string));
-            mClassName = (string)info.GetValue("_className", typeof(string));
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusObjPessimisticConcurrencyControlException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //    mUserNameEdited = (string)info.GetValue("UserNameEdited", typeof(string));
+        //    mMachineNameEdited = (string)info.GetValue("MachineNameEdited", typeof(string));
+        //    mDateUpdated = (DateTime)info.GetValue("DateUpdated", typeof(DateTime));
+        //    mObjectID = (string)info.GetValue("ObjectID", typeof(string));
+        //    mClassName = (string)info.GetValue("_className", typeof(string));
+        //}
 
-        /// <summary>
-        /// Gets object data using the specified serialisation info and
-        /// streaming context
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            // Implement type-specific serialization logic and call base serializer.
-            info.AddValue("UserNameEdited", mUserNameEdited);
-            info.AddValue("MachineNameEdited", mMachineNameEdited);
-            info.AddValue("DateUpdated", mDateUpdated);
-            info.AddValue("ObjectID", mObjectID);
-            info.AddValue("_className", mClassName);
-            base.GetObjectData(info, context);
-        }
+        ///// <summary>
+        ///// Gets object data using the specified serialisation info and
+        ///// streaming context
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    // Implement type-specific serialization logic and call base serializer.
+        //    info.AddValue("UserNameEdited", mUserNameEdited);
+        //    info.AddValue("MachineNameEdited", mMachineNameEdited);
+        //    info.AddValue("DateUpdated", mDateUpdated);
+        //    info.AddValue("ObjectID", mObjectID);
+        //    info.AddValue("_className", mClassName);
+        //    base.GetObjectData(info, context);
+        //}
     }
 
     /// <summary>
@@ -874,16 +875,16 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusObjDeleteConcurrencyControlException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusObjDeleteConcurrencyControlException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
 
 
@@ -952,16 +953,16 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusObjBeginEditConcurrencyControlException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusObjBeginEditConcurrencyControlException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
 
 
@@ -1020,30 +1021,30 @@ namespace Habanero.BO
             mobj = obj;
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusObjReadException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            mobj = info.GetValue("businessObject", typeof(object));
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusObjReadException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //    mobj = info.GetValue("businessObject", typeof(object));
+        //}
 
-        /// <summary>
-        /// Gets object data using the specified serialisation info and
-        /// streaming context
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("businessObject", mobj);
-            base.GetObjectData(info, context);
-        }
+        ///// <summary>
+        ///// Gets object data using the specified serialisation info and
+        ///// streaming context
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    info.AddValue("businessObject", mobj);
+        //    base.GetObjectData(info, context);
+        //}
     }
 
     /// <summary>
@@ -1098,29 +1099,29 @@ namespace Habanero.BO
             mobj = obj;
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected EditingException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            mobj = info.GetValue("businessObject", typeof (object));
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected EditingException(SerializationInfo info, StreamingContext context) : base(info, context)
+        //{
+        //    mobj = info.GetValue("businessObject", typeof (object));
+        //}
 
-        /// <summary>
-        /// Gets object data using the specified serialisation info and
-        /// streaming context
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("businessObject", mobj);
-            base.GetObjectData(info, context);
-        }
+        ///// <summary>
+        ///// Gets object data using the specified serialisation info and
+        ///// streaming context
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    info.AddValue("businessObject", mobj);
+        //    base.GetObjectData(info, context);
+        //}
     }
 
 
@@ -1188,16 +1189,16 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise the exception with the serialisation info
-        /// and streaming context provided
-        /// </summary>
-        /// <param name="info">The serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected BusObjDuplicateConcurrencyControlException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        ///// <summary>
+        ///// Constructor to initialise the exception with the serialisation info
+        ///// and streaming context provided
+        ///// </summary>
+        ///// <param name="info">The serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected BusObjDuplicateConcurrencyControlException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
     /// <summary>
     /// Provides an exception to throw when the object cannot be deleted due to either the 
