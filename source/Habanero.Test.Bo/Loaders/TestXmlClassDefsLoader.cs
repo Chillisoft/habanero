@@ -17,13 +17,18 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Linq;
+//TODO andrew 22 Dec 2010: CF : CF 2 does not have linq support
+
+//using System.Linq;
+using System.Collections;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.Test.Structure;
+using System.Collections.Generic;
+//TODO andrew 22 Dec 2010: Have not included Test.Structure
+//using Habanero.Test.Structure;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders
@@ -709,10 +714,16 @@ namespace Habanero.Test.BO.Loaders
                 loader.LoadClassDefs(TestClassWithUIDef);
             //---------------Test Result -----------------------
             IClassDef classDef = classDefs["Habanero.Test", "Sample"];
-            var uiDef = classDef.UIDefCol.FirstOrDefault();
+
+
+
+            IUIDef uiDef = FirstOrDefault(classDef.UIDefCol);
             Assert.IsNotNull(uiDef);
             Assert.AreSame(classDef, uiDef.ClassDef);
         }
+
+
+
         private const string TestClassWithUIGridDef =
             @"<classes>
 				<class name=""Sample"" assembly=""Habanero.Test"">
@@ -742,7 +753,7 @@ namespace Habanero.Test.BO.Loaders
                 loader.LoadClassDefs(TestClassWithUIGridDef);
             //---------------Test Result -----------------------
             IClassDef classDef = classDefs["Habanero.Test", "Sample"];
-            var uiDef = classDef.UIDefCol.FirstOrDefault();
+            IUIDef uiDef = FirstOrDefault(classDef.UIDefCol);
             Assert.AreSame(classDef, uiDef.ClassDef, "UIDefs ClassDef should be set");
             var uiGrid = uiDef.UIGrid;
             Assert.IsNotNull(uiGrid);
@@ -759,11 +770,34 @@ namespace Habanero.Test.BO.Loaders
                 loader.LoadClassDefs(TestClassWithUIGridDef);
             //---------------Test Result -----------------------
             IClassDef classDef = classDefs["Habanero.Test", "Sample"];
-            var uiDef = classDef.UIDefCol.FirstOrDefault();
+            IUIDef uiDef = FirstOrDefault(classDef.UIDefCol);
             Assert.IsNotNull(uiDef.UIGrid);
-            var gridColumn = uiDef.UIGrid.FirstOrDefault();
+            IUIGridColumn gridColumn = FirstOrDefault(uiDef.UIGrid);
             Assert.IsNotNull(gridColumn.UIGrid);
             Assert.AreSame(classDef, gridColumn.ClassDef);
+        }
+
+        //TODO andrew 22 Dec 2010: No linq support so need methods to simulate linq 
+        private static IUIDef FirstOrDefault(UIDefCol uiDefCol)
+        {
+            IUIDef result = null;
+            foreach (var uidef in uiDefCol)
+            {
+                result = uidef;
+                break;
+            }
+            return result;
+        }
+
+        private static IUIGridColumn FirstOrDefault(IEnumerable<IUIGridColumn> uiGridColumns)
+        {
+            IUIGridColumn result = null;
+            foreach (var uiGridColumn in uiGridColumns)
+            {
+                result = uiGridColumn;
+                break;
+            }
+            return result;
         }
 
 

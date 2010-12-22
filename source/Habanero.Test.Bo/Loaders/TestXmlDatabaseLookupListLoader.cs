@@ -24,7 +24,8 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.DB;
+//TODO andrew 22 Dec 2010: CF : Habanero.Db not included yet
+//using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders

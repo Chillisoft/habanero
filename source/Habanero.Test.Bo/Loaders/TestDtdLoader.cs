@@ -22,6 +22,7 @@ using System.Collections;
 using System.IO;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.Loaders;
 using Habanero.Util;
 using NMock;
@@ -99,7 +100,7 @@ TestDtd3";
 
             mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"class.dtd"});
             String dtdFileContents = loader.LoadDtd("class");
-            Assert.AreEqual(dtd1 + Environment.NewLine, dtdFileContents);
+            Assert.AreEqual(dtd1 + EnvironmentCF.NewLine, dtdFileContents);
             mockControl.Verify();
         }
 
@@ -117,7 +118,7 @@ TestDtd3";
             mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"class.dtd"});
 
             String dtdFileContents = loader.LoadDtd("property");
-            Assert.AreEqual(dtd2and1 + Environment.NewLine, dtdFileContents);
+            Assert.AreEqual(dtd2and1 + EnvironmentCF.NewLine, dtdFileContents);
         }
 
         [Test]
@@ -134,7 +135,7 @@ TestDtd3";
             mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "class.dtd" });
 
             String dtdFileContents = loader.LoadDtd("key");
-            Assert.AreEqual(dtd3processed + Environment.NewLine, dtdFileContents);
+            Assert.AreEqual(dtd3processed + EnvironmentCF.NewLine, dtdFileContents);
         }
 
         [Test]
