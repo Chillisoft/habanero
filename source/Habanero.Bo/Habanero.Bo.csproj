@@ -18,6 +18,8 @@
     <NativePlatformName>Windows CE</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -223,6 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CriteriaManager\CriteriaManagerBinaryTree.vsd" />
+    <None Include="key.snk" />
     <None Include="Loaders\DTDs\.svn\all-wcprops" />
     <None Include="Loaders\DTDs\.svn\dir-prop-base" />
     <None Include="Loaders\DTDs\.svn\entries" />

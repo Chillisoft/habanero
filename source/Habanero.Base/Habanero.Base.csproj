@@ -18,6 +18,8 @@
     <NativePlatformName>Windows CE</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -241,6 +243,7 @@
     <Compile Include="XMLWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="key.snk" />
     <None Include="Util\File\.svn\all-wcprops" />
     <None Include="Util\File\.svn\entries" />
     <None Include="Util\File\.svn\text-base\CSVFileReader.cs.svn-base" />

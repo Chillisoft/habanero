@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -96,7 +97,7 @@ namespace Habanero.Test.BO
             boProp.InitialiseProp(expectedGuid);
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), boProp.Value);
+            Assert.AreEqual(expectedGuid.ToString("B").ToUpper(CultureInfo.InvariantCulture), boProp.Value);
             Assert.IsTrue(boProp.Value is string, "Value should be a expectedString");
         }
 
@@ -209,7 +210,7 @@ namespace Habanero.Test.BO
             boProp.Value = expectedGuid;
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), boProp.Value);
+            Assert.AreEqual(expectedGuid.ToString("B").ToUpper(CultureInfo.InvariantCulture), boProp.Value);
             Assert.IsTrue(boProp.Value is string, "Value should be a expectedString");
         }
 
@@ -294,7 +295,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             string persistedPropertyValueString = boProp.PersistedPropertyValueString;
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), persistedPropertyValueString);
+            Assert.AreEqual(expectedGuid.ToString("B").ToUpper(CultureInfo.InvariantCulture), persistedPropertyValueString);
         }
 
         [Test]
@@ -385,7 +386,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             string persistedPropertyValueString = boProp.PropertyValueString;
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), persistedPropertyValueString);
+            Assert.AreEqual(expectedGuid.ToString("B").ToUpper(CultureInfo.InvariantCulture), persistedPropertyValueString);
         }
 
         [Test]

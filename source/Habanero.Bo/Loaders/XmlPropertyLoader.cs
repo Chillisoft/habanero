@@ -198,9 +198,15 @@ namespace Habanero.BO.Loaders
         {
             try
             {
+                var attribute = _reader.GetAttribute("readWriteRule");
+                if (attribute==null)
+                {
+                    _readWriteRule = PropReadWriteRule.ReadWrite;
+                    return;
+                }
                 _readWriteRule =
                     (PropReadWriteRule)
-                    Enum2.Parse(typeof (PropReadWriteRule), _reader.GetAttribute("readWriteRule"));
+                    Enum2.Parse(typeof (PropReadWriteRule), attribute);
             }
             catch (Exception ex)
             {

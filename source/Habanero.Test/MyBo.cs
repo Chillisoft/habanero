@@ -18,13 +18,15 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+//TODO andrew 22 Dec 2010: CF : No support for serialization
+//using System.Runtime.Serialization;
 using System.Xml;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.DB;
+//TODO andrew 22 Dec 2010: No yet ported
+//using Habanero.DB;
 using Habanero.Util;
 
 namespace Habanero.Test
@@ -39,10 +41,10 @@ namespace Habanero.Test
         private string _toStringValue = _stdToStringVal;
         private static string _stdToStringVal = "STDVALUE";
 
-        protected MyBO(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            _myRuleList = new List<IBusinessObjectRule>();
-        }
+        //protected MyBO(SerializationInfo info, StreamingContext context) : base(info, context)
+        //{
+        //    _myRuleList = new List<IBusinessObjectRule>();
+        //}
 
         public MyBO(IClassDef def)
             : base(def)
@@ -107,17 +109,18 @@ namespace Habanero.Test
             }
         }
 
-        public virtual Shape Shape
-        {
-            get
-            {
-                return Relationships.GetRelatedObject<Shape>("Shape");
-            }
-            set
-            {
-                Relationships.SetRelatedObject("Shape", value);
-            }
-        }
+        //TODO andrew 22 Dec 2010: Removed during porting needs to be re-added
+        //public virtual Shape Shape
+        //{
+        //    get
+        //    {
+        //        return Relationships.GetRelatedObject<Shape>("Shape");
+        //    }
+        //    set
+        //    {
+        //        Relationships.SetRelatedObject("Shape", value);
+        //    }
+        //}
 
         public bool TestBoolean
         {
@@ -1715,11 +1718,11 @@ namespace Habanero.Test
             return classDef;
         }
 
-        public static void DeleteAllMyBos()
-        {
-            string sql = "DELETE FROM mybo";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
-        }
+        //public static void DeleteAllMyBos()
+        //{
+        //    string sql = "DELETE FROM mybo";
+        //    DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        //}
 
         public void AddBusinessRule(IBusinessObjectRule businessObjectRuleStub)
         {

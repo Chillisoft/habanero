@@ -18,6 +18,8 @@
     <NativePlatformName>Windows CE</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,6 +72,7 @@
     <Compile Include="Base\TestRecordingExceptionNotifier.cs" />
     <Compile Include="Base\TestResult.cs" />
     <Compile Include="Base\TestRSAPasswordCrypter.cs" />
+    <Compile Include="MyBo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestUtil.cs" />
   </ItemGroup>
@@ -78,6 +81,13 @@
       <Project>{75043A90-2D88-43A0-8C64-EA51B6B2826A}</Project>
       <Name>Habanero.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{F214D8D4-F00F-46E7-8167-86331E5398DB}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Base\Exceptions\" />

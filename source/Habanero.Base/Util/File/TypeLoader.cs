@@ -219,7 +219,7 @@ namespace Habanero.Util
         {
             if (assemblyName.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase)
                 || assemblyName.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase))
-                assemblyName = assemblyName.Remove(0, assemblyName.Length - 4);
+                assemblyName = assemblyName.Remove(assemblyName.Length - 4, 4);
             return assemblyName;
         }
     }

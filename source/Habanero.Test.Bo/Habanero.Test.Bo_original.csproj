@@ -1,0 +1,401 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Habanero.Test.BO</AssemblyName>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Habanero.Test.BO</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>067</NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.2.2.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nmock">
+      <Name>nmock</Name>
+      <HintPath>..\..\lib\nmock.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Event.cs" />
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Events.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderInMemory.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderMultiSource.cs" />
+    <Compile Include="ClassDefinition\TestBOPropGeneralDataMapper.cs" />
+    <Compile Include="ClassDefinition\TestClassDefHelper.cs" />
+    <Compile Include="ClassDefinition\TestDefClassFactory.cs" />
+    <Compile Include="ClassDefinition\TestFilterDef.cs" />
+    <Compile Include="ClassDefinition\TestSingleRelationshipDef.cs" />
+    <Compile Include="CriteriaManager\TestCriteriaValues.cs" />
+    <Compile Include="DataMappers\TestBOPropDataMapper_long.cs" />
+    <Compile Include="Loaders\TestClassDefsXmlValidator.cs" />
+    <Compile Include="ClassDefinition\TestClassDefValidator.cs" />
+    <Compile Include="Loaders\TestXmlBusinessObjectLookupListLoader.cs" />
+    <Compile Include="Loaders\TestXmlDatabaseLookupListLoader.cs" />
+    <Compile Include="Loaders\TestXmlFilterLoader.cs" />
+    <Compile Include="Loaders\TestXmlPropertyRuleLoader_ClassDefOnly.cs" />
+    <Compile Include="Loaders\TestXmlSimpleLookupListLoader.cs" />
+    <Compile Include="PropRule\TestInterPropRule.cs" />
+    <Compile Include="PropRule\TestInterPropRuleGeneric.cs" />
+    <Compile Include="PropRule\TestPropRuleDouble.cs" />
+    <Compile Include="PropRule\TestPropRuleLong.cs" />
+    <Compile Include="PropRule\TestPropRuleSingle.cs" />
+    <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Aggregation.cs" />
+    <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Association.cs" />
+    <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Base.cs" />
+    <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Composition.cs" />
+    <Compile Include="TestBOError.cs" />
+    <Compile Include="TestBOHelper.cs" />
+    <Compile Include="TestBOObjectID.cs" />
+    <Compile Include="TestBOPropertyMapper.cs" />
+    <Compile Include="TestBOPropertyMapperFactory.cs" />
+    <Compile Include="TestBOPropInteger.cs" />
+    <Compile Include="TestBORelationshipMapper.cs" />
+    <Compile Include="TestBOSerialisation.cs" />
+    <Compile Include="TestBusinessObjectInheritance.cs" />
+    <Compile Include="TestBusinessObjectManagerNull.cs" />
+    <Compile Include="TestBusinessObjectRules.cs" />
+    <Compile Include="TestBusinessObjectSerialisationXML.cs" />
+    <Compile Include="TestBOStatus.cs" />
+    <Compile Include="TestDataAccessorMultiSource.cs" />
+    <Compile Include="TestDataStoreInMemoryBinaryWriter.cs" />
+    <Compile Include="TestDataStoreInMemoryXmlWriter.cs" />
+    <Compile Include="TestNumberGenerator.cs" />
+    <Compile Include="TestPack\BOWithIntID.cs" />
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_AddedBOs.cs" />
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_CreateBO.cs" />
+    <Compile Include="BusinessObjectCollection\TestOrderCriteria.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBoCol_Added.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Aggregation.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Association.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Created.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBoCol_Edits.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBusinessObjectCollection.cs" />
+    <Compile Include="BusinessObjectCollection\TestUtilsRelated.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderWithInheritance.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader_RefreshCollection.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Composition.cs" />
+    <Compile Include="TestBOPrimaryKey.cs" />
+    <Compile Include="ClassDefinition\TestPrimaryKeyDef.cs" />
+    <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
+    <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Int.cs" />
+    <Compile Include="Relationship\TestMultipleRelationship_Aggregation.cs" />
+    <Compile Include="Relationship\TestMultipleRelationship_Association.cs" />
+    <Compile Include="Relationship\TestMultipleRelationship_Composition.cs" />
+    <Compile Include="Relationship\TestSingleRelationship_Aggregation.cs" />
+    <Compile Include="Relationship\TestSingleRelationship_Association.cs" />
+    <Compile Include="Relationship\TestSingleRelationship_Composition.cs" />
+    <Compile Include="Relationship\TestTransactionalSingleRelationship.cs" />
+    <Compile Include="Security\TestBOPropAuthorisation.cs" />
+    <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Edits.cs" />
+    <Compile Include="TestBOPropDateTime.cs" />
+    <Compile Include="TestBOPropGuid.cs" />
+    <Compile Include="TestBOPropLookupList_BusinessObjectLookupList_IntID.cs" />
+    <Compile Include="TestBOPropLookupList_BusinessObjectLookupList_GuidID.cs" />
+    <Compile Include="TestBOPropLookupList_SimpleLookupList.cs" />
+    <Compile Include="TestBoPropString.cs" />
+    <Compile Include="TestBusinessObjectSerialisation.cs" />
+    <Compile Include="TestPack\AddressTestBO.cs" />
+    <Compile Include="ClassDefinition\TestTriggerCol.cs" />
+    <Compile Include="ClassDefinition\TestTrigger.cs" />
+    <Compile Include="ClassDefinition\TestUIFormGrid.cs" />
+    <Compile Include="ClassDefinition\TestUIGridColumn.cs" />
+    <Compile Include="ClassDefinition\TestUIGrid.cs" />
+    <Compile Include="ClassDefinition\TestUIFormField.cs" />
+    <Compile Include="ClassDefinition\TestUIFormTab.cs" />
+    <Compile Include="ClassDefinition\TestUIFormColumn.cs" />
+    <Compile Include="ClassDefinition\TestUIForm.cs" />
+    <Compile Include="ClassDefinition\TestUIDefCol.cs" />
+    <Compile Include="ClassDefinition\TestUIDef.cs" />
+    <Compile Include="ClassDefinition\TestSuperClassDef.cs" />
+    <Compile Include="ClassDefinition\TestRelationshipDefCol.cs" />
+    <Compile Include="ClassDefinition\TestPropDefCol.cs" />
+    <Compile Include="ClassDefinition\TestMultipleRelationshipDef.cs" />
+    <Compile Include="ClassDefinition\TestClassDef.cs" />
+    <Compile Include="ClassDefinition\TestClassDefCol.cs" />
+    <Compile Include="ClassDefinition\TestKeyDef.cs" />
+    <Compile Include="ClassDefinition\TestKeyDefCol.cs" />
+    <Compile Include="ClassDefinition\TestPropDef.cs" />
+    <Compile Include="ClassDefinition\TestRelationshipDef.cs" />
+    <Compile Include="ClassDefinition\TestRelKeyDef.cs" />
+    <Compile Include="ClassDefinition\TestRelPropDef.cs" />
+    <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
+    <Compile Include="Comparer\TestComparers.cs" />
+    <Compile Include="TestPack\BOWithIntID_Child.cs" />
+    <Compile Include="TestPack\BOWithIntID_DifferentType.cs" />
+    <Compile Include="TestPack\ContactPersonTestBO.cs" />
+    <Compile Include="TestPack\OrganisationTestBO.cs" />
+    <Compile Include="TestBORegistry.cs" />
+    <Compile Include="TestBusinessObjectManager.cs" />
+    <Compile Include="CriteriaManager\TestCriteria.cs" />
+    <Compile Include="BusinessObjectLoader\TestQueryBuilderWithInheritance.cs" />
+    <Compile Include="TestPack\PersonTestBO.cs" />
+    <Compile Include="BusinessObjectLoader\TestSource_Join.cs" />
+    <Compile Include="BusinessObjectLoader\TestSource_JoinList.cs" />
+    <Compile Include="BusinessObjectLoader\TestSqlFormatter.cs" />
+    <Compile Include="TestDataStoreInMemory.cs" />
+    <Compile Include="TestBusinessObjectLastUpdatePropertiesLog.cs" />
+    <Compile Include="TestBusinessObjectUpdateLog.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Bool.cs" />
+    <Compile Include="DataMappers\TestDataMapper_DateTime.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Guid.cs" />
+    <Compile Include="DataMappers\TestDataMapper_String.cs" />
+    <Compile Include="TestPropertyComparer.cs" />
+    <Compile Include="BusinessObjectLoader\TestQueryBuilder.cs" />
+    <Compile Include="BusinessObjectLoader\TestSelectQuery.cs" />
+    <Compile Include="BusinessObjectLoader\TestSource.cs" />
+    <Compile Include="TestPropertyLink.cs" />
+    <Compile Include="TestReflectionPropertyMapper.cs" />
+    <Compile Include="TestRelKey.cs" />
+    <Compile Include="TestSimpleLookupList.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionalBusinessObject.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitter.cs" />
+    <Compile Include="Relationship\TestMultipleRelationship.cs" />
+    <Compile Include="Loaders\TestXmlTriggerLoader.cs" />
+    <Compile Include="TestBOKeyCol.cs" />
+    <Compile Include="CriteriaManager\TestCriteriaExpression.cs" />
+    <Compile Include="CriteriaManager\TestExpression.cs" />
+    <Compile Include="Loaders\TestDtdsResource.cs" />
+    <Compile Include="Loaders\TestXmlSuperClassLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIFormFieldLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIFormLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIGridColumnLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIGridLoader.cs" />
+    <Compile Include="Loaders\TestXmlUILoader.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="Loaders\TestDtdLoader.cs" />
+    <Compile Include="Loaders\TestXmlClassDefsLoader.cs" />
+    <Compile Include="Loaders\TestXmlClassLoader.cs" />
+    <Compile Include="Loaders\TestXmlKeyLoader.cs" />
+    <Compile Include="Loaders\TestXmlPrimaryKeyLoader.cs" />
+    <Compile Include="Loaders\TestXmlPropertyLoader.cs" />
+    <Compile Include="Loaders\TestXmlPropertyRuleLoader.cs" />
+    <Compile Include="Loaders\TestXmlRelationshipLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIFormColumnLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIFormTabLoader.cs" />
+    <Compile Include="TestDataSetProvider.cs" />
+    <Compile Include="TestEditableDataSetProvider.cs" />
+    <Compile Include="TestReadOnlyDataSetProvider.cs" />
+    <Compile Include="TestBoKey.cs" />
+    <Compile Include="TestBoMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestBoProp.cs" />
+    <Compile Include="TestBoPropCol.cs" />
+    <Compile Include="TestBusinessObject.cs" />
+    <Compile Include="TestBusinessObjectLookupList.cs" />
+    <Compile Include="ClassDefinition\TestClassDefWithDyamicAttributes.cs" />
+    <Compile Include="TestDatabaseLookupList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDeleteHelper.cs" />
+    <Compile Include="PropRule\TestPropRuleDate.cs" />
+    <Compile Include="PropRule\TestPropRuleDecimal.cs" />
+    <Compile Include="PropRule\TestPropRuleInt.cs" />
+    <Compile Include="PropRule\TestPropRuleString.cs" />
+    <Compile Include="Relationship\TestRelationship.cs" />
+    <Compile Include="Relationship\TestRelationshipCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Relationship\TestRelProp.cs" />
+    <Compile Include="Relationship\TestSingleRelationship.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TransactionCommitters\TestTransactionCommitterFactory.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterHelper.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterInMemory.cs" />
+    <Compile Include="TestTransactionLogger.cs" />
+    <Compile Include="Relationship\TestMultipleRelationshipDef.cs" />
+    <Compile Include="BOTestUtils.cs" />
+    <Compile Include="TransactionCommitterStub.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterMultiSource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{75043A90-2D88-43A0-8C64-EA51B6B2826A}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{F214D8D4-F00F-46E7-8167-86331E5398DB}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.Structure\Habanero.Test.Structure.csproj">
+      <Project>{D59DAD41-663F-4AD7-9B22-04C2A7D7F9C2}</Project>
+      <Name>Habanero.Test.Structure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.VisualBasic.PowerPacks.10.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft Visual Basic PowerPacks 10.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

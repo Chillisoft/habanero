@@ -90,7 +90,9 @@ namespace Habanero.BO.Loaders
         protected override void LoadFromReader()
         {
             _reader.Read();
-            _name = _reader.GetAttribute("name");
+            //TODO andrew 22 Dec 2010: CF : Fix because no DTD validation
+            _name = _reader.GetAttribute("name") ?? "default";
+
             _reader.Read();
             if (_reader.Name == "grid")
             {

@@ -131,23 +131,23 @@ namespace Habanero.BO.Loaders
 		/// <param name="propertyElement">The xml property element</param>
 		private void CreateValidatingReader(XmlElement propertyElement)
 		{
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //XmlDocument doc = new XmlDocument();
-            //doc.LoadXml(propertyElement.OuterXml);
+            //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(propertyElement.OuterXml);
             //if (doc.DocumentElement != null)
             //    doc.InsertBefore(
             //        doc.CreateDocumentType(doc.DocumentElement.Name, null, null, GetDTD(doc.DocumentElement.Name)),
             //        doc.DocumentElement);
-            //XmlReaderSettings settings = new XmlReaderSettings();
-            //settings.CheckCharacters = true;
-            //settings.ConformanceLevel = ConformanceLevel.Auto;
-            //settings.IgnoreComments = true;
-            //settings.IgnoreWhitespace = true;
-            //settings.ValidationType = ValidationType.DTD;
-            //settings.ValidationEventHandler += ValidationHandler;
-            //_reader = XmlReader.Create(new XmlTextReader(new StringReader(doc.OuterXml)), settings);
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.CheckCharacters = true;
+            settings.ConformanceLevel = ConformanceLevel.Auto;
+            settings.IgnoreComments = true;
+            settings.IgnoreWhitespace = true;
+		    //settings.ValidationType = ValidationType.DTD;
+            settings.ValidationEventHandler += ValidationHandler;
+            _reader = XmlReader.Create(new XmlTextReader(new StringReader(doc.OuterXml)), settings);
 
-            
+		    //TODO andrew 22 Dec 2010: Removed the _reader.Read.  No longer need to read the DocType element as it was not inserted see above
             //_reader.Read();
 		}
 
