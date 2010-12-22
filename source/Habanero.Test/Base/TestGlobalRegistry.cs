@@ -17,7 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.Base;
-using Habanero.Console;
+//TODO andrew 22 Dec 2010: CF : Habanero.Console not included
+//using Habanero.Console;
 using Habanero.Util;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -80,17 +81,18 @@ namespace Habanero.Test.Base
         //    Assert.AreEqual(typeof(ConsoleExceptionNotifier), GlobalRegistry.UIExceptionNotifier.GetType());
         //}
 
-        [Test]
-        public void Test_UIExceptionNotifier_SetAndGet()
-        {
-            //---------------Set up test pack-------------------
-            ConsoleExceptionNotifier exceptionNotifier = new ConsoleExceptionNotifier();
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
-            //---------------Test Result -----------------------
-            Assert.AreSame(exceptionNotifier, GlobalRegistry.UIExceptionNotifier);
-        }
+        //TODO andrew 22 Dec 2010: CF : Hananero.Console not implemented
+        //[Test]
+        //public void Test_UIExceptionNotifier_SetAndGet()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    ConsoleExceptionNotifier exceptionNotifier = new ConsoleExceptionNotifier();
+        //    //---------------Assert Precondition----------------
+        //    //---------------Execute Test ----------------------
+        //    GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
+        //    //---------------Test Result -----------------------
+        //    Assert.AreSame(exceptionNotifier, GlobalRegistry.UIExceptionNotifier);
+        //}
 
         [Test]
         public void Test_UIExceptionNotifier_WhenNull_ShouldReturnRethrowingExceptionNotifier()

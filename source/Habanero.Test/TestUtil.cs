@@ -20,8 +20,9 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
-using Habanero.DB;
+//using Habanero.DB;
 using NUnit.Framework;
+using OpenNETCF;
 
 namespace Habanero.Test
 {
@@ -107,47 +108,49 @@ namespace Habanero.Test
         /// <returns>Returns true if assigned, false if not</returns>
         public static bool EventHasSubscriber(object eventSource, string eventName, string subscriberMethodName)
         {
-            //            string name = "EVENT_" + eventName.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
-            string name = "Event" + eventName;
+            throw new NotImplementedException("CF: Code commented out to get CF to compile");
 
-            Type targetType = eventSource.GetType();
+            ////            string name = "EVENT_" + eventName.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+            //string name = "Event" + eventName;
 
-            do
-            {
-                FieldInfo[] fields = targetType.GetFields
-                    (BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
+            //Type targetType = eventSource.GetType();
 
-                foreach (FieldInfo field in fields)
-                {
-                    if (field.Name == name || field.Name == eventName)
-                    {
-                        EventHandlerList eventHandlers =
-                            ((EventHandlerList)
-                             (eventSource.GetType().GetProperty
-                                 ("Events",
-                                  (BindingFlags.FlattenHierarchy | (BindingFlags.NonPublic | BindingFlags.Instance))).
-                                 GetValue(eventSource, null)));
+            //do
+            //{
+            //    FieldInfo[] fields = targetType.GetFields
+            //        (BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
 
-                        Delegate d = eventHandlers[field.GetValue(eventSource)];
+            //    foreach (FieldInfo field in fields)
+            //    {
+            //        if (field.Name == name || field.Name == eventName)
+            //        {
+            //            EventHandlerList eventHandlers =
+            //                ((EventHandlerList)
+            //                 (eventSource.GetType().GetProperty
+            //                     ("Events",
+            //                      (BindingFlags.FlattenHierarchy | (BindingFlags.NonPublic | BindingFlags.Instance))).
+            //                     GetValue(eventSource, null)));
 
-                        if ((!(d == null)))
-                        {
-                            Delegate[] subscribers = d.GetInvocationList();
+            //            Delegate d = eventHandlers[field.GetValue(eventSource)];
 
-                            foreach (Delegate d1 in subscribers)
-                            {
-                                if (d1.Method.Name == subscriberMethodName) return true;
-                            }
+            //            if ((!(d == null)))
+            //            {
+            //                Delegate[] subscribers = d.GetInvocationList();
 
-                            return false;
-                        }
-                    }
-                }
+            //                foreach (Delegate d1 in subscribers)
+            //                {
+            //                    if (d1.Method.Name == subscriberMethodName) return true;
+            //                }
 
-                targetType = targetType.BaseType;
-            } while (targetType != null);
+            //                return false;
+            //            }
+            //        }
+            //    }
 
-            return false;
+            //    targetType = targetType.BaseType;
+            //} while (targetType != null);
+
+            //return false;
         }
 
         public static int GetRandomInt()
@@ -179,7 +182,7 @@ namespace Habanero.Test
         public static TEnum GetRandomEnum<TEnum>(TEnum? excluded)
             where TEnum : struct
         {
-            Array values = Enum.GetValues(typeof(TEnum));
+            Array values = Enum2.GetValues(typeof(TEnum));
             int randomIndex = GetRandomInt(0, values.Length);
             TEnum value = (TEnum)values.GetValue(randomIndex);
             if (excluded.HasValue && excluded.Value.Equals(value))
@@ -189,9 +192,10 @@ namespace Habanero.Test
             return value;
         }
 
-        public static DatabaseConfig GetDatabaseConfig() {
-            return new DatabaseConfig("MySql", "localhost", "habanero_test_trunk", "root", "root", "3306");
-        }
+        //TODO andrew 22 Dec 2010: Don't have Habanero.Db
+        //public static DatabaseConfig GetDatabaseConfig() {
+        //    return new DatabaseConfig("MySql", "localhost", "habanero_test_trunk", "root", "root", "3306");
+        //}
 
         public static bool GetRandomBoolean()
         {

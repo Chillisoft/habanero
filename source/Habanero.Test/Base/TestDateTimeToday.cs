@@ -265,35 +265,43 @@ namespace Habanero.Test.Base
             //---------------Execute Test ----------------------
             string toString = dteNow.ToString();
             //---------------Test Result -----------------------
-            DateTime dteParsedDateTime;
-            Assert.IsTrue(DateTime.TryParse(toString, out dteParsedDateTime));
-            //            Assert.IsTrue(dteNow == dteParsedDateTime);
+            DateTime dteParsedDateTime = new DateTime(1900,1,1);
+            bool isParsed = true;
+            try
+            {
+                dteParsedDateTime = DateTime.Parse(toString);
+            }
+            catch
+            {
+                isParsed = false;
+            }
+            Assert.IsTrue(isParsed);
             Assert.AreEqual(toString, dteParsedDateTime.ToString());
         }
 
-        [Test]
-        public void Test_TypeConverter_TypeAttribute()
-        {
-            //---------------Set up test pack-------------------
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            object[] customAttributes = typeof(DateTimeToday).GetCustomAttributes(false);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, customAttributes.Length);
-            TypeConverterAttribute typeConverterAttribute =
-                TestUtil.AssertIsInstanceOf<TypeConverterAttribute>(customAttributes[0]);
-            Assert.AreEqual(typeof(DateTimeTodayConverter).AssemblyQualifiedName, typeConverterAttribute.ConverterTypeName);
-        }
-
-        [Test]
-        public void Test_TypeConverter_ShouldBeDefaultTypeConverterForDateTimeToday()
-        {
-            //---------------Set up test pack-------------------
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(DateTimeToday));
-            //---------------Test Result -----------------------
-            Assert.IsInstanceOf(typeof(DateTimeTodayConverter), typeConverter);
-        }
+        //TODO andrew 22 Dec 2010: CF : TypeConverter not implemented
+        //[Test]
+        //public void Test_TypeConverter_TypeAttribute()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    //---------------Assert Precondition----------------
+        //    //---------------Execute Test ----------------------
+        //    object[] customAttributes = typeof(DateTimeToday).GetCustomAttributes(false);
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(1, customAttributes.Length);
+        //    TypeConverterAttribute typeConverterAttribute =
+        //        TestUtil.AssertIsInstanceOf<TypeConverterAttribute>(customAttributes[0]);
+        //    Assert.AreEqual(typeof(DateTimeTodayConverter).AssemblyQualifiedName, typeConverterAttribute.ConverterTypeName);
+        //}
+        //[Test]
+        //public void Test_TypeConverter_ShouldBeDefaultTypeConverterForDateTimeToday()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    //---------------Assert Precondition----------------
+        //    //---------------Execute Test ----------------------
+        //    TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(DateTimeToday));
+        //    //---------------Test Result -----------------------
+        //    Assert.IsInstanceOf(typeof(DateTimeTodayConverter), typeConverter);
+        //}
     }
 }

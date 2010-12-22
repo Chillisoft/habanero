@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base;
+using Habanero.Base.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.Base
@@ -154,7 +155,7 @@ namespace Habanero.Test.Base
             //---------------Execute Test ----------------------
             var exceptionMessage = exceptionNotifier.ExceptionMessage;
             //---------------Test Result -----------------------
-            var expectedErrorMessage = exception.Message + " - " + furtherMessage + Environment.NewLine 
+            var expectedErrorMessage = exception.Message + " - " + furtherMessage + EnvironmentCF.NewLine 
                            + exception2.Message + " - " + furtherMessage2;
             Assert.AreEqual(expectedErrorMessage, exceptionMessage);
         }
@@ -201,7 +202,7 @@ namespace Habanero.Test.Base
                 exceptionThrown = true;
                 StringAssert.Contains(string.Format(
                     "An Exception that was recorded by the RecordingExceptionNotifier and has been rethrown." +
-                    "{0}Title: {1}{0}Further Message: {2}", Environment.NewLine, title, exceptionNotifier.ExceptionMessage), ex.Message);
+                    "{0}Title: {1}{0}Further Message: {2}", EnvironmentCF.NewLine, title, exceptionNotifier.ExceptionMessage), ex.Message);
                 Assert.AreSame(exception, ex.InnerException);
             }
             Assert.IsTrue(exceptionThrown, "Expected to throw an Exception");

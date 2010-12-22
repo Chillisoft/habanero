@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Base", "Habanero.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.BO", "Habanero.Bo\Habanero.BO.csproj", "{F214D8D4-F00F-46E7-8167-86331E5398DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "Habanero.Test\Habanero.Test.csproj", "{37E55226-D08F-4A7E-85AE-79D7993E1AE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,12 @@ Global
 		{F214D8D4-F00F-46E7-8167-86331E5398DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F214D8D4-F00F-46E7-8167-86331E5398DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F214D8D4-F00F-46E7-8167-86331E5398DB}.Release|x86.ActiveCfg = Release|Any CPU
+		{37E55226-D08F-4A7E-85AE-79D7993E1AE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E55226-D08F-4A7E-85AE-79D7993E1AE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E55226-D08F-4A7E-85AE-79D7993E1AE5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{37E55226-D08F-4A7E-85AE-79D7993E1AE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E55226-D08F-4A7E-85AE-79D7993E1AE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37E55226-D08F-4A7E-85AE-79D7993E1AE5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
