@@ -4,6 +4,9 @@ using log4net.Config;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Logger factory for creating a Log4NetLogger
+    /// </summary>
     public class Log4NetLoggerFactory : IHabaneroLoggerFactory
     {
         public Log4NetLoggerFactory()
