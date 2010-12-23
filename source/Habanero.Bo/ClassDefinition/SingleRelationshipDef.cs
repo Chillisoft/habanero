@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 //using System.Linq;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
@@ -123,9 +124,9 @@ namespace Habanero.BO.ClassDefinition
         /// <returns></returns>
         public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
         {
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //Type relationshipBOType = typeof (SingleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
-            //return (ISingleRelationship) Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);
+            Type relationshipBOType = typeof(SingleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
+            return (ISingleRelationship)ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(relationshipBOType, owningBo, this, lBOPropCol);
+            //return (ISingleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol);
         }
 
         ///<summary>

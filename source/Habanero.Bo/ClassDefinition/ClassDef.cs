@@ -21,6 +21,7 @@ using System.Collections.Generic;
 //using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.Comparer;
 using Habanero.Util;
 
@@ -624,7 +625,8 @@ namespace Habanero.BO.ClassDefinition
             {
                 try
                 {
-                    throw new NotImplementedException("CF: Code commented out to get CF to compile");
+
+                    return (BusinessObject)ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(MyClassType, new object[] { this });
                     //return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this});
                 }
                 catch (MissingMethodException ex)
