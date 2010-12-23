@@ -20,6 +20,7 @@ using System;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders
@@ -96,7 +97,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadIsObjectID()
         {
-            if (_reader.GetAttribute("isObjectID") == "true")
+            if (XmlHelpersCF.GetAttributeOrDefault(_reader ,"isObjectID", "true") == "true")
             {
                 _primaryKeyDef.IsGuidObjectID = true;
             }

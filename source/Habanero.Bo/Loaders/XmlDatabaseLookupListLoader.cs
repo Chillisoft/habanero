@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders
@@ -53,10 +54,9 @@ namespace Habanero.BO.Loaders
             _className = _reader.GetAttribute("class");
             _assemblyName = _reader.GetAttribute("assembly");
 
-            //TODO andrew 22 Dec 2010: CF : TryParse not supported - this should be tested
             try
             {
-                _timeout = Int32.Parse(_reader.GetAttribute("timeout"));
+                _timeout = Int32.Parse(XmlHelpersCF.GetAttributeOrDefault(_reader, "timeout", "10000"));
             }
             catch
             {
@@ -65,7 +65,7 @@ namespace Habanero.BO.Loaders
 
             if (_timeout < 0)
             {
-                throw new InvalidXmlDefinitionException("In a 'businessObjectLookupList' " +
+                throw new InvalidXmlDefinitionException("In a 'databaseLookupList' " +
                     "element, an invalid integer was assigned to the 'timeout' " +
                     "attribute.  The value must be a positive integer or zero.");
             }

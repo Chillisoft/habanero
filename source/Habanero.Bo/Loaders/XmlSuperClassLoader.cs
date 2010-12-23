@@ -20,6 +20,7 @@ using System;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using OpenNETCF;
 
@@ -91,7 +92,7 @@ namespace Habanero.BO.Loaders
             _className = _reader.GetAttribute("class");
             _assemblyName = _reader.GetAttribute("assembly");
             _typeParameter = _reader.GetAttribute("typeParameter");
-			string orMappingType = _reader.GetAttribute("orMapping");
+            string orMappingType = XmlHelpersCF.GetAttributeOrDefault(_reader, "orMapping", "ClassTableInheritance");
 			try
             {
                 _orMapping = (ORMapping)Enum2.Parse(typeof(ORMapping), orMappingType);

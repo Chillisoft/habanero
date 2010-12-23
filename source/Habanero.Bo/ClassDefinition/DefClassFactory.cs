@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO.Loaders;
 
 namespace Habanero.BO.ClassDefinition
@@ -72,12 +73,23 @@ namespace Habanero.BO.ClassDefinition
         public ILookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className, bool limitToList)
 		{
 
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //Type databaseLookupListType = Util.TypeLoader.LoadType("Habanero.DB", "DatabaseLookupList");
+            //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            Type databaseLookupListType = Util.TypeLoader.LoadType("Habanero.DB", "DatabaseLookupList");
+            return
+                (ILookupList)
+                ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(databaseLookupListType,
+                                                                           new object[]
+                                                                           {
+                                                                               sqlString, 
+                                                                               timeout, 
+                                                                               assemblyName, 
+                                                                               className,
+                                                                               limitToList
+                                                                           });
             //return
             //    (ILookupList)
             //    Activator.CreateInstance(databaseLookupListType,
-            //                             new object[] {sqlString, timeout, assemblyName, className, limitToList});
+            //                             new object[] { sqlString, timeout, assemblyName, className, limitToList });
 		}
 
         ///<summary>

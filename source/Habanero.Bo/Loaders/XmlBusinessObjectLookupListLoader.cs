@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders
@@ -54,10 +55,10 @@ namespace Habanero.BO.Loaders
             //_type = TypeLoader.LoadType(assemblyName, className);
             _criteria = _reader.GetAttribute("criteria");
             _sort = _reader.GetAttribute("sort");
-            //TODO andrew 22 Dec 2010: CF : TryParse not supported - this should be tested
+
             try
             {
-                _timeout = Int32.Parse(_reader.GetAttribute("timeout"));
+                _timeout = Int32.Parse(XmlHelpersCF.GetAttributeOrDefault(_reader, "timeout", "10000"));
             }
             catch
             {

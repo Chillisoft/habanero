@@ -31,6 +31,10 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class ClassDefsXmlValidator
     {
+        private bool _isValid;
+        private bool _schemaValid;
+        private List<string> _validationMessages;
+
         /// <summary>
         /// Validates the xml string against the classdefs schema.  
         /// </summary>
@@ -38,9 +42,9 @@ namespace Habanero.BO.Loaders
         /// <returns>The result of the validation.  See <see cref="XmlValidationResult"/>.</returns>
         public XmlValidationResult ValidateClassDefsXml(string xml)
         {
-            List<string> validationMessages = new List<string>();
-            bool isValid = true;
-            bool schemaValid = true;
+            _validationMessages = new List<string>();
+            _isValid = true;
+            _schemaValid = true;
             string xsd = Xsds.classes;
 
             XmlParserContext context = new XmlParserContext(null, null, "", XmlSpace.None);
@@ -50,15 +54,12 @@ namespace Habanero.BO.Loaders
 
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.ValidationType = ValidationType.Schema;
-            XmlSchema schema = XmlSchema.Read(readerSchema, (sender, args) => schemaValid = false);
+            XmlSchema schema = XmlSchema.Read(readerSchema, SchemaIsValid_EventHandler);
             settings.Schemas.Add(schema);
-            if (!schemaValid) throw new HabaneroDeveloperException("classes Schema is invalid", "classes Schema is invalid");
-            settings.ConformanceLevel = ConformanceLevel.Fragment;
-            settings.ValidationEventHandler += (sender, args) =>
-                                               {
-                                                   validationMessages.Add(args.Message);
-                                                   isValid = false;
-                                               };
+            if (!_schemaValid) throw new HabaneroDeveloperException("classes Schema is invalid", "classes Schema is invalid");
+            settings.ConformanceLevel = ConformanceLevel.Auto;
+
+            settings.ValidationEventHandler += SchemaValidation_EventHandler;
             XmlReader reader = XmlReader.Create(readerXml, settings);
 
             try
@@ -67,14 +68,24 @@ namespace Habanero.BO.Loaders
             }
             catch (XmlException ex)
             {
-                validationMessages.Add(ex.Message);
-                isValid = false;
+                _validationMessages.Add(ex.Message);
+                _isValid = false;
             }
 
-            return new XmlValidationResult(isValid, validationMessages);
+            return new XmlValidationResult(_isValid, _validationMessages);
 
         }
 
-       
+       private void SchemaIsValid_EventHandler(object sender, EventArgs e)
+       {
+           _schemaValid = false;
+       }
+
+        private void SchemaValidation_EventHandler(object sender, ValidationEventArgs e)
+        {
+            _validationMessages.Add(e.Message);
+            _isValid = false;
+        }
+
     }
 }

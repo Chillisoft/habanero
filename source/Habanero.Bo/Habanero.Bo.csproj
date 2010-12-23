@@ -226,36 +226,6 @@
   <ItemGroup>
     <None Include="CriteriaManager\CriteriaManagerBinaryTree.vsd" />
     <None Include="key.snk" />
-    <None Include="Loaders\DTDs\.svn\all-wcprops" />
-    <None Include="Loaders\DTDs\.svn\dir-prop-base" />
-    <None Include="Loaders\DTDs\.svn\entries" />
-    <None Include="Loaders\DTDs\.svn\text-base\businessObjectLookupList.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\class.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\classes.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\classes.xsd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\column.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\columnLayout.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\databaseLookupList.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\field.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\filter.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\form.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\formGrid.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\grid.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\GridPropertyCollection.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\key.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\parameter.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\primaryKey.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\Prop.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\property.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\relationship.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\Rule.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\simpleLookupList.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\superClass.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\tab.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\trigger.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\ui.dtd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\ui.xsd.svn-base" />
-    <None Include="Loaders\DTDs\.svn\text-base\UIFormGrid.dtd.svn-base" />
     <None Include="Loaders\DTDs\businessObjectLookupList.dtd" />
     <None Include="Loaders\DTDs\class.dtd" />
     <None Include="Loaders\DTDs\classes.dtd" />
@@ -283,10 +253,6 @@
     <None Include="Loaders\DTDs\ui.dtd" />
     <None Include="Loaders\DTDs\ui.xsd" />
     <None Include="Loaders\DTDs\UIFormGrid.dtd" />
-    <None Include="Loaders\XSDs\.svn\all-wcprops" />
-    <None Include="Loaders\XSDs\.svn\entries" />
-    <None Include="Loaders\XSDs\.svn\text-base\classes.xsd.svn-base" />
-    <None Include="Loaders\XSDs\.svn\text-base\ui.xsd.svn-base" />
     <None Include="Loaders\XSDs\classes.xsd" />
     <None Include="Loaders\XSDs\ui.xsd" />
   </ItemGroup>
@@ -299,18 +265,6 @@
       <Project>{75043A90-2D88-43A0-8C64-EA51B6B2826A}</Project>
       <Name>Habanero.Base</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Loaders\DTDs\.svn\prop-base\" />
-    <Folder Include="Loaders\DTDs\.svn\props\" />
-    <Folder Include="Loaders\DTDs\.svn\tmp\prop-base\" />
-    <Folder Include="Loaders\DTDs\.svn\tmp\props\" />
-    <Folder Include="Loaders\DTDs\.svn\tmp\text-base\" />
-    <Folder Include="Loaders\XSDs\.svn\prop-base\" />
-    <Folder Include="Loaders\XSDs\.svn\props\" />
-    <Folder Include="Loaders\XSDs\.svn\tmp\prop-base\" />
-    <Folder Include="Loaders\XSDs\.svn\tmp\props\" />
-    <Folder Include="Loaders\XSDs\.svn\tmp\text-base\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

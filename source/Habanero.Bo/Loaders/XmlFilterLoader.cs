@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using OpenNETCF;
 
@@ -62,10 +63,11 @@ namespace Habanero.BO.Loaders
         /// </summary>
         protected override void LoadFromReader()
         {
+            //TODO andrew 23 Dec 2010: CF: Needed move _reader.Read() 
+            _reader.Read();
             if (_reader.Name == "filter")
             {
-                _reader.Read();
-                string filterModeStr = _reader.GetAttribute("filterMode");
+                string filterModeStr = XmlHelpersCF.GetAttributeOrDefault(_reader, "filterMode", "Filter");
                 _filterMode = (FilterModes) Enum2.Parse(typeof (FilterModes), filterModeStr);
                 _columns = Convert.ToInt32(_reader.GetAttribute("columns"));
 
@@ -77,9 +79,9 @@ namespace Habanero.BO.Loaders
 
                 string propertyName = _reader.GetAttribute("name");
                 string label = _reader.GetAttribute("label");
-                string filterType = _reader.GetAttribute("filterType");
+                string filterType = XmlHelpersCF.GetAttributeOrDefault(_reader, "filterType", "StringTextBoxFilter");
                 string filterTypeAssembly = _reader.GetAttribute("filterTypeAssembly");
-                string filterClauseOperatorStr = _reader.GetAttribute("operator");
+                string filterClauseOperatorStr = XmlHelpersCF.GetAttributeOrDefault(_reader, "operator", "OpLike");
                 FilterClauseOperator filterClauseOperator 
                     = (FilterClauseOperator) Enum2.Parse(typeof (FilterClauseOperator), filterClauseOperatorStr);
                 Dictionary<string, string> parameters = new Dictionary<string, string>();

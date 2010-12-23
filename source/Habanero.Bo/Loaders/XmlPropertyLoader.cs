@@ -21,6 +21,7 @@ using System.Collections;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using OpenNETCF;
 
@@ -159,8 +160,8 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadPropertyType()
         {
-            _assemblyName = _reader.GetAttribute("assembly");
-            _typeName = _reader.GetAttribute("type");
+            _assemblyName = XmlHelpersCF.GetAttributeOrDefault(_reader, "assembly", "System");
+            _typeName = XmlHelpersCF.GetAttributeOrDefault(_reader, "type", "String");
 
             if (_assemblyName == "System")
             {
@@ -198,12 +199,8 @@ namespace Habanero.BO.Loaders
         {
             try
             {
-                var attribute = _reader.GetAttribute("readWriteRule");
-                if (attribute==null)
-                {
-                    _readWriteRule = PropReadWriteRule.ReadWrite;
-                    return;
-                }
+                var attribute = XmlHelpersCF.GetAttributeOrDefault(_reader, "readWriteRule", "ReadWrite");
+
                 _readWriteRule =
                     (PropReadWriteRule)
                     Enum2.Parse(typeof (PropReadWriteRule), attribute);

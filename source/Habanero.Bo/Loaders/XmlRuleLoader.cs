@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
@@ -190,15 +191,25 @@ namespace Habanero.BO.Loaders
 					"PropRuleBase Subclass", "Property Rule Definition");
 				if (customPropRuleType.IsSubclassOf(typeof(PropRuleBase)))
 				{
-                    throw new NotImplementedException("CF: Code commented out to get CF to compile");
-                    //try
-                    //{
-                    //    return (PropRuleBase) Activator.CreateInstance(customPropRuleType, new object[] {_name, _message });
-                    //}
-                    //catch (MissingMethodException)
-                    //{
-                    //    return (PropRuleBase) Activator.CreateInstance(customPropRuleType, new object[] { _name, _message, _ruleParameters });
-                    //}
+                    try
+                    {
+                        //TODO andrew 23 Dec 2010: CF : needed to ensure that _message is not null to create an instance of string
+                        if (string.IsNullOrEmpty(_message))
+                            _message = "";
+                        return
+                            (PropRuleBase)
+                            ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(customPropRuleType,
+                                                                                       new object[] {_name, _message});
+                        //return (PropRuleBase)Activator.CreateInstance(customPropRuleType, new object[] { _name, _message });
+                    }
+                    catch (MissingMethodException)
+                    {
+                        return
+                            (PropRuleBase)
+                            ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(customPropRuleType,
+                                                                                       new object[] { _name, _message, _ruleParameters });
+                        //return (PropRuleBase)Activator.CreateInstance(customPropRuleType, new object[] { _name, _message, _ruleParameters });
+                    }
 				}
 			    throw new TypeLoadException("The prop rule '" + _name + "' must inherit from PropRuleBase.");
 			}

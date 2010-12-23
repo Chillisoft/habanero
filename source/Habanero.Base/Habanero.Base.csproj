@@ -233,6 +233,7 @@
     <Compile Include="Util\ImageThumbnailCreator.cs" />
     <Compile Include="Util\LongText.cs" />
     <Compile Include="Util\ReflectionUtilities.cs" />
+    <Compile Include="Util\ReflectionUtilitiesCF.cs" />
     <Compile Include="Util\SerialisationUtilities.cs" />
     <Compile Include="Util\SortedStringCollection.cs" />
     <Compile Include="Util\StringUtilities.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Util\TypeUtilities.cs" />
     <Compile Include="Util\Utilities.cs" />
     <Compile Include="Util\XmlDocumentValidator.cs" />
+    <Compile Include="Util\XmlHelpersCF.cs" />
     <Compile Include="XMLWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,7 @@ using System;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using OpenNETCF;
 
@@ -141,7 +142,7 @@ namespace Habanero.BO.Loaders
             _name = _reader.GetAttribute("name");
             _type = _reader.GetAttribute("type");
 
-            string relationshipTypeString = _reader.GetAttribute("relationshipType");
+            string relationshipTypeString = XmlHelpersCF.GetAttributeOrDefault(_reader, "relationshipType", "Association");
 
             try
             {
@@ -180,12 +181,12 @@ namespace Habanero.BO.Loaders
             }
 
 
-            _orderBy = _reader.GetAttribute("orderBy");
-
+            _orderBy = XmlHelpersCF.GetAttributeOrDefault(_reader, "orderBy", ""); 
+            string deleteAction = XmlHelpersCF.GetAttributeOrDefault(_reader, "deleteAction", "Prevent");
             try
             {
                 _deleteParentAction =
-                    (DeleteParentAction) Enum2.Parse(typeof (DeleteParentAction), _reader.GetAttribute("deleteAction"));
+                    (DeleteParentAction)Enum2.Parse(typeof(DeleteParentAction), deleteAction);
             }
             catch (Exception ex)
             {
@@ -198,11 +199,8 @@ namespace Habanero.BO.Loaders
             {
                 try
                 {
-                    string attribute = _reader.GetAttribute("insertAction");
-                    if (string.IsNullOrEmpty(attribute))
-                    {
-                        attribute = "InsertRelationship";
-                    }
+                    string attribute = XmlHelpersCF.GetAttributeOrDefault(_reader, "insertAction", "InsertRelationship");
+
                     _insertParentAction =
                         (InsertParentAction)
                         Enum2.Parse(typeof (InsertParentAction), attribute);
