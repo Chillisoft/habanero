@@ -102,6 +102,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(def.IgnoreIfNull);
         }
 
+        //TODO andrew 03 Jan 2011: CF: Test fails because there is no DTD validation 
         [Test]
         public void TestLoadKeyWithWrongElementName()
         {

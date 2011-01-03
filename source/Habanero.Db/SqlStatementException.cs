@@ -17,7 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Runtime.Serialization;
+//TODO andrew 03 Jan 2011: CF: Removed Serialization code
+//using System.Runtime.Serialization;
 
 namespace Habanero.DB
 {
@@ -54,15 +55,16 @@ namespace Habanero.DB
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise a new exception
-        /// </summary>
-        /// <param name="info">Serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected SqlStatementException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        //TODO andrew 03 Jan 2011: CF: Removed Serialization code
+        ///// <summary>
+        ///// Constructor to initialise a new exception
+        ///// </summary>
+        ///// <param name="info">Serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected SqlStatementException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
 
         ///// <summary>
         ///// Returns a summary of this exception as a string

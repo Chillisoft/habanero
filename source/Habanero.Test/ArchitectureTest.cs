@@ -17,7 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.Base;
-using Habanero.Console;
+//TODO andrew 03 Jan 2011: CF: Console project not included
+//using Habanero.Console;
 
 namespace Habanero.Test
 {
@@ -29,7 +30,9 @@ namespace Habanero.Test
         public ArchitectureTest()
         {
             //GlobalRegistry.SynchronisationController = new NullSynchronisationController();
-            GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
+            //TODO andrew 03 Jan 2011: CF: ConsoleExceptionNotifier not available
+            //GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
+
             //GlobalUIRegistry.UISettings = new UISettings();
         }
     }

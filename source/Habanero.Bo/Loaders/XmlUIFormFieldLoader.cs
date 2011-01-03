@@ -21,6 +21,7 @@ using System.Collections;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using OpenNETCF;
 
@@ -189,7 +190,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadLabel()
         {
-            _label = _reader.GetAttribute("label");
+            _label = XmlHelpersCF.GetAttributeOrDefault(_reader, "label", "Label");
         }
 
         /// <summary>
@@ -200,7 +201,7 @@ namespace Habanero.BO.Loaders
         {
             try
             {
-                _editable = Convert.ToBoolean(_reader.GetAttribute("editable"));
+                _editable = Convert.ToBoolean(XmlHelpersCF.GetAttributeOrDefault(_reader, "editable", "true"));
             }
             catch (Exception ex)
             {
@@ -217,7 +218,7 @@ namespace Habanero.BO.Loaders
         {
             try
             {
-                _showAsCompulsory = Convert.ToBoolean(_reader.GetAttribute("showAsCompulsory"));
+                _showAsCompulsory = Convert.ToBoolean( XmlHelpersCF.GetAttributeOrDefault(_reader, "showAsCompulsory", "false"));
             }
             catch (Exception ex)
             {

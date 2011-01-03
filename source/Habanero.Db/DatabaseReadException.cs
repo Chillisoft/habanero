@@ -17,7 +17,10 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Runtime.Serialization;
+using Habanero.Base.Util;
+
+//TODO andrew 03 Jan 2011: Removed Serialization code
+//using System.Runtime.Serialization;
 
 namespace Habanero.DB
 {
@@ -87,14 +90,15 @@ namespace Habanero.DB
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise a new exception
-        /// </summary>
-        /// <param name="info">Serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected DatabaseReadException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        //TODO andrew 03 Jan 2011: Removed Serialization code
+        ///// <summary>
+        ///// Constructor to initialise a new exception
+        ///// </summary>
+        ///// <param name="info">Serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected DatabaseReadException(SerializationInfo info, StreamingContext context) : base(info, context)
+        //{
+        //}
 
         /// <summary>
         /// Returns the sql statement used
@@ -126,20 +130,21 @@ namespace Habanero.DB
         /// <returns>Returns a string</returns>
         public override string ToString()
         {
-            return this.Message + Environment.NewLine + this.DeveloperMessage + Environment.NewLine + this.SqlStatement;
+            return this.Message + EnvironmentCF.NewLine + this.DeveloperMessage + EnvironmentCF.NewLine + this.SqlStatement;
         }
 
-        /// <summary>
-        /// Required for ISerializable.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("sqlStatement", _sqlStatement);
-            info.AddValue("developerMessage", _developerMessage);
-            info.AddValue("connectString", _connectString);
-        }
+        //TODO andrew 03 Jan 2011: Removed Serialization code
+        ///// <summary>
+        ///// Required for ISerializable.
+        ///// </summary>
+        ///// <param name="info"></param>
+        ///// <param name="context"></param>
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    base.GetObjectData(info, context);
+        //    info.AddValue("sqlStatement", _sqlStatement);
+        //    info.AddValue("developerMessage", _developerMessage);
+        //    info.AddValue("connectString", _connectString);
+        //}
     }
 }

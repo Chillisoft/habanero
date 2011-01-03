@@ -17,9 +17,11 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Security.Principal;
+//TODO andrew 03 Jan 2011: CF: Does not support System.Security.Principal
+//using System.Security.Principal;
 using Habanero.Base;
 using Habanero.BO;
+using OpenNETCF;
 
 namespace Habanero.DB
 {
@@ -187,10 +189,11 @@ namespace Habanero.DB
             tranSql.Statement.Append(", ");
             tranSql.AddParameterToStatement(GetLogonUserName());
             tranSql.Statement.Append(", ");
-            WindowsIdentity currentWindowsUser = WindowsIdentity.GetCurrent();
-            if (currentWindowsUser != null) tranSql.AddParameterToStatement(currentWindowsUser.Name);
+            //TODO andrew 03 Jan 2011: CF: Need to work out how to get the CurrentUser
+            //WindowsIdentity currentWindowsUser = WindowsIdentity.GetCurrent();
+            //if (currentWindowsUser != null) tranSql.AddParameterToStatement(currentWindowsUser.Name);
             tranSql.Statement.Append(", ");
-            tranSql.AddParameterToStatement(Environment.MachineName);
+            tranSql.AddParameterToStatement(Environment2.MachineName);
             tranSql.Statement.Append(", ");
             tranSql.AddParameterToStatement(_buObjToLog.ClassDef.ClassName);
             tranSql.Statement.Append(", ");

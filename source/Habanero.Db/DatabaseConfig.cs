@@ -19,7 +19,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
+//using System.Configuration;
+using OpenNETCF.Configuration;
+using OpenNETCF.Security.Cryptography;
 using System.Data;
 using System.Security.Cryptography;
 using Habanero.Base;
@@ -285,9 +287,10 @@ namespace Habanero.DB
         /// <param name="xmlPrivateKey">The xml format of the RSA key (RSA.ToXmlString(true))</param>
         public void SetPrivateKey(string xmlPrivateKey)
         {
-            RSA rsa = RSA.Create();
-            rsa.FromXmlString(xmlPrivateKey);
-            SetPrivateKey(rsa);
+            throw  new NotImplementedException("CF: Does not support System.Security - see OpenNetCF for possible solution");
+            //RSA rsa = RSA.Create();
+            //rsa.FromXmlString(xmlPrivateKey);
+            //SetPrivateKey(rsa);
 
         }
 
@@ -318,7 +321,8 @@ namespace Habanero.DB
         ///<returns>Returns a DatabaseConfig object</returns>
 	    public static DatabaseConfig ReadFromConfigFile(string configSectionName)
 	    {
-	        return new DatabaseConfig((IDictionary) ConfigurationManager.GetSection(configSectionName));
+            // Andrew CF: Changed to use OpenNetCF.Configuration
+	        return new DatabaseConfig((IDictionary) ConfigurationSettings.GetConfig(configSectionName));
 	    }
 
         /// <summary>

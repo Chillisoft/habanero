@@ -139,6 +139,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(PropAlignment.centre, uiProp.Alignment);
         }
 
+        //TODO andrew 03 Jan 2011: CF: Test fails because there is no DTD validation 
         [Test]
         public void TestInvalidAlignmentValue()
         {

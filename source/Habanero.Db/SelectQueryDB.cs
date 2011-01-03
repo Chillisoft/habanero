@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -183,14 +184,14 @@ namespace Habanero.DB
                 builder.Append("SELECT ");
                 foreach (QueryField field in this.Fields.Values)
                 {
-                    builder.AppendFormat("{0}, ", DelimitField("SecondSelect", field.FieldName));
+                    builder.AppendFormat(CultureInfo.CurrentCulture, "{0}, ", DelimitField("SecondSelect", field.FieldName));
                 } 
                 builder.Remove(builder.Length - 2, 2);
                 builder.Append(" FROM (SELECT ");
                 AppendNoOfRecordsClauseAtBeginning(builder);
                 foreach (QueryField field in this.Fields.Values)
                 {
-                    builder.AppendFormat("{0}, ", DelimitField("FirstSelect", field.FieldName));
+                    builder.AppendFormat(CultureInfo.CurrentCulture, "{0}, ", DelimitField("FirstSelect", field.FieldName));
                 } 
                 builder.Remove(builder.Length - 2, 2);
                 builder.Append(" FROM (");
@@ -261,7 +262,7 @@ namespace Habanero.DB
         private void AppendFrom(StringBuilder builder)
         {
             SourceDB source = new SourceDB(_selectQuery.Source);
-            builder.AppendFormat(" FROM {0}", source.CreateSQL(_sqlFormatter, Aliases));
+            builder.AppendFormat(CultureInfo.CurrentCulture, " FROM {0}", source.CreateSQL(_sqlFormatter, Aliases));
         }
         
         private void AppendFields(StringBuilder builder)
@@ -276,7 +277,7 @@ namespace Habanero.DB
                 i++;
             }
 
-            builder.AppendFormat(String.Join(", ", formattedFields));
+            builder.AppendFormat(CultureInfo.CurrentCulture, String.Join(", ", formattedFields));
         }
 
 

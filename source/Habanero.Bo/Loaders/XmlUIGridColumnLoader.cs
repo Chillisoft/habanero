@@ -21,6 +21,7 @@ using System.Collections;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using log4net;
 
@@ -110,7 +111,7 @@ namespace Habanero.BO.Loaders
         {
             try
             {
-                _editable = Convert.ToBoolean(_reader.GetAttribute("editable"));
+                _editable = Convert.ToBoolean(XmlHelpersCF.GetAttributeOrDefault(_reader, "editable", "true"));
             }
             catch (Exception ex)
             {
@@ -192,7 +193,7 @@ namespace Habanero.BO.Loaders
         {
             try
             {
-                _width = Convert.ToInt32(_reader.GetAttribute("width"));
+                _width = Convert.ToInt32(XmlHelpersCF.GetAttributeOrDefault(_reader, "width", "100"));
             }
             catch (Exception ex)
             {
@@ -208,7 +209,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadAlignment()
         {
-            string alignmentStr = Convert.ToString(_reader.GetAttribute("alignment"));
+            string alignmentStr = Convert.ToString(XmlHelpersCF.GetAttributeOrDefault(_reader, "alignment", "left"));
             if (alignmentStr == "left")
             {
                 _alignment = PropAlignment.left;

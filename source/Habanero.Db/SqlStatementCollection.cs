@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.Util;
 
 namespace Habanero.DB
 {
@@ -177,7 +178,7 @@ namespace Habanero.DB
 			foreach (SqlStatement statement in this)
 			{
 				str.Append(statement.ToString());
-				str.Append(Environment.NewLine);
+				str.Append(EnvironmentCF.NewLine);
 			}
 			return str.ToString();
 		}

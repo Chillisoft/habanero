@@ -65,6 +65,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address.cs" />
+    <Compile Include="ArchitectureTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Asset.cs" />
     <Compile Include="Base\TestDateTimeToday.cs" />
     <Compile Include="Base\TestDelegatedExceptionNotifier.cs" />
     <Compile Include="Base\TestGlobalRegistry.cs" />
@@ -72,9 +77,33 @@
     <Compile Include="Base\TestRecordingExceptionNotifier.cs" />
     <Compile Include="Base\TestResult.cs" />
     <Compile Include="Base\TestRSAPasswordCrypter.cs" />
+    <Compile Include="BeforeSaveBo.cs" />
+    <Compile Include="BOWithCompositePK.cs" />
+    <Compile Include="BOWithStringPKProp.cs" />
+    <Compile Include="Car.cs" />
+    <Compile Include="Circle.cs" />
+    <Compile Include="CircleNoPrimaryKey.cs" />
+    <Compile Include="ColContactPeople.cs" />
+    <Compile Include="ContactPerson.cs" />
+    <Compile Include="ContactPersonCompositeKey.cs" />
+    <Compile Include="Engine.cs" />
+    <Compile Include="FilledCircle.cs" />
+    <Compile Include="FilledCircleInheritsCircleNoPK.cs" />
+    <Compile Include="FilledCircleNoPrimaryKey.cs" />
+    <Compile Include="FilledCircleNoPrimaryKeyInheritsCircle.cs" />
+    <Compile Include="ISampleUserInterfaceMapper.cs" />
+    <Compile Include="MockExceptionNotifier.cs" />
+    <Compile Include="MultiPropBO.cs" />
     <Compile Include="MyBo.cs" />
+    <Compile Include="MyDBConnection.cs" />
+    <Compile Include="OrderItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sample.cs" />
+    <Compile Include="Shape.cs" />
+    <Compile Include="TestAutoInc.cs" />
+    <Compile Include="TestUsingDatabase.cs" />
     <Compile Include="TestUtil.cs" />
+    <Compile Include="TransactionCommitterStubErrorRaising.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
@@ -85,9 +114,21 @@
       <Project>{F214D8D4-F00F-46E7-8167-86331E5398DB}</Project>
       <Name>Habanero.BO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+      <Project>{47FDF59D-7304-4883-AC23-129ED1BF1908}</Project>
+      <Name>Habanero.Db</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
+    <None Include="TestResources\Thumbs.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestResources\TestJpeg.jpg" />
+    <Content Include="TestResources\TestJpeg2.jpg" />
+    <Content Include="TestResources\TestJpeg3.jpg" />
+    <Content Include="TestResources\TestPhoto.jpg" />
+    <Content Include="TestResources\TestText.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Base\Exceptions\" />

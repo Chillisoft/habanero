@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "Habanero.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.BO", "Habanero.Test.Bo\Habanero.Test.BO.csproj", "{5EE52ED1-C9EC-45C0-8FB3-AF353FD31DC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Db", "Habanero.Db\Habanero.Db.csproj", "{47FDF59D-7304-4883-AC23-129ED1BF1908}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,12 @@ Global
 		{5EE52ED1-C9EC-45C0-8FB3-AF353FD31DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE52ED1-C9EC-45C0-8FB3-AF353FD31DC4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5EE52ED1-C9EC-45C0-8FB3-AF353FD31DC4}.Release|x86.ActiveCfg = Release|Any CPU
+		{47FDF59D-7304-4883-AC23-129ED1BF1908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47FDF59D-7304-4883-AC23-129ED1BF1908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47FDF59D-7304-4883-AC23-129ED1BF1908}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{47FDF59D-7304-4883-AC23-129ED1BF1908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47FDF59D-7304-4883-AC23-129ED1BF1908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47FDF59D-7304-4883-AC23-129ED1BF1908}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

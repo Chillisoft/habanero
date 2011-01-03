@@ -17,8 +17,10 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Runtime.Serialization;
+//TODO andrew 03 Jan 2011: Removed Serialization code
+//using System.Runtime.Serialization;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 
 namespace Habanero.DB
 {
@@ -42,7 +44,7 @@ namespace Habanero.DB
         /// <param name="connectString">The connection string that was used</param>
         public DatabaseWriteException(string userMessage, string developerMessage,
                                       string sqlStatement, string connectString)
-            : base(userMessage, developerMessage + Environment.NewLine + sqlStatement)
+            : base(userMessage, developerMessage + EnvironmentCF.NewLine + sqlStatement)
         {
             _sqlStatement = sqlStatement;
             _connectString = connectString;
@@ -59,7 +61,7 @@ namespace Habanero.DB
         /// <param name="connectString">The connection string that was used</param>
         public DatabaseWriteException(string userMessage, string developerMessage, Exception inner,
                                       string sqlStatement, string connectString)
-            : base(userMessage, developerMessage + Environment.NewLine + sqlStatement, inner)
+            : base(userMessage, developerMessage + EnvironmentCF.NewLine + sqlStatement, inner)
         {
             _sqlStatement = sqlStatement;
             _connectString = connectString;
@@ -90,14 +92,15 @@ namespace Habanero.DB
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise a new exception
-        /// </summary>
-        /// <param name="info">Serialisation info</param>
-        /// <param name="context">The streaming context</param>
-        protected DatabaseWriteException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        //TODO andrew 03 Jan 2011: Removed Serialization code
+        ///// <summary>
+        ///// Constructor to initialise a new exception
+        ///// </summary>
+        ///// <param name="info">Serialisation info</param>
+        ///// <param name="context">The streaming context</param>
+        //protected DatabaseWriteException(SerializationInfo info, StreamingContext context) : base(info, context)
+        //{
+        //}
 
         /// <summary>
         /// Returns the sql statement used
@@ -123,17 +126,18 @@ namespace Habanero.DB
         //    get { return _developerMessage; }
         //}
 
-        /// <summary>
-        /// Required for ISerializable.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("sqlStatement", _sqlStatement);
-            info.AddValue("developerMessage",DeveloperMessage);
-            info.AddValue("connectString",_connectString);
-        }
+        //TODO andrew 03 Jan 2011: CF: Removed Serializaiton code
+        ///// <summary>
+        ///// Required for ISerializable.
+        ///// </summary>
+        ///// <param name="info"></param>
+        ///// <param name="context"></param>
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    base.GetObjectData(info, context);
+        //    info.AddValue("sqlStatement", _sqlStatement);
+        //    info.AddValue("developerMessage",DeveloperMessage);
+        //    info.AddValue("connectString",_connectString);
+        //}
     }
 }

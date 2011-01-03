@@ -41,7 +41,8 @@ namespace Habanero.DB
         /// </summary>
         public const string DatabaseVersionSetting = "DATABASE_VERSION";
         private readonly IDatabaseConnection _connection;
-        private readonly SortedDictionary<int, SqlStatement> _migrations;
+        //TODO andrew 03 Jan 2011: CF: SortedDictionary not supported in CF 2.0
+        //private readonly SortedDictionary<int, SqlStatement> _migrations;
         private ISettings _settings;
 
         /// <summary>
@@ -50,13 +51,19 @@ namespace Habanero.DB
         /// <param name="connection">The database connection</param>
         public DBMigrator(IDatabaseConnection connection) {
             _connection = connection;
-            _migrations = new SortedDictionary<int, SqlStatement>();
+            throw new NotImplementedException("CF: SortedDicitonary is not supported in CF 2");
+            //_migrations = new SortedDictionary<int, SqlStatement>();
         }
 
         /// <summary>
         /// Returns the migration count
         /// </summary>
-        public int MigrationCount { get { return _migrations.Count; } }
+        public int MigrationCount { get
+        {
+            throw new NotImplementedException("CF: SortedDicitonary is not supported in CF 2");
+
+            //return _migrations.Count;
+        } }
 
         /// <summary>
         /// Adds a sql migration that can be performed
@@ -73,14 +80,16 @@ namespace Habanero.DB
         /// <param name="number">The migration number</param>
         /// <param name="sql">The sql statement object to add</param>
         public void AddMigration(int number, SqlStatement sql) {
-            if (_migrations.ContainsKey(number))
-            {
-                throw new HabaneroApplicationException(String.Format(
-                    "While processing a database migration, a duplicate migration " +
-                    "number '{0}' was encountered. Each number must be unique.",
-                    number));
-            }
-            _migrations.Add(number, sql);
+            throw new NotImplementedException("CF: SortedDicitonary is not supported in CF 2");
+
+            //if (_migrations.ContainsKey(number))
+            //{
+            //    throw new HabaneroApplicationException(String.Format(
+            //        "While processing a database migration, a duplicate migration " +
+            //        "number '{0}' was encountered. Each number must be unique.",
+            //        number));
+            //}
+            //_migrations.Add(number, sql);
         }
 
         /// <summary>
@@ -92,14 +101,16 @@ namespace Habanero.DB
         /// <returns>Returns a collection of sql objects</returns>
         public SqlStatementCollection  GetMigrationSql(int startAfterVersion, int endVersion) {
             SqlStatementCollection migrationSql = new SqlStatementCollection();
-            foreach (KeyValuePair<int, SqlStatement> migration in _migrations)
-            {
-                if (migration.Key > startAfterVersion && migration.Key <= endVersion)
-                {
-                    migrationSql.Add(migration.Value);
-                }
-            }
-            return migrationSql;
+            throw new NotImplementedException("CF: SortedDicitonary is not supported in CF 2");
+
+            //foreach (KeyValuePair<int, SqlStatement> migration in _migrations)
+            //{
+            //    if (migration.Key > startAfterVersion && migration.Key <= endVersion)
+            //    {
+            //        migrationSql.Add(migration.Value);
+            //    }
+            //}
+            //return migrationSql;
             
         }
 
@@ -110,7 +121,9 @@ namespace Habanero.DB
         /// <returns>Returns a sql statement object, or null if not found</returns>
         public SqlStatement GetMigration(int number)
         {
-            return _migrations[number];
+            throw new NotImplementedException("CF: SortedDicitonary is not supported in CF 2");
+
+            //return _migrations[number];
         }
 
         /// <summary>
@@ -186,11 +199,13 @@ namespace Habanero.DB
         /// </summary>
         /// <returns>Returns an integer</returns>
         public int LatestVersion() {
-            int latestVersion = 0;
-            foreach (KeyValuePair<int, SqlStatement > migration in _migrations) {
-                latestVersion = migration.Key;
-            }
-            return latestVersion;
+            throw new NotImplementedException("CF: SortedDicitonary is not supported in CF 2");
+
+            //int latestVersion = 0;
+            //foreach (KeyValuePair<int, SqlStatement > migration in _migrations) {
+            //    latestVersion = migration.Key;
+            //}
+            //return latestVersion;
            
         }
         

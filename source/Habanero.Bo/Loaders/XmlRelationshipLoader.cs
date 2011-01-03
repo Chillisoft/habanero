@@ -165,8 +165,8 @@ namespace Habanero.BO.Loaders
                      + "relationship and can be either 'single' or 'multiple'.");
             }
 
-            _keepReferenceToRelatedObject = _reader.GetAttribute("keepReference") == "true";
-            _owningBOHasForeignKey = _reader.GetAttribute("owningBOHasForeignKey") == "true";
+            _keepReferenceToRelatedObject = XmlHelpersCF.GetAttributeOrDefault(_reader, "keepReference", "true") == "true";
+            _owningBOHasForeignKey =  XmlHelpersCF.GetAttributeOrDefault(_reader, "owningBOHasForeignKey", "true") == "true";
             _reverseRelationshipName = _reader.GetAttribute("reverseRelationship");
             _typeParameter = _reader.GetAttribute("typeParameter");
             try

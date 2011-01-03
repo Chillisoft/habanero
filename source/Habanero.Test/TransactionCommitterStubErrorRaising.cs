@@ -18,7 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
+//TODO andrew 03 Jan 2011: CF: Linq not supported in CF 2.0
+//using System.Linq;
 using System.Text;
 using Habanero.Base;
 using Habanero.BO;

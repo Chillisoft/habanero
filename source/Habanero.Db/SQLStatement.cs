@@ -19,7 +19,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
+//TODO andrew 03 Jan 2011: CF: No oledb provider is supported on CF
+//using System.Data.OleDb;
+using System.Globalization;
 using System.Text;
 using Habanero.Base;
 using Habanero.Util;
@@ -152,14 +154,15 @@ namespace Habanero.DB
                     ReflectionUtilities.SetEnumPropertyValue(newParameter,"OracleType","Clob");
                 }
             }
-            if (_idbConnection is OleDbConnection)
-            {
-                OleDbParameter oleDbParameter = newParameter as OleDbParameter;
-                if (oleDbParameter != null && paramValue is DateTime && oleDbParameter.OleDbType == OleDbType.DBTimeStamp)
-                {
-                    oleDbParameter.OleDbType = OleDbType.Date;
-                }
-            }
+            //TODO andrew 03 Jan 2011: CF: No oledb provider is supported on CF
+            //if (_idbConnection is OleDbConnection)
+            //{
+            //    OleDbParameter oleDbParameter = newParameter as OleDbParameter;
+            //    if (oleDbParameter != null && paramValue is DateTime && oleDbParameter.OleDbType == OleDbType.DBTimeStamp)
+            //    {
+            //        oleDbParameter.OleDbType = OleDbType.Date;
+            //    }
+            //}
         }
         
 
@@ -197,7 +200,7 @@ namespace Habanero.DB
             StringBuilder s = new StringBuilder(string.Format("Raw statement: {0}   , Parameter values: ", this.Statement));
             foreach (IDbDataParameter param in Parameters)
             {
-                s.AppendFormat("{0}, ", param.Value);
+                s.AppendFormat(CultureInfo.CurrentCulture, "{0}, ", param.Value);
             }
             return s.ToString();
         }

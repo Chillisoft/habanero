@@ -196,6 +196,7 @@ namespace Habanero.Test.BO.Loaders
             }
         }
 
+        //TODO andrew 03 Jan 2011: CF: Test fails because there is no DTD validation 
         [Test]
         public void TestMixedElementsUnderFormColumn()
         {
