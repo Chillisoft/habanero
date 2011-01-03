@@ -730,20 +730,21 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("Family", propDef.DefaultValueString);
             Assert.AreEqual(ContactPersonTestBO.ContactType.Family, propDef.DefaultValue);
         }
-        [Test]
-        public void Test_ConstructPropDef_ForCustomTypeWithATypeConverter_WithDefaultValueString_ShouldConstructWithCorrectValue()
-        {
-            //---------------Set up test pack-------------------
-            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
-            var type = typeof(EmailAddressWithTypeConverter);
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            var propDef = new PropDef("Name", type.Assembly.FullName, type.Name, PropReadWriteRule.ReadWrite, "DD", expectedValue, false, false);
-            //---------------Test Result -----------------------
-            Assert.IsInstanceOf<EmailAddressWithTypeConverter>(propDef.DefaultValue);
-            Assert.AreEqual(expectedValue, propDef.DefaultValue.ToString());
-            Assert.AreEqual(expectedValue, propDef.DefaultValueString);
-                }
+        //TODO andrew 03 Jan 2011: CF: Test relies on EmailAddressWithTypeConverter, TypeConverter is not supported in CF
+        //[Test]
+        //public void Test_ConstructPropDef_ForCustomTypeWithATypeConverter_WithDefaultValueString_ShouldConstructWithCorrectValue()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+        //    var type = typeof(EmailAddressWithTypeConverter);
+        //    //---------------Assert Precondition----------------
+        //    //---------------Execute Test ----------------------
+        //    var propDef = new PropDef("Name", type.Assembly.FullName, type.Name, PropReadWriteRule.ReadWrite, "DD", expectedValue, false, false);
+        //    //---------------Test Result -----------------------
+        //    Assert.IsInstanceOf<EmailAddressWithTypeConverter>(propDef.DefaultValue);
+        //    Assert.AreEqual(expectedValue, propDef.DefaultValue.ToString());
+        //    Assert.AreEqual(expectedValue, propDef.DefaultValueString);
+        //        }
         [Test]
         public void TestCreatePropDefWithEnumType()
         {

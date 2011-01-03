@@ -16,7 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
-using System.Runtime.Serialization;
+//TODO andrew 03 Jan 2011: Removed Serialization code
+//using System.Runtime.Serialization;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -30,11 +31,12 @@ namespace Habanero.Test.Structure
         {
         }
 
-        protected LegalEntity(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
+        //TODO andrew 03 Jan 2011: Removed Serialization code
+        //protected LegalEntity(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
             
-        }
+        //}
         public new static IClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());

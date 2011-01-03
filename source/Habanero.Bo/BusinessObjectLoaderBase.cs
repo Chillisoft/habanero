@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using log4net;
@@ -407,8 +408,9 @@ namespace Habanero.BO
         /// <returns></returns>
         protected static IBusinessObjectCollection CreateCollectionOfType(IClassDef classDef)
         {
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(classDef.ClassType);
+            //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(classDef.ClassType);
+            return (IBusinessObjectCollection)ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(boColType, classDef);
             //return (IBusinessObjectCollection) Activator.CreateInstance(boColType, classDef);
         }
 

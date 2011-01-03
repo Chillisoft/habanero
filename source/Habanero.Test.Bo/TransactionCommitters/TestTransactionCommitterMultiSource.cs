@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+//TODO andrew 03 Jan 2011: CF: No linq support in CF 2
+//using System.Linq;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO;
+using Habanero.Test.Structure;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -13,6 +16,7 @@ namespace Habanero.Test.BO.TransactionCommitters
     [TestFixture]
     public class TestTransactionCommitterMultiSource
     {
+        // ReSharper disable InconsistentNaming
         [Test]
         public void Test_DefaultDataAccessor_OneObject()
         {
@@ -181,28 +185,32 @@ namespace Habanero.Test.BO.TransactionCommitters
 
         }
 
-        [Test]
-        public void Test_CommitTransaction_WhenEmpty_ShouldNotCommitOnAnyDataAccessors()
-        {
-            //---------------Set up test pack-------------------
-            IDataAccessor defaultDataAccessor = MockRepository.GenerateStub<IDataAccessor>();
-            IDataAccessor alternateDataAccessor = MockRepository.GenerateStub<IDataAccessor>();
+        //TODO andrew 03 Jan 2011: CF: Tests below have dependency on Rhino Mocks and .Net Framework 3.5
+        //[Test]
+        //public void Test_CommitTransaction_WhenEmpty_ShouldNotCommitOnAnyDataAccessors()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    IDataAccessor defaultDataAccessor = MockRepository.GenerateStub<IDataAccessor>();
+        //    IDataAccessor alternateDataAccessor = MockRepository.GenerateStub<IDataAccessor>();
 
-            MyBO.LoadDefaultClassDef();
-            Dictionary<Type, IDataAccessor> dataAccessors = new Dictionary<Type, IDataAccessor>();
-            dataAccessors.Add(typeof(MyBO), alternateDataAccessor);
-            ITransactionCommitter transactionCommitter = new TransactionCommitterMultiSource(defaultDataAccessor, dataAccessors);
-            //---------------Assert Precondition----------------
-            defaultDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
-            alternateDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
-            //---------------Execute Test ----------------------
-            transactionCommitter.CommitTransaction();
-            //---------------Test Result -----------------------
-            defaultDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
-            alternateDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
-        }
+        //    MyBO.LoadDefaultClassDef();
+        //    Dictionary<Type, IDataAccessor> dataAccessors = new Dictionary<Type, IDataAccessor>();
+        //    dataAccessors.Add(typeof(MyBO), alternateDataAccessor);
+        //    ITransactionCommitter transactionCommitter = new TransactionCommitterMultiSource(defaultDataAccessor, dataAccessors);
+        //    //---------------Assert Precondition----------------
+        //    defaultDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
+        //    alternateDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
+        //    //---------------Execute Test ----------------------
+        //    transactionCommitter.CommitTransaction();
+        //    //---------------Test Result -----------------------
+        //    defaultDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
+        //    alternateDataAccessor.AssertWasNotCalled(accessor => accessor.CreateTransactionCommitter());
+        //}
+
 
     }
+    // ReSharper restore InconsistentNaming
 
-   
+  
+
 }

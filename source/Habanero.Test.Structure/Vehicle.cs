@@ -21,6 +21,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using OpenNETCF;
 
 namespace Habanero.Test.Structure
 {
@@ -73,7 +74,7 @@ namespace Habanero.Test.Structure
 			      <relatedProperty property=""OwnerID"" relatedProperty=""LegalEntityID"" />
 			    </relationship>
 			  </class>
-			", Enum.GetName(typeof(ORMapping), orMapping), orMapping == ORMapping.SingleTableInheritance ? "discriminator=\"EntityType\"" : ""));
+			", Enum2.GetName(typeof(ORMapping), orMapping), orMapping == ORMapping.SingleTableInheritance ? "discriminator=\"EntityType\"" : ""));
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }

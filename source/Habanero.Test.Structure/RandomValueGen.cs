@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using OpenNETCF;
 
 namespace Habanero.Test.Structure
 {
@@ -106,7 +108,7 @@ namespace Habanero.Test.Structure
                 minValue = 0M;
             }
             decimal range = maxValue - minValue;
-            decimal truncatedRange = Math.Truncate(range);
+            decimal truncatedRange = MathHelpersCF.Truncate(range);
             if (truncatedRange > int.MaxValue)
             {
                 truncatedRange = int.MaxValue - 1;
@@ -131,7 +133,7 @@ namespace Habanero.Test.Structure
                 minValue = 0.0;
             }
             double range = maxValue - minValue;
-            double truncatedRange = Math.Truncate(range);
+            double truncatedRange = MathHelpersCF.Truncate(range);
             if (truncatedRange > int.MaxValue)
             {
                 truncatedRange = int.MaxValue - 1;
@@ -162,7 +164,7 @@ namespace Habanero.Test.Structure
 
         public static object GetRandomEnum(Type enumType)
         {
-            Array values = Enum.GetValues(enumType);
+            Array values = Enum2.GetValues(enumType);
             int randomIndex = GetRandomInt(0, values.Length);
             return values.GetValue(randomIndex);
         }

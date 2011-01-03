@@ -19,6 +19,7 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -178,9 +179,8 @@ namespace Habanero.BO.ClassDefinition
 		/// <returns>Returns the new relationship that has been created</returns>
 		public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
 		{
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-
-            //Type relationshipBOType = typeof(MultipleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
+            Type relationshipBOType = typeof(MultipleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
+            return (IMultipleRelationship)ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(relationshipBOType, owningBo, this, lBOPropCol, this.TimeOut);
             //return (IMultipleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol, this.TimeOut);
 		}
 

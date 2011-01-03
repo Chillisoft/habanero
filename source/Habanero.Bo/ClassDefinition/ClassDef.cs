@@ -639,8 +639,9 @@ namespace Habanero.BO.ClassDefinition
             }
             try
             {
-                throw new NotImplementedException("CF: Code commented out to get CF to compile");
-                //return (BusinessObject) Activator.CreateInstance(MyClassType, true);
+                
+                //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                return (BusinessObject) Activator.CreateInstance(MyClassType);
             }
             catch (MissingMethodException ex)
             {

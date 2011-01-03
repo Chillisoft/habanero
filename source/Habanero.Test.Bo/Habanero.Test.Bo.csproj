@@ -48,6 +48,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="MySql.Data, Version=6.2.2.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="nmock, Version=1.0.2735.26971, Culture=neutral, PublicKeyToken=824173e82b3e3b0d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nmock.dll</HintPath>
@@ -55,6 +59,10 @@
     <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenNETCF, Version=2.2.0.0, Culture=neutral, PublicKeyToken=e60dbea84bb431b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\OpenNETCF.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,6 +77,34 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="BOTestUtils.cs" />
+    <Compile Include="ClassDefinition\TestBOPropGeneralDataMapper.cs" />
+    <Compile Include="ClassDefinition\TestClassDef.cs" />
+    <Compile Include="ClassDefinition\TestClassDefCol.cs" />
+    <Compile Include="ClassDefinition\TestClassDefHelper.cs" />
+    <Compile Include="ClassDefinition\TestClassDefValidator.cs" />
+    <Compile Include="ClassDefinition\TestClassDefWithDyamicAttributes.cs" />
+    <Compile Include="ClassDefinition\TestDefClassFactory.cs" />
+    <Compile Include="ClassDefinition\TestFilterDef.cs" />
+    <Compile Include="ClassDefinition\TestKeyDef.cs" />
+    <Compile Include="ClassDefinition\TestKeyDefCol.cs" />
+    <Compile Include="ClassDefinition\TestMultipleRelationshipDef.cs" />
+    <Compile Include="ClassDefinition\TestPrimaryKeyDef.cs" />
+    <Compile Include="ClassDefinition\TestPropDef.cs" />
+    <Compile Include="ClassDefinition\TestPropDefCol.cs" />
+    <Compile Include="ClassDefinition\TestRelationshipDef.cs" />
+    <Compile Include="ClassDefinition\TestRelationshipDefCol.cs" />
+    <Compile Include="ClassDefinition\TestRelKeyDef.cs" />
+    <Compile Include="ClassDefinition\TestRelPropDef.cs" />
+    <Compile Include="ClassDefinition\TestSingleRelationshipDef.cs" />
+    <Compile Include="ClassDefinition\TestSuperClassDef.cs" />
+    <Compile Include="ClassDefinition\TestTrigger.cs" />
+    <Compile Include="ClassDefinition\TestTriggerCol.cs" />
+    <Compile Include="ClassDefinition\TestUIDef.cs" />
+    <Compile Include="ClassDefinition\TestUIDefCol.cs" />
+    <Compile Include="ClassDefinition\TestUIForm.cs" />
+    <Compile Include="ClassDefinition\TestUIFormColumn.cs" />
+    <Compile Include="ClassDefinition\TestUIFormTab.cs" />
+    <Compile Include="ClassDefinition\TestUIGrid.cs" />
     <Compile Include="Loaders\TestClassDefsXmlValidator.cs" />
     <Compile Include="Loaders\TestDtdLoader.cs" />
     <Compile Include="Loaders\TestDtdsResource.cs" />
@@ -95,7 +131,22 @@
     <Compile Include="Loaders\TestXmlUILoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBOError.cs" />
+    <Compile Include="TestBoProp.cs" />
     <Compile Include="TestBoPropString.cs" />
+    <Compile Include="TestPack\AddressTestBO.cs" />
+    <Compile Include="TestPack\BOWithIntID.cs" />
+    <Compile Include="TestPack\BOWithIntID_Child.cs" />
+    <Compile Include="TestPack\BOWithIntID_DifferentType.cs" />
+    <Compile Include="TestPack\ContactPersonTestBO.cs" />
+    <Compile Include="TestPack\OrganisationTestBO.cs" />
+    <Compile Include="TestPack\PersonTestBO.cs" />
+    <Compile Include="TransactionCommitterStub.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionalBusinessObject.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitter.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterFactory.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterHelper.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterInMemory.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterMultiSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
@@ -105,6 +156,14 @@
     <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
       <Project>{F214D8D4-F00F-46E7-8167-86331E5398DB}</Project>
       <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+      <Project>{47FDF59D-7304-4883-AC23-129ED1BF1908}</Project>
+      <Name>Habanero.Db</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.Structure\Habanero.Test.Structure.csproj">
+      <Project>{7B42C3AA-CD51-48D6-BE90-76FBE8AC5F04}</Project>
+      <Name>Habanero.Test.Structure</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
       <Project>{37E55226-D08F-4A7E-85AE-79D7993E1AE5}</Project>

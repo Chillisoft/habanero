@@ -17,7 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Runtime.Serialization;
+//TODO andrew 03 Jan 2011: CF: Removed Serialization code
+//using System.Runtime.Serialization;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -32,10 +33,11 @@ namespace Habanero.Test.Structure
         {
         }
 
-        protected Person(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
+        //TODO andrew 03 Jan 2011: CF: Removed Serialization code
+        //protected Person(SerializationInfo info, StreamingContext context) : base(info, context)
+        //{
             
-        }
+        //}
 
 
         public new static IClassDef LoadDefaultClassDef()

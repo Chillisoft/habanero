@@ -16,7 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
-using System.Runtime.Serialization;
+//TODO andrew 03 Jan 2011: CF: Removed Serialization code
+//using System.Runtime.Serialization;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;

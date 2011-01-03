@@ -232,6 +232,7 @@
     <Compile Include="Util\IdNumberUtilities.cs" />
     <Compile Include="Util\ImageThumbnailCreator.cs" />
     <Compile Include="Util\LongText.cs" />
+    <Compile Include="Util\MathHelpersCF.cs" />
     <Compile Include="Util\ReflectionUtilities.cs" />
     <Compile Include="Util\ReflectionUtilitiesCF.cs" />
     <Compile Include="Util\SerialisationUtilities.cs" />

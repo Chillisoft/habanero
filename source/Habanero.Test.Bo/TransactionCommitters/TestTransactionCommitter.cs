@@ -52,6 +52,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
         #endregion
 
+// ReSharper disable InconsistentNaming
         private const string _customRuleErrorMessage = "Broken Rule";
 
 
@@ -285,8 +286,8 @@ namespace Habanero.Test.BO.TransactionCommitters
             catch (BusObjectInAnInvalidStateException ex)
                 //---------------Test Result -----------------------
             {
-                Assert.IsTrue(ex.Message.Contains(_customRuleErrorMessage));
-                Assert.IsTrue(ex.Message.Contains("Surname"));
+                StringAssert.Contains(_customRuleErrorMessage, ex.Message);
+                StringAssert.Contains("Surname", ex.Message);
             }
         }
 
@@ -306,7 +307,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             catch (BusObjectInAnInvalidStateException ex)
                 //---------------Test Result -----------------------
             {
-                Assert.IsTrue(ex.Message.Contains(_customRuleErrorMessage));
+                StringAssert.Contains(_customRuleErrorMessage, ex.Message);
             }
         }
 
@@ -421,6 +422,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             //Business object will throw an exception if executed in the incorrect order.
             Assert.AreEqual(1, committer.OriginalTransactions.Count);
         }
+        // ReSharper restore InconsistentNaming
 
       
     }
