@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Data;
+using Habanero.Base.Util;
 
 namespace Habanero.Test.Util.File
 {
@@ -25,7 +26,7 @@ namespace Habanero.Test.Util.File
     {
         public static string SimpleCsvContents()
         {
-            return "First,2nd,3" + Environment.NewLine + "a,b,c" + Environment.NewLine;
+            return "First,2nd,3" + EnvironmentCF.NewLine + "a,b,c" + EnvironmentCF.NewLine;
         }
 
         public static DataTable SimpleDataTable()
@@ -40,8 +41,8 @@ namespace Habanero.Test.Util.File
 
         public static string ComplexCsvContents()
         {
-            return "First Entry,2nd 'Entry',\"3 \"\"Entry\"\"\"" + Environment.NewLine +
-                   "a'a a,\"b\"\"b\"\"b\",c'c'c" + Environment.NewLine;
+            return "First Entry,2nd 'Entry',\"3 \"\"Entry\"\"\"" + EnvironmentCF.NewLine +
+                   "a'a a,\"b\"\"b\"\"b\",c'c'c" + EnvironmentCF.NewLine;
         }
 
         public static DataTable ComplexDataTable()
@@ -56,9 +57,9 @@ namespace Habanero.Test.Util.File
 
         public static string CommasInDataCsvContents()
         {
-            return "First,Second,Third" + Environment.NewLine +
-                   "\"a,a\",\"b,b\",\"c,c\"" + Environment.NewLine +
-                   "\"a1,a1\",\"b1,b1\",\"c1,c1\"" + Environment.NewLine;
+            return "First,Second,Third" + EnvironmentCF.NewLine +
+                   "\"a,a\",\"b,b\",\"c,c\"" + EnvironmentCF.NewLine +
+                   "\"a1,a1\",\"b1,b1\",\"c1,c1\"" + EnvironmentCF.NewLine;
         }
 
         public static DataTable CommasInDataDataTable()
@@ -74,8 +75,8 @@ namespace Habanero.Test.Util.File
 
         public static string CommasInHeaderCsvContents()
         {
-            return "\"First,One\",\"Second,Two\",\"Third,Three\"" + Environment.NewLine +
-                   "a,b,c" + Environment.NewLine;
+            return "\"First,One\",\"Second,Two\",\"Third,Three\"" + EnvironmentCF.NewLine +
+                   "a,b,c" + EnvironmentCF.NewLine;
         }
 
         public static DataTable CommasInHeaderDataTable()
@@ -90,8 +91,8 @@ namespace Habanero.Test.Util.File
 
         public static string AdvancedCsvContents()
         {
-            return "\"First,One\"\"Singular\",\"Second\tTwo,''Double'\",\"Third\"\"\"\",Three'\t'\",Forth\tFour'\t'" + Environment.NewLine +
-                   "\"a,a'\",\"\"\",bb\",\"c'\"\"c,\",d\t'd" + Environment.NewLine;
+            return "\"First,One\"\"Singular\",\"Second\tTwo,''Double'\",\"Third\"\"\"\",Three'\t'\",Forth\tFour'\t'" + EnvironmentCF.NewLine +
+                   "\"a,a'\",\"\"\",bb\",\"c'\"\"c,\",d\t'd" + EnvironmentCF.NewLine;
         }
 
         public static DataTable AdvancedDataTable()

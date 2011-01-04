@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using Habanero.Base.Util;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -31,7 +32,7 @@ namespace Habanero.Test.Util.File
         [Test]
         public void TestCsvReaderEmpty()
         {
-            CompareToDataTable(Environment.NewLine, new DataTable());
+            CompareToDataTable(EnvironmentCF.NewLine, new DataTable());
         }
                 
         [Test]

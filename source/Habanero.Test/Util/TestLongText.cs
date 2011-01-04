@@ -89,15 +89,16 @@ namespace Habanero.Test.Util
         public void TestHashCode()
         {
             LongText longText = new LongText("test");
-
-            if (Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") == "x86")
-            {
-                Assert.AreEqual(-354185609, longText.GetHashCode());
-            }
-            else
-            {
-                Assert.AreEqual(-871206010, longText.GetHashCode());
-            }
+            //TODO andrew 04 Jan 2011: CF: Don't know what bytecode will be Environment.GetEnvironmentVariable not supported
+            Assert.Fail("CF: Don't know what bytecode will be Environment.GetEnvironmentVariable not supported");
+            //if (Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") == "x86")
+            //{
+            //    Assert.AreEqual(-354185609, longText.GetHashCode());
+            //}
+            //else
+            //{
+            //    Assert.AreEqual(-871206010, longText.GetHashCode());
+            //}
         }
 
         [Test]

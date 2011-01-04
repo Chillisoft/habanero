@@ -62,6 +62,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +105,21 @@
     <Compile Include="TestUsingDatabase.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="TransactionCommitterStubErrorRaising.cs" />
+    <Compile Include="Util\File\CsvTestsSamples.cs" />
+    <Compile Include="Util\File\TestCsvFileReader.cs" />
+    <Compile Include="Util\File\TestCsvFileWriter.cs" />
+    <Compile Include="Util\TestByteString.cs" />
+    <Compile Include="Util\TestDateTimeUtilities.cs" />
+    <Compile Include="Util\TestImageThumbnailCreator.cs" />
+    <Compile Include="Util\TestLongText.cs" />
+    <Compile Include="Util\TestReflectionUtilities.cs" />
+    <Compile Include="Util\TestSerialisationUtilities.cs" />
+    <Compile Include="Util\TestSortedStringCollection.cs" />
+    <Compile Include="Util\TestStringUtilities.cs" />
+    <Compile Include="Util\TestTypeUtilities.cs" />
+    <Compile Include="Util\TestUtilities.cs" />
+    <Compile Include="Util\TestValueObject.cs" />
+    <Compile Include="Util\TestXmlDocumentValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
@@ -122,6 +138,11 @@
   <ItemGroup>
     <None Include="key.snk" />
     <None Include="TestResources\Thumbs.db" />
+    <None Include="Util\File\.svn\all-wcprops" />
+    <None Include="Util\File\.svn\entries" />
+    <None Include="Util\File\.svn\text-base\CsvTestsSamples.cs.svn-base" />
+    <None Include="Util\File\.svn\text-base\TestCsvFileReader.cs.svn-base" />
+    <None Include="Util\File\.svn\text-base\TestCsvFileWriter.cs.svn-base" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestResources\TestJpeg.jpg" />
@@ -132,6 +153,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Base\Exceptions\" />
+    <Folder Include="Util\File\.svn\prop-base\" />
+    <Folder Include="Util\File\.svn\props\" />
+    <Folder Include="Util\File\.svn\tmp\prop-base\" />
+    <Folder Include="Util\File\.svn\tmp\props\" />
+    <Folder Include="Util\File\.svn\tmp\text-base\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

@@ -19,6 +19,7 @@
 using System;
 using System.Data;
 using System.IO;
+using Habanero.Base.Util;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -35,7 +36,7 @@ namespace Habanero.Test.Util.File
             DataTable dataTable = new DataTable();
             csvFileWriter.WriteFromDataTable(dataTable);
             csvFileWriter.Close();
-            Assert.AreEqual(Environment.NewLine, stringWriter.ToString());
+            Assert.AreEqual(EnvironmentCF.NewLine, stringWriter.ToString());
         }
 
         [Test]

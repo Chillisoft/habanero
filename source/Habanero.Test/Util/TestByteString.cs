@@ -25,6 +25,7 @@ using Habanero.BO.Loaders;
 using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
+using OpenNETCF;
 
 namespace Habanero.Test.Util
 {
@@ -122,11 +123,14 @@ namespace Habanero.Test.Util
         public void TestHashCode()
         {
             ByteString byteString = new ByteString("test");
-            if (Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") == "x86") {
-                Assert.AreEqual(-354185609, byteString.GetHashCode());
-            } else {
-                Assert.AreEqual(-871206010, byteString.GetHashCode());
-            }
+            //TODO andrew 04 Jan 2011: CF: Don't know what the bytestring will be for CF device
+
+            Assert.Fail("CF: don't know what bytesting value will be");
+            //if (Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") == "x86") {
+            //    Assert.AreEqual(-354185609, byteString.GetHashCode());
+            //} else {
+            //    Assert.AreEqual(-871206010, byteString.GetHashCode());
+            //}
 
         }
 

@@ -46,6 +46,7 @@ namespace Habanero.Base
         /// <returns>Returns the unaltered string provided</returns>
         public string DecryptString(string value)
         {
+
             throw new NotImplementedException("CF: Code commented out to get CF to compile");
             //RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
             //provider.FromXmlString(_rsa.ToXmlString(true));
