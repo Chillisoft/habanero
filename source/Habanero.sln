@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Db", "Habanero.Db\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.Structure", "Habanero.Test.Structure\Habanero.Test.Structure.csproj", "{7B42C3AA-CD51-48D6-BE90-76FBE8AC5F04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.Db", "Habanero.Test.Db\Habanero.Test.Db.csproj", "{2A6564CF-775A-47A0-86B5-65C00FDC4659}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,12 @@ Global
 		{7B42C3AA-CD51-48D6-BE90-76FBE8AC5F04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B42C3AA-CD51-48D6-BE90-76FBE8AC5F04}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7B42C3AA-CD51-48D6-BE90-76FBE8AC5F04}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A6564CF-775A-47A0-86B5-65C00FDC4659}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A6564CF-775A-47A0-86B5-65C00FDC4659}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A6564CF-775A-47A0-86B5-65C00FDC4659}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A6564CF-775A-47A0-86B5-65C00FDC4659}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A6564CF-775A-47A0-86B5-65C00FDC4659}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A6564CF-775A-47A0-86B5-65C00FDC4659}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -243,7 +244,7 @@ namespace Habanero.Test.DB
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(Guid.NewGuid().ToString("N").ToUpperInvariant(), out returnedValue);
+            bool keyReturned = list.TryGetValue(Guid.NewGuid().ToString("N").ToUpper(CultureInfo.InvariantCulture), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsFalse(keyReturned);
             Assert.IsNull(returnedValue);
