@@ -86,6 +86,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCreateRelationship()
         {
+            
             MultipleRelationship rel =
                 (MultipleRelationship)_multipleRelationshipDef.CreateRelationship(_mockBo, _mockBo.PropCol);
             Assert.AreEqual(_multipleRelationshipDef.RelationshipName, rel.RelationshipName);
