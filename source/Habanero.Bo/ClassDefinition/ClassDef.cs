@@ -1195,12 +1195,13 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>The type of the specified property</returns>
         public IPropertyComparer<T> CreatePropertyComparer<T>(string propertyName) where T : IBusinessObject
         {
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //Type comparerType = typeof (PropertyComparer<,>);
-            //Type propertyType = GetPropertyType(propertyName);
-            //comparerType = comparerType.MakeGenericType(typeof (T), propertyType);
-            //var comparer = (IPropertyComparer<T>) Activator.CreateInstance(comparerType, propertyName);
-            //return comparer;
+            //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            Type comparerType = typeof(PropertyComparer<,>);
+            Type propertyType = GetPropertyType(propertyName);
+            comparerType = comparerType.MakeGenericType(typeof(T), propertyType);
+            var comparer = (IPropertyComparer<T>) ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(comparerType, propertyName);
+            //var comparer = (IPropertyComparer<T>)Activator.CreateInstance(comparerType, propertyName);
+            return comparer;
         }
 
         /// <summary>

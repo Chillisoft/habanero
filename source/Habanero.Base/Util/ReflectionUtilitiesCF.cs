@@ -15,10 +15,11 @@ namespace Habanero.Base.Util
             }
 
             var c = type.GetConstructor(paramTypes); 
-            if (c == null) return null; 
+            if (c == null) throw new MissingMethodException(); 
             
             return c.Invoke(pars);
         }
+
 
     }
 }

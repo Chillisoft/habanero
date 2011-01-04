@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.Comparer;
 using Habanero.Util;
 
@@ -911,12 +912,14 @@ namespace Habanero.BO.ClassDefinition
         /// type is not one of those mentioned above</returns>
         public IPropertyComparer<T> GetPropertyComparer<T>() where T : IBusinessObject
         {
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //Type comparerType = typeof (PropertyComparer<,>);
-            //comparerType = comparerType.MakeGenericType(typeof (T), PropertyType);
+            //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            Type comparerType = typeof(PropertyComparer<,>);
+            comparerType = comparerType.MakeGenericType(typeof(T), PropertyType);
+            IPropertyComparer<T> comparer =
+                (IPropertyComparer<T>)ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(comparerType, this.PropertyName);
             //IPropertyComparer<T> comparer =
-            //    (IPropertyComparer<T>) Activator.CreateInstance(comparerType, this.PropertyName);
-            //return comparer;
+            //    (IPropertyComparer<T>)Activator.CreateInstance(comparerType, this.PropertyName);
+            return comparer;
         }
 
         #endregion //PropertyComparer

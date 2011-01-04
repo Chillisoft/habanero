@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
 using Habanero.Util;
@@ -2198,7 +2199,9 @@ namespace Habanero.BO
                 //use the customised classdef instead of the default.
                 try
                 {
-                    throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                    //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                    newBO = (TBusinessObject)
+                            ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(typeof (TBusinessObject), new object[] {this.ClassDef});
                     //newBO = (TBusinessObject)
                     //        Activator.CreateInstance(typeof (TBusinessObject), new object[] {this.ClassDef});
                 }

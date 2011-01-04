@@ -156,7 +156,7 @@ namespace Habanero.BO
         /// Constructor that specifies a class definition
         /// </summary>
         /// <param name="def">The class definition</param>
-        protected internal BusinessObject(IClassDef def)
+        public BusinessObject(IClassDef def)
         {
             ConstructEntireClassFromClassDefs(def);
         }

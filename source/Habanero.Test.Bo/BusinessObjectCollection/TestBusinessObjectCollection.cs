@@ -36,6 +36,9 @@ namespace Habanero.Test.BO.BusinessObjectCollection
     [TestFixture]
     public class TestBusinessObjectCollection : TestUsingDatabase
     {
+        // ReSharper disable InconsistentNaming
+
+
         #region Setup/Teardown
 
         [SetUp]
@@ -388,8 +391,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             try
             {
 
-                //this should not work because AddressTestBO does not have a constructor that takes a ClassDef as parameter
-                OrganisationTestBO orgBo = orgCol.CreateBusinessObject();
+                //this should not work because OrganisationTestBO does not have a constructor that takes a ClassDef as parameter
+                orgCol.CreateBusinessObject();
 
                 Assert.Fail("Expected to throw an HabaneroDeveloperException");
             }
@@ -1494,7 +1497,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("col", ex.ParamName);
+                //TODO andrew 03 Jan 2011: CF: ex.ParamName not supported
+                //StringAssert.Contains("col", ex.ParamName);
             }
         }
 
@@ -1774,5 +1778,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             col.Sort("Surname", true, true);
             return col;
         }
+        // ReSharper restore InconsistentNaming
+
     }
 }

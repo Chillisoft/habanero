@@ -403,20 +403,21 @@ namespace Habanero.BO
         {
             if (sortByDisplayValue)
             {
-                throw new NotImplementedException("CF: Code commented out to get CF to compile");
-                //SortedDictionary<string, string> sortedLookupList = new SortedDictionary<string, string>();
-                //foreach (BusinessObject bo in col)
-                //{
-                //    string stringValue = GetAvailableDisplayValue(sortedLookupList, bo.ToString());
-                //    sortedLookupList.Add(stringValue, coverter(bo.ID.GetAsValue()));
-                //}
 
-                //Dictionary<string, string> lookupList = new Dictionary<string, string>();
-                //foreach (string key in sortedLookupList.Keys)
-                //{
-                //    AddBusinessObjectToLookupList(lookupList, sortedLookupList[key], key);
-                //}
-                //return lookupList;
+                //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                var sortedLookupList = new SortedList<string, string>();
+                foreach (BusinessObject bo in col)
+                {
+                    string stringValue = GetAvailableDisplayValue(sortedLookupList, bo.ToString());
+                    sortedLookupList.Add(stringValue, coverter(bo.ID.GetAsValue()));
+                }
+
+                Dictionary<string, string> lookupList = new Dictionary<string, string>();
+                foreach (string key in sortedLookupList.Keys)
+                {
+                    AddBusinessObjectToLookupList(lookupList, sortedLookupList[key], key);
+                }
+                return lookupList;
             }
             else
             {
