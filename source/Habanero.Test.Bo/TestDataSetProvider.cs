@@ -19,7 +19,8 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
+//TODO andrew 04 Jan 2011: CF: Windows.Forms not supported
+//using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -141,7 +142,8 @@ namespace Habanero.Test.BO
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("collection", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("collection", ex.ParamName);
             }
 
         }
@@ -163,7 +165,8 @@ namespace Habanero.Test.BO
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("uiGrid", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("uiGrid", ex.ParamName);
             }
 
         }
@@ -801,36 +804,37 @@ namespace Habanero.Test.BO
             Assert.AreEqual(bo.DateProperty, value);
         }
 
-        [Test]
-        public void Test_GetDataTable_WhenMultipleLevelProp_ShouldLoadCorrectly()
-        {
-            //---------------Set up test pack-------------------
-            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
-            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
-            ClassDef.ClassDefs.Clear();
-            AddressTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
-            OrganisationTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
-            BusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
-            AddressTestBO.CreateUnsavedAddress(contactPersonTestBO);
+        //TODO andrew 04 Jan 2011: CF: Windows.Forms not supported in CF
+        //[Test]
+        //public void Test_GetDataTable_WhenMultipleLevelProp_ShouldLoadCorrectly()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+        //    GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+        //    ClassDef.ClassDefs.Clear();
+        //    AddressTestBO.LoadDefaultClassDef();
+        //    ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+        //    OrganisationTestBO.LoadDefaultClassDef();
+        //    ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
+        //    BusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
+        //    AddressTestBO.CreateUnsavedAddress(contactPersonTestBO);
 
-            UIGrid uiGrid = new UIGrid();
-            const string propertyName = "ContactPersonTestBO.FirstName";
-            uiGrid.Add(new UIGridColumn("Contact First Name", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+        //    UIGrid uiGrid = new UIGrid();
+        //    const string propertyName = "ContactPersonTestBO.FirstName";
+        //    uiGrid.Add(new UIGridColumn("Contact First Name", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
 
-            IDataSetProvider dataSetProvider = CreateDataSetProvider(addresses);
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(1, addresses.Count);
-            //---------------Execute Test ----------------------
+        //    IDataSetProvider dataSetProvider = CreateDataSetProvider(addresses);
+        //    //---------------Assert Precondition----------------
+        //    Assert.AreEqual(1, addresses.Count);
+        //    //---------------Execute Test ----------------------
 
-            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+        //    DataTable table = dataSetProvider.GetDataTable(uiGrid);
 
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, table.Rows.Count);
-            Assert.AreEqual(contactPersonTestBO.FirstName, table.Rows[0][propertyName]);
-            recordingExceptionNotifier.RethrowRecordedException();
-        }
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(1, table.Rows.Count);
+        //    Assert.AreEqual(contactPersonTestBO.FirstName, table.Rows[0][propertyName]);
+        //    recordingExceptionNotifier.RethrowRecordedException();
+        //}
         private static UIGrid CreateUiGridWithColumn(IClassDef classDef, string columnName)
         {
             UIGrid uiGrid = new UIGrid();

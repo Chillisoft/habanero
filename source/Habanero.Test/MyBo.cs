@@ -27,6 +27,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 //TODO andrew 22 Dec 2010: No yet ported
 //using Habanero.DB;
+using Habanero.DB;
 using Habanero.Util;
 
 namespace Habanero.Test
@@ -109,18 +110,17 @@ namespace Habanero.Test
             }
         }
 
-        //TODO andrew 22 Dec 2010: Removed during porting needs to be re-added
-        //public virtual Shape Shape
-        //{
-        //    get
-        //    {
-        //        return Relationships.GetRelatedObject<Shape>("Shape");
-        //    }
-        //    set
-        //    {
-        //        Relationships.SetRelatedObject("Shape", value);
-        //    }
-        //}
+        public virtual Shape Shape
+        {
+            get
+            {
+                return Relationships.GetRelatedObject<Shape>("Shape");
+            }
+            set
+            {
+                Relationships.SetRelatedObject("Shape", value);
+            }
+        }
 
         public bool TestBoolean
         {
@@ -1718,11 +1718,11 @@ namespace Habanero.Test
             return classDef;
         }
 
-        //public static void DeleteAllMyBos()
-        //{
-        //    string sql = "DELETE FROM mybo";
-        //    DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
-        //}
+        public static void DeleteAllMyBos()
+        {
+            string sql = "DELETE FROM mybo";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
 
         public void AddBusinessRule(IBusinessObjectRule businessObjectRuleStub)
         {

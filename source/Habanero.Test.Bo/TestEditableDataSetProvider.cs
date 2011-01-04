@@ -19,7 +19,8 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
+//TODO andrew 04 Jan 2011: CF: Windows Form not supported
+//using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -133,38 +134,39 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
         }
 
-        [Test]
-        public void TestAddRowP_RowValueDBNull_VirtualProp_NUll_ShouldNotRaiseException_FIXBUG()
-        {
-            //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadClassDefWithUIAllDataTypes();
-            classDef.UIDefCol["default"].UIGrid.Add(new UIGridColumn("VirtualProp", "-TestProp-", typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
-            BusinessObjectCollection<MyBO> boCollection = new BusinessObjectCollection<MyBO>();
+        //TODO andrew 04 Jan 2011: CF: Windows Forms not supported
+        //[Test]
+        //public void TestAddRowP_RowValueDBNull_VirtualProp_NUll_ShouldNotRaiseException_FIXBUG()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    BORegistry.DataAccessor = new DataAccessorInMemory();
+        //    ClassDef.ClassDefs.Clear();
+        //    IClassDef classDef = MyBO.LoadClassDefWithUIAllDataTypes();
+        //    classDef.UIDefCol["default"].UIGrid.Add(new UIGridColumn("VirtualProp", "-TestProp-", typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+        //    BusinessObjectCollection<MyBO> boCollection = new BusinessObjectCollection<MyBO>();
 
-            _dataSetProvider = new EditableDataSetProvider(boCollection);
-            BOMapper mapper = new BOMapper(boCollection.ClassDef.CreateNewBusinessObject());
-            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+        //    _dataSetProvider = new EditableDataSetProvider(boCollection);
+        //    BOMapper mapper = new BOMapper(boCollection.ClassDef.CreateNewBusinessObject());
+        //    itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
 
-            //--------------Assert PreConditions----------------            
-            Assert.AreEqual(0, boCollection.Count);
-            Assert.AreEqual(0, boCollection.PersistedBusinessObjects.Count, "Should be no created items to start");
-            //            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
+        //    //--------------Assert PreConditions----------------            
+        //    Assert.AreEqual(0, boCollection.Count);
+        //    Assert.AreEqual(0, boCollection.PersistedBusinessObjects.Count, "Should be no created items to start");
+        //    //            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
 
-            //---------------Execute Test ----------------------
-            itsTable.Rows.Add(new object[] { DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value });
-            //---------------Test Result -----------------------
-            Assert.IsFalse(itsTable.Rows[0].HasErrors);
-            //Behaviour has been changed to persist the business object
-            Assert.AreEqual
-                (1, boCollection.PersistedBusinessObjects.Count,
-                 "Adding a row to the table should use the collection to create the object");
-            //            Assert.AreEqual
-            //                (1, boCollection.CreatedBusinessObjects.Count,
-            //                 "Adding a row to the table should use the collection to create the object");
-            Assert.AreEqual(1, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
-        }
+        //    //---------------Execute Test ----------------------
+        //    itsTable.Rows.Add(new object[] { DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value });
+        //    //---------------Test Result -----------------------
+        //    Assert.IsFalse(itsTable.Rows[0].HasErrors);
+        //    //Behaviour has been changed to persist the business object
+        //    Assert.AreEqual
+        //        (1, boCollection.PersistedBusinessObjects.Count,
+        //         "Adding a row to the table should use the collection to create the object");
+        //    //            Assert.AreEqual
+        //    //                (1, boCollection.CreatedBusinessObjects.Count,
+        //    //                 "Adding a row to the table should use the collection to create the object");
+        //    Assert.AreEqual(1, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
+        //}
         [Test]
         public void TestAddRowP_RowValueDBNull_BOProp_DateTime_NUll_ShouldNotRaiseException_FIXBUG()
         {
@@ -593,145 +595,146 @@ namespace Habanero.Test.BO
             Assert.AreEqual(null, bo1.GetPropertyValue(columnName));
         }
 
-        [Test]
-        public void Test_EditDataTable_WhenMultipleLevelProp_ShouldEditRelatedBO()
-        {
-            //---------------Set up test pack-------------------
-            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
-            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
-            AddressTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
-            OrganisationTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<AddressTestBO> addresses = new BusinessObjectCollection<AddressTestBO>();
-            addresses.Add(new AddressTestBO { ContactPersonTestBO = new ContactPersonTestBO() });
-            addresses.Add(new AddressTestBO { ContactPersonTestBO = new ContactPersonTestBO() });
-            addresses.Add(new AddressTestBO { ContactPersonTestBO = new ContactPersonTestBO() });
+        //TODO andrew 04 Jan 2011: Windows Forms not supported
+        //[Test]
+        //public void Test_EditDataTable_WhenMultipleLevelProp_ShouldEditRelatedBO()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+        //    GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+        //    AddressTestBO.LoadDefaultClassDef();
+        //    ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+        //    OrganisationTestBO.LoadDefaultClassDef();
+        //    BusinessObjectCollection<AddressTestBO> addresses = new BusinessObjectCollection<AddressTestBO>();
+        //    addresses.Add(new AddressTestBO { ContactPersonTestBO = new ContactPersonTestBO() });
+        //    addresses.Add(new AddressTestBO { ContactPersonTestBO = new ContactPersonTestBO() });
+        //    addresses.Add(new AddressTestBO { ContactPersonTestBO = new ContactPersonTestBO() });
 
-            OrganisationTestBO organisation = new OrganisationTestBO();
+        //    OrganisationTestBO organisation = new OrganisationTestBO();
 
-            UIGrid uiGrid = new UIGrid();
-            const string propertyName = "ContactPersonTestBO.OrganisationID";
-            uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+        //    UIGrid uiGrid = new UIGrid();
+        //    const string propertyName = "ContactPersonTestBO.OrganisationID";
+        //    uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
 
-            IDataSetProvider dataSetProvider = CreateDataSetProvider(addresses);
-            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+        //    IDataSetProvider dataSetProvider = CreateDataSetProvider(addresses);
+        //    DataTable table = dataSetProvider.GetDataTable(uiGrid);
 
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
-            Assert.AreEqual(3, table.Rows.Count);
-            Assert.AreEqual(DBNull.Value, table.Rows[0][propertyName]);
-            //---------------Execute Test ----------------------
-            table.Rows[0][propertyName] = organisation.OrganisationID;
-            //---------------Test Result -----------------------
-            Assert.AreEqual(organisation.OrganisationID, table.Rows[0][propertyName]);
-            Assert.AreEqual(organisation.OrganisationID, addresses[0].ContactPersonTestBO.OrganisationID);
-            recordingExceptionNotifier.RethrowRecordedException();
-        }
+        //    //---------------Assert Precondition----------------
+        //    Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+        //    Assert.AreEqual(3, table.Rows.Count);
+        //    Assert.AreEqual(DBNull.Value, table.Rows[0][propertyName]);
+        //    //---------------Execute Test ----------------------
+        //    table.Rows[0][propertyName] = organisation.OrganisationID;
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(organisation.OrganisationID, table.Rows[0][propertyName]);
+        //    Assert.AreEqual(organisation.OrganisationID, addresses[0].ContactPersonTestBO.OrganisationID);
+        //    recordingExceptionNotifier.RethrowRecordedException();
+        //}
 
-        [Test]
-        public void Test_AddRow_WhenMultipleLevelProp_ShouldAddBOWithRelatedPropSet()
-        {
-            //---------------Set up test pack-------------------
-            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
-            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
-            ClassDef.ClassDefs.Clear();
-            AddressTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
-            OrganisationTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
-            BusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
+        //[Test]
+        //public void Test_AddRow_WhenMultipleLevelProp_ShouldAddBOWithRelatedPropSet()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+        //    GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+        //    ClassDef.ClassDefs.Clear();
+        //    AddressTestBO.LoadDefaultClassDef();
+        //    ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+        //    OrganisationTestBO.LoadDefaultClassDef();
+        //    ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
+        //    BusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
 
-            OrganisationTestBO organisation = new OrganisationTestBO();
+        //    OrganisationTestBO organisation = new OrganisationTestBO();
 
-            UIGrid uiGrid = new UIGrid();
-            const string propertyName = "ContactPersonTestBO.OrganisationID";
-            uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+        //    UIGrid uiGrid = new UIGrid();
+        //    const string propertyName = "ContactPersonTestBO.OrganisationID";
+        //    uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
 
-            IDataSetProvider dataSetProvider = CreateDataSetProvider(addresses);
-            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+        //    IDataSetProvider dataSetProvider = CreateDataSetProvider(addresses);
+        //    DataTable table = dataSetProvider.GetDataTable(uiGrid);
 
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
-            Assert.AreEqual(0, table.Rows.Count);
-            Assert.AreEqual(0, addresses.Count);
-            //---------------Execute Test ----------------------
-            table.Rows.Add(new object[] { null, organisation.OrganisationID });
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, table.Rows.Count);
-            Assert.AreEqual(1, addresses.Count);
-            Assert.AreEqual(organisation.OrganisationID.ToString(), table.Rows[0][propertyName].ToString());
-            Assert.AreEqual(organisation.OrganisationID, contactPersonTestBO.OrganisationID);
-            recordingExceptionNotifier.RethrowRecordedException();
-        }
+        //    //---------------Assert Precondition----------------
+        //    Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+        //    Assert.AreEqual(0, table.Rows.Count);
+        //    Assert.AreEqual(0, addresses.Count);
+        //    //---------------Execute Test ----------------------
+        //    table.Rows.Add(new object[] { null, organisation.OrganisationID });
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(1, table.Rows.Count);
+        //    Assert.AreEqual(1, addresses.Count);
+        //    Assert.AreEqual(organisation.OrganisationID.ToString(), table.Rows[0][propertyName].ToString());
+        //    Assert.AreEqual(organisation.OrganisationID, contactPersonTestBO.OrganisationID);
+        //    recordingExceptionNotifier.RethrowRecordedException();
+        //}
 
-        [Test]
-        public void Test_EditDataTable_WhenVirtualProp_ShouldEditRelatedVirtualProp()
-        {
-            //---------------Set up test pack-------------------
-            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
-            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
-            AddressTestBO.LoadDefaultClassDef();
-            var contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
-            OrganisationTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
-            contactPersonTestBOS.Add(new ContactPersonTestBO(), new ContactPersonTestBO(), new ContactPersonTestBO());
+        //[Test]
+        //public void Test_EditDataTable_WhenVirtualProp_ShouldEditRelatedVirtualProp()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+        //    GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+        //    AddressTestBO.LoadDefaultClassDef();
+        //    var contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+        //    OrganisationTestBO.LoadDefaultClassDef();
+        //    BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
+        //    contactPersonTestBOS.Add(new ContactPersonTestBO(), new ContactPersonTestBO(), new ContactPersonTestBO());
 
-            OrganisationTestBO organisation = new OrganisationTestBO();
+        //    OrganisationTestBO organisation = new OrganisationTestBO();
 
-            UIGrid uiGrid = new UIGrid();
-            new UIDef("fdafdas", new UIForm(), uiGrid) { ClassDef = contactPersonClassDef };
-            const string propertyName = "-Organisation-";
-            uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+        //    UIGrid uiGrid = new UIGrid();
+        //    new UIDef("fdafdas", new UIForm(), uiGrid) { ClassDef = contactPersonClassDef };
+        //    const string propertyName = "-Organisation-";
+        //    uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
 
-            IDataSetProvider dataSetProvider = CreateDataSetProvider(contactPersonTestBOS);
-            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+        //    IDataSetProvider dataSetProvider = CreateDataSetProvider(contactPersonTestBOS);
+        //    DataTable table = dataSetProvider.GetDataTable(uiGrid);
 
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
-            Assert.AreEqual(3, table.Rows.Count);
-            Assert.AreEqual(DBNull.Value, table.Rows[0][propertyName]);
-            Assert.AreEqual(null, contactPersonTestBOS[0].Organisation);
-            //---------------Execute Test ----------------------
-            table.Rows[0][propertyName] = organisation;
-            //---------------Test Result -----------------------
-            Assert.AreSame(organisation, table.Rows[0][propertyName]);
-            Assert.AreSame(organisation, contactPersonTestBOS[0].Organisation);
-            recordingExceptionNotifier.RethrowRecordedException();
-        }
+        //    //---------------Assert Precondition----------------
+        //    Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+        //    Assert.AreEqual(3, table.Rows.Count);
+        //    Assert.AreEqual(DBNull.Value, table.Rows[0][propertyName]);
+        //    Assert.AreEqual(null, contactPersonTestBOS[0].Organisation);
+        //    //---------------Execute Test ----------------------
+        //    table.Rows[0][propertyName] = organisation;
+        //    //---------------Test Result -----------------------
+        //    Assert.AreSame(organisation, table.Rows[0][propertyName]);
+        //    Assert.AreSame(organisation, contactPersonTestBOS[0].Organisation);
+        //    recordingExceptionNotifier.RethrowRecordedException();
+        //}
 
-        [Test]
-        public void Test_AddRow_WhenVirtualProp_ShouldAddBOWithRelatedVirtualPropSet()
-        {
-            //---------------Set up test pack-------------------
-            RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
-            GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
-            AddressTestBO.LoadDefaultClassDef();
-            var contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
-            OrganisationTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
+        //[Test]
+        //public void Test_AddRow_WhenVirtualProp_ShouldAddBOWithRelatedVirtualPropSet()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    RecordingExceptionNotifier recordingExceptionNotifier = new RecordingExceptionNotifier();
+        //    GlobalRegistry.UIExceptionNotifier = recordingExceptionNotifier;
+        //    AddressTestBO.LoadDefaultClassDef();
+        //    var contactPersonClassDef = ContactPersonTestBO.LoadClassDefWithOrganisationAndAddressRelationships();
+        //    OrganisationTestBO.LoadDefaultClassDef();
+        //    BusinessObjectCollection<ContactPersonTestBO> contactPersonTestBOS = new BusinessObjectCollection<ContactPersonTestBO>();
 
-            OrganisationTestBO organisation = new OrganisationTestBO();
+        //    OrganisationTestBO organisation = new OrganisationTestBO();
 
-            UIGrid uiGrid = new UIGrid();
-            new UIDef("fdafdas", new UIForm(), uiGrid) {ClassDef = contactPersonClassDef};
-            const string propertyName = "-Organisation-";
-            uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
+        //    UIGrid uiGrid = new UIGrid();
+        //    new UIDef("fdafdas", new UIForm(), uiGrid) {ClassDef = contactPersonClassDef};
+        //    const string propertyName = "-Organisation-";
+        //    uiGrid.Add(new UIGridColumn("Contact Organisation", propertyName, typeof(DataGridViewTextBoxColumn), true, 100, PropAlignment.left, new Hashtable()));
 
-            IDataSetProvider dataSetProvider = CreateDataSetProvider(contactPersonTestBOS);
-            DataTable table = dataSetProvider.GetDataTable(uiGrid);
+        //    IDataSetProvider dataSetProvider = CreateDataSetProvider(contactPersonTestBOS);
+        //    DataTable table = dataSetProvider.GetDataTable(uiGrid);
 
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
-            Assert.AreEqual(0, table.Rows.Count);
-            Assert.AreEqual(0, contactPersonTestBOS.Count);
-            //---------------Execute Test ----------------------
-            table.Rows.Add(new object[] { null, organisation });
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, table.Rows.Count);
-            Assert.AreEqual(1, contactPersonTestBOS.Count);
-            Assert.AreSame(organisation, table.Rows[0][propertyName]);
-            Assert.AreSame(organisation, contactPersonTestBOS[0].Organisation);
-        }
+        //    //---------------Assert Precondition----------------
+        //    Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+        //    Assert.AreEqual(0, table.Rows.Count);
+        //    Assert.AreEqual(0, contactPersonTestBOS.Count);
+        //    //---------------Execute Test ----------------------
+        //    table.Rows.Add(new object[] { null, organisation });
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(1, table.Rows.Count);
+        //    Assert.AreEqual(1, contactPersonTestBOS.Count);
+        //    Assert.AreSame(organisation, table.Rows[0][propertyName]);
+        //    Assert.AreSame(organisation, contactPersonTestBOS[0].Organisation);
+        //}
 
         [Test]
         public void TestGetConnection()

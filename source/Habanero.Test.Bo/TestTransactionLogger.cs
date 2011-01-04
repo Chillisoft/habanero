@@ -23,6 +23,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
 using NUnit.Framework;
+using OpenNETCF;
 
 namespace Habanero.Test.BO
 {
@@ -107,7 +108,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(dirtyXML, trLog.DirtyXMLLog);
             Assert.AreEqual("ContactPersonTransactionLogging", trLog.BusinessObjectTypeName);
             //Assert.AreEqual(WindowsIdentity.GetCurrent().Name, trLog.WindowsUser);
-            Assert.AreEqual(Environment.MachineName, trLog.MachineUpdatedName);
+            Assert.AreEqual(Environment2.MachineName, trLog.MachineUpdatedName);
             //Assert.GreaterOrEqual(trLog.DateTimeUpdated, DateTime.Now.AddMinutes(-1));
             Assert.LessOrEqual(trLog.DateTimeUpdated, DateTime.Now.AddSeconds(1));
             Assert.AreEqual(cp.ToString(),trLog.BusinessObjectToString);

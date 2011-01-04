@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -67,7 +68,7 @@ namespace Habanero.Test.BO
             //-----------Assert Result------------------------------
             Assert.IsFalse(canDelete, "Should prevent delete.");
             StringAssert.Contains("Cannot delete this 'TestBO1' identified as", result);
-            StringAssert.Contains("for the following reasons:" + Environment.NewLine +
+            StringAssert.Contains("for the following reasons:" + EnvironmentCF.NewLine +
                     "There are 7 objects related through the 'MyBO2.MyPreventBO3' relationship that need to be deleted first.",
                     result);
         }
@@ -82,7 +83,7 @@ namespace Habanero.Test.BO
             //-----------Assert Result------------------------------
             Assert.IsFalse(canDelete, "Should prevent delete.");
             StringAssert.Contains("Cannot delete this 'TestBO1' ", result);
-            StringAssert.Contains("for the following reasons:" + Environment.NewLine +
+            StringAssert.Contains("for the following reasons:" + EnvironmentCF.NewLine +
                     "There are 7 objects related through the 'MyBO2.MyPreventBO3' relationship that need to be deleted first.",
                     result);
         }
@@ -107,9 +108,9 @@ namespace Habanero.Test.BO
             //-----------------Assert Result-----------------------
             Assert.IsFalse(canDelete, "Should prevent delete.");
             StringAssert.Contains("Cannot delete this 'TestBO1'", result);
-            StringAssert.Contains(" for the following reasons:" + Environment.NewLine +
-                    "There are 9 objects related through the 'MyBO2.MyBO3.MyBO4.MyPreventBO5' relationship that need to be deleted first." + Environment.NewLine +
-                    "There are 7 objects related through the 'MyBO2.MyPreventBO3' relationship that need to be deleted first." + Environment.NewLine +
+            StringAssert.Contains(" for the following reasons:" + EnvironmentCF.NewLine +
+                    "There are 9 objects related through the 'MyBO2.MyBO3.MyBO4.MyPreventBO5' relationship that need to be deleted first." + EnvironmentCF.NewLine +
+                    "There are 7 objects related through the 'MyBO2.MyPreventBO3' relationship that need to be deleted first." + EnvironmentCF.NewLine +
                     "There are 1 objects related through the 'MyBO2.MyBO3.MyBO4.MyBO5.MyBO6.MyPreventBO7' relationship that need to be deleted first.",
                     result);
         }
@@ -121,9 +122,9 @@ namespace Habanero.Test.BO
             bool canDelete = DeleteHelper.CheckCanDelete(testBO1, out result);
             Assert.IsFalse(canDelete, "Should prevent delete.");
             StringAssert.Contains("Cannot delete this 'TestBO1' ", result);
-            StringAssert.Contains("for the following reasons:" + Environment.NewLine +
-                    "There are 9 objects related through the 'MyBO2.MyBO3.MyBO4.MyPreventBO5' relationship that need to be deleted first." + Environment.NewLine +
-                    "There are 7 objects related through the 'MyBO2.MyPreventBO3' relationship that need to be deleted first." + Environment.NewLine +
+            StringAssert.Contains("for the following reasons:" + EnvironmentCF.NewLine +
+                    "There are 9 objects related through the 'MyBO2.MyBO3.MyBO4.MyPreventBO5' relationship that need to be deleted first." + EnvironmentCF.NewLine +
+                    "There are 7 objects related through the 'MyBO2.MyPreventBO3' relationship that need to be deleted first." + EnvironmentCF.NewLine +
                     "There are 1 objects related through the 'MyBO2.MyBO3.MyBO4.MyBO5.MyBO6.MyPreventBO7' relationship that need to be deleted first.",
                     result);
         }
@@ -384,11 +385,20 @@ namespace Habanero.Test.BO
             {
                 string typeName = GetType().Name.Replace("TestBO", "");
                 int val;
-                if (int.TryParse(typeName, out val))
+                try
                 {
-                    return val;
+                    val = int.Parse(typeName);
                 }
-                return 0;
+                catch(Exception ex)
+                {
+                    val = 0;
+                }
+                //TODO andrew 04 Jan 2011: CF: TryParse is not supported
+                //if (int.TryParse(typeName, out val))
+                //{
+                //    return val;
+                //}
+                return val;
             }
         }
 

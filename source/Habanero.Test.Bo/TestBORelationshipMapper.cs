@@ -68,7 +68,8 @@ namespace Habanero.Test.BO
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("relationshipName", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("relationshipName", ex.ParamName);
             }
         }    
 
@@ -87,7 +88,8 @@ namespace Habanero.Test.BO
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("relationshipName", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("relationshipName", ex.ParamName);
             }
         }
 

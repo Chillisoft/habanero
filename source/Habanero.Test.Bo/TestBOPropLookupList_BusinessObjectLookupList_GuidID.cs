@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -31,6 +32,8 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBoPropLookupListBusinessObjectLookupListGuidId
     {
+        // ReSharper disable InconsistentNaming
+
         private PropDef _propDefGuid;
         private IBusinessObjectCollection _collection;
         private MyBO _validBusinessObject;
@@ -62,10 +65,6 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
         }
 
-        private static string GuidToUpper(Guid guid)
-        {
-            return StringUtilities.GuidToUpper(guid);
-        }
 
         [Test]
         public void Test_GetKey_FromLookupList_Sorted()
@@ -528,7 +527,7 @@ namespace Habanero.Test.BO
             boProp.InitialiseProp(guid);
             //---------------Test Result -----------------------
             Assert.IsInstanceOf(typeof (string), boProp.Value);
-            Assert.AreEqual(guid.ToString("B").ToUpperInvariant(), boProp.Value);
+            Assert.AreEqual(guid.ToString("B").ToUpper(CultureInfo.InvariantCulture), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
         [Test]
@@ -1344,5 +1343,7 @@ namespace Habanero.Test.BO
                 set { base.Loading = value; }
             }
         }
+        // ReSharper restore InconsistentNaming
+
     }
 }

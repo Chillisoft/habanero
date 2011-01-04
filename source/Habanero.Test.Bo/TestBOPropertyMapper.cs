@@ -12,6 +12,8 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBOPropertyMapper
     {
+        // ReSharper disable InconsistentNaming
+
         private string _RelationshipPathSeperator = ".";
 
         [SetUp]
@@ -54,7 +56,8 @@ namespace Habanero.Test.BO
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("propertyName", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("propertyName", ex.ParamName);
             }
         }
 
@@ -73,7 +76,8 @@ namespace Habanero.Test.BO
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("propertyName", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("propertyName", ex.ParamName);
             }
         }
 
@@ -640,6 +644,7 @@ namespace Habanero.Test.BO
                      , propMapper.PropertyName );
             Assert.AreEqual(expectedMessage, invalidMessage);
         }
+        // ReSharper restore InconsistentNaming
 
     }
 
