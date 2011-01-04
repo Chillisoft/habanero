@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 //using Habanero.DB;
+using Habanero.DB;
 using NUnit.Framework;
 using OpenNETCF;
 
@@ -192,10 +193,10 @@ namespace Habanero.Test
             return value;
         }
 
-        //TODO andrew 22 Dec 2010: Don't have Habanero.Db
-        //public static DatabaseConfig GetDatabaseConfig() {
-        //    return new DatabaseConfig("MySql", "localhost", "habanero_test_trunk", "root", "root", "3306");
-        //}
+        public static DatabaseConfig GetDatabaseConfig()
+        {
+            return new DatabaseConfig("MySql", "localhost", "habanero_test_trunk", "root", "root", "3306");
+        }
 
         public static bool GetRandomBoolean()
         {

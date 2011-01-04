@@ -56,6 +56,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -65,6 +69,15 @@
     <Compile Include="StatementGeneratorTestHelper.cs" />
     <Compile Include="TestBOPropLookupList_DatabaseLookupList_GuidID.cs" />
     <Compile Include="TestBOPropLookupList_DatabaseLookupList_Int.cs" />
+    <Compile Include="TestBusinessObjectLoaderDB.cs" />
+    <Compile Include="TestBusinessObjectLoaderDBWithInheritance.cs" />
+    <Compile Include="TestBusinessObjectLoader_GetBusinessObjectCollectionDB.cs" />
+    <Compile Include="TestBusinessObjectLoader_RefreshCollectionDB.cs" />
+    <Compile Include="TestBusinessObjectLookupListDB.cs" />
+    <Compile Include="TestCompositeKeyBO.cs" />
+    <Compile Include="TestConnectionStringFactory.cs" />
+    <Compile Include="TestCriteriaDB.cs" />
+    <Compile Include="TestDataAccessorDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
