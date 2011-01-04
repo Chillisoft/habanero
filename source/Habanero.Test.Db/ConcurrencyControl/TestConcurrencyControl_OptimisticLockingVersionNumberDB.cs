@@ -101,7 +101,8 @@ namespace Habanero.Test.DB.ConcurrencyControl
                 // the user last edited.
             catch(BusObjBeginEditConcurrencyControlException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("You cannot Edit 'ContactPersonOptimisticLockingVersionNumberDB', as another user has edited this record"));
+                StringAssert.Contains("You cannot Edit 'ContactPersonOptimisticLockingVersionNumberDB', as another user has edited this record", ex.Message);
+                //Assert.IsTrue(ex.Message.Contains("You cannot Edit 'ContactPersonOptimisticLockingVersionNumberDB', as another user has edited this record"));
             }
         }
         [Test]
@@ -137,7 +138,8 @@ namespace Habanero.Test.DB.ConcurrencyControl
                 // the user last edited.
             catch (BusObjOptimisticConcurrencyControlException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("You cannot save the changes to 'ContactPersonOptimisticLockingVersionNumberDB', as another user has edited this record"));
+                StringAssert.Contains("You cannot save the changes to 'ContactPersonOptimisticLockingVersionNumberDB', as another user has edited this record", ex.Message);
+                //Assert.IsTrue(ex.Message.Contains("You cannot save the changes to 'ContactPersonOptimisticLockingVersionNumberDB', as another user has edited this record"));
             }
         }
         [Test]
@@ -164,7 +166,8 @@ namespace Habanero.Test.DB.ConcurrencyControl
                 //--------Check Result --------------------------------
             catch (BusObjDeleteConcurrencyControlException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("You cannot save the changes to 'ContactPersonOptimisticLockingVersionNumberDB', as another user has deleted the record"));
+                StringAssert.Contains("You cannot save the changes to 'ContactPersonOptimisticLockingVersionNumberDB', as another user has deleted the record", ex.Message);
+                //Assert.IsTrue(ex.Message.Contains("You cannot save the changes to 'ContactPersonOptimisticLockingVersionNumberDB', as another user has deleted the record"));
             }
         }
         //Rollback failure must reset concurrency version number.

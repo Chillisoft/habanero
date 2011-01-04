@@ -18,7 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Security;
-using System.Security.Principal;
+//TODO andrew 04 Jan 2011: CF: System.Security.Principal not supported on CF
+//using System.Security.Principal;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -26,6 +27,7 @@ using Habanero.BO.Loaders;
 using Habanero.DB;
 using Habanero.DB.ConcurrencyControl;
 using NUnit.Framework;
+using OpenNETCF;
 
 namespace Habanero.Test.DB.ConcurrencyControl
 {
@@ -106,7 +108,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
         {
             try
             {
-                return Environment.MachineName;
+                return Environment2.MachineName;
             }
             catch (InvalidOperationException)
             {
@@ -116,15 +118,16 @@ namespace Habanero.Test.DB.ConcurrencyControl
 
         private static string GetOperatinSystemUser()
         {
-            try
-            {
-                WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
-                return currentUser == null ? "" : currentUser.Name;
-            }
-            catch (SecurityException)
-            {
-            }
-            return "";
+            throw new NotImplementedException("CF: Does not support WindowsIdentity");
+            //try
+            //{
+            //    WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
+            //    return currentUser == null ? "" : currentUser.Name;
+            //}
+            //catch (SecurityException)
+            //{
+            //}
+            //return "";
         }
 
         [Test]
@@ -159,9 +162,12 @@ namespace Habanero.Test.DB.ConcurrencyControl
                 //---------------Test Result -----------------------
             catch (BusObjPessimisticConcurrencyControlException ex)
             {
-                Assert.IsTrue(
-                    ex.Message.Contains(
-                        "The lock on the business object ContactPersonPessimisticLockingDB has a duration of 15 minutes and has been exceeded for the object"));
+                StringAssert.Contains(
+                    "The lock on the business object ContactPersonPessimisticLockingDB has a duration of 15 minutes and has been exceeded for the object",
+                    ex.Message);
+                //Assert.IsTrue(
+                //    ex.Message.Contains(
+                //        "The lock on the business object ContactPersonPessimisticLockingDB has a duration of 15 minutes and has been exceeded for the object"));
             }
         }
 
@@ -252,9 +258,10 @@ namespace Habanero.Test.DB.ConcurrencyControl
                 //---------------Test Result -----------------------
             catch (BusObjPessimisticConcurrencyControlException ex)
             {
-                Assert.IsTrue(
-                    ex.Message.Contains(
-                        "You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record."));
+                StringAssert.Contains("You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record.", ex.Message);
+                //Assert.IsTrue(
+                //    ex.Message.Contains(
+                //        "You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record."));
             }
         }
 
@@ -274,9 +281,10 @@ namespace Habanero.Test.DB.ConcurrencyControl
                 //---------------Test Result -----------------------
             catch (BusObjDeleteConcurrencyControlException ex)
             {
-                Assert.IsTrue(
-                    ex.Message.Contains(
-                        "You cannot save the changes to 'ContactPersonPessimisticLockingDB', as another user has deleted the record"));
+                StringAssert.Contains("You cannot save the changes to 'ContactPersonPessimisticLockingDB', as another user has deleted the record", ex.Message);
+                //Assert.IsTrue(
+                //    ex.Message.Contains(
+                //        "You cannot save the changes to 'ContactPersonPessimisticLockingDB', as another user has deleted the record"));
             }
         }
 
@@ -300,9 +308,10 @@ namespace Habanero.Test.DB.ConcurrencyControl
             catch (BusObjPessimisticConcurrencyControlException ex)
             {
                 Assert.AreEqual(surname, cp2.Surname);
-                Assert.IsTrue(
-                    ex.Message.Contains(
-                        "You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record."));
+                StringAssert.Contains("You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record.",ex.Message);
+                //Assert.IsTrue(
+                //    ex.Message.Contains(
+                //        "You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record."));
             }
         }
 
