@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -120,8 +121,8 @@ namespace Habanero.Test.DB.SqlGeneration
             ISqlStatementCollection statementCol = gen.Generate();
             InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
             //TODO andrew 04 Jan 2011: CF: String.Contains not supported
+            Assert.IsFalse(StringUtilitiesCF.Contains(newPropName, statement.Statement.ToString()));
             //Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
-            StringAssert.Contains(newPropName, statement.Statement.ToString());
         }
 
 

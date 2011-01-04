@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB
@@ -119,8 +120,9 @@ namespace Habanero.Test.DB
             string sql = sourceDB.CreateSQL(GetSqlFormatter(), CreateAliases(source, joinSource));
             //-------------Test Result ----------------------
             StringAssert.Contains("JOIN", sql);
-            Assert.IsFalse(sql.Contains("LEFT JOIN"));
-
+            Assert.IsFalse(StringUtilitiesCF.Contains("LEFT JOIN",sql));
+            
+            //Assert.IsFalse(sql.Contains("LEFT JOIN"));
         }
 
         private IDictionary<string, string> CreateAliases(params Source[] sources)

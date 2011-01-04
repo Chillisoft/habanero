@@ -93,6 +93,23 @@
     <Compile Include="TestMultipleRelationship_Composition_DB.cs" />
     <Compile Include="TestMySqlDatabaseConnection.cs" />
     <Compile Include="TestNumberGeneratorDB.cs" />
+    <Compile Include="TestParameterNameGenerator.cs" />
+    <Compile Include="TestRelatedBOCol_Aggregation_UsingDB.cs" />
+    <Compile Include="TestRelatedBOCol_Association_WithDB.cs" />
+    <Compile Include="TestRelatedBOCol_Association_WithOracleDB.cs" />
+    <Compile Include="TestRelatedBOCol_Composition_UsingDB.cs" />
+    <Compile Include="TestSelectQueryDB.cs" />
+    <Compile Include="TestSingleRelationship_Aggregation_DB.cs" />
+    <Compile Include="TestSingleRelationship_Association_DB.cs" />
+    <Compile Include="TestSingleRelationship_Composition_DB.cs" />
+    <Compile Include="TestSourceDB.cs" />
+    <Compile Include="TestSqlFormatterForAccess.cs" />
+    <Compile Include="TestSQLStatement.cs" />
+    <Compile Include="TestSQLStatementList.cs" />
+    <Compile Include="TestTransactionalBusinessObjectDB.cs" />
+    <Compile Include="TestTransactionCommitterDB.cs" />
+    <Compile Include="TestTransactionLoggerDB.cs" />
+    <Compile Include="TestUpdateStatementGenerator.cs" />
     <Compile Include="TransactionCommitterStubDB.cs" />
   </ItemGroup>
   <ItemGroup>

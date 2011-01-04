@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -71,7 +72,9 @@ namespace Habanero.Test.DB.SqlGeneration
             ISqlStatementCollection statementCol = gen.Generate();
             Assert.AreEqual(1, statementCol.Count);
             ISqlStatement statement = statementCol[0];
-            Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
+            Assert.IsFalse(StringUtilitiesCF.Contains(newPropName, statement.Statement.ToString()));
+            //Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
+
         }
         
         [Test]

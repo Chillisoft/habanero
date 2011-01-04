@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -69,7 +70,7 @@ namespace Habanero.Test.DB
         public void TestToString()
         {
             Assert.AreEqual(
-                testStatement1.ToString() + Environment.NewLine + testStatement2.ToString() + Environment.NewLine,
+                testStatement1.ToString() + EnvironmentCF.NewLine + testStatement2.ToString() + EnvironmentCF.NewLine,
                 testCollection.ToString(), "Tostring of SqlStatementList not working correctly.");
         }
 
