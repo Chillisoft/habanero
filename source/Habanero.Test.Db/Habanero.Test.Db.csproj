@@ -69,6 +69,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseConnection\TestDatabaseConnection.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionAccess.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionCreation.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionFactory.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionFirebird.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionMySql.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionOracle.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionPostgreSql.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionSQLite.cs" />
+    <Compile Include="DatabaseConnection\TestDatabaseConnectionSqlServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatementGeneratorTestHelper.cs" />
     <Compile Include="TestBOPropLookupList_DatabaseLookupList_GuidID.cs" />
