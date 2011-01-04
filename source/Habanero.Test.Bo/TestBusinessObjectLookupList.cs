@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -69,6 +70,141 @@ namespace Habanero.Test.BO
                 //---------------Test Result -----------------------
                 Assert.IsNotNull(lookupList);
             }
+            [Test]
+            public void Test_CreateDisplayValueDictionary_WhenTwoBOsWithSameToString_ShouldIncrementANumber()
+            {
+                //---------------Set up test pack-------------------
+                var person = new ContactPersonTestBO { Surname = "A" };
+                var person2 = new ContactPersonTestBO { Surname = "A" };
+                var col = new BusinessObjectCollection<ContactPersonTestBO> {person, person2};
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(2, col.Count);
+                //---------------Execute Test ----------------------
+                var displayValueDictionary = BusinessObjectLookupList.CreateDisplayValueDictionary(col, false, Convert.ToString);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(2, displayValueDictionary.Count);
+                var key1 = displayValueDictionary.Keys.FirstOrDefault();
+                var key2 = displayValueDictionary.Keys.LastOrDefault();
+                Assert.AreEqual("A", key1.ToString());
+                Assert.AreEqual("A(2)", key2.ToString());
+            }
+            [Test]
+            public void Test_CreateDisplayValueDictionary_WhenThreeBOsWithSameToString_ShouldIncrementANumber()
+            {
+                //---------------Set up test pack-------------------
+                //---------NNB person.ToString returns the Surname.-----------------
+                var person = new ContactPersonTestBO { Surname = "A" };
+                var person2 = new ContactPersonTestBO { Surname = "A" };
+                var person3 = new ContactPersonTestBO { Surname = "A" };
+                var col = new BusinessObjectCollection<ContactPersonTestBO> {person, person2, person3};
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(3, col.Count);
+                //---------------Execute Test ----------------------
+                var displayValueDictionary = BusinessObjectLookupList.CreateDisplayValueDictionary(col, false, Convert.ToString);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(3, displayValueDictionary.Count);
+                Assert.Contains("A", displayValueDictionary.Keys, "The first person in the list returns its ToString");
+                Assert.Contains("A(2)", displayValueDictionary.Keys, "The second person in the list returns its ToString plus 2");
+                Assert.Contains("A(3)", displayValueDictionary.Keys, "The third person in the list returns its ToString plus 3");
+            }
+
+            [Test]
+            public void Test_CreateDisplayValueDictionary_WhenThreeBOsWithSameToString_WhenOrdered_ShouldAddIncrementedNumberToToString()
+            {
+                //---------------Set up test pack-------------------
+                //---------NNB person.ToString returns the Surname.-----------------
+                var person = new ContactPersonTestBO { Surname = "A" };
+                var person2 = new ContactPersonTestBO { Surname = "A" };
+                var person3 = new ContactPersonTestBO { Surname = "A" };
+                var col = new BusinessObjectCollection<ContactPersonTestBO> {person, person2, person3};
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(3, col.Count);
+                //---------------Execute Test ----------------------
+                var displayValueDictionary = BusinessObjectLookupList.CreateDisplayValueDictionary(col, true, Convert.ToString);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(3, displayValueDictionary.Count);
+                Assert.Contains("A", displayValueDictionary.Keys, "The first person in the list returns its ToString");
+                Assert.Contains("A(2)", displayValueDictionary.Keys, "The second person in the list returns its ToString plus 2");
+                Assert.Contains("A(3)", displayValueDictionary.Keys, "The third person in the list returns its ToString plus 3");
+            }
+            [Test]
+            public void Test_CreateDisplayValueDictionary_WhenThreeBOsWithSameToStringAndTwoWithAnotherToString_WhenOrdered_ShouldAddIncrementedNumberToToString()
+            {
+                //---------------Set up test pack-------------------
+                //---------NNB person.ToString returns the Surname.-----------------
+                var person = new ContactPersonTestBO { Surname = "A" };
+                var personBB1 = new ContactPersonTestBO { Surname = "BB" };
+                var person2 = new ContactPersonTestBO { Surname = "A" };
+                var personBB2 = new ContactPersonTestBO { Surname = "BB" };
+                var person3 = new ContactPersonTestBO { Surname = "A" };
+                var col = new BusinessObjectCollection<ContactPersonTestBO> {person,personBB1, person2, personBB2, person3};
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(5, col.Count);
+                //---------------Execute Test ----------------------
+                var displayValueDictionary = BusinessObjectLookupList.CreateDisplayValueDictionary(col, true, Convert.ToString);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(5, displayValueDictionary.Count);
+                Assert.Contains("A", displayValueDictionary.Keys, "The first person in the list returns its ToString");
+                Assert.Contains("A(2)", displayValueDictionary.Keys, "The second person in the list returns its ToString plus 2");
+                Assert.Contains("A(3)", displayValueDictionary.Keys, "The third person in the list returns its ToString plus 3");
+                Assert.Contains("BB", displayValueDictionary.Keys, "");
+                Assert.Contains("BB(2)", displayValueDictionary.Keys, "");
+            }
+
+#pragma warning disable 612,618
+//The warning for obsolete is irrelevant in tests since we still need to test obsolete code.
+            [Test]
+            public void Test_GetValueCollection_WhenNoBOs_ShouldReturnEmptyCollection()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();//Clear any other loaded data (See Test Setup)
+                var lookupList = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                var valueCollection = lookupList.GetValueCollection();
+                //---------------Test Result -----------------------
+                Assert.AreEqual(0, valueCollection.Count);
+            }
+            [Test]
+            public void Test_GetValueCollection_When3Items_AndOrderCriteriaIsNull_ShouldReturnAValueListCollectionForTheBusinessObjects()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();//Clear any other loaded data (See Test Setup)
+                new ContactPersonTestBO { Surname = "zzz" }.Save();
+                new ContactPersonTestBO { Surname = "abc" }.Save();
+                new ContactPersonTestBO { Surname = "abcd" }.Save();
+                var lookupList = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
+                //---------------Assert Precondition----------------
+                Assert.IsNull(lookupList.OrderCriteria);
+                //---------------Execute Test ----------------------
+                var valueCollection = lookupList.GetValueCollection();
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOf<SortedStringCollection>(valueCollection);
+                Assert.AreEqual(3, valueCollection.Count);
+            }
+            [Test]
+            public void Test_GetValueCollection_When3Items_AndOrderCriteriaIsNotNull_ShouldReturnAValueListCollectionForTheBusinessObjects()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();//Clear any other loaded data (See Test Setup)
+                new ContactPersonTestBO { Surname = "zzz" }.Save();
+                new ContactPersonTestBO { Surname = "abc" }.Save();
+                new ContactPersonTestBO { Surname = "abcd" }.Save();
+                var lookupList = new BusinessObjectLookupList(typeof(ContactPersonTestBO), "", "Surname", true);
+                //---------------Assert Precondition----------------
+                Assert.IsNotNull(lookupList.OrderCriteria);
+                //---------------Execute Test ----------------------
+                var valueCollection = lookupList.GetValueCollection() as ArrayList;
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(valueCollection);
+                Assert.AreEqual(3, valueCollection.Count);
+                Assert.AreEqual("abcd", valueCollection[0]);
+                Assert.AreEqual("abc", valueCollection[1]);
+                Assert.AreEqual("zzz", valueCollection[2]);
+            }
+
+#pragma warning restore 612,618
 
         }
         protected static string GuidToString(Guid guid)
@@ -457,8 +593,8 @@ namespace Habanero.Test.BO
 
         private static void AssertCorrectlySortedBusinessObjectInList(ArrayList items, int index, string expected)
         {
-            object item = items[index];
-            IBusinessObject businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(typeof(ContactPersonTestBO), item);
+            var item = items[index];
+            var businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(typeof(ContactPersonTestBO), item);
             Assert.AreEqual(expected, businessObject.ToString());
         }
 
@@ -523,8 +659,9 @@ namespace Habanero.Test.BO
             AssertCorrectlySortedBusinessObjectInList(items, 0, "zzz");
             AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
             AssertCorrectlySortedBusinessObjectInList(items, 2, "abc");
-
         }
+
+
 
         [Test]
         public void Test_CreateDisplayValueDictionary_Sorted()

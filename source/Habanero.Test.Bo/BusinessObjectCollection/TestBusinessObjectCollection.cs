@@ -375,7 +375,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_CreateBusinessObject_AlternateClassDef_NoConstructor()
+        public void Test_CreateBusinessObject_AlternateClassDef_NoConstructor_ShouldThrowException()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = (ClassDef) OrganisationTestBO.LoadDefaultClassDef();
@@ -388,8 +388,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             try
             {
 
-                //this should not work because AddressTestBO does not have a constructor that takes a ClassDef as parameter
-                OrganisationTestBO orgBo = orgCol.CreateBusinessObject();
+                //this should not work because OrganisationTestBO does not have a constructor that takes a ClassDef as parameter
+                orgCol.CreateBusinessObject();
 
                 Assert.Fail("Expected to throw an HabaneroDeveloperException");
             }

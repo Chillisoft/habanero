@@ -237,21 +237,7 @@ namespace Habanero.BO
             }
         }
 
-//        /// <summary>
-//        /// Gets and sets the sql criteria used to limit which objects
-//        /// are loaded in the BO collection
-//        /// </summary>
-//        public string Criteria
-//        {
-//            get { return _criteria; }
-//            private set { _criteria = value;
-//            Criteria criteria = BusinessObjectLoaderBase.GetCriteriaObject(classDef, criteriaString);
-//            }
-//        }
         private Criteria _criteria;
-
-        
-
 
         /// <summary>
         /// Gets and sets the sql criteria used to limit which objects
@@ -290,7 +276,7 @@ namespace Habanero.BO
         {
             get { if(_orderCriteria == null && !string.IsNullOrEmpty(_sortString))
             {
-                IClassDef classDef = this.LookupBoClassDef;
+                var classDef = this.LookupBoClassDef;
                 _orderCriteria = QueryBuilder.CreateOrderCriteria(classDef, _sortString);
             }
                 return _orderCriteria;
@@ -344,8 +330,8 @@ namespace Habanero.BO
                 _lastCallTime = DateTime.Now;
                 return DisplayValueDictionary;
             }
-            IClassDef classDef = LookupBoClassDef;
-            IPrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, ClassDef.ClassDefs);
+            var classDef = LookupBoClassDef;
+            var primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, ClassDef.ClassDefs);
             if (primaryKeyDef.Count > 1)
             {
                 throw new HabaneroDeveloperException
@@ -368,7 +354,7 @@ namespace Habanero.BO
         ///<returns></returns>
         public virtual IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            IClassDef classDef = LookupBoClassDef;
+            var classDef = LookupBoClassDef;
             return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
                 (classDef, this.Criteria, this.OrderCriteria);
         }
@@ -403,27 +389,27 @@ namespace Habanero.BO
         {
             if (sortByDisplayValue)
             {
-                SortedDictionary<string, string> sortedLookupList = new SortedDictionary<string, string>();
+                var keyLookupList = new SortedDictionary<string, string>();
                 foreach (BusinessObject bo in col)
                 {
-                    string stringValue = GetAvailableDisplayValue(sortedLookupList, bo.ToString());
-                    sortedLookupList.Add(stringValue, coverter(bo.ID.GetAsValue()));
+                    var stringValue = GetAvailableDisplayValue(keyLookupList, bo.ToString());
+                    keyLookupList.Add(stringValue, coverter(bo.ID.GetAsValue()));
                 }
 
-                Dictionary<string, string> lookupList = new Dictionary<string, string>();
-                foreach (string key in sortedLookupList.Keys)
+                var lookupList = new Dictionary<string, string>();
+                foreach (var key in keyLookupList.Keys)
                 {
-                    AddBusinessObjectToLookupList(lookupList, sortedLookupList[key], key);
+                    AddBusinessObjectToLookupList(lookupList, keyLookupList[key], key);
                 }
                 return lookupList;
             }
             else
             {
-                Dictionary<string, string> lookupList = new Dictionary<string, string>();
+                var lookupList = new Dictionary<string, string>();
                 foreach (BusinessObject bo in col)
                 {
-                    string stringValue = GetAvailableDisplayValue(lookupList, bo.ToString());
-                    string objectID = coverter(bo.ID.GetAsValue());
+                    var stringValue = GetAvailableDisplayValue(lookupList, bo.ToString());
+                    var objectID = coverter(bo.ID.GetAsValue());
                     AddBusinessObjectToLookupList(lookupList, objectID, stringValue);
                 }
                 return lookupList;
@@ -536,6 +522,7 @@ namespace Habanero.BO
         /// a string version of each of the business objects.
         /// </summary>
         /// <returns>Returns an ICollection object</returns>
+        [Obsolete("V2.6.0 This code does not appear to have anything to do with Business Object LookupList")]
         public ICollection GetValueCollection()
         {
             IClassDef classDef = LookupBoClassDef;
@@ -554,7 +541,8 @@ namespace Habanero.BO
         {
             if (this.OrderCriteria == null)
             {
-                SortedStringCollection valueList = new SortedStringCollection();
+                //IF there is no order criteria then order by bo.ToString.
+                var valueList = new SortedStringCollection();
                 foreach (IBusinessObject bo in col)
                 {
                     valueList.Add(bo.ToString());
@@ -563,7 +551,7 @@ namespace Habanero.BO
             }
             else
             {
-                ArrayList valueList = new ArrayList();
+                var valueList = new ArrayList();
                 foreach (IBusinessObject bo in col)
                 {
                     valueList.Add(bo.ToString());
