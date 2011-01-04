@@ -104,7 +104,7 @@ namespace Habanero.Test.DB
         [Test]
         public void TestActivatorCreate()
         {
-            object contact = Activator.CreateInstance(typeof (ContactPerson), true);
+            object contact = Activator.CreateInstance(typeof (ContactPerson));
         }
 
         [Test]

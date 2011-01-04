@@ -119,7 +119,9 @@ namespace Habanero.Test.DB.SqlGeneration
             InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             ISqlStatementCollection statementCol = gen.Generate();
             InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
-            Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
+            //TODO andrew 04 Jan 2011: CF: String.Contains not supported
+            //Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
+            StringAssert.Contains(newPropName, statement.Statement.ToString());
         }
 
 

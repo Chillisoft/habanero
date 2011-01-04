@@ -87,7 +87,8 @@ namespace Habanero.Test.DB
             //should get locking error
             catch (BusObjPessimisticConcurrencyControlException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("You cannot begin edits on the 'BOSequenceNumberLocking', as another user has started edits and therefore locked to this record"));
+                //Assert.IsTrue(ex.Message.Contains("You cannot begin edits on the 'BOSequenceNumberLocking', as another user has started edits and therefore locked to this record"));
+                StringAssert.Contains("You cannot begin edits on the 'BOSequenceNumberLocking', as another user has started edits and therefore locked to this record",ex.Message);
             }
         }
 

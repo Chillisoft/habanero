@@ -52,6 +52,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="nmock, Version=1.0.2735.26971, Culture=neutral, PublicKeyToken=824173e82b3e3b0d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nmock.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
@@ -78,6 +82,18 @@
     <Compile Include="TestConnectionStringFactory.cs" />
     <Compile Include="TestCriteriaDB.cs" />
     <Compile Include="TestDataAccessorDB.cs" />
+    <Compile Include="TestDataAccessorInMemory.cs" />
+    <Compile Include="TestDatabaseConfig.cs" />
+    <Compile Include="TestDbMigrator.cs" />
+    <Compile Include="TestDeleteStatementGenerator.cs" />
+    <Compile Include="TestGeneral.cs" />
+    <Compile Include="TestInsertStatementGenerator.cs" />
+    <Compile Include="TestMultipleRelationship_Aggregation_DB.cs" />
+    <Compile Include="TestMultipleRelationship_Association_DB.cs" />
+    <Compile Include="TestMultipleRelationship_Composition_DB.cs" />
+    <Compile Include="TestMySqlDatabaseConnection.cs" />
+    <Compile Include="TestNumberGeneratorDB.cs" />
+    <Compile Include="TransactionCommitterStubDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
@@ -99,6 +115,10 @@
     <ProjectReference Include="..\Habanero.Test.Bo\Habanero.Test.BO.csproj">
       <Project>{5EE52ED1-C9EC-45C0-8FB3-AF353FD31DC4}</Project>
       <Name>Habanero.Test.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.Structure\Habanero.Test.Structure.csproj">
+      <Project>{7B42C3AA-CD51-48D6-BE90-76FBE8AC5F04}</Project>
+      <Name>Habanero.Test.Structure</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
       <Project>{37E55226-D08F-4A7E-85AE-79D7993E1AE5}</Project>
