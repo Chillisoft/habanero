@@ -134,6 +134,8 @@
     <Compile Include="ClassDefinition\TestUIFormColumn.cs" />
     <Compile Include="ClassDefinition\TestUIFormTab.cs" />
     <Compile Include="ClassDefinition\TestUIGrid.cs" />
+    <Compile Include="Comparer\TestComparers.cs" />
+    <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
     <Compile Include="CriteriaManager\TestCriteria.cs" />
     <Compile Include="CriteriaManager\TestCriteriaExpression.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
@@ -197,6 +199,8 @@
     <Compile Include="Relationship\TestSingleRelationship_Association.cs" />
     <Compile Include="Relationship\TestSingleRelationship_Composition.cs" />
     <Compile Include="Relationship\TestTransactionalSingleRelationship.cs" />
+    <Compile Include="Security\TestBOPropAuthorisation.cs" />
+    <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
     <Compile Include="TestBOError.cs" />
     <Compile Include="TestBoProp.cs" />
     <Compile Include="TestBoPropString.cs" />

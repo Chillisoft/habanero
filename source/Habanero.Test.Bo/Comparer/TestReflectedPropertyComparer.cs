@@ -136,7 +136,8 @@ namespace Habanero.Test.BO.Comparer
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("propertyName", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ex.ParamName
+                //StringAssert.Contains("propertyName", ex.ParamName);
             }
         }
         [Test]
