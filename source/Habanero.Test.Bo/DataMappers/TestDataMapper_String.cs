@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -220,7 +221,7 @@ namespace Habanero.Test.BO
             bool parsedSucceed = _dataMapper.TryParsePropValue(expectedGuid, out parsedValue);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), parsedValue);
+            Assert.AreEqual(expectedGuid.ToString("B").ToUpper(CultureInfo.InvariantCulture), parsedValue);
             Assert.IsTrue(parsedValue is string, "Value should be a string");
             Assert.IsInstanceOf(typeof (string), parsedValue);
             Assert.IsTrue(parsedSucceed);

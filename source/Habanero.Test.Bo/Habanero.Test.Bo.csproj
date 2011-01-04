@@ -70,6 +70,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +93,19 @@
     <Compile Include="BusinessObjectCollection\TestRelatedBoCol_Edits.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBusinessObjectCollection.cs" />
     <Compile Include="BusinessObjectCollection\TestUtilsRelated.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderInMemory.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderMultiSource.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderWithInheritance.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
+    <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader_RefreshCollection.cs" />
+    <Compile Include="BusinessObjectLoader\TestQueryBuilder.cs" />
+    <Compile Include="BusinessObjectLoader\TestQueryBuilderWithInheritance.cs" />
+    <Compile Include="BusinessObjectLoader\TestSelectQuery.cs" />
+    <Compile Include="BusinessObjectLoader\TestSource.cs" />
+    <Compile Include="BusinessObjectLoader\TestSource_Join.cs" />
+    <Compile Include="BusinessObjectLoader\TestSource_JoinList.cs" />
+    <Compile Include="BusinessObjectLoader\TestSqlFormatter.cs" />
     <Compile Include="ClassDefinition\TestBOPropGeneralDataMapper.cs" />
     <Compile Include="ClassDefinition\TestClassDef.cs" />
     <Compile Include="ClassDefinition\TestClassDefCol.cs" />
@@ -120,6 +134,18 @@
     <Compile Include="ClassDefinition\TestUIFormColumn.cs" />
     <Compile Include="ClassDefinition\TestUIFormTab.cs" />
     <Compile Include="ClassDefinition\TestUIGrid.cs" />
+    <Compile Include="CriteriaManager\TestCriteria.cs" />
+    <Compile Include="CriteriaManager\TestCriteriaExpression.cs" />
+    <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
+    <Compile Include="CriteriaManager\TestCriteriaValues.cs" />
+    <Compile Include="CriteriaManager\TestExpression.cs" />
+    <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
+    <Compile Include="DataMappers\TestBOPropDataMapper_long.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Bool.cs" />
+    <Compile Include="DataMappers\TestDataMapper_DateTime.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Guid.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Int.cs" />
+    <Compile Include="DataMappers\TestDataMapper_String.cs" />
     <Compile Include="Loaders\TestClassDefsXmlValidator.cs" />
     <Compile Include="Loaders\TestDtdLoader.cs" />
     <Compile Include="Loaders\TestDtdsResource.cs" />
@@ -148,6 +174,7 @@
     <Compile Include="TestBOError.cs" />
     <Compile Include="TestBoProp.cs" />
     <Compile Include="TestBoPropString.cs" />
+    <Compile Include="TestBusinessObjectManager.cs" />
     <Compile Include="TestPack\AddressTestBO.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />
     <Compile Include="TestPack\BOWithIntID_Child.cs" />

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Habanero.Base;
+﻿using Habanero.Base;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.CriteriaManager
@@ -11,6 +7,7 @@ namespace Habanero.Test.BO.CriteriaManager
     public class TestCriteriaValues
     {
         [Test]
+// ReSharper disable InconsistentNaming
         public void Test_ToString_WithIntegers()
         {
             //-------------Setup Test Pack ------------------
@@ -134,6 +131,7 @@ namespace Habanero.Test.BO.CriteriaManager
             //-------------Test Result ----------------------
             Assert.AreEqual(0, result);
         }
+        // ReSharper restore InconsistentNaming
     
 
     }

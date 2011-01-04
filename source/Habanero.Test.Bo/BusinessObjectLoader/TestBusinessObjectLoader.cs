@@ -33,6 +33,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
     /// </summary>
     public abstract class TestBusinessObjectLoader
     {
+        // ReSharper disable InconsistentNaming
         protected abstract void SetupDataAccessor();
 
         protected abstract void DeleteEnginesAndCars();
@@ -838,13 +839,18 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 //-------------Test Result ---------------------
             catch (HabaneroDeveloperException ex)
             {
-                Assert.IsTrue
-                    (ex.Message.Contains("A Error has occured since the object being refreshed is being edited."));
-                Assert.IsTrue
-                    (ex.DeveloperMessage.Contains
-                         ("A Error has occured since the object being refreshed is being edited."));
-                Assert.IsTrue(ex.DeveloperMessage.Contains(cpLoaded.ID.AsString_CurrentValue()));
-                Assert.IsTrue(ex.DeveloperMessage.Contains(cpLoaded.ClassDef.ClassName));
+                StringAssert.Contains("A Error has occured since the object being refreshed is being edited.", ex.Message);
+                StringAssert.Contains("A Error has occured since the object being refreshed is being edited.", ex.DeveloperMessage);
+                StringAssert.Contains(cpLoaded.ID.AsString_CurrentValue(), ex.DeveloperMessage);
+                StringAssert.Contains(cpLoaded.ClassDef.ClassName, ex.DeveloperMessage);
+
+                //Assert.IsTrue
+                //    (ex.Message.Contains("A Error has occured since the object being refreshed is being edited."));
+                //Assert.IsTrue
+                //    (ex.DeveloperMessage.Contains
+                //         ("A Error has occured since the object being refreshed is being edited."));
+                //Assert.IsTrue(ex.DeveloperMessage.Contains(cpLoaded.ID.AsString_CurrentValue()));
+                //Assert.IsTrue(ex.DeveloperMessage.Contains(cpLoaded.ClassDef.ClassName));
             }
         }
 
@@ -916,7 +922,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         #endregion
 
 
-       
+        // ReSharper restore InconsistentNaming
+  
     }
 
 

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -10,6 +11,7 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBOPropDataMapper_long
     {
+        // ReSharper disable InconsistentNaming
         private PropDef _propDef;
         private BOPropDataMapper _dataMapper;
 
@@ -180,7 +182,8 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             string parsedValue = _propDef.ConvertValueToString(expectedlong);
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedlong.ToString().ToUpperInvariant(), parsedValue);
+            
+            Assert.AreEqual(expectedlong.ToString().ToUpper(CultureInfo.InvariantCulture), parsedValue);
         }
 
 
@@ -455,7 +458,7 @@ namespace Habanero.Test.BO
             string parsedValue = _dataMapper.ConvertValueToString(expectedlong.ToString());
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedlong.ToString().ToUpperInvariant(), parsedValue);
+            Assert.AreEqual(expectedlong.ToString().ToUpper(CultureInfo.InvariantCulture), parsedValue);
         }
 
         [Test]
@@ -470,7 +473,7 @@ namespace Habanero.Test.BO
             string parsedValue = _dataMapper.ConvertValueToString(expectedlong);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedlong.ToString().ToUpperInvariant(), parsedValue);
+            Assert.AreEqual(expectedlong.ToString().ToUpper(CultureInfo.InvariantCulture), parsedValue);
         }
 
 
@@ -512,6 +515,8 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(validLongID.ToString(), parsedValue);
         }
+        // ReSharper restore InconsistentNaming
+
     }
     ///<summary>
     /// A simple sequential number generator business object

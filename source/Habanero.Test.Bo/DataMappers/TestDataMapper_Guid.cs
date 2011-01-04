@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -26,6 +27,7 @@ namespace Habanero.Test.BO
 {
     [TestFixture]
     public class TestDataMapper_Guid
+    // ReSharper disable InconsistentNaming
     {
         private PropDef _propDef;
         private BOPropGuidDataMapper _dataMapper;
@@ -276,7 +278,7 @@ namespace Habanero.Test.BO
             string parsedValue = _dataMapper.ConvertValueToString(expectedGuid.ToString("B"));
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), parsedValue);
+            Assert.AreEqual(expectedGuid.ToString("B").ToUpper(CultureInfo.InvariantCulture), parsedValue);
         }
 
         [Test]
@@ -353,5 +355,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual("", parsedValue);
         }
+        // ReSharper restore InconsistentNaming
+
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Habanero.Base;
+﻿//TODO andrew 04 Jan 2011: CF: Ling not supported in CF 2
+//using System.Linq;
 using Habanero.BO;
 using NUnit.Framework;
 

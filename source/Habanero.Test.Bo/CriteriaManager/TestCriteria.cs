@@ -19,7 +19,6 @@
 
 using System;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -29,6 +28,7 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestCriteria
     {
+        // ReSharper disable InconsistentNaming
         [SetUp]
         public void SetupTest()
         {
@@ -1080,6 +1080,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
+            
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThan, new System.Drawing.Bitmap(20, 20));
             cp.Surname = TestUtil.GetRandomString();
@@ -2622,8 +2623,11 @@ namespace Habanero.Test.BO
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("fieldString", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Does not support ex.ParamName
+                //StringAssert.Contains("fieldString", ex.ParamName);
             }
+            // ReSharper restore InconsistentNaming
+
         }
 
         #endregion //Comparison Operators

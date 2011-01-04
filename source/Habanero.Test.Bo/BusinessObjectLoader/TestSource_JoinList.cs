@@ -57,7 +57,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.IsNotNull(exception, "Expected a constructor with null parameter to throw an exception");
             Assert.IsInstanceOf(typeof(ArgumentNullException), exception);
             ArgumentNullException argumentNullException = (ArgumentNullException)exception;
-            Assert.AreEqual("fromSource", argumentNullException.ParamName);
+            //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName in CF
+            //Assert.AreEqual("fromSource", argumentNullException.ParamName);
         }
 
         [Test]

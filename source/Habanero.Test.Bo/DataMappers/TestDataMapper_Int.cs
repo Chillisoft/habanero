@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -28,6 +29,8 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestDataMapper_Int
     {
+        // ReSharper disable InconsistentNaming
+
         private PropDef _propDef;
         private BOPropIntDataMapper _dataMapper;
 
@@ -200,7 +203,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             string parsedValue = _propDef.ConvertValueToString(expectedint);
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedint.ToString().ToUpperInvariant(), parsedValue);
+            Assert.AreEqual(expectedint.ToString().ToUpper(CultureInfo.InvariantCulture), parsedValue);
         }
 
 
@@ -477,7 +480,7 @@ namespace Habanero.Test.BO
             string parsedValue = _dataMapper.ConvertValueToString(expectedint.ToString());
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedint.ToString().ToUpperInvariant(), parsedValue);
+            Assert.AreEqual(expectedint.ToString().ToUpper(CultureInfo.InvariantCulture), parsedValue);
         }
 
         [Test]
@@ -492,7 +495,7 @@ namespace Habanero.Test.BO
             string parsedValue = _dataMapper.ConvertValueToString(expectedint);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedint.ToString().ToUpperInvariant(), parsedValue);
+            Assert.AreEqual(expectedint.ToString().ToUpper(CultureInfo.InvariantCulture), parsedValue);
         }
 
 
@@ -535,5 +538,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(validIntID.ToString(), parsedValue);
         }
+        // ReSharper restore InconsistentNaming
+
     }
 }
