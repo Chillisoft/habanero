@@ -171,6 +171,15 @@
     <Compile Include="Loaders\TestXmlUIGridLoader.cs" />
     <Compile Include="Loaders\TestXmlUILoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropRule\TestInterPropRule.cs" />
+    <Compile Include="PropRule\TestInterPropRuleGeneric.cs" />
+    <Compile Include="PropRule\TestPropRuleDate.cs" />
+    <Compile Include="PropRule\TestPropRuleDecimal.cs" />
+    <Compile Include="PropRule\TestPropRuleDouble.cs" />
+    <Compile Include="PropRule\TestPropRuleInt.cs" />
+    <Compile Include="PropRule\TestPropRuleLong.cs" />
+    <Compile Include="PropRule\TestPropRuleSingle.cs" />
+    <Compile Include="PropRule\TestPropRuleString.cs" />
     <Compile Include="TestBOError.cs" />
     <Compile Include="TestBoProp.cs" />
     <Compile Include="TestBoPropString.cs" />

@@ -32,6 +32,7 @@ namespace Habanero.Test.BO.PropRule
         [Test]
         public void Test_CreateInterPropRule()
         {
+            // ReSharper disable InconsistentNaming
             //---------------Set up test pack-------------------
             PropDefFake prop1 = new PropDefFake();
             PropDefFake prop2 = new PropDefFake();
@@ -77,7 +78,8 @@ namespace Habanero.Test.BO.PropRule
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("propRight", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("propRight", ex.ParamName);
             }
         }
 
@@ -114,7 +116,8 @@ namespace Habanero.Test.BO.PropRule
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("propLeft", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("propLeft", ex.ParamName);
             }
         }
 
@@ -419,6 +422,8 @@ namespace Habanero.Test.BO.PropRule
                 : base(TestUtil.GetRandomString(), typeof(int), PropReadWriteRule.ReadWrite, null)
             {
             }
-        }  
+        }
+        // ReSharper restore InconsistentNaming
+
     }
 }

@@ -29,6 +29,8 @@ namespace Habanero.Test.BO.PropRule
     [TestFixture]
     public class TestInterPropRuleGeneric
     {
+        // ReSharper disable InconsistentNaming
+
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -103,7 +105,8 @@ namespace Habanero.Test.BO.PropRule
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("propRight", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("propRight", ex.ParamName);
             }
         }
 
@@ -122,7 +125,8 @@ namespace Habanero.Test.BO.PropRule
             catch (ArgumentNullException ex)
             {
                 StringAssert.Contains("Value cannot be null", ex.Message);
-                StringAssert.Contains("propLeft", ex.ParamName);
+                //TODO andrew 04 Jan 2011: CF: Exception does not support ParamName
+                //StringAssert.Contains("propLeft", ex.ParamName);
             }
         }
         /*
@@ -204,6 +208,8 @@ namespace Habanero.Test.BO.PropRule
             {
             }
         }
+        // ReSharper restore InconsistentNaming
+
     }
 
     public class FakeBO : BusinessObject
