@@ -85,6 +85,17 @@
     <Compile Include="DatabaseConnection\TestDatabaseConnectionPostgreSql.cs" />
     <Compile Include="DatabaseConnection\TestDatabaseConnectionSQLite.cs" />
     <Compile Include="DatabaseConnection\TestDatabaseConnectionSqlServer.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceBase.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceClassTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceClassTableCopyID.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceClassTableNoID.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceConcreteTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchyBase.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchyClassTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchyConcreteTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchySingleClass.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceHierarchySingleTable.cs" />
+    <Compile Include="InheritanceSqlGeneration\TestInheritanceSingleTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatementGeneratorTestHelper.cs" />
     <Compile Include="TestBOPropLookupList_DatabaseLookupList_GuidID.cs" />
