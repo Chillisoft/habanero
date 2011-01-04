@@ -472,6 +472,7 @@ namespace Habanero.BO
         private static string FormatForXML(string text)
         {
             throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            
             //return SecurityElement.Escape(text);
         }
 

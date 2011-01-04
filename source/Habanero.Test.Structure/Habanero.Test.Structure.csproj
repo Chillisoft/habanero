@@ -87,7 +87,7 @@
     <Compile Include="Vehicle.Def.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClassDefs.xml" />
+    <EmbeddedResource Include="ClassDefs.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
