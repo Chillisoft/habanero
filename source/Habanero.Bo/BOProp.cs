@@ -521,10 +521,9 @@ namespace Habanero.BO
             if (_boPropAuthorisation == null) return true;
             if (!_boPropAuthorisation.IsAuthorised(this, BOPropActions.CanUpdate))
             {
-                throw new NotImplementedException("CF: Code commented out to get CF to compile");
-                //message = string.Format
-                //    ("The logged on user {0} is not authorised to update the {1} ",
-                //     Thread.CurrentPrincipal.Identity.Name, this.PropertyName);
+                message = string.Format
+                    ("The logged on user {0} is not authorised to update the {1} ",
+                     HabaneroEnvironmentCF.GetCurrentUser(), this.PropertyName);
                 return false;
             }
 
@@ -550,10 +549,9 @@ namespace Habanero.BO
             message = "";
             if (!IsReadable())
             {
-                throw new NotImplementedException("CF: Code commented out to get CF to compile");
-                //message = string.Format
-                //    ("The logged on user {0} is not authorised to read the {1} ", Thread.CurrentPrincipal.Identity.Name,
-                //     this.PropertyName);
+                message = string.Format
+                    ("The logged on user {0} is not authorised to read the {1} ", HabaneroEnvironmentCF.GetCurrentUser(),
+                     this.PropertyName);
                 return false;
             }
             return true;

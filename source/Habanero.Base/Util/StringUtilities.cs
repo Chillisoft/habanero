@@ -584,12 +584,17 @@ namespace Habanero.Util
         /// <returns>Returns the number of occurrences</returns>
         public static int CountOccurrences(string fullText, string searchText, int startIndex, int length)
         {
+
             string text = fullText.Substring(startIndex, length);
-            //TODO andrew 22 Dec 2010: CF : split out the char array and removed StringSplitOptions - should be tested
-            char[] c = searchText.ToCharArray();
-            string[] parts = text.Split(c);
-            //string[] parts = text.Split(new[] {searchText}, StringSplitOptions.None);
-            return parts.Length - 1;
+            int count = 0;
+            while (text.IndexOf(searchText) >= 0)
+            {
+                count++;
+                text = text.Substring(text.IndexOf(searchText) + searchText.Length);
+            }
+
+            return count;
+
         }
 
         /// <summary>

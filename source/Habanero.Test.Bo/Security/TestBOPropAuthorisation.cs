@@ -324,7 +324,8 @@ namespace Habanero.Test.BO.Security
                 //---------------Test Result -----------------------
             catch (BOPropWriteException ex)
             {
-                StringAssert.Contains("The logged on user  is not authorised to update the Prop1 ", ex.Message);
+                StringAssert.Contains("The logged on user ", ex.Message);
+                StringAssert.Contains(" is not authorised to update the Prop1 ", ex.Message);
             }
         }
 
@@ -382,7 +383,8 @@ namespace Habanero.Test.BO.Security
                 //---------------Test Result -----------------------
             catch (BOPropWriteException ex)
             {
-                StringAssert.Contains("The logged on user  is not authorised to update the Prop1 ", ex.Message);
+                StringAssert.Contains("The logged on user ", ex.Message);
+                StringAssert.Contains(" is not authorised to update the Prop1 ", ex.Message);
             }
         }
 
@@ -522,7 +524,8 @@ namespace Habanero.Test.BO.Security
                 //---------------Test Result -----------------------
             catch (BOPropReadException ex)
             {
-                StringAssert.Contains("The logged on user  is not authorised to read the Prop1 ", ex.Message);
+                StringAssert.Contains("The logged on user", ex.Message);
+                StringAssert.Contains(" is not authorised to read the Prop1 ", ex.Message);
             }
         }
 #pragma warning restore 168
@@ -552,7 +555,8 @@ namespace Habanero.Test.BO.Security
                 //---------------Test Result -----------------------
             catch (BOPropReadException ex)
             {
-                StringAssert.Contains("The logged on user  is not authorised to read the Prop1 ", ex.Message);
+                StringAssert.Contains("The logged on user", ex.Message);
+                StringAssert.Contains(" is not authorised to read the Prop1 ", ex.Message);
             }
         }
 

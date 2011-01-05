@@ -23,6 +23,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.Util
 {
+    [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
     [TestFixture]
     public class TestImageThumbnailCreator
     {
@@ -34,7 +35,6 @@ namespace Habanero.Test.Util
             _resourceManager = new ResourceManager("Habanero.Test.TestResources", typeof(TestImageThumbnailCreator).Assembly);
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestThumbnailCreation()
         {
@@ -54,7 +54,6 @@ namespace Habanero.Test.Util
             Assert.AreEqual(200, newLargeImage.Width);
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestForHeightLargerThanWidth()
         {
@@ -74,7 +73,6 @@ namespace Habanero.Test.Util
             Assert.AreEqual(40, newLargeImage.Width);
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestForWidthLargerThanHeight()
         {

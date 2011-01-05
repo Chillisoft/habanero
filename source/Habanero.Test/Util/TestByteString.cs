@@ -32,6 +32,7 @@ namespace Habanero.Test.Util
     /// <summary>
     /// This Test Class tests the functionality of the ByteString custom property class.
     /// </summary>
+    [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
     [TestFixture]
     public class TestByteString : TestUsingDatabase
     {
@@ -59,7 +60,6 @@ namespace Habanero.Test.Util
             base.SetupDBConnection();
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestLoadingConstructor()
         {
@@ -67,7 +67,6 @@ namespace Habanero.Test.Util
             Assert.IsTrue(byteString.Value.Equals("test"));
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestNonLoadingConstructor()
         {
@@ -75,7 +74,6 @@ namespace Habanero.Test.Util
             Assert.IsTrue(byteString.Value.Equals("test"));
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestStringConstructor()
         {
@@ -83,7 +81,6 @@ namespace Habanero.Test.Util
             Assert.IsTrue(byteString.Value.Equals("test"));
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestOtherTypeConstructor()
         {
@@ -91,7 +88,6 @@ namespace Habanero.Test.Util
             Assert.AreEqual("1", byteString.Value);
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestSettingValue()
         {
@@ -100,7 +96,6 @@ namespace Habanero.Test.Util
             Assert.IsTrue(byteString.Value.Equals("newtest"));
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestEquals()
         {
@@ -109,7 +104,6 @@ namespace Habanero.Test.Util
             Assert.IsTrue(byteString1.Equals(byteString2));
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestEqualsWithByte()
         {
@@ -118,7 +112,6 @@ namespace Habanero.Test.Util
             Assert.IsTrue(byteString1.Equals(byteString2));
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestEqualsBothByte()
         {
@@ -127,7 +120,6 @@ namespace Habanero.Test.Util
             Assert.IsTrue(byteString1.Equals(byteString2));
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestHashCode()
         {
@@ -143,7 +135,6 @@ namespace Habanero.Test.Util
 
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestToString()
         {
@@ -151,7 +142,6 @@ namespace Habanero.Test.Util
             Assert.AreEqual("test", byteString.ToString());
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestToStringFromByte()
         {
@@ -159,7 +149,6 @@ namespace Habanero.Test.Util
             Assert.AreEqual("test", byteString.ToString());
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestPropertyType()
         {
@@ -167,7 +156,6 @@ namespace Habanero.Test.Util
             Assert.AreEqual(propDef.PropertyType, typeof(ByteString));
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestPropertyValue()
         {
@@ -176,7 +164,6 @@ namespace Habanero.Test.Util
             Assert.AreSame(typeof(ByteString), bo.GetPropertyValue("TestProp").GetType());
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestSetPropertyValueWithString()
         {
@@ -186,7 +173,6 @@ namespace Habanero.Test.Util
             Assert.AreEqual("test", bo.GetPropertyValue("TestProp").ToString());
         }
 
-        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestPersistSqlParameterValue()
         {

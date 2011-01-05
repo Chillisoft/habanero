@@ -29,6 +29,7 @@ using System.Xml;
 using System.Xml.Schema;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using log4net;
@@ -673,10 +674,9 @@ namespace Habanero.BO
             if (AuthorisationRules == null) return true;
             if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanCreate)) return true;
 
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //message = string.Format
-            //    ("The logged on user {0} is not authorised to create a {1}", Thread.CurrentPrincipal.Identity.Name,
-            //     ClassDef.ClassName);
+            message = string.Format
+                ("The logged on user {0} is not authorised to create a {1}", HabaneroEnvironmentCF.GetCurrentUser(),
+                 ClassDef.ClassName);
             return false;
         }
 
@@ -697,10 +697,9 @@ namespace Habanero.BO
             message = "";
             if (AuthorisationRules == null) return true;
             if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanUpdate)) return true;
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //message = string.Format
-            //    ("The logged on user {0} is not authorised to update {1} Identified By {2}",
-            //     Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
+            message = string.Format
+                ("The logged on user {0} is not authorised to update {1} Identified By {2}",
+                 HabaneroEnvironmentCF.GetCurrentUser(), ClassDef.ClassName, ID.AsString_CurrentValue());
             return false;
         }
 
@@ -719,11 +718,9 @@ namespace Habanero.BO
             message = "";
             if (AuthorisationRules != null && !AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanDelete))
             {
-                throw new NotImplementedException("CF: Code commented out to get CF to compile");
-
-                //message = string.Format
-                //    ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
-                //     Thread.CurrentPrincipal.Identity.Name, ClassDef.ClassName, ID.AsString_CurrentValue());
+                message = string.Format
+                    ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
+                     HabaneroEnvironmentCF.GetCurrentUser(), ClassDef.ClassName, ID.AsString_CurrentValue());
                 return false;
             }
             if (Relationships == null) return true;
@@ -868,10 +865,9 @@ namespace Habanero.BO
             message = "";
             if (AuthorisationRules == null) return true;
             if (AuthorisationRules.IsAuthorised(this, BusinessObjectActions.CanRead)) return true;
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //message = string.Format
-            //    ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
-            //     ClassDef.ClassName);
+            message = string.Format
+                ("The logged on user {0} is not authorised to read a {1}", HabaneroEnvironmentCF.GetCurrentUser(),
+                 ClassDef.ClassName);
             return false;
         }
 
